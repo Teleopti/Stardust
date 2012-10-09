@@ -1,6 +1,7 @@
 ﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Notifier.js"/>
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="~/Content/Scripts/knockout-2.1.0.js" />
 
 if (typeof (Teleopti) === 'undefined') {
@@ -16,13 +17,14 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var timeLineMarkerWidth = 100;
 	var vm;
 	var notifyOptions;
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
 
 	function asmViewModel(yesterday) {
 		var self = this;
 		self.intervalPointer = null;
 
 		self.loadViewModel = function () {
-			Teleopti.MyTimeWeb.Ajax.Ajax({
+			ajax.Ajax({
 				url: 'Asm/Today',
 				dataType: "json",
 				type: 'GET',
@@ -104,7 +106,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 
 		self.isNextday = ko.computed(function () {
-			return (layer.StartMinutesSinceAsmZero > 2 * 24 * 60) ?  "+1" : "  " ;
+			return (layer.StartMinutesSinceAsmZero > 2 * 24 * 60) ? "+1" : "  ";
 		});
 	}
 
@@ -125,7 +127,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	function _listenForEvents(listeners) {
-		Teleopti.MyTimeWeb.Ajax.Ajax({
+		ajax.Ajax({
 			url: 'MessageBroker/FetchUserData',
 			dataType: "json",
 			type: 'GET',
