@@ -4,7 +4,7 @@
 		Teleopti.MyTimeWeb.Ajax.Init({ baseUrl: '@Url.Content("~/MyTime/")' });
 		Teleopti.MyTimeWeb.Asm.ShowAsm();
 		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
-			{ yourScheduleHasChanged: '@Resources.YourScheduleHasChanged' },
+			{ notifyText: '@Resources.YourScheduleHasChanged', timeout: 4000, baseUrl: '@Url.Content("~/")' },
 			function (notification) {
 				Teleopti.MyTimeWeb.Asm.ReloadAsmViewModelListener(notification);
 				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);

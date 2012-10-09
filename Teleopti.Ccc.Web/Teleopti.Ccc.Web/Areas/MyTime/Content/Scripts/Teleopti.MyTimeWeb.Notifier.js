@@ -1,11 +1,17 @@
 Teleopti.MyTimeWeb.Notifier = (function () {
 	var notifyText;
 	var timeout = 5000;
+	var baseUrl;
 
 	function _setOptions(options) {
-		notifyText = options.text;
+		notifyText = options.notifyText;
 		if (options.timeout) {
 			timeout = options.timeout;
+		}
+		if (options.baseUrl) {
+			baseUrl = options.baseUrl;
+		} else {
+			console.warning('Missing base url for icon in notification!');
 		}
 	}
 	function _notify() {
@@ -24,9 +30,10 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 	function _webNotification() {
 		if (window.webkitNotifications) {
 			if (window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
-				var notification = window.webkitNotifications.createNotification('', notifyText, '');
+				var iconUrl = baseUrl + 'content/favicon.ico';
+				var notification = window.webkitNotifications.createNotification(iconUrl, notifyText, '');
 				notification.show();
-				setTimeout(function() {
+				setTimeout(function () {
 					notification.cancel();
 				}, timeout);
 			} else {
