@@ -5,7 +5,7 @@
 
 @section head {
 	<script type="text/javascript">
-		jQuery(function () { 
+		$(function () { 
 			$.datepicker.setDefaults(@Html.LayoutBase().DatePickerGlobalizationAsJson());
 			Teleopti.MyTimeWeb.Portal.Init(
 				{
@@ -13,12 +13,13 @@
 					baseUrl: '@Url.Content("~/MyTime/")',
 					startBaseUrl: '@Url.Content("~/Start/")'
 				});
+
 			Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
-				{ notifyText: '@Resources.YourScheduleHasChanged', timeout: 4000, baseUrl: '@Url.Content("~/")' },
-				function(notification) {
+				{ notifyText: '@Resources.YourScheduleHasChanged', timeout: 4000, baseUrl: '@Url.Content("~/")', header: '@Resources.Teleopti' },
+				function (notification) {
 					Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
 				});
-		});
+	});
 	</script>
 }
 <header class="col-1 mb10" dir="ltr"> 

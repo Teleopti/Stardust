@@ -21,6 +21,9 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 		if (options.webNotification) {
 			webNotification = options.webNotification;
 		}
+		if (options.header) {
+			header = options.header;
+		}
 	}
 	function _notify() {
 		return noty({
