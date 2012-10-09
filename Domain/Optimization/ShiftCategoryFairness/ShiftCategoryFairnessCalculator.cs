@@ -1,56 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling.Assignment
+namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 {
     /// <summary>
-    /// Executes the equal shift category fairness calculations 
+    /// Executes the equal shift category fairnessHolder calculations 
     /// </summary>
 	public interface IShiftCategoryFairnessCalculator
 	{
 		IShiftCategoryFairnessFactors ShiftCategoryFairnessFactors(
-			IShiftCategoryFairness groupCategoryFairness,
-			IShiftCategoryFairness personCategoryFairness);
+			IShiftCategoryFairnessHolder groupCategoryFairnessHolder,
+			IShiftCategoryFairnessHolder personCategoryFairnessHolder);
 	}
 
 	public class ShiftCategoryFairnessCalculator : IShiftCategoryFairnessCalculator
 	{
 
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IShiftCategoryFairnessFactors ShiftCategoryFairnessFactors(
-			IShiftCategoryFairness groupCategoryFairness,
-			IShiftCategoryFairness personCategoryFairness)
+			IShiftCategoryFairnessHolder groupCategoryFairnessHolder,
+			IShiftCategoryFairnessHolder personCategoryFairnessHolder)
 		{
-			var dictionary = executeCalculations(groupCategoryFairness, personCategoryFairness);
-			return new ShiftCategoryFairnessFactors(dictionary, groupCategoryFairness.FairnessValueResult.FairnessPoints);
+			var dictionary = executeCalculations(groupCategoryFairnessHolder, personCategoryFairnessHolder);
+			return new ShiftCategoryFairnessFactors(dictionary, groupCategoryFairnessHolder.FairnessValueResult.FairnessPoints);
 		}
 
 		private static IDictionary<IShiftCategory, double> executeCalculations(
-			IShiftCategoryFairness groupCategoryFairness,
-			IShiftCategoryFairness personCategoryFairness)
+			IShiftCategoryFairnessHolder groupCategoryFairnessHolder,
+			IShiftCategoryFairnessHolder personCategoryFairnessHolder)
 		{
 			IDictionary<IShiftCategory, double> dictionary = new Dictionary<IShiftCategory, double>();
 
 			int sumGroupShifts = 0;
-			foreach (int value in groupCategoryFairness.ShiftCategoryFairnessDictionary.Values)
+			foreach (int value in groupCategoryFairnessHolder.ShiftCategoryFairnessDictionary.Values)
 			{
 				sumGroupShifts += value;
 			}
 
 			int sumPersonShifts = 0;
-			foreach (int value in personCategoryFairness.ShiftCategoryFairnessDictionary.Values)
+			foreach (int value in personCategoryFairnessHolder.ShiftCategoryFairnessDictionary.Values)
 			{
 				sumPersonShifts += value;
 			}
 
-			foreach (var shiftCategory in groupCategoryFairness.ShiftCategoryFairnessDictionary.Keys)
+			foreach (var shiftCategory in groupCategoryFairnessHolder.ShiftCategoryFairnessDictionary.Keys)
 			{
-				int currentGroupCategoryShifts = groupCategoryFairness.ShiftCategoryFairnessDictionary[shiftCategory];
+				int currentGroupCategoryShifts = groupCategoryFairnessHolder.ShiftCategoryFairnessDictionary[shiftCategory];
 				int currentPersonCategoryShifts = 0;
 
-				if (personCategoryFairness.ShiftCategoryFairnessDictionary.ContainsKey(shiftCategory))
-					currentPersonCategoryShifts = personCategoryFairness.ShiftCategoryFairnessDictionary[shiftCategory];
+				if (personCategoryFairnessHolder.ShiftCategoryFairnessDictionary.ContainsKey(shiftCategory))
+					currentPersonCategoryShifts = personCategoryFairnessHolder.ShiftCategoryFairnessDictionary[shiftCategory];
 
 				double currentFairnessValue =
 					calculateShiftValue(sumGroupShifts, currentGroupCategoryShifts, sumPersonShifts, currentPersonCategoryShifts);

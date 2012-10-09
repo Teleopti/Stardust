@@ -2,12 +2,12 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Optimization
+namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 {
 	[TestFixture]
 	public class ShiftCategoryFairnessAggregatorTest
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var person2 = PersonFactory.CreatePerson("herr person");
 			var catDic = new Dictionary<IShiftCategory, int> {{cat, 2}};
 
-			var fairness = new ShiftCategoryFairness(catDic,new FairnessValueResult() );
+			var fairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder(catDic,new FairnessValueResult() );
 
 			Expect.Call(_dic[person1]).Return(_range1);
 			Expect.Call(_range1.CachedShiftCategoryFairness()).Return(fairness);
@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var catDic = new Dictionary<IShiftCategory, int> { { cat, 2 } };
 			var catDic2 = new Dictionary<IShiftCategory, int> { { cat2, 2 } };
 
-			var fairness = new ShiftCategoryFairness(catDic, new FairnessValueResult());
-			var fairness2 = new ShiftCategoryFairness(catDic2, new FairnessValueResult());
+			var fairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder(catDic, new FairnessValueResult());
+			var fairness2 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder(catDic2, new FairnessValueResult());
 
 			Expect.Call(_dic[person1]).Return(_range1);
 			Expect.Call(_range1.CachedShiftCategoryFairness()).Return(fairness);

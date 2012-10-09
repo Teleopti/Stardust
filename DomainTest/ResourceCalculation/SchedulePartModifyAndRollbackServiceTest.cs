@@ -154,5 +154,41 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(0, _target.StackLength);
             Assert.AreEqual(0, _target.ModificationCollection.Count());
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "hej"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Scheduling.Rules.BusinessRuleResponse.#ctor(System.Type,System.String,System.Boolean,System.Boolean,Teleopti.Interfaces.Domain.DateTimePeriod,Teleopti.Interfaces.Domain.IPerson,Teleopti.Interfaces.Domain.DateOnlyPeriod)"), Test]
+		public void ShouldModifyBoth()
+		{
+			var schedulePart = _mocks.StrictMock<IScheduleDay>();
+			var schedulePart2 = _mocks.StrictMock<IScheduleDay>();
+			var schedules = _mocks.StrictMock<IScheduleDictionary>();
+			IPerson person = new Person();
+			var partToSave = _mocks.StrictMock<IScheduleDay>();
+			var partToSave2 = _mocks.StrictMock<IScheduleDay>();
+			var range = _mocks.StrictMock<IScheduleRange>();
+			var period = new DateTimePeriod(new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+			IList<IBusinessRuleResponse> validationList = new List<IBusinessRuleResponse>();
+			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(), new DateOnly());
+			validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod));
+
+			Expect.Call(_stateHolder.AllPersonAccounts).Return(new Dictionary<IPerson, IPersonAccountCollection>()).Repeat.Twice();
+			Expect.Call(_stateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
+			Expect.Call(schedules[person]).Return(range).IgnoreArguments().Repeat.AtLeastOnce();
+			Expect.Call(range.ReFetch(schedulePart)).Return(partToSave);
+			Expect.Call(range.ReFetch(schedulePart2)).Return(partToSave2);
+			Expect.Call(schedules.Modify(ScheduleModifier.Scheduler, schedulePart, _businessRuleCollection, _scheduleDayChangeCallback, _tagSetter)).IgnoreArguments().Return(validationList).Repeat.AtLeastOnce();
+			Expect.Call(schedulePart.Person).Return(person).Repeat.Any();
+			Expect.Call(schedulePart2.Person).Return(person).Repeat.Any();
+			Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
+			Expect.Call(_stateHolder.UseValidation).Return(true).Repeat.AtLeastOnce();
+			_mocks.ReplayAll();
+
+			var result = _target.ModifyParts(new List<IScheduleDay>{schedulePart, schedulePart2} );
+			
+			Assert.AreEqual(2, _target.StackLength);
+			Assert.AreEqual(2, _target.ModificationCollection.Count());
+			Assert.AreEqual(2, result.Count());
+
+			_mocks.VerifyAll();
+		}
     }
 }

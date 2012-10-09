@@ -125,7 +125,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets the shift category fairness.
         /// </summary>
         /// <returns></returns>
-        IShiftCategoryFairness CachedShiftCategoryFairness();
+        IShiftCategoryFairnessHolder CachedShiftCategoryFairness();
 
 		/// <summary>
 		/// What is the (potential) changes on this schedule range?

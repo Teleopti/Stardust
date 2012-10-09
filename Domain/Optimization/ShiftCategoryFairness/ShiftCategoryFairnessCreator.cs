@@ -1,19 +1,19 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling.Assignment
+namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 {
 
     public interface IShiftCategoryFairnessCreator
     {
-        IShiftCategoryFairness CreatePersonShiftCategoryFairness(IScheduleRange scheduleRange, DateOnlyPeriod period);
+        IShiftCategoryFairnessHolder CreatePersonShiftCategoryFairness(IScheduleRange scheduleRange, DateOnlyPeriod period);
     }
 
     public class ShiftCategoryFairnessCreator : IShiftCategoryFairnessCreator
     {
 
-        public IShiftCategoryFairness CreatePersonShiftCategoryFairness(IScheduleRange scheduleRange, DateOnlyPeriod period)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IShiftCategoryFairnessHolder CreatePersonShiftCategoryFairness(IScheduleRange scheduleRange, DateOnlyPeriod period)
         {
             Dictionary<IShiftCategory, int> shiftDic = new Dictionary<IShiftCategory, int>();
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         	IFairnessValueResult fairnessValueResult = scheduleRange.FairnessPoints();
 
-            return new ShiftCategoryFairness(shiftDic, fairnessValueResult);
+            return new ShiftCategoryFairnessHolder(shiftDic, fairnessValueResult);
         }
     }
 }
