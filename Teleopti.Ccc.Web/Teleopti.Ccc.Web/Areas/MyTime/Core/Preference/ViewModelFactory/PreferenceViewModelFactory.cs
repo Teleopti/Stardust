@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Web;
 using AutoMapper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
@@ -35,6 +36,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 			if (preferenceDay == null) return null;
 
 			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+		}
+
+		public IEnumerable<PreferenceDayViewModel> CreatePreferencesAndSchedulesViewModel(DateOnly @from, DateOnly to)
+		{
+			var period = new DateOnlyPeriod(@from, to);
+			var preferenceDays = _preferenceProvider.GetPreferencesForPeriod(period);
+			return _mapper.Map<IEnumerable<IPreferenceDay>, IEnumerable<PreferenceDayViewModel>>(preferenceDays);
 		}
 	}
 }

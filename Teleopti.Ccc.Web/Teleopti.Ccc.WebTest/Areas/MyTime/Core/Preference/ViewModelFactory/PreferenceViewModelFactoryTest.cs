@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Collections.Generic;
+using System.Web;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -75,5 +76,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 			result.Should().Be.SameInstanceAs(viewModel);
 		}
 
-	}
+		[Test]
+		public void CreatePreferencesAndSchedulesViewModel()
+		{
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var preferenceProvider = MockRepository.GenerateMock<IPreferenceProvider>();
+			var target = new PreferenceViewModelFactory(mapper, preferenceProvider);
+			var preferenceDays = new IPreferenceDay[] {};
+			var preferenceDayViewModels = new PreferenceDayViewModel[] {};
+
+			preferenceProvider.Stub(x => x.GetPreferencesForPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1))))
+				.Return(preferenceDays);
+			mapper.Stub(x => x.Map<IEnumerable<IPreferenceDay>, IEnumerable<PreferenceDayViewModel>>(preferenceDays))
+				.Return(preferenceDayViewModels);
+			var result = target.CreatePreferencesAndSchedulesViewModel(DateOnly.Today, DateOnly.Today.AddDays(1));
+
+			result.Should().Be.SameInstanceAs(preferenceDayViewModels);
 		}
+	}
+}

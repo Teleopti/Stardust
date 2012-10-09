@@ -37,6 +37,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
 
 		[Test]
+		public void ShouldMapDate()
+		{
+			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
+
+			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+
+			result.Date.Should().Be(DateOnly.Today.ToFixedClientDateOnlyFormat());
+		}
+
+		[Test]
 		public void ShouldMapEmptyPreferenceShiftCategoryWhenNoShiftCategory()
 		{
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());

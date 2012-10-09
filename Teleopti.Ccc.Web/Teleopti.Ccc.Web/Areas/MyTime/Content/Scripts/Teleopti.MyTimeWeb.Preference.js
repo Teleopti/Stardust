@@ -5,6 +5,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -18,9 +19,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	var loadingStarted = false;
 	var periodFeedbackViewModel = null;
-	var dayViewModels = {};
 	var addExtendedTooltip = null;
 	var addExtendedPreferenceFormViewModel = null;
+	var preferencesAndScheduleViewModel = null;
 
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#PreferenceDateRangeSelector';
@@ -45,7 +46,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				$('#Preference-body-inner .ui-selected')
 					.each(function (index, cell) {
 						var date = $(cell).data('mytime-date');
-						var promise = dayViewModels[date].DeletePreference();
+						var promise = preferencesAndScheduleViewModel.DayViewModels[date].DeletePreference();
 						promises.push(promise);
 					});
 				$.when.apply(null, promises)
@@ -66,7 +67,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
-				var promise = dayViewModels[date].SetPreference(preference, validationErrorCallback);
+				var promise = preferencesAndScheduleViewModel.DayViewModels[date].SetPreference(preference, validationErrorCallback);
 				promises.push(promise);
 			});
 		if (promises.length != 0) {
@@ -80,7 +81,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
-				dayViewModels[date].SetMustHave(mustHave);
+				preferencesAndScheduleViewModel.DayViewModels[date].SetMustHave(mustHave);
 			});
 	}
 
@@ -163,16 +164,19 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	}
 
 	function _initViewModels(loader) {
+		var date = portal ? portal.CurrentFixedDate() : null;
 
-		dayViewModels = {};
+		var dayViewModels = {};
 		$('li[data-mytime-date].inperiod').each(function (index, element) {
 			var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
 			dayViewModel.ReadElement(element);
 			dayViewModels[dayViewModel.Date] = dayViewModel;
 			ko.applyBindings(dayViewModel, element);
 		});
-
-		var date = portal ? portal.CurrentFixedDate() : null;
+		var from = $('li[data-mytime-date].inperiod').first().data('mytime-date');
+		var to = $('li[data-mytime-date].inperiod').last().data('mytime-date');
+		
+		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModels, date);
 
 		var element = $('#Preference-period-feedback-view')[0];
@@ -182,11 +186,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		loader = loader || function (call) { call(); };
 		loader(function () {
 			periodFeedbackViewModel.LoadFeedback();
-			$.each(dayViewModels, function (index, element) {
-				element.LoadPreference(function () {
-					element.LoadFeedback();
-				});
-				loadingStarted = true;
+			preferencesAndScheduleViewModel.LoadPreferencesAndSchedules(from, to);
+			loadingStarted = true;
+			$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, element) {
+				element.LoadFeedback();
 			});
 		});
 	}
