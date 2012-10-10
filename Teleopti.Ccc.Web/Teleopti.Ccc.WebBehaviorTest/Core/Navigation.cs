@@ -26,18 +26,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Log.Write("Ended up in: " + Browser.Current.Url);
 
 			interceptors.Reverse().ToList().ForEach(i => i.After(pageUrl));
-			mockWindowAlert();
-		}
-
-		private static void mockWindowAlert()
-		{
-			const string jsCode = "window.alert = function (value) {$('<span/>', {text: value, 'class': 'alertLoggerItem'}).appendTo('#alertLogger');};";
-			Browser.Current.Eval(jsCode);
 		}
 
 		public static void GotoAsm()
 		{
-			GoTo("MyTime/Asm");
+			GoTo("MyTime/Asm", new OverrideNotifyBehavior());
 		}
 
 		public static void GotoGlobalSignInPage()
@@ -135,7 +128,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoPreference()
 		{
-			GoTo("MyTime#Preference/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#Preference/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new OverrideNotifyBehavior());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 
@@ -236,4 +229,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	}
 
+	public class OverrideNotifyBehavior : IGoToInterceptor
+	{
+		public void Before(string pageUrl)
+		{
+		}
+
+		public void After(string pageUrl)
+		{
+			mockNotifyCall();
+		}
+
+		private static void mockNotifyCall()
+		{
+			const string jsCode = "Teleopti.MyTimeWeb.Notifier.Notify = function (value) {$('<span/>', {text: value, 'class': 'notifyLoggerItem'}).appendTo('#notifyLogger');};";
+			Browser.Current.Eval(jsCode);
+		}
+	}
 }

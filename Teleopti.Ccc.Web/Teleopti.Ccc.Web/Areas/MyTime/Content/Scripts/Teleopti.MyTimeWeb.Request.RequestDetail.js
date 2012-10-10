@@ -4,11 +4,12 @@
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
 
 Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
-
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var requestViewModel = null;
 
 	function _initToolbarButtons() {
@@ -92,7 +93,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _addRequest(requestUrl) {
 		var formData = _getFormData();
-		Teleopti.MyTimeWeb.Ajax.Ajax({
+		ajax.Ajax({
 			url: requestUrl,
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',

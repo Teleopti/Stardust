@@ -5,6 +5,7 @@
 /// <reference path="~/Content/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -181,7 +182,7 @@ Teleopti.MyTimeWeb.Schedule.RequestViewModel = (function RequestViewModel() {
 });
 
 Teleopti.MyTimeWeb.Schedule.Request = (function ($) {
-
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var requestViewModel = null;
 
 	function _initEditSection() {
@@ -244,7 +245,7 @@ Teleopti.MyTimeWeb.Schedule.Request = (function ($) {
 
 	function _addRequest(requestUrl) {
 		var formData = _getFormData();
-		Teleopti.MyTimeWeb.Ajax.Ajax({
+		ajax.Ajax({
 			url: requestUrl,
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',

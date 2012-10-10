@@ -269,6 +269,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		},
 		PreferencePartialDispose: function () {
 			_hideAddExtendedTooltip();
+			ajax.AbortAll();
 		},
 		CallWhenLoaded: function (callback) {
 			_callWhenLoaded(callback);
@@ -277,7 +278,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 };
 
-Teleopti.MyTimeWeb.Preference = Teleopti.MyTimeWeb.PreferenceInitializer(Teleopti.MyTimeWeb.Ajax, Teleopti.MyTimeWeb.Portal);
+Teleopti.MyTimeWeb.Preference = Teleopti.MyTimeWeb.PreferenceInitializer(new Teleopti.MyTimeWeb.Ajax(), Teleopti.MyTimeWeb.Portal);
 
 Teleopti.MyTimeWeb.Preference.formatTimeSpan = function (totalMinutes) {
 	if (!totalMinutes)

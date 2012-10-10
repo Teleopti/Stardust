@@ -807,7 +807,7 @@ namespace Teleopti.Ccc.Domain.Common
                     return contract.WorkTime.AvgWorkTimePerDay;
                 case WorkTimeSource.FromSchedulePeriod:
                     {
-                        var schedulePeriod = SchedulePeriod(dateOnly);
+                        var schedulePeriod = VirtualSchedulePeriod(dateOnly);
                         return schedulePeriod == null
                                    ? WorkTime.DefaultWorkTime.AvgWorkTimePerDay
                                    : schedulePeriod.AverageWorkTimePerDay;

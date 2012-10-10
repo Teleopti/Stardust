@@ -332,10 +332,10 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Agent should be notified when current shift has changed")]
-        public virtual void AgentShouldBeNotifiedWhenCurrentShiftHasChanged()
+        [NUnit.Framework.DescriptionAttribute("Agent should from ASM popup be notified when current shift has changed")]
+        public virtual void AgentShouldFromASMPopupBeNotifiedWhenCurrentShiftHasChanged()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should be notified when current shift has changed", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should from ASM popup be notified when current shift has changed", ((string[])(null)));
 #line 87
 this.ScenarioSetup(scenarioInfo);
 #line 7
@@ -349,7 +349,30 @@ this.FeatureBackground();
 #line 91
  testRunner.And("My schedule between \'2030-01-01 08:00\' to \'2030-01-01 17:00\' change");
 #line 92
- testRunner.Then("I should see one alert");
+ testRunner.Then("I should see one notify message");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Agent should from portal be notified when current shift has changed")]
+        public virtual void AgentShouldFromPortalBeNotifiedWhenCurrentShiftHasChanged()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should from portal be notified when current shift has changed", ((string[])(null)));
+#line 94
+this.ScenarioSetup(scenarioInfo);
+#line 7
+this.FeatureBackground();
+#line 95
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 96
+ testRunner.And("Current time is \'2030-01-01 00:00\'");
+#line 97
+ testRunner.When("I view preferences");
+#line 98
+ testRunner.And("My schedule between \'2030-01-01 08:00\' to \'2030-01-01 17:00\' change");
+#line 99
+ testRunner.Then("I should see one notify message");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -359,21 +382,21 @@ this.FeatureBackground();
         public virtual void AsmShouldBeAutomaticallyReloadedWhenTimePasses()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Asm should be automatically reloaded when time passes", ((string[])(null)));
-#line 94
+#line 101
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 95
+#line 102
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 96
+#line 103
  testRunner.And("Current time is \'2030-01-01 23:59\'");
-#line 97
+#line 104
  testRunner.When("I click ASM link");
-#line 98
+#line 105
  testRunner.Then("Now indicator should be at hour \'47\'");
-#line 99
+#line 106
  testRunner.When("Current browser time has changed to \'2030-01-02 00:01\'");
-#line 100
+#line 107
  testRunner.Then("Now indicator should be at hour \'24\'");
 #line hidden
             this.ScenarioCleanup();
@@ -386,19 +409,19 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should be notified when activity changes", new string[] {
                         "ignore"});
-#line 105
+#line 112
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 106
+#line 113
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 107
+#line 114
  testRunner.And("Current time is \'2030-01-01 11:59\'");
-#line 108
+#line 115
  testRunner.When("I click ASM link");
-#line 109
+#line 116
  testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'");
-#line 110
+#line 117
  testRunner.Then("I should see only one alert containing \'Phone\'");
 #line hidden
             this.ScenarioCleanup();
