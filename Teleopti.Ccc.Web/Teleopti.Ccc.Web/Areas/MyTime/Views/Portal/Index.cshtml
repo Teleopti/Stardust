@@ -18,9 +18,8 @@
 				<text>
 				Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
 					{ notifyText: '@Resources.YourScheduleHasChanged', timeout: 4000, baseUrl: '@Url.Content("~/")', header: '@Resources.Teleopti' },
-					function (notification) {
-						Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
-				});
+					function (notification) { Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);}
+				);
 				</text>
 			}
 
