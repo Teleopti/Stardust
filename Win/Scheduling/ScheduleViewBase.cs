@@ -327,10 +327,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (_grid.Model.ColCount < colIndex) return;
             _grid.Model.Selections.Clear(true);
             
-            int weekNumWeekHeader = DateHelper.WeekNumber((DateTime)_grid.Model[rowIndex, colIndex].Tag, CultureInfo.CurrentCulture);
+            int weekNumWeekHeader = DateHelper.WeekNumber(((DateOnly)_grid.Model[rowIndex, colIndex].Tag).Date, CultureInfo.CurrentCulture);
             for (int i = (int)ColumnType.StartScheduleColumns; i <= _grid.ColCount; i++)
             {
-                int weekNumDateHeader = DateHelper.WeekNumber((DateTime)_grid.Model[rowIndex + 1, i].Tag, CultureInfo.CurrentCulture);
+                int weekNumDateHeader = DateHelper.WeekNumber(((DateOnly)_grid.Model[rowIndex + 1, i].Tag).Date, CultureInfo.CurrentCulture);
                 if (weekNumWeekHeader == weekNumDateHeader)
                 {
                     _grid.Model.Selections.Add(GridRangeInfo.Cols(i, i));
