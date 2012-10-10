@@ -542,7 +542,6 @@
     <Content Include="Areas\MyTime\Content\Css\ScheduleStyles.css" />
     <Content Include="Areas\MyTime\Content\Css\WeekView.css" />
     <Content Include="Areas\MyTime\Content\Scripts\AllTests.html" />
-    <Content Include="Areas\MyTime\Views\Asm\todo.txt" />
     <Content Include="Areas\Start\Content\Css\mobile.custom.css" />
     <Content Include="Areas\Start\Content\Images\mobile_logo.png" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
