@@ -1001,6 +1001,51 @@ this.FeatureBackground();
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Update schedule when schedule has changed")]
+        public virtual void UpdateScheduleWhenScheduleHasChanged()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update schedule when schedule has changed", ((string[])(null)));
+#line 297
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 298
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 299
+ testRunner.And("I have the workflow control set \'Published schedule\'");
+#line 300
+ testRunner.When("I view my week schedule for date \'2012-08-28\'");
+#line hidden
+            TechTalk.SpecFlow.Table table32 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table32.AddRow(new string[] {
+                        "StartTime",
+                        "2012-08-28 12:00"});
+            table32.AddRow(new string[] {
+                        "EndTime",
+                        "2012-08-28 15:00"});
+            table32.AddRow(new string[] {
+                        "ShiftCategoryName",
+                        "ForTest"});
+#line 301
+ testRunner.And("there is a shift with", ((string)(null)), table32);
+#line 306
+ testRunner.And("My schedule between \'2012-08-28 08:00\' to \'2012-08-28 18:00\' change");
+#line hidden
+            TechTalk.SpecFlow.Table table33 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table33.AddRow(new string[] {
+                        "First activity times",
+                        "12:00 - 15:00"});
+#line 307
+ testRunner.Then("I should see activities on date \'2012-08-28\' with:", ((string)(null)), table33);
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

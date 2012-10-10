@@ -293,3 +293,19 @@ Scenario: Show activity at correct times
 	| First activity times  | 08:00 - 11:00 |
 	| Second activity times | 11:00 - 12:00 |
 	| Third activity times  | 12:00 - 18:00 |
+
+Scenario: Update schedule when schedule has changed
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	When I view my week schedule for date '2012-08-28'
+	And there is a shift with 
+	| Field                 | Value            |
+	| StartTime             | 2012-08-28 12:00 |
+	| EndTime               | 2012-08-28 15:00 |
+	| ShiftCategoryName     | ForTest          |
+	And My schedule between '2012-08-28 08:00' to '2012-08-28 18:00' change
+	Then I should see activities on date '2012-08-28' with:
+	| Field                 | Value         |
+	| First activity times  | 12:00 - 15:00 |
+
+

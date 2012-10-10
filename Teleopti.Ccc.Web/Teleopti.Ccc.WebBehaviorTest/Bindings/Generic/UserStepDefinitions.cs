@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 		[Given(@"there is a shift with")]
+		[When(@"there is a shift with")]
 		public void GivenThereIsAShiftWith(Table table)
 		{
 			var schedule = table.CreateInstance<ShiftConfigurable>();
