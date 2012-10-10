@@ -38,7 +38,5 @@ INNER JOIN (
 	AND personPeriodVirtual2.parent = personPeriodVirtual1.Parent
 ) VirtualEndData
 	ON VirtualEndData.Id = pp.Id
-WHERE ISNULL(VirtualEndData.TerminalDate2+1,pp.StartDate) >
-		CASE WHEN VirtualEndData.TerminalDate2 IS NOT NULL THEN pp.StartDate
-		ELSE '1900-01-01'
-	END
+	WHERE ((ISNULL(VirtualEndData.TerminalDate2+1,pp.StartDate) > pp.StartDate AND VirtualEndData.TerminalDate2 IS NOT NULL)  OR 
+	(ISNULL(VirtualEndData.TerminalDate2+1,pp.StartDate) > '1900-01-01' AND VirtualEndData.TerminalDate2 IS NULL))
