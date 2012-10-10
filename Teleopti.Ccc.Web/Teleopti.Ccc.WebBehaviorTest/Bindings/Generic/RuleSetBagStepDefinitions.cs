@@ -1,4 +1,3 @@
-using System.Globalization;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -10,9 +9,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	public class RuleSetBagStepDefinitions
 	{
 		[StepArgumentTransformation]
-		public RuleSetBagConfigurable WorkShiftRuleSetConfigurableTransform(Table table)
+		public RuleSetBagConfigurable RuleSetBagConfigurableTransform(Table table)
 		{
 			return table.CreateInstance<RuleSetBagConfigurable>();
+		}
+
+		[StepArgumentTransformation]
+		public WorkShiftRuleSetConfigurable WorkShiftRuleSetConfigurableTransform(Table table)
+		{
+			return table.CreateInstance<WorkShiftRuleSetConfigurable>();
+		}
+
+		[Given(@"there is a rule set with")]
+		public void GivenThereIsARuleSetWith(WorkShiftRuleSetConfigurable workShiftRuleSet)
+		{
+			UserFactory.User().Setup(workShiftRuleSet);
 		}
 
 		[Given(@"there is a rule set bag with")]
@@ -20,5 +31,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			UserFactory.User().Setup(ruleSetBag);
 		}
+
 	}
 }

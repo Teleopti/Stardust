@@ -55,6 +55,22 @@ Scenario: Feedback from blacklisted shift with preference
 	| Date                  | 2010-10-10  |
 	| Contract time boundry | 12:00-12:00 |
 
+Scenario: Feedback from blacklisted shift with availability
+	Given there is an availability rotation with
+	| Field             | Value        |
+	| Name              | Availability |
+	| Days              | 1            |
+	| Work time minimum | 12:00        |
+	And I have an availability with
+	| Field      | Value        |
+	| Start date | 2012-10-01   |
+	| Rotation   | Availability |
+	When I view preferences for date '2012-10-10'
+	Then I should see preference feedback with
+	| Field                 | Value       |
+	| Date                  | 2010-10-10  |
+	| Contract time boundry | 12:00-12:00 |
+
 Scenario: No feedback from blacklisted shift without preference
 	When I view preferences for date '2012-10-10'
 	Then I should see preference feedback with

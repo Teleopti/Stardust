@@ -99,11 +99,13 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\AlertStepDefinition.cs" />
+    <Compile Include="Data\Setups\Generic\AvailabilityRotationConfigurable.cs" />
+    <Compile Include="Bindings\Generic\AvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\PersonAvailabilityConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\RuleSetBagConfigurable.cs" />
     <Compile Include="Bindings\Generic\RuleSetBagStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\WorkShiftRuleSetConfigurable.cs" />
-    <Compile Include="Bindings\Generic\WorkShiftRuleSetStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WeekScheduleTimeIndicatorStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\DayOffStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />

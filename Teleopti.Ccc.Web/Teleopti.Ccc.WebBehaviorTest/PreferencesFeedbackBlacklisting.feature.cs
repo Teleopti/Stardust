@@ -225,28 +225,82 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("No feedback from blacklisted shift without preference")]
-        public virtual void NoFeedbackFromBlacklistedShiftWithoutPreference()
+        [NUnit.Framework.DescriptionAttribute("Feedback from blacklisted shift with availability")]
+        public virtual void FeedbackFromBlacklistedShiftWithAvailability()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No feedback from blacklisted shift without preference", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback from blacklisted shift with availability", ((string[])(null)));
 #line 58
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 59
- testRunner.When("I view preferences for date \'2012-10-10\'");
 #line hidden
             TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table9.AddRow(new string[] {
+                        "Name",
+                        "Availability"});
+            table9.AddRow(new string[] {
+                        "Days",
+                        "1"});
+            table9.AddRow(new string[] {
+                        "Work time minimum",
+                        "12:00"});
+#line 59
+ testRunner.Given("there is an availability rotation with", ((string)(null)), table9);
+#line hidden
+            TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table10.AddRow(new string[] {
+                        "Start date",
+                        "2012-10-01"});
+            table10.AddRow(new string[] {
+                        "Rotation",
+                        "Availability"});
+#line 64
+ testRunner.And("I have an availability with", ((string)(null)), table10);
+#line 68
+ testRunner.When("I view preferences for date \'2012-10-10\'");
+#line hidden
+            TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table11.AddRow(new string[] {
                         "Date",
                         "2010-10-10"});
-            table9.AddRow(new string[] {
+            table11.AddRow(new string[] {
+                        "Contract time boundry",
+                        "12:00-12:00"});
+#line 69
+ testRunner.Then("I should see preference feedback with", ((string)(null)), table11);
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("No feedback from blacklisted shift without preference")]
+        public virtual void NoFeedbackFromBlacklistedShiftWithoutPreference()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No feedback from blacklisted shift without preference", ((string[])(null)));
+#line 74
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 75
+ testRunner.When("I view preferences for date \'2012-10-10\'");
+#line hidden
+            TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table12.AddRow(new string[] {
+                        "Date",
+                        "2010-10-10"});
+            table12.AddRow(new string[] {
                         "Contract time boundry",
                         "9:00-9:00"});
-#line 60
- testRunner.Then("I should see preference feedback with", ((string)(null)), table9);
+#line 76
+ testRunner.Then("I should see preference feedback with", ((string)(null)), table12);
 #line hidden
             this.ScenarioCleanup();
         }

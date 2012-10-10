@@ -1,5 +1,8 @@
+using System;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -54,4 +57,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			personAvailabilityRepository.Add(personAvailability);
 		}
 	}
+
 }

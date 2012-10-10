@@ -343,5 +343,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			public string ActivityTimeMinimum { get; set; }
 			public string ActivityTimeMaximum { get; set; }
 		}
+
+
+
+		[StepArgumentTransformation]
+		public PreferenceFeedbackFields PreferenceFeedbackFieldsTransform(Table table)
+		{
+			return table.CreateInstance<PreferenceFeedbackFields>();
+		}
+
+		public class PreferenceFeedbackFields
+		{
+			public DateTime Date { get; set; }
+			public string ContractTimeBoundry { get; set; }
+		}
+
+		[Then(@"I should see preference feedback with")]
+		public void ThenIShouldSeePreferenceFeedbackWith(PreferenceFeedbackFields fields)
+		{
+			ScenarioContext.Current.Pending();
+			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-contract-times").InnerHtml, Is.StringMatching(fields.ContractTimeBoundry));
+		}
+
 	}
 }
