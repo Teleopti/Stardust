@@ -143,6 +143,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Height"), Is.EqualTo("400px"));
 		}
 
+		[Then(@"I should see activities on date '(.*)'")]
+		public void ThenIShouldSeeActivitiesOnDate(DateTime date)
+		{
+			EventualAssert.That(()=>_page.DayLayers(date),Is.Not.Empty);
+		}
 
 		[Then(@"I should see request page")]
 		public void ThenIShouldSeeRequestPage()
