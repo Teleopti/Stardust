@@ -50,7 +50,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Playback())
 			{
 				var multiplicatorDefinitionSetShiftAllowanceDto = new GetMultiplicatorDefinitionSetShiftAllowanceDto();
-				multiplicatorDefinitionSetShiftAllowanceDto.Period = new DateOnlyPeriodDto(new DateOnlyPeriod(2012,09,19,2012,09,19));
+				multiplicatorDefinitionSetShiftAllowanceDto.Period = new DateOnlyPeriodDto
+				{
+					StartDate = new DateOnlyDto { DateTime = new DateTime(2012, 9, 19) },
+					EndDate = new DateOnlyDto { DateTime = new DateTime(2012, 9, 19) }
+				};
 				multiplicatorDefinitionSetShiftAllowanceDto.TimeZoneId = TimeZoneInfo.Local.Id;
 				var result = target.Handle(multiplicatorDefinitionSetShiftAllowanceDto);
 				Assert.IsTrue(result.Count > 0);

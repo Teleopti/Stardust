@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Record())
 			{
 				Expect.Call(teamRepository.FindTeamByDescriptionName("MyTeam")).Return(teamList);
-				Expect.Call(assembler.DomainEntitiesToDtos(teamList)).Return(new[] {new TeamDto(teamList[0])});
+				Expect.Call(assembler.DomainEntitiesToDtos(teamList)).Return(new[] { new TeamDto { Description = teamList[0].Description.Name, Id = teamList[0].Id} });
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			}
 			using (mocks.Playback())

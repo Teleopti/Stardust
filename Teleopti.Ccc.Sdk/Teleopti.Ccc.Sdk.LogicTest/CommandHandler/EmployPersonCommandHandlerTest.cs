@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _team = TeamFactory.CreateSimpleTeam("test team");
             _team.SetId(Guid.NewGuid());
             _team.Site = new Site("test site");
-            _teamDto = new TeamDto(_team) {Id = Guid.NewGuid()};
+			_teamDto = new TeamDto { Id = Guid.NewGuid(), Description = _team.Description.Name, SiteAndTeam = _team .SiteAndTeam};
 
             _personContractDto = new PersonContractDto
                                         {
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _employPersonCommandDto = new EmployPersonCommandDto
             {
                 Person = _personDto,
-                Period = new DateOnlyPeriodDto(_dateOnlyPeriod),
+				Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto { DateTime = _dateOnlyPeriod.StartDate }, EndDate = new DateOnlyDto { DateTime = _dateOnlyPeriod .EndDate} },
                 PersonContract = _personContractDto,
                 Team = _teamDto
             };

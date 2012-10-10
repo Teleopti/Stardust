@@ -48,7 +48,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Playback())
 			{
 				var multiplicatorDefinitionSetOvertimeDto = new GetMultiplicatorDefinitionSetOvertimeDto();
-				multiplicatorDefinitionSetOvertimeDto.Period = new DateOnlyPeriodDto(new DateOnlyPeriod(2012, 09, 19, 2012, 09, 19));
+				multiplicatorDefinitionSetOvertimeDto.Period = new DateOnlyPeriodDto
+					{
+						StartDate = new DateOnlyDto {DateTime = new DateTime(2012, 9, 12)},
+						EndDate = new DateOnlyDto {DateTime = new DateTime(2012, 9, 19)}
+					};
 				multiplicatorDefinitionSetOvertimeDto.TimeZoneId = TimeZoneInfo.Local.Id;
 				var result = target.Handle(multiplicatorDefinitionSetOvertimeDto);
 				Assert.IsTrue(result.Count > 0);

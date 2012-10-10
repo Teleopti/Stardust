@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
+using DetailLevel = Teleopti.Ccc.Sdk.Common.Contracts.DetailLevel;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         public override PayrollResultDetailDto DomainEntityToDto(IPayrollResultDetail entity)
         {
             var detail = new PayrollResultDetailDto();
-            detail.DetailLevel = entity.DetailLevel;
+            detail.DetailLevel = (DetailLevel)entity.DetailLevel;
             detail.ExceptionMessage = entity.ExceptionMessage;
             detail.ExceptionStackTrace = entity.ExceptionStackTrace;
             detail.Message = entity.Message;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         public override IPayrollResultDetail DtoToDomainEntity(PayrollResultDetailDto dto)
         {
-            var detail = new PayrollResultDetail(dto.DetailLevel, dto.Message, dto.Timestamp, new Exception(dto.ExceptionMessage));
+			var detail = new PayrollResultDetail((Interfaces.Domain.DetailLevel)dto.DetailLevel, dto.Message, dto.Timestamp, new Exception(dto.ExceptionMessage));
             return detail;
         }
     }

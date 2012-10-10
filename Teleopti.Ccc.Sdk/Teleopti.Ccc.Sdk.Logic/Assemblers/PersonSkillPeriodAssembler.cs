@@ -8,15 +8,17 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
     {
         public override PersonSkillPeriodDto DomainEntityToDto(IPersonPeriod entity)
         {
-            PersonSkillPeriodDto dto = new PersonSkillPeriodDto();
-            dto.Id = entity.Id;
-            dto.PersonId = entity.Parent.Id.GetValueOrDefault(Guid.Empty);
-            dto.DateFrom = new DateOnlyDto(entity.StartDate);
-            dto.DateTo = new DateOnlyDto(entity.EndDate());
+            var dto = new PersonSkillPeriodDto
+	            {
+		            Id = entity.Id,
+		            PersonId = entity.Parent.Id.GetValueOrDefault(Guid.Empty),
+		            DateFrom = new DateOnlyDto {DateTime = entity.StartDate},
+		            DateTo = new DateOnlyDto {DateTime = entity.EndDate()}
+	            };
 
-            foreach (IPersonSkill personSkill in entity.PersonSkillCollection)
+	        foreach (var personSkill in entity.PersonSkillCollection)
             {
-                dto.SkillCollection.Add(PersonSkillDoToDto(personSkill));
+                dto.SkillCollection.Add(personSkillDoToDto(personSkill));
             }
 
             return dto;
@@ -27,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             throw new NotSupportedException("This function is not supported yet.");
         }
 
-        private static Guid PersonSkillDoToDto(IPersonSkill entity)
+        private static Guid personSkillDoToDto(IPersonSkill entity)
         {
             return entity.Skill.Id.GetValueOrDefault(Guid.Empty);
         }

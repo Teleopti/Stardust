@@ -122,6 +122,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\DomainInterfaces.cs" />
     <Compile Include="Contracts\INotificationConfigReader.cs" />
     <Compile Include="Contracts\INotificationMessage.cs" />
     <Compile Include="Contracts\INotificationSender.cs" />
@@ -292,12 +293,6 @@
     <Compile Include="WcfExtensions\CustomWindowsSecurityToken.cs" />
     <Compile Include="WcfExtensions\LicenseCache.cs" />
     <Compile Include="WcfExtensions\TeleoptiAuthenticationHeader.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
-      <Name>Teleopti.Interfaces</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

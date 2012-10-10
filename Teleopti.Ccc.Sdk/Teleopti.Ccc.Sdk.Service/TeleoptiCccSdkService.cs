@@ -762,7 +762,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				{
 					if (businessUnitDto.Id.Value == site.BusinessUnit.Id.Value)
 					{
-						SiteDto dto = new SiteDto(site);
+						SiteDto dto = new SiteDto { DescriptionName = site.Description.Name, Id = site.Id };
 						sitesOnBusinessUnit.Add(dto);
 					}
 				}
@@ -782,7 +782,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				{
 					if (team.Site.Id.Value == siteDto.Id.Value)
 					{
-						TeamDto dto = new TeamDto(team);
+						TeamDto dto = new TeamDto { Description = team.Description.Name, Id = team.Id, SiteAndTeam = team.SiteAndTeam};
 						teamsOnSite.Add(dto);
 					}
 				}
@@ -1434,7 +1434,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				teamCollection = OrganizationFactory.CreateTeamCollectionLight(uow, func, new DateOnly(localDate));
 				foreach (ISite site in teamCollection.AllPermittedSites)
 				{
-					dtos.Add(new SiteDto(site));
+					dtos.Add(new SiteDto { DescriptionName = site.Description.Name, Id = site.Id});
 				}
 			}
 			
@@ -1475,7 +1475,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				{
 					if (team.Site.Id == site.Id.GetValueOrDefault())
 					{
-						dtos.Add(new TeamDto(team));
+						dtos.Add(new TeamDto {  Description = team.Description.Name, Id = team.Id, SiteAndTeam = team.SiteAndTeam });
 					}
 				}
 			}
@@ -1525,7 +1525,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 				foreach (ITeam team in teamCollection.AllPermittedTeams)
 				{
-					dtos.Add(new TeamDto(team));
+					dtos.Add(new TeamDto { Description = team.Description.Name, Id = team.Id, SiteAndTeam = team.SiteAndTeam });
 				}
 			}
 
@@ -1585,7 +1585,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
                 ITeam loggedOnPersonsTeam = person.MyTeam(localDate);
                 TeamDto returnTeamDto = null;
                 if (loggedOnPersonsTeam != null)
-                    returnTeamDto = new TeamDto(loggedOnPersonsTeam);
+					returnTeamDto = new TeamDto { Description = loggedOnPersonsTeam.Description.Name, Id = loggedOnPersonsTeam.Id, SiteAndTeam = loggedOnPersonsTeam.SiteAndTeam };
                 return returnTeamDto;
 		    }
 		}
@@ -1820,7 +1820,15 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			
 			foreach (IApplicationFunction function in afUnionCollection)
 			{
-				applicationFunctionCollectionToRetrun.Add(new ApplicationFunctionDto(function));
+				applicationFunctionCollectionToRetrun.Add(new ApplicationFunctionDto
+					{
+						ForeignId = function.ForeignId,
+						ForeignSource = function.ForeignSource,
+						FunctionCode = function.FunctionCode,
+						FunctionPath = function.FunctionPath,
+						IsPreliminary = function.IsPreliminary,
+						FunctionDescription = function.FunctionDescription
+					});
 			}
 
 			return applicationFunctionCollectionToRetrun;

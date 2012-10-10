@@ -156,8 +156,8 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
             addMethod.Invoke(collection, new object[] { error });
             addMethod.Invoke(collection, new object[] { error2 });
 
-            var types = new[] { typeof(string), typeof(SqlErrorCollection) };
-            var parameters = new object[] { errorMessage, collection };
+            var types = new[] { typeof(string), typeof(SqlErrorCollection), typeof(Exception), typeof(Guid) };
+            var parameters = new object[] { errorMessage, collection, new Exception(), Guid.NewGuid() };
 
             var constructor = typeof(SqlException).
                 GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, types, null);

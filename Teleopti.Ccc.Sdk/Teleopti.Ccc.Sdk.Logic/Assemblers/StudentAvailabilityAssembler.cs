@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         public override StudentAvailabilityDayDto DomainEntityToDto(IStudentAvailabilityDay entity)
         {
             var dto = new StudentAvailabilityDayDto();
-            dto.RestrictionDate = new DateOnlyDto(entity.RestrictionDate);
+			dto.RestrictionDate = new DateOnlyDto { DateTime = entity.RestrictionDate };
             dto.Person = PersonAssembler.DomainEntityToDto(entity.Person);
 			if (entity.NotAvailable) return dto;
 

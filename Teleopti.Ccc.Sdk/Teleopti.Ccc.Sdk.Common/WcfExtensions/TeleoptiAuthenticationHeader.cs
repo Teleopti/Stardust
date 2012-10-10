@@ -3,7 +3,7 @@ using System.Linq;
 using System.ServiceModel.Channels;
 using System.Xml;
 using System.Xml.Linq;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 
 namespace Teleopti.Ccc.Sdk.Common.WcfExtensions
 {

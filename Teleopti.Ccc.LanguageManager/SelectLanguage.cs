@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.LanguageManager
         /// </remarks>
         private void SelectLanguage_Load(object sender, EventArgs e)
         {
-            listBoxLanguages.DataSource = CultureInfo.GetCultures(CultureTypes.FrameworkCultures).OrderBy(c => c.DisplayName).ToList();
+            listBoxLanguages.DataSource = CultureInfo.GetCultures(CultureTypes.AllCultures).OrderBy(c => c.DisplayName).ToList();
             listBoxLanguages.SelectedIndex = 0;
         }
 

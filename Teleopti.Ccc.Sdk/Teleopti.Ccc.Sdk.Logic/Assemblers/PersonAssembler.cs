@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             ICccTimeZoneInfo timeZone = entity.PermissionInformation.DefaultTimeZone();
             personDto.TimeZoneId = timeZone.Id;
             if (entity.TerminalDate.HasValue)
-                personDto.TerminationDate = new DateOnlyDto(entity.TerminalDate.Value);
+				personDto.TerminationDate = new DateOnlyDto { DateTime = entity.TerminalDate.Value };
 
             if (!IgnorePersonPeriods)
             {
@@ -169,7 +169,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         private static PersonPeriodDto PersonPeriodDoToDto(IPersonPeriod entity)
         {
             PersonPeriodDto personPeriodDto = new PersonPeriodDto();
-            personPeriodDto.Period = new DateOnlyPeriodDto(entity.Period);
+			personPeriodDto.Period = new DateOnlyPeriodDto
+			{
+				StartDate = new DateOnlyDto { DateTime = entity.Period.StartDate },
+				EndDate = new DateOnlyDto { DateTime = entity.Period.EndDate }
+			};
             
             personPeriodDto.PersonContract = PersonContractDoToDto(entity.PersonContract);
 

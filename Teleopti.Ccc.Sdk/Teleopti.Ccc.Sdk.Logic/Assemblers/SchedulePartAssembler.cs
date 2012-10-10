@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             if (schedulePart != null)
             {
                 retDto.PersonId = schedulePart.Person.Id.Value;
-                retDto.Date = new DateOnlyDto(schedulePart.DateOnlyAsPeriod.DateOnly);
+				retDto.Date = new DateOnlyDto { DateTime = schedulePart.DateOnlyAsPeriod.DateOnly };
                 retDto.TimeZoneId = schedulePart.Person.PermissionInformation.DefaultTimeZone().Id;
 
                 DateTimePeriodDto dateOnlyPeriodDto = _dateTimePeriodAssembler.DomainEntityToDto(schedulePart.DateOnlyAsPeriod.Period());
