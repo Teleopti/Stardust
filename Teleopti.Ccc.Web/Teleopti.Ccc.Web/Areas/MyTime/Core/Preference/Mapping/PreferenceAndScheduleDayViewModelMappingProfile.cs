@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
@@ -10,10 +11,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceAndScheduleDayViewModelMappingProfile : Profile
 	{
 		private readonly IResolve<IProjectionProvider> _projectionProvider;
+		private readonly IResolve<IPreferenceFulfilledChecker> _preferenceFulfilledChecker;
 
-		public PreferenceAndScheduleDayViewModelMappingProfile(IResolve<IProjectionProvider> projectionProvider)
+		public PreferenceAndScheduleDayViewModelMappingProfile(IResolve<IProjectionProvider> projectionProvider, IResolve<IPreferenceFulfilledChecker> preferenceFulfilledChecker)
 		{
 			_projectionProvider = projectionProvider;
+			_preferenceFulfilledChecker = preferenceFulfilledChecker;
 		}
 
 		protected override void Configure()
@@ -27,6 +30,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					                                               ? s.PersonAbsenceCollection().First()
 					                                               : null))
 				.ForMember(s => s.PersonAssignment, o => o.MapFrom(s => s.SignificantPartForDisplay() == SchedulePartView.MainShift ? s : null))
+				.ForMember(d => d.Fulfilled, o => o.MapFrom(s =>
+				{
+					if (s != null && s.IsScheduled())
+						return _preferenceFulfilledChecker.Invoke().IsPreferenceFulfilled(s);
+					return null;
+				}))
 				;
 
 			CreateMap<IPersonDayOff, DayOffDayViewModel>()

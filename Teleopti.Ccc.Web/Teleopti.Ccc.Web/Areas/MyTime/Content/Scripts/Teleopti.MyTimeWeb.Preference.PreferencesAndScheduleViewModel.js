@@ -3,14 +3,15 @@
 /// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
 
 Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax, dayViewModels) {
 
 	this.DayViewModels = dayViewModels;
 
 	this.LoadPreferencesAndSchedules = function (from, to) {
-
-		return ajax.Ajax({
+		var deferred = $.Deferred();
+		ajax.Ajax({
 			url: "Preference/PreferencesAndSchedules",
 			dataType: "json",
 			data: {
@@ -19,7 +20,7 @@ Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax,
 			},
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
-
+				data = data || [];
 				$.each(data, function (index, element) {
 					var dayViewModel = dayViewModels[element.Date];
 					if (element.Preference)
@@ -30,10 +31,14 @@ Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax,
 						dayViewModel.ReadAbsence(element.Absence);
 					if (element.PersonAssignment)
 						dayViewModel.ReadPersonAssignment(element.PersonAssignment);
+					if (element.Fulfilled != null) {
+						dayViewModel.Fulfilled(element.Fulfilled);
+					}
 				});
+				deferred.resolve();
 			}
 		});
-
+		return deferred.promise();
 	};
 };
 

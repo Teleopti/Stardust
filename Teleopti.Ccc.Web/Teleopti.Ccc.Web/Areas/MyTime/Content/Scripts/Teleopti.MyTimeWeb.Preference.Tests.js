@@ -125,10 +125,13 @@ $(document).ready(function () {
 
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url != "PreferenceFeedback/PeriodFeedback")
-					return;
-				equal(options.url, "PreferenceFeedback/PeriodFeedback", "period feedback ajax url");
-				equal(options.data.Date, "2012-06-13", "period feedback date");
+				if (options.url == "Preference/PreferencesAndSchedules") {
+					options.success();
+				}
+				if (options.url == "PreferenceFeedback/PeriodFeedback") {
+					equal(options.url, "PreferenceFeedback/PeriodFeedback", "period feedback ajax url");
+					equal(options.data.Date, "2012-06-13", "period feedback date");
+				}
 			}
 		};
 		var portal = {

@@ -161,8 +161,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                              	}))
 				.ForMember(d => d.Editable, o => o.MapFrom(s =>
 				                                           	{
-				                                           		if (s.ScheduleDay != null)
-				                                           			return false;
+																//if (s.ScheduleDay != null)
+																//    return false;
 				                                           		if (s.WorkflowControlSet == null)
 				                                           			return false;
 

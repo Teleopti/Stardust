@@ -105,6 +105,9 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		return self.EditableIsInOpenPeriod() && self.EditableHasNoSchedule();
 	});
 
+	this.Fulfilled = ko.observable(true);
+
+
 	this.ReadElement = function (element) {
 		var item = $(element);
 		self.Date = item.attr('data-mytime-date');

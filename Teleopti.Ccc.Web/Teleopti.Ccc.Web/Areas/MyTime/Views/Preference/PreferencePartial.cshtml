@@ -87,17 +87,17 @@
 									<!-- /ko -->
 
 
-									string fulfilled = "";
-									if (day.Fulfilled.HasValue)
-									{
-										fulfilled = day.Fulfilled.Value ? "preference-fulfilled" : "preference-not-fulfilled";
-									}
+									//string fulfilled = "";
+									//if (day.Fulfilled.HasValue)
+									//{
+									//    fulfilled = day.Fulfilled.Value ? "preference-fulfilled" : "preference-not-fulfilled";
+									//}
 									<div class="preference">
 										<span class="displayinline-block">
 											<div class="preference-indicator">
 												<div class="heart-small preference-must-have @(day.Editable ? "" : "grey-out")" data-bind="css: {'icon': MustHave}"></div>
 											</div>
-											<div class="preference-text @fulfilled" data-bind="text: Preference" />
+											<div class="preference-text" data-bind="text: Preference, css: {'preference-fulfilled': Fulfilled(), 'preference-not-fulfilled': !Fulfilled()}" />
 											<div class="preference-indicator">
 												<div class="extended-indication" style="display: none" data-bind="visible: Extended">&raquo;</div>
 												<div class="extended-panel" style="display: none">
