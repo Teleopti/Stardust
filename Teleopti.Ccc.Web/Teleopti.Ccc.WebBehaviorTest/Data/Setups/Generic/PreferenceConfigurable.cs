@@ -17,14 +17,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string ShiftCategory { get; set; }
 		public string Dayoff { get; set; }
 		public string Absence { get; set; }
+		public TimeSpan? WorkTimeMinimum { get; set; }
+		public TimeSpan? WorkTimeMaximum { get; set; }
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var restriction = new PreferenceRestriction();
 
-			if (Absence == null && Dayoff == null && IsExtended)
+			if (IsExtended) // shortcut to create an extended preference
 				restriction.WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(8));
-
 
 			if (ShiftCategory != null)
 			{
@@ -48,6 +49,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			}
 
 			restriction.MustHave = MustHave;
+
+			if (WorkTimeMinimum.HasValue || WorkTimeMaximum.HasValue)
+				restriction.WorkTimeLimitation = new WorkTimeLimitation(WorkTimeMinimum, WorkTimeMaximum);
 
 			var preferenceDay = new PreferenceDay(user, new DateOnly(Date), restriction);
 
