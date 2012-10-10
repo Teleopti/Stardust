@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnMessagePartialView()
 		{
-			var target = new MessageController(MockRepository.GenerateMock<IMessageViewModelFactory>(), null);
+			var target = new MessageController(MockRepository.GenerateMock<IMessageViewModelFactory>(), null, TODO);
 
 			var result = target.Index();
 
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnViewModelForMessages()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IMessageViewModelFactory>();
-			var target = new MessageController(viewModelFactory, null);
+			var target = new MessageController(viewModelFactory, null, TODO);
 			var model = new MessageViewModel[] { };
 			var paging = new Paging();
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IMessageViewModelFactory>();
 			var pushMessageDialoguePersister = MockRepository.GenerateMock<IPushMessageDialoguePersister>();
 			
-			var target = new MessageController(viewModelFactory, pushMessageDialoguePersister);
+			var target = new MessageController(viewModelFactory, pushMessageDialoguePersister, TODO);
 
 			var messageViewModel = new MessageViewModel {MessageId = Guid.NewGuid().ToString()};
 			var form = new MessageForm {MessageId = messageViewModel.MessageId};
@@ -55,5 +55,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			result.Data.Should().Be.SameInstanceAs(messageViewModel);
 		}
+
+        [Test]
+        public void ShouldReturnMessageCount()
+        {
+            var viewModelFactory = MockRepository.GenerateMock<IMessageViewModelFactory>();
+            var pushMessageDialoguePersister = MockRepository.GenerateMock<IPushMessageDialoguePersister>();
+            var pushMessageProvider = MockRepository.GenerateMock<IPushMessageProvider>();
+
+            var target = new MessageController(viewModelFactory, pushMessageDialoguePersister, pushMessageProvider);
+
+            var messageInfo = new MessageInfo {UnreadMessagesCount = 1};
+            pushMessageProvider.Stub(x => x.UnreadMessageCount).Return(messageInfo.UnreadMessagesCount);
+
+            var result = target.MessagesCount();
+
+            result.Data.Should().Be.SameInstanceAs(messageInfo);
+        }
 	}
 }

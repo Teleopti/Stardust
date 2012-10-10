@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 			var timeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			
 			_person = new Person {Name = new Name("ashley", "andeen")};
-            _pushMessage = new PushMessage()
+            _pushMessage = new PushMessage(new [] {"OK"})
                                   {
                                       Title = "my title",
                                       Message = "message text",
@@ -124,6 +125,14 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
         public void ShouldMapMessageId()
         {
             _result.First().MessageId.Should().Be.EqualTo(_pushMessageDialogue.Id.ToString());
+        }
+
+        [Test]
+        public void ShouldMapMessageIsRead()
+        {
+            _pushMessageDialogue.SetReply(_pushMessage.ReplyOptions.First());
+            _result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+            _result.First().IsRead.Should().Be.True();
         }
 
         public static void SetDate(IAggregateRoot root, DateTime dateTime, string property)

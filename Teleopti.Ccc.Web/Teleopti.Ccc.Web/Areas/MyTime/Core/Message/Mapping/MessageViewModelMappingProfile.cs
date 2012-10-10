@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
 																	? _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(
 																		s.UpdatedOn.Value).ToShortDateTimeString()
 																	: null))
+                .ForMember(d => d.IsRead, o => o.MapFrom(m => m.IsReplied))
             ;
         }
     }

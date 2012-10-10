@@ -26,7 +26,7 @@
         <input id="Message-detail-ok-button" type="button" class="button mb5 floatright" data-bind="click : confirmReadMessage" value="@Html.AttributeEncode(Resources.Ok)"/>
 	</div>
 	<div class="communication-list">
-		<div id="friendly-message" class="friendly-message ui-corner-all floatleft" style="display: none;">
+		<div id="friendly-message" class="friendly-message ui-corner-all floatleft" data-bind="visible: shouldShowMessage">
 			@Resources.NoMessagesFound
 		</div>
 		<ol id="Communications-list" data-bind="foreach: communicationList">

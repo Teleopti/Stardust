@@ -11,48 +11,65 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.AsmMessage = (function () {
 
-	function _onMessageBrokerEvent(notification) {
-		var messageTab = $('a[href*="#MessageTab"]');
-		messageTab.addClass("asm-new-message-indicator");
-		var firstParenthesis = messageTab.text().indexOf('(');
-		if (firstParenthesis > -1) {
-			var messageCount = messageTab.text().substring(firstParenthesis + 1, messageTab.text().length - 1);
-			messageTab.text(messageTab.text().replace(messageCount, parseInt(messageCount) + 1));
-			return;
-		}
+    var userId;
 
-		messageTab.text(messageTab.text() + ' (1)');
-	};
+    function _onMessageBrokerEvent(notification) {
+        var messageCountFromDb = _getUnreadMessages();
+        var countString = '';
+        
+        var messageTab = $('a[href*="#MessageTab"]');
+        messageTab.addClass("asm-new-message-indicator");
+        
+        if (messageCountFromDb > 0) {
+            countString = ' (' + messageCountFromDb + ')';
+        }
+        
+        messageTab.text(messageTab.text() + countString);
+    };
 
-	function test() {
-		//console.log('fel');
-	}
+    function test() {
+        //console.log('fel');
+    }
 
-	function _listenForEvents() {
-		Teleopti.MyTimeWeb.Ajax.Ajax({
-			url: '/MyTime/MessageBroker/FetchUserData',
-			dataType: "json",
-			type: 'GET',
-			success: function (data) {
-				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
-					url: data.Url,
-					callback: _onMessageBrokerEvent,
-					errCallback: test,
-					domainType: 'IPushMessageDialogue',
-					businessUnitId: data.BusinessUnitId,
-					datasource: data.DataSourceName,
-					referenceId: data.AgentId
-				});
-			}
-		});
-	}
+    function _listenForEvents() {
+        Teleopti.MyTimeWeb.Ajax.Ajax({
+            url: '/MyTime/MessageBroker/FetchUserData',
+            dataType: "json",
+            type: 'GET',
+            success: function (data) {
+                Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
+                    url: data.Url,
+                    callback: _onMessageBrokerEvent,
+                    errCallback: test,
+                    domainType: 'IPushMessageDialogue',
+                    businessUnitId: data.BusinessUnitId,
+                    datasource: data.DataSourceName,
+                    referenceId: data.AgentId
+                });
+                userId = data.AgentId;
+            }
+        });
+    }
 
-	return {
-		Init: function () {
-			_listenForEvents();
-		},
-		OnMessageBrokerEvent: function () {
-			_onMessageBrokerEvent();
-		}
-	};
+    function _getUnreadMessages() {
+        var count;
+        Teleopti.MyTimeWeb.Ajax.Ajax({
+            url: '/MyTime/Message/MessagesCount',
+            dataType: "json",
+            type: 'GET',
+            success: function (data) {
+                count = data.UnreadMessagesCount;
+            }
+        });
+        return count;
+    }
+
+    return {
+        Init: function () {
+            _listenForEvents();
+        },
+        OnMessageBrokerEvent: function () {
+            _onMessageBrokerEvent();
+        }
+    };
 })(jQuery);

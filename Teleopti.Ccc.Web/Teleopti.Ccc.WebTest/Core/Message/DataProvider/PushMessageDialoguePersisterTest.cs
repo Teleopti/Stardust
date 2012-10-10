@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -22,11 +23,11 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var target = new PushMessageDialoguePersister(pushMessageDialogueRepository, mapper);
 
-			var pushMessage = new PushMessage();
+			var pushMessage = new PushMessage(new []{"OK"});
 
 			var pushMessageDialogue = new PushMessageDialogue(pushMessage, new Person());
 			pushMessageDialogue.SetId(Guid.NewGuid());
-			var mappedViewModel = new MessageViewModel { MessageId = pushMessageDialogue.Id.ToString() };
+			var mappedViewModel = new MessageViewModel { MessageId = pushMessageDialogue.Id.ToString(), IsRead = true};
 
 			pushMessageDialogueRepository.Stub(x => x.Get(pushMessageDialogue.Id.Value)).Return(pushMessageDialogue);
 			mapper.Stub(x => x.Map<IPushMessageDialogue, MessageViewModel>(pushMessageDialogue)).Return(mappedViewModel);
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 			var viewModel = target.Persist(pushMessageDialogue.Id.ToString());
 
 			viewModel.MessageId.Should().Be.EqualTo(mappedViewModel.MessageId);
+            viewModel.IsRead.Should().Be.True();
 		}
 	}
 }

@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Message
         public string Sender { get; set; }
         public string Date { get; set; }
         public string MessageId { get; set; }
+        public bool IsRead { get; set; }
     }
 }

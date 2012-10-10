@@ -89,7 +89,7 @@ Scenario: Confirm message is read
 	And I click on the message at position '1' in the list
 	When I click the confirm button
 	Then I should not see any messages
-	And I should be notified that I have 'no' unread message(s)
+	And I should see a user-friendly message explaining I dont have any messages
 
 Scenario: Sort messages in list by latest message
 	Given I have the role 'Full access to mytime'
@@ -113,10 +113,11 @@ Scenario: Reduce number of unread messages in message tab title
 	And I have an unread message with
 	| Field         | Value					|
 	| Title         | Another new message	|
-	And I should be notified that I have '2' unread message(s)
 	And I am viewing week schedule
+	And I should be notified that I have '2' unread message(s)
 	When I navigate to messages
 	And I confirm reading the message at position '1' in the list
+	# OK till hit
 	Then I should be notified that I have '1' unread message(s)
 	
 

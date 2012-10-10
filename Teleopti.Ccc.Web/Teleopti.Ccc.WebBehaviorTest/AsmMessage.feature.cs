@@ -342,7 +342,7 @@ this.FeatureBackground();
 #line 91
  testRunner.Then("I should not see any messages");
 #line 92
- testRunner.And("I should be notified that I have \'no\' unread message(s)");
+ testRunner.And("I should see a user-friendly message explaining I dont have any messages");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -421,14 +421,14 @@ this.FeatureBackground();
 #line 113
  testRunner.And("I have an unread message with", ((string)(null)), table12);
 #line 116
- testRunner.And("I should be notified that I have \'2\' unread message(s)");
-#line 117
  testRunner.And("I am viewing week schedule");
+#line 117
+ testRunner.And("I should be notified that I have \'2\' unread message(s)");
 #line 118
  testRunner.When("I navigate to messages");
 #line 119
  testRunner.And("I confirm reading the message at position \'1\' in the list");
-#line 120
+#line 121
  testRunner.Then("I should be notified that I have \'1\' unread message(s)");
 #line hidden
             this.ScenarioCleanup();

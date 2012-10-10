@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 	    public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-		    var message = new PushMessage()
+		    var message = new PushMessage(new[] {"OK"})
 		                      {
 		                          Title = Title,
 		                          Message = Message,

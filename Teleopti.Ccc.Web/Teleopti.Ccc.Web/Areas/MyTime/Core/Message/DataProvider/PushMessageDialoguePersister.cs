@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 		public MessageViewModel Persist(string messageId)
 		{
 			var pushMessageDialogue = _pushMessageDialogueRepository.Get(new Guid(messageId));
+            pushMessageDialogue.SetReply(pushMessageDialogue.PushMessage.ReplyOptions.First());
 
 			return _mapper.Map<IPushMessageDialogue, MessageViewModel>(pushMessageDialogue);
 		}

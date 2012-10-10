@@ -134,7 +134,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
         [When(@"I confirm reading the message at position '(.*)' in the list")]
         public void WhenIConfirmReadingTheMessageAtPositionInTheList(int listPosition)
         {
-            _page.MessageListItems[listPosition - 1].EventualClick();
+            EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(2));
+            _page.MessageListItems[listPosition - 1].Click();
             Pages.Pages.CurrentOkButton.OkButton.EventualClick();
         }
 
