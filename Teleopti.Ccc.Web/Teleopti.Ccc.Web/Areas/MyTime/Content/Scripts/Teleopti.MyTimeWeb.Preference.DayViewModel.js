@@ -87,14 +87,12 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.Absence = ko.observable('');
 	this.PersonAssignmentShiftCategory = ko.observable('');
 	this.PersonAssignmentTimeSpan = ko.observable('');
-	this.ContractTimeMinutes = ko.observable(0);
 	this.PersonAssignmentContractTime = ko.observable('');
-//	this.PersonAssignmentContractTimeMinutes = ko.observable('');
+	this.ContractTimeMinutes = ko.observable(0);
 
 	this.ReadElement = function (element) {
 		var item = $(element);
 		self.Date = item.attr('data-mytime-date');
-//		self.ContractTimeMinutes = parseInt($('[data-mytime-contract-time]', item).attr('data-mytime-contract-time')) || 0;
 		self.HasFeedback = item.hasClass("feedback");
 		self.HasPreference = item.hasClass("preference") || $(".preference", item).length > 0;
 		self.Color($('.day-content', element).css("border-left-color"));

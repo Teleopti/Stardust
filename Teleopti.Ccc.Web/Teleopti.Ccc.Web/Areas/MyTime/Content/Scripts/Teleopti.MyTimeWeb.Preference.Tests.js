@@ -84,7 +84,7 @@ $(document).ready(function () {
 	test("should compute with schedule data", function () {
 
 		$("#qunit-fixture")
-			.html("<div id='Preference-period-feedback-view'><span data-bind='text: PossibleResultContractTimeLower' /><span data-bind='text: PossibleResultContractTimeUpper' /></div>")
+			.append("<div id='Preference-period-feedback-view'><span data-bind='text: PossibleResultContractTimeLower' /><span data-bind='text: PossibleResultContractTimeUpper' /></div>")
 			.append("<li data-mytime-date='2012-06-13' class='inperiod'></li>")
 			.append("<li data-mytime-date='2012-06-14' class='inperiod'></li>");
 
@@ -93,9 +93,20 @@ $(document).ready(function () {
 				if (options.url == "PreferenceFeedback/Feedback")
 					ok(true, "feedback should not be loaded");
 				if (options.url == "Preference/PreferencesAndSchedules") {
-					options.success({
-						ContractTimeMinutes: 120
-					});
+					var data1 = {
+						Date: '2012-06-13',
+						PersonAssignment: {
+							ContractTimeMinutes: 120
+						}
+					};
+					var data2 = {
+						Date: '2012-06-14',
+						PersonAssignment: {
+							ContractTimeMinutes: 120
+						}
+					};
+					var data = [data1, data2];
+					options.success(data);
 				}
 			}
 		};
