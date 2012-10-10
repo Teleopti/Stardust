@@ -111,14 +111,13 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 	this.StyleClassName = ko.observable('');
 
-
 	this.ReadElement = function (element) {
 		var item = $(element);
 		self.Date = item.attr('data-mytime-date');
 		self.EditableIsInOpenPeriod(item.attr('data-mytime-editable') == "True");
 		//		self.HasFeedback = item.hasClass("feedback");
 		self.HasPreference = item.hasClass("preference") || $(".preference", item).length > 0;
-		self.Color($('.day-content', element).css("border-left-color"));
+//		self.Color($('.day-content', element).css("border-left-color"));
 	};
 
 	this.ReadPreference = function (data) {

@@ -59,6 +59,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						}
 						return null;
 					}))
+				.ForMember(d => d.BorderColor, o => o.MapFrom(s =>
+					{
+						if (s != null)
+						{
+							if((s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff))
+							{
+								if (s.PersonAbsenceCollection() != null)
+									return s.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
+								
+							}
+							if (s.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence)
+								return s.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
+							if (s.SignificantPartForDisplay() == SchedulePartView.MainShift)
+								return s.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor.ToHtml();
+							if (s.SignificantPartForDisplay() == SchedulePartView.DayOff)
+								return null;
+						}
+						return null;
+					}))
 				;
 
 			CreateMap<IPersonDayOff, DayOffDayViewModel>()

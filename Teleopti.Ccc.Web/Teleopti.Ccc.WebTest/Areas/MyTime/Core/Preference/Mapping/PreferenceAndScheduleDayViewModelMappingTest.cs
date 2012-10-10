@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Globalization;
 using AutoMapper;
 using NUnit.Framework;
@@ -248,6 +249,30 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 
 			result.StyleClassName.Should().Contain(StyleClasses.Striped);
+		}
+
+		[Test]
+		public void ShouldMapAbsenceBorderColor()
+		{
+			var stubs = new StubFactory();
+			var personAbsence = stubs.PersonAbsenceStub(new DateTimePeriod(), stubs.AbsenceLayerStub(stubs.AbsenceStub(Color.DarkMagenta)));
+			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today, SchedulePartView.FullDayAbsence, personAbsence);
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.BorderColor.Should().Be(Color.DarkMagenta.ToHtml());
+		}
+
+		[Test]
+		public void ShouldMapPersonAssignmentsBorderColor()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.MainShiftStub(stubs.ShiftCategoryStub(Color.Coral)));
+			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.BorderColor.Should().Be(Color.Coral.ToHtml());
 		}
 
 	}

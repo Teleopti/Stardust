@@ -37,6 +37,8 @@ Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax,
 					dayViewModel.Feedback(element.Feedback);
 					if (element.StyleClassName)
 						dayViewModel.StyleClassName(element.StyleClassName);
+					if (element.BorderColor)
+						dayViewModel.Color(element.BorderColor);
 				});
 				deferred.resolve();
 			}
