@@ -95,7 +95,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				Expect.Call(_contractSchedule.IsWorkday(dateOnly, dateOnly)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			    Expect.Call(_person.PreviousPeriod(_personPeriod)).Return(null);
 				Expect.Call(_person.SchedulePeriodStartDate(dateOnly)).Return(dateOnly).Repeat.AtLeastOnce();
-			    Expect.Call(_person.AverageWorkTimeOfDay(dateOnly)).Return(TimeSpan.FromHours(8));
 			}
 
 			using (_mockRepository.Playback())
