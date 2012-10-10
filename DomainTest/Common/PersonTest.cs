@@ -745,7 +745,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsTrue(_target.IsOkToAddPersonPeriod(dateOnly));
             var team = TeamFactory.CreateSimpleTeam("Team");
             var personContract =
-                new PersonContract(new Contract("contract") { WorkTimeSource = WorkTimeSource.FromSchedulePeriod },
+                new PersonContract(new Contract("contract") { WorkTimeSource = WorkTimeSource.FromContract },
                     new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
             var personPeriod = new PersonPeriod(dateOnly, personContract, team);
             _target.AddPersonPeriod(personPeriod);
@@ -771,18 +771,33 @@ namespace Teleopti.Ccc.DomainTest.Common
         } 
         
         [Test]
-        public void ShouldGetContractTimeFromNoSchedulePeriod()
+        public void ShouldGetContractTimeFromVirtualSchedulePeriod()
         {
-            var dateOnly = new DateOnly(2012, 12, 1);
+            var dateOnly = new DateOnly(2012, 7, 1);
             Assert.IsTrue(_target.IsOkToAddPersonPeriod(dateOnly));
             Assert.IsTrue(_target.IsOkToAddSchedulePeriod(dateOnly));
             var team = TeamFactory.CreateSimpleTeam("Team");
+            var contractSchedule = new ContractSchedule("Test1");
+            var week = new ContractScheduleWeek();
+            week.Add(DayOfWeek.Monday, true);
+            week.Add(DayOfWeek.Tuesday, true);
+            week.Add(DayOfWeek.Wednesday, true);
+            week.Add(DayOfWeek.Thursday, true);
+            week.Add(DayOfWeek.Friday, true);
+            contractSchedule.AddContractScheduleWeek(week);
             var personContract =
                 new PersonContract(new Contract("contract") { WorkTimeSource = WorkTimeSource.FromSchedulePeriod },
-                    new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
+                    new PartTimePercentage("Testing"), contractSchedule);
+       
             var personPeriod = new PersonPeriod(dateOnly, personContract, team);
             _target.AddPersonPeriod(personPeriod);
-            Assert.That(_target.AverageWorkTimeOfDay(dateOnly), Is.EqualTo(WorkTime.DefaultWorkTime.AvgWorkTimePerDay));
+            var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2012, 6, 1));
+            schedulePeriod.PeriodType = SchedulePeriodType.Month;
+            schedulePeriod.Number = 1;
+            schedulePeriod.PeriodTime = new TimeSpan(0, 167, 42, 0);
+            schedulePeriod.DaysOff = 12;
+            _target.AddSchedulePeriod(schedulePeriod);
+            Assert.That(_target.AverageWorkTimeOfDay(dateOnly), Is.EqualTo(TimeSpan.FromMinutes(schedulePeriod.PeriodTime.Value.TotalMinutes / 19)));
         }
     }
 }
