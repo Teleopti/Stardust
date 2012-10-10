@@ -172,8 +172,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				if (!IsValid)
 					return new TimeSpan();
-
-			    return _person.AverageWorkTimeOfDay(_requestedDateOnly);
+                if (_schedulePeriod.IsPeriodTimeOverride)
+					{
+						double periodTime = _schedulePeriod.PeriodTime.Value.TotalMinutes; //PeriodTime will NOT be null, as we check for PeriodTimeOverride
+						int schedulePeriodWorkdays = SchedulePeriodWorkdays();
+						double periodMinutes = periodTime / schedulePeriodWorkdays;
+						return TimeSpan.FromMinutes(periodMinutes);
+					}
+					if (_schedulePeriod.IsAverageWorkTimePerDayOverride)
+						return _schedulePeriod.AverageWorkTimePerDay;
+				return _personContract.AverageWorkTimePerDay;
 			}
 		}
 
