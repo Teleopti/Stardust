@@ -66,6 +66,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 
 	this.Date = "";
+
 	this.HasFeedback = true;
 	this.HasPreference = true;
 	this.IsLoading = ko.observable(false);
@@ -82,7 +83,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.ActivityTimeLimitation = ko.observable();
 	this.Color = ko.observable();
 	this.AjaxError = ko.observable('');
-	
+
 	this.DayOff = ko.observable('');
 	this.Absence = ko.observable('');
 	this.PersonAssignmentShiftCategory = ko.observable('');
@@ -90,9 +91,24 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.PersonAssignmentContractTime = ko.observable('');
 	this.ContractTimeMinutes = ko.observable(0);
 
+	this.EditableIsInOpenPeriod = ko.observable(false);
+	this.EditableHasNoSchedule = ko.computed(function () {
+		if (hasStringValue(self.DayOff()))
+			return false;
+		if (hasStringValue(self.Absence()))
+			return false;
+		if (hasStringValue(self.PersonAssignmentShiftCategory()))
+			return false;
+		return true;
+	});
+	this.Editable = ko.computed(function () {
+		return self.EditableIsInOpenPeriod() && self.EditableHasNoSchedule();
+	});
+
 	this.ReadElement = function (element) {
 		var item = $(element);
 		self.Date = item.attr('data-mytime-date');
+		self.EditableIsInOpenPeriod(item.attr('data-mytime-editable') == "True");
 		self.HasFeedback = item.hasClass("feedback");
 		self.HasPreference = item.hasClass("preference") || $(".preference", item).length > 0;
 		self.Color($('.day-content', element).css("border-left-color"));
@@ -115,7 +131,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		self.ActivityTimeLimitation(data.ActivityTimeLimitation);
 	};
 
-	this.ReadDayOff = function(data) {
+	this.ReadDayOff = function (data) {
 		self.DayOff(data.DayOff);
 	};
 
@@ -129,7 +145,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		self.PersonAssignmentContractTime(data.ContractTime);
 		self.ContractTimeMinutes(data.ContractTimeMinutes);
 	};
-	
+
 	this.LoadPreference = function (complete) {
 		if (!self.HasPreference) {
 			complete();

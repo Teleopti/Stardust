@@ -200,16 +200,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.ScheduleDay.PersonDayOffCollection().Single().DayOff.Description.Name))
 				;
 
-			CreateMap<IPersonDayOff, DayOffDayViewModel>()
-				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.DayOff.Description.Name))
-				;
-
 			CreateMap<DayMappingData, AbsenceDayViewModel>()
 				.ForMember(d => d.Absence, o => o.MapFrom(s => s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.Description.Name))
-				;
-
-			CreateMap<IPersonAbsence, AbsenceDayViewModel>()
-				.ForMember(s => s.Absence, o => o.MapFrom(s => s.Layer.Payload.Description.Name))
 				;
 
 			CreateMap<DayMappingData, HeaderViewModel>()

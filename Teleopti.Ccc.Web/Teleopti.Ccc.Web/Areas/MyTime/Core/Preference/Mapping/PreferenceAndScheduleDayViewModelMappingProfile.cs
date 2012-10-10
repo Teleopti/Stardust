@@ -29,6 +29,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(s => s.PersonAssignment, o => o.MapFrom(s => s.SignificantPartForDisplay() == SchedulePartView.MainShift ? s : null))
 				;
 
+			CreateMap<IPersonDayOff, DayOffDayViewModel>()
+				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.DayOff.Description.Name))
+				;
+
+			CreateMap<IPersonAbsence, AbsenceDayViewModel>()
+				.ForMember(s => s.Absence, o => o.MapFrom(s => s.Layer.Payload.Description.Name))
+				;
+
 			CreateMap<IScheduleDay, PersonAssignmentDayViewModel>()
 				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.AssignmentHighZOrder().MainShift.ShiftCategory.Description.Name))
 				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(_projectionProvider.Invoke().Projection(s).ContractTime(), CultureInfo.CurrentUICulture)))

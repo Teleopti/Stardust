@@ -175,7 +175,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		});
 		var from = $('li[data-mytime-date].inperiod').first().data('mytime-date');
 		var to = $('li[data-mytime-date].inperiod').last().data('mytime-date');
-		
+
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModels, date);
 
@@ -185,8 +185,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 		loader = loader || function (call) { call(); };
 		loader(function () {
-			periodFeedbackViewModel.LoadFeedback();
-			preferencesAndScheduleViewModel.LoadPreferencesAndSchedules(from, to);
+			preferencesAndScheduleViewModel.LoadPreferencesAndSchedules(from, to)
+				.done(function() {
+					_activateSelectable();
+					periodFeedbackViewModel.LoadFeedback();
+				});
 			loadingStarted = true;
 			$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, element) {
 				element.LoadFeedback();
@@ -267,7 +270,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				return;
 			_initPeriodSelection();
 			_initViewModels(_soon);
-			_activateSelectable();
 			_initExtendedPanels();
 		},
 		PreferencePartialDispose: function () {

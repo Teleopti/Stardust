@@ -7,19 +7,19 @@
 Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax, dayViewModels) {
 
 	this.DayViewModels = dayViewModels;
-	
+
 	this.LoadPreferencesAndSchedules = function (from, to) {
 
-		ajax.Ajax({
+		return ajax.Ajax({
 			url: "Preference/PreferencesAndSchedules",
 			dataType: "json",
 			data: {
-				From: from, 
+				From: from,
 				To: to
 			},
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
-				
+
 				$.each(data, function (index, element) {
 					var dayViewModel = dayViewModels[element.Date];
 					if (element.Preference)

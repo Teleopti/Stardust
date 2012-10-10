@@ -71,10 +71,7 @@
 				</li>
 				@foreach (DayViewModel day in week.Days)
 				{
-					PersonAssignmentDayViewModel personAssignment = day.PersonAssignment;
-					DayOffDayViewModel dayOff = day.DayOff;
-					AbsenceDayViewModel absence = day.Absence;
-					<li class="relative @(day.InPeriod ? "inperiod" : "") @(day.Feedback ? "feedback" : "") @(day.Editable ? "editable" : "non-editable") @Html.AttributeEncode(day.StyleClassName)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)">
+					<li class="relative @(day.InPeriod ? "inperiod" : "non-editable") @(day.Feedback ? "feedback" : "") @Html.AttributeEncode(day.StyleClassName)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" data-mytime-editable="@day.Editable" data-bind="css: {editable: Editable, 'non-editable': !Editable()}">
 						<div>
 							<div class="day-header">
 								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
