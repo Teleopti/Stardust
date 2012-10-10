@@ -3424,7 +3424,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     updateShiftEditor();
                     var currentCell = _scheduleView.ViewGrid.CurrentCell;
                     var selectedCols = _scheduleView.ViewGrid.Model.Selections.Ranges.ActiveRange.Width;
-                    if (!(_scheduleView is RestrictionSummaryView) && currentCell.RowIndex == 0 && selectedCols == 1 && currentCell.ColIndex >= (int)ColumnType.StartScheduleColumns)
+                    if (!(_scheduleView is AgentRestrictionsDetailView) && currentCell.RowIndex == 0 && selectedCols == 1 && currentCell.ColIndex >= (int)ColumnType.StartScheduleColumns)
                     {
                         _scheduleView.AddWholeWeekAsSelected(currentCell.RowIndex, currentCell.ColIndex);
                     }
