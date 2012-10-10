@@ -129,8 +129,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly ChartControl _chartControlSkillData;
         private readonly TeleoptiLessIntelligentSplitContainer _splitContainerAdvMain;
         private readonly TeleoptiLessIntelligentSplitContainer _splitContainerAdvResultGraph;
-        private readonly TeleoptiLessIntelligentSplitContainer _splitContainerLessIntellegent1;
-        private readonly TeleoptiLessIntelligentSplitContainer _splitContainerView;
+        private readonly TeleoptiLessIntelligentSplitContainer _splitContainerLessIntellegentEditor;
+        private readonly TeleoptiLessIntelligentSplitContainer _splitContainerLessIntellegentRestriction;
         private readonly TabControlAdv _tabSkillData;
         private readonly ElementHost _elementHostRequests;
         private readonly WpfControls.Controls.Requests.Views.HandlePersonRequestView _handlePersonRequestView1;
@@ -275,8 +275,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             _chartControlSkillData = schedulerSplitters1.ChartControlSkillData;
             _splitContainerAdvMain = schedulerSplitters1.SplitContainerAdvMain;
             _splitContainerAdvResultGraph = schedulerSplitters1.SplitContainerAdvResultGraph;
-            _splitContainerLessIntellegent1 = schedulerSplitters1.SplitContainerLessIntelligent1;
-            _splitContainerView = schedulerSplitters1.SplitContainerView;
+            _splitContainerLessIntellegentEditor = schedulerSplitters1.SplitContainerLessIntelligent1;
+            _splitContainerLessIntellegentRestriction = schedulerSplitters1.SplitContainerView;
             _elementHostRequests = schedulerSplitters1.ElementHostRequests;
             _handlePersonRequestView1 = schedulerSplitters1.HandlePersonRequestView1;
             _tabSkillData = schedulerSplitters1.TabSkillData;
@@ -6019,10 +6019,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 						toolStripButtonFilterAgents.Checked = true;
 					else
 						toolStripButtonFilterAgents.Checked = false;
-					if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
-					{
-						prepareAgentRestrictionView(null, _scheduleView);
-					}
+					//if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
+					//{
+					//    prepareAgentRestrictionView(null, _scheduleView);
+					//}
 
 					if (_scheduleView != null)
 					{
@@ -6066,9 +6066,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		//    schedulerSplitters1.AgentRestrictionGrid.LoadData(SchedulerState, persons, schedulingOptions, _workShiftWorkTime, selectedPerson);	
 		//}
 
-		private void prepareAgentRestrictionView(IScheduleDay schedulePart, ScheduleViewBase detailView)
+		private void prepareAgentRestrictionView(IScheduleDay schedulePart, ScheduleViewBase detailView, IList<IPerson> persons)
 		{
-			var persons = _schedulerState.FilteredPersonDictionary.Values.ToList();
+			//var persons = _schedulerState.FilteredPersonDictionary.Values.ToList();
 			if (persons.Count == 0) return;
 			var selectedPerson = persons.FirstOrDefault();
 			if (schedulePart != null) selectedPerson = schedulePart.Person;
@@ -6085,6 +6085,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var view = (AgentRestrictionsDetailView)detailView;
 
+			_splitContainerLessIntellegentRestriction.SplitterDistance = 300;
 			schedulerSplitters1.AgentRestrictionGrid.MergeHeaders();
 			schedulerSplitters1.AgentRestrictionGrid.LoadData(SchedulerState, persons, schedulingOptions, _workShiftWorkTime, selectedPerson, view, schedulePart);
 		}
@@ -6098,10 +6099,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             schedulerSplitters1.SuspendLayout();
             IList<IScheduleDay> scheduleParts = null;
         	IScheduleDay selectedPart = null;
+        	IList<IPerson> selectedPersons = null;
 
             if (_scheduleView != null)
             {
                 scheduleParts = _scheduleView.SelectedSchedules();
+            	selectedPersons = new List<IPerson>(_scheduleView.AllSelectedPersons());
 				selectedPart = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
                 _scheduleView.RefreshSelectionInfo -= _scheduleView_RefreshSelectionInfo;
                 _scheduleView.RefreshShiftEditor -= _scheduleView_RefreshShiftEditor;
@@ -6115,6 +6118,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             toolStripExEdit2.Visible = true;
             toolStripExActions.Visible = true;
             toolStripExLocks.Visible = true;
+			toolStripButtonFilterAgents.Enabled = true;
+
+			toolStripMenuItemFilter.Enabled = true;
+        	toolStripMenuItemLock.Enabled = true;
+        	toolStripMenuItemLoggedOnUserTimeZone.Enabled = true;
+			
 
             var callback = new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(),
                                                                         SchedulerState);
@@ -6142,6 +6151,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _scheduleView = new DetailView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter,
                                                    _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback,
                                                    _defaultScheduleTag);
+					_grid.ContextMenuStrip = contextMenuViews;
                     ActiveControl = _grid;
 
                     break;
@@ -6192,6 +6202,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                     //restriction view
                     Cursor = Cursors.WaitCursor;
                     _grid.BringToFront();
+
+					toolStripButtonFilterAgents.Enabled = false;
+					toolStripExClipboard.Visible = false;
+					toolStripExEdit2.Visible = false;
+					toolStripExActions.Visible = false;
+					toolStripExLocks.Visible = false;
 					//ÖÖÖ
 					//_scheduleView = new RestrictionSummaryView(_grid, SchedulerState, _gridLockManager,
 					//                                           SchedulePartFilter, _clipHandlerSchedule,
@@ -6200,10 +6216,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 					//                                           callback, _defaultScheduleTag);
 
 					_scheduleView = new AgentRestrictionsDetailView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _workShiftWorkTime);
-
+            		_scheduleView.TheGrid.ContextMenuStrip = null;
                     //_schedulingOptions = schedulerSplitters1.SchedulingOptions;
                     //prepareAgentRestrictionView(selectedPart);
-					prepareAgentRestrictionView(selectedPart, _scheduleView);
+					prepareAgentRestrictionView(selectedPart, _scheduleView, selectedPersons);
 
 					//GridRangeInfo info = GridRangeInfo.Cell(1, 1);
 					//_scheduleView.ViewGrid.CurrentCell.Activate(1, 1, GridSetCurrentCellOptions.SetFocus);
@@ -8316,8 +8332,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                            {
                                                MainSplitter = _splitContainerAdvMain,
                                                GraphResultSplitter = _splitContainerAdvResultGraph,
-                                               GridEditorSplitter = _splitContainerLessIntellegent1,
-                                               RestrictionViewSplitter = _splitContainerView
+                                               GridEditorSplitter = _splitContainerLessIntellegentEditor,
+                                               RestrictionViewSplitter = _splitContainerLessIntellegentRestriction
                                            };
                 }
                 return _splitterManager;
@@ -8537,7 +8553,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
             {
-                prepareAgentRestrictionView(null, _scheduleView);
+                prepareAgentRestrictionView(null, _scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons()));
             }
             _grid.Invalidate();
             _grid.Refresh();
