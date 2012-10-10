@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() =>
 									  Browser.Current.Table("asm-current-info-table")
 										  .Elements.Filter(Find.ByClass("asm-info-time-column"))
-										  .Last().Text + nextDayIndication,
-										Is.EqualTo(startTime.Trim()));
+										  .Last().Text + nextDayIndication.Trim(),
+										Is.EqualTo(startTime));
 		}
 
 		[Then(@"I should see a popup with title AgentScheduleMessenger")]
