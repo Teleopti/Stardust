@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 									  Browser.Current.Table("asm-current-info-table")
 										  .Elements.Filter(Find.ByClass("asm-info-time-column"))
 										  .Last().Text + nextDayIndication,
-										Is.EqualTo(startTime));
+										Is.EqualTo(startTime.Trim()));
 		}
 
 		[Then(@"I should see a popup with title AgentScheduleMessenger")]
