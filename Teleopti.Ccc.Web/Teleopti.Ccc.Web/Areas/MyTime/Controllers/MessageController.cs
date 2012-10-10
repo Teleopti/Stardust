@@ -11,11 +11,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	{
 		private readonly IMessageViewModelFactory _messageViewModelFactory;
 		private readonly IPushMessageDialoguePersister _pushMessageDialoguePersister;
+		private readonly IPushMessageProvider _pushMessageProvider;
 
 		public MessageController(IMessageViewModelFactory viewModelFactory, IPushMessageDialoguePersister pushMessageDialoguePersister, IPushMessageProvider pushMessageProvider)
 		{
 			_messageViewModelFactory = viewModelFactory;
 			_pushMessageDialoguePersister = pushMessageDialoguePersister;
+			_pushMessageProvider = pushMessageProvider;
 		}
 
 		[EnsureInPortal]
@@ -38,10 +40,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_pushMessageDialoguePersister.Persist(form.MessageId));
 		}
 
-	    public JsonResult MessagesCount()
-	    {
-	        throw new System.NotImplementedException();
-	    }
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult MessagesCount()
+		{
+			return Json(new MessageInfo {UnreadMessagesCount = _pushMessageProvider.UnreadMessageCount}, JsonRequestBehavior.AllowGet);
+		}
 	}
 
 	public class MessageForm
@@ -49,8 +53,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public string MessageId { get; set; }
 	}
 
-    public class MessageInfo
-    {
-        public int UnreadMessagesCount { get; set; }
-    }
+	public class MessageInfo
+	{
+		public int UnreadMessagesCount { get; set; }
+	}
 }

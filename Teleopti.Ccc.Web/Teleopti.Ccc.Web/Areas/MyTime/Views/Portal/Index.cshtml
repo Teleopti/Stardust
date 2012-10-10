@@ -14,8 +14,16 @@
 					startBaseUrl: '@Url.Content("~/Start/")'
 				});
 		});
+		
+    	jQuery(function () {
+    		@if (Model.HasAsmPermission)
+			{
+				@Html.Raw("Teleopti.MyTimeWeb.AsmMessage.Init();")
+			}
+    	});
 	</script>
 }
+
 <header class="col-1 mb10" dir="ltr"> 
 		@Html.Partial("Navigation", Model)
 </header>
