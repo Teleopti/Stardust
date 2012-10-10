@@ -71,7 +71,7 @@
 				</li>
 				@foreach (DayViewModel day in week.Days)
 				{
-					<li class="relative @(day.InPeriod ? "inperiod" : "non-editable") @(day.Feedback ? "feedback" : "") @Html.AttributeEncode(day.StyleClassName)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" data-mytime-editable="@day.Editable" data-bind="css: {editable: Editable, 'non-editable': !Editable()}">
+					<li class="relative @(day.InPeriod ? "inperiod" : "non-editable") @Html.AttributeEncode(day.StyleClassName)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" data-mytime-editable="@day.Editable" data-bind="css: {editable: Editable, 'non-editable': !Editable(), feedback: Feedback}">
 						<div>
 							<div class="day-header">
 								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
@@ -134,8 +134,9 @@
 									</div>
 									<!-- /ko -->
 								}
-								@if (day.Feedback)
+								@if (day.InPeriod)
 								{
+									<!-- ko if: Feedback -->
 									<!-- ko if: DisplayFeedbackError -->
 									<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
 									<!-- /ko -->
@@ -143,6 +144,7 @@
 									<div class="possible-start-times time-limitation icon leftarrow truncate" data-bind="text: PossibleStartTimes"></div>
 									<div class="possible-end-times time-limitation icon rightarrow truncate" data-bind="text: PossibleEndTimes"></div>
 									<div class="possible-contract-times time-limitation icon doublearrow-blue truncate" data-bind="text: PossibleContractTimes"></div>
+									<!-- /ko -->
 									<!-- /ko -->
 								}
 							</div>

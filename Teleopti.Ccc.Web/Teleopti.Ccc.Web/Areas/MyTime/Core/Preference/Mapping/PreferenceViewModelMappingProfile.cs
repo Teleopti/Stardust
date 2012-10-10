@@ -175,8 +175,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.InPeriod, o => o.MapFrom(s => s.Period.Contains(s.Date)))
 				.ForMember(d => d.Feedback, o => o.MapFrom(s =>
 				                                           	{
-				                                           		var isScheduled = s.ScheduleDay != null && s.ScheduleDay.IsScheduled();
-				                                           		return !isScheduled && s.Period.Contains(s.Date);
+																//var isScheduled = s.ScheduleDay != null && s.ScheduleDay.IsScheduled();
+																//return !isScheduled && s.Period.Contains(s.Date);
+				                                           		return s.Period.Contains(s.Date);
 				                                           	}))
 				.ForMember(d => d.PersonAssignment, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.MainShift ? s : null))
 				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.DayOff ? s : null))

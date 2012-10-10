@@ -67,7 +67,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 	this.Date = "";
 
-	this.HasFeedback = true;
+	//	this.HasFeedback = true;
 	this.HasPreference = true;
 	this.IsLoading = ko.observable(false);
 	this.Preference = ko.observable();
@@ -107,12 +107,14 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 	this.Fulfilled = ko.observable(true);
 
+	this.Feedback = ko.observable(false);
+
 
 	this.ReadElement = function (element) {
 		var item = $(element);
 		self.Date = item.attr('data-mytime-date');
 		self.EditableIsInOpenPeriod(item.attr('data-mytime-editable') == "True");
-		self.HasFeedback = item.hasClass("feedback");
+		//		self.HasFeedback = item.hasClass("feedback");
 		self.HasPreference = item.hasClass("preference") || $(".preference", item).length > 0;
 		self.Color($('.day-content', element).css("border-left-color"));
 	};
@@ -166,7 +168,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	};
 
 	this.LoadFeedback = function () {
-		if (!self.HasFeedback)
+		if (!self.Feedback())
 			return null;
 		return ajaxForDate({
 			url: "PreferenceFeedback/Feedback",

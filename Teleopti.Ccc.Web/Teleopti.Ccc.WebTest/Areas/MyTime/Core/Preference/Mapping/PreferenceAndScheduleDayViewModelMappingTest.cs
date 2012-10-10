@@ -195,5 +195,35 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			result.Fulfilled.Should().Be(null);
 		}
+
+		[Test]
+		public void ShouldFlagFeedbackIfInsidePeriodAndNotScheduled()
+		{
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.Feedback.Should().Be.True();
+		}
+
+		//[Test]
+		//public void ShouldFlagFeedbackIfInsidePeriodAndNoScheduleDay()
+		//{
+		//    var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(null);
+
+		//    result.Feedback.Should().Be.True();
+		//}
+
+		[Test]
+		public void ShouldNotFlagFeedbackIfScheduled()
+		{
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.Feedback.Should().Be.False();
+		}
 	}
 }

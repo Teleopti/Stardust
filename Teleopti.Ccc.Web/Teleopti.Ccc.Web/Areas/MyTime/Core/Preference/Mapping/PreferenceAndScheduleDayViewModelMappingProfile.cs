@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						return _preferenceFulfilledChecker.Invoke().IsPreferenceFulfilled(s);
 					return null;
 				}))
+				.ForMember(d => d.Feedback, o => o.MapFrom(s => s == null || !s.IsScheduled()))
 				;
 
 			CreateMap<IPersonDayOff, DayOffDayViewModel>()

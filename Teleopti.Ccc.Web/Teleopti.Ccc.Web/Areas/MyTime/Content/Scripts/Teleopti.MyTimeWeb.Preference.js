@@ -189,11 +189,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				.done(function() {
 					_activateSelectable();
 					periodFeedbackViewModel.LoadFeedback();
+					loadingStarted = true;
+					$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
+						day.LoadFeedback();
+					});
 				});
-			loadingStarted = true;
-			$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, element) {
-				element.LoadFeedback();
-			});
 		});
 	}
 
