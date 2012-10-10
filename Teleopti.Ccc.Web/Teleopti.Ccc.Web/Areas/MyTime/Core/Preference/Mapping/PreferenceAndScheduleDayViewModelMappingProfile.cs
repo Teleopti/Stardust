@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -23,20 +24,41 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		{
 			CreateMap<IScheduleDay, PreferenceAndScheduleDayViewModel>()
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.DateOnlyAsPeriod.DateOnly.ToFixedClientDateOnlyFormat()))
-				.ForMember(s => s.Preference, o => o.MapFrom(s => s.PersonRestrictionCollection() == null ? null : s.PersonRestrictionCollection().OfType<IPreferenceDay>().SingleOrDefault()))
-				.ForMember(s => s.DayOff, o => o.MapFrom(s => s.PersonDayOffCollection() == null ? null : s.PersonDayOffCollection().SingleOrDefault()))
-				.ForMember(s => s.Absence, o => o.MapFrom(s => s.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence ||
-				                                               s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff
+				.ForMember(s => s.Preference,
+				           o =>
+				           o.MapFrom(
+					           s =>
+					           s.PersonRestrictionCollection() == null
+						           ? null
+						           : s.PersonRestrictionCollection().OfType<IPreferenceDay>().SingleOrDefault()))
+				.ForMember(s => s.DayOff,
+				           o =>
+				           o.MapFrom(s => s.PersonDayOffCollection() == null ? null : s.PersonDayOffCollection().SingleOrDefault()))
+				.ForMember(s => s.Absence, o => o.MapFrom(s => (s.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence ||
+				                                                s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff) &&
+				                                               s.PersonAbsenceCollection() != null
 					                                               ? s.PersonAbsenceCollection().First()
 					                                               : null))
-				.ForMember(s => s.PersonAssignment, o => o.MapFrom(s => s.SignificantPartForDisplay() == SchedulePartView.MainShift ? s : null))
+				.ForMember(s => s.PersonAssignment,
+				           o => o.MapFrom(s => s.SignificantPartForDisplay() == SchedulePartView.MainShift ? s : null))
 				.ForMember(d => d.Fulfilled, o => o.MapFrom(s =>
-				{
-					if (s != null && s.IsScheduled())
-						return _preferenceFulfilledChecker.Invoke().IsPreferenceFulfilled(s);
-					return null;
-				}))
+					{
+						if (s != null && s.IsScheduled())
+							return _preferenceFulfilledChecker.Invoke().IsPreferenceFulfilled(s);
+						return null;
+					}))
 				.ForMember(d => d.Feedback, o => o.MapFrom(s => s == null || !s.IsScheduled()))
+				.ForMember(d => d.StyleClassName, o => o.MapFrom(s =>
+					{
+						if (s != null)
+						{
+							if (s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff)
+								return StyleClasses.Striped;
+							if (s.SignificantPartForDisplay() == SchedulePartView.DayOff)
+								return StyleClasses.DayOff + " " + StyleClasses.Striped;
+						}
+						return null;
+					}))
 				;
 
 			CreateMap<IPersonDayOff, DayOffDayViewModel>()

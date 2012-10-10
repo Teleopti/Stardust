@@ -16,6 +16,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
@@ -225,5 +226,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			result.Feedback.Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldMapDayOffStyleClassName()
+		{
+			var stubs = new StubFactory();
+			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff, stubs.PersonDayOffStub());
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.StyleClassName.Should().Contain(StyleClasses.DayOff);
+			result.StyleClassName.Should().Contain(StyleClasses.Striped);
+		}
+
+		[Test]
+		public void ShouldMapContractDayOffStyleClassName()
+		{
+			var stubs = new StubFactory();
+			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today, SchedulePartView.ContractDayOff, stubs.PersonDayOffStub());
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.StyleClassName.Should().Contain(StyleClasses.Striped);
+		}
+
 	}
 }

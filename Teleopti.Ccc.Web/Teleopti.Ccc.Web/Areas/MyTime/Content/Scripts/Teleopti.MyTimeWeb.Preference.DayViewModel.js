@@ -109,6 +109,8 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 	this.Feedback = ko.observable(false);
 
+	this.StyleClassName = ko.observable('');
+
 
 	this.ReadElement = function (element) {
 		var item = $(element);

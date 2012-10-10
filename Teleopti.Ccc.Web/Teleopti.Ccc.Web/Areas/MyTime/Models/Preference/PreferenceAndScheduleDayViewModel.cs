@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public PersonAssignmentDayViewModel PersonAssignment { get; set; }
 		public bool? Fulfilled { get; set; }
 		public bool Feedback { get; set; }
+		public string StyleClassName { get; set; }
 	}
 }
