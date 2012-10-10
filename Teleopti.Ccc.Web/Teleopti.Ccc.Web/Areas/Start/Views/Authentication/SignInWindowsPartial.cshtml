@@ -14,7 +14,7 @@
 	 	<script type="text/javascript">
 	 		$(function () {
 	 			$('#WindowsOkButton').click(function () {
-	 				window.webkitNotifications.requestPermission(function () {
+	 				Teleopti.Start.Authentication.RequestPermissionForNotification(function () {
 	 					$("#windows_partial_target form").submit();
 	 				});
 	 			});
