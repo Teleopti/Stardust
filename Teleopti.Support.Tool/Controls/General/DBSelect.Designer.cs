@@ -39,31 +39,35 @@
             // CAnalyticsDB
             // 
             this.CAnalyticsDB.FormattingEnabled = true;
-            this.CAnalyticsDB.Location = new System.Drawing.Point(17, 114);
+            this.CAnalyticsDB.Location = new System.Drawing.Point(8, 134);
+            this.CAnalyticsDB.Margin = new System.Windows.Forms.Padding(5);
             this.CAnalyticsDB.Name = "CAnalyticsDB";
-            this.CAnalyticsDB.Size = new System.Drawing.Size(256, 21);
+            this.CAnalyticsDB.Size = new System.Drawing.Size(287, 21);
             this.CAnalyticsDB.TabIndex = 2;
             // 
             // CAggDB
             // 
             this.CAggDB.FormattingEnabled = true;
-            this.CAggDB.Location = new System.Drawing.Point(17, 67);
+            this.CAggDB.Location = new System.Drawing.Point(8, 82);
+            this.CAggDB.Margin = new System.Windows.Forms.Padding(5);
             this.CAggDB.Name = "CAggDB";
-            this.CAggDB.Size = new System.Drawing.Size(256, 21);
+            this.CAggDB.Size = new System.Drawing.Size(287, 21);
             this.CAggDB.TabIndex = 1;
             // 
             // CAppDB
             // 
             this.CAppDB.FormattingEnabled = true;
-            this.CAppDB.Location = new System.Drawing.Point(17, 19);
+            this.CAppDB.Location = new System.Drawing.Point(8, 28);
+            this.CAppDB.Margin = new System.Windows.Forms.Padding(5);
             this.CAppDB.Name = "CAppDB";
-            this.CAppDB.Size = new System.Drawing.Size(256, 21);
+            this.CAppDB.Size = new System.Drawing.Size(287, 21);
             this.CAppDB.TabIndex = 0;
             // 
             // LAggregationDB
             // 
             this.LAggregationDB.AutoSize = true;
-            this.LAggregationDB.Location = new System.Drawing.Point(14, 50);
+            this.LAggregationDB.Location = new System.Drawing.Point(5, 59);
+            this.LAggregationDB.Margin = new System.Windows.Forms.Padding(5);
             this.LAggregationDB.Name = "LAggregationDB";
             this.LAggregationDB.Size = new System.Drawing.Size(82, 13);
             this.LAggregationDB.TabIndex = 30;
@@ -72,7 +76,8 @@
             // AnalyticsDb
             // 
             this.AnalyticsDb.AutoSize = true;
-            this.AnalyticsDb.Location = new System.Drawing.Point(14, 98);
+            this.AnalyticsDb.Location = new System.Drawing.Point(5, 113);
+            this.AnalyticsDb.Margin = new System.Windows.Forms.Padding(5);
             this.AnalyticsDb.Name = "AnalyticsDb";
             this.AnalyticsDb.Size = new System.Drawing.Size(67, 13);
             this.AnalyticsDb.TabIndex = 29;
@@ -81,7 +86,8 @@
             // LApplicationDB
             // 
             this.LApplicationDB.AutoSize = true;
-            this.LApplicationDB.Location = new System.Drawing.Point(18, 0);
+            this.LApplicationDB.Location = new System.Drawing.Point(5, 5);
+            this.LApplicationDB.Margin = new System.Windows.Forms.Padding(5);
             this.LApplicationDB.Name = "LApplicationDB";
             this.LApplicationDB.Size = new System.Drawing.Size(77, 13);
             this.LApplicationDB.TabIndex = 34;
@@ -99,7 +105,7 @@
             this.Controls.Add(this.LAggregationDB);
             this.Controls.Add(this.AnalyticsDb);
             this.Name = "DBSelect";
-            this.Size = new System.Drawing.Size(286, 151);
+            this.Size = new System.Drawing.Size(300, 160);
             this.ResumeLayout(false);
             this.PerformLayout();
 

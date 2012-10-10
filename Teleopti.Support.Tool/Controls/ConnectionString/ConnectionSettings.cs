@@ -70,11 +70,6 @@ namespace Teleopti.Support.Tool.Controls.ConnectionString
             set { sqlAccount.TestConnection = value; }
            
         }
-         public string GroupText
-         {
-             get { return groupBox1.Text; }
-             set { groupBox1.Text = value; }
-         }
 
          public Color ConnectedColor
          {

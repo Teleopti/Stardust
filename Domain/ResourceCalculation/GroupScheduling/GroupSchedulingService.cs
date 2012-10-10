@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
@@ -17,6 +18,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
     	bool ScheduleOneDayOnOnePerson(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions,
     	                               IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList);
+
+        IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions);
     }
 
     public class GroupSchedulingService : IGroupSchedulingService
@@ -31,14 +34,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
         private readonly IWorkShiftFinderResultHolder _finderResultHolder;
     	private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
+        private readonly IDeleteSchedulePartService _deleteSchedulePartService;
+        private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
         private bool _cancelMe;
         
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-    
-		public GroupSchedulingService(IGroupPersonsBuilder groupPersonsBuilder, IBestBlockShiftCategoryFinder bestBlockShiftCategoryFinder, 
-            ISchedulingResultStateHolder resultStateHolder, IScheduleService scheduleService, ISchedulePartModifyAndRollbackService rollbackService,
-			IResourceOptimizationHelper resourceOptimizationHelper, IWorkShiftFinderResultHolder finderResultHolder, IEffectiveRestrictionCreator effectiveRestrictionCreator, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator)
+		public GroupSchedulingService(IGroupPersonsBuilder groupPersonsBuilder,
+            IBestBlockShiftCategoryFinder bestBlockShiftCategoryFinder, 
+            ISchedulingResultStateHolder resultStateHolder, 
+            IScheduleService scheduleService,
+            ISchedulePartModifyAndRollbackService rollbackService,
+			IResourceOptimizationHelper resourceOptimizationHelper,
+            IWorkShiftFinderResultHolder finderResultHolder,
+            IEffectiveRestrictionCreator effectiveRestrictionCreator,
+            IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
+            IDeleteSchedulePartService deleteSchedulePartService,
+            IShiftCategoryLimitationChecker shiftCategoryLimitationChecker)
 		{
 			_groupPersonsBuilder = groupPersonsBuilder;
 			_bestBlockShiftCategoryFinder = bestBlockShiftCategoryFinder;
@@ -49,6 +61,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			_finderResultHolder = finderResultHolder;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 		    _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
+		    _deleteSchedulePartService = deleteSchedulePartService;
+		    _shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
 		}
 
 
@@ -117,7 +131,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			var members = groupPerson.GroupMembers;
 			var agentAverageFairness = scheduleDictionary.AverageFairnessPoints(members);
 			var best = groupPerson.CommonPossibleStartEndCategory;
-			if(best == null)
+            if (schedulingOptions.UseShiftCategoryLimitations)
+            {
+                _shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, groupPerson, dateOnly);
+                if (best != null && schedulingOptions.NotAllowedShiftCategories.Contains(best.ShiftCategory))
+                    best = null;
+            }
+
+		    if(best == null)
 			{
 				IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { dateOnly }, new Dictionary<string, IWorkShiftFinderResult>());
 
@@ -171,7 +192,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				if (!sucess)
 				{
 					return false;
-
 				}
 				OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
 				if (_cancelMe)
@@ -199,7 +219,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			{
 				IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { dateOnly }, new Dictionary<string, IWorkShiftFinderResult>());
 			    var matrix = matrixList.First(d => d.Person == person);
-
                 _workShiftMinMaxCalculator.ResetCache();
                 var minmax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);
                 var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, schedulingOptions, agentAverageFairness, minmax);
@@ -264,6 +283,37 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     		return true;
     	}
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+        public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions)
+        {
+            //Delete old current shift
+            //TODO use a new Delete method with a rollbackservice
+            var options = new DeleteOption { MainShift = true };
+
+            IList<IScheduleDay> retList;
+            using (var bgWorker = new BackgroundWorker())
+            {
+                retList = _deleteSchedulePartService.Delete(schedulePartList, options, _rollbackService, bgWorker);
+            }
+
+            //recalc resources
+            ICollection<DateOnly> daysToRecalculate = new HashSet<DateOnly>();
+            if (schedulePartList != null)
+                foreach (var part in schedulePartList)
+                {
+                    var date = new DateOnly(part.Period.LocalStartDateTime);
+                    daysToRecalculate.Add(date);
+                    daysToRecalculate.Add(date.AddDays(1));
+                }
+
+            foreach (var date in daysToRecalculate)
+            {
+                _resourceOptimizationHelper.ResourceCalculateDate(date, true, schedulingOptions.ConsiderShortBreaks);
+            }
+
+            return retList;
+        }
+
     	protected void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
         {
             EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
@@ -274,6 +324,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                     _cancelMe = true;
             }
         }
-
     }
 }

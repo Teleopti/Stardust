@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.LConnected = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.TBServer = new System.Windows.Forms.TextBox();
             this.CBWindowsAuth = new System.Windows.Forms.CheckBox();
             this.TBPassword = new System.Windows.Forms.TextBox();
@@ -38,31 +37,23 @@
             this.LSQLUser = new System.Windows.Forms.Label();
             this.LServer = new System.Windows.Forms.Label();
             this.BConnect = new System.Windows.Forms.Button();
+            this.labelSQLServerConnection = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.SuspendLayout();
             // 
             // LConnected
             // 
             this.LConnected.AccessibleRole = System.Windows.Forms.AccessibleRole.Application;
             this.LConnected.BackColor = System.Drawing.SystemColors.Window;
-            this.LConnected.Location = new System.Drawing.Point(8, 150);
+            this.LConnected.Location = new System.Drawing.Point(167, 182);
             this.LConnected.Name = "LConnected";
-            this.LConnected.Size = new System.Drawing.Size(269, 138);
+            this.LConnected.Size = new System.Drawing.Size(269, 62);
             this.LConnected.TabIndex = 27;
             this.LConnected.Text = "Not Connected";
             this.LConnected.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(87, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(121, 13);
-            this.label3.TabIndex = 26;
-            this.label3.Text = "Connect To SQL Server";
-            // 
             // TBServer
             // 
-            this.TBServer.Location = new System.Drawing.Point(67, 25);
+            this.TBServer.Location = new System.Drawing.Point(226, 57);
             this.TBServer.Name = "TBServer";
             this.TBServer.Size = new System.Drawing.Size(170, 20);
             this.TBServer.TabIndex = 0;
@@ -70,7 +61,7 @@
             // CBWindowsAuth
             // 
             this.CBWindowsAuth.AutoSize = true;
-            this.CBWindowsAuth.Location = new System.Drawing.Point(67, 103);
+            this.CBWindowsAuth.Location = new System.Drawing.Point(226, 135);
             this.CBWindowsAuth.Name = "CBWindowsAuth";
             this.CBWindowsAuth.Size = new System.Drawing.Size(141, 17);
             this.CBWindowsAuth.TabIndex = 3;
@@ -80,14 +71,14 @@
             // 
             // TBPassword
             // 
-            this.TBPassword.Location = new System.Drawing.Point(67, 77);
+            this.TBPassword.Location = new System.Drawing.Point(226, 109);
             this.TBPassword.Name = "TBPassword";
             this.TBPassword.Size = new System.Drawing.Size(170, 20);
             this.TBPassword.TabIndex = 2;
             // 
             // TBSQLUser
             // 
-            this.TBSQLUser.Location = new System.Drawing.Point(67, 51);
+            this.TBSQLUser.Location = new System.Drawing.Point(226, 83);
             this.TBSQLUser.Name = "TBSQLUser";
             this.TBSQLUser.Size = new System.Drawing.Size(170, 20);
             this.TBSQLUser.TabIndex = 1;
@@ -95,7 +86,7 @@
             // LPassword
             // 
             this.LPassword.AutoSize = true;
-            this.LPassword.Location = new System.Drawing.Point(8, 77);
+            this.LPassword.Location = new System.Drawing.Point(167, 109);
             this.LPassword.Name = "LPassword";
             this.LPassword.Size = new System.Drawing.Size(53, 13);
             this.LPassword.TabIndex = 21;
@@ -104,7 +95,7 @@
             // LSQLUser
             // 
             this.LSQLUser.AutoSize = true;
-            this.LSQLUser.Location = new System.Drawing.Point(8, 54);
+            this.LSQLUser.Location = new System.Drawing.Point(167, 86);
             this.LSQLUser.Name = "LSQLUser";
             this.LSQLUser.Size = new System.Drawing.Size(53, 13);
             this.LSQLUser.TabIndex = 20;
@@ -113,7 +104,7 @@
             // LServer
             // 
             this.LServer.AutoSize = true;
-            this.LServer.Location = new System.Drawing.Point(23, 28);
+            this.LServer.Location = new System.Drawing.Point(182, 60);
             this.LServer.Name = "LServer";
             this.LServer.Size = new System.Drawing.Size(38, 13);
             this.LServer.TabIndex = 19;
@@ -121,13 +112,25 @@
             // 
             // BConnect
             // 
-            this.BConnect.Location = new System.Drawing.Point(97, 124);
+            this.BConnect.Location = new System.Drawing.Point(256, 156);
             this.BConnect.Name = "BConnect";
             this.BConnect.Size = new System.Drawing.Size(77, 23);
             this.BConnect.TabIndex = 4;
             this.BConnect.Text = "Connect";
             this.BConnect.UseVisualStyleBackColor = true;
             this.BConnect.Click += new System.EventHandler(this.BConnect_Click);
+            // 
+            // labelSQLServerConnection
+            // 
+            this.labelSQLServerConnection.AutoSize = true;
+            this.labelSQLServerConnection.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSQLServerConnection.Location = new System.Drawing.Point(10, 10);
+            this.labelSQLServerConnection.Margin = new System.Windows.Forms.Padding(10);
+            this.labelSQLServerConnection.Name = "labelSQLServerConnection";
+            this.labelSQLServerConnection.Size = new System.Drawing.Size(171, 21);
+            this.labelSQLServerConnection.TabIndex = 26;
+            this.labelSQLServerConnection.Text = "SQL Server Connection";
+            this.labelSQLServerConnection.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             // 
             // DBConnect
             // 
@@ -136,7 +139,7 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.LConnected);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.labelSQLServerConnection);
             this.Controls.Add(this.TBServer);
             this.Controls.Add(this.CBWindowsAuth);
             this.Controls.Add(this.TBPassword);
@@ -146,7 +149,7 @@
             this.Controls.Add(this.LServer);
             this.Controls.Add(this.BConnect);
             this.Name = "DBConnect";
-            this.Size = new System.Drawing.Size(285, 297);
+            this.Size = new System.Drawing.Size(670, 320);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -155,7 +158,7 @@
         #endregion
 
         private System.Windows.Forms.Label LConnected;
-        private System.Windows.Forms.Label label3;
+        private SmoothLabel labelSQLServerConnection;
         private System.Windows.Forms.TextBox TBServer;
         private System.Windows.Forms.CheckBox CBWindowsAuth;
         private System.Windows.Forms.TextBox TBPassword;

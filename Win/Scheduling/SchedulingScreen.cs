@@ -3425,7 +3425,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
                     _scheduleView.Presenter.UpdateFromEditor();
                     updateShiftEditor();
-
+                    var currentCell = _scheduleView.ViewGrid.CurrentCell;
+                    var selectedCols = _scheduleView.ViewGrid.Model.Selections.Ranges.ActiveRange.Width;
+                    if (!(_scheduleView is RestrictionSummaryView) && currentCell.RowIndex == 0 && selectedCols == 1 && currentCell.ColIndex >= (int)ColumnType.StartScheduleColumns)
+                    {
+                        _scheduleView.AddWholeWeekAsSelected(currentCell.RowIndex, currentCell.ColIndex);
+                    }
                     var selectedSchedules = _scheduleView.SelectedSchedules();
                     updateSelectionInfo(selectedSchedules);
                     enableSwapButtons(selectedSchedules);
@@ -6068,14 +6073,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var selectedPerson = persons.FirstOrDefault();
 			if (schedulePart != null) selectedPerson = schedulePart.Person;
 
-			var schedulingOptions = new RestrictionSchedulingOptions
-			{
-				UseAvailability = true,
-				UsePreferences = true,
-				UseStudentAvailability = true,
-				UseRotations = true,
-				UseScheduling = true
-			};
+			var schedulingOptions = schedulerSplitters1.SchedulingOptions;
+			//var schedulingOptions = new RestrictionSchedulingOptions
+			//{
+			//    UseAvailability = true,
+			//    UsePreferences = true,
+			//    UseStudentAvailability = true,
+			//    UseRotations = true,
+			//    UseScheduling = true
+			//};
 
 			var view = (AgentRestrictionsDetailView)detailView;
 
@@ -6195,7 +6201,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					_scheduleView = new AgentRestrictionsDetailView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _workShiftWorkTime);
 
-            		
                     //_schedulingOptions = schedulerSplitters1.SchedulingOptions;
                     //prepareAgentRestrictionView(selectedPart);
 					prepareAgentRestrictionView(selectedPart, _scheduleView);
@@ -6278,17 +6283,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		void AgentRestrictionGridSelectedAgentIsReady(object sender, EventArgs e)
 		{
-			if (_scheduleView.TheGrid.InvokeRequired)
+			AgentRestrictionsDetailView view = _scheduleView as AgentRestrictionsDetailView;
+			if(view == null)
+				return;
+
+			if (view.TheGrid.InvokeRequired)
 			{
 				BeginInvoke(new EventHandler<EventArgs>(AgentRestrictionGridSelectedAgentIsReady), sender, e);
 			}
 			else
 			{
 				_scheduleView.TheGrid.Refresh();
-				((AgentRestrictionsDetailView)_scheduleView).InitializeGrid();
+				view.InitializeGrid();
 				var args = e as AgentDisplayRowEventArgs;
 				if (args == null) return;
-				if(args.MoveToDate) ((AgentRestrictionsDetailView)_scheduleView).SelectDateIfExists(_dateNavigateControl.SelectedDate);
+				if (args.MoveToDate) view.SelectDateIfExists(_dateNavigateControl.SelectedDate);
 				if(args.UpdateShiftEditor) updateShiftEditor();		
 			}
 		}

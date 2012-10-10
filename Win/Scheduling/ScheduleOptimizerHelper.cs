@@ -4,8 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -39,6 +37,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
+        private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
         public ScheduleOptimizerHelper(ILifetimeScope container)
         {
@@ -52,6 +51,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _allResults = _container.Resolve<IWorkShiftFinderResultHolder>();
             _resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
             _scheduleMatrixListCreator = _container.Resolve<IScheduleMatrixListCreator>();
+            _groupPersonBuilderForOptimization = _container.Resolve<IGroupPersonBuilderForOptimization>();
         }
 
         #region Interface
@@ -551,7 +551,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
             IScheduleTagSetter tagSetter = _container.Resolve<IScheduleTagSetter>();
             tagSetter.ChangeTagToSet(optimizerPreferences.General.ScheduleTag);
-
+			IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedDays));
             IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, SchedulingStateHolder, _container);
             IList<IScheduleMatrixPro> matrixListForDayOffOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, SchedulingStateHolder, _container);
             IList<IScheduleMatrixPro> matrixListForIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, SchedulingStateHolder, _container);
@@ -565,7 +565,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
             var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedDays, currentPersonTimeZone));
 
-            OptimizerHelperHelper.SetConsiderShortBreaks(ScheduleViewBase.AllSelectedPersons(selectedDays), selectedPeriod, optimizerPreferences.Rescheduling, _container);
+			OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, selectedPeriod, optimizerPreferences.Rescheduling, _container);
 
             using (PerformanceOutput.ForOperation("Optimizing " + matrixListForWorkShiftOptimization.Count + " matrixes"))
             {
@@ -602,6 +602,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                         matrixOriginalStateContainerListForIntradayOptimization,
                         workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization, 
                         backgroundWorker);
+
+				if (optimizerPreferences.General.OptimizationStepFairness)
+					runFairness(selectedDays, tagSetter, selectedPersons, optimizerPreferences);
             }
 
 
@@ -613,10 +616,25 @@ namespace Teleopti.Ccc.Win.Scheduling
             	                                    optimizerPreferences, schedulingOptions);
             }
 
-        	//runFairness();
+			if (optimizerPreferences.General.OptimizationStepFairness)
+        		runFairness(selectedDays,tagSetter,selectedPersons,optimizerPreferences);
+
             //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
+
+		private void runFairness(IList<IScheduleDay> selectedDays, IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
+			IOptimizationPreferences optimizerPreferences)
+		{
+			var matrixListForFairness = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
+			var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
+			var selectedDates = OptimizerHelperHelper.GetSelectedPeriod(selectedDays).DayCollection();
+			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new EmptyScheduleDayChangeCallback(), tagSetter);
+			fairnessOpt.ReportProgress += resourceOptimizerPersonOptimized;
+			fairnessOpt.ExecutePersonal(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness,
+										optimizerPreferences.Extra.GroupPageOnCompareWith, rollbackService);
+			fairnessOpt.ReportProgress -= resourceOptimizerPersonOptimized;
+		}
 
         private static IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IList<IScheduleMatrixPro> matrixList)
         {
@@ -815,13 +833,26 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
             using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
             {
-                var backToLegalStateServicePro =
+                if(schedulingOptions.UseGroupScheduling)
+                {
+                    var backToLegalStateServicePro =
+                    _container.Resolve<IGroupListShiftCategoryBackToLegalStateService>();
+
+                    if (backgroundWorker.CancellationPending)
+                        return;
+                    var groupOptimizerFindMatrixesForGroup =
+                        new GroupOptimizerFindMatrixesForGroup(_groupPersonBuilderForOptimization, matrixList);
+                    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences, groupOptimizerFindMatrixesForGroup);
+                }else
+                {
+                    var backToLegalStateServicePro =
                     _container.Resolve<ISchedulePeriodListShiftCategoryBackToLegalStateService>();
 
-                if (backgroundWorker.CancellationPending)
-                    return;
+                    if (backgroundWorker.CancellationPending)
+                        return;
 
-                backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
+                    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
+                }
             }
         }
 

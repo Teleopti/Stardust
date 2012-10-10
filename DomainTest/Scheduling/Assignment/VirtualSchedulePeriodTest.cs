@@ -120,8 +120,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyAverageWorkTimePerDay()
         {
             Assert.AreEqual(TimeSpan.FromHours(8), _target.AverageWorkTimePerDay);
+            _personContract.Contract.WorkTimeSource = WorkTimeSource.FromSchedulePeriod;
 			_schedulePeriod.AverageWorkTimePerDayOverride = TimeSpan.FromHours(9);
             Assert.AreEqual(TimeSpan.FromHours(9), _target.AverageWorkTimePerDay);
+        }
+        
+        [Test]
+        public void VerifyAverageWorkTimePerDayFromContract()
+        {
+            Assert.AreEqual(TimeSpan.FromHours(8), _target.AverageWorkTimePerDay);
+            _personContract.Contract.WorkTimeSource = WorkTimeSource.FromContract;
+			_schedulePeriod.AverageWorkTimePerDayOverride = TimeSpan.FromHours(9);
+            Assert.AreEqual(TimeSpan.FromHours(8), _target.AverageWorkTimePerDay);
         }
 
         [Test]
