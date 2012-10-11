@@ -67,6 +67,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
+		public void ShouldBeCoherentWhenOnlyOneMainShift()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.None);
+			}
+
+			using (_mock.Playback())
+			{
+				var scheduleDay = _target.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay2);
+				Assert.IsNotNull(scheduleDay);
+			}
+		}
+
+		[Test]
 		public void ShouldNotBeCoherent()
 		{
 			using (_mock.Record())

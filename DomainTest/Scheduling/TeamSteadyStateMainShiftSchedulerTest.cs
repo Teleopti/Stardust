@@ -73,6 +73,48 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target = new TeamSteadyStateMainShiftScheduler(_groupMatrixHelper, _coherentChecker, _teamSteadyStateScheduleMatrixProFinder);
 		}
 
+		[Test]
+		public void ShouldReturnFalseWhenNoCoherence()
+		{
+			using(_mocks.Record())
+			{
+				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1);
+				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.None);
+				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay1)).Return(_scheduleMatrixPro);
+				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay1)).Return(null);
+			}
+
+			using(_mocks.Playback())
+			{
+				var result = _target.ScheduleTeam(_dateOnly, _groupPerson, _groupSchedulingService, _rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _matrixes, _scheduleDictionary);
+				Assert.IsFalse(result);
+			}	
+		}
+
+		[Test]
+		public void ShouldSkipMemberIfNoMatrix()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1);
+				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
+				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
+				Expect.Call(_scheduleRange2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.None);
+				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.None);
+				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay1)).Return(null);
+				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay2)).Return(_scheduleMatrixPro);
+				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay2)).Return(null);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.ScheduleTeam(_dateOnly, _groupPerson, _groupSchedulingService, _rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _matrixes, _scheduleDictionary);
+				Assert.IsFalse(result);
+			}	
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldSetAllMembersWithSameMainShift()
 		{
@@ -123,13 +165,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro);
 				Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(_dateOnly, _person1, _groupSchedulingService, _schedulingOptions, _groupPersonBuilderForOptimization, _matrixes)).Return(true).IgnoreArguments();
-				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
+				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);	
 			}
 
 			using(_mocks.Playback())
 			{
 				var result = _target.ScheduleTeam(_dateOnly, _groupPerson, _groupSchedulingService, _rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _matrixes, _scheduleDictionary);
 				Assert.IsTrue(result);	
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldReturnFalseIfNotPossibleToSchedule()
+		{
+			_groupPerson = new GroupPerson(new List<IPerson> { _person1 }, _dateOnly, "groupPerson1", _guid);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1);
+				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.None).Repeat.Twice();
+				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay1)).Return(_scheduleMatrixPro);
+				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay1)).Return(_scheduleDay1);
+				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro);
+				Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(_dateOnly, _person1, _groupSchedulingService, _schedulingOptions, _groupPersonBuilderForOptimization, _matrixes)).Return(false).IgnoreArguments();
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.ScheduleTeam(_dateOnly, _groupPerson, _groupSchedulingService, _rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _matrixes, _scheduleDictionary);
+				Assert.IsFalse(result);
 			}
 		}
 
@@ -163,6 +229,60 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			{
 				var result = _target.ScheduleTeam(_dateOnly, _groupPerson, _groupSchedulingService, _rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _matrixes, _scheduleDictionary);
 				Assert.IsTrue(result);
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldNotAddMainShiftIfNoMatrix()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1).Repeat.Twice();
+				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1).Repeat.Twice();
+				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+				Expect.Call(_personAssignment1.MainShift).Return(_mainShift1).Repeat.Twice();
+				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
+				Expect.Call(_scheduleRange2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
+				Expect.Call(_mainShift1.NoneEntityClone()).Return(_mainShift2).Repeat.Twice();
+				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.None);
+
+				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro);
+
+				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay1)).Return(_scheduleDay1);
+				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay1)).Return(_scheduleMatrixPro);
+				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay2)).Return(null);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.ScheduleTeam(_dateOnly, _groupPerson, _groupSchedulingService, _rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _matrixes, _scheduleDictionary);
+				Assert.IsTrue(result);
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldNotAddMainShiftIfPersonAssignmentIsNull()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1);
+				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(null);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+				
+				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro);
+
+				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay1)).Return(_scheduleDay1);
+				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay1)).Return(_scheduleMatrixPro);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.ScheduleTeam(_dateOnly, _groupPerson, _groupSchedulingService, _rollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _matrixes, _scheduleDictionary);
+				Assert.IsFalse(result);
 			}
 		}
 
