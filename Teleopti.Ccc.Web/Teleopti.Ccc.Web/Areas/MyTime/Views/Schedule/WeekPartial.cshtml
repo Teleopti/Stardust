@@ -108,12 +108,12 @@
 				</strong><span class="fullwidth displayblock" data-bind="text:Summary.TimeSpan">
 				</span><span data-bind="text: Summary.Summary"></span></li>
 			<li id="day-symbol" class="fourth">
-				<div class="text-request floatright" data-bind="if: TextRequestCount > 0" title="XXXXXXXXXXXXXXXXXXXXXXXXXXXX">
+				<div class="text-request floatright" data-bind="visible: TextRequestCount > 0" title="XXXXXXXXXXXXXXXXXXXXXXXXXXXX">
 					<div class="floatright extrasmall" data-bind="text:TextRequestCount">
 					</div>
 					<div class="icon text-request ir floatright" />
 				</div>
-				<div class="icon comment-day ir tooltip floatright" data-bind="if: HasNote, attr: {'tooltip-text': Note.Message}">
+				<div class="icon comment-day ir tooltip floatright" data-bind="visible: HasNote, attr: {'tooltip-text': Note.Message}">
 				</div>
 				<div id="add-request-cell" data-bind="css:{'add-request-space show-request': $root.RequestPermission.TextRequestPermission}">
 				</div>
