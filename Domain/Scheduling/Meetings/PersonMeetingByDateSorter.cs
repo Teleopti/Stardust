@@ -16,6 +16,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
         /// <returns></returns>
         public int Compare(IPersonMeeting x, IPersonMeeting y)
         {
+            var xUpdatedOn = x.BelongsToMeeting.UpdatedOn;
+            var yUpdatedOn = y.BelongsToMeeting.UpdatedOn;
+            if (xUpdatedOn.HasValue && yUpdatedOn.HasValue)
+                return xUpdatedOn.Value.CompareTo(yUpdatedOn.Value);
             return x.Period.StartDateTime.CompareTo(y.Period.StartDateTime);
         }
     }
