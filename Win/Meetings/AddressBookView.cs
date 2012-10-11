@@ -379,17 +379,27 @@ namespace Teleopti.Ccc.Win.Meetings
             }
         }
 
-        private void textBoxExtRequiredParticipant_MouseUp(object sender, EventArgs e)
+		private void textBoxExtRequiredParticipant_MouseUp(object sender, MouseEventArgs e)
         {
             _isRequired = true;
+			if (e.Button.Equals(MouseButtons.Right))
+				textBoxExtRequiredParticipant.Select();
             TextBoxNameExtender.GetSelected(textBoxExtRequiredParticipant);   
         }
 
-        private void textBoxExtOptionalParticipant_MouseUp(object sender, EventArgs e)
+		private void textBoxExtOptionalParticipant_MouseUp(object sender, MouseEventArgs e)
         {
             _isRequired = false;
+			if (e.Button.Equals(MouseButtons.Right))
+				textBoxExtOptionalParticipant.Select();
             TextBoxNameExtender.GetSelected(textBoxExtOptionalParticipant);
         }
+
+		private void textBoxExtFilterCriteria_MouseUp(object sender, MouseEventArgs e)
+		{
+			if(e.Button.Equals(MouseButtons.Right))
+				textBoxExtFilterCriteria.Select();
+		}
         
         private void textBoxExtRequiredParticipant_KeyDown(object sender, KeyEventArgs e)
         {
