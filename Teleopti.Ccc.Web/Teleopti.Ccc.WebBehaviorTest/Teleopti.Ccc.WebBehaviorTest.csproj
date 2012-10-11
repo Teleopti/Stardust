@@ -58,6 +58,7 @@
       <HintPath>..\..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -108,6 +109,7 @@
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\ScheduledShiftConfigurable.cs" />
+    <Compile Include="ConfigSanityCheck.cs" />
     <Compile Include="PreferencesFollowUpStepDefinition.cs" />
     <Compile Include="PreferencesFollowUp.feature.cs">
       <DependentUpon>PreferencesFollowUp.feature</DependentUpon>
