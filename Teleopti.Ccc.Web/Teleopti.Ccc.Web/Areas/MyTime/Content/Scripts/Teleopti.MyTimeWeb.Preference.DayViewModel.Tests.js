@@ -74,7 +74,7 @@ $(document).ready(function () {
 		equal(viewModelDay.PersonAssignmentContractTime(), "PersonAssignmentContractTime");
 		equal(viewModelDay.ContractTimeMinutes(), "PersonAssignmentContractTimeMinutes");
 	});
-	
+
 	test("should load preference", function () {
 
 		var ajax = {
@@ -139,7 +139,7 @@ $(document).ready(function () {
 				equal(options.url, "Preference/Preference");
 
 				var result = jQuery.parseJSON(options.data);
-				
+
 				equal(result.Date, "2012-06-11");
 				equal(result.PreferenceId, "id");
 				options.success({
@@ -224,7 +224,7 @@ $(document).ready(function () {
 				equal(options.url, "Preference/Preference");
 
 				var result = jQuery.parseJSON(options.data);
-				
+
 				equal(result.Date, "2012-06-11");
 				options.success({
 					Preference: "deleted!",
@@ -272,7 +272,7 @@ $(document).ready(function () {
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
 		viewModelDay.Date = "2012-06-11";
-
+		viewModelDay.Feedback(true);
 		viewModelDay.LoadFeedback();
 
 		equal(viewModelDay.FeedbackError(), "an error");

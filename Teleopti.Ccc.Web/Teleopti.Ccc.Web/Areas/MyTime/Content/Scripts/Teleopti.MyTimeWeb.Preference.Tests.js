@@ -34,16 +34,24 @@ $(document).ready(function () {
 
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url != "PreferenceFeedback/Feedback")
-					return;
-				if (options.data.Date == '2012-06-11')
-					options.success({
-						PossibleContractTimeMinutesLower: 6 * 60
-					});
-				if (options.data.Date == '2012-06-12')
-					options.success({
-						PossibleContractTimeMinutesLower: 8 * 60
-					});
+				if (options.url == "Preference/PreferencesAndSchedules") {
+					options.success(
+						[
+							{ Date: "2012-06-11", Feedback: true },
+							{ Date: "2012-06-12", Feedback: true }
+						]
+					);
+				}
+				if (options.url == "PreferenceFeedback/Feedback") {
+					if (options.data.Date == '2012-06-11')
+						options.success({
+							PossibleContractTimeMinutesLower: 6 * 60
+						});
+					if (options.data.Date == '2012-06-12')
+						options.success({
+							PossibleContractTimeMinutesLower: 8 * 60
+						});
+				}
 			}
 		};
 
@@ -65,11 +73,18 @@ $(document).ready(function () {
 
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url != "PreferenceFeedback/Feedback")
-					return;
-				options.success({
-					PossibleContractTimeMinutesLower: 8 * 60
-				});
+				if (options.url == "Preference/PreferencesAndSchedules") {
+					options.success(
+						[
+							{ Date: "2012-06-12", Feedback: true }
+						]
+					);
+				}
+				if (options.url == "PreferenceFeedback/Feedback") {
+					options.success({
+						PossibleContractTimeMinutesLower: 8 * 60
+					});
+				}
 			}
 		};
 
@@ -154,12 +169,28 @@ $(document).ready(function () {
 
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url != "PreferenceFeedback/Feedback")
-					return;
-				if (options.data.Date == '2012-06-19' || options.data.Date == '2012-06-20')
-					options.success({
-						PossibleContractTimeMinutesLower: 6 * 60
-					});
+				if (options.url == "Preference/PreferencesAndSchedules") {
+					if (options.data.From == '2012-06-19') {
+						options.success(
+							[
+								{ Date: "2012-06-19", Feedback: true }
+							]
+						);
+					}
+					if (options.data.From == '2012-06-20') {
+						options.success(
+							[
+								{ Date: "2012-06-20", Feedback: true }
+							]
+						);
+					}
+				}
+				if (options.url == "PreferenceFeedback/Feedback") {
+					if (options.data.Date == '2012-06-19' || options.data.Date == '2012-06-20')
+						options.success({
+							PossibleContractTimeMinutesLower: 6 * 60
+						});
+				}
 			}
 		};
 
