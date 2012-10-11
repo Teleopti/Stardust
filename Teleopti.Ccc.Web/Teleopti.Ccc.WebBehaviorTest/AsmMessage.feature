@@ -24,11 +24,8 @@ Scenario: Show message tab
 
 Scenario: Indicate new message while logged on
 	Given I have the role 'Full access to mytime'
-	And My supervisor sends me a message with
-	| Field         | Value          |
-	| Title         | New message	 |
 	And I am viewing week schedule
-	When I receive new message(s)
+	When I receive message number '1'
 	Then I should be notified that I have '1' unread message(s)
 
 Scenario: Indicate another new message while logged on
@@ -38,7 +35,7 @@ Scenario: Indicate another new message while logged on
 	| Title         | New message	 |
 	And I am viewing week schedule
 	And I should be notified that I have '1' unread message(s)
-	When I receive a new message
+	When I receive message number '2'
 	Then I should be notified that I have '2' unread message(s)
 
 Scenario: Indicate new message at logon
@@ -92,7 +89,6 @@ Scenario: Confirm message is read
 	And I click on the message at position '1' in the list
 	When I click the confirm button
 	Then I should not see any messages
-	And I navigate to messages
 	And I should see a user-friendly message explaining I dont have any messages
 
 Scenario: Sort messages in list by latest message
@@ -120,9 +116,7 @@ Scenario: Reduce number of unread messages in message tab title
 	And I am viewing week schedule
 	And I should be notified that I have '2' unread message(s)
 	When I navigate to messages
-	And I confirm reading the message at position '1' in the list
-	# OK till hit
-	And I navigate to messages
+	And I confirm reading the message at position '1' of '2' in the list
 	Then I should be notified that I have '1' unread message(s)
 	
 

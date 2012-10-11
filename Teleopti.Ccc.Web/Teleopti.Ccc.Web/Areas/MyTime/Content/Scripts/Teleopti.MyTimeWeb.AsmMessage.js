@@ -81,6 +81,9 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
         },
         OnMessageBrokerEvent: function () {
             _onMessageBrokerEvent();
+        },
+        SetMessageNotificationOnTab: function (messageCount) {
+            _setMessageNotificationOnTab(messageCount);
         }
     };
 })(jQuery);

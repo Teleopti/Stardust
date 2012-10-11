@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => _page.MessageLink.Exists, Is.False);
 		}
 
-        [Given(@"My supervisor sends me a message with")]
 		[Given(@"I have an unread message with")]
 		public void GivenIHaveAnUnreadMessageWith(Table table)
 		{
@@ -54,11 +53,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
             }
 		}
 
-        [When(@"I receive new message\(s\)")]
-        public void WhenIReceiveNewMessageS()
-		{
-			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.OnMessageBrokerEvent(null);");
-		}
+        [When(@"I receive message number '(.*)'")]
+        public void WhenIReceiveMessageNumber(int messageCount)
+        {
+            Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
+        }
 
         [Given(@"I have no unread messages")]
         public void GivenIHaveNoUnreadMessages()
@@ -77,7 +76,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
         [Then(@"I should not see any messages")]
         public void ThenIShouldNotSeeAnyMessages()
         {
-            EventualAssert.That(() => _page.MessageListItems.Count , Is.EqualTo(0));
+            EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(0));
+            Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(0)");
         }
 
         [Then(@"I should see a message in the list")]
@@ -132,12 +132,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
             Pages.Pages.CurrentOkButton.OkButton.EventualClick();
         }
 
-        [When(@"I confirm reading the message at position '(.*)' in the list")]
-        public void WhenIConfirmReadingTheMessageAtPositionInTheList(int listPosition)
+        [When(@"I confirm reading the message at position '(.*)' of '(.*)' in the list")]
+        public void WhenIConfirmReadingTheMessageAtPositionInTheList(int listPosition, int messageCount)
         {
-            EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(2));
+            var newMessageCount = messageCount - 1;
+            EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(messageCount));
             _page.MessageListItems[listPosition - 1].Click();
             Pages.Pages.CurrentOkButton.OkButton.EventualClick();
+            Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + newMessageCount.ToString() + ");");
         }
 
         [Then(@"I should see a user-friendly message explaining I dont have any messages")]
