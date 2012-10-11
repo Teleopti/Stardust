@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
@@ -15,29 +16,36 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(startTime, endTime), new EndTimeLimitation(startTime, endEndTime), new WorkTimeLimitation(startTime, endTime), null, null, null, new List<IActivityRestriction>());
 
+			//var extractor  = new RestrictionExtractorWithoutStateHolder();
+			//extractor.Extract(scheduleDay);
+			//var effectiveRestriction = extractor.CombinedRestriction(
+			//    new SchedulingOptions
+			//        {
+			//            UseAvailability = effectiveRestrictionOptions.UseAvailability,
+			//            UsePreferences = effectiveRestrictionOptions.UsePreference,
+			//        }
+			//    );
+
 			if (scheduleDay != null && effectiveRestrictionOptions != null)
 			{
 				if (effectiveRestrictionOptions.UsePreference)
 				{
-					effectiveRestriction =
-						scheduleDay.RestrictionCollection().OfType<IPreferenceRestriction>().Aggregate(effectiveRestriction,
-						                                                                               (current, preferenceRestriction) =>
-						                                                                               (EffectiveRestriction)
-						                                                                               current.Combine(
-						                                                                               	new EffectiveRestriction(
-						                                                                               		preferenceRestriction.
-						                                                                               			StartTimeLimitation,
-						                                                                               		preferenceRestriction.
-						                                                                               			EndTimeLimitation,
-						                                                                               		preferenceRestriction.
-						                                                                               			WorkTimeLimitation,
-						                                                                               		preferenceRestriction.
-						                                                                               			ShiftCategory,
-						                                                                               		preferenceRestriction.
-						                                                                               			DayOffTemplate,
-						                                                                               		preferenceRestriction.Absence,
-						                                                                               		preferenceRestriction.
-						                                                                               			ActivityRestrictionCollection)));
+					effectiveRestriction = scheduleDay.RestrictionCollection().OfType<IPreferenceRestriction>()
+						.Aggregate(effectiveRestriction,
+						           (current, preferenceRestriction) =>
+						           	{
+						           		var restriction = new EffectiveRestriction(
+						           			preferenceRestriction.StartTimeLimitation,
+						           			preferenceRestriction.EndTimeLimitation,
+						           			preferenceRestriction.WorkTimeLimitation,
+						           			preferenceRestriction.ShiftCategory,
+						           			preferenceRestriction.DayOffTemplate,
+						           			preferenceRestriction.Absence,
+						           			preferenceRestriction.ActivityRestrictionCollection
+						           			);
+						           		return (EffectiveRestriction) current.Combine(restriction);
+						           	}
+						);
 				}
 
 				if (effectiveRestrictionOptions.UseAvailability)
