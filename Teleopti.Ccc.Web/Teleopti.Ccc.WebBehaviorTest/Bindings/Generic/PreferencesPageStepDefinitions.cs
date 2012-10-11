@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Threading;
-using System.Linq;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -11,11 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
-using Teleopti.Interfaces.Domain;
-using WatiN.Core;
-using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic

@@ -2,32 +2,18 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
-using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceViewModelMappingProfile : Profile
 	{
-		private readonly IResolve<IScheduleColorProvider> _scheduleColorProvider;
-		private readonly IResolve<IPreferenceFulfilledChecker> _preferenceFulfilledChecker;
-
-		public PreferenceViewModelMappingProfile(IResolve<IScheduleColorProvider> scheduleColorProvider, IResolve<IPreferenceFulfilledChecker> preferenceFulfilledChecker)
-		{
-			_scheduleColorProvider = scheduleColorProvider;
-			_preferenceFulfilledChecker = preferenceFulfilledChecker;
-		}
-
 		private class PreferenceWeekMappingData
 		{
 			public DateOnly FirstDayOfWeek { get; set; }
 			public DateOnlyPeriod Period { get; set; }
-			public IEnumerable<PreferenceDayDomainData> Days { get; set; }
 			public IWorkflowControlSet WorkflowControlSet { get; set; }
 		}
 
@@ -35,12 +21,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		{
 			public DateOnly Date { get; set; }
 			public DateOnlyPeriod Period { get; set; }
-
-			public IScheduleDay ScheduleDay { get; set; }
-			public SchedulePartView SignificantPart { get; set; }
-			public bool HasDayOffUnderAbsence { get; set; }
-			public IVisualLayerCollection Projection { get; set; }
-
 			public IWorkflowControlSet WorkflowControlSet { get; set; }
 		}
 
@@ -68,12 +48,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                        		        		{
 				                                        		        			FirstDayOfWeek = d,
 				                                        		        			Period = s.Period,
-				                                        		        			Days = s.Days,
 				                                        		        			WorkflowControlSet = s.WorkflowControlSet,
 				                                        		        		}).ToArray();
 				                                        	}))
 				.ForMember(d => d.PreferencePeriod, c => c.MapFrom(s => s.WorkflowControlSet))
-				.ForMember(d => d.Styles, c => c.MapFrom(s => _scheduleColorProvider.Invoke().GetColors(s.ColorSource)))
 				;
 
 			CreateMap<string, WeekDayHeader>()
@@ -104,26 +82,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			CreateMap<PreferenceWeekMappingData, WeekViewModel>()
 				.ForMember(d => d.Days, o => o.MapFrom(s =>
 				                                       	{
-				                                       		var days = s.Days ?? new PreferenceDayDomainData[] {};
 				                                       		var datesThisWeek = from d in Enumerable.Range(0, 7) select s.FirstDayOfWeek.AddDays(d);
 				                                       		return (
 				                                       		       	from d in datesThisWeek
-				                                       		       	let day = (from day in days where day.Date == d select day).SingleOrDefault()
-				                                       		       	let projection = day == null ? null : day.Projection
-				                                       		       	let scheduleDay = day == null ? null : day.ScheduleDay
-				                                       		       	let significantPart = scheduleDay == null ? SchedulePartView.None : scheduleDay.SignificantPartForDisplay()
-																	let hasDayOffUnderAbsence = scheduleDay != null && (scheduleDay.SignificantPartForDisplay() == SchedulePartView.ContractDayOff)
 				                                       		       	select
 				                                       		       		new DayMappingData
 				                                       		       			{
 				                                       		       				Date = d,
 				                                       		       				Period = s.Period,
-
-				                                       		       				Projection = projection,
-				                                       		       				ScheduleDay = scheduleDay,
-																				SignificantPart = significantPart,
-																				HasDayOffUnderAbsence = hasDayOffUnderAbsence,
-
 				                                       		       				WorkflowControlSet = s.WorkflowControlSet,
 				                                       		       			}
 				                                       		       ).ToArray();
@@ -133,36 +99,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			CreateMap<DayMappingData, DayViewModel>()
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.Date))
 				.ForMember(d => d.Header, o => o.MapFrom(s => s))
-				.ForMember(d => d.StyleClassName, o => o.MapFrom(s =>
-				                                                 	{
-				                                                 		if (s.ScheduleDay != null)
-				                                                 		{
-				                                                 			if (s.SignificantPart == SchedulePartView.ContractDayOff)
-				                                                 				return StyleClasses.Striped;
-				                                                 			if (s.SignificantPart == SchedulePartView.DayOff)
-				                                                 				return StyleClasses.DayOff + " " + StyleClasses.Striped;
-				                                                 		}
-				                                                 		return null;
-				                                                 	}))
-				.ForMember(d => d.BorderColor, o => o.MapFrom(s =>
-				                                              	{
-				                                              		if (s.ScheduleDay != null)
-				                                              		{
-				                                              			if (s.HasDayOffUnderAbsence)
-				                                              				return s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
-				                                              			if (s.SignificantPart == SchedulePartView.FullDayAbsence)
-				                                              				return s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
-				                                              			if (s.SignificantPart == SchedulePartView.MainShift)
-				                                              				return s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor.ToHtml();
-				                                              			if (s.SignificantPart == SchedulePartView.DayOff)
-				                                              				return null;
-				                                              		}
-				                                              		return null;
-				                                              	}))
 				.ForMember(d => d.Editable, o => o.MapFrom(s =>
 				                                           	{
-																//if (s.ScheduleDay != null)
-																//    return false;
 				                                           		if (s.WorkflowControlSet == null)
 				                                           			return false;
 
@@ -173,36 +111,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                           		return isInsideSchedulePeriod && isInsidePreferencePeriod && isInsidePreferenceInputPeriod;
 				                                           	}))
 				.ForMember(d => d.InPeriod, o => o.MapFrom(s => s.Period.Contains(s.Date)))
-				.ForMember(d => d.Feedback, o => o.MapFrom(s =>
-				                                           	{
-																//var isScheduled = s.ScheduleDay != null && s.ScheduleDay.IsScheduled();
-																//return !isScheduled && s.Period.Contains(s.Date);
-				                                           		return s.Period.Contains(s.Date);
-				                                           	}))
-				.ForMember(d => d.PersonAssignment, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.MainShift ? s : null))
-				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.DayOff ? s : null))
-				.ForMember(d => d.Absence, o => o.MapFrom(s => s.SignificantPart == SchedulePartView.FullDayAbsence || s.SignificantPart == SchedulePartView.ContractDayOff ? s : null))
-				.ForMember(d => d.Fulfilled, o => o.MapFrom(s =>
-					{
-						if (s.ScheduleDay != null && s.ScheduleDay.IsScheduled())
-							return _preferenceFulfilledChecker.Invoke().IsPreferenceFulfilled(s.ScheduleDay);
-						return null;
-					}))
-				;
-			
-			CreateMap<DayMappingData, PersonAssignmentDayViewModel>()
-				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture)))
-				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.Description.Name))
-				.ForMember(d => d.TimeSpan, o => o.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().Period.TimePeriod(s.ScheduleDay.TimeZone).ToShortTimeString()))
-				.ForMember(d => d.ContractTimeMinutes, o => o.MapFrom(s =>s.Projection.ContractTime().TotalMinutes))
-				;
-
-			CreateMap<DayMappingData, DayOffDayViewModel>()
-				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.ScheduleDay.PersonDayOffCollection().Single().DayOff.Description.Name))
-				;
-
-			CreateMap<DayMappingData, AbsenceDayViewModel>()
-				.ForMember(d => d.Absence, o => o.MapFrom(s => s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.Description.Name))
 				;
 
 			CreateMap<DayMappingData, HeaderViewModel>()

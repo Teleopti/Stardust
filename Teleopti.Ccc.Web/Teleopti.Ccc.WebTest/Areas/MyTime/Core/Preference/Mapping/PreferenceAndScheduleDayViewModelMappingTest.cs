@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
@@ -43,10 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					c.AddProfile(new PreferenceDayViewModelMappingProfile(
 						Depend.On(MockRepository.GenerateMock<IExtendedPreferencePredicate>()
 						)));
-					c.AddProfile(new PreferenceViewModelMappingProfile(
-						             Depend.On<IScheduleColorProvider>(() => null),
-						             Depend.On<IPreferenceFulfilledChecker>(() => null)
-						             ));
+					c.AddProfile(new PreferenceViewModelMappingProfile());
 					c.AddProfile(new CommonViewModelMappingProfile());
 				});
 		}
