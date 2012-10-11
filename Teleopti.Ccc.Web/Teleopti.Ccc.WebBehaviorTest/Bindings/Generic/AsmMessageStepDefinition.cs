@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => _page.MessageLink.Exists, Is.False);
 		}
 
+        [Given(@"My supervisor sends me a message with")]
 		[Given(@"I have an unread message with")]
 		public void GivenIHaveAnUnreadMessageWith(Table table)
 		{
@@ -53,8 +54,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
             }
 		}
 
-		[When(@"I receive a new message")]
-		public void WhenIReceiveANewMessage()
+        [When(@"I receive new message\(s\)")]
+        public void WhenIReceiveNewMessageS()
 		{
 			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.OnMessageBrokerEvent(null);");
 		}
