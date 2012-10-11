@@ -13,7 +13,6 @@
 		dataType: "json",
 		type: 'GET',
 		success: function (data) {
-			console.log(data);
 			var vm = data;
 			vm.scheduleHeight = 668;
 			vm.timelineOffset = 198;
@@ -34,10 +33,7 @@
 			};
 
 			vm.textRequestCount = function (count) {
-				console.log(count);
-				var ret = '@(Resources.XRequests)'.format(count);
-				console.log(ret);
-				return ret;
+				return '@(Resources.XRequests)'.format(count);
 			};
 
 			vm.topPixel = function (period) {
@@ -59,7 +55,6 @@
 			vm.tooltipText = function (period) {
 				if (period.Meeting) {
 					return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>'.format(period.TimeSpan, "Resources.SubjectColon", period.Meeting.Title, "Resources.LocationColon", period.Meeting.Location);
-
 				} else {
 					return period.TimeSpan;
 				}
