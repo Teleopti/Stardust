@@ -40,21 +40,54 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 	}
 
-    public class RestrictionExtractor : IRestrictionExtractor
-    {
-        private readonly ISchedulingResultStateHolder _resultStateHolder;
-        private readonly IList<IAvailabilityRestriction> _availabilityRestrictions = new List<IAvailabilityRestriction>();
-        private readonly IList<IRotationRestriction> _rotationRestrictions = new List<IRotationRestriction>();
-        private readonly IList<IStudentAvailabilityDay> _studentAvailabilityDays = new List<IStudentAvailabilityDay>();
-        private readonly IList<IPreferenceRestriction> _preferenceRestrictions = new List<IPreferenceRestriction>();
-        
+	public class RestrictionExtractor : RestrictionExtractorWithoutStateHolder, IRestrictionExtractor
+	{
+		private readonly ISchedulingResultStateHolder _resultStateHolder;
 
-        public RestrictionExtractor(ISchedulingResultStateHolder resultStateHolder)
+		public RestrictionExtractor(ISchedulingResultStateHolder resultStateHolder)
         {
             _resultStateHolder = resultStateHolder;
         }
 
         private IScheduleDictionary ScheduleDictionary {get { return _resultStateHolder.Schedules; }}
+
+		public void Extract(IPerson person, DateOnly dateOnly)
+		{
+			var scheduleDay = GetScheduleDay(person, dateOnly);
+			Extract(scheduleDay);
+		}
+
+		private IScheduleDay GetScheduleDay(IPerson person, DateOnly dateOnly)
+		{
+			IScheduleDay schedulePart = null;
+			IScheduleRange scheduleRange = ScheduleDictionary[person];
+			if (scheduleRange != null)
+			{
+				schedulePart = scheduleRange.ScheduledDay(dateOnly);
+			}
+			return schedulePart;
+		}
+
+		public void ExtractFromGroupPerson(IGroupPerson groupPerson, DateOnly dateOnly)
+		{
+			InParameter.NotNull("groupPerson", groupPerson);
+
+			ClearLists();
+			foreach (var person in groupPerson.GroupMembers)
+			{
+				var scheduleDay = GetScheduleDay(person, dateOnly);
+				ExtractDay(scheduleDay);
+			}
+
+		}
+	}
+
+    public class RestrictionExtractorWithoutStateHolder : IRestrictionExtractorWithoutStateHolder
+    {
+        private readonly IList<IAvailabilityRestriction> _availabilityRestrictions = new List<IAvailabilityRestriction>();
+        private readonly IList<IRotationRestriction> _rotationRestrictions = new List<IRotationRestriction>();
+        private readonly IList<IStudentAvailabilityDay> _studentAvailabilityDays = new List<IStudentAvailabilityDay>();
+        private readonly IList<IPreferenceRestriction> _preferenceRestrictions = new List<IPreferenceRestriction>();
 
         public IEnumerable<IAvailabilityRestriction> AvailabilityList
         {
@@ -82,7 +115,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             ExtractDay(schedulePart);
         }
 
-        private void ExtractDay(IScheduleDay scheduleDay)
+    	protected void ExtractDay(IScheduleDay scheduleDay)
         {
         	if (scheduleDay == null) return;
 
@@ -94,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         	operation.GetStudentAvailabilityDays(scheduleDay).ForEach(_studentAvailabilityDays.Add);
         }
 
-        private void ClearLists()
+    	protected void ClearLists()
         {
             _availabilityRestrictions.Clear();
             _rotationRestrictions.Clear();
@@ -102,37 +135,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             _preferenceRestrictions.Clear();
         }
 
-        public void Extract(IPerson person, DateOnly dateOnly)
-        {
-            ClearLists();
-
-            IScheduleDay schedulePart = GetScheduleDay(person, dateOnly);
-            ExtractDay(schedulePart);
-        }
-
-        private IScheduleDay GetScheduleDay(IPerson person, DateOnly dateOnly)
-        {
-            IScheduleDay schedulePart = null;
-            IScheduleRange scheduleRange = ScheduleDictionary[person];
-            if (scheduleRange != null)
-            {
-                schedulePart = scheduleRange.ScheduledDay(dateOnly);
-            }
-            return schedulePart;
-        }
-
-        public void ExtractFromGroupPerson(IGroupPerson groupPerson, DateOnly dateOnly)
-        {
-            InParameter.NotNull("groupPerson", groupPerson);
-
-            ClearLists();
-            foreach (var person in groupPerson.GroupMembers)
-            {
-                var scheduleDay = GetScheduleDay(person, dateOnly);
-                ExtractDay(scheduleDay);
-            }
-
-        }
 
         public IEffectiveRestriction CombinedRestriction(ISchedulingOptions schedulingOptions)
         {
@@ -150,9 +152,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
     internal class InnerRestrictionExtractor
     {
         private readonly ISchedulingOptions _schedulingOptions;
-        private readonly IRestrictionExtractor _restrictionExtractor;
+        private readonly IRestrictionExtractorWithoutStateHolder _restrictionExtractor;
 
-        public InnerRestrictionExtractor(ISchedulingOptions schedulingOptions, IRestrictionExtractor restrictionExtractor)
+        public InnerRestrictionExtractor(ISchedulingOptions schedulingOptions, IRestrictionExtractorWithoutStateHolder restrictionExtractor)
         {
             _schedulingOptions = schedulingOptions;
             _restrictionExtractor = restrictionExtractor;
