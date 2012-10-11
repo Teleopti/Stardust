@@ -7,57 +7,61 @@
 	Layout = null;
 }
 <script>
-	var ajax = new Teleopti.MyTimeWeb.Ajax();
-	ajax.Ajax({
-		url: 'Schedule/Bajs',
-		dataType: "json",
-		type: 'GET',
-		success: function (data) {
-			var vm = data;
-			vm.scheduleHeight = 668;
-			vm.timelineOffset = 198;
-			vm.pixelToDisplayAll = 33;
-			vm.pixelToDisplayTitle = 16;
-			vm.mathRound = function (value) {
-				return Math.round(value);
-			};
+	$(function() {
+		var ajax = new Teleopti.MyTimeWeb.Ajax();
+		ajax.Ajax({
+			url: 'Schedule/Bajs',
+			dataType: "json",
+			type: 'GET',
+			success: function(data) {
+				var vm = data;
+				vm.scheduleHeight = 668;
+				vm.timelineOffset = 198;
+				vm.pixelToDisplayAll = 33;
+				vm.pixelToDisplayTitle = 16;
+				vm.mathRound = function(value) {
+					return Math.round(value);
+				};
 
-			vm.textRequestCount = function (count) {
-				return '@(Resources.XRequests)'.format(count);
-			};
+				vm.textRequestCount = function(count) {
+					return '@(Resources.XRequests)'.format(count);
+				};
 
-			vm.topPixel = function (period) {
-				return vm.mathRound(vm.scheduleHeight * period.StartPositionPercentage);
-			};
+				vm.topPixel = function(period) {
+					return vm.mathRound(vm.scheduleHeight * period.StartPositionPercentage);
+				};
 
-			vm.bottomPixel = function (period) {
-				return vm.mathRound(vm.scheduleHeight * period.EndPositionPercentage) - 1;
-			};
+				vm.bottomPixel = function(period) {
+					return vm.mathRound(vm.scheduleHeight * period.EndPositionPercentage) - 1;
+				};
 
-			vm.heightPixel = function (period) {
-				return vm.bottomPixel(period) - vm.topPixel(period);
-			};
+				vm.heightPixel = function(period) {
+					return vm.bottomPixel(period) - vm.topPixel(period);
+				};
 
-			vm.heightDouble = function (period) {
-				return vm.scheduleHeight * (period.EndPositionPercentage - period.StartPositionPercentage);
-			};
+				vm.heightDouble = function(period) {
+					return vm.scheduleHeight * (period.EndPositionPercentage - period.StartPositionPercentage);
+				};
 
-			vm.tooltipText = function (period) {
-				if (period.Meeting) {
-					return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>'.format(period.TimeSpan, "Resources.SubjectColon", period.Meeting.Title, "Resources.LocationColon", period.Meeting.Location);
-				} else {
-					return period.TimeSpan;
-				}
-			};
+				vm.tooltipText = function(period) {
+					if (period.Meeting) {
+						return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>'.format(period.TimeSpan, "Resources.SubjectColon", period.Meeting.Title, "Resources.LocationColon", period.Meeting.Location);
+					} else {
+						return period.TimeSpan;
+					}
+				};
 
-			ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
-			Teleopti.MyTimeWeb.Schedule.DataLoaded();
-		}
+				ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
+				Teleopti.MyTimeWeb.Schedule.DataLoaded();
+			}
+		});
 	});
 </script>
 <div id="ScheduleWeek-body" class="body-weekview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
-<div class="week-schedule-ASM-permission-granted" data-bind="if : AsmPermission">yes</div>
-<div class="week-schedule-current-week" data-bind="if : IsCurrentWeek">yes</div>
+	<div class="week-schedule-ASM-permission-granted" data-bind="if : AsmPermission">
+		yes</div>
+	<div class="week-schedule-current-week" data-bind="if : IsCurrentWeek">
+		yes</div>
 	<style>
 		@foreach (var style in Model.Styles)
   {
@@ -104,13 +108,14 @@
 				<div class="week-schedule-time-indicator relative">
 				</div>
 				<!-- ko foreach: Periods -->
-				<div class="week-schedule-layer absolute tooltip" data-bind="attr: {'tooltip-title': Title, 'tooltip-text' : $root.tooltipText($data)}, style:{'background-color' : 'rgb(' + Color +')', 'height' :  $root.heightPixel($data) + 'px', top:  $root.topPixel($data) + 'px', 'width' : '131px'}"  >  
+				<div class="week-schedule-layer absolute tooltip" data-bind="attr: {'tooltip-title': Title, 'tooltip-text' : $root.tooltipText($data)}, style:{'background-color' : 'rgb(' + Color +')', 'height' :  $root.heightPixel($data) + 'px', top:  $root.topPixel($data) + 'px', 'width' : '131px'}">
 					<!-- ko if: Meeting -->
 					<div class="icon meeting floatright">
 					</div>
 					<!-- /ko -->
-					<strong class="truncate" data-bind="text: Title, visible: $root.heightDouble($data) > $root.pixelToDisplayTitle"></strong>
-					<span class="fullwidth displayblock" data-bind="visible: $root.heightDouble($data) > $root.pixelToDisplayAll, text: TimeSpan"></span>
+					<strong class="truncate" data-bind="text: Title, visible: $root.heightDouble($data) > $root.pixelToDisplayTitle">
+					</strong><span class="fullwidth displayblock" data-bind="visible: $root.heightDouble($data) > $root.pixelToDisplayAll, text: TimeSpan">
+					</span>
 				</div>
 				<!-- /ko -->
 			</li>
