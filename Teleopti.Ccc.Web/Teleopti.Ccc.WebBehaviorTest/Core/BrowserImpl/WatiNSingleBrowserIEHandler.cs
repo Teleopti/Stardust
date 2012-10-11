@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
@@ -61,9 +62,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 				ProcessName,
 				new Func<TryResult>[]
 					{
-						() => TryCloseByWatiNCloseNDispose(),
+						// never works in AfterTestRun
+						//() => TryCloseByWatiNCloseNDispose(),
 						() => ProcessHelpers.TryCloseByClosingMainWindow(ProcessName),
-						() => TryCloseByWatiNForceClose(),
+						// never works in AfterTestRun
+						//() => TryCloseByWatiNForceClose(),
 						() => ProcessHelpers.TryCloseByKillingProcess(ProcessName)
 					});
 			if (!result)
@@ -95,30 +98,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 
 
-		private TryResult TryCloseByWatiNForceClose()
-		{
-			_browser.ForceClose();
-			return TryResult.Passed;
-		}
+		//private TryResult TryCloseByWatiNForceClose()
+		//{
+		//    _browser.ForceClose();
+		//    return TryResult.Passed;
+		//}
 
-		private TryResult TryCloseByWatiNCloseNDispose()
-		{
-			if (_closeByWatiNCloseNDisposeFailed)
-				return TryResult.Failure;
-			var success = Task.Factory
-				.StartNew(() =>
-				          	{
-								_browser.Close();
-								_browser.Dispose();
-				          	})
-				.Wait(TimeSpan.FromSeconds(2));
-			if (!success)
-			{
-				_closeByWatiNCloseNDisposeFailed = true;
-				return TryResult.Failure;
-			}
-			return TryResult.Passed;
-		}
+		//private TryResult TryCloseByWatiNCloseNDispose()
+		//{
+		//    if (_closeByWatiNCloseNDisposeFailed)
+		//        return TryResult.Failure;
+		//    var success = Task.Factory
+		//        .StartNew(() =>
+		//                    {
+		//                        _browser.Close();
+		//                        _browser.Dispose();
+		//                    })
+		//        .Wait(TimeSpan.FromSeconds(2));
+		//    if (!success)
+		//    {
+		//        _closeByWatiNCloseNDisposeFailed = true;
+		//        return TryResult.Failure;
+		//    }
+		//    return TryResult.Passed;
+		//}
 
 
 
