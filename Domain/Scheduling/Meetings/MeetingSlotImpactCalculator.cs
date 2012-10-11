@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -96,6 +97,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 					return false;
 
                 if (!_allLayersAreInWorkTimeSpecification.IsSatisfiedBy(layers))
+                    return false;
+
+                if (layers.Any(x => !((VisualLayer)x).HighestPriorityActivity.AllowOverwrite && x.Period.Intersect(meetingTime )))
                     return false;
 			}
 			return true;

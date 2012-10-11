@@ -8,7 +8,7 @@
 
 
 Teleopti.MyTimeWeb.Settings = (function ($) {
-
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	function _init() {
 		Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Settings/Index', Teleopti.MyTimeWeb.Settings.PartialInit);
 		Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Settings/Password', Teleopti.MyTimeWeb.Settings.PartialInit);
@@ -50,7 +50,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 
 	function _updatePassword(oldPassword, newPassword) {
 		var data = { OldPassword: oldPassword, NewPassword: newPassword };
-		Teleopti.MyTimeWeb.Ajax.Ajax({
+		ajax.Ajax({
 			url: "Settings/ChangePassword",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
@@ -59,6 +59,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			success: function (data, textStatus, jqXHR) {
 				var updatedLabel = $("label#updated");
 				updatedLabel.show();
+				$("#incorrectOldPassword").hide();
 				$("#passwordDiv input").reset();
 				setTimeout(function () { updatedLabel.hide(); }, 2000);
 			},
@@ -91,7 +92,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 
 	function _selectorChanged(value, url) {
 		var data = { LCID: value };
-		Teleopti.MyTimeWeb.Ajax.Ajax({
+		ajax.Ajax({
 			url: url,
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
@@ -107,7 +108,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	}
 
 	function _refreshPageWhenAllAjaxDone() {
-		if (!Teleopti.MyTimeWeb.Ajax.IsRequesting())
+		if (!ajax.IsRequesting())
 			location.reload();
 		else
 			setTimeout(function () { _refreshPageWhenAllAjaxDone(); }, 100);

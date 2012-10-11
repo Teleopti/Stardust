@@ -98,6 +98,18 @@
     <Compile Include="Controls\ConnectionString\Summary.Designer.cs">
       <DependentUpon>Summary.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\General\SmoothLink.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\General\SmoothLink.Designer.cs">
+      <DependentUpon>SmoothLink.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\General\SmoothLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\General\SmoothLabel.Designer.cs">
+      <DependentUpon>SmoothLabel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\General\DBSelect.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -134,8 +146,15 @@
     <Compile Include="Controls\MainPatch.Designer.cs">
       <DependentUpon>MainPatch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ManageDatabaseVersions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ManageDatabaseVersions.Designer.cs">
+      <DependentUpon>ManageDatabaseVersions.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataLayer\DBHelper.cs" />
     <Compile Include="DataLayer\IOHelper.cs" />
+    <Compile Include="DataLayer\Nhib.cs" />
     <Compile Include="DataLayer\XmlHandler.cs" />
     <Compile Include="DataLayer\XmlHandlerException.cs" />
     <Compile Include="GlobalSuppressions.cs" />
@@ -172,6 +191,9 @@
     <EmbeddedResource Include="Controls\MainPatch.resx">
       <DependentUpon>MainPatch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ManageDatabaseVersions.resx">
+      <DependentUpon>ManageDatabaseVersions.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -203,6 +225,7 @@
     <Content Include="config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\ccc_Menu.png" />
     <None Include="Resources\warning.png" />
     <None Include="Resources\PlayHS.png" />
     <None Include="Resources\info1.png" />

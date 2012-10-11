@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Xml;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using WatiN.Core;
-using Browser = WatiN.Core.Browser;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -14,26 +15,24 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	public class AsmStepDefinition
 	{
 		private const string attributeUsedForWidth = "padding-left";
-		public static readonly Uri asmUri = new Uri(TestSiteConfigurationSetup.Url, "MyTime/Asm");
-		private IE _popup;
 
 		[When(@"I click ASM link")]
 		public void WhenIClickASMLink()
 		{
-			Pages.Pages.CurrentPortalPage.AsmButton.Click();
-			_popup = Browser.AttachTo<IE>(Find.ByUrl(asmUri));
+			TestControllerMethods.Logon();
+			Navigation.GotoAsm();
 		}
 
 		[Then(@"I should see a schedule in popup")]
 		public void ThenIShouldSeeAScheduleInPopup()
 		{
-			EventualAssert.That(() => _popup.Spans.Filter(Find.ByClass("asm-layer", false)).Count, Is.GreaterThan(0));
+			EventualAssert.That(() => Browser.Current.Spans.Filter(Find.ByClass("asm-layer", false)).Count, Is.GreaterThan(0));
 		}
 
 		[Then(@"I should see '(.*)' upcoming activities")]
 		public void ThenIShouldSeeUpcomingActivities(int numberOfUpcomingActivities)
 		{
-			EventualAssert.That(() => _popup.Table("asm-current-info-table").TableRows.Count, Is.EqualTo(numberOfUpcomingActivities));
+			EventualAssert.That(() => Browser.Current.Table("asm-current-info-table").TableRows.Count, Is.EqualTo(numberOfUpcomingActivities));
 		}
 
 
@@ -41,14 +40,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeePhoneAsCurrentActivity()
 		{
 			EventualAssert.That(() =>
-				_popup.Table("asm-current-info-table").TableRow(Find.ByClass("asm-info-current-activity")).Children().Filter(Find.ByText(TestData.ActivityPhone.Description.Name)).Count,
+				Browser.Current.Table("asm-current-info-table").TableRow(Find.ByClass("asm-info-current-activity")).Children().Filter(Find.ByText(TestData.ActivityPhone.Description.Name)).Count,
 				Is.EqualTo(1));
 		}
 
 		[Then(@"I should not see as current activity")]
 		public void ThenIShouldNotSeeAsCurrentActivity()
 		{
-			EventualAssert.That(() => _popup.Table("asm-current-info-table").TableRow(Find.ByClass("asm-info-current-activity")).Exists, Is.False);
+			EventualAssert.That(() => Browser.Current.Table("asm-current-info-table").TableRow(Find.ByClass("asm-info-current-activity")).Exists, Is.False);
 		}
 
 		[Then(@"ASM link should not be visible")]
@@ -62,9 +61,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() =>
 										{
-											var allLayers = _popup.Elements.Filter(Find.ByClass("asm-layer", false));
-											var oneHourLayer = allLayers.First();
-											var pxPerHour = pixelLength(oneHourLayer);
+											var allLayers = Browser.Current.Elements.Filter(Find.ByClass("asm-layer", false));
+											var pxPerHour = pixelsPerHour();
 											var theLayerToCheck = allLayers.Last();
 											return pixelLength(theLayerToCheck) / pxPerHour;
 										}, Is.EqualTo(hours));
@@ -73,11 +71,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see last activity starttime as '(.*)'")]
 		public void ThenIShouldSeeLastActivityStarttimeAs(string startTime)
 		{
-			_popup.Element(Find.ByClass("asm-outer-canvas", false)).WaitUntilDisplayed();
+			Browser.Current.Element(Find.ByClass("asm-outer-canvas", false)).WaitUntilDisplayed();
+
+			Element nextDayIndicationElement = Browser.Current.Table("asm-current-info-table")
+				.Elements.Filter(Find.ByClass("asm-info-next-day-column")).Last();
+
+			var nextDayIndication = isDisplayed(nextDayIndicationElement) ? nextDayIndicationElement.Text : string.Empty;
+
 			EventualAssert.That(() =>
-									  _popup.Table("asm-current-info-table")
+									  Browser.Current.Table("asm-current-info-table")
 										  .Elements.Filter(Find.ByClass("asm-info-time-column"))
-										  .Last().Text,
+										  .Last().Text + nextDayIndication.Trim(),
 										Is.EqualTo(startTime));
 		}
 
@@ -85,30 +89,57 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeAPopupWithTitleAgentScheduleMessenger()
 		{
 			EventualAssert.That(() =>
-								_popup.Title.Contains(Resources.AgentScheduleMessenger), 
-								Is.True, 
-								string.Format("{0} does not contain {1}", _popup.Title, Resources.AgentScheduleMessenger));
+								Browser.Current.Title.Contains(Resources.AgentScheduleMessenger), 
+								Is.True,
+								string.Format("{0} does not contain {1}", Browser.Current.Title, Resources.AgentScheduleMessenger));
 		}
 
+		[When(@"My schedule between '(.*)' to '(.*)' change")]
+		public void WhenMyScheduleBetweenToChange(DateTime start, DateTime end)
+		{
+			var xmlStartDate = "D" + XmlConvert.ToString(start, XmlDateTimeSerializationMode.Unspecified);
+			var xmlEndDate = "D" + XmlConvert.ToString(end, XmlDateTimeSerializationMode.Unspecified);
+
+			const string js = @"var notification = {{StartDate : '{0}', EndDate : '{1}'}};Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);";
+
+			var formattedJs = string.Format(js, xmlStartDate, xmlEndDate);
+			Browser.Current.Eval(formattedJs);
+		}
+
+		[Then(@"Now indicator should be at hour '(.*)'")]
+		public void ThenNowIndicatorShouldBeAtHour(int hour)
+		{
+			EventualAssert.That(() =>
+			{
+				var slidingSchedules = Browser.Current.Div(Find.ByClass("asm-sliding-schedules"));
+				var pixelPos = -Convert.ToDouble(slidingSchedules.Style.GetAttributeValue("left").TrimEnd('p', 'x'));
+				var holeHours = Math.Floor(pixelPos / pixelsPerHour());
+				return holeHours;
+			}, Is.EqualTo(hour));
+		}
 
 		private static int pixelLength(Element oneHourLengthLayer)
 		{
 			return Convert.ToInt32(oneHourLengthLayer.Style.GetAttributeValue(attributeUsedForWidth).TrimEnd('p', 'x'));
 		}
 
-
-		[AfterScenario("ASM")]
-		[AfterScenario("ASMWinterSummer")]
-		[AfterScenario("ASMSummerWinter")]
-		public void AfterScenario()
+		private static int pixelsPerHour()
 		{
-			killPopupIfExists();
+			const int hackExtra = 1; //due to borde width of hours
+			var allHours = Browser.Current.Elements.Filter(Find.ByClass("asm-timeline-line", false));
+			var firstHour = allHours.First();
+			if (!firstHour.Exists)
+				throw new NotSupportedException("Missing hour to read from");
+			return Convert.ToInt32(firstHour.Style.GetAttributeValue("width").TrimEnd('p', 'x')) + hackExtra;
 		}
 
-		private void killPopupIfExists()
+		private static bool isDisplayed(Element element)
 		{
-			if (_popup != null)
-				_popup.Dispose();
+			if(string.Equals(element.Style.Display,"none"))
+			{
+				return false;
+			}
+			return element.Parent == null || isDisplayed(element.Parent);
 		}
 	}
 }

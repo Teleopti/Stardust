@@ -4,6 +4,7 @@ GO
 
 
 create PROCEDURE [stage].[etl_stg_permission_report_delete]
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;

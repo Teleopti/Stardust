@@ -1,5 +1,4 @@
-﻿@ASM
-Feature: ASM
+﻿Feature: ASM
 	In order to improve adherence
 	As an agent
 	I want to see my current activities
@@ -40,55 +39,79 @@ Scenario: No permission to ASM module
 Scenario: Show part of agent's schedule in popup
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01'	
-	When I view my week schedule
-	And I click ASM link
+	When I click ASM link
 	Then I should see a schedule in popup
 
 Scenario: Show title in popup
 	Given I have the role 'Full access to mytime'
-	When I view my week schedule
-	And I click ASM link
+	When I click ASM link
 	Then I should see a popup with title AgentScheduleMessenger 
 
 Scenario: Write all upcoming activities
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 07:00'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	Then I should see '3' upcoming activities
 
 Scenario: Current activity should be shown
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 16:00'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	Then I should see Phone as current activity
 
 Scenario: No current activity to show
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 07:00'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	Then I should not see as current activity
 
 Scenario: Current activity changes
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 11:59'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	And Current browser time has changed to '2030-01-01 12:00'
 	Then I should see Phone as current activity
 
 Scenario: Upcoming activity starttime should be displayed
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 00:01'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	Then I should see last activity starttime as '12:00'
 
 Scenario: Upcoming activity starttime starting after midnight should be indicated as next day
 	Given I have the role 'Full access to mytime'
 	And Current time is '2029-12-31 23:59'
-	When I view my regional settings
-	And I click ASM link
+	When I click ASM link
 	Then I should see last activity starttime as '12:00+1'
+
+Scenario: Agent should from ASM popup be notified when current shift has changed
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01 00:00'
+	When I click ASM link
+	And My schedule between '2030-01-01 08:00' to '2030-01-01 17:00' change
+	Then I should see one notify message
+
+Scenario: Agent should from portal be notified when current shift has changed
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01 00:00'
+	When I view preferences
+	And My schedule between '2030-01-01 08:00' to '2030-01-01 17:00' change
+	Then I should see one notify message
+
+Scenario: Asm should be automatically reloaded when time passes
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01 23:59'
+	When I click ASM link
+	Then Now indicator should be at hour '47'
+	When Current browser time has changed to '2030-01-02 00:01'
+	Then Now indicator should be at hour '24'
+	
+
+#Not in use until version 8
+@ignore
+Scenario: Agent should be notified when activity changes
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01 11:59'
+	When I click ASM link
+	And Current browser time has changed to '2030-01-01 12:00'
+	Then I should see only one alert containing 'Phone'

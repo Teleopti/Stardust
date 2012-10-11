@@ -91,6 +91,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			result.TargetTime.Should().Be(targetTime);
 		}
 
+		[Test]
+		public void ShouldReturnMaxMustHave()
+		{
+			var virtualSchedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
+			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
+
+			virtualSchedulePeriodProvider.Stub(x => x.VirtualSchedulePeriodForDate(DateOnly.Today)).Return(virtualSchedulePeriod);
+			virtualSchedulePeriod.Stub(x => x.MustHavePreference).Return(1);
+
+			var target = new PreferencePeriodFeedbackProvider(virtualSchedulePeriodProvider, null, null, null, null);
+
+			var result = target.MaxMustHave(DateOnly.Today);
+
+			result.Should().Be.EqualTo(1);
+		}
+
 	}
 	
 }

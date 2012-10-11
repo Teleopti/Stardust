@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Time;
@@ -150,6 +152,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 			var range = _mocks.StrictMock<IScheduleRange>();
 			var projService = _mocks.StrictMock<IProjectionService>();
 			var visualLayers = _mocks.StrictMock<IVisualLayerCollection>();
+
+             var lunchActivity = ActivityFactory.CreateActivity("lunch");
+            lunchActivity.AllowOverwrite = true  ;
+
+            var activity = ActivityFactory.CreateActivity("hej");
+            activity.InWorkTime = true;
+            activity.AllowOverwrite = true ;
+            var layerBefore = new VisualLayer(activity, dateTimePeriod,
+                                activity, null);
+            var layerLunch =
+                new VisualLayer(lunchActivity, dateTimePeriod,
+                                lunchActivity, null);
+            var layerAfter = new VisualLayer(activity, dateTimePeriod,
+                                activity, null);
+            var layers = new List<IVisualLayer> { layerBefore, layerLunch, layerAfter };
+           
 			var virtualPeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var personPeriod = _mocks.StrictMock<IPersonPeriod>();
 			var filteredVisualLayers = _mocks.StrictMock<IFilteredVisualLayerCollection>();
@@ -166,8 +184,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 			                        		period1145To1200,
 			                        		period1200To1215
 			                        	};
-			Expect.Call(_schedulingResultStateHolder.Schedules).Return(_dictionary);
-			Expect.Call(_dictionary[person]).Return(range);
+			Expect.Call(_schedulingResultStateHolder.Schedules).Return(_dictionary).Repeat.AtLeastOnce();
+            Expect.Call(_dictionary[person]).Return(range).Repeat.AtLeastOnce();
 			Expect.Call(person.PermissionInformation).Return(permissionInfo).Repeat.Twice();
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			Expect.Call(range.ScheduledDay(new DateOnly(2010, 11, 1))).Return(scheduleDay);
@@ -175,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 			Expect.Call(scheduleDay.ProjectionService()).Return(projService);
 			Expect.Call(projService.CreateProjection()).Return(visualLayers);
 			Expect.Call(visualLayers.FilterLayers(dateTimePeriod)).Return(filteredVisualLayers);
-			Expect.Call(filteredVisualLayers.HasLayers).Return(true);
+            Expect.Call(filteredVisualLayers.HasLayers).Return(true).Repeat.AtLeastOnce();
 			Expect.Call(filteredVisualLayers.ContractTime()).Return(TimeSpan.FromMinutes(60));
             Expect.Call(_allLayersInWorkTimeSpec.IsSatisfiedBy(filteredVisualLayers)).Return(true);
 			Expect.Call(person.VirtualSchedulePeriod(new DateOnly(2010, 11, 1))).Return(virtualPeriod);
@@ -196,6 +214,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 			Expect.Call(period1130To1145.AbsoluteDifference).Return(15);
 			Expect.Call(period1145To1200.AbsoluteDifference).Return(15);
 			Expect.Call(period1200To1215.AbsoluteDifference).Return(15); // 10 should be left to 1200 - 1210
+
+            Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layers.GetEnumerator());
 
 			_mocks.ReplayAll();
 			var result = _target.GetImpact(persons, dateTimePeriod);

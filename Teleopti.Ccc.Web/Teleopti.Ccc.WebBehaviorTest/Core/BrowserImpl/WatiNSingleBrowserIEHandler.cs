@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 	{
 		private const string ProcessName = "iexplore";
 
-		private static IDisposable BrowserLock { get { return ScenarioContext.Current.Value<SystemLevelLock>(); } set { ScenarioContext.Current.Value((SystemLevelLock)value); } }
+		private static IDisposable BrowserLock { get; set; }
+		//private static IDisposable BrowserLock { get { return ScenarioContext.Current.Value<SystemLevelLock>(); } set { ScenarioContext.Current.Value((SystemLevelLock)value); } }
 
 		private static bool _closeByWatiNCloseNDisposeFailed = false;
 		private IE _browser;

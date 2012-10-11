@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Castle.Components.DictionaryAdapter;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -24,10 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 							  from l in layers
 							  select l.DisplayColor();
 
-			var personAssignmentColors = from d in scheduleDays
-										 let personAssignment = d.AssignmentHighZOrder()
-										 where personAssignment != null
-										 select personAssignment.MainShift.ShiftCategory.DisplayColor;
+			IEnumerable<Color> personAssignmentColors = new List<Color>();
+			var assignments = scheduleDays.Select(x => x.AssignmentHighZOrder()).Where(x => x != null);
+			if (assignments.Any(x => x.MainShift != null))
+			{
+				personAssignmentColors = from d in assignments
+										 select d.MainShift.ShiftCategory.DisplayColor;
+			}
 
 			var absenceColors = from d in scheduleDays
 			                    let personAbsences = d.PersonAbsenceCollection()

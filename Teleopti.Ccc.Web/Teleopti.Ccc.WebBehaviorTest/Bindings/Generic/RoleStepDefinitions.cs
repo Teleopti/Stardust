@@ -31,6 +31,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(userRole);
 		}
 
-
+		[Given(@"I have a role named '(.*)'")]
+		public void GivenIHaveARoleNamedWith(string name)
+		{
+			UserFactory.User().Setup(new RoleConfigurable {Name = name});
+			UserFactory.User().Setup(new RoleForUser {Name = name});
+		}
 	}
 }

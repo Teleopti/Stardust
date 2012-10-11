@@ -28,6 +28,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			interceptors.Reverse().ToList().ForEach(i => i.After(pageUrl));
 		}
 
+		public static void GotoAsm()
+		{
+			GoTo("MyTime/Asm", new OverrideNotifyBehavior());
+		}
+
 		public static void GotoGlobalSignInPage()
 		{
 			GoTo("Start/Authentication/SignIn", new ApplicationStartupTimeout());
@@ -123,7 +128,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoPreference()
 		{
-			GoTo("MyTime#Preference/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#Preference/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new OverrideNotifyBehavior());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 
@@ -230,4 +235,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	}
 
+	public class OverrideNotifyBehavior : IGoToInterceptor
+	{
+		public void Before(string pageUrl)
+		{
+		}
+
+		public void After(string pageUrl)
+		{
+			mockNotifyCall();
+		}
+
+		private static void mockNotifyCall()
+		{
+			const string jsCode = "Teleopti.MyTimeWeb.Notifier.Notify = function (value) {$('<span/>', {text: value, 'class': 'notifyLoggerItem'}).appendTo('#notifyLogger');};";
+			Browser.Current.Eval(jsCode);
+		}
+	}
 }

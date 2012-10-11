@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private ICccTimeZoneInfo _timeZone;
         private ICollection<DateOnly> _availableDates;
         private IEnumerable<DateOnlyPeriod> _availablePeriods;
-        private IShiftCategoryFairness _shiftCategoryFairness;
+        private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
 
         public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters)
             : base(owner, parameters)
@@ -230,7 +231,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             _calculatedTargettTimeHolder = null;
             _calculatedTargetScheduleDaysOff = null;
             _calculatedScheduleDaysOff = null;
-            _shiftCategoryFairness = null;
+            _shiftCategoryFairnessHolder = null;
         }
 
         private class PersistableScheduleDataForAuthorization
@@ -283,7 +284,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public IFairnessValueResult FairnessPoints()
         {
-            DateTimePeriod period = createVisiblePeriodMinusFourWeeksPeriod();
+            DateTimePeriod period = VisiblePeriodMinusFourWeeksPeriod();
             return FairnessPoints(period);
         }
 
@@ -411,22 +412,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return null;
         }
 
-        private DateTimePeriod createVisiblePeriodMinusFourWeeksPeriod()
+        public DateTimePeriod VisiblePeriodMinusFourWeeksPeriod()
         {
-            TimeSpan offset = TimeSpan.FromDays(-28);
-            return ((ISchedule)this).Owner.Period.VisiblePeriod.ChangeStartTime(offset);
+        	return ((ISchedule) this).Owner.Period.VisiblePeriodMinusFourWeeksPeriod();
         }
 
-        public IShiftCategoryFairness CachedShiftCategoryFairness()
+        public IShiftCategoryFairnessHolder CachedShiftCategoryFairness()
         {
-            if (_shiftCategoryFairness == null)
+            if (_shiftCategoryFairnessHolder == null)
             {
                 ShiftCategoryFairnessCreator creator = new ShiftCategoryFairnessCreator();
                 ICccTimeZoneInfo timeZoneInfo = this.Person.PermissionInformation.DefaultTimeZone();
-                DateOnlyPeriod period = createVisiblePeriodMinusFourWeeksPeriod().ToDateOnlyPeriod(timeZoneInfo);
-                _shiftCategoryFairness = creator.CreatePersonShiftCategoryFairness(this, period);
+                DateOnlyPeriod period = VisiblePeriodMinusFourWeeksPeriod().ToDateOnlyPeriod(timeZoneInfo);
+                _shiftCategoryFairnessHolder = creator.CreatePersonShiftCategoryFairness(this, period);
             }
-            return _shiftCategoryFairness;
+            return _shiftCategoryFairnessHolder;
         }
     }
 }

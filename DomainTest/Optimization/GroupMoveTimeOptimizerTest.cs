@@ -181,6 +181,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
 
+        //[Test]
+        //public void TestPeriodValueBeingPopulated()
+        //{
+        //    double result;
+        //    using(_mock.Playback())
+        //    {
+        //        result = _target.PeriodValue();
+        //        Assert.AreEqual(0.0, result);
+        //    }
+           
+
+        //}
+
+
         private void commomMocks()
         {
             Expect.Call(_scheduleMatrixLockableBitArrayConverter.Convert(false, false)).Return(_lockableBitArray);

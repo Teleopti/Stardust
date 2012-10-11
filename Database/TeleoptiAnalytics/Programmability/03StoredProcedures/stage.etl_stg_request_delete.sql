@@ -4,6 +4,7 @@ GO
 
 
 create PROCEDURE [stage].[etl_stg_request_delete]
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;

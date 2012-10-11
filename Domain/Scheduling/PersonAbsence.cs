@@ -194,9 +194,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
             DateTimePeriod dateTimePeriod =
                 dateOnlyPeriod.ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone());
-
+            
             var addExtraEndDayDueToNightShifts = dateTimePeriod.ChangeEndTime(TimeSpan.FromDays(1));
-            return addExtraEndDayDueToNightShifts.Intersect(Period);
+            var addExtraEndDayDueToConsecutiveAbsence = addExtraEndDayDueToNightShifts.ChangeStartTime(TimeSpan.FromDays(-1));
+            return addExtraEndDayDueToConsecutiveAbsence.Intersect(Period);
         }
 
         /// <summary>

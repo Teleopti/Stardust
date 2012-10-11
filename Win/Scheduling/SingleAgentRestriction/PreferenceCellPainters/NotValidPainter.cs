@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.PreferenceCellPaint
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public override void Paint(Graphics g, Rectangle clientRectangle, IPreferenceCellData cellValue, PreferenceRestriction preference, IEffectiveRestriction effectiveRestriction, StringFormat format)
         {
-            g.DrawImage(_notValidatedImage, clientRectangle.Left + clientRectangle.Width - _notValidatedImage.Width - 3, clientRectangle.Top + 3);
+            g.DrawImage(_notValidatedImage, clientRectangle.Left + clientRectangle.Width - _notValidatedImage.Width - 10, clientRectangle.Top + 3);
         }
 
     }

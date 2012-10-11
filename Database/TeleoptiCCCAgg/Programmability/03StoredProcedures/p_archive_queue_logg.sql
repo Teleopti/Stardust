@@ -6,6 +6,7 @@ CREATE  PROCEDURE [dbo].[p_archive_queue_logg]
 @date_from smalldatetime,
 @date_to smalldatetime
 
+WITH EXECUTE AS OWNER
 AS
 
 CREATE TABLE #tmp_q_logg (

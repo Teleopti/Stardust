@@ -27,7 +27,9 @@
 	{
 		if (toolbarItem is ToolBarSeparatorItem)
 		{
-			{ index = 0; }
+						{
+							index = 0;
+						}
 						<div class="seperator"></div>
 		}
 		if (toolbarItem is ToolBarDatePicker)
@@ -46,12 +48,12 @@
 			var button = toolbarItem as ToolBarButtonItem;
 			var id = string.Format("{0}-{1}", navSection.Controller, button.ButtonType);
 			var buttonId = id + "-button";
-			var textId = id + "-text";
 						<button title="@Html.AttributeEncode(button.Title)" id="@buttonId" disabled="disabled" class="toolbar-@Html.Raw(button.ButtonType) icon @button.Icon ir floatleft@((index > 1) ? " ml10" : "")">@button.Title</button>
-			if (!string.IsNullOrEmpty(button.Text))
-			{
-							<span id="@textId"></span>
-			}
+					}
+					if (toolbarItem is ToolBarTextItem)
+					{
+						var id = string.Format("{0}-{1}", navSection.Controller, (toolbarItem as ToolBarTextItem).Id);
+						<span id="@id" class="ml10"></span>
 		}
 		if (toolbarItem is ToolBarSplitButton)
 		{
@@ -86,21 +88,21 @@
 	{
 		var preferenceNavigation = navSection as PreferenceNavigationItem;
 		var times = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
-					let value = Html.AttributeEncode(TimeHelper.TimeOfDayFromTimeSpan(t))
-					let text = TimeHelper.TimeOfDayFromTimeSpan(t)
-					select new Option
-					{
-						Value = value,
-						Text = text
-					};
-		var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
-						  let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture))
-						  let text = TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture)
-						  select new Option
-						  {
-							  Value = value,
-							  Text = text
-						  };
+								let value = Html.AttributeEncode(TimeHelper.TimeOfDayFromTimeSpan(t))
+								let text = TimeHelper.TimeOfDayFromTimeSpan(t)
+								select new Option
+									{
+										Value = value,
+										Text = text
+									};
+					var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0))
+									  let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture))
+									  let text = TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture)
+									  select new Option
+										  {
+											  Value = value,
+											  Text = text
+										  };
 					<div id="Preference-add-extended-form" class="displaynone"> 
 						
 						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15 mt5">
@@ -177,7 +179,7 @@
 		}
 							</select>
 						</div>
-						<div id="activity-preference-fields" data-bind="visible: EnableActivityTimeEditing" class="mt5">
+						<div id="Activity-preference-fields" data-bind="visible: EnableActivityTimeEditing" class="mt5">
 							<div>
 								<div class="time-limitation-label icon leftarrow"></div>
 								<select id="Preference-extended-activity-start-time-minimum" class="time-input" data-bind="combobox: ActivityEarliestStartTime, combobox-enabled: EnableActivityTimeEditing">
@@ -234,8 +236,11 @@
 							</div>
 						</div>
 						<div class="mt5">
+							<button id="Preference-extended-reset" class="ml15 mt10 mb5 floatleft">@Resources.Reset</button>
 							<button id="Preference-extended-apply" class="mr25 mt10 mb5 floatright">@Resources.Apply</button>
-							<div id="Preference-extended-error" class="error" data-bind="html: ValidationError"></div>
+						</div>
+						<div>
+							<div id="Preference-extended-error" class="error floatleft" data-bind="html: ValidationError"></div>
 							<div class="clearboth"></div>
 						</div>
 					</div>
@@ -258,9 +263,9 @@
 							<li class="ui-menu-item"><a data-mytime-action="Settings/Password" class="ui-corner-all">@Resources.ChangeYourPassword</a></li>
 	  }
 						@if (Model.HasAsmPermission)
-	  { 
+						{
 							<li class="ui-menu-item"><a id="asm-link" class="ui-corner-all cursorpointer" >@Resources.OpenASM</a></li>
-	  }
+						}
 						<li>&nbsp;</li>
 						<li class="ui-menu-item">@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new {area = "Start"}, new {id = "signout", @class = "ui-corner-all"})</li>
 					</ul>

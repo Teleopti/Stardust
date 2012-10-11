@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "1.8.1.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Preferences must-haves")]
-    public partial class PreferencesMust_HavesFeature
+    [NUnit.Framework.DescriptionAttribute("Preferences must haves")]
+    public partial class PreferencesMustHavesFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Preferences must-haves", "In order to get scheduled according specific preferences\r\nAs an agent\r\nI want to " +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Preferences must haves", "In order to get scheduled according specific preferences\r\nAs an agent\r\nI want to " +
                     "stress which of my preferences are most important", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
@@ -314,16 +314,16 @@ this.FeatureBackground();
 #line 80
  testRunner.When("I view preferences for date \'2012-08-23\'");
 #line 81
- testRunner.Then("I should see I have \'1\' available must haves");
+ testRunner.Then("I should see I have 1 available must haves");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Decrement available must haves on set")]
-        public virtual void DecrementAvailableMustHavesOnSet()
+        [NUnit.Framework.DescriptionAttribute("Increment must haves on set")]
+        public virtual void IncrementMustHavesOnSet()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Decrement available must haves on set", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Increment must haves on set", ((string[])(null)));
 #line 83
 this.ScenarioSetup(scenarioInfo);
 #line 6
@@ -350,16 +350,16 @@ this.FeatureBackground();
 #line 91
  testRunner.And("I click set must have button");
 #line 92
- testRunner.Then("I should see I have \'0\' available must haves");
+ testRunner.Then("I should see I have 1 must haves");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Increment available must haves on remove")]
-        public virtual void IncrementAvailableMustHavesOnRemove()
+        [NUnit.Framework.DescriptionAttribute("Decrement must haves on remove")]
+        public virtual void DecrementMustHavesOnRemove()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Increment available must haves on remove", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Decrement must haves on remove", ((string[])(null)));
 #line 94
 this.ScenarioSetup(scenarioInfo);
 #line 6
@@ -386,7 +386,7 @@ this.FeatureBackground();
 #line 102
  testRunner.And("I click remove must have button");
 #line 103
- testRunner.Then("I should see I have \'1\' available must haves");
+ testRunner.Then("I should see I have 0 must haves");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -409,7 +409,7 @@ this.FeatureBackground();
                         "2012-08-23"});
             table15.AddRow(new string[] {
                         "Must have",
-                        "true"});
+                        "false"});
             table15.AddRow(new string[] {
                         "Shift category",
                         "Late"});
@@ -433,22 +433,24 @@ this.FeatureBackground();
 #line 116
  testRunner.When("I view preferences for date \'2012-08-23\'");
 #line 117
- testRunner.And("I select day \'2012-08-24\'");
+ testRunner.And("I select day \'2012-08-23\'");
 #line 118
- testRunner.And("I click set must have button");
+ testRunner.And("I select day \'2012-08-24\'");
 #line 119
- testRunner.Then("I should see I have \'0\' available must haves");
+ testRunner.And("I click set must have button");
+#line 120
+ testRunner.Then("I should see I have 1 must haves");
 #line hidden
             TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table17.AddRow(new string[] {
                         "Date",
-                        "2012-08-36"});
+                        "2012-08-23"});
             table17.AddRow(new string[] {
                         "Must have",
                         "true"});
-#line 120
+#line 121
  testRunner.And("I should see preference", ((string)(null)), table17);
 #line hidden
             TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
@@ -460,7 +462,7 @@ this.FeatureBackground();
             table18.AddRow(new string[] {
                         "Must have",
                         "false"});
-#line 124
+#line 125
  testRunner.And("I should see preference", ((string)(null)), table18);
 #line hidden
             this.ScenarioCleanup();

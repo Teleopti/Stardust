@@ -11,6 +11,6 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="person">The person.</param>
         /// <param name="dateOnly">The date only.</param>
         /// <returns></returns>
-        IShiftCategoryFairness CalculateGroupShiftCategoryFairness(IPerson person, DateOnly dateOnly);
+        IShiftCategoryFairnessHolder CalculateGroupShiftCategoryFairness(IPerson person, DateOnly dateOnly);
     }
 }

@@ -3991,7 +3991,7 @@
     </Dimension>
     <Dimension dwd:design-time-name="1fb07414-23a3-496a-a0a3-e7d1394ed382">
       <ID>Quality</ID>
-      <Name>Quality</Name>
+      <Name>Quality Questionnaire</Name>
       <DimensionID>Quality</DimensionID>
       <Attributes>
         <Attribute dwd:design-time-name="522e3ede-7b47-420d-998c-ecebfa6ca2dc">
@@ -8077,6 +8077,19 @@
       <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
       <State>Unprocessed</State>
       <Measures>
+        <Measure dwd:design-time-name="0a7b257a-5782-4e06-be70-7cc7055c35df">
+          <ID>Quality Percentage Count</ID>
+          <Name>Percentage Evaluation Raw</Name>
+          <AggregateFunction>Count</AggregateFunction>
+          <Source dwd:design-time-name="1a204e0c-ced6-452f-8b04-f7342a5f92e3">
+            <DataType>Integer</DataType>
+            <DataSize>4</DataSize>
+            <Source xsi:type="RowBinding" dwd:design-time-name="1de728d6-83de-47f3-b5a6-c8c9838f05a5">
+              <TableID>mart_fact_quality_percentage</TableID>
+            </Source>
+          </Source>
+          <Visible>false</Visible>
+        </Measure>
         <Measure dwd:design-time-name="a1cddb5e-9da1-4fc3-a117-44b0dd15ca2a">
           <ID>Score 1</ID>
           <Name>Percentage Score</Name>
@@ -8088,18 +8101,6 @@
             </Source>
           </Source>
           <Visible>false</Visible>
-        </Measure>
-        <Measure dwd:design-time-name="0a7b257a-5782-4e06-be70-7cc7055c35df">
-          <ID>Quality Percentage Count</ID>
-          <Name>Percentage Evaluations</Name>
-          <AggregateFunction>Count</AggregateFunction>
-          <Source dwd:design-time-name="1a204e0c-ced6-452f-8b04-f7342a5f92e3">
-            <DataType>Integer</DataType>
-            <DataSize>4</DataSize>
-            <Source xsi:type="RowBinding" dwd:design-time-name="1de728d6-83de-47f3-b5a6-c8c9838f05a5">
-              <TableID>mart_fact_quality_percentage</TableID>
-            </Source>
-          </Source>
         </Measure>
       </Measures>
       <StorageMode>Molap</StorageMode>
@@ -8178,6 +8179,19 @@
       <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
       <State>Unprocessed</State>
       <Measures>
+        <Measure dwd:design-time-name="631b8d3f-e1d6-4ee6-9e8c-d73e65253f06">
+          <ID>Quality Grades Count</ID>
+          <Name>Grade Evaluation Raw</Name>
+          <AggregateFunction>Count</AggregateFunction>
+          <Source dwd:design-time-name="38772ad5-b72a-44bf-ab65-6cf1ff079fcd">
+            <DataType>Integer</DataType>
+            <DataSize>4</DataSize>
+            <Source xsi:type="RowBinding" dwd:design-time-name="029a927e-9d66-454b-820a-da0fcc7660f4">
+              <TableID>mart_fact_quality_grades</TableID>
+            </Source>
+          </Source>
+          <Visible>false</Visible>
+        </Measure>
         <Measure dwd:design-time-name="a287e05f-b0b8-461c-9213-c3794e9e11d5">
           <ID>Score</ID>
           <Name>Grade Score</Name>
@@ -8189,18 +8203,6 @@
             </Source>
           </Source>
           <Visible>false</Visible>
-        </Measure>
-        <Measure dwd:design-time-name="631b8d3f-e1d6-4ee6-9e8c-d73e65253f06">
-          <ID>Quality Grades Count</ID>
-          <Name>Grade Evaluations</Name>
-          <AggregateFunction>Count</AggregateFunction>
-          <Source dwd:design-time-name="38772ad5-b72a-44bf-ab65-6cf1ff079fcd">
-            <DataType>Integer</DataType>
-            <DataSize>4</DataSize>
-            <Source xsi:type="RowBinding" dwd:design-time-name="029a927e-9d66-454b-820a-da0fcc7660f4">
-              <TableID>mart_fact_quality_grades</TableID>
-            </Source>
-          </Source>
         </Measure>
       </Measures>
       <StorageMode>Molap</StorageMode>
@@ -8273,7 +8275,7 @@
     </MeasureGroup>
     <MeasureGroup dwd:design-time-name="be02bf17-9ec7-47d8-9b85-77f7c381360b">
       <ID>Fact Quality Points</ID>
-      <Name>Quality Point</Name>
+      <Name>Quality Scores</Name>
       <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
       <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
       <LastProcessed>0001-01-01T00:00:00Z</LastProcessed>
@@ -8281,7 +8283,7 @@
       <Measures>
         <Measure dwd:design-time-name="72e20494-f8bf-4c30-98af-6c0a4058ab93">
           <ID>Fact Quality Points Count</ID>
-          <Name>Point Evaluations</Name>
+          <Name>Point Evaluation Raw</Name>
           <AggregateFunction>Count</AggregateFunction>
           <Source dwd:design-time-name="82d06935-2d57-4531-9706-c4f820874a3a">
             <DataType>Integer</DataType>
@@ -8290,6 +8292,7 @@
               <TableID>mart_fact_quality_points</TableID>
             </Source>
           </Source>
+          <Visible>false</Visible>
         </Measure>
         <Measure dwd:design-time-name="25646d8e-f3c4-45f5-8670-beee028b844f">
           <ID>Acd Login Id</ID>
@@ -8389,7 +8392,10 @@ The CALCULATE command controls the aggregation of leaf cells in the cube.
 If the CALCULATE command is deleted or modified, the data within the cube is affected.
 You should edit this command only if you manually specify how the cube is aggregated.
 */
-CALCULATE;   
+CALCULATE;  
+CREATE MEMBER CURRENTCUBE.[Measures].[Point Evaluations]
+ AS [Measures].[Point Evaluation Raw], 
+VISIBLE = 1  ;     
 CREATE MEMBER CURRENTCUBE.[Measures].[Calc Time s]
  AS CASE 
 
@@ -8407,7 +8413,10 @@ ELSE NULL
 
 END, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;   
+VISIBLE = 0;  
+CREATE MEMBER CURRENTCUBE.[Measures].[Grade Evaluations]
+ AS [Measures].[Grade Evaluation Raw], 
+VISIBLE = 1  ;     
 CREATE MEMBER CURRENTCUBE.[Measures].[Temp Adherence]
  AS CASE 
 
@@ -8425,7 +8434,7 @@ ELSE NULL
 
 END, 
 FORMAT_STRING = "Percent", 
-VISIBLE = 0;   
+VISIBLE = 0;     
 CREATE MEMBER CURRENTCUBE.[Measures].[Adherence]
  AS CASE
 WHEN ([Adherence Calculation].[Adherence Calculation].CurrentMember IS 
@@ -8443,52 +8452,55 @@ THEN "N/A"
 
 END, 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1;           CREATE HIDDEN SET CURRENTCUBE.[Date Today]
-AS filter([Date].[Date Year Month].[Date].Members,[Date].[Date Year Month].CurrentMember.Name = Format(Now(),"yyyy-MM-dd 00:00:00"));           CREATE HIDDEN SET CURRENTCUBE.[TodaySet]
-AS exists([Date].[Date Year Month].[Date].Members, [Date Today]).ITEM(0).ITEM(0);           CREATE HIDDEN SET CURRENTCUBE.[Today Weekly]
-AS filter([Date].[Date Year Week].[Date].Members,[Date].[Date Year Week].CurrentMember.Name = Format(Now(),"yyyy-MM-dd 00:00:00"));   
+VISIBLE = 1;             CREATE HIDDEN SET CURRENTCUBE.[Date Today]
+AS filter([Date].[Date Year Month].[Date].Members,[Date].[Date Year Month].CurrentMember.Name = Format(Now(),"yyyy-MM-dd 00:00:00"));             CREATE HIDDEN SET CURRENTCUBE.[TodaySet]
+AS exists([Date].[Date Year Month].[Date].Members, [Date Today]).ITEM(0).ITEM(0);             CREATE HIDDEN SET CURRENTCUBE.[Today Weekly]
+AS filter([Date].[Date Year Week].[Date].Members,[Date].[Date Year Week].CurrentMember.Name = Format(Now(),"yyyy-MM-dd 00:00:00"));     
 CREATE MEMBER CURRENTCUBE.[Measures].[Grade Average Score]
- AS [Measures].[Grade Score]/([Measures].[Grade Evaluations]), 
+ AS [Measures].[Grade Score]/([Measures].[Grade Evaluation Raw]), 
 FORMAT_STRING = "#,##0.00", 
-VISIBLE = 1  ;           
+VISIBLE = 1  ;             
 CREATE MEMBER CURRENTCUBE.[Measures].[Point Average Score]
- AS [Measures].[Point Score]/([Measures].[Point Evaluations]), 
+ AS [Measures].[Point Score]/([Measures].[Point Evaluation Raw]), 
 FORMAT_STRING = "#,##0.00", 
-VISIBLE = 1  ;      
+VISIBLE = 1  ;  
+CREATE MEMBER CURRENTCUBE.[Measures].[Percentage Evaluations]
+ AS [Measures].[Percentage Evaluation Raw], 
+VISIBLE = 1  ;        
 CREATE MEMBER CURRENTCUBE.[Measures].[Percentage Average Score]
- AS [Measures].[Percentage Score]/[Measures].[Percentage Evaluations]/100.0000, 
+ AS [Measures].[Percentage Score]/[Measures].[Percentage Evaluation Raw]/100.0000, 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1  ;               
+VISIBLE = 1  ;                 
 CREATE SET CURRENTCUBE.[Date Yesterday]
- AS [TodaySet].ITEM(0).ITEM(0).Lag(1);           
+ AS [TodaySet].ITEM(0).ITEM(0).Lag(1);             
 CREATE SET CURRENTCUBE.[Date Current Week Until Yesterday]
- AS [Today Weekly].ITEM(0).ITEM(0).Parent.FirstChild : [Today Weekly].ITEM(0).ITEM(0).Lag(1);           
+ AS [Today Weekly].ITEM(0).ITEM(0).Parent.FirstChild : [Today Weekly].ITEM(0).ITEM(0).Lag(1);             
 CREATE SET CURRENTCUBE.[Date Last Week]
- AS [Today Weekly].ITEM(0).ITEM(0).Parent.Lag(1).FirstChild : [Today Weekly].ITEM(0).ITEM(0).Parent.Lag(1).LastChild;           
+ AS [Today Weekly].ITEM(0).ITEM(0).Parent.Lag(1).FirstChild : [Today Weekly].ITEM(0).ITEM(0).Parent.Lag(1).LastChild;             
 CREATE SET CURRENTCUBE.[Date Current Month Until Yesterday]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);           
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);             
 CREATE SET CURRENTCUBE.[Date Last Month]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.Lag(1).FirstChild : [TodaySet].ITEM(0).ITEM(0).Parent.Lag(1).LastChild;           
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.Lag(1).FirstChild : [TodaySet].ITEM(0).ITEM(0).Parent.Lag(1).LastChild;             
 CREATE SET CURRENTCUBE.[Date Current Quarter Until Yesterday]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);           
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);             
 CREATE SET CURRENTCUBE.[Date Last Quarter]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Lag(1).FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Lag(1).LastChild.LastChild;           
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Lag(1).FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Lag(1).LastChild.LastChild;             
 CREATE SET CURRENTCUBE.[Date Current Year Until Yesterday]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Parent.FirstChild.FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);                                
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Parent.FirstChild.FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);                                  
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Preferences Accepted %]
  AS [Measures].[Preferences Accepted]/[Measures].[Preferences Requested], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Preferences Requested] }, 
-VISIBLE = 1;                                
+VISIBLE = 1;                                  
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Preferences Declined %]
  AS [Measures].[Preferences Declined]/[Measures].[Preferences Requested], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Preferences Requested] }, 
-VISIBLE = 1;                    
+VISIBLE = 1;                      
 CREATE MEMBER CURRENTCUBE.[Measures].[Logged In Time m]
  AS [Measures].[Logged In Time s]/60, 
 FORMAT_STRING = "#,##0.00", 
-VISIBLE = 1;                                                   
+VISIBLE = 1;                                                     
 CREATE MEMBER CURRENTCUBE.[MEASURES].[factor]
  AS CASE 
 WHEN [KPI].[KPI].currentmember.firstchild is [KPI].[KPI].[Resource Key].&amp;[KpiAbsenteeism] OR [KPI].[KPI].currentmember is [KPI].[KPI].[Resource Key].&amp;[KpiAbsenteeism]
@@ -8504,7 +8516,7 @@ WHEN [KPI].[KPI].currentmember.firstchild is [KPI].[KPI].[Resource Key].&amp;[Kp
 THEN -1
 ELSE 1
 END, 
-VISIBLE = 0;                                                  
+VISIBLE = 0;                                                    
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Agents Ready FTE]
  AS CASE 
 WHEN [Interval].[Interval Hour].CurrentMember.Level IS [Interval].[Interval Hour].[Hour] 
@@ -8518,11 +8530,11 @@ THEN [Measures].[Ready Time s]/(1440/[Interval].[Interval Hour].[Interval].COUNT
   
 END, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                                 
+VISIBLE = 1;                                                   
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Ready Time m]
  AS [Measures].[Ready Time s]/60, 
 FORMAT_STRING = "#,##0.00", 
-VISIBLE = 1;                                                    
+VISIBLE = 1;                                                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Actual]
  AS CASE 
 
@@ -8562,7 +8574,7 @@ IIF([Measures].[Scheduled Ready Time m]=0,null,[Measures].[Agent Answered Calls]
 
 END, 
 FORMAT_STRING = "#,#", 
-VISIBLE = 1;                                                   
+VISIBLE = 1;                                                     
 CREATE MEMBER CURRENTCUBE.[Measures].[Calc Deviation time s]
  AS CASE 
 
@@ -8580,75 +8592,75 @@ ELSE NULL
 
 END, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;       
+VISIBLE = 0;         
 CREATE MEMBER CURRENTCUBE.[Measures].[Adherence_KPI]
  AS [Measures].[Adherence], 
 FORMAT_STRING = "#,##0.0000", 
-VISIBLE = 0;                                            
+VISIBLE = 0;                                              
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Average Answered Calls per Scheduled Phone Hour]
  AS IIF([Measures].[Scheduled Ready Time m]=0 , null, [Measures].[Agent Answered Calls]/([Measures].[Scheduled Ready Time m]/60)), 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Scheduled Ready Time m] }, 
-VISIBLE = 1;       
+VISIBLE = 1;         
 CREATE MEMBER CURRENTCUBE.[Measures].[Absenteeism_KPI]
  AS IIF( [Measures].[Scheduled Contract Time m]= 0,null,([Measures].[Scheduled Contract Absence Time  m]/[Measures].[Scheduled Contract Time m decimal])), 
 FORMAT_STRING = "#,##0.0000", 
-VISIBLE = 0;     
+VISIBLE = 0;       
 CREATE MEMBER CURRENTCUBE.[Measures].[Scheduled Contract Time m decimal]
  AS [Measures].[Scheduled Contract Time m], 
 FORMAT_STRING = "#,##0.00", 
-VISIBLE = 0;                                                           
+VISIBLE = 0;                                                             
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Average Talk Time s]
  AS [Measures].[Forecasted Talk Time S]/[Measures].[Forecasted Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Calls] }, 
-VISIBLE = 1;                                                    
+VISIBLE = 1;                                                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[KPI Actual]
  AS [Actual], 
 FORMAT_STRING = "#", 
-VISIBLE = 1;                                                           
+VISIBLE = 1;                                                             
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Average Handle Time s]
  AS [Measures].[Forecasted Handle Time s]/[Measures].[Forecasted Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Calls] }, 
-VISIBLE = 1;                
+VISIBLE = 1;                  
 CREATE MEMBER CURRENTCUBE.[Measures].[Readiness]
  AS [Measures].[Ready Time s]/[Measures].[Logged In Time s], 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1;       
+VISIBLE = 1;         
 CREATE MEMBER CURRENTCUBE.[Measures].[Readiness_KPI]
  AS [Measures].[Ready Time s]/[Measures].[Logged In Time s], 
 FORMAT_STRING = "#,##0.0000", 
-VISIBLE = 0;                
+VISIBLE = 0;                  
 CREATE MEMBER CURRENTCUBE.[Measures].[Absenteeism]
  AS IIF( [Measures].[Scheduled Contract Time m]= 0,null,([Measures].[Scheduled Contract Absence Time  m]/[Measures].[Scheduled Contract Time m decimal])), 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1;                                                           
+VISIBLE = 1;                                                             
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Average After Call Work s]
  AS [Measures].[Forecasted After Call Work s]/[Measures].[Forecasted Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Calls] }, 
-VISIBLE = 1;                                                          
+VISIBLE = 1;                                                            
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Campaign Average Talk time s]
  AS [Measures].[Forecasted Campaign Talk Time S]/[Measures].[Forecasted Campaign Calls], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Campaign Calls] }, 
-VISIBLE = 0;                                                          
+VISIBLE = 0;                                                            
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Campaign Average After Call Work s ]
  AS [Measures].[Forecasted Campaign After Call Work S]/[Measures].[Forecasted Campaign Calls], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Campaign Calls] }, 
-VISIBLE = 0;                                                          
+VISIBLE = 0;                                                            
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Campaign Average Handle Time s ]
  AS [Measures].[Forecasted Campaign Handling Time S]/[Measures].[Forecasted Campaign Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Campaign Calls] }, 
-VISIBLE = 0;                                                             
+VISIBLE = 0;                                                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Answer Rate]
  AS [Measures].[Answered Calls]/[Measures].[Offered Calls], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Offered Calls] }, 
-VISIBLE = 1;                                                             
+VISIBLE = 1;                                                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Service Level]
  AS /*
 2010-03-16 DJ
@@ -8676,122 +8688,122 @@ ELSE NULL
 
 END, 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1;                                                             
+VISIBLE = 1;                                                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Abandon Rate]
  AS [Measures].[Abandoned Calls]/[Measures].[Offered Calls], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Offered Calls] }, 
-VISIBLE = 1;                                       
+VISIBLE = 1;                                         
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Occupancy]
  AS ([Measures].[Agent Talk Time s]+[Measures].[Agent After Call Work s])/[Measures].[Ready Time s], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Ready Time s] }, 
-VISIBLE = 1;                                                             
+VISIBLE = 1;                                                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[AHT Average Handle Time s]
  AS ([Measures].[Agent Talk Time s]+ [Measures].[Agent After Call Work s])/[Measures].[Agent Answered Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Agent Answered Calls] }, 
-VISIBLE = 1;                                                             
+VISIBLE = 1;                                                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[ASA Average Speed of Answer s]
  AS [Measures].[Speed Of Answer s]/[Measures].[Answered Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Answered Calls] }, 
-VISIBLE = 1;                                                             
+VISIBLE = 1;                                                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Average Time to Abandon s]
  AS [Measures].[Time To Abandon s]/[Measures].[Abandoned Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Abandoned Calls] }, 
-VISIBLE = 1;                                            
+VISIBLE = 1;                                              
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Average After Call Work s]
  AS [Measures].[Agent After Call Work s]/[Measures].[Agent Answered Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Agent Answered Calls] }, 
-VISIBLE = 1;                                                
+VISIBLE = 1;                                                  
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Time excl Shrinkage h]
  AS [Measures].[Forecasted Time excl Shrinkage m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                          
+VISIBLE = 1;                                            
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Time incl Shrinkage h]
  AS [Measures].[Forecasted Time incl Shrinkage m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                             
+VISIBLE = 1;                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Time h]
  AS [Measures].[Scheduled Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;         
+VISIBLE = 1;           
 CREATE MEMBER CURRENTCUBE.[Measures].[Deviation Schedule Ready m]
  AS [Measures].[Deviation Schedule Ready s]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                             
+VISIBLE = 1;                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Contract Time h]
  AS [Measures].[Scheduled Contract Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                             
+VISIBLE = 1;                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Work Time h]
  AS [Measures].[Scheduled Work Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                             
+VISIBLE = 1;                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Contract Absence Time h]
  AS [Measures].[Scheduled Contract Absence Time  m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                             
+VISIBLE = 1;                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Over Time h]
  AS [Measures].[Scheduled Over Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                             
+VISIBLE = 1;                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Ready Time h]
  AS [Measures].[Scheduled Ready Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;         
+VISIBLE = 1;           
 CREATE MEMBER CURRENTCUBE.[Measures].[Deviation Schedule m]
  AS [Measures].[Deviation Schedule s]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;         
+VISIBLE = 1;           
 CREATE MEMBER CURRENTCUBE.[Measures].[Deviation Contract m]
  AS [Measures].[Deviation Contract s]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                             
+VISIBLE = 1;                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Paid Time h]
  AS [Measures].[Scheduled Paid Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                          
+VISIBLE = 1;                                            
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Time Skill h]
  AS [Measures].[Scheduled Time Skill m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                          
+VISIBLE = 1;                                            
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Agents]
  AS [Measures].[Forecasted Time excl Shrinkage m]/15, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;                                          
+VISIBLE = 0;                                            
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Agents Skill]
  AS [Measures].[Scheduled Time Skill m]/15
 , --beräkning ej klar
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;                                          
+VISIBLE = 0;                                            
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Agents incl Shrinkage]
  AS [Measures].[Forecasted Time incl Shrinkage m]/15
 , --beräkning ej klar
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;                                        
+VISIBLE = 0;                                          
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Schedule vs Forecast Relative Difference]
  AS ([Measures].[Scheduled Time Skill m]-[Measures].[Forecasted Time excl Shrinkage m])/[Measures].[Forecasted Time excl Shrinkage m], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Time excl Shrinkage m] }, 
-VISIBLE = 1;                                          
+VISIBLE = 1;                                            
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Schedule vs Forecast Standard Deviation]
  AS STDEVP([Measures].[Relative Difference]), 
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;                                                             
+VISIBLE = 0;                                                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[ATT Average Talk Time s]
  AS [Measures].[Agent Talk Time s]/[Measures].[Agent Answered Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Agent Answered Calls] }, 
-VISIBLE = 1;                                                            
+VISIBLE = 1;                                                              
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecast Accuracy Talk Time]
  AS [Measures].[Forecasted Talk Time S]/[Measures].[Talk Time s], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Talk Time s] }, 
-VISIBLE = 1;                                                            
+VISIBLE = 1;                                                              
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecast Accuracy After Call Work]
  AS [Measures].[Forecasted After Call Work S]/[Measures].[After Call Work s], 
 FORMAT_STRING = "Percent", 
@@ -8800,291 +8812,306 @@ VISIBLE = 1; </Text>
         </Command>
       </Commands>
       <CalculationProperties>
-        <CalculationProperty dwd:design-time-name="8c707c7b-7f46-4493-ba0e-f6056abaa341">
+        <CalculationProperty dwd:design-time-name="85fe6325-bfe8-43c1-9d1f-81fa2896bd9c">
           <CalculationReference>[MEASURES].[Ready Time m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="dabdef56-c277-4297-897e-4f5f4f64c169">
+        <CalculationProperty dwd:design-time-name="028660cb-a7f9-4c18-be5d-d1fd4c5ec77c">
           <CalculationReference>[MEASURES].[Forecasted Average Talk Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="a690a7f2-d681-4ce6-bbcf-d15f06730e56">
+        <CalculationProperty dwd:design-time-name="a8279821-fb93-459e-ac89-0c15ad339861">
           <CalculationReference>[MEASURES].[Adherence]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="d94e3fe4-5916-4b5c-9026-db07d839e959">
+        <CalculationProperty dwd:design-time-name="82c98b95-3c9c-4383-98dc-457dce5808f0">
           <CalculationReference>[MEASURES].[Average Answered Calls per Scheduled Phone Hour]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="901c4d5d-8dda-4783-b9d2-16cd2ad012fd">
+        <CalculationProperty dwd:design-time-name="41e2b9ad-d469-49a6-870e-fd5581299008">
           <CalculationReference>[MEASURES].[Forecasted Average Handle Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="3e2c315b-60c7-44b6-8765-891b06208df3">
+        <CalculationProperty dwd:design-time-name="cada4f89-c4f7-444c-ac3a-f676d6a06085">
           <CalculationReference>[MEASURES].[Forecasted Average After Call Work s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="d53b6e0e-af82-4d7f-8df7-8abb8b9b798f">
+        <CalculationProperty dwd:design-time-name="99aaf5ef-3285-4b04-a880-d663f46ec7eb">
           <CalculationReference>[MEASURES].[Forecasted Campaign Average Talk time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="d816a0f3-1083-478a-9b8b-d50718de7d2e">
+        <CalculationProperty dwd:design-time-name="ca6c1d0c-8aaa-4f8d-9e82-9eaa92d41c91">
           <CalculationReference>[MEASURES].[Forecasted Campaign Average After Call Work s ]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="8729cca5-77c2-4406-bcb1-a0869c4e4811">
+        <CalculationProperty dwd:design-time-name="d302339d-406f-48f2-b71e-0ca2b088cef5">
           <CalculationReference>[MEASURES].[Forecasted Campaign Average Handle Time s ]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="6f077b65-b9f0-4c80-bd20-6b7a2af0bf88">
+        <CalculationProperty dwd:design-time-name="9b606ca2-0c44-4eb1-8f93-e25ba9dabff3">
           <CalculationReference>[MEASURES].[Answer Rate]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="5d1aaad9-1efe-4b21-9543-fa640b5cd7d8">
+        <CalculationProperty dwd:design-time-name="15266adb-cf99-4388-9f75-8ad661f6706f">
           <CalculationReference>[MEASURES].[Absenteeism]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="876e64b4-ddef-41ac-a2c9-e469d68eb88e">
+        <CalculationProperty dwd:design-time-name="7b44bd44-0d40-47be-9238-8485b7ab5740">
           <CalculationReference>[MEASURES].[Service Level]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="3fdf01b4-cdd8-4824-9d4b-23a9413a4c65">
+        <CalculationProperty dwd:design-time-name="44b6a26a-4953-469f-9ffd-26d69b289cde">
           <CalculationReference>[MEASURES].[Abandon Rate]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="1bdf1c90-7d6c-477f-aca3-7cd81cb7829c">
+        <CalculationProperty dwd:design-time-name="26419f66-77df-4785-adab-6b086a75439e">
           <CalculationReference>[MEASURES].[Occupancy]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="6696147d-3694-4cf0-accd-9c206df35cd8">
+        <CalculationProperty dwd:design-time-name="a530261a-ea2f-4625-8b14-7d62913455e9">
           <CalculationReference>[MEASURES].[AHT Average Handle Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="d407243b-dd22-442b-8d4c-f3d46c7dda58">
+        <CalculationProperty dwd:design-time-name="305b9623-ae4f-45a1-89bf-147256e4099b">
           <CalculationReference>[MEASURES].[ASA Average Speed of Answer s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="3f5c767e-2de7-46e3-a697-c2e4787c913b">
+        <CalculationProperty dwd:design-time-name="85f42cf6-6e5a-4edc-8d74-3fbca8fe24cd">
           <CalculationReference>[MEASURES].[Average Time to Abandon s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="c4736666-2232-4f2b-b177-3f707493f9f5">
+        <CalculationProperty dwd:design-time-name="869ea455-07d1-41a5-9e39-cb4e9c49947e">
           <CalculationReference>[MEASURES].[Average After Call Work s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="9f9d53c9-dd1f-4f51-b2af-93a555726f9c">
+        <CalculationProperty dwd:design-time-name="efad830a-0dc0-4d86-bac4-b1d279f57635">
           <CalculationReference>[MEASURES].[Forecasted Time excl Shrinkage h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="2578779d-fd37-45e6-8bea-b2a1cb354b50">
+        <CalculationProperty dwd:design-time-name="2c63df77-93a0-483e-90df-186877e27400">
           <CalculationReference>[MEASURES].[Forecasted Time incl Shrinkage h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="09335580-5aac-4977-9b5d-2c9b7d9b04ba">
+        <CalculationProperty dwd:design-time-name="e1a474b8-b2ef-46e2-b054-8a89b6d50e70">
           <CalculationReference>[MEASURES].[Scheduled Time Skill h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="733e4ce5-e3f4-4399-879e-67bdbbe14481">
+        <CalculationProperty dwd:design-time-name="9b1f06e6-7d3e-4ca8-bb56-678c0f366b82">
           <CalculationReference>[MEASURES].[Schedule vs Forecast Relative Difference]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="5cb7fa62-6a9d-4029-8a43-6d7bd0946a3c">
+        <CalculationProperty dwd:design-time-name="db093b6d-b5bf-4497-89b8-77441fb9a2aa">
           <CalculationReference>[MEASURES].[Schedule vs Forecast Standard Deviation]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="932bb695-6d83-42a1-9493-2534fa372b80">
+        <CalculationProperty dwd:design-time-name="2ea6df85-b0f2-465d-a876-1d944191639d">
           <CalculationReference>[MEASURES].[ATT Average Talk Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="573e7980-6dd3-4602-bcfe-b67271415466">
+        <CalculationProperty dwd:design-time-name="7d451f53-f0b6-4c0f-a6d3-51a39201962b">
           <CalculationReference>[MEASURES].[Forecast Accuracy Talk Time]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="563c52c3-909b-446b-a263-d76494a65a94">
+        <CalculationProperty dwd:design-time-name="0e506c39-9aa5-46e8-83af-73e2c01de457">
           <CalculationReference>[MEASURES].[Forecast Accuracy After Call Work]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="bcdc5f1e-b257-4ed6-9809-8b30aab3bb46">
+        <CalculationProperty dwd:design-time-name="ba4a5220-1c2e-49d5-b4c5-701be7358974">
           <CalculationReference>[MEASURES].[Agents Ready FTE]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Vfact Agents Ready</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="76da83f2-bcc4-4fd4-b4ad-e7ce1e33e769">
+        <CalculationProperty dwd:design-time-name="c88a0506-63b6-4df4-9c9a-7bdd2f69c7c6">
           <CalculationReference>[MEASURES].[Preferences Accepted %]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Preference</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="26e38c98-cba8-4f08-bb9c-5772dec6efcf">
+        <CalculationProperty dwd:design-time-name="0628a3d1-dc2d-4482-a78a-8f2dc9fbfca6">
           <CalculationReference>[MEASURES].[Preferences Declined %]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Preference</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="cc5f4c47-12e2-499f-93a2-09f52917afc3">
+        <CalculationProperty dwd:design-time-name="588eee0f-85ee-40c5-a177-896441274622">
           <CalculationReference>[MEASURES].[Scheduled Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="37770150-1d06-485f-8616-28032829e253">
+        <CalculationProperty dwd:design-time-name="cc3425f0-a7d7-4d4b-9805-1e6911708a99">
           <CalculationReference>[MEASURES].[Scheduled Contract Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="cd2ff30f-cdf1-4aba-9f42-45b4b544cc7b">
+        <CalculationProperty dwd:design-time-name="a59ee6f5-88cb-44ea-8ea9-a86e24789a3d">
           <CalculationReference>[MEASURES].[Scheduled Work Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="342255ca-cc19-4622-a482-70517661b85c">
+        <CalculationProperty dwd:design-time-name="554e93d4-e698-4d68-a011-e53940927907">
           <CalculationReference>[MEASURES].[Scheduled Contract Absence Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="f18e1ab2-5016-49bc-a7a9-69395462d2de">
+        <CalculationProperty dwd:design-time-name="bb7be646-f2b2-4879-b696-43bfb4c0797f">
           <CalculationReference>[MEASURES].[Scheduled Over Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="1510a07e-52c6-4fc2-882e-9f74d14b920b">
+        <CalculationProperty dwd:design-time-name="56dcfb35-78f7-4d5c-a63f-7ed53381ac74">
           <CalculationReference>[MEASURES].[Scheduled Ready Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="08986fd0-cb63-4954-a55b-c9f3b60ceec4">
+        <CalculationProperty dwd:design-time-name="1b221c1c-66a1-4395-90f0-eee0ec3bff54">
           <CalculationReference>[MEASURES].[Scheduled Paid Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="e3aed018-4e68-40b0-954d-0822d1d853d6">
+        <CalculationProperty dwd:design-time-name="1bc3f131-dff6-423b-ad8b-4d9a84fde369">
           <CalculationReference>[MEASURES].[Adherence1]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="9cb18d83-2e40-44dd-ae69-3be66f8110f7">
+        <CalculationProperty dwd:design-time-name="bd39024e-e97f-4cc2-8baf-a67eaf24207d">
           <CalculationReference>[Measures].[Logged In Time m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="738b183e-654d-430b-8ec3-f6291f0929dd">
+        <CalculationProperty dwd:design-time-name="a052197c-bfee-4cb6-a96a-5b4b1fd0d6b8">
           <CalculationReference>[Measures].[Adherance %]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="fd73da4e-5733-4864-ae72-2e7c2f66f7fc">
+        <CalculationProperty dwd:design-time-name="16fee13b-9e88-4db3-af44-f6a83df2aaf5">
           <CalculationReference>[Measures].[Absent]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="8c3fc7c5-155b-49f9-902f-3549da7aa2de">
+        <CalculationProperty dwd:design-time-name="7aedce4e-5216-4ed2-895c-6eb9e05841b9">
           <CalculationReference>[Measures].[Readiness]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="edde8ea3-0ac7-400e-83d6-9812aca49e1a">
+        <CalculationProperty dwd:design-time-name="e714e6af-b218-44e2-9273-c07fb1837949">
           <CalculationReference>[MEASURES].[KPI Actual]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <Description></Description>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="2164ec29-069a-4fba-876d-bb3266633f2a">
+        <CalculationProperty dwd:design-time-name="b9b78a0e-f142-48ce-80c6-1f9eb03ba5da">
           <CalculationReference>[MEASURES].[Actual]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="b116c444-32c7-44c6-84fd-d1cdc24c861d">
+        <CalculationProperty dwd:design-time-name="f0708ae7-8e9d-4031-b38b-5f0aad6392bc">
           <CalculationReference>[Measures].[Deviation Schedule Ready m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="9a0db114-7320-4d34-aaec-1b7c417d159b">
+        <CalculationProperty dwd:design-time-name="d8955bb2-f461-4aca-ab39-8af9d0ccaf9c">
           <CalculationReference>[Measures].[Deviation Schedule m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="0c3eec5c-cdf1-400a-9ff1-1ba672a1af64">
+        <CalculationProperty dwd:design-time-name="5b2a89fe-8533-4ba8-bee6-b9d52e4fc7ea">
           <CalculationReference>[Measures].[Deviation Contract m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="ca815886-92f7-4755-ae13-ac9a800e055f">
+        <CalculationProperty dwd:design-time-name="300bf1f3-c4fc-43fb-abb0-d02837c98bfe">
           <CalculationReference>[Measures].[Scheduled Contract Time m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="83659ff7-8f0d-4cd9-8787-57ec7e7ef25d">
+        <CalculationProperty dwd:design-time-name="34447f37-3174-43b6-92df-f2336fe5d877">
           <CalculationReference>[Measures].[Scheduled Ready Time m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="4460958c-eac3-491d-aea0-a8afae061e98">
+        <CalculationProperty dwd:design-time-name="82636314-0a65-4d5f-aade-675f638deb0c">
           <CalculationReference>[Measures].[Scheduled Contract Time m decimal]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="61ddde20-4e04-4489-aba1-c2e1b3c73dc9">
+        <CalculationProperty dwd:design-time-name="7b9f7b2c-ffff-47f0-ad60-f24a6d82453d">
           <CalculationReference>[Measures].[Calc Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="d1b17bdf-ece6-4170-9710-ba034ae74378">
+        <CalculationProperty dwd:design-time-name="e2d1bd29-3c48-40fb-a0ec-b2b84537f392">
           <CalculationReference>[Measures].[Calculated Member2]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="1eb114aa-cc1e-4ed8-a410-9bb90482dea9">
+        <CalculationProperty dwd:design-time-name="70b301b8-1fb4-47cd-88a0-9768a29990a0">
           <CalculationReference>[Measures].[Calc New Adherence]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="655e0fbb-b54a-49e2-a62b-dbfd0ef15152">
+        <CalculationProperty dwd:design-time-name="23a85d39-0957-4d06-9fe4-68f1beb99b56">
           <CalculationReference>[Measures].[Calc Deviation time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="9502fc0c-4e46-453d-8031-d859a363e3b9">
+        <CalculationProperty dwd:design-time-name="b6801bcc-5f84-4b01-9058-3dc34c9d84d1">
           <CalculationReference>[Measures].[Final Adherence Value]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="57910ec9-6114-43ec-8c29-891994f8d3e2">
+        <CalculationProperty dwd:design-time-name="22f3b7ad-d0a3-4de1-8fbf-83dd7c77e4f4">
           <CalculationReference>[Measures].[Point Average Score]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="c16bc2af-e0f9-4192-9cfa-879448cd8144">
+        <CalculationProperty dwd:design-time-name="4257499e-768e-4291-bf80-583b0b628397">
           <CalculationReference>[Measures].[Grade Average Score]</CalculationReference>
           <CalculationType>Member</CalculationType>
-          <AssociatedMeasureGroupID>Fact Quality Grades</AssociatedMeasureGroupID>
+          <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="3d371d6d-1359-4ee6-b5c0-cfffeab03ed5">
+        <CalculationProperty dwd:design-time-name="35695f8f-3b3c-485a-96d4-06ee398a0cbc">
           <CalculationReference>[Measures].[Percentage Average Score]</CalculationReference>
           <CalculationType>Member</CalculationType>
-          <AssociatedMeasureGroupID>Fact Quality Percentage</AssociatedMeasureGroupID>
+          <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
+        </CalculationProperty>
+        <CalculationProperty dwd:design-time-name="d3293c8f-4f6b-42a3-849e-3df4f48acbf2">
+          <CalculationReference>[Measures].[Percentage Evaluations]</CalculationReference>
+          <CalculationType>Member</CalculationType>
+          <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
+        </CalculationProperty>
+        <CalculationProperty dwd:design-time-name="f8150668-9eab-4519-a31c-8a6556581c49">
+          <CalculationReference>[Measures].[Point Evaluations]</CalculationReference>
+          <CalculationType>Member</CalculationType>
+          <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
+        </CalculationProperty>
+        <CalculationProperty dwd:design-time-name="cee223fa-904b-4f2e-8dfb-3c2829efe6fa">
+          <CalculationReference>[Measures].[Grade Evaluations]</CalculationReference>
+          <CalculationType>Member</CalculationType>
+          <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
       </CalculationProperties>
     </MdxScript>

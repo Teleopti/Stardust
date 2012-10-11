@@ -67,7 +67,15 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                                                                    layer.Period.StartDateTimeLocal(scheduleDay.TimeZone)
                                                                    .Date,
                                                                Amount = layer.Period.ElapsedTime(),
-                                                               Multiplicator = new MultiplicatorDto(layer.Payload),
+                                                               Multiplicator = new MultiplicatorDto{	
+																										Id = layer.Payload.Id, 
+																										PayrollCode = layer.Payload.ExportCode,
+															                                            Color = new ColorDto(layer.Payload.DisplayColor),
+																										Multiplicator = layer.Payload.MultiplicatorValue,
+																										MultiplicatorType = (MultiplicatorTypeDto) layer.Payload.MultiplicatorType,
+																										Name = layer.Payload.Description.Name
+																								     },
+																										
                                                                PersonId = person.Id
                                                            };
 

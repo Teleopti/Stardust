@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof (Browser));
 
-		private static readonly IBrowserHandler<IE> BrowserHandler = new WatiNParallelBrowserIEHandler();
+		private static readonly IBrowserHandler<IE> BrowserHandler = new WatiNSingleBrowserIEHandler();
 
 		private static IE GlobalBrowser { get; set; }
 

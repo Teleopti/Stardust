@@ -11079,9 +11079,9 @@ These options are activated:
     <value>Schedule Only Preference Must Have</value>
     <comment>Schedule only must have preferences</comment>
   </data>
-  <data name="AllowOverwrite" xml:space="preserve">
-    <value>Allow Overwrite</value>
-    <comment>Column Allow overwrite</comment>
+  <data name="AllowMeetings" xml:space="preserve">
+    <value>Allow Meetings</value>
+    <comment>Column Allow meetings</comment>
   </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Shift categories</value>
@@ -11092,6 +11092,10 @@ These options are activated:
   </data>
   <data name="AddExtendedPreference" xml:space="preserve">
     <value>Add extended preference</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>Others</value>
+    <comment>Others</comment>
   </data>
   <data name="MyTime" xml:space="preserve">
     <value>MyTime</value>
@@ -11124,8 +11128,26 @@ These options are activated:
     <value>Totals</value>
     <comment>Totals</comment>
   </data>
+  <data name="YourScheduleHasChanged" xml:space="preserve">
+    <value>Your schedule has changed!</value>
+  </data>
   <data name="NoMessagesFound" xml:space="preserve">
     <value>No messages could be found</value>
     <comment>Shown in MyTime Web Messages when no messages found for user</comment>
+  <data name="FairnessOptimizationOn" xml:space="preserve">
+    <value>Optimizing fairness on </value>
+    <comment>Information displayed on the status bar in scheduler during fairness optimization</comment>
+  </data>
+  <data name="FairnessOptimizationRollingBack" xml:space="preserve">
+    <value> - value after is not better, rolling back.</value>
+    <comment>Information displayed on the status bar in scheduler during fairness optimization</comment>
+  </data>
+  <data name="FairnessOptimizationValueAfter" xml:space="preserve">
+    <value> - value after = </value>
+    <comment>Information displayed on the status bar in scheduler during fairness optimization</comment>
+  </data>
+  <data name="FairnessOptimizationValueBefore" xml:space="preserve">
+    <value> - value before = </value>
+    <comment>Information displayed on the status bar in scheduler during fairness optimization</comment>
   </data>
 </root>

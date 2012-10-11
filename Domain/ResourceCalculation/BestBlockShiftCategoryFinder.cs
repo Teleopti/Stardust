@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.UserTexts;
@@ -46,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IGroupShiftLengthDecider _groupShiftLengthDecider;
 		private readonly IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
 
-		public BestBlockShiftCategoryFinder(IWorkShiftWorkTime workShiftWorkTime,
+	    public BestBlockShiftCategoryFinder(IWorkShiftWorkTime workShiftWorkTime,
 		                                    IShiftProjectionCacheManager shiftProjectionCacheManager,
 		                                    ISchedulingResultStateHolder schedulingResultStateHolder,
 		                                    IEffectiveRestrictionCreator effectiveRestrictionCreator,
@@ -70,142 +72,144 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_groupShiftLengthDecider = groupShiftLengthDecider;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-		 	MessageId = "2"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-		 	MessageId = "0"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-		 	MessageId = "1")]
-		public IBestShiftCategoryResult BestShiftCategoryForDays(IBlockFinderResult result, IPerson person,
-		                                                         ISchedulingOptions schedulingOptions,
-		                                                         IFairnessValueResult agentFairness)
-		{
-			InParameter.NotNull("result", result);
-			InParameter.NotNull("person", person);
-			InParameter.NotNull("schedulingOptions", schedulingOptions);
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        public IBestShiftCategoryResult BestShiftCategoryForDays(IBlockFinderResult result, IPerson person,
+                                                         ISchedulingOptions schedulingOptions,
+                                                         IFairnessValueResult agentFairness,
+                                                         MinMax<TimeSpan>? allowedMinMax = null)
+        {
+            InParameter.NotNull("result", result);
+            InParameter.NotNull("person", person);
+            InParameter.NotNull("schedulingOptions", schedulingOptions);
 
-			var dates = result.BlockDays;
-			var dictionary = ScheduleDictionary;
-			var bestPossible = new HashSet<IPossibleStartEndCategory>();
+            var dates = result.BlockDays;
+            var dictionary = ScheduleDictionary;
+            var bestPossible = new HashSet<IPossibleStartEndCategory>();
 
-			var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
-			var schedulePeriodFound = false;
+            var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
+            var schedulePeriodFound = false;
 
-			var validPeriod = extendedVisiblePeriod();
+            var validPeriod = extendedVisiblePeriod();
 
-			foreach (var dateOnly in dates)
-			{
-				var currentSchedulePeriod = person.VirtualSchedulePeriod(dateOnly);
+            foreach (var dateOnly in dates)
+            {
+                var currentSchedulePeriod = person.VirtualSchedulePeriod(dateOnly);
 
-				if (!validPeriod.Contains(dateOnly.Date))
-					continue;
+                if (!validPeriod.Contains(dateOnly.Date))
+                    continue;
 
-				if (!currentSchedulePeriod.IsValid)
-					continue;
+                if (!currentSchedulePeriod.IsValid)
+                    continue;
 
-				schedulePeriodFound = true;
+                schedulePeriodFound = true;
 
-				IList<IPerson> persons;
-				var groupPerson = person as IGroupPerson;
-				if (groupPerson != null)
-				{
-					persons = new List<IPerson>();
-					foreach (var member in groupPerson.GroupMembers)
-					{
-						IScheduleDay scheduleDay = dictionary[member].ScheduledDay(dateOnly);
-						if (!scheduleDay.IsScheduled())
-							persons.Add(member);
-					}
+                IList<IPerson> persons;
+                var groupPerson = person as IGroupPerson;
+                if (groupPerson != null)
+                {
+                    persons = new List<IPerson>();
+                    foreach (var member in groupPerson.GroupMembers)
+                    {
+                        IScheduleDay scheduleDay = dictionary[member].ScheduledDay(dateOnly);
+                        if (!scheduleDay.IsScheduled())
+                            persons.Add(member);
+                    }
 
-					if (persons.Count == 0)
-						return new BestShiftCategoryResult(null, FailureCause.AlreadyAssigned);
-				}
-				else
-				{
-					persons = new List<IPerson> {person};
-				}
+                    if (persons.Count == 0)
+                        return new BestShiftCategoryResult(null, FailureCause.AlreadyAssigned);
+                }
+                else
+                {
+                    persons = new List<IPerson> { person };
+                }
 
 
 
-				var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(persons, dateOnly, schedulingOptions,
-				                                                                                dictionary);
-				if (effectiveRestriction == null)
-					return new BestShiftCategoryResult(null, FailureCause.ConflictingRestrictions);
+                var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(persons, dateOnly, schedulingOptions,
+                                                                                                dictionary);
+                if (effectiveRestriction == null)
+                    return new BestShiftCategoryResult(null, FailureCause.ConflictingRestrictions);
 
-				var personPeriod = currentSchedulePeriod.Person.Period(dateOnly);
-				var bag = personPeriod.RuleSetBag;
-				var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, agentTimeZone, bag, false);
+                var personPeriod = currentSchedulePeriod.Person.Period(dateOnly);
+                var bag = personPeriod.RuleSetBag;
+                var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, agentTimeZone, bag, false);
 
-				if (shiftList == null)
-					continue;
+                if (shiftList == null)
+                    continue;
+                if (allowedMinMax.HasValue && schedulingOptions.UseGroupScheduling && (schedulingOptions.UseGroupSchedulingCommonEnd || schedulingOptions.UseGroupSchedulingCommonStart))
+			    {
+                    shiftList = shiftList.Where(proj => allowedMinMax.Value.Contains(proj.WorkShiftProjectionContractTime)).ToList();
+			    }
+                var minmax = bag.MinMaxWorkTime(_workShiftWorkTime, dateOnly, effectiveRestriction);
 
-				var minmax = bag.MinMaxWorkTime(_workShiftWorkTime, dateOnly, effectiveRestriction);
+                var combinations = _possibleCombinationsOfStartEndCategoryCreator.FindCombinations(minmax, schedulingOptions);
+                // CONTINUE TO NEXT IF EMPTY, WE SHOULD SKIP OUT MAYBE, THIS DAY CAN'T BE SCHEDULED 
+                if (combinations.IsEmpty())
+                    continue;
+                if (schedulingOptions.UseShiftCategoryLimitations)
+                {
+                    combinations.RemoveWhere(x => schedulingOptions.NotAllowedShiftCategories.Contains(x.ShiftCategory));
+                }
+                var useShiftCategoryFairness = false;
+                IShiftCategoryFairnessFactors shiftCategoryFairnessFactors = null;
+                if (person.WorkflowControlSet != null)
+                {
+                    useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
+                    shiftCategoryFairnessFactors = extractShiftCategoryFairnessFactor(person, dateOnly);
+                }
+                if (schedulingOptions.WorkShiftLengthHintOption.Equals(WorkShiftLengthHintOption.AverageWorkTime))
+                    shiftList = _groupShiftLengthDecider.FilterList(shiftList, persons, schedulingOptions, ScheduleDictionary, dateOnly);
 
-				var combinations = _possibleCombinationsOfStartEndCategoryCreator.FindCombinations(minmax, schedulingOptions);
-				// CONTINUE TO NEXT IF EMPTY, WE SHOULD SKIP OUT MAYBE, THIS DAY CAN'T BE SCHEDULED 
-				if (combinations.IsEmpty())
-					continue;
+                var totalFairness = ScheduleDictionary.FairnessPoints();
+                _possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person,
+                                                                         schedulingOptions,
+                                                                         useShiftCategoryFairness, shiftCategoryFairnessFactors,
+                                                                         totalFairness, agentFairness, persons, effectiveRestriction);
 
-				var useShiftCategoryFairness = false;
-				IShiftCategoryFairnessFactors shiftCategoryFairnessFactors = null;
-				if (person.WorkflowControlSet != null)
-				{
-					useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
-					shiftCategoryFairnessFactors = extractShiftCategoryFairnessFactor(person, dateOnly);
-				}
-                if(schedulingOptions.WorkShiftLengthHintOption.Equals(WorkShiftLengthHintOption.AverageWorkTime))
-				    shiftList = _groupShiftLengthDecider.FilterList(shiftList, persons, schedulingOptions, ScheduleDictionary, dateOnly);
+                IWorkShiftFinderResult finderResult = new WorkShiftFinderResult(person, dateOnly);
 
-				var totalFairness = ScheduleDictionary.FairnessPoints();
-				_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person,
-				                                                         schedulingOptions,
-				                                                         useShiftCategoryFairness, shiftCategoryFairnessFactors,
-				                                                         totalFairness, agentFairness, persons, effectiveRestriction);
-
-				IWorkShiftFinderResult finderResult = new WorkShiftFinderResult(person, dateOnly);
-
-				IPossibleStartEndCategory tmpBestPossible = null;
-				if (!combinations.IsEmpty())
-					tmpBestPossible = combinations.OrderBy(c => c.ShiftValue).Last();
+                IPossibleStartEndCategory tmpBestPossible = null;
+                if (!combinations.IsEmpty())
+                    tmpBestPossible = combinations.OrderBy(c => c.ShiftValue).Last();
 
 
-				if (tmpBestPossible == null && effectiveRestriction.IsRestriction)
-				{
-					finderResult.Successful = true;
-					shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, agentTimeZone, bag, true);
-					shiftList = _groupShiftLengthDecider.FilterList(shiftList, persons, schedulingOptions, ScheduleDictionary, dateOnly);
+                if (tmpBestPossible == null && effectiveRestriction.IsRestriction)
+                {
+                    finderResult.Successful = true;
+                    shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, agentTimeZone, bag, true);
+                    shiftList = _groupShiftLengthDecider.FilterList(shiftList, persons, schedulingOptions, ScheduleDictionary, dateOnly);
 
-					_possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person,
-					                                                         schedulingOptions,
-					                                                         useShiftCategoryFairness, shiftCategoryFairnessFactors,
-					                                                         totalFairness, agentFairness, persons,
-					                                                         effectiveRestriction);
-					if (!combinations.IsEmpty())
-						tmpBestPossible = combinations.OrderBy(c => c.ShiftValue).Last();
+                    _possibleCombinationsOfStartEndCategoryRunner.RunTheList(combinations.ToList(), shiftList, dateOnly, person,
+                                                                             schedulingOptions,
+                                                                             useShiftCategoryFairness, shiftCategoryFairnessFactors,
+                                                                             totalFairness, agentFairness, persons,
+                                                                             effectiveRestriction);
+                    if (!combinations.IsEmpty())
+                        tmpBestPossible = combinations.OrderBy(c => c.ShiftValue).Last();
 
-				}
-				if (!finderResult.Successful)
-				{
-					string key = Resources.ScheduleBlockDayWith + dateOnly.ToShortDateString(CultureInfo.CurrentCulture);
-					if (!result.WorkShiftFinderResult.ContainsKey(key))
-						result.WorkShiftFinderResult.Add(key, finderResult);
-				}
+                }
+                if (!finderResult.Successful)
+                {
+                    string key = Resources.ScheduleBlockDayWith + dateOnly.ToShortDateString(CultureInfo.CurrentCulture);
+                    if (!result.WorkShiftFinderResult.ContainsKey(key))
+                        result.WorkShiftFinderResult.Add(key, finderResult);
+                }
 
-				if (tmpBestPossible != null)
-					bestPossible.Add(tmpBestPossible);
+                if (tmpBestPossible != null)
+                    bestPossible.Add(tmpBestPossible);
 
-			}
-			if (!schedulePeriodFound)
-				return new BestShiftCategoryResult(null, FailureCause.NoValidPeriod);
+            }
+            if (!schedulePeriodFound)
+                return new BestShiftCategoryResult(null, FailureCause.NoValidPeriod);
 
-			IPossibleStartEndCategory best = null;
-			if (bestPossible.Count > 0)
-				best = bestPossible.OrderBy(c => c.ShiftValue).Last();
+            IPossibleStartEndCategory best = null;
+            if (bestPossible.Count > 0)
+            {
+                best = bestPossible.OrderBy(c => c.ShiftValue).Last();
+            }
 
-			return new BestShiftCategoryResult(best, FailureCause.NoFailure);
-		}
+            return new BestShiftCategoryResult(best, FailureCause.NoFailure);
+        }
 
 		private DateTimePeriod extendedVisiblePeriod()
 		{

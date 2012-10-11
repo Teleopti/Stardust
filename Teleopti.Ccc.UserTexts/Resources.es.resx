@@ -6815,7 +6815,7 @@ Si este error de validación persiste, deberá verificar que su contraseña sigu
     <value>La nueva contraseña no sigue las políticas de contraseñas.</value>
   </data>
   <data name="WrongNumberOfDayOffsInSchedulePeriod" xml:space="preserve">
-    <value>El OObjetivo de Días Libres en Período de Planificación es {0} y hay {1}. No es posible planificar.</value>
+    <value>El objetivo de Días Libres en Período de Planificación es {0} y hay {1}. No es posible planificar.</value>
   </data>
   <data name="ExtendedPreferencesTemplate" xml:space="preserve">
     <value>Plantilla de Preferencias Extendidas</value>
@@ -8233,5 +8233,320 @@ Las opciones activadas son:
   </data>
   <data name="MissingAbsenceType" xml:space="preserve">
     <value>Falta tipo de ausencia.</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Clientes</value>
+  </data>
+  <data name="UseRestriction" xml:space="preserve">
+    <value>Usar restricciones</value>
+  </data>
+  <data name="SameStartTime" xml:space="preserve">
+    <value>Igual hora de inicio</value>
+  </data>
+  <data name="ValidatedAfterCustomerWork" xml:space="preserve">
+    <value>Tiempo de Posproceso Clientes Validado</value>
+  </data>
+  <data name="WalkAways" xml:space="preserve">
+    <value>Pausas</value>
+  </data>
+  <data name="SameShiftCategory" xml:space="preserve">
+    <value>Igual categoría de turno</value>
+  </data>
+  <data name="SameEndTime" xml:space="preserve">
+    <value>Igual hora de fin</value>
+  </data>
+  <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
+    <value>Su preferencia está fuera de rangos.</value>
+  </data>
+  <data name="TotalCustomers" xml:space="preserve">
+    <value>Total de clientes</value>
+  </data>
+  <data name="CampaignCustomersPercent" xml:space="preserve">
+    <value>Clientes de campaña %</value>
+  </data>
+  <data name="CalculatedCustomers" xml:space="preserve">
+    <value>Clientes calculados</value>
+  </data>
+  <data name="AverageCustomers" xml:space="preserve">
+    <value>Promedio Clientes</value>
+  </data>
+  <data name="AverageAfterCustomerWork" xml:space="preserve">
+    <value>Promedio Tiempo de Posproceso Clientes</value>
+  </data>
+  <data name="FileExportFailed" xml:space="preserve">
+    <value>Fallo en Exportación de ficheros</value>
+  </data>
+  <data name="FileExportFinished" xml:space="preserve">
+    <value>Exportación de ficheros finalizada</value>
+  </data>
+  <data name="OptimizationOptionMessageBox" xml:space="preserve">
+    <value>Opciones de Optimización</value>
+  </data>
+  <data name="NoActivity" xml:space="preserve">
+    <value>Sin actividad</value>
+  </data>
+  <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
+    <value>Agentes planificados y actuales</value>
+  </data>
+  <data name="AfterCustomerWorkTime" xml:space="preserve">
+    <value>Tiempo de Posproceso Clientes</value>
+  </data>
+  <data name="ExportWorkloadAndStaffing" xml:space="preserve">
+    <value>Exportar Workload y Dotación</value>
+  </data>
+  <data name="ExportWorkload" xml:space="preserve">
+    <value>Exporatr Workload</value>
+  </data>
+  <data name="ExportStaffing" xml:space="preserve">
+    <value>Exportar Dotación</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
+    <value>Por favor, seleccione al menos una de las opciones "Categoría de turno", "Hoar de inicio" u "Hora de fin" en Optimización por Grupos</value>
+  </data>
+  <data name="SchedulingOptionMessageBox" xml:space="preserve">
+    <value>Opciones de Planificación</value>
+  </data>
+  <data name="CSVFile" xml:space="preserve">
+    <value>Ficheros CSV (*.csv)|*.csv</value>
+  </data>
+  <data name="SelectSkill" xml:space="preserve">
+    <value>Seleccionar skill</value>
+  </data>
+  <data name="SelectFileDestination" xml:space="preserve">
+    <value>Seleccionar fichero de destino</value>
+  </data>
+  <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
+    <value>Por favor, seleccione al menos una de las opciones "Categoría de turno", "Hoar de inicio" u "Hora de fin" en Planificación por Grupos</value>
+  </data>
+  <data name="SelectDateAndScenario" xml:space="preserve">
+    <value>Seleccione una fecha y escenario</value>
+  </data>
+  <data name="ManageSmsSettings" xml:space="preserve">
+    <value>Gestionar configuración de SMS</value>
+  </data>
+  <data name="ServedCustomers" xml:space="preserve">
+    <value>Clientes Atendidos</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
+    <value>Difinir columna con el número de teléfono para SMS</value>
+  </data>
+  <data name="SmsSettings" xml:space="preserve">
+    <value>Configuración de SMS</value>
+  </data>
+  <data name="ScheduledEmployeesIncoming" xml:space="preserve">
+    <value>Empleados Planificados, entrantes</value>
+  </data>
+  <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
+    <value>Su horario de trabajo ha sido modificado:</value>
+  </data>
+  <data name="FileExportDone" xml:space="preserve">
+    <value>Exportación de fichero finalizada</value>
+  </data>
+  <data name="GraphLOC" xml:space="preserve">
+    <value>Gráfico (loc)</value>
+  </data>
+  <data name="IntervalLOC" xml:space="preserve">
+    <value>Intervalo (loc)</value>
+  </data>
+  <data name="TableLOC" xml:space="preserve">
+    <value>Tabla (loc)</value>
+  </data>
+  <data name="ScheduledEmployees" xml:space="preserve">
+    <value>Empleados Planificados</value>
+  </data>
+  <data name="DeviationCustomersColon" xml:space="preserve">
+    <value>Desviación Clientes:</value>
+  </data>
+  <data name="EmployeesIncWithShrinkage" xml:space="preserve">
+    <value>Empleados entrantes, incl. absentismo</value>
+  </data>
+  <data name="EmployeesWithShrinkage" xml:space="preserve">
+    <value>Empleados, incl. absentismo</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Empleado</value>
+  </data>
+  <data name="ForecastedAverageAfterCustomerWork" xml:space="preserve">
+    <value>Promedio previsto Tiempo de Posproceso Clientes</value>
+  </data>
+  <data name="ExportToBU" xml:space="preserve">
+    <value>Exportar a unidad de negocio</value>
+  </data>
+  <data name="ForecastedCustomers" xml:space="preserve">
+    <value>Clientes previstos</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Empleados</value>
+  </data>
+  <data name="FullDayAbsence" xml:space="preserve">
+    <value>Ausencia de día completo</value>
+  </data>
+  <data name="InsufficientPermissionForWeb" xml:space="preserve">
+    <value>No tiene permisos para acceder al portal Web</value>
+  </data>
+  <data name="NotWorking" xml:space="preserve">
+    <value>No funciona.</value>
+  </data>
+  <data name="ForecastedCustomersColon" xml:space="preserve">
+    <value>Clientes previstos:</value>
+  </data>
+  <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
+    <value>Mes 7-8 días libres</value>
+  </data>
+  <data name="ActualEmployees" xml:space="preserve">
+    <value>Empleados Actuales</value>
+  </data>
+  <data name="MobileReports" xml:space="preserve">
+    <value>Reportes móvil</value>
+  </data>
+  <data name="SkillTypeRetail" xml:space="preserve">
+    <value>Retail</value>
+  </data>
+  <data name="SchedulePeriodTypeDay" xml:space="preserve">
+    <value>Día</value>
+  </data>
+  <data name="SchedulePeriodTypeMonth" xml:space="preserve">
+    <value>Mes</value>
+  </data>
+  <data name="SchedulePeriodTypeWeek" xml:space="preserve">
+    <value>Semana</value>
+  </data>
+  <data name="PleaseChooseAReportType" xml:space="preserve">
+    <value>por favor, seleccione tipo de reporte.</value>
+  </data>
+  <data name="SameDaysOff" xml:space="preserve">
+    <value>Días libres iguales</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Adherencia por Agente</value>
+  </data>
+  <data name="RequestCannotUpdateDelete" xml:space="preserve">
+    <value>Su estado de petición ha cambiado. No puede ni modificarlo ni borrarlo. </value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Adherencia por Día</value>
+  </data>
+  <data name="ManualAgents" xml:space="preserve">
+    <value>Agentes (Sobrescritura manual)</value>
+  </data>
+  <data name="PleaseChooseSkillSet" xml:space="preserve">
+    <value>Por favor, seleccione in conjunto de skilles.</value>
+  </data>
+  <data name="ManageRuleSets" xml:space="preserve">
+    <value>Gestionar conjunto de normas</value>
+  </data>
+  <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
+    <value>Planificar sólo Preferencias Imprescindibles</value>
+  </data>
+  <data name="AllowOverwrite" xml:space="preserve">
+    <value>Permitir sobrescritura</value>
+  </data>
+  <data name="LongtermForecast" xml:space="preserve">
+    <value>Previción a largo plazo</value>
+  </data>
+  <data name="ShiftCategories" xml:space="preserve">
+    <value>Categorías de turno</value>
+  </data>
+  <data name="IndexCustomers" xml:space="preserve">
+    <value>Índice Clientes</value>
+  </data>
+  <data name="ForecastedEmployees" xml:space="preserve">
+    <value>Empleados Previstos</value>
+  </data>
+  <data name="WorkloadWindowAlreadyOpen" xml:space="preserve">
+    <value>La ventana del Workload {0} está abierta. Por favor, ciérrela por falta de validez.</value>
+  </data>
+  <data name="AfterCheckingAgainstActivities" xml:space="preserve">
+    <value>Después de verificar contra actividades</value>
+  </data>
+  <data name="EmployeesInc" xml:space="preserve">
+    <value>Empleados entr</value>
+  </data>
+  <data name="AddExtendedPreference" xml:space="preserve">
+    <value>Añadir preferencia extendida</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>Otros</value>
+  </data>
+  <data name="ExtendedPreferencesWeb" xml:space="preserve">
+    <value>Preferencias Extendidas</value>
+  </data>
+  <data name="IndexAfterCustomerWork" xml:space="preserve">
+    <value>Índice Posproceso Clientes</value>
+  </data>
+  <data name="ForecastedEmployeesIncoming" xml:space="preserve">
+    <value>Previción Empleados, entrante</value>
+  </data>
+  <data name="OriginalOfferedCustomers" xml:space="preserve">
+    <value>Original Clientes</value>
+  </data>
+  <data name="ExportToFile" xml:space="preserve">
+    <value>Exportar a fichero</value>
+  </data>
+  <data name="OverrideDaysOff" xml:space="preserve">
+    <value>Sobrescribir días libres</value>
+  </data>
+  <data name="OverrideHoursPerDay" xml:space="preserve">
+    <value>Sobrescribir horas por día</value>
+  </data>
+  <data name="OverridePeriod" xml:space="preserve">
+    <value>Sobrescribir período</value>
+  </data>
+  <data name="SubmitRequest" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="ValidatedCustomers" xml:space="preserve">
+    <value>Clientes validados</value>
+  </data>
+  <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
+    <value>Debe trabajar de {0} a {1} horas.</value>
+  </data>
+  <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
+    <value>Sus preferencias pueden resultar en {0} a {1} horas.</value>
+  </data>
+  <data name="YourPreferencesCanResultXHours" xml:space="preserve">
+    <value>Sus preferencias pueden resultar en {0} horas.</value>
+  </data>
+  <data name="DistributionBetweenSubskillsMustbeEqualToOneHundredPercent" xml:space="preserve">
+    <value>Distirbución entre sub-skilles debe sumar 100%</value>
+  </data>
+  <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
+    <value>El máximo ocupación de agentes debe ser mayor o igual que el mínimo</value>
+  </data>
+  <data name="FromSchedulePeriod" xml:space="preserve">
+    <value>Desde el Período Personal</value>
+  </data>
+  <data name="TypeLOC" xml:space="preserve">
+    <value>Tipo (loc)</value>
+  </data>
+  <data name="FromContract" xml:space="preserve">
+    <value>Desde el Contrato</value>
+  </data>
+  <data name="MaximumEmployees" xml:space="preserve">
+    <value>Máximo Empleados</value>
+  </data>
+  <data name="MinimumEmployees" xml:space="preserve">
+    <value>Mínimo Empleados</value>
+  </data>
+  <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
+    <value>El máximo de agentes debe ser mayor o igual que el mínimo</value>
+  </data>
+  <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
+    <value>No se ha encontrado período personal para este usuario</value>
+  </data>
+  <data name="OfferedCustomers" xml:space="preserve">
+    <value>Clientes</value>
+  </data>
+  <data name="OriginalAfterCustomerWork" xml:space="preserve">
+    <value>Original Posproceso Clientes</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Agentes Planificados por Actividad</value>
+  </data>
+  <data name="OriginalCustomers" xml:space="preserve">
+    <value>Original Clientes</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Totales</value>
   </data>
 </root>

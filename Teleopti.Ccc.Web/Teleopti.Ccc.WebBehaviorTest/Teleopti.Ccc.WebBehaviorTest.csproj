@@ -58,6 +58,7 @@
       <HintPath>..\..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -97,8 +98,15 @@
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
+    <Compile Include="Data\Setups\Generic\AvailabilityRotationConfigurable.cs" />
+    <Compile Include="Bindings\Generic\AvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\PersonAvailabilityConfigurable.cs" />
     <Compile Include="Bindings\Generic\AsmMessageStepDefinition.cs" />
+    <Compile Include="Data\Setups\Generic\RuleSetBagConfigurable.cs" />
+    <Compile Include="Bindings\Generic\RuleSetBagStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\WorkShiftRuleSetConfigurable.cs" />
     <Compile Include="Bindings\Generic\WeekScheduleTimeIndicatorStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\DayOffStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
@@ -107,6 +115,7 @@
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
+    <Compile Include="ConfigSanityCheck.cs" />
     <Compile Include="AsmMessage.feature.cs">
       <DependentUpon>AsmMessage.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -128,6 +137,11 @@
     <Compile Include="Pages\Common\IMessageReplyPage.cs" />
     <Compile Include="Pages\MessagePage.cs" />
     <Compile Include="Pages\GlobalMenuPage.cs" />
+    <Compile Include="PreferencesFeedbackBlacklisting.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreferencesFeedbackBlacklisting.feature</DependentUpon>
+    </Compile>
     <Compile Include="WeekScheduleTimeIndicator.feature.cs">
       <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -474,6 +488,10 @@
     <None Include="ApplicationStartRecovery.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ApplicationStartRecovery.feature.cs</LastGenOutput>
+    </None>
+    <None Include="PreferencesFeedbackBlacklisting.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesFeedbackBlacklisting.feature.cs</LastGenOutput>
     </None>
     <None Include="AsmMessage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

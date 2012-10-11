@@ -38,22 +38,25 @@
             // 
             // CNewSqlUserPwd
             // 
-            this.CNewSqlUserPwd.Location = new System.Drawing.Point(20, 69);
+            this.CNewSqlUserPwd.Location = new System.Drawing.Point(8, 82);
+            this.CNewSqlUserPwd.Margin = new System.Windows.Forms.Padding(5);
             this.CNewSqlUserPwd.Name = "CNewSqlUserPwd";
-            this.CNewSqlUserPwd.Size = new System.Drawing.Size(256, 20);
+            this.CNewSqlUserPwd.Size = new System.Drawing.Size(287, 20);
             this.CNewSqlUserPwd.TabIndex = 1;
             // 
             // LTestConnection
             // 
-            this.LTestConnection.Location = new System.Drawing.Point(126, 95);
+            this.LTestConnection.Location = new System.Drawing.Point(117, 117);
+            this.LTestConnection.Margin = new System.Windows.Forms.Padding(5);
             this.LTestConnection.Name = "LTestConnection";
-            this.LTestConnection.Size = new System.Drawing.Size(178, 68);
+            this.LTestConnection.Size = new System.Drawing.Size(178, 38);
             this.LTestConnection.TabIndex = 38;
             this.LTestConnection.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // BTestConnection
             // 
-            this.BTestConnection.Location = new System.Drawing.Point(21, 95);
+            this.BTestConnection.Location = new System.Drawing.Point(8, 117);
+            this.BTestConnection.Margin = new System.Windows.Forms.Padding(5);
             this.BTestConnection.Name = "BTestConnection";
             this.BTestConnection.Size = new System.Drawing.Size(99, 23);
             this.BTestConnection.TabIndex = 2;
@@ -63,7 +66,8 @@
             // LNewSqlUserPwd
             // 
             this.LNewSqlUserPwd.AutoSize = true;
-            this.LNewSqlUserPwd.Location = new System.Drawing.Point(18, 51);
+            this.LNewSqlUserPwd.Location = new System.Drawing.Point(5, 59);
+            this.LNewSqlUserPwd.Margin = new System.Windows.Forms.Padding(5);
             this.LNewSqlUserPwd.Name = "LNewSqlUserPwd";
             this.LNewSqlUserPwd.Size = new System.Drawing.Size(102, 13);
             this.LNewSqlUserPwd.TabIndex = 36;
@@ -72,7 +76,8 @@
             // LNewSqlUser
             // 
             this.LNewSqlUser.AutoSize = true;
-            this.LNewSqlUser.Location = new System.Drawing.Point(18, 5);
+            this.LNewSqlUser.Location = new System.Drawing.Point(5, 5);
+            this.LNewSqlUser.Margin = new System.Windows.Forms.Padding(5);
             this.LNewSqlUser.Name = "LNewSqlUser";
             this.LNewSqlUser.Size = new System.Drawing.Size(78, 13);
             this.LNewSqlUser.TabIndex = 35;
@@ -81,9 +86,10 @@
             // CNewSqlUser
             // 
             this.CNewSqlUser.FormattingEnabled = true;
-            this.CNewSqlUser.Location = new System.Drawing.Point(20, 24);
+            this.CNewSqlUser.Location = new System.Drawing.Point(8, 28);
+            this.CNewSqlUser.Margin = new System.Windows.Forms.Padding(5);
             this.CNewSqlUser.Name = "CNewSqlUser";
-            this.CNewSqlUser.Size = new System.Drawing.Size(256, 21);
+            this.CNewSqlUser.Size = new System.Drawing.Size(287, 21);
             this.CNewSqlUser.TabIndex = 0;
             // 
             // SqlAccount
@@ -98,7 +104,7 @@
             this.Controls.Add(this.LNewSqlUser);
             this.Controls.Add(this.CNewSqlUser);
             this.Name = "SqlAccount";
-            this.Size = new System.Drawing.Size(299, 126);
+            this.Size = new System.Drawing.Size(300, 160);
             this.ResumeLayout(false);
             this.PerformLayout();
 

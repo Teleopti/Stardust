@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security;
@@ -155,7 +156,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var agentRoleWithoutRequestsApplicationFunctions =
 				from r in agentRoleApplicationFunctions
 				where
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.TextRequests
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.TextRequests &&
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb
 				select r;
 			var agentRoleWithoutTextRequestsApplicationFunctions =
 				from r in agentRoleApplicationFunctions
@@ -196,6 +198,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var anotherSite = GlobalDataContext.Data().Data<AnotherSite>().Site;
 
 			var shippedRoles = ApplicationRoleFactory.CreateShippedRoles(out TestData.AdministratorRole, out TestData.AgentRole, out TestData.UnitRole, out TestData.SiteRole, out TestData.TeamRole);
+			shippedRoles.ForEach(r => r.Name += "Shipped");
 			var shippedRolesWithFunctions = from role in shippedRoles
 			                                let functions = (role == TestData.AgentRole ? agentRoleApplicationFunctions : allApplicationFunctions)
 											let availableDataRangeOption = (role == TestData.AgentRole ? AvailableDataRangeOption.MyTeam : 

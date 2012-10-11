@@ -44,34 +44,34 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyCalculationGivesCorrectNewOccupancy()
         {
-            Assert.AreEqual(0.68, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.CalculatedOccupancy, 2));
-            Assert.AreEqual(0.64, Math.Round(_relevantSkillStaffPeriods[_s2].Payload.CalculatedOccupancy, 2));
-            Assert.AreEqual(0.42, Math.Round(_relevantSkillStaffPeriods[_s3].Payload.CalculatedOccupancy, 2));
+            Assert.AreEqual(0.74, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.CalculatedOccupancy, 2));
+            Assert.AreEqual(0.73, Math.Round(_relevantSkillStaffPeriods[_s2].Payload.CalculatedOccupancy, 2));
+            Assert.AreEqual(0.5, Math.Round(_relevantSkillStaffPeriods[_s3].Payload.CalculatedOccupancy, 2));
 
-            Assert.AreEqual(7.38, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.ForecastedIncomingDemand, 2));
-            Assert.AreEqual(7.84, Math.Round(_relevantSkillStaffPeriods[_s2].Payload.ForecastedIncomingDemand, 2));
-            Assert.AreEqual(2, Math.Round(_relevantSkillStaffPeriods[_s3].Payload.ForecastedIncomingDemand, 2));
+            Assert.AreEqual(6.78, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.ForecastedIncomingDemand, 2));
+            Assert.AreEqual(6.86, Math.Round(_relevantSkillStaffPeriods[_s2].Payload.ForecastedIncomingDemand, 2));
+            Assert.AreEqual(1.67, Math.Round(_relevantSkillStaffPeriods[_s3].Payload.ForecastedIncomingDemand, 2));
 
             _target.AdjustOccupancy();
             Assert.AreEqual(3, _relevantSkillStaffPeriods.Count);
-            Assert.AreEqual(0.73, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.CalculatedOccupancy, 2));
-            Assert.AreEqual(0.72, Math.Round(_relevantSkillStaffPeriods[_s2].Payload.CalculatedOccupancy, 2));
-            Assert.AreEqual(0.65, Math.Round(_relevantSkillStaffPeriods[_s3].Payload.CalculatedOccupancy, 2));
+            Assert.AreEqual(0.77, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.CalculatedOccupancy, 2));
+            Assert.AreEqual(0.77, Math.Round(_relevantSkillStaffPeriods[_s2].Payload.CalculatedOccupancy, 2));
+            Assert.AreEqual(0.71, Math.Round(_relevantSkillStaffPeriods[_s3].Payload.CalculatedOccupancy, 2));
 
-            Assert.AreEqual(6.87, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.ForecastedIncomingDemand, 2));
-            Assert.AreEqual(6.97, Math.Round(_relevantSkillStaffPeriods[_s2].Payload.ForecastedIncomingDemand, 2));
-            Assert.AreEqual(1.28, Math.Round(_relevantSkillStaffPeriods[_s3].Payload.ForecastedIncomingDemand, 2));
+            Assert.AreEqual(6.46, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.ForecastedIncomingDemand, 2));
+            Assert.AreEqual(6.49, Math.Round(_relevantSkillStaffPeriods[_s2].Payload.ForecastedIncomingDemand, 2));
+            Assert.AreEqual(1.18, Math.Round(_relevantSkillStaffPeriods[_s3].Payload.ForecastedIncomingDemand, 2));
         }
 
         [Test]
         public void VerifyResetToOriginal()
         {
-            Assert.AreEqual(7.38, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.ForecastedIncomingDemand, 2));
+            Assert.AreEqual(6.78, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.ForecastedIncomingDemand, 2));
             _target.AdjustOccupancy();
-            Assert.AreEqual(6.87, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.ForecastedIncomingDemand, 2));
+            Assert.AreEqual(6.46, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.ForecastedIncomingDemand, 2));
             _relevantSkillStaffPeriods[_s1].Payload.MultiskillMinOccupancy = null;
             _relevantSkillStaffPeriods[_s1].CalculateStaff();
-            Assert.AreEqual(7.38, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.ForecastedIncomingDemand, 2));
+            Assert.AreEqual(6.78, Math.Round(_relevantSkillStaffPeriods[_s1].Payload.ForecastedIncomingDemand, 2));
         }
 
 

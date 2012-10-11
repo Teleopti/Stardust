@@ -1,13 +1,13 @@
 Teleopti.MyTimeWeb.MessageBroker = (function () {
 	function _addSubscription(options) {
 		var hub = $.connection.messageBrokerHub;
-		$.connection.hub.url = options.url + 'signalr';
+		$.connection.hub.url = options.url + '/signalr';
 
 		$.connection.hub.error(options.errCallback);
 
 		hub.onEventMessage = options.callback;
 
-		$.connection.hub.start()
+		$.connection.hub.start({ transport: 'longPolling', xdomain: true })
 			.done(function () {
 				hub.addSubscription({
 					'DomainType': options.domainType,

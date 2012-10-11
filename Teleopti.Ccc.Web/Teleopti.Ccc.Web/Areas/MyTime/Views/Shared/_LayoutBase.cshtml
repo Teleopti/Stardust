@@ -56,15 +56,18 @@
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.selectbox.ko.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.custominput.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.combobox.js")"></script>
-    <script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.combobox.ko.js")"></script>
+   <script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.combobox.ko.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.calendarselectable.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.connector.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.tabberiet.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/knockout.bindings.js")"></script>
-
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/noty/jquery.noty.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/noty/layouts/bottom.js")"></script>
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/noty/themes/default.js")"></script>
+	
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js")"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.js")"></script>
@@ -86,7 +89,8 @@
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.signalR-0.5.3.min.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Signalr.Hubs.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js")"></script>	
-	
+	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Notifier.js")"></script>
+
 	@if (ViewBag.LayoutBase.FixedDate != null)
 	{
 		DateTime date = ViewBag.LayoutBase.FixedDate;
@@ -120,5 +124,6 @@
 	<div id="dialog">
 	</div>
 	<div id="modal-disable"></div>
+	<span id="notifyLogger" style="display: none"></span>
 </body>
 </html>

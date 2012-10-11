@@ -4,6 +4,7 @@ GO
 
 
 create PROCEDURE [stage].[etl_stg_kpi_targets_team_delete]
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;

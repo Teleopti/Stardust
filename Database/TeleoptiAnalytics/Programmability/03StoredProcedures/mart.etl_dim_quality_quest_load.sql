@@ -11,7 +11,7 @@ GO
 --Exec mart.etl_dim_quality_quest_load -2;select * from mart.dim_quality_quest
 CREATE PROCEDURE [mart].[etl_dim_quality_quest_load]
 @datasource_id smallint
-	
+WITH EXECUTE AS OWNER	
 AS
 
 --------------------------------------------------------------------------

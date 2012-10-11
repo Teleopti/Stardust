@@ -100,6 +100,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
                 if (details != ScheduleReportDetail.None)
                 {
                     bool beforeLunch = true;
+                    var hasLunch =
+                        projection.Select(layer => layer.Payload as IActivity).Count(a => a.ReportLevelDetail == ReportLevelDetail.Lunch) != 0;
+                    
                     // draw breaks too
                     foreach (IVisualLayer visualLayer in projection)
                     {
@@ -113,11 +116,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
                                 if (beforeLunch)
                                 {
                                     break1Top = DrawColumnData(break1Top, 190, per, 85, culture);
+                                    if (!hasLunch) beforeLunch = false;
                                 }
                                 else
-                                {
                                     break2Top = DrawColumnData(break2Top, 390, per, 85, culture);
-                                }
+                                
                             }
                             if (activity.ReportLevelDetail == ReportLevelDetail.Lunch)
                             {

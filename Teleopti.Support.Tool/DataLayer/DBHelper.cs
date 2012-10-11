@@ -35,9 +35,43 @@ namespace  Teleopti.Support.Tool.DataLayer
         /// Creates a new, trusted, connection to the server
         /// </summary>
         /// <param name="server">Name of the server</param>
-        public DBHelper(string server)
+        public DBHelper(string server,string database)
         {
-            _connString = "Server=" + server + ";Database=Master;Trusted_Connection=True;";
+            _connString = "Server=" + server + ";Database=" + database +";Trusted_Connection=True;";
+        }
+
+        public DBHelper(string connectionString)
+        {
+            _connString = connectionString;
+
+        }
+
+        /// <summary>
+        /// Get what database version this database is on
+        /// </summary>
+        /// <param name="database">The databse name</param>
+        /// <returns>The databse version</returns>
+        public string GetDatabaseVersion(String database)
+        {
+           
+
+            using (DataSet ds = Execute("select MAX(SystemVersion) from DatabaseVersion where SystemVersion <> 'Not defined'", database))
+            {
+                return Convert.ToString(ds.Tables[0].Rows[0].ItemArray[0], System.Globalization.CultureInfo.InvariantCulture);
+            }
+        }
+
+       /// <summary>
+       /// Get the what aggregation database this analytic databse is connected to
+       /// </summary>
+       /// <param name="analyticDatabase"></param>
+       /// <returns></returns>
+        public string GetAggDatabaseName(String analyticDatabase)
+        {
+            using (DataSet ds = Execute("SELECT target_customname from mart.sys_crossdatabaseview_target", analyticDatabase))
+            {
+                return Convert.ToString(ds.Tables[0].Rows[0].ItemArray[0], System.Globalization.CultureInfo.InvariantCulture);
+            }
         }
 
         /// <summary>

@@ -32,9 +32,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         #region Methods - Instance Member
 
-        #region Constructor - (1)
+        #region Constructor - (2)
         public MultiplicatorRepository(IUnitOfWork unitOfWork)
             : base(unitOfWork)
+        {
+        }
+
+        public MultiplicatorRepository(IUnitOfWorkFactory unitOfWorkFactory)
+            :base(unitOfWorkFactory)
         {
         }
         #endregion

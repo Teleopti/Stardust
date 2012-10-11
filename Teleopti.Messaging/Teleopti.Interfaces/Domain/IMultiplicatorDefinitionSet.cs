@@ -91,15 +91,14 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Creates the projection for period.
         /// </summary>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
+        /// <param name="period">The period.</param>
         /// <param name="timeZoneInfo">The time zone info.</param>
         /// <returns>The layers expressed in UTC</returns>
         /// <remarks>
         /// Created by: micke
         /// Created date: 2008-12-10
         /// </remarks>
-        IList<IMultiplicatorLayer> CreateProjectionForPeriod(DateOnly startDate, DateOnly endDate, ICccTimeZoneInfo timeZoneInfo);
+        IList<IMultiplicatorLayer> CreateProjectionForPeriod(DateOnlyPeriod period, ICccTimeZoneInfo timeZoneInfo);
 
         /// <summary>
         /// Indicates if this definition set is deleted.

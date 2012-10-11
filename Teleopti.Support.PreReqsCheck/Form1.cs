@@ -832,14 +832,11 @@ namespace CheckPreRequisites
             else
                 printFeatureStatus(false);
 
-            if (checkBoxDotNet4.Checked)
-            {
-                printNewFeature(".NET framework", ".NET Framework", "version 4.0 required", FrameworkVersionDetection.GetExactVersion(FrameworkVersion.Fx40).ToString());
-                if (FrameworkVersionDetection.IsInstalled(FrameworkVersion.Fx40))
-                    printFeatureStatus(true);
-                else
-                    printFeatureStatus(false);
-            }
+            printNewFeature(".NET framework", ".NET Framework", "version 4.0 required", FrameworkVersionDetection.GetExactVersion(FrameworkVersion.Fx40).ToString());
+            if (FrameworkVersionDetection.IsInstalled(FrameworkVersion.Fx40))
+                printFeatureStatus(true);
+            else
+                printFeatureStatus(false);
         }
 
         private void CheckIIS()
@@ -933,23 +930,20 @@ namespace CheckPreRequisites
                         printFeatureStatus(false);
                     }
 
-                    if (checkBoxDotNet4.Checked)
+                    try
                     {
-                        try
-                        {
 
-                            printNewFeature("IIS Subcomp", ".NET 4.0 registered", "", "");
-                            if (InternetInformationServicesDetection.IsAspNetRegistered(FrameworkVersion.Fx40))
-                                printFeatureStatus(true);
-                            else
-                                printFeatureStatus(false);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            printNewFeature("IIS Subcomp", ".NET 4.0 registered", "", "Error when checking" + ex.Message.ToString());
+                        printNewFeature("IIS Subcomp", ".NET 4.0 registered", "", "");
+                        if (InternetInformationServicesDetection.IsAspNetRegistered(FrameworkVersion.Fx40))
+                            printFeatureStatus(true);
+                        else
                             printFeatureStatus(false);
-                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        printNewFeature("IIS Subcomp", ".NET 4.0 registered", "", "Error when checking" + ex.Message.ToString());
+                        printFeatureStatus(false);
                     }
 
                     try

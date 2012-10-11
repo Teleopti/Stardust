@@ -125,7 +125,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets the shift category fairness.
         /// </summary>
         /// <returns></returns>
-        IShiftCategoryFairness CachedShiftCategoryFairness();
+        IShiftCategoryFairnessHolder CachedShiftCategoryFairness();
 
 		/// <summary>
 		/// What is the (potential) changes on this schedule range?
@@ -138,5 +138,11 @@ namespace Teleopti.Interfaces.Domain
 		/// Tells the domain that current state corresponds with db state
 		/// </summary>
     	void TakeSnapshot();
+
+    	/// <summary>
+    	/// The period used to calculate fairness
+    	/// </summary>
+    	/// <returns></returns>
+    	DateTimePeriod VisiblePeriodMinusFourWeeksPeriod();
     }
 }

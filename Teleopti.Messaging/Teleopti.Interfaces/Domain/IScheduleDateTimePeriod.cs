@@ -52,5 +52,11 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-05-14
         /// </remarks>
         DateTimePeriod LoadedPeriod();
+
+    	/// <summary>
+    	/// Period used for fairness
+    	/// </summary>
+    	/// <returns></returns>
+    	DateTimePeriod VisiblePeriodMinusFourWeeksPeriod();
     }
 }

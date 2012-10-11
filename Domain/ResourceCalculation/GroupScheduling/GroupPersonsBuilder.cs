@@ -65,8 +65,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
                         continue;
                     }
-               
-                    var newGroupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, personGroup.Description.Name);
+
+					var guid = ((IEntity)personGroup).Id;
+                    var newGroupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, personGroup.Description.Name, guid);
                     if (!newGroupPerson.GroupMembers.IsEmpty())
                     {
                         newGroupPerson.CommonPossibleStartEndCategory = _groupPersonConsistentChecker.CommonPossibleStartEndCategory;

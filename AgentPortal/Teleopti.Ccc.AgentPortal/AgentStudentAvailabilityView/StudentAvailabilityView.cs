@@ -224,7 +224,8 @@ namespace Teleopti.Ccc.AgentPortal.AgentStudentAvailabilityView
                 e.Style.CellValue = cellData;
                 return;
             }
-            return;
+        	e.Style.CellType = "Static";
+        	e.Style.ReadOnly = true;
         }
 
         void IStudentAvailabilityView.CellDataLoaded()

@@ -228,7 +228,7 @@ Scenario: Disable all time fields when absence preference is selected
     And I am viewing preferences
     When I click the add extended preference button
     And I input extended preference fields with
-    | Field      | Value  |
+    | Field      | Value   |
     | Preference | Illness |
     Then I should not be able to edit time fields
 
@@ -299,7 +299,7 @@ Scenario: Reset time input fields when absence is selected
     | Activity time minimum       | 00:15 |
     | Activity time maximum       | 00:45 |
     And I input extended preference fields with
-    | Field      | Value  |
+    | Field      | Value   |
     | Preference | Illness |
     Then all the time fields should be reset
 
@@ -329,3 +329,29 @@ Scenario: Disable activity time fields when no activity selected
     And I am viewing preferences
     When I click the add extended preference button
     Then I should not be able to edit activity minimum and maximum fields
+
+Scenario: Reset extended preference form 
+	Given I have the role 'Access to extended preferences'
+	And I am viewing preferences
+	When I click the add extended preference button
+	And I input extended preference fields with
+	| Field                       | Value |
+	| Preference                  | Late  |
+	| Start time minimum          | 10:30 |
+	| Start time maximum          | 11:00 |
+	| End time minimum            | 19:00 |
+	| End time maximum            | 20:30 |
+	| Work time minimum           | 08:00 |
+	| Work time maximum           | 08:30 |
+	| Activity                    | Lunch |
+	| Activity Start time minimum | 12:00 |
+	| Activity Start time maximum | 12:15 |
+	| Activity End time minimum   | 12:30 |
+	| Activity End time maximum   | 12:45 |
+	| Activity time minimum       | 00:15 |
+	| Activity time maximum       | 00:45 |
+	And I click the reset extended preference button
+	Then I should see preference dropdown list selected to " "
+	And all the time fields should be reset
+	And I should see activity dropdown list selected to " "
+	And I should not be able to edit activity minimum and maximum fields

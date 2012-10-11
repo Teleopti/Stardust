@@ -44,6 +44,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	{
 		public string ButtonType { get; set; }
 		public string Icon { get; set; }
+	}
+
+	public class ToolBarTextItem : ToolBarItemBase
+	{
+		public string Id { get; set; }
 		public string Text { get; set; }
 	}
 

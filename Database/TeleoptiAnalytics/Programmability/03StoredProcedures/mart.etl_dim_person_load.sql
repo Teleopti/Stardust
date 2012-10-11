@@ -31,6 +31,7 @@ GO
 --EXEC [mart].[etl_dim_person_load] @current_business_unit_code = '928DD0BC-BF40-412E-B970-9B5E015AADEA'
 CREATE PROCEDURE [mart].[etl_dim_person_load] 
 @current_business_unit_code uniqueidentifier
+WITH EXECUTE AS OWNER
 AS
 
 --Create maxdate

@@ -151,7 +151,6 @@
     <Compile Include="Forecast\OpenAndSplitTargetSkillTest.cs" />
     <Compile Include="Forecast\SendImportForecastBusMessageTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="IntegrationTest.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
     <Compile Include="Notification\ScheduleDayReadModelComparerTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />
@@ -183,12 +182,6 @@
     </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Raptor.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="RaptorClient.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>

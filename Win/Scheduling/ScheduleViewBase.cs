@@ -320,30 +320,29 @@ namespace Teleopti.Ccc.Win.Scheduling
         /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridCellClickEventArgs"/> instance containing the event data.</param>
         internal virtual void CellClick(object sender, GridCellClickEventArgs e)
         {
-            //handle selection when click on week header
-            if (e.RowIndex == 0 && e.ColIndex >= (int)ColumnType.StartScheduleColumns)
+        }
+
+        public void AddWholeWeekAsSelected(int rowIndex, int colIndex)
+        {
+            if (_grid.Model.ColCount < colIndex) return;
+            _grid.Model.Selections.Clear(true);
+            var culture = TeleoptiPrincipal.Current.Regional.Culture;
+            int weekNumWeekHeader = DateHelper.WeekNumber(((DateOnly)_grid.Model[rowIndex, colIndex].Tag).Date, culture);
+            for (int i = (int)ColumnType.StartScheduleColumns; i <= _grid.ColCount; i++)
             {
-                e.Cancel = true;
-
-                _grid.Model.Selections.Clear(true);
-
-                int weekNumWeekHeader = DateHelper.WeekNumber((DateOnly)_grid.Model[e.RowIndex, e.ColIndex].Tag, CultureInfo.CurrentCulture);
-                for (int i = (int)ColumnType.StartScheduleColumns; i <= _grid.ColCount; i++)
+                int weekNumDateHeader = DateHelper.WeekNumber(((DateOnly)_grid.Model[rowIndex + 1, i].Tag).Date, culture);
+                if (weekNumWeekHeader == weekNumDateHeader)
                 {
-                    int weekNumDateHeader = DateHelper.WeekNumber((DateOnly)_grid.Model[e.RowIndex + 1, i].Tag, CultureInfo.CurrentCulture);
-                    if (weekNumWeekHeader == weekNumDateHeader)
-                    {
-                        _grid.Model.Selections.Add(GridRangeInfo.Cols(i, i));
+                    _grid.Model.Selections.Add(GridRangeInfo.Cols(i, i));
 
-                        _grid.CurrentCell.MoveTo(_grid.Model.SelectedRanges[0].Top,
-                                                 _grid.Model.SelectedRanges[0].Left);
-                    }
+                    _grid.CurrentCell.MoveTo(_grid.Model.SelectedRanges[0].Top,
+                                             _grid.Model.SelectedRanges[0].Left);
                 }
-				var start = _grid.Model.Selections.Ranges[0].Left;
-				var end = _grid.Model.Selections.Ranges[_grid.Model.Selections.Ranges.Count - 1].Right;
-				_grid.Model.Selections.Clear(true);
-				_grid.Model.Selections.Add(GridRangeInfo.Cols(start, end));
             }
+            var start = _grid.Model.Selections.Ranges[0].Left;
+            var end = _grid.Model.Selections.Ranges[_grid.Model.Selections.Ranges.Count - 1].Right;
+            _grid.Model.Selections.Clear(true);
+            _grid.Model.Selections.Add(GridRangeInfo.Cols(start, end));
         }
 
         internal virtual void MouseUp(object sender, MouseEventArgs e)
@@ -873,26 +872,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private static IList<IPersonAbsence> getSplitDayLongAbsences(IScheduleDay splitDay)
         {
-            IList<IPersonAbsence> dayAbsences = new List<IPersonAbsence>();
-
-            foreach (IPersonAbsence personAbsence in splitDay.PersonAbsenceCollection())
-            {
-                if (personAbsence.Layer.Period.StartDateTime < splitDay.Period.StartDateTime || personAbsence.Layer.Period.EndDateTime > splitDay.Period.EndDateTime)
-                {
-                    DateTime start, end;
-                    IPersonAbsence splitDayAbsence = personAbsence.NoneEntityClone();
-
-                    if (splitDayAbsence.Period.StartDateTime < splitDay.Period.StartDateTime) start = splitDay.Period.StartDateTime;
-                    else start = splitDayAbsence.Period.StartDateTime;
-
-                    if (splitDayAbsence.Period.EndDateTime > splitDay.Period.EndDateTime) end = splitDay.Period.EndDateTime;
-                    else end = splitDayAbsence.Period.EndDateTime;
-
-                    splitDayAbsence.Layer.Period = new DateTimePeriod(start, end);
-                    dayAbsences.Add(splitDayAbsence);
-                }
-            }
-
+        	IList<IPersonAbsence> dayAbsences = new SplitLongDayAbsences().SplitAbsences(splitDay);
             return dayAbsences;
         }
 
@@ -947,7 +927,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             int column = GetColumnForDate(dateOnly);
             if(TheGrid.CurrentCell.ColIndex != column)
-                TheGrid.CurrentCell.MoveTo(TheGrid.CurrentCell.RowIndex, column);
+            {
+				TheGrid.CurrentCell.MoveTo(TheGrid.CurrentCell.RowIndex, column);
+            	TheGrid.CurrentCell.ScrollInView(GridScrollCurrentCellReason.MoveTo);
+            }
+                
         }
 
         //get the local selected date

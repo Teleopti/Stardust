@@ -31,7 +31,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return LoadAll();
         }
 
-        public IList<IMultiplicatorDefinitionSet> FindAllDefinitions()
+    	public IList<IMultiplicatorDefinitionSet> FindAllShiftAllowanceDefinitions()
+    	{
+			IList<IMultiplicatorDefinitionSet> retList = Session.CreateCriteria(typeof(MultiplicatorDefinitionSet))
+					  .Add(Restrictions.Eq("MultiplicatorType", MultiplicatorType.OBTime))
+					  .List<IMultiplicatorDefinitionSet>();
+			return retList;
+    	}
+
+    	public IList<IMultiplicatorDefinitionSet> FindAllDefinitions()
         {
             IList<IMultiplicatorDefinitionSet> retList = Session.CreateCriteria(typeof(MultiplicatorDefinitionSet))
                        .List<IMultiplicatorDefinitionSet>();
