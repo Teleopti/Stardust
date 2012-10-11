@@ -63,7 +63,7 @@ Scenario: Navigate to message tab with an unread message
 	| Title         | New message	 |
 	And I am viewing week schedule
 	When I navigate to messages
-	Then I should see a message in the list
+	Then I should see '1' message(s) in the list
 
 Scenario: Open unread message
 	Given I have the role 'Full access to mytime'
@@ -118,6 +118,26 @@ Scenario: Reduce number of unread messages in message tab title
 	When I navigate to messages
 	And I confirm reading the message at position '1' of '2' in the list
 	Then I should be notified that I have '1' unread message(s)
+
+Scenario: Receive a new message when viewing message page
+	Given I have the role 'Full access to mytime'
+	And I am viewing week schedule
+	And I navigate to messages
+	When I receive message number '1'
+	Then I should see '1' message(s) in the list
+
+Scenario: Receive a new message when viewing a message detail
+	Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field         | Value			|
+	| Title         | New message	|
+	And I am viewing week schedule
+	And I navigate to messages
+	And I click on the message at position '1' in the list
+	When I receive message number '2'
+	Then I should see '2' message(s) in the list
+
+
 	
 
 

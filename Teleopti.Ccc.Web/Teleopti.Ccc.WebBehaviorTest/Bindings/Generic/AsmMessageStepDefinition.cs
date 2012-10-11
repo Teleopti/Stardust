@@ -80,10 +80,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
             Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(0)");
         }
 
-        [Then(@"I should see a message in the list")]
-        public void ThenIShouldSeeAMessageInTheList()
+        [Then(@"I should see '(.*)' message\(s\) in the list")]
+        public void ThenIShouldSeeMessageSInTheList(int messageCount)
         {
-			EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(1));
+            EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(messageCount));
         }
 
         [Given(@"message tab indicates '(.*)' new message\(s\)")]

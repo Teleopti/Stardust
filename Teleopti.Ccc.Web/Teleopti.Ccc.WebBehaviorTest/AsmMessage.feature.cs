@@ -261,7 +261,7 @@ this.FeatureBackground();
 #line 65
  testRunner.When("I navigate to messages");
 #line 66
- testRunner.Then("I should see a message in the list");
+ testRunner.Then("I should see \'1\' message(s) in the list");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -430,6 +430,63 @@ this.FeatureBackground();
  testRunner.And("I confirm reading the message at position \'1\' of \'2\' in the list");
 #line 120
  testRunner.Then("I should be notified that I have \'1\' unread message(s)");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Receive a new message when viewing message page")]
+        public virtual void ReceiveANewMessageWhenViewingMessagePage()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Receive a new message when viewing message page", ((string[])(null)));
+#line 122
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 123
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 124
+ testRunner.And("I am viewing week schedule");
+#line 125
+ testRunner.And("I navigate to messages");
+#line 126
+ testRunner.When("I receive message number \'1\'");
+#line 127
+ testRunner.Then("I should see \'1\' message(s) in the list");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Receive a new message when viewing a message detail")]
+        public virtual void ReceiveANewMessageWhenViewingAMessageDetail()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Receive a new message when viewing a message detail", ((string[])(null)));
+#line 129
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 130
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table13.AddRow(new string[] {
+                        "Title",
+                        "New message"});
+#line 131
+ testRunner.And("I have an unread message with", ((string)(null)), table13);
+#line 134
+ testRunner.And("I am viewing week schedule");
+#line 135
+ testRunner.And("I navigate to messages");
+#line 136
+ testRunner.And("I click on the message at position \'1\' in the list");
+#line 137
+ testRunner.When("I receive message number \'2\'");
+#line 138
+ testRunner.Then("I should see \'2\' message(s) in the list");
 #line hidden
             this.ScenarioCleanup();
         }
