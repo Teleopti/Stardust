@@ -55,6 +55,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			}
 		}
 
+		public FireFox Restart() { throw new NotImplementedException(); }
+
 
 		private void MakeSureBrowserIsNotRunning()
 		{

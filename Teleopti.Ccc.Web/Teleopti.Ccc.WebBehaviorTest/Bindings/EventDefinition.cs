@@ -48,6 +48,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			}
 		}
 
+		[BeforeFeature]
+		public static void BeforeFeature()
+		{
+			Browser.Restart();
+		}
+
 		[BeforeScenario]
 		public static void BeforeScenario()
 		{

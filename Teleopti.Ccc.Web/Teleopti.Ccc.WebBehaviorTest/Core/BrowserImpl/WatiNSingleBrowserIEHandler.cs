@@ -28,6 +28,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			Settings.HighLightElement = true;
 			Settings.MakeNewIe8InstanceNoMerge = true;
 			Settings.MakeNewIeInstanceVisible = true;
+			return StartBrowser();
+		}
+
+		private IE StartBrowser()
+		{
 			_browser = new IE {AutoClose = true};
 			_browser.ClearCache();
 			_browser.ClearCookies();
@@ -41,17 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 		{
 			try
 			{
-				var result = ProcessHelpers.TryToCloseProcess(
-					ProcessName,
-					new Func<TryResult>[]
-						{
-							() => TryCloseByWatiNCloseNDispose(),
-							() => ProcessHelpers.TryCloseByClosingMainWindow(ProcessName),
-							() => TryCloseByWatiNForceClose(),
-							() => ProcessHelpers.TryCloseByKillingProcess(ProcessName)
-						});
-				if (!result)
-					throw new ApplicationException("Browser failed to close.");
+				CloseBrowser();
 			}
 			finally
 			{
@@ -60,8 +55,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			}
 		}
 
+		private void CloseBrowser()
+		{
+			var result = ProcessHelpers.TryToCloseProcess(
+				ProcessName,
+				new Func<TryResult>[]
+					{
+						() => TryCloseByWatiNCloseNDispose(),
+						() => ProcessHelpers.TryCloseByClosingMainWindow(ProcessName),
+						() => TryCloseByWatiNForceClose(),
+						() => ProcessHelpers.TryCloseByKillingProcess(ProcessName)
+					});
+			if (!result)
+				throw new ApplicationException("Browser failed to close.");
+		}
 
-
+		public IE Restart()
+		{
+			CloseBrowser();
+			return StartBrowser();
+		}
 
 
 		private void MakeSureBrowserIsNotRunning()
