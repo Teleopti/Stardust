@@ -360,10 +360,12 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Prioritize feedback from normal over blacklisted shift when I have a preference")]
-        public virtual void PrioritizeFeedbackFromNormalOverBlacklistedShiftWhenIHaveAPreference()
+        [NUnit.Framework.DescriptionAttribute("Prioritize feedback from normal over blacklisted shift even though I have a prefe" +
+            "rence")]
+        public virtual void PrioritizeFeedbackFromNormalOverBlacklistedShiftEvenThoughIHaveAPreference()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Prioritize feedback from normal over blacklisted shift when I have a preference", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Prioritize feedback from normal over blacklisted shift even though I have a prefe" +
+                    "rence", ((string[])(null)));
 #line 99
 this.ScenarioSetup(scenarioInfo);
 #line 6

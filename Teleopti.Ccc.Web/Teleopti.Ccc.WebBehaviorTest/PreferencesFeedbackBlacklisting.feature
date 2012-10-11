@@ -96,7 +96,7 @@ Scenario: No feedback from blacklisted shift without preference
 	| Date                  | 2012-10-10 |
 	| Contract time boundry | 9:00-9:00  |
 
-Scenario: Prioritize feedback from normal over blacklisted shift when I have a preference
+Scenario: Prioritize feedback from normal over blacklisted shift even though I have a preference
 	Given I have a person period with 
 	| Field        | Value             |
 	| Start date   | 2012-10-01        |
