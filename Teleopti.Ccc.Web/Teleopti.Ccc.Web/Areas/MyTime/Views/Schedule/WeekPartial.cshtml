@@ -55,17 +55,9 @@
 		}
 	});
 </script>
-@if (Model.AsmPermission)
-{
-	<div class="week-schedule-ASM-permission-granted">
-	</div>
-}
-@if (Model.IsCurrentWeek)
-{
-	<div class="week-schedule-current-week">
-	</div>
-}
 <div id="ScheduleWeek-body" class="body-weekview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
+<div class="week-schedule-ASM-permission-granted" data-bind="if : AsmPermission">yes</div>
+<div class="week-schedule-current-week" data-bind="if : IsCurrentWeek">yes</div>
 	<style>
 		@foreach (var style in Model.Styles)
   {
