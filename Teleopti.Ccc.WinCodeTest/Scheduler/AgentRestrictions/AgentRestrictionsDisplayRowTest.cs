@@ -282,11 +282,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.AreEqual(_daysOff, _displayRow.CurrentDaysOff);
 		}
 
-		[Test]
-		public void ShouldGetSetThreadIndex()
-		{
-			_displayRow.ThreadIndex = 1;
-			Assert.AreEqual(1, _displayRow.ThreadIndex);
-		}
+		//[Test]
+		//public void ShouldGetSetThreadIndex()
+		//{
+		//    _displayRow.ThreadIndex = 1;
+		//    Assert.AreEqual(1, _displayRow.ThreadIndex);
+		//}
 	}
 }
