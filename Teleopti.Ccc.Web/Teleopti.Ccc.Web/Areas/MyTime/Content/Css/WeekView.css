@@ -245,7 +245,7 @@ select.absence-input
 	display: none;
 }
 
-.week-schedule-ASM-permission-granted .week-schedule-current-week
+.week-schedule-ASM-permission-granted, .week-schedule-current-week
 {
 	display: none;
 }

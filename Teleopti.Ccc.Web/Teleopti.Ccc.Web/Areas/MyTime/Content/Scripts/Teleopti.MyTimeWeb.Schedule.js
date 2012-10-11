@@ -86,7 +86,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	}
 
 	function _setTimeIndicator(theDate) {
-		if ($('.week-schedule-ASM-permission-granted').length == 0 | $('.week-schedule-current-week').length == 0)
+		if ($('.week-schedule-ASM-permission-granted').val() == 'yes' | $('.week-schedule-current-week').val() == 'yes')
 			return;
 
 		var timelineHeight = 668;
