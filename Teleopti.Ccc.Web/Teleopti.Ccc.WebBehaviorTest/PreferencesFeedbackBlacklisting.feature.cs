@@ -109,23 +109,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Name",
                         "Normal"});
             table3.AddRow(new string[] {
+                        "Test",
+                        "8:00-8:00"});
+            table3.AddRow(new string[] {
                         "Activity",
                         "Phone"});
             table3.AddRow(new string[] {
                         "Shift category",
                         "Day"});
             table3.AddRow(new string[] {
-                        "Earliest start",
-                        "8:00"});
+                        "Start boundry",
+                        "8:00-8:00"});
             table3.AddRow(new string[] {
-                        "Latest start",
-                        "8:00"});
-            table3.AddRow(new string[] {
-                        "Earliest end",
-                        "17:00"});
-            table3.AddRow(new string[] {
-                        "Latest end",
-                        "17:00"});
+                        "End boundry",
+                        "17:00-17:00"});
 #line 19
  testRunner.And("there is a rule set with", ((string)(null)), table3);
 #line hidden
@@ -142,21 +139,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Shift category",
                         "Day"});
             table4.AddRow(new string[] {
-                        "Earliest start",
+                        "Start boundry",
                         "8:00"});
             table4.AddRow(new string[] {
-                        "Latest start",
-                        "8:00"});
-            table4.AddRow(new string[] {
-                        "Earliest end",
-                        "20:00"});
-            table4.AddRow(new string[] {
-                        "Latest end",
+                        "End boundry",
                         "20:00"});
             table4.AddRow(new string[] {
                         "Blacklisted",
                         "true"});
-#line 28
+#line 27
  testRunner.And("there is a rule set with", ((string)(null)), table4);
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
@@ -168,7 +159,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table5.AddRow(new string[] {
                         "Sets",
                         "Normal, Blacklisted"});
-#line 38
+#line 35
  testRunner.And("there is a rule set bag with", ((string)(null)), table5);
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
@@ -180,7 +171,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table6.AddRow(new string[] {
                         "Rule set bag",
                         "Bag"});
-#line 42
+#line 39
  testRunner.And("I have a person period with", ((string)(null)), table6);
 #line hidden
         }
@@ -190,7 +181,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void FeedbackFromBlacklistedShiftWithPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback from blacklisted shift with preference", ((string[])(null)));
-#line 47
+#line 44
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
@@ -200,13 +191,13 @@ this.FeatureBackground();
                         "Value"});
             table7.AddRow(new string[] {
                         "Date",
-                        "2010-10-10"});
+                        "2012-10-10"});
             table7.AddRow(new string[] {
                         "Work time minimum",
                         "12:00"});
-#line 48
+#line 45
  testRunner.Given("I have a preference with", ((string)(null)), table7);
-#line 52
+#line 49
  testRunner.When("I view preferences for date \'2012-10-10\'");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
@@ -214,11 +205,11 @@ this.FeatureBackground();
                         "Value"});
             table8.AddRow(new string[] {
                         "Date",
-                        "2010-10-10"});
+                        "2012-10-10"});
             table8.AddRow(new string[] {
                         "Contract time boundry",
                         "12:00-12:00"});
-#line 53
+#line 50
  testRunner.Then("I should see preference feedback with", ((string)(null)), table8);
 #line hidden
             this.ScenarioCleanup();
@@ -229,7 +220,7 @@ this.FeatureBackground();
         public virtual void FeedbackFromBlacklistedShiftWithAvailability()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback from blacklisted shift with availability", ((string[])(null)));
-#line 58
+#line 55
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
@@ -246,7 +237,7 @@ this.FeatureBackground();
             table9.AddRow(new string[] {
                         "Work time minimum",
                         "12:00"});
-#line 59
+#line 56
  testRunner.Given("there is an availability rotation with", ((string)(null)), table9);
 #line hidden
             TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
@@ -258,9 +249,9 @@ this.FeatureBackground();
             table10.AddRow(new string[] {
                         "Rotation",
                         "Availability"});
-#line 64
+#line 61
  testRunner.And("I have an availability with", ((string)(null)), table10);
-#line 68
+#line 65
  testRunner.When("I view preferences for date \'2012-10-10\'");
 #line hidden
             TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
@@ -268,11 +259,11 @@ this.FeatureBackground();
                         "Value"});
             table11.AddRow(new string[] {
                         "Date",
-                        "2010-10-10"});
+                        "2012-10-10"});
             table11.AddRow(new string[] {
                         "Contract time boundry",
                         "12:00-12:00"});
-#line 69
+#line 66
  testRunner.Then("I should see preference feedback with", ((string)(null)), table11);
 #line hidden
             this.ScenarioCleanup();
@@ -283,11 +274,11 @@ this.FeatureBackground();
         public virtual void NoFeedbackFromBlacklistedShiftWithoutPreference()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No feedback from blacklisted shift without preference", ((string[])(null)));
-#line 74
+#line 71
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 75
+#line 72
  testRunner.When("I view preferences for date \'2012-10-10\'");
 #line hidden
             TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
@@ -295,11 +286,11 @@ this.FeatureBackground();
                         "Value"});
             table12.AddRow(new string[] {
                         "Date",
-                        "2010-10-10"});
+                        "2012-10-10"});
             table12.AddRow(new string[] {
                         "Contract time boundry",
                         "9:00-9:00"});
-#line 76
+#line 73
  testRunner.Then("I should see preference feedback with", ((string)(null)), table12);
 #line hidden
             this.ScenarioCleanup();

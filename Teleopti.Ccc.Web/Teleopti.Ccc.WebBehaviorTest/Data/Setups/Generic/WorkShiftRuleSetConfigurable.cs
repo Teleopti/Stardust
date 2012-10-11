@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -14,18 +15,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string Activity { get; set; }
 		public string ShiftCategory { get; set; }
 
-		public TimeSpan EarliestStart { get; set; }
-		public TimeSpan LatestStart { get; set; }
-		public TimeSpan EarliestEnd { get; set; }
-		public TimeSpan LatestEnd { get; set; }
+		public string StartBoundry { get; set; }
+		public string EndBoundry { get; set; }
 
-		public TimeSpan Segment { get; set; }
+		public string Segment { get; set; }
 
 		public bool Blacklisted { get; set; }
 
 		public WorkShiftRuleSetConfigurable()
 		{
-			Segment = TimeSpan.FromMinutes(15);
+			Segment = "00:15";
 			Blacklisted = false;
 		}
 
@@ -34,8 +33,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var activity = new ActivityRepository(uow).LoadAll().Single(a => a.Name == Activity);
 			var shiftCategory = new ShiftCategoryRepository(uow).LoadAll().Single(a => a.Description.Name == ShiftCategory);
 
-			var start = new TimePeriodWithSegment(new TimePeriod(EarliestStart, LatestStart), Segment);
-			var end = new TimePeriodWithSegment(new TimePeriod(EarliestEnd, LatestEnd), Segment);
+			var start = new TimePeriodWithSegment(Transform.ToTimePeriod(StartBoundry), Transform.ToTimeSpan(Segment));
+			var end = new TimePeriodWithSegment(Transform.ToTimePeriod(EndBoundry), Transform.ToTimeSpan(Segment));
 
 			var generator = new WorkShiftTemplateGenerator(activity, start, end, shiftCategory);
 
