@@ -26,35 +26,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 	public class PreferenceFulfilledChecker : IPreferenceFulfilledChecker
 	{
-		private ICheckerRestriction _restrictionChecker;
-
-		/// <summary>
-		/// Sets the restriction checker.
-		/// </summary>
-		/// <param name="restrictionChecker">The restriction checker.</param>
-		/// <remarks>Only for test purposes</remarks>
-		public void SetRestrictionChecker(ICheckerRestriction restrictionChecker)
-		{
-			_restrictionChecker = restrictionChecker;
-		}
-
-		/// <summary>
-		/// Gets the or create restriction checker.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>Only for test purposes</remarks>
-		private ICheckerRestriction getOrCreateRestrictionChecker()
-		{
-			if (_restrictionChecker == null)
-				_restrictionChecker = new RestrictionChecker();
-			return _restrictionChecker;
-		}
-
 		public bool? IsPreferenceFulfilled(IScheduleDay day)
 		{
 
-			var restrictionChecker = getOrCreateRestrictionChecker();
-			restrictionChecker.ScheduleDay = day;
+			var restrictionChecker = new RestrictionChecker {ScheduleDay = day};
 			var result = restrictionChecker.CheckPreference();
 			switch (result)
 			{
