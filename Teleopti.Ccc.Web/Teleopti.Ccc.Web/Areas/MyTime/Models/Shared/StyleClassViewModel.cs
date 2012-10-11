@@ -4,5 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Shared
 	{
 		public string Name { get; set; } 
 		public string ColorHex { get; set; }
+		public string RgbColor { get; set; }
 	}
 }

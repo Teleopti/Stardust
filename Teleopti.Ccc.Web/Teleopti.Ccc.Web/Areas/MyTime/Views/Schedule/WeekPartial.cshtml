@@ -67,10 +67,12 @@
 }
 <div id="ScheduleWeek-body" class="body-weekview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
 	<style>
+		
 		@foreach (var style in Model.Styles)
-  {
-			@string.Format("li.third.{0} {{background-color: rgb({1});}}\n", style.Name, ColorTranslator.FromHtml(style.ColorHex).ToCSV())
-  }
+		{
+			@string.Format("li.third.{0} {{background-color: rgb({1});}}\n", style.Name, style.RgbColor)
+			
+		}
 	</style>
 	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">
 		<div class="weekview-timeline floatleft">
