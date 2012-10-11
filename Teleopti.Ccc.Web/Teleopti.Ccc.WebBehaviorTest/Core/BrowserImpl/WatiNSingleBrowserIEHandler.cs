@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 		private static IDisposable BrowserLock { get; set; }
 		//private static IDisposable BrowserLock { get { return ScenarioContext.Current.Value<SystemLevelLock>(); } set { ScenarioContext.Current.Value((SystemLevelLock)value); } }
 
-		private static bool _closeByWatiNCloseNDisposeFailed = false;
+		//private static bool _closeByWatiNCloseNDisposeFailed = false;
 		private IE _browser;
 
 		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
