@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 			}
 		}
 
-		public void SelectCalendarCellForDateByClick(DateTime date) { SelectCalendarCellByClick(CalendarCellForDate(date)); }
+		public void SelectCalendarCellForDateByClick(DateTime date) { SelectCalendarCellByClick(CalendarCellSelectableForDate(date)); }
 		public void SelectCalendarCellByClick(ListItem cell) { cell.Click(); }
 
 		public void SelectCalendarCellByClass(DateTime date)
