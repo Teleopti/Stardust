@@ -833,7 +833,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
             using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
             {
-                if(schedulingOptions.UseGroupScheduling)
+                if(schedulingOptions.UseGroupScheduling && schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
                 {
                     var backToLegalStateServicePro =
                     _container.Resolve<IGroupListShiftCategoryBackToLegalStateService>();
