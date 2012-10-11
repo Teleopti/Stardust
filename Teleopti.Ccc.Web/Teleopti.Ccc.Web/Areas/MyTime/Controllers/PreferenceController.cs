@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
