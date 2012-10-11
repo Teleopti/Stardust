@@ -11134,6 +11134,7 @@ These options are activated:
   <data name="NoMessagesFound" xml:space="preserve">
     <value>No messages could be found</value>
     <comment>Shown in MyTime Web Messages when no messages found for user</comment>
+  </data>
   <data name="FairnessOptimizationOn" xml:space="preserve">
     <value>Optimizing fairness on </value>
     <comment>Information displayed on the status bar in scheduler during fairness optimization</comment>

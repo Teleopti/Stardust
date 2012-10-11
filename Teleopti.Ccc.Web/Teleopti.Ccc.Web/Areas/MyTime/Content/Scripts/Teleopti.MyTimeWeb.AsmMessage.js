@@ -1,6 +1,7 @@
 ﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Communication.List.js"/>
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -11,6 +12,7 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 
+    var ajax = new Teleopti.MyTimeWeb.Ajax();
     var userId;
 
     function _onMessageBrokerEvent(notification) {
@@ -21,7 +23,7 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
         var countString = '';
 
         //alert('count: ' + messageCount);
-        
+
         if (messageCount > 0)
             countString = ' (' + messageCount + ')';
 
@@ -35,12 +37,13 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
     }
 
     function test() {
+        console.log('rgsgfsdf');
         //console.log('fel');
     }
 
     function _listenForEvents() {
-        Teleopti.MyTimeWeb.Ajax.Ajax({
-            url: '/MyTime/MessageBroker/FetchUserData',
+        ajax.Ajax({
+            url: 'MessageBroker/FetchUserData',
             dataType: "json",
             type: 'GET',
             success: function (data) {
@@ -59,7 +62,7 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
     }
 
     function _getUnreadMessagesCount() {
-        Teleopti.MyTimeWeb.Ajax.Ajax({
+        ajax.Ajax({
             url: '/MyTime/Message/MessagesCount',
             dataType: "json",
             type: 'GET',

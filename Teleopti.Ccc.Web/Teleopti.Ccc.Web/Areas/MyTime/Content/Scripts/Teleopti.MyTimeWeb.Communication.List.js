@@ -1,9 +1,18 @@
 ﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="jquery.ui.connector.js"/>
 /// <reference path="~/Content/Scripts/knockout-2.1.0.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
+
+if (typeof (Teleopti) === 'undefined') {
+    Teleopti = {};
+    if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+        Teleopti.MyTimeWeb = {};
+    }
+}
 
 Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 
+    var ajax = new Teleopti.MyTimeWeb.Ajax();
     var vm;
 
     function communicationListViewModel() {
@@ -43,7 +52,7 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
             }
         });
 
-        self.communicationList.subscribe(function() {
+        self.communicationList.subscribe(function () {
             if (self.communicationList().length == 0)
                 self.shouldShowMessage(true);
             else {
@@ -72,7 +81,7 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
     }
 
     function _replyToMessage(messageItem) {
-        Teleopti.MyTimeWeb.Ajax.Ajax({
+        ajax.Ajax({
             url: "Message/Reply",
             dataType: "json",
             type: 'POST',
@@ -118,7 +127,7 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
     function _loadAPage() {
         var skip = $('#Communications-list li:not(.template)').length;
         var take = 20;
-        Teleopti.MyTimeWeb.Ajax.Ajax({
+        ajax.Ajax({
             url: "Message/Messages",
             dataType: "json",
             type: 'GET',
@@ -128,6 +137,7 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
                 Skip: skip
             },
             success: function (data, textStatus, jqXHR) {
+                console.log('success');
                 vm.CreateCommunicationList(data);
 
                 if (data.length == 0 || data.length < take) {
@@ -137,6 +147,9 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
                 }
                 _initListClick();
                 setConnectorOnAllConnectionItems();
+            },
+            error: function() {
+                console.log('error');
             }
         });
     }

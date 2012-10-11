@@ -13,24 +13,19 @@
 					baseUrl: '@Url.Content("~/MyTime/")',
 					startBaseUrl: '@Url.Content("~/Start/")'
 				});
-			@if(Model.ShowAsm)
+		    @if(Model.HasAsmPermission)
 			{
 				<text>
-				Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
-					{ notifyText: '@Resources.YourScheduleHasChanged', timeout: 4000, baseUrl: '@Url.Content("~/")', header: '@Resources.Teleopti' },
-					function (notification) { Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);}
-				);
+//				Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
+//				{ notifyText: '@Resources.YourScheduleHasChanged', timeout: 4000, baseUrl: '@Url.Content("~/")', header: '@Resources.Teleopti' },
+//					function (notification) { Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);}
+//				);
+
+                Teleopti.MyTimeWeb.AsmMessage.Init();
 				</text>
 			}
 
-	});
-		
-    	jQuery(function () {
-    		@if (Model.HasAsmPermission)
-			{
-				@Html.Raw("Teleopti.MyTimeWeb.AsmMessage.Init();")
-			}
-    	});
+	    });
 	</script>
 }
 
