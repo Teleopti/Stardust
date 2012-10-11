@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 				TestDataSetup.BackupCcc7Data();
 			}
-			catch(Exception ex)
+			catch(Exception)
 			{
 				Browser.Close();
 				throw;

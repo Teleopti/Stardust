@@ -13,9 +13,7 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-Teleopti.MyTimeWeb.Ajax = (function ($) {
-
-	var _settings = {};
+Teleopti.MyTimeWeb.Ajax = function () {
 	var _requests = [];
 
 	function _ajax(options) {
@@ -34,7 +32,7 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 			return;
 		if (options.url.indexOf('/') == 0)
 			return;
-		options.url = _settings.baseUrl + options.url;
+		options.url = Teleopti.MyTimeWeb.AjaxSettings.baseUrl + options.url;
 	}
 
 	function _setupError(options) {
@@ -110,13 +108,10 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 	}
 
 	return {
-		Init: function (settings) {
-			_settings = settings;
-		},
 		Ajax: function (options) {
 			return _ajax(options);
 		},
-		AjaxAbortAll: function () {
+		AbortAll: function () {
 			_ajaxAbortAll();
 		},
 		IsRequesting: function () {
@@ -124,7 +119,9 @@ Teleopti.MyTimeWeb.Ajax = (function ($) {
 		}
 	};
 
-})(jQuery);
+};
+
+Teleopti.MyTimeWeb.AjaxSettings = {baseUrl : ''};
 
 Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 

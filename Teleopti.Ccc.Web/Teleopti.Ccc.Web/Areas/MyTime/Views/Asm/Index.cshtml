@@ -1,8 +1,21 @@
 ﻿@using Teleopti.Ccc.UserTexts
 <script type="text/javascript">
 	$(function () {
-		Teleopti.MyTimeWeb.Ajax.Init({ baseUrl: '@Url.Content("~/MyTime/")' });
-		Teleopti.MyTimeWeb.Asm.Init({ yourScheduleHasChanged: '@Resources.YourScheduleHasChanged' });
+		Teleopti.MyTimeWeb.AjaxSettings = { baseUrl: '@Url.Content("~/MyTime/")' };
+		Teleopti.MyTimeWeb.Asm.ShowAsm();
+		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges({
+				notifyText: '@Resources.YourScheduleHasChanged',
+				timeout: 4000,
+				baseUrl: '@Url.Content("~/")', 
+				webNotification: function () {
+					return window.opener == null; //to avoid double messages to web notification if both portal and asm is open
+				},
+				header: '@Resources.Teleopti'
+			},
+			function (notification) {
+				Teleopti.MyTimeWeb.Asm.ReloadAsmViewModelListener(notification);
+				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
+			});
 	});
 </script>
 <div class="asm-outer-canvas ui-corner-all">
@@ -28,7 +41,7 @@
 				<tbody data-bind="foreach: visibleLayers">
 					<tr data-bind="css: { 'asm-info-current-activity' : active }">
 						<td class="asm-info-time-column" data-bind="text: startTimeText"></td>
-						<td class="asm-info-next-day-column" data-bind="visible: isNextday">+1</td>
+						<td class="asm-info-next-day-column" data-bind="text: isNextday">+1</td>
 						<td data-bind="text: payload"></td>
 					</tr>
 				</tbody>

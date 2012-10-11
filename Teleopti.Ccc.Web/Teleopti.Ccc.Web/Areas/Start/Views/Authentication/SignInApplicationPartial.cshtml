@@ -10,14 +10,23 @@
         Url = "Application"
     }))
     {
-        
+	 	<script type="text/javascript">
+	 		$(function () {
+	 			$('#ApplicationOkButton').click(function () {
+	 				Teleopti.Start.Authentication.RequestPermissionForNotification(function() {
+	 					$("#ApplicationPartialTarget form").submit();
+	 				});
+	 			});
+	 		});
+	 	</script>
+		 
         <div class="select-list floatleft mt10 mr10 ml10">
             @Html.HiddenFor(m => m.SignIn.DataSourceName)
             <ul id="ApplicationDataSourceList">
                 @foreach (var item in Model.DataSources)
-                {
+					 {
                     <li data-mytime-value="@Html.AttributeEncode(item.Name)">@item.Name</li>
-                }
+					 }
             </ul>
         </div>
         <h1 class="floatleft mt10">
@@ -31,7 +40,7 @@
             @Html.TextBoxFor(m => m.SignIn.UserName, new { placeholder = Teleopti.Ccc.UserTexts.Resources.UserName, @class = "text-box ml10 floatleft usernameField" })
             @Html.PasswordFor(m => m.SignIn.Password, new { placeholder = Teleopti.Ccc.UserTexts.Resources.Password, @class = "text-box ml10 floatleft passwordField" })
             <div class="mr10 ml10 floatright">
-                <input type="submit" value="@Html.AttributeEncode(Teleopti.Ccc.UserTexts.Resources.Ok)" class="button" id="ApplicationOkButton">
+                <input type="button" value="@Html.AttributeEncode(Teleopti.Ccc.UserTexts.Resources.Ok)" class="button" id="ApplicationOkButton">
             </div>
         </div>
 	}

@@ -170,12 +170,13 @@ BEGIN
 	IF @type = 'Note'
 	BEGIN	
 		INSERT #otherResult
-		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit , Note,  
-		FirstName, LastName, EmploymentNumber  
+		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit , p.Note,  
+		pp.FirstName, pp.LastName, pp.EmploymentNumber  
 		FROM  #TempPersonPeriodWithEndDate pp
+		INNER JOIN Person p on pp.Parent = p.Id
 		INNER JOIN Team ON Team.Id = pp.Team
 		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
-		AND Note <> ''
+		AND p.Note <> ''
 	END
 		
 	IF @type = 'ShiftBag'
