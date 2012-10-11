@@ -5,9 +5,29 @@
 @model WeekScheduleViewModel
 @{
 	const int scheduleHeight = 668;
-	const int timelineOffset = 198;
 	Layout = null;
 }
+
+<script>
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	ajax.Ajax({
+		url: 'Schedule/Bajs',
+		dataType: "json",
+		type: 'GET',
+		success: function (data) {
+			console.log(data);
+			var vm = data;
+			vm.scheduleHeight = 668;
+			vm.timelineOffset = 198;
+			vm.mathRound = function(value) {
+				return Math.round(value);
+			};
+			ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
+			Teleopti.MyTimeWeb.Schedule.DataLoaded();
+		}
+	});
+</script>
+
 @if (Model.AsmPermission)
 {
 	<div class="week-schedule-ASM-permission-granted"></div>
@@ -26,23 +46,10 @@
 	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">
 		<div class="weekview-timeline floatleft">
 			<div class="week-schedule-time-indicator-small absolute"></div>
-			@{int timelineCounter = 0;}
-			@foreach (var time in Model.TimeLine)
-			{
-				string timelineAttribute = "";
-				timelineCounter++;
-				if (timelineCounter == 1)
-				{
-					timelineAttribute = "data-timeline-start=" + time.Time;
-				}
-				if (timelineCounter == Model.TimeLine.Count())
-				{
-					timelineAttribute = "data-timeline-end=" + time.Time;
-				}
-				<div class="weekview-timeline-label absolute" style="top: @(Math.Round(scheduleHeight * time.PositionPercentage) + timelineOffset)px;" @timelineAttribute>
-					@time.Time
-				</div>
-			}
+			<!-- ko foreach: TimeLine -->		
+				<div class="weekview-timeline-label absolute" data-bind="style: {top: ($root.mathRound($root.scheduleHeight * PositionPercentage) + $root.timelineOffset) + 'px'}, text : Time">
+				</div>	
+			<!-- /ko -->
 		</div>
 		@foreach (var day in Model.Days)
   {

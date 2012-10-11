@@ -97,8 +97,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var minutes = theDate.getMinutes();
 		var clientNowMinutes = (hours * 60) + (minutes * 1);
 
-		var timelineStartMinutes = getMinutes("div[data-timeline-start]");
-		var timelineEndMinutes = getMinutes("div[data-timeline-end]");
+		var timelineStartMinutes = getMinutes(".weekview-timeline", true);
+		var timelineEndMinutes = getMinutes(".weekview-timeline", false);
 
 		var division = (clientNowMinutes - timelineStartMinutes) / (timelineEndMinutes - timelineStartMinutes);
 		var position = Math.round(timelineHeight * division) - Math.round(timeindicatorHeight / 2);
@@ -111,8 +111,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		timeIndicatorTimeLine.css("top", position + timelineOffset).show();
 	}
 
-	function getMinutes(elementSelector) {
-		var timeString = $(elementSelector).text();
+	function getMinutes(elementSelector, first) {
+		var parent = $(elementSelector);
+		var children = parent.children('.weekview-timeline-label');
+		var timeString;
+		if (first) {
+			timeString = children.first().text();
+		} else {
+			timeString = children.last().text();
+		}
 		var timeParts = timeString.split(":");
 		return (timeParts[0] * 60) + (timeParts[1] * 1);
 	}
@@ -136,11 +143,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 			Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
-			_initTimeIndicator();
-			_setTimeIndicatorFirstTime();
 		},
 		PartialDispose: function () {
 			addTextRequestTooltip.qtip('destroy');
+		},
+		DataLoaded: function () {
+			_initTimeIndicator();
+			_setTimeIndicatorFirstTime();
 		},
 		SetTimeIndicator: function (date) {
 			_setTimeIndicator(date);

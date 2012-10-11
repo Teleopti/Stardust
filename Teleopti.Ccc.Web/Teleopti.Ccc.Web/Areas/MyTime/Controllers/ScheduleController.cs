@@ -29,12 +29,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				return Json(model, JsonRequestBehavior.AllowGet);
 			return View("WeekPartial", model);
 		}
-		
+
 		[EnsureInPortal]
 		[UnitOfWorkAction]
 		public ActionResult Month()
 		{
 			return new ContentResult { Content = "<br/><h2>Soon...</h2>" };
+		}
+
+		[UnitOfWorkAction]
+		public JsonResult Bajs(DateOnly? date)
+		{
+			var showForDate = date ?? _now.DateOnly();
+			var model = _scheduleViewModelFactory.CreateWeekViewModel(showForDate);
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 		public ActionResult Index()
