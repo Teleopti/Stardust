@@ -142,10 +142,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             var end = new EndTimeLimitation();
             var time = new WorkTimeLimitation();
 
-            InnerRestrictionExtractor innerRestrictionExtractor = new InnerRestrictionExtractor(schedulingOptions,this);
+            var extractor = new InnerRestrictionExtractor(schedulingOptions,this, new RestrictionCombiner());
 
-            IEffectiveRestriction ret = new EffectiveRestriction(start, end, time, null, null, null, new List<IActivityRestriction>());
-            return innerRestrictionExtractor.Extract(ret);
+            IEffectiveRestriction initial = new EffectiveRestriction(start, end, time, null, null, null, new List<IActivityRestriction>());
+            return extractor.Extract(initial);
         }
     }
 
@@ -153,11 +153,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
     {
         private readonly ISchedulingOptions _schedulingOptions;
         private readonly IRestrictionExtractorWithoutStateHolder _restrictionExtractor;
+    	private readonly IRestrictionCombiner _restrictionCombiner;
 
-        public InnerRestrictionExtractor(ISchedulingOptions schedulingOptions, IRestrictionExtractorWithoutStateHolder restrictionExtractor)
+    	public InnerRestrictionExtractor(ISchedulingOptions schedulingOptions, IRestrictionExtractorWithoutStateHolder restrictionExtractor, IRestrictionCombiner restrictionCombiner)
         {
             _schedulingOptions = schedulingOptions;
             _restrictionExtractor = restrictionExtractor;
+        	_restrictionCombiner = restrictionCombiner;
         }
 
         public IEffectiveRestriction Extract(IEffectiveRestriction effectiveRestriction)
@@ -237,49 +239,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         private IEffectiveRestriction ExtractAvailabilities(IEffectiveRestriction effectiveRestriction)
         {
-            foreach (IAvailabilityRestriction restriction in _restrictionExtractor.AvailabilityList)
-            {
-                if (restriction.IsRestriction())
-                {
-                    effectiveRestriction.IsAvailabilityDay = true;
-
-                	var newEffectiverestriction = new EffectiveRestriction(restriction.StartTimeLimitation,
-                	                                                       restriction.EndTimeLimitation,
-                	                                                       restriction.WorkTimeLimitation,
-                	                                                       null, null, null,
-                	                                                       new List<IActivityRestriction>());
-                	newEffectiverestriction.NotAvailable = restriction.NotAvailable;
-					effectiveRestriction = effectiveRestriction.Combine(newEffectiverestriction);
-                    if (effectiveRestriction == null) return effectiveRestriction;
-                }
-				//if (restriction.NotAvailable)
-				//    effectiveRestriction.NotAvailable = true;
-            }
-            return effectiveRestriction;
+			return _restrictionCombiner.CombineAvailabilityRestrictions(_restrictionExtractor.AvailabilityList, effectiveRestriction);
         }
 
         private IEffectiveRestriction ExtractPreferences(IEffectiveRestriction effectiveRestriction)
         {
-            foreach (var restriction in _restrictionExtractor.PreferenceList)
-            {
-                if (_schedulingOptions.UsePreferencesMustHaveOnly && !restriction.MustHave) continue;
-
-                if (restriction.IsRestriction())
-                {
-                    effectiveRestriction.IsPreferenceDay = true;
-                    IShiftCategory shiftCategory = restriction.ShiftCategory;
-                    IDayOffTemplate dayOff = restriction.DayOffTemplate;
-                    var absence = restriction.Absence;
-
-                    effectiveRestriction = effectiveRestriction.Combine(new EffectiveRestriction(restriction.StartTimeLimitation,
-                                                               restriction.EndTimeLimitation,
-                                                               restriction.WorkTimeLimitation,
-                                                               shiftCategory, dayOff, absence,
-                                                               new List<IActivityRestriction>(restriction.ActivityRestrictionCollection)));
-                    if (effectiveRestriction == null) return effectiveRestriction;
-                }
-            }
-            return effectiveRestriction;
+			return _restrictionCombiner.CombinePreferenceRestrictions(_restrictionExtractor.PreferenceList, effectiveRestriction, _schedulingOptions.UsePreferencesMustHaveOnly);
         }
 
         private IEffectiveRestriction ExtractRotations(IEffectiveRestriction effectiveRestriction)
@@ -303,4 +268,64 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return effectiveRestriction;
         }
     }
+
+	public interface IRestrictionCombiner
+	{
+		IEffectiveRestriction CombinePreferenceRestrictions(IEnumerable<IPreferenceRestriction> preferenceRestrictions, IEffectiveRestriction effectiveRestriction, bool mustHavesOnly);
+		IEffectiveRestriction CombineAvailabilityRestrictions(IEnumerable<IAvailabilityRestriction> availabilityRestrictions, IEffectiveRestriction effectiveRestriction);
+	}
+
+	public class RestrictionCombiner : IRestrictionCombiner
+	{
+		public IEffectiveRestriction CombinePreferenceRestrictions(IEnumerable<IPreferenceRestriction> preferenceRestrictions, IEffectiveRestriction effectiveRestriction, bool mustHavesOnly)
+		{
+			preferenceRestrictions = from r in preferenceRestrictions where r.IsRestriction() select r;
+			if (mustHavesOnly)
+				preferenceRestrictions = from r in preferenceRestrictions where r.MustHave select r;
+
+			var current = effectiveRestriction;
+			foreach (var preferenceRestriction in preferenceRestrictions)
+			{
+				current.IsPreferenceDay = true;
+
+				var restriction = new EffectiveRestriction(
+					preferenceRestriction.StartTimeLimitation,
+					preferenceRestriction.EndTimeLimitation,
+					preferenceRestriction.WorkTimeLimitation,
+					preferenceRestriction.ShiftCategory,
+					preferenceRestriction.DayOffTemplate,
+					preferenceRestriction.Absence,
+					preferenceRestriction.ActivityRestrictionCollection
+					);
+				current = current.Combine(restriction);
+
+				if (current == null) return null;
+			}
+			return current;
+		}
+
+		public IEffectiveRestriction CombineAvailabilityRestrictions(IEnumerable<IAvailabilityRestriction> availabilityRestrictions, IEffectiveRestriction effectiveRestriction)
+		{
+			foreach (IAvailabilityRestriction restriction in availabilityRestrictions)
+			{
+				if (restriction.IsRestriction())
+				{
+					effectiveRestriction.IsAvailabilityDay = true;
+
+					var newEffectiverestriction = new EffectiveRestriction(restriction.StartTimeLimitation,
+																		   restriction.EndTimeLimitation,
+																		   restriction.WorkTimeLimitation,
+																		   null, null, null,
+																		   new List<IActivityRestriction>());
+					newEffectiverestriction.NotAvailable = restriction.NotAvailable;
+					effectiveRestriction = effectiveRestriction.Combine(newEffectiverestriction);
+					if (effectiveRestriction == null) return effectiveRestriction;
+				}
+				//if (restriction.NotAvailable)
+				//    effectiveRestriction.NotAvailable = true;
+			}
+			return effectiveRestriction;
+		}
+	}
+
 }
