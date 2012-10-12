@@ -167,7 +167,7 @@ namespace Teleopti.Messaging.Server
             {
                 if (_clientSocket == null)
                 {
-                    if (Socket.OSSupportsIPv4)
+                    if (Socket.SupportsIPv4)
                     {
                         socket2 = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                         SetSocketOptionsBeforeBind(socket2);
