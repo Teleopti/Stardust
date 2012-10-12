@@ -20,22 +20,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             var contract = new ContractDto
                                {
                                    Description = entity.Description.ToString(),
-								   //EmploymentType = (EmploymentType)entity.EmploymentType,
+								   EmploymentType = entity.EmploymentType,
                                    Id = entity.Id.GetValueOrDefault(Guid.Empty),
                                    IsDeleted = ((IDeleteTag)entity).IsDeleted
                                };
-	        switch (entity.EmploymentType)
-	        {
-			    case EmploymentType.FixedStaffDayWorkTime:
-					contract.EmploymentType = Common.Contracts.EmploymentType.FixedStaffDayWorkTime;
-					break;
-			    case EmploymentType.FixedStaffNormalWorkTime:
-					contract.EmploymentType = Common.Contracts.EmploymentType.FixedStaffNormalWorkTime;
-					break;
-				default:
-			        contract.EmploymentType = Common.Contracts.EmploymentType.HourlyStaff;
-					break;
-	        }
 
             foreach (IMultiplicatorDefinitionSet multiplicatorDefinitionSet in entity.MultiplicatorDefinitionSetCollection)
             {
