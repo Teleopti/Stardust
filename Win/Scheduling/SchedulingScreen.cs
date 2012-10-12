@@ -6155,7 +6155,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					toolStripExActions.Visible = false;
 					toolStripExLocks.Visible = false;
 					_scheduleView = new AgentRestrictionsDetailView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _workShiftWorkTime);
-            		_scheduleView.TheGrid.ContextMenuStrip = contextMenuStripRestrictionView;
+            		//_scheduleView.TheGrid.ContextMenuStrip = contextMenuStripRestrictionView;
             		prepareAgentRestrictionView(selectedPart, _scheduleView, selectedPersons);
                     if (scheduleParts != null)
                     {
