@@ -146,17 +146,17 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 
 	public class ShiftCategoryChecker : IShiftCategoryChecker
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool DayHasShiftCategory(IScheduleDay day, IShiftCategory shiftCategory)
 		{
+			if (day == null) return false;
 			if (!day.SignificantPart().Equals(SchedulePartView.MainShift))
 				return false;
 			return day.PersonAssignmentCollection()[0].MainShift.ShiftCategory.Equals(shiftCategory);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool DayHasDayOff(IScheduleDay day)
 		{
+			if (day == null) return true;
 			return day.SignificantPart().Equals(SchedulePartView.DayOff);
 		}
 	}
