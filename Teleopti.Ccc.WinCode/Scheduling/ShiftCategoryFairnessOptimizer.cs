@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.UserTexts;
@@ -158,7 +156,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		}
 
-		private IList<IShiftCategoryFairnessCompareResult> stripOutAllZeros(IEnumerable<IShiftCategoryFairnessCompareResult> fairnessCompareResults)
+		private static IList<IShiftCategoryFairnessCompareResult> stripOutAllZeros(IEnumerable<IShiftCategoryFairnessCompareResult> fairnessCompareResults)
 		{
 			var ret = new List<IShiftCategoryFairnessCompareResult>();
 			foreach (var shiftCategoryFairnessCompareResult in fairnessCompareResults)
