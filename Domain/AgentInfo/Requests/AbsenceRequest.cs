@@ -52,37 +52,34 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             get { return _absence; }
         }
 
-        public override void Deny(IPerson denyPerson)
-        {
-            if (
-                Period.StartDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().
-                    ToString(Person.PermissionInformation.Culture()) ==
-                Period.EndDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().ToString
-                    (Person.PermissionInformation.Culture()))
-            {
-                TextForNotification = string.Format(Person.PermissionInformation.UICulture(),
-                                                    UserTexts.Resources.AbsenceRequestForOneDayHasBeenDeniedDot,
-                                                    Period.StartDateTimeLocal(
-                                                        Person.PermissionInformation.DefaultTimeZone()).
-                                                        ToShortDateString().ToString(
-                                                            Person.PermissionInformation.Culture()));
-            }
-            else
-            {
-                TextForNotification = string.Format(Person.PermissionInformation.UICulture(),
-                                                    UserTexts.Resources.AbsenceRequestHasBeenDeniedDot,
-                                                    Period.StartDateTimeLocal(
-                                                        Person.PermissionInformation.DefaultTimeZone()).
-                                                        ToShortDateString().ToString(
-                                                            Person.PermissionInformation.Culture()),
-                                                    Period.EndDateTimeLocal(
-                                                        Person.PermissionInformation.DefaultTimeZone()).
-                                                        ToShortDateString().ToString(
-                                                            Person.PermissionInformation.Culture()));
-                }
-        }
+		public override void Deny(IPerson denyPerson)
+		{
+			var timeZone = Person.PermissionInformation.DefaultTimeZone();
+			var culture = Person.PermissionInformation.Culture();
+			if (isRequestForOneLocalDay(timeZone))
+			{
+				TextForNotification = string.Format(Person.PermissionInformation.UICulture(),
+				                                    UserTexts.Resources.AbsenceRequestForOneDayHasBeenDeniedDot,
+				                                    Period.StartDateTimeLocal(timeZone).Date.ToString(
+				                                    	culture.DateTimeFormat.ShortDatePattern, culture));
+			}
+			else
+			{
+				TextForNotification = string.Format(Person.PermissionInformation.UICulture(),
+				                                    UserTexts.Resources.AbsenceRequestHasBeenDeniedDot,
+				                                    Period.StartDateTimeLocal(timeZone).Date.ToString(
+				                                    	culture.DateTimeFormat.ShortDatePattern, culture),
+				                                    Period.EndDateTimeLocal(timeZone).Date.ToString(
+				                                    	culture.DateTimeFormat.ShortDatePattern, culture));
+			}
+		}
 
-        public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization)
+    	private bool isRequestForOneLocalDay(ICccTimeZoneInfo timeZone)
+    	{
+    		return Period.StartDateTimeLocal(timeZone).Date == Period.EndDateTimeLocal(timeZone).Date;
+    	}
+
+    	public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization)
         {
             throw new NotImplementedException();
         }
@@ -118,17 +115,24 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             if (result.IsEmpty())
             {
 
-                if (Period.StartDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().ToString(Person.PermissionInformation.Culture()) == Period.EndDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().ToString(Person.PermissionInformation.Culture()))
-                {
-                    TextForNotification = string.Format(Person.PermissionInformation.UICulture(), UserTexts.Resources.AbsenceRequestForOneDayHasBeenApprovedDot, 
-                        Period.StartDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().ToString(Person.PermissionInformation.Culture()));
-                }
-                else
-                {
-                    TextForNotification = string.Format(Person.PermissionInformation.UICulture(), UserTexts.Resources.AbsenceRequestHasBeenApprovedDot, 
-                        Period.StartDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().ToString(Person.PermissionInformation.Culture()), 
-                        Period.EndDateTimeLocal(Person.PermissionInformation.DefaultTimeZone()).ToShortDateString().ToString(Person.PermissionInformation.Culture()));
-                }
+				var timeZone = Person.PermissionInformation.DefaultTimeZone();
+				var culture = Person.PermissionInformation.Culture();
+				if (isRequestForOneLocalDay(timeZone))
+				{
+					TextForNotification = string.Format(Person.PermissionInformation.UICulture(),
+														UserTexts.Resources.AbsenceRequestForOneDayHasBeenApprovedDot,
+														Period.StartDateTimeLocal(timeZone).Date.ToString(
+															culture.DateTimeFormat.ShortDatePattern, culture));
+				}
+				else
+				{
+					TextForNotification = string.Format(Person.PermissionInformation.UICulture(),
+														UserTexts.Resources.AbsenceRequestHasBeenApprovedDot,
+														Period.StartDateTimeLocal(timeZone).Date.ToString(
+															culture.DateTimeFormat.ShortDatePattern, culture),
+														Period.EndDateTimeLocal(timeZone).Date.ToString(
+															culture.DateTimeFormat.ShortDatePattern, culture));
+				}
             }
             return result;
         }
