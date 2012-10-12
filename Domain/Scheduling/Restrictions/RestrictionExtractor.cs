@@ -273,6 +273,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	{
 		IEffectiveRestriction CombinePreferenceRestrictions(IEnumerable<IPreferenceRestriction> preferenceRestrictions, IEffectiveRestriction effectiveRestriction, bool mustHavesOnly);
 		IEffectiveRestriction CombineAvailabilityRestrictions(IEnumerable<IAvailabilityRestriction> availabilityRestrictions, IEffectiveRestriction effectiveRestriction);
+		IEffectiveRestriction CombineEffectiveRestrictions(IEnumerable<IEffectiveRestriction> effectiveRestrictions, IEffectiveRestriction effectiveRestriction);
 	}
 
 	public class RestrictionCombiner : IRestrictionCombiner
