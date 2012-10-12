@@ -317,15 +317,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             TimeSpan diff = CalculatePeriodOffset(source.Period);
             DateTimePeriod period = source.Period.MovePeriod(diff);
             DateOnly date = new DateOnly(period.StartDateTimeLocal(TimeZone));
-     
-            foreach(IPreferenceDay preferenceDay in source.PersistableScheduleDataCollection())
-            {
-                if (preferenceDay is IPreferenceDay)
-                {
-                    Clear<IPreferenceDay>();
-                    Add(new PreferenceDay(Person, date, preferenceDay.Restriction.NoneEntityClone()));
-                }
-            } 
+
+			foreach (IPreferenceRestriction preferenceRestriction in source.RestrictionCollection().OfType<IPreferenceRestriction>())
+			{
+				Clear<IPreferenceDay>();
+				Add(new PreferenceDay(Person, date, ((IPreferenceRestriction) preferenceRestriction).NoneEntityClone()));
+			}
         }
 
         public void DeleteStudentAvailabilityRestriction()
@@ -348,19 +345,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             DateTimePeriod period = source.Period.MovePeriod(diff);
             DateOnly date = new DateOnly(period.StartDateTimeLocal(TimeZone));
 
-            foreach (IStudentAvailabilityDay studentAvailabilityDay in source.PersistableScheduleDataCollection())
-            {
-                if (studentAvailabilityDay is IStudentAvailabilityDay)
-                {
-                    IList<IStudentAvailabilityRestriction> cloneList = new List<IStudentAvailabilityRestriction>();
-                    foreach (IStudentAvailabilityRestriction restriction in studentAvailabilityDay.RestrictionCollection)
-                    {
-                        cloneList.Add(restriction.NoneEntityClone());
-                    }
 
-                    Add(new StudentAvailabilityDay(Person, date, cloneList));
-                }     
-            } 
+			IList<IStudentAvailabilityRestriction> cloneList = new List<IStudentAvailabilityRestriction>();
+			foreach (IStudentAvailabilityRestriction studentAvailabilityRestriction in source.RestrictionCollection().OfType<IStudentAvailabilityRestriction>())
+            {
+				cloneList.Add(studentAvailabilityRestriction.NoneEntityClone());
+            }
+			foreach (IStudentAvailabilityRestriction restriction in RestrictionCollection().OfType<IStudentAvailabilityRestriction>())
+			{
+				cloneList.Add(restriction.NoneEntityClone());
+			}
+
+			Add(new StudentAvailabilityDay(Person, date, cloneList));
         }
 
         public void DeleteDayOff()
