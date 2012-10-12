@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			return StartBrowser();
 		}
 
+		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private IE StartBrowser()
 		{
 			_browser = new IE {AutoClose = true};
