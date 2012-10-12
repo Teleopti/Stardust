@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Data.Should().Be.EqualTo(true);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldGetPreferencesAndSchedules()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
