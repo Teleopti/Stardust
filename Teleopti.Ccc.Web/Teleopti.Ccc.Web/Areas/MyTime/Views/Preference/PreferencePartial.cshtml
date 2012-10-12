@@ -79,9 +79,7 @@
 							<div class="day-content pdt10" data-bind="style: { borderLeftColor: Color() }">
 								@if (day.InPeriod)
 								{
-									<!-- ko if: IsLoading -->
-									<img class="loading-small-gray-blue" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8-A1C7D3.gif")" alt="..." />
-									<!-- /ko -->
+									<img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8-A1C7D3.gif")" alt="..." />
 									<!-- ko if: AjaxError().length > 0 -->
 									<h2 class="error" data-bind="text: AjaxError"></h2>
 									<!-- /ko -->

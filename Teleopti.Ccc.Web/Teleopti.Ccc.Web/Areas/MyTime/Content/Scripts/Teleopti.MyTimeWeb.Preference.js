@@ -186,12 +186,14 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		loader = loader || function (call) { call(); };
 		loader(function () {
 			preferencesAndScheduleViewModel.LoadPreferencesAndSchedules(from, to)
-				.done(function() {
-					_activateSelectable();
-					periodFeedbackViewModel.LoadFeedback();
+				.done(function () {
 					loadingStarted = true;
-					$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
-						day.LoadFeedback();
+					_activateSelectable();
+					loader(function () {
+						periodFeedbackViewModel.LoadFeedback();
+						$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
+							day.LoadFeedback();
+						});
 					});
 				});
 		});
