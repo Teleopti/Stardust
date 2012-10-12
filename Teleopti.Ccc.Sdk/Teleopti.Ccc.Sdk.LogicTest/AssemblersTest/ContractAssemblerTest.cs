@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             Assert.AreEqual(_contractDomain.Id, contractDto.Id);
             Assert.AreEqual(_contractDomain.Description.Name, contractDto.Description);
-			Assert.AreEqual(Common.Contracts.EmploymentType.HourlyStaff, contractDto.EmploymentType);
+			Assert.AreEqual(EmploymentType.HourlyStaff, contractDto.EmploymentType);
             Assert.AreEqual(1,contractDto.AvailableOvertimeDefinitionSets.Count);
 			Assert.AreEqual(1, contractDto.AvailableShiftAllowanceDefinitionSets.Count);
             Assert.IsFalse(contractDto.IsDeleted);
