@@ -4998,6 +4998,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                     }
                     else
                     {
+						// we need it here for fairness opt. for example
+						_groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
                         _scheduleOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules);
                     }
                     break;
