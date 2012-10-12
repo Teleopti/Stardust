@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction;
 using Teleopti.Ccc.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Ccc.WpfControls.Controls.Requests.Views;
 using Teleopti.Interfaces.Domain;
 
@@ -21,8 +16,8 @@ namespace Teleopti.Ccc.Win.Scheduling
     public partial class SchedulerSplitters : BaseUserControl
     {
         private bool _useAvailability = true;
-        private bool _useStudentAvailability = true;
-        private bool _useRotation = true;
+        private bool _useStudentAvailability;
+        private bool _useRotation;
         private bool _usePreference = true;
         private bool _useSchedules = true;
         private readonly PinnedSkillHelper _pinnedSkillHelper;
@@ -32,11 +27,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             InitializeComponent();
             if (!DesignMode)
                 SetTexts();
-            chbStudenAvailability.Checked = true;
+            chbStudenAvailability.Checked = false;
             chbAvailability.Checked = true;
-            chbRotations.Checked = true;
+            chbRotations.Checked = false;
             chbPreferences.Checked = true;
-            chbSchedules.Checked = true;
             chbSchedules.Checked = true;
             _pinnedSkillHelper = new PinnedSkillHelper();
             tabSkillData.TabStyle = typeof(SkillTabRenderer);
