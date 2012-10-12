@@ -435,10 +435,12 @@ this.FeatureBackground();
 #line 117
  testRunner.And("I select day \'2012-08-23\'");
 #line 118
- testRunner.And("I select day \'2012-08-24\'");
-#line 119
  testRunner.And("I click set must have button");
+#line 119
+ testRunner.And("I select day \'2012-08-24\'");
 #line 120
+ testRunner.And("I click set must have button");
+#line 121
  testRunner.Then("I should see I have 1 must haves");
 #line hidden
             TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
@@ -450,7 +452,7 @@ this.FeatureBackground();
             table17.AddRow(new string[] {
                         "Must have",
                         "true"});
-#line 121
+#line 122
  testRunner.And("I should see preference", ((string)(null)), table17);
 #line hidden
             TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
@@ -462,7 +464,7 @@ this.FeatureBackground();
             table18.AddRow(new string[] {
                         "Must have",
                         "false"});
-#line 125
+#line 126
  testRunner.And("I should see preference", ((string)(null)), table18);
 #line hidden
             this.ScenarioCleanup();

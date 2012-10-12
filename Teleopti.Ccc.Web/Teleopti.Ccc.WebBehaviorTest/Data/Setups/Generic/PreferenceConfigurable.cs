@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WebBehaviorTest.Bindings;
@@ -17,18 +16,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public bool IsExtended { get; set; }
 		public bool MustHave { get; set; }
 		public string ShiftCategory { get; set; }
+		public string Preference { get; set; } //same as the ShiftCategory
 		public string Dayoff { get; set; }
 		public string Absence { get; set; }
+		public DateTime? EndTimeMaximum { get; set; }
 		public string WorkTimeMinimum { get; set; }
 		public string WorkTimeMaximum { get; set; }
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
+			if (Preference != null)
+				ShiftCategory = Preference;
 			var restriction = new PreferenceRestriction();
 
 			if (IsExtended) // shortcut to create an extended preference
 				restriction.WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(8));
 
+			if (EndTimeMaximum.HasValue)
+			{
+				restriction.EndTimeLimitation=new EndTimeLimitation(null, EndTimeMaximum.Value.TimeOfDay);
+			}
 			if (ShiftCategory != null)
 			{
 				var shiftCategoryRepository = new ShiftCategoryRepository(uow);

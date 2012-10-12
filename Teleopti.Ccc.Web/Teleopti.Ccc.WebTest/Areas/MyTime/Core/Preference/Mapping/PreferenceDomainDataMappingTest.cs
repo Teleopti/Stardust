@@ -23,15 +23,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	{
 		private IVirtualSchedulePeriodProvider virtualScheduleProvider;
 		private IPerson person;
-		private IScheduleProvider scheduleProvider;
-		private IProjectionProvider projectionProvider;
 
 		[SetUp]
 		public void Setup()
 		{
 			virtualScheduleProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
-			scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
  
 			person = new Person
 			         	{
@@ -48,9 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			Mapper.Initialize(c => c.AddProfile(
 				new PreferenceDomainDataMappingProfile(
 					Depend.On(virtualScheduleProvider),
-					Depend.On(loggedOnUser),
-					Depend.On(scheduleProvider),
-					Depend.On(projectionProvider)
+					Depend.On(loggedOnUser)
 					)));
 		}
 
@@ -84,10 +78,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			result.WorkflowControlSet.Should().Be.SameInstanceAs(person.WorkflowControlSet);
 		}
 
-
-
-
-
 		[Test]
 		public void ShouldMapDays()
 		{
@@ -100,74 +90,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var expected = DateOnly.Today.DateRange(4);
 			result.Days.Select(d => d.Date).Should().Have.SameSequenceAs(expected);
 		}
-
-		[Test]
-		public void ShouldMapScheduleDay()
-		{
-			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
-			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
-
-			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] {scheduleDay});
-
-			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
-
-			result.Days.Single().ScheduleDay.Should().Be(scheduleDay);
-		}
-
-		[Test]
-		public void ShouldMapProjection()
-		{
-			var stubs = new StubFactory();
-			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
-			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
-			var projection = stubs.ProjectionStub();
-
-			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
-			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
-
-			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
-
-			result.Days.Single().Projection.Should().Be.SameInstanceAs(projection);
-		}
-
-		[Test]
-		public void ShouldNotMapScheduleDayAndProjectionIfNotScheduled()
-		{
-			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
-			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
-
-			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
-
-			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
-
-			result.Days.Single().ScheduleDay.Should().Be.Null();
-			result.Days.Single().Projection.Should().Be.Null();
-		}
-
-		[Test]
-		public void ShouldMapColorSource()
-		{
-			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
-			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
-			var projection = new StubFactory().ProjectionStub();
-
-			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today)).Return(period);
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
-			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
-			
-			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
-
-			result.ColorSource.ScheduleDays.Single().Should().Be(scheduleDay);
-			result.ColorSource.Projections.Single().Should().Be.SameInstanceAs(projection);
-			result.ColorSource.WorkflowControlSet.Should().Be(person.WorkflowControlSet);
-		}
-
 	}
 }

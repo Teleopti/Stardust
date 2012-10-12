@@ -150,5 +150,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Data.Should().Be.EqualTo(true);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldGetPreferencesAndSchedules()
+		{
+			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
+			var target = new PreferenceController(viewModelFactory, null, null);
+			var viewModels = new PreferenceAndScheduleDayViewModel[] {};
+
+			viewModelFactory.Stub(x => x.CreatePreferencesAndSchedulesViewModel(DateOnly.Today, DateOnly.Today.AddDays(1))).Return(viewModels);
+
+			var result = target.PreferencesAndSchedules(DateOnly.Today, DateOnly.Today.AddDays(1));
+
+			result.Data.Should().Be(viewModels);
+		}
 	}
 }

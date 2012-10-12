@@ -39,7 +39,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 			var value = day.PossibleContractTimeMinutesLower();
 			if (value)
 				sum += parseInt(value);
-			sum += day.ContractTimeMinutes;
+			sum += day.ContractTimeMinutes();
 		});
 		return sum;
 	});
@@ -50,7 +50,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 			var value = day.PossibleContractTimeMinutesUpper();
 			if (value)
 				sum += parseInt(value);
-			sum += day.ContractTimeMinutes;
+			sum += day.ContractTimeMinutes();
 		});
 		return sum;
 	});

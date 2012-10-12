@@ -23,14 +23,24 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
             _shiftCategoryFairnessCategorySorter = shiftCategoryFairnessCategorySorter;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"),
-         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"),
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"),
          System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> groupList,
                                                           IList<IShiftCategoryFairnessSwap> blacklist)
         {
+			BlacklistedGroups.Clear();
+	        var ret = getGroupsToSwap(groupList, blacklist);
+	        return ret;
+        }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		private IShiftCategoryFairnessSwap getGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> groupList,
+															  IList<IShiftCategoryFairnessSwap> blacklist)
+		{
+			if (groupList.Count() < 2) return null;
             var orderedList = groupList.Except(BlacklistedGroups).OrderByDescending(g => g.StandardDeviation);
-            if (groupList.Count < 2) return null;
+			if (!orderedList.Any())
+				return null;
 
             var selectedGroup = orderedList.First();
             var selectedGroupBlacklistedSwapCount = blacklist.Count(b => b.Group1 == selectedGroup);
@@ -41,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
             if (selectedGroupBlacklistedSwapCount >= (categoryCount*(categoryCount + 1)/2)*(groupList.Count - 1))
             {
                 BlacklistedGroups.Add(selectedGroup);
-                return GetGroupsToSwap(orderedList.ToList(), blacklist);
+                return getGroupsToSwap(orderedList.ToList(), blacklist);
             }
 
             // ES: get ordered list, check categories against blacklist
@@ -53,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
                                                                         orderedList.Count(),
                                                                         blacklist, ref BlacklistedGroups).ToList();
             if (!selectedGroupCategories.Any())
-                return GetGroupsToSwap(groupList, blacklist);
+                return getGroupsToSwap(groupList, blacklist);
 
             var selectedGroupHighestCategory = selectedGroupCategories.First().ShiftCategory;
             var selectedGroupLowestCategory = selectedGroupCategories.Last().ShiftCategory;

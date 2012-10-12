@@ -42,6 +42,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("PreferencePartial", _viewModelFactory.CreateViewModel(date.Value));
 		}
 
+		[HttpGet]
+		[UnitOfWork]
+		public virtual JsonResult PreferencesAndSchedules(DateOnly @from, DateOnly to)
+		{
+			return Json(_viewModelFactory.CreatePreferencesAndSchedulesViewModel(from, to), JsonRequestBehavior.AllowGet);
+		}
+
 		[UnitOfWork]
 		[HttpGet]
 		[ActionName("Preference")]
@@ -83,5 +90,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			return Json(_preferencePersister.Delete(date));
 		}
+
 	}
 }

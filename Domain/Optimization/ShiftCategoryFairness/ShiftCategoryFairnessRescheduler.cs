@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool Execute(IList<IPerson> persons, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixes )
 		{
+			if (persons.Count == 0) return true;
 			var schedulingOptionsSynchronizer = new SchedulingOptionsCreator();
 			var schedulingOptions = schedulingOptionsSynchronizer.CreateSchedulingOptions(_optimizationPreferences);
 

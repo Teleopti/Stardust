@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 		private static IDisposable BrowserLock { get; set; }
 		//private static IDisposable BrowserLock { get { return ScenarioContext.Current.Value<SystemLevelLock>(); } set { ScenarioContext.Current.Value((SystemLevelLock)value); } }
 
-		private static bool _closeByWatiNCloseNDisposeFailed = false;
+		//private static bool _closeByWatiNCloseNDisposeFailed = false;
 		private IE _browser;
 
 		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -28,6 +29,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			Settings.HighLightElement = true;
 			Settings.MakeNewIe8InstanceNoMerge = true;
 			Settings.MakeNewIeInstanceVisible = true;
+			return StartBrowser();
+		}
+
+		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private IE StartBrowser()
+		{
 			_browser = new IE {AutoClose = true};
 			_browser.ClearCache();
 			_browser.ClearCookies();
@@ -41,17 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 		{
 			try
 			{
-				var result = ProcessHelpers.TryToCloseProcess(
-					ProcessName,
-					new Func<TryResult>[]
-						{
-							() => TryCloseByWatiNCloseNDispose(),
-							() => ProcessHelpers.TryCloseByClosingMainWindow(ProcessName),
-							() => TryCloseByWatiNForceClose(),
-							() => ProcessHelpers.TryCloseByKillingProcess(ProcessName)
-						});
-				if (!result)
-					throw new ApplicationException("Browser failed to close.");
+				CloseBrowser();
 			}
 			finally
 			{
@@ -60,8 +57,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			}
 		}
 
+		private void CloseBrowser()
+		{
+			var result = ProcessHelpers.TryToCloseProcess(
+				ProcessName,
+				new Func<TryResult>[]
+					{
+						// never works in AfterTestRun
+						//() => TryCloseByWatiNCloseNDispose(),
+						() => ProcessHelpers.TryCloseByClosingMainWindow(ProcessName),
+						// never works in AfterTestRun
+						//() => TryCloseByWatiNForceClose(),
+						() => ProcessHelpers.TryCloseByKillingProcess(ProcessName)
+					});
+			if (!result)
+				throw new ApplicationException("Browser failed to close.");
+		}
 
-
+		public IE Restart()
+		{
+			CloseBrowser();
+			return StartBrowser();
+		}
 
 
 		private void MakeSureBrowserIsNotRunning()
@@ -82,30 +99,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 
 
 
-		private TryResult TryCloseByWatiNForceClose()
-		{
-			_browser.ForceClose();
-			return TryResult.Passed;
-		}
+		//private TryResult TryCloseByWatiNForceClose()
+		//{
+		//    _browser.ForceClose();
+		//    return TryResult.Passed;
+		//}
 
-		private TryResult TryCloseByWatiNCloseNDispose()
-		{
-			if (_closeByWatiNCloseNDisposeFailed)
-				return TryResult.Failure;
-			var success = Task.Factory
-				.StartNew(() =>
-				          	{
-								_browser.Close();
-								_browser.Dispose();
-				          	})
-				.Wait(TimeSpan.FromSeconds(2));
-			if (!success)
-			{
-				_closeByWatiNCloseNDisposeFailed = true;
-				return TryResult.Failure;
-			}
-			return TryResult.Passed;
-		}
+		//private TryResult TryCloseByWatiNCloseNDispose()
+		//{
+		//    if (_closeByWatiNCloseNDisposeFailed)
+		//        return TryResult.Failure;
+		//    var success = Task.Factory
+		//        .StartNew(() =>
+		//                    {
+		//                        _browser.Close();
+		//                        _browser.Dispose();
+		//                    })
+		//        .Wait(TimeSpan.FromSeconds(2));
+		//    if (!success)
+		//    {
+		//        _closeByWatiNCloseNDisposeFailed = true;
+		//        return TryResult.Failure;
+		//    }
+		//    return TryResult.Passed;
+		//}
 
 
 

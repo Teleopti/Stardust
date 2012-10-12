@@ -616,9 +616,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             	                                    optimizerPreferences, schedulingOptions);
             }
 
-			if (optimizerPreferences.General.OptimizationStepFairness)
-        		runFairness(selectedDays,tagSetter,selectedPersons,optimizerPreferences);
-
             //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
