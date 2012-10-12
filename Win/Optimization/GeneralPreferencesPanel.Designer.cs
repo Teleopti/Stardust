@@ -461,7 +461,6 @@
 			this.checkBoxFairness.TabIndex = 12;
 			this.checkBoxFairness.Text = "xxFairness";
 			this.checkBoxFairness.UseVisualStyleBackColor = true;
-			this.checkBoxFairness.Visible = false;
 			// 
 			// checkBoxShiftsWithinDay
 			// 

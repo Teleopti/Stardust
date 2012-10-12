@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.UserTexts;
@@ -100,14 +99,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			else
 				fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
 					x => x.StandardDeviation).ToList();
-
+			fairnessResults = stripOutAllZeros(fairnessResults);
 			// if zero it should be fair
 			var diff = fairnessResults.Sum(shiftCategoryFairnessCompareResult => shiftCategoryFairnessCompareResult.StandardDeviation);
 			if (diff.Equals(0))
 				return;
 			var optFairnessOnDate = Resources.FairnessOptimizationOn + dateOnly.ToShortDateString(CultureInfo.CurrentCulture);
 			OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationValueBefore + diff);
-
+			//it goes to fast
+			//Thread.Sleep(300);
 			var swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
 			if (swapSuggestion == null)
 				return;
@@ -131,8 +131,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					else
 						fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
 							x => x.StandardDeviation).ToList();
-					
 
+					fairnessResults = stripOutAllZeros(fairnessResults);
 					var newdiff = fairnessResults.Sum(shiftCategoryFairnessCompareResult => shiftCategoryFairnessCompareResult.StandardDeviation);
 					if (newdiff >= diff) // not better
 					{
@@ -154,6 +154,23 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
 			} while (swapSuggestion != null);
 
+		}
+
+		private static IList<IShiftCategoryFairnessCompareResult> stripOutAllZeros(IEnumerable<IShiftCategoryFairnessCompareResult> fairnessCompareResults)
+		{
+			var ret = new List<IShiftCategoryFairnessCompareResult>();
+			foreach (var shiftCategoryFairnessCompareResult in fairnessCompareResults)
+			{
+				foreach (var shiftCategoryFairnessCompareValue in shiftCategoryFairnessCompareResult.ShiftCategoryFairnessCompareValues)
+				{
+					if(shiftCategoryFairnessCompareValue.Original > 0)
+					{
+						ret.Add(shiftCategoryFairnessCompareResult);
+						break;
+					}
+				}
+			}
+			return ret;
 		}
 	}
 
