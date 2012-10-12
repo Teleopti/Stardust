@@ -50,6 +50,12 @@
 				}
 			};
 
+			vm.createClassForDaySummary = function (styleClass) {
+				var styleClassName = (styleClass) ? styleClass +' ': '';
+				var showRequestClass = (vm.RequestPermission.TextRequestPermission) ?  'show-request' : '';
+				return styleClassName + showRequestClass;
+			};
+
 			ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
 			Teleopti.MyTimeWeb.Schedule.DataLoaded();
 		}
@@ -59,7 +65,6 @@
 <div class="week-schedule-ASM-permission-granted" data-bind="if : AsmPermission">yes</div>
 <div class="week-schedule-current-week" data-bind="if : IsCurrentWeek">yes</div>
 	<style>
-		
 		@foreach (var style in Model.Styles)
 		{
 			@string.Format("li.third.{0} {{background-color: rgb({1});}}\n", style.Name, style.RgbColor)
@@ -75,6 +80,7 @@
 			</div>
 			<!-- /ko -->
 		</div>
+		
 		<!-- ko foreach: Days -->
 		<ul class="weekview-day" data-bind="attr: {'data-mytime-date': FixedDate, 'data-request-default-date': Date, 'data-mytime-state': State}">
 			<li>
@@ -83,14 +89,13 @@
 			</li>
 			<li class="second">
 				<div>
-					<span class="floatleft ml5" data-bind="text: Header.DayDescription"></span><span
-						class="floatright mr5" data-bind="text: Header.DayNumber"></span>
+					<span class="floatleft ml5" data-bind="text: Header.DayDescription"></span><span class="floatright mr5" data-bind="text: Header.DayNumber"></span>
 				</div>
 			</li>
-			<li id="day-summary" data-bind="style: {'background-color' : 'red'}, css: {'show-request':$root.RequestPermission.TextRequestPermission}"
-				class="third category"><strong class="fullwidth displayblock" data-bind="text:Summary.Title">
-				</strong><span class="fullwidth displayblock" data-bind="text:Summary.TimeSpan">
-				</span><span data-bind="text: Summary.Summary"></span></li>
+			<li id="day-summary" data-bind="css: {'show-request':$root.RequestPermission.TextRequestPermission}, attr: {'class' : 'third category ' + $root.createClassForDaySummary($data.Summary.StyleClassName)}"
+				 class="third category"><strong class="fullwidth displayblock" data-bind="text:Summary.Title"></strong>
+				<span class="fullwidth displayblock" data-bind="text:Summary.TimeSpan"></span>
+				<span data-bind="text: Summary.Summary"></span></li>
 			<li id="day-symbol" class="fourth">
 				<div class="text-request floatright" data-bind="visible: TextRequestCount > 0, attr: {title : $root.textRequestCount(TextRequestCount)}">
 					<div class="floatright extrasmall" data-bind="text:TextRequestCount">
