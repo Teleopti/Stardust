@@ -1,45 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
-	public interface IRestrictionExtractOperation
-	{
-		IEnumerable<IRotationRestriction> GetRotationRestrictions(IEnumerable<IRestrictionBase> restrictions);
-		IEnumerable<IAvailabilityRestriction> GetAvailabilityRestrictions(IEnumerable<IRestrictionBase> restrictions);
-		IEnumerable<IPreferenceRestriction> GetPreferenceRestrictions(IEnumerable<IRestrictionBase> restrictions);
-		IEnumerable<IStudentAvailabilityDay> GetStudentAvailabilityDays(IScheduleDay scheduleDay);
-	}
-
-	public class RestrictionExtractOperation : IRestrictionExtractOperation
-	{
-		public IEnumerable<IRotationRestriction> GetRotationRestrictions(IEnumerable<IRestrictionBase> restrictions)
-		{
-			return restrictions.FilterBySpecification(RestrictionMustBe.Rotation).Cast<IRotationRestriction>().ToArray();
-		}
-
-		public IEnumerable<IAvailabilityRestriction> GetAvailabilityRestrictions(IEnumerable<IRestrictionBase> restrictions)
-		{
-			return restrictions.FilterBySpecification(RestrictionMustBe.Availability).Cast<IAvailabilityRestriction>().ToArray();
-		}
-
-		public IEnumerable<IPreferenceRestriction> GetPreferenceRestrictions(IEnumerable<IRestrictionBase> restrictions)
-		{
-			return restrictions.FilterBySpecification(RestrictionMustBe.Preference).Cast<IPreferenceRestriction>().ToArray();
-		}
-
-		public IEnumerable<IStudentAvailabilityDay> GetStudentAvailabilityDays(IScheduleDay scheduleDay)
-		{
-			return scheduleDay.PersonRestrictionCollection().OfType<IStudentAvailabilityDay>().ToArray();
-		}
-
-	}
-
 	public class RestrictionExtractor : RestrictionExtractorWithoutStateHolder, IRestrictionExtractor
 	{
 		private readonly ISchedulingResultStateHolder _resultStateHolder;
@@ -120,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         	if (scheduleDay == null) return;
 
         	var restrictions = scheduleDay.RestrictionCollection();
-        	var operation = new RestrictionExtractOperation();
+        	var operation = new RestrictionRetrivalOperation();
         	operation.GetRotationRestrictions(restrictions).ForEach(_rotationRestrictions.Add);
         	operation.GetAvailabilityRestrictions(restrictions).ForEach(_availabilityRestrictions.Add);
         	operation.GetPreferenceRestrictions(restrictions).ForEach(_preferenceRestrictions.Add);
@@ -134,7 +100,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             _studentAvailabilityDays.Clear();
             _preferenceRestrictions.Clear();
         }
-
 
         public IEffectiveRestriction CombinedRestriction(ISchedulingOptions schedulingOptions)
         {
@@ -224,117 +189,4 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         	return _restrictionCombiner.CombineRotationRestrictions(_restrictionExtractor.RotationList, effectiveRestriction);
         }
     }
-
-	public interface IRestrictionCombiner
-	{
-		IEffectiveRestriction CombinePreferenceRestrictions(IEnumerable<IPreferenceRestriction> preferenceRestrictions, IEffectiveRestriction effectiveRestriction, bool mustHavesOnly);
-		IEffectiveRestriction CombineAvailabilityRestrictions(IEnumerable<IAvailabilityRestriction> availabilityRestrictions, IEffectiveRestriction effectiveRestriction);
-		IEffectiveRestriction CombineStudentAvailabilityDays(IEnumerable<IStudentAvailabilityDay> studentAvailabilityDays, IEffectiveRestriction effectiveRestriction);
-		IEffectiveRestriction CombineEffectiveRestrictions(IEnumerable<IEffectiveRestriction> effectiveRestrictions, IEffectiveRestriction effectiveRestriction);
-		IEffectiveRestriction CombineRotationRestrictions(IEnumerable<IRotationRestriction> rotationRestrictions, IEffectiveRestriction effectiveRestriction);
-	}
-
-	public class RestrictionCombiner : IRestrictionCombiner
-	{
-		public IEffectiveRestriction CombinePreferenceRestrictions(IEnumerable<IPreferenceRestriction> preferenceRestrictions, IEffectiveRestriction effectiveRestriction, bool mustHavesOnly)
-		{
-			preferenceRestrictions = from r in preferenceRestrictions where r.IsRestriction() select r;
-			if (mustHavesOnly)
-				preferenceRestrictions = from r in preferenceRestrictions where r.MustHave select r;
-
-			var asEffectiveRestrictions = from r in preferenceRestrictions
-			                              select new EffectiveRestriction(
-			                                     	r.StartTimeLimitation,
-			                                     	r.EndTimeLimitation,
-			                                     	r.WorkTimeLimitation,
-			                                     	r.ShiftCategory,
-			                                     	r.DayOffTemplate,
-			                                     	r.Absence,
-			                                     	r.ActivityRestrictionCollection
-			                                     	)
-			                                     	{
-			                                     		IsPreferenceDay = true
-			                                     	} as IEffectiveRestriction;
-
-			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
-		}
-
-		public IEffectiveRestriction CombineAvailabilityRestrictions(IEnumerable<IAvailabilityRestriction> availabilityRestrictions, IEffectiveRestriction effectiveRestriction)
-		{
-			availabilityRestrictions = from r in availabilityRestrictions where r.IsRestriction() select r;
-
-			var asEffectiveRestrictions = from r in availabilityRestrictions
-			                              select (IEffectiveRestriction) new EffectiveRestriction(
-			                                                             	r.StartTimeLimitation,
-			                                                             	r.EndTimeLimitation,
-			                                                             	r.WorkTimeLimitation,
-			                                                             	null,
-			                                                             	null,
-			                                                             	null,
-			                                                             	new List<IActivityRestriction>()
-			                                                             	)
-			                                                             	{
-			                                                             		IsAvailabilityDay = true
-			                                                             	};
-
-			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
-		}
-
-		public IEffectiveRestriction CombineStudentAvailabilityDays(IEnumerable<IStudentAvailabilityDay> studentAvailabilityDays, IEffectiveRestriction effectiveRestriction)
-		{
-			if (studentAvailabilityDays.IsEmpty())
-			{
-				effectiveRestriction.NotAvailable = true;
-				return effectiveRestriction;
-			}
-
-			var studentAvailabilityRestrictions = from d in studentAvailabilityDays
-			                                      let r = d.RestrictionCollection.FirstOrDefault()
-			                                      where r != null
-			                                      select r;
-
-			var asEffectiveRestrictions = from r in studentAvailabilityRestrictions
-			                              select new EffectiveRestriction(
-			                              	r.StartTimeLimitation,
-			                              	r.EndTimeLimitation,
-			                              	r.WorkTimeLimitation,
-			                              	null,
-			                              	null,
-			                              	null,
-			                              	new List<IActivityRestriction>()
-			                              	) as IEffectiveRestriction;
-
-			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
-		}
-
-		public IEffectiveRestriction CombineRotationRestrictions(IEnumerable<IRotationRestriction> rotationRestrictions, IEffectiveRestriction effectiveRestriction)
-		{
-			rotationRestrictions = from r in rotationRestrictions where r.IsRestriction() select r;
-
-			var asEffectiveRestrictions = from r in rotationRestrictions
-			                              select new EffectiveRestriction(
-			                              	r.StartTimeLimitation,
-			                              	r.EndTimeLimitation,
-			                              	r.WorkTimeLimitation,
-			                              	r.ShiftCategory,
-			                              	r.DayOffTemplate,
-			                              	null,
-			                              	new List<IActivityRestriction>())
-											as IEffectiveRestriction
-											;
-
-			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
-		}
-
-		public IEffectiveRestriction CombineEffectiveRestrictions(IEnumerable<IEffectiveRestriction> effectiveRestrictions, IEffectiveRestriction  effectiveRestriction)
-		{
-			foreach (var restriction in effectiveRestrictions)
-			{
-				effectiveRestriction = effectiveRestriction.Combine(restriction);
-				if (effectiveRestriction == null) return null;
-			}
-			return effectiveRestriction;
-		}
-	}
-
 }
