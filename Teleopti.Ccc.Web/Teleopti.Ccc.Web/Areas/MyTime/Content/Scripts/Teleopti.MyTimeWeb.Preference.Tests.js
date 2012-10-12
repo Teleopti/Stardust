@@ -11,12 +11,10 @@ $(document).ready(function () {
 
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url != "Preference/Preference")
+				if (options.url != "Preference/PreferencesAndSchedules")
 					return;
-				if (options.data.Date == '2012-06-11')
-					equal(true, true);
-				if (options.data.Date == '2012-06-12')
-					equal(true, true);
+				equal(options.data.From, '2012-06-11');
+				equal(options.data.To, '2012-06-12');
 			}
 		};
 
@@ -27,31 +25,6 @@ $(document).ready(function () {
 		target.InitViewModels();
 	});
 
-	test("should only load preference for days with class preference", function () {
-
-		$("#qunit-fixture")
-			.append("<li data-mytime-date='2012-06-11' class='inperiod' ><div><div class='preference'></div></div><li>")
-			.append("<li data-mytime-date='2012-06-12' class='inperiod' />");
-
-		var ajax = {
-			Ajax: function (options) {
-				if (options.url != "Preference/Preference")
-					return;
-				if (options.data.Date == '2012-06-11')
-					return equal(true, true, "preference loaded");
-				equal(false, true, "preference loaded for " + options.data.Date);
-			}
-		};
-
-		expect(1);
-
-		var target = new Teleopti.MyTimeWeb.PreferenceInitializer(ajax);
-
-		target.InitViewModels();
-
-	});
-
-
 	test("should load day feedback and bind", function () {
 
 		$("#qunit-fixture")
@@ -61,16 +34,24 @@ $(document).ready(function () {
 
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url != "PreferenceFeedback/Feedback")
-					return;
-				if (options.data.Date == '2012-06-11')
-					options.success({
-						PossibleContractTimeMinutesLower: 6 * 60
-					});
-				if (options.data.Date == '2012-06-12')
-					options.success({
-						PossibleContractTimeMinutesLower: 8 * 60
-					});
+				if (options.url == "Preference/PreferencesAndSchedules") {
+					options.success(
+						[
+							{ Date: "2012-06-11", Feedback: true },
+							{ Date: "2012-06-12", Feedback: true }
+						]
+					);
+				}
+				if (options.url == "PreferenceFeedback/Feedback") {
+					if (options.data.Date == '2012-06-11')
+						options.success({
+							PossibleContractTimeMinutesLower: 6 * 60
+						});
+					if (options.data.Date == '2012-06-12')
+						options.success({
+							PossibleContractTimeMinutesLower: 8 * 60
+						});
+				}
 			}
 		};
 
@@ -92,11 +73,18 @@ $(document).ready(function () {
 
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url != "PreferenceFeedback/Feedback")
-					return;
-				options.success({
-					PossibleContractTimeMinutesLower: 8 * 60
-				});
+				if (options.url == "Preference/PreferencesAndSchedules") {
+					options.success(
+						[
+							{ Date: "2012-06-12", Feedback: true }
+						]
+					);
+				}
+				if (options.url == "PreferenceFeedback/Feedback") {
+					options.success({
+						PossibleContractTimeMinutesLower: 8 * 60
+					});
+				}
 			}
 		};
 
@@ -108,17 +96,33 @@ $(document).ready(function () {
 		equal($('li[data-mytime-date="2012-06-12"]').text(), "8:00");
 	});
 
-	test("should compute with static schedule data", function () {
+	test("should compute with schedule data", function () {
 
 		$("#qunit-fixture")
-			.html("<div id='Preference-period-feedback-view'><span data-bind='text: PossibleResultContractTimeLower' /><span data-bind='text: PossibleResultContractTimeUpper' /></div>")
-			.append("<li data-mytime-date='2012-06-13' class='inperiod'><span data-mytime-contract-time='120' /></li>")
-			.append("<li data-mytime-date='2012-06-14' class='inperiod'><span data-mytime-contract-time='60' /></li>");
+			.append("<div id='Preference-period-feedback-view'><span data-bind='text: PossibleResultContractTimeLower' /><span data-bind='text: PossibleResultContractTimeUpper' /></div>")
+			.append("<li data-mytime-date='2012-06-13' class='inperiod'></li>")
+			.append("<li data-mytime-date='2012-06-14' class='inperiod'></li>");
 
 		var ajax = {
 			Ajax: function (options) {
 				if (options.url == "PreferenceFeedback/Feedback")
 					ok(true, "feedback should not be loaded");
+				if (options.url == "Preference/PreferencesAndSchedules") {
+					var data1 = {
+						Date: '2012-06-13',
+						PersonAssignment: {
+							ContractTimeMinutes: 120
+						}
+					};
+					var data2 = {
+						Date: '2012-06-14',
+						PersonAssignment: {
+							ContractTimeMinutes: 120
+						}
+					};
+					var data = [data1, data2];
+					options.success(data);
+				}
 			}
 		};
 
@@ -128,16 +132,21 @@ $(document).ready(function () {
 
 		target.InitViewModels();
 
-		equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeLower"]').text(), "3:00", "lower contract time");
-		equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeUpper"]').text(), "3:00", "upper contract time");
+		equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeLower"]').text(), "4:00", "lower contract time");
+		equal($('#Preference-period-feedback-view [data-bind*="PossibleResultContractTimeUpper"]').text(), "4:00", "upper contract time");
 	});
 
 	test("should load period feedback", function () {
 
 		var ajax = {
 			Ajax: function (options) {
-				equal(options.url, "PreferenceFeedback/PeriodFeedback", "period feedback ajax url");
-				equal(options.data.Date, "2012-06-13", "period feedback date");
+				if (options.url == "Preference/PreferencesAndSchedules") {
+					options.success();
+				}
+				if (options.url == "PreferenceFeedback/PeriodFeedback") {
+					equal(options.url, "PreferenceFeedback/PeriodFeedback", "period feedback ajax url");
+					equal(options.data.Date, "2012-06-13", "period feedback date");
+				}
 			}
 		};
 		var portal = {
@@ -160,12 +169,28 @@ $(document).ready(function () {
 
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url != "PreferenceFeedback/Feedback")
-					return;
-				if (options.data.Date == '2012-06-19' || options.data.Date == '2012-06-20')
-					options.success({
-						PossibleContractTimeMinutesLower: 6 * 60
-					});
+				if (options.url == "Preference/PreferencesAndSchedules") {
+					if (options.data.From == '2012-06-19') {
+						options.success(
+							[
+								{ Date: "2012-06-19", Feedback: true }
+							]
+						);
+					}
+					if (options.data.From == '2012-06-20') {
+						options.success(
+							[
+								{ Date: "2012-06-20", Feedback: true }
+							]
+						);
+					}
+				}
+				if (options.url == "PreferenceFeedback/Feedback") {
+					if (options.data.Date == '2012-06-19' || options.data.Date == '2012-06-20')
+						options.success({
+							PossibleContractTimeMinutesLower: 6 * 60
+						});
+				}
 			}
 		};
 
@@ -181,5 +206,5 @@ $(document).ready(function () {
 
 		equal($('#Preference-period-feedback-view').text(), "6:00", "day sum after reinit same instance");
 	});
-	
+
 });

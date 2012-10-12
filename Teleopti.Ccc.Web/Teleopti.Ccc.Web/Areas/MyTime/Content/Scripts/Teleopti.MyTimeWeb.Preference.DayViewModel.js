@@ -66,8 +66,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 
 	this.Date = "";
-	this.ContractTimeMinutes = 0;
-	this.HasFeedback = true;
+
 	this.HasPreference = true;
 	this.IsLoading = ko.observable(false);
 	this.Preference = ko.observable();
@@ -84,13 +83,38 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.Color = ko.observable();
 	this.AjaxError = ko.observable('');
 
+	this.DayOff = ko.observable('');
+	this.Absence = ko.observable('');
+	this.PersonAssignmentShiftCategory = ko.observable('');
+	this.PersonAssignmentTimeSpan = ko.observable('');
+	this.PersonAssignmentContractTime = ko.observable('');
+	this.ContractTimeMinutes = ko.observable(0);
+
+	this.EditableIsInOpenPeriod = ko.observable(false);
+	this.EditableHasNoSchedule = ko.computed(function () {
+		if (hasStringValue(self.DayOff()))
+			return false;
+		if (hasStringValue(self.Absence()))
+			return false;
+		if (hasStringValue(self.PersonAssignmentShiftCategory()))
+			return false;
+		return true;
+	});
+	this.Editable = ko.computed(function () {
+		return self.EditableIsInOpenPeriod() && self.EditableHasNoSchedule();
+	});
+
+	this.Fulfilled = ko.observable(true);
+
+	this.Feedback = ko.observable(false);
+
+	this.StyleClassName = ko.observable('');
+
 	this.ReadElement = function (element) {
 		var item = $(element);
 		self.Date = item.attr('data-mytime-date');
-		self.ContractTimeMinutes = parseInt($('[data-mytime-contract-time]', item).attr('data-mytime-contract-time')) || 0;
-		self.HasFeedback = item.hasClass("feedback");
+		self.EditableIsInOpenPeriod(item.attr('data-mytime-editable') == "True");
 		self.HasPreference = item.hasClass("preference") || $(".preference", item).length > 0;
-		self.Color($('.day-content', element).css("border-left-color"));
 	};
 
 	this.ReadPreference = function (data) {
@@ -110,6 +134,21 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		self.ActivityTimeLimitation(data.ActivityTimeLimitation);
 	};
 
+	this.ReadDayOff = function (data) {
+		self.DayOff(data.DayOff);
+	};
+
+	this.ReadAbsence = function (data) {
+		self.Absence(data.Absence);
+	};
+
+	this.ReadPersonAssignment = function (data) {
+		self.PersonAssignmentShiftCategory(data.ShiftCategory);
+		self.PersonAssignmentTimeSpan(data.TimeSpan);
+		self.PersonAssignmentContractTime(data.ContractTime);
+		self.ContractTimeMinutes(data.ContractTimeMinutes);
+	};
+
 	this.LoadPreference = function (complete) {
 		if (!self.HasPreference) {
 			complete();
@@ -127,7 +166,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	};
 
 	this.LoadFeedback = function () {
-		if (!self.HasFeedback)
+		if (!self.Feedback())
 			return null;
 		return ajaxForDate({
 			url: "PreferenceFeedback/Feedback",

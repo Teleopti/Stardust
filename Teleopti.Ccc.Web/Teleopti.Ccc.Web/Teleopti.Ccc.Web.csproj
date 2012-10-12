@@ -196,6 +196,11 @@
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
     <Compile Include="Areas\MyTime\Controllers\AsmController.cs" />
     <Compile Include="Areas\MyTime\Controllers\MessageBrokerController.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceAndScheduleDayViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\AbsenceDayViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PersonAssignmentDayViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceAndScheduleDayViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\DayOffDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\MustHaveInput.cs" />
     <Compile Include="Areas\MyTime\Core\Asm\Mapping\AsmViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractor.cs" />
@@ -503,6 +508,7 @@
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.signalR-0.5.3.min.js" />
     <Content Include="Areas\MyTime\Content\Images\icon_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\knockout.bindings.js" />

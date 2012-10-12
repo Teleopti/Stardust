@@ -46,5 +46,24 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			result.Should().Be.Null();
 		}
 
+		[Test]
+		public void ShouldGetPreferencesForPeriod()
+		{
+			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = new Person();
+			var preferenceDays = new[] {new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction())};
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			preferenceDayRepository.Stub(x => x.Find(period, person)).Return(preferenceDays);
+
+			var target = new PreferenceProvider(preferenceDayRepository, loggedOnUser);
+
+			var result = target.GetPreferencesForPeriod(period);
+
+			result.Should().Be.SameInstanceAs(preferenceDays);
+		}
+
 	}
 }

@@ -21,6 +21,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public ListItem CalendarCellForDate(string formattedDate) { return Document.ListItem(Find.By("data-mytime-date", v => v == formattedDate)).EventualGet(); }
 		public ListItem CalendarCellForDate(DateTime date) { return CalendarCellForDate(date.ToString("yyyy-MM-dd")); }
+		public ListItem CalendarCellSelectableForDate(string formattedDate) { return Document.ListItem(Find.By("data-mytime-date", v => v == formattedDate).And(Find.ByClass("ui-selectee", false))).EventualGet(); }
+		public ListItem CalendarCellSelectableForDate(DateTime date) { return CalendarCellSelectableForDate(date.ToString("yyyy-MM-dd")); }
+		
 
 		public Div CalendarCellDataForDate(DateTime date, string className)
 		{
@@ -46,12 +49,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 			}
 		}
 
-		public void SelectCalendarCellForDateByClick(DateTime date) { SelectCalendarCellByClick(CalendarCellForDate(date)); }
+		public void SelectCalendarCellForDateByClick(DateTime date) { SelectCalendarCellByClick(CalendarCellSelectableForDate(date)); }
 		public void SelectCalendarCellByClick(ListItem cell) { cell.Click(); }
 
 		public void SelectCalendarCellByClass(DateTime date)
 		{
-			CalendarCellForDate(date).WaitUntilExists();
+			CalendarCellSelectableForDate(date).WaitUntilExists();
 			JQuery.SelectByElementAttribute("li", "data-mytime-date", date.ToString("yyyy-MM-dd"))
 				.AddClass("ui-selected")
 				.Eval();

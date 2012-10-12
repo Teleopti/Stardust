@@ -115,7 +115,14 @@
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\ScheduledShiftConfigurable.cs" />
     <Compile Include="ConfigSanityCheck.cs" />
+    <Compile Include="PreferencesFollowUpStepDefinition.cs" />
+    <Compile Include="PreferencesFollowUp.feature.cs">
+      <DependentUpon>PreferencesFollowUp.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Data\Setups\Generic\AbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ActivityConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\AbsenceRequestConfigurable.cs" />
@@ -480,6 +487,10 @@
     <None Include="ApplicationStartRecovery.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ApplicationStartRecovery.feature.cs</LastGenOutput>
+    </None>
+    <None Include="PreferencesFollowUp.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesFollowUp.feature.cs</LastGenOutput>
     </None>
     <None Include="PreferencesFeedbackBlacklisting.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

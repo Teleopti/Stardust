@@ -16,9 +16,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(EventDefinition));
 
+		private static int _scenarioCount = 0;
+
+		private static void ResetScenarioCount() { _scenarioCount = 0; }
+		private static void IncrementScenarioCount() { _scenarioCount += 1; }
+
 		[BeforeTestRun]
 		public static void BeforeTestRun()
 		{
+			ResetScenarioCount();
+
 			Browser.PrepareForTestRun();
 
 			try
@@ -48,9 +55,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			}
 		}
 
+		[BeforeFeature]
+		public static void BeforeFeature()
+		{
+			if (_scenarioCount > 0)
+				Browser.Restart();
+		}
+
 		[BeforeScenario]
 		public static void BeforeScenario()
 		{
+			IncrementScenarioCount();
+
 			TestControllerMethods.BeforeScenario();
 			
 			TestDataSetup.RestoreCcc7Data();
