@@ -122,7 +122,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\DomainInterfaces.cs" />
     <Compile Include="Contracts\INotificationConfigReader.cs" />
     <Compile Include="Contracts\INotificationMessage.cs" />
     <Compile Include="Contracts\INotificationSender.cs" />
@@ -327,7 +326,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
+      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
+      <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

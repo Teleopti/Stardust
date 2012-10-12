@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 {
