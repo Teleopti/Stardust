@@ -361,7 +361,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see preference feedback with")]
 		public void ThenIShouldSeePreferenceFeedbackWith(PreferenceFeedbackFields fields)
 		{
-			ScenarioContext.Current.Pending();
 			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-contract-times").InnerHtml, Is.StringMatching(fields.ContractTimeBoundry));
 		}
 

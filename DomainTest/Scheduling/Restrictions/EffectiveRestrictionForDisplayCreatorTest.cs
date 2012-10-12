@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var result = target.GetEffectiveRestrictionForDisplay(scheduleDay, effectiveRestrictionOptions);
 
 			result.ShiftCategory.Should().Be.EqualTo(preference.ShiftCategory);
+			result.IsPreferenceDay.Should().Be.True();
+			result.IsRestriction.Should().Be.True();
 		}
 
 		[Test]
@@ -52,15 +54,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			result.StartTimeLimitation.Should().Be.EqualTo(availability.StartTimeLimitation);
 			result.EndTimeLimitation.Should().Be.EqualTo(availability.EndTimeLimitation);
 			result.WorkTimeLimitation.Should().Be.EqualTo(availability.WorkTimeLimitation);
-
-			effectiveRestrictionOptions.Equals(null).Should().Be.False();
-			effectiveRestrictionOptions.Equals((object)null).Should().Be.False();
-			effectiveRestrictionOptions.Equals(effectiveRestrictionOptions).Should().Be.True();
-			effectiveRestrictionOptions.Equals((object)effectiveRestrictionOptions).Should().Be.True();
-			effectiveRestrictionOptions.Equals(availability).Should().Be.False();
-			(true).Should().Be.True();
-			(false).Should().Be.False();
-			effectiveRestrictionOptions.GetHashCode().Should().Not.Be.EqualTo(null);
+			result.IsAvailabilityDay.Should().Be.True();
+			result.IsRestriction.Should().Be.True();
 		}
 	}
 }

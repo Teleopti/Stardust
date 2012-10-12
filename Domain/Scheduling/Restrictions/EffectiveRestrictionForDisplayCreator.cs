@@ -16,16 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(startTime, endTime), new EndTimeLimitation(startTime, endEndTime), new WorkTimeLimitation(startTime, endTime), null, null, null, new List<IActivityRestriction>());
 
-			//var extractor  = new RestrictionExtractorWithoutStateHolder();
-			//extractor.Extract(scheduleDay);
-			//var effectiveRestriction = extractor.CombinedRestriction(
-			//    new SchedulingOptions
-			//        {
-			//            UseAvailability = effectiveRestrictionOptions.UseAvailability,
-			//            UsePreferences = effectiveRestrictionOptions.UsePreference,
-			//        }
-			//    );
-
 			if (scheduleDay != null && effectiveRestrictionOptions != null)
 			{
 				if (effectiveRestrictionOptions.UsePreference)
@@ -34,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 						.Aggregate(effectiveRestriction,
 						           (current, preferenceRestriction) =>
 						           	{
+						           		current.IsPreferenceDay = true;
 						           		var restriction = new EffectiveRestriction(
 						           			preferenceRestriction.StartTimeLimitation,
 						           			preferenceRestriction.EndTimeLimitation,
@@ -52,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				{
 					foreach (var availabilityRestriction in scheduleDay.RestrictionCollection().OfType<IAvailabilityRestriction>())
 					{
+						effectiveRestriction.IsAvailabilityDay = true;
 						if (availabilityRestriction.NotAvailable)
 							effectiveRestriction =
 								(EffectiveRestriction)effectiveRestriction.Combine(new EffectiveRestriction(availabilityRestriction.StartTimeLimitation,
