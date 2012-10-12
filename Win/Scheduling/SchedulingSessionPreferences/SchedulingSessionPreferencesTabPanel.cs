@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
@@ -596,6 +597,19 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                     return false;
             }
             return true;
+        }
+
+        public void HideTeamAndBlockSchedulingOptions()
+        {
+            var row = tableLayoutPanel2.GetRow(pnlBlockTeamScheduling);
+            tableLayoutPanel2.Controls.Remove(pnlBlockTeamScheduling);
+            tableLayoutPanel2.RowStyles.RemoveAt(row);
+            foreach (Control control in tableLayoutPanel2.Controls)
+            {
+                var rowIndex = tableLayoutPanel2.GetRow(control);
+                if (rowIndex > row)
+                    tableLayoutPanel2.SetRow(control, rowIndex - 1);
+            }
         }
     }
     
