@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Win.Optimization
         private IList<IGroupPageLight> _groupPageOnTeams;
         private IList<IGroupPageLight> _groupPageOnCompareWith;
     	private IEventAggregator _eventAggregator;
+        private IList<IActivity> _availableActivity;
 
         public IExtraPreferences Preferences { get; private set; }
 
@@ -29,11 +30,12 @@ namespace Teleopti.Ccc.Win.Optimization
 		public void Initialize(
             IExtraPreferences extraPreferences,
 			ISchedulerGroupPagesProvider groupPagesProvider,
-			IEventAggregator eventAggregator)
+            IEventAggregator eventAggregator, IList<IActivity> availableActivity)
         {
             Preferences = extraPreferences;
 			_groupPageOnTeams = groupPagesProvider.GetGroups(false);
         	_eventAggregator = eventAggregator;
+		    _availableActivity = availableActivity;
 			_groupPageOnCompareWith = groupPagesProvider.GetGroups(false);
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             setInitialControlStatus();
@@ -51,6 +53,7 @@ namespace Teleopti.Ccc.Win.Optimization
             if (direction == ExchangeDataOption.DataSourceToControls)
             {
                 bindGroupPages();
+                bindActivityList();
                 setDataToControls();
             }
             else
@@ -71,6 +74,14 @@ namespace Teleopti.Ccc.Win.Optimization
             comboBoxGroupPageOnCompareWith.DisplayMember = "Name";
             comboBoxGroupPageOnCompareWith.ValueMember = "Key";
         }
+
+        private void bindActivityList()
+        {
+            comboBoxActivity .DataSource = _availableActivity ;
+            comboBoxActivity.DisplayMember = "Name";
+            comboBoxActivity.ValueMember = "Name";
+
+        }
     
         private void getDataFromControls()
         {
@@ -87,6 +98,8 @@ namespace Teleopti.Ccc.Win.Optimization
 			Preferences.UseGroupSchedulingCommonCategory = checkBoxCommonCategory.Checked;
 			Preferences.UseGroupSchedulingCommonStart = checkBoxCommonStart.Checked;
 			Preferences.UseGroupSchedulingCommonEnd = checkBoxCommonEnd.Checked;
+            Preferences.UseCommonActivity = checkBoxCommonActivity.Checked;
+            Preferences.CommonActivity = (IActivity)comboBoxActivity.SelectedItem;
 
             Preferences.GroupPageOnTeam = (IGroupPageLight)comboBoxGroupPageOnTeams.SelectedItem;
 
@@ -117,7 +130,10 @@ namespace Teleopti.Ccc.Win.Optimization
         	checkBoxCommonCategory.Checked = Preferences.UseGroupSchedulingCommonCategory;
         	checkBoxCommonStart.Checked = Preferences.UseGroupSchedulingCommonStart;
         	checkBoxCommonEnd.Checked = Preferences.UseGroupSchedulingCommonEnd;
-
+            checkBoxCommonActivity.Checked = Preferences.UseCommonActivity;
+            comboBoxActivity.Enabled = checkBoxCommonActivity.Checked;
+            if (Preferences.CommonActivity != null)
+                comboBoxActivity.SelectedValue = Preferences.CommonActivity.Name;
             if (Preferences.GroupPageOnTeam != null)
                 comboBoxGroupPageOnTeams.SelectedValue = Preferences.GroupPageOnTeam.Key;
             if (comboBoxGroupPageOnTeams.SelectedValue == null)
@@ -130,8 +146,6 @@ namespace Teleopti.Ccc.Win.Optimization
                 comboBoxGroupPageOnCompareWith.SelectedValue = Preferences.GroupPageOnCompareWith.Key;
             if (comboBoxGroupPageOnCompareWith.SelectedValue == null)
                 comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
-
-
         }
 
         private void checkBoxBlock_CheckedChanged(object sender, System.EventArgs e)
@@ -151,7 +165,7 @@ namespace Teleopti.Ccc.Win.Optimization
         {
             if (checkBoxTeams.Checked)
                 //check if none of the options are not checked. Set the default values
-                if (!(checkBoxCommonCategory.Checked || checkBoxCommonStart.Checked || checkBoxCommonEnd.Checked ))
+                if (!(checkBoxCommonCategory.Checked || checkBoxCommonStart.Checked || checkBoxCommonEnd.Checked || checkBoxCommonActivity.Checked  ))
                 {
                     return false ;
                 }
@@ -171,6 +185,8 @@ namespace Teleopti.Ccc.Win.Optimization
 			checkBoxCommonCategory.Enabled = checkBoxTeams.Checked;
 			checkBoxCommonStart.Enabled = checkBoxTeams.Checked;
 			checkBoxCommonEnd.Enabled = checkBoxTeams.Checked;
+            checkBoxCommonActivity.Enabled = checkBoxTeams.Checked;
+            comboBoxActivity.Enabled = checkBoxTeams.Checked;
         }
 
       
@@ -179,6 +195,11 @@ namespace Teleopti.Ccc.Win.Optimization
         {
             setRadioButtonsStatus();
             setSubItemsOnTeamOptimizationStatus();
+        }
+
+        private void checkBoxCommonActivity_CheckedChanged(object sender, System.EventArgs e)
+        {
+            comboBoxActivity.Enabled = checkBoxCommonActivity.Checked;
         }
     }
     public class ExtraPreferencesPanelUseBlockScheduling

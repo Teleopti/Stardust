@@ -67,6 +67,8 @@
             this.checkBoxCommonStart = new System.Windows.Forms.CheckBox();
             this.checkBoxCommonEnd = new System.Windows.Forms.CheckBox();
             this.checkBoxCommonCategory = new System.Windows.Forms.CheckBox();
+            this.checkBoxCommonActivity = new System.Windows.Forms.CheckBox();
+            this.comboBoxActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.tabPageAdvance = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.lblShiftSelection = new System.Windows.Forms.Label();
@@ -86,8 +88,6 @@
             this.checkBoxUseMaximumPersons = new System.Windows.Forms.CheckBox();
             this.checkBoxUseMinimumPersons = new System.Windows.Forms.CheckBox();
             this.checkBoxDoNotBreakMaxSeats = new System.Windows.Forms.CheckBox();
-            this.checkBoxCommonActivity = new System.Windows.Forms.CheckBox();
-            this.comboBoxActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.tabControl1.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -103,6 +103,7 @@
             this.pnlBlockTeamScheduling.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxGrouping)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxActivity)).BeginInit();
             this.tabPageAdvance.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.pnlShiftCategory.SuspendLayout();
@@ -112,7 +113,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.comboBoxActivity)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -374,17 +374,16 @@
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 3;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 48.31425F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 51.68575F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(432, 496);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // lblFairness
             // 
             this.lblFairness.AutoSize = true;
-            this.lblFairness.Location = new System.Drawing.Point(3, 232);
+            this.lblFairness.Location = new System.Drawing.Point(3, 288);
             this.lblFairness.Margin = new System.Windows.Forms.Padding(3);
             this.lblFairness.Name = "lblFairness";
             this.lblFairness.Size = new System.Drawing.Size(56, 13);
@@ -401,14 +400,14 @@
             this.tableLayoutPanel5.Controls.Add(this.label5, 0, 1);
             this.tableLayoutPanel5.Controls.Add(this.comboBoxGroupingFairness, 1, 1);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 252);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 308);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 4;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(426, 241);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(426, 185);
             this.tableLayoutPanel5.TabIndex = 25;
             // 
             // panel1
@@ -485,7 +484,7 @@
             this.pnlBlockTeamScheduling.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlBlockTeamScheduling.Location = new System.Drawing.Point(3, 3);
             this.pnlBlockTeamScheduling.Name = "pnlBlockTeamScheduling";
-            this.pnlBlockTeamScheduling.Size = new System.Drawing.Size(426, 223);
+            this.pnlBlockTeamScheduling.Size = new System.Drawing.Size(426, 279);
             this.pnlBlockTeamScheduling.TabIndex = 24;
             // 
             // tableLayoutPanel4
@@ -517,7 +516,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(426, 223);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(426, 279);
             this.tableLayoutPanel4.TabIndex = 1;
             // 
             // checkBoxUseGroupScheduling
@@ -576,6 +575,7 @@
             // 
             this.comboBoxGrouping.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
             this.comboBoxGrouping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxGrouping.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
             this.comboBoxGrouping.Location = new System.Drawing.Point(165, 78);
             this.comboBoxGrouping.Name = "comboBoxGrouping";
             this.comboBoxGrouping.Size = new System.Drawing.Size(173, 21);
@@ -615,6 +615,27 @@
             this.checkBoxCommonCategory.TabIndex = 36;
             this.checkBoxCommonCategory.Text = "xxSameShiftCategory";
             this.checkBoxCommonCategory.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxCommonActivity
+            // 
+            this.checkBoxCommonActivity.AutoSize = true;
+            this.checkBoxCommonActivity.Location = new System.Drawing.Point(33, 192);
+            this.checkBoxCommonActivity.Name = "checkBoxCommonActivity";
+            this.checkBoxCommonActivity.Size = new System.Drawing.Size(97, 17);
+            this.checkBoxCommonActivity.TabIndex = 39;
+            this.checkBoxCommonActivity.Text = "xxSameActivity";
+            this.checkBoxCommonActivity.UseVisualStyleBackColor = true;
+            this.checkBoxCommonActivity.CheckedChanged += new System.EventHandler(this.checkBoxCommonActivity_CheckedChanged);
+            // 
+            // comboBoxActivity
+            // 
+            this.comboBoxActivity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            this.comboBoxActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxActivity.Location = new System.Drawing.Point(165, 192);
+            this.comboBoxActivity.Name = "comboBoxActivity";
+            this.comboBoxActivity.Size = new System.Drawing.Size(173, 21);
+            this.comboBoxActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.comboBoxActivity.TabIndex = 40;
             // 
             // tabPageAdvance
             // 
@@ -882,27 +903,6 @@
             this.checkBoxDoNotBreakMaxSeats.Text = "xxDoNotBreakMaxSeats";
             this.checkBoxDoNotBreakMaxSeats.UseVisualStyleBackColor = true;
             // 
-            // checkBoxCommonActivity
-            // 
-            this.checkBoxCommonActivity.AutoSize = true;
-            this.checkBoxCommonActivity.Enabled = false;
-            this.checkBoxCommonActivity.Location = new System.Drawing.Point(33, 192);
-            this.checkBoxCommonActivity.Name = "checkBoxCommonActivity";
-            this.checkBoxCommonActivity.Size = new System.Drawing.Size(97, 17);
-            this.checkBoxCommonActivity.TabIndex = 39;
-            this.checkBoxCommonActivity.Text = "xxSameActivity";
-            this.checkBoxCommonActivity.UseVisualStyleBackColor = true;
-            // 
-            // comboBoxActivity
-            // 
-            this.comboBoxActivity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
-            this.comboBoxActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxActivity.Location = new System.Drawing.Point(165, 192);
-            this.comboBoxActivity.Name = "comboBoxActivity";
-            this.comboBoxActivity.Size = new System.Drawing.Size(173, 21);
-            this.comboBoxActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
-            this.comboBoxActivity.TabIndex = 40;
-            // 
             // SchedulingSessionPreferencesTabPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -933,6 +933,7 @@
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxGrouping)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxActivity)).EndInit();
             this.tabPageAdvance.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
@@ -945,7 +946,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).EndInit();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.comboBoxActivity)).EndInit();
             this.ResumeLayout(false);
 
         }

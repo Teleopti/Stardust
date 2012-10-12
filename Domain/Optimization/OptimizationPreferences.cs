@@ -95,7 +95,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool UseGroupSchedulingCommonStart { get; set; }
 		public bool UseGroupSchedulingCommonEnd { get; set; }
 		public bool UseGroupSchedulingCommonCategory { get; set; }
-        
+        public bool UseCommonActivity { get; set; }
+        public IActivity CommonActivity { get; set; }
 	}
 
     public class ShiftPreferences : IShiftPreferences

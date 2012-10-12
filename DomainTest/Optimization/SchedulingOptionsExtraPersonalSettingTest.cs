@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
@@ -20,6 +21,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IGroupPageLight _groupPageLight;
         private Percent _fairnessValue;
         private Guid _guid;
+        private List<IActivity> _activityList;
+        private IActivity _activity;
         private const int _resourceCalculateFrequency = 1;
 
 
@@ -36,6 +39,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _guid = new Guid();
             _fairnessValue = new Percent(0);
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
+            _activity = new Activity("a1");
+            _activityList = new List<IActivity>();
+            _activityList.Add(_activity);
         }
 
         [Test]
@@ -45,11 +51,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_schedulingOptions.TagToUseOnScheduling).Return(_scheduleTag);
                 Expect.Call(_scheduleTag.Id).Return(_guid);
+                Expect.Call(_schedulingOptions.CommonActivity).Return(_activity);
                 MapFromExpectations();
 
                 Expect.Call(_scheduleTag.Id).Return(_guid);
                 Expect.Call(_schedulingOptions.TagToUseOnScheduling).Return(_scheduleTag);
                 Expect.Call(() => _schedulingOptions.TagToUseOnScheduling = _scheduleTag);
+                
+                
                 MapToExpectations();
             }
 
@@ -57,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 _scheduleTags = new List<IScheduleTag> { _scheduleTag };
                 _target.MapFrom(_schedulingOptions);
-                _target.MapTo(_schedulingOptions, _scheduleTags, _groupPages);
+                _target.MapTo(_schedulingOptions, _scheduleTags, _groupPages, _activityList);
             }
         }
 
@@ -68,6 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_schedulingOptions.TagToUseOnScheduling).Return(_scheduleTag);
                 Expect.Call(_scheduleTag.Id).Return(null);
+                Expect.Call(_schedulingOptions.CommonActivity).Return(_activity);
                 MapFromExpectations();
 
                 Expect.Call(_schedulingOptions.TagToUseOnScheduling).Return(null);
@@ -79,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 _scheduleTags = new List<IScheduleTag>();
                 _target.MapFrom(_schedulingOptions);
-                _target.MapTo(_schedulingOptions, _scheduleTags, _groupPages);
+                _target.MapTo(_schedulingOptions, _scheduleTags, _groupPages, _activityList);
             }
         }
 
@@ -96,6 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulingOptions.UseGroupSchedulingCommonStart).Return(true);
             Expect.Call(_schedulingOptions.UseGroupSchedulingCommonEnd).Return(true);
             Expect.Call(_schedulingOptions.UseGroupSchedulingCommonCategory).Return(false);
+            Expect.Call(_schedulingOptions.UseCommonActivity ).Return(false);
         }
 
 
@@ -112,6 +123,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(() => _schedulingOptions.UseGroupSchedulingCommonStart = true);
             Expect.Call(() => _schedulingOptions.UseGroupSchedulingCommonEnd = true);
             Expect.Call(() => _schedulingOptions.UseGroupSchedulingCommonCategory = false);
+            Expect.Call(() => _schedulingOptions.UseCommonActivity  = false);
+            Expect.Call(() => _schedulingOptions.CommonActivity   = _activity );
             Expect.Call(() => _schedulingOptions.Fairness = _fairnessValue);
         }
     }

@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private IList<IShiftCategory> _shiftCategories;
         private bool _dataLoaded;
     	private IList<IGroupPageLight> _groupPages;
+        private IList<IActivity> _availableActivity;
 		private IList<IGroupPageLight> _groupPagesFairness;
         private IList<IScheduleTag> _scheduleTags;
     	private ISchedulerGroupPagesProvider _groupPagesProvider;
@@ -28,11 +29,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Initialize(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
-			bool reschedule, bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider, 
-            IList<IScheduleTag> scheduleTags)
+		public void Initialize(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories, bool reschedule, bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider,
+            IList<IScheduleTag> scheduleTags, IList<IActivity> availableActivity)
         {
 			_groupPagesProvider = groupPagesProvider;
+            _availableActivity = availableActivity;
             if(!reschedule)
             {
 
@@ -63,9 +64,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _scheduleTags = scheduleTags;
 			// inga skill
 			_groupPages = _groupPagesProvider.GetGroups(false);
+            
 			_groupPagesFairness = _groupPages.ToList();
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             _dataLoaded = true;
+		   
         }
 
 		public override string HelpId
@@ -137,6 +140,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             set { checkBoxCommonCategory.Checked = value; }
         }
 
+        public bool UseCommonActivity
+        {
+            get { return checkBoxCommonActivity.Checked; }
+            set { checkBoxCommonActivity.Checked = value; }
+        }
+
         #region IDataExchange Members
 
         public bool ValidateData(ExchangeDataOption direction)
@@ -151,6 +160,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 dataOffline();
                 initShiftCategories();
                 initGroupPages();
+                initCommonActivity();
 				initGroupPagesFairness();
                 initTags();
                 setDataInControls();
@@ -189,6 +199,16 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			{
                 comboBoxGrouping.SelectedValue  = _localSchedulingOptions.GroupOnGroupPage.Key ;
 			}
+		}
+        private void initCommonActivity()
+		{
+            comboBoxActivity.DataSource = _availableActivity ;
+            comboBoxActivity.DisplayMember = "Name";
+            comboBoxActivity.ValueMember = "Name";
+            if (_localSchedulingOptions.CommonActivity != null)
+            {
+                comboBoxActivity.SelectedValue = _localSchedulingOptions.CommonActivity.Name ;
+            }
 		}
 
         private void initTags()
@@ -247,7 +267,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 _localSchedulingOptions.UseGroupSchedulingCommonCategory;
             _schedulingOptions.UseGroupSchedulingCommonEnd = _localSchedulingOptions.UseGroupSchedulingCommonEnd;
             _schedulingOptions.UseGroupSchedulingCommonStart = _localSchedulingOptions.UseGroupSchedulingCommonStart;
-
+            _schedulingOptions.UseCommonActivity = _localSchedulingOptions.UseCommonActivity;
+            _schedulingOptions.CommonActivity = _localSchedulingOptions.CommonActivity;
         }
 
         private void getDataFromControls()
@@ -295,7 +316,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _localSchedulingOptions.UseGroupSchedulingCommonCategory = checkBoxCommonCategory.Checked;
             _localSchedulingOptions.UseGroupSchedulingCommonStart = checkBoxCommonStart.Checked;
             _localSchedulingOptions.UseGroupSchedulingCommonEnd = checkBoxCommonEnd.Checked;
-
+            _localSchedulingOptions.UseCommonActivity = checkBoxCommonActivity.Checked;
+            if (checkBoxCommonActivity.Checked)
+                _localSchedulingOptions.CommonActivity = (IActivity) comboBoxActivity.SelectedItem;
         }
 
         private void setDataInControls()
@@ -381,6 +404,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 checkBoxCommonCategory.Checked = _localSchedulingOptions.UseGroupSchedulingCommonCategory;
                 checkBoxCommonEnd.Checked = _localSchedulingOptions.UseGroupSchedulingCommonEnd;
                 checkBoxCommonStart.Checked = _localSchedulingOptions.UseGroupSchedulingCommonStart;
+                checkBoxCommonActivity.Checked = _localSchedulingOptions.UseCommonActivity;
+                comboBoxActivity.Enabled = _localSchedulingOptions.UseCommonActivity;
             }
         }
 
@@ -548,15 +573,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             {
                 checkBoxCommonCategory.Checked = false;
             }
-
             checkBoxCommonEnd.Checked = false;
             checkBoxCommonStart.Checked = false;
+            checkBoxCommonActivity.Checked = false;
             
             checkBoxCommonCategory.Enabled = value;
             checkBoxCommonEnd.Enabled = value;
             checkBoxCommonStart.Enabled = value;
-                
-            
+            checkBoxCommonActivity.Enabled = value;
         }
 
 		private void comboBoxGroupingSelectedIndexChanged(object sender, EventArgs e)
@@ -567,8 +591,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				setDataInControls();
 			}
 		}
-
-
 		private void comboBoxGroupingFairnessSelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -592,10 +614,20 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
             if(checkBoxUseGroupScheduling.Checked )
             {
-                if (!(checkBoxCommonCategory.Checked || checkBoxCommonStart.Checked || checkBoxCommonEnd.Checked))
+                if (!(checkBoxCommonCategory.Checked || checkBoxCommonStart.Checked || checkBoxCommonEnd.Checked || checkBoxCommonActivity.Checked ))
                     return false;
             }
             return true;
+        }
+
+        private void checkBoxCommonActivity_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxCommonActivity.Checked)
+                comboBoxActivity .Enabled = true;
+            else
+            {
+                comboBoxActivity.Enabled = false;
+            }
         }
     }
     
