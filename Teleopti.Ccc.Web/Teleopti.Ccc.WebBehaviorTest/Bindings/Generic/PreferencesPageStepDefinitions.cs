@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I select day '(.*)'")]
 		public void WhenISelectDayDate(DateTime date)
 		{
-			Pages.Pages.PreferencePage.SelectCalendarCellByClass(date);
+			Pages.Pages.PreferencePage.SelectCalendarCellForDateByClick(date);
 		}
 
 		[When(@"I click the add extended preference button")]
