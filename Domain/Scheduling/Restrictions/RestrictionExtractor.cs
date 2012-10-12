@@ -283,46 +283,50 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (mustHavesOnly)
 				preferenceRestrictions = from r in preferenceRestrictions where r.MustHave select r;
 
-			var current = effectiveRestriction;
-			foreach (var preferenceRestriction in preferenceRestrictions)
-			{
-				current.IsPreferenceDay = true;
+			var asEffectiveRestrictions = from r in preferenceRestrictions
+			                              select new EffectiveRestriction(
+			                                     	r.StartTimeLimitation,
+			                                     	r.EndTimeLimitation,
+			                                     	r.WorkTimeLimitation,
+			                                     	r.ShiftCategory,
+			                                     	r.DayOffTemplate,
+			                                     	r.Absence,
+			                                     	r.ActivityRestrictionCollection
+			                                     	)
+			                                     	{
+			                                     		IsPreferenceDay = true
+			                                     	} as IEffectiveRestriction;
 
-				var restriction = new EffectiveRestriction(
-					preferenceRestriction.StartTimeLimitation,
-					preferenceRestriction.EndTimeLimitation,
-					preferenceRestriction.WorkTimeLimitation,
-					preferenceRestriction.ShiftCategory,
-					preferenceRestriction.DayOffTemplate,
-					preferenceRestriction.Absence,
-					preferenceRestriction.ActivityRestrictionCollection
-					);
-				current = current.Combine(restriction);
-
-				if (current == null) return null;
-			}
-			return current;
+			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
 		}
 
 		public IEffectiveRestriction CombineAvailabilityRestrictions(IEnumerable<IAvailabilityRestriction> availabilityRestrictions, IEffectiveRestriction effectiveRestriction)
 		{
-			foreach (IAvailabilityRestriction restriction in availabilityRestrictions)
-			{
-				if (restriction.IsRestriction())
-				{
-					effectiveRestriction.IsAvailabilityDay = true;
+			availabilityRestrictions = from r in availabilityRestrictions where r.IsRestriction() select r;
 
-					var newEffectiverestriction = new EffectiveRestriction(restriction.StartTimeLimitation,
-																		   restriction.EndTimeLimitation,
-																		   restriction.WorkTimeLimitation,
-																		   null, null, null,
-																		   new List<IActivityRestriction>());
-					newEffectiverestriction.NotAvailable = restriction.NotAvailable;
-					effectiveRestriction = effectiveRestriction.Combine(newEffectiverestriction);
-					if (effectiveRestriction == null) return effectiveRestriction;
-				}
-				//if (restriction.NotAvailable)
-				//    effectiveRestriction.NotAvailable = true;
+			var asEffectiveRestrictions = from r in availabilityRestrictions
+			                              select (IEffectiveRestriction) new EffectiveRestriction(
+			                                                             	r.StartTimeLimitation,
+			                                                             	r.EndTimeLimitation,
+			                                                             	r.WorkTimeLimitation,
+			                                                             	null,
+			                                                             	null,
+			                                                             	null,
+			                                                             	new List<IActivityRestriction>()
+			                                                             	)
+			                                                             	{
+			                                                             		IsAvailabilityDay = true
+			                                                             	};
+
+			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
+		}
+
+		public IEffectiveRestriction CombineEffectiveRestrictions(IEnumerable<IEffectiveRestriction> effectiveRestrictions, IEffectiveRestriction  effectiveRestriction)
+		{
+			foreach (var restriction in effectiveRestrictions)
+			{
+				effectiveRestriction = effectiveRestriction.Combine(restriction);
+				if (effectiveRestriction == null) return null;
 			}
 			return effectiveRestriction;
 		}

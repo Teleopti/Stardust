@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var endEndTime = new TimeSpan(1, 23, 59, 59);
 
 			var combiner = new RestrictionCombiner();
+			var extractOperation = new RestrictionExtractOperation();
 
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(startTime, endTime), new EndTimeLimitation(startTime, endEndTime), new WorkTimeLimitation(startTime, endTime), null, null, null, new List<IActivityRestriction>());
 
@@ -23,14 +24,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				if (effectiveRestrictionOptions.UsePreference)
 				{
 					effectiveRestriction = combiner.CombinePreferenceRestrictions(
-						scheduleDay.RestrictionCollection().OfType<IPreferenceRestriction>(), 
+						extractOperation.GetPreferenceRestrictions(scheduleDay.RestrictionCollection()),
 						effectiveRestriction, false);
 				}
 
 				if (effectiveRestrictionOptions.UseAvailability)
 				{
 					effectiveRestriction = combiner.CombineAvailabilityRestrictions(
-						scheduleDay.RestrictionCollection().OfType<IAvailabilityRestriction>(),
+						extractOperation.GetAvailabilityRestrictions(scheduleDay.RestrictionCollection()),
 						effectiveRestriction);
 				}
 			}
