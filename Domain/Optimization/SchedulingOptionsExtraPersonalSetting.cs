@@ -49,9 +49,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.UseGroupSchedulingCommonEnd = _useGroupSchedulingCommonEnd;
             schedulingOptions.UseGroupSchedulingCommonCategory = _useGroupSchedulingCommonCategory;
             schedulingOptions.UseCommonActivity = _useCommmonActivity;
-            foreach(var activity in activityList )
-                if (activity.Id == _commonActivtyId)
-                    schedulingOptions.CommonActivity = activity ;
+            if (activityList != null)
+                foreach(var activity in activityList )
+                    if (activity.Id == _commonActivtyId)
+                        schedulingOptions.CommonActivity = activity ;
 
             schedulingOptions.Fairness = new Percent(_fairnessValue);
 
