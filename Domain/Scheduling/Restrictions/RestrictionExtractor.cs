@@ -206,35 +206,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         private IEffectiveRestriction ExtractStudentAvailabilities(IEffectiveRestriction effectiveRestriction)
         {
-            foreach (IStudentAvailabilityDay restriction in _restrictionExtractor.StudentAvailabilityList)
-            {
-                if (restriction.RestrictionCollection.Count > 0)
-                {
-                    effectiveRestriction.IsStudentAvailabilityDay = true;
-                    var studentAvailabilityRestriction = new StudentAvailabilityRestriction();
-						  studentAvailabilityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(23, 59, 59), new TimeSpan(23, 59, 59));
-                    studentAvailabilityRestriction.EndTimeLimitation = new EndTimeLimitation(TimeSpan.Zero, TimeSpan.Zero);
-                    foreach (var restrict in restriction.RestrictionCollection)
-                    {
-                        if (!restrict.StartTimeLimitation.StartTime.HasValue || restrict.StartTimeLimitation.StartTime < studentAvailabilityRestriction.StartTimeLimitation.StartTime)
-                            studentAvailabilityRestriction.StartTimeLimitation = restrict.StartTimeLimitation;
-                        if (!restrict.EndTimeLimitation.EndTime.HasValue || restrict.EndTimeLimitation.EndTime > studentAvailabilityRestriction.EndTimeLimitation.EndTime)
-                            studentAvailabilityRestriction.EndTimeLimitation = restrict.EndTimeLimitation;
-                    }
-                    effectiveRestriction = effectiveRestriction.Combine(new EffectiveRestriction(studentAvailabilityRestriction.StartTimeLimitation,
-                                                               studentAvailabilityRestriction.EndTimeLimitation,
-                                                               studentAvailabilityRestriction.WorkTimeLimitation,
-                                                               null, null, null, new List<IActivityRestriction>()));
-                    if (effectiveRestriction == null) return effectiveRestriction;
-                }
-
-                if (restriction.NotAvailable) effectiveRestriction.NotAvailable = true;
-            }
-			
-			if (_restrictionExtractor.StudentAvailabilityList.IsEmpty())
-				effectiveRestriction.NotAvailable = true;
-
-            return effectiveRestriction;
+        	return _restrictionCombiner.CombineStudentAvailabilityDays(_restrictionExtractor.StudentAvailabilityList, effectiveRestriction);
         }
 
         private IEffectiveRestriction ExtractAvailabilities(IEffectiveRestriction effectiveRestriction)
@@ -249,23 +221,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         private IEffectiveRestriction ExtractRotations(IEffectiveRestriction effectiveRestriction)
         {
-            foreach (IRotationRestriction restriction in _restrictionExtractor.RotationList)
-            {
-                if (restriction.IsRestriction())
-                {
-                    effectiveRestriction.IsRotationDay = true;
-                    effectiveRestriction = effectiveRestriction.Combine(new EffectiveRestriction(restriction.StartTimeLimitation,
-                                                               restriction.EndTimeLimitation,
-                                                               restriction.WorkTimeLimitation,
-                                                               restriction.ShiftCategory,
-                                                               restriction.DayOffTemplate,
-                                                               null,
-                                                               new List<IActivityRestriction>()));
-                    if (effectiveRestriction == null)
-                        return effectiveRestriction;
-                }
-            }
-            return effectiveRestriction;
+        	return _restrictionCombiner.CombineRotationRestrictions(_restrictionExtractor.RotationList, effectiveRestriction);
         }
     }
 
@@ -273,7 +229,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	{
 		IEffectiveRestriction CombinePreferenceRestrictions(IEnumerable<IPreferenceRestriction> preferenceRestrictions, IEffectiveRestriction effectiveRestriction, bool mustHavesOnly);
 		IEffectiveRestriction CombineAvailabilityRestrictions(IEnumerable<IAvailabilityRestriction> availabilityRestrictions, IEffectiveRestriction effectiveRestriction);
+		IEffectiveRestriction CombineStudentAvailabilityDays(IEnumerable<IStudentAvailabilityDay> studentAvailabilityDays, IEffectiveRestriction effectiveRestriction);
 		IEffectiveRestriction CombineEffectiveRestrictions(IEnumerable<IEffectiveRestriction> effectiveRestrictions, IEffectiveRestriction effectiveRestriction);
+		IEffectiveRestriction CombineRotationRestrictions(IEnumerable<IRotationRestriction> rotationRestrictions, IEffectiveRestriction effectiveRestriction);
 	}
 
 	public class RestrictionCombiner : IRestrictionCombiner
@@ -318,6 +276,52 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			                                                             	{
 			                                                             		IsAvailabilityDay = true
 			                                                             	};
+
+			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
+		}
+
+		public IEffectiveRestriction CombineStudentAvailabilityDays(IEnumerable<IStudentAvailabilityDay> studentAvailabilityDays, IEffectiveRestriction effectiveRestriction)
+		{
+			if (studentAvailabilityDays.IsEmpty())
+			{
+				effectiveRestriction.NotAvailable = true;
+				return effectiveRestriction;
+			}
+
+			var studentAvailabilityRestrictions = from d in studentAvailabilityDays
+			                                      let r = d.RestrictionCollection.FirstOrDefault()
+			                                      where r != null
+			                                      select r;
+
+			var asEffectiveRestrictions = from r in studentAvailabilityRestrictions
+			                              select new EffectiveRestriction(
+			                              	r.StartTimeLimitation,
+			                              	r.EndTimeLimitation,
+			                              	r.WorkTimeLimitation,
+			                              	null,
+			                              	null,
+			                              	null,
+			                              	new List<IActivityRestriction>()
+			                              	) as IEffectiveRestriction;
+
+			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
+		}
+
+		public IEffectiveRestriction CombineRotationRestrictions(IEnumerable<IRotationRestriction> rotationRestrictions, IEffectiveRestriction effectiveRestriction)
+		{
+			rotationRestrictions = from r in rotationRestrictions where r.IsRestriction() select r;
+
+			var asEffectiveRestrictions = from r in rotationRestrictions
+			                              select new EffectiveRestriction(
+			                              	r.StartTimeLimitation,
+			                              	r.EndTimeLimitation,
+			                              	r.WorkTimeLimitation,
+			                              	r.ShiftCategory,
+			                              	r.DayOffTemplate,
+			                              	null,
+			                              	new List<IActivityRestriction>())
+											as IEffectiveRestriction
+											;
 
 			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
 		}
