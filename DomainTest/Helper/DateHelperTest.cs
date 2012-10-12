@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Helper
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 
             Assert.AreEqual(expected, DateHelper.GetFirstDateInMonth(dateToUse, culture));
 
-            expected = new DateTime(2006, 12, 21);
+            expected = new DateTime(2006, 12, 22);
             culture = CultureInfo.GetCultureInfo(1025); //Arabic - Saudi
             Assert.AreEqual(expected, DateHelper.GetFirstDateInMonth(dateToUse, culture));
         }
@@ -99,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 
             Assert.AreEqual(expected, DateHelper.GetLastDateInMonth(dateToUse, culture));
 
-            expected = new DateTime(2007, 1, 18);
+            expected = new DateTime(2007, 1, 19);
             culture = CultureInfo.GetCultureInfo(1025); //Arabic - Saudi
             Assert.AreEqual(expected, DateHelper.GetLastDateInMonth(dateToUse, culture));
         }
