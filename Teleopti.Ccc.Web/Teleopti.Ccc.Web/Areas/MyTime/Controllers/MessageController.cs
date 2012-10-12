@@ -1,8 +1,10 @@
+using System;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
@@ -26,8 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("MessagePartial");
 		}
 		
-		[UnitOfWorkAction]
 		[HttpGet]
+		[UnitOfWorkAction]
 		public JsonResult Messages(Paging paging)
 		{
 			return Json(_messageViewModelFactory.CreatePageViewModel(paging), JsonRequestBehavior.AllowGet);
@@ -44,17 +46,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult MessagesCount()
 		{
-			return Json(new MessageInfo {UnreadMessagesCount = _pushMessageProvider.UnreadMessageCount}, JsonRequestBehavior.AllowGet);
+			return Json(new MessagesInformationViewModel {UnreadMessagesCount = _pushMessageProvider.UnreadMessageCount}, JsonRequestBehavior.AllowGet);
 		}
-	}
 
-	public class MessageForm
-	{
-		public string MessageId { get; set; }
-	}
-
-	public class MessageInfo
-	{
-		public int UnreadMessagesCount { get; set; }
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult Message(Guid messageId)
+		{
+			//return Json(_messageViewModelFactory.CreateMessagesInformationViewModel(new Guid(messageId)), JsonRequestBehavior.AllowGet);
+			return Json(_messageViewModelFactory.CreateMessagesInformationViewModel(messageId), JsonRequestBehavior.AllowGet);
+		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -8,5 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 	{
 		int UnreadMessageCount { get; }
 		IList<IPushMessageDialogue> GetMessages(Paging paging);
+		IPushMessageDialogue GetMessage(Guid messageId);
 	}
 }

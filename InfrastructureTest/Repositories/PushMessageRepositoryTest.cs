@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(dialogue);
 
 			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
-			var unreadMessages = repository.FindUnreadMessage(null, receiver);
+			var unreadMessages = repository.FindUnreadMessages(null, receiver);
 			unreadMessages.First().PushMessage.GetTitle(new NoFormatting()).Should().Be.EqualTo(
 				message.GetTitle(new NoFormatting()));
 		}
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			SetUpdatedOnForMessageDialogue(dialogueOrderLast, -1);
 
 			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
-			var unreadMessages = repository.FindUnreadMessage(null, receiver);
+			var unreadMessages = repository.FindUnreadMessages(null, receiver);
 			unreadMessages.First().PushMessage.GetTitle(new NoFormatting()).Should().Be.EqualTo(
 				messageOrderFirst.GetTitle(new NoFormatting()));
 			unreadMessages.Last().PushMessage.GetTitle(new NoFormatting()).Should().Be.EqualTo(
@@ -273,11 +273,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			SetUpdatedOnForMessageDialogue(dialogue4, -4);
 
 			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
-			var unreadMessages = repository.FindUnreadMessage(paging, receiver);
+			var unreadMessages = repository.FindUnreadMessages(paging, receiver);
 
 			unreadMessages.Should().Have.SameSequenceAs(new[] {dialogue2, dialogue3, dialogue4});
 
-			unreadMessages = repository.FindUnreadMessage(null, receiver);
+			unreadMessages = repository.FindUnreadMessages(null, receiver);
 
 			unreadMessages.Should().Have.SameSequenceAs(new[] { dialogue1 ,dialogue2, dialogue3, dialogue4 });
 		}

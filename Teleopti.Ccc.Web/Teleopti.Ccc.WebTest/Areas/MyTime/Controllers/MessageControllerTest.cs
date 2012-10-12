@@ -41,13 +41,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReplyToSimpleMessage()
 		{
-			var viewModelFactory = MockRepository.GenerateMock<IMessageViewModelFactory>();
 			var pushMessageDialoguePersister = MockRepository.GenerateMock<IPushMessageDialoguePersister>();
-			
-			var target = new MessageController(viewModelFactory, pushMessageDialoguePersister, null);
 
-			var messageViewModel = new MessageViewModel {MessageId = Guid.NewGuid().ToString()};
-			var form = new MessageForm {MessageId = messageViewModel.MessageId};
+			var target = new MessageController(null, pushMessageDialoguePersister, null);
+
+			var messageViewModel = new MessageViewModel { MessageId = Guid.NewGuid().ToString() };
+			var form = new MessageForm { MessageId = messageViewModel.MessageId };
 
 			pushMessageDialoguePersister.Stub(x => x.Persist(messageViewModel.MessageId)).Return(messageViewModel);
 
@@ -59,18 +58,35 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnMessageCount()
 		{
-			var viewModelFactory = MockRepository.GenerateMock<IMessageViewModelFactory>();
-			var pushMessageDialoguePersister = MockRepository.GenerateMock<IPushMessageDialoguePersister>();
 			var pushMessageProvider = MockRepository.GenerateMock<IPushMessageProvider>();
 
-			var target = new MessageController(viewModelFactory, pushMessageDialoguePersister, pushMessageProvider);
+			var target = new MessageController(null, null, pushMessageProvider);
 
-			var messageInfo = new MessageInfo {UnreadMessagesCount = 1};
+			var messageInfo = new MessagesInformationViewModel { UnreadMessagesCount = 1 };
 			pushMessageProvider.Stub(x => x.UnreadMessageCount).Return(messageInfo.UnreadMessagesCount);
 
 			var result = target.MessagesCount();
 
-			((MessageInfo)result.Data).UnreadMessagesCount.Should().Be.EqualTo(messageInfo.UnreadMessagesCount);
+			((MessagesInformationViewModel)result.Data).UnreadMessagesCount.Should().Be.EqualTo(messageInfo.UnreadMessagesCount);
+		}
+
+		[Test]
+		public void ShouldReturnMessageCountAndMessageAskedFor()
+		{
+			var viewModelFactory = MockRepository.GenerateMock<IMessageViewModelFactory>();
+			var messageViewModel = new MessageViewModel { MessageId = Guid.NewGuid().ToString() };
+			var messageInfo = new MessagesInformationViewModel
+								{
+									UnreadMessagesCount = 1,
+									MessageItem = messageViewModel
+								};
+
+			viewModelFactory.Stub(x => x.CreateMessagesInformationViewModel(new Guid(messageViewModel.MessageId))).Return(messageInfo);
+
+			var target = new MessageController(viewModelFactory, null, null);
+			var result = target.Message(new MessageForm {MessageId = messageViewModel.MessageId});
+
+			result.Data.Should().Be.SameInstanceAs(messageInfo);
 		}
 	}
 }

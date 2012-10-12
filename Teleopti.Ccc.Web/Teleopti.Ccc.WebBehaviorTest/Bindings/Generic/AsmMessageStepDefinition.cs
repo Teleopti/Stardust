@@ -1,4 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Globalization;
+using System.Text;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -56,7 +59,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
         [When(@"I receive message number '(.*)'")]
         public void WhenIReceiveMessageNumber(int messageCount)
         {
-            Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
+			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
+
+			var pushMessageDialogueJsonObject = new StringBuilder();
+        	pushMessageDialogueJsonObject.Append("var messageItem = {");
+			pushMessageDialogueJsonObject.AppendFormat(CultureInfo.InvariantCulture, "MessageId: '{0}', ", Guid.NewGuid());
+			pushMessageDialogueJsonObject.Append("Title: 'My title', ");
+			pushMessageDialogueJsonObject.Append("Message: 'My message', ");
+			pushMessageDialogueJsonObject.Append("Message: 'My message', ");
+			pushMessageDialogueJsonObject.Append("Sender: 'My sender', ");
+        	pushMessageDialogueJsonObject.AppendFormat(CultureInfo.InvariantCulture, "Date: '{0} {1}', ", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString());
+			pushMessageDialogueJsonObject.Append("IsRead: 'false'}; ");
+			pushMessageDialogueJsonObject.Append("Teleopti.MyTimeWeb.CommunicationList.AddNewMessageAtTop(messageItem);");
+
+			Browser.Current.Eval(pushMessageDialogueJsonObject.ToString());
         }
 
         [Given(@"I have no unread messages")]

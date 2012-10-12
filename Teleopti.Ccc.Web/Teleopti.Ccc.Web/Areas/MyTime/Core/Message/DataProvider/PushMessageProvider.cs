@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 	public class PushMessageProvider : IPushMessageProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IPushMessageRepository _repository;
+		private readonly IPushMessageDialogueRepository _repository;
 
-		public PushMessageProvider(ILoggedOnUser loggedOnUser, IPushMessageRepository repository)
+		public PushMessageProvider(ILoggedOnUser loggedOnUser, IPushMessageDialogueRepository repository)
 		{
 			_loggedOnUser = loggedOnUser;
 			_repository = repository;
@@ -24,7 +24,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 
 		public IList<IPushMessageDialogue> GetMessages(Paging paging)
 		{
-			return new List<IPushMessageDialogue>(_repository.FindUnreadMessage(paging, _loggedOnUser.CurrentUser()));
+			return new List<IPushMessageDialogue>(_repository.FindUnreadMessages(paging, _loggedOnUser.CurrentUser()));
+		}
+
+		public IPushMessageDialogue GetMessage(Guid messageId)
+		{
+			return _repository.Get(messageId);
 		}
 	}
 }

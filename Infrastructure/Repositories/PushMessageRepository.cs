@@ -109,33 +109,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return results.ToList();
 		}
-
-		public int CountUnread(IPerson receiver)
-		{
-			var rowCount = Session.CreateCriteria(typeof(PushMessageDialogue))
-				.Add(Restrictions.Eq("Receiver", receiver))
-				.Add(Restrictions.Eq("IsReplied", false))
-				.SetProjection(Projections.RowCount())
-				.FutureValue<int>();
-
-			return rowCount.Value;
-		}
-
-		public ICollection<IPushMessageDialogue> FindUnreadMessage(Paging paging, IPerson receiver)
-		{
-			var criteria = Session.CreateCriteria(typeof (PushMessageDialogue))
-				.Add(Restrictions.Eq("Receiver", receiver))
-				.Add(Restrictions.Eq("IsReplied", false))
-				.AddOrder(Order.Desc("UpdatedOn"));
-
-			if (paging != null)
-			{
-				criteria
-					.SetFirstResult(paging.Skip)
-					.SetMaxResults(paging.Take);
-			}
-
-			return new Collection<IPushMessageDialogue>(criteria.List<IPushMessageDialogue>());
-		}
 	}
 }

@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
 using Teleopti.Interfaces.Domain;
 
@@ -25,5 +25,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory
 
             return _mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(messages);
         }
+
+    	public MessagesInformationViewModel CreateMessagesInformationViewModel(Guid messageId)
+    	{
+			return new MessagesInformationViewModel
+			       	{
+						UnreadMessagesCount = _messageProvider.UnreadMessageCount,
+						MessageItem = _mapper.Map<IPushMessageDialogue, MessageViewModel>(_messageProvider.GetMessage(messageId))
+			       	};
+    	}
     }
 }
