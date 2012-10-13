@@ -342,13 +342,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public class PreferenceFeedbackFields
 		{
 			public DateTime Date { get; set; }
+			public string StartTimeBoundry { get; set; }
+			public string EndTimeBoundry { get; set; }
 			public string ContractTimeBoundry { get; set; }
 		}
 
 		[Then(@"I should see preference feedback with")]
 		public void ThenIShouldSeePreferenceFeedbackWith(PreferenceFeedbackFields fields)
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-contract-times").InnerHtml, Is.StringMatching(fields.ContractTimeBoundry));
+			if (fields.StartTimeBoundry != null)
+				EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-start-times").InnerHtml, Is.StringMatching(fields.StartTimeBoundry));
+			if (fields.EndTimeBoundry != null)
+				EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-end-times").InnerHtml, Is.StringMatching(fields.EndTimeBoundry));
+			if (fields.ContractTimeBoundry != null)
+				EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-contract-times").InnerHtml, Is.StringMatching(fields.ContractTimeBoundry));
+		}
+
+		[Then(@"I should see no preference feedback on '(.*)'")]
+		public void ThenIShouldSeeNoFeedback(DateTime date)
+		{
+			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(date, "feedback-error").Exists, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(date, "possible-start-times").Exists, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(date, "possible-end-times").Exists, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(date, "possible-contract-times").Exists, Is.False);
 		}
 
 	}
