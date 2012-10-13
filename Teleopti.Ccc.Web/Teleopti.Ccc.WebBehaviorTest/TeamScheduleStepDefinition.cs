@@ -241,14 +241,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			layer.GetAttributeValue("tooltip-title").Should().Contain(activityName);
 		}
 
-		[Then(@"I should see a tooltip with the activty start time (.*)")]
-		public void ThenIShouldSeeATooltipWithTheActivtyStartTime(string startTime)
-		{
-			var toolTip = Pages.Pages.TeamSchedulePage.ToolTipContainer();
-
-			toolTip.InnerHtml.Should().Contain(startTime);
-		}
-
 		[Then(@"I should see the team-picker with the other site's team")]
 		public void ThenIShouldSeeTheTeam_PickerWithTheOtherSiteSTeam()
 		{

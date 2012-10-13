@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I am viewing week schedule")]
 		[Given(@"I view my week schedule")]
 		[Given(@"I am viewing week schedule")]
-		[Given(@"I am viewing schedule")]
 		public void WhenIViewMyWeekSchedule()
 		{
 			TestControllerMethods.Logon();

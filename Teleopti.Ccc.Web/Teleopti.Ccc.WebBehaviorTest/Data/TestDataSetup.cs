@@ -213,7 +213,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestData.AgentRoleWithoutPreferences = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoPreferences", null);
 			TestData.AgentRoleWithoutExtendedPreferences = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoExtendedPreferences", null);
 			TestData.AgentRoleWithoutRequests = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoRequests", null);
-			TestData.AgentRoleWithoutTextRequests = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoTextRequests", null);
 			TestData.AgentRoleWithoutAbsenceRequests = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoAbsenceRequests", null);
 			TestData.AgentRoleWithoutTeamSchedule = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoTeamSchedule", null);
 			TestData.AgentRoleOnlyWithOwnData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "OnlyWithOwnData", null);
@@ -236,7 +235,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 									new { role = TestData.AgentRoleWithoutPreferences, functions = agentRoleWithoutPreferencesApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutExtendedPreferences, functions = agentRoleWithoutExtendedPreferencesApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutRequests, functions = agentRoleWithoutRequestsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
-									new { role = TestData.AgentRoleWithoutTextRequests, functions = agentRoleWithoutTextRequestsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutAbsenceRequests, functions = agentRoleWithoutAbsenceRequestsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutTeamSchedule, functions = agentRoleWithoutTeamScheduleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutMyTimeWeb, functions = agentRoleWithoutMyTimeWebApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
@@ -364,14 +362,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 										StudentAvailabilityPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1)
 			                        };
 
-			TestData.WorkflowControlSetNotPublished = new WorkflowControlSet("Not published")
-			                        {
-			                            SchedulePublishedToDate = DateOnly.Today.AddDays(-100),
-										// why do these need to be set for not published to work!?
-										PreferencePeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1),
-										StudentAvailabilityPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1)
-			                        };
-
 			TestData.WorkflowControlSetStudentAvailabilityOpen = new WorkflowControlSet("Published 100 days, SA open")
 			                         	{
 			                         		SchedulePublishedToDate = DateOnly.Today.AddDays(100),
@@ -429,7 +419,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var workflowControlSetRepository = new WorkflowControlSetRepository(unitOfWork);
 			workflowControlSetRepository.Add(TestData.WorkflowControlSetPublished);
 			workflowControlSetRepository.Add(TestData.WorkflowControlSetPublishedUntilWednesday);
-			workflowControlSetRepository.Add(TestData.WorkflowControlSetNotPublished);
 			workflowControlSetRepository.Add(TestData.WorkflowControlSetStudentAvailabilityOpen);
 			workflowControlSetRepository.Add(TestData.WorkflowControlSetStudentAvailabilityOpenNextMonth);
 			workflowControlSetRepository.Add(TestData.WorkflowControlSetStudentAvailabilityClosed);
