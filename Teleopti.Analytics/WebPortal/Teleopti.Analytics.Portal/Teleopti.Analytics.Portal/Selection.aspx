@@ -27,7 +27,11 @@ function setSize(){
 </head>
 <body>
     <form id="aspnetForm" runat="server">
-    <table width="100%" border="0" cellpadding="1" cellspacing="0"><tr><td style="width:100%"></td><td style="white-space:nowrap" align="right"><asp:Label ID="LoggedOnUser" runat="server" Text=""></asp:Label></td></tr></table>
+	    <div>
+		    <div >
+	    <div style="float:right; margin-left:10px;margin-right: 10px;"><asp:LinkButton runat="server" CssClass="SignOut" OnClick="SignOut" Text="Sign Out"></asp:LinkButton></div>
+		<div style="white-space:nowrap; float:right" ><asp:Label ID="LoggedOnUser" runat="server" Text=""></asp:Label></div>	
+	</div>
     
    <asp:ScriptManager ID="ScriptManager1" EnablePartialRendering="true" runat="server"  EnableScriptGlobalization="true" EnableScriptLocalization="true" />
     
@@ -36,16 +40,21 @@ function setSize(){
         <asp:HiddenField ID="HiddenUserID" runat="server" />
         <asp:HiddenField ID="ParametersValid" runat="server" Value="0" />
         <ajaxToolkit:CollapsiblePanelExtender ID="CPEReports" runat="Server" TargetControlID="Reports_ContentPanel"
-            ExpandControlID="tdTogglePanel" CollapseControlID="tdTogglePanel"
+            ExpandControlID="tdTogglePane" CollapseControlID="tdTogglePane"
             Collapsed="false" ExpandDirection="Vertical" ImageControlID="ImageReportsToggle"
             ExpandedImage="~/images/collapse.jpg" ExpandedText='xxCollapse' CollapsedImage="~/images/expand.jpg"
             CollapsedText='xxExpand' SuppressPostBack="true" />
         <asp:Panel ID="Reports_HeaderPanel" runat="server" Style="cursor: pointer;">
-            <table cellspacing="0" width="100%" border="0" cellpadding="0">
+            <table width="100%" style="margin: 0px">
                 <tr>
-                    <td id="tdTogglePanel" runat="server" style="vertical-align: middle" class="Caption">
-                        <asp:Image ID="ImageReportsToggle" runat="server" ImageUrl="~/images/collapse.jpg" />
-                        <asp:Label ID="labelRepCaption" runat="server" Text="xxxRapportnamnet"></asp:Label>
+                    <td id="tdTogglePane" runat="server" style="vertical-align: middle;margin: 0px" class="Caption">
+                        <div style="float: left">
+	                        <asp:Image ID="ImageReportsToggle" runat="server" ImageUrl="~/images/collapse.jpg" />
+                        </div>
+						
+						<div>
+							<asp:Label ID="labelRepCaption" CssClass="ReportName" runat="server" Text="xxxRapportnamnet"></asp:Label>
+						</div>
                     </td>
                     <td colspan="3" style="vertical-align: middle" class="Caption">
                         <div style="float: left; width: 50px">
@@ -59,14 +68,14 @@ function setSize(){
                             </asp:UpdateProgress>
                         </div>
                     </td>
-                    <td align="right" style="vertical-align: middle; width: 25px;" class="Caption">
+                    <td style="vertical-align: middle; width: 25px;" class="Caption">
                         <asp:ImageButton ID="ImageButtonHelp" runat="server" ImageUrl="~/images/Question_16x16.png" ToolTip="xxHelp" OnClientClick="javascript:return false;" />
                     </td>
                 </tr>
             </table>
         </asp:Panel>
         <asp:Panel ID="Reports_ContentPanel" runat="server" Height="0px">
-            <table cellspacing="0" width="100%" border="0" cellpadding="1">
+            <table  width="100%">
                 <tr>
                     <td class="DetailsView" style="width: 70%; ">
                         <Analytics:Selector LabelWidth="30%" List1Width="75%" ID="Parameter" runat="server" OnInit="Selector_OnInit">
@@ -74,10 +83,10 @@ function setSize(){
                     </td>
                 </tr>
             </table>
-            <table width="100%" cellpadding="0" cellspacing="0">
+            <table width="100%">
                 <tr>
-                    <td align="center">
-                        <asp:ImageButton OnClick="ButtonShow_Click" ID="buttonShow" SkinID="Show" ToolTip='' 
+                    <td style="text-align: center">
+                        <asp:ImageButton  OnClick="ButtonShow_Click" ID="buttonShow" SkinID="Show" ToolTip='' 
                             runat="server" />
                         <asp:Label ID="labelPermissionDenied" runat="server" ForeColor="Red" Font-Size="Large" Visible="false"></asp:Label>
                     </td>
@@ -85,6 +94,8 @@ function setSize(){
             </table>
         </asp:Panel>
     </div>
+	    </div>
+    
     
         <iframe  runat="server" id="ViewerFrame" name="ViewerFrame" style="height:670px; overflow:hidden; margin:0px; padding:0px; display:none;" src="" width="100%" frameborder="1"  allowtransparency="true" ></iframe>
     

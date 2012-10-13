@@ -96,5 +96,7 @@ namespace Teleopti.Analytics.Portal
 				CPEReports.ClientState = "true";
 			}
 		}
+
+		
 	}
 }

@@ -3,11 +3,15 @@ body
 {
 }
 
-
+.SignOut {
+	text-decoration: none;
+	color: black;
+	font: 14px "Segoe UI";
+}
 .Panel
 {
 	/*font-family:Verdana, Tahoma, Arial, Helvetica, Sans-Serif;*/
-	font-family:Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
+	font-family:Segoe UI, Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
 	font-size:11px;
 	font-weight:bold;
 	color:#545c60;	
@@ -17,8 +21,14 @@ body
 	background-color:White;
 	border: solid 1px #6e92a4;
 	border-collapse: collapse; /*background-color:#FFF;*/
+	clear:both;
+	padding: 0px;
+	margin: 0px;
 }
 
+.Panel table {
+	border-spacing: 0px;
+}
 .Panel TD
 {
     padding: 2px 5px 2px 5px;
@@ -66,7 +76,10 @@ body
 {
 	border:none;
 }
-
+.ReportName {
+	padding-bottom: 3px;
+	padding-left: 10px;
+}
 .DetailsView td 
 {
 	background-color: white;

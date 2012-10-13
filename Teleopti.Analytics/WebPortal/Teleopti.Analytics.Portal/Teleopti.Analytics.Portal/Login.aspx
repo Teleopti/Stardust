@@ -18,7 +18,7 @@
 			</tr>
         <tr>
             <td style="height:300px" valign="middle" align="center">
-                <asp:Login  DisplayRememberMe="false" ID="Login1" 
+                <asp:Login  DisplayRememberMe="true" ID="Login1" 
                 SkinID="Login" runat="server" DestinationPageUrl="~/Selection.aspx">
                 </asp:Login>
             </td>

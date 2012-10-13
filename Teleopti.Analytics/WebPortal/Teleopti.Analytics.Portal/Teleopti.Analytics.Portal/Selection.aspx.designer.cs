@@ -85,13 +85,13 @@ namespace Teleopti.Analytics.Portal {
         protected global::System.Web.UI.WebControls.Panel Reports_HeaderPanel;
         
         /// <summary>
-        /// tdTogglePanel control.
+        /// tdTogglePane control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdTogglePanel;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdTogglePane;
         
         /// <summary>
         /// ImageReportsToggle control.

@@ -71,7 +71,8 @@ namespace Teleopti.Analytics.Portal
 			if (e.Authenticated)
 			{
 				StateHolder.UserObject = null;
-				FormsAuthentication.SetAuthCookie(Login1.UserName, false);
+				FormsAuthentication.SetAuthCookie(Login1.UserName, Login1.RememberMeSet);
+				
 				StateHolder.UserName = Login1.UserName;
 				if (Request.QueryString.Get("ReturnUrl") != null)
 				{
