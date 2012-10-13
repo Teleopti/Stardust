@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 		private static int isDayOff(IScheduleDay scheduleDay, bool useSchedules, bool usePreferences, bool useRotations)
         {
-        	var extractOperation = new RestrictionRetrivalOperation();
+        	var extractOperation = new RestrictionRetrievalOperation();
             var significant = scheduleDay.SignificantPart();
 			var person = scheduleDay.Person;
 			var restrictions = scheduleDay.RestrictionCollection();

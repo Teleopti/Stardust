@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         	if (scheduleDay == null) return;
 
         	var restrictions = scheduleDay.RestrictionCollection();
-        	var operation = new RestrictionRetrivalOperation();
+        	var operation = new RestrictionRetrievalOperation();
         	operation.GetRotationRestrictions(restrictions).ForEach(_rotationRestrictions.Add);
         	operation.GetAvailabilityRestrictions(restrictions).ForEach(_availabilityRestrictions.Add);
         	operation.GetPreferenceRestrictions(restrictions).ForEach(_preferenceRestrictions.Add);

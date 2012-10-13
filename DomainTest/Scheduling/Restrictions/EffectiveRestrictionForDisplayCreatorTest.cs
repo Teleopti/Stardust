@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var restrictionCollection = new[] {preference};
 			scheduleDay.Stub(x => x.RestrictionCollection()).Return(restrictionCollection);
 
-			var target = new EffectiveRestrictionForDisplayCreator(new RestrictionCombiner(), new RestrictionRetrivalOperation());
+			var target = new EffectiveRestrictionForDisplayCreator(new RestrictionCombiner(), new RestrictionRetrievalOperation());
 			var result = target.GetEffectiveRestrictionForDisplay(scheduleDay, effectiveRestrictionOptions);
 
 			result.ShiftCategory.Should().Be.EqualTo(preference.ShiftCategory);
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var restrictionCollection = new[] { availability };
 			scheduleDay.Stub(x => x.RestrictionCollection()).Return(restrictionCollection);
 
-			var target = new EffectiveRestrictionForDisplayCreator(new RestrictionCombiner(), new RestrictionRetrivalOperation());
+			var target = new EffectiveRestrictionForDisplayCreator(new RestrictionCombiner(), new RestrictionRetrievalOperation());
 			var result = target.GetEffectiveRestrictionForDisplay(scheduleDay, effectiveRestrictionOptions);
 
 			result.StartTimeLimitation.Should().Be.EqualTo(availability.StartTimeLimitation);

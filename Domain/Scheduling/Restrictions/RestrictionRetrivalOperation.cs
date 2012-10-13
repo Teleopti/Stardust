@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
-	public interface IRestrictionRetrivalOperation
+	public interface IRestrictionRetrievalOperation
 	{
 		IEnumerable<IRotationRestriction> GetRotationRestrictions(IEnumerable<IRestrictionBase> restrictions);
 		IEnumerable<IAvailabilityRestriction> GetAvailabilityRestrictions(IEnumerable<IRestrictionBase> restrictions);
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		IEnumerable<IStudentAvailabilityDay> GetStudentAvailabilityDays(IScheduleDay scheduleDay);
 	}
 
-	public class RestrictionRetrivalOperation : IRestrictionRetrivalOperation
+	public class RestrictionRetrievalOperation : IRestrictionRetrievalOperation
 	{
 		public IEnumerable<IRotationRestriction> GetRotationRestrictions(IEnumerable<IRestrictionBase> restrictions)
 		{
@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			return restrictions.FilterBySpecification(RestrictionMustBe.Preference).Cast<IPreferenceRestriction>().ToArray();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IEnumerable<IStudentAvailabilityDay> GetStudentAvailabilityDays(IScheduleDay scheduleDay)
 		{
 			return scheduleDay.PersonRestrictionCollection().OfType<IStudentAvailabilityDay>().ToArray();

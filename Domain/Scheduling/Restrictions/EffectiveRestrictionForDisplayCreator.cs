@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	public class EffectiveRestrictionForDisplayCreator : IEffectiveRestrictionForDisplayCreator
 	{
 		private readonly IRestrictionCombiner _restrictionCombiner;
-		private readonly IRestrictionRetrivalOperation _retrivalOperation;
+		private readonly IRestrictionRetrievalOperation _retrievalOperation;
 
-		public EffectiveRestrictionForDisplayCreator(IRestrictionCombiner restrictionCombiner, IRestrictionRetrivalOperation retrivalOperation)
+		public EffectiveRestrictionForDisplayCreator(IRestrictionCombiner restrictionCombiner, IRestrictionRetrievalOperation retrievalOperation)
 		{
 			_restrictionCombiner = restrictionCombiner;
-			_retrivalOperation = retrivalOperation;
+			_retrievalOperation = retrievalOperation;
 		}
 
 		public IEffectiveRestriction GetEffectiveRestrictionForDisplay(IScheduleDay scheduleDay, IEffectiveRestrictionOptions effectiveRestrictionOptions)
@@ -29,14 +29,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				if (effectiveRestrictionOptions.UsePreference)
 				{
 					effectiveRestriction = _restrictionCombiner.CombinePreferenceRestrictions(
-						_retrivalOperation.GetPreferenceRestrictions(scheduleDay.RestrictionCollection()),
+						_retrievalOperation.GetPreferenceRestrictions(scheduleDay.RestrictionCollection()),
 						effectiveRestriction, false);
 				}
 
 				if (effectiveRestrictionOptions.UseAvailability)
 				{
 					effectiveRestriction = _restrictionCombiner.CombineAvailabilityRestrictions(
-						_retrivalOperation.GetAvailabilityRestrictions(scheduleDay.RestrictionCollection()),
+						_retrievalOperation.GetAvailabilityRestrictions(scheduleDay.RestrictionCollection()),
 						effectiveRestriction);
 				}
 			}

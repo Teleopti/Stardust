@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IEffectiveRestriction CombineStudentAvailabilityDays(IEnumerable<IStudentAvailabilityDay> studentAvailabilityDays, IEffectiveRestriction effectiveRestriction)
 		{
 			if (studentAvailabilityDays.IsEmpty())
@@ -97,6 +98,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IEffectiveRestriction CombineEffectiveRestrictions(IEnumerable<IEffectiveRestriction> effectiveRestrictions, IEffectiveRestriction  effectiveRestriction)
 		{
 			foreach (var restriction in effectiveRestrictions)
