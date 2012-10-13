@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person).Repeat.AtLeastOnce();
 				Expect.Call(() => _restrictionExtractor.Extract(_person, dateOnly));
 				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
-				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>());
+				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
 				Expect.Call(_effectiveRestriction.IsRestriction).Return(false);
 				Expect.Call(_effectiveRestriction.Absence).Return(absence).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestriction.StartTimeLimitation).Return(new StartTimeLimitation());
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person).Repeat.AtLeastOnce();
 				Expect.Call(() => _restrictionExtractor.Extract(_person, dateOnly));
 				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
-				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>());
+				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
 			}
 
 			using (_mocks.Playback())
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person).Repeat.AtLeastOnce();
 				Expect.Call(() => _restrictionExtractor.Extract(_person, dateOnly));
 				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
-				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>());
+				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
 			}
 
 			using (_mocks.Playback())
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person).Repeat.AtLeastOnce();
 				Expect.Call(() => _restrictionExtractor.Extract(_person, dateOnly));
 				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
-				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>());
+				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
 			}
 
 			using(_mocks.Playback())

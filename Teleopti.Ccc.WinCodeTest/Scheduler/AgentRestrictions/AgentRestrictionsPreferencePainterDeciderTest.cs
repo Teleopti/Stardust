@@ -398,6 +398,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			{
 				Expect.Call(_preferenceCellData.SchedulingOption).Return(_restrictionSchedulingOptions).Repeat.AtLeastOnce();
 				Expect.Call(_preferenceCellData.HasExtendedPreference).Return(true);
+				Expect.Call(_preferenceCellData.EffectiveRestriction).Return(_effectiveRestriction);
+				Expect.Call(_effectiveRestriction.DayOffTemplate).Return(null);
 			}
 
 			using (_mocks.Playback())
@@ -439,22 +441,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			}
 		}
 
-		[Test]
-		public void ShouldNotPaintPreferredExtendedWhenUseSchedules()
-		{
-			_restrictionSchedulingOptions.UsePreferences = true;
-			_restrictionSchedulingOptions.UseScheduling = true;
+		//[Test]
+		//public void ShouldNotPaintPreferredExtendedWhenUseSchedules()
+		//{
+		//    _restrictionSchedulingOptions.UsePreferences = true;
+		//    _restrictionSchedulingOptions.UseScheduling = true;
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_preferenceCellData.SchedulingOption).Return(_restrictionSchedulingOptions).Repeat.AtLeastOnce();
-				Expect.Call(_preferenceCellData.HasExtendedPreference).Return(true);
-			}
+		//    using (_mocks.Record())
+		//    {
+		//        Expect.Call(_preferenceCellData.SchedulingOption).Return(_restrictionSchedulingOptions).Repeat.AtLeastOnce();
+		//        Expect.Call(_preferenceCellData.HasExtendedPreference).Return(true);
+		//    }
 
-			using (_mocks.Playback())
-			{
-				Assert.IsFalse(_decider.ShouldPaintPreferredExtended(_preferenceCellData));
-			}
-		}
+		//    using (_mocks.Playback())
+		//    {
+		//        Assert.IsFalse(_decider.ShouldPaintPreferredExtended(_preferenceCellData));
+		//    }
+		//}
 	}
 }
