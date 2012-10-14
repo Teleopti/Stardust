@@ -493,6 +493,7 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackBlacklisting.feature.cs</LastGenOutput>
     </None>
+    <None Include="Testing\StepDefinitionReport.bat" />
     <None Include="WeekScheduleTimeIndicator.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WeekScheduleTimeIndicator.feature.cs</LastGenOutput>
