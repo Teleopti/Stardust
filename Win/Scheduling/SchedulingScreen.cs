@@ -3476,13 +3476,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             using (PerformanceOutput.ForOperation("Updating shift editor"))
             {
-                IScheduleDay scheduleDay =
+				restrictionEditor.LoadRestriction(null);
+				notesEditor.LoadNote(null);
+                IScheduleDay scheduleDay = 
                     _scheduleView.ViewGrid[
                         _scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].
                         CellValue as IScheduleDay;
-                restrictionEditor.LoadRestriction(null);
-                notesEditor.LoadNote(null);
 
+				if (scheduleDay == null)
+					return;
+
+            	scheduleDay = _schedulerState.Schedules[scheduleDay.Person].ReFetch(scheduleDay);
+                
                 if (_showEditor)
                     schedulePartToEditor(scheduleDay);
 
@@ -3490,7 +3495,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (scheduleDay != null)
                 {
                     schedulerSplitters1.MultipleHostControl3.UpdateItems();
-                    //_dateNavigateControl.SetSelectedDate(scheduleDay.DateOnlyAsPeriod.DateOnly);
                     _scheduleView.SetSelectedDateLocal(scheduleDay.DateOnlyAsPeriod.DateOnly);
                 }
 
@@ -6053,6 +6057,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (_scheduleView != null)
             {
+            	_grid.ContextMenuStrip = null;
                 scheduleParts = _scheduleView.SelectedSchedules();
             	selectedPersons = new List<IPerson>(_scheduleView.AllSelectedPersons());
 				selectedPart = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
@@ -6153,7 +6158,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					toolStripExActions.Visible = false;
 					toolStripExLocks.Visible = false;
 					_scheduleView = new AgentRestrictionsDetailView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _workShiftWorkTime);
-            		//_scheduleView.TheGrid.ContextMenuStrip = contextMenuStripRestrictionView;
+            		_scheduleView.TheGrid.ContextMenuStrip = contextMenuStripRestrictionView;
             		prepareAgentRestrictionView(selectedPart, _scheduleView, selectedPersons);
                     if (scheduleParts != null)
                     {
@@ -7435,11 +7440,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 _scheduleView.Presenter.LastUnsavedSchedulePart = restrictionEditor.SchedulePart;
                 _scheduleView.Presenter.UpdateRestriction();
-                if (typeof (RestrictionSummaryView) == _scheduleView.GetType())
+                if (_scheduleView is AgentRestrictionsDetailView)
                 {
                     schedulerSplitters1.RecalculateRestrictions();
-                    //ÖÖÖ
-					//schedulerSplitters1.RestrictionSummeryGrid.UpdateRestrictionSummaryView();
 					schedulerSplitters1.AgentRestrictionGrid.LoadData(schedulerSplitters1.SchedulingOptions);
                 }
             }
