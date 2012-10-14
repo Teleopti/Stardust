@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I select day '(.*)'")]
 		public void WhenISelectDayDate(DateTime date)
 		{
-			Pages.Pages.PreferencePage.SelectCalendarCellForDateByClick(date);
+			Pages.Pages.PreferencePage.SelectCalendarCellByClass(date);
 		}
 
 		[When(@"I click the add extended preference button")]
@@ -98,13 +98,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see I have (\d) available must haves")]
 		public void ThenIShouldSeeIHave1AvailableMustHaves(int mustHave)
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining("(" + mustHave.ToString(CultureInfo.CurrentCulture) + ")"));
+			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining("(" + mustHave + ")"));
 		}
 
 		[Then(@"I should see I have (\d) must haves")]
 		public void ThenIShouldSeeIHave1MustHaves(int mustHave)
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining(mustHave.ToString(CultureInfo.CurrentCulture) + "("));
+			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining(mustHave + "("));
 		}
 
 
