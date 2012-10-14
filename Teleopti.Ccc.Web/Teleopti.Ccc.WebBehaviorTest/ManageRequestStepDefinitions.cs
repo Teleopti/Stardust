@@ -32,7 +32,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.EventualClick();
 		}
 
-        [When(@"I input absence request values with '(.*)' for date '(.*)'")]
+		[When(@"I input absence request values with (.*)")]
+		public void WhenIInputAbsenceRequestValuesWith(string name)
+		{
+			WhenIInputAbsenceRequestValuesWithForDate(name, DateTime.Today);
+		}
+
+		[When(@"I input absence request values with '(.*)' for date '(.*)'")]
         public void WhenIInputAbsenceRequestValuesWithForDate(string name, DateTime date)
         {
             Pages.Pages.CurrentEditRequestPage.AbsenceTypesElement.WaitUntilDisplayed();
