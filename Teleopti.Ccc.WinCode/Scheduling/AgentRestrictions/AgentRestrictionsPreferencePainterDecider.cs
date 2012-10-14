@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 			if (!preferenceCellData.SchedulingOption.UsePreferences) return false;
 			if (!preferenceCellData.HasExtendedPreference) return false;
-			if (preferenceCellData.SchedulingOption.UseScheduling) return false;
+			if (preferenceCellData.SchedulingOption.UseRotations && preferenceCellData.EffectiveRestriction.DayOffTemplate != null) return false;
 
 			return _shouldPaint;
 		}
