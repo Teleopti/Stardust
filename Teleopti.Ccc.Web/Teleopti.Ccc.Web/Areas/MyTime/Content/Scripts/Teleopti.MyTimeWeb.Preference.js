@@ -22,6 +22,17 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	var addExtendedTooltip = null;
 	var addExtendedPreferenceFormViewModel = null;
 	var preferencesAndScheduleViewModel = null;
+	var readyForInteraction = function () { };
+	var completelyLoaded = function () { };
+
+
+	var callWhenAjaxIsCompleted = function (callback) {
+		callback();
+	};
+	if (ajax.CallWhenAllAjaxCompleted)
+		callWhenAjaxIsCompleted = ajax.CallWhenAllAjaxCompleted;
+	
+
 
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#PreferenceDateRangeSelector';
@@ -189,21 +200,16 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				.done(function () {
 					loadingStarted = true;
 					_activateSelectable();
+					readyForInteraction();
 					loader(function () {
 						periodFeedbackViewModel.LoadFeedback();
 						$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
 							day.LoadFeedback();
 						});
+						callWhenAjaxIsCompleted(completelyLoaded);
 					});
 				});
 		});
-	}
-
-	function _callWhenLoaded(callback) {
-		if (loadingStarted && !ajax.IsRequesting())
-			callback();
-		else
-			setTimeout(function () { _callWhenLoaded(callback); }, 100);
 	}
 
 	function _soon(call) {
@@ -267,9 +273,14 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		InitViewModels: function () {
 			_initViewModels();
 		},
-		PreferencePartialInit: function () {
-			if (!$('#Preference-body').length)
+		PreferencePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
+			readyForInteraction = readyForInteractionCallback;
+			completelyLoaded = completelyLoadedCallback;
+			if (!$('#Preference-body').length) {
+				readyForInteraction();
+				completelyLoaded();
 				return;
+			}
 			_initPeriodSelection();
 			_initViewModels(_soon);
 			_initExtendedPanels();
@@ -277,9 +288,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		PreferencePartialDispose: function () {
 			_hideAddExtendedTooltip();
 			ajax.AbortAll();
-		},
-		CallWhenLoaded: function (callback) {
-			_callWhenLoaded(callback);
 		}
 	};
 

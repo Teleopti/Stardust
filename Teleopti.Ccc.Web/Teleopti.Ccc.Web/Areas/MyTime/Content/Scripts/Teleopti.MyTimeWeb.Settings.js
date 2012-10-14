@@ -99,7 +99,9 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			type: "PUT",
 			data: JSON.stringify(data),
 			success: function (data, textStatus, jqXHR) {
-				_refreshPageWhenAllAjaxDone();
+				ajax.CallWhenAllAjaxCompleted(function () {
+					location.reload();
+				});
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
@@ -107,19 +109,14 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		});
 	}
 
-	function _refreshPageWhenAllAjaxDone() {
-		if (!ajax.IsRequesting())
-			location.reload();
-		else
-			setTimeout(function () { _refreshPageWhenAllAjaxDone(); }, 100);
-	}
-
 	return {
 		Init: function () {
 			_init();
 		},
-		PartialInit: function () {
+		PartialInit: function (readyForInteraction, completelyLoaded) {
 			_partialInit();
+			readyForInteraction();
+			completelyLoaded();
 		}
 	};
 })(jQuery);

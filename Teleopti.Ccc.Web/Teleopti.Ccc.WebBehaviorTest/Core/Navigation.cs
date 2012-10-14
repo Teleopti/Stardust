@@ -128,13 +128,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoPreference()
 		{
-			GoTo("MyTime#Preference/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new OverrideNotifyBehavior());
+			GoTo("MyTime#Preference/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
+		}
+
+		public static void GotoPreference(DateTime date)
+		{
+			GoTo(string.Format("MyTime#Preference/Index/{0}/{1}/{2}",
+				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+				new ApplicationStartupTimeout(), new LoadingOverlay(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 
 		public static void GotoRegionalSettings()
 		{
-			GoTo("MyTime#Settings/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#Settings/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RegionalSettingsPage>());
 		}
 
@@ -142,14 +150,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoTo("MyTime#Settings/Password", new ApplicationStartupTimeout(), new LoadingOverlay());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PasswordPage>());
-		}
-
-		public static void GotoPreference(DateTime date)
-		{
-			GoTo(string.Format("MyTime#Preference/Index/{0}/{1}/{2}", 
-				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				new ApplicationStartupTimeout(), new LoadingOverlay());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 
 		public static void GotoRequests()
@@ -244,6 +244,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			const string jsCode = "Teleopti.MyTimeWeb.Notifier.Notify = function (value) {$('<span/>', {text: value, 'class': 'notifyLoggerItem'}).appendTo('#notifyLogger');};";
 			Browser.Current.Eval(jsCode);
+		}
+	}
+
+	public class WaitUntilReadyForInteraction : IGoToInterceptor
+	{
+		public void Before(string pageUrl)
+		{
+		}
+
+		public void After(string pageUrl)
+		{
+			TestControllerMethods.WaitUntilReadyForInteraction();
 		}
 	}
 }

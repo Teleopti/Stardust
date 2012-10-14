@@ -247,8 +247,16 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	function _invokeInitCallback(viewId) {
 		var partialInit = _partialViewInitCallback[viewId];
 		if ($.isFunction(partialInit))
-			partialInit();
+			partialInit(_readyForInteraction, _completelyLoaded);
 		Teleopti.MyTimeWeb.Common.PartialInit();
+	}
+
+	function _readyForInteraction() {
+		Teleopti.MyTimeWeb.Test.PageLog("Ready for interaction");
+	}
+
+	function _completelyLoaded() {
+		Teleopti.MyTimeWeb.Test.PageLog("Completely loaded");
 	}
 
 	return {

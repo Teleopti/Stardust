@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var fields = table.CreateInstance<ExtendedPreferenceFields>();
 			Pages.Pages.PreferencePage.ExtendedPreferencePanel.WaitUntilDisplayed(); //needed
 			
-			if (fields.Preference != null) Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Select(fields.Preference);
+			if (fields.Preference != null) Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.SelectWait(fields.Preference);
 
 			if (fields.StartTimeMinimum != null)
 				Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.Value = fields.StartTimeMinimum;
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			if (fields.WorkTimeMaximum != null)
 				Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMaximum.Value = fields.WorkTimeMaximum;
 
-			if (fields.Activity != null) Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Select(fields.Activity);
+			if (fields.Activity != null) Pages.Pages.PreferencePage.ExtendedPreferenceActivity.SelectWait(fields.Activity);
 			if (fields.ActivityStartTimeMinimum != null)
 				Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Value = fields.ActivityStartTimeMinimum;
 			if (fields.ActivityStartTimeMaximum != null)

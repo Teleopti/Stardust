@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIChooseTheOtherTeamInTheTeamPicker()
 		{
 			var team = UserFactory.User().UserData<AnotherTeam>().TheTeam.Description.Name;
-			Pages.Pages.TeamSchedulePage.TeamPicker.Select(team);
+			Pages.Pages.TeamSchedulePage.TeamPicker.SelectWait(team);
 		}
 
 		[Then(@"I should see the team schedule tab")]
