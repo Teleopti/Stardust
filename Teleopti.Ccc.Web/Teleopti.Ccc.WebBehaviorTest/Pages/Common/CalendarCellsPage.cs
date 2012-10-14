@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 			JQuery.SelectByElementAttribute("li", "data-mytime-date", date.ToString("yyyy-MM-dd"))
 				.AddClass("ui-selected")
 				.Eval();
-			EventualAssert.WhenElementExists(CalendarCellForDate(date), c => c.ClassName, Is.StringContaining("ui-selected"));
+			EventualAssert.WhenElementExists(CalendarCellSelectableForDate(date), c => c.ClassName, Is.StringContaining("ui-selected"));
 		}
 	}
 
