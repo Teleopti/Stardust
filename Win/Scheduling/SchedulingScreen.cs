@@ -8728,14 +8728,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemRestrictionPaste_Click(object sender, EventArgs e)
 		{
-			var options = new PasteOptions {Preference = true, StudentAvailability = true};
-			_scheduleView.GridClipboardPaste(options, _undoRedo);
+			((AgentRestrictionsDetailView)_scheduleView).PasteSelectedRestrictions(_undoRedo);
+			//var options = new PasteOptions {Preference = true, StudentAvailability = true};
+			//_scheduleView.GridClipboardPaste(options, _undoRedo);
 		}
 
 		private void toolStripMenuItemRestrictionDelete_Click(object sender, EventArgs e)
 		{
-			var options = new PasteOptions { Preference = true, StudentAvailability = true };
-			deleteInMainGrid(options);
+			((AgentRestrictionsDetailView)_scheduleView).DeleteSelectedRestrictions(_undoRedo, _defaultScheduleTag);
+			//var options = new PasteOptions { Preference = true, StudentAvailability = true };
+			//deleteInMainGrid(options);
 		}
 
     }
