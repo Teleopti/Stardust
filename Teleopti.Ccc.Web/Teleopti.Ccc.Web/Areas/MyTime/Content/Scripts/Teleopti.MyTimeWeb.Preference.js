@@ -22,6 +22,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	var addExtendedTooltip = null;
 	var addExtendedPreferenceFormViewModel = null;
 	var preferencesAndScheduleViewModel = null;
+	var mustHaveCountViewModel = null;
 	var readyForInteraction = function () { };
 	var completelyLoaded = function () { };
 
@@ -136,15 +137,15 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					}
 				},
 				events: {
-					render: function() {
+					render: function () {
 						$('#Preference-extended-reset')
 							.button()
-							.click(function() {
+							.click(function () {
 								addExtendedPreferenceFormViewModel.reset();
 							});
 						$('#Preference-extended-apply')
 							.button()
-							.click(function() {
+							.click(function () {
 								_setPreference(ko.toJS(addExtendedPreferenceFormViewModel));
 							});
 
@@ -153,7 +154,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					}
 				}
 			});
-		
+
 		button.removeAttr('disabled');
 	}
 
@@ -194,11 +195,18 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var to = $('li[data-mytime-date].inperiod').last().data('mytime-date');
 
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
-		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModels, date);
+		mustHaveCountViewModel = new Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel(dayViewModels);
+		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModels, date, mustHaveCountViewModel);
 
-		var element = $('#Preference-period-feedback-view')[0];
-		if (element)
-			ko.applyBindings(periodFeedbackViewModel, element);
+		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
+		if (periodFeedbackElement)
+			ko.applyBindings(periodFeedbackViewModel, periodFeedbackElement);
+
+		var mustHaveTextElement = $('#Preference-must-have-numbers');
+		if (mustHaveTextElement) {
+			mustHaveTextElement.attr("data-bind", "text: MustHaveText");
+			ko.applyBindings(mustHaveCountViewModel, mustHaveTextElement[0]);
+		}
 
 		loader = loader || function (call) { call(); };
 		loader(function () {

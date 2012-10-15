@@ -508,6 +508,7 @@
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.signalR-0.5.3.min.js" />
     <Content Include="Areas\MyTime\Content\Images\icon_sprite.png" />
