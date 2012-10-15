@@ -25,7 +25,7 @@
 		
 		<RunWebBehaviorTests>false</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'RaptorMain'">true</RunWebBehaviorTests>
-		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI19655'">true</RunWebBehaviorTests>
+		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI17910'">true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI18813'">true</RunWebBehaviorTests>
 		
 		<vs2008ide>c:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe</vs2008ide>
