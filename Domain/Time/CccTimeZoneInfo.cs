@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Teleopti.Interfaces.Domain;
 
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Time
         }
 
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+		[SecurityCritical]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using System.Text;
 using System.Windows.Forms;
@@ -53,29 +54,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         public override string GetFormattedText(GridStyleInfo style, object value, int textInfo)
         {
-            // Get culture specified in style, default if null
-            //CultureInfo ci = style.GetCulture(true);
-
             if (string.IsNullOrEmpty((string) value))
                 return "";
 
             return value.ToString();
-
-            //String ret = string.Empty;
-          
-            //if (value != null && value.GetType() == typeof(TimeSpan))
-            //{
-            //    TimeSpan typedValue = (TimeSpan)value;
-
-            //    string min = Convert.ToString(typedValue.Minutes, ci);
-            //    if (min.Length == 1)
-            //    {
-            //        min = "0" + min;
-            //    }
-            //    ret = Convert.ToString(typedValue.Hours, ci) + ci.DateTimeFormat.TimeSeparator + min;
-
-            //}
-            //return ret;
             
         }
 
@@ -88,7 +70,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         /// Created by: peterwe
         /// Created date: 2008-01-08
         /// </remarks>
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
+		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 			return fixedText;
 		}
 
-		[SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
+		[SecurityCritical]
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 

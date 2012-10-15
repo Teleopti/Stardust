@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Security;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
@@ -80,17 +81,11 @@ namespace Teleopti.Ccc.Win.Meetings
                 e.Graphics.DrawLine(blackPen, pointX, pointQ);
                 e.Graphics.DrawLine(blackPen, pointY, pointP);
             }
-
-            //using (Brush transparent = new SolidBrush(Color.Transparent))
-            //{
-            //    e.Graphics.FillRegion(transparent, e.Graphics.Clip);
-            //    Console.WriteLine("Drawing transparent");
-            //}
         }
 
         protected override CreateParams CreateParams
         {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+			[SecurityCritical]
             get
             {
                 CreateParams cp = base.CreateParams;

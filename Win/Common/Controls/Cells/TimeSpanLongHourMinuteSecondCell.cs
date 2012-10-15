@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Interfaces.Domain;
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             return ret;
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
+		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             Trace.WriteLine("GetObjectData called");

@@ -91,7 +91,7 @@ namespace Teleopti.Messaging.SignalR
 			try
 			{
 				Exception startException = null;
-				var result = _hubConnection.Start(new LongPollingTransport()).ContinueWith(t =>
+				_hubConnection.Start(new LongPollingTransport()).ContinueWith(t =>
 				                                                                           	{
 				                                                                           		startException = t.Exception;
 				                                                                           	},TaskContinuationOptions.OnlyOnFaulted);

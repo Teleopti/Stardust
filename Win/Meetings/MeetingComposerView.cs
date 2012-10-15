@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.Win.Meetings
             SetToolStripsToPreferredSize();
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+		[SecurityCritical]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             const int WM_KEYDOWN = 0x100;

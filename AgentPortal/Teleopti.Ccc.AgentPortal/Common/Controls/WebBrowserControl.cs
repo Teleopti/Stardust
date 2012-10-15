@@ -1,4 +1,5 @@
-﻿using System.Security.Permissions;
+﻿using System.Security;
+using System.Security.Permissions;
 using System.Windows.Forms;
 
 namespace Teleopti.Ccc.AgentPortal.Common.Controls
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
         {
             get { return this.webBrowser; }
         }
-        [SecurityPermission(SecurityAction.LinkDemand,Flags = SecurityPermissionFlag.UnmanagedCode)]
+		[SecurityCritical]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             bool local = keyData != (Keys.F1 | Keys.Shift);

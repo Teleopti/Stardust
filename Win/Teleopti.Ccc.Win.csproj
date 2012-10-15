@@ -771,7 +771,6 @@
     <Compile Include="Grouping\PersonSelectorView.Designer.cs">
       <DependentUpon>PersonSelectorView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Grouping\TreeViewDictionary.cs" />
     <Compile Include="Intraday\IntradayNavigator.cs">
       <SubType>UserControl</SubType>
     </Compile>
