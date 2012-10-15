@@ -140,7 +140,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		PartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
-			Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
 		},
 		LoadAndBindData: function (userTexts) {
 			var ajax = new Teleopti.MyTimeWeb.Ajax();
@@ -211,6 +210,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					_initPeriodSelection();
 					//for now
 					Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
+					Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
 				}
 			});
 		},
