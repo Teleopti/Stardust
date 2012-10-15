@@ -44,8 +44,10 @@
 					</div>
 					<div class="icon text-request ir floatright" />
 				</div>
-				<div class="icon comment-day ir tooltip floatright" data-bind="visible: HasNote, attr: {'tooltip-text': Note.Message}">
+				<!-- ko if: HasNote -->
+				<div class="icon comment-day ir tooltip floatright" data-bind="attr: {'tooltip-text': Note.Message}">
 				</div>
+				<!-- /ko -->
 				<div id="add-request-cell" data-bind="css:{'add-request-space show-request': $root.RequestPermission.TextRequestPermission}">
 				</div>
 			</li>
