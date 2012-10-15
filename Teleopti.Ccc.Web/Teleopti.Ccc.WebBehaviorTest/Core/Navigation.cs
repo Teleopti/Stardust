@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoTeamSchedule()
 		{
-			GoTo("MyTime#TeamSchedule/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#TeamSchedule/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
 		}
 
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoTo(String.Format("MyTime#TeamSchedule/Index/{0}/{1}/{2}", 
 				date.Year.ToString("0000"), date.Month.ToString("00"),date.Day.ToString("00"))
-				, new ApplicationStartupTimeout(), new LoadingOverlay());
+				, new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
 		}
 
