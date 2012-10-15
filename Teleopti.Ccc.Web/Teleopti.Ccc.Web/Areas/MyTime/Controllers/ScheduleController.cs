@@ -1,10 +1,19 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
+	public class killme
+	{
+		public bool AbsenceRequestPermission { get; set; }
+		public IEnumerable<AbsenceTypeViewModel> AbsenceTypes { get; set; }
+	}
+
 	[OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
 	public class ScheduleController : Controller
 	{
@@ -27,7 +36,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 			if (AcceptsJson())
 				return Json(model, JsonRequestBehavior.AllowGet);
-			return View("WeekPartial", model);
+
+			var model2 = new killme();
+			model2.AbsenceRequestPermission = true;
+			model2.AbsenceTypes = new List<AbsenceTypeViewModel>{new AbsenceTypeViewModel{Id=Guid.NewGuid(), Name = "roger"}};
+			return View("WeekPartial", model2);
 		}
 
 		[EnsureInPortal]
