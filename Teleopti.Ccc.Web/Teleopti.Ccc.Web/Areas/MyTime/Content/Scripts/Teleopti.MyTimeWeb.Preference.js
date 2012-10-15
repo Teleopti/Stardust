@@ -203,7 +203,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			ko.applyBindings(periodFeedbackViewModel, periodFeedbackElement);
 
 		var mustHaveTextElement = $('#Preference-must-have-numbers');
-		if (mustHaveTextElement) {
+		if (mustHaveTextElement.length > 0) {
 			mustHaveTextElement.attr("data-bind", "text: MustHaveText");
 			mustHaveTextElement = mustHaveTextElement[0];
 			if (mustHaveTextElement)
