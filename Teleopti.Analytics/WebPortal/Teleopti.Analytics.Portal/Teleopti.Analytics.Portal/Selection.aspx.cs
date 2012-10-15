@@ -2,6 +2,7 @@
 using System.Data;
 using System.Globalization;
 using Teleopti.Analytics.Portal.Utils;
+using Teleopti.Analytics.ReportTexts;
 
 namespace Teleopti.Analytics.Portal
 {
@@ -28,6 +29,8 @@ namespace Teleopti.Analytics.Portal
 			Parameter.BusinessUnitCode = BusinessUnitCode;
 			Parameter.LanguageId = LangId;
 			
+			SignOutButton.Text = Resources.ResSignOut;
+
 			if (Parameter.IsReportPermissionGranted)
 			{
 				// User have permission on report

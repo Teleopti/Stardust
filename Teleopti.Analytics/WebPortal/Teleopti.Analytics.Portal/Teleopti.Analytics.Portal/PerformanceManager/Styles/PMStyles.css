@@ -5,14 +5,14 @@
 	margin-left: 5px;
 	margin-right: 5px;
     color: #000000;
-    font-family: Verdana;
+    font-family: Segoe UI;
     background-color: white;
 }
 TD
 {
     font-size: 12px;
     color: #000066;
-    font-family: Verdana;
+    font-family: Segoe UI;
 }
 H2
 {
@@ -79,10 +79,10 @@ FONT.key
     }
 .BannerTextCompany
 {
-    font: bold;
+    font-weight: bold;
     font-size: 18pt;
     color: #cecece;
-    font-family: Tahoma;
+    font-family: Segoe UI;
     height: 0px;
     margin-top: 0;
     margin-left: 8px;
@@ -94,9 +94,9 @@ FONT.key
 .BannerTextApplication
 {
     color: #607EA4;
-    font: bold;
+    font-weight: bold;
     font-size: 18pt;
-    font-family: Tahoma;
+    font-family: Segoe UI;
     height: 0px;
     margin-top: 0;
     margin-left: 8px;
@@ -107,9 +107,9 @@ FONT.key
 }
 .BannerText
 {
-    font: bold;
+    font-weight: bold;
     font-size: 18pt;
-    font-family: Tahoma;
+    font-family: Segoe UI;
     height: 0px;
     margin-top: 0;
     margin-left: 8px;
@@ -129,10 +129,10 @@ FONT.key
 }
 .BannerSubheadText
 {
-    font: bold;
+    font-weight: bold;
     height: 11px;
     font-size: 11px;
-    font-family: Tahoma;
+    font-family: Segoe UI;
     margin-top: 1;
     margin-left: 10;
     filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=2,Color='black',Positive='true');
@@ -197,9 +197,9 @@ FONT.key
 }
 .InstallTextStyle
 {
-    font: bold;
+    font-weight: bold;
     font-size: 14pt;
-    font-family: Tahoma;
+    font-family: Segoe UI;
     a: #FF0000;
     text-decoration: None;
 }

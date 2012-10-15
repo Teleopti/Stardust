@@ -23,6 +23,7 @@ namespace Teleopti.Analytics.Portal
 			Login1.FailureText = Resources.LogInError;
 			Login1.UserNameRequiredErrorMessage = Resources.LogInUserRequired;
 			Login1.PasswordRequiredErrorMessage = Resources.LogInPassRequired;
+			Login1.RememberMeText = Resources.LogInRemember;
 			Login1.Focus();
 
 			AuthenticationMode mode = AuthorizationHelper.GetWebAuthenticationMode();

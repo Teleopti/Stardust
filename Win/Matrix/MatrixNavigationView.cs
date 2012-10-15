@@ -102,22 +102,23 @@ namespace Teleopti.Ccc.Win.Matrix
 
         public void OpenUrl(Uri url)
         {
-            var proc = new Process
-                           {
-                               EnableRaisingEvents = false,
-                               StartInfo =
-                                   {
-                                       FileName = "iexplore.exe",
-                                       Arguments = url.ToString()
-                                   }
-                           };
+			//var proc = new Process
+			//               {
+			//                   EnableRaisingEvents = false,
+			//                   StartInfo =
+			//                       {
+			//                           FileName = "iexplore.exe",
+			//                           Arguments = url.ToString()
+			//                       }
+			//               };
             try
             {
-                proc.Start();
+              //  proc.Start();
+	            Process.Start(url.ToString());
             }
             catch (System.ComponentModel.Win32Exception ex)
             {
-                MessageDialogs.ShowError(this, ex.Message, "Cannot load Internet Explorer");
+                MessageDialogs.ShowError(this, ex.Message, "Cannot load the Default Browser");
             }
         }
 

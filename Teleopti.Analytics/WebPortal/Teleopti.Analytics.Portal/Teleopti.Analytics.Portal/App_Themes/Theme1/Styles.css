@@ -1,17 +1,33 @@
 ﻿
 body
 {
+	font-family:Segoe UI, Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
 }
 
+.banneri1
+{
+    background-image: url("../../performancemanager/images/headerborder.png");
+    background-repeat:repeat-x;
+}
+.banneri2
+{
+    background-image: url("../../performancemanager/images/edge.png") ;
+    background-repeat:repeat-x;
+    padding-bottom: 5px;
+    padding-right: 5px;
+}
+.Login 
+{
+	font-size: 14px;
+	vertical-align: middle;
+}
 .SignOut {
 	text-decoration: none;
 	color: black;
-	font: 14px "Segoe UI";
+	font-weight: bold;
 }
 .Panel
 {
-	/*font-family:Verdana, Tahoma, Arial, Helvetica, Sans-Serif;*/
-	font-family:Segoe UI, Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
 	font-size:11px;
 	font-weight:bold;
 	color:#545c60;	
@@ -34,10 +50,7 @@ body
     padding: 2px 5px 2px 5px;
     }
     
-.Panel TD.Caption
-{
-    padding: 0px 10px;
-    }
+
 
 .Panel TD.NoPadding
 {
@@ -62,40 +75,35 @@ body
  
  .Caption
 {
-	font-weight: bold;
-	font-size: 11px;
+	font-size: 14px;
 	color: white;
-	padding: 0 10px;
-	text-align: inherit;
-	background-image: url(images/gridheaditem_bg.gif);
+	padding-left: 5px;
+	/*background-image: url(images/gridheaditem_bg.gif);*/
+	background-color:  #6e92a4;
 	height: 22px;
-	vertical-align: middle;
-	white-space:nowrap;
 }   
     #Reports_HeaderPanel .Caption 
 {
 	border:none;
 }
 .ReportName {
-	padding-bottom: 3px;
+	margin-top: 3px;
 	padding-left: 10px;
 }
-.DetailsView td 
-{
-	background-color: white;
-	border-top: none;
-	border-left: none;
-	border-right: none;
-	border-bottom: solid 1px #bed7e5;
+.DetailsView {
 	padding-left: 10px;
+	padding-top: 10px;
+}
+.DetailsView TD
+{
+	border-bottom: solid 1px #bed7e5;
 	color: #545a86;
-	font-size: 11px;
+	font-size: 14px;
 	font-weight:bold;
 }
 
 .ReportBody
 {
-	font-family: Arial;
 	color: dimgray;
 	font-size: 10pt;
 }
@@ -109,7 +117,7 @@ body
 
 .ReportSelection
 {
-	font-size: 9pt;
+	font-size: 11pt;
 	margin-right: 10px;
 }
 
@@ -224,20 +232,24 @@ body
 
 .ErrorLabel
 {
-	font-family:Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
 	color: Red;
 	font-size: large;
 	font-weight: bold;
 }
+
 .TechnicalDetail
 {
-	font-family:Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
 	font-size: small;
 }
 .TechnicalDetailHeader
 {
-	font-family:Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
 	font-size: small;
 	font-weight: bold;
 	text-decoration:underline;
+}
+#ViewerFrame {
+	border: none;
+	height:670px; 
+	overflow:hidden; 
+
 }

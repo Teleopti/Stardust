@@ -22,15 +22,6 @@ namespace Teleopti.Analytics.Portal {
         protected global::System.Web.UI.HtmlControls.HtmlForm aspnetForm;
         
         /// <summary>
-        /// LoggedOnUser control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LoggedOnUser;
-        
-        /// <summary>
         /// ScriptManager1 control.
         /// </summary>
         /// <remarks>
@@ -67,6 +58,24 @@ namespace Teleopti.Analytics.Portal {
         protected global::System.Web.UI.WebControls.HiddenField ParametersValid;
         
         /// <summary>
+        /// SignOutButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton SignOutButton;
+        
+        /// <summary>
+        /// LoggedOnUser control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LoggedOnUser;
+        
+        /// <summary>
         /// CPEReports control.
         /// </summary>
         /// <remarks>
@@ -85,15 +94,6 @@ namespace Teleopti.Analytics.Portal {
         protected global::System.Web.UI.WebControls.Panel Reports_HeaderPanel;
         
         /// <summary>
-        /// tdTogglePane control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdTogglePane;
-        
-        /// <summary>
         /// ImageReportsToggle control.
         /// </summary>
         /// <remarks>
@@ -110,24 +110,6 @@ namespace Teleopti.Analytics.Portal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label labelRepCaption;
-        
-        /// <summary>
-        /// ImageLoading control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image ImageLoading;
-        
-        /// <summary>
-        /// Progress control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdateProgress Progress;
         
         /// <summary>
         /// ImageButtonHelp control.
