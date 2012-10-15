@@ -21,7 +21,8 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 				self.PossibleResultDaysOff(data.PossibleResultDaysOff);
 				self.TargetContractTimeLower(data.TargetContractTime.Lower);
 				self.TargetContractTimeUpper(data.TargetContractTime.Upper);
-				mustHaveCountViewModel.MaxMustHave(data.MaxMustHave);
+				if (mustHaveCountViewModel)
+					mustHaveCountViewModel.MaxMustHave(data.MaxMustHave);
 			}
 		});
 	};
