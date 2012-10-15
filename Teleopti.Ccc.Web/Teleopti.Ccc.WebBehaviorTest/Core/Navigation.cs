@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoRequests()
 		{
-			GoTo("MyTime#Requests/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#Requests/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
 		}
 

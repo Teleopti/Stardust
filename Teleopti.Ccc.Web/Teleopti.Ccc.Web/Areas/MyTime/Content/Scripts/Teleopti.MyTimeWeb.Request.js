@@ -18,9 +18,9 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		Init: function () {
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Requests/Index', Teleopti.MyTimeWeb.Request.RequestPartialInit);
 		},
-		RequestPartialInit: function () {
+		RequestPartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
-			Teleopti.MyTimeWeb.Request.List.Init();
+			Teleopti.MyTimeWeb.Request.List.Init(readyForInteractionCallback, completelyLoadedCallback);
 			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
 		}
 	};

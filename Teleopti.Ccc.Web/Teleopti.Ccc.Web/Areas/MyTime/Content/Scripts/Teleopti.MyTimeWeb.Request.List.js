@@ -9,7 +9,10 @@
 /// <reference path="jquery.ui.connector.js"/>
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
+
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var readyForInteraction = function () { };
+	var completelyLoaded = function () { };
 
 	function _initScrollPaging() {
 		_loadAPage();
@@ -53,6 +56,14 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 					_moreToLoad();
 				}
 				_showMessageIfNoRequests();
+			},
+			complete: function () {
+				if (readyForInteraction)
+					readyForInteraction();
+				readyForInteraction = null;
+				if (completelyLoaded)
+					completelyLoaded();
+				completelyLoaded = null;
 			}
 		});
 	}
@@ -242,7 +253,9 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	return {
-		Init: function () {
+		Init: function (readyForInteractionCallback, completelyLoadedCallback) {
+			readyForInteraction = readyForInteractionCallback;
+			completelyLoaded = completelyLoadedCallback;
 			_initScrollPaging();
 			_initListClick();
 		},
