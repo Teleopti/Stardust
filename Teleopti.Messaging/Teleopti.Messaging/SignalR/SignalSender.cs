@@ -103,8 +103,7 @@ namespace Teleopti.Messaging.SignalR
 					          		BusinessUnitId = Subscription.IdToString(businessUnitId),
 					          		BinaryData = null
 					          	});
-					task.OnFinish += (sender, e) => waitForSend.Set();
-					waitForSend.WaitOne();
+					task.Wait(TimeSpan.FromSeconds(20));
 					break;
 				}
 				catch (Exception)

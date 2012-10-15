@@ -200,7 +200,7 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 			{
 				if (_wrapper == null) return;
 
-				_wrapper.AddSubscription(subscription).Then(_ =>
+				_wrapper.AddSubscription(subscription).ContinueWith(_ =>
 				{
 					var route = subscription.Route();
 

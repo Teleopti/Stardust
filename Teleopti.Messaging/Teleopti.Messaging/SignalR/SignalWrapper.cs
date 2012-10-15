@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using SignalR.Client;
 using SignalR.Client.Hubs;
-using SignalR.Client.Net20.Infrastructure;
 using SignalR.Client.Transports;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
@@ -30,7 +30,7 @@ namespace Teleopti.Messaging.SignalR
 			_hubConnection = hubConnection;
 		}
 
-		public Task<object> NotifyClients(Notification notification)
+		public Task NotifyClients(Notification notification)
 		{
 			if (verifyStillConnected())
 			{
@@ -39,7 +39,7 @@ namespace Teleopti.Messaging.SignalR
 			return emptyTask();
 		}
 
-		public Task<object> NotifyClients(IEnumerable<Notification> notifications)
+		public Task NotifyClients(IEnumerable<Notification> notifications)
 		{
 			if (verifyStillConnected())
 			{
@@ -131,7 +131,7 @@ namespace Teleopti.Messaging.SignalR
 			((Action<Notification>)ar.AsyncState).EndInvoke(ar);
 		}
 
-		public Task<object> AddSubscription(Subscription subscription)
+		public Task AddSubscription(Subscription subscription)
 		{
 			if (verifyStillConnected())
 			{
@@ -140,14 +140,12 @@ namespace Teleopti.Messaging.SignalR
 			return emptyTask();
 		}
 
-		private static Task<object> emptyTask()
+		private static Task emptyTask()
 		{
-			var task = new Task<object>();
-			task.OnFinished(null, null);
-			return task;
+			return Task.Factory.StartNew(() => { });
 		}
 
-		public Task<object> RemoveSubscription(string route)
+		public Task RemoveSubscription(string route)
 		{
 			if (verifyStillConnected())
 			{
