@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -7,43 +6,6 @@ using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
-	public static class Robustness
-	{
-		public static bool IESafeExists(this Element element)
-		{
-			return SafeIEOperation(() => element.Exists, e => false);
-		}
-
-		public static T SafeIEOperation<T>(Func<T> action, Func<Exception, T> failureCallback)
-		{
-			try
-			{
-				return action.Invoke();
-			}
-			// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
-			// if so, lets just try again
-			// maybe this behavior should be placed elsewhere and not only apply to asserts..
-			catch (UnauthorizedAccessException ex)
-			{
-				return failureCallback.Invoke(ex);
-			}
-			catch (NullReferenceException ex)
-			{
-				return failureCallback.Invoke(ex);
-			}
-			catch (ArgumentNullException ex)
-			{
-				return failureCallback.Invoke(ex);
-			}
-			catch (COMException ex)
-			{
-				return failureCallback.Invoke(ex);
-			}
-		}
-	}
-
-
-
 	public static class EventualTimeouts
 	{
 		public static TimeSpan Timeout { get; private set; }
