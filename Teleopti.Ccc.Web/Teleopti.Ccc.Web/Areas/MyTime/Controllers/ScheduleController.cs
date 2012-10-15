@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.Web.Filters;
@@ -18,11 +19,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	public class ScheduleController : Controller
 	{
 		private readonly IScheduleViewModelFactory _scheduleViewModelFactory;
+		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly INow _now;
 
-		public ScheduleController(IScheduleViewModelFactory scheduleViewModelFactory, INow now)
+		public ScheduleController(IScheduleViewModelFactory scheduleViewModelFactory, 
+										IRequestsViewModelFactory requestsViewModelFactory, 
+										INow now)
 		{
 			_scheduleViewModelFactory = scheduleViewModelFactory;
+			_requestsViewModelFactory = requestsViewModelFactory;
 			_now = now;
 		}
 
@@ -40,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var model2 = new killme();
 			model2.AbsenceRequestPermission = true;
 			model2.AbsenceTypes = new List<AbsenceTypeViewModel>{new AbsenceTypeViewModel{Id=Guid.NewGuid(), Name = "roger"}};
-			return View("WeekPartial", model2);
+			return View("WeekPartial", _requestsViewModelFactory.CreatePageViewModel());
 		}
 
 		[EnsureInPortal]
