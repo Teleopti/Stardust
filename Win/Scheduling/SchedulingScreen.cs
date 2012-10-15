@@ -1524,6 +1524,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _agentInfo.FormClosed += _agentInfo_FormClosed;
                 _agentInfo.Show(this);
             }
+            else
+            {
+				if (_agentInfo.WindowState.Equals(FormWindowState.Minimized))
+					_agentInfo.WindowState = FormWindowState.Normal;	
+            }
 
             updateSelectionInfo(_scheduleView.SelectedSchedules());
         }
