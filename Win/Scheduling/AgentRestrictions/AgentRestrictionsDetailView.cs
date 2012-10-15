@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void DeleteSelectedRestrictions(IUndoRedoContainer undoRedo, IScheduleTag defaultScheduleTag)
 		{
 			IScheduleMatrixPro matrix = _agentRestrictionGrid.CurrentDisplayRow.Matrix;
