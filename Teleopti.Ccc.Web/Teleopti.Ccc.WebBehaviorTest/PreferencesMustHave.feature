@@ -127,6 +127,3 @@ Scenario: Disallow setting too many must haves
 	| Field     | Value      |
 	| Date      | 2012-08-24 |
 	| Must have | false      |
-
-
-	# we need a scenario for visibility and enability of must have button
