@@ -16,6 +16,8 @@ namespace Teleopti.Interfaces
         /// 
         /// </summary>
 		TimeSpan EndTime { get; set; }
+
+        DateTimePeriod ActivityPeriod { get; set; }
         /// <summary>
         /// 
         /// </summary>

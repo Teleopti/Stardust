@@ -418,8 +418,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
 				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.EndTime == shift.WorkShiftEndTime));
             }
-
-			finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstKeepStartAndEndTime, cnt, finalShiftList.Count));
+            
+            finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstKeepStartAndEndTime, cnt, finalShiftList.Count));
 
             return finalShiftList;
 
