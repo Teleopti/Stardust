@@ -164,16 +164,7 @@ namespace Teleopti.Messaging.SignalR
 						_hubProxy.Subscribe(EventName).Data -= subscription_Data;
 					}
 
-					ThreadPool.QueueUserWorkItem(state =>
-					                             	{
-					                             		try
-					                             		{
-															_hubConnection.Stop();
-					                             		}
-					                             		catch (Exception)
-					                             		{
-					                             		}
-					                             	});
+					_hubConnection.Stop();
 				}
 				catch (Exception)
 				{
