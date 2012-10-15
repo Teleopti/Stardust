@@ -15,7 +15,7 @@
 		<asp:HiddenField ID="HiddenUserID" runat="server" />
 		<asp:HiddenField ID="ParametersValid" runat="server" Value="0" /> 
 
-		<div style="float: right;margin-top: 5px">
+		<div style="float: right">
 			<div style="float:right; margin-left:10px;margin-right: 10px;padding-bottom: 5px"><asp:LinkButton runat="server" ID="SignOutButton" CssClass="SignOut" OnClick="SignOut" Text="xxSign Out"></asp:LinkButton></div>
 			<div style="white-space:nowrap; float:right" ><asp:Label ID="LoggedOnUser" runat="server" Text=""></asp:Label></div>
 		</div>
@@ -27,13 +27,13 @@
 				ExpandedImage="~/images/up.png" ExpandedText='xxCollapse' CollapsedImage="~/images/down.png"
 				CollapsedText='xxExpand' SuppressPostBack="true" />
 			<asp:Panel ID="Reports_HeaderPanel" runat="server" Style="cursor: pointer;" CssClass="Caption">
-					<div style="float: left;padding-top: 3px">
+					<div style="float: left;padding-top: 2px">
 						<asp:Image ID="ImageReportsToggle" runat="server" ImageUrl="~/images/down.png" />
 					</div>
-					<div style="float: left">
+					<div style="float: left;padding-top: 2px">
 						<asp:Label ID="labelRepCaption" CssClass="ReportName" runat="server" Text="xxxRapportnamnet"></asp:Label>
 					</div>
-					<div style="float: right; vertical-align: middle; width: 25px; padding-top: 3px">
+					<div style="float: right; width: 25px; padding-top: 3px">
 						<asp:ImageButton ID="ImageButtonHelp" runat="server" ImageUrl="~/images/Question_16x16.png" ToolTip="xxHelp" OnClientClick="javascript:return false;" />
 					</div>
 			</asp:Panel>
@@ -42,7 +42,7 @@
 					<Analytics:Selector LabelWidth="30%" List1Width="75%" ID="Parameter" runat="server" OnInit="Selector_OnInit">
 					</Analytics:Selector>
 				</div>
-				<div style="text-align: center;padding-bottom: 20px;padding-top: 20px">
+				<div style="text-align: center;padding-bottom: 30px;padding-top: 10px">
 					<asp:ImageButton  OnClick="ButtonShow_Click" ID="buttonShow" SkinID="Show" ToolTip='' 
 						runat="server" />
 					<asp:Label ID="labelPermissionDenied" runat="server" ForeColor="Red" Font-Size="Large" Visible="false"></asp:Label>

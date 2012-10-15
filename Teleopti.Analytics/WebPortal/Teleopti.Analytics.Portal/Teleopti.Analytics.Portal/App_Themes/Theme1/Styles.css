@@ -4,18 +4,6 @@ body
 	font-family:Segoe UI, Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
 }
 
-.banneri1
-{
-    background-image: url("../../performancemanager/images/headerborder.png");
-    background-repeat:repeat-x;
-}
-.banneri2
-{
-    background-image: url("../../performancemanager/images/edge.png") ;
-    background-repeat:repeat-x;
-    padding-bottom: 5px;
-    padding-right: 5px;
-}
 .Login 
 {
 	font-size: 14px;
@@ -26,6 +14,7 @@ body
 	color: black;
 	font-weight: bold;
 }
+
 .Panel
 {
 	font-size:11px;
@@ -50,8 +39,6 @@ body
     padding: 2px 5px 2px 5px;
     }
     
-
-
 .Panel TD.NoPadding
 {
     padding: 0px;
@@ -76,10 +63,11 @@ body
  .Caption
 {
 	font-size: 14px;
-	color: white;
 	padding-left: 5px;
-	/*background-image: url(images/gridheaditem_bg.gif);*/
-	background-color:  #6e92a4;
+	color: white;
+	/*background-image: url(images/gridheaditem_bg.gif);
+	background-color:  #6e92a4;*/
+	background-color:  #96bacc;
 	height: 22px;
 }   
     #Reports_HeaderPanel .Caption 

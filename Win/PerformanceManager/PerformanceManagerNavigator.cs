@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -41,26 +42,26 @@ namespace Teleopti.Ccc.Win.PerformanceManager
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.MessageDialogs.ShowError(System.Windows.Forms.Control,System.String,System.String)")]
 		private void toolStripNewReport_Click(object sender, EventArgs e)
         {
-            string forceFormsLogin = "true";
+            var forceFormsLogin = "true";
             if (StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
                 forceFormsLogin = "false";
 
-            string bUnitID = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.ToString();
+            var bUnitID = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.ToString();
 
-            System.Diagnostics.Process proc = new System.Diagnostics.Process();
-            proc.EnableRaisingEvents = false;
-            proc.StartInfo.FileName = "iexplore.exe";
-            
-			string matrixUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["MatrixWebSiteUrl"] + "/PmContainer.aspx?pm=1&forceformslogin={0}&buid={1}";
-            proc.StartInfo.Arguments = string.Format(CultureInfo.CurrentCulture, matrixUrl, forceFormsLogin, bUnitID);
+            //var proc = new Process {EnableRaisingEvents = false, StartInfo = {FileName = "iexplore.exe"}};
+
+			var matrixUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["MatrixWebSiteUrl"] + "/PmContainer.aspx?pm=1&forceformslogin={0}&buid={1}";
+			matrixUrl = string.Format(CultureInfo.CurrentCulture, matrixUrl, forceFormsLogin, bUnitID);
+			//proc.StartInfo.Arguments = string.Format(CultureInfo.CurrentCulture, matrixUrl, forceFormsLogin, bUnitID);
             //proc.Start();
 			try
 			{
-				proc.Start();
+				//proc.Start();
+				Process.Start(matrixUrl);
 			}
 			catch (System.ComponentModel.Win32Exception ex)
 			{
-				MessageDialogs.ShowError(this, ex.Message, "Cannot load Internet Explorer");
+				MessageDialogs.ShowError(this, ex.Message, "Cannot load the Default Browser");
 			}
         }
     }
