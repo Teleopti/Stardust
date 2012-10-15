@@ -186,9 +186,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, UserFactory.User().Culture);
 			var lastDayOfWeek = DateHelper.GetLastDateInWeek(anyDayOfWeek, UserFactory.User().Culture);
-			EventualAssert.WhenElementExists(_page.FirstDay, d => d.GetAttributeValue("data-mytime-date"), Is.EqualTo(firstDayOfWeek.ToString("yyyy-MM-dd")));
-			EventualAssert.WhenElementExists(_page.SeventhDay, d => d.GetAttributeValue("data-mytime-date"), Is.EqualTo(lastDayOfWeek.ToString("yyyy-MM-dd")));
+			EventualAssert.That(() => _page.FirstDay.GetAttributeValue("data-mytime-date"), Is.EqualTo(firstDayOfWeek.ToString("yyyy-MM-dd")));
+			EventualAssert.That(() => _page.SeventhDay.GetAttributeValue("data-mytime-date"), Is.EqualTo(lastDayOfWeek.ToString("yyyy-MM-dd")));
 		}
-
 	}
 }
