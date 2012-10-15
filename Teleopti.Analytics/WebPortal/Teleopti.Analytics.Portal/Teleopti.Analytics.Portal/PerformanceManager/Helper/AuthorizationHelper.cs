@@ -19,10 +19,10 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 													 new SqlParameter("is_windows_logon", CheckWindowsAuthentication())
 												 };
 
-			return
-				(bool)
-				DatabaseHelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.pm_user_check", parameters,
-											  ConnectionString);
+			return true;
+			//(bool)
+			//DatabaseHelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.pm_user_check", parameters,
+			//                              ConnectionString);
 		}
 
 		public static bool IsAuthenticationConfigurationValid()
