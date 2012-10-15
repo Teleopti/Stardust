@@ -144,6 +144,72 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 			Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
 		},
+		LoadData : function () {
+			var ajax = new Teleopti.MyTimeWeb.Ajax();
+			ajax.Ajax({
+				url: 'Schedule/Bajs',
+				dataType: "json",
+				type: 'GET',
+				data: {
+					date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
+				},
+				success: function (data) {
+					var vm = data;
+					vm.scheduleHeight = 668;
+					vm.timelineOffset = 198;
+					vm.pixelToDisplayAll = 33;
+					vm.pixelToDisplayTitle = 16;
+					vm.mathRound = function (value) {
+						return Math.round(value);
+					};
+
+					vm.textRequestCount = function (count) {
+						return '@(Resources.XRequests)'.format(count);
+					};
+
+					vm.topPixel = function (period) {
+						return vm.mathRound(vm.scheduleHeight * period.StartPositionPercentage);
+					};
+
+					vm.bottomPixel = function (period) {
+						return vm.mathRound(vm.scheduleHeight * period.EndPositionPercentage) - 1;
+					};
+
+					vm.heightPixel = function (period) {
+						return vm.bottomPixel(period) - vm.topPixel(period);
+					};
+
+					vm.heightDouble = function (period) {
+						return vm.scheduleHeight * (period.EndPositionPercentage - period.StartPositionPercentage);
+					};
+
+					vm.tooltipText = function (period) {
+						if (period.Meeting) {
+							return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>'.format(period.TimeSpan, "Resources.SubjectColon", period.Meeting.Title, "Resources.LocationColon", period.Meeting.Location);
+						} else {
+							return period.TimeSpan;
+						}
+					};
+
+					vm.createClassForDaySummary = function (styleClass) {
+						var styleClassName = (styleClass) ? styleClass + ' ' : '';
+						var showRequestClass = (vm.RequestPermission.TextRequestPermission) ? 'show-request' : '';
+						return styleClassName + showRequestClass;
+					};
+
+					vm.createStyleList = function () {
+						var ret = '';
+						$.each(data.Styles, function (key, value) {
+							ret += "li.third.{0} {background-color: rgb({1});} ".format(value.Name, value.RgbColor);
+						});
+						return ret;
+					};
+
+					ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
+					Teleopti.MyTimeWeb.Schedule.DataLoaded();
+				}
+			});
+		},
 		PartialDispose: function () {
 			addTextRequestTooltip.qtip('destroy');
 		},
