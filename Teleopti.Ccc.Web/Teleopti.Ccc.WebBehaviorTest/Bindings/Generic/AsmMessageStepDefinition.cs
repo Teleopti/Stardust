@@ -56,6 +56,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
             }
 		}
 
+        [When(@"I receive message number '(.*)' while not viewing message page")]
+        public void WhenIReceiveMessageNumberWhileNotViewingMessagePage(int messageCount)
+        {
+            Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
+        }
+
         [When(@"I receive message number '(.*)'")]
         public void WhenIReceiveMessageNumber(int messageCount)
         {

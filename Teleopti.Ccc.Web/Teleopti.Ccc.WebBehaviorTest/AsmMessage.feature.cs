@@ -144,7 +144,7 @@ this.FeatureBackground();
 #line 27
  testRunner.And("I am viewing week schedule");
 #line 28
- testRunner.When("I receive message number \'1\'");
+ testRunner.When("I receive message number \'1\' while not viewing message page");
 #line 29
  testRunner.Then("I should be notified that I have \'1\' unread message(s)");
 #line hidden
@@ -176,7 +176,7 @@ this.FeatureBackground();
 #line 37
  testRunner.And("I should be notified that I have \'1\' unread message(s)");
 #line 38
- testRunner.When("I receive message number \'2\'");
+ testRunner.When("I receive message number \'2\' while not viewing message page");
 #line 39
  testRunner.Then("I should be notified that I have \'2\' unread message(s)");
 #line hidden

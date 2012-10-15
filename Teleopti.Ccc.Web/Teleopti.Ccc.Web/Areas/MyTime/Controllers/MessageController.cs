@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public JsonResult Reply(MessageForm form)
+		public JsonResult Reply(Guid messageId)
 		{
-			return Json(_pushMessageDialoguePersister.Persist(form.MessageId));
+			return Json(_pushMessageDialoguePersister.Persist(messageId));
 		}
 
 		[UnitOfWorkAction]
@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult Message(Guid messageId)
 		{
-			//return Json(_messageViewModelFactory.CreateMessagesInformationViewModel(new Guid(messageId)), JsonRequestBehavior.AllowGet);
 			return Json(_messageViewModelFactory.CreateMessagesInformationViewModel(messageId), JsonRequestBehavior.AllowGet);
 		}
 	}

@@ -97,8 +97,8 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 				_setConfirmButtonState(messageItem, false);
 				_loading();
 			},
-			data: JSON.stringify({
-				MessageId: messageItem.messageId()
+			data: JSON.stringify ({
+				messageId: messageItem.messageId()
 			}),
 			success: function (data, textStatus, jqXHR) {
 				// Ta bort meddelandet mha messageId från vår vm
@@ -106,7 +106,7 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 				_noMoreToLoad();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
-				//alert('felfelfel!');
+				alert('felfelfel! ' + messageItem.messageId());
 			}
 		});
 	}
@@ -170,12 +170,9 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 	}
 
 	function setConnectorOnAllConnectionItems() {
-		//loopa igenom listan och sätta connector.connect på alla items
 		$('.communication-list li .communication-connector')
 			.not('ui-connector')
 			.connector();
-		//var connector = listItem.find('.communication-connector');
-		//connector.connector();
 	}
 
 	function _hasMoreToLoad() {

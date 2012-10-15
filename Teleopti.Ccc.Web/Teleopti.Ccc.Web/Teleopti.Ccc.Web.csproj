@@ -887,7 +887,7 @@
           <UseIIS>False</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>52858</DevelopmentServerPort>
-          <DevelopmentServerVPath>/jonas</DevelopmentServerVPath>
+          <DevelopmentServerVPath>/MyTimeWeb</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

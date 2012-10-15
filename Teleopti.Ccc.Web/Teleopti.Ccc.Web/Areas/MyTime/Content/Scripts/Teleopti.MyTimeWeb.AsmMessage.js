@@ -38,8 +38,9 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 	}
 
 	function _setAddNewMessageAtTopOfList(messageItem) {
-		console.log('_setAddNewMessageAtTopOfList: ' + JSON.stringify(messageItem));
-		Teleopti.MyTimeWeb.CommunicationList.AddNewMessageAtTop(messageItem);
+	    //		console.log('_setAddNewMessageAtTopOfList: ' + JSON.stringify(messageItem));
+	    if (!messageItem().IsRead)
+		    Teleopti.MyTimeWeb.CommunicationList.AddNewMessageAtTop(messageItem);
 	}
 
 	function test() {
@@ -76,12 +77,11 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 				messageId: messageId
 			},
 			success: function (data) {
-				console.log('success: _getMessageInformation; messageId = ' + messageId);
+//				console.log('success: _getMessageInformation; messageId = ' + messageId);
 				_setMessageNotificationOnTab(data.UnreadMessagesCount);
 				_setAddNewMessageAtTopOfList(data.MessageItem);
 			},
 			error: function (error) {
-				console.log('error: ' + error);
 			}
 		});
 	}

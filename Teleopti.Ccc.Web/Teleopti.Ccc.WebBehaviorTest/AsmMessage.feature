@@ -25,7 +25,7 @@ Scenario: Show message tab
 Scenario: Indicate new message while logged on
 	Given I have the role 'Full access to mytime'
 	And I am viewing week schedule
-	When I receive message number '1'
+	When I receive message number '1' while not viewing message page
 	Then I should be notified that I have '1' unread message(s)
 
 Scenario: Indicate another new message while logged on
@@ -35,7 +35,7 @@ Scenario: Indicate another new message while logged on
 	| Title         | New message	 |
 	And I am viewing week schedule
 	And I should be notified that I have '1' unread message(s)
-	When I receive message number '2'
+	When I receive message number '2' while not viewing message page
 	Then I should be notified that I have '2' unread message(s)
 
 Scenario: Indicate new message at logon

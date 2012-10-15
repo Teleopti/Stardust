@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 			pushMessageDialogueRepository.Stub(x => x.Get(pushMessageDialogue.Id.Value)).Return(pushMessageDialogue);
 			mapper.Stub(x => x.Map<IPushMessageDialogue, MessageViewModel>(pushMessageDialogue)).Return(mappedViewModel);
 
-			var viewModel = target.Persist(pushMessageDialogue.Id.ToString());
+			var viewModel = target.Persist(pushMessageDialogue.Id.Value);
 
 			viewModel.MessageId.Should().Be.EqualTo(mappedViewModel.MessageId);
             viewModel.IsRead.Should().Be.True();

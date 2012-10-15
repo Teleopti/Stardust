@@ -45,12 +45,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var target = new MessageController(null, pushMessageDialoguePersister, null);
 
-			var messageViewModel = new MessageViewModel { MessageId = Guid.NewGuid().ToString() };
-			var form = new MessageForm { MessageId = messageViewModel.MessageId };
+		    var messageId = Guid.NewGuid();
+            var messageViewModel = new MessageViewModel { MessageId = messageId.ToString() };
 
-			pushMessageDialoguePersister.Stub(x => x.Persist(messageViewModel.MessageId)).Return(messageViewModel);
+			pushMessageDialoguePersister.Stub(x => x.Persist(messageId)).Return(messageViewModel);
 
-			var result = target.Reply(form);
+			var result = target.Reply(messageId);
 
 			result.Data.Should().Be.SameInstanceAs(messageViewModel);
 		}
@@ -73,8 +73,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnMessageCountAndMessageAskedFor()
 		{
+		    var messageId = Guid.NewGuid();
 			var viewModelFactory = MockRepository.GenerateMock<IMessageViewModelFactory>();
-			var messageViewModel = new MessageViewModel { MessageId = Guid.NewGuid().ToString() };
+			var messageViewModel = new MessageViewModel { MessageId = messageId.ToString() };
 			var messageInfo = new MessagesInformationViewModel
 								{
 									UnreadMessagesCount = 1,
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			viewModelFactory.Stub(x => x.CreateMessagesInformationViewModel(new Guid(messageViewModel.MessageId))).Return(messageInfo);
 
 			var target = new MessageController(viewModelFactory, null, null);
-			var result = target.Message(new MessageForm {MessageId = messageViewModel.MessageId});
+			var result = target.Message(messageId);
 
 			result.Data.Should().Be.SameInstanceAs(messageInfo);
 		}

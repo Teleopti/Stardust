@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 			_mapper = mapper;
 		}
 
-		public MessageViewModel Persist(string messageId)
+		public MessageViewModel Persist(Guid messageId)
 		{
-			var pushMessageDialogue = _pushMessageDialogueRepository.Get(new Guid(messageId));
+			var pushMessageDialogue = _pushMessageDialogueRepository.Get(messageId);
             pushMessageDialogue.SetReply(pushMessageDialogue.PushMessage.ReplyOptions.First());
 
 			return _mapper.Map<IPushMessageDialogue, MessageViewModel>(pushMessageDialogue);
