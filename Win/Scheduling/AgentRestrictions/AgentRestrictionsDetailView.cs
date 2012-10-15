@@ -24,10 +24,11 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 	public class AgentRestrictionsDetailView : ScheduleViewBase, IAgentRestrictionsDetailView
 	{
 		private readonly AgentRestrictionsDetailModel _model;
+		private readonly AgentRestrictionGrid _agentRestrictionGrid;
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private bool _useScheduling;
 
-		public AgentRestrictionsDetailView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
+		public AgentRestrictionsDetailView(AgentRestrictionGrid agentRestrictionGrid, GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
 			SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
 			IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IWorkShiftWorkTime workShiftWorkTime)
 			: base(grid)
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_model = new AgentRestrictionsDetailModel(schedulerState.RequestedPeriod.Period());
 			Presenter = new AgentRestrictionsDetailPresenter(this, _model, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag);
 
+			_agentRestrictionGrid = agentRestrictionGrid;
 			_workShiftWorkTime = workShiftWorkTime;
 
 			InitializeGrid();
@@ -242,8 +244,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void DeleteSelectedRestrictions(IUndoRedoContainer undoRedo, IScheduleTag defaultScheduleTag)
 		{
-			AgentRestrictionGrid agentRestrictionGrid = (AgentRestrictionGrid) ViewGrid;
-			IScheduleMatrixPro matrix = agentRestrictionGrid.CurrentDisplayRow.Matrix;
+			IScheduleMatrixPro matrix = _agentRestrictionGrid.CurrentDisplayRow.Matrix;
 			var clipHandler = new ClipHandler<IScheduleDay>();
 			GridHelper.GridCopySelection(ViewGrid, clipHandler, true);
 			var list = DeleteList(clipHandler);
@@ -269,10 +270,13 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 														 new ScheduleTagSetter(defaultScheduleTag));
 
 			var options = new DeleteOption { Preference = true, StudentAvailability = true };
-			deleteService.Delete(strippedList, options, rollbackService, null);
+			deleteService.Delete(strippedList, rollbackService, options);
 
 
 			undoRedo.CommitBatch();
+			OnPasteCompleted();
+
+			//InvalidateSelectedRows(new List<IScheduleDay> { Presenter.ClipHandlerSchedule.ClipList[0].ClipValue });
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -291,8 +295,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 				IList<IScheduleDay> pasteList =
 								   GridHelper.HandlePasteScheduleGridFrozenColumn(ViewGrid, Presenter.ClipHandlerSchedule, pasteAction);
 
-				AgentRestrictionGrid agentRestrictionGrid = (AgentRestrictionGrid)ViewGrid;
-				IScheduleMatrixPro matrix = agentRestrictionGrid.CurrentDisplayRow.Matrix;
+				IScheduleMatrixPro matrix = _agentRestrictionGrid.CurrentDisplayRow.Matrix;
 
 				IList<IScheduleDay> strippedList = new List<IScheduleDay>();
 				foreach (var scheduleDay in pasteList)

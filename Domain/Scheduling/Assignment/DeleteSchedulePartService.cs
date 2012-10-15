@@ -14,6 +14,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, BackgroundWorker backgroundWorker,
                                    IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter tagSetter, INewBusinessRuleCollection businessRuleCollection);
+
+    	IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService,
+    	                           DeleteOption deleteOption);
     }
 
     /// <summary>
@@ -59,7 +62,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         }
 
-        
+		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, DeleteOption deleteOption)
+		{
+			var bgWorker = new BackgroundWorker();
+			IList<IScheduleDay> retList;
+			try
+			{
+				retList = Delete(list, deleteOption, rollbackService, bgWorker);
+			}
+			finally
+			{
+				bgWorker.Dispose();
+			}
+
+			return retList;
+		}
 
         public IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService)
         {
