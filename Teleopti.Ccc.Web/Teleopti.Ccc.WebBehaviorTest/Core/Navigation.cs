@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 			var uri = new Uri(TestSiteConfigurationSetup.Url, pageUrl);
 			Log.Write("Browsing to: " + uri);
-			Browser.Current.GoTo(uri);
+			Robustness.RetryIEOperation(() => Browser.Current.GoTo(uri));
 			Log.Write("Ended up in: " + Browser.Current.Url);
 
 			interceptors.Reverse().ToList().ForEach(i => i.After(pageUrl));
