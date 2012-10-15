@@ -205,9 +205,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var mustHaveTextElement = $('#Preference-must-have-numbers');
 		if (mustHaveTextElement.length > 0) {
 			mustHaveTextElement.attr("data-bind", "text: MustHaveText");
-			mustHaveTextElement = mustHaveTextElement[0];
-			if (mustHaveTextElement)
-				ko.applyBindings(mustHaveCountViewModel, mustHaveTextElement[0]);
+			ko.applyBindings(mustHaveCountViewModel, mustHaveTextElement[0]);
 		}
 
 		loader = loader || function (call) { call(); };
