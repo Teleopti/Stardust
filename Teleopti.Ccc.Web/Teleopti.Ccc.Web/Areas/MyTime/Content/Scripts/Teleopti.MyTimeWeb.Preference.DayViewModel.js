@@ -26,23 +26,16 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		    },
 		    complete = options.complete || null;
 
-		var cell = $('li[data-mytime-date="' + date + '"]');
 		return ajax.Ajax({
 			url: url,
 			dataType: "json",
 			contentType: "application/json; charset=utf-8",
 			type: type,
 			beforeSend: function (jqXHR) {
-				var currentRequest = cell.data('request');
-				if (currentRequest) {
-					currentRequest.abort();
-				}
-				cell.data('request', jqXHR);
 				self.AjaxError('');
 				self.IsLoading(true);
 			},
 			complete: function (jqXHR, textStatus) {
-				cell.data('request', null);
 				self.IsLoading(false);
 				if (complete)
 					complete(jqXHR, textStatus);
