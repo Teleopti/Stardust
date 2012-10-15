@@ -259,6 +259,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 				.Should().Have.SameValuesAs(new[] { Color.Blue.ToStyleClass(), Color.Red.ToStyleClass() });
 			result.Styles.Select(s => s.ColorHex)
 				.Should().Have.SameValuesAs(new[] { Color.Blue.ToHtml(), Color.Red.ToHtml() });
+			result.Styles.Select(s => s.RgbColor)
+				.Should().Have.SameValuesAs(new[] {Color.Blue.ToCSV(), Color.Red.ToCSV()});
 		}
 
 		[Test]
