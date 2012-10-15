@@ -209,6 +209,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					_setTimeIndicatorFirstTime();
 					_initTooltip();
 					_initPeriodSelection();
+					//for now
+					Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
 				}
 			});
 		},
