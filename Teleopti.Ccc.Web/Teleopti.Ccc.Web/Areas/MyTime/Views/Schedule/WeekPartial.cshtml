@@ -12,6 +12,9 @@
 			url: 'Schedule/Bajs',
 			dataType: "json",
 			type: 'GET',
+			data: {
+				date : Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
+			},
 			success: function (data) {
 				var vm = data;
 				vm.scheduleHeight = 668;
@@ -57,8 +60,8 @@
 				};
 
 				vm.createStyleList = function () {
-					var ret='';
-					$.each(data.Styles, function(key, value) {
+					var ret = '';
+					$.each(data.Styles, function (key, value) {
 						ret += "li.third.{0} {background-color: rgb({1});} ".format(value.Name, value.RgbColor);
 					});
 					return ret;
