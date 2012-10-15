@@ -23,6 +23,7 @@ namespace Teleopti.Analytics.Portal
 			Login1.FailureText = Resources.LogInError;
 			Login1.UserNameRequiredErrorMessage = Resources.LogInUserRequired;
 			Login1.PasswordRequiredErrorMessage = Resources.LogInPassRequired;
+			Login1.RememberMeText = Resources.LogInRemember;
 			Login1.Focus();
 
 			AuthenticationMode mode = AuthorizationHelper.GetWebAuthenticationMode();
@@ -71,7 +72,8 @@ namespace Teleopti.Analytics.Portal
 			if (e.Authenticated)
 			{
 				StateHolder.UserObject = null;
-				FormsAuthentication.SetAuthCookie(Login1.UserName, false);
+				FormsAuthentication.SetAuthCookie(Login1.UserName, Login1.RememberMeSet);
+				
 				StateHolder.UserName = Login1.UserName;
 				if (Request.QueryString.Get("ReturnUrl") != null)
 				{
