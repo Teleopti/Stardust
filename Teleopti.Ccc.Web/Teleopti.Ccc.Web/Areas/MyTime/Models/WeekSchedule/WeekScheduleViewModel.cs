@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public IEnumerable<StyleClassViewModel> Styles { get; set; }
 		public IEnumerable<DayViewModel> Days { get; set; }
 		public RequestPermission RequestPermission { get; set; }
-		public IEnumerable<AbsenceTypeViewModel> AbsenceTypes { get; set; }
 		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
 		public bool AsmPermission { get; set; }
 		public bool IsCurrentWeek { get; set; }

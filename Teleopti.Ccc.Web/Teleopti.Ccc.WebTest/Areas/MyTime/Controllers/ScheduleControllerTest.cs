@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldRedirectToWeekActionFromDefault()
 		{
-			var target = new ScheduleController(null, null);
+			var target = new ScheduleController(null, null, null);
 			var result = target.Index() as RedirectToRouteResult;
 			result.RouteValues["action"].Should().Be.EqualTo("Week");
 		}
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			now.Stub(x => x.DateOnly()).Return(new DateOnly(2012, 8, 1));
 			viewModelFactory.Stub(x => x.CreateWeekViewModel(now.DateOnly())).Return(new WeekScheduleViewModel());
 			
-			using (var target = new ScheduleController(viewModelFactory, now))
+			using (var target = new ScheduleController(viewModelFactory, null, now))
 			{
 				var result = target.Week(null) as ViewResult;
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			now.Stub(x => x.DateOnly()).Return(new DateOnly(2012, 8, 1));
 			viewModelFactory.Stub(x => x.CreateWeekViewModel(now.DateOnly())).Return(new WeekScheduleViewModel());
 			
-			using (var target = new ScheduleController(viewModelFactory, now))
+			using (var target = new ScheduleController(viewModelFactory, null, null))
 			{
 				new StubbingControllerBuilder().InitializeController(target);
 				target.ControllerContext.HttpContext.Request.Stub(x => x.Headers).Return(new NameValueCollection { { "Accept", "application/json" } });
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IScheduleViewModelFactory>();
 			var now = MockRepository.GenerateMock<INow>();
 			viewModelFactory.Stub(x => x.CreateWeekViewModel(date)).Return(new WeekScheduleViewModel());
-			using (var target = new ScheduleController(viewModelFactory, now))
+			using (var target = new ScheduleController(viewModelFactory, null, now))
 			{
 				var result = target.Week(date) as ViewResult;
 
