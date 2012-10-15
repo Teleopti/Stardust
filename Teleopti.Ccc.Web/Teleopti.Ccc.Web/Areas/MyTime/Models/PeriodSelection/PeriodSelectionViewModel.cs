@@ -6,6 +6,6 @@
 		public string Date { get; set; }
 		public PeriodDateRangeViewModel SelectedDateRange { get; set; }
 		public PeriodDateRangeViewModel SelectableDateRange { get; set; }
-		public PeriodNavigationViewModel Navigation { get; set; }
+		public PeriodNavigationViewModel PeriodNavigation { get; set; }
 	}
 }

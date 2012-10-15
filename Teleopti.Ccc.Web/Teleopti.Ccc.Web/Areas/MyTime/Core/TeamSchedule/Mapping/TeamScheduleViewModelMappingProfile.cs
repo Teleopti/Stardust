@@ -138,15 +138,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				.ForMember(d => d.Display, o => o.MapFrom(s => s.Date.ToShortDateString()))
 				.ForMember(d => d.SelectableDateRange, o => o.MapFrom(s => new DateOnlyPeriod(new DateOnly(CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime), new DateOnly(CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime))))
 				.ForMember(d => d.SelectedDateRange, o => o.MapFrom(s => new DateOnlyPeriod(s.Date, s.Date)))
-				.ForMember(d => d.Navigation, o => o.MapFrom(s => s))
+				.ForMember(d => d.PeriodNavigation, o => o.MapFrom(s => s))
 				;
 
 			CreateMap<TeamScheduleDomainData, PeriodNavigationViewModel>()
 				.ForMember(d => d.CanPickPeriod, o => o.UseValue(true))
 				.ForMember(d => d.HasNextPeriod, o => o.UseValue(true))
 				.ForMember(d => d.HasPrevPeriod, o => o.UseValue(true))
-				.ForMember(d => d.FirstDateNextPeriod, o => o.MapFrom(s => s.Date.AddDays(1).ToFixedClientDateOnlyFormat()))
-				.ForMember(d => d.LastDatePreviousPeriod, o => o.MapFrom(s => s.Date.AddDays(-1).ToFixedClientDateOnlyFormat()))
+				.ForMember(d => d.NextPeriod, o => o.MapFrom(s => s.Date.AddDays(1).ToFixedClientDateOnlyFormat()))
+				.ForMember(d => d.PrevPeriod, o => o.MapFrom(s => s.Date.AddDays(-1).ToFixedClientDateOnlyFormat()))
 				;
 
 			CreateMap<DateOnlyPeriod, PeriodDateRangeViewModel>()

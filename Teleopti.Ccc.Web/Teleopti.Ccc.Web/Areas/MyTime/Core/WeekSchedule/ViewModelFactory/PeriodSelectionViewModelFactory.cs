@@ -18,14 +18,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			       	{
 			       		Date = dateOnly.ToFixedClientDateOnlyFormat(),
 			       		Display = week.DateString,
-			       		Navigation =
+			       		PeriodNavigation =
 			       			new PeriodNavigationViewModel
 			       				{
 			       					CanPickPeriod = false,
 			       					HasNextPeriod = true,
 			       					HasPrevPeriod = true,
-			       					FirstDateNextPeriod = new DateOnly(firstDayNextWeek).ToFixedClientDateOnlyFormat(),
-			       					LastDatePreviousPeriod = new DateOnly(lastDayPreviousWeek).ToFixedClientDateOnlyFormat()
+			       					NextPeriod = new DateOnly(firstDayNextWeek).ToFixedClientDateOnlyFormat(),
+			       					PrevPeriod = new DateOnly(lastDayPreviousWeek).ToFixedClientDateOnlyFormat()
 			       				},
 			       		SelectableDateRange =
 			       			new PeriodDateRangeViewModel

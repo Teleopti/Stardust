@@ -2,9 +2,9 @@
 {
 	public class PeriodNavigationViewModel
 	{
-		public string FirstDateNextPeriod { get; set;}
+		public string NextPeriod { get; set;}
 		public bool HasNextPeriod { get; set; }
-		public string LastDatePreviousPeriod { get; set; }
+		public string PrevPeriod { get; set; }
 		public bool HasPrevPeriod { get; set; }
 		public bool CanPickPeriod { get; set; }
 	}

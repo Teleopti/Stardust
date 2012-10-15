@@ -138,14 +138,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_initTodayButton();
 		},
 		PartialInit: function () {
-			_initTooltip();
-			_initPeriodSelection();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 			Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
 		},
-		LoadAndBindData : function () {
+		LoadAndBindData: function () {
 			var ajax = new Teleopti.MyTimeWeb.Ajax();
+			
 			ajax.Ajax({
 				url: 'Schedule/Bajs',
 				dataType: "json",
@@ -209,6 +208,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 					_initTimeIndicator();
 					_setTimeIndicatorFirstTime();
+					_initTooltip();
+					_initPeriodSelection();
 				}
 			});
 		},

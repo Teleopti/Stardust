@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 			CreateMap<StudentAvailabilityDomainData, PeriodSelectionViewModel>()
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.ChoosenDate.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.Display, c => c.MapFrom(s => s.Period.DateString))
-				.ForMember(d => d.Navigation, c => c.MapFrom(s => s))
+				.ForMember(d => d.PeriodNavigation, c => c.MapFrom(s => s))
 				.ForMember(d => d.SelectableDateRange, c => c.MapFrom(s => new PeriodDateRangeViewModel
 				                                                           	{
 																				MinDate = new DateOnly(CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime).ToFixedClientDateOnlyFormat(),
@@ -157,8 +157,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				.ForMember(d => d.CanPickPeriod, c => c.UseValue(true))
 				.ForMember(d => d.HasNextPeriod, c => c.UseValue(true))
 				.ForMember(d => d.HasPrevPeriod, c => c.UseValue(true))
-				.ForMember(d => d.FirstDateNextPeriod, c => c.MapFrom(s => s.Period.EndDate.AddDays(1).ToFixedClientDateOnlyFormat()))
-				.ForMember(d => d.LastDatePreviousPeriod, c => c.MapFrom(s => s.Period.StartDate.AddDays(-1).ToFixedClientDateOnlyFormat()))
+				.ForMember(d => d.NextPeriod, c => c.MapFrom(s => s.Period.EndDate.AddDays(1).ToFixedClientDateOnlyFormat()))
+				.ForMember(d => d.PrevPeriod, c => c.MapFrom(s => s.Period.StartDate.AddDays(-1).ToFixedClientDateOnlyFormat()))
 				;
 
 			CreateMap<IWorkflowControlSet, StudentAvailabilityPeriodViewModel>()

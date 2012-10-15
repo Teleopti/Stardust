@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		  	result.Date.Should().Be.EqualTo(new DateOnly(2011, 5, 18).ToFixedClientDateOnlyFormat());
 		  	result.Display.Should().Be.EqualTo("2011-05-16 - 2011-05-22");
 
-		  	result.Navigation.CanPickPeriod.Should().Be.False();
-		  	result.Navigation.HasNextPeriod.Should().Be.True();
-		  	result.Navigation.HasPrevPeriod.Should().Be.True();
-		  	result.Navigation.FirstDateNextPeriod.Should().Be.EqualTo(new DateOnly(2011, 5, 23).ToFixedClientDateOnlyFormat());
-		  	result.Navigation.LastDatePreviousPeriod.Should().Be.EqualTo(new DateOnly(2011, 5, 15).ToFixedClientDateOnlyFormat());
+		  	result.PeriodNavigation.CanPickPeriod.Should().Be.False();
+		  	result.PeriodNavigation.HasNextPeriod.Should().Be.True();
+		  	result.PeriodNavigation.HasPrevPeriod.Should().Be.True();
+		  	result.PeriodNavigation.NextPeriod.Should().Be.EqualTo(new DateOnly(2011, 5, 23).ToFixedClientDateOnlyFormat());
+		  	result.PeriodNavigation.PrevPeriod.Should().Be.EqualTo(new DateOnly(2011, 5, 15).ToFixedClientDateOnlyFormat());
 
 			result.SelectedDateRange.MinDate.Should().Be.EqualTo(new DateOnly(2011, 5, 16).ToFixedClientDateOnlyFormat());
 			result.SelectedDateRange.MaxDate.Should().Be.EqualTo(new DateOnly(2011, 5, 22).ToFixedClientDateOnlyFormat());

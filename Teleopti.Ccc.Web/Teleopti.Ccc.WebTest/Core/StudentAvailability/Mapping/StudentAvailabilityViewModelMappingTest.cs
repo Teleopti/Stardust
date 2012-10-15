@@ -105,11 +105,11 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 			var sa = Mapper.Map<DateOnly, StudentAvailabilityDomainData>(date);
 			var result = Mapper.Map<StudentAvailabilityDomainData, PeriodSelectionViewModel>(sa);
 
-			result.Navigation.CanPickPeriod.Should().Be.True();
-			result.Navigation.HasNextPeriod.Should().Be.True();
-			result.Navigation.HasPrevPeriod.Should().Be.True();
-			result.Navigation.FirstDateNextPeriod.Should().Be.EqualTo(period.EndDate.AddDays(1).ToFixedClientDateOnlyFormat());
-			result.Navigation.LastDatePreviousPeriod.Should().Be.EqualTo(period.StartDate.AddDays(-1).ToFixedClientDateOnlyFormat());
+			result.PeriodNavigation.CanPickPeriod.Should().Be.True();
+			result.PeriodNavigation.HasNextPeriod.Should().Be.True();
+			result.PeriodNavigation.HasPrevPeriod.Should().Be.True();
+			result.PeriodNavigation.NextPeriod.Should().Be.EqualTo(period.EndDate.AddDays(1).ToFixedClientDateOnlyFormat());
+			result.PeriodNavigation.PrevPeriod.Should().Be.EqualTo(period.StartDate.AddDays(-1).ToFixedClientDateOnlyFormat());
 		}
 
 		[Test]
