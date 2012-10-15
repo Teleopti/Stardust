@@ -1,5 +1,4 @@
-﻿@using System.Drawing
-@using Teleopti.Ccc.UserTexts
+﻿@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 @model WeekScheduleViewModel
@@ -76,11 +75,6 @@
 	<div class="week-schedule-ASM-permission-granted" data-bind="if : AsmPermission">yes</div>
 	<div class="week-schedule-current-week" data-bind="if : IsCurrentWeek">yes</div>
 	<style data-bind="text : createStyleList()">
-@*		@foreach (var style in Model.Styles)
-		{
-			@string.Format("li.third.{0} {{background-color: rgb({1});}}\n", style.Name, style.RgbColor)
-			
-		}*@
 	</style>
 	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">
 		<div class="weekview-timeline floatleft">
@@ -136,61 +130,6 @@
 			<!-- /ko -->
 		</ul>
 		<!-- /ko -->
-		@*		@foreach (var day in Model.Days)
-  {
-			<ul class="weekview-day" data-mytime-date="@day.FixedDate" data-request-default-date="@day.Date" data-mytime-state="@Html.Schedule().FormatState(day.State)">
-				<li>
-					<div>@day.Header.Title</div>
-				</li>
-				<li class="second">
-					<div>
-						<span class="floatleft ml5">@day.Header.DayDescription</span>
-						<span class="floatright mr5">@day.Header.DayNumber</span>
-					</div>
-				</li>
-				<li id="day-summary" class="@Html.AttributeEncode(day.Summary.StyleClassName) third category @(Model.RequestPermission.TextRequestPermission ? @Html.Raw("show-request") : @Html.Raw(""))">
-					
-					<strong class="fullwidth displayblock">@day.Summary.Title</strong>
-					<span class="fullwidth displayblock">@day.Summary.TimeSpan</span>
-					@day.Summary.Summary
-					
-				</li>
-				<li id="day-symbol" class="fourth">
-					<div class="text-request floatright" @(day.TextRequestCount > 0 ? "" : "style=display:none") title="@(string.Format(Resources.XRequests, day.TextRequestCount))">
-						<div class="floatright extrasmall">@day.TextRequestCount</div>
-						<div class="icon text-request ir floatright" />
-					</div>
-					@if (day.HasNote)
-					 {
-						<div class="icon comment-day ir tooltip floatright" tooltip-text="@day.Note.Message"></div>
-					 }
-					<div id="add-request-cell"  @(Model.RequestPermission.TextRequestPermission ? @Html.Raw("class=\"add-request-space show-request\"") : @Html.Raw("class=\"\""))></div>
-				</li>
-				<li class="weekview-day-schedule relative">
-					<div class="week-schedule-time-indicator relative"></div>
-					@foreach (var period in day.Periods)
-					 {
-						 var topPixel = Math.Round(scheduleHeight * period.StartPositionPercentage);
-						 var bottomPixel = Math.Round(scheduleHeight * period.EndPositionPercentage) - 1;
-						 var heightPixel = bottomPixel - topPixel;
-						 var heightDouble = scheduleHeight * (period.EndPositionPercentage - period.StartPositionPercentage);
-
-						 const int pixelToDisplayAll = 33;
-						 const int pixelToDisplayTitle = 16;
-						 var tooltipText = period.Meeting == null ? period.TimeSpan : string.Format("<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>", period.TimeSpan, Resources.SubjectColon, period.Meeting.Title, Resources.LocationColon, period.Meeting.Location);
-
-						<div class="week-schedule-layer absolute tooltip" tooltip-title="@period.Title" tooltip-text="@tooltipText" 
-								style="background-color: @string.Format("rgb({0})", period.Color); height: @(heightPixel)px; top: @(topPixel)px; width: 131px">
-							@if (period.Meeting != null)
-							{
-								<div class="icon meeting floatright"></div>
-							}
-							<strong @(heightDouble > pixelToDisplayTitle ? @Html.Raw("class=\"truncate\"") : @Html.Raw("class=\"truncate displaynone\""))>@period.Title</strong>
-							<span @(heightDouble < pixelToDisplayAll ? @Html.Raw("class=\"fullwidth displaynone\"") : @Html.Raw("class=\"fullwidth displayblock\""))>@period.TimeSpan</span>
-						</div>
-					}
-				</li>
-			</ul>*@ }
 	</div>
 </div>
 @Html.Partial("WeekRequestPartial", Model)
