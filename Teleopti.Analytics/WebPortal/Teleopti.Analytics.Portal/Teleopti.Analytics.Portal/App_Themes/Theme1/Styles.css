@@ -92,7 +92,7 @@ body
 
 .ReportBody
 {
-	color: dimgray;
+	color: rgb(105,105,105);
 	font-size: 10pt;
 }
 
@@ -137,7 +137,7 @@ body
 .ReportColumnHeaders
 {
 	font-weight: bold;
-	color: darkgrey;
+	color: rgb(169,169,169);
 	height: 40px;
 }
 
@@ -180,7 +180,7 @@ body
 {
 	font-weight: normal;
 	font-style: italic;
-	color: dimgray;
+	color: rgb(105,105,105);
 }
 
 .ReportIntervalTotalDeviationCell
@@ -192,7 +192,7 @@ body
 .ReportTotalAdherence
 {
 	font-weight: normal;
-	color: dimgray;
+	color: rgb(105,105,105);
 	font-style: italic;
 	border-top: solid 1pt lightgrey;
 }

@@ -50,12 +50,12 @@ LI
 FONT.value
 {
     font-weight: bold;
-    color: darkblue;
+    color: rgb(0,0,139);
 }
 FONT.key
 {
     font-weight: bold;
-    color: darkgreen;
+    color: rgb(169,169,169);
 }
 .divTag
 {
@@ -89,7 +89,6 @@ FONT.key
     margin-bottom: 0;
     padding: 0px;
     white-space: nowrap;
-    filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=2,Color='black',Positive='true');
 }
 .BannerTextApplication
 {
@@ -102,8 +101,7 @@ FONT.key
     margin-left: 8px;
     margin-bottom: 0;
     padding: 0px;
-    white-space: nowrap;
-    filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=2,Color='black',Positive='true');
+    white-space: nowrap;    
 }
 .BannerText
 {
@@ -115,7 +113,6 @@ FONT.key
     margin-left: 8px;
     margin-bottom: 0;
     padding: 0px;
-    filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=2,Color='black',Positive='true');
 }
 .BannerSubhead
 {
@@ -125,7 +122,6 @@ FONT.key
     margin-top: 0px;
     margin-left: 10px;
     color: #ffffff;
-    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=1,StartColorStr='#4B3E1A',EndColorStr='#FFFFFF');
 }
 .BannerSubheadText
 {
@@ -135,7 +131,6 @@ FONT.key
     font-family: Segoe UI;
     margin-top: 1;
     margin-left: 10;
-    filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=2,Color='black',Positive='true');
 }
 .FooterRule
 {
@@ -144,7 +139,6 @@ FONT.key
     height: 1px;
     margin: 0px;
     color: #ffffff;
-    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=1,StartColorStr='#4B3E1A',EndColorStr='#FFFFFF');
 }
 .FooterText
 {
@@ -200,8 +194,11 @@ FONT.key
     font-weight: bold;
     font-size: 14pt;
     font-family: Segoe UI;
-    a: #FF0000;
     text-decoration: None;
+}
+
+.InstallTextStyle a {
+	color: #FF0000;
 }
 .DetailsStyle
 {
