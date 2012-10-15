@@ -145,7 +145,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		LoadAndBindData: function (xRequests) {
 			var ajax = new Teleopti.MyTimeWeb.Ajax();
 			ajax.Ajax({
-				url: 'Schedule/Bajs',
+				url: 'Schedule/FetchData',
 				dataType: "json",
 				type: 'GET',
 				data: {

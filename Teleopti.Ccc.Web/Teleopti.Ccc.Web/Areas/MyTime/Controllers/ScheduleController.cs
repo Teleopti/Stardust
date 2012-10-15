@@ -33,18 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[EnsureInPortal]
 		[UnitOfWorkAction]
-		public ActionResult Week(DateOnly? dateSelection)
+		public ActionResult Week()
 		{
-			var showForDate = dateSelection ?? _now.DateOnly();
-
-			var model = _scheduleViewModelFactory.CreateWeekViewModel(showForDate);
-
-			if (AcceptsJson())
-				return Json(model, JsonRequestBehavior.AllowGet);
-
-			var model2 = new killme();
-			model2.AbsenceRequestPermission = true;
-			model2.AbsenceTypes = new List<AbsenceTypeViewModel>{new AbsenceTypeViewModel{Id=Guid.NewGuid(), Name = "roger"}};
 			return View("WeekPartial", _requestsViewModelFactory.CreatePageViewModel());
 		}
 
@@ -56,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		public JsonResult Bajs(DateOnly? date)
+		public JsonResult FetchData(DateOnly? date)
 		{
 			var showForDate = date ?? _now.DateOnly();
 			var model = _scheduleViewModelFactory.CreateWeekViewModel(showForDate);
