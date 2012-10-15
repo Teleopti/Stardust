@@ -10,7 +10,7 @@
 		Teleopti.MyTimeWeb.Schedule.LoadData();
 	});
 </script>
-<div id="ScheduleWeek-body" class="body-weekview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
+<div id="ScheduleWeek-body" class="body-weekview clearfix" data-bind="attr: {'data-mytime-periodselection' ,'PeriodSelection'}">
 	<div class="week-schedule-ASM-permission-granted" data-bind="if : AsmPermission">yes</div>
 	<div class="week-schedule-current-week" data-bind="if : IsCurrentWeek">yes</div>
 	<style data-bind="text : createStyleList()">
