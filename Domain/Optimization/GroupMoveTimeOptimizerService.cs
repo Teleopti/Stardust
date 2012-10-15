@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     public interface IGroupMoveTimeOptimizerService
     {
         event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-        void Execute(IList<IScheduleMatrixPro> allMatrixes);
+		void Execute(IList<IScheduleMatrixPro> allMatrixes, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IDictionary<Guid, bool> teamSteadyStates, IScheduleDictionary scheduleDictionary);
         void OnReportProgress(string message);
     }
 
@@ -34,12 +35,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupMoveTimeValidatorRunner = groupMoveTimeValidatorRunner;
         }
 
-        public void Execute(IList<IScheduleMatrixPro> allMatrixes)
+		public void Execute(IList<IScheduleMatrixPro> allMatrixes, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IDictionary<Guid, bool> teamSteadyStates, IScheduleDictionary scheduleDictionary)
         {
             var pendingOptimizers = new List<IGroupMoveTimeOptimizer>(_optimizers);
             while (pendingOptimizers.Count > 0)
             {
-                var removedOptimizers = runOptimizers(pendingOptimizers);
+                var removedOptimizers = runOptimizers(pendingOptimizers, teamSteadyStateMainShiftScheduler, teamSteadyStates, scheduleDictionary);
                 foreach (var optimizer in removedOptimizers)
                 {
                     pendingOptimizers.Remove(optimizer);
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
         
-        private IEnumerable<IGroupMoveTimeOptimizer> runOptimizers(ICollection<IGroupMoveTimeOptimizer> pendingOptimizers)
+        private IEnumerable<IGroupMoveTimeOptimizer> runOptimizers(ICollection<IGroupMoveTimeOptimizer> pendingOptimizers, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IDictionary<Guid, bool> teamSteadyStates, IScheduleDictionary scheduleDictionary)
         {
             var skippedOptimizers = new List<IGroupMoveTimeOptimizer>();
             var removedOptimizers = new List<IGroupMoveTimeOptimizer>();
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (!validateResult.Success || validateResult.DaysToLock.HasValue) continue; 
                 
                 var oldPeriodValue = optimizer.PeriodValue();
-                var success = _groupMoveTimeOptimizerExecuter.Execute(daysToDelete, daysToSave, matrixes, optimizer.OptimizationOverLimitByRestrictionDecider);
+                var success = _groupMoveTimeOptimizerExecuter.Execute(daysToDelete, daysToSave, matrixes, optimizer.OptimizationOverLimitByRestrictionDecider, teamSteadyStateMainShiftScheduler, teamSteadyStates, scheduleDictionary);
                 if(success)
                 {
                     var newPeriodValue = optimizer.PeriodValue();

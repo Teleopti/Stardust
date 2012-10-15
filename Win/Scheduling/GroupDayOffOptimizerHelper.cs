@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (optimizerPreferences.General.OptimizationStepDaysOff)
                     runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod, selectedPersons);
                 if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
-					runMoveTimeOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
+					runMoveTimeOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences, selectedPersons, selectedPeriod);
                 if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
                     runIntradayOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
 
@@ -131,7 +131,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			
 		}
 
-        private void runMoveTimeOptimization(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void runMoveTimeOptimization(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons,
+			DateOnlyPeriod selectedPeriod)
         {
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
             IList<IGroupMoveTimeOptimizer> optimizers = new List<IGroupMoveTimeOptimizer>();
@@ -164,8 +166,19 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                  new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup));
             var service = new GroupMoveTimeOptimizerService(optimizers, groupOptimizerFindMatrixesForGroup, groupMoveTimeOptimizerExecuter, groupMoveTimeValidatorRunner);
 
+
+			var coherentChecker = new TeamSteadyStateCoherentChecker();
+			var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
+			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(groupMatrixHelper, coherentChecker, scheduleMatrixProFinder);
+
+			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+			var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
+			var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
+			var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(selectedPersons, targetTimeCalculator, allMatrix, groupPersonsBuilder, schedulingOptions);
+        	var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
+
             service.ReportProgress += resourceOptimizerPersonOptimized;
-            service.Execute(allMatrix);
+            service.Execute(allMatrix, teamSteadyStateMainShiftScheduler, teamSteadyStateDictionary, _stateHolder.Schedules);
             service.ReportProgress -= resourceOptimizerPersonOptimized;
         }
 
