@@ -79,8 +79,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartListening()
 		{
-			var subscription = _hubProxy.Subscribe(EventName);
-			subscription.Data += subscription_Data;
+			_hubProxy.Subscribe(EventName).Data += subscription_Data;
 
 			startHubConnection();
 			_hubProxy.Subscribe(EventName);
@@ -91,20 +90,15 @@ namespace Teleopti.Messaging.SignalR
 		{
 			try
 			{
-				var resetEvent = new ManualResetEvent(false);
 				Exception startException = null;
-				_hubConnection.Start(new LongPollingTransport()).ContinueWith(t =>
-				{
-					if (t.IsFaulted)
-					{
-						startException = t.Exception;
-					}
-					resetEvent.Set();
-				});
-				if (resetEvent.WaitOne()==false)
+				var result = _hubConnection.Start(new LongPollingTransport()).ContinueWith(t =>
+				                                                                           	{
+				                                                                           		startException = t.Exception;
+				                                                                           	},TaskContinuationOptions.OnlyOnFaulted);
+				/*if (result==false)
 				{
 					throw new InvalidOperationException("Time out occurred upon startup of Message Broker.");
-				}
+				}*/
 				if (startException!=null)
 				{
 					throw startException;
@@ -142,7 +136,9 @@ namespace Teleopti.Messaging.SignalR
 
 		private static Task emptyTask()
 		{
-			return Task.Factory.StartNew(() => { });
+			var tcs = new TaskCompletionSource<object>();
+			tcs.SetResult(null);
+			return tcs.Task;
 		}
 
 		public Task RemoveSubscription(string route)
@@ -165,8 +161,7 @@ namespace Teleopti.Messaging.SignalR
 					var subscriptionList = new List<string>(proxy.GetSubscriptions());
 					if (subscriptionList.Contains(EventName))
 					{
-						var subscription = _hubProxy.Subscribe(EventName);
-						subscription.Data -= subscription_Data;
+						_hubProxy.Subscribe(EventName).Data -= subscription_Data;
 					}
 
 					ThreadPool.QueueUserWorkItem(state =>
