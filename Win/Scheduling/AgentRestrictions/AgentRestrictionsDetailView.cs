@@ -1,9 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -16,10 +24,11 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 	public class AgentRestrictionsDetailView : ScheduleViewBase, IAgentRestrictionsDetailView
 	{
 		private readonly AgentRestrictionsDetailModel _model;
+		private readonly AgentRestrictionGrid _agentRestrictionGrid;
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private bool _useScheduling;
 
-		public AgentRestrictionsDetailView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
+		public AgentRestrictionsDetailView(AgentRestrictionGrid agentRestrictionGrid, GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
 			SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
 			IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag, IWorkShiftWorkTime workShiftWorkTime)
 			: base(grid)
@@ -29,6 +38,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_model = new AgentRestrictionsDetailModel(schedulerState.RequestedPeriod.Period());
 			Presenter = new AgentRestrictionsDetailPresenter(this, _model, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag);
 
+			_agentRestrictionGrid = agentRestrictionGrid;
 			_workShiftWorkTime = workShiftWorkTime;
 
 			InitializeGrid();
@@ -228,6 +238,83 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 					break;
 				}
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void DeleteSelectedRestrictions(IUndoRedoContainer undoRedo, IScheduleTag defaultScheduleTag)
+		{
+			IScheduleMatrixPro matrix = _agentRestrictionGrid.CurrentDisplayRow.Matrix;
+			var clipHandler = new ClipHandler<IScheduleDay>();
+			GridHelper.GridCopySelection(ViewGrid, clipHandler, true);
+			var list = DeleteList(clipHandler);
+			IList<IScheduleDay> strippedList = new List<IScheduleDay>();
+			foreach (var scheduleDay in list)
+			{
+				IScheduleDayPro scheduleDayPro = matrix.GetScheduleDayByKey(scheduleDay.DateOnlyAsPeriod.DateOnly);
+				if(matrix.UnlockedDays.Contains(scheduleDayPro))
+				{
+					strippedList.Add(scheduleDay);
+				}
+			}
+
+			undoRedo.CreateBatch(string.Format(CultureInfo.CurrentCulture, Resources.UndoRedoDeleteSchedules,
+											   strippedList.Count));
+
+			var deleteService = new DeleteSchedulePartService(Presenter.SchedulerState.SchedulingResultState);
+
+			ISchedulePartModifyAndRollbackService rollbackService =
+				new SchedulePartModifyAndRollbackService(Presenter.SchedulerState.SchedulingResultState,
+														 new SchedulerStateScheduleDayChangedCallback(
+															 new ResourceCalculateDaysDecider(), Presenter.SchedulerState),
+														 new ScheduleTagSetter(defaultScheduleTag));
+
+			var options = new DeleteOption { Preference = true, StudentAvailability = true };
+			deleteService.Delete(strippedList, rollbackService, options);
+
+
+			undoRedo.CommitBatch();
+			OnPasteCompleted();
+
+			//InvalidateSelectedRows(new List<IScheduleDay> { Presenter.ClipHandlerSchedule.ClipList[0].ClipValue });
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void PasteSelectedRestrictions(IUndoRedoContainer undoRedo)
+		{
+			if (Presenter.ClipHandlerSchedule.ClipList.Count == 0)
+				return;
+
+			if (!Clipboard.ContainsData("PersistableScheduleData"))
+				return;
+
+			var options = new PasteOptions { Preference = true, StudentAvailability = true };
+			using (var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter))
+			{
+				undoRedo.CreateBatch(Resources.UndoRedoPaste);
+				IList<IScheduleDay> pasteList =
+								   GridHelper.HandlePasteScheduleGridFrozenColumn(ViewGrid, Presenter.ClipHandlerSchedule, pasteAction);
+
+				IScheduleMatrixPro matrix = _agentRestrictionGrid.CurrentDisplayRow.Matrix;
+
+				IList<IScheduleDay> strippedList = new List<IScheduleDay>();
+				foreach (var scheduleDay in pasteList)
+				{
+					IScheduleDayPro scheduleDayPro = matrix.GetScheduleDayByKey(scheduleDay.DateOnlyAsPeriod.DateOnly);
+					if (matrix.UnlockedDays.Contains(scheduleDayPro))
+					{
+						strippedList.Add(scheduleDay);
+					}
+				}
+
+				if (!pasteList.IsEmpty())
+					Presenter.TryModify(strippedList);
+
+				undoRedo.CommitBatch();
+
+				OnPasteCompleted();
+
+				InvalidateSelectedRows(new List<IScheduleDay> { Presenter.ClipHandlerSchedule.ClipList[0].ClipValue });
 			}
 		}
 	}
