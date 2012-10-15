@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Text;
 using System.Web;
+using System.Web.Security;
 using Teleopti.Analytics.Portal.AnalyzerProxy;
 using Teleopti.Analytics.Portal.PerformanceManager.Helper;
 using Teleopti.Analytics.Portal.Utils;
@@ -169,6 +170,21 @@ namespace Teleopti.Analytics.Portal.PerformanceManager
             }
             Session.Abandon();
             RegisterClientCloseWindow();
+
+			FormsAuthentication.SignOut();
+			StateHolder.UserObject = null;
+			HttpContext.Current.Session["FORCEFORMSLOGIN"] = true;
+			Response.Redirect(LoginUrl());
         }
+
+		protected string LoginUrl()
+		{
+			return string.Format("~/Login.aspx{0}", QueryStringWithPrefix);
+		}
+
+		protected virtual string QueryStringWithPrefix
+		{
+			get { return string.Concat("?", Request.QueryString.ToString()); }
+		}
     }
 }
