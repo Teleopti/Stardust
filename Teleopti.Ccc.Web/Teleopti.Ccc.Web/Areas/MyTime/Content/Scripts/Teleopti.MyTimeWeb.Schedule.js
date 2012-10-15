@@ -142,7 +142,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 			Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
 		},
-		LoadAndBindData: function (xRequests) {
+		LoadAndBindData: function (userTexts) {
 			var ajax = new Teleopti.MyTimeWeb.Ajax();
 			ajax.Ajax({
 				url: 'Schedule/FetchData',
@@ -162,7 +162,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					};
 
 					vm.textRequestCount = function (count) {
-						return xRequests.format(count);
+						return userTexts.xRequests.format(count);
 					};
 
 					vm.topPixel = function (period) {
@@ -183,7 +183,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 					vm.tooltipText = function (period) {
 						if (period.Meeting) {
-							return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>'.format(period.TimeSpan, "Resources.SubjectColon", period.Meeting.Title, "Resources.LocationColon", period.Meeting.Location);
+							return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>'.format(period.TimeSpan, userTexts.subjectColon, period.Meeting.Title, userTexts.locationColon, period.Meeting.Location);
 						} else {
 							return period.TimeSpan;
 						}

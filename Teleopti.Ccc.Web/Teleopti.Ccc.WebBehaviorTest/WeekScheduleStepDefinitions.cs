@@ -24,8 +24,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I hover over the meeting on date '(.*)'")]
 		public void WhenIHoverOverTheMeetingOnDate(DateTime date)
 		{
-			Div meetingLayer =
-				_page.DayLayers(date).Filter(Find.BySelector("[tooltip-text*=" + Resources.SubjectColon + "]")).First();
+			Div meetingLayer=null;
+			EventualAssert.That(()=>
+			                    	{
+			                    		var meetingLayers =_page.DayLayers(date).Filter(Find.BySelector(@"[tooltip-text*=<div>]"));
+											if (meetingLayers.Count == 0)
+											{
+												return false;												
+											}
+			                    		meetingLayer = meetingLayers.First();
+			                    		return true;
+			                    	}, Is.True);
 			meetingLayer.FireEvent("onmouseover");
 		}
 

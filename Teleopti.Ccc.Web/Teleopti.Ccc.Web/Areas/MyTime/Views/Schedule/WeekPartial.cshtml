@@ -6,7 +6,11 @@
 }
 <script>
 	$(function () {
-		Teleopti.MyTimeWeb.Schedule.LoadAndBindData('@Resources.XRequests');
+		Teleopti.MyTimeWeb.Schedule.LoadAndBindData({
+			xRequests : '@Resources.XRequests',
+			subjectColon : '@Resources.SubjectColon',
+			locationColon : '@Resources.LocationColon'
+		});
 	});
 </script>
 <div id="ScheduleWeek-body" class="body-weekview clearfix" data-bind="attr: {'data-mytime-periodselection' : JSON.stringify(PeriodSelection)}">
