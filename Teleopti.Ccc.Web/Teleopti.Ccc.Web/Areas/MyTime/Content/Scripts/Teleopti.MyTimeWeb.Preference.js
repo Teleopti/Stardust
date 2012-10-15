@@ -31,7 +31,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	};
 	if (ajax.CallWhenAllAjaxCompleted)
 		callWhenAjaxIsCompleted = ajax.CallWhenAllAjaxCompleted;
-	
+
 
 
 	function _initPeriodSelection() {
@@ -136,15 +136,15 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					}
 				},
 				events: {
-					render: function () {
+					render: function() {
 						$('#Preference-extended-reset')
 							.button()
-							.click(function () {
+							.click(function() {
 								addExtendedPreferenceFormViewModel.reset();
 							});
 						$('#Preference-extended-apply')
 							.button()
-							.click(function () {
+							.click(function() {
 								_setPreference(ko.toJS(addExtendedPreferenceFormViewModel));
 							});
 
@@ -153,17 +153,23 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					}
 				}
 			});
+		
+		button.removeAttr('disabled');
 	}
 
 	function _initMustHaveButton() {
 		$('#Preference-must-have-button')
 			.click(function () {
 				_setMustHave(true);
-			});
+			})
+			.removeAttr("disabled")
+			;
 		$('#Preference-must-have-delete-button')
 			.click(function () {
 				_setMustHave(false);
-			});
+			})
+			.removeAttr("disabled")
+			;
 	}
 
 	function _hideAddExtendedTooltip() {

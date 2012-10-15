@@ -84,17 +84,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 					.css({
 						'top': 50 + $(window).scrollTop()
 					});
-				$('.toolbar-inner button.icon[disabled!="disabled"]')
-					.attr('disabled', 'disabled')
-					.addClass('ajax-disabled')
-					;
 			})
 			.ajaxStop(function () {
 				$(this).hide();
-				$('.toolbar-inner button.icon.ajax-disabled')
-					.removeAttr('disabled')
-					.removeClass('ajax-disabled')
-					;
 			});
 	}
 
