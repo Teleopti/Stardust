@@ -61,13 +61,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.IsNotNull(_deleteService);
         }
 
-		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
-		public void ListToDeleteShouldNotBeEmpty()
-		{
-			_list.Clear();
-            _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
-		}
-
         [Test]
         public void VerifyDeleteMainShift()
         {
