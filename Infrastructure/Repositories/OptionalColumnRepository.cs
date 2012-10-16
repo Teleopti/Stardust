@@ -50,13 +50,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true).List<IColumnUniqueValues>();
 			}
 		}
-
-        public override void Remove(IOptionalColumn entity)
-        {
-            base.Remove(entity);
-            Session.CreateQuery("DELETE OptionalColumnValue WHERE Parent.Id = (:parentId)").
-                SetParameter("parentId", entity.Id.GetValueOrDefault()).ExecuteUpdate();
-        }
     }
 	public class ColumnUniqueValues : IColumnUniqueValues
 	{
