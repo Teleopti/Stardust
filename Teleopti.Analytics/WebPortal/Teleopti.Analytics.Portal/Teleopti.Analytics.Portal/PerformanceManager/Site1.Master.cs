@@ -174,10 +174,11 @@ namespace Teleopti.Analytics.Portal.PerformanceManager
 			FormsAuthentication.SignOut();
 			StateHolder.UserObject = null;
 			HttpContext.Current.Session["FORCEFORMSLOGIN"] = true;
-			Response.Redirect(LoginUrl());
+			Response.Redirect(LogOnUrl());
         }
 
-		protected string LoginUrl()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings")]
+		protected string LogOnUrl()
 		{
 			return string.Format("~/Login.aspx{0}", QueryStringWithPrefix);
 		}
