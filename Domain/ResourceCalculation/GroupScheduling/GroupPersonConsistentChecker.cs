@@ -54,7 +54,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 						if (schedulingOptions.UseGroupSchedulingCommonEnd)
 							poss.EndTime = period.LocalEndDateTime.TimeOfDay;
 					}
-
+                    if (schedulingOptions.UseCommonActivity)
+                        foreach (var activity in shift.LayerCollection)
+                            if (activity.Payload.Id == schedulingOptions.CommonActivity.Id)
+                                poss.ActivityPeriod = activity.Period;
 					if (schedulingOptions.UseGroupSchedulingCommonCategory)
 						poss.ShiftCategory = shift.ShiftCategory;
 
@@ -97,7 +100,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 					if (schedulingOptions.UseGroupSchedulingCommonCategory)
 						poss.ShiftCategory = shift.ShiftCategory;
-
+                    if (schedulingOptions.UseCommonActivity)
+                        foreach (var activity in shift.LayerCollection)
+                            if (activity.Payload.Id == schedulingOptions.CommonActivity.Id)
+                                poss.ActivityPeriod = activity.Period;
 					_possible.Add(poss);
 				}
 			}

@@ -149,7 +149,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
             }
-
+            _schedulingOptions.UseCommonActivity = true;
+            
             using (_mocks.Playback())
             {
 				_target = new ShiftCategoryPeriodValueExtractorThread(_shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
@@ -158,11 +159,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				_target.ExtractShiftCategoryPeriodValue(_possibleStartEndCategory);
             }
-
-           
-
-        
-
+            
         }
 		public void Dispose()
 		{

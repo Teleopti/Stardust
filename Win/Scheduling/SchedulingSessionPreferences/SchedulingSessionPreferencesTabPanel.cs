@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
 			_groupPagesProvider = groupPagesProvider;
             _availableActivity = availableActivity;
+
             if(!reschedule)
             {
 
