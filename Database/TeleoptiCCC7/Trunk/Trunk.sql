@@ -8,3 +8,13 @@ begin
 	insert into PurgeSetting values ('Payroll', 20)
 end
 GO
+----------------  
+--Name: Xianwei Shen
+--Date: 2012-10-15
+--Desc: #21058 Purge OptionalColumnValue when its parent is deleted
+----------------  
+DELETE FROM dbo.OptionalColumnValue 
+WHERE Parent in (
+	SELECT Id FROM dbo.OptionalColumn WHERE IsDeleted = 1
+)
+GO
