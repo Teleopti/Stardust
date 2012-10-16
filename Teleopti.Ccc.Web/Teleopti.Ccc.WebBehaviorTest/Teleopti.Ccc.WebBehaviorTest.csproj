@@ -145,10 +145,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedbackBlacklisting.feature</DependentUpon>
     </Compile>
-    <Compile Include="MeetingAndPersonalAssignmentFeedback.feature.cs">
+    <Compile Include="PreferencesFeedbackPreSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>MeetingAndPersonalAssignmentFeedback.feature</DependentUpon>
+      <DependentUpon>PreferencesFeedbackPreSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="WeekScheduleTimeIndicator.feature.cs">
       <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
@@ -500,9 +500,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackBlacklisting.feature.cs</LastGenOutput>
     </None>
-    <None Include="MeetingAndPersonalAssignmentFeedback.feature">
+    <None Include="PreferencesFeedbackPreSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MeetingAndPersonalAssignmentFeedback.feature.cs</LastGenOutput>
+      <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />
