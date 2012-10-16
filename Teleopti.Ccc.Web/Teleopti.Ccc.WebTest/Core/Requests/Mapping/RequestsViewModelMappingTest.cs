@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void Setup()
 		{
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			_userTimeZone.Stub(x => x.TimeZone()).Return(TimeZoneInfo.Local);
 			_linkProvider = MockRepository.GenerateMock<ILinkProvider>();
 
 			Mapper.Reset();
