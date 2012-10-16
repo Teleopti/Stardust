@@ -15,6 +15,7 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Ajax = function () {
 	var _requests = [];
+	var callWhenAllAjaxIsCompleted;
 
 	function _ajax(options) {
 
@@ -37,10 +38,10 @@ Teleopti.MyTimeWeb.Ajax = function () {
 
 	function _setupError(options) {
 
-		options.statusCode401 = options.statusCode401 || function () { window.location.href = _settings.baseUrl; };
-		options.statusCode403 = options.statusCode403 || function () { window.location.href = _settings.baseUrl; };
+		options.statusCode401 = options.statusCode401 || function () { window.location.href = Teleopti.MyTimeWeb.AjaxSettings.baseUrl; };
+		options.statusCode403 = options.statusCode403 || function () { window.location.href = Teleopti.MyTimeWeb.AjaxSettings.baseUrl; };
 		options.abort = options.abort || function () { };
-		
+
 		var errorCallback = options.error;
 
 		options.error = function (jqXHR, textStatus, errorThrown) {
@@ -96,8 +97,16 @@ Teleopti.MyTimeWeb.Ajax = function () {
 				_requests.splice(index, 1);
 			if (completeCallback)
 				completeCallback(jqXHR, textStatus);
+			_handleCallWhenAllAjaxCompleted();
 		};
 
+	}
+
+	function _handleCallWhenAllAjaxCompleted() {
+		if (callWhenAllAjaxIsCompleted && _requests.length == 0) {
+			callWhenAllAjaxIsCompleted();
+			callWhenAllAjaxIsCompleted = null; // prevent next call. good or bad?
+		}
 	}
 
 	function _ajaxAbortAll() {
@@ -114,8 +123,9 @@ Teleopti.MyTimeWeb.Ajax = function () {
 		AbortAll: function () {
 			_ajaxAbortAll();
 		},
-		IsRequesting: function () {
-			return _requests.length > 0;
+		CallWhenAllAjaxCompleted: function (callback) {
+			callWhenAllAjaxIsCompleted = callback;
+			_handleCallWhenAllAjaxCompleted();
 		}
 	};
 

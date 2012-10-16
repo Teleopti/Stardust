@@ -39,6 +39,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             var pendingOptimizers = new List<IGroupMoveTimeOptimizer>(_optimizers);
             while (pendingOptimizers.Count > 0)
             {
+                if (_cancelOptimization)
+                    return;
                 var removedOptimizers = runOptimizers(pendingOptimizers);
                 foreach (var optimizer in removedOptimizers)
                 {

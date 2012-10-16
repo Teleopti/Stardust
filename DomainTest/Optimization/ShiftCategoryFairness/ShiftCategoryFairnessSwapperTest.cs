@@ -70,6 +70,117 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldSkipDayOffs()
+		{
+			var dateOnly = new DateOnly(2012, 10, 1);
+			var cat1 = _mocks.DynamicMock<IShiftCategory>();
+			var cat2 = _mocks.DynamicMock<IShiftCategory>();
+			var person1 = new Person();
+			var person2 = new Person();
+
+			var group1 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson> { person1 } };
+			var group2 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson> { person2 } };
+
+			var suggestion = new ShiftCategoryFairnessSwap { Group1 = group1, Group2 = group2, ShiftCategoryFromGroup1 = cat1, ShiftCategoryFromGroup2 = cat2 };
+			var matrix1 = _mocks.DynamicMock<IScheduleMatrixPro>();
+			var matrix2 = _mocks.DynamicMock<IScheduleMatrixPro>();
+			var matrixes = new List<IScheduleMatrixPro> { matrix1, matrix2 };
+			var rollbackService = _mocks.DynamicMock<ISchedulePartModifyAndRollbackService>();
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDayPro>();
+			var part1 = _mocks.DynamicMock<IScheduleDay>();
+
+			Expect.Call(matrix1.Person).Return(person1);
+			Expect.Call(matrix1.GetScheduleDayByKey(dateOnly)).Return(scheduleDay1);
+			Expect.Call(matrix1.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { scheduleDay1 }));
+			Expect.Call(scheduleDay1.DaySchedulePart()).Return(part1);
+			Expect.Call(_shiftCatChecker.DayHasDayOff(part1)).Return(true);
+			
+			_mocks.ReplayAll();
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker);
+			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.False);
+			_mocks.VerifyAll();
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldSkipIfDayTwoDayOff()
+		{
+			var dateOnly = new DateOnly(2012, 10, 1);
+			var cat1 = _mocks.DynamicMock<IShiftCategory>();
+			var cat2 = _mocks.DynamicMock<IShiftCategory>();
+			var person1 = new Person();
+			var person2 = new Person();
+
+			var group1 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson> { person1 } };
+			var group2 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson> { person2 } };
+
+			var suggestion = new ShiftCategoryFairnessSwap { Group1 = group1, Group2 = group2, ShiftCategoryFromGroup1 = cat1, ShiftCategoryFromGroup2 = cat2 };
+			var matrix1 = _mocks.DynamicMock<IScheduleMatrixPro>();
+			var matrix2 = _mocks.DynamicMock<IScheduleMatrixPro>();
+			var matrixes = new List<IScheduleMatrixPro> { matrix1, matrix2 };
+			var rollbackService = _mocks.DynamicMock<ISchedulePartModifyAndRollbackService>();
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDayPro>();
+			var scheduleDay2 = _mocks.StrictMock<IScheduleDayPro>();
+			var part1 = _mocks.DynamicMock<IScheduleDay>();
+			var part2 = _mocks.DynamicMock<IScheduleDay>();
+			
+			Expect.Call(matrix1.Person).Return(person1);
+			Expect.Call(matrix2.Person).Return(person2);
+			Expect.Call(matrix1.GetScheduleDayByKey(dateOnly)).Return(scheduleDay1);
+			Expect.Call(matrix2.GetScheduleDayByKey(dateOnly)).Return(scheduleDay2);
+			Expect.Call(matrix1.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { scheduleDay1 }));
+			Expect.Call(matrix2.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { scheduleDay2 }));
+			Expect.Call(scheduleDay1.DaySchedulePart()).Return(part1);
+			Expect.Call(scheduleDay2.DaySchedulePart()).Return(part2);
+			Expect.Call(_shiftCatChecker.DayHasDayOff(part2)).Return(true);
+			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
+
+			_mocks.ReplayAll();
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker);
+			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.False);
+			_mocks.VerifyAll();
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldSkipIfNotSwappable()
+		{
+			var dateOnly = new DateOnly(2012, 10, 1);
+			var cat1 = _mocks.DynamicMock<IShiftCategory>();
+			var cat2 = _mocks.DynamicMock<IShiftCategory>();
+			var person1 = new Person();
+			var person2 = new Person();
+
+			var group1 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson> { person1 } };
+			var group2 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson> { person2 } };
+
+			var suggestion = new ShiftCategoryFairnessSwap { Group1 = group1, Group2 = group2, ShiftCategoryFromGroup1 = cat1, ShiftCategoryFromGroup2 = cat2 };
+			var matrix1 = _mocks.DynamicMock<IScheduleMatrixPro>();
+			var matrix2 = _mocks.DynamicMock<IScheduleMatrixPro>();
+			var matrixes = new List<IScheduleMatrixPro> { matrix1, matrix2 };
+			var rollbackService = _mocks.DynamicMock<ISchedulePartModifyAndRollbackService>();
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDayPro>();
+			var scheduleDay2 = _mocks.StrictMock<IScheduleDayPro>();
+			var part1 = _mocks.DynamicMock<IScheduleDay>();
+			var part2 = _mocks.DynamicMock<IScheduleDay>();
+			var scheduleDays = new List<IScheduleDay> { part1, part2 };
+
+			Expect.Call(matrix1.Person).Return(person1);
+			Expect.Call(matrix2.Person).Return(person2);
+			Expect.Call(matrix1.GetScheduleDayByKey(dateOnly)).Return(scheduleDay1);
+			Expect.Call(matrix2.GetScheduleDayByKey(dateOnly)).Return(scheduleDay2);
+			Expect.Call(matrix1.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { scheduleDay1 }));
+			Expect.Call(matrix2.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { scheduleDay2 }));
+			Expect.Call(scheduleDay1.DaySchedulePart()).Return(part1);
+			Expect.Call(scheduleDay2.DaySchedulePart()).Return(part2);
+			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
+			Expect.Call(_swappableChecker.PersonsAreSwappable(person1, person2, dateOnly, scheduleDays)).Return(false);
+
+			_mocks.ReplayAll();
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker);
+			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.False);
+			_mocks.VerifyAll();
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnFalseIfDayTwoWrongCategory()
 		{
 			var dateOnly = new DateOnly(2012, 10, 1);
@@ -236,6 +347,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(mainShift.ShiftCategory).Return(cat);
 			_mocks.ReplayAll();
 			Assert.That(_target.DayHasShiftCategory(part, cat), Is.True);
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldReturnIfDayOff()
+		{
+			var part = _mocks.DynamicMock<IScheduleDay>();
+			Expect.Call(part.SignificantPart()).Return(SchedulePartView.DayOff);
+			_mocks.ReplayAll();
+			Assert.That(_target.DayHasDayOff(part), Is.True);
 			_mocks.VerifyAll();
 		}
 	}

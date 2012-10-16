@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 			foreach (var scheduleDayPro in agentDisplayData.Matrix.EffectivePeriodDays)
 			{
-				Thread.Sleep(5);
+				//Thread.Sleep(5);
 				var projSvc = scheduleDayPro.DaySchedulePart().ProjectionService();
 				var res = projSvc.CreateProjection();
 

@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Threading;
-using System.Linq;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -11,11 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
-using Teleopti.Interfaces.Domain;
-using WatiN.Core;
-using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -91,33 +83,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see preference")]
 		public void ThenIShouldSeePreference(Table table)
 		{
-
 			var fields = table.CreateInstance<PreferenceConfigurable>();
+			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(fields.Date);
+			var mustHave = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "preference-must-have");
 
-			//I should see the correct date on the cell header: the right day
-			DateTime date = fields.Date;
-			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(date);
-			//var mustHave = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "preference-must-have");
-			var mustHave = cell.Div(Find.ByClass("preference-must-have", false));
+			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(">" + fields.Date.Day.ToString(CultureInfo.CurrentCulture) + "<"));
 
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(">" + date.Day.ToString(CultureInfo.CurrentCulture) +"<"));
-
-			//I should see on heart icon on the current calendar cell, accorning the the must have settings
-			//todo: add an icon and test code here
-			EventualAssert.That(() => mustHave.Exists, Is.EqualTo(fields.MustHave));
-
+			if (fields.MustHave)
+				EventualAssert.That(() => mustHave.ClassName, Is.StringContaining("icon"));
+			else
+				EventualAssert.That(() => mustHave.ClassName, Is.Not.StringContaining("icon"));
 		}
 
 		[Then(@"I should see I have (\d) available must haves")]
 		public void ThenIShouldSeeIHave1AvailableMustHaves(int mustHave)
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining("(" + mustHave.ToString(CultureInfo.CurrentCulture) + ")"));
+			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining("(" + mustHave + ")"));
 		}
 
 		[Then(@"I should see I have (\d) must haves")]
 		public void ThenIShouldSeeIHave1MustHaves(int mustHave)
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining(mustHave.ToString(CultureInfo.CurrentCulture) + "("));
+			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining(mustHave + "("));
 		}
 
 
@@ -170,7 +157,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var fields = table.CreateInstance<ExtendedPreferenceFields>();
 			Pages.Pages.PreferencePage.ExtendedPreferencePanel.WaitUntilDisplayed(); //needed
 			
-			if (fields.Preference != null) Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.Select(fields.Preference);
+			if (fields.Preference != null) Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.SelectWait(fields.Preference);
 
 			if (fields.StartTimeMinimum != null)
 				Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.Value = fields.StartTimeMinimum;
@@ -189,7 +176,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			if (fields.WorkTimeMaximum != null)
 				Pages.Pages.PreferencePage.ExtendedPreferenceWorkTimeMaximum.Value = fields.WorkTimeMaximum;
 
-			if (fields.Activity != null) Pages.Pages.PreferencePage.ExtendedPreferenceActivity.Select(fields.Activity);
+			if (fields.Activity != null) Pages.Pages.PreferencePage.ExtendedPreferenceActivity.SelectWait(fields.Activity);
 			if (fields.ActivityStartTimeMinimum != null)
 				Pages.Pages.PreferencePage.ExtendedPreferenceActivityStartTimeMinimum.Value = fields.ActivityStartTimeMinimum;
 			if (fields.ActivityStartTimeMaximum != null)
@@ -309,16 +296,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click set must have button")]
 		public void WhenIClickOnMustHaveButton()
 		{
-			// I have a must have button on the menu bar
-			// todo: imitate that I click on the button
-			Pages.Pages.PreferencePage.MustHaveButton.Focus();
 			Pages.Pages.PreferencePage.MustHaveButton.EventualClick();
 		}
 
 		[When(@"I click remove must have button")]
 		public void WhenIClickOnRemoveMustHaveButton()
 		{
-			Pages.Pages.PreferencePage.MustHaveDeleteButton.Focus();
 			Pages.Pages.PreferencePage.MustHaveDeleteButton.EventualClick();
 		}
 
@@ -343,5 +326,42 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			public string ActivityTimeMinimum { get; set; }
 			public string ActivityTimeMaximum { get; set; }
 		}
+
+
+
+		[StepArgumentTransformation]
+		public PreferenceFeedbackFields PreferenceFeedbackFieldsTransform(Table table)
+		{
+			return table.CreateInstance<PreferenceFeedbackFields>();
+		}
+
+		public class PreferenceFeedbackFields
+		{
+			public DateTime Date { get; set; }
+			public string StartTimeBoundry { get; set; }
+			public string EndTimeBoundry { get; set; }
+			public string ContractTimeBoundry { get; set; }
+		}
+
+		[Then(@"I should see preference feedback with")]
+		public void ThenIShouldSeePreferenceFeedbackWith(PreferenceFeedbackFields fields)
+		{
+			if (fields.StartTimeBoundry != null)
+				EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-start-times").InnerHtml, Is.StringMatching(fields.StartTimeBoundry));
+			if (fields.EndTimeBoundry != null)
+				EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-end-times").InnerHtml, Is.StringMatching(fields.EndTimeBoundry));
+			if (fields.ContractTimeBoundry != null)
+				EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-contract-times").InnerHtml, Is.StringMatching(fields.ContractTimeBoundry));
+		}
+
+		[Then(@"I should see no preference feedback on '(.*)'")]
+		public void ThenIShouldSeeNoFeedback(DateTime date)
+		{
+			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(date, "feedback-error").Exists, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(date, "possible-start-times").Exists, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(date, "possible-end-times").Exists, Is.False);
+			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(date, "possible-contract-times").Exists, Is.False);
+		}
+
 	}
 }

@@ -190,14 +190,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             var ret = new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation,
                                            cat, dayOff, absence, _activityRestrictionCollection);
         	ret.NotAvailable = NotAvailable;
-            if (IsRotationDay)
-                ret.IsRotationDay = IsRotationDay;
-            if (IsAvailabilityDay)
-                ret.IsAvailabilityDay = IsAvailabilityDay;
-            if (IsPreferenceDay)
-                ret.IsPreferenceDay = IsPreferenceDay;
-            if (IsStudentAvailabilityDay)
-                ret.IsStudentAvailabilityDay = IsStudentAvailabilityDay;
+            if (effectiveRestriction.IsRotationDay || IsRotationDay)
+                ret.IsRotationDay = true;
+			if (effectiveRestriction.IsAvailabilityDay || IsAvailabilityDay)
+				ret.IsAvailabilityDay = true;
+			if (effectiveRestriction.IsPreferenceDay || IsPreferenceDay)
+				ret.IsPreferenceDay = true;
+			if (effectiveRestriction.IsStudentAvailabilityDay || IsStudentAvailabilityDay)
+				ret.IsStudentAvailabilityDay = true;
 			if (effectiveRestriction.NotAvailable)
 				ret.NotAvailable = true;
             return ret;

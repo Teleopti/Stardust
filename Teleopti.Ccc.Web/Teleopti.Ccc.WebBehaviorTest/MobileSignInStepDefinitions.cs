@@ -15,11 +15,5 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Navigation.GotoMobileReportsSignInPage("#wanyprefs");
 		}
 
-		[Then(@"I should se the login page")]
-		public void ThenIShouldSeTheLoginPage()
-		{
-			var page = Pages.Pages.Current as MobileSignInPage;
-			EventualAssert.That(() => page.ApplicationSignIn.DisplayVisible(), Is.True, "Signin page should be visible");
-		}
 	}
 }

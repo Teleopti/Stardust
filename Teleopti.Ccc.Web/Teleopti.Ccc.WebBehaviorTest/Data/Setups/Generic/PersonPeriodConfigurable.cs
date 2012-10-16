@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Interfaces.Domain;
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string PartTimePercentage { get; set; }
 		public string ContractSchedule { get; set; }
 		public string Team { get; set; }
+		public string RuleSetBag { get; set; }
 
 		public PersonPeriodConfigurable() {
 			Contract = GlobalDataContext.Data().Data<CommonContract>().Contract.Description.Name;
@@ -41,9 +43,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var personContract = new PersonContract(contract,
 			                                        partTimePercentage,
 			                                        contractSchedule);
-			var personPeriod = new Domain.AgentInfo.PersonPeriod(new DateOnly(StartDate),
+			var personPeriod = new PersonPeriod(new DateOnly(StartDate),
 			                                                     personContract,
 			                                                     team);
+
+			if (!string.IsNullOrEmpty(RuleSetBag))
+			{
+				var bag = new RuleSetBagRepository(uow)
+					.LoadAll()
+					.Single(x => x.Description.Name == RuleSetBag);
+				personPeriod.RuleSetBag = bag;
+			}
+
 			user.AddPersonPeriod(personPeriod);
 		}
 	}

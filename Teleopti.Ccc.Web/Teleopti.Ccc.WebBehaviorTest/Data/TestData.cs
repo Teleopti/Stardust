@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IApplicationRole AgentRoleWithoutPreferences;
 		public static IApplicationRole AgentRoleWithoutExtendedPreferences;
 		public static IApplicationRole AgentRoleWithoutRequests;
-		public static IApplicationRole AgentRoleWithoutTextRequests;
 		public static IApplicationRole AgentRoleWithoutAbsenceRequests;
 		public static IApplicationRole AgentRoleWithoutTeamSchedule;
 		public static IApplicationRole AgentRoleWithoutMyTimeWeb;
@@ -53,7 +52,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IWorkflowControlSet WorkflowControlSetExisting;
 		public static IWorkflowControlSet WorkflowControlSetPublished;
 		public static IWorkflowControlSet WorkflowControlSetPublishedUntilWednesday;
-		public static IWorkflowControlSet WorkflowControlSetNotPublished;
 		public static IWorkflowControlSet WorkflowControlSetStudentAvailabilityOpen;
 		public static IWorkflowControlSet WorkflowControlSetStudentAvailabilityClosed;
 		public static IWorkflowControlSet WorkflowControlSetStudentAvailabilityOpenNextMonth;

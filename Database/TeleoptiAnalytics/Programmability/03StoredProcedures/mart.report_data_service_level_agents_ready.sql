@@ -132,13 +132,13 @@ SELECT
 		sum(answered_calls_within_SL),
 		sum(abandoned_calls),
 		sum(abandoned_calls_within_SL),
-	CASE WHEN sum(answered_calls+abandoned_calls)=0 THEN 0
+	CASE WHEN sum(fq.offered_calls)=0 THEN 0
 		ELSE
-		(sum(fq.answered_calls)/sum(answered_calls+abandoned_calls))
+		(sum(fq.answered_calls)/convert(decimal(19,3),sum(fq.offered_calls)))
 		END AS 'answ_rate',
-	CASE WHEN sum(answered_calls+abandoned_calls)=0 THEN 0
+	CASE WHEN sum(fq.offered_calls)=0 THEN 0
 		ELSE
-		(sum(fq.abandoned_calls)/sum(answered_calls+abandoned_calls))
+		(sum(fq.abandoned_calls)/convert(decimal(19,3),sum(fq.offered_calls)))
 		END AS 'abnd_rate',
 		0 as 'service_level',
 		0 as 'service_level_numerator',

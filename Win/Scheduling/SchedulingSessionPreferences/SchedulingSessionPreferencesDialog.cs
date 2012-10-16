@@ -129,6 +129,16 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             schedulingSessionPreferencesTabPanel1.ScheduleOnlyAvailableDaysVisible = true;
             schedulingSessionPreferencesTabPanel1.ScheduleOnlyPreferenceDaysVisible = true;
             schedulingSessionPreferencesTabPanel1.ScheduleOnlyRotationDaysVisible = true;
+            if (_schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff)
+            {
+                _schedulingOptions.UseBlockScheduling = BlockFinderType.None;
+                _schedulingOptions.UseGroupScheduling = false;
+
+                _schedulingOptions.UseGroupSchedulingCommonStart = false;
+                _schedulingOptions.UseGroupSchedulingCommonEnd = false;
+                _schedulingOptions.UseGroupSchedulingCommonCategory = false;
+                schedulingSessionPreferencesTabPanel1.HideTeamAndBlockSchedulingOptions();
+            }
         }
 
         private void AddToHelpContext()

@@ -46,9 +46,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var days = new List<DateOnly>{dateOnly};
 			var matrixes = new List<IScheduleMatrixPro>();
 			var gropPage = new GroupPageLight();
-			var compare1 = new ShiftCategoryFairnessCompareResult{StandardDeviation = 0};
-			var compare2 = new ShiftCategoryFairnessCompareResult{StandardDeviation = 0};
-
+			var value = new ShiftCategoryFairnessCompareValue { Original = 1 };
+			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(
 				new List<IShiftCategoryFairnessCompareResult> {compare1, compare2});
 			_mocks.ReplayAll();
@@ -64,8 +65,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var days = new List<DateOnly> { dateOnly };
 			var matrixes = new List<IScheduleMatrixPro>();
 			var gropPage = new GroupPageLight();
-			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0 };
-			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3 };
+			var value = new ShiftCategoryFairnessCompareValue { Original = 1 };
+			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
 			var list = new List<IShiftCategoryFairnessCompareResult> {compare1, compare2};
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
 			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap>())).Return(null);
@@ -82,8 +84,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var days = new List<DateOnly> { dateOnly };
 			var matrixes = new List<IScheduleMatrixPro>();
 			var gropPage = new GroupPageLight();
-			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0 };
-			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3 };
+			var value = new ShiftCategoryFairnessCompareValue { Original = 1 };
+			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
 			var list = new List<IShiftCategoryFairnessCompareResult> { compare1, compare2 };
 			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
@@ -103,9 +106,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var days = new List<DateOnly> { dateOnly };
 			var matrixes = new List<IScheduleMatrixPro>();
 			var gropPage = new GroupPageLight();
-			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0 };
-			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3 };
-			var compare3 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 2 };
+			var value = new ShiftCategoryFairnessCompareValue { Original = 1 };
+			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare3 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 2, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
 			var list = new List<IShiftCategoryFairnessCompareResult> { compare1, compare2 };
 			var list2 = new List<IShiftCategoryFairnessCompareResult> { compare1, compare3 };
 			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
@@ -128,9 +132,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var days = new List<DateOnly> { dateOnly };
 			var matrixes = new List<IScheduleMatrixPro>();
 			var gropPage = new GroupPageLight();
-			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0 };
-			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3 };
-			var compare3 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 4 };
+			var value = new ShiftCategoryFairnessCompareValue{Original = 1};
+			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare3 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 4, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
 			var list = new List<IShiftCategoryFairnessCompareResult> { compare1, compare2 };
 			var list2 = new List<IShiftCategoryFairnessCompareResult> { compare1, compare3 };
 			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
@@ -152,9 +157,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var days = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
 			var matrixes = new List<IScheduleMatrixPro>();
 			var gropPage = new GroupPageLight();
-			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0 };
-			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3 };
-			var compare3 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 4 };
+			var value = new ShiftCategoryFairnessCompareValue { Original = 1 };
+			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare3 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 4, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
 			var list = new List<IShiftCategoryFairnessCompareResult> { compare1, compare2 };
 			var list2 = new List<IShiftCategoryFairnessCompareResult> { compare1, compare3 };
 			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();

@@ -37,10 +37,10 @@ namespace Teleopti.Analytics.Portal.Utils
 		{
 			get
 			{
-				if (HttpContext.Current.Session["USERNAME"] == null)
+				if (HttpContext.Current.User == null)
 					return null;
 
-				return (string)HttpContext.Current.Session["USERNAME"];
+				return HttpContext.Current.User.Identity.Name;
 			}
 			set { HttpContext.Current.Session["USERNAME"] = value; }
 		}

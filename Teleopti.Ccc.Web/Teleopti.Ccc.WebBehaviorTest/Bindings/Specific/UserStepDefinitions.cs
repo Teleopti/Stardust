@@ -28,12 +28,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new Agent());
 		}
 
-		[Given(@"I am a user with access only to Mobile Reports")]
-		public void GivenIAmAUserWithAccessOnlyToMobileReports()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
 		[Given(@"I am an agent")]
 		public void GivenIAmAnAgent()
 		{
@@ -100,13 +94,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(dataSource);
 			UserFactory.User().Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, dataSource));
 		}
-
-		[Given(@"I am user without permission to MobileReports")]
-		public void GivenIAmUserWithoutPermissionToMobileReports()
-		{
-			UserFactory.User().Setup(new Agent());
-		}
-
 
 		[Given(@"I am user with partial access to reports")]
 		public void GivenIAmUserWithPartialAccessToReports()
@@ -195,12 +182,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new AgentWithoutRequestsAccess());
 		}
 
-		[Given(@"I am an agent without access to text requests")]
-		public void GivenIAmAnAgentWithoutAccessToTextRequests()
-		{
-			UserFactory.User().Setup(new AgentWithoutTextRequestsAccess());
-		}
-
 		[Given(@"I am an agent with no access to team schedule")]
 		public void GivenIAmAnAgentWithNoAccessToTeamSchedule()
 		{
@@ -253,19 +234,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIHaveExistingAbsencePreference(string aOrExisting)
 		{
 			UserFactory.User().Setup(new AbsencePreference());
-		}
-
-		[Given(@"I have a absence preference today")]
-		public void GivenIHaveAAbsencePreferenceToday()
-		{
-			UserFactory.User().Setup(new AbsencePreferenceToday());
-		}
-
-		[Given(@"I have (existing|a) preference")]
-		[Given(@"I have (existing|a) preference today")]
-		public void GivenIHaveExistingPreference(string aOrExisting)
-		{
-			UserFactory.User().Setup(new ExistingPreferenceToday());
 		}
 
 		[Given(@"I have a preference with end time limitation between (.*) and (.*)")]
@@ -425,24 +393,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new PreferenceClosedWorkflowControlSet());
 		}
 
-		[Given(@"My schedule is not published")]
-		public void GivenMyScheduleIsNotPublished()
-		{
-			UserFactory.User().Setup(new ScheduleIsNotPublished());
-		}
-
-		[Given(@"I have custom shifts scheduled on wednesday for two weeks:")]
-		public void GivenIHaveCustomShiftsScheduledOnWednesdayForTwoWeeks(Table table)
-		{
-			UserFactory.User().Setup(new ShiftsForTwoWeeksWithDifferentActivities());
-		}
-
-		[Given(@"I have shifts scheduled with different activities for two weeks")]
-		public void GivenIHaveShiftsScheduledWithDifferentActivitiesForTwoWeeks()
-		{
-			UserFactory.User().Setup(new ShiftsForTwoWeeksWithDifferentActivities());
-		}
-
 		[Given(@"I have a shift today")]
 		public void GivenIHaveAShiftToday()
 		{
@@ -456,28 +406,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new DayOffToday());
 		}
 
-		[Given(@"I have a contract dayoff today")]
-		public void GivenIHaveAContractDayoffToday()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
 		[Given(@"I have a full-day absence today")]
 		public void GivenIHaveAFull_DayAbsenceToday()
 		{
 			UserFactory.User().Setup(new AbsenceToday());
-		}
-
-		[Given(@"I have a night shift starting on monday")]
-		public void GivenIHaveANightShiftOnStartingMonday()
-		{
-			UserFactory.User().Setup(new NightShiftOnMonday());
-		}
-
-		[Given(@"I have a shift on thursday")]
-		public void GivenIHaveAShiftOnThursday()
-		{
-			UserFactory.User().Setup(new ShiftOnThursday());
 		}
 
 		[Given(@"I have a shift from (.*) to (.*)")]
@@ -490,12 +422,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIHaveAnActivityFromTo(string from, string to)
 		{
 			UserFactory.User().Setup(new ShiftToday(TimeSpan.Parse(from), TimeSpan.Parse(to), false));
-		}
-
-		[Given(@"I have a absence from (.*) to (.*)")]
-		public void GivenIHaveAAbsenceFromTo(string from, string to)
-		{
-			UserFactory.User().Setup(new AbsenceToday());
 		}
 
 		[Given(@"I am swedish")]
@@ -660,11 +586,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().UserData<PersonPeriod>().ContractSchedule = contractSchedule;
 		}
 
-        [Given(@"I have a scheduled shift according to this:")]
-        public void GivenIHaveAScheduledShiftAccordingToThis(Table table)
-        {
-            ScenarioContext.Current.Pending();
-        }
 	}
 }
 

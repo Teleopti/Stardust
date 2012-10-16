@@ -2,10 +2,25 @@
 
 namespace Teleopti.Interfaces.Domain
 {
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public interface IRestrictionExtractor : IRestrictionExtractorWithoutStateHolder
+	{
+
+		/// <summary>
+		/// Extracts the specified person.
+		/// </summary>
+		/// <param name="person">The person.</param>
+		/// <param name="dateOnly">The date only.</param>
+		void Extract(IPerson person, DateOnly dateOnly);
+	}
+
     /// <summary>
     /// 
     /// </summary>
-    public interface IRestrictionExtractor
+    public interface IRestrictionExtractorWithoutStateHolder
     {
         /// <summary>
         /// Gets the availability list.
@@ -36,13 +51,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="schedulePart">The schedule part.</param>
         void Extract(IScheduleDay schedulePart);
-
-        /// <summary>
-        /// Extracts the specified person.
-        /// </summary>
-        /// <param name="person">The person.</param>
-        /// <param name="dateOnly">The date only.</param>
-        void Extract(IPerson person, DateOnly dateOnly);
 
         /// <summary>
         /// Combineds the restriction.

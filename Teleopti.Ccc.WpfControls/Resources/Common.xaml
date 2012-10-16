@@ -18,7 +18,7 @@
     <Style TargetType="Control" x:Key="HeaderStyle">
         <Setter Property="Background" Value="{StaticResource RaptorStandardGradientBrush}"/>
         <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="FontFamily" Value="SegoeUI"/>
+        <Setter Property="FontFamily" Value="SegoeUI, Segoe UI, Tahoma"/>
         <Setter Property="BorderBrush" Value="{StaticResource RaptorStandardCellBorderBrush}"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="BorderThickness" Value="0,0.5,0.5,0.5"/>

@@ -3,6 +3,7 @@ using System.Data;
 using System.Configuration;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Security;
 using System.Web.UI;
 using System.Threading;
 using Teleopti.Analytics.Parameters;
@@ -121,7 +122,8 @@ namespace Teleopti.Analytics.Portal
             }
         }
 
-        private string LoginUrl()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Login"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings")]
+		protected string LoginUrl()
         {
             return string.Format("~/Login.aspx{0}", QueryStringWithPrefix);
         }
@@ -176,5 +178,13 @@ namespace Teleopti.Analytics.Portal
     	{
 			get { return string.Format(CultureInfo.InvariantCulture, "~/PmContainer.aspx{0}", QueryStringWithPrefix); }
     	}
+
+		protected void SignOut(object sender, EventArgs e)
+		{
+			FormsAuthentication.SignOut();
+			StateHolder.UserObject = null;
+			HttpContext.Current.Session["FORCEFORMSLOGIN"] = true;
+			Response.Redirect(LoginUrl());
+		}
     }
 }

@@ -54,8 +54,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I click the delete button")]
 		public void WhenIClickTheDeleteButton()
 		{
-			if (Pages.Pages.Current is PreferencePage)
-				TestControllerMethods.WaitForPreferencesToLoad();
 			Pages.Pages.CurrentDeleteButton.DeleteButton.EventualClick();
 		}
 
@@ -72,24 +70,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void ThenIShouldSeeAnErrorMessage()
 		{
 			EventualAssert.That(() => Browser.Current.Div("error-panel").Exists, Is.True);
-		}
-
-		[Then(@"I should see a symbol at the top of the schedule")]
-		public void ThenIShouldSeeASymbolAtTheTopOfTheSchedule()
-		{
-			var date = DateTime.Today;
-			if (UserFactory.User().HasSetup<ExistingTextRequest>())
-				date = UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.Request.Period.StartDateTime.Date;
-			var textRequest = Pages.Pages.WeekSchedulePage.RequestForDate(date);
-			EventualAssert.That(() => textRequest.DisplayVisible(), Is.True);
-		}
-
-		[Then(@"I should not see a symbol at the top of the schedule")]
-		public void ThenIShouldNotSeeASymbolAtTheTopOfTheSchedule()
-		{
-			var date = DateTime.Today;
-			var textRequestSymbol = Pages.Pages.WeekSchedulePage.RequestForDate(date);
-			EventualAssert.That(() => textRequestSymbol.DisplayHidden(), Is.True);
 		}
 
 		[Then(@"I should see a symbol at the top of the schedule for date '(.*)'")]

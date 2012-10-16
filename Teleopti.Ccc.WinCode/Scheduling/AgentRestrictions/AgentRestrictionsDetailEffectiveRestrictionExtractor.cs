@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			_schedulingOptions = schedulingOptions;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void Extract(IScheduleMatrixPro scheduleMatrixPro, PreferenceCellData preferenceCellData, DateOnly dateOnly, DateTimePeriod loadedPeriod, TimeSpan periodTarget)
 		{
 			if(scheduleMatrixPro == null) throw new ArgumentNullException("scheduleMatrixPro");
@@ -54,6 +55,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			SetTotalRestriction(scheduleDay, totalRestriction, preferenceCellData);
 
 			preferenceCellData.MustHavePreference = _restrictionExtractor.PreferenceList.Any(restriction => restriction.MustHave);
+
+			foreach (var restriction in _restrictionExtractor.PreferenceList)
+			{
+				if (restriction.WorkTimeLimitation.HasValue() || restriction.StartTimeLimitation.HasValue() || restriction.EndTimeLimitation.HasValue() || restriction.ActivityRestrictionCollection.Count > 0)
+				{
+					preferenceCellData.HasExtendedPreference = true;
+					break;
+				}
+			}
+			
 
 			if (scheduleMatrixPro.Person.Period(dateOnly) == null)
 			{

@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		{
 			if(preferenceCellData == null) throw new ArgumentNullException("preferenceCellData");
 
-			if (!preferenceCellData.Enabled) return false;
 			if (preferenceCellData.SchedulingOption.UseScheduling && (preferenceCellData.HasFullDayAbsence || preferenceCellData.HasShift || preferenceCellData.HasDayOff)) return false;
 			if (!preferenceCellData.SchedulingOption.UsePreferences && !preferenceCellData.SchedulingOption.UseRotations && !preferenceCellData.SchedulingOption.UseAvailability && !preferenceCellData.SchedulingOption.UseStudentAvailability) return false;
 
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 			if (!preferenceCellData.SchedulingOption.UsePreferences) return false;
 			if (!preferenceCellData.HasExtendedPreference) return false;
-			if (preferenceCellData.SchedulingOption.UseScheduling) return false;
+			if (preferenceCellData.SchedulingOption.UseRotations && preferenceCellData.EffectiveRestriction.DayOffTemplate != null) return false;
 
 			return _shouldPaint;
 		}
