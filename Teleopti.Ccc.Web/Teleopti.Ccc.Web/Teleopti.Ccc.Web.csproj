@@ -73,7 +73,7 @@
     <Reference Include="Elmah">
       <HintPath>..\..\packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
     </Reference>
-    <Reference Include="Esent.Interop, Version=1.6.0.0, Culture=neutral, PublicKeyToken=8dd49bbdae3f61af, processorArchitecture=MSIL">
+    <Reference Include="Esent.Interop">
       <HintPath>..\..\packages\Rhino.ServiceBus.References.2.3.2.6\lib\Esent.Interop.dll</HintPath>
     </Reference>
     <Reference Include="LinFu.DynamicProxy">
@@ -104,8 +104,14 @@
     <Reference Include="Rhino.PersistentHashTable">
       <HintPath>..\..\packages\Rhino.PersistentHashTable.1.7.0.0\lib\4.0\Rhino.PersistentHashTable.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.Queues, Version=1.4.2.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+    <Reference Include="Rhino.Queues">
       <HintPath>..\..\packages\Rhino.Queues.1.4.2.0\lib\4.0\Rhino.Queues.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.ServiceBus">
+      <HintPath>..\..\packages\Rhino.ServiceBus.2.3.2.6\lib\4.0\Rhino.ServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.ServiceBus.Autofac">
+      <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.2.3.2.6\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Extensions" />
