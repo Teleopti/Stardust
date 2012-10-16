@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             selectedPersons = new List<IPerson>{person};
         	target = new SchedulerStateHolder(scenario,
         	                                  new DateOnlyPeriodAsDateTimePeriod(
-        	                                  	dtp.VisiblePeriod.ToDateOnlyPeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo()),
-        	                                  	CccTimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons);
+        	                                  	dtp.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo()),
+        	                                  	TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons);
             mocks = new MockRepository();
         }
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [Test]
         public void ShouldBeAbleToSetTimeZoneInfo()
         {
-            var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
             target.TimeZoneInfo = timeZone;
             Assert.AreEqual(timeZone, target.TimeZoneInfo);
         }

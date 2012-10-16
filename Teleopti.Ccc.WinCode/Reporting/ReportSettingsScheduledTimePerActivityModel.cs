@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Reporting
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.WinCode.Reporting
         private IScenario _scenario;
         private DateOnlyPeriod _period;
         private IList<IPerson> _persons;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private IList<IActivity> _activities;
 
         public IScenario Scenario
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Reporting
             set { _persons = value; }
         }
 
-        public ICccTimeZoneInfo TimeZone
+        public TimeZoneInfo TimeZone
         {
             get { return _timeZone; }
             set { _timeZone = value; }

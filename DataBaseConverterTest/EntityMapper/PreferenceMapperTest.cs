@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             _mappedObject.Absence = _absencePairList;
             _mappedObject.Agent = _agentPairList;
             _mappedObject.DayOff = _dayOffPairList;
-            _target = new PreferenceMapper(_mappedObject, new CccTimeZoneInfo(TimeZoneInfo.Utc)); 
+            _target = new PreferenceMapper(_mappedObject, (TimeZoneInfo.Utc)); 
         }
 
         /// <summary>

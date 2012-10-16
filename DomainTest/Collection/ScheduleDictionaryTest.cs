@@ -827,7 +827,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                 {
                     IPerson per = PersonFactory.CreatePerson();
                     per.PermissionInformation.SetDefaultTimeZone(
-                        new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC")));
+                        (TimeZoneInfo.FindSystemTimeZoneById("UTC")));
                     IPersonAssignment pAssOld = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, per,
                                                                                                       new DateTimePeriod
                                                                                                           (

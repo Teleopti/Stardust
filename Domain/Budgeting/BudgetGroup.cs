@@ -41,13 +41,13 @@ namespace Teleopti.Ccc.Domain.Budgeting
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public virtual ICccTimeZoneInfo TimeZone
+        public virtual TimeZoneInfo TimeZone
         {
             get
             {
                 if (String.IsNullOrEmpty(_timeZone)) return null;
 
-                return new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(_timeZone));
+                return TimeZoneInfo.FindSystemTimeZoneById(_timeZone);
             }
             set
             {

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _shbrAct.InContractTime = true;
             _originalMainShift = MainShiftFactory.CreateMainShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
             DateOnly dateOnly = new DateOnly(2007, 1, 1);
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.Utc);
             _target = new MainShiftOptimizeActivitiesSpecification(_preferences, _originalMainShift, dateOnly, timeZoneInfo);
             _interface = new MainShiftOptimizeActivitiesSpecification(_preferences, _originalMainShift, dateOnly, timeZoneInfo);
         }

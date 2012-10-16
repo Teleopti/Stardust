@@ -14,12 +14,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private ISchedulerRangeToLoadCalculator _target;
         private IPerson _person;
         private DateTimePeriod _requestedPeriod;
-        private CccTimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
         
         [SetUp]
         public void Setup()
         {
-            _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));//GMT-3
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));//GMT-3
             _person = PersonFactory.CreatePerson();
             _person.PermissionInformation.SetCulture(CultureInfo.CreateSpecificCulture("en-US"));
             _person.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo); 
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void CanGetCorrectPeriodWithFourWeekSchedulePeriod()
         {
-            _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));//GMT-4
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));//GMT-4
             _person.PermissionInformation.SetCulture(CultureInfo.CreateSpecificCulture("sv-SE"));
             _person.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo);
             _requestedPeriod = new DateTimePeriod(new DateTime(2010, 04, 05, 04, 00, 00, DateTimeKind.Utc), new DateTime(2010, 05, 03 , 04, 00, 00, DateTimeKind.Utc));
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void CanGetCorrectPeriodWithFourWeekSchedulePeriodAndNoJusticeLoaded()
         {
-            _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));//GMT-4
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));//GMT-4
             _person.PermissionInformation.SetCulture(CultureInfo.CreateSpecificCulture("sv-SE"));
             _person.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo);
             _requestedPeriod = new DateTimePeriod(new DateTime(2010, 04, 05, 04, 00, 00, DateTimeKind.Utc), new DateTime(2010, 05, 03, 04, 00, 00, DateTimeKind.Utc));
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _requestedPeriod = new DateTimePeriod(new DateTime(2008, 06, 08, 00, 00, 00, DateTimeKind.Utc), new DateTime(2008, 08, 10, 00, 00, 00, DateTimeKind.Utc));
             DateTimePeriod expectedPeriod =
                 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                    _timeZoneInfo.ConvertTimeFromUtc(_requestedPeriod.StartDateTime, _timeZoneInfo).AddDays(-28),
+                    TimeZoneInfo.ConvertTimeFromUtc(_requestedPeriod.StartDateTime, _timeZoneInfo).AddDays(-28),
                     new DateTime(2008, 09, 14, 0, 0, 0, DateTimeKind.Local),
                     _person.PermissionInformation.DefaultTimeZone());
             _target = new SchedulerRangeToLoadCalculator(_requestedPeriod);
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _requestedPeriod = new DateTimePeriod(2008,1,1,2008,8,10);
             DateTimePeriod expectedPeriod =
                 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                    _timeZoneInfo.ConvertTimeFromUtc(_requestedPeriod.StartDateTime, _timeZoneInfo).AddDays(-28),
+                    TimeZoneInfo.ConvertTimeFromUtc(_requestedPeriod.StartDateTime, _timeZoneInfo).AddDays(-28),
                     new DateTime(2008, 09, 14, 0, 0, 0, DateTimeKind.Local),
                     _person.PermissionInformation.DefaultTimeZone());
             _target = new SchedulerRangeToLoadCalculator(_requestedPeriod);
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             DateTimePeriod expectedPeriod =
                 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                    _timeZoneInfo.ConvertTimeFromUtc(_requestedPeriod.StartDateTime, _timeZoneInfo).AddDays(-28),
+                    TimeZoneInfo.ConvertTimeFromUtc(_requestedPeriod.StartDateTime, _timeZoneInfo).AddDays(-28),
                     new DateTime(2008, 05, 18, 00, 00, 00, DateTimeKind.Local),
                     _person.PermissionInformation.DefaultTimeZone());
             Assert.AreEqual(expectedPeriod, _target.SchedulerRangeToLoad(_person));
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _person.AddSchedulePeriod(new SchedulePeriod(startDate, SchedulePeriodType.Month, 1));
             DateTimePeriod expectedPeriod =
                 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                    _timeZoneInfo.ConvertTimeFromUtc(_requestedPeriod.StartDateTime, _timeZoneInfo).AddDays(-28),
+                    TimeZoneInfo.ConvertTimeFromUtc(_requestedPeriod.StartDateTime, _timeZoneInfo).AddDays(-28),
                     new DateTime(2008, 06, 15, 0, 0, 0, DateTimeKind.Local),
                     _person.PermissionInformation.DefaultTimeZone());
             _target = new SchedulerRangeToLoadCalculator(_requestedPeriod);
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _person.AddSchedulePeriod(new SchedulePeriod(startDate, SchedulePeriodType.Month, 1));
             DateTimePeriod expectedPeriod =
                 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                    _timeZoneInfo.ConvertTimeFromUtc(_requestedPeriod.StartDateTime, _timeZoneInfo).AddDays(-20),
+                    TimeZoneInfo.ConvertTimeFromUtc(_requestedPeriod.StartDateTime, _timeZoneInfo).AddDays(-20),
                     new DateTime(2008, 06, 15, 0, 0, 0, DateTimeKind.Local),
                     _person.PermissionInformation.DefaultTimeZone());
             _target = new SchedulerRangeToLoadCalculator(_requestedPeriod);
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyGetSchedulerRangeToLoadCanIncludeFirstAndLastFullWeek()
         {
-            _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));//GMT-3
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));//GMT-3
             _person.PermissionInformation.SetCulture(CultureInfo.CreateSpecificCulture("en-GB"));
             _person.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo); 
 
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyGetSchedulerRangeToLoadCanIncludeFirstAndLastFullWeek1()
         {
-            _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));//GMT+1
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));//GMT+1
             _person.PermissionInformation.SetCulture(CultureInfo.CreateSpecificCulture("en-GB"));
             _person.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo);
 

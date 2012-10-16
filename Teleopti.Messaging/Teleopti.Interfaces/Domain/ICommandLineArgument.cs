@@ -93,7 +93,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: peterwe
         /// Created date: 2009-01-28
         /// </remarks>
-        ICccTimeZoneInfo TimeZone { get; }
+        TimeZoneInfo TimeZone { get; }
         /// <summary>
         /// Gets from date.
         /// </summary>

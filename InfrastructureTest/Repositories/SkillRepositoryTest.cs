@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void CanFindAllUsingMultisiteSkill()
         {
             ISkill skill1 = new MultisiteSkill("test","test",Color.Blue,15, _skillType);
-            skill1.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            skill1.TimeZone = (TimeZoneInfo.Utc);
             skill1.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill1);
 
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void CanFindAllUsingMultisiteSkillWithChildSkills()
         {
             IMultisiteSkill skill1 = SkillFactory.CreateMultisiteSkill("testp1",_skillType,15);
-            skill1.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            skill1.TimeZone = (TimeZoneInfo.Utc);
             skill1.Activity = _activity;
 
             PersistAndRemoveFromUnitOfWork(skill1);
@@ -303,13 +303,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void CanFindAllWithoutMultisiteSkillUsingMultisiteSkillWithChildSkills()
         {
             IMultisiteSkill skill1 = SkillFactory.CreateMultisiteSkill("testp1", _skillType, 15);
-            skill1.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            skill1.TimeZone = (TimeZoneInfo.Utc);
             skill1.Activity = _activity;
 
             PersistAndRemoveFromUnitOfWork(skill1);
 
             ISkill skill2 = SkillFactory.CreateSkill("testp2", _skillType, 15);
-            skill2.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            skill2.TimeZone = (TimeZoneInfo.Utc);
             skill2.Activity = _activity;
 
             PersistAndRemoveFromUnitOfWork(skill2);
@@ -514,7 +514,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadMultisiteSkill()
         {
             var skill1 = SkillFactory.CreateMultisiteSkill("multisite skill", _skillType, 15);
-            skill1.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            skill1.TimeZone = (TimeZoneInfo.Utc);
             skill1.Activity = _activity;
 
             PersistAndRemoveFromUnitOfWork(skill1);

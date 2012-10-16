@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
     public interface IForecastsRowExtractor
     {
-        IForecastsRow Extract(string value, ICccTimeZoneInfo timeZone);
+        IForecastsRow Extract(string value, TimeZoneInfo timeZone);
     }
 
     public class ForecastsRowExtractor : IForecastsRowExtractor
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
         private readonly ForecastsFileIntegerValueValidator _integerValidator = new ForecastsFileIntegerValueValidator();
         private readonly ForecastsFileDoubleValueValidator _doubleValidator = new ForecastsFileDoubleValueValidator();
 
-        public IForecastsRow Extract(string value, ICccTimeZoneInfo timeZone)
+        public IForecastsRow Extract(string value, TimeZoneInfo timeZone)
         {
             var content = value.Split(',');
             if (!_columnsInRowValidSpecification.IsSatisfiedBy(content))
@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
                 throw new ValidationException(string.Format(CultureInfo.InvariantCulture, "{0} is invalid time.", newRow.LocalDateTimeTo));
             }
 
-            newRow.UtcDateTimeFrom = timeZone.ConvertTimeToUtc(newRow.LocalDateTimeFrom, timeZone);
-            newRow.UtcDateTimeTo = timeZone.ConvertTimeToUtc(newRow.LocalDateTimeTo, timeZone);
+            newRow.UtcDateTimeFrom = timeZone.SafeConvertTimeToUtc(newRow.LocalDateTimeFrom);
+            newRow.UtcDateTimeTo = timeZone.SafeConvertTimeToUtc(newRow.LocalDateTimeTo);
 
             ForecastParseResult<int> integerResult;
             if (!_integerValidator.TryParse(content[3], out integerResult))

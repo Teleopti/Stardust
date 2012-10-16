@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
     [TestFixture]
     public class DateTimePeriodMapperTest : MapperTest<global::Domain.DatePeriod>
     {
-        private ICccTimeZoneInfo timeZone;
+        private TimeZoneInfo timeZone;
 
         /// <summary>
         /// Runs once per test
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         [SetUp]
         public void Setup()
         {
-            timeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            timeZone = (TimeZoneInfo.Utc);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
                 new DateTimePeriod(new DateTime(2007, 3, 25, 1, 30, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 3, 25, 1, 30, 0, DateTimeKind.Utc));
 
-            ICccTimeZoneInfo currentTimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo currentTimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             DateTimePeriodMapper dtMapper = new DateTimePeriodMapper(currentTimeZone, new DateTime(2007, 3, 25));
             DateTimePeriod newObj = dtMapper.Map(p1);
             Assert.AreEqual(dtP1, newObj);
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
                 new DateTimePeriod(new DateTime(2007, 3, 25, 0, 30, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 3, 25, 1, 30, 0, DateTimeKind.Utc));
 
-            ICccTimeZoneInfo currentTimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo currentTimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             DateTimePeriodMapper dtMapper = new DateTimePeriodMapper(currentTimeZone, new DateTime(2007, 3, 25));
             DateTimePeriod newObj = dtMapper.Map(p1);
             Assert.AreEqual(dtP1, newObj);
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
                 new DateTimePeriod(new DateTime(2007, 3, 25, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 3, 25, 1, 0, 0, DateTimeKind.Utc));
 
-            ICccTimeZoneInfo currentTimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo currentTimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             DateTimePeriodMapper dtMapper = new DateTimePeriodMapper(currentTimeZone, new DateTime(2007, 3, 25));
             DateTimePeriod newObj = dtMapper.Map(p1);
             Assert.AreEqual(dtP1, newObj);
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
                 new DateTimePeriod(new DateTime(2007, 3, 25, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 3, 25, 1, 0, 0, DateTimeKind.Utc));
 
-            ICccTimeZoneInfo currentTimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo currentTimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             DateTimePeriodMapper dtMapper = new DateTimePeriodMapper(currentTimeZone, new DateTime(2007, 3, 25));
             DateTimePeriod newObj = dtMapper.Map(p1);
             Assert.AreEqual(dtP1, newObj);

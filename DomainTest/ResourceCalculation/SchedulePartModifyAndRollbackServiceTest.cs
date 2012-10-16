@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
                 Expect.Call(_stateHolder.UseValidation).Return(true).Repeat.AtLeastOnce();
                 //Expect.Call(person.Name).Return(new Name()).Repeat.Once();
-                //Expect.Call(schedulePart.DateOnlyAsPeriod).Return((new DateOnlyAsDateTimePeriod(new DateOnly(2008, 1, 1), new CccTimeZoneInfo(TimeZoneInfo.Utc)))).Repeat.Once();
+                //Expect.Call(schedulePart.DateOnlyAsPeriod).Return((new DateOnlyAsDateTimePeriod(new DateOnly(2008, 1, 1), (TimeZoneInfo.Utc)))).Repeat.Once();
             }
 
             using (_mocks.Playback())
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
                 Expect.Call(_stateHolder.UseValidation).Return(true).Repeat.AtLeastOnce();
                 //Expect.Call(person.Name).Return(new Name()).Repeat.Once();
-                //Expect.Call(schedulePart.DateOnlyAsPeriod).Return((new DateOnlyAsDateTimePeriod(new DateOnly(2008, 1, 1), new CccTimeZoneInfo(TimeZoneInfo.Utc)))).Repeat.Once();
+                //Expect.Call(schedulePart.DateOnlyAsPeriod).Return((new DateOnlyAsDateTimePeriod(new DateOnly(2008, 1, 1), (TimeZoneInfo.Utc)))).Repeat.Once();
             }
 
             using (_mocks.Playback())

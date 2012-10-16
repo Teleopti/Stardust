@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 															  sdkProjectionServiceFactory);
             target.PersonRepository = personRepository;
             target.ScheduleRepository = scheduleRepository;
-			  target.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+			  target.TimeZone = (TimeZoneInfo.Utc);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			using (mocks.Playback())
 			{
 				target.SpecialProjection = "midnightSplit";
-				target.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+				target.TimeZone = (TimeZoneInfo.Utc);
 				var dto = target.DomainEntityToDto(schedDay);
 				Assert.AreEqual(2, dto.ProjectedLayerCollection.Count);				
 			}
@@ -354,7 +354,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         	Expect.Call(sdkProjectionServiceFactory.CreateProjectionService(part, string.Empty, target.TimeZone)).Return(projectionService);
             Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
             Expect.Call(part.Person).Return(person).Repeat.Any();
-            Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 7, 25), new CccTimeZoneInfo(TimeZoneInfo.Utc))).Repeat.Any();
+            Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 7, 25), (TimeZoneInfo.Utc))).Repeat.Any();
         }
 
         [Test]
@@ -469,13 +469,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             using (mocks.Playback())
             {
                 target.SpecialProjection = "excludeAbsences";
-                target.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+                target.TimeZone = (TimeZoneInfo.Utc);
                 var dto = target.DomainEntityToDto(scheduleDay);
                 Assert.AreEqual(1, dto.ProjectedLayerCollection.Count);
                 Assert.AreEqual(activityId, ((List<ProjectedLayerDto>)dto.ProjectedLayerCollection)[0].PayloadId);
 
                 target.SpecialProjection = "excludeAbsencesMidnightSplit";
-                target.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+                target.TimeZone = (TimeZoneInfo.Utc);
                 dto = target.DomainEntityToDto(scheduleDay);
                 Assert.AreEqual(1, dto.ProjectedLayerCollection.Count);
                 Assert.AreEqual(activityId, ((List<ProjectedLayerDto>)dto.ProjectedLayerCollection)[0].PayloadId);

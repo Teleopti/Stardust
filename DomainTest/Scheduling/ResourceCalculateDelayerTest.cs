@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldCalculateThisDateAndNextIfLimitIs1AndPeriodOverMidnight()
 		{
 			DateOnlyPeriod dop = new DateOnlyPeriod(new DateOnly(), new DateOnly().AddDays(1));
-			var dp = dop.ToDateTimePeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+			var dp = dop.ToDateTimePeriod((TimeZoneInfo.Utc));
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
 			using (_mocks.Record())
 			{
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldCalculateThisDateIfLimitIs1AndPeriodNotOverMidnight()
 		{
 			DateOnlyPeriod dop = new DateOnlyPeriod(new DateOnly(), new DateOnly());
-			var dp = dop.ToDateTimePeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+			var dp = dop.ToDateTimePeriod((TimeZoneInfo.Utc));
 			dp = dp.ChangeEndTime(TimeSpan.FromSeconds(-1));
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
 			using (_mocks.Record())

@@ -73,7 +73,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2009-03-19
         /// </remarks>
-        public DateTime StartDateTimeLocal(ICccTimeZoneInfo timeZoneInfo)
+        public DateTime StartDateTimeLocal(TimeZoneInfo timeZoneInfo)
         {
             return TimeZoneHelper.ConvertFromUtc(StartDateTime, timeZoneInfo);
         }
@@ -87,7 +87,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2009-03-19
         /// </remarks>
-        public DateTime EndDateTimeLocal(ICccTimeZoneInfo timeZoneInfo)
+        public DateTime EndDateTimeLocal(TimeZoneInfo timeZoneInfo)
         {
             return TimeZoneHelper.ConvertFromUtc(EndDateTime, timeZoneInfo);
         }
@@ -435,7 +435,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: cs
         /// Created date: 2000-03-26
         /// </remarks>
-        public IList<IntervalDefinition> IntervalsFromHourCollection(int resolution, ICccTimeZoneInfo timeZoneInfo)
+        public IList<IntervalDefinition> IntervalsFromHourCollection(int resolution, TimeZoneInfo timeZoneInfo)
         {
             var elapsedTime = ElapsedTime();
             if (elapsedTime == TimeSpan.Zero) return new List<IntervalDefinition>();
@@ -457,7 +457,7 @@ namespace Teleopti.Interfaces.Domain
             do
             {
                 var timeRelativeToStartOfDay =
-                    timeZoneInfo.ConvertTimeFromUtc(currentTime, timeZoneInfo).Subtract(localStartDate);
+                    TimeZoneHelper.ConvertFromUtc(currentTime, timeZoneInfo).Subtract(localStartDate);
                 intervals.Add(new IntervalDefinition(currentTime,timeRelativeToStartOfDay));
                 currentTime = currentTime.Add(resolutionAsTimeSpan);
             } while (currentTime<EndDateTime);
@@ -763,7 +763,7 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="info">The time zone info.</param>
         /// <returns></returns>
-        public DateOnlyPeriod ToDateOnlyPeriod(ICccTimeZoneInfo info)
+        public DateOnlyPeriod ToDateOnlyPeriod(TimeZoneInfo info)
         {
             var localStartDate = TimeZoneHelper.ConvertFromUtc(period.Minimum, info);
             var localEndDate = TimeZoneHelper.ConvertFromUtc(period.Maximum, info);
@@ -813,13 +813,14 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2008-02-18
         /// </remarks>
-        public TimePeriod TimePeriod(ICccTimeZoneInfo timeZone)
+        public TimePeriod TimePeriod(TimeZoneInfo timeZone)
         {
             TimeSpan startTimeOfDay;
-            if (timeZone.Id == timeZone.Utc.Id)
+
+            if (TimeZoneInfo.FindSystemTimeZoneById(timeZone.Id) == TimeZoneInfo.Utc)
                 startTimeOfDay = StartDateTime.TimeOfDay;
             else
-                startTimeOfDay = timeZone.ConvertTimeFromUtc(StartDateTime, timeZone).TimeOfDay;
+                startTimeOfDay = TimeZoneHelper.ConvertFromUtc(StartDateTime, timeZone).TimeOfDay;
 
             return new TimePeriod(startTimeOfDay, startTimeOfDay.Add(ElapsedTime()));
         }
@@ -836,12 +837,12 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-05-14
         /// </remarks>
         /// <param name="timeZoneInfo"></param>
-        public DateTimePeriod WholeWeek(CultureInfo culture, ICccTimeZoneInfo timeZoneInfo)
+        public DateTimePeriod WholeWeek(CultureInfo culture, TimeZoneInfo timeZoneInfo)
         {
             DateTime startdate = DateHelper.GetFirstDateInWeek(StartDateTimeLocal(timeZoneInfo), culture);
             DateTime endDate = DateHelper.GetLastDateInWeek(EndDateTimeLocal(timeZoneInfo), culture).AddDays(1);
-            return new DateTimePeriod(timeZoneInfo.ConvertTimeToUtc(startdate, timeZoneInfo),
-                                      timeZoneInfo.ConvertTimeToUtc(endDate, timeZoneInfo), false);
+            return new DateTimePeriod(timeZoneInfo.SafeConvertTimeToUtc(startdate),
+                                      timeZoneInfo.SafeConvertTimeToUtc(endDate), false);
         }
 
         /// <summary>

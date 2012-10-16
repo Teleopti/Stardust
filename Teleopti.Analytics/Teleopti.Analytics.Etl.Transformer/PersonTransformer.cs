@@ -15,22 +15,22 @@ namespace Teleopti.Analytics.Etl.Transformer
 
             foreach (IPerson person in personCollection)
             {
-                ICccTimeZoneInfo cccTimeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+                TimeZoneInfo TimeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 
                 foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
                 {
-                    createPersonDataRow(person, personTable, cccTimeZoneInfo, personPeriod, intervalsPerDay, insertDate, commonNameDescriptionSetting);
-                    externalLogOnPerson(person, acdLogOnTable, cccTimeZoneInfo, personPeriod);
+                    createPersonDataRow(person, personTable, TimeZoneInfo, personPeriod, intervalsPerDay, insertDate, commonNameDescriptionSetting);
+                    externalLogOnPerson(person, acdLogOnTable, TimeZoneInfo, personPeriod);
                 }
             }
         }
 
-        private static void createPersonDataRow(IPerson person, DataTable table, ICccTimeZoneInfo cccTimeZoneInfo, IPersonPeriod personPeriod, int intervalsPerDay, DateOnly insertDate, ICommonNameDescriptionSetting commonNameDescriptionSetting)
+        private static void createPersonDataRow(IPerson person, DataTable table, TimeZoneInfo TimeZoneInfo, IPersonPeriod personPeriod, int intervalsPerDay, DateOnly insertDate, ICommonNameDescriptionSetting commonNameDescriptionSetting)
         {
             DataRow row = table.NewRow();
 
-            DateTime validFromDate = cccTimeZoneInfo.ConvertTimeToUtc(personPeriod.StartDate.Date);
-            DateTime validToDate = getPeriodEndDate(personPeriod.EndDate().Date, cccTimeZoneInfo);
+            DateTime validFromDate = TimeZoneInfo.ConvertTimeToUtc(personPeriod.StartDate.Date);
+            DateTime validToDate = getPeriodEndDate(personPeriod.EndDate().Date, TimeZoneInfo);
             row["person_code"] = person.Id;
             row["valid_from_date"] = validFromDate;
             row["valid_to_date"] = validToDate;
@@ -62,7 +62,7 @@ namespace Teleopti.Analytics.Etl.Transformer
             row["business_unit_code"] = personPeriod.Team.BusinessUnitExplicit.Id;
             row["business_unit_name"] = personPeriod.Team.BusinessUnitExplicit.Name;
             row["employment_number"] = person.EmploymentNumber;
-            row["employment_start_date"] = cccTimeZoneInfo.ConvertTimeToUtc(personPeriod.StartDate.Date);
+            row["employment_start_date"] = TimeZoneInfo.ConvertTimeToUtc(personPeriod.StartDate.Date);
             row["employment_end_date"] = validToDate;
             row["is_agent"] = person.IsAgent(insertDate);
             row["is_user"] = false; //Actually "Not Defined"
@@ -87,10 +87,10 @@ namespace Teleopti.Analytics.Etl.Transformer
             table.Rows.Add(row);
         }
 
-        private static void externalLogOnPerson(IPerson person, DataTable acdLoginTable, ICccTimeZoneInfo cccTimeZoneInfo, IPersonPeriod personPeriod)
+        private static void externalLogOnPerson(IPerson person, DataTable acdLoginTable, TimeZoneInfo TimeZoneInfo, IPersonPeriod personPeriod)
         {
-            DateTime validFromDate = cccTimeZoneInfo.ConvertTimeToUtc(personPeriod.StartDate.Date);
-            DateTime validToDate = getPeriodEndDate(personPeriod.EndDate().Date, cccTimeZoneInfo);
+            DateTime validFromDate = TimeZoneInfo.ConvertTimeToUtc(personPeriod.StartDate.Date);
+            DateTime validToDate = getPeriodEndDate(personPeriod.EndDate().Date, TimeZoneInfo);
 
             foreach (IExternalLogOn externalLogOn in personPeriod.ExternalLogOnCollection)
             {
@@ -110,14 +110,14 @@ namespace Teleopti.Analytics.Etl.Transformer
             }
         }
 
-        private static DateTime getPeriodEndDate(DateTime endDate, ICccTimeZoneInfo cccTimeZoneInfo)
+        private static DateTime getPeriodEndDate(DateTime endDate, TimeZoneInfo TimeZoneInfo)
         {
             if (endDate.Equals(new DateTime(2059, 12, 31)))
             {
                 return endDate;
             }
 
-            return cccTimeZoneInfo.ConvertTimeToUtc(endDate.AddDays(1));
+            return TimeZoneInfo.ConvertTimeToUtc(endDate.AddDays(1));
         }
 
         public static DateTime GetPeriodIntervalEndDate(DateTime endDate, int intervalsPerDay)

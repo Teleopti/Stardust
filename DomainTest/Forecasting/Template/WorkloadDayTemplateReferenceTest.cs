@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         public void CanReturnCorrectTemplateName()
         {
             var createDate = new DateOnly(2008, 01, 14);
-			var createLocalDate = _workload.Skill.TimeZone.ConvertTimeFromUtc(createDate);
+			var createLocalDate = TimeZoneInfo.ConvertTimeFromUtc(createDate, _workload.Skill.TimeZone);
             const string baseTemplateName = "JULDAGEN";
             const string templateName = "<" + baseTemplateName + ">";
             var workloadDayTemplate = CreateAndAddWorkloadDayTemplate(templateName, createDate);
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         public void VerifyRenameWorksAsExpected()
         {
             var createDate = new DateOnly(2008, 01, 14);
-			var createLocalDate = _workload.Skill.TimeZone.ConvertTimeFromUtc(createDate);
+			var createLocalDate = TimeZoneInfo.ConvertTimeFromUtc(createDate, _workload.Skill.TimeZone);
             const string baseTemplateName = "JULDAGEN";
             const string templateName = "<" + baseTemplateName + ">";
             var workloadDayTemplate = CreateAndAddWorkloadDayTemplate(templateName, createDate);

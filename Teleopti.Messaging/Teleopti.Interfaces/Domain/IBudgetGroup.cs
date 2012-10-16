@@ -50,7 +50,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: peterwe
         /// Created date: 9/28/2010
         /// </remarks>
-        ICccTimeZoneInfo TimeZone { get; set; }
+        TimeZoneInfo TimeZone { get; set; }
 
         ///<summary>
         /// The custom shrinkages defined for this budget group

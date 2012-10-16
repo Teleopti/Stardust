@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory.ScheduleReporting
 
         private const float ROW_SPACE = 1;
 
-        public IList<PersonWithScheduleStream> ExportIndividual(ICccTimeZoneInfo timeZoneInfo, IEnumerable<IPerson> persons,
+        public IList<PersonWithScheduleStream> ExportIndividual(TimeZoneInfo timeZoneInfo, IEnumerable<IPerson> persons,
                                      DateOnlyPeriod period, IScheduleDictionary scheduleDictionary, ScheduleReportDetail details)
         {
             _brush = new PdfSolidBrush(Color.DimGray);
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory.ScheduleReporting
             return IndividualPages(persons, period, scheduleDictionary, timeZoneInfo, details);
         }
 
-        private IList<PersonWithScheduleStream> IndividualPages(IEnumerable<IPerson> persons, DateOnlyPeriod period, IDictionary<IPerson, IScheduleRange> scheduleDictionary, ICccTimeZoneInfo timeZoneInfo, ScheduleReportDetail details)
+        private IList<PersonWithScheduleStream> IndividualPages(IEnumerable<IPerson> persons, DateOnlyPeriod period, IDictionary<IPerson, IScheduleRange> scheduleDictionary, TimeZoneInfo timeZoneInfo, ScheduleReportDetail details)
         {
             IList<PersonWithScheduleStream> scheduleStreams = new List<PersonWithScheduleStream>();
             
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory.ScheduleReporting
             return ret;
         }
 
-        private IList<IPdfScheduleTemplate> CreateWeek(bool rtl, IPerson person, DateOnlyPeriod fullWeekPeriod, int offset, IDictionary<IPerson, IScheduleRange> scheduleDictionary, ICccTimeZoneInfo timeZoneInfo, ScheduleReportDetail details, CultureInfo culture)
+        private IList<IPdfScheduleTemplate> CreateWeek(bool rtl, IPerson person, DateOnlyPeriod fullWeekPeriod, int offset, IDictionary<IPerson, IScheduleRange> scheduleDictionary, TimeZoneInfo timeZoneInfo, ScheduleReportDetail details, CultureInfo culture)
         {
 
             IList<IPdfScheduleTemplate> weekList = new List<IPdfScheduleTemplate>();

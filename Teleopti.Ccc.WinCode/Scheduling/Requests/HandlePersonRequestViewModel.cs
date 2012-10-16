@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 		private IEventAggregator _eventAggregator;
 		private readonly IPersonRequestCheckAuthorization _authorization;
 		private bool setFilters=true;
-	    private ICccTimeZoneInfo _cccTimeZoneInfo;
+	    private TimeZoneInfo _TimeZoneInfo;
 
 	    public ListCollectionView PersonRequestViewModels
 		{ 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 												IDictionary<IPerson, IPersonAccountCollection> allAccounts,
 												IEventAggregator eventAggregator,
 			                                    IPersonRequestCheckAuthorization authorization,
-                                                ICccTimeZoneInfo cccTimeZoneInfo)
+                                                TimeZoneInfo TimeZoneInfo)
 		{
 			_eventAggregator = eventAggregator;
 			_authorization = authorization;
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			_filterTimeSpan = TimeSpan.FromDays(3650);
 			filterItems();
 			_undoRedoContainer.ChangedHandler += _undoRedoContainer_ChangedHandler;
-		    _cccTimeZoneInfo = cccTimeZoneInfo;
+		    _TimeZoneInfo = TimeZoneInfo;
 		}
 
 		void _undoRedoContainer_ChangedHandler(object sender, EventArgs e)
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 		{
 			if(authorization.HasViewRequestPermission(request) && !request.IsNew)
 			{
-                PersonRequestViewModel model = new PersonRequestViewModel(request, statusChecker, _allAccounts[request.Person], _eventAggregator, _cccTimeZoneInfo);
+                PersonRequestViewModel model = new PersonRequestViewModel(request, statusChecker, _allAccounts[request.Person], _eventAggregator, _TimeZoneInfo);
 				ShiftTradeRequestOkByMeSpecification specification = new ShiftTradeRequestOkByMeSpecification(statusChecker);
 
 				if (!specification.IsSatisfiedBy(request))

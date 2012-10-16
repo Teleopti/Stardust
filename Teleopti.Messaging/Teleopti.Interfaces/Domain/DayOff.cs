@@ -61,9 +61,9 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2007-10-22
         /// </remarks>
-        public DateTime AnchorLocal(ICccTimeZoneInfo targetTimeZone)
+        public DateTime AnchorLocal(TimeZoneInfo targetTimeZone)
         {
-                return targetTimeZone.ConvertTimeFromUtc(_anchor, targetTimeZone);
+            return TimeZoneInfo.ConvertTimeFromUtc(_anchor, targetTimeZone);
          }
 
         /// <summary>

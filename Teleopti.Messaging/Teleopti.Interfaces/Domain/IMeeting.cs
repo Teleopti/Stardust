@@ -123,7 +123,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2009-10-13
         /// </remarks>
-        ICccTimeZoneInfo TimeZone { get; set; }
+        TimeZoneInfo TimeZone { get; set; }
 
         /// <summary>
         /// Gets or sets the end date for recurrencies. Cannot be less than start date.

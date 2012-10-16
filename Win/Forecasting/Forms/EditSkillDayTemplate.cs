@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
     	private DateTimePeriod InitializeTimePeriod()
     	{
-    		var startDateUtc = _skill.TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone);
+            var startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone);
     		return new DateTimePeriod(startDateUtc, startDateUtc.AddDays(1)).MovePeriod(_skill.MidnightBreakOffset);
     	}
 
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void InitializeSkillDayTemplateFromSkillDay(ISkillDay skillDay)
     	{
-			var baseDateUtc = _skill.TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone);
-            var actualDateUtc = _skill.TimeZone.ConvertTimeToUtc(skillDay.CurrentDate, _skill.TimeZone);
+            var baseDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone);
+            var actualDateUtc = TimeZoneInfo.ConvertTimeToUtc(skillDay.CurrentDate, _skill.TimeZone);
 			var difference = actualDateUtc.Subtract(baseDateUtc);
 			var tempalteSkillDataPeriodCollection = skillDay.SkillDataPeriodCollection.Select(
 				skillDataPeriod =>

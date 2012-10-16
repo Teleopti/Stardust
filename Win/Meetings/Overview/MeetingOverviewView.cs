@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             }
         }
 
-        public ICccTimeZoneInfo UserTimeZone { get; set; }
+        public TimeZoneInfo UserTimeZone { get; set; }
 
         private void deleteClick(object sender, EventArgs e)
         {

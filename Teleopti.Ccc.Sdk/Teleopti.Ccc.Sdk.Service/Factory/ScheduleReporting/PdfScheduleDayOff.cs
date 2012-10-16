@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory.ScheduleReporting
     internal class PdfScheduleDayOff : PdfScheduleTemplate
     {
 
-        public PdfScheduleDayOff(float columnWidth, IPersonDayOff dayOff, ICccTimeZoneInfo timeZoneInfo, bool rightToLeft, CultureInfo culture)
+        public PdfScheduleDayOff(float columnWidth, IPersonDayOff dayOff, TimeZoneInfo timeZoneInfo, bool rightToLeft, CultureInfo culture)
         {
             Brush = new PdfSolidBrush(Color.DimGray);
            

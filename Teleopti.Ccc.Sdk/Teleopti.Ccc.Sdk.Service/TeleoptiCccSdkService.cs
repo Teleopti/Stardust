@@ -1592,8 +1592,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		private static DateTime GetPersonLocalTime(DateTime utcTime, IPerson person)
 		{
-			ICccTimeZoneInfo timeZone = person.PermissionInformation.DefaultTimeZone();
-			return timeZone.ConvertTimeFromUtc(utcTime, timeZone);
+			TimeZoneInfo timeZone = person.PermissionInformation.DefaultTimeZone();
+            return TimeZoneInfo.ConvertTimeFromUtc(utcTime, timeZone);
 		}
 		/// <summary>
 		/// Changes the password.
@@ -1675,7 +1675,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			{
                 var personAssembler = _factoryProvider.CreatePersonAssembler();
 				IPerson thePerson = personAssembler.DtoToDomainEntity(person);
-				ICccTimeZoneInfo timeZoneInfo = thePerson.PermissionInformation.DefaultTimeZone();
+				TimeZoneInfo timeZoneInfo = thePerson.PermissionInformation.DefaultTimeZone();
 				DateOnly dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(utcDate, timeZoneInfo).Date);
 				IPersonPeriod personPeriodForGivenDate = thePerson.Period(dateOnlyPerson);
 

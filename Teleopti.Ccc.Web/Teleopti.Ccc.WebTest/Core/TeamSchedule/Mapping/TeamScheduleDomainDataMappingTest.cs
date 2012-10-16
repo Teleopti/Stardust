@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		private ITeamScheduleProjectionProvider projectionProvider;
 		private ISchedulePersonProvider personProvider;
 		private IUserTimeZone userTimeZone;
-		private CccTimeZoneInfo timeZone;
+		private TimeZoneInfo timeZone;
 
 		[SetUp]
 		public void Setup()
@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			projectionProvider = MockRepository.GenerateStub<ITeamScheduleProjectionProvider>();
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 
-			timeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+			timeZone = (TimeZoneInfo.Utc);
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			userTimeZone.Stub(x => x.TimeZone()).Do((Func<CccTimeZoneInfo>)(() => timeZone));
+			userTimeZone.Stub(x => x.TimeZone()).Do((Func<TimeZoneInfo>)(() => timeZone));
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new TeamScheduleDomainDataMappingProfile(
@@ -222,15 +222,15 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		[Test]
 		public void ShouldMapDefaultDisplayTimeInUsersTimeZone()
 		{
-			timeZone = CccTimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			timeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 
 			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
 
 			var startDateTimeLocal = DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.StartTime).AddMinutes(-15);
-			var expectedStartDateTime = timeZone.ConvertTimeToUtc(startDateTimeLocal);
+			var expectedStartDateTime = timeZone.SafeConvertTimeToUtc(startDateTimeLocal);
 
 			var endDateTimeLocal = DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.EndTime).AddMinutes(15);
-			var expectedEndDateTime = timeZone.ConvertTimeToUtc(endDateTimeLocal);
+			var expectedEndDateTime = timeZone.SafeConvertTimeToUtc(endDateTimeLocal);
 
 			result.DisplayTimePeriod.StartDateTime.Should().Be.EqualTo(expectedStartDateTime);
 			result.DisplayTimePeriod.EndDateTime.Should().Be.EqualTo(expectedEndDateTime);

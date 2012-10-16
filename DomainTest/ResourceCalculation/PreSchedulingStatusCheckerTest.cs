@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private DateTimePeriod _period;
         private readonly DateOnly _scheduleDateOnly = new DateOnly(2009,2,2);
         private IPerson _person;
-        private ICccTimeZoneInfo _cccTimeZoneInfo;
+        private TimeZoneInfo _TimeZoneInfo;
         private IVirtualSchedulePeriod _schedulePeriod;
         private IPersonPeriod _personPeriod;
 
@@ -39,11 +39,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
             _period = new DateTimePeriod(_scheduleDate, _scheduleDate.AddDays(1));
             TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
-            _cccTimeZoneInfo = new CccTimeZoneInfo(zone);
+            _TimeZoneInfo = (zone);
             _personPeriod = _mocks.StrictMock<IPersonPeriod>();
             _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
-            var p = new DateOnlyAsDateTimePeriod(_scheduleDateOnly, _cccTimeZoneInfo);
+            var p = new DateOnlyAsDateTimePeriod(_scheduleDateOnly, _TimeZoneInfo);
             Expect.Call(_part.DateOnlyAsPeriod).Return(p).Repeat.Any();
             Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
         }

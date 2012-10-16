@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -5,10 +6,10 @@ namespace Teleopti.Ccc.Domain.Common
     public class DateOnlyAsDateTimePeriod : IDateOnlyAsDateTimePeriod
     {
         private readonly DateOnly _dateOnly;
-        private readonly ICccTimeZoneInfo _sourceTimeZone;
+        private readonly TimeZoneInfo _sourceTimeZone;
         private DateTimePeriod? _period;
 
-        public DateOnlyAsDateTimePeriod(DateOnly dateOnly, ICccTimeZoneInfo sourceTimeZone)
+        public DateOnlyAsDateTimePeriod(DateOnly dateOnly, TimeZoneInfo sourceTimeZone)
         {
             _dateOnly = dateOnly;
             _sourceTimeZone = sourceTimeZone;
@@ -38,10 +39,10 @@ namespace Teleopti.Ccc.Domain.Common
 	public class DateOnlyPeriodAsDateTimePeriod : IDateOnlyPeriodAsDateTimePeriod
 	{
 		private readonly DateOnlyPeriod _dateOnlyPeriod;
-		private readonly ICccTimeZoneInfo _sourceTimeZone;
+		private readonly TimeZoneInfo _sourceTimeZone;
 		private DateTimePeriod? _period;
 
-		public DateOnlyPeriodAsDateTimePeriod(DateOnlyPeriod dateOnlyPeriod, ICccTimeZoneInfo sourceTimeZone)
+		public DateOnlyPeriodAsDateTimePeriod(DateOnlyPeriod dateOnlyPeriod, TimeZoneInfo sourceTimeZone)
 		{
 			_dateOnlyPeriod = dateOnlyPeriod;
 			_sourceTimeZone = sourceTimeZone;

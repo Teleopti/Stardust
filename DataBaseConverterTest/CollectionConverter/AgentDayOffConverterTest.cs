@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.CollectionConverter
             mocks = new MockRepository();
             uow = mocks.StrictMock<IUnitOfWork>();
             mappedObjectPair = new MappedObjectPair();
-            mapper = mocks.StrictMock<Mapper<IPersonDayOff, global::Domain.AgentDay>>(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Local));
+            mapper = mocks.StrictMock<Mapper<IPersonDayOff, global::Domain.AgentDay>>(mappedObjectPair, (TimeZoneInfo.Local));
             target = new AgentDayOffConverter(uow, mapper);
         }
 

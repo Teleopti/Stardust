@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.DomainTest.Time
         private readonly DateOnly _start = new DateOnly(2007, 06, 01);
         private readonly DateOnly _end = new DateOnly(2008, 02, 28);
         private DateOnlyPeriod _period;
-        private CccTimeZoneInfo _cccTimeZoneInfo;
+        private TimeZoneInfo _TimeZoneInfo;
 
         [SetUp]
         public void TestSetup()
         {
             _period = new DateOnlyPeriod(_start, _end);
             TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time");
-            _cccTimeZoneInfo = new CccTimeZoneInfo(timeZone);
+            _TimeZoneInfo = (timeZone);
         }
 
         [Test]
@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyToDateTimePeriod()
         {
-            DateTime startDate =  TimeZoneHelper.ConvertToUtc(_start,_cccTimeZoneInfo);
-            DateTime endDate = TimeZoneHelper.ConvertToUtc(_end.AddDays(1), _cccTimeZoneInfo);
-            DateTimePeriod dateTimePeriod = _period.ToDateTimePeriod(_cccTimeZoneInfo);
+            DateTime startDate =  TimeZoneHelper.ConvertToUtc(_start,_TimeZoneInfo);
+            DateTime endDate = TimeZoneHelper.ConvertToUtc(_end.AddDays(1), _TimeZoneInfo);
+            DateTimePeriod dateTimePeriod = _period.ToDateTimePeriod(_TimeZoneInfo);
             Assert.AreEqual(startDate, dateTimePeriod.StartDateTime);
             Assert.AreEqual(endDate, dateTimePeriod.EndDateTime);
 

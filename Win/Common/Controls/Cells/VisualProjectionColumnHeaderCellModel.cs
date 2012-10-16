@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
     [Serializable]
     public class VisualProjectionColumnHeaderCellModel : GridHeaderCellModel
     {
-        public ICccTimeZoneInfo TimeZoneInfo { get; set; }
+        public TimeZoneInfo TimeZoneInfo { get; set; }
 
-        public VisualProjectionColumnHeaderCellModel(GridModel grid, ICccTimeZoneInfo timeZoneInfo)
+        public VisualProjectionColumnHeaderCellModel(GridModel grid, TimeZoneInfo timeZoneInfo)
             : base(grid)
         {
             TimeZoneInfo = timeZoneInfo;
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             base.Draw(g, cellRectangle, rowIndex, colIndex, style);
             base.OnDrawDisplayText(g, cellRectangle, rowIndex, colIndex, style);
 
-            ICccTimeZoneInfo timeZoneInfo;
+            TimeZoneInfo timeZoneInfo;
             VisualProjectionColumnHeaderCellModel cellModel = style.CellModel as VisualProjectionColumnHeaderCellModel;
             if (cellModel != null && cellModel.TimeZoneInfo!=null)
                 timeZoneInfo = cellModel.TimeZoneInfo;

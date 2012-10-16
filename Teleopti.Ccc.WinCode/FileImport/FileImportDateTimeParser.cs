@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCode.FileImport
             DateTime dateTime = DateTime.ParseExact(dateValue, "yyyyMMdd", _cultureInfo);
             TimeSpan timeSpan = TimeSpan.Parse(timeValue);
             DateTime local = dateTime.Add(timeSpan);
-            return TimeZoneHelper.ConvertToUtc(local, new CccTimeZoneInfo(_timeZone));
+            return TimeZoneHelper.ConvertToUtc(local, _timeZone);
         }
 
         public bool DateTimeIsValid(string dateValue, string timeValue)

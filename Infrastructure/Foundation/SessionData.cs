@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -9,14 +10,14 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
     /// </summary>
     public class SessionData : ISessionData
     {
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         
         public SessionData()
         {
             _timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
         }
 
-        public ICccTimeZoneInfo TimeZone
+        public TimeZoneInfo TimeZone
         {
             get { return _timeZone; }
             set

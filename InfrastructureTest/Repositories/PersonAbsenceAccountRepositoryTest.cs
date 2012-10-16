@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             var rep = new Repository(UnitOfWork);
             var person=new Person();
-            person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Local));
+            person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
             rep.Add(person);
             return person;
         }

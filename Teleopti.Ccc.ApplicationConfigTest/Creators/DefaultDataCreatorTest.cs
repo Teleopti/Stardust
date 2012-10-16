@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
             CultureInfo cultureInfo = commandLineArgument.CultureInfo;
 
             ISessionFactory sessionFactory = SetupFixtureForAssembly.SessionFactory;
-            _target = new DefaultDataCreator(businessUnitName, cultureInfo, new CccTimeZoneInfo(TimeZoneInfo.Local), "username", "password", sessionFactory);
+            _target = new DefaultDataCreator(businessUnitName, cultureInfo, (TimeZoneInfo.Local), "username", "password", sessionFactory);
         }
 
         [Test]

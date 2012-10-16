@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IEffectiveRestriction effectiveRestriction = null;
             Expect.Call(_part.IsScheduled()).Return(false);
             Expect.Call(_part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 4, 18),
-                                                                                    new CccTimeZoneInfo(
+                                                                                    (
                                                                                         TimeZoneInfo.
                                                                                             FindSystemTimeZoneById("Utc"))));
             Expect.Call(_part.Person).Return(_person);
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             Expect.Call(_part.IsScheduled()).Return(false);
             Expect.Call(_part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 4, 18),
-                                                                                    new CccTimeZoneInfo(
+                                                                                    (
                                                                                         TimeZoneInfo.
                                                                                             FindSystemTimeZoneById("Utc"))));
             Expect.Call(_part.Person).Return(_person);
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             Expect.Call(_part.IsScheduled()).Return(false);
             Expect.Call(_part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 4, 18),
-                                                                                    new CccTimeZoneInfo(
+                                                                                    (
                                                                                         TimeZoneInfo.
                                                                                             FindSystemTimeZoneById("Utc"))));
             Expect.Call(_part.Person).Return(_person);
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             Expect.Call(_part.IsScheduled()).Return(false);
             Expect.Call(_part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 4, 18),
-                                                                                    new CccTimeZoneInfo(
+                                                                                    (
                                                                                         TimeZoneInfo.
                                                                                             FindSystemTimeZoneById("Utc"))));
             Expect.Call(_part.Person).Return(_person);
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var period = new DateTimePeriod(start, start.AddDays(1));
             Expect.Call(_part.IsScheduled()).Return(false);
             Expect.Call(_part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 4, 18),
-                                                                                    new CccTimeZoneInfo(
+                                                                                    (
                                                                                         TimeZoneInfo.
                                                                                             FindSystemTimeZoneById("Utc"))));
             Expect.Call(_part.Person).Return(_person);
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var period = new DateTimePeriod(start, start.AddDays(1));
             Expect.Call(_part.IsScheduled()).Return(false);
             Expect.Call(_part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 4, 18),
-                                                                                    new CccTimeZoneInfo(
+                                                                                    (
                                                                                         TimeZoneInfo.
                                                                                             FindSystemTimeZoneById("Utc"))));
             Expect.Call(_part.Person).Return(_person);

@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.Win.Reporting
 
         public void LoadTimeZones()
         {
-            ICccTimeZoneInfo defaultTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-            IList<ICccTimeZoneInfo> timeZoneList = TimeZoneInfo.GetSystemTimeZones().Select(t => (ICccTimeZoneInfo)new CccTimeZoneInfo(t)).ToList();
+            TimeZoneInfo defaultTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+            IList<TimeZoneInfo> timeZoneList = TimeZoneInfo.GetSystemTimeZones().Select(t => (TimeZoneInfo)(t)).ToList();
 
             comboBoxAdvTimeZone.DisplayMember = "DisplayName";
             comboBoxAdvTimeZone.DataSource = timeZoneList;
 
-             foreach (ICccTimeZoneInfo timeZone in timeZoneList)
+             foreach (TimeZoneInfo timeZone in timeZoneList)
             {
                 if (timeZone.StandardName == defaultTimeZone.StandardName)
                 {
@@ -42,15 +42,15 @@ namespace Teleopti.Ccc.Win.Reporting
             }
         }
 
-        public ICccTimeZoneInfo TimeZone()
+        public TimeZoneInfo TimeZone()
         {
             if (comboBoxAdvTimeZone.InvokeRequired)
             {
-                return (ICccTimeZoneInfo)comboBoxAdvTimeZone.Invoke(new Func<ICccTimeZoneInfo>(TimeZone));
+                return (TimeZoneInfo)comboBoxAdvTimeZone.Invoke(new Func<TimeZoneInfo>(TimeZone));
             }
             else
             {
-                return (ICccTimeZoneInfo)comboBoxAdvTimeZone.SelectedItem;
+                return (TimeZoneInfo)comboBoxAdvTimeZone.SelectedItem;
             }
         }
 

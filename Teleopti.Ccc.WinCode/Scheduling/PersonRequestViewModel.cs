@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private bool _isSelected;
         private bool _isWithinSchedulePeriod = true;
         private readonly IEventAggregator _eventAggregator;
-        private ICccTimeZoneInfo _cccTimeZoneInfo;
+        private TimeZoneInfo _TimeZoneInfo;
 
         public bool IsWithinSchedulePeriod
         {
@@ -42,14 +42,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
         }
         public PersonRequestViewModel(IPersonRequest personRequest, IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker,
-            IPersonAccountCollection personAccountCollection, IEventAggregator eventAggregator, ICccTimeZoneInfo cccTimeZoneInfo)
+            IPersonAccountCollection personAccountCollection, IEventAggregator eventAggregator, TimeZoneInfo TimeZoneInfo)
         {
             _eventAggregator = eventAggregator;
             _personRequest = personRequest;
             _shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
             _personAccountCollection = personAccountCollection;
             _personRequest.PropertyChanged += PersonRequestViewModel_PropertyChanged;
-            _cccTimeZoneInfo = cccTimeZoneInfo;
+            _TimeZoneInfo = TimeZoneInfo;
         }
 
         private void PersonRequestViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 if(!_personRequest.UpdatedOn.HasValue)
                     return "";
-                var convertedDate = TimeZoneHelper.ConvertFromUtc(_personRequest.UpdatedOn.Value, _cccTimeZoneInfo);
+                var convertedDate = TimeZoneHelper.ConvertFromUtc(_personRequest.UpdatedOn.Value, _TimeZoneInfo);
                 return convertedDate.ToString("g", CultureInfo.CurrentCulture);
             }
         }

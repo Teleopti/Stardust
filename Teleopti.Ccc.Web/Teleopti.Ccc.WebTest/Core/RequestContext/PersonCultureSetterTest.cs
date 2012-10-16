@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
         {
             CultureInfo arabicCulture = CultureInfo.GetCultureInfo("ar-SA");
 
-                _target.SetCulture(new Regional(CccTimeZoneInfoFactory.StockholmTimeZoneInfo(),arabicCulture,arabicCulture));
+                _target.SetCulture(new Regional(TimeZoneInfoFactory.StockholmTimeZoneInfo(),arabicCulture,arabicCulture));
         
             Assert.AreEqual(Thread.CurrentThread.CurrentCulture, arabicCulture);
             Assert.AreEqual(Thread.CurrentThread.CurrentUICulture, arabicCulture);

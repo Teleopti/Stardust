@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -178,7 +179,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2009-03-19
         /// </remarks>
-        ICccTimeZoneInfo TimeZone { get; }
+        TimeZoneInfo TimeZone { get; }
 
         /// <summary>
         /// Returns the ScheduleTag or its null representation NullScheduleTag.

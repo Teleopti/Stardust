@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
         /// Created by: peterwe
         /// Created date: 2008-10-24
         /// </remarks>
-        public IPerson Create(string firstName, string lastName, string logOnName, string password, CultureInfo cultureInfo, ICccTimeZoneInfo timeZone)
+        public IPerson Create(string firstName, string lastName, string logOnName, string password, CultureInfo cultureInfo, TimeZoneInfo timeZone)
         {
 			ISession session = _sessionFactory.OpenSession();
 

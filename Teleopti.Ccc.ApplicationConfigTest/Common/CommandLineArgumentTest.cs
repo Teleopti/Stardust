@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
             Assert.AreEqual("DestDatabase", _target.DestinationDatabase);
             Assert.AreEqual("DestUser", _target.DestinationUserName);
             Assert.AreEqual("DestPassWord", _target.DestinationPassword);
-            Assert.AreEqual(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")).Id, _target.TimeZone.Id);
+            Assert.AreEqual((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")).Id, _target.TimeZone.Id);
             Assert.AreEqual(DateTime.Parse("2004-12-01", CultureInfo.CurrentCulture), _target.FromDate);
             Assert.AreEqual(DateTime.Parse("2006-12-01", CultureInfo.CurrentCulture), _target.ToDate);
             Assert.AreEqual("BusinessUnit", _target.BusinessUnit);

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             if (scheduleDay == null)
                 throw new ArgumentNullException("scheduleDay");
 
-            ICccTimeZoneInfo timeZoneInfo = scheduleDay.TimeZone;
+            TimeZoneInfo timeZoneInfo = scheduleDay.TimeZone;
             IWorkTimeMinMax minMaxLength = new WorkTimeMinMax();
             IProjectionService projSvc = scheduleDay.ProjectionService();
             var proj = projSvc.CreateProjection();
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 
             //inte på parten här??????????
             IPerson person = scheduleDay.Person;
-            ICccTimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 
             foreach (IPersonAssignment assignment in scheduleDay.PersonAssignmentCollection())
             {
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 
             //inte på parten här??????????
             IPerson person = scheduleDay.Person;
-            ICccTimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 
             foreach (IPersonMeeting meeting in scheduleDay.PersonMeetingCollection())
             {

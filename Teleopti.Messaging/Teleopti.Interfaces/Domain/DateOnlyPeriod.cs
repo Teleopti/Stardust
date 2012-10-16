@@ -175,11 +175,11 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2009-03-17    
         /// </remarks>
-        public DateTimePeriod ToDateTimePeriod(ICccTimeZoneInfo info)
+        public DateTimePeriod ToDateTimePeriod(TimeZoneInfo info)
         {
 
-            return new DateTimePeriod(TimeZoneHelper.ConvertToUtc(period.Minimum.Date, info),
-                                      TimeZoneHelper.ConvertToUtc(period.Maximum.AddDays(1).Date, info));
+            return new DateTimePeriod(info.SafeConvertTimeToUtc(period.Minimum.Date),
+                                      info.SafeConvertTimeToUtc(period.Maximum.AddDays(1).Date));
         }
 
         /// <summary>

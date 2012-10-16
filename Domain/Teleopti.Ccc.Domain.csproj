@@ -1145,7 +1145,6 @@
     <Compile Include="Time\DateTimePeriodMerger.cs" />
     <Compile Include="Time\IntervalRounding.cs" />
     <Compile Include="Time\PeriodScaleUnit.cs" />
-    <Compile Include="Time\CccTimeZoneInfo.cs" />
     <Compile Include="Time\DateTimeExtensions.cs" />
     <Compile Include="Collection\FixedCapacityStack.cs" />
     <Compile Include="Tracking\TrackerCalculator.cs" />

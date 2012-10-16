@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -27,6 +28,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         
         void Unload();
 
-        void SetTimeZone(ICccTimeZoneInfo cccTimeZoneInfo);
+        void SetTimeZone(TimeZoneInfo TimeZoneInfo);
     }
 }

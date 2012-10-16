@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
         private IPerson _person;
         private IScenario _scenario;
-        private ICccTimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
         private MockRepository _mocks;
         private IAssembler<IPerson, PersonDto> _personAssembler;
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         {
             _person = PersonFactory.CreatePerson();
             _person.SetId(Guid.NewGuid());
-            _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _person.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo);
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             _mocks = new MockRepository();

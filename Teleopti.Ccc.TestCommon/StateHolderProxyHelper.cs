@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.TestCommon
 			//    currentPrincipal.ChangePrincipal(principal);
 			//}
             ISessionData sessData = new SessionData();
-            sessData.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            sessData.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
             return sessData;
         }
 
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.TestCommon
             Person person = new Person();
             person.PermissionInformation.AddApplicationRole(role);
             person.PermissionInformation.SetDefaultTimeZone(
-                new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+                TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
                                                        {ApplicationLogOnName = "App", Password = "User"};
             return person;

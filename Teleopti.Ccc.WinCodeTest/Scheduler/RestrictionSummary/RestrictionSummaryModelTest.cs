@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
         private RestrictionSchedulingOptions _options;
         private IPerson _person;
         private DateTime _dateTime;
-        private ICccTimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
         private IScenario _scenario;
         private DateTimePeriod _dateTimePeriod;
         private IScheduleRange _range;
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
                            };
             _dateTime = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             ISchedulePeriod schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(_dateTime));
-            _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Utc"));
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Utc"));
 
             _person = PersonFactory.CreatePerson("Jens");
             _person.AddSchedulePeriod(schedulePeriod);
@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
 
             IPersonAssignment assignment = new PersonAssignment(_person, _scenario);
             assignment.SetMainShift(mainShiftShift);
-            _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
             part.Add(assignment);
 
@@ -417,14 +417,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             var cultureBefore = TeleoptiPrincipal.Current.Regional.Culture;
 
             var regional = (Regional)TeleoptiPrincipal.Current.Regional;
-            var timeZoneInfoLoggedOnPerson = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+            var timeZoneInfoLoggedOnPerson = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
             regional.TimeZone = timeZoneInfoLoggedOnPerson;
             var cultureInfo = new CultureInfo(1033);
             regional.Culture = cultureInfo;
 
 			_target = new RestrictionSummaryModel(_schedulingResultStateHolder, new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService())), _stateHolder, _preferenceNightRestChecker);
 
-            var timeZoneInfoAgent = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            var timeZoneInfoAgent = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _person.PermissionInformation.SetDefaultTimeZone(timeZoneInfoAgent);
             var periodStartDate = new DateOnly(2009, 2, 2);
             ISchedulePeriod period = SchedulePeriodFactory.CreateSchedulePeriod(periodStartDate);

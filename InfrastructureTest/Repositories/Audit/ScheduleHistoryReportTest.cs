@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 		protected override void AuditSetup()
 		{
-			regional = new Regional(new CccTimeZoneInfo(TimeZoneInfo.Local), null, null);
+			regional = new Regional(TimeZoneInfo.Local, null, null);
 			target = new ScheduleHistoryReport(UnitOfWorkFactory.Current, regional);
 			personProvider = new UnsafePersonProvider();
 		}
@@ -49,11 +49,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 										AuditType = Resources.AuditingReportModified,
 										ShiftType = Resources.AuditingReportShift,
 										Detail = PersonAssignment.MainShift.ShiftCategory.Description.Name,
-										ModifiedAt = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value),
+                                        ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 										ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 										ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName),
-										ScheduleEnd = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.Period.EndDateTime),
-										ScheduleStart = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.Period.StartDateTime)
+                                        ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.Period.EndDateTime, regional.TimeZone),
+                                        ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.Period.StartDateTime, regional.TimeZone)
 									};
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today).AddDays(-1), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Local)),
+								  PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Any(pa => consideredEqual(pa, expected)).Should().Be.True();
 			}
@@ -82,17 +82,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				AuditType = Resources.AuditingReportInsert,
 				ShiftType = Resources.AuditingReportDayOff,
 				Detail = PersonDayOff.DayOff.Description.Name,
-				ModifiedAt = regional.TimeZone.ConvertTimeFromUtc(PersonDayOff.UpdatedOn.Value),
+				ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonDayOff.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonDayOff.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonDayOff.Person.Name.ToString(NameOrderOption.FirstNameLastName),
-				ScheduleEnd = regional.TimeZone.ConvertTimeFromUtc(PersonDayOff.Period.EndDateTime),
-				ScheduleStart = regional.TimeZone.ConvertTimeFromUtc(PersonDayOff.Period.StartDateTime)
+				ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(PersonDayOff.Period.EndDateTime, regional.TimeZone),
+				ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(PersonDayOff.Period.StartDateTime, regional.TimeZone)
 			};
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today).AddDays(-1), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Local)),
+								  PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Any(dayOff => consideredEqual(dayOff, expected)).Should().Be.True();
 			}
@@ -106,11 +106,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				AuditType = Resources.AuditingReportDeleted,
 				ShiftType = Resources.AuditingReportAbsence,
 				Detail = PersonAbsence.Layer.Payload.Description.Name,
-				ModifiedAt = regional.TimeZone.ConvertTimeFromUtc(PersonAbsence.UpdatedOn.Value),
+				ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAbsence.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAbsence.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonAbsence.Person.Name.ToString(NameOrderOption.FirstNameLastName),
-				ScheduleEnd = regional.TimeZone.ConvertTimeFromUtc(PersonAbsence.Period.EndDateTime),
-				ScheduleStart = regional.TimeZone.ConvertTimeFromUtc(PersonAbsence.Period.StartDateTime)
+				ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(PersonAbsence.Period.EndDateTime, regional.TimeZone),
+				ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(PersonAbsence.Period.StartDateTime, regional.TimeZone)
 			};
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today).AddDays(-1), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Local)),
+								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
 			}
@@ -137,10 +137,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				AuditType = Resources.AuditingReportDeleted,
 				ShiftType = Resources.AuditingReportShift,
-				ScheduleEnd = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.Period.EndDateTime),
-				ScheduleStart = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.Period.StartDateTime),
+				ScheduleEnd =  TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.Period.EndDateTime, regional.TimeZone),
+                ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.Period.StartDateTime, regional.TimeZone),
 				Detail = PersonAssignment.MainShift.ShiftCategory.Description.Name,
-				ModifiedAt = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value),
+                ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName)
 			};
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today).AddDays(-1), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Local)),
+								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
 			}
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				ScheduleEnd = DateTime.MinValue,
 				ScheduleStart = DateTime.MinValue,
 				Detail = string.Empty,
-				ModifiedAt = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value),
+                ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName)
 			};
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today).AddDays(-1), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Local)),
+								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
 			}
@@ -210,11 +210,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				AuditType = Resources.AuditingReportModified,
 				ShiftType = Resources.AuditingReportShift,
 				Detail = string.Empty,
-				ModifiedAt = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value),
+                ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName),
-				ScheduleEnd = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.Period.EndDateTime),
-				ScheduleStart = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.Period.StartDateTime)
+                ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.Period.EndDateTime, regional.TimeZone),
+                ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.Period.StartDateTime, regional.TimeZone)
 			};
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today).AddDays(-1), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Local)),
+								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Any(schedule => consideredEqual(schedule, expected)).Should().Be.True();
 			}
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				AuditType = Resources.AuditingReportModified,
 				ShiftType = Resources.AuditingReportShift,
 				Detail = string.Empty,
-				ModifiedAt = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value),
+                ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduleEnd = DateTime.MinValue,
@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today).AddDays(-1), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Local)),
+								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
 			}
@@ -274,24 +274,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		public void ShouldShowTimeInUsersTimeZone()
 		{
 			//changing timezone to -4 GMT
-			regional.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time"));
+			regional.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time"));
 
 			var expected = new ScheduleAuditingReportData
 			{
 				AuditType = Resources.AuditingReportInsert,
 				ShiftType = Resources.AuditingReportShift,
 				Detail = PersonAssignment.MainShift.ShiftCategory.Description.Name,
-				ModifiedAt = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value),
+                ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName),
-				ScheduleEnd = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.Period.EndDateTime),
-				ScheduleStart = regional.TimeZone.ConvertTimeFromUtc(PersonAssignment.Period.StartDateTime)
+                ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.Period.EndDateTime, regional.TimeZone),
+                ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.Period.StartDateTime, regional.TimeZone)
 			};
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today).AddDays(-1), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Local)),
+								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Any(dayOff => consideredEqual(dayOff, expected)).Should().Be.True();
 			}

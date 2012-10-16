@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.WinCode.Meetings.Interfaces
         void SetParticipants(string participants);
         void SetActivityList(IList<IActivity> activities);
         void SetSelectedActivity(IActivity activity);
-        void SetTimeZoneList(IList<ICccTimeZoneInfo> timeZoneList);
-        void SetSelectedTimeZone(ICccTimeZoneInfo timeZone);
+        void SetTimeZoneList(IList<TimeZoneInfo> timeZoneList);
+        void SetSelectedTimeZone(TimeZoneInfo timeZone);
         void SetStartDate(DateOnly startDate);
         void SetEndDate(DateOnly endDate);
         void SetStartTime(TimeSpan startTime);

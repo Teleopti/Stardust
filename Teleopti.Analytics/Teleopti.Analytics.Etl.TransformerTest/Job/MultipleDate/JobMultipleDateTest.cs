@@ -54,9 +54,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.MultipleDate
             _target.Add(dt3, dt4, JobCategoryType.AgentStatistics);
 
             IJobMultipleDateItem jobMultipleDateItem = _target.MinMaxDatesUtc;
-            ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(_timeZone);
-            Assert.AreEqual(cccTimeZoneInfo.ConvertTimeToUtc(dt1), jobMultipleDateItem.StartDateUtc);
-            Assert.AreEqual(cccTimeZoneInfo.ConvertTimeToUtc(dt4), jobMultipleDateItem.EndDateUtc);
+            TimeZoneInfo TimeZoneInfo = (_timeZone);
+            Assert.AreEqual(TimeZoneInfo.ConvertTimeToUtc(dt1), jobMultipleDateItem.StartDateUtc);
+            Assert.AreEqual(TimeZoneInfo.ConvertTimeToUtc(dt4), jobMultipleDateItem.EndDateUtc);
         }
 
         [Test]

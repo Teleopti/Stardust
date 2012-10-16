@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             _mappedObjectPair.ShiftCategory = shiftCatPairList;
             _mappedObjectPair.Contract = contractPairList;
 
-            _workShiftRuleSetMapper = new WorkShiftRuleSetMapper(_mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _workShiftRuleSetMapper = new WorkShiftRuleSetMapper(_mappedObjectPair, (TimeZoneInfo.Utc));
             _workShiftRuleSet = _workShiftRuleSetMapper.Map(_oldShiftClass);
         }
 
@@ -233,13 +233,13 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         [Test]
         public void VerifyNullOnNegativeId()
         {
-            _workShiftRuleSetMapper = new WorkShiftRuleSetMapper(new MappedObjectPair(), new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _workShiftRuleSetMapper = new WorkShiftRuleSetMapper(new MappedObjectPair(), (TimeZoneInfo.Utc));
             Assert.IsNull(_workShiftRuleSetMapper.Map(_oldShiftClassNegativeId));
         }
         [Test]
         public void VerifyDoNotConvertWithDeletedShiftCategory()
         {
-            _workShiftRuleSetMapper = new WorkShiftRuleSetMapper(_mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _workShiftRuleSetMapper = new WorkShiftRuleSetMapper(_mappedObjectPair, (TimeZoneInfo.Utc));
             _workShiftRuleSet = _workShiftRuleSetMapper.Map(_oldShiftClassDeletedCategory);
             Assert.IsNull(_workShiftRuleSetMapper.Map(_oldShiftClassDeletedCategory));
         }
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             //will get no hit it in mapper
             MappedObjectPair pair = new MappedObjectPair();
             pair.Activity = new ObjectPairCollection<Activity, IActivity>();
-            _workShiftRuleSetMapper = new WorkShiftRuleSetMapper(pair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _workShiftRuleSetMapper = new WorkShiftRuleSetMapper(pair, (TimeZoneInfo.Utc));
             Assert.IsNull(_workShiftRuleSetMapper.Map(_oldShiftClass));
         }
 

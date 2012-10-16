@@ -133,23 +133,23 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public static DateOnly GetStartDateInSelection(ClipHandler clipHandler, ICccTimeZoneInfo personTimeZone)
+        public static DateOnly GetStartDateInSelection(ClipHandler clipHandler, TimeZoneInfo personTimeZone)
         {
             IEnumerable<IScheduleDay> selectedParts = ContainedSchedulePartList(clipHandler.ClipList);
             return GetStartDateInSelectedDays(selectedParts, personTimeZone);
         }
-        public static DateOnly GetStartDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, ICccTimeZoneInfo personTimeZone)
+        public static DateOnly GetStartDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, TimeZoneInfo personTimeZone)
         {
             return new DateOnly(selectedParts.Min(c => TimeZoneHelper.ConvertFromUtc(c.Period.StartDateTime, personTimeZone)));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public static DateOnly GetEndDateInSelection(ClipHandler clipHandler, ICccTimeZoneInfo personTimeZone)
+        public static DateOnly GetEndDateInSelection(ClipHandler clipHandler, TimeZoneInfo personTimeZone)
         {
             IEnumerable<IScheduleDay> selectedParts = ContainedSchedulePartList(clipHandler.ClipList);
             return GetEndDateInSelectedDays(selectedParts, personTimeZone);
         }
-        public static DateOnly GetEndDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, ICccTimeZoneInfo personTimeZone)
+        public static DateOnly GetEndDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, TimeZoneInfo personTimeZone)
         {
             return new DateOnly(selectedParts.Max(c => TimeZoneHelper.ConvertFromUtc(c.Period.StartDateTime, personTimeZone)));
         }

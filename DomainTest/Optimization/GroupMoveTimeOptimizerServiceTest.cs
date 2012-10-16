@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
                 Expect.Call(() => _optimizer.LockDate(date)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
-                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo() )).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfo.Local )).Repeat.AtLeastOnce();
                 Expect.Call(_groupMoveTimeOptimizerExecuter.SchedulingOptions).Return(_schedulingOptions);
                 Expect.Call(_schedulingOptions.UseSameDayOffs).Return(true).Repeat.AtLeastOnce();
             }
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
                 Expect.Call(() => _optimizer.LockDate(date)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
-                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo())).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfo.Utc)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.PeriodValue()).Return(2).Repeat.AtLeastOnce();
                 Expect.Call(_groupMoveTimeOptimizerExecuter.SchedulingOptions).Return(_schedulingOptions);
                 Expect.Call(_schedulingOptions.UseSameDayOffs).Return(true).Repeat.AtLeastOnce();

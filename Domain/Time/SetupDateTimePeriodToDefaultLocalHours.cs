@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Time
     {
         private DateTimePeriod _period;
 
-        public SetupDateTimePeriodToDefaultLocalHours(DateTimePeriod defaultLocal, IScheduleDay scheduleDay, ICccTimeZoneInfo info)
+        public SetupDateTimePeriodToDefaultLocalHours(DateTimePeriod defaultLocal, IScheduleDay scheduleDay, TimeZoneInfo info)
         {
             _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(defaultLocal.LocalStartDateTime, defaultLocal.LocalEndDateTime, info);
 

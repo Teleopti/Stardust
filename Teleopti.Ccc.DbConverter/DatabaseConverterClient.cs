@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DBConverter
     public class DatabaseConverterClient
     {
         private readonly DateTimePeriod _period;
-        private readonly ICccTimeZoneInfo _timeZoneInfo;
+        private readonly TimeZoneInfo _timeZoneInfo;
         private readonly DefaultAggregateRoot defaultAggregateRoot;
         private readonly MappedObjectPair mappedObjectPair;
         private readonly string _oldConnectionInformation;
@@ -22,14 +22,14 @@ namespace Teleopti.Ccc.DBConverter
         public DatabaseConverterClient(DateTime fromDate,
                                        DateTime toDate,
                                        DefaultAggregateRoot defaultAggregateRoots,
-                                       ICccTimeZoneInfo timeZoneInfo,
+                                       TimeZoneInfo timeZoneInfo,
                                        string oldConnectionInformation,
                                        int defaultResolution)
         {
             _period =
                 new DateTimePeriod(
-                    timeZoneInfo.ConvertTimeToUtc(fromDate, timeZoneInfo),
-                    timeZoneInfo.ConvertTimeToUtc(toDate, timeZoneInfo));
+                    TimeZoneInfo.ConvertTimeToUtc(fromDate, timeZoneInfo),
+                    TimeZoneInfo.ConvertTimeToUtc(toDate, timeZoneInfo));
             _timeZoneInfo = timeZoneInfo;
             _oldConnectionInformation = oldConnectionInformation;
             defaultAggregateRoot = defaultAggregateRoots;

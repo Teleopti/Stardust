@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private IPerson _person;
         private IScenario _scenario;
         private readonly DayOff _dayOff;
-        private ICccTimeZoneInfo _usedTimeZone;
+        private TimeZoneInfo _usedTimeZone;
 
         /// <summary>
         /// Creates a new instance of PersonAbsence
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
         }
 
-        public PersonDayOff(IPerson person, IScenario scenario, IDayOffTemplate dayOff, DateOnly date, ICccTimeZoneInfo toTimeZone)
+        public PersonDayOff(IPerson person, IScenario scenario, IDayOffTemplate dayOff, DateOnly date, TimeZoneInfo toTimeZone)
         {
 
             _person = person;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         /// <param name="date">The date.</param>
         /// <param name="fromTimeZone">From time zone.</param>
 
-        public PersonDayOff(IPerson person, IScenario scenario, DayOff dayOff, DateOnly date, ICccTimeZoneInfo fromTimeZone)
+        public PersonDayOff(IPerson person, IScenario scenario, DayOff dayOff, DateOnly date, TimeZoneInfo fromTimeZone)
         {
 
             _person = person;
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 Crc32.Compute(SerializationHelper.SerializeAsBinary(Period.StartDateTime.Ticks));
         }
 
-        public virtual ICccTimeZoneInfo UsedTimeZone
+        public virtual TimeZoneInfo UsedTimeZone
         {
             get { return _usedTimeZone; }
         }

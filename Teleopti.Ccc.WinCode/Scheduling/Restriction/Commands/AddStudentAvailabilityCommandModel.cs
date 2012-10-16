@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Teleopti.Ccc.Domain.Collection;
@@ -29,9 +30,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction.Commands
         {
                 IScheduleDay part = _target.SchedulePart;
                 IStudentAvailabilityRestriction restriction = new StudentAvailabilityRestriction();
-                ICccTimeZoneInfo timeZoneInfo = part.TimeZone;
+                TimeZoneInfo timeZoneInfo = part.TimeZone;
 
-                var agentLocalDate = new DateOnly(timeZoneInfo.ConvertTimeFromUtc(part.Period.StartDateTime, timeZoneInfo));
+                var agentLocalDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(part.Period.StartDateTime, timeZoneInfo));
                 var studRestriction = new StudentAvailabilityDay(part.Person, agentLocalDate, new  List<IStudentAvailabilityRestriction>{ restriction});
                 _target.AddStudentAvailabilityDay(studRestriction, part);
         }

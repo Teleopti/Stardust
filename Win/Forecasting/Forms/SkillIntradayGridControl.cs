@@ -21,12 +21,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private readonly RowManager<MultisitePeriodGridRow, IMultisitePeriod> _rowManagerMultisitePeriod;
         private readonly IMultisiteSkill _multisiteSkill;
         
-        internal SkillIntradayGridControl(ITaskOwner skillDay, TaskOwnerHelper taskOwnerPeriodHelper, ICccTimeZoneInfo timeZone, int resolution, AbstractDetailView owner,ChartSettings chartSettings)
+        internal SkillIntradayGridControl(ITaskOwner skillDay, TaskOwnerHelper taskOwnerPeriodHelper, TimeZoneInfo timeZone, int resolution, AbstractDetailView owner,ChartSettings chartSettings)
             : this(skillDay, new List<IMultisiteDay>(), taskOwnerPeriodHelper, null, timeZone, resolution, owner, chartSettings)
         {
         }
 
-        internal SkillIntradayGridControl(ITaskOwner skillDay, IList<IMultisiteDay> multisiteDays, TaskOwnerHelper taskOwnerPeriodHelper, IMultisiteSkill multisiteSkill, ICccTimeZoneInfo timeZone, int resolution, AbstractDetailView owner, ChartSettings chartSettings)
+        internal SkillIntradayGridControl(ITaskOwner skillDay, IList<IMultisiteDay> multisiteDays, TaskOwnerHelper taskOwnerPeriodHelper, IMultisiteSkill multisiteSkill, TimeZoneInfo timeZone, int resolution, AbstractDetailView owner, ChartSettings chartSettings)
             : base(skillDay, taskOwnerPeriodHelper, timeZone, resolution, owner, owner.SkillType.DisplayTimeSpanAsMinutes,chartSettings)
         {
             _multisiteDays = multisiteDays;

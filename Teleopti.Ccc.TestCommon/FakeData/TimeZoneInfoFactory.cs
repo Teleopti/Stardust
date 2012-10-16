@@ -12,31 +12,31 @@ namespace Teleopti.Ccc.TestCommon.FakeData
     /// <note type="note">
     /// 	http://msdn.microsoft.com/en-us/library/ms912391%28v=winembedded.11%29.aspx
     /// </note>
-    public static class CccTimeZoneInfoFactory
+    public static class TimeZoneInfoFactory
     {
-        public static CccTimeZoneInfo StockholmTimeZoneInfo()
+        public static TimeZoneInfo StockholmTimeZoneInfo()
         {
-            return new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            return TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
         }
 
-        public static CccTimeZoneInfo HelsinkiTimeZoneInfo()
+        public static TimeZoneInfo HelsinkiTimeZoneInfo()
         {
-            return new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time"));
+            return TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time");
         }
 
-        public static CccTimeZoneInfo UtcTimeZoneInfo()
+        public static TimeZoneInfo UtcTimeZoneInfo()
         {
-            return new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            return TimeZoneInfo.Utc;
         }
 
-        public static CccTimeZoneInfo HawaiiTimeZoneInfo()
+        public static TimeZoneInfo HawaiiTimeZoneInfo()
         {
-            return new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Hawaiian Standard Time"));
+            return TimeZoneInfo.FindSystemTimeZoneById("Hawaiian Standard Time");
         }
 
-        public static CccTimeZoneInfo SingaporeTimeZoneInfo()
+        public static TimeZoneInfo SingaporeTimeZoneInfo()
         {
-            return new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
+            return TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
         }
     }
 }

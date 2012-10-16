@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         private VisualLayerCalendarDayExtractor _target;
         private Activity _activity;
         private IPerson _person;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         List<IVisualLayer> _visualLayerCollection;
         private IPrincipal _principalBefore;
 
         [SetUp]
         public void Setup()
         {
-            _timeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
+            _timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
             setPrincipal();
         }
 

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 	{
 		private TeamScheduleDomainData data;
 		private IUserTimeZone userTimeZone;
-		private CccTimeZoneInfo timeZone;
+		private TimeZoneInfo timeZone;
 
 		[SetUp]
 		public void SetUp()
@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 						Days = new TeamScheduleDayDomainData[] { }
 					};
 
-			timeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+			timeZone = (TimeZoneInfo.Utc);
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			userTimeZone.Stub(x => x.TimeZone()).Do((Func<CccTimeZoneInfo>)(() => timeZone));
+			userTimeZone.Stub(x => x.TimeZone()).Do((Func<TimeZoneInfo>)(() => timeZone));
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone)));
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		[Test]
 		public void ShouldMapLayerStartTime()
 		{
-			timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var period = new DateTimePeriod(new DateTime(2011, 12, 19, 8, 0, 0, DateTimeKind.Utc), new DateTime(2011, 12, 19, 13, 0, 0, DateTimeKind.Utc));
 			data.Days = new []
 			            	{
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		[Test]
 		public void ShouldMapLayerEndTime()
 		{
-			timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var period = new DateTimePeriod(new DateTime(2011, 12, 19, 8, 0, 0, DateTimeKind.Utc), new DateTime(2011, 12, 19, 13, 0, 0, DateTimeKind.Utc));
 			data.Days = new[]
 			            	{
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		[Test]
 		public void ShouldMapLayerActivityName()
 		{
-			timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			const string activityName = "Phone";
 			data.Days = new[]
 			            	{
@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			var start = new DateTime(2012, 1, 3, 8, 45, 0, DateTimeKind.Utc);
 			var end = new DateTime(2012, 1, 3, 11, 15, 0, DateTimeKind.Utc);
 			data.DisplayTimePeriod = new DateTimePeriod(start, end);
-			timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 

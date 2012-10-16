@@ -31,8 +31,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 		[Test]
 		public void ShouldLoadDataInThreeChunks()
 		{
-			var startDate = DateTime.SpecifyKind(DateTime.Now.Date.AddDays(-100), DateTimeKind.Local);
-			var endDate = DateTime.SpecifyKind(DateTime.Now.Date.AddDays(-30), DateTimeKind.Local);
+            var startDate = new DateTime(2011, 01, 01, 00, 00, 00, DateTimeKind.Unspecified);
+		    var endDate = new DateTime(2012, 01, 01, 00, 00, 00, DateTimeKind.Unspecified);
 			_jobCategoryDates.Add(startDate, endDate, JobCategoryType.Schedule);
 			var jobParameters = new JobParameters(_jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture);
 			

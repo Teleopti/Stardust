@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
         private const float RowSpace = 1;
 
-		public void ExportIndividual(ICccTimeZoneInfo timeZoneInfo, CultureInfo culture, IDictionary<IPerson, string> persons,
+		public void ExportIndividual(TimeZoneInfo timeZoneInfo, CultureInfo culture, IDictionary<IPerson, string> persons,
             DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, bool rightToLeft, ScheduleReportDetail details,
             Control owner, bool singleFile, string path)
         {
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 			}
 		}
 
-		public static void ExportShiftsPerDay(ICccTimeZoneInfo timeZoneInfo, CultureInfo culture, IDictionary<IPerson, string> persons,
+		public static void ExportShiftsPerDay(TimeZoneInfo timeZoneInfo, CultureInfo culture, IDictionary<IPerson, string> persons,
             DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, ScheduleReportDetail details, bool publicNote, Control owner, string path)
         {
             var shiftsPerDayToPdfManager = new ShiftsPerDayToPdfManager();
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
         }
 
-		public void ExportTeam(ICccTimeZoneInfo timeZoneInfo, CultureInfo culture, IDictionary<IPerson, string> persons,
+		public void ExportTeam(TimeZoneInfo timeZoneInfo, CultureInfo culture, IDictionary<IPerson, string> persons,
             DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, bool rightToLeft, ScheduleReportDetail details, Control owner, string path)
         {
 			if(culture == null)
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
         }
 
 		private void individualPages(bool rightToLeft, IDictionary<IPerson, string> persons, DayOfWeek firstDayOfWeek, DateOnlyPeriod fullWeekPeriod, ISchedulingResultStateHolder stateHolder,
-            ICccTimeZoneInfo timeZoneInfo, ScheduleReportDetail details, Control owner, bool singleFile, string path, CultureInfo culture)
+            TimeZoneInfo timeZoneInfo, ScheduleReportDetail details, Control owner, bool singleFile, string path, CultureInfo culture)
         {
             var doc = new PdfDocument();
             PdfPage page;
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             }
         }
 
-		private void teamPages(bool rightToLeft, PdfDocument doc, IDictionary<IPerson, string> persons, DayOfWeek firstDayOfWeek, DateOnlyPeriod fullWeekPeriod, ISchedulingResultStateHolder stateHolder, ICccTimeZoneInfo timeZoneInfo, ScheduleReportDetail details, CultureInfo cultureInfo)
+		private void teamPages(bool rightToLeft, PdfDocument doc, IDictionary<IPerson, string> persons, DayOfWeek firstDayOfWeek, DateOnlyPeriod fullWeekPeriod, ISchedulingResultStateHolder stateHolder, TimeZoneInfo timeZoneInfo, ScheduleReportDetail details, CultureInfo cultureInfo)
         {
             PdfPage page;
 
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
         }
 
         private IList<IPdfScheduleTemplate> createWeek(bool rtl, IPerson person, DateOnlyPeriod fullWeekPeriod, int offset,
-            ISchedulingResultStateHolder stateHolder, ICccTimeZoneInfo timeZoneInfo, ScheduleReportDetail details, CultureInfo culture)
+            ISchedulingResultStateHolder stateHolder, TimeZoneInfo timeZoneInfo, ScheduleReportDetail details, CultureInfo culture)
         {
             IList<IPdfScheduleTemplate> weekList = new List<IPdfScheduleTemplate>();
         	var dayCollection = fullWeekPeriod.DayCollection();

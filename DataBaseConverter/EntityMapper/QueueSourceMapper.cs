@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: rogerkr
         /// Created date: 2007-10-31
         /// </remarks>
-        public QueueSourceMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone)
+        public QueueSourceMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone)
             : base(mappedObjectPair, timeZone)
         {
         }

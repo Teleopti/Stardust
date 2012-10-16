@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _validPeriod = schedulePart.DateOnlyAsPeriod.Period();
             _scheduleDayUtc = _validPeriod.StartDateTime;
 
-            //ICccTimeZoneInfo timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
+            //TimeZoneInfo timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
             _scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
            
             _currentSchedulePeriod = schedulePart.Person.VirtualSchedulePeriod(_scheduleDateOnly);

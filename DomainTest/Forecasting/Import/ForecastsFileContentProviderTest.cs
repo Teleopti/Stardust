@@ -14,12 +14,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
     {
         private IForecastsFileContentProvider _target;
         private byte[] _fileContent;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
 
         [SetUp]
         public void Setup()
         {
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            _timeZone = (TimeZoneInfo.Utc);
             _target = new ForecastsFileContentProvider(new ForecastsRowExtractor());
         }
 
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
         public void ShouldImportWinterTime()
         {
             _fileContent = Encoding.UTF8.GetBytes("Insurance,20121028 02:00,20121028 02:15,17,179,0,4.05\r\nInsurance,20121028 02:45,20121028 03:00,17,179,0,4.05");
-            var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             var forecastRows = _target.LoadContent(_fileContent, timeZone).ToArray();
 
             Assert.That(forecastRows.Length, Is.EqualTo(4));
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
         public void ShouldImportWinterTimeForAmbiguousTime()
         {
             _fileContent = Encoding.UTF8.GetBytes("Insurance,20121028 01:45,20121028 02:00,17,179,0,4.05");
-            var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             var forecastRows = _target.LoadContent(_fileContent, timeZone).ToArray();
 
             Assert.That(forecastRows.Length, Is.EqualTo(1));

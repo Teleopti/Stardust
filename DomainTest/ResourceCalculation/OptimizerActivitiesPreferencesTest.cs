@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyUtcPeriodFromDateAndTimePeriod()
         {
             DateOnly dateOnly = new DateOnly(2010, 1, 1);
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.Utc);
             Assert.IsFalse(_target.UtcPeriodFromDateAndTimePeriod(dateOnly, timeZoneInfo).HasValue);
 
             TimePeriod timePeriod = new TimePeriod(new TimeSpan(12, 30, 0), new TimeSpan(1, 6, 0, 0));

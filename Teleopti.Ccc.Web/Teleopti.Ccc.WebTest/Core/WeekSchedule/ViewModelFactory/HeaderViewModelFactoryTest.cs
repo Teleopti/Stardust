@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		  private IHeaderViewModelFactory target;
 		  private MockRepository mocks;
 		  private IScheduleDay scheduleDay;
-		  private ICccTimeZoneInfo timeZone;
+		  private TimeZoneInfo timeZone;
 		  private DateOnly dateOnly;
 
 		  [SetUp]
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 				mocks = new MockRepository();
 
 				scheduleDay = mocks.StrictMock<IScheduleDay>();
-				timeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
+				timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 
 				dateOnly = new DateOnly(2011,5,18);
 

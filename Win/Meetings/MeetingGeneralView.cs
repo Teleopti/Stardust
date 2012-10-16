@@ -118,11 +118,11 @@ namespace Teleopti.Ccc.Win.Meetings
             comboBoxAdvActivity.SelectedItem = activity;
         }
 
-        public void SetTimeZoneList(IList<ICccTimeZoneInfo> timeZoneList)
+        public void SetTimeZoneList(IList<TimeZoneInfo> timeZoneList)
         {
         }
 
-        public void SetSelectedTimeZone(ICccTimeZoneInfo timeZone)
+        public void SetSelectedTimeZone(TimeZoneInfo timeZone)
         {
         }
 

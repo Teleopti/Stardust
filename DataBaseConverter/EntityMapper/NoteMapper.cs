@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 using OldAgentDay = Domain.AgentDay;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// </summary>
         /// <param name="mappedObjectPair">The mapped object pair.</param>
         /// <param name="timeZone">The time zone.</param>
-        public NoteMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone)
+        public NoteMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone)
             : base(mappedObjectPair, timeZone)
         {
         }

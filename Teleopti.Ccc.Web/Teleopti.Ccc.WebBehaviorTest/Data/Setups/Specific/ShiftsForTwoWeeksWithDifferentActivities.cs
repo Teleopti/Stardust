@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 				}
 				else if (date.Date.DayOfWeek == DayOfWeek.Monday)
 				{
-					var baseDate = timeZone.ConvertTimeToUtc(date.Date);
+					var baseDate = timeZone.SafeConvertTimeToUtc(date.Date);
 					var layerPeriod = new DateTimePeriod(baseDate.AddHours(8), baseDate.AddHours(17));
 					var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario);
 					assignment.SetMainShift(MainShiftFactory.CreateMainShift(TestData.ActivityPhone, layerPeriod, TestData.ShiftCategory));
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 				}
 				else if (date.Date.DayOfWeek == DayOfWeek.Wednesday)
 				{
-					var baseDate = timeZone.ConvertTimeToUtc(date.Date);
+					var baseDate = timeZone.SafeConvertTimeToUtc(date.Date);
 					var layerPeriod = new DateTimePeriod(baseDate.AddHours(9), baseDate.AddHours(18));
 					var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario);
 					assignment.SetMainShift(MainShiftFactory.CreateMainShift(TestData.ActivityPhone, layerPeriod, TestData.ShiftCategory));
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 				}
 				else
 				{
-					var baseDate = timeZone.ConvertTimeToUtc(date.Date);
+					var baseDate = timeZone.SafeConvertTimeToUtc(date.Date);
 					var layerPeriod = new DateTimePeriod(baseDate.AddHours(8.5), baseDate.AddHours(17.5));
 					var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario);
 					assignment.SetMainShift(MainShiftFactory.CreateMainShift(TestData.ActivityPhone, layerPeriod, TestData.ShiftCategory));

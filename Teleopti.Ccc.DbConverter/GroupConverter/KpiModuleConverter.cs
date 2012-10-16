@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
     {
         //private readonly DefaultAggregateRoot _defaultAggregateRoot;
 
-        public KpiModuleConverter(MappedObjectPair mappedObjectPair, DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo)
+        public KpiModuleConverter(MappedObjectPair mappedObjectPair, DateTimePeriod period, TimeZoneInfo timeZoneInfo)
             : base(mappedObjectPair, period, timeZoneInfo)
         {
             //_defaultAggregateRoot = defaultAggregateRoot;

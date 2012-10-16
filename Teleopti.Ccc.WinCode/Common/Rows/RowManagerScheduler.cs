@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCode.Common.Rows
         /// Created by: micke
         /// Created date: 2009-03-22
         /// </remarks>
-        public override ICccTimeZoneInfo TimeZoneInfo
+        public override TimeZoneInfo TimeZoneInfo
         {
             get
             {

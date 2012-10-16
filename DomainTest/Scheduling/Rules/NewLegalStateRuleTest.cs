@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var scheduleDays = new List<IScheduleDay> { scheduleDay1, scheduleDay2 };
             var dateOnly1 = new DateOnly(2010, 1, 1);
             var dateOnly2 = new DateOnly(2010, 1, 2);
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.Utc);
             var scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
             var scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
             var permissionInformation = _mocks.StrictMock<IPermissionInformation>();

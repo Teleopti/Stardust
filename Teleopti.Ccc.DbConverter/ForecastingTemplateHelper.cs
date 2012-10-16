@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DBConverter
         public static IList<ITemplateSkillDataPeriod> CreateSkillDataPeriodList(ISkill owningSkill, int intervalLength)
         {
             IList<ITemplateSkillDataPeriod> skillDataPeriodList = new List<ITemplateSkillDataPeriod>();
-            DateTime baseDate = owningSkill.TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate, owningSkill.TimeZone);
+            DateTime baseDate = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, owningSkill.TimeZone);
             DateTime endDate = baseDate.AddDays(1);
             TimeSpan step = TimeSpan.FromMinutes(intervalLength);
             for (DateTime currentDateTime = baseDate; currentDateTime < endDate; currentDateTime = currentDateTime.Add(step))

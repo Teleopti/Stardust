@@ -28,7 +28,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="notAllowedCategories">The not allowed categories.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList,
+        IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList,
                                                                                    IEffectiveRestriction restriction, IList<IShiftCategory> notAllowedCategories, IWorkShiftFinderResult finderResult);
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="restriction">The restriction.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<IShiftProjectionCache> FilterOnRestrictionTimeLimits(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList,
+        IList<IShiftProjectionCache> FilterOnRestrictionTimeLimits(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList,
                                                                                    IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult);
 
         /// <summary>

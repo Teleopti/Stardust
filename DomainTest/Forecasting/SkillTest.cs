@@ -57,12 +57,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Skill skill = new Skill(_name, _description, _displayColor, 15, target.SkillType);
             //skill.TimeZone = TimeZoneInfo.Utc;
             //skill.Activity = ActivityFactory.CreateActivity("activity");
-            Assert.AreEqual(TimeZoneInfo.Utc,skill.TimeZone.TimeZoneInfoObject);
+            Assert.AreEqual(TimeZoneInfo.Utc,skill.TimeZone);
 
             TimeZoneInfo inf = TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time");
 
-            skill.TimeZone = new CccTimeZoneInfo(inf);
-            Assert.AreSame(inf,skill.TimeZone.TimeZoneInfoObject);
+            skill.TimeZone = (inf);
+            Assert.AreSame(inf,skill.TimeZone);
         }
         [Test]
         public void CanGetTemplateWeekdaysByDayOfWeek()
@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             const string timeZoneName = "W. Europe Standard Time";
             target.GetType().GetField("_timeZone",BindingFlags.Instance|BindingFlags.NonPublic).SetValue(target,timeZoneName);
-            Assert.AreEqual(TimeZoneInfo.FindSystemTimeZoneById(timeZoneName).Id,((TimeZoneInfo)target.TimeZone.TimeZoneInfoObject).Id);
+            Assert.AreEqual(TimeZoneInfo.FindSystemTimeZoneById(timeZoneName).Id,((TimeZoneInfo)target.TimeZone).Id);
         }
 
         [Test]
@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanSetTimeZone()
         {
-            target.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+            target.TimeZone = (TimeZoneInfo.Local);
             Assert.AreEqual(TimeZoneInfo.Local.Id, target.TimeZone.Id);
         }
 
@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void CanGetTimeZoneDefault()
         {
             target = new Skill(target.Name, target.Description, target.DisplayColor, target.DefaultResolution, target.SkillType);
-            Assert.AreEqual(TimeZoneInfo.Utc, target.TimeZone.TimeZoneInfoObject);
+            Assert.AreEqual(TimeZoneInfo.Utc, target.TimeZone);
         }
 
         /// <summary>

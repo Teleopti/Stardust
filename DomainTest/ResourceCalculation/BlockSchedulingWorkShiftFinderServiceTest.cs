@@ -40,10 +40,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             DateOnly dateOnly = new DateOnly(2009,2,2);
             var shifts = GetCashes();
-            ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+            TimeZoneInfo TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
             foreach (IShiftProjectionCache shiftProjectionCache in shifts)
             {
-                shiftProjectionCache.SetDate(dateOnly, cccTimeZoneInfo);
+                shiftProjectionCache.SetDate(dateOnly, TimeZoneInfo);
             }
             IFairnessValueResult fairnessValueResult = new FairnessValueResult();
             using (_mocks.Record())
@@ -75,10 +75,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			DateOnly dateOnly = new DateOnly(2009, 2, 2);
 			var shifts = GetCashes();
-			ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+			TimeZoneInfo TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
 			foreach (IShiftProjectionCache shiftProjectionCache in shifts)
 			{
-				shiftProjectionCache.SetDate(dateOnly, cccTimeZoneInfo);
+				shiftProjectionCache.SetDate(dateOnly, TimeZoneInfo);
 			}
 			IFairnessValueResult fairnessValueResult = new FairnessValueResult();
 			var shiftCategoryFairnessFactors = _mocks.DynamicMock<IShiftCategoryFairnessFactors>();

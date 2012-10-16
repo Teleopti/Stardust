@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			          	};
 		}
 
-		private static IEnumerable<string> createHours(DateTime asmZero, ICccTimeZoneInfo timeZone)
+		private static IEnumerable<string> createHours(DateTime asmZero, TimeZoneInfo timeZone)
 		{
 			const int numberOfHoursToShow = 24*3;
 			var hoursAsInts = new List<int>();
@@ -42,14 +42,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			
 			for (var hour = 0; hour < numberOfHoursToShow; hour++)
 			{
-				var localTime = timeZone.ConvertTimeFromUtc(asmZeroAsUtc.AddHours(hour));
+				var localTime = TimeZoneInfo.ConvertTimeFromUtc(asmZeroAsUtc.AddHours(hour), timeZone);
 				hoursAsInts.Add(localTime.Hour);
 			}
 
 			return hoursAsInts.Take(numberOfHoursToShow).Select(x => x.ToString(CultureInfo.InvariantCulture));
 		}
 
-		private static IEnumerable<AsmLayer> createAsmLayers(DateTime asmZero, ICccTimeZoneInfo timeZone, IEnumerable<IVisualLayer> layers)
+		private static IEnumerable<AsmLayer> createAsmLayers(DateTime asmZero, TimeZoneInfo timeZone, IEnumerable<IVisualLayer> layers)
 		{
 			var asmLayers = (from visualLayer in layers
 			                 let startDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.StartDateTime, timeZone)

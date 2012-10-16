@@ -1,11 +1,11 @@
-﻿using System.Globalization;
-using Teleopti.Interfaces.Domain;
+﻿using System;
+using System.Globalization;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
     public interface IRegional
     {
-        ICccTimeZoneInfo TimeZone { get; }
+        TimeZoneInfo TimeZone { get; }
         CultureInfo UICulture { get; }
         CultureInfo Culture { get; }
     }

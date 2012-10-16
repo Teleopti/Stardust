@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             _dateTimePeriod = new DateTimePeriod(_dateTime, TimeZoneHelper.ConvertToUtc(_dateTime.AddHours(12d)));
             _schedulePartMock = _mockRepository.StrictMock<IScheduleDay>();
             _person = PersonFactory.CreatePerson("testAgent");
-            _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
         	_scenario = ScenarioFactory.CreateScenarioAggregate();
             _projectionService = _mockRepository.StrictMock<IProjectionService>();
             _visualLayerCollection = _mockRepository.StrictMock<IVisualLayerCollection>();
@@ -1919,10 +1919,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifySatisfiedStudentAvailabilityWhenNotAvailable()
         {
-            ICccTimeZoneInfo cccTimeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo TimeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
             IStudentAvailabilityRestriction restriction = new StudentAvailabilityRestriction();
-            DateTime start = _dateTimePeriod.StartDateTimeLocal(cccTimeZoneInfo);
-            DateTime end = _dateTimePeriod.EndDateTimeLocal(cccTimeZoneInfo);
+            DateTime start = _dateTimePeriod.StartDateTimeLocal(TimeZoneInfo);
+            DateTime end = _dateTimePeriod.EndDateTimeLocal(TimeZoneInfo);
             restriction.StartTimeLimitation = new StartTimeLimitation(start.TimeOfDay, null);
             restriction.EndTimeLimitation = new EndTimeLimitation(null, end.AddMinutes(-1).TimeOfDay);
             IStudentAvailabilityDay studentAvailabilityDay = new StudentAvailabilityDay(_person, new DateOnly(_dateTime), new List<IStudentAvailabilityRestriction> { restriction });
@@ -1953,10 +1953,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IMainShift mainShift = new MainShift(_shiftCategory);
             IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
             assignment.SetMainShift(mainShift);
-            ICccTimeZoneInfo cccTimeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo TimeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
             IStudentAvailabilityRestriction restriction = new StudentAvailabilityRestriction();
-            DateTime start = _dateTimePeriod.StartDateTimeLocal( cccTimeZoneInfo);
-            DateTime end = _dateTimePeriod.EndDateTimeLocal(cccTimeZoneInfo);
+            DateTime start = _dateTimePeriod.StartDateTimeLocal( TimeZoneInfo);
+            DateTime end = _dateTimePeriod.EndDateTimeLocal(TimeZoneInfo);
             restriction.StartTimeLimitation = new StartTimeLimitation(start.TimeOfDay, null);
             restriction.EndTimeLimitation = new EndTimeLimitation(null, end.TimeOfDay);
             IStudentAvailabilityDay studentAvailabilityDay = new StudentAvailabilityDay(_person, new DateOnly(_dateTime), new List<IStudentAvailabilityRestriction> { restriction });
@@ -1994,10 +1994,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IMainShift mainShift = new MainShift(_shiftCategory);
             IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
             assignment.SetMainShift(mainShift);
-            ICccTimeZoneInfo cccTimeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo TimeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
             IStudentAvailabilityRestriction restriction = new StudentAvailabilityRestriction();
-            DateTime start = cccTimeZoneInfo.ConvertTimeFromUtc(_dateTimePeriod.StartDateTime, cccTimeZoneInfo);
-            DateTime end = cccTimeZoneInfo.ConvertTimeFromUtc(_dateTimePeriod.EndDateTime, cccTimeZoneInfo);
+            DateTime start = TimeZoneInfo.ConvertTimeFromUtc(_dateTimePeriod.StartDateTime, TimeZoneInfo);
+            DateTime end = TimeZoneInfo.ConvertTimeFromUtc(_dateTimePeriod.EndDateTime, TimeZoneInfo);
             restriction.StartTimeLimitation = new StartTimeLimitation(start.TimeOfDay,null);
             restriction.EndTimeLimitation = new EndTimeLimitation(null,end.AddMinutes(-1).TimeOfDay);
             IStudentAvailabilityDay studentAvailabilityDay = new StudentAvailabilityDay(_person,new DateOnly(_dateTime) ,new List<IStudentAvailabilityRestriction>{restriction});
@@ -2036,10 +2036,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IMainShift mainShift = new MainShift(_shiftCategory);
             IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
             assignment.SetMainShift(mainShift);
-            ICccTimeZoneInfo cccTimeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo TimeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
             IStudentAvailabilityRestriction restriction = new StudentAvailabilityRestriction();
-            DateTime start = _dateTimePeriod.StartDateTimeLocal(cccTimeZoneInfo);
-            DateTime end = _dateTimePeriod.EndDateTimeLocal(cccTimeZoneInfo);
+            DateTime start = _dateTimePeriod.StartDateTimeLocal(TimeZoneInfo);
+            DateTime end = _dateTimePeriod.EndDateTimeLocal(TimeZoneInfo);
             restriction.StartTimeLimitation = new StartTimeLimitation(start.TimeOfDay, null);
             restriction.EndTimeLimitation = new EndTimeLimitation(null, end.TimeOfDay);
             IStudentAvailabilityDay studentAvailabilityDay = new StudentAvailabilityDay(_person, new DateOnly(_dateTime), new List<IStudentAvailabilityRestriction> { restriction });
@@ -2074,10 +2074,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
             IVisualLayerCollection visualLayerCollection = new VisualLayerCollection(_person, layerCollection, new ProjectionPayloadMerger());
-            ICccTimeZoneInfo cccTimeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo TimeZoneInfo = _person.PermissionInformation.DefaultTimeZone();
             IStudentAvailabilityRestriction restriction = new StudentAvailabilityRestriction();
-            DateTime start = _dateTimePeriod.StartDateTimeLocal(cccTimeZoneInfo);
-            DateTime end = _dateTimePeriod.EndDateTimeLocal(cccTimeZoneInfo);
+            DateTime start = _dateTimePeriod.StartDateTimeLocal(TimeZoneInfo);
+            DateTime end = _dateTimePeriod.EndDateTimeLocal(TimeZoneInfo);
             restriction.StartTimeLimitation = new StartTimeLimitation(start.TimeOfDay, null);
             restriction.EndTimeLimitation = new EndTimeLimitation(null, end.TimeOfDay);
             IStudentAvailabilityDay studentAvailabilityDay = new StudentAvailabilityDay(_person, new DateOnly(_dateTime), new List<IStudentAvailabilityRestriction> { restriction });

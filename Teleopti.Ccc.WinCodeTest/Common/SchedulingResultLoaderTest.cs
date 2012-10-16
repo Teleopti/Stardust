@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _permittedPeople = new List<IPerson> { _mocks.StrictMock<IPerson>() };
             _scenario = _mocks.StrictMock<IScenario>();
 
-			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, CccTimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople);
+			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople);
 
             target = new SchedulingResultLoader(_schedulerState, _repositoryFactory, _eventAggregator, _lazyManager, _peopleAndSkillLoaderDecider, _peopleLoader, _skillDayLoadHelper, _resourceOptimizationHelper, _loadScheduleByPersonSpecification);
         }

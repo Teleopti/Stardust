@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		{
 			var person = _mocks.StrictMock<IPerson>();
 			var permissionInfo = new PermissionInformation(person);
-			permissionInfo.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Utc")));
+			permissionInfo.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("Utc")));
 			var persons = new List<IPerson> { person };
 			
 			var dateTime = new DateTime(2010, 11, 1, 11, 0, 0, DateTimeKind.Utc);
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		private static IPerson GetPerson()
 		{
 			var person = PersonFactory.CreatePersonWithBasicPermissionInfo("", "");
-			person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Utc")));
+			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("Utc")));
 			return person;
 		}
 	}

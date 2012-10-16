@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			return string.Format("{0} {1}", dateTime.ToShortDateString(), dateTime.ToShortTimeString());
 		}
 
-		public static string ToShortDateTimeString(this DateTimePeriod period, ICccTimeZoneInfo timeZone)
+		public static string ToShortDateTimeString(this DateTimePeriod period, TimeZoneInfo timeZone)
 		{
 			var startDateTime = period.StartDateTimeLocal(timeZone);
 			var endDateTime = period.EndDateTimeLocal(timeZone);

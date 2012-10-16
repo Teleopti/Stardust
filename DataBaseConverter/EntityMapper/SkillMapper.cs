@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: peterwe
         /// Created date: 2007-10-29
         /// </remarks>
-        public SkillMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone, int intervalLength)
+        public SkillMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone, int intervalLength)
             : base(mappedObjectPair, timeZone)
         {
             _intervalLength = intervalLength;

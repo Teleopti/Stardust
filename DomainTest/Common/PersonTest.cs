@@ -679,7 +679,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyOneRotationCanReplacePreviousRotation()
         {
-            _target.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _target.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
             IRotation rotation1 = new Rotation("rotation1", 7);
             IRotation rotation2 = new Rotation("rotation2", 7);
             IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("test");

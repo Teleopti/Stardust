@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: rogerkr
         /// Created date: 10/26/2007
         /// </remarks>
-        public DateTimePeriodMapper(ICccTimeZoneInfo timeZone, DateTime date)
+        public DateTimePeriodMapper(TimeZoneInfo timeZone, DateTime date)
                                 : base(new MappedObjectPair(), timeZone)
         {
             _date = date;
@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             //DateTime dateTimeAsUtc = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
             
             if (TimeZone.IsInvalidTime(dateTime))
-                return TimeZone.ConvertTimeToUtc(dateTime.AddHours(1), TimeZone);
-            return TimeZone.ConvertTimeToUtc(dateTime, TimeZone);
+                return TimeZoneInfo.ConvertTimeToUtc(dateTime.AddHours(1), TimeZone);
+            return TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZone);
 
             //try
             //{

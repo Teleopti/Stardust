@@ -21,14 +21,14 @@ namespace Teleopti.Ccc.DomainTest.Time
         private readonly DateTime _start = new DateTime(2007, 06, 01, 12, 31, 0, DateTimeKind.Utc);
         private readonly DateTime _end = new DateTime(2008, 02, 28, 0, 0, 0, DateTimeKind.Utc);
         private DateTimePeriod _period;
-        private CccTimeZoneInfo _cccTimeZoneInfo;
+        private TimeZoneInfo _TimeZoneInfo;
 
         [SetUp]
         public void TestSetup()
         {
             _period = new DateTimePeriod(_start, _end);
             TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time");
-            _cccTimeZoneInfo = new CccTimeZoneInfo(timeZone);
+            _TimeZoneInfo = (timeZone);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Time
                     TimeSpan.FromHours(2),
                     TimeSpan.FromDays(1).Add(
                         TimeSpan.FromHours(6))),
-                _period.TimePeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc)));
+                _period.TimePeriod((TimeZoneInfo.Utc)));
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Time
                     TimeSpan.FromHours(3),
                     TimeSpan.FromDays(1).Add(
                         TimeSpan.FromHours(7))),
-                _period.TimePeriod(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"))));
+                _period.TimePeriod((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"))));
         }
 
         /// <summary>
@@ -532,9 +532,9 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void VerifyLocalDateTimesWorks()
         {
             DateTime expectedLocalStart =
-                TimeZoneInfo.ConvertTimeFromUtc(_start, (TimeZoneInfo)StateHolder.Instance.StateReader.SessionScopeData.TimeZone.TimeZoneInfoObject);
+                TimeZoneInfo.ConvertTimeFromUtc(_start, (TimeZoneInfo)StateHolder.Instance.StateReader.SessionScopeData.TimeZone);
             DateTime expectedLocalEnd =
-                TimeZoneInfo.ConvertTimeFromUtc(_end, (TimeZoneInfo)StateHolder.Instance.StateReader.SessionScopeData.TimeZone.TimeZoneInfoObject);
+                TimeZoneInfo.ConvertTimeFromUtc(_end, (TimeZoneInfo)StateHolder.Instance.StateReader.SessionScopeData.TimeZone);
 
             Assert.AreEqual(expectedLocalStart, _period.LocalStartDateTime);
             Assert.AreEqual(expectedLocalEnd, _period.LocalEndDateTime);
@@ -543,11 +543,11 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyDateTimeLocalWorks()
         {
-            ICccTimeZoneInfo timeZoneInfo = StateHolder.Instance.StateReader.SessionScopeData.TimeZone;
+            TimeZoneInfo timeZoneInfo = StateHolder.Instance.StateReader.SessionScopeData.TimeZone;
             DateTime expectedLocalStart =
-                TimeZoneInfo.ConvertTimeFromUtc(_start, (TimeZoneInfo)timeZoneInfo.TimeZoneInfoObject);
+                TimeZoneInfo.ConvertTimeFromUtc(_start, (TimeZoneInfo)timeZoneInfo);
             DateTime expectedLocalEnd =
-                TimeZoneInfo.ConvertTimeFromUtc(_end, (TimeZoneInfo)timeZoneInfo.TimeZoneInfoObject);
+                TimeZoneInfo.ConvertTimeFromUtc(_end, (TimeZoneInfo)timeZoneInfo);
 
             Assert.AreEqual(expectedLocalStart, _period.StartDateTimeLocal(timeZoneInfo));
             Assert.AreEqual(expectedLocalEnd, _period.EndDateTimeLocal(timeZoneInfo));
@@ -774,8 +774,8 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void VerifyToWholeWeeks()
         {
             _period = new DateTimePeriod(2008,5,4,2008,5,5);
-            Assert.AreEqual(new DateTimePeriod(2008, 4, 28, 2008, 5, 12), _period.WholeWeek(CultureInfo.GetCultureInfo("sv-SE"), new CccTimeZoneInfo(TimeZoneInfo.Utc)));
-            Assert.AreEqual(new DateTimePeriod(2008, 4, 27, 2008, 5, 11), _period.WholeWeek(CultureInfo.GetCultureInfo("en-US"), new CccTimeZoneInfo(TimeZoneInfo.Utc)));
+            Assert.AreEqual(new DateTimePeriod(2008, 4, 28, 2008, 5, 12), _period.WholeWeek(CultureInfo.GetCultureInfo("sv-SE"), (TimeZoneInfo.Utc)));
+            Assert.AreEqual(new DateTimePeriod(2008, 4, 27, 2008, 5, 11), _period.WholeWeek(CultureInfo.GetCultureInfo("en-US"), (TimeZoneInfo.Utc)));
         }
 
 
@@ -1237,9 +1237,9 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyToDateOnlyPeriod()
         {
-            DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_start, _cccTimeZoneInfo));
-            DateOnly endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_end, _cccTimeZoneInfo));
-            DateOnlyPeriod dateOnlyPeriod = _period.ToDateOnlyPeriod(_cccTimeZoneInfo);
+            DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_start, _TimeZoneInfo));
+            DateOnly endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_end, _TimeZoneInfo));
+            DateOnlyPeriod dateOnlyPeriod = _period.ToDateOnlyPeriod(_TimeZoneInfo);
             Assert.AreEqual(dateOnlyPeriod.StartDate, startDate);
             Assert.AreEqual(dateOnlyPeriod.EndDate, endDate);
         }
@@ -1247,13 +1247,13 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyToDateOnlyPeriodWorksBothWays()
         {
-            DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_start, _cccTimeZoneInfo));
-            DateOnly endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_end, _cccTimeZoneInfo));
-            DateOnlyPeriod dateOnlyPeriod = _period.ToDateOnlyPeriod(_cccTimeZoneInfo);
+            DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_start, _TimeZoneInfo));
+            DateOnly endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_end, _TimeZoneInfo));
+            DateOnlyPeriod dateOnlyPeriod = _period.ToDateOnlyPeriod(_TimeZoneInfo);
             Assert.AreEqual(dateOnlyPeriod.StartDate, startDate);
             Assert.AreEqual(dateOnlyPeriod.EndDate, endDate);
-            DateTimePeriod dateTimePeriod = dateOnlyPeriod.ToDateTimePeriod(_cccTimeZoneInfo);
-            DateOnlyPeriod dateOnlyPeriodAfterBeingDateTimePeriod = dateTimePeriod.ToDateOnlyPeriod(_cccTimeZoneInfo);
+            DateTimePeriod dateTimePeriod = dateOnlyPeriod.ToDateTimePeriod(_TimeZoneInfo);
+            DateOnlyPeriod dateOnlyPeriodAfterBeingDateTimePeriod = dateTimePeriod.ToDateOnlyPeriod(_TimeZoneInfo);
             Assert.AreEqual(dateOnlyPeriodAfterBeingDateTimePeriod.StartDate, startDate);
             Assert.AreEqual(dateOnlyPeriodAfterBeingDateTimePeriod.EndDate, endDate);
         }
@@ -1262,11 +1262,11 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void VerifyToDateOnlyPeriodWorksBothWaysWithOneDate()
         {
             DateTime dateTime = new DateTime(2007,12,31,23,0,0,DateTimeKind.Utc);
-            _cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateTime, _cccTimeZoneInfo));
-            DateOnly endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateTime, _cccTimeZoneInfo));
+            _TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateTime, _TimeZoneInfo));
+            DateOnly endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateTime, _TimeZoneInfo));
             _period = new DateTimePeriod(dateTime,dateTime);
-            DateOnlyPeriod dateOnlyPeriod = _period.ToDateOnlyPeriod(_cccTimeZoneInfo);
+            DateOnlyPeriod dateOnlyPeriod = _period.ToDateOnlyPeriod(_TimeZoneInfo);
             Assert.AreEqual(dateOnlyPeriod.StartDate, startDate);
             Assert.AreEqual(dateOnlyPeriod.EndDate, endDate);
         }
