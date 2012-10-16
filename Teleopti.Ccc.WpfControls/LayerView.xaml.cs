@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WpfControls
         {
             InitializeComponent();
             PreviewMouseDown += LayerView_PreviewMouseDown;
-            PreviewMouseUp += new MouseButtonEventHandler(LayerView_PreviewMouseUp);
+            PreviewMouseUp += LayerView_PreviewMouseUp;
         }
 
         void LayerView_PreviewMouseUp(object sender, MouseButtonEventArgs e)

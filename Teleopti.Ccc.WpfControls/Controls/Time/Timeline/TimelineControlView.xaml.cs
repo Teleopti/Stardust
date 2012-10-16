@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Time.Timeline
                 if (model != null)
                 {
                     _mouseDownTime = panel.GetUtcDateTimeFromPosition(e.GetPosition(panel).X);
-                    model.SelectedPeriod = new DateTimePeriod(_mouseDownTime, _mouseDownTime.AddMinutes(1));
+                    model.SelectedPeriod = new DateTimePeriod(_mouseDownTime, _mouseDownTime.AddMilliseconds(1));
 
                 }
               
