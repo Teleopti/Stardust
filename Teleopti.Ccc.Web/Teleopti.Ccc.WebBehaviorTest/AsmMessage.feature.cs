@@ -475,18 +475,36 @@ this.FeatureBackground();
             table13.AddRow(new string[] {
                         "Title",
                         "New message"});
+            table13.AddRow(new string[] {
+                        "Message",
+                        "Text in message"});
 #line 131
  testRunner.And("I have an unread message with", ((string)(null)), table13);
-#line 134
- testRunner.And("I am viewing week schedule");
 #line 135
- testRunner.And("I navigate to messages");
+ testRunner.And("I am viewing week schedule");
 #line 136
- testRunner.And("I click on the message at position \'1\' in the list");
+ testRunner.And("I navigate to messages");
 #line 137
- testRunner.When("I receive message number \'2\'");
+ testRunner.And("I click on the message at position \'1\' in the list");
+#line hidden
+            TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table14.AddRow(new string[] {
+                        "Title",
+                        "New message"});
+            table14.AddRow(new string[] {
+                        "Message",
+                        "Text in message"});
 #line 138
+ testRunner.And("I should see the message details form with", ((string)(null)), table14);
+#line 142
+ testRunner.When("I receive message number \'2\'");
+#line 143
  testRunner.Then("I should see \'2\' message(s) in the list");
+#line 144
+ testRunner.And("the message details should be connected and centered to message number \'2\' in the" +
+                    " list");
 #line hidden
             this.ScenarioCleanup();
         }

@@ -129,13 +129,21 @@ Scenario: Receive a new message when viewing message page
 Scenario: Receive a new message when viewing a message detail
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
-	| Field         | Value			|
-	| Title         | New message	|
+	| Field         | Value				|
+	| Title         | New message		|
+	| Message		| Text in message	|	
 	And I am viewing week schedule
 	And I navigate to messages
 	And I click on the message at position '1' in the list
+	And I should see the message details form with
+	| Field		| Value				|
+	| Title		| New message		|
+	| Message	| Text in message	|	
 	When I receive message number '2'
 	Then I should see '2' message(s) in the list
+	And the message details should be connected and centered to message number '2' in the list 
+
+
 
 
 	

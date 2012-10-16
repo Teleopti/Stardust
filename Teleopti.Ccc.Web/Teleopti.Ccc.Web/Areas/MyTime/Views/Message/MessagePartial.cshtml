@@ -1,4 +1,5 @@
-﻿@using Teleopti.Ccc.UserTexts
+﻿@using System.Web.UI.WebControls
+@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Message
 @using Teleopti.Interfaces.Domain
 @model MessageViewModel
@@ -9,7 +10,7 @@
 <div class="displaynone" id="Communication-detail-default-end-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
 
 <div id="Communication-body-inner" class="communication-body-inner relative">
-	<div id="Message-detail-section" class="displaynone request-edit-section ui-corner-all" data-bind="with : chosenMessage">
+	<div id="Message-detail-section" class="displaynone communication-edit-section ui-corner-all" data-bind="with : chosenMessage">
 		<input type="hidden" id="Request-detail-entityid"/>
 		<div class="edit-module-element communication-detail-sender displayinline-block">
 			<label data-bind="text : sender"></label>
@@ -30,43 +31,26 @@
 			@Resources.NoMessagesFound
 		</div>
 		<ol id="Communications-list" data-bind="foreach: communicationList">
-			<li class="ui-corner-all communication-item relative">
+			<li class="ui-corner-all communication-item relative" data-bind="css: { 'communication-selected': isSelected() == true }">
+                <span id="mySpan" class="displaynone" data-bind="text : messageId"></span>
+                <div class="communication-arrow-right">
+                    <img src="@Url.Content("~/Areas/MyTime/Content/Images/arrow-right.png")"/>   
+                </div>
 				<div class="communication-subject">
 					<h3 class="communication-data-subject" data-bind="text : title">
 					</h3>
 				</div>
 				<div class="communication-details">
 					<div>
-                        <span id="mySpan" class="displaynone" data-bind="text : messageId"></span>
-						<span class="communication-caption">XXSender: </span>
+						<span class="communication-caption">@Resources.Sender: </span>
 						<span class="communication-data-type" data-bind="text : sender"></span>
-						<span class="communication-caption">xxSent: </span>
+						<span class="communication-caption">@Resources.Sent: </span>
 						<span class="communication-data-updatedon" data-bind="text : date"></span>
 					</div>
 				</div>
 				<div class="communication-text communication-data-text" data-bind="text : message">
-				</div>
-                <div class="communication-connector"></div>
+				</div>             
 			</li>
-@*			<li class="ui-corner-all communication-item template relative">
-				<button class="communication-delete-button icon" style="display: none;" disabled="disabled" title="@Resources.Delete" />
-				<div class="communication-subject">
-					<h3 class="communication-data-subject">
-					</h3>
-				</div>
-				<div class="communication-details">
-					<div>
-						<span class="communication-caption">XXSender: </span>
-						<span class="communication-data-sender"></span>
-						<span class="communication-caption">@Resources.UpdatedOn: </span>
-						<span class="communication-data-updatedon"></span>
-					</div>
-				</div>
-				<div class="communication-text communication-data-text">
-				</div>
-				<div class="communication-connector">
-				</div>
-			</li>*@
 		</ol>
 		<div class="loading-gradient" style="display: none">
 			<div class="loading"></div>

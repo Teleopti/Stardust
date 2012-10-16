@@ -11151,4 +11151,12 @@ These options are activated:
     <value> - value before = </value>
     <comment>Information displayed on the status bar in scheduler during fairness optimization</comment>
   </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Sender</value>
+    <comment>Name of person who has sent an asm message</comment>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Sent</value>
+    <comment>Date and time when an asm message has been sent</comment>
+  </data>
 </root>

@@ -130,3 +130,31 @@
 	font-size: 85%;
 	font-style: italic;
 }
+.communication-body-inner .communication-selected
+{
+    background: rgba(240, 240, 240, 1);
+}
+.communication-arrow-right
+{
+	position: relative;
+	top:15px;
+	left:20px;
+    float: right;
+}
+.communication-edit-section
+{
+	padding-top: 0.8em;
+	padding-bottom: 0.8em;
+	padding-left: 1em;
+	padding-right: 1em;
+	margin-top: 0.1em;
+	margin-bottom: 0.1em;
+	margin-left: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: rgba(240, 240, 240, 1);
+	width: 450px;
+	top: 0px;
+	right: 0px;
+	float: right;
+	position: absolute;
+}
