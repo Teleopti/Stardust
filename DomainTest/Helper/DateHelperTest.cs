@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             Assert.AreEqual(expected, DateHelper.GetLastDateInWeek(dateToUse, culture));
         }
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldGetQuarter()
 		{
 			DateHelper.GetQuarter(1).Should().Be.EqualTo(1);
@@ -163,6 +163,14 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			DateHelper.GetQuarter(12).Should().Be.EqualTo(4);
 			DateHelper.GetQuarter(13).Should().Be.EqualTo(0);
 			DateHelper.GetQuarter(-1).Should().Be.EqualTo(0);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		public void ShouldGetWeekPeriod()
+		{
+			var result = DateHelper.GetWeekPeriod(new DateOnly(2012, 10, 16), DayOfWeek.Monday);
+			result.StartDate.Should().Be.EqualTo(new DateOnly(2012, 10, 15));
+			result.EndDate.Should().Be.EqualTo(new DateOnly(2012, 10, 21));
 		}
 
         /// <summary>
