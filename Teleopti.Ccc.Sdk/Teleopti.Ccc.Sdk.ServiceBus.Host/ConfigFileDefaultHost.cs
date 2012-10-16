@@ -35,7 +35,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Host
 
 		public void SetQueueConnectionString(string connectionString)
 		{
-			new DefaultHost().SetQueueConnectionString(connectionString);
+			using (var host = new DefaultHost())
+			{
+				host.SetQueueConnectionString(connectionString);
+			}
 		}
 
 		public void Start<TBootStrapper>()
@@ -97,7 +100,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Host
 			var queueConnection = ConfigurationManager.ConnectionStrings["Queue"];
 			if (queueConnection!=null)
 			{
-				new DefaultHost().SetQueueConnectionString(queueConnection.ConnectionString);
+				using(var host = new DefaultHost())
+				{
+					host.SetQueueConnectionString(queueConnection.ConnectionString);
+				}
 			}
 
 			bootStrapperType = bootStrapperType ??

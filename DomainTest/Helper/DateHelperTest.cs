@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using System.Globalization;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
@@ -144,6 +145,25 @@ namespace Teleopti.Ccc.DomainTest.Helper
             culture = CultureInfo.GetCultureInfo(1025); //Arabic - Saudi
             Assert.AreEqual(expected, DateHelper.GetLastDateInWeek(dateToUse, culture));
         }
+
+		[Test]
+		public void ShouldGetQuarter()
+		{
+			DateHelper.GetQuarter(1).Should().Be.EqualTo(1);
+			DateHelper.GetQuarter(2).Should().Be.EqualTo(1);
+			DateHelper.GetQuarter(3).Should().Be.EqualTo(1);
+			DateHelper.GetQuarter(4).Should().Be.EqualTo(2);
+			DateHelper.GetQuarter(5).Should().Be.EqualTo(2);
+			DateHelper.GetQuarter(6).Should().Be.EqualTo(2);
+			DateHelper.GetQuarter(7).Should().Be.EqualTo(3);
+			DateHelper.GetQuarter(8).Should().Be.EqualTo(3);
+			DateHelper.GetQuarter(9).Should().Be.EqualTo(3);
+			DateHelper.GetQuarter(10).Should().Be.EqualTo(4);
+			DateHelper.GetQuarter(11).Should().Be.EqualTo(4);
+			DateHelper.GetQuarter(12).Should().Be.EqualTo(4);
+			DateHelper.GetQuarter(13).Should().Be.EqualTo(0);
+			DateHelper.GetQuarter(-1).Should().Be.EqualTo(0);
+		}
 
         /// <summary>
         /// Verifies the day of week collection is returned.
