@@ -6,21 +6,15 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
 
-Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel = function (dayViewModels) {
-	var self = this;
+Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel = function (dayViewModels, maxMustHave) {
 
-	this.MaxMustHave = ko.observable(0);
-
-	this.CurrentMustHave = ko.computed(function () {
+	this.MustHaveText = ko.computed(function () {
 		var total = 0;
 		$.each(dayViewModels, function (index, day) {
 			if (day.MustHave())
 				total += 1;
 		});
-		return total;
-	});
 
-	this.MustHaveText = ko.computed(function () {
-		return self.CurrentMustHave() + "(" + self.MaxMustHave() + ")";
+		return total + "(" + maxMustHave + ")";
 	});
 };

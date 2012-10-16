@@ -6,6 +6,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -195,8 +196,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var to = $('li[data-mytime-date].inperiod').last().data('mytime-date');
 
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
-		mustHaveCountViewModel = new Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel(dayViewModels);
-		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModels, date, mustHaveCountViewModel);
+		mustHaveCountViewModel = new Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel(dayViewModels, $('#Preference-body').data('mytime-maxmusthave'));
+		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModels, date);
 
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
 		if (periodFeedbackElement)

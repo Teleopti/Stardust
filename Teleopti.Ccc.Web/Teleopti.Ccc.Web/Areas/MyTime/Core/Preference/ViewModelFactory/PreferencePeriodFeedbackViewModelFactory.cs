@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 		public PreferencePeriodFeedbackViewModel CreatePeriodFeedbackViewModel(DateOnly date)
 		{
 			var feedback = _preferencePeriodFeedbackProvider.PeriodFeedback(date);
-			var maxMustHave = _preferencePeriodFeedbackProvider.MaxMustHave(date);
 			return new PreferencePeriodFeedbackViewModel
 				{
 					PossibleResultDaysOff = feedback.PossibleResultDaysOff,
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 							Lower = _timeFormatter.GetLongHourMinuteTimeString(feedback.TargetTime.Minimum),
 							Upper = _timeFormatter.GetLongHourMinuteTimeString(feedback.TargetTime.Maximum)
 						},
-					MaxMustHave = maxMustHave
 				};
 		}
 	}

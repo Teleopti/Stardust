@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
