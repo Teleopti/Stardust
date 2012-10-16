@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.Win.Meetings
         private void textBoxExtParticipant_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Modifiers != Keys.Control)
-                _lastSelectionWas = TextBoxNameExtender.KeyDown(textBoxExtParticipant, e, _lastSelectionWas);
+                _lastSelectionWas = TextBoxNameExtender.KeyDown(textBoxExtParticipant, e, _lastSelectionWas, true);
             
             e.SuppressKeyPress = true;
         }
