@@ -1,4 +1,5 @@
 using System;
+using System.Security;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Drawing
 
         protected override CreateParams CreateParams
         {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+			[SecurityCritical]
             get
             {
                 CreateParams cp = base.CreateParams;

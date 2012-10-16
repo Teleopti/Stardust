@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Scheduling.Panels;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             return string.Empty;
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
+		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
 

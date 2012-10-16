@@ -74,13 +74,13 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
         private static SqlException CreateSqlException(int errorNumber)
         {
 			SqlErrorCollection collection = Construct<SqlErrorCollection>();
-			SqlError error = Construct<SqlError>(errorNumber, (byte)2, (byte)3, "server name", "error message", "proc", 100, (UInt32)1 );
+			SqlError error = Construct<SqlError>(errorNumber, (byte)2, (byte)3, "server name", "error message", "proc", 100);
            
 			var addMethod = collection.GetType().GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Instance);
 			addMethod.Invoke(collection, new object[] { error });
 			
-			var types = new[] { typeof(string), typeof(SqlErrorCollection), typeof(Exception), typeof(Guid) };
-			var parameters = new object[] { "mess", collection, new Exception(), Guid.NewGuid() };
+			var types = new[] { typeof(string), typeof(SqlErrorCollection) };
+			var parameters = new object[] { "mess", collection };
 
 			var constructor = typeof(SqlException).
 				GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, types, null);

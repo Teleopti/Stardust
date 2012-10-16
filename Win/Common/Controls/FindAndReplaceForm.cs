@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Globalization;
+using System.Security;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
             setOptionButtonCaption();
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+		[SecurityCritical]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             const int wmKeydown = 0x100;

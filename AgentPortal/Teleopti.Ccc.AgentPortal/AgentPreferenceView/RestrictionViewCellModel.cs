@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.AgentPortal.AgentPreferenceView.PreferenceCellPainters;
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentPreferenceView
             return string.Empty;
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
+		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             Trace.WriteLine("GetObjectData called");

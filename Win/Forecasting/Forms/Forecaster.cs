@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Security;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -1471,7 +1472,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         //--------------------
 
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+		[SecurityCritical]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             const int WM_KEYDOWN = 0x100;

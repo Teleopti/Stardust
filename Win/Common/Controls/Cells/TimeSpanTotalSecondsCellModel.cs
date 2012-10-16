@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using System.Text;
 using Syncfusion.Windows.Forms.Grid;
@@ -174,7 +175,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         /// Created by: peterwe
         /// Created date: 2008-01-08
         /// </remarks>
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
+		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
 
