@@ -1,5 +1,4 @@
 ﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="jquery.ui.connector.js"/>
 /// <reference path="~/Content/Scripts/knockout-2.1.0.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
 
@@ -83,7 +82,6 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 
     function _addNewMessageAtTop(messageItem) {
         vm.communicationList.unshift(new communicationItemViewModel(messageItem));
-        setConnectorOnAllConnectionItems();
         $('.communication-list li')
             .first()
             .click(function () {
@@ -172,17 +170,10 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
                     _moreToLoad();
                 }
                 _initListClick();
-                setConnectorOnAllConnectionItems();
             },
             error: function () {
             }
         });
-    }
-
-    function setConnectorOnAllConnectionItems() {
-        $('.communication-list li .communication-connector')
-			.not('ui-connector')
-			.connector();
     }
 
     function _hasMoreToLoad() {
@@ -223,9 +214,6 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
     }
 
     function _showCommunication(listItem) {
-        var connector = listItem
-			.find('.communication-connector')
-			;
         var bindListItemClick = function _bindClick() {
             listItem.bind('click', function () {
                 vm.chosenMessageId($(this).find('span[data-bind$="messageId"]').text());
@@ -234,33 +222,13 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
         };
 
         listItem.unbind('click');
-        _disconnectAllOthers(listItem);
         Teleopti.MyTimeWeb.CommunicationDetail.FadeEditSection(bindListItemClick);
-        connector.connector("connecting");
         Teleopti.MyTimeWeb.CommunicationDetail.ShowCommunication(listItem.position().top - 30);
-        connector.connector("connect");
-    }
-
-    function _disconnectAll() {
-        $('#Communications-list li:not(.template) .communication-connector')
-			.connector('disconnect')
-		;
-    }
-
-    function _disconnectAllOthers(listItem) {
-        listItem.siblings()
-					.data('connected', false)
-					.find('.communication-connector')
-					.connector('disconnect')
-					;
     }
 
     return {
         Init: function () {
             _initScrollPaging();
-        },
-        DisconnectAll: function () {
-            _disconnectAll();
         },
         AddNewMessageAtTop: function (messageItem) {
             _addNewMessageAtTop(messageItem);
