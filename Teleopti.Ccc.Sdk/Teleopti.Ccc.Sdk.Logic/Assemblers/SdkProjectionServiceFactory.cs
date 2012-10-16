@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
 	public class SdkProjectionServiceFactory : ISdkProjectionServiceFactory
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IProjectionService CreateProjectionService(IScheduleDay scheduleDay, string specialProjection, TimeZoneInfo timeZoneInfo)
 		{
 			var merger = specialProjection.ContainsIgnoreCase("midnightsplit")

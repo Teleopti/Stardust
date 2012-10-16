@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory.ScheduleReporting
             return IndividualPages(persons, period, scheduleDictionary, timeZoneInfo, details);
         }
 
-        private IList<PersonWithScheduleStream> IndividualPages(IEnumerable<IPerson> persons, DateOnlyPeriod period, IDictionary<IPerson, IScheduleRange> scheduleDictionary, TimeZoneInfo timeZoneInfo, ScheduleReportDetail details)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private IList<PersonWithScheduleStream> IndividualPages(IEnumerable<IPerson> persons, DateOnlyPeriod period, IDictionary<IPerson, IScheduleRange> scheduleDictionary, TimeZoneInfo timeZoneInfo, ScheduleReportDetail details)
         {
             IList<PersonWithScheduleStream> scheduleStreams = new List<PersonWithScheduleStream>();
             

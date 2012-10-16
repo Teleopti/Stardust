@@ -123,7 +123,6 @@
     <Compile Include="GroupConverter\EmployeeOptionalColumnModuleConverter.cs" />
     <Compile Include="GroupConverter\ForecastModuleConverter.cs" />
     <Compile Include="GroupConverter\GroupingModuleConverter.cs" />
-    <Compile Include="GroupConverter\KpiModuleConverter.cs" />
     <Compile Include="GroupConverter\ModuleChecker.cs" />
     <Compile Include="GroupConverter\ModuleConverter.cs" />
     <Compile Include="GroupConverter\ScheduleModuleConverter.cs" />

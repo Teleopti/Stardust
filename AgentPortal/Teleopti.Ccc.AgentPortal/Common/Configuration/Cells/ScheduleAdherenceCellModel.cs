@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells
         {
         }
 
-		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
 

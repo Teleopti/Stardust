@@ -66,7 +66,6 @@ namespace Teleopti.Ccc.AgentPortal.Common
         {
         }
 
-		[SecurityCritical]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             bool local = keyData != (Keys.F1 | Keys.Shift);

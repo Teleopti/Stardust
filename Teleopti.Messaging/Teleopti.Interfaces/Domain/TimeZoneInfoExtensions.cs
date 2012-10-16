@@ -13,7 +13,8 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="timeZoneInfo">The source time zone.</param>
 		/// <param name="dateTime">The datetime local to the time zone.</param>
 		/// <returns></returns>
-        public static DateTime SafeConvertTimeToUtc(this TimeZoneInfo timeZoneInfo, DateTime dateTime)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public static DateTime SafeConvertTimeToUtc(this TimeZoneInfo timeZoneInfo, DateTime dateTime)
         {
             var kindUnSpecifiedDateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
             while (timeZoneInfo.IsInvalidTime(kindUnSpecifiedDateTime))

@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
         {
             get { return this.webBrowser; }
         }
-		[SecurityCritical]
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             bool local = keyData != (Keys.F1 | Keys.Shift);
 

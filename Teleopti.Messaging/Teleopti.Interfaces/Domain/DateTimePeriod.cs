@@ -813,19 +813,17 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2008-02-18
         /// </remarks>
-        public TimePeriod TimePeriod(TimeZoneInfo timeZone)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public TimePeriod TimePeriod(TimeZoneInfo timeZone)
         {
-            TimeSpan startTimeOfDay;
+        	TimeSpan startTimeOfDay = timeZone.Id == TimeZoneInfo.Utc.Id
+        	                          	? StartDateTime.TimeOfDay
+        	                          	: TimeZoneHelper.ConvertFromUtc(StartDateTime, timeZone).TimeOfDay;
 
-            if (TimeZoneInfo.FindSystemTimeZoneById(timeZone.Id) == TimeZoneInfo.Utc)
-                startTimeOfDay = StartDateTime.TimeOfDay;
-            else
-                startTimeOfDay = TimeZoneHelper.ConvertFromUtc(StartDateTime, timeZone).TimeOfDay;
-
-            return new TimePeriod(startTimeOfDay, startTimeOfDay.Add(ElapsedTime()));
+        	return new TimePeriod(startTimeOfDay, startTimeOfDay.Add(ElapsedTime()));
         }
 
-        /// <summary>
+    	/// <summary>
         /// Gets a new period starting the first day of the week
         /// ending the last day of week
         /// (in sweden: startdate will back to nearest monday, enddate will be forward to closest sunday)
