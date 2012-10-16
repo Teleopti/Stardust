@@ -85,7 +85,6 @@ namespace Teleopti.Ccc.Win.Meetings
 
         protected override CreateParams CreateParams
         {
-			[SecurityCritical]
             get
             {
                 CreateParams cp = base.CreateParams;

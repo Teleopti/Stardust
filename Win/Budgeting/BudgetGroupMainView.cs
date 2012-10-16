@@ -528,8 +528,6 @@ namespace Teleopti.Ccc.Win.Budgeting
             }
 		}
 
-
-		[SecurityCritical]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             const int WM_KEYDOWN = 0x100;

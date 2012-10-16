@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
 		protected override CreateParams CreateParams
 		{
-			[SecurityCritical]
 			get
 			{
 				var cp = base.CreateParams;

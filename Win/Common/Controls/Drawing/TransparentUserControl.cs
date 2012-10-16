@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Drawing
 
         protected override CreateParams CreateParams
         {
-			[SecurityCritical]
             get
             {
                 CreateParams cp = base.CreateParams;

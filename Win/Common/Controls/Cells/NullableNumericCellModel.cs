@@ -111,11 +111,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 		public static string GetFormattedTextForCopyPasteExcel(NumberFormatInfo numberFormatInfo, double value)
 		{
 			string fixedText = ((decimal)value).ToString("N", numberFormatInfo).Replace((char)160, (char)32);
-			//fixedText = fixedText.Replace(" ", "");
 			return fixedText;
 		}
 
-		[SecurityCritical]
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 

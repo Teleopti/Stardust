@@ -28,6 +28,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         
         void Unload();
 
-        void SetTimeZone(TimeZoneInfo TimeZoneInfo);
+        void SetTimeZone(TimeZoneInfo timeZoneInfo);
     }
 }

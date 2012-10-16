@@ -129,21 +129,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             NumberFormatInfo nfi = (NumberFormatInfo)ci.NumberFormat.Clone();
             nfi.NumberDecimalDigits = NumberOfDecimals;
 
-            //return ((decimal)d).ToString("N", nfi).Replace((char)160, (char)32);
             return ((decimal) d).ToString("N", nfi);
 
         }
 
-        /// <summary>
-        /// Gets the object data.
-        /// </summary>
-        /// <param name="info">The info.</param>
-        /// <param name="context">The context.</param>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2008-01-08
-        /// </remarks>
-		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
 

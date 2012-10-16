@@ -4,10 +4,8 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private bool _isSelected;
         private bool _isWithinSchedulePeriod = true;
         private readonly IEventAggregator _eventAggregator;
-        private TimeZoneInfo _TimeZoneInfo;
+        private readonly TimeZoneInfo _timeZoneInfo;
 
         public bool IsWithinSchedulePeriod
         {
@@ -41,15 +39,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 }
             }
         }
-        public PersonRequestViewModel(IPersonRequest personRequest, IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker,
-            IPersonAccountCollection personAccountCollection, IEventAggregator eventAggregator, TimeZoneInfo TimeZoneInfo)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public PersonRequestViewModel(IPersonRequest personRequest, IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker,
+            IPersonAccountCollection personAccountCollection, IEventAggregator eventAggregator, TimeZoneInfo timeZoneInfo)
         {
             _eventAggregator = eventAggregator;
             _personRequest = personRequest;
             _shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
             _personAccountCollection = personAccountCollection;
             _personRequest.PropertyChanged += PersonRequestViewModel_PropertyChanged;
-            _TimeZoneInfo = TimeZoneInfo;
+            _timeZoneInfo = timeZoneInfo;
         }
 
         private void PersonRequestViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -167,7 +166,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 if(!_personRequest.UpdatedOn.HasValue)
                     return "";
-                var convertedDate = TimeZoneHelper.ConvertFromUtc(_personRequest.UpdatedOn.Value, _TimeZoneInfo);
+                var convertedDate = TimeZoneHelper.ConvertFromUtc(_personRequest.UpdatedOn.Value, _timeZoneInfo);
                 return convertedDate.ToString("g", CultureInfo.CurrentCulture);
             }
         }

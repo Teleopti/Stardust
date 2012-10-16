@@ -626,8 +626,6 @@ namespace Teleopti.Ccc.Win.Intraday
             statusStripButtonServerUnavailable.Enabled = true;
         }
 
-
-		[SecurityCritical]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             const int WM_KEYDOWN = 0x100;

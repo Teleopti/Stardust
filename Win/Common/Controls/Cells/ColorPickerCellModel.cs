@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             set { _cellValue = value; }
         }
 
-		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
 

@@ -108,7 +108,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             return ret;
         }
 
-		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             Trace.WriteLine("GetObjectData called");

@@ -118,12 +118,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             return ret;
         }
 
-        /// <summary>
-        /// Gets the object data.
-        /// </summary>
-        /// <param name="info">The info.</param>
-        /// <param name="context">The context.</param>
-		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)

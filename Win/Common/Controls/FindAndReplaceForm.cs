@@ -84,7 +84,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
             setOptionButtonCaption();
         }
 
-		[SecurityCritical]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             const int wmKeydown = 0x100;

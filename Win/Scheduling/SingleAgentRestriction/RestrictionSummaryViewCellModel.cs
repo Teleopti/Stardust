@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
             return string.Empty;
         }
 
-		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             Trace.WriteLine("GetObjectData called");

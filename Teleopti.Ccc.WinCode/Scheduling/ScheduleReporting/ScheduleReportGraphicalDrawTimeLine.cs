@@ -82,7 +82,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 			return _top + Padding;
 		}
 
-        private DateTime MinDateTime(IList<DateOnly> dates, ISchedulingResultStateHolder stateHolder, IList<IPerson> persons, DateOnly day)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		private DateTime MinDateTime(IList<DateOnly> dates, ISchedulingResultStateHolder stateHolder, IList<IPerson> persons, DateOnly day)
         {
             if (dates == null)
                 throw new ArgumentNullException("dates");
@@ -146,7 +147,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             return DateTime.SpecifyKind(startDate.Date.AddHours(minTime.Hours).AddMinutes(minTime.Minutes),DateTimeKind.Utc);
         }
 
-        private DateTime MaxDateTime(IList<DateOnly> dates, ISchedulingResultStateHolder stateHolder, IList<IPerson> persons, DateOnly day)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		private DateTime MaxDateTime(IList<DateOnly> dates, ISchedulingResultStateHolder stateHolder, IList<IPerson> persons, DateOnly day)
         {
             if (dates == null)
                 throw new ArgumentNullException("dates");

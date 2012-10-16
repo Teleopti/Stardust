@@ -46,13 +46,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         public override string GetFormattedText(GridStyleInfo style, object value, int textInfo)
         {
             String ret = string.Empty;
-            if (value.GetType() == typeof(Description))
+            if (value is Description)
                 ret = ((Description)value).ShortName;
 
             return ret;
         }
 
-		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
 
