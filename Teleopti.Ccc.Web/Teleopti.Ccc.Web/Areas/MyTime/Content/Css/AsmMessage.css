@@ -1,19 +1,19 @@
 ﻿
-.communication-body-inner ol
+.asmMessage-body-inner ol
 {
 	list-style: none;
 	margin-left: 0em;
 	margin-right: 0em;
 }
-.communication-list 
+.asmMessage-list 
 {
 	width: 483px;
 }
-.rtl .communication-list
+.rtl .asmMessage-list
 {
     margin-right: 483px;
 }
-.communication-body-inner .communication-item
+.asmMessage-body-inner .asmMessage-item
 {
 	padding-top: 0.5em;
 	padding-bottom: 0.8em;
@@ -24,124 +24,124 @@
 	margin-top: 0.1em;
 	margin-bottom: 0.1em;
 }
-.communication-body-inner .friendly-message {
+.asmMessage-body-inner .friendly-message {
 	width: 433px;
 }
-.communication-body-inner .loading
+.asmMessage-body-inner .loading
 {
 	height: 5em;
 }
-.communication-body-inner .arrow-down
+.asmMessage-body-inner .arrow-down
 {
 	height: 5em;
 }
 
-.no-rgba .communication-body-inner li {
+.no-rgba .asmMessage-body-inner li {
 	 border: 1px solid #dfdfdf;
 }
-.communication-body-inner .communication-subject 
+.asmMessage-body-inner .asmMessage-subject 
 {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-.communication-body-inner .communication-details 
+.asmMessage-body-inner .asmMessage-details 
 {
 	font-size: smaller;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-.communication-body-inner .communication-caption 
+.asmMessage-body-inner .asmMessage-caption 
 {
 	color: #B0B0B0;
 	font-style: italic;
 	font-size: xx-small;
 }
-.communication-body-inner .communication-data-type {
+.asmMessage-body-inner .asmMessage-data-type {
 	padding-right: 20px;
 	padding-left: 0px;
 }
-.communication-data-updatedon {
+.asmMessage-data-updatedon {
 	padding-right: 20px;
 	padding-left: 0px;
 }
-.rtl .communication-body-inner .communication-data-type {
+.rtl .asmMessage-body-inner .asmMessage-data-type {
 	padding-right: 0px;
 	padding-left: 20px;
 }
-.communication-body-inner .communication-data-date {
+.asmMessage-body-inner .asmMessage-data-date {
 	padding-right: 20px;
 	padding-left: 0px;
 }
-.rtl .communication-body-inner .communication-data-date {
+.rtl .asmMessage-body-inner .asmMessage-data-date {
 	padding-right: 0px;
 	padding-left: 20px;
 }
-.communication-body-inner .communication-data-sender {
+.asmMessage-body-inner .asmMessage-data-sender {
 	padding-right: 20px;
 	padding-left: 0px;
 }
-.rtl .communication-body-inner .communication-data-sender {
+.rtl .asmMessage-body-inner .asmMessage-data-sender {
 	padding-right: 0px;
 	padding-left: 20px;
 }
-.communication-body-inner .communication-text 
+.asmMessage-body-inner .asmMessage-text 
 {
 	padding-top: 0.3em;
 }
-.communication-edit-section .edit-module-element {
+.asmMessage-edit-section .edit-module-element {
 	position: relative;
 	padding-left: 10px;
 	padding-right: 10px;
 	padding-bottom: 10px;
 }
-.communication-edit-section .date-input
+.asmMessage-edit-section .date-input
 {
 	width: 8em;
 }
-.communication-data-subject {
+.asmMessage-data-subject {
 	word-wrap: break-word;	
 }
-.communication-data-text {
+.asmMessage-data-text {
 	word-wrap: break-word;	
 }
-.communication-type-input-label 
+.asmMessage-type-input-label 
 {
 	width: 8em;
 	padding-top: 4px;
 	padding-right: 2px;
 	height: 16px;
 }
-.rtl .communication-type-input-label 
+.rtl .asmMessage-type-input-label 
 {
 	text-align: right;
 }
 
-.communication-detail-title
+.asmMessage-detail-title
 {
 	font-weight: bold;
 	font-size: 115%;
 }
-.communication-detail-sent 
+.asmMessage-detail-sent 
 {
 	float: right;
 	font-size: 85%;
 	font-style: italic;
 }
-.communication-detail-sender 
+.asmMessage-detail-sender 
 {
 	font-size: 85%;
 	font-style: italic;
 }
-.communication-body-inner .communication-selected
+.asmMessage-body-inner .asmMessage-selected
 {
     background: rgba(240, 240, 240, 1);
 }
-.communication-arrow-right
+.asmMessage-arrow-right
 {
 	position: relative;
 	top:15px;
 	left:20px;
     float: right;
 }
-.communication-edit-section
+.asmMessage-edit-section
 {
 	padding-top: 0.8em;
 	padding-bottom: 0.8em;

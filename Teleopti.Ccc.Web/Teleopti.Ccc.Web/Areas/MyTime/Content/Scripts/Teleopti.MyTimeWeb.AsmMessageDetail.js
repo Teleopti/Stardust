@@ -1,5 +1,5 @@
 ﻿
-Teleopti.MyTimeWeb.CommunicationDetail = (function ($) {
+Teleopti.MyTimeWeb.AsmMessageDetail = (function ($) {
 
     function _showCommunication(position) {
         _hideEditSection();
@@ -7,12 +7,12 @@ Teleopti.MyTimeWeb.CommunicationDetail = (function ($) {
     }
 
     function _showEditSection(position) {
-        var topPosition = $('#Communications-list').position().top - 1;
+        var topPosition = $('#AsmMessages-list').position().top - 1;
         if (!position)
             position = topPosition;
         if (position < topPosition)
             position = topPosition;
-        $('#Message-detail-section')
+        $('.asmMessage-edit-section')
 			.css({
 			    'top': position
 			})
@@ -21,13 +21,13 @@ Teleopti.MyTimeWeb.CommunicationDetail = (function ($) {
     }
 
     function _hideEditSection() {
-        $('#Message-detail-section')
+        $('.asmMessage-edit-section')
 			.hide()
 			;
     }
 
     function _fadeEditSection(func) {
-        $('#Message-detail-section')
+        $('.asmMessage-edit-section')
             .fadeOut(400, func)
             ;
     }
@@ -41,7 +41,7 @@ Teleopti.MyTimeWeb.CommunicationDetail = (function ($) {
         FadeEditSection: function (func) {
             _fadeEditSection(func);
         },
-        ShowCommunication: function (position) {
+        ShowAsmMessage: function (position) {
             _showCommunication(position);
         }
     };

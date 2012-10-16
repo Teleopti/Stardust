@@ -1,32 +1,34 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
-using WatiN.Core.Constraints;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class MessagePage : PortalPage, IMessageReplyPage
-	{
-        [FindBy(Id = "friendly-message")] 
-        public Div FriendlyMessage;
+    public class MessagePage : PortalPage, IMessageReplyPage
+    {
+        public Div FriendlyMessage
+        {
+            get { return Document.Div(Find.ByClass("friendly-message", false)); }
+        }
 
-        [FindBy(Id = "Communications-list")]
+        [FindBy(Id = "AsmMessages-list")]
         public List MessageList { get; set; }
 
-        private readonly Constraint _messageConstraint = Find.ByClass("communication-item", false);
-		public ListItemCollection MessageListItems { get { return Document.ListItems.Filter(_messageConstraint); } }
+        public ListItemCollection MessageListItems { get { return Document.ListItems.Filter(Find.ByClass("asmMessage-item", false)); } }
         public IEnumerable<ListItem> Messages { get { return MessageListItems; } }
 
-		[FindBy(Id = "Message-detail-section")]
-        public Div MessageDetailSection { get; set; }
+        public Div MessageDetailSection
+        {
+            get { return Document.Div(Find.ByClass("asmMessage-edit-section", false)); }
+        }
 
-		[FindBy(Id = "Message-detail-title")]
-		public Label Title { get; set; }
+        [FindBy(Id = "AsmMessage-detail-title")]
+        public Label Title { get; set; }
 
-		[FindBy(Id = "Message-detail-message")]
-		public Label Message { get; set; }
+        [FindBy(Id = "AsmMessage-detail-message")]
+        public Label Message { get; set; }
 
-		[FindBy(Id = "Message-detail-ok-button")]
-		public Button OkButton{ get; set; }
-	}
+        [FindBy(Id = "AsmMessage-detail-ok-button")]
+        public Button OkButton { get; set; }
+    }
 }

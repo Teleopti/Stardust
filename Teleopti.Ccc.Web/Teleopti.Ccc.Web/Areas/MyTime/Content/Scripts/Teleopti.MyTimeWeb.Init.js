@@ -5,6 +5,5 @@
 	Teleopti.MyTimeWeb.Request.Init();
 	Teleopti.MyTimeWeb.TeamSchedule.Init();
 	Teleopti.MyTimeWeb.Settings.Init();
-	Teleopti.MyTimeWeb.Communication.Init();
 
 });

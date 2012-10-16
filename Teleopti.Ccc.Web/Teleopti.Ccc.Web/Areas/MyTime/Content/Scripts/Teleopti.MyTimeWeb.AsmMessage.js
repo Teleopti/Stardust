@@ -1,6 +1,6 @@
 ﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js"/>
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Communication.List.js"/>
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.AsmMessage.List.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
 
 if (typeof (Teleopti) === 'undefined') {
@@ -23,8 +23,6 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
     function _setMessageNotificationOnTab(messageCount) {
         var countString = '';
 
-        //alert('count: ' + messageCount);
-
         if (messageCount > 0)
             countString = ' (' + messageCount + ')';
 
@@ -38,13 +36,11 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
     }
 
     function _setAddNewMessageAtTopOfList(messageItem) {
-        //		console.log('_setAddNewMessageAtTopOfList: ' + JSON.stringify(messageItem));
         if (!messageItem.IsRead)
-            Teleopti.MyTimeWeb.CommunicationList.AddNewMessageAtTop(messageItem);
+            Teleopti.MyTimeWeb.AsmMessageList.AddNewMessageAtTop(messageItem);
     }
 
     function test() {
-        //console.log('fel');
     }
 
     function _listenForEvents() {
@@ -68,7 +64,6 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
     }
 
     function _getMessageInformation(messageId) {
-        //alert(messageId);
         ajax.Ajax({
             url: 'Message/Message',
             dataType: "json",
@@ -77,7 +72,6 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
                 messageId: messageId
             },
             success: function (data) {
-                //				console.log('success: _getMessageInformation; messageId = ' + messageId);
                 _setMessageNotificationOnTab(data.UnreadMessagesCount);
                 _setAddNewMessageAtTopOfList(data.MessageItem);
             },
@@ -89,12 +83,16 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
     return {
         Init: function () {
             _listenForEvents();
+			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Message/Index', Teleopti.MyTimeWeb.AsmMessage.MessagePartialInit);
         },
         OnMessageBrokerEvent: function () {
             _onMessageBrokerEvent();
         },
         SetMessageNotificationOnTab: function (messageCount) {
             _setMessageNotificationOnTab(messageCount);
-        }
+        },
+		MessagePartialInit: function () {
+			Teleopti.MyTimeWeb.AsmMessageList.Init();
+		}
     };
 })(jQuery);

@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			pushMessageDialogueJsonObject.Append("Sender: 'My sender', ");
         	pushMessageDialogueJsonObject.AppendFormat(CultureInfo.InvariantCulture, "Date: '{0} {1}', ", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString());
 			pushMessageDialogueJsonObject.Append("IsRead: 'false'}; ");
-			pushMessageDialogueJsonObject.Append("Teleopti.MyTimeWeb.CommunicationList.AddNewMessageAtTop(messageItem);");
+			pushMessageDialogueJsonObject.Append("Teleopti.MyTimeWeb.AsmMessageList.AddNewMessageAtTop(messageItem);");
 
 			Browser.Current.Eval(pushMessageDialogueJsonObject.ToString());
         }
@@ -170,21 +170,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
         public void ThenIShouldSeeAUser_FriendlyMessageExplainingIDontHaveAnyMessages()
         {
 			EventualAssert.That(() => _page.FriendlyMessage.Style.GetAttributeValue("display"), Is.Not.EqualTo("none"));
-        }
-
-        [Then(@"the message details should be connected and centered to message number '(.*)' in the list")]
-        public void ThenTheMessageDetailsShouldBeConnectedAndCenteredToMessageNumberInTheList(int listPosition)
-        {
-            EventualAssert.That(
-                () => _page.MessageListItems[listPosition - 1].Div(Find.ByClass("ui-connected", false)).Exists, Is.True);
-
-            EventualAssert.That(() => _page.MessageDetailSection.DisplayVisible(), Is.True);
-            //_page.MessageDetailSection
-
-            int messageItemPosition = Convert.ToInt32(_page.MessageListItems[listPosition - 1].Style.GetAttributeValue("top"));
-            int messageDetailPosition = Convert.ToInt32(_page.MessageDetailSection.Style.GetAttributeValue("top"));
-            EventualAssert.That(() => messageItemPosition == messageDetailPosition - 30, Is.True);
-
         }
 	}
 }

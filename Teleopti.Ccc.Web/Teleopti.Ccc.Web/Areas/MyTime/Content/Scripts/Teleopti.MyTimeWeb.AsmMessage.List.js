@@ -1,6 +1,7 @@
 ﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="~/Content/Scripts/knockout-2.1.0.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.AsmMessageDetail.js"/>
 
 if (typeof (Teleopti) === 'undefined') {
     Teleopti = {};
@@ -9,31 +10,31 @@ if (typeof (Teleopti) === 'undefined') {
     }
 }
 
-Teleopti.MyTimeWeb.CommunicationList = (function ($) {
+Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 
     var ajax = new Teleopti.MyTimeWeb.Ajax();
     var vm;
 
-    function communicationListViewModel() {
+    function asmMessageListViewModel() {
         var self = this;
 
-        self.communicationList = ko.observableArray();
+        self.asmMessageList = ko.observableArray();
         self.chosenMessage = ko.observable();
         self.chosenMessageId = ko.observable();
         self.shouldShowMessage = ko.observable(false);
 
-        self.CreateCommunicationList = function (dataList) {
-            var communicationItems = new Array();
+        self.CreateAsmMessageList = function (dataList) {
+            var asmMessageItems = new Array();
             $.each(dataList, function (position, element) {
-                communicationItems.push(new communicationItemViewModel(element));
+                asmMessageItems.push(new asmMessageItemViewModel(element));
             });
 
-            self.communicationList($.merge(self.communicationList(), communicationItems));
+            self.asmMessageList($.merge(self.asmMessageList(), asmMessageItems));
         };
 
         self.chosenMessageId.subscribe(function () {
             var match;
-            ko.utils.arrayForEach(self.communicationList(), function (item) {
+            ko.utils.arrayForEach(self.asmMessageList(), function (item) {
                 item.isSelected(false);
                 if (item.messageId() === self.chosenMessageId()) {
                     item.isSelected(true);
@@ -47,12 +48,12 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
 
         self.chosenMessage.subscribe(function () {
             if (self.chosenMessage() == null) {
-                Teleopti.MyTimeWeb.CommunicationDetail.HideEditSection();
+                Teleopti.MyTimeWeb.AsmMessageDetail.HideEditSection();
             }
         });
 
-        self.communicationList.subscribe(function () {
-            if (self.communicationList().length == 0)
+        self.asmMessageList.subscribe(function () {
+            if (self.asmMessageList().length == 0)
                 self.shouldShowMessage(true);
             else {
                 self.shouldShowMessage(false);
@@ -60,7 +61,7 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
         });
     }
 
-    function communicationItemViewModel(item) {
+    function asmMessageItemViewModel(item) {
         var self = this;
         self.title = ko.observable(item.Title);
         self.message = ko.observable(item.Message);
@@ -72,7 +73,7 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
         self.isSelected = ko.observable(false);
 
         self.isRead.subscribe(function () {
-            vm.communicationList.remove(self);
+            vm.asmMessageList.remove(self);
             vm.chosenMessage(null);
         });
         self.confirmReadMessage = function (data, event) {
@@ -81,20 +82,20 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
     }
 
     function _addNewMessageAtTop(messageItem) {
-        vm.communicationList.unshift(new communicationItemViewModel(messageItem));
-        $('.communication-list li')
+        vm.asmMessageList.unshift(new asmMessageItemViewModel(messageItem));
+        $('.asmMessage-list li')
             .first()
             .click(function () {
                 vm.chosenMessageId($(this).find('span[data-bind$="messageId"]').text());
-                _showCommunication($(this));
+                _showAsmMessage($(this));
             })
             .hover(function() {
-                $(this).find('.communication-arrow-right').css({ opacity: 1.0 });
+                $(this).find('.asmMessage-arrow-right').css({ opacity: 1.0 });
             },
             function() {
-                $(this).find('.communication-arrow-right').css({ opacity: 0.1 });
+                $(this).find('.asmMessage-arrow-right').css({ opacity: 0.1 });
             })
-            .find('.communication-arrow-right').css({ opacity: 0.1 })
+            .find('.asmMessage-arrow-right').css({ opacity: 0.1 })
             ;
     };
 
@@ -126,8 +127,8 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
     }
 
     function _initScrollPaging() {
-        vm = new communicationListViewModel();
-        ko.applyBindings(vm, document.getElementById('Communication-body-inner'));
+        vm = new asmMessageListViewModel();
+        ko.applyBindings(vm, document.getElementById('AsmMessage-body-inner'));
         _loadAPage();
         $(window).scroll(_loadAPageIfRequired);
     }
@@ -150,7 +151,7 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
     }
 
     function _loadAPage() {
-        var skip = $('#Communications-list li:not(.template)').length;
+        var skip = $('#AsmMessages-list li:not(.template)').length;
         var take = 20;
         ajax.Ajax({
             url: "Message/Messages",
@@ -162,7 +163,7 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
                 Skip: skip
             },
             success: function (data, textStatus, jqXHR) {
-                vm.CreateCommunicationList(data);
+                vm.CreateAsmMessageList(data);
 
                 if (data.length == 0 || data.length < take) {
                     _noMoreToLoad();
@@ -177,53 +178,52 @@ Teleopti.MyTimeWeb.CommunicationList = (function ($) {
     }
 
     function _hasMoreToLoad() {
-        return $('.communication-list .arrow-down').is(':visible');
+        return $('.asmMessage-list .arrow-down').is(':visible');
     }
 
     function _loading() {
-        $('.communication-list .arrow-down').hide();
-        $('.communication-list .loading-gradient').show();
+        $('.asmMessage-list .arrow-down').hide();
+        $('.asmMessage-list .loading-gradient').show();
     }
 
     function _noMoreToLoad() {
-        $('.communication-list .arrow-down').hide();
-        $('.communication-list .loading-gradient').hide();
+        $('.asmMessage-list .arrow-down').hide();
+        $('.asmMessage-list .loading-gradient').hide();
     }
 
     function _moreToLoad() {
-        $('.communication-list .arrow-down').show();
-        $('.communication-list .loading-gradient').hide();
+        $('.asmMessage-list .arrow-down').show();
+        $('.asmMessage-list .loading-gradient').hide();
     }
 
     function _initListClick() {
-        var item = $('#Communications-list li');
-        $('#Communications-list li')
+        $('#AsmMessages-list li')
 			.unbind('click')
             .click(function () {
                 vm.chosenMessageId($(this).find('span[data-bind$="messageId"]').text());
-                _showCommunication($(this));
+                _showAsmMessage($(this));
             })
             .hover(function () {
-                $(this).find('.communication-arrow-right').css({ opacity: 1.0 });
+                $(this).find('.asmMessage-arrow-right').css({ opacity: 1.0 });
             },
         	function () {
-        	    $(this).find('.communication-arrow-right').css({ opacity: 0.1 });
+        	    $(this).find('.asmMessage-arrow-right').css({ opacity: 0.1 });
         	})
-            .find('.communication-arrow-right').css({ opacity: 0.1 })
+            .find('.asmMessage-arrow-right').css({ opacity: 0.1 })
             ;
     }
 
-    function _showCommunication(listItem) {
+    function _showAsmMessage(listItem) {
         var bindListItemClick = function _bindClick() {
             listItem.bind('click', function () {
                 vm.chosenMessageId($(this).find('span[data-bind$="messageId"]').text());
-                _showCommunication($(this));
+                _showAsmMessage($(this));
             });
         };
 
         listItem.unbind('click');
-        Teleopti.MyTimeWeb.CommunicationDetail.FadeEditSection(bindListItemClick);
-        Teleopti.MyTimeWeb.CommunicationDetail.ShowCommunication(listItem.position().top - 30);
+        Teleopti.MyTimeWeb.AsmMessageDetail.FadeEditSection(bindListItemClick);
+        Teleopti.MyTimeWeb.AsmMessageDetail.ShowAsmMessage(listItem.position().top - 30);
     }
 
     return {
