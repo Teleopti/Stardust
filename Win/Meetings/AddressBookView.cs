@@ -403,13 +403,13 @@ namespace Teleopti.Ccc.Win.Meetings
         
         private void textBoxExtRequiredParticipant_KeyDown(object sender, KeyEventArgs e)
         {
-            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase) ActiveControl, e, _lastSelectionWas);
+            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase) ActiveControl, e, _lastSelectionWas, true);
             e.SuppressKeyPress = true;
         }
 
         private void textBoxExtOptionalParticipant_KeyDown(object sender, KeyEventArgs e)
         {
-            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase)ActiveControl, e, _lastSelectionWas);
+            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase)ActiveControl, e, _lastSelectionWas, true);
             e.SuppressKeyPress = true;
         }
 
@@ -433,7 +433,8 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TextBoxNameExtender.PasteItem((TextBoxBase)ActiveControl);
+        	var addSemiColon = !ActiveControl.Name.Equals("textBoxExtFilterCriteria");
+            TextBoxNameExtender.PasteItem((TextBoxBase)ActiveControl, addSemiColon);
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)

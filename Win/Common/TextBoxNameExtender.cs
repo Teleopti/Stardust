@@ -15,13 +15,14 @@ namespace Teleopti.Ccc.Win.Common
     {
         #region Keyhandling - ContextMenu handling
 
-        public static LastSelectionWas KeyDown(TextBoxBase textBox, KeyEventArgs e, LastSelectionWas lastSelectionWas)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public static LastSelectionWas KeyDown(TextBoxBase textBox, KeyEventArgs e, LastSelectionWas lastSelectionWas, bool addSemicolonToPaste)
         {
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.C)
                 CopyItem(textBox);
 
             else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.V)
-                PasteItem(textBox);
+				PasteItem(textBox, addSemicolonToPaste);
 
             else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.X)
                 CutItem(textBox);
@@ -65,8 +66,12 @@ namespace Teleopti.Ccc.Win.Common
             GetSelected(textBox);
         }
 
-        public static void PasteItem(TextBoxBase textBox)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public static void PasteItem(TextBoxBase textBox, bool addSemicolonToPaste)
         {
+			if (!Clipboard.ContainsData(DataFormats.Text))
+				return;
+
             if (textBox.SelectionLength > 0)
             {
                 var first = textBox.Text.Substring(0, textBox.SelectionStart);
@@ -79,7 +84,7 @@ namespace Teleopti.Ccc.Win.Common
             else
             {
                 var textLength = textBox.SelectionStart == 0 ? textBox.TextLength : textBox.TextLength + 2;
-                var text = AddSemicolon();
+				var text = AddSemicolon(addSemicolonToPaste);
                 textBox.Text += text;
                 textBox.Select(textLength, Clipboard.GetData(DataFormats.Text).ToString().Length);
             }
@@ -112,9 +117,10 @@ namespace Teleopti.Ccc.Win.Common
                 contextMenu.Items[2].Enabled = true;
         }
 
-        public static string AddSemicolon()
+        public static string AddSemicolon(bool addSemicolonToPaste)
         {
             var clipboardCopy = Clipboard.GetData(DataFormats.Text).ToString();
+			if (!addSemicolonToPaste) return clipboardCopy;
             if (clipboardCopy.Substring(0, 2) != "; ")
                 clipboardCopy = clipboardCopy.Insert(0, "; ");
 
