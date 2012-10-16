@@ -13,20 +13,22 @@ GO
 --Date: 2012-10-15
 --Desc: #21058 Purge OptionalColumnValue when its parent is deleted
 ----------------  
-DELETE FROM dbo.OptionalColumnValue 
-WHERE Parent in (
-	SELECT Id FROM dbo.OptionalColumn WHERE IsDeleted = 1
+IF EXISTS(SELECT * FROM sys.columns WHERE object_id=OBJECT_ID('dbo.OptionalColumn','U') AND name='IsDeleted')
+BEGIN
+EXECUTE(
+'DELETE FROM dbo.OptionalColumnValue 
+WHERE Parent IN (
+   SELECT Id FROM dbo.OptionalColumn WHERE IsDeleted = 1
 )
 DELETE FROM dbo.OptionalColumn WHERE IsDeleted = 1
-GO
 ALTER TABLE dbo.OptionalColumn
-	DROP COLUMN IsDeleted
-GO
+           DROP COLUMN IsDeleted
 ALTER TABLE dbo.OptionalColumnValue
-	DROP CONSTRAINT FK_OptionalColumnValue_OptionalColumn
-GO
+           DROP CONSTRAINT FK_OptionalColumnValue_OptionalColumn
 ALTER TABLE dbo.OptionalColumnValue ADD CONSTRAINT
-	FK_OptionalColumnValue_OptionalColumn FOREIGN KEY(Parent) 
-	REFERENCES dbo.OptionalColumn(Id)
-	ON DELETE  CASCADE 
+          FK_OptionalColumnValue_OptionalColumn FOREIGN KEY(Parent) 
+           REFERENCES dbo.OptionalColumn(Id)
+          ON DELETE  CASCADE')
+END
 GO
+
