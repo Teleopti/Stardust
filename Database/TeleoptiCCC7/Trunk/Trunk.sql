@@ -17,4 +17,16 @@ DELETE FROM dbo.OptionalColumnValue
 WHERE Parent in (
 	SELECT Id FROM dbo.OptionalColumn WHERE IsDeleted = 1
 )
+DELETE FROM dbo.OptionalColumn WHERE IsDeleted = 1
+GO
+ALTER TABLE dbo.OptionalColumn
+	DROP COLUMN IsDeleted
+GO
+ALTER TABLE dbo.OptionalColumnValue
+	DROP CONSTRAINT FK_OptionalColumnValue_OptionalColumn
+GO
+ALTER TABLE dbo.OptionalColumnValue ADD CONSTRAINT
+	FK_OptionalColumnValue_OptionalColumn FOREIGN KEY(Parent) 
+	REFERENCES dbo.OptionalColumn(Id)
+	ON DELETE  CASCADE 
 GO
