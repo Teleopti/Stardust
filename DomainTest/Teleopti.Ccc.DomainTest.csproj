@@ -958,7 +958,7 @@
     <Compile Include="Time\AnchorTimePeriodTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Time\CccTimeZoneInfoTest.cs" />
+    <Compile Include="Time\TimeZoneInfoExtensionsTest.cs" />
     <Compile Include="Time\DateOnlyTest.cs" />
     <Compile Include="Time\DateTimePeriodTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
