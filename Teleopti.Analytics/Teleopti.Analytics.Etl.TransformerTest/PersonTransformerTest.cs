@@ -135,15 +135,15 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             TimeZoneInfo TimeZoneInfo5 = _personCollection[5].PermissionInformation.DefaultTimeZone();
 
             DateTime validFromDate0 =
-                TimeZoneInfo.ConvertTimeToUtc(
-                    DateTime.SpecifyKind(personPeriods0[1].StartDate.Date, DateTimeKind.Unspecified), TimeZoneInfo0);
+                TimeZoneInfo0.SafeConvertTimeToUtc(
+                    DateTime.SpecifyKind(personPeriods0[1].StartDate.Date, DateTimeKind.Unspecified));
             DateTime validToDate0 =
-                TimeZoneInfo.ConvertTimeToUtc(
-                    DateTime.SpecifyKind(personPeriods0[0].EndDate().Date, DateTimeKind.Unspecified), TimeZoneInfo0);
+                TimeZoneInfo0.SafeConvertTimeToUtc(
+                    DateTime.SpecifyKind(personPeriods0[0].EndDate().Date, DateTimeKind.Unspecified));
             validToDate0 = validToDate0.AddDays(1);
             DateTime validToDate3 =
-                TimeZoneInfo.ConvertTimeToUtc(
-                    DateTime.SpecifyKind(personPeriods5[1].EndDate().Date, DateTimeKind.Unspecified), TimeZoneInfo5); //Eternity date
+                TimeZoneInfo5.SafeConvertTimeToUtc(
+                    DateTime.SpecifyKind(personPeriods5[1].EndDate().Date, DateTimeKind.Unspecified)); //Eternity date
             DateTime eternityDate = new DateTime(2059,12,31);
 
             Assert.AreEqual(5, _table.Rows.Count);
@@ -173,12 +173,12 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.AreEqual(_personCollection[0].Name.LastName, _table.Rows[1]["person_last_name"]);
             //Employment start and and dates
             Assert.AreEqual(
-                TimeZoneInfo.ConvertTimeToUtc(
-                    DateTime.SpecifyKind(personPeriods0[1].StartDate.Date, DateTimeKind.Unspecified), TimeZoneInfo0),
+                TimeZoneInfo0.SafeConvertTimeToUtc(
+                    DateTime.SpecifyKind(personPeriods0[1].StartDate.Date, DateTimeKind.Unspecified)),
                 (DateTime) _table.Rows[1]["employment_start_date"]);
             Assert.AreEqual(
-                TimeZoneInfo.ConvertTimeToUtc(
-                    DateTime.SpecifyKind(personPeriods0[1].EndDate().Date.AddDays(1), DateTimeKind.Unspecified), TimeZoneInfo0),
+                TimeZoneInfo0.SafeConvertTimeToUtc(
+                    DateTime.SpecifyKind(personPeriods0[1].EndDate().Date.AddDays(1), DateTimeKind.Unspecified)),
                 (DateTime) _table.Rows[1]["employment_end_date"]);
 
             //PersonPeriod id test
@@ -198,13 +198,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void VerifyAcd()
         {
             IList<IPersonPeriod> wrapper = new List<IPersonPeriod>(_personCollection[0].PersonPeriodCollection);
-            TimeZoneInfo TimeZoneInfo = _personCollection[0].PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo timeZoneInfo = _personCollection[0].PermissionInformation.DefaultTimeZone();
 
             Assert.AreEqual(1, _acdTable.Rows.Count);
             Assert.AreEqual("CODE", _acdTable.Rows[0]["acd_login_code"]);
-            Assert.AreEqual(TimeZoneInfo.ConvertTimeToUtc(wrapper[0].StartDate.Date),
+            Assert.AreEqual(timeZoneInfo.SafeConvertTimeToUtc(wrapper[0].StartDate.Date),
                             (DateTime) _acdTable.Rows[0]["start_date"]);
-            Assert.AreEqual(TimeZoneInfo.ConvertTimeToUtc(wrapper[0].EndDate().Date).AddDays(1),
+            Assert.AreEqual(timeZoneInfo.SafeConvertTimeToUtc(wrapper[0].EndDate().Date).AddDays(1),
                             (DateTime) _acdTable.Rows[0]["end_date"]);
             Assert.AreEqual(wrapper[0].Id, _acdTable.Rows[0]["person_period_code"]);
             Assert.AreEqual(1, _acdTable.Rows[0]["datasource_id"]);

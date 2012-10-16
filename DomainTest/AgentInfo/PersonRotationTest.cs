@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             Assert.AreEqual(_startDate, _target.StartDate);
             Assert.AreEqual(_startRow,_target.StartDay);
             Assert.AreEqual(
-                TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(_startDate.Date, DateTimeKind.Unspecified), _timeZone),
+				_timeZone.SafeConvertTimeToUtc(DateTime.SpecifyKind(_startDate.Date, DateTimeKind.Unspecified)),
                 _target.StartDateAsUtc);
 
             IRotation another = new Rotation("My other rotation", 7);
@@ -70,8 +70,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             _target.StartDate = new DateOnly(2008,8,8);
             Assert.AreEqual(new DateOnly(2008, 8, 8),_target.StartDate);
             Assert.AreEqual(
-                TimeZoneInfo.ConvertTimeToUtc(
-                    DateTime.SpecifyKind(new DateOnly(2008, 8, 8).Date, DateTimeKind.Unspecified), _timeZone),
+				_timeZone.SafeConvertTimeToUtc(
+                    DateTime.SpecifyKind(new DateOnly(2008, 8, 8).Date, DateTimeKind.Unspecified)),
                 _target.StartDateAsUtc);
             _target.StartDay = 0;
             Assert.AreEqual(0, _target.StartDay);

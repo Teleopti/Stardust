@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public DateTime ConvertToUtc(DateTime localDateTime, string fromTimeZoneId)
 		{
 			TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(fromTimeZoneId);
-			return TimeZoneInfo.ConvertTimeToUtc(localDateTime, timeZoneInfo);
+			return timeZoneInfo.SafeConvertTimeToUtc(localDateTime);
 		}
 		public DateTime ConvertFromUtc(DateTime utcDateTime, string toTimeZoneId)
 		{

@@ -22,8 +22,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			//Deviation data is never loaded into .net memory, just SQL Server stuff. Hardcode bigger chunks!
 			const int chunkTimeSpan = 30;
 		    var affectedRows = 0;
-            var includedTodayUtc = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now.Date.AddDays(1).AddMilliseconds(-1),
-		                                                         JobParameters.DefaultTimeZone);
+            var includedTodayUtc = JobParameters.DefaultTimeZone.SafeConvertTimeToUtc(DateTime.Today.AddDays(1).AddMilliseconds(-1));
 
 
 			if (JobCategoryDatePeriod.StartDateUtc > includedTodayUtc)

@@ -57,23 +57,9 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// </remarks>
         private DateTime GetDateTimeAsUtc(DateTime dateTime)
         {
-            //DateTime dateTimeAsUtc = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
-            
             if (TimeZone.IsInvalidTime(dateTime))
                 return TimeZoneInfo.ConvertTimeToUtc(dateTime.AddHours(1), TimeZone);
             return TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZone);
-
-            //try
-            //{
-                
-            //}
-            //catch (ArgumentException ex)
-            //{
-            //    if (ex.ParamName == "dateTime" &&
-            //        ex.Message.Contains("adjusted forward"))
-                    
-            //}
-            //return dateTimeAsUtc;
         }
     }
 }

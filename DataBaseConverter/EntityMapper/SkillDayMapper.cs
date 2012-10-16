@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                 workloadDays.Add(workloadDayMapper.Map(forecastDay));
             }
 
-            DateTime dateTime = TimeZoneInfo.ConvertTimeToUtc(oldEntity.SkillDate, TimeZone);
+            DateTime dateTime = TimeZone.SafeConvertTimeToUtc(oldEntity.SkillDate);
             IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
             SkillDataPeriodMapper skillDataPeriodMapper = new SkillDataPeriodMapper(MappedObjectPair, TimeZone, dateTime, _intervalLength);
             foreach (global::Domain.SkillData skillData in oldEntity.SkillDataCollection.Values)
