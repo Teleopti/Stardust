@@ -102,5 +102,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(1, returnList.Count);
 			Assert.AreEqual(columnName, returnList[0].Name);
 		}
+
+        [Test]
+        public void ShouldDeleteAssociatedOptionalColumnValues()
+        {
+            var col = CreateAggregateWithCorrectBusinessUnit();
+            IPerson person1 = PersonFactory.CreatePerson("sdgf");
+            person1.AddOptionalColumnValue(new OptionalColumnValue("VAL1"), col);
+            PersistAndRemoveFromUnitOfWork(col);
+            PersistAndRemoveFromUnitOfWork(person1);
+            UnitOfWork.PersistAll();
+            Assert.That(person1.OptionalColumnValueCollection.Count, Is.EqualTo(1));
+
+            repository.Remove(col);
+            UnitOfWork.PersistAll();
+            Session.Clear();
+            var person = Session.Get<IPerson>(person1.Id);
+            Assert.That(person.OptionalColumnValueCollection.Count, Is.EqualTo(0));
+        }
     }
 }
