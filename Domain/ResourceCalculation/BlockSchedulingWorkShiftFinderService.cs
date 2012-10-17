@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public interface IBlockSchedulingWorkShiftFinderService
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        double BestShiftValue(DateOnly dateOnly, IList<IShiftProjectionCache> filteredListOfShifts, IDictionary<IActivity, IDictionary<DateTime,
+        ShiftProjectionShiftValue BestShiftValue(DateOnly dateOnly, IList<IShiftProjectionCache> filteredListOfShifts, IDictionary<IActivity, IDictionary<DateTime,
             ISkillStaffPeriodDataHolder>> dataHolders, IFairnessValueResult totalFairness, IFairnessValueResult agentFairness,
 			int maxFairnessOnShiftCategories, TimeSpan averageWorkTime, bool useShiftCategoryFairness, IShiftCategoryFairnessFactors shiftCategoryFairnessFactors,
             double lengthFactor, bool useMinimumPersons, bool useMaximumPersons, ISchedulingOptions schedulingOptions);
@@ -29,25 +29,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         	_shiftCategoryFairnessShiftValueCalculator = shiftCategoryFairnessShiftValueCalculator;
         }
 
-        private class shiftValue
-        {
-            public double Value { get; set; }
-            public IShiftProjectionCache ShiftProjection { get; set; }
-        }
+        
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "8"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public double BestShiftValue(DateOnly dateOnly, IList<IShiftProjectionCache> filteredListOfShifts, IDictionary<IActivity,
+        public ShiftProjectionShiftValue BestShiftValue(DateOnly dateOnly, IList<IShiftProjectionCache> filteredListOfShifts, IDictionary<IActivity,
             IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders, IFairnessValueResult totalFairness,IFairnessValueResult agentFairness,
 			int maxFairnessOnShiftCategories, TimeSpan averageWorkTime, bool useShiftCategoryFairness, IShiftCategoryFairnessFactors shiftCategoryFairnessFactors,
             double lengthFactor, bool useMinimumPersons, bool useMaximumPersons, ISchedulingOptions schedulingOptions)
         {
-            IList<shiftValue> allValues = new List<shiftValue>(filteredListOfShifts.Count);
+            IList<ShiftProjectionShiftValue> allValues = new List<ShiftProjectionShiftValue>(filteredListOfShifts.Count);
             double minValue = double.MaxValue;
             double maxValue = double.MinValue;
+		    ShiftProjectionShiftValue finalShiftProjectionShift = new ShiftProjectionShiftValue();
             foreach (IShiftProjectionCache shiftProjection in filteredListOfShifts)
             {
                 double thisValue = _calculator.CalculateShiftValue(shiftProjection.MainShiftProjection, dataHolders,lengthFactor, useMinimumPersons, useMaximumPersons);
-                var shiftValue = new shiftValue { ShiftProjection = shiftProjection, Value = thisValue };
+                var shiftValue = new ShiftProjectionShiftValue { ShiftProjection = shiftProjection, Value = thisValue };
                 allValues.Add(shiftValue);
                 if (thisValue > maxValue)
                     maxValue = thisValue;
@@ -58,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             double highestShiftValue = double.MinValue;
             IList<IShiftProjectionCache> foundShifts = new List<IShiftProjectionCache>();
 
-            foreach (shiftValue thisShiftValue in allValues)
+            foreach (ShiftProjectionShiftValue thisShiftValue in allValues)
             {
                 IShiftProjectionCache shiftProjection = thisShiftValue.ShiftProjection;
             	double shiftValue;
@@ -82,19 +79,35 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 {
                     foundShifts = new List<IShiftProjectionCache> { shiftProjection };
                     highestShiftValue = shiftValue;
+                    if(schedulingOptions != null && schedulingOptions.UseCommonActivity)
+                    {
+                        foreach(var proj in  shiftProjection.TheMainShift.LayerCollection  )
+                        {
+                            if (proj.Payload.Id == schedulingOptions.CommonActivity.Id)
+                            {
+                                finalShiftProjectionShift.ActivityPeriod  = proj.Period;
+                            }
+
+                        }
+                    }
                 }
 
             }
-
-
             if (highestShiftValue == double.MinValue)
-                return double.MinValue;
-
+                return new ShiftProjectionShiftValue {  Value = double.MinValue }; 
             if (foundShifts.Count == 0)
-                return double.MinValue;
-
-            return highestShiftValue;
+                return new ShiftProjectionShiftValue {  Value =  double.MinValue};
+            finalShiftProjectionShift.Value = highestShiftValue;
+            return  finalShiftProjectionShift; 
         }
+        
+        
+    }
 
+    public class ShiftProjectionShiftValue
+    {
+        public double Value { get; set; }
+        public IShiftProjectionCache ShiftProjection { get; set; }
+        public DateTimePeriod ActivityPeriod { get; set; }
     }
 }

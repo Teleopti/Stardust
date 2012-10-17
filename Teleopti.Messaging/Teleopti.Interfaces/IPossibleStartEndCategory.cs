@@ -19,6 +19,10 @@ namespace Teleopti.Interfaces
         /// <summary>
         /// 
         /// </summary>
+        DateTimePeriod ActivityPeriod { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         IShiftCategory ShiftCategory { get; set; }
         /// <summary>
         /// 

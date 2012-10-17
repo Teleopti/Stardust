@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public TimeSpan StartTime { get; set; }
 		public TimeSpan EndTime { get; set; }
         public IShiftCategory ShiftCategory { get; set; }
+        public DateTimePeriod  ActivityPeriod { get; set; }
         // holds the best value of this combination
         public double ShiftValue { get; set; }
 

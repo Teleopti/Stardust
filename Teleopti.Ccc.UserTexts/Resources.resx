@@ -11147,4 +11147,8 @@ These options are activated:
     <value> - value before = </value>
     <comment>Information displayed on the status bar in scheduler during fairness optimization</comment>
   </data>
+  <data name="SameActivity" xml:space="preserve">
+    <value>Same Activity</value>
+    <comment>The same activity option in Team scheduling and optimization</comment>
+  </data>
 </root>
