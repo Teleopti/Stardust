@@ -3,6 +3,7 @@
 /// <reference path="~/Content/Scripts/jquery-1.6.4-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/date.js" />
+/// <reference path="~/Content/Scripts/knockout-2.1.0.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
@@ -17,8 +18,12 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var timeIndicatorDateTime;
-
 	var addTextRequestTooltip = null;
+	var scheduleHeight = 668;
+	var timeLineOffset = 198;
+	var pixelToDisplayAll = 33;
+	var pixelToDisplayTitle = 16;
+
 
 	function _initTooltip() {
 		var addTextRequest = $('.show-request');
@@ -74,7 +79,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
 			})
 			.removeAttr('disabled');
-			;
+		;
 	}
 
 	function _initTimeIndicator() {
@@ -86,6 +91,119 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 		}, 1000);
 	}
+
+	var WeekScheduleViewModel = function (data, userTexts) {
+		var self = this;
+
+		self.userTexts = userTexts;
+		self.textPermission = ko.observable(data.RequestPermission.TextRequestPermission);
+		self.periodSelection = ko.observable(JSON.stringify(data.PeriodSelection));
+		self.asmPermission = ko.observable(data.AsmPermission);
+		self.isCurrentWeek = ko.observable(data.IsCurrentWeek);
+		self.styles = ko.computed(function () {
+			var ret = '';
+			$.each(data.Styles, function (key, value) {
+				ret += "li.third.{0} {background-color: rgb({1});} ".format(value.Name, value.RgbColor);
+			});
+			return ret;
+		});
+		self.timeLines = ko.utils.arrayMap(data.TimeLine, function (item) {
+			return new TimelineViewModel(item);
+		});
+		self.days = ko.utils.arrayMap(data.Days, function (item) {
+			return new DayViewModel(item, self);
+		});
+	};
+	var DayViewModel = function (day, parent) {
+		var self = this;
+		self.fixedDate = ko.observable(day.FixedDate);
+		self.date = ko.observable(day.Date);
+		self.state = ko.observable(day.State);
+		self.headerTitle = ko.observable(day.Header.Title);
+		self.headerDayDescription = ko.observable(day.Header.DayDescription);
+		self.headerDayNumber = ko.observable(day.Header.DayNumber);
+		self.textRequestPermission = ko.observable(parent.textPermission);
+		self.summaryStyleClassName = ko.observable(day.Summary.StyleClassName);
+		self.summaryTitle = ko.observable(day.Summary.Title);
+		self.summaryTimeSpan = ko.observable(day.Summary.TimeSpan);
+		self.summary = ko.observable(day.Summary.Summary);
+		self.noteMessage = ko.observable(day.Note.Message);
+		self.textRequestCount = ko.observable(day.TextRequestCount);
+		self.hasTextRequest = ko.computed(function () {
+			return self.textRequestCount > 0;
+		});
+		self.hasNote = ko.observable(day.HasNote);
+		self.textRequestText = ko.computed(function () {
+			return parent.userTexts.xRequests.format(self.textRequestCount);
+		});
+
+		self.classForDaySummary = ko.computed(function () {
+			var showRequestClass = self.textRequestPermission ? 'show-request ' : '';
+			return showRequestClass + self.summaryStyleClassName;
+		});
+		self.layers = ko.utils.arrayMap(day.Periods, function (item) {
+			return new LayerViewModel(item, parent);
+		});
+	};
+	var LayerViewModel = function (layer, parent) {
+		var self = this;
+
+		self.title = ko.observable(layer.Title);
+		self.hasMeeting = ko.computed(function () {
+			return layer.Meeting != null;
+		});
+		self.meetingTitle = ko.computed(function () {
+			if (self.hasMeeting()) {
+				return layer.Meeting.Title;
+			}
+			return null;
+		});
+		self.meetingLocation = ko.computed(function() {
+			if(self.hasMeeting()) {
+				return layer.Meeting.Location;	
+			}
+			return null;
+		});
+		self.timeSpan = ko.observable(layer.TimeSpan);
+		self.color = ko.observable(layer.Color);
+		self.tooltipText = ko.computed(function () {
+			if (self.hasMeeting) {
+				return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>'
+					.format(self.timeSpan, parent.userTexts.subjectColon, self.meetingTitle, parent.userTexts.locationColon, self.meetingLocation);
+			} else {
+				return self.timespan;
+			}
+		});
+		self.startPositionPercentage = ko.observable(layer.StartPositionPercentage);
+		self.endPositionPercentage = ko.observable(layer.EndPositionPercentage);
+		self.top = ko.computed(function () {
+			return Math.round(scheduleHeight * self.startPositionPercentage);
+		});
+		self.height = ko.computed(function () {
+			var bottom = Math.round(scheduleHeight * self.endPositionPercentage);
+			return (bottom - self.top);
+		});
+		self.heightDouble = ko.computed(function () {
+			return scheduleHeight * (self.endPositionPercentage - self.startPositionPercentage);
+		});
+		self.showTitle = ko.computed(function () {
+			return self.heightDouble > pixelToDisplayTitle;
+		});
+		self.showDetail = ko.computed(function () {
+			return self.heightDouble > pixelToDisplayAll;
+		});
+	};
+
+
+	var TimelineViewModel = function (timeline) {
+		var self = this;
+
+		self.positionPercentage = timeline.PositionPercentage;
+		self.time = timeline.Time;
+		self.topPosition = ko.computed(function () {
+			return Math.round(scheduleHeight * self.positionPercentage) + timeLineOffset + 'px';
+		});
+	};
 
 	function _setTimeIndicator(theDate) {
 		if ($('.week-schedule-ASM-permission-granted').val() == 'yes' | $('.week-schedule-current-week').val() == 'yes')
@@ -152,57 +270,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				data: {
 					date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
 				},
+
 				success: function (data) {
-					var vm = data;
-					vm.scheduleHeight = 668;
-					vm.timelineOffset = 198;
-					vm.pixelToDisplayAll = 33;
-					vm.pixelToDisplayTitle = 16;
-					vm.mathRound = function (value) {
-						return Math.round(value);
-					};
-
-					vm.textRequestCount = function (count) {
-						return userTexts.xRequests.format(count);
-					};
-
-					vm.topPixel = function (period) {
-						return vm.mathRound(vm.scheduleHeight * period.StartPositionPercentage);
-					};
-
-					vm.bottomPixel = function (period) {
-						return vm.mathRound(vm.scheduleHeight * period.EndPositionPercentage) - 1;
-					};
-
-					vm.heightPixel = function (period) {
-						return vm.bottomPixel(period) - vm.topPixel(period);
-					};
-
-					vm.heightDouble = function (period) {
-						return vm.scheduleHeight * (period.EndPositionPercentage - period.StartPositionPercentage);
-					};
-
-					vm.tooltipText = function (period) {
-						if (period.Meeting) {
-							return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>'.format(period.TimeSpan, userTexts.subjectColon, period.Meeting.Title, userTexts.locationColon, period.Meeting.Location);
-						} else {
-							return period.TimeSpan;
-						}
-					};
-
-					vm.createClassForDaySummary = function (styleClass) {
-						var styleClassName = (styleClass) ? styleClass + ' ' : '';
-						var showRequestClass = (vm.RequestPermission.TextRequestPermission) ? 'show-request' : '';
-						return styleClassName + showRequestClass;
-					};
-
-					vm.createStyleList = function () {
-						var ret = '';
-						$.each(data.Styles, function (key, value) {
-							ret += "li.third.{0} {background-color: rgb({1});} ".format(value.Name, value.RgbColor);
-						});
-						return ret;
-					};
+					var vm = new WeekScheduleViewModel(data, userTexts);
 
 					ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
 
