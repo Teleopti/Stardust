@@ -35,3 +35,14 @@ begin
 	TRUNCATE TABLE readModel.ScheduleProjectionReadOnly
 	INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES (@bugId,@systemVersion)
 end
+
+----------------  
+--Name: Anders F
+--Date: 2012-10-17
+--Desc: #21067 Error on save after copy/paste of restrictions (nhib do insert of duplicate first and then delete...)
+----------------  
+IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PreferenceDay]') AND name = N'uq_preference_day_per_agent')
+BEGIN
+EXECUTE('DROP INDEX [uq_preference_day_per_agent] ON [dbo].[PreferenceDay] WITH ( ONLINE = OFF )')
+END
+GO
