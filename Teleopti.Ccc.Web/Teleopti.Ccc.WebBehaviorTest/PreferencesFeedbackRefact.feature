@@ -1,4 +1,8 @@
-﻿
+﻿Feature: Preferences feedback - Scenario refact
+	In order to know at which times I might work
+	As an agent
+	I want feedback for my preferences
+	
 Background: 
 	Given I have a role named 'Agent'
     And I have a workflow control set with
@@ -44,7 +48,7 @@ Background:
 	| Name                      | 8 hours a day |
 	| Average work time per day | 8:00          |
 
-Scenario: Feedback for a day without restrictions NEW
+Scenario: Feedback for a day without restrictions
 	Given I have a person period with 
 	| Field        | Value      |
 	| Start date   | 2012-10-01 |
@@ -57,7 +61,7 @@ Scenario: Feedback for a day without restrictions NEW
 	| End time boundry      | 16:00-17:00 |
 	| Contract time boundry | 7:00-9:00   |
 
-Scenario: Feedback for a day with day off preference NEW
+Scenario: Feedback for a day with day off preference
 	Given I have a person period with 
 	| Field        | Value      |
 	| Start date   | 2012-10-01 |
@@ -69,7 +73,7 @@ Scenario: Feedback for a day with day off preference NEW
 	When I view preferences for date '2012-10-13'
 	Then I should see no preference feedback on '2012-10-13'
 
-Scenario: Feedback for a day with absence preference NEW
+Scenario: Feedback for a day with absence preference
 	Given I have a person period with 
 	| Field             | Value         |
 	| Start date        | 2012-10-01    |
