@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private INotificationSenderFactory _notificationSenderFactory;
 		private IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
+		private IScenario scenario;
 
 		[SetUp]
 		public void Setup()
@@ -48,23 +49,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			_target = new ScheduleDayReadModelHandler(_unitOfWorkFactory, _scenarioRepository, _personRepository, _significantChangeChecker, 
 				_smsLinkChecker, _notificationSenderFactory,_scheduleDayReadModelsCreator, _scheduleDayReadModelRepository);
 
-			DefinedLicenseDataFactory.LicenseActivator = new LicenseActivator("", DateTime.Now.AddDays(100), 1000, 1000,
+			DefinedLicenseDataFactory.LicenseActivator = new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
 			                                                                  LicenseType.Agent, new Percent(.10), null, null);
-			
+
+			scenario = ScenarioFactory.CreateScenarioAggregate();
+			scenario.SetId(Guid.NewGuid());
 		}
 
 		[Test]
 		public void ShouldSkipOutIfNotDefaultScenario()
 		{
 			DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
-			var scenario = ScenarioFactory.CreateScenarioAggregate();
-			scenario.SetId(Guid.NewGuid());
+			
 			scenario.DefaultScenario = false;
 
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
 
-			var period = new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddDays(2));
+			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(2));
 			var uow = _mocks.StrictMock<IUnitOfWork>();
 
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
@@ -86,14 +88,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[Test]
 		public void ShouldSkipOutIfNoLicense()
 		{
-			var scenario = ScenarioFactory.CreateScenarioAggregate();
-			scenario.SetId(Guid.NewGuid());
 			scenario.DefaultScenario = true;
 
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
-			var period = new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddDays(2));
-			var dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
+			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(2));
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
 			var uow = _mocks.StrictMock<IUnitOfWork>();
 			var models = new List<ScheduleDayReadModel>();
 
@@ -120,15 +120,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		public void ShouldCheckSignificantChangeAndSendIfTrue()
 		{
 			DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
-			var scenario = ScenarioFactory.CreateScenarioAggregate();
-			scenario.SetId(Guid.NewGuid());
 			scenario.DefaultScenario = true;
 
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
 			var mess = new NotificationMessage {Subject = "ändrats!"};
-			var period = new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date.AddDays(2));
-			var dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
+			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(2));
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
 			var uow = _mocks.StrictMock<IUnitOfWork>();
 			var models = new List<ScheduleDayReadModel>();
 
