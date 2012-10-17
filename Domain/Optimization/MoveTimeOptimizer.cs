@@ -110,9 +110,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService);
 
+
             if (!tryScheduleFirstDay(firstDayDate, schedulingOptions, firstDayEffectiveRestriction, firstDayContractTime))
             {
-            	calculateDate(firstDayDate, originalFirstScheduleDay);
+				calculateDate(firstDayDate, originalFirstScheduleDay);
+				calculateDate(secondDayDate, originalSecondScheduleDay);
                 return true;
             }
 
@@ -148,7 +150,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return true;
             }
 
-            lockDays(firstDayDate, secondDayDate);
+            //lockDays(firstDayDate, secondDayDate);
 
             return true;
         }
@@ -157,8 +159,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			_rollbackService.Rollback();
 			lockDays(firstDayDate, secondDayDate);
-			calculateDate(firstDayDate, originalFirstScheduleDay);
-			calculateDate(secondDayDate, originalSecondScheduleDay);
+			safeCalculateDate(firstDayDate);
+			safeCalculateDate(secondDayDate);
+		}
+
+		private void safeCalculateDate(DateOnly dayDate)
+		{
+			_resourceOptimizationHelper.ResourceCalculateDate(dayDate, true, true);
+			_resourceOptimizationHelper.ResourceCalculateDate(dayDate.AddDays(1), true, true);
 		}
 
 		private void calculateDate(DateOnly dayDate, IScheduleDay originalScheduleDay)
