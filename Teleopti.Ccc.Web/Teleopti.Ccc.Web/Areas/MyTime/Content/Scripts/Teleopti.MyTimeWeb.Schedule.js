@@ -169,7 +169,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.tooltipText = ko.computed(function () {
 			if (self.hasMeeting()) {
 				return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>'
-					.format(self.timeSpan, parent.userTexts.subjectColon, self.meetingTitle, parent.userTexts.locationColon, self.meetingLocation);
+					.format(self.timeSpan(), parent.userTexts.subjectColon, self.meetingTitle(), parent.userTexts.locationColon, self.meetingLocation());
 			} else {
 				return self.timeSpan();
 			}
