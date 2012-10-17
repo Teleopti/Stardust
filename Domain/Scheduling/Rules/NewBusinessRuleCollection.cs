@@ -151,12 +151,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         public static INewBusinessRuleCollection AllForDelete(ISchedulingResultStateHolder schedulingResultStateHolder)
         {
+  
             var ret = All(schedulingResultStateHolder);
+
             foreach (INewBusinessRule rule in ret)
             {
-                rule.ForDelete = true;
+				if (rule is NewOverlappingAssignmentRule)
+					rule.ForDelete = true;
                 rule.HaltModify = false;
             }
+	
             return ret;
         }
 

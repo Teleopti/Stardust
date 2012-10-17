@@ -24,6 +24,13 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="scheduleTagSetter">The schedule tag setter.</param>
         void Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter);
 
+		/// <summary>
+		/// Modifies with specified rules
+		/// </summary>
+		/// <param name="schedulePart"></param>
+		/// <param name="newBusinessRuleCollection"></param>
+    	void Modify(IScheduleDay schedulePart, INewBusinessRuleCollection newBusinessRuleCollection);
+
         /// <summary>
         /// Performs a rollback to the state of when this class was instatiated.
         /// </summary>
