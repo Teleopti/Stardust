@@ -130,7 +130,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.noteMessage = ko.observable(day.Note.Message);
 		self.textRequestCount = ko.observable(day.TextRequestCount);
 		self.hasTextRequest = ko.computed(function () {
-			return self.textRequestCount > 0;
+			return self.textRequestCount() > 0;
 		});
 		self.hasNote = ko.observable(day.HasNote);
 		self.textRequestText = ko.computed(function () {
@@ -138,8 +138,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 
 		self.classForDaySummary = ko.computed(function () {
-			var showRequestClass = self.textRequestPermission ? 'show-request ' : '';
-			return showRequestClass + self.summaryStyleClassName;
+			var showRequestClass = self.textRequestPermission() ? 'show-request ' : '';
+			return showRequestClass + self.summaryStyleClassName();
 		});
 		self.layers = ko.utils.arrayMap(day.Periods, function (item) {
 			return new LayerViewModel(item, parent);
@@ -167,30 +167,30 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.timeSpan = ko.observable(layer.TimeSpan);
 		self.color = ko.observable(layer.Color);
 		self.tooltipText = ko.computed(function () {
-			if (self.hasMeeting) {
+			if (self.hasMeeting()) {
 				return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>'
 					.format(self.timeSpan, parent.userTexts.subjectColon, self.meetingTitle, parent.userTexts.locationColon, self.meetingLocation);
 			} else {
-				return self.timespan;
+				return self.timeSpan();
 			}
 		});
 		self.startPositionPercentage = ko.observable(layer.StartPositionPercentage);
 		self.endPositionPercentage = ko.observable(layer.EndPositionPercentage);
 		self.top = ko.computed(function () {
-			return Math.round(scheduleHeight * self.startPositionPercentage);
+			return Math.round(scheduleHeight * self.startPositionPercentage());
 		});
 		self.height = ko.computed(function () {
-			var bottom = Math.round(scheduleHeight * self.endPositionPercentage);
-			return (bottom - self.top);
+			var bottom = Math.round(scheduleHeight * self.endPositionPercentage());
+			return (bottom - self.top());
 		});
 		self.heightDouble = ko.computed(function () {
-			return scheduleHeight * (self.endPositionPercentage - self.startPositionPercentage);
+			return scheduleHeight * (self.endPositionPercentage() - self.startPositionPercentage());
 		});
 		self.showTitle = ko.computed(function () {
-			return self.heightDouble > pixelToDisplayTitle;
+			return self.heightDouble() > pixelToDisplayTitle;
 		});
 		self.showDetail = ko.computed(function () {
-			return self.heightDouble > pixelToDisplayAll;
+			return self.heightDouble() > pixelToDisplayAll;
 		});
 	};
 
@@ -198,10 +198,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var TimelineViewModel = function (timeline) {
 		var self = this;
 
-		self.positionPercentage = timeline.PositionPercentage;
-		self.time = timeline.Time;
+		self.positionPercentage = ko.observable(timeline.PositionPercentage);
+		self.time = ko.observable(timeline.Time);
 		self.topPosition = ko.computed(function () {
-			return Math.round(scheduleHeight * self.positionPercentage) + timeLineOffset + 'px';
+			return Math.round(scheduleHeight * self.positionPercentage()) + timeLineOffset + 'px';
 		});
 	};
 
