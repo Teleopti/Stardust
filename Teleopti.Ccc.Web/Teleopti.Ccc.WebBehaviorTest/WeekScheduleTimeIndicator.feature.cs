@@ -273,6 +273,79 @@ this.FeatureBackground();
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Do not show the time indicator after passing end of timeline")]
+        public virtual void DoNotShowTheTimeIndicatorAfterPassingEndOfTimeline()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Do not show the time indicator after passing end of timeline", ((string[])(null)));
+#line 71
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 72
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table7.AddRow(new string[] {
+                        "Name",
+                        "Published schedule"});
+            table7.AddRow(new string[] {
+                        "Schedule published to date",
+                        "2040-06-24"});
+#line 73
+ testRunner.And("I have a workflow control set with", ((string)(null)), table7);
+#line hidden
+            TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table8.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+            table8.AddRow(new string[] {
+                        "Type",
+                        "Week"});
+            table8.AddRow(new string[] {
+                        "Length",
+                        "1"});
+#line 77
+ testRunner.And("I have a schedule period with", ((string)(null)), table8);
+#line hidden
+            TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table9.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+#line 82
+ testRunner.And("I have a person period with", ((string)(null)), table9);
+#line hidden
+            TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table10.AddRow(new string[] {
+                        "StartTime",
+                        "2030-03-12 04:00"});
+            table10.AddRow(new string[] {
+                        "EndTime",
+                        "2030-03-12 12:00"});
+#line 85
+ testRunner.And("there is a shift with", ((string)(null)), table10);
+#line 89
+ testRunner.And("Current time is \'2030-03-12 12:00\'");
+#line 90
+ testRunner.And("I view my week schedule for date \'2030-03-12\'");
+#line 91
+ testRunner.And("I should see the time indicator at time \'2030-03-12 12:00\'");
+#line 92
+ testRunner.When("Current browser time has changed to \'2030-03-12 12:01\'");
+#line 93
+ testRunner.Then("I should not see the time indicator");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
