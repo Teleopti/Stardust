@@ -434,14 +434,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
                 foreach (var shift in shiftList)
                 {
-                    foreach (var visualLayer in shift.TheMainShift.ProjectionService().CreateProjection())
+                    IList<DateTimePeriod> visualLayerPeriodList = new List<DateTimePeriod>();
+                    foreach (var visualLayer in   shift.TheMainShift.ProjectionService().CreateProjection().Where(   c => c.Payload.Id == schedulingOptions.CommonActivity.Id))
                     {
-                        if (visualLayer.Payload.Id == schedulingOptions.CommonActivity.Id &&
-                            visualLayer.Period == possibleStartEndCategory.ActivityPeriod)
-                        {
-                            activtyfinalShiftList.Add(shift);
-                        }
+                       visualLayerPeriodList.Add(visualLayer.Period  );
                     }
+                    if (possibleStartEndCategory.ActivityPeriod.All(visualLayerPeriodList.Contains))
+                    {
+                        activtyfinalShiftList.Add(shift);
+                    }
+                    
                 }
             }
             else

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces
@@ -19,7 +20,7 @@ namespace Teleopti.Interfaces
         /// <summary>
         /// 
         /// </summary>
-        DateTimePeriod ActivityPeriod { get; set; }
+        IList<DateTimePeriod> ActivityPeriod { get; set; }
         /// <summary>
         /// 
         /// </summary>
