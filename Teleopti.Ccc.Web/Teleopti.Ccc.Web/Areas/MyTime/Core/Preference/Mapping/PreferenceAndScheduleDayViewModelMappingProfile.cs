@@ -1,6 +1,10 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
@@ -13,11 +17,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	{
 		private readonly IResolve<IProjectionProvider> _projectionProvider;
 		private readonly IResolve<IPreferenceFulfilledChecker> _preferenceFulfilledChecker;
+		private readonly IResolve<IUserTimeZone> _userTimeZone;
 
-		public PreferenceAndScheduleDayViewModelMappingProfile(IResolve<IProjectionProvider> projectionProvider, IResolve<IPreferenceFulfilledChecker> preferenceFulfilledChecker)
+		public PreferenceAndScheduleDayViewModelMappingProfile(IResolve<IProjectionProvider> projectionProvider, IResolve<IPreferenceFulfilledChecker> preferenceFulfilledChecker, IResolve<IUserTimeZone> userTimeZone)
 		{
 			_projectionProvider = projectionProvider;
 			_preferenceFulfilledChecker = preferenceFulfilledChecker;
+			_userTimeZone = userTimeZone;
 		}
 
 		protected override void Configure()
@@ -78,6 +84,47 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						}
 						return null;
 					}))
+				.ForMember(d => d.MeetingAndPersonalShift, o => o.MapFrom(s =>
+					{
+						var sb = new StringBuilder();
+
+						IList<IPersonAssignment> asses = s.PersonAssignmentCollection();
+						IList<IPersonMeeting> meetings = s.PersonMeetingCollection();
+						if (asses.Count > 0 || meetings.Count > 0)
+						{
+							foreach (IPersonAssignment pa in asses)
+							{
+								foreach (PersonalShift ps in pa.PersonalShiftCollection)
+								{
+									sb.AppendFormat(" - {0}: ", UserTexts.Resources.PersonalShift);
+									foreach (ActivityLayer layer in ps.LayerCollection)
+									{
+										sb.AppendLine();
+										sb.Append("    ");
+										sb.Append(layer.Payload.ConfidentialDescription(pa.Person, s.DateOnlyAsPeriod.DateOnly).Name);
+										sb.Append(": ");
+										sb.Append(ToLocalStartEndTimeString(layer.Period, _userTimeZone.Invoke().TimeZone(), CultureInfo.CurrentCulture));
+									}
+								}
+							}
+
+							foreach (IPersonMeeting personMeeting in meetings)
+							{
+								if (sb.Length > 0) sb.AppendLine();
+								sb.AppendFormat(" - {0}: ", UserTexts.Resources.Meeting);
+								sb.AppendLine();
+								sb.Append("    ");
+								sb.Append(personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()));
+								sb.Append(": ");
+								sb.Append(ToLocalStartEndTimeString(personMeeting.Period, _userTimeZone.Invoke().TimeZone(), CultureInfo.CurrentCulture));
+
+								if (personMeeting.Optional)
+									sb.AppendFormat(" ({0})", UserTexts.Resources.Optional);
+							}
+						}
+
+						return sb.ToString();
+					}))
 				;
 
 			CreateMap<IPersonDayOff, DayOffDayViewModel>()
@@ -93,6 +140,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(_projectionProvider.Invoke().Projection(s).ContractTime(), CultureInfo.CurrentUICulture)))
 				.ForMember(d => d.TimeSpan, o => o.MapFrom(s => s.AssignmentHighZOrder().Period.TimePeriod(s.TimeZone).ToShortTimeString()))
 				.ForMember(d => d.ContractTimeMinutes, o => o.MapFrom(s => _projectionProvider.Invoke().Projection(s).ContractTime().TotalMinutes));
+		}
+
+		private static string ToLocalStartEndTimeString(DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo, CultureInfo cultureInfo)
+		{
+			const string separator = " - ";
+			string start = period.StartDateTimeLocal(timeZoneInfo).ToString("t", cultureInfo);
+			string end = period.EndDateTimeLocal(timeZoneInfo).ToString("t", cultureInfo);
+			return string.Concat(start, separator, end);
 		}
 	}
 }

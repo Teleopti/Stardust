@@ -57,6 +57,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => indication.DisplayVisible(), Is.True);
 		}
 
+		[Then(@"I should see that I have a pre-scheduled meeting on '(.*)'")]
+		public void ThenIShouldSeeThatIHaveAPreScheduledMeetingOn(DateTime date)
+		{
+			var indication = Pages.Pages.PreferencePage.MeetingIndicationForDate(date);
+			EventualAssert.That(() => indication.Exists, Is.True);
+			EventualAssert.That(() => indication.DisplayVisible(), Is.True);
+		}
+
+		[Then(@"I should have a tooltip with meeting details")]
+		public void ThenIShouldHaveATooltipWithMeetingDetails()
+		{
+		}
+
+
 		[Then(@"I should not see an extended preference indication on '(.*)'")]
 		public void ThenIShouldNotSeeAnExtendedPreferenceIndicationOn(DateTime date)
 		{

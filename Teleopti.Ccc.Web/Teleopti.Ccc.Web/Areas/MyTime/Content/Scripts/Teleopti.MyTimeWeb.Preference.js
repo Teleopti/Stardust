@@ -182,6 +182,32 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		$('#Preference-body-inner').calendarselectable();
 	}
 
+	function _activateMeetingTooltip() {
+		$('.meeting-small')
+			.each(function() {
+				var content = {
+					text: $(this).next('.meeting-tooltip')
+				};
+				$(this).qtip({
+					content: content,
+					style: {
+						def: false,
+						classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+						tip: true
+					},
+					position: {
+						my: 'bottom left',
+						at: 'top right',
+						target: 'mouse',
+						adjust: {
+							x: 10,
+							y: -13
+						}
+					}
+				});
+			});
+	}
+
 	function _initViewModels(loader) {
 		var date = portal ? portal.CurrentFixedDate() : null;
 
@@ -215,6 +241,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				.done(function () {
 					loadingStarted = true;
 					_activateSelectable();
+					_activateMeetingTooltip();
 					readyForInteraction();
 					loader(function () {
 						periodFeedbackViewModel.LoadFeedback();

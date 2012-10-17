@@ -89,6 +89,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			return CalendarCellForDate(date).Div(Find.ByClass("extended-indication", false));
 		}
+
+		public Div MeetingIndicationForDate(DateTime date)
+		{
+			return CalendarCellForDate(date).Div(Find.ByClass("meeting-small", false));
+		}
 		
 		public Div ExtendedPreferenceForDate(DateTime date)
 		{

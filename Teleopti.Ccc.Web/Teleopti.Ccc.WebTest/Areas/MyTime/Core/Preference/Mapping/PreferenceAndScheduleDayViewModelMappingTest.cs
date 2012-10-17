@@ -1,16 +1,20 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
@@ -27,18 +31,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	{
 		private IProjectionProvider _projectionProvider;
 		private IPreferenceFulfilledChecker _preferenceFulfilledChecker;
-
+		private IUserTimeZone _userTimeZone;
+		private CccTimeZoneInfo _timeZone;
 
 		[SetUp]
 		public void Setup()
 		{
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			_preferenceFulfilledChecker = MockRepository.GenerateMock<IPreferenceFulfilledChecker>();
+			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			_timeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
 			Mapper.Reset();
 			Mapper.Initialize(c =>
 				{
 					c.AddProfile(new PreferenceAndScheduleDayViewModelMappingProfile(
-						Depend.On(_projectionProvider), Depend.On(_preferenceFulfilledChecker)));
+						             Depend.On(_projectionProvider),
+						             Depend.On(_preferenceFulfilledChecker),
+						             Depend.On(_userTimeZone)));
 					c.AddProfile(new PreferenceDayViewModelMappingProfile(
 						Depend.On(MockRepository.GenerateMock<IExtendedPreferencePredicate>()
 						)));
@@ -204,14 +214,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			result.Feedback.Should().Be.True();
 		}
-
-		//[Test]
-		//public void ShouldFlagFeedbackIfInsidePeriodAndNoScheduleDay()
-		//{
-		//    var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(null);
-
-		//    result.Feedback.Should().Be.True();
-		//}
 
 		[Test]
 		public void ShouldNotFlagFeedbackIfScheduled()

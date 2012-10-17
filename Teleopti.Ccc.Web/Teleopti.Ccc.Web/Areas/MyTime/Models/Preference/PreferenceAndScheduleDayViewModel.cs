@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public bool Feedback { get; set; }
 		public string StyleClassName { get; set; }
 		public string BorderColor { get; set; }
+		public string MeetingAndPersonalShift { get; set; }
 	}
 }
