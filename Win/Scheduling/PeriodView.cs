@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             grid.Name = "PeriodView";
         }
 
+		
+
         protected override int CellWidth()
         {
             return 30;
