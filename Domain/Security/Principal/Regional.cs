@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 								uiCultureLCID);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "LCID")]
 		public Regional(ICccTimeZoneInfo defaultTimeZone, int cultureLCID, int uiCultureLCID)
 		{
 			TimeZone = defaultTimeZone;
@@ -44,7 +45,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			UICultureLCID = uiCultureLCID;
 		}
 
-        public Regional(ICccTimeZoneInfo defaultTimeZone, CultureInfo culture, CultureInfo uiCulture)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public Regional(ICccTimeZoneInfo defaultTimeZone, CultureInfo culture, CultureInfo uiCulture)
         {
             TimeZone = defaultTimeZone;
 			CultureLCID = culture.LCID;
