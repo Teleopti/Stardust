@@ -103,10 +103,67 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Field",
                         "Value"});
             table3.AddRow(new string[] {
-                        "Start date",
-                        "2012-10-01"});
+                        "Name",
+                        "Normal"});
+            table3.AddRow(new string[] {
+                        "Activity",
+                        "Phone"});
+            table3.AddRow(new string[] {
+                        "Shift category",
+                        "Day"});
+            table3.AddRow(new string[] {
+                        "Start boundry",
+                        "8:00-9:00"});
+            table3.AddRow(new string[] {
+                        "End boundry",
+                        "17:00-18:00"});
 #line 17
- testRunner.And("I have a person period with", ((string)(null)), table3);
+ testRunner.And("there is a rule set with", ((string)(null)), table3);
+#line hidden
+            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table4.AddRow(new string[] {
+                        "Name",
+                        "Without allowMeeting"});
+            table4.AddRow(new string[] {
+                        "Activity",
+                        "Phone without allowMeeting"});
+            table4.AddRow(new string[] {
+                        "Shift category",
+                        "Day"});
+            table4.AddRow(new string[] {
+                        "Start boundry",
+                        "8:00-9:00"});
+            table4.AddRow(new string[] {
+                        "End boundry",
+                        "17:00-18:00"});
+#line 24
+ testRunner.And("there is a rule set with", ((string)(null)), table4);
+#line hidden
+            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table5.AddRow(new string[] {
+                        "Name",
+                        "Normal bag"});
+            table5.AddRow(new string[] {
+                        "Sets",
+                        "Normal"});
+#line 31
+ testRunner.And("there is a rule set bag with", ((string)(null)), table5);
+#line hidden
+            TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table6.AddRow(new string[] {
+                        "Name",
+                        "Without allowMeeting bag"});
+            table6.AddRow(new string[] {
+                        "Sets",
+                        "Without allowMeeting"});
+#line 35
+ testRunner.And("there is a rule set bag with", ((string)(null)), table6);
 #line hidden
         }
         
@@ -115,34 +172,107 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void SeeIndicationOfAPre_ScheduledMeeting()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See indication of a pre-scheduled meeting", ((string[])(null)));
-#line 22
+#line 40
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line hidden
-            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table4.AddRow(new string[] {
+            table7.AddRow(new string[] {
+                        "Start date",
+                        "2012-10-01"});
+            table7.AddRow(new string[] {
+                        "Rule set bag",
+                        "Normal bag"});
+#line 41
+ testRunner.Given("I have a person period with", ((string)(null)), table7);
+#line hidden
+            TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table8.AddRow(new string[] {
                         "StartTime",
                         "2012-10-19 9:00"});
-            table4.AddRow(new string[] {
+            table8.AddRow(new string[] {
                         "EndTime",
                         "2012-10-19 10:00"});
-            table4.AddRow(new string[] {
+            table8.AddRow(new string[] {
                         "Subject",
                         "Meeting subject"});
-            table4.AddRow(new string[] {
+            table8.AddRow(new string[] {
                         "Location",
                         "Meeting location"});
-#line 23
- testRunner.Given("I have a pre-scheduled meeting with", ((string)(null)), table4);
-#line 29
+#line 45
+ testRunner.And("I have a pre-scheduled meeting with", ((string)(null)), table8);
+#line 51
  testRunner.When("I view preferences for date \'2012-10-19\'");
-#line 30
+#line 52
  testRunner.Then("I should see that I have a pre-scheduled meeting on \'2012-10-19\'");
-#line 31
- testRunner.And("I should have a tooltip with meeting details");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Tooltip of a pre-scheduled meeting")]
+        public virtual void TooltipOfAPre_ScheduledMeeting()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Tooltip of a pre-scheduled meeting", ((string[])(null)));
+#line 54
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line hidden
+            TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table9.AddRow(new string[] {
+                        "Start date",
+                        "2012-10-01"});
+            table9.AddRow(new string[] {
+                        "Rule set bag",
+                        "Normal bag"});
+#line 55
+ testRunner.Given("I have a person period with", ((string)(null)), table9);
+#line hidden
+            TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table10.AddRow(new string[] {
+                        "StartTime",
+                        "2012-10-19 9:00"});
+            table10.AddRow(new string[] {
+                        "EndTime",
+                        "2012-10-19 10:00"});
+            table10.AddRow(new string[] {
+                        "Subject",
+                        "Meeting subject"});
+            table10.AddRow(new string[] {
+                        "Location",
+                        "Meeting location"});
+#line 59
+ testRunner.And("I have a pre-scheduled meeting with", ((string)(null)), table10);
+#line 65
+ testRunner.When("I view preferences for date \'2012-10-19\'");
+#line hidden
+            TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table11.AddRow(new string[] {
+                        "StartTime",
+                        "2012-10-19 9:00"});
+            table11.AddRow(new string[] {
+                        "EndTime",
+                        "2012-10-19 10:00"});
+            table11.AddRow(new string[] {
+                        "Subject",
+                        "Meeting subject"});
+            table11.AddRow(new string[] {
+                        "Location",
+                        "Meeting location"});
+#line 66
+ testRunner.Then("I should have a tooltip for meeting details with", ((string)(null)), table11);
 #line hidden
             this.ScenarioCleanup();
         }
@@ -152,34 +282,107 @@ this.FeatureBackground();
         public virtual void SeeIndicationOfAPre_ScheduledPersonalShift()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See indication of a pre-scheduled personal shift", ((string[])(null)));
-#line 33
+#line 73
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line hidden
-            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table5.AddRow(new string[] {
+            table12.AddRow(new string[] {
+                        "Start date",
+                        "2012-10-01"});
+            table12.AddRow(new string[] {
+                        "Rule set bag",
+                        "Normal bag"});
+#line 74
+ testRunner.Given("I have a person period with", ((string)(null)), table12);
+#line hidden
+            TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table5.AddRow(new string[] {
+            table13.AddRow(new string[] {
+                        "Field",
+                        "Value"});
+            table13.AddRow(new string[] {
                         "StartTime",
                         "2012-10-19 15:00"});
-            table5.AddRow(new string[] {
+            table13.AddRow(new string[] {
                         "EndTime",
                         "2012-10-19 17:00"});
-            table5.AddRow(new string[] {
+            table13.AddRow(new string[] {
                         "Activity",
                         "Administration"});
-#line 34
- testRunner.Given("I have a pre-scheduled personal shift with", ((string)(null)), table5);
-#line 40
+#line 78
+ testRunner.And("I have a pre-scheduled personal shift with", ((string)(null)), table13);
+#line 84
  testRunner.When("I view preferences for date \'2012-10-19\'");
-#line 41
+#line 85
  testRunner.Then("I should see that I have a pre-scheduled personal shift on \'2012-10-19\'");
-#line 42
- testRunner.And("I should have a tooltip with personal shift details");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Tooltip of a pre-scheduled personal shift")]
+        public virtual void TooltipOfAPre_ScheduledPersonalShift()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Tooltip of a pre-scheduled personal shift", ((string[])(null)));
+#line 87
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line hidden
+            TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table14.AddRow(new string[] {
+                        "Start date",
+                        "2012-10-01"});
+            table14.AddRow(new string[] {
+                        "Rule set bag",
+                        "Normal bag"});
+#line 88
+ testRunner.Given("I have a person period with", ((string)(null)), table14);
+#line hidden
+            TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table15.AddRow(new string[] {
+                        "Field",
+                        "Value"});
+            table15.AddRow(new string[] {
+                        "StartTime",
+                        "2012-10-19 15:00"});
+            table15.AddRow(new string[] {
+                        "EndTime",
+                        "2012-10-19 17:00"});
+            table15.AddRow(new string[] {
+                        "Activity",
+                        "Administration"});
+#line 92
+ testRunner.And("I have a pre-scheduled personal shift with", ((string)(null)), table15);
+#line 98
+ testRunner.When("I view preferences for date \'2012-10-19\'");
+#line hidden
+            TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table16.AddRow(new string[] {
+                        "Field",
+                        "Value"});
+            table16.AddRow(new string[] {
+                        "StartTime",
+                        "2012-10-19 15:00"});
+            table16.AddRow(new string[] {
+                        "EndTime",
+                        "2012-10-19 17:00"});
+            table16.AddRow(new string[] {
+                        "Activity",
+                        "Administration"});
+#line 99
+ testRunner.Then("I should have a tooltip for personal shift details with", ((string)(null)), table16);
 #line hidden
             this.ScenarioCleanup();
         }
@@ -189,54 +392,111 @@ this.FeatureBackground();
         public virtual void FeedbackFromPre_ScheduledMeeting()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback from pre-scheduled meeting", ((string[])(null)));
-#line 44
+#line 106
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line hidden
-            TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table6.AddRow(new string[] {
-                        "Date",
-                        "2012-10-19"});
-            table6.AddRow(new string[] {
-                        "EndTime minimum",
-                        "2012-10-19 16:00"});
-#line 45
- testRunner.Given("I have a preference with", ((string)(null)), table6);
+            table17.AddRow(new string[] {
+                        "Start date",
+                        "2012-10-01"});
+            table17.AddRow(new string[] {
+                        "Rule set bag",
+                        "Normal bag"});
+#line 107
+ testRunner.Given("I have a person period with", ((string)(null)), table17);
 #line hidden
-            TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table7.AddRow(new string[] {
+            table18.AddRow(new string[] {
                         "StartTime",
-                        "2012-10-19 15:00"});
-            table7.AddRow(new string[] {
-                        "EndTime",
                         "2012-10-19 17:00"});
-            table7.AddRow(new string[] {
+            table18.AddRow(new string[] {
+                        "EndTime",
+                        "2012-10-19 18:00"});
+            table18.AddRow(new string[] {
                         "Subject",
                         "Meeting subject"});
-            table7.AddRow(new string[] {
+            table18.AddRow(new string[] {
                         "Location",
                         "Meeting location"});
-#line 49
- testRunner.And("I have a pre-scheduled meeting with", ((string)(null)), table7);
-#line 55
+#line 111
+ testRunner.And("I have a pre-scheduled meeting with", ((string)(null)), table18);
+#line 117
  testRunner.When("I view preferences for date \'2012-10-19\'");
 #line hidden
-            TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table8.AddRow(new string[] {
+            table19.AddRow(new string[] {
                         "Date",
                         "2012-10-19"});
-            table8.AddRow(new string[] {
-                        "Endtime minimum",
-                        "17:00"});
-#line 56
- testRunner.Then("I should see preference feedback with", ((string)(null)), table8);
+            table19.AddRow(new string[] {
+                        "EndTime boundry",
+                        "18:00-18:00"});
+#line 118
+ testRunner.Then("I should see preference feedback with", ((string)(null)), table19);
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Feedback from pre-scheduled meeting when no shift available")]
+        public virtual void FeedbackFromPre_ScheduledMeetingWhenNoShiftAvailable()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback from pre-scheduled meeting when no shift available", ((string[])(null)));
+#line 123
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line hidden
+            TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table20.AddRow(new string[] {
+                        "Start date",
+                        "2012-10-01"});
+            table20.AddRow(new string[] {
+                        "Rule set bag",
+                        "Normal bag"});
+#line 124
+ testRunner.Given("I have a person period with", ((string)(null)), table20);
+#line hidden
+            TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table21.AddRow(new string[] {
+                        "StartTime",
+                        "2012-10-19 18:00"});
+            table21.AddRow(new string[] {
+                        "EndTime",
+                        "2012-10-19 19:00"});
+            table21.AddRow(new string[] {
+                        "Subject",
+                        "Meeting subject"});
+            table21.AddRow(new string[] {
+                        "Location",
+                        "Meeting location"});
+#line 128
+ testRunner.And("I have a pre-scheduled meeting with", ((string)(null)), table21);
+#line 134
+ testRunner.When("I view preferences for date \'2012-10-19\'");
+#line hidden
+            TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table22.AddRow(new string[] {
+                        "Date",
+                        "2012-10-19"});
+            table22.AddRow(new string[] {
+                        "Feedback error",
+                        "No available shift"});
+#line 135
+ testRunner.Then("I should see preference feedback with", ((string)(null)), table22);
 #line hidden
             this.ScenarioCleanup();
         }
@@ -246,51 +506,108 @@ this.FeatureBackground();
         public virtual void FeedbackFromPre_ScheduledPersonalShift()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback from pre-scheduled personal shift", ((string[])(null)));
-#line 61
+#line 140
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line hidden
-            TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table9.AddRow(new string[] {
-                        "Date",
-                        "2012-10-19"});
-            table9.AddRow(new string[] {
-                        "EndTime minimum",
-                        "2012-10-19 16:00"});
-#line 62
- testRunner.Given("I have a preference with", ((string)(null)), table9);
+            table23.AddRow(new string[] {
+                        "Start date",
+                        "2012-10-01"});
+            table23.AddRow(new string[] {
+                        "Rule set bag",
+                        "Normal bag"});
+#line 141
+ testRunner.Given("I have a person period with", ((string)(null)), table23);
 #line hidden
-            TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table10.AddRow(new string[] {
+            table24.AddRow(new string[] {
                         "StartTime",
-                        "2012-10-19 15:00"});
-            table10.AddRow(new string[] {
-                        "EndTime",
                         "2012-10-19 17:00"});
-            table10.AddRow(new string[] {
+            table24.AddRow(new string[] {
+                        "EndTime",
+                        "2012-10-19 18:00"});
+            table24.AddRow(new string[] {
                         "Activity",
                         "Administration"});
-#line 66
- testRunner.And("I have a pre-scheduled personal shift with", ((string)(null)), table10);
-#line 71
+#line 145
+ testRunner.And("I have a pre-scheduled personal shift with", ((string)(null)), table24);
+#line 150
  testRunner.When("I view preferences for date \'2012-10-19\'");
 #line hidden
-            TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table11.AddRow(new string[] {
+            table25.AddRow(new string[] {
                         "Date",
                         "2012-10-19"});
-            table11.AddRow(new string[] {
-                        "Endtime minimum",
-                        "17:00"});
-#line 72
- testRunner.Then("I should see preference feedback with", ((string)(null)), table11);
+            table25.AddRow(new string[] {
+                        "EndTime boundry",
+                        "18:00-18:00"});
+#line 151
+ testRunner.Then("I should see preference feedback with", ((string)(null)), table25);
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Feedback from pre-scheduled meeting without activity allowMeeting")]
+        public virtual void FeedbackFromPre_ScheduledMeetingWithoutActivityAllowMeeting()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Feedback from pre-scheduled meeting without activity allowMeeting", ((string[])(null)));
+#line 156
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line hidden
+            TechTalk.SpecFlow.Table table26 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table26.AddRow(new string[] {
+                        "Start date",
+                        "2012-10-01"});
+            table26.AddRow(new string[] {
+                        "Rule set bag",
+                        "Without allowMeeting bag"});
+#line 157
+ testRunner.Given("I have a person period with", ((string)(null)), table26);
+#line hidden
+            TechTalk.SpecFlow.Table table27 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table27.AddRow(new string[] {
+                        "StartTime",
+                        "2012-10-19 17:00"});
+            table27.AddRow(new string[] {
+                        "EndTime",
+                        "2012-10-19 18:00"});
+            table27.AddRow(new string[] {
+                        "Subject",
+                        "Meeting subject"});
+            table27.AddRow(new string[] {
+                        "Location",
+                        "Meeting location"});
+#line 161
+ testRunner.And("I have a pre-scheduled meeting with", ((string)(null)), table27);
+#line 167
+ testRunner.When("I view preferences for date \'2012-10-19\'");
+#line hidden
+            TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table28.AddRow(new string[] {
+                        "Date",
+                        "2012-10-19"});
+            table28.AddRow(new string[] {
+                        "Feedback error",
+                        "No available shift"});
+#line 168
+ testRunner.Then("I should see preference feedback with", ((string)(null)), table28);
 #line hidden
             this.ScenarioCleanup();
         }
