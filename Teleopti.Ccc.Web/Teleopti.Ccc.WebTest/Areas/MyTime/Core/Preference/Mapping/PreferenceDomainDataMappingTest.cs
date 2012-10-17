@@ -90,5 +90,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var expected = DateOnly.Today.DateRange(4);
 			result.Days.Select(d => d.Date).Should().Have.SameSequenceAs(expected);
 		}
+
+		[Test]
+		public void ShouldMapMaxMustHave()
+		{
+			const int maxMustHave = 8;
+			var virtualSchedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
+			virtualSchedulePeriod.Stub(x => x.MustHavePreference).Return(maxMustHave);
+			virtualScheduleProvider.Stub(x => x.VirtualSchedulePeriodForDate(DateOnly.Today)).Return(virtualSchedulePeriod);
+
+			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
+
+			result.MaxMustHave.Should().Be.EqualTo(maxMustHave);
+		}
 	}
 }

@@ -122,7 +122,8 @@ namespace Teleopti.Analytics.Portal
             }
         }
 
-        protected string LoginUrl()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Login"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings")]
+		protected string LoginUrl()
         {
             return string.Format("~/Login.aspx{0}", QueryStringWithPrefix);
         }

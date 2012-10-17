@@ -33,12 +33,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				              		                   		Date = d,
 				              		                   	}).ToArray();
 				              		var workflowControlSet = _loggedOnUser.Invoke().CurrentUser().WorkflowControlSet;
+				              		var virtualSchedulePeriod = _virtualSchedulePeriodProvider.Invoke().VirtualSchedulePeriodForDate(s);
+									var maxMustHave = virtualSchedulePeriod == null ? 0 : virtualSchedulePeriod.MustHavePreference;
+				              		
 				              		return new PreferenceDomainData
 				              		       	{
 				              		       		SelectedDate = s,
 				              		       		Period = period,
 				              		       		WorkflowControlSet = workflowControlSet,
 				              		       		Days = days,
+												MaxMustHave = maxMustHave
 				              		       	};
 				              	});
 		}

@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public IEnumerable<WeekDayHeader> WeekDayHeaders { get; set; }
 		public IEnumerable<WeekViewModel> Weeks { get; set; }
 		public PreferencePeriodViewModel PreferencePeriod { get; set; }
+		public int MaxMustHave { get; set; }
 	}
 
 	public class PreferencePeriodViewModel

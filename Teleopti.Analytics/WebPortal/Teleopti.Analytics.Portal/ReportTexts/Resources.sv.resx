@@ -1188,4 +1188,7 @@
   <data name="ResTotals" xml:space="preserve">
     <value>Totalt</value>
   </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>Logga ut</value>
+  </data>
 </root>
