@@ -17,6 +17,7 @@
 		<Configuration>Release</Configuration>
 		<ClientProperties>$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\Properties</ClientProperties>
 		<MyTimeProperties>$(CCNetWorkingDirectory)\AgentPortal\Teleopti.Ccc.AgentPortal\Properties</MyTimeProperties>
+		<SupportToolProperties>$(CCNetWorkingDirectory)\Teleopti.Support.Tool\Properties</SupportToolProperties>
 		<DeployShare>D:\Installation\PreviousBuilds</DeployShare>
 		<DocSrcPath>\\integration\Documentation</DocSrcPath>
 		<MSIShare>D:\Installation\msi</MSIShare>
@@ -538,6 +539,29 @@
 		/>
 
 		<Message Text="Update MyTime. done"/>
+		
+		
+		<Message Text="Setting readWrite on all file $(SupportToolProperties)\AssemblyInfo.cs  ..."/>
+		<Exec Command="attrib -R &quot;$(SupportToolProperties)\AssemblyInfo.cs&quot;"/>
+		<Message Text="Setting readWrite. Done!"/>
+
+		<Message Text="Update Support Tool Version ..."/>
+		<AssemblyInfo CodeLanguage="CS"
+				OutputFile="$(SupportToolProperties)\AssemblyInfo.cs"
+				AssemblyTitle="TELEOPTI CCC Support Tool"
+				AssemblyDescription="TELEOPTI CCC Support Tool"
+				AssemblyConfiguration=""
+				AssemblyCompany="$(Company)"
+				AssemblyProduct="$(ProductName)"
+				AssemblyCopyright="Copyright © Teleopti AB 2009"
+				AssemblyTrademark=""
+				CLSCompliant ="false"
+				ComVisible="false"
+				AssemblyVersion="$(CCCVersion)"
+				AssemblyFileVersion="$(CCCVersion)"
+		/>
+
+		<Message Text="Update Support Tool. done"/>
 	</Target>
 
 
