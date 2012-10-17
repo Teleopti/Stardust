@@ -135,6 +135,20 @@
       <Output TaskParameter="Path" PropertyName="SdkPath" />
     </GetFrameworkSdkPath>
 
+	<GenerateBootstrapper
+	  ApplicationFile="$(SolutionName).application"
+	  ApplicationName="$(ClickOnceAppTitle)"
+	  ApplicationUrl="$(ClickOnceUrl)"
+	  BootstrapperItems="@(MyTimeBootstrapperFile)"
+	  Culture="en"
+	  FallbackCulture="en-US"
+	  ComponentsLocation="HomeSite"
+	  CopyComponents="true"
+	  Validate="false"
+	  SupportUrl="http://www.microsoft.com/downloads/details.aspx?FamilyID=333325FD-AE52-4E35-B531-508D977D32A6"
+	  Path="C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bootstrapper"
+	  OutputPath="." />
+	  
   </Target>
 
   <Target Name="MyTimeDeleteRootFiles">
