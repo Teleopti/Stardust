@@ -425,6 +425,35 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         }
 
+        public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonActivity(IList<IShiftProjectionCache> shiftList, ISchedulingOptions schedulingOptions,
+                                        IPossibleStartEndCategory possibleStartEndCategory, IWorkShiftFinderResult finderResult)
+        {
+            IList<IShiftProjectionCache> activtyfinalShiftList = new List<IShiftProjectionCache>();
+            var cnt = shiftList.Count;
+            if (schedulingOptions.UseCommonActivity)
+            {
+                foreach (var shift in shiftList)
+                {
+                    foreach (var visualLayer in shift.TheMainShift.ProjectionService().CreateProjection())
+                    {
+                        if (visualLayer.Payload.Id == schedulingOptions.CommonActivity.Id &&
+                            visualLayer.Period == possibleStartEndCategory.ActivityPeriod)
+                        {
+                            activtyfinalShiftList.Add(shift);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                activtyfinalShiftList = shiftList;
+            }
+            finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstKeepActivity, cnt, activtyfinalShiftList.Count));
+
+            return activtyfinalShiftList;
+        }
+
+
         public IList<IShiftProjectionCache> FilterOnNotOverWritableActivities(IList<IShiftProjectionCache> shiftList, IScheduleDay part, IWorkShiftFinderResult finderResult)
         {
             if (shiftList == null) throw new ArgumentNullException("shiftList");

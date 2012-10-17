@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
                                                                 
             double highestShiftValue = double.MinValue;
-            IList<IShiftProjectionCache> foundShifts = new List<IShiftProjectionCache>();
+            IShiftProjectionCache foundShift = null;
 
             foreach (ShiftProjectionShiftValue thisShiftValue in allValues)
             {
@@ -77,26 +77,27 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 
                 if (shiftValue > highestShiftValue)
                 {
-                    foundShifts = new List<IShiftProjectionCache> { shiftProjection };
+                    foundShift = shiftProjection;
                     highestShiftValue = shiftValue;
-                    if(schedulingOptions != null && schedulingOptions.UseCommonActivity)
-                    {
-                        foreach(var proj in  shiftProjection.TheMainShift.LayerCollection  )
-                        {
-                            if (proj.Payload.Id == schedulingOptions.CommonActivity.Id)
-                            {
-                                finalShiftProjectionShift.ActivityPeriod  = proj.Period;
-                            }
-
-                        }
-                    }
                 }
 
             }
-            if (highestShiftValue == double.MinValue)
-                return new ShiftProjectionShiftValue {  Value = double.MinValue }; 
-            if (foundShifts.Count == 0)
+           
+		    if (highestShiftValue == double.MinValue)
+                return new ShiftProjectionShiftValue {  Value = double.MinValue };
+            if (foundShift == null)
                 return new ShiftProjectionShiftValue {  Value =  double.MinValue};
+            if (schedulingOptions != null && schedulingOptions.UseCommonActivity)
+            {
+                foreach (var proj in foundShift.TheMainShift.ProjectionService().CreateProjection())
+                {
+                    if (proj.Payload.Id == schedulingOptions.CommonActivity.Id)
+                    {
+                        finalShiftProjectionShift.ActivityPeriod = proj.Period;
+                    }
+
+                }
+            }
             finalShiftProjectionShift.Value = highestShiftValue;
             return  finalShiftProjectionShift; 
         }

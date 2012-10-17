@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 				_shiftList = _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(_shiftList, possibleStartEndCategory, schedulingOptions, FinderResult);
 
-               _shiftList=  FilterCommonActivity(schedulingOptions, possibleStartEndCategory);
+                _shiftList = _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonActivity(_shiftList, schedulingOptions, possibleStartEndCategory, FinderResult);
 
 			    _shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList, schedulingOptions.MainShiftOptimizeActivitySpecification);
 
@@ -244,31 +244,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             return result;
         }
 
-        private IList<IShiftProjectionCache> FilterCommonActivity(ISchedulingOptions schedulingOptions,
-                                          IPossibleStartEndCategory possibleStartEndCategory)
-        {
-            IList<IShiftProjectionCache> activtyfinalShiftList = new List<IShiftProjectionCache>();
-            if (schedulingOptions.UseCommonActivity)
-            {
-                foreach (var shift in _shiftList)
-                {
-                    foreach (var ac in shift.TheMainShift.LayerCollection)
-                    {
-                        if (ac.Payload.Id == schedulingOptions.CommonActivity.Id &&
-                            ac.Period == possibleStartEndCategory.ActivityPeriod)
-                        {
-                            activtyfinalShiftList.Add(shift);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                activtyfinalShiftList = _shiftList;
-            }
-            return activtyfinalShiftList;
-        }
-
+      
         #endregion
     }
 }
