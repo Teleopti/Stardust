@@ -57,7 +57,15 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this[0, 2].Text = "xxLowest ESL";
 			this[0, 3].Text = "xxHeighest intraday STDev";
 			this[0, 4].Text = "xxMost staffed";
-			GridStyleInfo.Default.CellType = "Static";
+			//GridStyleInfo.Default.CellType = "Static";
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		protected override void OnQueryCellInfo(GridQueryCellInfoEventArgs e)
+		{
+			base.OnQueryCellInfo(e);
+			if(e.RowIndex > 0 && e.ColIndex > 0)
+				e.Style.CellType = "Static";
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.Grid.GridStyleInfo.set_Text(System.String)")]
