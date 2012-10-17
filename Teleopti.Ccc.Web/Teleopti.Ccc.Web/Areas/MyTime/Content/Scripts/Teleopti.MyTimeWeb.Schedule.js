@@ -139,7 +139,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.classForDaySummary = ko.computed(function () {
 			var showRequestClass = self.textRequestPermission() ? 'show-request ' : '';
-			return showRequestClass + self.summaryStyleClassName();
+			return 'third category ' + showRequestClass + self.summaryStyleClassName();
 		});
 		self.layers = ko.utils.arrayMap(day.Periods, function (item) {
 			return new LayerViewModel(item, parent);
@@ -177,12 +177,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.startPositionPercentage = ko.observable(layer.StartPositionPercentage);
 		self.endPositionPercentage = ko.observable(layer.EndPositionPercentage);
 		self.top = ko.computed(function () {
-			console.log(Math.round(scheduleHeight * self.startPositionPercentage()));
 			return Math.round(scheduleHeight * self.startPositionPercentage());
 		});
 		self.height = ko.computed(function () {
 			var bottom = Math.round(scheduleHeight * self.endPositionPercentage());
-			console.log(bottom - self.top());
 			return bottom - self.top();
 		});
 		self.topPx = ko.computed(function () {
