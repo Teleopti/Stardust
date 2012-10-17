@@ -40,6 +40,7 @@
       <IconFile Include="$(CCNetWorkingDirectory)\BuildArtifacts\ccc_Menu.ico"/>
 
       <MyTimeClickOnceInstallationFiles Include="$(SolutionName).application"/>
+      <MyTimeClickOnceInstallationFiles Include="setup.exe"/>
       <MyTimeClickOnceInstallationFiles Include="default.htm"/>
 
       <MyTimeManifestFile Include="$(SolutionName).exe.manifest"/>

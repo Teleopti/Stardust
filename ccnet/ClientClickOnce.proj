@@ -34,6 +34,7 @@
     <ItemGroup>
       <ManifestFile Include="$(SolutionName).exe.manifest"/>
       <ClickOnceInstallationFiles Include="$(SolutionName).application"/>
+      <ClickOnceInstallationFiles Include="setup.exe"/>
       <ClickOnceInstallationFiles Include="default.htm"/>
       <ClickOncePageFiles Include="$(CCNetWorkingDirectory)\BuildArtifacts\images\*.*"/>
       <ClickOnceLandingPage Include="$(CCNetWorkingDirectory)\BuildArtifacts\ClickOnceLandingPage.htm"/>
