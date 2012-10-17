@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                     if (schedulingOptions.UseCommonActivity)
                         foreach (var activity in shift.ProjectionService().CreateProjection())
                             if (activity.Payload.Id == schedulingOptions.CommonActivity.Id)
-                                poss.ActivityPeriod.Add(activity.Period);
+                                poss.ActivityPeriods.Add(activity.Period);
 					if (schedulingOptions.UseGroupSchedulingCommonCategory)
 						poss.ShiftCategory = shift.ShiftCategory;
 
@@ -102,10 +102,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 						poss.ShiftCategory = shift.ShiftCategory;
                     if (schedulingOptions.UseCommonActivity)
                     {
-                        poss.ActivityPeriod = new List<DateTimePeriod>();
                         foreach (var activity in shift.ProjectionService().CreateProjection())
                             if (activity.Payload.Id == schedulingOptions.CommonActivity.Id)
-                                poss.ActivityPeriod.Add( activity.Period);
+                                poss.ActivityPeriods.Add( activity.Period);
                     }
 					_possible.Add(poss);
 				}

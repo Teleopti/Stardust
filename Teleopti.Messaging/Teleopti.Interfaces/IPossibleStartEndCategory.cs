@@ -20,7 +20,7 @@ namespace Teleopti.Interfaces
         /// <summary>
         /// 
         /// </summary>
-        IList<DateTimePeriod> ActivityPeriod { get; set; }
+        IList<DateTimePeriod> ActivityPeriods { get; set; }
         /// <summary>
         /// 
         /// </summary>

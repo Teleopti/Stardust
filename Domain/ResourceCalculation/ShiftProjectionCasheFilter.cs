@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     {
                        visualLayerPeriodList.Add(visualLayer.Period  );
                     }
-                    if (possibleStartEndCategory.ActivityPeriod.All(visualLayerPeriodList.Contains))
+                    if (possibleStartEndCategory.ActivityPeriods.All(visualLayerPeriodList.Contains))
                     {
                         activtyfinalShiftList.Add(shift);
                     }

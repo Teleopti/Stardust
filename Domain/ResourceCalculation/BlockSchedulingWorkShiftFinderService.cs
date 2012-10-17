@@ -89,12 +89,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return new ShiftProjectionShiftValue {  Value =  double.MinValue};
             if (schedulingOptions != null && schedulingOptions.UseCommonActivity)
             {
-                finalShiftProjectionShift.ActivityPeriod = new List<DateTimePeriod>();
                 foreach (var proj in foundShift.TheMainShift.ProjectionService().CreateProjection())
                 {
                     if (proj.Payload.Id == schedulingOptions.CommonActivity.Id)
                     {
-                        finalShiftProjectionShift.ActivityPeriod.Add(proj.Period);
+                        finalShiftProjectionShift.ActivityPeriods.Add(proj.Period);
                     }
 
                 }
@@ -110,6 +109,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
         public double Value { get; set; }
         public IShiftProjectionCache ShiftProjection { get; set; }
-        public IList<DateTimePeriod> ActivityPeriod { get; set; }
+        public IList<DateTimePeriod> ActivityPeriods { get; set; }
+
+        public ShiftProjectionShiftValue()
+        {
+            ActivityPeriods = new List<DateTimePeriod>();
+        }
     }
 }

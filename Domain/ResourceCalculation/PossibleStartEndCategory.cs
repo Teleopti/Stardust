@@ -13,10 +13,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public TimeSpan StartTime { get; set; }
 		public TimeSpan EndTime { get; set; }
         public IShiftCategory ShiftCategory { get; set; }
-        public IList<DateTimePeriod>  ActivityPeriod { get; set; }
+        public IList<DateTimePeriod>  ActivityPeriods { get; set; }
         // holds the best value of this combination
         public double ShiftValue { get; set; }
 
+        public PossibleStartEndCategory()
+        {
+            ActivityPeriods = new List<DateTimePeriod>();
+        }
         public bool Equals(IPossibleStartEndCategory other)
         {
             return other != null && GetHashCode().Equals(other.GetHashCode());
