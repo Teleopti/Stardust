@@ -28,6 +28,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         	schedulingOptions.UseGroupSchedulingCommonStart = optimizationPreferences.Extra.UseGroupSchedulingCommonStart;
         	schedulingOptions.UseGroupSchedulingCommonEnd = optimizationPreferences.Extra.UseGroupSchedulingCommonEnd;
         	schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.KeepSameDaysOffInTeam;
+            schedulingOptions.UseCommonActivity = optimizationPreferences.Extra.UseCommonActivity;
+            if(schedulingOptions.UseCommonActivity )
+                schedulingOptions.CommonActivity = optimizationPreferences.Extra.CommonActivity;
             
             schedulingOptions.GroupOnGroupPage = optimizationPreferences.Extra.GroupPageOnTeam;
 
