@@ -1,4 +1,4 @@
-<SmartAssemblyProject ProjectID="{e78547d7-ab4f-45a0-970f-18412df4b4d6}" Version="4.0">
+<SmartAssemblyProject ProjectID="{e78547d7-ab4f-45a0-970f-18412df4b4d6}" Version="2.0">
     <MainAssemblyFileName>..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release\Teleopti.Ccc.Obfuscated.dll</MainAssemblyFileName>
     <Configuration Name="Release">
         <ApplicationName />

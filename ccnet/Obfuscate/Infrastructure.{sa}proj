@@ -1,4 +1,4 @@
-<SmartAssemblyProject ProjectID="{0d4c3ef1-3a9c-4cbc-a414-745e380b7ac3}" Version="4.0">
+<SmartAssemblyProject ProjectID="{0d4c3ef1-3a9c-4cbc-a414-745e380b7ac3}" Version="2.0">
 	<MainAssemblyFileName>.\..\..\Infrastructure\bin\Release\Teleopti.Ccc.Infrastructure.dll</MainAssemblyFileName>
 	<Configuration Name="Release">
 		<ApplicationName />
