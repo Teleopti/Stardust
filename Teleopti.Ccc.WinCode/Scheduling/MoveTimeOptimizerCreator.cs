@@ -89,6 +89,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 var schedulingOptionsCreator = new SchedulingOptionsCreator();
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
+				IDeleteAndResourceCalculateService deleteAndResourceCalculateService = new DeleteAndResourceCalculateService(deleteSchedulePartService, resourceOptimizationHelper);
+
         		IMoveTimeOptimizer optimizer =
         			new MoveTimeOptimizer(
                         periodValueCalculator,
@@ -98,7 +100,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						_scheduleService,
         				_optimizerPreferences,
         				_rollbackService,
-        				deleteSchedulePartService,
+						deleteAndResourceCalculateService,
         				resourceOptimizationHelper,
         				effectiveRestrictionCreator,
                         new ResourceCalculateDaysDecider(),

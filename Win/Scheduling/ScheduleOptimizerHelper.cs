@@ -109,6 +109,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 OptimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
 
             IMoveTimeDecisionMaker decisionMaker = new MoveTimeDecisionMaker2();
+
             var scheduleService = _container.Resolve<IScheduleService>();
 
             IMoveTimeOptimizerCreator creator =
@@ -265,10 +266,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             _scheduledCount = 0;
             fixedStaffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
             DateTime schedulingTime = DateTime.Now;
-
+			IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+			IDeleteAndResourceCalculateService deleteAndResourceCalculateService =
+				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(_stateHolder), resourceOptimizationHelper);
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
                         new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
-                                                            new DeleteSchedulePartService(_stateHolder),
+															deleteAndResourceCalculateService,
                                                             new SchedulePartModifyAndRollbackService(_stateHolder,
                                                                                                      _scheduleDayChangeCallback,
                                                                                                      new ScheduleTagSetter
@@ -1190,10 +1193,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationUserPreferences, originalStateContainer);
 
             var schedulingOptionsSyncronizer = new SchedulingOptionsCreator();
-
+			IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+			IDeleteAndResourceCalculateService deleteAndResourceCalculateService =
+				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(_stateHolder), resourceOptimizationHelper);
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
                 new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
-                                                    new DeleteSchedulePartService(_stateHolder), rollbackService,
+													deleteAndResourceCalculateService, rollbackService,
                                                     scheduleService, WorkShiftFinderResultHolder,
 													resourceCalculateDelayer);
 			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();

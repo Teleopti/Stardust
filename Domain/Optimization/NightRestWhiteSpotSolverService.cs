@@ -9,20 +9,20 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class NightRestWhiteSpotSolverService : INightRestWhiteSpotSolverService
     {
         private readonly INightRestWhiteSpotSolver _solver;
-        private readonly IDeleteSchedulePartService _deleteSchedulePartService;
-        private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
+    	private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+    	private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private readonly IScheduleService _scheduleService;
         private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
     	private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
 
-    	public NightRestWhiteSpotSolverService(INightRestWhiteSpotSolver solver, IDeleteSchedulePartService deleteSchedulePartService, 
+    	public NightRestWhiteSpotSolverService(INightRestWhiteSpotSolver solver, IDeleteAndResourceCalculateService deleteAndResourceCalculateService, 
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
 			IScheduleService scheduleService, IWorkShiftFinderResultHolder workShiftFinderResultHolder,
 			IResourceCalculateDelayer resourceCalculateDelayer)
         {
             _solver = solver;
-            _deleteSchedulePartService = deleteSchedulePartService;
-            _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
+    		_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
+    		_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
             _scheduleService = scheduleService;
             _workShiftFinderResultHolder = workShiftFinderResultHolder;
         	_resourceCalculateDelayer = resourceCalculateDelayer;
@@ -40,9 +40,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             foreach (var dateOnly in solverResult.DaysToDelete)
             {
-                daysToDelete.Add(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart());
+            	IScheduleDay scheduleDay = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
+				daysToDelete.Add(scheduleDay);
             }
-            _deleteSchedulePartService.Delete(daysToDelete, _schedulePartModifyAndRollbackService);
+        	_deleteAndResourceCalculateService.DeleteWithResourceCalculation(daysToDelete,
+        	                                                                 _schedulePartModifyAndRollbackService);
 
             bool success = false;
             IPerson person = matrix.Person;
