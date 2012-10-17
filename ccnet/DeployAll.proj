@@ -82,7 +82,7 @@
 	<Target Name="Obfuscate">
 		<Message Importance="high" Text="Obfuscate ..."/>
 		<Message Importance="high" Text="&quot;$(ObfuscateCmd)&quot; &quot;$(CCNetWorkingDirectory)&quot;"/>
-		<!-- <Exec Command="&quot;$(ObfuscateCmd)&quot; &quot;$(CCNetWorkingDirectory)&quot;"/> -->
+		<Exec Command="&quot;$(ObfuscateCmd)&quot; &quot;$(CCNetWorkingDirectory)&quot;"/>
 		<Message Importance="high" Text="Obfuscate. Done!"/>
 	</Target>
 
