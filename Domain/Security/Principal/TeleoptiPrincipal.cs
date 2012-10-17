@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 				Organisation = new OrganisationMembership();
 				return;
 			}
-			Regional = Principal.Regional.FromPerson(_person);
+			Regional = Principal.Regional.FromPersonWithThreadCultureFallback(_person);
 			Organisation = OrganisationMembership.FromPerson(_person);
 		}
 
