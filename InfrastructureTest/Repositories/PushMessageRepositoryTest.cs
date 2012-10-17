@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
@@ -174,118 +172,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
 			Assert.AreEqual(1, repository.Find(_sender, new PagingDetail { Take = 10 }).Count);
         }
-
-		[Test]
-		public void ShouldGetCorrectCountOfUnreadMessages()
-		{
-			IPerson receiver = PersonFactory.CreatePerson("vsd");
-			IPushMessage message = new PushMessage { Sender = _sender, Title = "title", Message = "message" };
-			IPushMessageDialogue dialogue = new PushMessageDialogue(message, receiver);
-
-			PersistAndRemoveFromUnitOfWork(_sender);
-			PersistAndRemoveFromUnitOfWork(message);
-			PersistAndRemoveFromUnitOfWork(receiver);
-			PersistAndRemoveFromUnitOfWork(dialogue);
-
-			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
-			repository.CountUnread(receiver).Should().Be.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldGetUnreadMessages()
-		{
-			IPerson receiver = PersonFactory.CreatePerson("vsd");
-			IPushMessage message = new PushMessage { Sender = _sender, Title = "title", Message = "message" };
-			IPushMessageDialogue dialogue = new PushMessageDialogue(message, receiver);
-
-			PersistAndRemoveFromUnitOfWork(_sender);
-			PersistAndRemoveFromUnitOfWork(message);
-			PersistAndRemoveFromUnitOfWork(receiver);
-			PersistAndRemoveFromUnitOfWork(dialogue);
-
-			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
-			var unreadMessages = repository.FindUnreadMessages(null, receiver);
-			unreadMessages.First().PushMessage.GetTitle(new NoFormatting()).Should().Be.EqualTo(
-				message.GetTitle(new NoFormatting()));
-		}
-
-		[Test]
-		public void ShouldGetUnreadMessagesInExpectedOrder()
-		{
-			IPerson receiver = PersonFactory.CreatePerson("vsd");
-
-			IPushMessage messageOrderFirst = new PushMessage { Sender = _sender, Title = "title first", Message = "first message" };
-			IPushMessageDialogue dialogueOrderFirst = new PushMessageDialogue(messageOrderFirst, receiver);
-
-			IPushMessage messageOrderLast = new PushMessage { Sender = _sender, Title = "title last", Message = "last message" };
-			IPushMessageDialogue dialogueOrderLast = new PushMessageDialogue(messageOrderLast, receiver);
-
-			PersistAndRemoveFromUnitOfWork(_sender);
-			PersistAndRemoveFromUnitOfWork(receiver);
-			PersistAndRemoveFromUnitOfWork(messageOrderLast);
-			PersistAndRemoveFromUnitOfWork(dialogueOrderLast);
-			PersistAndRemoveFromUnitOfWork(messageOrderFirst);
-			PersistAndRemoveFromUnitOfWork(dialogueOrderFirst);
-
-			SetUpdatedOnForMessageDialogue(dialogueOrderLast, -1);
-
-			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
-			var unreadMessages = repository.FindUnreadMessages(null, receiver);
-			unreadMessages.First().PushMessage.GetTitle(new NoFormatting()).Should().Be.EqualTo(
-				messageOrderFirst.GetTitle(new NoFormatting()));
-			unreadMessages.Last().PushMessage.GetTitle(new NoFormatting()).Should().Be.EqualTo(
-				messageOrderLast.GetTitle(new NoFormatting()));
-		}
-
-
-		[Test]
-		public void ShouldGetUnreadMessagesWithPaging()
-		{
-			IPerson receiver = PersonFactory.CreatePerson("vsd");
-
-			IPushMessage message1 = new PushMessage { Sender = _sender, Title = "title first", Message = "first message" };
-			IPushMessageDialogue dialogue1 = new PushMessageDialogue(message1, receiver);
-
-			IPushMessage message2 = new PushMessage { Sender = _sender, Title = "title last", Message = "last message" };
-			IPushMessageDialogue dialogue2 = new PushMessageDialogue(message2, receiver);
-
-			IPushMessage message3 = new PushMessage { Sender = _sender, Title = "title first", Message = "first message" };
-			IPushMessageDialogue dialogue3 = new PushMessageDialogue(message3, receiver);
-
-			IPushMessage message4 = new PushMessage { Sender = _sender, Title = "title last", Message = "last message" };
-			IPushMessageDialogue dialogue4 = new PushMessageDialogue(message4, receiver);
-
-			var paging = new Paging{Skip = 1, Take = 3};
-
-			PersistAndRemoveFromUnitOfWork(_sender);
-			PersistAndRemoveFromUnitOfWork(receiver);
-			PersistAndRemoveFromUnitOfWork(message1);
-			PersistAndRemoveFromUnitOfWork(dialogue1);
-			SetUpdatedOnForMessageDialogue(dialogue1, -1);
-			PersistAndRemoveFromUnitOfWork(message2);
-			PersistAndRemoveFromUnitOfWork(dialogue2);
-			SetUpdatedOnForMessageDialogue(dialogue2, -2);
-			PersistAndRemoveFromUnitOfWork(message3);
-			PersistAndRemoveFromUnitOfWork(dialogue3);
-			SetUpdatedOnForMessageDialogue(dialogue3, -3);
-			PersistAndRemoveFromUnitOfWork(message4);
-			PersistAndRemoveFromUnitOfWork(dialogue4);
-			SetUpdatedOnForMessageDialogue(dialogue4, -4);
-
-			IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
-			var unreadMessages = repository.FindUnreadMessages(paging, receiver);
-
-			unreadMessages.Should().Have.SameSequenceAs(new[] {dialogue2, dialogue3, dialogue4});
-
-			unreadMessages = repository.FindUnreadMessages(null, receiver);
-
-			unreadMessages.Should().Have.SameSequenceAs(new[] { dialogue1 ,dialogue2, dialogue3, dialogue4 });
-		}
-
-		private void SetUpdatedOnForMessageDialogue(IPushMessageDialogue messageDialogue, int minutes)
-		{
-			Session.CreateSQLQuery("UPDATE dbo.PushMessageDialogue SET UpdatedOn = DATEADD(mi,:Minutes,UpdatedOn) WHERE Id=:Id;").SetGuid(
-				"Id", messageDialogue.Id.GetValueOrDefault()).SetInt32("Minutes", minutes).ExecuteUpdate();
-		}
     }
 }

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 
-		[Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReplyToSimpleMessage()
 		{
 			var pushMessageDialoguePersister = MockRepository.GenerateMock<IPushMessageDialoguePersister>();
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Data.Should().Be.SameInstanceAs(messageViewModel);
 		}
 
-		[Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnMessageCount()
 		{
 			var pushMessageProvider = MockRepository.GenerateMock<IPushMessageProvider>();
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			((MessagesInformationViewModel)result.Data).UnreadMessagesCount.Should().Be.EqualTo(messageInfo.UnreadMessagesCount);
 		}
 
-		[Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnMessageCountAndMessageAskedFor()
 		{
 		    var messageId = Guid.NewGuid();
