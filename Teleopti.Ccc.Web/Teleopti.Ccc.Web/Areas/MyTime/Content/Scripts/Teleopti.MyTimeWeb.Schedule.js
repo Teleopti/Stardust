@@ -158,14 +158,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 			return null;
 		});
-		self.meetingLocation = ko.computed(function() {
-			if(self.hasMeeting()) {
-				return layer.Meeting.Location;	
+		self.meetingLocation = ko.computed(function () {
+			if (self.hasMeeting()) {
+				return layer.Meeting.Location;
 			}
 			return null;
 		});
 		self.timeSpan = ko.observable(layer.TimeSpan);
-		self.color = ko.observable(layer.Color);
+		self.color = ko.observable('rgb(' + layer.Color + ')');
 		self.tooltipText = ko.computed(function () {
 			if (self.hasMeeting()) {
 				return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>'
@@ -177,11 +177,19 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.startPositionPercentage = ko.observable(layer.StartPositionPercentage);
 		self.endPositionPercentage = ko.observable(layer.EndPositionPercentage);
 		self.top = ko.computed(function () {
+			console.log(Math.round(scheduleHeight * self.startPositionPercentage()));
 			return Math.round(scheduleHeight * self.startPositionPercentage());
 		});
 		self.height = ko.computed(function () {
 			var bottom = Math.round(scheduleHeight * self.endPositionPercentage());
-			return (bottom - self.top());
+			console.log(bottom - self.top());
+			return bottom - self.top();
+		});
+		self.topPx = ko.computed(function () {
+			return self.top() + 'px';
+		});
+		self.heightPx = ko.computed(function() {
+			return self.height() + 'px';
 		});
 		self.heightDouble = ko.computed(function () {
 			return scheduleHeight * (self.endPositionPercentage() - self.startPositionPercentage());
