@@ -50,19 +50,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. cinnemon roll!";
 		}
 
-
-		[Then(@"I should see the text request form with the first day of week as default")]
-		public void ThenIShouldSeeTheTextRequestFormWithTheFirstDayOfWeekAsDefault()
-		{
-			if (Browser.Current.Url.Contains("Requests/Index"))
-				ScenarioContext.Current.Pending();
-			
-			var firstDayOfWeek = Pages.Pages.WeekSchedulePage.FirstDate;
-
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value, Is.EqualTo(firstDayOfWeek));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value, Is.EqualTo(firstDayOfWeek));
-		}
-
 		[Then(@"I should see the text request's details form")]
 		public void ThenIShouldSeeTheTextRequestsDetailsForm()
 		{
@@ -212,16 +199,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.Exists, Is.True);
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.ValidationErrorText.InnerHtml, Is.StringContaining(Resources.TheNameIsTooLong));
-		}
-
-
-		[Then(@"I should not see the add text request button")]
-		public void ThenIShouldNotSeeTheAddTextRequestButton()
-		{
-			if (Browser.Current.Url.Contains("Requests/Index"))
-				ScenarioContext.Current.Pending();
-			
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AddRequestButton.Exists, Is.False);
 		}
 
 		[Then(@"I should not see the absence request in the list")]

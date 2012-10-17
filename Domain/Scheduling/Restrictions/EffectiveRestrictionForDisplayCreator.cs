@@ -7,60 +7,37 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
 	public class EffectiveRestrictionForDisplayCreator : IEffectiveRestrictionForDisplayCreator
 	{
+		private readonly IRestrictionCombiner _restrictionCombiner;
+		private readonly IRestrictionRetrievalOperation _retrievalOperation;
+
+		public EffectiveRestrictionForDisplayCreator(IRestrictionCombiner restrictionCombiner, IRestrictionRetrievalOperation retrievalOperation)
+		{
+			_restrictionCombiner = restrictionCombiner;
+			_retrievalOperation = retrievalOperation;
+		}
+
 		public IEffectiveRestriction GetEffectiveRestrictionForDisplay(IScheduleDay scheduleDay, IEffectiveRestrictionOptions effectiveRestrictionOptions)
 		{
 			var startTime = new TimeSpan(0, 0, 0);
 			var endTime = new TimeSpan(23, 59, 59);
 			var endEndTime = new TimeSpan(1, 23, 59, 59);
 
-			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(startTime, endTime), new EndTimeLimitation(startTime, endEndTime), new WorkTimeLimitation(startTime, endTime), null, null, null, new List<IActivityRestriction>());
+			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(startTime, endTime), new EndTimeLimitation(startTime, endEndTime), new WorkTimeLimitation(startTime, endTime), null, null, null, new List<IActivityRestriction>());
 
 			if (scheduleDay != null && effectiveRestrictionOptions != null)
 			{
 				if (effectiveRestrictionOptions.UsePreference)
 				{
-					effectiveRestriction =
-						scheduleDay.RestrictionCollection().OfType<IPreferenceRestriction>().Aggregate(effectiveRestriction,
-						                                                                               (current, preferenceRestriction) =>
-						                                                                               (EffectiveRestriction)
-						                                                                               current.Combine(
-						                                                                               	new EffectiveRestriction(
-						                                                                               		preferenceRestriction.
-						                                                                               			StartTimeLimitation,
-						                                                                               		preferenceRestriction.
-						                                                                               			EndTimeLimitation,
-						                                                                               		preferenceRestriction.
-						                                                                               			WorkTimeLimitation,
-						                                                                               		preferenceRestriction.
-						                                                                               			ShiftCategory,
-						                                                                               		preferenceRestriction.
-						                                                                               			DayOffTemplate,
-						                                                                               		preferenceRestriction.Absence,
-						                                                                               		preferenceRestriction.
-						                                                                               			ActivityRestrictionCollection)));
+					effectiveRestriction = _restrictionCombiner.CombinePreferenceRestrictions(
+						_retrievalOperation.GetPreferenceRestrictions(scheduleDay.RestrictionCollection()),
+						effectiveRestriction, false);
 				}
 
 				if (effectiveRestrictionOptions.UseAvailability)
 				{
-					foreach (var availabilityRestriction in scheduleDay.RestrictionCollection().OfType<IAvailabilityRestriction>())
-					{
-						if (availabilityRestriction.NotAvailable)
-							effectiveRestriction =
-								(EffectiveRestriction)effectiveRestriction.Combine(new EffectiveRestriction(availabilityRestriction.StartTimeLimitation,
-								                                                      availabilityRestriction.EndTimeLimitation,
-								                                                      availabilityRestriction.WorkTimeLimitation, null,
-								                                                      new DayOffTemplate(new Description("Not available", "N/A")),
-								                                                      null, new List<IActivityRestriction>()));
-						else
-						{
-							effectiveRestriction =
-								(EffectiveRestriction)effectiveRestriction.Combine(new EffectiveRestriction(availabilityRestriction.StartTimeLimitation,
-																				  availabilityRestriction.EndTimeLimitation,
-																				  availabilityRestriction.WorkTimeLimitation, null,
-																				  null,
-																				  null, new List<IActivityRestriction>()));
-						}
-					}
+					effectiveRestriction = _restrictionCombiner.CombineAvailabilityRestrictions(
+						_retrievalOperation.GetAvailabilityRestrictions(scheduleDay.RestrictionCollection()),
+						effectiveRestriction);
 				}
 			}
 

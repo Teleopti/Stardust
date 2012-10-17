@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIChooseTheOtherTeamInTheTeamPicker()
 		{
 			var team = UserFactory.User().UserData<AnotherTeam>().TheTeam.Description.Name;
-			Pages.Pages.TeamSchedulePage.TeamPicker.Select(team);
+			Pages.Pages.TeamSchedulePage.TeamPicker.SelectWait(team);
 		}
 
 		[Then(@"I should see the team schedule tab")]
@@ -239,14 +239,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var layer = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User().Person.Name.ToString()).FirstOrDefault();
 
 			layer.GetAttributeValue("tooltip-title").Should().Contain(activityName);
-		}
-
-		[Then(@"I should see a tooltip with the activty start time (.*)")]
-		public void ThenIShouldSeeATooltipWithTheActivtyStartTime(string startTime)
-		{
-			var toolTip = Pages.Pages.TeamSchedulePage.ToolTipContainer();
-
-			toolTip.InnerHtml.Should().Contain(startTime);
 		}
 
 		[Then(@"I should see the team-picker with the other site's team")]

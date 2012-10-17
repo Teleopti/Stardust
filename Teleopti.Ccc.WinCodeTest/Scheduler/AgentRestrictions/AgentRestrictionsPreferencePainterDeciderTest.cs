@@ -33,20 +33,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_absence = _mocks.StrictMock<IAbsence>();
 		}
 
-		[Test]
-		public void ShouldNotPaintWhenNotEnabled()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_preferenceCellData.Enabled).Return(false);
-			}
-
-			using (_mocks.Playback())
-			{
-				Assert.IsFalse(_decider.ShouldPaint(_preferenceCellData));
-			}	
-		}
-
+		
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowExceptionOnNullArgumentShouldPaint()
 		{
@@ -90,7 +77,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_preferenceCellData.Enabled).Return(true);
 				Expect.Call(_preferenceCellData.SchedulingOption).Return(_restrictionSchedulingOptions);
 				Expect.Call(_preferenceCellData.HasFullDayAbsence).Return(true);
 			}
@@ -112,7 +98,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_preferenceCellData.Enabled).Return(true);
 				Expect.Call(_preferenceCellData.HasFullDayAbsence).Return(false);
 				Expect.Call(_preferenceCellData.HasDayOff).Return(false);
 				Expect.Call(_preferenceCellData.HasShift).Return(false);
@@ -398,6 +383,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			{
 				Expect.Call(_preferenceCellData.SchedulingOption).Return(_restrictionSchedulingOptions).Repeat.AtLeastOnce();
 				Expect.Call(_preferenceCellData.HasExtendedPreference).Return(true);
+				Expect.Call(_preferenceCellData.EffectiveRestriction).Return(_effectiveRestriction);
+				Expect.Call(_effectiveRestriction.DayOffTemplate).Return(null);
 			}
 
 			using (_mocks.Playback())
@@ -439,22 +426,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			}
 		}
 
-		[Test]
-		public void ShouldNotPaintPreferredExtendedWhenUseSchedules()
-		{
-			_restrictionSchedulingOptions.UsePreferences = true;
-			_restrictionSchedulingOptions.UseScheduling = true;
+		//[Test]
+		//public void ShouldNotPaintPreferredExtendedWhenUseSchedules()
+		//{
+		//    _restrictionSchedulingOptions.UsePreferences = true;
+		//    _restrictionSchedulingOptions.UseScheduling = true;
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_preferenceCellData.SchedulingOption).Return(_restrictionSchedulingOptions).Repeat.AtLeastOnce();
-				Expect.Call(_preferenceCellData.HasExtendedPreference).Return(true);
-			}
+		//    using (_mocks.Record())
+		//    {
+		//        Expect.Call(_preferenceCellData.SchedulingOption).Return(_restrictionSchedulingOptions).Repeat.AtLeastOnce();
+		//        Expect.Call(_preferenceCellData.HasExtendedPreference).Return(true);
+		//    }
 
-			using (_mocks.Playback())
-			{
-				Assert.IsFalse(_decider.ShouldPaintPreferredExtended(_preferenceCellData));
-			}
-		}
+		//    using (_mocks.Playback())
+		//    {
+		//        Assert.IsFalse(_decider.ShouldPaintPreferredExtended(_preferenceCellData));
+		//    }
+		//}
 	}
 }

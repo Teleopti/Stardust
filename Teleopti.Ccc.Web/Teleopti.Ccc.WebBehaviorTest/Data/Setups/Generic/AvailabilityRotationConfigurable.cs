@@ -2,6 +2,8 @@ using System;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.WebBehaviorTest.Bindings;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -11,8 +13,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public string Name { get; set; }
 		public int Days { get; set; }
-		public TimeSpan? WorkTimeMinimum { get; set; }
-		public TimeSpan? WorkTimeMaximum { get; set; }
+		public string WorkTimeMinimum { get; set; }
+		public string WorkTimeMaximum { get; set; }
 
 		public AvailabilityRotationConfigurable()
 		{
@@ -24,8 +26,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var availabilityRotation = new AvailabilityRotation(Name, Days);
 			var availabilityRestriction = new AvailabilityRestriction();
 
-			if (WorkTimeMinimum.HasValue || WorkTimeMaximum.HasValue)
-				availabilityRestriction.WorkTimeLimitation = new WorkTimeLimitation(WorkTimeMinimum, WorkTimeMaximum);
+			if (WorkTimeMinimum != null || WorkTimeMaximum != null)
+				availabilityRestriction.WorkTimeLimitation = new WorkTimeLimitation(Transform.ToNullableTimeSpan(WorkTimeMinimum), Transform.ToNullableTimeSpan(WorkTimeMaximum));
 
 			availabilityRotation.AvailabilityDays.ForEach(d => d.Restriction = availabilityRestriction);
 

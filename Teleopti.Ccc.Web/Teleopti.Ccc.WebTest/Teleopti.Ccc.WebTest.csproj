@@ -120,6 +120,7 @@
     <Compile Include="Areas\MyTime\Controllers\MessageControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\MessageBrokerControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePeriodFeedbackProviderTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceAndScheduleDayViewModelMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Models\MessageBroker\UserDataFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInputTest.cs" />

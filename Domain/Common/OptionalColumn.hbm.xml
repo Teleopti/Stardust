@@ -26,9 +26,6 @@
      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
      access="nosetter.camelcase-underscore"
      not-null="true" foreign-key="FK_OptionalColumn_BusinessUnit"/>
-
-    <property name="IsDeleted" type="boolean" not-null="true"/>
-    <filter name="deletedFlagFilter" condition="IsDeleted = 0" />
     
     <filter name="businessUnitFilter"
        condition=":businessUnitParameter = BusinessUnit" />

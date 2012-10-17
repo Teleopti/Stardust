@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -22,5 +23,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			return _preferenceDayRepository.Find(date, user).SingleOrDefault();
 		}
 
+		public IEnumerable<IPreferenceDay> GetPreferencesForPeriod(DateOnlyPeriod period)
+		{
+			var user = _loggedOnUser.CurrentUser();
+			return _preferenceDayRepository.Find(period, user);
+		}
 	}
 }

@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 	{
 
 		[Given(@"I have a colleague")]
-		[Given(@"I have another colleague")]
 		public void GivenIHaveAColleague()
 		{
 			UserFactory.User().AddTeamColleague();

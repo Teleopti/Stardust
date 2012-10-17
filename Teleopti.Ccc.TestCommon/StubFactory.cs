@@ -137,7 +137,11 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IPersonAbsence PersonAbsenceStub() { return PersonAbsenceStub(new DateTimePeriod()); }
 
+		public IPersonAbsence PersonAbsenceStub(string name) { return PersonAbsenceStub(new DateTimePeriod(), name); }
+
 		public IPersonAbsence PersonAbsenceStub(DateTimePeriod period) { return PersonAbsenceStub(period, AbsenceLayerStub()); }
+
+		public IPersonAbsence PersonAbsenceStub(DateTimePeriod period, string name) { return PersonAbsenceStub(period, AbsenceLayerStub(name)); }
 
 		public IPersonAbsence PersonAbsenceStub(DateTimePeriod period, IAbsenceLayer absenceLayer)
 		{
@@ -151,6 +155,8 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IAbsenceLayer AbsenceLayerStub() { return AbsenceLayerStub(AbsenceStub()); }
 
+		public IAbsenceLayer AbsenceLayerStub(string name) { return AbsenceLayerStub(AbsenceStub(name)); }
+
 		public IAbsenceLayer AbsenceLayerStub(IAbsence absence)
 		{
 			var absenceLayer = MockRepository.GenerateStub<IAbsenceLayer>();
@@ -160,12 +166,22 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IAbsence AbsenceStub() { return AbsenceStub(Color.Green); }
 
+		public IAbsence AbsenceStub(string name)
+		{
+			return AbsenceStub(Color.Green, name);
+		}
+
 		public IAbsence AbsenceStub(Color color)
 		{
+			return AbsenceStub(color, Guid.NewGuid().ToString());
+		}
+
+		public IAbsence AbsenceStub(Color color, string name)
+		{
 			var absence = MockRepository.GenerateStub<IAbsence>();
-			absence.Description = new Description(Guid.NewGuid().ToString());
+			absence.Description = new Description(name);
 			absence.DisplayColor = color;
-			absence.Stub(x => x.ConfidentialDisplayColor(Arg<IPerson>.Is.Anything,Arg<DateOnly>.Is.Anything)).Return(Color.Gray);
+			absence.Stub(x => x.ConfidentialDisplayColor(Arg<IPerson>.Is.Anything, Arg<DateOnly>.Is.Anything)).Return(Color.Gray);
 			return absence;
 		}
 
@@ -219,14 +235,18 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IPersonDayOff PersonDayOffStub() { return PersonDayOffStub(new DateTimePeriod()); }
 
-		public IPersonDayOff PersonDayOffStub(DateTimePeriod period)
+		public IPersonDayOff PersonDayOffStub(DateTimePeriod period) { return PersonDayOffStub(period, null); }
+
+		public IPersonDayOff PersonDayOffStub(DateTimePeriod period, DayOff? dayOff)
 		{
 			var personDayOff = MockRepository.GenerateStub<IPersonDayOff>();
 			personDayOff.Stub(x => x.Period).Return(period);
+			if (dayOff != null)
+				personDayOff.Stub(x => x.DayOff).Return(dayOff.Value);
 			return personDayOff;
 		}
 
-		public IVisualLayerCollection ProjectionStub() { return ProjectionStub(new IVisualLayer[] {}); }
+		public IVisualLayerCollection ProjectionStub() { return ProjectionStub(new IVisualLayer[] { }); }
 
 		public IVisualLayerCollection ProjectionStub(IEnumerable<IVisualLayer> visualLayerCollection)
 		{

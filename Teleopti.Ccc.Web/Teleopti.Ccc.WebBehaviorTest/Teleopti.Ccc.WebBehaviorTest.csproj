@@ -98,10 +98,15 @@
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
+    <Compile Include="Bindings\Transform.cs" />
+    <Compile Include="Core\Robustness.cs" />
     <Compile Include="Data\Setups\Generic\AvailabilityRotationConfigurable.cs" />
     <Compile Include="Bindings\Generic\AvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\ContractConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\ContractScheduleConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonAvailabilityConfigurable.cs" />
     <Compile Include="Bindings\Generic\AsmMessageStepDefinition.cs" />
     <Compile Include="Data\Setups\Generic\RuleSetBagConfigurable.cs" />
@@ -115,9 +120,21 @@
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\ScheduledShiftConfigurable.cs" />
     <Compile Include="ConfigSanityCheck.cs" />
+    <Compile Include="PreferencesFeedbackRefact.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreferencesFeedbackRefact.feature</DependentUpon>
+    </Compile>
     <Compile Include="AsmMessage.feature.cs">
       <DependentUpon>AsmMessage.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PreferencesFollowUpStepDefinition.cs" />
+    <Compile Include="PreferencesFollowUp.feature.cs">
+      <DependentUpon>PreferencesFollowUp.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -191,7 +208,6 @@
       <DependentUpon>PreferencesExtended.feature</DependentUpon>
     </Compile>
     <Compile Include="AbsenceRequestFromRequestStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Specific\ShiftsForTwoWeeksWithDifferentActivities.cs" />
     <Compile Include="ManageRequestStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\DoNotHavePersonPeriods.cs" />
     <Compile Include="Data\Setups\Specific\DoNotHaveSchedulePeriods.cs" />
@@ -233,7 +249,6 @@
     <Compile Include="Data\Setups\Specific\RuleSetBagWithTwoCategories.cs" />
     <Compile Include="Data\Setups\Specific\ExistingExtendedPreferenceToday.cs" />
     <Compile Include="Data\Setups\Specific\ExistingPreference.cs" />
-    <Compile Include="Data\Setups\Specific\ExistingPreferenceToday.cs" />
     <Compile Include="Data\Setups\Specific\RuleSetBag.cs" />
     <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\BaseShiftCategory.cs" />
@@ -331,7 +346,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Data\Setups\Specific\AgentWithoutRequestsAccess.cs" />
-    <Compile Include="Data\Setups\Specific\AgentWithoutTextRequestsAccess.cs" />
     <Compile Include="Data\Setups\Specific\ExistingTextRequest.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutPreferencesAccess.cs" />
     <Compile Include="Core\Eventual.cs" />
@@ -357,7 +371,6 @@
     <Compile Include="Data\Setups\Specific\DoNotHaveVirtualSchedulePeriods.cs" />
     <Compile Include="Data\Setups\Specific\NoWorkflowControlSet.cs" />
     <Compile Include="Data\Setups\Specific\PreferenceOpenWithAllowedPreferencesWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Specific\ScheduleIsNotPublished.cs" />
     <Compile Include="Data\Setups\Specific\ShiftCategoryPreference.cs" />
     <Compile Include="Data\Setups\Specific\StandardPreference.cs" />
     <Compile Include="Data\Setups\Specific\StudentAvailabilityClosedWorkflowControlSet.cs" />
@@ -370,7 +383,6 @@
     <Compile Include="Data\IUserDataSetup.cs" />
     <Compile Include="Data\IUserSetup.cs" />
     <Compile Include="LicenseStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Specific\NightShiftOnMonday.cs" />
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Pages.cs" />
@@ -397,7 +409,6 @@
     <Compile Include="Core\Extensions\ScenarioContextExtensions.cs" />
     <Compile Include="Bindings\SharedStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\ShiftForDate.cs" />
-    <Compile Include="Data\Setups\Specific\ShiftOnThursday.cs" />
     <Compile Include="Requests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -474,6 +485,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="PreferencesFeedbackRefact.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesFeedbackRefact.feature.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="AbsenceRequestFromRequests.feature">
@@ -489,6 +504,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ApplicationStartRecovery.feature.cs</LastGenOutput>
     </None>
+    <None Include="PreferencesFollowUp.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesFollowUp.feature.cs</LastGenOutput>
+    </None>
     <None Include="PreferencesFeedbackBlacklisting.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackBlacklisting.feature.cs</LastGenOutput>
@@ -497,6 +516,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmMessage.feature.cs</LastGenOutput>
     </None>
+    <None Include="Testing\specflow.exe.config" />
+    <None Include="Testing\TestExecutionReport.bat" />
+    <None Include="Testing\StepDefinitionReport.bat" />
     <None Include="WeekScheduleTimeIndicator.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WeekScheduleTimeIndicator.feature.cs</LastGenOutput>

@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	public class RuleSetBagStepDefinitions
 	{
 		[StepArgumentTransformation]
-		public RuleSetBagConfigurable RuleSetBagConfigurableTransform(Table table)
+		public static RuleSetBagConfigurable RuleSetBagConfigurableTransform(Table table)
 		{
 			return table.CreateInstance<RuleSetBagConfigurable>();
 		}
 
 		[StepArgumentTransformation]
-		public WorkShiftRuleSetConfigurable WorkShiftRuleSetConfigurableTransform(Table table)
+		public static WorkShiftRuleSetConfigurable WorkShiftRuleSetConfigurableTransform(Table table)
 		{
 			return table.CreateInstance<WorkShiftRuleSetConfigurable>();
 		}

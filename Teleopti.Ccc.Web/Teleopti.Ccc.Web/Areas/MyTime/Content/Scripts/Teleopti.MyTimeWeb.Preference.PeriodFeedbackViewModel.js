@@ -21,7 +21,6 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 				self.PossibleResultDaysOff(data.PossibleResultDaysOff);
 				self.TargetContractTimeLower(data.TargetContractTime.Lower);
 				self.TargetContractTimeUpper(data.TargetContractTime.Upper);
-				self.MaxMustHave(data.MaxMustHave);
 			}
 		});
 	};
@@ -39,7 +38,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 			var value = day.PossibleContractTimeMinutesLower();
 			if (value)
 				sum += parseInt(value);
-			sum += day.ContractTimeMinutes;
+			sum += day.ContractTimeMinutes();
 		});
 		return sum;
 	});
@@ -50,7 +49,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 			var value = day.PossibleContractTimeMinutesUpper();
 			if (value)
 				sum += parseInt(value);
-			sum += day.ContractTimeMinutes;
+			sum += day.ContractTimeMinutes();
 		});
 		return sum;
 	});
@@ -62,29 +61,5 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	this.PossibleResultContractTimeUpper = ko.computed(function () {
 		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesUpper());
 	});
-
-
-
-	this.MaxMustHave = ko.observable(0);
-
-	this.CurrentMustHave = ko.computed(function () {
-		var total = 0;
-		$.each(dayViewModels, function (index, day) {
-			var value = day.MustHave();
-			if (value)
-				total += 1;
-		});
-
-		return total;
-	});
-
-	this.MustHaveText = ko.computed(function () {
-		$('#Preference-must-have-numbers').text(self.CurrentMustHave() + "(" + self.MaxMustHave() + ")");
-		if (self.CurrentMustHave() >= self.MaxMustHave()) {
-			$('#Preference-must-have-button').addClass("grey-out");
-		} else {
-			$('#Preference-must-have-button').removeClass("grey-out");
-		}
-		return self.CurrentMustHave() + "(" + self.MaxMustHave() + ")";
-	});
 };
+

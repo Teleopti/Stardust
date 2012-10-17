@@ -72,7 +72,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		$('#Schedule-today-button')
 			.click(function () {
 				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
-			});
+			})
+			.removeAttr('disabled');
+			;
 	}
 
 	function _initTimeIndicator() {

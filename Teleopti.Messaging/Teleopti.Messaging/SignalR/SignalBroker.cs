@@ -224,20 +224,21 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 				if (_wrapper == null) return;
 
 				var subscriptionWithHandlersToRemove = new List<SubscriptionWithHandler>();
-				foreach (var subscriptionHandler in _subscriptionHandlers)
+				var subscriptionValues = new List<IList<SubscriptionWithHandler>>(_subscriptionHandlers.Values);
+				foreach (var subscriptionHandler in subscriptionValues)
 				{
-					if (subscriptionHandler.Value == null)
+					if (subscriptionHandler == null)
 					{
 						continue;
 					}
 
-					foreach (var subscriptionWithHandler in subscriptionHandler.Value)
+					foreach (var subscriptionWithHandler in subscriptionHandler)
 					{
 						var target = subscriptionWithHandler.Handler;
 						if (target == eventMessageHandler)
 						{
 							subscriptionWithHandlersToRemove.Add(subscriptionWithHandler);
-							if (subscriptionHandler.Value.Count == 0 && subscriptionWithHandler.Subscription!=null)
+							if (subscriptionHandler.Count == 0 && subscriptionWithHandler.Subscription!=null)
 							{
 								var route = subscriptionWithHandler.Subscription.Route();
 								_wrapper.RemoveSubscription(route);
@@ -248,7 +249,7 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 
 					foreach (var subscriptionWithHandler in subscriptionWithHandlersToRemove)
 					{
-						subscriptionHandler.Value.Remove(subscriptionWithHandler);
+						subscriptionHandler.Remove(subscriptionWithHandler);
 					}
 				}
 			}

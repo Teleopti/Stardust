@@ -234,19 +234,22 @@ namespace Teleopti.Ccc.Win.Scheduling
             	pointPerShiftCategoryOption = true;
 		    }
 
-            EmploymentType employmentType = person.Period(helper.SelectedDate).PersonContract.Contract.EmploymentType;
-            if (employmentType != EmploymentType.HourlyStaff)
-            {
-                createAndAddItem(listViewFairness, Resources.PreferenceFulfillment, helper.PreferenceFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-                createAndAddItem(listViewFairness, Resources.MustHaveFulfillment, helper.MustHavesFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-                createAndAddItem(listViewFairness, Resources.RotationFulfillment, helper.RotationFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-                createAndAddItem(listViewFairness, Resources.AvailabilityFulfillment, helper.AvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-            }
-            else
-            {
-                createAndAddItem(listViewFairness, Resources.StudentAvailabilityFulfillment, helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-            }
-
+			var period = person.Period(helper.SelectedDate);
+			if (period != null)
+			{
+				var employmentType = period.PersonContract.Contract.EmploymentType;
+				if (employmentType != EmploymentType.HourlyStaff)
+				{
+					createAndAddItem(listViewFairness, Resources.PreferenceFulfillment, helper.PreferenceFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(listViewFairness, Resources.MustHaveFulfillment, helper.MustHavesFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(listViewFairness, Resources.RotationFulfillment, helper.RotationFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(listViewFairness, Resources.AvailabilityFulfillment, helper.AvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+				}
+				else
+				{
+					createAndAddItem(listViewFairness, Resources.StudentAvailabilityFulfillment, helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+				}
+			}
 			if(pointPerShiftCategoryOption)
 			{
 				listViewFairness.Items.Add("");

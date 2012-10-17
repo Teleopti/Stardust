@@ -1,26 +1,14 @@
-﻿using System;
-using System.Drawing;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
-using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
@@ -29,32 +17,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceViewModelMappingTest
 	{
 		private PreferenceDomainData data;
-		private IScheduleColorProvider scheduleColorProvider;
 
 		[SetUp]
 		public void Setup()
 		{
-			scheduleColorProvider = MockRepository.GenerateMock<IScheduleColorProvider>();
-
 			data = new PreferenceDomainData
-			       	{
-			       		SelectedDate = DateOnly.Today,
-			       		Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)),
-			       		Days = new[] {new PreferenceDayDomainData {Date = DateOnly.Today}},
-			       		WorkflowControlSet =
-			       			new WorkflowControlSet(null)
-			       				{
-			       					PreferencePeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)),
-			       					PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today)
-			       				}
-			       	};
+					{
+						SelectedDate = DateOnly.Today,
+						Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)),
+						Days = new[] { new PreferenceDayDomainData { Date = DateOnly.Today } },
+						WorkflowControlSet =
+							new WorkflowControlSet(null)
+								{
+									PreferencePeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)),
+									PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today)
+								},
+						MaxMustHave = 8
+					};
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
 			                  	{
-			                  		c.AddProfile(new PreferenceViewModelMappingProfile(
-			                  		             	Depend.On(scheduleColorProvider)
-													));
+			                  		c.AddProfile(new PreferenceViewModelMappingProfile());
 									c.AddProfile(new CommonViewModelMappingProfile());
 			                  	});
 		}
@@ -219,18 +203,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
-		public void ShouldNotSetEditableWhenScheduled()
-		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
-			data.Days = new[] {new PreferenceDayDomainData {Date = data.SelectedDate, ScheduleDay = scheduleDay}};
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Editable.Should().Be.False();
-		}
-
-		[Test]
 		public void ShouldNotBeEditablWhenOutsideSchedulePeriod()
 		{
 			var outsideDate = data.Period.EndDate.AddDays(1);
@@ -280,79 +252,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
-		public void ShouldFlagPreferenceIfNoScheduleDay()
-		{
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldFlagPreferenceIfNotScheduled()
-		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Preference.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldFlagFeedbackIfInsidePeriodAndNotScheduled()
-		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
-			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Feedback.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldFlagFeedbackIfInsidePeriodAndNoScheduleDay()
-		{
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Feedback.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldNotFlagFeedbackIfOutsidePeriodAndNotScheduled()
-		{
-			data.SelectedDate = DateOnly.Today.AddDays(-1);
-			data.Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
-			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Feedback.Should().Be.False();
-		}
-
-		[Test]
-		public void ShouldNotFlagFeedbackIfScheduled()
-		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate);
-			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Feedback.Should().Be.False();
-		}
-
-		[Test]
 		public void ShouldFlagInPeriodWhenInsideSchedulePeriod()
 		{
 			data.SelectedDate = data.Period.StartDate;
@@ -374,209 +273,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			result.DayViewModel(data.SelectedDate)
 				.InPeriod.Should().Be.False();
 		}
-
-		[Test]
-		public void ShouldMapPersonAssignmentShiftCategory()
-		{
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
-			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.PersonAssignment.ShiftCategory.Should().Be(personAssignment.MainShift.ShiftCategory.Description.Name);
-		}
-
-		[Test]
-		public void ShouldMapPersonAssignmentContractTime()
-		{
-			var contractTime = TimeSpan.FromHours(8);
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
-			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
-			projection.Stub(x => x.ContractTime()).Return(contractTime);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay, Projection = projection } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.PersonAssignment.ContractTime.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
-		}
-
-		[Test]
-		public void ShouldMapPersonAssignmentContractTimeMinutes()
-		{
-			var contractTime = TimeSpan.FromHours(8);
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
-			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
-			projection.Stub(x => x.ContractTime()).Return(contractTime);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay, Projection = projection } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.PersonAssignment.ContractTimeMinutes.Should().Be(contractTime.TotalMinutes);
-		}
-
-		[Test]
-		public void ShouldMapPersonAssignmentTimeSpan()
-		{
-			data.SelectedDate = new DateOnly(2012, 2, 21);
-			data.Period = new DateOnlyPeriod(data.SelectedDate, data.SelectedDate);
-			var stubs = new StubFactory();
-			var personAssignment = stubs.PersonAssignmentStub(new DateTimePeriod(new DateTime(2012, 2, 21, 7, 0, 0, DateTimeKind.Utc),
-			                                                                     new DateTime(2012, 2, 21, 16, 0, 0, DateTimeKind.Utc)));
-			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
-			data.Days = new[] {new PreferenceDayDomainData {Date = data.SelectedDate, ScheduleDay = scheduleDay}};
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.PersonAssignment.TimeSpan.Should().Be(new TimePeriod(8, 0, 17, 0).ToShortTimeString());
-		}
-
-		[Test]
-		public void ShouldMapPersonAssignmentsStyleClassNameFromDisplayColor()
-		{
-			var stubs = new StubFactory();
-			var personAssignment = stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.MainShiftStub(stubs.ShiftCategoryStub(Color.Coral)));
-			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.BorderColor.Should().Be(Color.Coral.ToHtml());
-		}
-
-		[Test]
-		public void ShouldOnlyMapPersonAssignmentWhenPersonAssignment()
-		{
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
-			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
-			var scheduleDay = new StubFactory().ScheduleDayStub(data.SelectedDate, SchedulePartView.MainShift, personAssignment);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.PersonAssignment.Should().Not.Be.Null();
-			result.DayViewModel(data.SelectedDate)
-				.DayOff.Should().Be.Null();
-			result.DayViewModel(data.SelectedDate)
-				.Absence.Should().Be.Null();
-		}
-
-		[Test]
-		public void ShouldMapDayOff()
-		{
-			var stubs = new StubFactory();
-			var dayOff = stubs.PersonDayOffStub();
-			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.DayOff, dayOff);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.DayOff.DayOff.Should().Be(dayOff.DayOff.Description.Name);
-		}
-
-		[Test]
-		public void ShouldMapDayOffStyleClassName()
-		{
-			var stubs = new StubFactory();
-			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.DayOff, stubs.PersonDayOffStub());
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.StyleClassName.Should().Contain(StyleClasses.DayOff);
-			result.DayViewModel(data.SelectedDate)
-				.StyleClassName.Should().Contain(StyleClasses.Striped);
-		}
-
-		[Test]
-		public void ShouldOnlyMapDayOffWhenDayOff()
-		{
-			var stubs = new StubFactory();
-			var dayOff = stubs.PersonDayOffStub();
-			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.DayOff, dayOff);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.DayOff.Should().Not.Be.Null();
-			result.DayViewModel(data.SelectedDate)
-				.PersonAssignment.Should().Be.Null();
-			result.DayViewModel(data.SelectedDate)
-				.Absence.Should().Be.Null();
-		}
-
-		[Test]
-		public void ShouldMapAbsence()
-		{
-			var stubs = new StubFactory();
-			var absenceToDisplay = stubs.PersonAbsenceStub();
-			var lowPriorityAbsence = stubs.PersonAbsenceStub();
-			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.FullDayAbsence, new[] { absenceToDisplay, lowPriorityAbsence });
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Absence.Absence.Should().Be(absenceToDisplay.Layer.Payload.Description.Name);
-		}
-
-		[Test]
-		public void ShouldMapAbsenceStyleClassNameFromDisplayColor()
-		{
-			var stubs = new StubFactory();
-			var personAbsence = stubs.PersonAbsenceStub(new DateTimePeriod(), stubs.AbsenceLayerStub(stubs.AbsenceStub(Color.DarkMagenta)));
-			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.FullDayAbsence, personAbsence);
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate).BorderColor.Should().Be(Color.DarkMagenta.ToHtml());
-		}
-
-		[Test]
-		public void ShouldMapAbsenceStyleClassNameStripedWhenOverDayOff()
-		{
-			var stubs = new StubFactory();
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, SchedulePartView.ContractDayOff, stubs.PersonAbsenceStub());
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.StyleClassName.Should().Contain(StyleClasses.Striped);
-		}
-
-		[Test]
-		public void ShouldOnlyMapAbsenceWhenAbsence()
-		{
-			var stubs = new StubFactory();
-			var absence = stubs.PersonAbsenceStub();
-			var scheduleDay = stubs.ScheduleDayStub(data.SelectedDate, SchedulePartView.FullDayAbsence, new[] { absence });
-			data.Days = new[] { new PreferenceDayDomainData { Date = data.SelectedDate, ScheduleDay = scheduleDay } };
-
-			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
-
-			result.DayViewModel(data.SelectedDate)
-				.Absence.Should().Not.Be.Null();
-			result.DayViewModel(data.SelectedDate)
-				.DayOff.Should().Be.Null();
-			result.DayViewModel(data.SelectedDate)
-				.PersonAssignment.Should().Be.Null();
-		}
-
-
 
 		[Test]
 		public void ShouldMapPreferencePeriod()
@@ -605,18 +301,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
-		public void ShouldMapStyleClassViewModelsFromScheduleColors()
+		public void ShouldMapMaxMustHave()
 		{
-			var colors = new[] { Color.Red, Color.Blue };
-
-			scheduleColorProvider.Stub(x => x.GetColors(data.ColorSource)).Return(colors);
-
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
-			result.Styles.Select(s => s.Name)
-				.Should().Have.SameValuesAs(new[] { Color.Blue.ToStyleClass(), Color.Red.ToStyleClass() });
-			result.Styles.Select(s => s.ColorHex)
-				.Should().Have.SameValuesAs(new[] { Color.Blue.ToHtml(), Color.Red.ToHtml() });
+			result.MaxMustHave.Should().Be.EqualTo(8);
 		}
 
 	}

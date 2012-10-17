@@ -94,7 +94,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         {
         }
 
-        protected override void OnDraw(Graphics g, Rectangle clientRectangle, int rowIndex, int colIndex, GridStyleInfo style)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		protected override void OnDraw(Graphics g, Rectangle clientRectangle, int rowIndex, int colIndex, GridStyleInfo style)
         {
             base.OnDraw(g, clientRectangle, rowIndex, colIndex, style);
             RestrictionCellValue cellValue = (RestrictionCellValue) style.CellValue;

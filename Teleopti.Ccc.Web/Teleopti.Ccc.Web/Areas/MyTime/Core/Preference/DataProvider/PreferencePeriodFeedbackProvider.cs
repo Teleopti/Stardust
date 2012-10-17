@@ -37,12 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 					TargetTime = targetTime
 			    };
 		}
-
-		public int MaxMustHave(DateOnly date)
-		{
-			var virtualSchedulePeriod = _virtualSchedulePeriodProvider.VirtualSchedulePeriodForDate(date);
-			return virtualSchedulePeriod.MustHavePreference;
-		}
 	}
 
 	public class PeriodFeedback

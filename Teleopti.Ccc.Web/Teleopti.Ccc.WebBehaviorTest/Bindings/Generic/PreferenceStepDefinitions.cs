@@ -9,11 +9,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class PreferenceStepDefinitions
 	{
-		[Given(@"I have an extended preference with")]
 		[Given(@"I have a preference with")]
 		public void GivenIHaveAPreferenceWith(Table table)
 		{
 			var preference = table.CreateInstance<PreferenceConfigurable>();
+			UserFactory.User().Setup(preference);
+		}
+
+		[Given(@"I have an extended preference with")]
+		public void GivenIHaveAnExtendedPreferenceWith(Table table)
+		{
+			var preference = table.CreateInstance<PreferenceConfigurable>();
+			preference.IsExtended = true;
 			UserFactory.User().Setup(preference);
 		}
 
@@ -24,4 +31,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 	}
+
 }

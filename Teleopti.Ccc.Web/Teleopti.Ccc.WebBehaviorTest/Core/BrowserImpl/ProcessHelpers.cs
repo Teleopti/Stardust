@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 				return false;
 			}
 			if (result == TryResult.Passed)
-				return isClosed.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(20));
+				return isClosed.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5));
 			if (result == TryResult.NotFound)
 				return isClosed.Invoke();
 			return false;

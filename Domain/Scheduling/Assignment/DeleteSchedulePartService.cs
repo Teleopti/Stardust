@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -14,6 +12,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, BackgroundWorker backgroundWorker,
                                    IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter tagSetter, INewBusinessRuleCollection businessRuleCollection);
+
+    	IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService,
+    	                           DeleteOption deleteOption);
     }
 
     /// <summary>
@@ -31,7 +32,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, BackgroundWorker backgroundWorker)
         {
-			InParameter.ListCannotBeEmpty("list", (IList)list);
             IList<IScheduleDay> returnList = new List<IScheduleDay>();
             if (backgroundWorker == null)
                 throw new ArgumentNullException("backgroundWorker");
@@ -57,7 +57,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         }
 
-        
+		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, DeleteOption deleteOption)
+		{
+			var bgWorker = new BackgroundWorker();
+			IList<IScheduleDay> retList;
+			try
+			{
+				retList = Delete(list, deleteOption, rollbackService, bgWorker);
+			}
+			finally
+			{
+				bgWorker.Dispose();
+			}
+
+			return retList;
+		}
         public IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService)
         {
             var deleteOption = new DeleteOption {Default = true};

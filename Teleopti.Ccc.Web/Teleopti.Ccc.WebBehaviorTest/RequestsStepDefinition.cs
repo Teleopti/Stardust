@@ -13,17 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class RequestsStepDefinition
 	{
-		private RequestsPage _page;
-
-		[Given(@"I am viewing requests")]
-		[When(@"I am viewing requests")]
-		[When(@"I view requests")]
-		public void GivenIAmViewingRequests()
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoRequests();
-			_page = Browser.Current.Page<RequestsPage>();
-		}
+		private RequestsPage _page { get { return Pages.Pages.RequestsPage; } }
 
 		[When(@"I click on the request")]
 		public void WhenIClickOnTheRequest()

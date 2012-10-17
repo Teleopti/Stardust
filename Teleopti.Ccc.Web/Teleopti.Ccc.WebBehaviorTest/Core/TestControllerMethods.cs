@@ -63,12 +63,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			// probably depending on how quickly the next request takes place.
 			// making a second request seems to enforce the cookie somehow..
 			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
-			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Cookie is expired!"));
+			EventualAssert.That(() =>
+			                    	{
+										Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();");
+										return Browser.Current.Text;
+			                    	}, Is.StringContaining("Cookie is expired!"));
 
 			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
 			EventualAssert.That(() =>
 			                    	{
-			                    		var text = Browser.Current.Text;
+										Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();");
+										var text = Browser.Current.Text;
 			                    		var regex = new Regex("Cookie is expired!");
 			                    		return regex.Matches(text).Count;
 			                    	}, Is.EqualTo(2));
@@ -77,14 +82,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void PageLog(string message)
 		{
 			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PageLog('" + message + "');");
+			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();");
+			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining(message));
 		}
 
-		public static void WaitForPreferencesToLoad()
+		public static void WaitUntilReadyForInteraction()
 		{
-			if (Browser.Current.Text.Contains("Preference loaded!"))
-				return;
-			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.InformWhenPreferenceLoaded('Preference loaded!');");
-			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Preference loaded!"));
+			EventualAssert.That(() =>
+			                    	{
+			                    		Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();");
+			                    		return Browser.Current.Text;
+			                    	}, Is.StringContaining("Ready for interaction"));
 		}
+
+		public static void WaitUntilCompletelyLoaded()
+		{
+			EventualAssert.That(() =>
+			                    	{
+			                    		Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();");
+			                    		return Browser.Current.Text;
+			                    	}, Is.StringContaining("Completely loaded"));
+		}
+
 	}
 }

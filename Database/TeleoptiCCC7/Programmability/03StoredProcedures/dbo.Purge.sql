@@ -25,6 +25,8 @@ declare @ScheduleKeepYears int
 declare @ScheduleKeepUntil datetime
 declare @MessageKeepYears int
 declare @MessageKeepUntil datetime
+declare @PayrollKeepYears int
+declare @PayrollKeepUntil datetime
 declare @BatchSize int
 declare @MaxDate datetime
 
@@ -38,6 +40,8 @@ select @ScheduleKeepYears = isnull(KeepYears,100) from PurgeSetting where [Key] 
 select @ScheduleKeepUntil = dateadd(year,-1*@ScheduleKeepYears,getdate())
 select @MessageKeepYears = isnull(KeepYears,100) from PurgeSetting where [Key] = 'Message'
 select @MessageKeepUntil = dateadd(year,-1*@MessageKeepYears,getdate())
+select @PayrollKeepYears = isnull(KeepYears,100) from PurgeSetting where [Key] = 'Payroll'
+select @PayrollKeepUntil = dateadd(year,-1*@MessageKeepYears,getdate())
 select @BatchSize = 14
 
 --Forecast
@@ -148,6 +152,28 @@ where not exists (select 1 from PushMessageDialogue pmd where pmd.PushMessage = 
 delete PushMessage
 from PushMessage pm
 where not exists (select 1 from PushMessageDialogue pmd where pmd.PushMessage = pm.Id)
+
+--Payroll
+select @MaxDate = dateadd(day,@BatchSize,isnull(min(UpdatedOn),'19900101')) from PayrollResult
+
+delete PayrollResultDetail
+from PayrollResultDetail prd
+inner join PayrollResult pr on prd.Parent = pr.Id
+where pr.UpdatedOn < @PayrollKeepUntil
+and pr.UpdatedOn < @Maxdate
+
+delete PayrollResult
+from PayrollResult pr
+where pr.UpdatedOn < @PayrollKeepUntil
+and pr.UpdatedOn < @Maxdate
+
+delete PayrollExport
+from PayrollExport pe
+where pe.UpdatedOn < @PayrollKeepUntil
+and pe.UpdatedOn < @Maxdate
+and not exists (select 1
+				from PayrollResult pr
+				where pr.PayrollExport = pe.Id)
 
 
 END

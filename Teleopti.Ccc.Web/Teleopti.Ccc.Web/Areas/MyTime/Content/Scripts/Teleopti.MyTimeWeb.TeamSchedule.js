@@ -16,6 +16,8 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 
 	var portal = Teleopti.MyTimeWeb.Portal;
+	var readyForInteraction = function () { };
+	var completelyLoaded = function () { };
 
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#TeamScheduleDateRangeSelector';
@@ -58,6 +60,8 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 				if (date)
 					_navigateTo(date);
 			}
+			readyForInteraction();
+			completelyLoaded();
 		});
 	}
 
@@ -84,7 +88,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	function _currentFixedDate() {
 		if ($('#TeamSchedule-body').data('mytime-periodselection')) {
 			return $('#TeamSchedule-body').data('mytime-periodselection').Date;
-		}else {
+		} else {
 			return undefined;
 		}
 	}
@@ -98,7 +102,14 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 			portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit);
 			_initTeamPicker();
 		},
-		TeamSchedulePartialInit: function () {
+		TeamSchedulePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
+			readyForInteraction = readyForInteractionCallback;
+			completelyLoaded = completelyLoadedCallback;
+			if ($('#TeamSchedule-body').length == 0) {
+				readyForInteraction();
+				completelyLoaded();
+				return;
+			}
 			_initPeriodSelection();
 			_initTeamPickerSelection();
 			_initAgentNameOverflow();

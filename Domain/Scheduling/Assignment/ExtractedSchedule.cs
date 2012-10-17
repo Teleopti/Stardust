@@ -317,15 +317,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             TimeSpan diff = CalculatePeriodOffset(source.Period);
             DateTimePeriod period = source.Period.MovePeriod(diff);
             DateOnly date = new DateOnly(period.StartDateTimeLocal(TimeZone));
-     
-            foreach(IPreferenceDay preferenceDay in source.PersistableScheduleDataCollection())
-            {
-                if (preferenceDay is IPreferenceDay)
-                {
-                    Clear<IPreferenceDay>();
-                    Add(new PreferenceDay(Person, date, preferenceDay.Restriction.NoneEntityClone()));
-                }
-            } 
+
+			foreach (IPreferenceRestriction preferenceRestriction in source.RestrictionCollection().OfType<IPreferenceRestriction>())
+			{
+				Clear<IPreferenceDay>();
+				Add(new PreferenceDay(Person, date, preferenceRestriction.NoneEntityClone()));
+			}
         }
 
         public void DeleteStudentAvailabilityRestriction()
@@ -348,19 +345,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             DateTimePeriod period = source.Period.MovePeriod(diff);
             DateOnly date = new DateOnly(period.StartDateTimeLocal(TimeZone));
 
-            foreach (IStudentAvailabilityDay studentAvailabilityDay in source.PersistableScheduleDataCollection())
+			foreach (IStudentAvailabilityRestriction studentAvailabilityRestriction in source.RestrictionCollection().OfType<IStudentAvailabilityRestriction>())
             {
-                if (studentAvailabilityDay is IStudentAvailabilityDay)
-                {
-                    IList<IStudentAvailabilityRestriction> cloneList = new List<IStudentAvailabilityRestriction>();
-                    foreach (IStudentAvailabilityRestriction restriction in studentAvailabilityDay.RestrictionCollection)
-                    {
-                        cloneList.Add(restriction.NoneEntityClone());
-                    }
-
-                    Add(new StudentAvailabilityDay(Person, date, cloneList));
-                }     
-            } 
+				Clear<IStudentAvailabilityDay>();
+				Add(new StudentAvailabilityDay(Person, date, new List<IStudentAvailabilityRestriction>{studentAvailabilityRestriction}));
+            }
         }
 
         public void DeleteDayOff()
