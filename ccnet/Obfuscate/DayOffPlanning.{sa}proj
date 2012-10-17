@@ -1,4 +1,4 @@
-<SmartAssemblyProject ProjectID="{6ea2a4ff-5070-4244-8d5a-2bd2de3b725f}" Version="2.0">
+<SmartAssemblyProject ProjectID="{6ea2a4ff-5070-4244-8d5a-2bd2de3b725f}" Version="4.0">
     <MainAssemblyFileName>..\..\Teleopti.Ccc.DayOffPlanning\bin\Release\Teleopti.Ccc.DayOffPlanning.dll</MainAssemblyFileName>
     <Configuration Name="Release">
         <ApplicationName />
