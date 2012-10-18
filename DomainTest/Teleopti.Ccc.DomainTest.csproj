@@ -605,7 +605,6 @@
     <Compile Include="Scheduling\PersonalAccount\PersonAccountCollectionTest.cs" />
     <Compile Include="Scheduling\ResourceCalculateDelayerTest.cs" />
     <Compile Include="Scheduling\Restrictions\AvailabilitySpecificationTest.cs" />
-    <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForPersonalShiftTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreatorTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayCreatorTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionTest.cs" />
@@ -623,8 +622,8 @@
     <Compile Include="Scheduling\Restrictions\ScheduleDayStudentAvailabilityRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\StudentSpecificationTest.cs" />
     <Compile Include="Scheduling\Restriction\AvailabilityRotationTest.cs" />
-    <Compile Include="Scheduling\Restriction\EffectiveRestrictionForPersonalShiftTest.cs" />
-    <Compile Include="Scheduling\Restriction\EffectiveRestrictionForMeetingTest.cs" />
+    <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForPersonalShiftTest.cs" />
+    <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForMeetingTest.cs" />
     <Compile Include="Scheduling\Restriction\StudentAvailabilityRestrictionTest.cs" />
     <Compile Include="Scheduling\Restriction\PreferenceRestrictionTest.cs" />
     <Compile Include="Scheduling\Restriction\RotationTest.cs" />
