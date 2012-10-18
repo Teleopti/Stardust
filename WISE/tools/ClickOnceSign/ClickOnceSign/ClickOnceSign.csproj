@@ -151,7 +151,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)mage.exe" copy "\\hebe\Installation\Dependencies\ccc7_server\mage.exe" "$(ProjectDir)mage.exe"</PreBuildEvent>
+    <PreBuildEvent>if exist "\\hebe\Installation\Dependencies\ccc7_server\mage.exe" xcopy /Y "\\hebe\Installation\Dependencies\ccc7_server\mage.exe" "$(ProjectDir)"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
