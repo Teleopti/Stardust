@@ -18,6 +18,13 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         void Modify(IScheduleDay schedulePart);
 
+    	/// <summary>
+    	/// Modifies with specified rules
+    	/// </summary>
+    	/// <param name="schedulePart"></param>
+    	/// <param name="newBusinessRuleCollection"></param>
+    	void Modify(IScheduleDay schedulePart, INewBusinessRuleCollection newBusinessRuleCollection);
+
         /// <summary>
         /// Modifies the specified schedule part.
         /// </summary>
