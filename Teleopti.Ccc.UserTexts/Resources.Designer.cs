@@ -19540,7 +19540,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selected file destination does not exist, please enter valid filepath.
+        ///   Looks up a localized string similar to Selected file destination does not exist, please enter valid file path.
         /// </summary>
         public static string SelectedFileDestinationDoesNotExist {
             get {
