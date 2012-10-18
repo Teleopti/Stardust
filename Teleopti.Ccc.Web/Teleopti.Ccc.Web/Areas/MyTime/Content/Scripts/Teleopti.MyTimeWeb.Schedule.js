@@ -180,7 +180,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return Math.round(scheduleHeight * self.startPositionPercentage());
 		});
 		self.height = ko.computed(function () {
-			var bottom = Math.round(scheduleHeight * self.endPositionPercentage());
+			var bottom = Math.round(scheduleHeight * self.endPositionPercentage())-1;
 			return bottom - self.top();
 		});
 		self.topPx = ko.computed(function () {
