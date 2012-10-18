@@ -115,9 +115,8 @@ namespace Teleopti.Support.Tool
             this.smoothLabelVersion.ForeColor = System.Drawing.Color.Gray;
             this.smoothLabelVersion.Location = new System.Drawing.Point(12, 394);
             this.smoothLabelVersion.Name = "smoothLabelVersion";
-            this.smoothLabelVersion.Size = new System.Drawing.Size(62, 13);
+            this.smoothLabelVersion.Size = new System.Drawing.Size(0, 13);
             this.smoothLabelVersion.TabIndex = 8;
-            this.smoothLabelVersion.Text = "7.x.xxx.xxxx";
             this.smoothLabelVersion.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.smoothLabelVersion.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             // 
