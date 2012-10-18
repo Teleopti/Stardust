@@ -303,6 +303,6 @@ Scenario: Update schedule when schedule has changed
 	| StartTime             | 2012-08-28 12:00 |
 	| EndTime               | 2012-08-28 15:00 |
 	| ShiftCategoryName     | ForTest          |
-	And My schedule between '2012-08-28 08:00' to '2012-08-28 18:00' change
+	And My schedule between '2012-08-28 08:00' to '2012-08-28 18:00' reloads
 	Then I should see activities on date '2012-08-28'
 

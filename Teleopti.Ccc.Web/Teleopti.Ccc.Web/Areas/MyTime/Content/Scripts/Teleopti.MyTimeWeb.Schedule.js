@@ -293,7 +293,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			});
 		},
 		ReloadScheduleListener: function (notifiction) {
-			console.log('mb message');
 		},
 		PartialDispose: function () {
 			addTextRequestTooltip.qtip('destroy');

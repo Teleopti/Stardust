@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Xml;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
@@ -11,6 +12,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest
@@ -180,6 +182,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldNotSeeAShiftOnDate(DateTime date)
 		{
 			_page.DayLayers(date).Count.Should().Be.EqualTo(0);
+		}
+
+		[When(@"My schedule between '(.*)' to '(.*)' reloads")]
+		public void WhenMyScheduleBetweenToReloads(DateTime start, DateTime end)
+		{
+			var xmlStartDate = "D" + XmlConvert.ToString(start, XmlDateTimeSerializationMode.Unspecified);
+			var xmlEndDate = "D" + XmlConvert.ToString(end, XmlDateTimeSerializationMode.Unspecified);
+
+			const string js = @"var notification = {{StartDate : '{0}', EndDate : '{1}'}};Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener(notification);";
+
+			var formattedJs = string.Format(js, xmlStartDate, xmlEndDate);
+			Browser.Current.Eval(formattedJs);
 		}
 
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
