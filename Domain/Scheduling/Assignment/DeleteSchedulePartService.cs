@@ -58,6 +58,37 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, BackgroundWorker backgroundWorker, INewBusinessRuleCollection newBusinessRuleCollection)
+		{
+			InParameter.ListCannotBeEmpty("list", (IList)list);
+			IList<IScheduleDay> returnList = new List<IScheduleDay>();
+			if (backgroundWorker == null)
+				throw new ArgumentNullException("backgroundWorker");
+
+			foreach (IScheduleDay part in list)
+			{
+
+
+				var clonePart = preparePart(options, part);
+				IList<IScheduleDay> cloneList = new List<IScheduleDay> { clonePart };
+
+				if (backgroundWorker.CancellationPending)
+					return returnList;
+
+				//modify the original schedules
+				foreach (IScheduleDay scheduleDay in cloneList)
+				{
+					rollbackService.Modify(scheduleDay, newBusinessRuleCollection);
+				}
+
+				returnList.Add(_scheduleResultStateHolder.Schedules[part.Person].ReFetch(part));
+			}
+
+			return returnList;
+
+		}
+
 		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, DeleteOption deleteOption)
 		{
 			var bgWorker = new BackgroundWorker();
