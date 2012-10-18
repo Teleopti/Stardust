@@ -73,20 +73,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             MinMaxWorkTimeChecker.GetWorkTime(_scheduleDay);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
-        public void GetEffectiveRestrictionForPersonalShiftShouldThrowIfScheduleDayIsNull()
-        {
-            var effective = _mocks.StrictMock<IEffectiveRestriction>();
-            MinMaxWorkTimeChecker.GetEffectiveRestrictionForPersonalShift(null, effective);
-        }
-
-        [Test, ExpectedException(typeof(ArgumentNullException))]
-        public void GetEffectiveRestrictionForMeetingShiftShouldThrowIfScheduleDayIsNull()
-        {
-            var effective = _mocks.StrictMock<IEffectiveRestriction>();
-            MinMaxWorkTimeChecker.GetEffectiveRestrictionForMeeting(null, effective);
-        }
-
         [Test]
         public void ShouldReturnEmptyIfDayOff()
         {
@@ -268,50 +254,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 
             var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, _restriction);
             Assert.That(result, Is.Not.Null);
-            _mocks.VerifyAll();
-        }
-
-        [Test]
-        public void CanGetEffectiveRestrictionForPersonalShift()
-        {
-            var dateTime = new DateTime(2010, 1, 1, 10, 0, 0, DateTimeKind.Utc);
-            var period = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-            IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(_person, period);
-            var assignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment });
-            IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
-                                                                                  new EndTimeLimitation(),
-                                                                                  new WorkTimeLimitation(), null, null, null,
-                                                                                  new List<IActivityRestriction>());
-            Expect.Call(_scheduleDay.PersonAssignmentCollection()).Return(assignments).Repeat.Twice();
-            Expect.Call(_scheduleDay.Person).Return(_person);
-            _mocks.ReplayAll();
-            effectiveRestriction = MinMaxWorkTimeChecker.GetEffectiveRestrictionForPersonalShift(_scheduleDay, effectiveRestriction);
-            Assert.AreEqual(TimeZoneHelper.ConvertFromUtc(dateTime, _permissionInformation.DefaultTimeZone()).TimeOfDay, effectiveRestriction.StartTimeLimitation.EndTime);
-            Assert.AreEqual(TimeZoneHelper.ConvertFromUtc(dateTime.AddHours(1), _permissionInformation.DefaultTimeZone()).TimeOfDay, effectiveRestriction.EndTimeLimitation.StartTime);
-            Assert.AreEqual(period.ElapsedTime(), effectiveRestriction.WorkTimeLimitation.StartTime);
-            _mocks.VerifyAll();
-        }
-
-        [Test]
-        public void CanGetEffectiveRestrictionForMeeting()
-        {
-            var dateTime = new DateTime(2010, 1, 1, 10, 0, 0, DateTimeKind.Utc);
-            var period = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-            var meeting = _mocks.StrictMock<IMeeting>();
-            IMeetingPerson meetingPerson = new MeetingPerson(_person, false);
-            IPersonMeeting personMeeting = new PersonMeeting(meeting, meetingPerson, period);
-            var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { personMeeting });
-            IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
-                                                                                  new EndTimeLimitation(),
-                                                                                  new WorkTimeLimitation(), null, null, null,
-                                                                                  new List<IActivityRestriction>());
-            Expect.Call(_scheduleDay.PersonMeetingCollection()).Return(meetings).Repeat.Twice();
-            Expect.Call(_scheduleDay.Person).Return(_person);
-            _mocks.ReplayAll();
-            effectiveRestriction = MinMaxWorkTimeChecker.GetEffectiveRestrictionForMeeting(_scheduleDay, effectiveRestriction);
-            Assert.AreEqual(TimeZoneHelper.ConvertFromUtc(dateTime, _permissionInformation.DefaultTimeZone()).TimeOfDay, effectiveRestriction.StartTimeLimitation.EndTime);
-            Assert.AreEqual(TimeZoneHelper.ConvertFromUtc(dateTime.AddHours(1), _permissionInformation.DefaultTimeZone()).TimeOfDay, effectiveRestriction.EndTimeLimitation.StartTime);
-            Assert.AreEqual(period.ElapsedTime(), effectiveRestriction.WorkTimeLimitation.StartTime);
             _mocks.VerifyAll();
         }
 

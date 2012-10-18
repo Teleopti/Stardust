@@ -114,6 +114,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>().SingleInstance();
 			builder.RegisterType<ExtendedPreferencePredicate>().As<IExtendedPreferencePredicate>().SingleInstance();
 			builder.RegisterType<PreferenceFulfilledChecker>().As<IPreferenceFulfilledChecker>().SingleInstance();
+			builder.RegisterType<EffectiveRestrictionForMeeting>().As<IEffectiveRestrictionForMeeting>().SingleInstance();
+			builder.RegisterType<EffectiveRestrictionForPersonalShift>().As<IEffectiveRestrictionForPersonalShift>().SingleInstance();
 		}
 		 
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)
