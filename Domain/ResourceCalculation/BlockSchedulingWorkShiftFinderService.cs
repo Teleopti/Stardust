@@ -87,6 +87,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return new ShiftProjectionShiftValue {  Value = double.MinValue };
             if (foundShift == null)
                 return new ShiftProjectionShiftValue {  Value =  double.MinValue};
+            ExtractCommonActivty(schedulingOptions, finalShiftProjectionShift, foundShift);
+            finalShiftProjectionShift.Value = highestShiftValue;
+            return  finalShiftProjectionShift; 
+        }
+
+        private static void ExtractCommonActivty(ISchedulingOptions schedulingOptions,
+                                                 ShiftProjectionShiftValue finalShiftProjectionShift,
+                                                 IShiftProjectionCache foundShift)
+        {
             if (schedulingOptions != null && schedulingOptions.UseCommonActivity)
             {
                 foreach (var proj in foundShift.TheMainShift.ProjectionService().CreateProjection())
@@ -95,14 +104,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     {
                         finalShiftProjectionShift.ActivityPeriods.Add(proj.Period);
                     }
-
                 }
             }
-            finalShiftProjectionShift.Value = highestShiftValue;
-            return  finalShiftProjectionShift; 
         }
-        
-        
     }
 
     public class ShiftProjectionShiftValue

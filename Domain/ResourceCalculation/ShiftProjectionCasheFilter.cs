@@ -429,28 +429,32 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                                         IPossibleStartEndCategory possibleStartEndCategory, IWorkShiftFinderResult finderResult)
         {
             IList<IShiftProjectionCache> activtyfinalShiftList = new List<IShiftProjectionCache>();
-            var cnt = shiftList.Count;
-            if (schedulingOptions.UseCommonActivity)
+            if (shiftList != null)
             {
-                foreach (var shift in shiftList)
+                var cnt = shiftList.Count;
+                if (schedulingOptions.UseCommonActivity)
                 {
-                    IList<DateTimePeriod> visualLayerPeriodList = new List<DateTimePeriod>();
-                    foreach (var visualLayer in   shift.TheMainShift.ProjectionService().CreateProjection().Where(   c => c.Payload.Id == schedulingOptions.CommonActivity.Id))
+                    foreach (var shift in shiftList)
                     {
-                       visualLayerPeriodList.Add(visualLayer.Period  );
-                    }
-                    if (possibleStartEndCategory.ActivityPeriods.All(visualLayerPeriodList.Contains))
-                    {
-                        activtyfinalShiftList.Add(shift);
-                    }
+                        IList<DateTimePeriod> visualLayerPeriodList = new List<DateTimePeriod>();
+                        foreach (var visualLayer in   shift.TheMainShift.ProjectionService().CreateProjection().Where(   c => c.Payload.Id == schedulingOptions.CommonActivity.Id))
+                        {
+                            visualLayerPeriodList.Add(visualLayer.Period  );
+                        }
+                        if (possibleStartEndCategory != null && possibleStartEndCategory.ActivityPeriods.All(visualLayerPeriodList.Contains))
+                        {
+                            activtyfinalShiftList.Add(shift);
+                        }
                     
+                    }
                 }
+                else
+                {
+                    activtyfinalShiftList = shiftList;
+                }
+                if (finderResult != null)
+                    finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstKeepActivity, cnt, activtyfinalShiftList.Count));
             }
-            else
-            {
-                activtyfinalShiftList = shiftList;
-            }
-            finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstKeepActivity, cnt, activtyfinalShiftList.Count));
 
             return activtyfinalShiftList;
         }
