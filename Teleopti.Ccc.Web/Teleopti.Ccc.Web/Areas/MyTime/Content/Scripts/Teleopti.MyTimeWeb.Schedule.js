@@ -23,7 +23,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var timeLineOffset = 198;
 	var pixelToDisplayAll = 33;
 	var pixelToDisplayTitle = 16;
-
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var vm;
 
 	function _initTooltip() {
 		var addTextRequest = $('.show-request');
@@ -92,27 +93,39 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}, 1000);
 	}
 
-	var WeekScheduleViewModel = function (data, userTexts) {
+	var WeekScheduleViewModel = function (userTexts) {
 		var self = this;
 
-		self.userTexts = userTexts;
-		self.textPermission = ko.observable(data.RequestPermission.TextRequestPermission);
-		self.periodSelection = ko.observable(JSON.stringify(data.PeriodSelection));
-		self.asmPermission = ko.observable(data.AsmPermission);
-		self.isCurrentWeek = ko.observable(data.IsCurrentWeek);
-		self.styles = ko.computed(function () {
-			var ret = '';
-			$.each(data.Styles, function (key, value) {
-				ret += "li.third.{0} {background-color: rgb({1});} ".format(value.Name, value.RgbColor);
+		self.refresh = function (data) {
+			self.textPermission(data.RequestPermission.TextRequestPermission);
+			self.periodSelection(JSON.stringify(data.PeriodSelection));
+			self.asmPermission(data.AsmPermission);
+			self.isCurrentWeek(data.IsCurrentWeek);
+			var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
+				return new TimelineViewModel(item);
 			});
-			return ret;
-		});
-		self.timeLines = ko.utils.arrayMap(data.TimeLine, function (item) {
-			return new TimelineViewModel(item);
-		});
-		self.days = ko.utils.arrayMap(data.Days, function (item) {
-			return new DayViewModel(item, self);
-		});
+			self.timeLines(timelines);
+			var days = ko.utils.arrayMap(data.Days, function (item) {
+				return new DayViewModel(item, self);
+			});
+			self.days(days);
+			self.styles = function () {
+				var ret = '';
+				$.each(data.Styles, function (key, value) {
+					ret += "li.third.{0} {background-color: rgb({1});} ".format(value.Name, value.RgbColor);
+				});
+				return ret;
+			};
+		};
+
+		self.userTexts = userTexts;
+		self.textPermission = ko.observable();
+		self.periodSelection = ko.observable();
+		self.asmPermission = ko.observable();
+		self.isCurrentWeek = ko.observable();
+
+		self.timeLines = ko.observableArray();
+		self.days = ko.observableArray();
 	};
 	var DayViewModel = function (day, parent) {
 		var self = this;
@@ -200,7 +213,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 	};
 
-
 	var TimelineViewModel = function (timeline) {
 		var self = this;
 
@@ -267,7 +279,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 		},
 		LoadAndBindData: function (userTexts) {
-			var ajax = new Teleopti.MyTimeWeb.Ajax();
 			ajax.Ajax({
 				url: 'Schedule/FetchData',
 				dataType: "json",
@@ -277,7 +288,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				},
 
 				success: function (data) {
-					var vm = new WeekScheduleViewModel(data, userTexts);
+					vm = new WeekScheduleViewModel(userTexts);
+					vm.refresh(data);
 
 					ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
 
@@ -293,6 +305,17 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			});
 		},
 		ReloadScheduleListener: function (notifiction) {
+			ajax.Ajax({
+				url: 'Schedule/FetchData',
+				dataType: "json",
+				type: 'GET',
+				data: {
+					date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
+				},
+				success: function(data) {
+					vm.refresh(data);
+				}
+			});
 		},
 		PartialDispose: function () {
 			addTextRequestTooltip.qtip('destroy');
