@@ -69,11 +69,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					{
 						if (s != null)
 						{
-							if((s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff))
+							if ((s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff))
 							{
 								if (s.PersonAbsenceCollection() != null)
 									return s.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
-								
+
 							}
 							if (s.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence)
 								return s.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
@@ -84,46 +84,38 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						}
 						return null;
 					}))
-				.ForMember(d => d.MeetingAndPersonalShift, o => o.MapFrom(s =>
+				.ForMember(d => d.Meetings, o => o.MapFrom(s =>
 					{
-						var sb = new StringBuilder();
-
-						IList<IPersonAssignment> asses = s.PersonAssignmentCollection();
-						IList<IPersonMeeting> meetings = s.PersonMeetingCollection();
-						if (asses.Count > 0 || meetings.Count > 0)
+						var meetings = s.PersonMeetingCollection();
+						if (meetings.Count > 0)
 						{
-							foreach (IPersonAssignment pa in asses)
-							{
-								foreach (PersonalShift ps in pa.PersonalShiftCollection)
+							return meetings.Select(personMeeting => new MeetingViewModel
 								{
-									sb.AppendFormat(" - {0}: ", UserTexts.Resources.PersonalShift);
-									foreach (ActivityLayer layer in ps.LayerCollection)
-									{
-										sb.AppendLine();
-										sb.Append("    ");
-										sb.Append(layer.Payload.ConfidentialDescription(pa.Person, s.DateOnlyAsPeriod.DateOnly).Name);
-										sb.Append(": ");
-										sb.Append(ToLocalStartEndTimeString(layer.Period, _userTimeZone.Invoke().TimeZone(), CultureInfo.CurrentCulture));
-									}
-								}
-							}
-
-							foreach (IPersonMeeting personMeeting in meetings)
-							{
-								if (sb.Length > 0) sb.AppendLine();
-								sb.AppendFormat(" - {0}: ", UserTexts.Resources.Meeting);
-								sb.AppendLine();
-								sb.Append("    ");
-								sb.Append(personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()));
-								sb.Append(": ");
-								sb.Append(ToLocalStartEndTimeString(personMeeting.Period, _userTimeZone.Invoke().TimeZone(), CultureInfo.CurrentCulture));
-
-								if (personMeeting.Optional)
-									sb.AppendFormat(" ({0})", UserTexts.Resources.Optional);
-							}
+									Subject = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
+									TimeSpan = ToLocalStartEndTimeString(personMeeting.Period,
+									                                     _userTimeZone.Invoke().TimeZone(), CultureInfo.CurrentCulture),
+									IsOptional = personMeeting.Optional
+								}).ToList();
 						}
-
-						return sb.ToString();
+						return null;
+					}))
+				.ForMember(d => d.PersonalShifts, o => o.MapFrom(s =>
+					{
+						var assignments = s.PersonAssignmentCollection();
+						if (assignments.Count > 0)
+						{
+							return (from personAssignment in assignments
+							        from personalShift in personAssignment.PersonalShiftCollection
+							        from layer in personalShift.LayerCollection
+							        select new PersonalShiftViewModel
+								        {
+									        Subject =
+										        layer.Payload.ConfidentialDescription(personAssignment.Person, s.DateOnlyAsPeriod.DateOnly).Name,
+									        TimeSpan =
+										        ToLocalStartEndTimeString(layer.Period, _userTimeZone.Invoke().TimeZone(), CultureInfo.CurrentCulture)
+								        }).ToList();
+						}
+						return null;
 					}))
 				;
 
@@ -142,11 +134,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.ContractTimeMinutes, o => o.MapFrom(s => _projectionProvider.Invoke().Projection(s).ContractTime().TotalMinutes));
 		}
 
-		private static string ToLocalStartEndTimeString(DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo, CultureInfo cultureInfo)
+		private static string ToLocalStartEndTimeString(DateTimePeriod period, ICccTimeZoneInfo timeZone, CultureInfo cultureInfo)
 		{
 			const string separator = " - ";
-			string start = period.StartDateTimeLocal(timeZoneInfo).ToString("t", cultureInfo);
-			string end = period.EndDateTimeLocal(timeZoneInfo).ToString("t", cultureInfo);
+			string start = period.StartDateTimeLocal(timeZone).ToString("t", cultureInfo);
+			string end = period.EndDateTimeLocal(timeZone).ToString("t", cultureInfo);
 			return string.Concat(start, separator, end);
 		}
 	}

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
@@ -8,6 +7,7 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -271,6 +271,58 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 
 			result.BorderColor.Should().Be(Color.Coral.ToHtml());
+		}
+
+		[Test]
+		public void ShouldMapMeetings()
+		{
+			var now = DateTime.Now;
+			var stubs = new StubFactory();
+			var meeting = MockRepository.GenerateMock<IPersonMeeting>();
+			var belongsToMeeting = MockRepository.GenerateMock<IMeeting>();
+			belongsToMeeting.Stub(x => x.GetSubject(new NoFormatting())).IgnoreArguments().Return("subject");
+			var meetings = new ReadOnlyCollection<IPersonMeeting>(new[] {meeting});
+			meeting.Stub(x => x.BelongsToMeeting).Return(belongsToMeeting);
+			meeting.Stub(x => x.Period).Return(new DateTimePeriod(now.ToUniversalTime(), now.ToUniversalTime().AddHours(1)));
+			meeting.Stub(x => x.Optional).Return(true);
+
+			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
+			scheduleDay.Stub(x => x.PersonMeetingCollection()).Return(meetings);
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.Meetings.Count().Should().Be(1);
+			result.Meetings.First().Subject.Should().Be("subject");
+			result.Meetings.First().TimeSpan.Should().Be(now.ToShortTimeString()+" - " + now.AddHours(1).ToShortTimeString());
+			result.Meetings.First().IsOptional.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapPersonalShifts()
+		{
+			var now = DateTime.Now;
+			var stubs = new StubFactory();
+			var personAssignment = MockRepository.GenerateMock<IPersonAssignment>();
+			var personalShift = MockRepository.GenerateMock<IPersonalShift>();
+			var activityLayer = MockRepository.GenerateMock<ILayer<IActivity>>();
+			var payload = MockRepository.GenerateMock<IActivity>();
+			payload.Stub(x => x.ConfidentialDescription(new Person(),DateOnly.Today)).IgnoreArguments().Return(new Description("activity"));
+			activityLayer.Stub(x => x.Payload).Return(payload);
+			activityLayer.Stub(x => x.Period).Return(new DateTimePeriod(now.ToUniversalTime(), now.ToUniversalTime().AddHours(1)));
+
+			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
+			var layers = new LayerCollection<IActivity> {activityLayer};
+			personalShift.Stub(x => x.LayerCollection).Return(layers);
+			var shifts = new ReadOnlyCollection<IPersonalShift>(new[] { personalShift });
+			personAssignment.Stub(x => x.PersonalShiftCollection).Return(shifts);
+			var assignments = new ReadOnlyCollection<IPersonAssignment>(new[] { personAssignment });
+			scheduleDay.Stub(x => x.PersonAssignmentCollection()).Return(assignments);
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.PersonalShifts.Count().Should().Be(1);
+			result.PersonalShifts.First().Subject.Should().Be("activity");
+			result.PersonalShifts.First().TimeSpan.Should().Be(now.ToShortTimeString() + " - " + now.AddHours(1).ToShortTimeString());
 		}
 
 	}

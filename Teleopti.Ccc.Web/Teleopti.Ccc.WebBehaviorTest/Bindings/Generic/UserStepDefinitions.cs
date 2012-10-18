@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"I have a person period that starts on '(.*)'")]
 		public void GivenIHaveAPersonPeriodThatStartsOn(DateTime date)
 		{
-			var personPeriod = new PersonPeriodConfigurable()
+			var personPeriod = new PersonPeriodConfigurable
 				{
 					StartDate = date,
 					RuleSetBag = "Common"
@@ -48,6 +48,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var meeting = table.CreateInstance<MeetingConfigurable>();
 			UserFactory.User().Setup(meeting);
+		}
+
+		[Given(@"I have a pre-scheduled personal shift with")]
+		public void GivenIHaveAPersonalShiftWith(Table table)
+		{
+			var personalShift = table.CreateInstance<PersonalShiftConfigurable>();
+			UserFactory.User().Setup(personalShift);
 		}
 
 		[Given(@"I have a public note with")]
@@ -73,5 +80,4 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 
 	}
-
 }

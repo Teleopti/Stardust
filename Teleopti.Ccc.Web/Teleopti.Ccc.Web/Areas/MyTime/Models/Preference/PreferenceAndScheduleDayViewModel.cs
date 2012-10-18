@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 {
 	public class PreferenceAndScheduleDayViewModel
@@ -11,6 +13,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public bool Feedback { get; set; }
 		public string StyleClassName { get; set; }
 		public string BorderColor { get; set; }
-		public string MeetingAndPersonalShift { get; set; }
+		public IEnumerable<MeetingViewModel> Meetings { get; set; }
+		public IEnumerable<PersonalShiftViewModel> PersonalShifts { get; set; }
+	}
+
+	public class PersonalShiftViewModel
+	{
+		public string Subject { get; set; }
+		public string TimeSpan { get; set; }
+	}
+
+	public class MeetingViewModel
+	{
+		public string Subject { get; set; }
+		public string TimeSpan { get; set; }
+		public bool IsOptional { get; set; }
 	}
 }

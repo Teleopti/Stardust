@@ -1,4 +1,4 @@
-﻿Feature: Preference feedback for pre-scheduled meetings and personal shifts
+﻿Feature: Preferences feedback pre scheduled
 	In order to clearly see preferences that collide with the pre scheduled personal shift or meeting.
 	As an agent
 	I want good feedback about personal shifts, meetings and the the preferences in collision   
@@ -23,6 +23,10 @@ Background:
 	| Field        | Value                  |
 	| Name         | Phone disallow meeting |
 	| AllowMeeting | false                  |
+	And there is an activity with
+	| Field        | Value          |
+	| Name         | Administration |
+	| AllowMeeting | true           |
 	And there is a rule set with
 	| Field          | Value       |
 	| Name           | Common      |
@@ -71,14 +75,13 @@ Scenario: Tooltip of a pre-scheduled meeting
 	| StartTime | 2012-10-19 9:00  |
 	| EndTime   | 2012-10-19 10:00 |
 	| Subject   | Meeting subject  |
-	| Location  | Meeting location |
 
 Scenario: See indication of a pre-scheduled personal shift
 	Given I have a person period that starts on '2012-10-01'
 	And I have a pre-scheduled personal shift with
 	| Field     | Value            |
-	| StartTime | 2012-10-19 15:00 |
-	| EndTime   | 2012-10-19 17:00 |
+	| StartTime | 2012-10-19 9:00  |
+	| EndTime   | 2012-10-19 10:00 |
 	| Activity  | Administration   |
 	When I view preferences for date '2012-10-19'
 	Then I should see that I have a pre-scheduled personal shift on '2012-10-19'
@@ -87,14 +90,14 @@ Scenario: Tooltip of a pre-scheduled personal shift
 	Given I have a person period that starts on '2012-10-01'
 	And I have a pre-scheduled personal shift with
 	| Field     | Value            |
-	| StartTime | 2012-10-19 15:00 |
-	| EndTime   | 2012-10-19 17:00 |
+	| StartTime | 2012-10-19 9:00  |
+	| EndTime   | 2012-10-19 10:00 |
 	| Activity  | Administration   |
 	When I view preferences for date '2012-10-19'
 	Then I should have a tooltip for personal shift details with
 	| Field     | Value            |
-	| StartTime | 2012-10-19 15:00 |
-	| EndTime   | 2012-10-19 17:00 |
+	| StartTime | 2012-10-19 9:00  |
+	| EndTime   | 2012-10-19 10:00 |
 	| Activity  | Administration   |
 
 Scenario: Feedback from pre-scheduled meeting

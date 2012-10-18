@@ -86,12 +86,33 @@
 
 									<div class="preference">
 										<span class="displayinline-block">
-											<!-- ko if: MeetingAndPersonalShift().length>0 -->
+											<!-- ko if: Meetings().length > 0 || PersonalShifts().length > 0 -->
 											<div class="preference-indicator icon meeting-small">
 											</div>
 											<div class="meeting-tooltip" style="display: none">
-												<div>type</div>
-												<div><span>title (optional):</span> <span>17:00 - 18:00</span></div>
+												<!-- ko if: Meetings().length > 0 -->
+												<table>
+													<thead>@Resources.Meeting</thead>
+													<tbody data-bind="foreach: Meetings">
+														<tr>
+															<td data-bind="text: Subject"></td>
+															<td data-bind="text: TimeSpan"></td>
+															<td data-bind="text: IsOptional"></td>
+														</tr>
+													</tbody>
+												</table>
+												<!-- /ko -->
+												<!-- ko if: PersonalShifts().length > 0 -->
+												<table>
+													<thead>@Resources.PersonalShift</thead>
+													<tbody data-bind="foreach: PersonalShifts">
+														<tr>
+															<td data-bind="text: Subject"></td>
+															<td data-bind="text: TimeSpan"></td>
+														</tr>
+													</tbody>
+												</table>
+												<!-- /ko -->
 											</div>
 											<!-- /ko -->
 											<div class="preference-indicator">

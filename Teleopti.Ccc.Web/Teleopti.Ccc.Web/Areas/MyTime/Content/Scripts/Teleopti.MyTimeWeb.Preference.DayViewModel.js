@@ -64,7 +64,6 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.IsLoading = ko.observable(false);
 	this.Preference = ko.observable();
 	this.MustHave = ko.observable();
-	this.MeetingAndPersonalShift = ko.observable('');
 	this.Extended = ko.observable();
 	this.ExtendedTitle = ko.observable();
 	this.StartTimeLimitation = ko.observable();
@@ -84,6 +83,9 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.PersonAssignmentContractTime = ko.observable('');
 	this.ContractTimeMinutes = ko.observable(0);
 
+	this.Meetings = ko.observableArray();
+	this.PersonalShifts = ko.observableArray();
+	
 	this.EditableIsInOpenPeriod = ko.observable(false);
 	this.EditableHasNoSchedule = ko.computed(function () {
 		if (hasStringValue(self.DayOff()))

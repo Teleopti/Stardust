@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -8,6 +9,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using WatiN.Core;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -48,6 +50,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			indication.EventualClick();
 		}
 
+		[When(@"I hover over the meeting indication on date '(.*)'")]
+		public void WhenIHoverOverTheMeetingIndicationOnDate(DateTime date)
+		{
+			var indication = Pages.Pages.PreferencePage.MeetingAndPersonalShiftIndicationForDate(date);
+			Pages.Pages.PreferencePage.MeetingAndPersonalShiftTooltipForDate(date).WaitUntilExists();
+			indication.FireEvent("onmouseover");
+			Pages.Pages.PreferencePage.MeetingAndPersonalShiftTooltipForDate(date).WaitUntilRemoved();
+		}
+
 		[Then(@"I should see that I have an extended preference on '(.*)'")]
 		[Then(@"I should see an extended preference indication on '(.*)'")]
 		public void ThenIShouldSeeThatIHaveAnExtendedPreferenceOn(DateTime date)
@@ -57,19 +68,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => indication.DisplayVisible(), Is.True);
 		}
 
+		[Then(@"I should see that I have a pre-scheduled personal shift on '(.*)'")]
 		[Then(@"I should see that I have a pre-scheduled meeting on '(.*)'")]
 		public void ThenIShouldSeeThatIHaveAPreScheduledMeetingOn(DateTime date)
 		{
-			var indication = Pages.Pages.PreferencePage.MeetingIndicationForDate(date);
+			var indication = Pages.Pages.PreferencePage.MeetingAndPersonalShiftIndicationForDate(date);
 			EventualAssert.That(() => indication.Exists, Is.True);
 			EventualAssert.That(() => indication.DisplayVisible(), Is.True);
 		}
 
-		[Then(@"I should have a tooltip with meeting details")]
-		public void ThenIShouldHaveATooltipWithMeetingDetails()
+		[Then(@"I should have a tooltip for meeting details with")]
+		public void ThenIShouldHaveATooltipForMeetingDetailsWith(Table table)
 		{
+			var fields = table.CreateInstance<MeetingConfigurable>();
+			var meetings = Pages.Pages.PreferencePage.MeetingAndPersonalShiftTooltipForDate(fields.StartTime);
+
+			EventualAssert.That(() => meetings.InnerHtml, Is.StringContaining(fields.StartTime.ToShortTimeString().Split(' ').First()));
+			EventualAssert.That(() => meetings.InnerHtml, Is.StringContaining(fields.EndTime.ToShortTimeString().Split(' ').First()));
+			EventualAssert.That(() => meetings.InnerHtml, Is.StringContaining(fields.Subject));
 		}
 
+		[Then(@"I should have a tooltip for personal shift details with")]
+		public void ThenIShouldHaveATooltipForPersonalShiftDetailsWith(Table table)
+		{
+			var fields = table.CreateInstance<PersonalShiftConfigurable>();
+			var personalshifts = Pages.Pages.PreferencePage.MeetingAndPersonalShiftTooltipForDate(fields.StartTime);
+
+			EventualAssert.That(() => personalshifts.InnerHtml, Is.StringContaining(fields.StartTime.ToShortTimeString().Split(' ').First()));
+			EventualAssert.That(() => personalshifts.InnerHtml, Is.StringContaining(fields.EndTime.ToShortTimeString().Split(' ').First()));
+			EventualAssert.That(() => personalshifts.InnerHtml, Is.StringContaining(fields.Activity));
+		}
 
 		[Then(@"I should not see an extended preference indication on '(.*)'")]
 		public void ThenIShouldNotSeeAnExtendedPreferenceIndicationOn(DateTime date)

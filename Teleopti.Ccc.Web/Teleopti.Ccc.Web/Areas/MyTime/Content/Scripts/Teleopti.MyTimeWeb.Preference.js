@@ -184,11 +184,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	function _activateMeetingTooltip() {
 		$('.meeting-small')
-			.each(function() {
+			.each(function () {
+				var date = $(this).closest("li[data-mytime-date]").attr("data-mytime-date");
 				var content = {
 					text: $(this).next('.meeting-tooltip')
 				};
 				$(this).qtip({
+					id: "meeting-" + date,
 					content: content,
 					style: {
 						def: false,
