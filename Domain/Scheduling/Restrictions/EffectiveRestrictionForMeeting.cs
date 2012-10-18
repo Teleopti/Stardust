@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			foreach (IPersonMeeting meeting in meetings)
 			{
-				DateTimePeriod personalShiftPeriod = meeting.Period;
-				var personalShiftRestriction = new EffectiveRestriction(
-					new StartTimeLimitation(null, personalShiftPeriod.TimePeriod(timeZoneInfo).StartTime),
-					new EndTimeLimitation(personalShiftPeriod.TimePeriod(timeZoneInfo).EndTime, null),
-					new WorkTimeLimitation(personalShiftPeriod.TimePeriod(timeZoneInfo).SpanningTime(), null), null,
+				DateTimePeriod meetingPeriod = meeting.Period;
+				var shiftRestriction = new EffectiveRestriction(
+					new StartTimeLimitation(null, meetingPeriod.TimePeriod(timeZoneInfo).StartTime),
+					new EndTimeLimitation(meetingPeriod.TimePeriod(timeZoneInfo).EndTime, null),
+					new WorkTimeLimitation(meetingPeriod.TimePeriod(timeZoneInfo).SpanningTime(), null), null,
 					null, null, new List<IActivityRestriction>());
-				effectiveRestriction = effectiveRestriction.Combine(personalShiftRestriction);
+				effectiveRestriction = effectiveRestriction.Combine(shiftRestriction);
 			}
 			return effectiveRestriction;
 		}
