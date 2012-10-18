@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return sb.ToString();
         }
 
-        private static string ToLocalStartEndTimeString(DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo, CultureInfo cultureInfo)
+        public static string ToLocalStartEndTimeString(DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo, CultureInfo cultureInfo)
         {
             const string separator = " - ";
             string start = period.StartDateTimeLocal(timeZoneInfo).ToString("t", cultureInfo);

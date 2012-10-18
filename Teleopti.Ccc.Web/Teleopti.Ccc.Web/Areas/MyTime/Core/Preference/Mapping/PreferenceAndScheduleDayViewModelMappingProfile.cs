@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -92,7 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 							return meetings.Select(personMeeting => new MeetingViewModel
 								{
 									Subject = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
-									TimeSpan = ToLocalStartEndTimeString(personMeeting.Period,
+									TimeSpan = ScheduleDayStringVisualizer.ToLocalStartEndTimeString(personMeeting.Period,
 									                                     _userTimeZone.Invoke().TimeZone(), CultureInfo.CurrentCulture),
 									IsOptional = personMeeting.Optional
 								}).ToList();
@@ -112,7 +110,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 									        Subject =
 										        layer.Payload.ConfidentialDescription(personAssignment.Person, s.DateOnlyAsPeriod.DateOnly).Name,
 									        TimeSpan =
-										        ToLocalStartEndTimeString(layer.Period, _userTimeZone.Invoke().TimeZone(), CultureInfo.CurrentCulture)
+												ScheduleDayStringVisualizer.ToLocalStartEndTimeString(layer.Period, _userTimeZone.Invoke().TimeZone(), CultureInfo.CurrentCulture)
 								        }).ToList();
 						}
 						return null;
@@ -132,14 +130,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(_projectionProvider.Invoke().Projection(s).ContractTime(), CultureInfo.CurrentUICulture)))
 				.ForMember(d => d.TimeSpan, o => o.MapFrom(s => s.AssignmentHighZOrder().Period.TimePeriod(s.TimeZone).ToShortTimeString()))
 				.ForMember(d => d.ContractTimeMinutes, o => o.MapFrom(s => _projectionProvider.Invoke().Projection(s).ContractTime().TotalMinutes));
-		}
-
-		private static string ToLocalStartEndTimeString(DateTimePeriod period, ICccTimeZoneInfo timeZone, CultureInfo cultureInfo)
-		{
-			const string separator = " - ";
-			string start = period.StartDateTimeLocal(timeZone).ToString("t", cultureInfo);
-			string end = period.EndDateTimeLocal(timeZone).ToString("t", cultureInfo);
-			return string.Concat(start, separator, end);
 		}
 	}
 }

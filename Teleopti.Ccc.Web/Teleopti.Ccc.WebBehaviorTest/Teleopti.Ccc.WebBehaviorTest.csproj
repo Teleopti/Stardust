@@ -107,6 +107,7 @@
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\ContractConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ContractScheduleConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\PersonalShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonAvailabilityConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\RuleSetBagConfigurable.cs" />
     <Compile Include="Bindings\Generic\RuleSetBagStepDefinitions.cs" />
