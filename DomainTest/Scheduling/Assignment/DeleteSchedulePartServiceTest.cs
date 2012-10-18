@@ -305,6 +305,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
         }
 
+		[Test]
+		public void ShouldDeleteWithSpecifiedRules()
+		{
+			_list = new List<IScheduleDay> { _part1, _part2 };
+			var rules = NewBusinessRuleCollection.Minimum();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+				Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
+				Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_part3.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(() => _rollbackService.Modify(_part3, rules)).Repeat.AtLeastOnce();
+				Expect.Call(() => _rollbackService.Modify(_part2, rules));
+			}
+
+			var ret = _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker, rules);
+			Assert.AreEqual(2, ret.Count);
+		}
+
         [Test]
         public void VerifyDeleteIsReturningListOfNewScheduleParts()
         {
