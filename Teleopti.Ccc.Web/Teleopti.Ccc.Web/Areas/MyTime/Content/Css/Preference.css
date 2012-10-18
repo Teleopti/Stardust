@@ -142,3 +142,9 @@
 .preference-not-fulfilled {
 	color: red;
 }
+
+.meeting-small {
+	margin-left: 3px;
+	margin-top: 5px;
+	margin-bottom: 3px;
+}
