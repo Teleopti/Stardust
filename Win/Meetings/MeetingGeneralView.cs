@@ -29,6 +29,11 @@ namespace Teleopti.Ccc.Win.Meetings
             outlookTimePickerStartTime.CreateAndBindList();
             outlookTimePickerStartTime.MaxValue = TimeSpan.FromDays(1);
             outlookTimePickerEndTime.MaxValue = TimeSpan.FromDays(1);
+
+        	dateTimePickerAdvStartDate.MinValue = DateHelper.MinSmallDateTime;
+        	dateTimePickerAdvStartDate.MaxValue = DateHelper.MaxSmallDateTime;
+        	dateTimePickerAdvEndDate.MinValue = DateHelper.MinSmallDateTime;
+        	dateTimePickerAdvEndDate.MaxValue = DateHelper.MaxSmallDateTime;
         }
 
         private void SetColors()
@@ -188,13 +193,10 @@ namespace Teleopti.Ccc.Win.Meetings
 
         public void OnMeetingTimeChanged()
         {
-			//outlookTimePickerStartTime.TextChanged -= outlookTimePickerStartTime_TextChanged;
-            //outlookTimePickerEndTime.TextChanged -= outlookTimePickerEndTime_TextChanged;
             outlookTimePickerStartTime.SetTimeValue(_presenter.Model.StartTime);
             outlookTimePickerEndTime.SetTimeValue(_presenter.Model.EndTime);
             dateTimePickerAdvEndDate.Value = _presenter.Model.EndDate;
             //outlookTimePickerStartTime.TextChanged += outlookTimePickerStartTime_TextChanged;
-            //outlookTimePickerEndTime.TextChanged += outlookTimePickerEndTime_TextChanged;
         }
 
     	public IMeetingDetailPresenter Presenter
