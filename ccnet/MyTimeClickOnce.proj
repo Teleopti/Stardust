@@ -127,7 +127,6 @@
 												  OutputManifest="$(SolutionName).application"
 												  MapFileExtensions="true"
 												  MinimumRequiredVersion="$(CCCVersion)"
-												  TargetFrameworkMoniker=".NETFramework,Version=v4.0"
                           TrustUrlParameters="true"/>
 
 
