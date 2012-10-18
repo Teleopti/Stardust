@@ -18,17 +18,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
-			var shiftCat = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals("Day"));
 			var activity = new ActivityRepository(uow).LoadAll().Single(a => a.Name == Activity);
 
 			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(StartTime);
 			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(EndTime);
 
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
 				activity,
 				user,
 				new DateTimePeriod(startTimeUtc, endTimeUtc),
-				shiftCat,
 				scenario);
 			var repository = new PersonAssignmentRepository(uow);
 			repository.Add(assignment);

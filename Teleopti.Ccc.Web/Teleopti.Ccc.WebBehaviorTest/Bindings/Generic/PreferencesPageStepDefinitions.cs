@@ -383,6 +383,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			public string StartTimeBoundry { get; set; }
 			public string EndTimeBoundry { get; set; }
 			public string ContractTimeBoundry { get; set; }
+			public string FeedbackError { get; set; }
 		}
 
 		[Then(@"I should see preference feedback with")]
@@ -394,6 +395,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-end-times").InnerHtml, Is.StringMatching(fields.EndTimeBoundry));
 			if (fields.ContractTimeBoundry != null)
 				EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-contract-times").InnerHtml, Is.StringMatching(fields.ContractTimeBoundry));
+			if (fields.FeedbackError != null)
+				EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "feedback-error").InnerHtml, Is.StringMatching(Resources.NoAvailableShifts));
 		}
 
 		[Then(@"I should see no preference feedback on '(.*)'")]

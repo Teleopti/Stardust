@@ -96,8 +96,12 @@
 													<tbody data-bind="foreach: Meetings">
 														<tr>
 															<td data-bind="text: Subject"></td>
+															<!-- ko if: IsOptional -->
+															<td>(@Resources.Optional)</td>
+															<!-- /ko -->
+															<td>:</td>
 															<td data-bind="text: TimeSpan"></td>
-															<td data-bind="text: IsOptional"></td>
+															
 														</tr>
 													</tbody>
 												</table>
@@ -108,6 +112,7 @@
 													<tbody data-bind="foreach: PersonalShifts">
 														<tr>
 															<td data-bind="text: Subject"></td>
+															<td>:</td>
 															<td data-bind="text: TimeSpan"></td>
 														</tr>
 													</tbody>
