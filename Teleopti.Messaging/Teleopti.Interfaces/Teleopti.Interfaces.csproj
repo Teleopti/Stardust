@@ -106,6 +106,7 @@
     <Compile Include="Domain\BudgetSection.cs" />
     <Compile Include="Domain\ChartSeriesDisplayType.cs" />
     <Compile Include="Domain\ClipboardAction.cs" />
+    <Compile Include="Domain\IEffectiveRestrictionForPersonalShift.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
     <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
     <Compile Include="Domain\DetailLevel.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Domain\IDayOffOptimizerConflictHandler.cs" />
     <Compile Include="Domain\IDayOffOptimizerValidator.cs" />
     <Compile Include="Domain\IAuditSetter.cs" />
+    <Compile Include="Domain\IEffectiveRestrictionForMeeting.cs" />
     <Compile Include="Domain\IEffectiveRestrictionForDisplayCreator.cs" />
     <Compile Include="Domain\IEffectiveRestrictionOptions.cs" />
     <Compile Include="Domain\IExtendedPreferencePredicate.cs" />

@@ -3,7 +3,7 @@ namespace Teleopti.Interfaces.Domain
 	/// <summary>
 	/// add effectiveRestriction to scheduleDay
 	/// </summary>
-	public interface IEffectiveRestrictionAdder
+	public interface IEffectiveRestrictionForPersonalShift
 	{
 		/// <summary>
 		/// add effectiveRestriction to  scheduleDay

@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
-	public class EffectiveRestrictionForMeeting : IEffectiveRestrictionAdder
+	public class EffectiveRestrictionForMeeting : IEffectiveRestrictionForMeeting
 	{
 		public IEffectiveRestriction AddEffectiveRestriction(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction)
 		{
