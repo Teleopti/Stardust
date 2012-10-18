@@ -43,6 +43,6 @@ end
 ----------------  
 IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PreferenceDay]') AND name = N'uq_preference_day_per_agent')
 BEGIN
-EXECUTE('DROP INDEX [uq_preference_day_per_agent] ON [dbo].[PreferenceDay] WITH ( ONLINE = OFF )')
+EXECUTE('DROP INDEX [uq_preference_day_per_agent] ON [dbo].[PreferenceDay]')
 END
 GO
