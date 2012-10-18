@@ -74,13 +74,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             Assert.AreEqual(totalNumberOfRules + 1, _target.Count);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void AllRulesForDeleteHasSetPropertyForDeleteInAllRules()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		public void NewOverlappingAssignmentRuleHasSetPropertyForDeleteInAllRules()
 	    {
             var rulesForDelete = NewBusinessRuleCollection.AllForDelete(new SchedulingResultStateHolder());
             foreach (INewBusinessRule rule in rulesForDelete)
             {
-                Assert.IsTrue(rule.ForDelete);
+				if(rule is NewOverlappingAssignmentRule || rule is GapsInAssignmentRule)
+					Assert.IsTrue(rule.ForDelete);
+				else
+					Assert.IsFalse(rule.ForDelete);
             }
 	    }
 
