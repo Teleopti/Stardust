@@ -7,9 +7,25 @@
 <script>
 	$(function () {
 		Teleopti.MyTimeWeb.Schedule.LoadAndBindData({
-			xRequests : '@Resources.XRequests',
-			subjectColon : '@Resources.SubjectColon',
-			locationColon : '@Resources.LocationColon'
+			xRequests: '@Resources.XRequests',
+			subjectColon: '@Resources.SubjectColon',
+			locationColon: '@Resources.LocationColon'
+		});
+		var ajax = new Teleopti.MyTimeWeb.Ajax();
+		ajax.Ajax({
+			url: 'MessageBroker/FetchUserData',
+			dataType: "json",
+			type: 'GET',
+			success: function (data) {
+				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
+					url: data.Url,
+					callback: Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener,
+					domainType: 'IScheduleChangedInDefaultScenario',
+					businessUnitId: data.BusinessUnitId,
+					datasource: data.DataSourceName,
+					referenceId: data.AgentId
+				});
+			}
 		});
 	});
 </script>

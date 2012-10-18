@@ -180,13 +180,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return Math.round(scheduleHeight * self.startPositionPercentage());
 		});
 		self.height = ko.computed(function () {
-			var bottom = Math.round(scheduleHeight * self.endPositionPercentage())-1;
+			var bottom = Math.round(scheduleHeight * self.endPositionPercentage()) - 1;
 			return bottom - self.top();
 		});
 		self.topPx = ko.computed(function () {
 			return self.top() + 'px';
 		});
-		self.heightPx = ko.computed(function() {
+		self.heightPx = ko.computed(function () {
 			return self.height() + 'px';
 		});
 		self.heightDouble = ko.computed(function () {
@@ -291,6 +291,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					_initTodayButton();
 				}
 			});
+		},
+		ReloadScheduleListener: function (notifiction) {
+			console.log('mb message');
 		},
 		PartialDispose: function () {
 			addTextRequestTooltip.qtip('destroy');
