@@ -261,7 +261,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Schedule/Week', Teleopti.MyTimeWeb.Schedule.PartialInit, Teleopti.MyTimeWeb.Schedule.PartialDispose);
 			}
 			Teleopti.MyTimeWeb.Schedule.Request.Init();
-			_initTodayButton();
 		},
 		PartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
@@ -289,6 +288,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					//for now
 					Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
 					Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
+					_initTodayButton();
 				}
 			});
 		},
