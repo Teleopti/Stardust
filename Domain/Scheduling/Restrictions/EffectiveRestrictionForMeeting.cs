@@ -15,14 +15,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (effectiveRestriction == null)
 				return null;
 
-			if (scheduleDay.PersonMeetingCollection().IsEmpty())
+			var meetings = scheduleDay.PersonMeetingCollection();
+
+			if (meetings.IsEmpty())
 				return effectiveRestriction;
 
 			//inte på parten här??????????
 			IPerson person = scheduleDay.Person;
 			ICccTimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 
-			foreach (IPersonMeeting meeting in scheduleDay.PersonMeetingCollection())
+			foreach (IPersonMeeting meeting in meetings)
 			{
 				DateTimePeriod personalShiftPeriod = meeting.Period;
 				var personalShiftRestriction = new EffectiveRestriction(
