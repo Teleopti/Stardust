@@ -125,6 +125,7 @@
     <Compile Include="Domain\IDayOffOptimizerConflictHandler.cs" />
     <Compile Include="Domain\IDayOffOptimizerValidator.cs" />
     <Compile Include="Domain\IAuditSetter.cs" />
+    <Compile Include="Domain\IEffectiveRestrictionAdder.cs" />
     <Compile Include="Domain\IEffectiveRestrictionForDisplayCreator.cs" />
     <Compile Include="Domain\IEffectiveRestrictionOptions.cs" />
     <Compile Include="Domain\IExtendedPreferencePredicate.cs" />
