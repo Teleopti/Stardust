@@ -19,16 +19,14 @@
 .preference-indicator 
 {
 	float: left;
-	width: 17px;
+	width: 14px;
 	height: 14px;
 }
 .extended-indication
 {
     position: relative;
     top: -2px;
-    margin-left: 4px;
-    padding-left: 3px;
-    padding-right: 3px;
+    margin-left: 1px;
     padding-top: 0px;
     padding-bottom: 3px;
     border-radius: 4px;
