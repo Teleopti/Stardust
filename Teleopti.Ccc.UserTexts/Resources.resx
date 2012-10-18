@@ -11147,4 +11147,8 @@ These options are activated:
     <value> - value before = </value>
     <comment>Information displayed on the status bar in scheduler during fairness optimization</comment>
   </data>
+  <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
+    <value>Selected file destination does not exist, please enter valid filepath</value>
+    <comment>Selected file destination does not exist, please enter valid filepath</comment>
+  </data>
 </root>
