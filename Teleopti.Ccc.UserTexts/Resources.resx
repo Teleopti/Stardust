@@ -11152,6 +11152,6 @@ These options are activated:
     <comment>The same activity option in Team scheduling and optimization</comment>
   </data>
   <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
-    <value>After checking against keep acitivity</value>
+    <value>After checking against keep activity</value>
   </data>
 </root>

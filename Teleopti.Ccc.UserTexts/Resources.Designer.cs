@@ -1268,7 +1268,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to After checking against keep acitivity.
+        ///   Looks up a localized string similar to After checking against keep activity.
         /// </summary>
         public static string AfterCheckingAgainstKeepActivity {
             get {
