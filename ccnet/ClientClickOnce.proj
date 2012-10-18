@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--EXTERNAL_PROPERTIES: CCNetWorkingDirectory, Configuration-->
-<Project DefaultTargets="ClientClickOnce" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="ClientClickOnce" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
   <PropertyGroup>
     <MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
