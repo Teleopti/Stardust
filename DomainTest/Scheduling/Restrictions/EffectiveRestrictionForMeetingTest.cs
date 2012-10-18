@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
+namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 {
 	[TestFixture]
-	public class EffectiveRestrictionForPersonaShiftTest
+	public class EffectiveRestrictionForMeetingTest
 	{
-		private EffectiveRestrictionForPersonalShift _target;
+		private EffectiveRestrictionForMeeting _target;
 		private MockRepository _mocks;
 		private IScheduleDay _scheduleDay;
 		private IEffectiveRestriction _restriction;
@@ -25,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
 			_mocks = new MockRepository();
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_restriction = _mocks.StrictMock<IEffectiveRestriction>();
-			_target = new EffectiveRestrictionForPersonalShift();
+			_target = new EffectiveRestrictionForMeeting();
 		}
 
 		[Test]
@@ -52,12 +50,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
 		}
 
 		[Test]
-		public void VerifyEmptyPersonAssignmentCollection()
+		public void VerifyEmptyPersonMeetingCollection()
 		{
 			using(_mocks.Record())
 			{
-				Expect.Call(_scheduleDay.PersonAssignmentCollection())
-					.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+				Expect.Call(_scheduleDay.PersonMeetingCollection())
+					.Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
 			}
 			using (_mocks.Playback())
 			{
@@ -72,23 +70,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
 		public void VerifyAddEffectiveRestriction()
 		{
 
-			IPersonAssignment personAssignment = _mocks.StrictMock<IPersonAssignment>();
+			IPersonMeeting personMeeting = _mocks.StrictMock<IPersonMeeting>();
 			IPerson person = PersonFactory.CreatePerson();
-			IPersonalShift personalShift = _mocks.StrictMock<IPersonalShift>();
-			IActivity activity = _mocks.StrictMock<IActivity>();
-			ILayerCollection<IActivity> layerCollection = new LayerCollection<IActivity>();
-			layerCollection.Add(new ActivityLayer(activity, DateTimeFactory.CreateDateTimePeriodUtc()));
 
 			using(_mocks.Record())
 			{
-				Expect.Call(_scheduleDay.PersonAssignmentCollection())
-					.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAssignment }));
+				Expect.Call(_scheduleDay.PersonMeetingCollection())
+					.Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>{personMeeting}));
 				Expect.Call(_scheduleDay.Person)
 					.Return(person);
-				Expect.Call(personAssignment.PersonalShiftCollection)
-					.Return(new ReadOnlyCollection<IPersonalShift>(new List<IPersonalShift> { personalShift }));
-				Expect.Call(personalShift.LayerCollection)
-					.Return(layerCollection);
+				Expect.Call(personMeeting.Period)
+					.Return(new DateTimePeriod());
 
 				Expect.Call(_restriction.Combine(null))
 					.IgnoreArguments()
