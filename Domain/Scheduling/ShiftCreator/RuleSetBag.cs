@@ -87,21 +87,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
 		  public virtual IWorkTimeMinMax MinMaxWorkTime(IWorkShiftWorkTime workShiftWorkTime,
                                                         DateOnly onDate,
-                                                        IEffectiveRestriction restriction)
+														IWorkTimeMinMaxRestriction restriction)
         {
 
             if (restriction == null)
                 return null;
 
-            if (restriction.DayOffTemplate != null)
-                return null;
+			if (!restriction.MayMatch())
+				return null;
+
+			//if (restriction.DayOffTemplate != null)
+			//    return null;
 
 		  	var validRuleSets = _ruleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.IsValidDate(onDate)).ToList();
             
             var nonRestrictionSets = validRuleSets.Where(workShiftRuleSet => !workShiftRuleSet.OnlyForRestrictions).ToList();
 				var retVal = worktimeForRuleSetsAndRestriction(restriction, nonRestrictionSets, workShiftWorkTime);
 
-            if(retVal == null && restriction.IsRestriction)
+            if(retVal == null && restriction.MayMatchBlacklistedShifts())
             {
                 var restrictionSets = validRuleSets.Where(workShiftRuleSet => workShiftRuleSet.OnlyForRestrictions).ToList();
 					 retVal = worktimeForRuleSetsAndRestriction(restriction, restrictionSets, workShiftWorkTime);
@@ -110,16 +113,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             return retVal;
         }
 
-        private static IWorkTimeMinMax worktimeForRuleSetsAndRestriction(IEffectiveRestriction restriction, IEnumerable<IWorkShiftRuleSet> validRuleSets,
+		  private static IWorkTimeMinMax worktimeForRuleSetsAndRestriction(IWorkTimeMinMaxRestriction restriction, IEnumerable<IWorkShiftRuleSet> validRuleSets,
 				IWorkShiftWorkTime workShiftWorkTime)
         {
 			  IWorkTimeMinMax retVal = null;
             foreach (var workShiftRuleSet in validRuleSets)
             {
-                
-                if (restriction.ShiftCategory != null &&
-                    !workShiftRuleSet.TemplateGenerator.Category.Equals(restriction.ShiftCategory))
-                    continue;
+
+				if (!restriction.Match(workShiftRuleSet.TemplateGenerator.Category))
+					continue;
+
+				//if (restriction.ShiftCategory != null &&
+				//    !workShiftRuleSet.TemplateGenerator.Category.Equals(restriction.ShiftCategory))
+				//    continue;
 
             	var ruleSetWorkTimeMinMax = workShiftWorkTime.CalculateMinMax(workShiftRuleSet, restriction);
                 if (ruleSetWorkTimeMinMax != null)

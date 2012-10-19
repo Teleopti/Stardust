@@ -30,18 +30,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			if (scheduleDay != null && effectiveRestrictionOptions != null)
 			{
+				var restrictions = scheduleDay.RestrictionCollection();
+
 				if (effectiveRestrictionOptions.UsePreference)
 				{
-					effectiveRestriction = _restrictionCombiner.CombinePreferenceRestrictions(
-						_retrievalOperation.GetPreferenceRestrictions(scheduleDay.RestrictionCollection()),
-						effectiveRestriction, false);
+					if (restrictions != null)
+						effectiveRestriction = _restrictionCombiner.CombinePreferenceRestrictions(
+							_retrievalOperation.GetPreferenceRestrictions(restrictions),
+							effectiveRestriction, false);
 				}
 
 				if (effectiveRestrictionOptions.UseAvailability)
 				{
-					effectiveRestriction = _restrictionCombiner.CombineAvailabilityRestrictions(
-						_retrievalOperation.GetAvailabilityRestrictions(scheduleDay.RestrictionCollection()),
-						effectiveRestriction);
+					if (restrictions != null)
+						effectiveRestriction = _restrictionCombiner.CombineAvailabilityRestrictions(
+							_retrievalOperation.GetAvailabilityRestrictions(restrictions),
+							effectiveRestriction);
 				}
 
 				if (effectiveRestrictionOptions.UseMeetings)

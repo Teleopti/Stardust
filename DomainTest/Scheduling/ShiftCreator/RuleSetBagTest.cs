@@ -141,18 +141,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
                                                   new WorkTimeLimitation(TimeSpan.FromHours(4), TimeSpan.FromHours(8))
                                           };
 
+			var shiftCategory = new ShiftCategory(" ");
+			var templateGenerator = MockRepository.GenerateMock<IWorkShiftTemplateGenerator>();
+			templateGenerator.Stub(x => x.Category).Return(shiftCategory);
+
             using (_mocks.Record())
             {
-                Expect.Call(effectiveRestriction.DayOffTemplate).Return(null);
-                Expect.Call(effectiveRestriction.ShiftCategory).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(effectiveRestriction.MayMatch()).Return(true);
+                Expect.Call(effectiveRestriction.Match(shiftCategory)).Return(true).Repeat.AtLeastOnce();
             	Expect.Call(workShiftWorkTime.CalculateMinMax(ruleSet1, effectiveRestriction)).Return(minMax1);
             	Expect.Call(workShiftWorkTime.CalculateMinMax(ruleSet2, effectiveRestriction)).Return(minMax2);
 
-                Expect.Call(ruleSet2.IsValidDate(new DateOnly(2008, 1, 1))).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
-                Expect.Call(ruleSet1.IsValidDate(new DateOnly(2008, 1, 1))).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
-                Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
+				Expect.Call(ruleSet1.IsValidDate(new DateOnly(2008, 1, 1))).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+				Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
+				Expect.Call(ruleSet1.TemplateGenerator).Return(templateGenerator);
+				Expect.Call(ruleSet2.IsValidDate(new DateOnly(2008, 1, 1))).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
                 Expect.Call(ruleSet2.OnlyForRestrictions).Return(false);
-            }
+				Expect.Call(ruleSet2.TemplateGenerator).Return(templateGenerator);
+			}
 
             using (_mocks.Playback())
             {
@@ -206,9 +212,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         {
 			  var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService()));
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
+
             using (_mocks.Record())
             {
-                Expect.Call(effectiveRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("af")));
+                Expect.Call(effectiveRestriction.MayMatch()).Return(false);
             }
 
             using (_mocks.Playback())
@@ -228,9 +235,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 
             using (_mocks.Record())
             {
-                Expect.Call(effectiveRestriction.DayOffTemplate).Return(null);
+                Expect.Call(effectiveRestriction.MayMatch()).Return(true);
                 Expect.Call(ruleSet.IsValidDate(new DateOnly())).IgnoreArguments().Return(false);
-                Expect.Call(effectiveRestriction.IsRestriction).Return(false);
+                Expect.Call(effectiveRestriction.MayMatchBlacklistedShifts()).Return(false);
             }
 
             using (_mocks.Playback())
@@ -260,15 +267,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
                     new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(11))
             };
 
+	        var shiftCategory = new ShiftCategory(" ");
+	        var templateGenerator = MockRepository.GenerateMock<IWorkShiftTemplateGenerator>();
+	        templateGenerator.Stub(x => x.Category).Return(shiftCategory);
+
             using (_mocks.Record())
             {
-                Expect.Call(effectiveRestriction.DayOffTemplate).Return(null);
-                Expect.Call(effectiveRestriction.ShiftCategory).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(effectiveRestriction.MayMatch()).Return(true);
+                Expect.Call(effectiveRestriction.Match(shiftCategory)).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(ruleSet.IsValidDate(new DateOnly())).IgnoreArguments().Return(true);
-                Expect.Call(ruleSet2.IsValidDate(new DateOnly())).IgnoreArguments().Return(true);
-                Expect.Call(ruleSet.OnlyForRestrictions).Return(false).Repeat.Twice();
-                Expect.Call(effectiveRestriction.IsRestriction).Return(true);
-                Expect.Call(ruleSet2.OnlyForRestrictions).Return(true).Repeat.Twice();
+	            Expect.Call(ruleSet.TemplateGenerator).Return(templateGenerator);
+				Expect.Call(ruleSet.OnlyForRestrictions).Return(false).Repeat.Twice();
+				Expect.Call(ruleSet2.IsValidDate(new DateOnly())).IgnoreArguments().Return(true);
+				Expect.Call(ruleSet2.TemplateGenerator).Return(templateGenerator);
+				Expect.Call(ruleSet2.OnlyForRestrictions).Return(true).Repeat.Twice();
+                Expect.Call(effectiveRestriction.MayMatchBlacklistedShifts()).Return(true);
             	Expect.Call(workShiftWorkTime.CalculateMinMax(ruleSet, effectiveRestriction)).Return(null);
             	Expect.Call(workShiftWorkTime.CalculateMinMax(ruleSet2, effectiveRestriction)).Return(minMax1);
             }

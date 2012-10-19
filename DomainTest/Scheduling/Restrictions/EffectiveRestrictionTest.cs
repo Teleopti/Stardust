@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
     [TestFixture]
     public class EffectiveRestrictionTest
     {
-        private IEffectiveRestriction _target;
+        private EffectiveRestriction _target;
         private StartTimeLimitation _startTimeLimitation;
         private EndTimeLimitation _endTimeLimitation;
         private WorkTimeLimitation _workTimeLimitation;
@@ -565,7 +565,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				null,
 				null, null, new List<IActivityRestriction>());
 			other.NotAvailable = true;
-			_target = _target.Combine(other);
+			_target = _target.Combine(other) as EffectiveRestriction;
 			Assert.IsTrue(_target.NotAvailable);
 
 			other = new EffectiveRestriction(
@@ -575,7 +575,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				null,
 				null, null, new List<IActivityRestriction>());
 
-			_target = _target.Combine(other);
+			_target = _target.Combine(other) as EffectiveRestriction;
 			Assert.IsTrue(_target.NotAvailable);
 		}
 

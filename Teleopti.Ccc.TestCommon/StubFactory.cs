@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.TestCommon
 			scheduleDay.Stub(x => x.SignificantPartForDisplay()).Return(significantPartToDisplay);
 			scheduleDay.Stub(x => x.SignificantPart()).Return(significantPartToDisplay);
 			scheduleDay.Stub(x => x.TimeZone).Return(timeZone);
-			scheduleDay.Stub(x => x.RestrictionCollection()).Return(new IRestrictionBase[] {});
+			//scheduleDay.Stub(x => x.RestrictionCollection()).Return(new IRestrictionBase[] {});
 			if (person != null)
 				scheduleDay.Stub(x => x.Person).Return(person);
 			if (publicNote != null)

@@ -43,7 +43,35 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             _activityRestrictionCollection = activityRestrictionCollection;
         }
 
-        public StartTimeLimitation StartTimeLimitation
+		#region Implementation of IIWorkTimeMinMaxRestriction
+
+		public bool MayMatch()
+		{
+			var available = !NotAvailable;
+			var noDayOff = DayOffTemplate != null;
+			return available && noDayOff;
+		}
+
+		public bool MayMatchBlacklistedShifts()
+		{
+			return IsRestriction;
+		}
+
+		public bool Match(IShiftCategory shiftCategory)
+		{
+			if (ShiftCategory == null)
+				return true;
+			return shiftCategory.Equals(ShiftCategory);
+		}
+
+		public bool Match(IWorkShiftProjection workShiftProjection)
+		{
+			return ValidateWorkShiftInfo(workShiftProjection);
+		}
+
+		#endregion
+
+		public StartTimeLimitation StartTimeLimitation
         {
             get { return _startTimeLimitation; }
         }
