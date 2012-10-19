@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "1.8.1.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Time indicator in week schedule")]
-    public partial class TimeIndicatorInWeekScheduleFeature
+    [NUnit.Framework.DescriptionAttribute("Week schedule time indicator")]
+    public partial class WeekScheduleTimeIndicatorFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Time indicator in week schedule", "In order to get better control of my weekly schedule \r\nAs an agent\r\nI want to see" +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Week schedule time indicator", "In order to get better control of my weekly schedule \r\nAs an agent\r\nI want to see" +
                     " an indication of the current and passed time in the week schedule", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
