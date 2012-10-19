@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private TimeZoneInfo _timeZone;
         private ICollection<DateOnly> _availableDates;
         private IEnumerable<DateOnlyPeriod> _availablePeriods;
-        private IShiftCategoryFairness _shiftCategoryFairness;
+        private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
 
         public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters)
             : base(owner, parameters)
@@ -230,7 +231,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             _calculatedTargettTimeHolder = null;
             _calculatedTargetScheduleDaysOff = null;
             _calculatedScheduleDaysOff = null;
-            _shiftCategoryFairness = null;
+            _shiftCategoryFairnessHolder = null;
         }
 
         private class PersistableScheduleDataForAuthorization
@@ -416,16 +417,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         	return ((ISchedule) this).Owner.Period.VisiblePeriodMinusFourWeeksPeriod();
         }
 
-        public IShiftCategoryFairness CachedShiftCategoryFairness()
+        public IShiftCategoryFairnessHolder CachedShiftCategoryFairness()
         {
-            if (_shiftCategoryFairness == null)
+            if (_shiftCategoryFairnessHolder == null)
             {
                 ShiftCategoryFairnessCreator creator = new ShiftCategoryFairnessCreator();
                 TimeZoneInfo timeZoneInfo = this.Person.PermissionInformation.DefaultTimeZone();
                 DateOnlyPeriod period = VisiblePeriodMinusFourWeeksPeriod().ToDateOnlyPeriod(timeZoneInfo);
-                _shiftCategoryFairness = creator.CreatePersonShiftCategoryFairness(this, period);
+                _shiftCategoryFairnessHolder = creator.CreatePersonShiftCategoryFairness(this, period);
             }
-            return _shiftCategoryFairness;
+            return _shiftCategoryFairnessHolder;
         }
     }
 }

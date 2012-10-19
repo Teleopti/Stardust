@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -30,5 +28,13 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <returns></returns>
 		IList<IScheduleDay> Swap(IScheduleDictionary schedules);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="selectedSchedules"></param>
+		/// <param name="schedules"></param>
+		/// <returns></returns>
+		IList<IScheduleDay> Swap(IList<IScheduleDay> selectedSchedules, IScheduleDictionary schedules);
 	}
 }

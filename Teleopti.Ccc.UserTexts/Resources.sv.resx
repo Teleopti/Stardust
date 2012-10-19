@@ -10730,4 +10730,16 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="YourScheduleHasChanged" xml:space="preserve">
     <value>Ditt schema har ändrats!</value>
   </data>
+  <data name="FairnessOptimizationOn" xml:space="preserve">
+    <value>Optimerar rättvisa på </value>
+  </data>
+  <data name="FairnessOptimizationRollingBack" xml:space="preserve">
+    <value> - värdet efter är inte bättre, rullar tillbaka.</value>
+  </data>
+  <data name="FairnessOptimizationValueAfter" xml:space="preserve">
+    <value> - värdet efter =</value>
+  </data>
+  <data name="FairnessOptimizationValueBefore" xml:space="preserve">
+    <value> - värdet innan =</value>
+  </data>
 </root>

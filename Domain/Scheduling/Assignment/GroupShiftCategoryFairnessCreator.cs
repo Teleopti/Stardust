@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -18,14 +19,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private IScheduleDictionary ScheduleDictionary
         { get { return _resultStateHolder.Schedules; } }
 
-        public IShiftCategoryFairness CalculateGroupShiftCategoryFairness(IPerson person, DateOnly dateOnly)
+        public IShiftCategoryFairnessHolder CalculateGroupShiftCategoryFairness(IPerson person, DateOnly dateOnly)
         {
             IGroupPage groupPage = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate.GetGroupPageByDate(dateOnly);
             return CalculateGroupShiftCategoryFairness(groupPage, person, dateOnly);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public IShiftCategoryFairness CalculateGroupShiftCategoryFairness(IGroupPage groupPage, IPerson person, DateOnly dateOnly)
+        public IShiftCategoryFairnessHolder CalculateGroupShiftCategoryFairness(IGroupPage groupPage, IPerson person, DateOnly dateOnly)
         {
             var rootGroups = groupPage.RootGroupCollection;
             var retLis = new List<IPerson>();
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 CheckGroupCollection(person, rootPersonGroup, retLis);
             }
 
-            IShiftCategoryFairness groupFairness = new ShiftCategoryFairness();
+            IShiftCategoryFairnessHolder groupFairnessHolder = new ShiftCategoryFairnessHolder();
             foreach (IPerson member in retLis)
             {
 				if (member.TerminalDate != null && member.TerminalDate < dateOnly)
@@ -43,10 +44,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 if (!member.VirtualSchedulePeriod(dateOnly).IsValid)
                     continue;
                 IScheduleRange range = ScheduleDictionary[member];
-                IShiftCategoryFairness fairness = range.CachedShiftCategoryFairness();
-                groupFairness = groupFairness.Add(fairness);
+                IShiftCategoryFairnessHolder fairnessHolder = range.CachedShiftCategoryFairness();
+                groupFairnessHolder = groupFairnessHolder.Add(fairnessHolder);
             }
-            return groupFairness;
+            return groupFairnessHolder;
         }
 
         private void CheckGroupCollection(IPerson person, IPersonGroup group, List<IPerson> retLis)

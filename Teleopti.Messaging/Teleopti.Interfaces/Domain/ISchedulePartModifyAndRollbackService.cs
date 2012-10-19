@@ -18,12 +18,19 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         void Modify(IScheduleDay schedulePart);
 
+    	/// <summary>
+    	/// Modifies with specified rules
+    	/// </summary>
+    	/// <param name="schedulePart"></param>
+    	/// <param name="newBusinessRuleCollection"></param>
+    	void Modify(IScheduleDay schedulePart, INewBusinessRuleCollection newBusinessRuleCollection);
+
         /// <summary>
         /// Modifies the specified schedule part.
         /// </summary>
         /// <param name="schedulePart">The schedule part.</param>
         /// <param name="scheduleTagSetter">The schedule tag setter.</param>
-        void Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter);
+		IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter);
 
         /// <summary>
         /// Performs a rollback to the state of when this class was instatiated.
@@ -63,5 +70,12 @@ namespace Teleopti.Interfaces.Domain
         /// Clears the modification collection.
         /// </summary>
         void ClearModificationCollection();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="scheduleParts"></param>
+		/// <returns></returns>
+		IEnumerable<IBusinessRuleResponse> ModifyParts(IEnumerable<IScheduleDay> scheduleParts);
     }
 }

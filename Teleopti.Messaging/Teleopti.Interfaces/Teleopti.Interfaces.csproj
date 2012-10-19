@@ -147,6 +147,7 @@
     <Compile Include="Domain\IProvideCustomChangeInfo.cs" />
     <Compile Include="Domain\IRelativeDailyDifferencesByAllSkillsExtractor.cs" />
     <Compile Include="Domain\IResourceCalculateDelayer.cs" />
+    <Compile Include="Domain\IRestrictionCombiner.cs" />
     <Compile Include="Domain\IRevision.cs" />
     <Compile Include="Domain\IRuleSetProjectionService.cs" />
     <Compile Include="Domain\IScheduleDayAvailabilityRestrictionExtractor.cs" />
@@ -285,7 +286,7 @@
     <Compile Include="Domain\ISchedulingResultService.cs" />
     <Compile Include="Domain\IScorecard.cs" />
     <Compile Include="Domain\IScorecardPeriod.cs" />
-    <Compile Include="Domain\IShiftCategoryFairness.cs" />
+    <Compile Include="Domain\IShiftCategoryFairnessHolder.cs" />
     <Compile Include="Domain\IShiftCategoryFairnessFactors.cs" />
     <Compile Include="Domain\IShiftCategoryFairnessShiftValueCalculator.cs" />
     <Compile Include="Domain\IShiftCategoryLimitation.cs" />

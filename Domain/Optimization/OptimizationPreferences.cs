@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool OptimizationStepShiftsForFlexibleWorkTime { get; set; }
 		public bool OptimizationStepDaysOffForFlexibleWorkTime { get; set; }
 		public bool OptimizationStepShiftsWithinDay { get; set; }
+		public bool OptimizationStepFairness { get; set; }
 
 		public bool UsePreferences { get; set; }
 		public bool UseMustHaves { get; set; }

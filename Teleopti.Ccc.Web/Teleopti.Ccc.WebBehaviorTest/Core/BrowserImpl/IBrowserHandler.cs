@@ -5,5 +5,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 		T Start();
 		void PrepareForTestRun();
 		void Close();
+		T Restart();
 	}
 }

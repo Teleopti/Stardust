@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
         private bool _showGraph = true;
         private bool _showResult = true;
         private bool _showRestrictionView;
-        private int _editorHeight = 120;
+        private int _editorHeight = 50;
         private TeleoptiLessIntelligentSplitContainer _gridEditorSplitter;
         private TeleoptiLessIntelligentSplitContainer _restrictionViewSplitter;
 
@@ -135,17 +135,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
                 RestrictionViewSplitter.Style = Style.Office2007Blue;
                 RestrictionViewSplitter.SplitterWidth = 7;
             }
-        }
-
-        public void ToggleEditorHeight()
-        {
-            if (_editorHeight == 100)
-                _editorHeight = 150;
-            else
-            {
-                _editorHeight = 100;
-            }
-            GridEditorSplitter.SplitterDistance = GridEditorSplitter.Height - _editorHeight;
         }
 
         private void setupResultAndGraph()

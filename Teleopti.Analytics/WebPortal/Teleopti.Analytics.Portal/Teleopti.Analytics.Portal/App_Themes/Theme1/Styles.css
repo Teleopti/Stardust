@@ -1,13 +1,22 @@
 ﻿
 body
 {
+	font-family:Segoe UI, Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
 }
 
+.Login 
+{
+	font-size: 14px;
+	vertical-align: middle;
+}
+.SignOut {
+	text-decoration: none;
+	color: black;
+	font-weight: bold;
+}
 
 .Panel
 {
-	/*font-family:Verdana, Tahoma, Arial, Helvetica, Sans-Serif;*/
-	font-family:Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
 	font-size:11px;
 	font-weight:bold;
 	color:#545c60;	
@@ -17,18 +26,19 @@ body
 	background-color:White;
 	border: solid 1px #6e92a4;
 	border-collapse: collapse; /*background-color:#FFF;*/
+	clear:both;
+	padding: 0px;
+	margin: 0px;
 }
 
+.Panel table {
+	border-spacing: 0px;
+}
 .Panel TD
 {
     padding: 2px 5px 2px 5px;
     }
     
-.Panel TD.Caption
-{
-    padding: 0px 10px;
-    }
-
 .Panel TD.NoPadding
 {
     padding: 0px;
@@ -52,38 +62,37 @@ body
  
  .Caption
 {
-	font-weight: bold;
-	font-size: 11px;
+	font-size: 14px;
+	padding-left: 5px;
 	color: white;
-	padding: 0 10px;
-	text-align: inherit;
-	background-image: url(images/gridheaditem_bg.gif);
+	/*background-image: url(images/gridheaditem_bg.gif);
+	background-color:  #6e92a4;*/
+	background-color:  #96bacc;
 	height: 22px;
-	vertical-align: middle;
-	white-space:nowrap;
 }   
     #Reports_HeaderPanel .Caption 
 {
 	border:none;
 }
-
-.DetailsView td 
-{
-	background-color: white;
-	border-top: none;
-	border-left: none;
-	border-right: none;
-	border-bottom: solid 1px #bed7e5;
+.ReportName {
+	margin-top: 3px;
 	padding-left: 10px;
+}
+.DetailsView {
+	padding-left: 10px;
+	padding-top: 10px;
+}
+.DetailsView TD
+{
+	border-bottom: solid 1px #bed7e5;
 	color: #545a86;
-	font-size: 11px;
+	font-size: 14px;
 	font-weight:bold;
 }
 
 .ReportBody
 {
-	font-family: Arial;
-	color: dimgray;
+	color: rgb(105,105,105);
 	font-size: 10pt;
 }
 
@@ -96,7 +105,7 @@ body
 
 .ReportSelection
 {
-	font-size: 9pt;
+	font-size: 11pt;
 	margin-right: 10px;
 }
 
@@ -128,7 +137,7 @@ body
 .ReportColumnHeaders
 {
 	font-weight: bold;
-	color: darkgrey;
+	color: rgb(169,169,169);
 	height: 40px;
 }
 
@@ -171,7 +180,7 @@ body
 {
 	font-weight: normal;
 	font-style: italic;
-	color: dimgray;
+	color: rgb(105,105,105);
 }
 
 .ReportIntervalTotalDeviationCell
@@ -183,7 +192,7 @@ body
 .ReportTotalAdherence
 {
 	font-weight: normal;
-	color: dimgray;
+	color: rgb(105,105,105);
 	font-style: italic;
 	border-top: solid 1pt lightgrey;
 }
@@ -211,20 +220,24 @@ body
 
 .ErrorLabel
 {
-	font-family:Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
 	color: Red;
 	font-size: large;
 	font-weight: bold;
 }
+
 .TechnicalDetail
 {
-	font-family:Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
 	font-size: small;
 }
 .TechnicalDetailHeader
 {
-	font-family:Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
 	font-size: small;
 	font-weight: bold;
 	text-decoration:underline;
+}
+#ViewerFrame {
+	border: none;
+	height:670px; 
+	overflow:hidden; 
+
 }

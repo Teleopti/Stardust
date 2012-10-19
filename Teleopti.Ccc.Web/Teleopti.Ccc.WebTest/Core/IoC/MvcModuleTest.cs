@@ -493,7 +493,5 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			result.Should().Not.Be.Null();
 		}
 
-
-
 	}
 }

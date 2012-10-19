@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I select a standard preference")]
 		public void WhenIChangeStandardPreference()
 		{
-			TestControllerMethods.WaitForPreferencesToLoad();
 			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
 			_page.SelectPreferenceItemByText(data.ShiftCategory.Description.Name, true);
 		}
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I try to select a standard preference")]
 		public void WhenITryToSelectStandardPreference()
 		{
-			TestControllerMethods.WaitForPreferencesToLoad();
 			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
 			_page.SelectPreferenceItemByText(data.ShiftCategory.Description.Name, false);
 		}
@@ -201,7 +199,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var editableDate = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			_page.SelectCalendarCellForDateByClick(editableDate);
-			_page.CalendarCellForDate(editableDate).ClassName.Should().Contain("ui-selected");
+			_page.CalendarCellSelectableForDate(editableDate).ClassName.Should().Contain("ui-selected");
 		}
 
 		[Then(@"I should not be able to see preferences link")]

@@ -379,27 +379,37 @@ namespace Teleopti.Ccc.Win.Meetings
             }
         }
 
-        private void textBoxExtRequiredParticipant_MouseUp(object sender, EventArgs e)
+		private void textBoxExtRequiredParticipant_MouseUp(object sender, MouseEventArgs e)
         {
             _isRequired = true;
+			if (e.Button.Equals(MouseButtons.Right))
+				textBoxExtRequiredParticipant.Select();
             TextBoxNameExtender.GetSelected(textBoxExtRequiredParticipant);   
         }
 
-        private void textBoxExtOptionalParticipant_MouseUp(object sender, EventArgs e)
+		private void textBoxExtOptionalParticipant_MouseUp(object sender, MouseEventArgs e)
         {
             _isRequired = false;
+			if (e.Button.Equals(MouseButtons.Right))
+				textBoxExtOptionalParticipant.Select();
             TextBoxNameExtender.GetSelected(textBoxExtOptionalParticipant);
         }
+
+		private void textBoxExtFilterCriteria_MouseUp(object sender, MouseEventArgs e)
+		{
+			if(e.Button.Equals(MouseButtons.Right))
+				textBoxExtFilterCriteria.Select();
+		}
         
         private void textBoxExtRequiredParticipant_KeyDown(object sender, KeyEventArgs e)
         {
-            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase) ActiveControl, e, _lastSelectionWas);
+            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase) ActiveControl, e, _lastSelectionWas, true);
             e.SuppressKeyPress = true;
         }
 
         private void textBoxExtOptionalParticipant_KeyDown(object sender, KeyEventArgs e)
         {
-            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase)ActiveControl, e, _lastSelectionWas);
+            _lastSelectionWas = TextBoxNameExtender.KeyDown((TextBoxBase)ActiveControl, e, _lastSelectionWas, true);
             e.SuppressKeyPress = true;
         }
 
@@ -423,7 +433,8 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TextBoxNameExtender.PasteItem((TextBoxBase)ActiveControl);
+        	var addSemiColon = !ActiveControl.Name.Equals("textBoxExtFilterCriteria");
+            TextBoxNameExtender.PasteItem((TextBoxBase)ActiveControl, addSemiColon);
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)

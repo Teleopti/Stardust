@@ -21,11 +21,10 @@ namespace Teleopti.Ccc.Win.Meetings
         private readonly bool _editMeetingPermission;
         private readonly bool _viewSchedulesPermission;
 	    private IMeetingDetailView _currentView;
-	    private IEventAggregator _eventAggregator;
+	    private readonly IEventAggregator _eventAggregator;
 
 	    public event EventHandler<ModifyMeetingEventArgs> ModificationOccurred;
 
-		
         protected MeetingComposerView()
         {
             InitializeComponent();
@@ -147,8 +146,6 @@ namespace Teleopti.Ccc.Win.Meetings
             {
                 if (meetingRecurrenceView.ShowDialog(this) != DialogResult.OK) return;
                 _meetingComposerPresenter.RecurrentMeetingUpdated();
-                //NotifyMeetingDatesChanged(meetingRecurrenceView);
-                //NotifyMeetingTimeChanged(meetingRecurrenceView);
                 _currentView.Presenter.UpdateView();
             }
         }
@@ -210,17 +207,13 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
 		private void ChangeView(ViewType viewType)
-        {
-            //if (panelContent.Controls.Count>0)
-            //{
-                panelContent.Controls.Clear();
-            //}
+		{
+			panelContent.Controls.Clear();
 
             toolStripButtonMeetings.Checked = false;
             toolStripButtonSchedules.Checked = false;
             toolStripButtonImpact.Checked = false;
 
-        	//IMeetingDetailView view = null;
             switch (viewType)
             {
                 case ViewType.MeetingView:
@@ -237,20 +230,7 @@ namespace Teleopti.Ccc.Win.Meetings
 					EnsureImpactViewIsLoaded();
 					toolStripButtonImpact.Checked = true;
                     _currentView = _meetingDetailViews[2];
-
-                    ////ugly...
-                    //panelContent.Controls.Add((Control)view);
-                    //((Control)view).Dock = DockStyle.Fill;
-                    //view.Presenter.UpdateView();
-
-                    //if (panelContent.Controls.Count > 0)
-                    //{
-                    //    panelContent.Controls.Clear();
-                    //}
-
 					break;
-                default:
-                    break;
             }
 
             if (_currentView == null) return;
@@ -260,13 +240,6 @@ namespace Teleopti.Ccc.Win.Meetings
             _currentView.Presenter.UpdateView();
         }
 
-        /// <summary>
-        /// Facilitates the size of the with preferred.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Niclas Haner
-        /// Created date: 2008-10-28
-        /// </remarks>
         private void SetToolStripsToPreferredSize()
         {
             toolStripEx2.Size = toolStripEx2.PreferredSize;
@@ -298,12 +271,6 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void ToolStripButtonImpact_Click(object sender, EventArgs e)
         {
-            //if (toolStripButtonRecurrentMeetings.Checked)
-            //{
-            //    toolStripButtonImpact.Checked = false;
-            //    return;
-            //}
-				
 			ChangeView(ViewType.ImpactView);
         }
 
@@ -373,8 +340,6 @@ namespace Teleopti.Ccc.Win.Meetings
 				detailView.OnMeetingTimeChanged();
 			}
     	}
-
-        
     }
 
 	public interface INotifyComposerMeetingChanged

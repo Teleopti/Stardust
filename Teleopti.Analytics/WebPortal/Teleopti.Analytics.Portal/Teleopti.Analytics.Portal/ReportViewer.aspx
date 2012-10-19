@@ -7,11 +7,11 @@
 <head runat="server">
     <title>Viewer</title>
 </head>
-<body style="margin:0; padding:0; background-color:white; background-image:none">
+<body style="margin:0; padding:0">
     <form id="form1" runat="server">
         <asp:ScriptManager ID="ScriptManager1" runat="server">
         </asp:ScriptManager>
-        <rsweb:ReportViewer BackColor="LightSteelBlue" Height="670px"  DocumentMapCollapsed="true" HyperlinkTarget="ReportViewer"  ID="ReportViewer1" runat="server"  Width="98%">
+        <rsweb:ReportViewer BackColor="#96bacc" Height="670px"  DocumentMapCollapsed="true" HyperlinkTarget="ReportViewer"  ID="ReportViewer1" runat="server"  Width="100%">
         </rsweb:ReportViewer>       
     </form>
 </body>

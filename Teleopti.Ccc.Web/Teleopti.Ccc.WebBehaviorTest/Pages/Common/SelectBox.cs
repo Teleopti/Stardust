@@ -28,6 +28,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		public string SelectedText { get { return Button.InnerHtml; } }
 		public IEnumerable<string> Texts() { return from o in Options where o.Value != "-" select o.Text; }
 
+		public void SelectWait(string text)
+		{
+			Select(text);
+			EventualAssert.That(() => Button.InnerHtml, Contains.Substring(text));
+		}
+
 		public void Select(string text)
 		{
 			Button.EventualClick();
@@ -39,7 +45,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 				.Trigger("mouseover")
 				.Trigger("click")
 				.EvalIn(Element.DomContainer);
-			EventualAssert.That(() => Button.InnerHtml, Contains.Substring(text));
 		}
 
 		public void Open()

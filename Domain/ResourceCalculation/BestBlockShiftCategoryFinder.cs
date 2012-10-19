@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.UserTexts;
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IGroupShiftLengthDecider _groupShiftLengthDecider;
 		private readonly IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
 
-		public BestBlockShiftCategoryFinder(IWorkShiftWorkTime workShiftWorkTime,
+	    public BestBlockShiftCategoryFinder(IWorkShiftWorkTime workShiftWorkTime,
 		                                    IShiftProjectionCacheManager shiftProjectionCacheManager,
 		                                    ISchedulingResultStateHolder schedulingResultStateHolder,
 		                                    IEffectiveRestrictionCreator effectiveRestrictionCreator,
@@ -145,7 +146,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 // CONTINUE TO NEXT IF EMPTY, WE SHOULD SKIP OUT MAYBE, THIS DAY CAN'T BE SCHEDULED 
                 if (combinations.IsEmpty())
                     continue;
-
+                if (schedulingOptions.UseShiftCategoryLimitations)
+                {
+                    combinations.RemoveWhere(x => schedulingOptions.NotAllowedShiftCategories.Contains(x.ShiftCategory));
+                }
                 var useShiftCategoryFairness = false;
                 IShiftCategoryFairnessFactors shiftCategoryFairnessFactors = null;
                 if (person.WorkflowControlSet != null)
@@ -200,7 +204,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             IPossibleStartEndCategory best = null;
             if (bestPossible.Count > 0)
+            {
                 best = bestPossible.OrderBy(c => c.ShiftValue).Last();
+            }
 
             return new BestShiftCategoryResult(best, FailureCause.NoFailure);
         }

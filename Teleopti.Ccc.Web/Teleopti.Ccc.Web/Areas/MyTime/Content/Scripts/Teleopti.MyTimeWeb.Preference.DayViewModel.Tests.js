@@ -3,6 +3,78 @@ $(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Preference day view model");
 
+	test("should read preference", function () {
+
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+
+		viewModelDay.ReadPreference({
+			Preference: "a shift category",
+			MustHave: true,
+			Color: "black",
+			Extended: true,
+			ExtendedTitle: "ExtendedTitle",
+			StartTimeLimitation: "8:00 am-9:00 am",
+			EndTimeLimitation: "5:00 pm-6:00 pm",
+			WorkTimeLimitation: "8:00-9:00",
+			Activity: "Lunch",
+			ActivityStartTimeLimitation: "8:00 am-9:00 am",
+			ActivityEndTimeLimitation: "5:00 pm-6:00 pm",
+			ActivityTimeLimitation: "1:00-2:00"
+		});
+
+		equal(viewModelDay.Preference(), "a shift category");
+		equal(viewModelDay.MustHave(), true);
+		equal(viewModelDay.Color(), "black");
+		equal(viewModelDay.Extended(), true);
+		equal(viewModelDay.ExtendedTitle(), "ExtendedTitle");
+		equal(viewModelDay.StartTimeLimitation(), "8:00 am-9:00 am");
+		equal(viewModelDay.EndTimeLimitation(), "5:00 pm-6:00 pm");
+		equal(viewModelDay.WorkTimeLimitation(), "8:00-9:00");
+		equal(viewModelDay.Activity(), "Lunch");
+		equal(viewModelDay.ActivityStartTimeLimitation(), "8:00 am-9:00 am");
+		equal(viewModelDay.ActivityEndTimeLimitation(), "5:00 pm-6:00 pm");
+		equal(viewModelDay.ActivityTimeLimitation(), "1:00-2:00");
+	});
+
+	test("should read dayoff", function () {
+
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+
+		viewModelDay.ReadDayOff({
+			DayOff: "Day off"
+		});
+
+		equal(viewModelDay.DayOff(), "Day off");
+	});
+
+	test("should read absence", function () {
+
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+
+		viewModelDay.ReadAbsence({
+			Absence: "Illness"
+		});
+
+		equal(viewModelDay.Absence(), "Illness");
+	});
+
+	test("should read person assignment", function () {
+
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+
+		viewModelDay.ReadPersonAssignment({
+			ShiftCategory: "Late",
+			TimeSpan: "PersonAssignmentTimeSpan",
+			ContractTime: "PersonAssignmentContractTime",
+			ContractTimeMinutes: "PersonAssignmentContractTimeMinutes"
+		});
+
+		equal(viewModelDay.PersonAssignmentShiftCategory(), "Late");
+		equal(viewModelDay.PersonAssignmentTimeSpan(), "PersonAssignmentTimeSpan");
+		equal(viewModelDay.PersonAssignmentContractTime(), "PersonAssignmentContractTime");
+		equal(viewModelDay.ContractTimeMinutes(), "PersonAssignmentContractTimeMinutes");
+	});
+
 	test("should load preference", function () {
 
 		var ajax = {
@@ -67,7 +139,7 @@ $(document).ready(function () {
 				equal(options.url, "Preference/Preference");
 
 				var result = jQuery.parseJSON(options.data);
-				
+
 				equal(result.Date, "2012-06-11");
 				equal(result.PreferenceId, "id");
 				options.success({
@@ -152,7 +224,7 @@ $(document).ready(function () {
 				equal(options.url, "Preference/Preference");
 
 				var result = jQuery.parseJSON(options.data);
-				
+
 				equal(result.Date, "2012-06-11");
 				options.success({
 					Preference: "deleted!",
@@ -200,7 +272,7 @@ $(document).ready(function () {
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
 		viewModelDay.Date = "2012-06-11";
-
+		viewModelDay.Feedback(true);
 		viewModelDay.LoadFeedback();
 
 		equal(viewModelDay.FeedbackError(), "an error");

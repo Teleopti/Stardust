@@ -21,6 +21,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	var currentViewId = null;
 	var tabs = null;
 	var currentFixedDate = null;
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
 
 	function _layout() {
 		Teleopti.MyTimeWeb.Common.Layout.ActivateTabs();
@@ -83,17 +84,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 					.css({
 						'top': 50 + $(window).scrollTop()
 					});
-				$('.toolbar-inner button.icon[disabled!="disabled"]')
-					.attr('disabled', 'disabled')
-					.addClass('ajax-disabled')
-					;
 			})
 			.ajaxStop(function () {
 				$(this).hide();
-				$('.toolbar-inner button.icon.ajax-disabled')
-					.removeAttr('disabled')
-					.removeClass('ajax-disabled')
-					;
 			});
 	}
 
@@ -107,13 +100,13 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				emptyContentSelector: '#EmptyTab'
 			})
 			;
-		
+
 		$('#toolbar-right .ui-menu-item [data-mytime-action]')
 			.click(function () {
 				_navigateTo($(this).data('mytime-action'));
 			})
 			;
-		
+
 		if (location.hash.length <= 1) {
 			location.hash = '#' + _settings.defaultNavigation;
 		} else {
@@ -175,13 +168,13 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	function _endsWith(str, suffix) {
 		return str.indexOf(suffix, str.length - suffix.length) !== -1;
 	}
-	
+
 	function _parseHash() {
 		var hash = location.hash || '';
 		if (_endsWith(hash, 'Tab')) {
 			if (hash.indexOf('#Schedule') == 0) {
 				hash = hash.substring(0, hash.length - 'Tab'.length) + '/Week';
-			}else {
+			} else {
 				hash = hash.substring(0, hash.length - 'Tab'.length) + '/Index';
 			}
 		}
@@ -225,8 +218,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	function _loadContent(hashInfo) {
 		_disablePortalControls();
 
-		Teleopti.MyTimeWeb.Ajax.AjaxAbortAll();
-		Teleopti.MyTimeWeb.Ajax.Ajax({
+		ajax.Ajax({
 			url: hashInfo.hash,
 			global: true,
 			success: function (html) {
@@ -247,13 +239,21 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	function _invokeInitCallback(viewId) {
 		var partialInit = _partialViewInitCallback[viewId];
 		if ($.isFunction(partialInit))
-			partialInit();
+			partialInit(_readyForInteraction, _completelyLoaded);
 		Teleopti.MyTimeWeb.Common.PartialInit();
+	}
+
+	function _readyForInteraction() {
+		Teleopti.MyTimeWeb.Test.PageLog("Ready for interaction");
+	}
+
+	function _completelyLoaded() {
+		Teleopti.MyTimeWeb.Test.PageLog("Completely loaded");
 	}
 
 	return {
 		Init: function (settings) {
-			Teleopti.MyTimeWeb.Ajax.Init(settings);
+			Teleopti.MyTimeWeb.AjaxSettings = settings;
 			Teleopti.MyTimeWeb.Common.Init(settings);
 			Teleopti.MyTimeWeb.Test.Init(settings);
 			_settings = settings;

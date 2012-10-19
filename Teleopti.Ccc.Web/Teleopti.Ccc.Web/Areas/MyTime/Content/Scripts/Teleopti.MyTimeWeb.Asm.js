@@ -1,5 +1,7 @@
 ﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js"/>
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Notifier.js"/>
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="~/Content/Scripts/knockout-2.1.0.js" />
 
 if (typeof (Teleopti) === 'undefined') {
@@ -14,14 +16,15 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var pixelPerHours = 50;
 	var timeLineMarkerWidth = 100;
 	var vm;
-	var texts;
+	var notifyOptions;
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
 
 	function asmViewModel(yesterday) {
 		var self = this;
 		self.intervalPointer = null;
 
 		self.loadViewModel = function () {
-			Teleopti.MyTimeWeb.Ajax.Ajax({
+			ajax.Ajax({
 				url: 'Asm/Today',
 				dataType: "json",
 				type: 'GET',
@@ -103,12 +106,11 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 
 		self.isNextday = ko.computed(function () {
-			return layer.StartMinutesSinceAsmZero > 2 * 24 * 60;
+			return (layer.StartMinutesSinceAsmZero > 2 * 24 * 60) ? "+1" : "  ";
 		});
 	}
 
-	function _start(userTexts) {
-		texts = userTexts;
+	function _showAsm() {
 		_setFixedElementAttributes();
 
 		var yesterDayFromNow = new Date(new Date().getTeleoptiTime()).addDays(-1).clearTime();
@@ -124,27 +126,15 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		$('.asm-timeline-line').css('width', (pixelPerHours - 1)); //"1" due to border size
 	}
 
-	var onMessageBrokerEvent = function (notification) {
-		var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate).addDays(-1);
-		var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate).addDays(1);
-		var visibleStartDate = vm.yesterday();
-		var visibleEndDate = new Date(visibleStartDate.getTime()).addDays(2);
-
-		if (messageStartDate < visibleEndDate && messageEndDate > visibleStartDate) {
-			vm.loadViewModel();
-			window.alert(texts.yourScheduleHasChanged);
-		}
-	};
-
-	function _listenForEvents() {
-		Teleopti.MyTimeWeb.Ajax.Ajax({
+	function _listenForEvents(listeners) {
+		ajax.Ajax({
 			url: 'MessageBroker/FetchUserData',
 			dataType: "json",
 			type: 'GET',
 			success: function (data) {
 				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
 					url: data.Url,
-					callback: onMessageBrokerEvent,
+					callback: listeners,
 					domainType: 'IScheduleChangedInDefaultScenario',
 					businessUnitId: data.BusinessUnitId,
 					datasource: data.DataSourceName,
@@ -154,12 +144,35 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 	}
 
+	function _validSchedulePeriod(notification) {
+		var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate).addDays(-1);
+		var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate).addDays(1);
+		var listeningStartDate = new Date(new Date().getTeleoptiTime()).addHours(-1);
+		var listeningEndDate = new Date(listeningStartDate.getTime()).addDays(1);
+
+		if (messageStartDate < listeningEndDate && messageEndDate > listeningStartDate) {
+			return true;
+		}
+		return false;
+	}
+
 	return {
-		Init: function (userTexts) {
-			_start(userTexts);
-			_listenForEvents();
+		ShowAsm: function () {
+			_showAsm();
 		},
-		//for testing purposes
-		CallMessageBrokerEvent: onMessageBrokerEvent
+		ListenForScheduleChanges: function (options, eventListeners) {
+			notifyOptions = options;
+			_listenForEvents(eventListeners);
+		},
+		NotifyWhenScheduleChangedListener: function (notification) {
+			if (_validSchedulePeriod(notification)) {
+				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions);
+			}
+		},
+		ReloadAsmViewModelListener: function (notification) {
+			if (_validSchedulePeriod(notification)) {
+				vm.loadViewModel();
+			}
+		}
 	};
 })(jQuery);

@@ -9,19 +9,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof (Browser));
 
-		private static readonly IBrowserHandler<IE> BrowserHandler = new WatiNParallelBrowserIEHandler();
+		private static readonly IBrowserHandler<IE> BrowserHandler = new WatiNSingleBrowserIEHandler();
 
 		private static IE GlobalBrowser { get; set; }
 
-		public static IE Current
-		{
-			get
-			{
-				if (!IsStarted())
-					Start();
-				return GlobalBrowser;
-			}
-		}
+		public static IE Current { get { return GlobalBrowser; } }
 
 		public static void Start() { GlobalBrowser = BrowserHandler.Start(); }
 
@@ -36,5 +28,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			BrowserHandler.Close();
 		}
 
+		public static void Restart()
+		{
+			GlobalBrowser = BrowserHandler.Restart();
+		}
 	}
 }

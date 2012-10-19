@@ -52,7 +52,12 @@ namespace Teleopti.Interfaces.Domain
 
         /// <summary>
         /// Gets a list of cloned person restrictions.
+        /// 
         /// DONT USE THIS ANYMORE. WILL BE DELETED! Use RestrictionCollection instead!
+        /// 
+		/// Please give an example how to use RestrictionCollection when trying to 
+		/// extract all IPreferenceDay from this collection please. 
+		/// 
         /// </summary>
         /// <returns></returns>
         /// <remarks>

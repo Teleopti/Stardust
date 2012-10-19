@@ -1,11 +1,10 @@
 ﻿using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    public class OptionalColumn : AggregateRootWithBusinessUnit, IOptionalColumn, IDeleteTag
+    public class OptionalColumn : AggregateRootWithBusinessUnit, IOptionalColumn
     {
         protected OptionalColumn()
         {}
@@ -19,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Common
         private string _name;
         private string _tableName;
         //private readonly IList<IOptionalColumnValue> _valueCollection = new List<IOptionalColumnValue>();
-        private bool _isDeleted;
 
         public virtual string Name
         {
@@ -41,11 +39,6 @@ namespace Teleopti.Ccc.Domain.Common
 		//        return new ReadOnlyCollection<IOptionalColumnValue>(_valueCollection);
 		//    }
 		//}
-
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
 
 		///// <summary>
 		///// Adds the value.
@@ -91,10 +84,5 @@ namespace Teleopti.Ccc.Domain.Common
 		//    IOptionalColumnValue result = _valueCollection.FirstOrDefault(v => v.ReferenceId.Equals(id));
 		//    return result;
 		//}
-
-        public virtual void SetDeleted()
-        {
-            _isDeleted = true;
-        }
     }
 }

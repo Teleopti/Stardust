@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             bool useOccupancyAdjustment, 
             IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			IPossibleStartEndCategory possibleStartEndCategory)
+			IPossibleStartEndCategory possibleStartEndCategory, IPerson person = null)
         {
             using (PerformanceOutput.ForOperation("SchedulePersonOnDay"))
             {
@@ -89,7 +89,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 }
 
                 var scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
-                var person = schedulePart.Person;
+                if(person == null )
+                    person = schedulePart.Person;
                 if (effectiveRestriction == null)
                 {
                     IWorkShiftFinderResult finderResult = new WorkShiftFinderResult(person, scheduleDateOnly);

@@ -6,25 +6,16 @@
 <head runat="server">
     <title>TELEOPTI CCC Login</title>
     <link rel="shortcut icon" href="~/Images/ccc_menu.ico"/>
-    <link href="App_Themes/Theme1/Styles.css" rel="stylesheet" type="text/css" />
 </head>
-<body style="filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#CADAF9', EndColorStr= '#fcfcfc');">
-    <form id="form1" runat="server" >
-        <table cellspacing="0" cellpadding="0" width="100%" border="0">
-			<tr id="topmenu">
-				<td align="center" valign="bottom" style="height:50px">
-                    <asp:Label ID="_labelInfo" runat="server" CssClass="TechnicalDetailHeader" EnableViewState="false"></asp:Label>
-				</td>   
-			</tr>
-        <tr>
-            <td style="height:300px" valign="middle" align="center">
-                <asp:Login  DisplayRememberMe="false" ID="Login1" 
-                SkinID="Login" runat="server" DestinationPageUrl="~/Selection.aspx">
-                </asp:Login>
-            </td>
-        </tr>
-    </table>
-    
+<body >
+    <form id="form1" runat="server" >  
+		 <div align="center" style="width: 100%; min-height: 50px;">
+            <asp:Label ID="_labelInfo" runat="server" CssClass="TechnicalDetailHeader" EnableViewState="false"></asp:Label>
+		</div>   
+		<div style="width: 100%; padding-top: 200px" align="center">
+			<asp:Login DisplayRememberMe="true" ID="Login1" SkinID="Login" runat="server" DestinationPageUrl="~/Selection.aspx"></asp:Login>
+		</div>
+	    
     </form>
 </body>
 </html>

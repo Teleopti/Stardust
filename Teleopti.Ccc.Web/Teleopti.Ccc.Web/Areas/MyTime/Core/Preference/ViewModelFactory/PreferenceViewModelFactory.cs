@@ -1,5 +1,6 @@
-using System.Web;
+using System.Collections.Generic;
 using AutoMapper;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
@@ -11,11 +12,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 	{
 		private readonly IMappingEngine _mapper;
 		private readonly IPreferenceProvider _preferenceProvider;
+		private readonly IScheduleProvider _scheduleProvider;
 
-		public PreferenceViewModelFactory(IMappingEngine mapper, IPreferenceProvider preferenceProvider)
+		public PreferenceViewModelFactory(IMappingEngine mapper, IPreferenceProvider preferenceProvider, IScheduleProvider scheduleProvider)
 		{
 			_mapper = mapper;
 			_preferenceProvider = preferenceProvider;
+			_scheduleProvider = scheduleProvider;
 		}
 
 		public PreferenceViewModel CreateViewModel(DateOnly date)
@@ -35,6 +38,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 			if (preferenceDay == null) return null;
 
 			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
+		}
+
+		public IEnumerable<PreferenceAndScheduleDayViewModel> CreatePreferencesAndSchedulesViewModel(DateOnly @from, DateOnly to)
+		{
+			var period = new DateOnlyPeriod(@from, to);
+			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(period);
+			return _mapper.Map<IEnumerable<IScheduleDay>, IEnumerable<PreferenceAndScheduleDayViewModel>>(scheduleDays);
 		}
 	}
 }

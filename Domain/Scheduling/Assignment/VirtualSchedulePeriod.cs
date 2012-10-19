@@ -172,8 +172,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				if (!IsValid)
 					return new TimeSpan();
-
-					if (_schedulePeriod.IsPeriodTimeOverride)
+                if (_schedulePeriod.IsPeriodTimeOverride)
 					{
 						double periodTime = _schedulePeriod.PeriodTime.Value.TotalMinutes; //PeriodTime will NOT be null, as we check for PeriodTimeOverride
 						int schedulePeriodWorkdays = SchedulePeriodWorkdays();

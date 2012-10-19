@@ -65,5 +65,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			_browser = null;
 		}
 
+		public IE Restart() { throw new NotImplementedException(); }
 	}
 }

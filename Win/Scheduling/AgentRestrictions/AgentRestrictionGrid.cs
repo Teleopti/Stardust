@@ -82,12 +82,12 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private IList<IPerson> _persons;
 		private IPerson _selectedPerson;
 		private AgentRestrictionsDetailView _detailView;
-		private IAgentRestrictionsDisplayRow _showInDetailView;
+		private IAgentRestrictionsDisplayRow _currentDisplayRow;
 		private IScheduleDay _selectedDay;
 		private bool _moveToDate;
 		private bool _clearSelection;
-		private ManualResetEvent[] _resetEvents;
-		private ManualResetEvent _waitClick;
+		//private ManualResetEvent[] _resetEvents;
+		//private ManualResetEvent _waitClick;
 
 		private delegate void GridDelegate();
 
@@ -123,7 +123,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		
 			_model = new AgentRestrictionsModel();
 			_presenter = new AgentRestrictionsPresenter(this, _model, _warningDrawer, _loadingDrawer, _notAvailableDrawer, _availableDrawer);
-			
+
+			AllowSelection = GridSelectionFlags.Cell;
 			ResetVolatileData();
 			GridHelper.GridStyle(this);
 			InitializeHeaders();
@@ -131,6 +132,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			QueryRowCount += GridQueryRowCount;
 			QueryCellInfo += GridQueryCellInfo;
 			CellDrawn += GridCellDrawn;
+			
 			CellClick += AgentRestrictionGridCellClick;
 			SelectionChanging += GridSelectionChanging;
 			SelectionChanged += GridSelectionChanged;
@@ -138,35 +140,60 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			if (!CellModels.ContainsKey("NumericReadOnlyCellModel")) CellModels.Add("NumericReadOnlyCellModel",new NumericReadOnlyCellModel(Model) {NumberOfDecimals = 0});
 			if (!CellModels.ContainsKey("TimeSpan")) CellModels.Add("TimeSpan", new TimeSpanLongHourMinutesStaticCellModel(Model));
 
-			_waitClick = new ManualResetEvent(true);
+			//_waitClick = new ManualResetEvent(true);
 		}
 
 		void AgentRestrictionGridCellClick(object sender, GridCellClickEventArgs e)
 		{
-			if (e.RowIndex == 1) _presenter.Sort(e.ColIndex);
-			if (e.RowIndex <= 1) return;
-			var displayRow = this[e.RowIndex, 0].Tag as AgentRestrictionsDisplayRow;
-			if (displayRow == null) return;
-			//_selectedPerson = displayRow.Matrix.Person;
-			if (displayRow.State != AgentRestrictionDisplayRowState.Available)
+			if(e.ColIndex == 0 && e.RowIndex > 1)
 			{
-				e.Cancel = true;
-				return;
+				CurrentCell.MoveTo(e.RowIndex, 1, GridSetCurrentCellOptions.ScrollInView);
 			}
+			if (e.RowIndex == 1)
+			{
+				_presenter.Sort(e.ColIndex);
+				for (int r = 2; r < RowCount; r++)
+				{
+					var displayRow = this[r, 0].Tag as AgentRestrictionsDisplayRow;
+					if (CurrentDisplayRow.Equals(displayRow))
+						CurrentCell.MoveTo(r, 1, GridSetCurrentCellOptions.ScrollInView);
+					
+				}
+			}
+			if(e.RowIndex == 0)
+			{
+				for (int r = 2; r < RowCount; r++)
+				{
+					var displayRow = this[r, 0].Tag as AgentRestrictionsDisplayRow;
+					if (CurrentDisplayRow.Equals(displayRow))
+						CurrentCell.MoveTo(r, 1, GridSetCurrentCellOptions.ScrollInView);
 
-			_selectedPerson = displayRow.Matrix.Person;
-			if (!_showInDetailView.Equals(displayRow))
-				_clearSelection = true;
-			_showInDetailView = displayRow;
+				}
+			}
+			e.Cancel = true;
+				
+			//if (e.RowIndex <= 1) return;
+			//var displayRow = this[e.RowIndex, 0].Tag as AgentRestrictionsDisplayRow;
+			//if (displayRow == null) return;
+			////_selectedPerson = displayRow.Matrix.Person;
+			//if (displayRow.State != AgentRestrictionDisplayRowState.Available)
+			//{
+			//    e.Cancel = true;
+			//    return;
+			//}
 
-			//ThreadPool.QueueUserWorkItem(LoadDetails, displayRow);
-			_waitClick.Reset();
-			LoadDetails(displayRow);
+			//_selectedPerson = displayRow.Matrix.Person;
+			//if (!_currentDisplayRow.Equals(displayRow))
+			//    _clearSelection = true;
+			//_currentDisplayRow = displayRow;
+
+			////ThreadPool.QueueUserWorkItem(LoadDetails, displayRow);
+			////_waitClick.Reset();
+			//LoadDetails(displayRow);
 		}
 
-		void LoadDetails(object workObject)
+		void LoadDetails(AgentRestrictionsDisplayRow displayRow)
 		{
-			var displayRow = workObject as AgentRestrictionsDisplayRow;
 			if (displayRow == null) return;
 
 			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder.SchedulingResultState);
@@ -175,27 +202,45 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			var displayRowArgs = new AgentDisplayRowEventArgs(displayRow, false, _clearSelection);
 			_clearSelection = false;
 			OnSelectedAgentIsReady(displayRowArgs);
-			_waitClick.Set();
+			//_waitClick.Set();
 		}
 
 		void GridSelectionChanged(object sender, GridSelectionChangedEventArgs e)
 		{
-			if (e.Range.RangeType == GridRangeInfoType.Cells || Selections.Count > 1 || Selections.Ranges.Count > 0 && Selections.Ranges[0].Top != Selections.Ranges[0].Bottom)
+			var displayRow = this[e.Range.Top, 0].Tag as AgentRestrictionsDisplayRow;
+			if (displayRow == null) return;
+			//_selectedPerson = displayRow.Matrix.Person;
+			if (displayRow.State != AgentRestrictionDisplayRowState.Available)
 			{
-				var top = Selections.Ranges[0].Top;
-				Selections.Clear();
-				var rangelistTemp = new GridRangeInfoList {GridRangeInfo.Row(top)};
-				Selections.SelectRange(rangelistTemp[0], true);							
+				return;
 			}
+
+			_selectedPerson = displayRow.Matrix.Person;
+			if (!CurrentDisplayRow.Equals(displayRow))
+				_clearSelection = true;
+			_currentDisplayRow = displayRow;
+
+			//ThreadPool.QueueUserWorkItem(LoadDetails, displayRow);
+			//_waitClick.Reset();
+			LoadDetails(displayRow);
+			//if (e.Range.RangeType == GridRangeInfoType.Cells || Selections.Count > 1 || Selections.Ranges.Count > 0 && Selections.Ranges[0].Top != Selections.Ranges[0].Bottom)
+			//{
+			//    var top = Selections.Ranges[0].Top;
+			//    Selections.Clear();
+			//    var rangelistTemp = new GridRangeInfoList {GridRangeInfo.Row(top)};
+			//    Selections.SelectRange(rangelistTemp[0], true);							
+			//}
 		}
 
 		void GridSelectionChanging(object sender, GridSelectionChangingEventArgs e)
 		{
-			if (e.Reason == GridSelectionReason.MouseMove)
+			if (e.Range.Height != 1)
 				e.Cancel = true;
+			//if (e.Reason == GridSelectionReason.MouseMove)
+			//    e.Cancel = true;
 
-			if (!e.Cancel && e.Range.Top <= 1 && e.Range.RangeType != GridRangeInfoType.Empty) 
-				e.Cancel = true; 
+			//if (!e.Cancel && e.Range.Top <= 1 && e.Range.RangeType != GridRangeInfoType.Empty) 
+			//    e.Cancel = true; 
 		}
 
 		private void InitializeHeaders()
@@ -233,7 +278,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			var scheduleMatrixListCreator = new ScheduleMatrixListCreator(stateHolder.SchedulingResultState);
 			var agentRestrictionsDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(stateHolder, scheduleMatrixListCreator);
 
-			ThreadPool.QueueUserWorkItem(Load, agentRestrictionsDisplayRowCreator);
+			Load(agentRestrictionsDisplayRowCreator);
+			//ThreadPool.QueueUserWorkItem(Load, agentRestrictionsDisplayRowCreator);
 		}
 
 		public void LoadData(RestrictionSchedulingOptions schedulingOptions)
@@ -249,7 +295,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 			Invalidate();
 
-			ThreadPool.QueueUserWorkItem(Load, null);
+			Load(null);
+			//ThreadPool.QueueUserWorkItem(Load, null);
 		}
 
 		public void LoadData(RestrictionSchedulingOptions schedulingOptions, ICollection<IPerson> persons)
@@ -269,7 +316,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 			Invalidate();
 
-			ThreadPool.QueueUserWorkItem(LoadDataPersons, personsToLoad);
+			LoadDataPersons(personsToLoad);
+			//ThreadPool.QueueUserWorkItem(LoadDataPersons, personsToLoad);
 		}
 
 		void LoadDataPersons(object workObject)
@@ -280,7 +328,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			foreach (var agentRestrictionsDisplayRow in _model.DisplayRows)
 			{
 				if(persons.Contains(agentRestrictionsDisplayRow.Matrix.Person))
-				ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
+					DoWork(agentRestrictionsDisplayRow);
+					//ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
 			}
 		}
 
@@ -292,7 +341,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			{
 				_model.LoadDisplayRows(agentRestrictionsDisplayRowCreator, _persons);
 
-				_showInDetailView = ShowRow(_model.DisplayRows);
+				_currentDisplayRow = ShowRow(_model.DisplayRows);
 
 				if (!IsHandleCreated) return;
 
@@ -301,42 +350,47 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 				Invoke(new GridDelegate(SelectRowForSelectedAgent));
 			}
 
+			//foreach (var agentRestrictionsDisplayRow in _model.DisplayRows)
+			//{
+			//    if (agentRestrictionsDisplayRow.Matrix.Person.Equals(_selectedPerson))
+			//    {
+			//        //ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
+			//        DoWork(agentRestrictionsDisplayRow);
+			//        Thread.Sleep(1000);
+			//        break;
+			//    }
+			//}
+
 			foreach (var agentRestrictionsDisplayRow in _model.DisplayRows)
 			{
-				if (agentRestrictionsDisplayRow.Matrix.Person.Equals(_selectedPerson))
-				{
-					//ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
-					DoWork(agentRestrictionsDisplayRow);
-					Thread.Sleep(1000);
-					break;
-				}
+				DoWork(agentRestrictionsDisplayRow);
 			}
 
-			int index = 0;
+			//int index = 0;
 
-			for (int i = 0; i < _model.DisplayRows.Count; i++)
-			{
-				index++;
+			//for (int i = 0; i < _model.DisplayRows.Count; i++)
+			//{
+			//    index++;
 
-				if(index == 8 || i == _model.DisplayRows.Count - 1)
-				{
-					_resetEvents = new ManualResetEvent[index];
+			//    if(index == 8 || i == _model.DisplayRows.Count - 1)
+			//    {
+			//        _resetEvents = new ManualResetEvent[index];
 
-					for(int j = 0; j < index; j++)
-					{
-						_resetEvents[j] = new ManualResetEvent(false);
-						var agentRestrictionsDisplayRow = _model.DisplayRows[i - j];
-						agentRestrictionsDisplayRow.ThreadIndex = j;
-						ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
-					}
+			//        for(int j = 0; j < index; j++)
+			//        {
+			//            _resetEvents[j] = new ManualResetEvent(false);
+			//            var agentRestrictionsDisplayRow = _model.DisplayRows[i - j];
+			//            agentRestrictionsDisplayRow.ThreadIndex = j;
+			//            ThreadPool.QueueUserWorkItem(DoWork, agentRestrictionsDisplayRow);
+			//        }
 
-					index = 0;
-					WaitHandle.WaitAll(_resetEvents);
-				}
+			//        index = 0;
+			//        WaitHandle.WaitAll(_resetEvents);
+			//    }
 
-				_waitClick.WaitOne();
+			//    _waitClick.WaitOne();
 
-			}
+			//}
 
 			//foreach (var agentRestrictionsDisplayRow in _model.DisplayRows)
 			//{
@@ -370,7 +424,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		void DoWork(object workObject)
 		{
 			if (IsDisposed || IsDisposing) return;
-			Thread.Sleep(100);
+			//Thread.Sleep(100);
 			var displayRow = workObject as AgentRestrictionsDisplayRow;
 			if (displayRow == null) return;
 			displayRow.State = AgentRestrictionDisplayRowState.Loading;
@@ -391,9 +445,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 			if (IsDisposed || IsDisposing) return;
 			//if (displayRow.Matrix.Person.Equals(_selectedPerson))
-			if(displayRow.Equals(_showInDetailView))
+			if(displayRow.Equals(CurrentDisplayRow))
 			{
-				//_showInDetailView = null;
+				//_currentDisplayRow = null;
 				_detailView.LoadDetails(displayRow.Matrix, restrictionExtractor, _schedulingOptions, displayRow.ContractTargetTime);
 				var displayRowArgs = new AgentDisplayRowEventArgs(displayRow, _moveToDate, false);
 				_moveToDate = false;
@@ -403,8 +457,12 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_loadedCounter++;
 			if (_loadedCounter % 25 == 0 || _loadedCounter >= _model.DisplayRows.Count - 1) Invoke(new GridDelegate(InvalidateGrid));
 
-			if(_resetEvents != null)
-			_resetEvents[displayRow.ThreadIndex].Set();
+			//if(_resetEvents != null)
+			//{
+			//    if(_resetEvents.Length > displayRow.ThreadIndex)
+			//        _resetEvents[displayRow.ThreadIndex].Set();
+			//}
+			
 		}
 
 		private void InvalidateGrid()
@@ -426,17 +484,17 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 				var displayRow = Model[i, 0].Tag as AgentRestrictionsDisplayRow;
 				if (displayRow == null) continue;
 				//if (!displayRow.Matrix.Person.Equals(_selectedPerson)) continue;
-				if (!displayRow.Equals(_showInDetailView)) continue;
+				if (!displayRow.Equals(CurrentDisplayRow)) continue;
 				row = i;
 				break;
 			}
 
-			var info = GridRangeInfo.Cells(row, 0, row, 0);
+			//var info = GridRangeInfo.Cells(row, 0, row, 0);
 
-			Selections.Clear(true);
-			CurrentCell.Activate(row, 0, GridSetCurrentCellOptions.SetFocus);
-			Selections.ChangeSelection(info, info, true);
-			CurrentCell.MoveTo(row, 0, GridSetCurrentCellOptions.ScrollInView);
+			//Selections.Clear(true);
+			//CurrentCell.Activate(row, 0, GridSetCurrentCellOptions.SetFocus);
+			//Selections.ChangeSelection(info, info, true);
+			CurrentCell.MoveTo(row, 1, GridSetCurrentCellOptions.ScrollInView);
 		}
 
 		void GridQueryColCount(object sender, GridRowColCountEventArgs e)
@@ -470,6 +528,11 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		public string HelpId
 		{
 			get { return Name; }
+		}
+
+		public AgentRestrictionsDisplayRow CurrentDisplayRow
+		{
+			get { return (AgentRestrictionsDisplayRow)_currentDisplayRow; }
 		}
 	}
 }

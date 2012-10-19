@@ -4,10 +4,15 @@
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
 /// <reference path="jquery.ui.connector.js"/>
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
+
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var readyForInteraction = function () { };
+	var completelyLoaded = function () { };
 
 	function _initScrollPaging() {
 		_loadAPage();
@@ -34,7 +39,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	function _loadAPage() {
 		var skip = $('#Requests-list li:not(.template)').length;
 		var take = 20;
-		Teleopti.MyTimeWeb.Ajax.Ajax({
+		ajax.Ajax({
 			url: "Requests/Requests",
 			dataType: "json",
 			type: 'GET',
@@ -51,6 +56,14 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 					_moreToLoad();
 				}
 				_showMessageIfNoRequests();
+			},
+			complete: function () {
+				if (readyForInteraction)
+					readyForInteraction();
+				readyForInteraction = null;
+				if (completelyLoaded)
+					completelyLoaded();
+				completelyLoaded = null;
 			}
 		});
 	}
@@ -167,7 +180,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	function _deleteRequest(listItem) {
 		var url = listItem.data('mytime-link');
-		Teleopti.MyTimeWeb.Ajax.Ajax({
+		ajax.Ajax({
 			url: url,
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
@@ -206,7 +219,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				_showRequest($(this));
 			});
 		};
-		Teleopti.MyTimeWeb.Ajax.Ajax({
+		ajax.Ajax({
 			url: url,
 			dataType: "json",
 			type: 'GET',
@@ -240,7 +253,9 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	return {
-		Init: function () {
+		Init: function (readyForInteractionCallback, completelyLoadedCallback) {
+			readyForInteraction = readyForInteractionCallback;
+			completelyLoaded = completelyLoadedCallback;
 			_initScrollPaging();
 			_initListClick();
 		},

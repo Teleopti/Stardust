@@ -18,9 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenMyCookieExpires()
 		{
 			if (Pages.Pages.Current is PreferencePage)
-			{
-				TestControllerMethods.WaitForPreferencesToLoad();
-			}
+				TestControllerMethods.WaitUntilCompletelyLoaded();
 			TestControllerMethods.ExpireMyCookieInsidePortal();
 		}
 

@@ -14,5 +14,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var activity = table.CreateInstance<ActivityConfigurable>();
 			UserFactory.User().Setup(activity);
 		}
+
+		[Given(@"there is an activity named '(.*)'")]
+		public void GivenThereIsAnActivityNamed(string name)
+		{
+			var activity = new ActivityConfigurable {Name = name};
+			UserFactory.User().Setup(activity);
+		}
 	}
 }

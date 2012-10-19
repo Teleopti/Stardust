@@ -108,6 +108,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
+        public void ShouldBreakUntilWithCancelOptimizer()
+        {
+            using (_mock.Record())
+            {
+                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly>( )).Repeat.AtLeastOnce() ;
+                Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce() ;
+            }
+            _target = new GroupMoveTimeOptimizerService(new List<IGroupMoveTimeOptimizer> { _optimizer, _optimizer }, _groupOptimizerFindMatrixesForGroup,
+                                                        _groupMoveTimeOptimizerExecuter, _groupMoveTimeValidatorRunner);
+            using (_mock.Playback())
+            {
+                _target.Execute(_allMatrixes);
+            }
+        }
+
+        [Test]
         public void VerifyReportProgressEventExecutedAndCanCancel()
         {
             var date = new DateOnly(2012, 1, 1);

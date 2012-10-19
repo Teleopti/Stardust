@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 			uow.Reassociate(user);
 			user.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today)).FirstOrDefault().RuleSetBag = TheRuleSetBag;
-			Debug.Assert(uow.Contains(user));
 		}
 	}
+
 }

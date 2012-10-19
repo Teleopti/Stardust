@@ -13,7 +13,7 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
-
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
 
 	function _setEditError(message) {
 		$('#StudentAvailability-edit-error').html(message || '');
@@ -49,7 +49,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	}
 
 	function _xhr(type, successCallback, addressSuffix, reqData) {
-		Teleopti.MyTimeWeb.Ajax.Ajax({
+		ajax.Ajax({
 			url: "StudentAvailability/StudentAvailability" + addressSuffix,
 			type: type,
 			data: reqData,

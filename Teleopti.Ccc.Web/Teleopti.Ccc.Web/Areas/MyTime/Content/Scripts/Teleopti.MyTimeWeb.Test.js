@@ -17,11 +17,19 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Test = (function ($) {
 	var _settings = {};
+	var _messages = [];
 
 	function _pageLog(message) {
-		$('#page')
-			.append(message + '<br/>')
-			;
+		_messages.push(message);
+	}
+
+	function _flushPageLog() {
+		var page = $('#page');
+		for (var i = 0; i < _messages.length; i++) {
+			var message = _messages[i];
+			page.append(message + "</ br>");
+		}
+		_messages = [];
 	}
 
 	function _expireMyCookie(message) {
@@ -41,12 +49,6 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 		});
 	}
 
-	function _informWhenPreferenceLoaded(message) {
-		Teleopti.MyTimeWeb.Preference.CallWhenLoaded(function() {
-			_pageLog(message);
-		});
-	}
-
 	return {
 		Init: function (settings) {
 			_settings = settings;
@@ -54,11 +56,11 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 		PageLog: function (message) {
 			_pageLog(message);
 		},
+		FlushPageLog: function () {
+			_flushPageLog();
+		},
 		ExpireMyCookie: function (message) {
 			_expireMyCookie(message);
-		},
-		InformWhenPreferenceLoaded: function (message) {
-			_informWhenPreferenceLoaded(message);
 		}
 	};
 

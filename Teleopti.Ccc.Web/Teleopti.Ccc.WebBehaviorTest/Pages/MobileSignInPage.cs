@@ -1,4 +1,5 @@
 using System;
+using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
@@ -60,29 +61,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		private void WaitForSigninResult()
 		{
-			Func<bool> signedInOrBusinessUnitListExists = () => SignoutButton.IESafeExists() ||
-			                                                    ErrorDisplayed() ||
-			                                                    BusinessUnitsDisplayed();
-			var found = signedInOrBusinessUnitListExists.WaitUntil(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(5));
-			if (!found)
-				throw new ApplicationException("Waiting for signin result failed!");
-		}
-
-		private bool BusinessUnitsDisplayed()
-		{
-			return Document.RadioButton(Find.ByName("signin-sel-businessunit")).IESafeExists();
-		}
-
-		private bool ErrorDisplayed()
-		{
-			var span = Document.Span(Find.ByClass("error", false));
-			if (span.IESafeExists())
-			{
-				if (span.Text == null)
-					return false;
-				return span.Text.Trim().Length > 0;
-			}
-			return false;
+			EventualAssert.That(() =>
+			                    	{
+			                    		if (SignoutButton.Exists)
+			                    			return true;
+			                    		if (Document.RadioButton(Find.ByName("signin-sel-businessunit")).Exists)
+			                    			return true;
+			                    		var span = Document.Span(Find.ByClass("error", false));
+			                    		if (span.Exists)
+			                    		{
+			                    			if (span.Text == null)
+			                    				return false;
+			                    			return span.Text.Trim().Length > 0;
+			                    		}
+			                    		return false;
+			                    	}, Is.True);
 		}
 
 		public void SelectFirstBusinessUnit()

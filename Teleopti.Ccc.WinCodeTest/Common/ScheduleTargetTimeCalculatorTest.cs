@@ -77,11 +77,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             _target = new ScheduleTargetTimeCalculator(_schedulerStateHolder, _person, _dateOnlyPeriod);
 			_schedulePeriod.AverageWorkTimePerDayOverride = new TimeSpan(8, 0, 0);
-
+	        var dateOnly = new DateOnly(2011, 1, 1);
 			using (_mockRepository.Record())
 			{
 				Expect.Call(_person.PersonSchedulePeriodCollection).Return(_schedulePeriods).Repeat.AtLeastOnce();
-				Expect.Call(_person.Period(new DateOnly(2011, 1, 1))).IgnoreArguments().Return(_personPeriod).Repeat.AtLeastOnce();
+				Expect.Call(_person.Period(dateOnly)).IgnoreArguments().Return(_personPeriod).Repeat.AtLeastOnce();
 			    Expect.Call(_person.FirstDayOfWeek).Return(DayOfWeek.Monday).Repeat.Twice();
 				Expect.Call(_person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
 				Expect.Call(_permissionInformation.Culture()).Return(CultureInfo.CurrentCulture).Repeat.AtLeastOnce();
@@ -92,9 +92,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
-				Expect.Call(_contractSchedule.IsWorkday(new DateOnly(2011, 1, 1), new DateOnly(2011, 1, 1))).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_contractSchedule.IsWorkday(dateOnly, dateOnly)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			    Expect.Call(_person.PreviousPeriod(_personPeriod)).Return(null);
-				Expect.Call(_person.SchedulePeriodStartDate(new DateOnly(2011, 1, 1))).Return(new DateOnly(2011, 1, 1)).Repeat.AtLeastOnce();
+				Expect.Call(_person.SchedulePeriodStartDate(dateOnly)).Return(dateOnly).Repeat.AtLeastOnce();
 			}
 
 			using (_mockRepository.Playback())

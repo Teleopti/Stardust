@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 	{
 		void MergeHeaders();
 		void RefreshGrid();
+		AgentRestrictionsDisplayRow CurrentDisplayRow { get; }
 	}
 
 	public interface IAgentRestrictionsWarningDrawer

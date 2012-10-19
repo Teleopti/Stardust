@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {
-            ((Regional)TeleoptiPrincipal.Current.Regional).Culture = new CultureInfo("sv-SE");
+            ((Regional)TeleoptiPrincipal.Current.Regional).CultureLCID = new CultureInfo("sv-SE").LCID;
             _mocks = new MockRepository();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _stateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             var timeZoneInfoLoggedOnPerson = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
             regional.TimeZone = timeZoneInfoLoggedOnPerson;
             var cultureInfo = new CultureInfo(1033);
-            regional.Culture = cultureInfo;
+            regional.CultureLCID = cultureInfo.LCID;
 
 			_target = new RestrictionSummaryModel(_schedulingResultStateHolder, new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService())), _stateHolder, _preferenceNightRestChecker);
 
@@ -443,7 +443,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             Assert.AreEqual(expectedMin, min);
 
             regional.TimeZone = timeZoneBefore;
-            regional.Culture = cultureBefore;
+            regional.CultureLCID = cultureBefore.LCID;
         }
 
 

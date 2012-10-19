@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
@@ -13,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public IEnumerable<WeekDayHeader> WeekDayHeaders { get; set; }
 		public IEnumerable<WeekViewModel> Weeks { get; set; }
 		public PreferencePeriodViewModel PreferencePeriod { get; set; }
-		public IEnumerable<StyleClassViewModel> Styles { get; set; }
+		public int MaxMustHave { get; set; }
 	}
 
 	public class PreferencePeriodViewModel
@@ -37,16 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public DateOnly Date { get; set; }
 		public bool InPeriod { get; set; }
 		public bool Editable { get; set; }
-		public bool Feedback { get; set; }
-		public bool Preference { get; set; }
-
 		public HeaderViewModel Header { get; set; }
-		public string StyleClassName { get; set; }
-		public string BorderColor { get; set; }
-
-		public PersonAssignmentDayViewModel PersonAssignment { get; set; }
-		public DayOffDayViewModel DayOff { get; set; }
-		public AbsenceDayViewModel Absence { get; set; }
 	}
 
 	public class HeaderViewModel
@@ -54,23 +42,4 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public string DayDescription { get; set; }
 		public string DayNumber { get; set; }
 	}
-
-	public class PersonAssignmentDayViewModel
-	{
-		public string ShiftCategory { get; set; }
-		public string TimeSpan { get; set; }
-		public string ContractTime { get; set; }
-		public int ContractTimeMinutes { get; set; }
-	}
-
-	public class DayOffDayViewModel
-	{
-		public string DayOff { get; set; }
-	}
-
-	public class AbsenceDayViewModel
-	{
-		public string Absence { get; set; }
-	}
-
 }

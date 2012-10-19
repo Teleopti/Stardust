@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
@@ -15,7 +16,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private AgentRestrictionsDetailModel _model;
 		private IScheduleMatrixPro _scheduleMatrixPro;
 		private MockRepository _mocks;
-		private IVirtualSchedulePeriod _schedulePeriod;
 		private DateTimePeriod _period;
 		private IRestrictionExtractor _restrictionExtractor;
 		private RestrictionSchedulingOptions _schedulingOptions;
@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_model = new AgentRestrictionsDetailModel(_period);
 			_mocks = new MockRepository();
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
-			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_restrictionExtractor = _mocks.StrictMock<IRestrictionExtractor>();
 			_schedulingOptions = new RestrictionSchedulingOptions {UseScheduling = true};
 			_effectiveRestrictionExtractor = _mocks.StrictMock<IAgentRestrictionsDetailEffectiveRestrictionExtractor>();
@@ -41,13 +40,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		[Test]
 		public void ShouldLoadDetails()
 		{
-			var dateOnlyPeriod = new DateOnlyPeriod(2012, 6, 28, 2012, 7, 4);
 			var loadedPeriod = new DateTimePeriod(2012, 6, 28, 2012, 7, 4);
+			IDictionary<DateOnly, IScheduleDayPro> dic = new Dictionary<DateOnly, IScheduleDayPro>();
+			dic.Add(DateOnly.MinValue, null);
+			dic.Add(DateOnly.MaxValue, null);
 
 			using(_mocks.Record())
 			{
-				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro.OuterWeeksPeriodDictionary).Return(dic);
 				Expect.Call(() =>_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, new DateOnly(), loadedPeriod,TimeSpan.FromHours(40))).IgnoreArguments().Repeat.AtLeastOnce();
 				Expect.Call(() => _preferenceNightRestChecker.CheckNightlyRest(null)).IgnoreArguments();
 			}
@@ -57,18 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				_model.LoadDetails(_scheduleMatrixPro, _restrictionExtractor, _schedulingOptions, _effectiveRestrictionExtractor, TimeSpan.FromHours(40), _preferenceNightRestChecker);
 			}
 
-			Assert.AreEqual(28, _model.DetailData().Count);
-		}
-		
-		[Test]
-		public void ShouldGetDetailDays()
-		{
-			var startDate = new DateTime(2012, 6, 28, 0, 0, 0, DateTimeKind.Utc);
-			var endDate = new DateTime(2012, 7, 4, 0, 0, 0, DateTimeKind.Utc);
-			var detailDates = _model.DetailDates(startDate, endDate);
-			Assert.AreEqual(28, detailDates.Count);
-			Assert.AreEqual(new DateOnly(2012, 6, 18), detailDates.Min());
-			Assert.AreEqual(new DateOnly(2012, 7, 15), detailDates.Max());
+			Assert.AreEqual(2, _model.DetailData().Count);
 		}
 	}
 }

@@ -11131,4 +11131,24 @@ These options are activated:
   <data name="YourScheduleHasChanged" xml:space="preserve">
     <value>Your schedule has changed!</value>
   </data>
+  <data name="FairnessOptimizationOn" xml:space="preserve">
+    <value>Optimizing fairness on </value>
+    <comment>Information displayed on the status bar in scheduler during fairness optimization</comment>
+  </data>
+  <data name="FairnessOptimizationRollingBack" xml:space="preserve">
+    <value> - value after is not better, rolling back.</value>
+    <comment>Information displayed on the status bar in scheduler during fairness optimization</comment>
+  </data>
+  <data name="FairnessOptimizationValueAfter" xml:space="preserve">
+    <value> - value after = </value>
+    <comment>Information displayed on the status bar in scheduler during fairness optimization</comment>
+  </data>
+  <data name="FairnessOptimizationValueBefore" xml:space="preserve">
+    <value> - value before = </value>
+    <comment>Information displayed on the status bar in scheduler during fairness optimization</comment>
+  </data>
+  <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
+    <value>Selected file destination does not exist, please enter valid file path</value>
+    <comment>Selected file destination does not exist, please enter valid filepath</comment>
+  </data>
 </root>

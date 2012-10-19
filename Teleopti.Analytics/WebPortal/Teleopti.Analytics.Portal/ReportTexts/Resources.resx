@@ -1201,4 +1201,8 @@ Schedule</value>
     <value>Totals</value>
     <comment>Totals</comment>
   </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>Sign Out</value>
+    <comment>Sign out from analytics</comment>
+  </data>
 </root>

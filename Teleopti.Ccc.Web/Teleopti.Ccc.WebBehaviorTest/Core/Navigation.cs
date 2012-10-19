@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -22,22 +23,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 			var uri = new Uri(TestSiteConfigurationSetup.Url, pageUrl);
 			Log.Write("Browsing to: " + uri);
-			Browser.Current.GoTo(uri);
+			Robustness.RetryIEOperation(() => Browser.Current.GoTo(uri));
 			Log.Write("Ended up in: " + Browser.Current.Url);
 
 			interceptors.Reverse().ToList().ForEach(i => i.After(pageUrl));
-			mockWindowAlert();
-		}
-
-		private static void mockWindowAlert()
-		{
-			const string jsCode = "window.alert = function (value) {$('<span/>', {text: value, 'class': 'alertLoggerItem'}).appendTo('#alertLogger');};";
-			Browser.Current.Eval(jsCode);
 		}
 
 		public static void GotoAsm()
 		{
-			GoTo("MyTime/Asm");
+			GoTo("MyTime/Asm", new OverrideNotifyBehavior());
 		}
 
 		public static void GotoGlobalSignInPage()
@@ -135,13 +129,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoPreference()
 		{
-			GoTo("MyTime#Preference/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#Preference/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
+		}
+
+		public static void GotoPreference(DateTime date)
+		{
+			GoTo(string.Format("MyTime#Preference/Index/{0}/{1}/{2}",
+				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+				new ApplicationStartupTimeout(), new LoadingOverlay(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 
 		public static void GotoRegionalSettings()
 		{
-			GoTo("MyTime#Settings/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#Settings/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RegionalSettingsPage>());
 		}
 
@@ -151,23 +153,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PasswordPage>());
 		}
 
-		public static void GotoPreference(DateTime date)
-		{
-			GoTo(string.Format("MyTime#Preference/Index/{0}/{1}/{2}", 
-				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				new ApplicationStartupTimeout(), new LoadingOverlay());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
-		}
-
 		public static void GotoRequests()
 		{
-			GoTo("MyTime#Requests/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#Requests/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
 		}
 
 		public static void GotoTeamSchedule()
 		{
-			GoTo("MyTime#TeamSchedule/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#TeamSchedule/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
 		}
 
@@ -175,7 +169,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoTo(String.Format("MyTime#TeamSchedule/Index/{0}/{1}/{2}", 
 				date.Year.ToString("0000"), date.Month.ToString("00"),date.Day.ToString("00"))
-				, new ApplicationStartupTimeout(), new LoadingOverlay());
+				, new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
 		}
 
@@ -236,4 +230,33 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	}
 
+	public class OverrideNotifyBehavior : IGoToInterceptor
+	{
+		public void Before(string pageUrl)
+		{
+		}
+
+		public void After(string pageUrl)
+		{
+			mockNotifyCall();
+		}
+
+		private static void mockNotifyCall()
+		{
+			const string jsCode = "Teleopti.MyTimeWeb.Notifier.Notify = function (value) {$('<span/>', {text: value, 'class': 'notifyLoggerItem'}).appendTo('#notifyLogger');};";
+			Browser.Current.Eval(jsCode);
+		}
+	}
+
+	public class WaitUntilReadyForInteraction : IGoToInterceptor
+	{
+		public void Before(string pageUrl)
+		{
+		}
+
+		public void After(string pageUrl)
+		{
+			TestControllerMethods.WaitUntilReadyForInteraction();
+		}
+	}
 }
