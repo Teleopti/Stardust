@@ -307,6 +307,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
 					Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
 					_initTodayButton();
+					$('.body-weekview-inner').show();
 				}
 			});
 		},
