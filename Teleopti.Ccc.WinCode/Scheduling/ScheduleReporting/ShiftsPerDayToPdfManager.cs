@@ -101,7 +101,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
                 {
                     bool beforeLunch = true;
                     var hasLunch =
-                        projection.Select(layer => layer.Payload as IActivity).Count(a => a.ReportLevelDetail == ReportLevelDetail.Lunch) != 0;
+						projection.Select(layer => layer.Payload).OfType<IActivity>().Count(a => a.ReportLevelDetail == ReportLevelDetail.Lunch) != 0;
+
                     
                     // draw breaks too
                     foreach (IVisualLayer visualLayer in projection)
