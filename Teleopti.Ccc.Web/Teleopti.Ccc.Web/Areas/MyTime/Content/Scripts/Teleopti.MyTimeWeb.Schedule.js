@@ -95,39 +95,49 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	var WeekScheduleViewModel = function (userTexts) {
 		var self = this;
-
 		self.refresh = function (data) {
-			self.textPermission(data.RequestPermission.TextRequestPermission);
-			self.periodSelection(JSON.stringify(data.PeriodSelection));
-			self.asmPermission(data.AsmPermission);
-			self.isCurrentWeek(data.IsCurrentWeek);
+			self.Initialize(data);
+		};
+		self.userTexts = userTexts;
+		self.textPermission = ko.observable();
+		self.periodSelection = ko.observable();
+		self.asmPermission = ko.observable();
+		self.isCurrentWeek = ko.observable();
+		self.timeLines = ko.observableArray();
+		self.days = ko.observableArray();
+		
+	};
+
+	ko.utils.extend(WeekScheduleViewModel.prototype, {
+		Initialize: function (data) {
+			var instance = this;
+			console.log(instance);
+			instance.textPermission(data.RequestPermission.TextRequestPermission);
+			instance.periodSelection(JSON.stringify(data.PeriodSelection));
+			instance.asmPermission(data.AsmPermission);
+			instance.isCurrentWeek(data.IsCurrentWeek);
 			var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
 				return new TimelineViewModel(item);
 			});
-			self.timeLines(timelines);
+			this.timeLines(timelines);
 			var days = ko.utils.arrayMap(data.Days, function (item) {
-				return new DayViewModel(item, self);
+				return new DayViewModel(item, instance);
 			});
-			self.days(days);
-			self.styles = function () {
+			this.days(days);
+			this.styles = function () {
 				var ret = '';
 				$.each(data.Styles, function (key, value) {
 					ret += "li.third.{0} {background-color: rgb({1});} ".format(value.Name, value.RgbColor);
 				});
 				return ret;
 			};
-		};
+		}
+	});
 
-		self.userTexts = userTexts;
-		self.textPermission = ko.observable();
-		self.periodSelection = ko.observable();
-		self.asmPermission = ko.observable();
-		self.isCurrentWeek = ko.observable();
-
-		self.timeLines = ko.observableArray();
-		self.days = ko.observableArray();
-	};
 	var DayViewModel = function (day, parent) {
+		console.log('parent');
+		console.log(parent);
+		console.log(parent.userTexts);
 		var self = this;
 		self.fixedDate = ko.observable(day.FixedDate);
 		self.date = ko.observable(day.Date);
@@ -147,7 +157,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 		self.hasNote = ko.observable(day.HasNote);
 		self.textRequestText = ko.computed(function () {
-			return parent.userTexts.xRequests.format(self.textRequestCount);
+			console.log('--inside the function--');
+			console.log('--self--');
+			console.log(self);
+			console.log('--this--');
+			console.log(this);
+			console.log('--parent--');
+			console.log(parent);
+			return parent.userTexts.xRequests.format(self.textRequestCount());
 		});
 
 		self.classForDaySummary = ko.computed(function () {
@@ -312,7 +329,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				data: {
 					date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
 				},
-				success: function(data) {
+				success: function (data) {
 					vm.refresh(data);
 				}
 			});
