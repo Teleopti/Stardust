@@ -95,7 +95,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	var WeekScheduleViewModel = function (userTexts) {
 		var self = this;
-		self.refresh = function (data) {
+		self.initialize = function (data) {
 			self.Initialize(data);
 		};
 		self.userTexts = userTexts;
@@ -110,18 +110,17 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	ko.utils.extend(WeekScheduleViewModel.prototype, {
 		Initialize: function (data) {
-			var instance = this;
-			console.log(instance);
-			instance.textPermission(data.RequestPermission.TextRequestPermission);
-			instance.periodSelection(JSON.stringify(data.PeriodSelection));
-			instance.asmPermission(data.AsmPermission);
-			instance.isCurrentWeek(data.IsCurrentWeek);
+			var self = this;
+			self.textPermission(data.RequestPermission.TextRequestPermission);
+			self.periodSelection(JSON.stringify(data.PeriodSelection));
+			self.asmPermission(data.AsmPermission);
+			self.isCurrentWeek(data.IsCurrentWeek);
 			var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
 				return new TimelineViewModel(item);
 			});
 			this.timeLines(timelines);
 			var days = ko.utils.arrayMap(data.Days, function (item) {
-				return new DayViewModel(item, instance);
+				return new DayViewModel(item, self);
 			});
 			this.days(days);
 			this.styles = function () {
@@ -133,11 +132,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			};
 		}
 	});
-
+	
 	var DayViewModel = function (day, parent) {
-		console.log('parent');
-		console.log(parent);
-		console.log(parent.userTexts);
 		var self = this;
 		self.fixedDate = ko.observable(day.FixedDate);
 		self.date = ko.observable(day.Date);
@@ -157,13 +153,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 		self.hasNote = ko.observable(day.HasNote);
 		self.textRequestText = ko.computed(function () {
-			console.log('--inside the function--');
-			console.log('--self--');
-			console.log(self);
-			console.log('--this--');
-			console.log(this);
-			console.log('--parent--');
-			console.log(parent);
 			return parent.userTexts.xRequests.format(self.textRequestCount());
 		});
 
@@ -306,7 +295,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 				success: function (data) {
 					vm = new WeekScheduleViewModel(userTexts);
-					vm.refresh(data);
+					vm.initialize(data);
 
 					ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
 
@@ -330,7 +319,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
 				},
 				success: function (data) {
-					vm.refresh(data);
+					vm.initialize(data);
 				}
 			});
 		},
