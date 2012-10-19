@@ -105,7 +105,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
 		self.days = ko.observableArray();
-		
+
 	};
 
 	ko.utils.extend(WeekScheduleViewModel.prototype, {
@@ -132,7 +132,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			};
 		}
 	});
-	
+
 	var DayViewModel = function (day, parent) {
 		var self = this;
 		self.fixedDate = ko.observable(day.FixedDate);
@@ -230,7 +230,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	};
 
 	function _setTimeIndicator(theDate) {
-		if ($('.week-schedule-ASM-permission-granted').val() != 'yes' || $('.week-schedule-current-week').val() != 'yes') {
+		if ($('.week-schedule-ASM-permission-granted').text() != 'yes' || $('.week-schedule-current-week').text() != 'yes') {
 			return;
 		}
 
