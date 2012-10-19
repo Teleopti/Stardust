@@ -277,8 +277,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             }
         }
 
-        [Test]
-
         private string TranslateToEnglish(string key)
         {
             return Resources.ResourceManager.GetString(key, _englishCulture);
