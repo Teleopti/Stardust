@@ -152,7 +152,7 @@
 		messageBrokerHub: {
 			_: {
 				hubName: 'MessageBrokerHub',
-				ignoreMembers: ['addSubscription', 'notifyClients', 'removeSubscription', 'namespace', 'ignoreMembers', 'callbacks'],
+				ignoreMembers: ['addSubscription', 'notifyClients', 'notifyClientsMultiple', 'removeSubscription', 'namespace', 'ignoreMembers', 'callbacks'],
 				connection: function () { return signalR.hub; }
 			},
 
@@ -166,6 +166,10 @@
 
 			notifyClients: function (notification, callback) {
 				return serverCall(this, "NotifyClients", $.makeArray(arguments));
+			},
+
+			notifyClientsMultiple: function (notifications, callback) {
+				return serverCall(this, "NotifyClientsMultiple", $.makeArray(arguments));
 			}
 		}
 	});
