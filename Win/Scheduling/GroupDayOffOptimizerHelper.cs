@@ -90,16 +90,18 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 var schedulingOptionsCreator = new SchedulingOptionsCreator();
                 var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
+				var rollbackService = _container.Resolve<ISchedulePartModifyAndRollbackService>();
                 RemoveShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker,
-                                                    optimizerPreferences, schedulingOptions);
+                                                    optimizerPreferences, schedulingOptions, selectedPersons, selectedPeriod, rollbackService);
             }
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
 
 
-        public void RemoveShiftCategoryBackToLegalState(
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		public void RemoveShiftCategoryBackToLegalState(
             IList<IScheduleMatrixPro> matrixList,
-            BackgroundWorker backgroundWorker, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions)
+			BackgroundWorker backgroundWorker, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, ISchedulePartModifyAndRollbackService rollbackService)
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -112,8 +114,33 @@ namespace Teleopti.Ccc.Win.Scheduling
                     return;
                 var groupOptimizerFindMatrixesForGroup =
                     new GroupOptimizerFindMatrixesForGroup(_groupPersonBuilderForOptimization, matrixList);
+
+
+				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
+			   OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container);
+				IGroupMatrixContainerCreator groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
+				IGroupPersonConsistentChecker groupPersonConsistentChecker =
+					_container.Resolve<IGroupPersonConsistentChecker>();
+				IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+				var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+				IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
+																		 groupPersonConsistentChecker,
+																		 workShiftBackToLegalStateService,
+																		 resourceOptimizationHelper,
+																		 mainShiftOptimizeActivitySpecificationSetter);
+
+		
+				var coherentChecker = new TeamSteadyStateCoherentChecker();
+				var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
+				var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(groupMatrixHelper, coherentChecker, scheduleMatrixProFinder);
+				var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
+				var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
+				var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(selectedPersons, targetTimeCalculator, matrixList, groupPersonsBuilder, schedulingOptions);
+				var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
+				IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_stateHolder, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
+
                 backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences,
-                                                   groupOptimizerFindMatrixesForGroup);
+                                                   groupOptimizerFindMatrixesForGroup, teamSteadyStateDictionary, teamSteadyStateMainShiftScheduler, groupPersonBuilderForOptimization);
 
             }
         }
