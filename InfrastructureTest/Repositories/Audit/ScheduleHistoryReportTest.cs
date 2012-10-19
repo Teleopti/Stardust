@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -25,7 +26,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 		protected override void AuditSetup()
 		{
-			regional = new Regional(TimeZoneInfo.Local, null, null);
+			var culture = CultureInfo.GetCultureInfo("sv-SE");
+			regional = new Regional(TimeZoneInfo.Local, culture, culture);
 			target = new ScheduleHistoryReport(UnitOfWorkFactory.Current, regional);
 			personProvider = new UnsafePersonProvider();
 		}
