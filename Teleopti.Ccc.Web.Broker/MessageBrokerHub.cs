@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using SignalR.Hubs;
@@ -11,15 +10,16 @@ namespace Teleopti.Ccc.Web.Broker
 	public class MessageBrokerHub : Hub
 	{
 		private readonly static ILog Logger = LogManager.GetLogger(typeof (MessageBrokerHub));
-		//private readonly ConcurrentDictionary<string,IList<Subscription>> SubscriptionStorage 
 
-		public void AddSubscription(Subscription subscription)
+		public string AddSubscription(Subscription subscription)
 		{
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId, subscription.Route(), subscription.Route().GetHashCode());
 			}
-			Groups.Add(Context.ConnectionId, subscription.Route().GetHashCode().ToString()).ContinueWith(t => Logger.InfoFormat("Added subscription {0}.",subscription.Route()));
+			var route = subscription.Route();
+			Groups.Add(Context.ConnectionId, createRouteHash(route)).ContinueWith(t => Logger.InfoFormat("Added subscription {0}.", route));
+			return route;
 		}
 
 		public void RemoveSubscription(string route)
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Broker
 
 			foreach (var route in routes)
 			{
-				Clients[route.GetHashCode().ToString()].onEventMessage(notification);
+				Clients[createRouteHash(route)].onEventMessage(notification, route);
 			}
 		}
 
@@ -52,6 +52,12 @@ namespace Teleopti.Ccc.Web.Broker
 			{
 				NotifyClients(notification);
 			}
+		}
+
+		private static string createRouteHash(string route)
+		{
+			//gethashcode won't work in 100% of the cases...
+			return route.GetHashCode().ToString();
 		}
 	}
 }
