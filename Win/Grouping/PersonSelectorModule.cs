@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Win.Grouping
             builder.RegisterType<DeleteGroupPageCommand>().As<IDeleteGroupPageCommand>().InstancePerLifetimeScope();
             builder.RegisterType<RenameGroupPageCommand>().As<IRenameGroupPageCommand>().InstancePerLifetimeScope();
             builder.RegisterType<SendInstantMessageCommand>().As<ISendInstantMessageCommand>().InstancePerLifetimeScope();
+            builder.RegisterType<SendInstantMessageEnableCommand>().As<ISendInstantMessageEnableCommand>().InstancePerLifetimeScope();
             builder.RegisterType<OpenMeetingsOverviewCommand>().As<IOpenMeetingsOverviewCommand>().InstancePerLifetimeScope();
             builder.RegisterType<AddMeetingFromPanelCommand>().As<IAddMeetingFromPanelCommand>().InstancePerLifetimeScope();
             builder.RegisterType<OpenIntradayTodayCommand>().As<IOpenIntradayTodayCommand>().InstancePerLifetimeScope();
