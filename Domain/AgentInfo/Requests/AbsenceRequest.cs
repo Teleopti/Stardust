@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 		}
 
-    	private bool isRequestForOneLocalDay(ICccTimeZoneInfo timeZone)
+    	private bool isRequestForOneLocalDay(TimeZoneInfo timeZone)
     	{
     		return Period.StartDateTimeLocal(timeZone).Date == Period.EndDateTimeLocal(timeZone).Date;
     	}
