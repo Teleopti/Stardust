@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -75,13 +76,17 @@ namespace Teleopti.Analytics.Parameters
 			                    DataValueField = "id"
 			                };
 
-		    _validator = new RequiredFieldValidator();
+		    
 			_dropDown.ID = "Drop" + Dbid;
-			_validator.ControlToValidate = _dropDown.ID;
-			_validator.Text = "*";
+			_validator = new RequiredFieldValidator
+				{
+					ControlToValidate = _dropDown.ID,
+					Text = "*",
+					ErrorMessage = Selector.ErrorMessage + " '" + Text + "'",
+					Display = ValidatorDisplay.Dynamic,
+					ForeColor = Color.Red
+				};
 
-            _validator.ErrorMessage = Selector.ErrorMessage + " '" + Text + "'";
-            _validator.Display = ValidatorDisplay.Dynamic;
 			_label.Text = Text;
 			base.Controls.Add(_label);
 			base.Controls.Add(_dropDown);
@@ -92,7 +97,7 @@ namespace Teleopti.Analytics.Parameters
 				LoadData();				
 			}
 		}
-
+		
 		protected override void BindData()
 		{
 			_dropDown.DataSource = MyData.Tables[0];
