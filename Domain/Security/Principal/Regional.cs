@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public int CultureLCID { get; set; }
 		public int UICultureLCID { get; set; }
 
-		public CultureInfo Culture { get { return CultureInfo.GetCultureInfo(CultureLCID); } }
-		public CultureInfo UICulture { get { return CultureInfo.GetCultureInfo(UICultureLCID); } }
+		public CultureInfo Culture { get { return CultureLCID == 0 ? CultureInfo.CurrentCulture : CultureInfo.GetCultureInfo(CultureLCID); } }
+		public CultureInfo UICulture { get { return UICultureLCID == 0 ? CultureInfo.CurrentUICulture : CultureInfo.GetCultureInfo(UICultureLCID); } }
 
 		public ICccTimeZoneInfo TimeZone { get; set; }
 
