@@ -7,13 +7,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
 	public class EffectiveRestrictionForDisplayCreator : IEffectiveRestrictionForDisplayCreator
 	{
-		private readonly IRestrictionCombiner _restrictionCombiner;
 		private readonly IRestrictionRetrievalOperation _retrievalOperation;
+		private readonly IRestrictionCombiner _restrictionCombiner;
+		private readonly IMeetingRestrictionCombiner _meetingRestrictionCombiner;
+		private readonly IPersonalShiftRestrictionCombiner _personalShiftRestrictionCombiner;
 
-		public EffectiveRestrictionForDisplayCreator(IRestrictionCombiner restrictionCombiner, IRestrictionRetrievalOperation retrievalOperation)
+		public EffectiveRestrictionForDisplayCreator(IRestrictionRetrievalOperation retrievalOperation, IRestrictionCombiner restrictionCombiner, IMeetingRestrictionCombiner meetingRestrictionCombiner, IPersonalShiftRestrictionCombiner personalShiftRestrictionCombiner)
 		{
-			_restrictionCombiner = restrictionCombiner;
 			_retrievalOperation = retrievalOperation;
+			_restrictionCombiner = restrictionCombiner;
+			_meetingRestrictionCombiner = meetingRestrictionCombiner;
+			_personalShiftRestrictionCombiner = personalShiftRestrictionCombiner;
 		}
 
 		public IEffectiveRestriction GetEffectiveRestrictionForDisplay(IScheduleDay scheduleDay, IEffectiveRestrictionOptions effectiveRestrictionOptions)
@@ -39,6 +43,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 						_retrievalOperation.GetAvailabilityRestrictions(scheduleDay.RestrictionCollection()),
 						effectiveRestriction);
 				}
+
+				if (effectiveRestrictionOptions.UseMeetings)
+				{
+					if (_meetingRestrictionCombiner != null)
+						effectiveRestriction = _meetingRestrictionCombiner.Combine(scheduleDay, effectiveRestriction);
+				}
+
+				if (effectiveRestrictionOptions.UsePersonalShifts)
+				{
+					if (_personalShiftRestrictionCombiner != null)
+						effectiveRestriction = _personalShiftRestrictionCombiner.Combine(scheduleDay, effectiveRestriction);
+				}
+
 			}
 
 			return effectiveRestriction;

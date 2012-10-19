@@ -9,15 +9,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private readonly IEffectiveRestrictionForDisplayCreator _effectiveRestrictionCreator;
-		private readonly IEffectiveRestrictionForMeeting _effectiveRestrictionForMeeting;
-		private readonly IEffectiveRestrictionForPersonalShift _effectiveRestrictionForPersonalShift;
 
-		public WorkTimeMinMaxCalculator(IWorkShiftWorkTime workShiftWorkTime, IEffectiveRestrictionForDisplayCreator effectiveRestrictionCreator, IEffectiveRestrictionForMeeting effectiveRestrictionForMeeting, IEffectiveRestrictionForPersonalShift effectiveRestrictionForPersonalShift)
+		public WorkTimeMinMaxCalculator(IWorkShiftWorkTime workShiftWorkTime, IEffectiveRestrictionForDisplayCreator effectiveRestrictionCreator)
 		{
 			_workShiftWorkTime = workShiftWorkTime;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_effectiveRestrictionForMeeting = effectiveRestrictionForMeeting;
-			_effectiveRestrictionForPersonalShift = effectiveRestrictionForPersonalShift;
 		}
 
 		public IWorkTimeMinMax WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay, out PreferenceType? preferenceType)
@@ -32,9 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (ruleSetBag == null)
 				return null;
 
-			var options = new EffectiveRestrictionOptions(true, true);
-
-			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForDisplay(scheduleDay, options);
+			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForDisplay(scheduleDay, EffectiveRestrictionOptions.UseAll());
 			if (effectiveRestriction != null)
 			{
 				if (effectiveRestriction.DayOffTemplate != null)
@@ -54,14 +48,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (effectiveRestriction != null && effectiveRestriction.Absence != null)
 			{
 				return WorkTimeMinMaxForAbsence(scheduleDay, effectiveRestriction);
-			}
-			if (_effectiveRestrictionForMeeting != null)
-			{
-				effectiveRestriction = _effectiveRestrictionForMeeting.AddEffectiveRestriction(scheduleDay, effectiveRestriction);
-			}
-			if (_effectiveRestrictionForPersonalShift != null)
-			{
-				effectiveRestriction = _effectiveRestrictionForPersonalShift.AddEffectiveRestriction(scheduleDay, effectiveRestriction);
 			}
 
 			return ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, date, effectiveRestriction);

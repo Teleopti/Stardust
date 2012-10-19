@@ -1,9 +1,11 @@
+using System.Collections.Generic;
+
 namespace Teleopti.Interfaces.Domain
 {
 	/// <summary>
 	/// add effectiveRestriction to scheduleDay
 	/// </summary>
-	public interface IEffectiveRestrictionForMeeting
+	public interface IMeetingRestrictionCombiner
 	{
 		/// <summary>
 		/// add effectiveRestriction to  scheduleDay
@@ -11,6 +13,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="scheduleDay"> the scheduleDay</param>
 		/// <param name="effectiveRestriction"> the effectiveRestriction</param>
 		/// <returns>the effectiveRestriction</returns>
-		IEffectiveRestriction AddEffectiveRestriction(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction);
+		IEffectiveRestriction Combine(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction);
 	}
 }

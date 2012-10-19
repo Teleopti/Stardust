@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
                 return GetWorkTimeAbsencePreference(scheduleDay, effectiveRestriction);
             }
 
-			effectiveRestriction = new EffectiveRestrictionForPersonalShift().AddEffectiveRestriction(scheduleDay, effectiveRestriction);
-			effectiveRestriction = new EffectiveRestrictionForMeeting().AddEffectiveRestriction(scheduleDay, effectiveRestriction);
+			effectiveRestriction = new PersonalShiftRestrictionCombiner(new RestrictionCombiner()).Combine(scheduleDay, effectiveRestriction);
+			effectiveRestriction = new MeetingRestrictionCombiner(new RestrictionCombiner()).Combine(scheduleDay, effectiveRestriction);
 
             var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
 				return ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, dateOnly, effectiveRestriction);

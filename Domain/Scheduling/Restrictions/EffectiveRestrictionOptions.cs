@@ -5,15 +5,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
 	public class EffectiveRestrictionOptions : IEffectiveRestrictionOptions, IEquatable<EffectiveRestrictionOptions>
 	{
-		public bool UseAvailability { get; set; }
-		public bool UsePreference { get; set; }
-
-		public EffectiveRestrictionOptions(bool usePreference, bool useAvailability)
+		public static EffectiveRestrictionOptions UseAll()
 		{
-			UseAvailability = useAvailability;
-			UsePreference = usePreference;
+			return new EffectiveRestrictionOptions
+				{
+					UseAvailability = true,
+					UsePreference = true,
+					UseMeetings = true,
+					UsePersonalShifts = true
+				};
 		}
 
+		public bool UsePreference { get; set; }
+		public bool UseAvailability { get; set; }
+		public bool UseMeetings { get; set; }
+		public bool UsePersonalShifts { get; set; }
 
 
 
@@ -24,14 +30,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return other.UseAvailability.Equals(UseAvailability) && other.UsePreference.Equals(UsePreference);
+			return UsePreference.Equals(other.UsePreference) && UseAvailability.Equals(other.UseAvailability) && UseMeetings.Equals(other.UseMeetings) && UsePersonalShifts.Equals(other.UsePersonalShifts);
 		}
 
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != typeof (EffectiveRestrictionOptions)) return false;
+			if (obj.GetType() != this.GetType()) return false;
 			return Equals((EffectiveRestrictionOptions) obj);
 		}
 
@@ -39,18 +45,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		{
 			unchecked
 			{
-				return (UseAvailability.GetHashCode()*397) ^ UsePreference.GetHashCode();
+				int hashCode = UsePreference.GetHashCode();
+				hashCode = (hashCode*397) ^ UseAvailability.GetHashCode();
+				hashCode = (hashCode*397) ^ UseMeetings.GetHashCode();
+				hashCode = (hashCode*397) ^ UsePersonalShifts.GetHashCode();
+				return hashCode;
 			}
 		}
 
-		public static bool operator ==(EffectiveRestrictionOptions left, EffectiveRestrictionOptions right)
-		{
-			return Equals(left, right);
-		}
 
-		public static bool operator !=(EffectiveRestrictionOptions left, EffectiveRestrictionOptions right)
-		{
-			return !Equals(left, right);
-		}
+
+
 	}
 }
