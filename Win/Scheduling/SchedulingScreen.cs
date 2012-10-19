@@ -4758,8 +4758,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             	schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
                 if (schedulingOptions.UseShiftCategoryLimitations)
                 {
-                    _scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixList,
-                                                                                 _backgroundWorkerScheduling, _optimizationPreferences, schedulingOptions);
+					IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(scheduleDays));
+					var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+					 var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+                    var rollbackService = _container.Resolve<ISchedulePartModifyAndRollbackService>();
+					_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixList,
+                                                                                 _backgroundWorkerScheduling, _optimizationPreferences, schedulingOptions, selectedPersons,selectedPeriod, rollbackService);
                 }
             }
             _schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
@@ -4981,10 +4985,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 					IList<IScheduleMatrixPro> matrixList =
                         OptimizerHelperHelper.CreateMatrixList(selectedSchedules, _schedulerState.SchedulingResultState, _container);
 
+					IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedSchedules));
+					var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+					var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedSchedules, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedSchedules, currentPersonTimeZone));
+
                     _scheduleOptimizerHelper.GetBackToLegalState(matrixList,
                                                                  _schedulerState,
                                                                  _backgroundWorkerOptimization,
-																 _optimizerOriginalPreferences.SchedulingOptions);
+																 _optimizerOriginalPreferences.SchedulingOptions, selectedPersons, selectedPeriod);
 
                     break;
                 case OptimizationMethod.ReOptimize:
