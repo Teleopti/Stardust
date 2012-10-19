@@ -395,7 +395,7 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 			}
 		}
 
-		private void onNotification(Notification d, string route)
+		private void onNotification(Notification d)
 		{
 			var message = new EventMessage();
 			message.InterfaceType = Type.GetType(d.DomainQualifiedType, false, true);

@@ -22,7 +22,7 @@ namespace Teleopti.Messaging.SignalR
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
-		public event Action<Notification, string> OnNotification;
+		public event Action<Notification> OnNotification;
 
 		public SignalWrapper(IHubProxy hubProxy, HubConnection hubConnection)
 		{
@@ -122,8 +122,7 @@ namespace Teleopti.Messaging.SignalR
 			if (handler!=null)
 			{
 				var d = ((JObject)obj[0]).ToObject<Notification>();
-				var route = ((JObject) obj[1]).ToObject<string>();
-				handler.BeginInvoke(d, route, onNotificationCallback,handler);
+				handler.BeginInvoke(d, onNotificationCallback,handler);
 			}
 		}
 
