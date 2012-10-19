@@ -20,13 +20,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
         private readonly IModifyGroupPageCommand _modifyGroupPageCommand;
         private readonly IRenameGroupPageCommand _renameGroupPageCommand;
         private readonly ISendInstantMessageCommand _sendInstantMessageCommand;
-        private IPeopleNavigator _navigator;
+    	private readonly ISendInstantMessageEnableCommand _sendInstantMessageEnableCommand;
+    	private IPeopleNavigator _navigator;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public PeopleNavigatorPresenter(IEventAggregator eventAggregator, IOpenModuleCommand openModuleCommand, 
-            IAddGroupPageCommand addGroupPageCommand, IDeleteGroupPageCommand deleteGroupPageCommand, 
-            IModifyGroupPageCommand modifyGroupPageCommand, IRenameGroupPageCommand renameGroupPageCommand,
-            ISendInstantMessageCommand sendInstantMessageCommand)
+        public PeopleNavigatorPresenter(IEventAggregator eventAggregator, IOpenModuleCommand openModuleCommand, IAddGroupPageCommand addGroupPageCommand, IDeleteGroupPageCommand deleteGroupPageCommand, IModifyGroupPageCommand modifyGroupPageCommand, IRenameGroupPageCommand renameGroupPageCommand, ISendInstantMessageCommand sendInstantMessageCommand, ISendInstantMessageEnableCommand sendInstantMessageEnableCommand)
         {
             _eventAggregator = eventAggregator;
             _openModuleCommand = openModuleCommand;
@@ -35,7 +33,8 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
             _modifyGroupPageCommand = modifyGroupPageCommand;
             _renameGroupPageCommand = renameGroupPageCommand;
             _sendInstantMessageCommand = sendInstantMessageCommand;
-            _eventAggregator.GetEvent<SelectedNodesChanged>().Subscribe(selectedNodesChanged);
+        	_sendInstantMessageEnableCommand = sendInstantMessageEnableCommand;
+        	_eventAggregator.GetEvent<SelectedNodesChanged>().Subscribe(selectedNodesChanged);
             _eventAggregator.GetEvent<OpenModuleClicked>().Subscribe(openModuleClicked);
             _eventAggregator.GetEvent<FindPeopleClicked>().Subscribe(findPeopleClicked);
             
@@ -70,6 +69,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
             _navigator.ModifyGroupPageEnabled = _modifyGroupPageCommand.CanExecute();
             _navigator.RenameGroupPageEnabled = _renameGroupPageCommand.CanExecute();
             _navigator.SendMessageVisible = _sendInstantMessageCommand.CanExecute();
+            _navigator.SendMessageEnable = _sendInstantMessageEnableCommand.CanExecute();
         }
     }
 }
