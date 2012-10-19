@@ -295,8 +295,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 				success: function (data) {
 					vm = new WeekScheduleViewModel(userTexts);
-					vm.initialize(data);
-
+					vm.Initialize(data);
 					ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
 
 					_initTimeIndicator();
@@ -319,7 +318,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
 				},
 				success: function (data) {
-					vm.initialize(data);
+					vm.Initialize(data);
 				}
 			});
 		},
