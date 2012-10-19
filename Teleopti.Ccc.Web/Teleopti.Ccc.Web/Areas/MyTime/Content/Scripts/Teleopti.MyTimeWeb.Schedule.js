@@ -103,6 +103,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
 		self.days = ko.observableArray();
+		self.styles = ko.observable();
 
 	};
 
@@ -121,13 +122,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return new DayViewModel(item, self);
 			});
 			self.days(days);
-			self.styles = function () {
+			self.styles(function () {
 				var ret = '';
 				$.each(data.Styles, function (key, value) {
 					ret += "li.third.{0} {background-color: rgb({1});} ".format(value.Name, value.RgbColor);
 				});
 				return ret;
-			};
+			});
 		}
 	});
 
@@ -281,10 +282,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		},
 		PartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
-			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();	
+			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 		},
 		SetupViewModel: function (userTexts) {
-			vm = new WeekScheduleViewModel(userTexts);			
+			vm = new WeekScheduleViewModel(userTexts);
+			ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
 		},
 		LoadAndBindData: function () {
 			ajax.Ajax({
@@ -296,9 +298,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				},
 
 				success: function (data) {
-					
+
 					vm.Initialize(data);
-					ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
+
 					_initTimeIndicator();
 					_setTimeIndicatorFirstTime();
 					_initTooltip();
@@ -312,6 +314,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			});
 		},
 		ReloadScheduleListener: function (notifiction) {
+
 			ajax.Ajax({
 				url: 'Schedule/FetchData',
 				dataType: "json",
