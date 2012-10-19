@@ -30,10 +30,8 @@ namespace Teleopti.Ccc.Win.Meetings
             outlookTimePickerStartTime.MaxValue = TimeSpan.FromDays(1);
             outlookTimePickerEndTime.MaxValue = TimeSpan.FromDays(1);
 
-        	dateTimePickerAdvStartDate.MinValue = DateHelper.MinSmallDateTime;
-        	dateTimePickerAdvStartDate.MaxValue = DateHelper.MaxSmallDateTime;
-        	dateTimePickerAdvEndDate.MinValue = DateHelper.MinSmallDateTime;
-        	dateTimePickerAdvEndDate.MaxValue = DateHelper.MaxSmallDateTime;
+        	dateTimePickerAdvStartDate.SetSafeBoundary();
+        	dateTimePickerAdvEndDate.SetSafeBoundary();
         }
 
         private void SetColors()
