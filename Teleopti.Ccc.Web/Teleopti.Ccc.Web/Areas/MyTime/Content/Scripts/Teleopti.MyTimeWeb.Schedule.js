@@ -95,9 +95,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	var WeekScheduleViewModel = function (userTexts) {
 		var self = this;
-		self.initialize = function (data) {
-			self.Initialize(data);
-		};
+
 		self.userTexts = userTexts;
 		self.textPermission = ko.observable();
 		self.periodSelection = ko.observable();
@@ -118,12 +116,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
 				return new TimelineViewModel(item);
 			});
-			this.timeLines(timelines);
+			self.timeLines(timelines);
 			var days = ko.utils.arrayMap(data.Days, function (item) {
 				return new DayViewModel(item, self);
 			});
-			this.days(days);
-			this.styles = function () {
+			self.days(days);
+			self.styles = function () {
 				var ret = '';
 				$.each(data.Styles, function (key, value) {
 					ret += "li.third.{0} {background-color: rgb({1});} ".format(value.Name, value.RgbColor);
