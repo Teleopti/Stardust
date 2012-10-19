@@ -224,8 +224,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	};
 
 	function _setTimeIndicator(theDate) {
-		if ($('.week-schedule-ASM-permission-granted').val() == 'yes' | $('.week-schedule-current-week').val() == 'yes')
+		if ($('.week-schedule-ASM-permission-granted').val() != 'yes' || $('.week-schedule-current-week').val() != 'yes') {
 			return;
+		}
 
 		var timelineHeight = 668;
 		var timelineOffset = 203;
@@ -312,7 +313,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				data: {
 					date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
 				},
-				success: function(data) {
+				success: function (data) {
 					vm.refresh(data);
 				}
 			});
