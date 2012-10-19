@@ -52,11 +52,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public void VerifyEmptyPersonMeetingCollection()
 		{
-			using(_mocks.Record())
-			{
-				Expect.Call(_scheduleDay.PersonMeetingCollection())
-					.Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
-			}
+
+			_scheduleDay.Stub(x=>x.PersonMeetingCollection())
+				.Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
+
+			using(_mocks.Record()) {}
 			using (_mocks.Playback())
 			{
 				IEffectiveRestriction result =
@@ -73,15 +73,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			IPersonMeeting personMeeting = _mocks.StrictMock<IPersonMeeting>();
 			IPerson person = PersonFactory.CreatePerson();
 
-			using(_mocks.Record())
-			{
-				Expect.Call(_scheduleDay.PersonMeetingCollection())
+
+				_scheduleDay.Stub(x=>x.PersonMeetingCollection())
 					.Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>{personMeeting}));
-				Expect.Call(_scheduleDay.Person)
+				_scheduleDay.Stub(x=>x.Person)
 					.Return(person);
-				Expect.Call(personMeeting.Period)
+				personMeeting.Stub(x=>x.Period)
 					.Return(new DateTimePeriod());
 
+				using (_mocks.Record())
+				{
 				Expect.Call(_restriction.Combine(null))
 					.IgnoreArguments()
 					.Return(_restriction);
