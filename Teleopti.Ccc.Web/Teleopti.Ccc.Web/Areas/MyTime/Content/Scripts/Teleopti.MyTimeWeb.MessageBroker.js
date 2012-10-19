@@ -1,21 +1,18 @@
 Teleopti.MyTimeWeb.MessageBroker = (function () {
-	var onetime = true;
-	var listeners = [];
-	var conn;
-	var hub;
+	var listeners = [], conn, hub;
 
 	function _oneTime(options) {
-		onetime = false;
 		hub = $.connection.messageBrokerHub;
 		$.connection.hub.url = options.url + '/signalr';
+		$.connection.hub.error(options.errCallback);
 
 		hub.onEventMessage = function (notification, route) {
 			//cant use "dictionary" array. may be multiple subscription with same route
-			$.each(listeners, function (key, value) {
+			$.each(listeners, function(key, value) {
 				if (value.Route == route) {
 					value.Callback(notification);
 				}
-			})
+			});
 			listeners.push({ Route: route, Notification: notification });
 		};
 
@@ -24,10 +21,9 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 
 
 	function _addSubscription(options) {
-		if (onetime) {
+		if (hub==null) {
 			_oneTime(options);
 		}
-		//$.connection.hub.error(options.errCallback);
 
 		conn
 			.done(function () {
@@ -38,7 +34,6 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 					'DomainReferenceId': options.referenceId
 				})
 				.done(function (route) {
-					console.log('register' + route);
 					listeners.push({ Route: route, Callback: options.callback });
 				});
 			});
