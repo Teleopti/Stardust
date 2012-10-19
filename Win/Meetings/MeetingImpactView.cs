@@ -96,6 +96,12 @@ namespace Teleopti.Ccc.Win.Meetings
 			office2007OutlookTimePickerEndSlotPeriod.Leave += Office2007OutlookTimePickerEndSlotPeriodLeave;
 			office2007OutlookTimePickerEndSlotPeriod.KeyDown += Office2007OutlookTimePickerEndSlotPeriodKeyDown;
 
+			dateTimePickerAdvStartDate.SetSafeBoundary();
+			dateTimePickerAdvEndDate.SetSafeBoundary();
+
+			dateTimePickerAdvStartDate.SetSafeBoundary();
+			dateTimePickerAdvStartDate.SetSafeBoundary();
+
 			dateTimePickerAdvEndSlotPeriod.ValueChanged += DateTimePickerAdvEndSlotPeriodValueChanged;
 			dateTimePickerAdvStartSlotPeriod.ValueChanged += DateTimePickerAdvStartSlotPeriodValueChanged;
             Paint += MeetingImpactViewPaint;
