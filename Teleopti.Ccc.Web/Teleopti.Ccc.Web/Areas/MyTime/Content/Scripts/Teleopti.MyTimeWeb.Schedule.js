@@ -281,13 +281,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		},
 		PartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
-			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
+			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();	
 		},
 		SetupViewModel: function (userTexts) {
-			console.log('setting usertexts:');
-			console.log(userTexts);
-			vm = new WeekScheduleViewModel(userTexts);
-			
+			vm = new WeekScheduleViewModel(userTexts);			
 		},
 		LoadAndBindData: function () {
 			ajax.Ajax({
@@ -299,11 +296,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				},
 
 				success: function (data) {
-					console.log('setting data:');
-					console.log(data);
+					
 					vm.Initialize(data);
 					ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
-
 					_initTimeIndicator();
 					_setTimeIndicatorFirstTime();
 					_initTooltip();
