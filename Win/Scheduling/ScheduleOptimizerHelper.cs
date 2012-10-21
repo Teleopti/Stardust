@@ -6,6 +6,7 @@ using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -1202,6 +1203,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                     scheduleService, WorkShiftFinderResultHolder,
 													resourceCalculateDelayer);
 			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+			var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(_stateHolder);
+			var populationStatisticsCalculator = new PopulationStatisticsCalculator();
+			var deviationStatisticData = new DeviationStatisticData();
+        	var dayOffOptimizerPreMoveResultPredictor =
+        		new DayOffOptimizerPreMoveResultPredictor(dailySkillForecastAndScheduledValueCalculator,
+        		                                          populationStatisticsCalculator, deviationStatisticData);
 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,
@@ -1220,7 +1227,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   optimizerOverLimitDecider,
                                                   nightRestWhiteSpotSolverService,
                                                   schedulingOptionsSyncronizer,
-												  mainShiftOptimizeActivitySpecificationSetter);
+												  mainShiftOptimizeActivitySpecificationSetter,
+												  dayOffOptimizerPreMoveResultPredictor);
 
             IDayOffOptimizerContainer optimizerContainer =
                 new DayOffOptimizerContainer(scheduleMatrixArrayConverter,

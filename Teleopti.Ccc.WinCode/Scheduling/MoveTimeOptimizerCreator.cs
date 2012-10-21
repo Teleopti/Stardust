@@ -103,7 +103,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						deleteAndResourceCalculateService,
         				resourceOptimizationHelper,
         				effectiveRestrictionCreator,
-                        new ResourceCalculateDaysDecider(),
                         workShiftContainer, 
                         optimizerOverLimitDecider, 
                         schedulingOptionsCreator,

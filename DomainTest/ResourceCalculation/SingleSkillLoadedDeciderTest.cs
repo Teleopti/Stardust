@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void Setup()
 		{
 			_target = new SingleSkillLoadedDecider();
-			StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode = true;
 		}
 
 		[Test]

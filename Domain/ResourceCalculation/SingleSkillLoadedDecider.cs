@@ -20,9 +20,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (loadedSkills[0].SkillType.GetType() != typeof(SkillTypePhone))
 				return false;
 
-			if (!StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
-				return false;
-
 			return true;
 		}
 	}

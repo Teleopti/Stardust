@@ -288,6 +288,7 @@
     <Compile Include="Optimization\SchedulingOptionsCreator.cs" />
     <Compile Include="Optimization\SchedulingOptionsExtraPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSetting.cs" />
+    <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictor.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessAggregator.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessContractTimeCheck.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapCategorySorter.cs" />

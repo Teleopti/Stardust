@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks.VerifyAll();
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldReturnFalseIfNotFindShift()
         {
             Expect.Call(_part.IsScheduled()).Return(false);
@@ -197,13 +197,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(new List<IScheduleDay> { _part })).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro });
 
 			Expect.Call(_workShiftFinder.FindBestShift(_part, _options, _scheduleMatrixPro, _effectiveRestriction, null)).Return(resultHolder).IgnoreArguments();
-				Expect.Call(_workShiftFinder.FinderResult).Return(new WorkShiftFinderResult(_person,
-																														new DateOnly(2011, 4, 18)));
+				Expect.Call(_workShiftFinder.FinderResult).Return(new WorkShiftFinderResult(_person, new DateOnly(2011, 4, 18)));
             Expect.Call(resultHolder.ShiftProjection).Return(projCashe).Repeat.Twice();
             Expect.Call(projCashe.TheMainShift).Return(mainShift);
             Expect.Call(mainShift.EntityClone()).Return(mainShift);
             Expect.Call(() =>_part.AddMainShift(mainShift));
-            Expect.Call(() => _modifyRollback.Modify(_part));
+			Expect.Call(() => _rollbackService.Modify(_part));
             Expect.Call(projCashe.WorkShiftProjectionPeriod).Return(period);
 			Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 04, 18), period, new List<IScheduleDay>())).IgnoreArguments().Return(false);
 

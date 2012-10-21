@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			return schedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction,
-			                           resourceCalculateDelayer, null, rollbackService);
+			                           resourceCalculateDelayer, null, null, rollbackService);
 		}
 
 		public bool SchedulePersonOnDay(
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			IPossibleStartEndCategory possibleStartEndCategory, IPerson person = null)
 		{
 			return schedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer,
-			                           possibleStartEndCategory, _rollbackService);
+			                           possibleStartEndCategory, person, _rollbackService);
 		}
 
 
@@ -91,6 +91,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IPossibleStartEndCategory possibleStartEndCategory,
+			IPerson person,
 			ISchedulePartModifyAndRollbackService rollbackService)
         {
             using (PerformanceOutput.ForOperation("SchedulePersonOnDay"))

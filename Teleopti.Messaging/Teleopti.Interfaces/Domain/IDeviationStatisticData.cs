@@ -29,5 +29,13 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The visual relative deviation.</value>
         double RelativeDeviationForDisplayOnly { get; }
 
+		/// <summary>
+		/// Calculates the relative deviation, overriding the values used when creating this class.
+		/// </summary>
+		/// <param name="expectedValue">The expected value.</param>
+		/// <param name="realValue">The real value.</param>
+		/// <returns></returns>
+    	double CalculateRelativeDeviation(double expectedValue, double realValue);
+
     }
 }

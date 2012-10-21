@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
     	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
+    	private readonly IDayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
     	private readonly ILogWriter _logWriter;
 
         public DayOffDecisionMakerExecuter(
@@ -49,7 +51,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider,
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService, 
             ISchedulingOptionsCreator schedulingOptionsCreator,
-			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
+			IDayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor
             )
         {
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
@@ -69,6 +72,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _nightRestWhiteSpotSolverService = nightRestWhiteSpotSolverService;
             _schedulingOptionsCreator = schedulingOptionsCreator;
         	_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
+        	_dayOffOptimizerPreMoveResultPredictor = dayOffOptimizerPreMoveResultPredictor;
 
         	_logWriter = new LogWriter<DayOffDecisionMakerExecuter>();
         }
@@ -91,16 +95,29 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
         	schedulingOptions.UseCustomTargetTime = _originalStateContainer.OriginalWorkTime();
-            
             IDaysOffPreferences daysOffPreferences = _optimizerPreferences.DaysOff;
-
             var changesTracker = new LockableBitArrayChangesTracker();
+
+			double oldValue;
+			if(!_optimizerPreferences.Advanced.UseTweakedValues)
+			{
+				oldValue = _dayOffOptimizerPreMoveResultPredictor.CurrentValue(currentScheduleMatrix);
+				double predictedNewValue = _dayOffOptimizerPreMoveResultPredictor.PredictedValue(currentScheduleMatrix, workingBitArray,
+				                                                                          originalBitArray, daysOffPreferences);
+				if (predictedNewValue >= oldValue)
+				{
+					writeToLogValueNotBetter();
+					return false;
+				}	
+			}
+			else
+			{
+				oldValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
+			}
 
             IList<DateOnly> movedDays = changesTracker.DayOffChanges(workingBitArray, originalBitArray, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
 
             writeToLogMovedDays(movedDays);
-
-            double oldValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
 
             var workingBitArrayBeforeBackToLegalState = (ILockableBitArray)workingBitArray.Clone();
 
@@ -167,8 +184,14 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return true;
             }
 
-            double newValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
-            if (newValue >= oldValue)
+			double newValue;
+			if(!_optimizerPreferences.Advanced.UseTweakedValues)
+				newValue = _dayOffOptimizerPreMoveResultPredictor.CurrentValue(currentScheduleMatrix);
+			else
+			{
+				newValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
+			}
+			if (newValue >= oldValue)
             {
                 writeToLogValueNotBetter();
                 rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
