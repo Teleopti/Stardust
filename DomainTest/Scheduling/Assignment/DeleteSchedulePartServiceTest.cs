@@ -101,9 +101,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.Any();
                 Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
-
-				//Expect.Call(() => _rollbackService.Modify(_part1)).Repeat.AtLeastOnce();
-				//Expect.Call(() => _rollbackService.Modify(_part2)).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
 
             }
@@ -238,6 +235,48 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 _deleteService.Delete(_list, _deleteOption, _rollbackService, _backgroundWorker);
             }
         }
+
+		[Test]
+		public void VerifyDeleteDefaultWithoutBackgroundWorker()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_part3.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.Twice();
+				Expect.Call(_part3.SignificantPartForDisplay()).Return(SchedulePartView.FullDayAbsence).Repeat.Twice();
+				Expect.Call(_part3.SignificantPartForDisplay()).Return(SchedulePartView.Absence).Repeat.Twice();
+				Expect.Call(_part3.SignificantPartForDisplay()).Return(SchedulePartView.PersonalShift).Repeat.Twice();
+				Expect.Call(_part3.SignificantPartForDisplay()).Return(SchedulePartView.DayOff).Repeat.Twice();
+				Expect.Call(_part3.SignificantPartForDisplay()).Return(SchedulePartView.Overtime).Repeat.Twice();
+
+				Expect.Call(() => _part3.DeleteMainShift(_part3)).Repeat.AtLeastOnce();
+				Expect.Call(() => _part3.DeletePersonalStuff()).Repeat.AtLeastOnce();
+				Expect.Call(() => _part3.DeleteDayOff()).Repeat.AtLeastOnce();
+				Expect.Call(() => _part3.DeleteFullDayAbsence(_part3)).Repeat.AtLeastOnce();
+				Expect.Call(() => _part3.DeleteAbsence(false)).Repeat.AtLeastOnce();
+				Expect.Call(() => _part3.DeleteOvertime()).Repeat.AtLeastOnce();
+
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+				Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange1).Repeat.AtLeastOnce();
+				Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleRange1.ReFetch(_part1)).Return(_part3).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
+
+				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
+
+			}
+
+			using (_mocks.Playback())
+			{
+
+				_deleteService.Delete(_list, _rollbackService);
+				_deleteService.Delete(_list, _rollbackService);
+				_deleteService.Delete(_list, _rollbackService);
+				_deleteService.Delete(_list, _rollbackService);
+				_deleteService.Delete(_list, _rollbackService);
+				_deleteService.Delete(_list, _rollbackService);
+			}
+		}
 
         [Test]
         public void VerifyDeleteOvertime()
@@ -378,5 +417,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             Assert.AreEqual(1, ret.Count);
         }
+		
     }
 }
