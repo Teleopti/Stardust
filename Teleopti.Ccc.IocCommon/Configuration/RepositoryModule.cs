@@ -16,6 +16,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.AsImplementedInterfaces()
 				.InstancePerDependency();
 			builder.Register(c => StatisticRepositoryFactory.Create()).As<IStatisticRepository>();
+			builder.RegisterType<PushMessageRepository>()
+				.As<IPushMessageRepository>()
+				.InstancePerDependency();
 		}
 
 		private static bool hasCorrectCtor(Type repositoryType)

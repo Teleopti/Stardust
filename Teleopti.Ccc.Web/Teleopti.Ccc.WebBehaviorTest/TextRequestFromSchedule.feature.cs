@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Name",
                         "No access to text requests"});
             table2.AddRow(new string[] {
-                        "Access to text requests",
+                        "Access To Text Requests",
                         "False"});
 #line 10
  testRunner.And("there is a role with", ((string)(null)), table2);

@@ -2,7 +2,7 @@
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 
-namespace Teleopti.Ccc.WebTest.Core.Portal
+namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 {
 	[TestFixture]
 	public class DatePickerGlobalizationViewModelDataFactoryTest

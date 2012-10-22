@@ -1,0 +1,63 @@
+﻿@using System.Web.UI.WebControls
+@using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.Web.Areas.MyTime.Models.Message
+@using Teleopti.Interfaces.Domain
+@model MessageViewModel
+@{
+	Layout = null;
+}
+
+<div id="AsmMessage-body-inner" class="asmMessage-body-inner relative">
+	<div class="displaynone asmMessage-edit-section ui-corner-all" data-bind="with : chosenMessage">
+		<input type="hidden" id="Request-detail-entityid"/>
+		<div class="edit-module-element asmMessage-detail-sender displayinline-block">
+			<label data-bind="text : sender"></label>
+		</div>
+		<div class="edit-module-element asmMessage-detail-sent displayinline-block">
+			<label data-bind="text : date"></label>
+		</div>
+		<div class="edit-module-element asmMessage-detail-title">
+			<label id="AsmMessage-detail-title" data-bind="text : title"></label>
+		</div>
+		<div class="edit-module-element">
+			<label id="AsmMessage-detail-message" data-bind="text : message"></label>
+		</div>
+		@*<div>
+			<textarea id="AsmMessage-detail-reply" rows="5" cols="10"></textarea>
+		</div>*@
+		
+		<input id="AsmMessage-detail-ok-button" type="button" class="button mb5 floatright" data-bind="click : confirmReadMessage, enable : isConfirmButtonEnabled" value="@Html.AttributeEncode(Resources.Ok)"/>
+	</div>
+	<div class="asmMessage-list">
+		<div class="friendly-message ui-corner-all floatleft" data-bind="visible: shouldShowMessage">
+			@Resources.NoMessagesFound
+		</div>
+		<ol id="AsmMessages-list" data-bind="foreach: asmMessageList">
+			<li class="ui-corner-all asmMessage-item relative" data-bind="css: { 'asmMessage-selected': isSelected() == true }">
+				<span class="displaynone" data-bind="text : messageId"></span>
+				<div class="asmMessage-arrow-right">
+					<img src="@Url.Content("~/Areas/MyTime/Content/Images/arrow-right.png")"/>   
+				</div>
+				<div class="asmMessage-subject">
+					<h3 class="asmMessage-data-subject" data-bind="text : title">
+					</h3>
+				</div>
+				<div class="asmMessage-details">
+					<div>
+						<span class="asmMessage-caption">@Resources.Sender: </span>
+						<span class="asmMessage-data-type" data-bind="text : sender"></span>
+						<span class="asmMessage-caption">@Resources.Sent: </span>
+						<span class="asmMessage-data-updatedon" data-bind="text : date"></span>
+					</div>
+				</div>
+				<div class="asmMessage-text asmMessage-data-text" data-bind="text : message">
+				</div>             
+			</li>
+		</ol>
+		<div class="loading-gradient" style="display: none">
+			<div class="loading"></div>
+		</div>
+		<div class="arrow-down"></div>
+		<div class="clearboth"></div>
+	</div>
+</div>

@@ -1,4 +1,4 @@
-﻿Feature: Time indicator in week schedule
+﻿Feature: Week schedule time indicator
 	In order to get better control of my weekly schedule 
 	As an agent
 	I want to see an indication of the current and passed time in the week schedule

@@ -22,12 +22,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see the time indicator at time '(.*)'")]
 		public void ThenIShouldSeeTheTimeIndicatorAtTime(DateTime date)
 		{
-			//var dateString = _page.DayElementForDate(date).GetAttributeValue("data-mytime-date");
-			//DateTime dateFromPage;
-			//if (DateTime.TryParse(dateString, UserFactory.User().Culture, DateTimeStyles.None, out dateFromPage))
-			//    dateFromPage.Date.Should().Be.EqualTo(date.Date);
-			//dateFromPage.Should().Not.Be.EqualTo(null);
-
 			const int heightOfDay = 668;
 			const int timeLineOffset = 203;
 			const int timeIndicatorHeight = 2;
