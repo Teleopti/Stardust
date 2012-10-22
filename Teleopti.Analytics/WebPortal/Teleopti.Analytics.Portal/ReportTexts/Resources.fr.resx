@@ -721,7 +721,7 @@
     <value>Préférences Refusées</value>
   </data>
   <data name="ResPreferencesRequested" xml:space="preserve">
-    <value>Préférences Approuvées</value>
+    <value>Préférences Emises</value>
   </data>
   <data name="ResPreferenceCategory" xml:space="preserve">
     <value>Catégorie Préférence</value>
@@ -962,5 +962,20 @@
   </data>
   <data name="SessionExpiredText" xml:space="preserve">
     <value>Votre session à expiré à cause d'une période d'incativité étendue. Vous allez bientôt être redirigé vers la page de log on.</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Adhérence par Agent</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Adhérence par Jour</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Agents planifiés par Activité</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Totaux</value>
+  </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>Déconnexion</value>
   </data>
 </root>

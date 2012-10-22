@@ -6,11 +6,14 @@ using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
+using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
 	public class ScheduleDayReadModelHandler : ConsumerOf<DenormalizeScheduleProjection>
 	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
+
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
@@ -53,6 +56,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
 
 				var newReadModels = _scheduleDayReadModelsCreator.GetReadModels(scenario, period, person);
+
+				if (DefinedLicenseDataFactory.LicenseActivator == null)
+				{
+					if (Logger.IsInfoEnabled)
+						Logger.Info("Can't access LicenseActivator to check SMSLink license.");
+					return;
+				}
+
+				if (Logger.IsInfoEnabled)
+					Logger.Info("Checking SMSLink license.");
 				//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
 				if (DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains("TeleoptiCcc/SMSLink"))
 				{

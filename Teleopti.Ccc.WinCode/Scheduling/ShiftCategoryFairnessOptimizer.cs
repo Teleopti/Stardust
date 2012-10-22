@@ -161,6 +161,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var ret = new List<IShiftCategoryFairnessCompareResult>();
 			foreach (var shiftCategoryFairnessCompareResult in fairnessCompareResults)
 			{
+				if (shiftCategoryFairnessCompareResult.ShiftCategoryFairnessCompareValues == null)
+					continue;
 				foreach (var shiftCategoryFairnessCompareValue in shiftCategoryFairnessCompareResult.ShiftCategoryFairnessCompareValues)
 				{
 					if(shiftCategoryFairnessCompareValue.Original > 0)

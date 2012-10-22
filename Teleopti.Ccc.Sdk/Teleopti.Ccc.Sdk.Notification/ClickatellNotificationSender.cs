@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Xml;
 using Teleopti.Ccc.Sdk.Common.Contracts;
+using log4net;
 
 namespace Teleopti.Ccc.Sdk.Notification
 {
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.Sdk.Notification
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Clickatell"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 	public class ClickatellNotificationSender : INotificationSender
 	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(ClickatellNotificationSender));
 		private INotificationConfigReader _notificationConfigReader;
 		//private static readonly ILog Logger = LogManager.GetLogger(typeof(ClickatellNotificationSender));
 
@@ -76,6 +78,9 @@ namespace Teleopti.Ccc.Sdk.Notification
 				client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
 				var msgData = string.Format(CultureInfo.InvariantCulture, smsString, _notificationConfigReader.User, _notificationConfigReader.Password, mobileNumber, _notificationConfigReader.From,
 										 smsMessage);
+
+				if (Logger.IsInfoEnabled)
+					Logger.Info("Sending SMS on: " + _notificationConfigReader.Url + msgData);
 				try
 				{
 					var data = client.OpenRead(_notificationConfigReader.Url + msgData);
