@@ -8,7 +8,6 @@ namespace Teleopti.Support.Tool.Controls
     {
         private readonly string _fileName;
         private Process _process;
-        private ThreadInputAttachment _threadInputAttachment;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage ("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible"), System.Diagnostics.CodeAnalysis.SuppressMessage ("Microsoft.Design", "CA1003:UseGenericEventHandlerInstances")]
         public delegate void NotepadExitedDelegate(object sender, EventArgs e);
@@ -29,9 +28,6 @@ namespace Teleopti.Support.Tool.Controls
 
             _process.Start();
 
-            int threadId = _process.Threads[0].Id;
-            _threadInputAttachment = new ThreadInputAttachment(threadId);
-
             //while (!_process.HasExited)
             //{
             //    NotepadExited();
@@ -46,10 +42,6 @@ namespace Teleopti.Support.Tool.Controls
 
         public void Dispose()
         {
-            if (_threadInputAttachment != null)
-            {
-                _threadInputAttachment.Dispose();
-            }
             if (_process != null)
             {
                 _process.Dispose();
