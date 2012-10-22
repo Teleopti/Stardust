@@ -12,9 +12,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 {
 	[TestFixture]
-	public class PersonalShiftRestrictionCombinerTest
+	public class EffectiveRestrictionForPersonalShiftTest
 	{
-		private PersonalShiftRestrictionCombiner _target;
+		private EffectiveRestrictionForPersonalShift _target;
 		private MockRepository _mocks;
 		private IScheduleDay _scheduleDay;
 		private IEffectiveRestriction _restriction;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			_mocks = new MockRepository();
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_restriction = _mocks.StrictMock<IEffectiveRestriction>();
-			_target = new PersonalShiftRestrictionCombiner(new RestrictionCombiner());
+			_target = new EffectiveRestrictionForPersonalShift();
 		}
 
 		[Test]
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		public void VerifyNullScheduleDayParameter()
 		{
 			_scheduleDay = null;
-			_target.Combine(_scheduleDay, _restriction);
+			_target.AddEffectiveRestriction(_scheduleDay, _restriction);
 		}
 
 		[Test]
@@ -47,25 +47,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		{
 			_restriction = null;
 			IEffectiveRestriction result = 
-				_target.Combine(_scheduleDay, _restriction);
+				_target.AddEffectiveRestriction(_scheduleDay, _restriction);
 			Assert.IsNull(result);
 		}
 
 		[Test]
 		public void VerifyEmptyPersonAssignmentCollection()
 		{
-			using(_mocks.Record())
-			{
-				Expect.Call(_scheduleDay.PersonAssignmentCollection())
-					.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			}
+			_scheduleDay.Stub(x => x.PersonAssignmentCollection())
+				.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+			using (_mocks.Record()) {}
 			using (_mocks.Playback())
-			{
-				IEffectiveRestriction result =
-					_target.Combine(_scheduleDay, _restriction);
-				Assert.IsNotNull(result);
-				Assert.AreSame(_restriction, _restriction);
-			}
+				{
+					IEffectiveRestriction result =
+						_target.AddEffectiveRestriction(_scheduleDay, _restriction);
+					Assert.IsNotNull(result);
+					Assert.AreSame(_restriction, _restriction);
+				}
 		}
 
 		[Test]
@@ -79,26 +77,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			ILayerCollection<IActivity> layerCollection = new LayerCollection<IActivity>();
 			layerCollection.Add(new ActivityLayer(activity, DateTimeFactory.CreateDateTimePeriodUtc()));
 
+			_scheduleDay.Stub(x => x.PersonAssignmentCollection())
+				.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAssignment }));
+			_scheduleDay.Stub(x=>x.Person)
+				.Return(person);
+			personAssignment.Stub(x=>x.PersonalShiftCollection)
+				.Return(new ReadOnlyCollection<IPersonalShift>(new List<IPersonalShift> { personalShift }));
+			personalShift.Stub(x=>x.LayerCollection)
+				.Return(layerCollection);
+
 			using(_mocks.Record())
 			{
-				Expect.Call(_scheduleDay.PersonAssignmentCollection())
-					.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAssignment }));
-				Expect.Call(_scheduleDay.Person)
-					.Return(person);
-				Expect.Call(personAssignment.PersonalShiftCollection)
-					.Return(new ReadOnlyCollection<IPersonalShift>(new List<IPersonalShift> { personalShift }));
-				Expect.Call(personalShift.LayerCollection)
-					.Return(layerCollection);
-
 				Expect.Call(_restriction.Combine(null))
 					.IgnoreArguments()
 					.Return(_restriction);
-
 			}
 			using (_mocks.Playback())
 			{
 				IEffectiveRestriction result =
-					_target.Combine(_scheduleDay, _restriction);
+					_target.AddEffectiveRestriction(_scheduleDay, _restriction);
 				Assert.IsNotNull(result);
 				Assert.AreSame(_restriction, _restriction);
 			}
