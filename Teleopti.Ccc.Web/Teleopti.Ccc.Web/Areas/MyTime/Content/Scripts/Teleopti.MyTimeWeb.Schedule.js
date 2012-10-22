@@ -309,7 +309,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
 					url: data.Url,
 					callback: Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener,
-					domainType: 'IPersistableScheduleData',
+					domainType: 'IScheduleChangedInDefaultScenario',
 					businessUnitId: data.BusinessUnitId,
 					datasource: data.DataSourceName,
 					referenceId: data.AgentId
