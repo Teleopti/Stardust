@@ -133,10 +133,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.MessageDetailSection.DisplayVisible(), Is.True);
 			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.Title.InnerHtml.Contains(table.Rows[0][1]), Is.True);
 			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.Message.InnerHtml.Contains(table.Rows[1][1]), Is.True);
-			if (table.RowCount == 3)
-			{
-				EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.Reply.InnerHtml.Contains(table.Rows[2][1]), Is.True);
-			}
 		}
 
 		[Then(@"I should see the message with title '(.*)' at position '(.*)' in the list")]
