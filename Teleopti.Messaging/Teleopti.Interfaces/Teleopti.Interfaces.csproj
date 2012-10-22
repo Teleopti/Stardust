@@ -106,6 +106,7 @@
     <Compile Include="Domain\BudgetSection.cs" />
     <Compile Include="Domain\ChartSeriesDisplayType.cs" />
     <Compile Include="Domain\ClipboardAction.cs" />
+    <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
     <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
     <Compile Include="Domain\DetailLevel.cs" />

@@ -675,42 +675,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void setPermissionOnEditControl()
         {
-            if (_editControl != null)
-            {
-                var authorization = PrincipalAuthorization.Instance();
-
-                _editControl.SetButtonState(EditAction.New,
-                                            authorization.IsPermitted(
-                                                DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment) ||
-                                            authorization.IsPermitted(
-                                                DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence) ||
-                                            authorization.IsPermitted(
-                                                DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff));
-
-                _editControl.SetSpecialItemState(EditAction.New, ClipboardItems.Shift.ToString(),
-                                                 authorization.IsPermitted(
-                                                     DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
-                _editControl.SetSpecialItemState(EditAction.New, ClipboardItems.Absence.ToString(),
-                                                 authorization.IsPermitted(
-                                                     DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence));
-                _editControl.SetSpecialItemState(EditAction.New, ClipboardItems.DayOff.ToString(),
-                                                 authorization.IsPermitted(
-                                                     DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff));
-                _editControl.SetSpecialItemState(EditAction.New, ClipboardItems.PersonalShift.ToString(),
-                                                 authorization.IsPermitted(
-                                                     DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
-                _editControl.SetSpecialItemState(EditAction.New, ClipboardItems.Overtime.ToString(),
-                                                 authorization.IsPermitted(
-                                                     DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
-
-                _editControl.SetButtonState(EditAction.Delete,
-                                            authorization.IsPermitted(
-                                                DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment) ||
-                                            authorization.IsPermitted(
-                                                DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence) ||
-                                            authorization.IsPermitted(
-                                                DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff));
-            }
+        	var permissionSetter = new PermissionEditControl(_editControl);
+			permissionSetter.SetPermission();
         }
 
         private void _editControl_DeleteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -928,61 +894,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void setPermissionOnClipboardControl()
         {
-            if (_clipboardControl != null)
-            {
-                var authorization = PrincipalAuthorization.Instance();
-                _clipboardControl.SetButtonDropDownItemState(ClipboardAction.Cut, ClipboardItems.Shift.ToString(),
-                                                             authorization.IsPermitted(
-                                                                 DefinedRaptorApplicationFunctionPaths.
-                                                                     ModifyPersonAssignment));
-                _clipboardControl.SetButtonDropDownItemState(ClipboardAction.Cut, ClipboardItems.Absence.ToString(),
-                                                             authorization.IsPermitted(
-                                                                 DefinedRaptorApplicationFunctionPaths.
-                                                                     ModifyPersonAbsence));
-                _clipboardControl.SetButtonDropDownItemState(ClipboardAction.Cut, ClipboardItems.DayOff.ToString(),
-                                                             authorization.IsPermitted(
-                                                                 DefinedRaptorApplicationFunctionPaths.
-                                                                     ModifyPersonDayOff));
-                _clipboardControl.SetButtonDropDownItemState(ClipboardAction.Cut,
-                                                             ClipboardItems.PersonalShift.ToString(),
-                                                             authorization.IsPermitted(
-                                                                 DefinedRaptorApplicationFunctionPaths.
-                                                                     ModifyPersonAssignment));
-                _clipboardControl.SetButtonState(ClipboardAction.Cut,
-                                                 authorization.IsPermitted(
-                                                     DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
-                _clipboardControl.SetButtonDropDownItemState(ClipboardAction.Paste, ClipboardItems.Shift.ToString(),
-                                                             authorization.IsPermitted(
-                                                                 DefinedRaptorApplicationFunctionPaths.
-                                                                     ModifyPersonAssignment));
-                _clipboardControl.SetButtonDropDownItemState(ClipboardAction.Paste, ClipboardItems.Absence.ToString(),
-                                                             authorization.IsPermitted(
-                                                                 DefinedRaptorApplicationFunctionPaths.
-                                                                     ModifyPersonAbsence));
-                _clipboardControl.SetButtonDropDownItemState(ClipboardAction.Paste, ClipboardItems.DayOff.ToString(),
-                                                             authorization.IsPermitted(
-                                                                 DefinedRaptorApplicationFunctionPaths.
-                                                                     ModifyPersonDayOff));
-                _clipboardControl.SetButtonDropDownItemState(ClipboardAction.Paste,
-                                                             ClipboardItems.PersonalShift.ToString(),
-                                                             authorization.IsPermitted(
-                                                                 DefinedRaptorApplicationFunctionPaths.
-                                                                     ModifyPersonAssignment));
-                _clipboardControl.SetButtonState(ClipboardAction.Paste,
-                                                 authorization.IsPermitted(
-                                                     DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
-            }
-        }
-
-        private enum ClipboardItems
-        {
-            Shift,
-            Absence,
-            DayOff,
-            PersonalShift,
-            Special,
-            Overtime,
-            ShiftFromShifts
+        	var permissionSetter = new PermissionClipboardControl(_clipboardControl);
+			permissionSetter.SetPermission();
         }
 
         private void _clipboardControl_CutClicked(object sender, EventArgs e)

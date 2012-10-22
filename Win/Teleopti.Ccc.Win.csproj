@@ -1215,6 +1215,8 @@
     </Compile>
     <Compile Include="Scheduling\ExportToPdf.cs" />
     <Compile Include="Scheduling\ExportToPdfGraphical.cs" />
+    <Compile Include="Scheduling\PermissionClipboardControl.cs" />
+    <Compile Include="Scheduling\PermissionEditControl.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
