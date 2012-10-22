@@ -104,7 +104,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.timeLines = ko.observableArray();
 		self.days = ko.observableArray();
 		self.styles = ko.observable();
+		self.minDate;
+		self.maxDate;
 
+		self.isWithinSelected = function (startDate, endDate) {
+			return (startDate <= self.maxDate && endDate >= self.minDate);
+		};
 	};
 
 	ko.utils.extend(WeekScheduleViewModel.prototype, {
@@ -129,11 +134,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				});
 				return ret;
 			});
+
+			self.minDate = new Date(data.PeriodSelection.SelectedDateRange.MinDate);
+			self.maxDate = new Date(data.PeriodSelection.SelectedDateRange.MaxDate).addDays(1);
 		}
 	});
 
 	var DayViewModel = function (day, parent) {
 		var self = this;
+
 		self.fixedDate = ko.observable(day.FixedDate);
 		self.date = ko.observable(day.Date);
 		self.state = ko.observable(day.State);
@@ -313,19 +322,26 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				}
 			});
 		},
+
 		ReloadScheduleListener: function (notifiction) {
 
-			ajax.Ajax({
-				url: 'Schedule/FetchData',
-				dataType: "json",
-				type: 'GET',
-				data: {
-					date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
-				},
-				success: function (data) {
-					vm.Initialize(data);
-				}
-			});
+			var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
+			var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
+
+			if (vm.isWithinSelected(messageStartDate, messageEndDate)) {
+
+				ajax.Ajax({
+					url: 'Schedule/FetchData',
+					dataType: "json",
+					type: 'GET',
+					data: {
+						date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
+					},
+					success: function (data) {
+						vm.Initialize(data);
+					}
+				});
+			};
 		},
 		PartialDispose: function () {
 			addTextRequestTooltip.qtip('destroy');
