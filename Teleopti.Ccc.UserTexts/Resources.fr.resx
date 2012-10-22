@@ -3853,7 +3853,7 @@
     <value>Supprimer pourcentage temps partiel</value>
   </data>
   <data name="ViewReports" xml:space="preserve">
-    <value>Montrer Rapports</value>
+    <value>Montrer rapports</value>
   </data>
   <data name="IntervalStdev" xml:space="preserve">
     <value>Intervalle écart type</value>
@@ -6340,7 +6340,7 @@
     <value>Supprimer réduction d'efficience</value>
   </data>
   <data name="DeleteShrinkageRow" xml:space="preserve">
-    <value>Supprimer rétrécissement</value>
+    <value>Supprimer réduction</value>
   </data>
   <data name="LoadForecastedHours" xml:space="preserve">
     <value>Charger Heures prévues</value>
@@ -7652,7 +7652,7 @@ Vos préférences peuvent maintenant aller de {1}h à {2}h.</value>
     <value>Voulez-vous appliquer le nouveau modèle aux jours sélectionnés?</value>
   </data>
   <data name="Toggle" xml:space="preserve">
-    <value>Interrupteur</value>
+    <value>Sélection</value>
   </data>
   <data name="DayOffOutsideScheduleException" xml:space="preserve">
     <value>N'a pas pu réaliser l'action dû a des fuseaux horaires différents</value>
@@ -8090,7 +8090,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Ne peut pas joindre le Customer Web de Teleopti pour le moment!</value>
   </data>
   <data name="RequestHistory" xml:space="preserve">
-    <value>Historique de Demandes</value>
+    <value>Historique des Demandes</value>
   </data>
   <data name="ViewHistory" xml:space="preserve">
     <value>Voir l'Historique</value>
@@ -8499,5 +8499,77 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   </data>
   <data name="SchedulePeriodTypeWeek" xml:space="preserve">
     <value>Semaine</value>
+  </data>
+  <data name="PleaseChooseAReportType" xml:space="preserve">
+    <value>Merci de choisir un type de rapport.</value>
+  </data>
+  <data name="SameDaysOff" xml:space="preserve">
+    <value>Mêmes jours libres</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Adhérence par Agent</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Adhérence par Jour</value>
+  </data>
+  <data name="PleaseChooseSkillSet" xml:space="preserve">
+    <value>Merci de choisir un set de compétences.</value>
+  </data>
+  <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
+    <value>Planifier uniquement Préférences Doit Avoir</value>
+  </data>
+  <data name="AllowMeetings" xml:space="preserve">
+    <value>Autoriser Réunions</value>
+  </data>
+  <data name="ShiftCategories" xml:space="preserve">
+    <value>Catégories d'horaires</value>
+  </data>
+  <data name="AfterCheckingAgainstActivities" xml:space="preserve">
+    <value>Après vérification contre activités</value>
+  </data>
+  <data name="AddExtendedPreference" xml:space="preserve">
+    <value>Ajouter préférences étendues</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>Autres</value>
+  </data>
+  <data name="MyTime" xml:space="preserve">
+    <value>Mytime</value>
+  </data>
+  <data name="AgentScheduleMessengerPermission" xml:space="preserve">
+    <value>Agent Schedule Messenger</value>
+  </data>
+  <data name="ExtendedPreferencesWeb" xml:space="preserve">
+    <value>Préférences Etendues</value>
+  </data>
+  <data name="DistributionBetweenSubskillsMustbeEqualToOneHundredPercent" xml:space="preserve">
+    <value>La distribution entre sub compétences doit être égale à 100%</value>
+  </data>
+  <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
+    <value>Le taux d'activité maximum doit être supérieur ou égal au taux d'activité minimum</value>
+  </data>
+  <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
+    <value>Agents Maximum doit être suérieur à Agents Minimum</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Agents planifiés par Activité</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Totaux</value>
+  </data>
+  <data name="YourScheduleHasChanged" xml:space="preserve">
+    <value>Votre planning a changé!</value>
+  </data>
+  <data name="FairnessOptimizationOn" xml:space="preserve">
+    <value>Optimise l'équité pour</value>
+  </data>
+  <data name="FairnessOptimizationRollingBack" xml:space="preserve">
+    <value>- valeur après n'est pas améliorée, retour arrière</value>
+  </data>
+  <data name="FairnessOptimizationValueAfter" xml:space="preserve">
+    <value>- valeur après =</value>
+  </data>
+  <data name="FairnessOptimizationValueBefore" xml:space="preserve">
+    <value>- valeur avant =</value>
   </data>
 </root>
