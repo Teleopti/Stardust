@@ -117,8 +117,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.timeLines = ko.observableArray();
 		self.days = ko.observableArray();
 		self.styles = ko.observable();
-		self.minDate ={};
-		self.maxDate ={};
+		self.minDate = {};
+		self.maxDate = {};
 
 		self.isWithinSelected = function (startDate, endDate) {
 			return (startDate <= self.maxDate && endDate >= self.minDate);
@@ -140,14 +140,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return new DayViewModel(item, self);
 			});
 			self.days(days);
-			self.styles(function () {
-				var ret = '';
-				$.each(data.Styles, function (key, value) {
-					ret += "li.third.{0} {background-color: rgb({1});} ".format(value.Name, value.RgbColor);
-				});
-				return ret;
+			var styleToSet = '';
+			$.each(data.Styles, function (key, value) {
+				styleToSet += "li.third.{0} {background-color: rgb({1});} ".format(value.Name, value.RgbColor);
 			});
-
+			self.styles(styleToSet);
 			self.minDate = new Date(data.PeriodSelection.SelectedDateRange.MinDate).addDays(-1);
 			self.maxDate = new Date(data.PeriodSelection.SelectedDateRange.MaxDate).addDays(1);
 		}
