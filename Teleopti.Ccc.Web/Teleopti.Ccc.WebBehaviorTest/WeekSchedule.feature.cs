@@ -1039,6 +1039,35 @@ this.FeatureBackground();
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Keep user request input when schedules are refreshed")]
+        public virtual void KeepUserRequestInputWhenSchedulesAreRefreshed()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Keep user request input when schedules are refreshed", ((string[])(null)));
+#line 309
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 310
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 311
+ testRunner.And("I have the workflow control set \'Published schedule\'");
+#line 312
+ testRunner.And("I view my week schedule for date \'2013-10-03\'");
+#line 313
+ testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
+#line 314
+ testRunner.And("I input text request values for date \'2013-10-03\'");
+#line 315
+ testRunner.And("My schedule between \'2013-10-03 08:00\' to \'2013-10-03 18:00\' reloads");
+#line 316
+ testRunner.Then("I should see the text request form");
+#line 317
+ testRunner.And("Subject should not be empty");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
