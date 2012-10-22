@@ -487,6 +487,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
 		public void OnOutlookTimePickerStartTimeSelectedIndexChanged(string inputText)
 		{
+			if (!_view.TimeFocused) return;
             if (_skipIndexChangeEvent) return;
 			OnOutlookTimePickerStartTimeLeave(inputText);
 		    _view.ScrollMeetingIntoView();
@@ -494,9 +495,10 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
 		public void OnOutlookTimePickerEndTimeSelectedIndexChanged(string inputText)
 		{
-            if (_skipIndexChangeEvent) return;
+			if (!_view.TimeFocused) return;
+			if (_skipIndexChangeEvent) return;
 			OnOutlookTimePickerEndTimeLeave(inputText);
-            _view.ScrollMeetingIntoView();
+			_view.ScrollMeetingIntoView();
 		}
 
         #region IDispose
