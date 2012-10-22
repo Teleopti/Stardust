@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -90,23 +91,36 @@ namespace Teleopti.Messaging.SignalR
 		{
 			try
 			{
-				Exception startException = null;
-				_hubConnection.Start(new LongPollingTransport()).ContinueWith(t =>
-				                                                                           	{
-				                                                                           		startException = t.Exception;
-				                                                                           	},TaskContinuationOptions.OnlyOnFaulted);
-				/*if (result==false)
+				Exception exception = null;
+				var startTask = _hubConnection.Start(new LongPollingTransport());
+				startTask.ContinueWith(t =>
+				                       	{
+				                       		if (t.IsFaulted && t.Exception != null)
+				                       		{
+				                       			exception = t.Exception.GetBaseException();
+				                       		}
+				                       	}, TaskContinuationOptions.OnlyOnFaulted);
+				
+				if (!startTask.Wait(TimeSpan.FromSeconds(10)))
 				{
-					throw new InvalidOperationException("Time out occurred upon startup of Message Broker.");
-				}*/
-				if (startException!=null)
-				{
-					throw startException;
+					exception = new InvalidOperationException("Could not start within given time limit.");
 				}
+				if (exception!=null)
+				{
+					throw exception;
+				}
+			}
+			catch (AggregateException aggregateException)
+			{
+				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", aggregateException);
+			}
+			catch (SocketException socketException)
+			{
+				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", socketException);
 			}
 			catch (InvalidOperationException exception)
 			{
-				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.",exception);
+				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", exception);
 			}
 		}
 
