@@ -95,6 +95,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	}
 
 	function _initTimeIndicator() {
+		var currentDateTimeStart = new Date(new Date().getTeleoptiTime());
+		_setTimeIndicator(currentDateTimeStart);
 		setInterval(function () {
 			var currentDateTime = new Date(new Date().getTeleoptiTime());
 			if (timeIndicatorDateTime == undefined || currentDateTime.getMinutes() != timeIndicatorDateTime.getMinutes()) {
@@ -115,8 +117,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.timeLines = ko.observableArray();
 		self.days = ko.observableArray();
 		self.styles = ko.observable();
-		self.minDate;
-		self.maxDate;
+		self.minDate ={};
+		self.maxDate ={};
 
 		self.isWithinSelected = function (startDate, endDate) {
 			return (startDate <= self.maxDate && endDate >= self.minDate);
@@ -295,11 +297,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		return (timeParts[0] * 60) + (timeParts[1] * 1);
 	}
 
-	function _setTimeIndicatorFirstTime() {
-		var currentDateTime = new Date(new Date().getTeleoptiTime());
-		_setTimeIndicator(currentDateTime);
-	}
-
 	function _subscribeForChanges() {
 		ajax.Ajax({
 			url: 'MessageBroker/FetchUserData',
@@ -328,7 +325,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		PartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
-			_setTimeIndicatorFirstTime();
 		},
 		SetupViewModel: function (userTexts) {
 			vm = new WeekScheduleViewModel(userTexts);
@@ -342,7 +338,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				data: {
 					date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
 				},
-
 				success: function (data) {
 					_bindData(data);
 					_subscribeForChanges();
