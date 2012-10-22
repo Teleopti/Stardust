@@ -39,6 +39,7 @@ namespace Teleopti.Support.Tool
             this.BClose = new System.Windows.Forms.Button();
             this.pictureBoxBathingBall = new System.Windows.Forms.PictureBox();
             this.panelContent = new System.Windows.Forms.Panel();
+            this.smoothLabelVersion = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.labelHeader = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.PTracks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBathingBall)).BeginInit();
@@ -134,6 +135,19 @@ namespace Teleopti.Support.Tool
             this.panelContent.Size = new System.Drawing.Size(670, 320);
             this.panelContent.TabIndex = 7;
             // 
+            // smoothLabelVersion
+            // 
+            this.smoothLabelVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.smoothLabelVersion.AutoSize = true;
+            this.smoothLabelVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.smoothLabelVersion.ForeColor = System.Drawing.Color.Gray;
+            this.smoothLabelVersion.Location = new System.Drawing.Point(12, 394);
+            this.smoothLabelVersion.Name = "smoothLabelVersion";
+            this.smoothLabelVersion.Size = new System.Drawing.Size(0, 13);
+            this.smoothLabelVersion.TabIndex = 8;
+            this.smoothLabelVersion.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.smoothLabelVersion.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            // 
             // labelHeader
             // 
             this.labelHeader.AutoSize = true;
@@ -152,6 +166,7 @@ namespace Teleopti.Support.Tool
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(694, 416);
+            this.Controls.Add(this.smoothLabelVersion);
             this.Controls.Add(this.pictureBoxBathingBall);
             this.Controls.Add(this.labelHeader);
             this.Controls.Add(this.BClose);
@@ -182,6 +197,7 @@ namespace Teleopti.Support.Tool
         private SmoothLabel labelHeader;
         private System.Windows.Forms.PictureBox pictureBoxBathingBall;
         private System.Windows.Forms.Panel panelContent;
+        private SmoothLabel smoothLabelVersion;
 
 
     }

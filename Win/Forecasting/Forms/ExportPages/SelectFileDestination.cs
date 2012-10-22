@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Forecasting;
+using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
@@ -67,7 +68,32 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public bool Depopulate(ExportSkillModel stateObj)
         {
-            if (String.IsNullOrEmpty(txtFileName.Text)) return false;
+            if (String.IsNullOrEmpty(txtFileName.Text))
+            {
+                MessageBoxAdv.Show(Resources.SelectedFileDestinationDoesNotExist,
+                                   Resources.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+            
+            var path = Path.GetDirectoryName(txtFileName.Text);
+            var fileName = Path.GetFileNameWithoutExtension(txtFileName.Text);
+            var fileExtension = Path.GetExtension(txtFileName.Text);
+            var drives = Environment.GetLogicalDrives();
+
+            if (path == null || fileName ==  null || fileExtension == null
+                || path.Length < 4
+                || drives.All(t => path.Substring(0, 3) != t)
+                || !Directory.Exists(path)
+                || path.IndexOfAny(Path.GetInvalidPathChars()) != -1
+                || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1
+                || fileExtension != ".csv")
+            {
+                MessageBoxAdv.Show(Resources.SelectedFileDestinationDoesNotExist,
+                                   Resources.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+
+
             var commandModel = stateObj.ExportSkillToFileCommandModel;
             var pathExists = txtFileName.Text.Contains("\\");
             

@@ -14,5 +14,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             defaultScheduleTag)
         {
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public override void QueryCellInfo(object sender, Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)
+		{
+			base.QueryCellInfo(sender, e);
+			if (e.ColIndex > (int)ColumnType.StartScheduleColumns -1 && e.RowIndex > 1)
+				e.Style.CellType = "Static";
+		}
     }
 }

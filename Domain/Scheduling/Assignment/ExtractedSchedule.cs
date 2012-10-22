@@ -613,7 +613,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private void MergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges)
         {
-            IMainShift workingCopyOfMainShift = (IMainShift)source.AssignmentHighZOrder().MainShift.NoneEntityClone();
+        	IPersonAssignment personAssignment = source.AssignmentHighZOrder();
+			if (personAssignment == null)
+				return;
+
+        	IMainShift sourceMainShift = personAssignment.MainShift;
+			if (sourceMainShift == null)
+				return;
+
+            IMainShift workingCopyOfMainShift = (IMainShift)sourceMainShift.NoneEntityClone();
             var sourceShiftPeriod = source.Period;
             if (workingCopyOfMainShift.LayerCollection.Period().HasValue)
                 sourceShiftPeriod = workingCopyOfMainShift.LayerCollection.Period().Value;

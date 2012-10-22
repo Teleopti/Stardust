@@ -23,10 +23,7 @@
 		experimental. if we decide to do this, we can remove all this stuff from this script.
 		-->
 		
-		<RunWebBehaviorTests>false</RunWebBehaviorTests>
-		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'RaptorMain'">true</RunWebBehaviorTests>
-		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI17910'">true</RunWebBehaviorTests>
-		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI18813'">true</RunWebBehaviorTests>
+		<RunWebBehaviorTests>true</RunWebBehaviorTests>
 		
 		<vs2008ide>c:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe</vs2008ide>
 		<AsDBDeploy>c:\Program Files (x86)\Microsoft SQL Server\100\Tools\Binn\VSShell\Common7\IDE\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>

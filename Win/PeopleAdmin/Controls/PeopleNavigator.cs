@@ -251,7 +251,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             set { toolStripButtonSendInstantMessage.Visible = value; }
         }
 
-        public void Open()
+    	public bool SendMessageEnable
+    	{
+			get { return toolStripButtonSendInstantMessage.Enabled; }
+			set { toolStripButtonSendInstantMessage.Enabled = value; }
+    	}
+
+    	public void Open()
         {
             OpenPeopleAdmin();
         }

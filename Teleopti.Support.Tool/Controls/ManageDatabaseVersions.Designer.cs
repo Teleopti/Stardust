@@ -30,8 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiAnalytics", 0);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiCCC7", 0);
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiCCC7", 2);
             System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiCCCAgg", 1);
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Demoreg_TeleoptiAnalytics", 3);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageDatabaseVersions));
             this.listViewDatabases = new System.Windows.Forms.ListView();
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -46,9 +47,13 @@
             this.buttonRefresh = new System.Windows.Forms.Button();
             this.folderBrowserDialogNHib = new System.Windows.Forms.FolderBrowserDialog();
             this.textBoxOutput = new System.Windows.Forms.TextBox();
+            this.backgroundWorkerConnectionAndVersion = new System.ComponentModel.BackgroundWorker();
+            this.contextMenuStripDatabases = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.smoothLabelCurrentVersionIs = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.smoothLabelCurrentVersion = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.labelManageDatabaseVersions = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
+            this.contextMenuStripDatabases.SuspendLayout();
             this.SuspendLayout();
             // 
             // listViewDatabases
@@ -59,12 +64,14 @@
             this.columnHeaderName,
             this.columnHeaderType,
             this.columnHeaderVersion});
+            this.listViewDatabases.ContextMenuStrip = this.contextMenuStripDatabases;
             this.listViewDatabases.FullRowSelect = true;
             this.listViewDatabases.HideSelection = false;
             this.listViewDatabases.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1,
             listViewItem2,
-            listViewItem3});
+            listViewItem3,
+            listViewItem4});
             this.listViewDatabases.Location = new System.Drawing.Point(14, 83);
             this.listViewDatabases.Margin = new System.Windows.Forms.Padding(5);
             this.listViewDatabases.Name = "listViewDatabases";
@@ -97,6 +104,8 @@
             this.imageListIconsForListview.TransparentColor = System.Drawing.Color.Transparent;
             this.imageListIconsForListview.Images.SetKeyName(0, "database.png");
             this.imageListIconsForListview.Images.SetKeyName(1, "database_error.png");
+            this.imageListIconsForListview.Images.SetKeyName(2, "database_connect.png");
+            this.imageListIconsForListview.Images.SetKeyName(3, "database_delete.png");
             // 
             // labelNHibFolder
             // 
@@ -185,6 +194,24 @@
             this.textBoxOutput.TabIndex = 37;
             this.textBoxOutput.Visible = false;
             // 
+            // backgroundWorkerConnectionAndVersion
+            // 
+            this.backgroundWorkerConnectionAndVersion.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerConnectionAndVersion_DoWork);
+            // 
+            // contextMenuStripDatabases
+            // 
+            this.contextMenuStripDatabases.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemEdit});
+            this.contextMenuStripDatabases.Name = "contextMenuStrip1";
+            this.contextMenuStripDatabases.Size = new System.Drawing.Size(133, 26);
+            // 
+            // toolStripMenuItemEdit
+            // 
+            this.toolStripMenuItemEdit.Name = "toolStripMenuItemEdit";
+            this.toolStripMenuItemEdit.Size = new System.Drawing.Size(132, 22);
+            this.toolStripMenuItemEdit.Text = "Edit Nhib...";
+            this.toolStripMenuItemEdit.Click += new System.EventHandler(this.toolStripMenuItemEdit_Click);
+            // 
             // smoothLabelCurrentVersionIs
             // 
             this.smoothLabelCurrentVersionIs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -243,6 +270,7 @@
             this.Name = "ManageDatabaseVersions";
             this.Size = new System.Drawing.Size(670, 320);
             this.Load += new System.EventHandler(this.ManageDatabaseVersions_Load);
+            this.contextMenuStripDatabases.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -266,5 +294,8 @@
         private System.Windows.Forms.Button buttonRefresh;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialogNHib;
         private System.Windows.Forms.TextBox textBoxOutput;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerConnectionAndVersion;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripDatabases;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEdit;
     }
 }

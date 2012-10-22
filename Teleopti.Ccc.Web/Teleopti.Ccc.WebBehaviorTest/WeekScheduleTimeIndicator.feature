@@ -68,4 +68,28 @@ Scenario: Show the time indicator at correct time with a shift
 	When I view my week schedule for date '2030-01-01'
 	Then I should see the time indicator at time '2030-01-01 11:00'
 
+Scenario: Do not show the time indicator after passing end of timeline
+	Given I have the role 'Full access to mytime'
+	And I have a workflow control set with
+	| Field                      | Value              |
+	| Name                       | Published schedule |
+	| Schedule published to date | 2040-06-24         |
+	And I have a schedule period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And there is a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-03-12 04:00 |
+	| EndTime               | 2030-03-12 12:00 |
+	And Current time is '2030-03-12 12:00'
+	And I view my week schedule for date '2030-03-12'
+	And I should see the time indicator at time '2030-03-12 12:00'
+	When Current browser time has changed to '2030-03-12 12:01'
+	Then I should not see the time indicator
+
 	
