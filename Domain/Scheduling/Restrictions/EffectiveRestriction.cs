@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		public bool MayMatch()
 		{
 			var available = !NotAvailable;
-			var noDayOff = DayOffTemplate != null;
+			var noDayOff = DayOffTemplate == null;
 			return available && noDayOff;
 		}
 
