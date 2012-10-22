@@ -238,7 +238,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	};
 
 	function _setTimeIndicator(theDate) {
-		if ($('.week-schedule-ASM-permission-granted').text() != 'yes' || $('.week-schedule-current-week').text() != 'yes') {
+		if ($('.week-schedule-ASM-permission-granted').text().indexOf('yes') == -1 || 
+			$('.week-schedule-current-week').text().indexOf('yes') == -1) {
 			return;
 		}
 
@@ -287,7 +288,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var currentDateTime = new Date(new Date().getTeleoptiTime());
 		_setTimeIndicator(currentDateTime);
 	}
-	
+
 	function _subscribeForChanges() {
 		ajax.Ajax({
 			url: 'MessageBroker/FetchUserData',
