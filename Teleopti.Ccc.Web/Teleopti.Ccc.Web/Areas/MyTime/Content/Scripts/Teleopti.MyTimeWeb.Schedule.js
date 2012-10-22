@@ -134,8 +134,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.isCurrentWeek(data.IsCurrentWeek);
 			var styleToSet = {};
 			$.each(data.Styles, function (key, value) {
-				console.log(value.Name);
-				console.log(value.RgbColor);
 				styleToSet[value.Name] = 'rgb({0})'.format(value.RgbColor);
 			});
 			self.styles(styleToSet);
@@ -178,7 +176,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.classForDaySummary = ko.computed(function () {
 			var showRequestClass = self.textRequestPermission() ? 'show-request ' : '';
-			return 'third category ' + showRequestClass;
+			return 'third category ' + showRequestClass + self.summaryStyleClassName(); //last one needs to be becuase of "stripes" and similar
 		});
 		self.colorForDaySummary = ko.computed(function () {
 			return parent.styles()[self.summaryStyleClassName()];
