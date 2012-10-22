@@ -135,7 +135,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return ret;
 			});
 
-			self.minDate = new Date(data.PeriodSelection.SelectedDateRange.MinDate);
+			self.minDate = new Date(data.PeriodSelection.SelectedDateRange.MinDate).addDays(-1);
 			self.maxDate = new Date(data.PeriodSelection.SelectedDateRange.MaxDate).addDays(1);
 		}
 	});
