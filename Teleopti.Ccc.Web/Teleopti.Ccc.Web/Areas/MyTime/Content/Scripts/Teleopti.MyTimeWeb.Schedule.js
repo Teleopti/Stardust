@@ -260,8 +260,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var timeIndicator = $('ul[data-mytime-date="' + formattedDate + '"] .week-schedule-time-indicator');
 		var timeIndicatorTimeLine = $('.week-schedule-time-indicator-small');
 
-		timeIndicator.css("top", position).show();
-		timeIndicatorTimeLine.css("top", position + timelineOffset).show();
+		if (timelineStartMinutes <= clientNowMinutes && clientNowMinutes <= timelineEndMinutes) {
+			timeIndicator.css("top", position).show();
+			timeIndicatorTimeLine.css("top", position + timelineOffset).show();
+		}
+		else {
+			timeIndicator.hide();
+			timeIndicatorTimeLine.hide();
+		}
 	}
 
 	function getMinutes(elementSelector, first) {
