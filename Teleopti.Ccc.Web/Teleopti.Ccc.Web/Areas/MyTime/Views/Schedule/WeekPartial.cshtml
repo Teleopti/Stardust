@@ -12,22 +12,6 @@
 			locationColon: '@Resources.LocationColon'
 		});
 		Teleopti.MyTimeWeb.Schedule.LoadAndBindData();
-		var ajax = new Teleopti.MyTimeWeb.Ajax();
-		ajax.Ajax({
-			url: 'MessageBroker/FetchUserData',
-			dataType: "json",
-			type: 'GET',
-			success: function (data) {
-				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
-					url: data.Url,
-					callback: Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener,
-					domainType: 'IScheduleChangedInDefaultScenario',
-					businessUnitId: data.BusinessUnitId,
-					datasource: data.DataSourceName,
-					referenceId: data.AgentId
-				});
-			}
-		});
 	});
 </script>
 <div id="ScheduleWeek-body" class="body-weekview clearfix" data-bind="attr: {'data-mytime-periodselection' : periodSelection}">
