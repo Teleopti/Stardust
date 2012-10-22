@@ -14,7 +14,12 @@ Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel = function (dayViewModels, 
 			if (day.MustHave())
 				total += 1;
 		});
-
+		if (total == maxMustHave) {
+			$("#Preference-must-have-button").addClass("grey-out");
+		}else {
+			$("#Preference-must-have-button").removeClass("grey-out");
+		}
+		
 		return total + "(" + maxMustHave + ")";
 	});
 };
