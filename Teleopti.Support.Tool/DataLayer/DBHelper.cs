@@ -46,6 +46,12 @@ namespace  Teleopti.Support.Tool.DataLayer
 
         }
 
+        public string GetDatabaseVersion()
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(_connString);
+            return GetDatabaseVersion(builder.InitialCatalog);
+        }
+
         /// <summary>
         /// Get what database version this database is on
         /// </summary>
@@ -59,6 +65,13 @@ namespace  Teleopti.Support.Tool.DataLayer
             {
                 return Convert.ToString(ds.Tables[0].Rows[0].ItemArray[0], System.Globalization.CultureInfo.InvariantCulture);
             }
+        }
+
+
+        public string GetAggDatabaseName()
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(_connString);
+            return GetAggDatabaseName(builder.InitialCatalog);
         }
 
        /// <summary>
@@ -100,6 +113,28 @@ namespace  Teleopti.Support.Tool.DataLayer
             {
                 return Convert.ToBoolean(ds.Tables[0].Rows[0].ItemArray[0], System.Globalization.CultureInfo.InvariantCulture);
             }
+        }
+
+
+        public bool TestConnection()
+        {
+            bool connectionIsOk = true;
+            try
+            {
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(_connString);
+                builder.ConnectTimeout = 10;
+                SqlConnection sqlConnection = new SqlConnection(builder.ConnectionString);
+                sqlConnection.Open();
+                SqlCommand sqlCommand = sqlConnection.CreateCommand();
+                sqlCommand.CommandTimeout = 10;
+                sqlCommand.CommandText = "select MAX(SystemVersion) from DatabaseVersion where SystemVersion <> 'Not defined'";
+                sqlCommand.ExecuteScalar();
+            }
+            catch(SqlException)
+            {
+                connectionIsOk = false;
+            }
+            return connectionIsOk;
         }
 
         /// <summary>
@@ -333,5 +368,6 @@ namespace  Teleopti.Support.Tool.DataLayer
                 return dbUsers;
             }
         }
+
     }
 }
