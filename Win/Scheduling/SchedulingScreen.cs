@@ -464,23 +464,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _teamLeaderMode = teamLeaderMode;
             _schedulerState.SchedulingResultState.TeamLeaderMode = teamLeaderMode;
 			_skillResultViewSetting = _currentSchedulingScreenSettings.SkillResultViewSetting;
-
             initializeDocking();
-
-			//ÖÖÖ
-			//var model = new SingleAgentRestrictionModel(_schedulerState.RequestedPeriod.Period(), _schedulerState.TimeZoneInfo,
-			//                                            _workShiftWorkTime);
-			//_singleAgentRestrictionPresenter =
-			//    new SingleAgentRestrictionPresenter(schedulerSplitters1.RestrictionSummeryGrid, model);
-			//_schedulingOptions = new RestrictionSchedulingOptions
-			//                         {
-			//                             UseAvailability = true,
-			//                             UsePreferences = true,
-			//                             UseStudentAvailability = true,
-			//                             UseRotations = true,
-			//                             UseScheduling = true
-			//                         };
-            
             toolStripProgressBar1.Visible = true;
             toolStripProgressBar1.Maximum = loadingPeriod.DayCount() + 5;
             toolStripProgressBar1.Step = 1;
@@ -2598,17 +2582,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (_scheduleView != null)
             {
                 var options = new PasteOptions {PersonalShifts = true};
-                _scheduleView.GridClipboardPaste(options, _undoRedo);
-
-                checkCutMode();
-            }
-        }
-
-        private void pasteOvertime()
-        {
-            if (_scheduleView != null)
-            {
-                var options = new PasteOptions {Overtime = true};
                 _scheduleView.GridClipboardPaste(options, _undoRedo);
 
                 checkCutMode();
