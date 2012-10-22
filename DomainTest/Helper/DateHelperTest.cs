@@ -12,14 +12,19 @@ namespace Teleopti.Ccc.DomainTest.Helper
     /// <summary>
     /// Test for DateHelper
     /// </summary>
-    /// 
     [TestFixture]
     public class DateHelperTest
     {
-        private readonly CultureInfo _cult = new CultureInfo("sv-SE");
+        private CultureInfo _cult;
         private readonly DateTime _minSmallDateTime = new DateTime(1901,1,1);
         private readonly DateTime _maxSmallDateTime = new DateTime(2029,1,1);
         private string _ok = string.Empty;
+
+		[SetUp]
+		public void Setup()
+		{
+			_cult = CultureInfo.GetCultureInfo("sv-SE");
+		}
 
         [Test]
         public void CheckWeekNumberIsCorrect()
@@ -32,6 +37,20 @@ namespace Teleopti.Ccc.DomainTest.Helper
             Assert.AreEqual(1, DateHelper.WeekNumber(date2, _cult));
             Assert.AreEqual(53, DateHelper.WeekNumber(date3, _cult));
         }
+
+		[Test]
+		public void CheckWeekNumberIsCorrectForSpanishCulture()
+		{
+			_cult = CultureInfo.GetCultureInfo("es-ES");
+
+			DateTime date = new DateTime(2007, 11, 21);
+			DateTime date2 = new DateTime(2007, 12, 31);
+			DateTime date3 = new DateTime(2009, 12, 29);
+
+			Assert.AreEqual(47, DateHelper.WeekNumber(date, _cult));
+			Assert.AreEqual(1, DateHelper.WeekNumber(date2, _cult));
+			Assert.AreEqual(53, DateHelper.WeekNumber(date3, _cult));
+		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyWeekPeriod()
