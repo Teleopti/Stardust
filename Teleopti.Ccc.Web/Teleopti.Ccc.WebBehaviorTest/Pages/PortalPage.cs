@@ -41,10 +41,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			get { return Document.Link(Find.By("href", s => s.EndsWith("#RequestsTab"))); }
 		}
 
+	    public Link MessageLink
+        {
+            get { return Document.Link(Find.By("href", s => s.EndsWith("#MessageTab"))); }
+	    }
+
 		[FindBy(Id = "asm-link")]
 		public Link AsmButton { get; set; }
 
-		[FindBy(Id = "signout")]
+	    [FindBy(Id = "signout")]
 		public Link SignOutLink;
 
 		[FindBy(Id = "licensed-to-label")]

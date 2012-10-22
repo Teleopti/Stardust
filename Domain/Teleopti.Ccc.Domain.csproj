@@ -1410,7 +1410,9 @@
     <EmbeddedResource Include="Forecasting\OutlierDateProviderBase.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AgentInfo\Requests\PersonRequest.hbm.xml" />
+    <EmbeddedResource Include="AgentInfo\Requests\PersonRequest.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AgentInfo\Requests\Request.hbm.xml" />

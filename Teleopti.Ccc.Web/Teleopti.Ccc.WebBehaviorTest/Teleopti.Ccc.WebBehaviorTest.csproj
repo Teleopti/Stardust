@@ -108,6 +108,7 @@
     <Compile Include="Data\Setups\Generic\ContractConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ContractScheduleConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonAvailabilityConfigurable.cs" />
+    <Compile Include="Bindings\Generic\AsmMessageStepDefinition.cs" />
     <Compile Include="Data\Setups\Generic\RuleSetBagConfigurable.cs" />
     <Compile Include="Bindings\Generic\RuleSetBagStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\WorkShiftRuleSetConfigurable.cs" />
@@ -126,6 +127,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedbackRefact.feature</DependentUpon>
     </Compile>
+    <Compile Include="AsmMessage.feature.cs">
+      <DependentUpon>AsmMessage.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="PreferencesFollowUpStepDefinition.cs" />
     <Compile Include="PreferencesFollowUp.feature.cs">
       <DependentUpon>PreferencesFollowUp.feature</DependentUpon>
@@ -135,6 +141,7 @@
     <Compile Include="Data\Setups\Generic\AbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ActivityConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\AbsenceRequestConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\MessageConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\TextRequestConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PublicNoteConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\MeetingConfigurable.cs" />
@@ -144,6 +151,8 @@
     <Compile Include="Data\Setups\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
     <Compile Include="Data\Setups\Specific\StockholmTimeZone.cs" />
     <Compile Include="Pages\Common\ComboBox.cs" />
+    <Compile Include="Pages\Common\IMessageReplyPage.cs" />
+    <Compile Include="Pages\MessagePage.cs" />
     <Compile Include="Pages\GlobalMenuPage.cs" />
     <Compile Include="PreferencesFeedbackBlacklisting.feature.cs">
       <AutoGen>True</AutoGen>
@@ -502,6 +511,10 @@
     <None Include="PreferencesFeedbackBlacklisting.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackBlacklisting.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AsmMessage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AsmMessage.feature.cs</LastGenOutput>
     </None>
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />
