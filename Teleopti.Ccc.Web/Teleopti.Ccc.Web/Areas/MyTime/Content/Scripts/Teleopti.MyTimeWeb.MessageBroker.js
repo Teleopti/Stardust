@@ -4,7 +4,9 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 	function _oneTime(options) {
 		hub = $.connection.messageBrokerHub;
 		$.connection.hub.url = options.url + '/signalr';
-		$.connection.hub.error(options.errCallback);
+		if(options.errCallback) {
+			$.connection.hub.error(options.errCallback);			
+		}
 
 		hub.onEventMessage = function (notification, route) {
 			//cant use "dictionary" array. may be multiple subscription with same route
@@ -18,8 +20,7 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 
 		conn = $.connection.hub.start({ jsonp: true });
 	}
-
-
+	
 	function _addSubscription(options) {
 		if (hub==null) {
 			_oneTime(options);
