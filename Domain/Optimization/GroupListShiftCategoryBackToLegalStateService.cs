@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
@@ -11,7 +13,10 @@ namespace Teleopti.Ccc.Domain.Optimization
         void Execute(IList<IScheduleMatrixPro> scheduleMatrixList,
             ISchedulingOptions schedulingOptions,
             IOptimizationPreferences optimizationPreferences, 
-            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup);
+            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup,
+			IDictionary<Guid, bool> teamSteadyStates,
+			ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler,
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
     }
 
     public class GroupListShiftCategoryBackToLegalStateService : IGroupListShiftCategoryBackToLegalStateService
@@ -41,7 +46,10 @@ namespace Teleopti.Ccc.Domain.Optimization
         public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList,
             ISchedulingOptions schedulingOptions,
             IOptimizationPreferences optimizationPreferences,
-            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup)
+			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup, 
+			IDictionary<Guid, bool> teamSteadyStates, 
+			ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler,
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
             var scheduleMatrixValueCalculator =
                 BuildScheduleMatrixValueCalculator(
@@ -68,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                                                             new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
                     var groupBackToLegalStateService =
                         groupackToLegalStateServiceBuilder.Build(matrix, schedulePartModifyAndRollbackService);
-                    var toRemove = groupBackToLegalStateService.Execute(matrix.SchedulePeriod, schedulingOptions, scheduleMatrixList, groupOptimizerFindMatrixesForGroup);
+					var toRemove = groupBackToLegalStateService.Execute(matrix.SchedulePeriod, schedulingOptions, scheduleMatrixList, groupOptimizerFindMatrixesForGroup, teamSteadyStates, teamSteadyStateMainShiftScheduler, _stateHolder.Schedules, schedulePartModifyAndRollbackService, groupPersonBuilderForOptimization);
                     foreach (var matrixPro in toRemove)
                     {
                         if (!removeList.Contains(matrixPro))

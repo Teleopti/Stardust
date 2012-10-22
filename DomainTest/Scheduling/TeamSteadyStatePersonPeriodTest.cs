@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -182,6 +183,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			{
 				Assert.IsTrue(_target.PersonPeriodEquals(_personPeriod));
 			}
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullPersonPeriod()
+		{
+			_target.PersonPeriodEquals(null);
 		}
 	}
 }

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -24,6 +26,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDayChangeCallback _scheduleDayChangeCallback;
         private IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
         private IGroupPersonsBuilder _groupPersonsBuilder;
+		private Dictionary<Guid, bool> _teamSteadyStates;
+		private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
+    	private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+    	private IScheduleDictionary _scheduleDictionary;
 
         [SetUp]
         public void Setup()
@@ -38,6 +44,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleService = _mockRepository.StrictMock<IGroupSchedulingService>();
             _groupPersonsBuilder = _mockRepository.StrictMock<IGroupPersonsBuilder>();
             _groupOptimizerFindMatrixesForGroup = _mockRepository.StrictMock<IGroupOptimizerFindMatrixesForGroup>();
+			_teamSteadyStates = new Dictionary<Guid, bool>();
+			_teamSteadyStateMainShiftScheduler = _mockRepository.StrictMock<ITeamSteadyStateMainShiftScheduler>();
+        	_groupPersonBuilderForOptimization = _mockRepository.StrictMock<IGroupPersonBuilderForOptimization>();
             _target = new GroupListShiftCategoryBackToLegalStateService(
                 _stateHolder,
                 _scheduleMatrixValueCalculatorFactory,
@@ -45,6 +54,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _scheduleService,
                 _scheduleDayChangeCallback,
                 _groupPersonsBuilder);
+
+			_teamSteadyStates = new Dictionary<Guid, bool> ();
+        	_scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
         }
 
         [Test]
@@ -79,10 +91,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(schedulePeriod.ShiftCategoryLimitationCollection()).Return(
                     new ReadOnlyCollection<IShiftCategoryLimitation>(new List<IShiftCategoryLimitation>())).Repeat.AtLeastOnce();
                 Expect.Call(scheduleMatrixPro.SchedulePeriod).Return(schedulePeriod).Repeat.Times(2 * iteration);
+
+            	Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
             }
             using (_mockRepository.Playback())
             {
-                _target.Execute(_scheduleMatrixList, new SchedulingOptions(), _optimizerPreferences, _groupOptimizerFindMatrixesForGroup);
+                _target.Execute(_scheduleMatrixList, new SchedulingOptions(), _optimizerPreferences, _groupOptimizerFindMatrixesForGroup, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
             }
         }
 
