@@ -22,7 +22,11 @@
 		<div class="edit-module-element">
 			<label id="AsmMessage-detail-message" data-bind="text : message"></label>
 		</div>
-        <input id="AsmMessage-detail-ok-button" type="button" class="button mb5 floatright" data-bind="click : confirmReadMessage, enable : isConfirmButtonEnabled" value="@Html.AttributeEncode(Resources.Ok)"/>
+		@*<div>
+			<textarea id="AsmMessage-detail-reply" rows="5" cols="10"></textarea>
+		</div>*@
+		
+		<input id="AsmMessage-detail-ok-button" type="button" class="button mb5 floatright" data-bind="click : confirmReadMessage, enable : isConfirmButtonEnabled" value="@Html.AttributeEncode(Resources.Ok)"/>
 	</div>
 	<div class="asmMessage-list">
 		<div class="friendly-message ui-corner-all floatleft" data-bind="visible: shouldShowMessage">
@@ -30,10 +34,10 @@
 		</div>
 		<ol id="AsmMessages-list" data-bind="foreach: asmMessageList">
 			<li class="ui-corner-all asmMessage-item relative" data-bind="css: { 'asmMessage-selected': isSelected() == true }">
-                <span class="displaynone" data-bind="text : messageId"></span>
-                <div class="asmMessage-arrow-right">
-                    <img src="@Url.Content("~/Areas/MyTime/Content/Images/arrow-right.png")"/>   
-                </div>
+				<span class="displaynone" data-bind="text : messageId"></span>
+				<div class="asmMessage-arrow-right">
+					<img src="@Url.Content("~/Areas/MyTime/Content/Images/arrow-right.png")"/>   
+				</div>
 				<div class="asmMessage-subject">
 					<h3 class="asmMessage-data-subject" data-bind="text : title">
 					</h3>

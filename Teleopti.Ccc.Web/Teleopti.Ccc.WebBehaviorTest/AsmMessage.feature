@@ -131,26 +131,28 @@ Scenario: Receive a new message when viewing message page
 Scenario: Open unread message where text reply is allowed
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
-	| Field			| Value				|
-	| Title			| New message		|
-	| Message		| Text in message	|
-	| Reply allowed	| True				|
+	| Field					| Value				|
+	| Title					| New message		|
+	| Message				| Text in message	|
+	| Text reply allowed	| True				|
 	And I am viewing week schedule
 	And I navigate to messages
 	When I click on the message at position '1' in the list
 	Then I should see the message details form with
-	| Field				| Value			|
-	| Editable text box	| My reply		|
+	| Field				| Value				|
+	| Title				| New message		|
+	| Message			| Text in message	|	
+	| Editable text box	| My reply			|
 
 Scenario: See reply dialogue in message text
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
-	| Field			| Value						|
-	| Title			| Work late					|
-	| Message		| Can u work late today?	|
-	| Reply allowed	| True						|
-	| Reply 1		| Ok if you buy me dinner?	|
-	| Reply 2		| It´s a deal!				|
+	| Field					| Value						|
+	| Title					| Work late					|
+	| Message				| Can u work late today?	|
+	| Text reply allowed	| True						|
+	| Reply 1				| Ok if you buy me dinner?	|
+	| Reply 2				| It´s a deal!				|
 	And I am viewing week schedule
 	And I navigate to messages
 	When I click on the message at position '1' in the list
@@ -163,10 +165,10 @@ Scenario: See reply dialogue in message text
 Scenario: Do not allow empty reply
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
-	| Field			| Value				|
-	| Title			| New message		|
-	| Message		| Text in message	|
-	| Reply allowed	| True				|
+	| Field					| Value				|
+	| Title					| New message		|
+	| Message				| Text in message	|
+	| Text reply allowed	| True				|
 	And I am viewing week schedule
 	And I navigate to messages
 	And I click on the message at position '1' in the list
@@ -177,10 +179,10 @@ Scenario: Do not allow empty reply
 Scenario: Send text reply message
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
-	| Field			| Value				|
-	| Title			| New message		|
-	| Message		| Text in message	|
-	| Reply allowed	| True				|
+	| Field					| Value				|
+	| Title					| New message		|
+	| Message				| Text in message	|
+	| Text reply allowed	| True				|
 	And I am viewing week schedule
 	And I navigate to messages
 	And I click on the message at position '1' in the list
@@ -192,10 +194,10 @@ Scenario: Send text reply message
 Scenario: Do not allow too long replies
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
-	| Field			| Value				|
-	| Title			| New message		|
-	| Message		| Text in message	|
-	| Reply allowed	| True				|
+	| Field					| Value				|
+	| Title					| New message		|
+	| Message				| Text in message	|
+	| Text reply allowed	| True				|
 	And I am viewing week schedule
 	And I navigate to messages
 	And I click on the message at position '1' in the list
