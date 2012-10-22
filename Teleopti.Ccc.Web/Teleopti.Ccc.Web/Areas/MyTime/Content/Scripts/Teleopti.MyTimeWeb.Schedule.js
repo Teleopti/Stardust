@@ -349,13 +349,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			});
 		},
 
-		ReloadScheduleListener: function (notifiction) {
-
+		ReloadScheduleListener: function (notification) {
 			var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
 			var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
 
 			if (vm.isWithinSelected(messageStartDate, messageEndDate)) {
-
 				ajax.Ajax({
 					url: 'Schedule/FetchData',
 					dataType: "json",
