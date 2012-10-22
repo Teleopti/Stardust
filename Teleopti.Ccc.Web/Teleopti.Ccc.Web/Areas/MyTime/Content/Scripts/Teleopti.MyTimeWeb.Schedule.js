@@ -68,6 +68,18 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 	}
 
+	function _bindData(data) {
+		vm.Initialize(data);
+		_initTimeIndicator();
+		_setTimeIndicatorFirstTime();
+		_initTooltip();
+		_initPeriodSelection();
+		Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
+		Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
+		_initTodayButton();
+		$('.body-weekview-inner').show();
+	}
+
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#ScheduleDateRangeSelector';
 		var periodData = $('#ScheduleWeek-body').data('mytime-periodselection');
@@ -238,7 +250,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	};
 
 	function _setTimeIndicator(theDate) {
-		if ($('.week-schedule-ASM-permission-granted').text().indexOf('yes') == -1 || 
+		if ($('.week-schedule-ASM-permission-granted').text().indexOf('yes') == -1 ||
 			$('.week-schedule-current-week').text().indexOf('yes') == -1) {
 			return;
 		}
@@ -298,7 +310,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
 					url: data.Url,
 					callback: Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener,
-					domainType: 'IScheduleChangedInDefaultScenario',
+					domainType: 'IPersistableScheduleData',
 					businessUnitId: data.BusinessUnitId,
 					datasource: data.DataSourceName,
 					referenceId: data.AgentId
@@ -332,19 +344,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				},
 
 				success: function (data) {
-
-					vm.Initialize(data);
-
-					_initTimeIndicator();
-					_setTimeIndicatorFirstTime();
-					_initTooltip();
-					_initPeriodSelection();
-					//for now
-					Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
-					Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
-					_initTodayButton();
-					$('.body-weekview-inner').show();
-
+					_bindData(data);
 					_subscribeForChanges();
 				}
 			});
@@ -363,7 +363,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 						date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
 					},
 					success: function (data) {
-						vm.Initialize(data);
+						_bindData(data);
 					}
 				});
 			};
