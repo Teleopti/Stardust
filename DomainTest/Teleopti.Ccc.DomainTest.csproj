@@ -622,7 +622,7 @@
     <Compile Include="Scheduling\Restrictions\ScheduleDayStudentAvailabilityRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\StudentSpecificationTest.cs" />
     <Compile Include="Scheduling\Restriction\AvailabilityRotationTest.cs" />
-    <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForPersonalShiftTest.cs" />
+    <Compile Include="Scheduling\Restrictions\PersonalShiftRestrictionCombinerTest.cs" />
     <Compile Include="Scheduling\Restrictions\MeetingRestrictionCombinerTest.cs" />
     <Compile Include="Scheduling\Restriction\StudentAvailabilityRestrictionTest.cs" />
     <Compile Include="Scheduling\Restriction\PreferenceRestrictionTest.cs" />

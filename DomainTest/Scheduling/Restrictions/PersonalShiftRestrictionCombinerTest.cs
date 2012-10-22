@@ -12,9 +12,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 {
 	[TestFixture]
-	public class EffectiveRestrictionForPersonalShiftTest
+	public class PersonalShiftRestrictionCombinerTest
 	{
-		private EffectiveRestrictionForPersonalShift _target;
+		private PersonalShiftRestrictionCombiner _target;
 		private MockRepository _mocks;
 		private IScheduleDay _scheduleDay;
 		private IEffectiveRestriction _restriction;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			_mocks = new MockRepository();
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_restriction = _mocks.StrictMock<IEffectiveRestriction>();
-			_target = new EffectiveRestrictionForPersonalShift();
+			_target = new PersonalShiftRestrictionCombiner(new RestrictionCombiner());
 		}
 
 		[Test]
@@ -39,15 +39,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		public void VerifyNullScheduleDayParameter()
 		{
 			_scheduleDay = null;
-			_target.AddEffectiveRestriction(_scheduleDay, _restriction);
+			_target.Combine(_scheduleDay, _restriction);
 		}
 
 		[Test]
 		public void VerifyNullRestrictionParameter()
 		{
 			_restriction = null;
-			IEffectiveRestriction result = 
-				_target.AddEffectiveRestriction(_scheduleDay, _restriction);
+			IEffectiveRestriction result =
+				_target.Combine(_scheduleDay, _restriction);
 			Assert.IsNull(result);
 		}
 
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			using (_mocks.Playback())
 				{
 					IEffectiveRestriction result =
-						_target.AddEffectiveRestriction(_scheduleDay, _restriction);
+						_target.Combine(_scheduleDay, _restriction);
 					Assert.IsNotNull(result);
 					Assert.AreSame(_restriction, _restriction);
 				}
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			using (_mocks.Playback())
 			{
 				IEffectiveRestriction result =
-					_target.AddEffectiveRestriction(_scheduleDay, _restriction);
+					_target.Combine(_scheduleDay, _restriction);
 				Assert.IsNotNull(result);
 				Assert.AreSame(_restriction, _restriction);
 			}
