@@ -2943,105 +2943,50 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void SkillGridMenuItemPeriodClick(object sender, EventArgs e)
 		{
+			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Period, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
+			menuUpdater.Update();
 			_skillResultViewSetting = SkillResultViewSetting.Period;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = true;
-			
-			toolStripButtonChartPeriodView.Checked = true;
-			toolStripButtonChartMonthView.Checked = false;
-			toolStripButtonChartWeekView.Checked = false;
-			toolStripButtonChartDayView.Checked = false;
-			toolStripButtonChartIntradayView.Checked = false;
-
 			_currentSelectedGridRow = null;
-
 			drawSkillGrid();
 			reloadChart();		
 		}
 
 		private void SkillGridMenuItemMonthClick(object sender, EventArgs e)
 		{
+			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Month, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
+			menuUpdater.Update();
 			_skillResultViewSetting = SkillResultViewSetting.Month;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = true;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = false;
-			
-			toolStripButtonChartPeriodView.Checked = false;
-			toolStripButtonChartMonthView.Checked = true;
-			toolStripButtonChartWeekView.Checked = false;
-			toolStripButtonChartDayView.Checked = false;
-			toolStripButtonChartIntradayView.Checked = false;
-
 			_currentSelectedGridRow = null;
-
 			drawSkillGrid();
 			reloadChart();	
 		}
 
 		private void SkillGridMenuItemWeekClick(object sender, EventArgs e)
 		{
+			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Week, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
+			menuUpdater.Update();
 			_skillResultViewSetting = SkillResultViewSetting.Week;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = true;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = false;
-			
-			toolStripButtonChartPeriodView.Checked = false;
-			toolStripButtonChartMonthView.Checked = false;
-			toolStripButtonChartWeekView.Checked = true;
-			toolStripButtonChartDayView.Checked = false;
-			toolStripButtonChartIntradayView.Checked = false;
-
 			_currentSelectedGridRow = null;
-
 			drawSkillGrid();
 			reloadChart();	
 		}
 
         private void skillGridMenuItemDay_Click(object sender, EventArgs e)
         {
+			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Day, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
+			menuUpdater.Update();
         	_skillResultViewSetting = SkillResultViewSetting.Day;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked = true;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = false;
-			
 			_currentSelectedGridRow = null;
-
-			toolStripButtonChartPeriodView.Checked = false;
-			toolStripButtonChartMonthView.Checked = false;
-			toolStripButtonChartWeekView.Checked = false;
-			toolStripButtonChartDayView.Checked = true;
-			toolStripButtonChartIntradayView.Checked = false;
-
 			drawSkillGrid();
 			reloadChart();
         }
 
         private void skillGridMenuItemIntraDay_Click(object sender, EventArgs e)
         {
+			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Intraday, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
+			menuUpdater.Update();
         	_skillResultViewSetting = SkillResultViewSetting.Intraday;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["IntraDay"]).Checked = true;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Day"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Week"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Month"]).Checked = false;
-			((ToolStripMenuItem)_contextMenuSkillGrid.Items["Period"]).Checked = false;
-			
-			toolStripButtonChartPeriodView.Checked = false;
-			toolStripButtonChartMonthView.Checked = false;
-			toolStripButtonChartWeekView.Checked = false;
-			toolStripButtonChartDayView.Checked = false;
-			toolStripButtonChartIntradayView.Checked = true;
-
 			_currentSelectedGridRow = null;
-
 			drawSkillGrid();
 			reloadChart();	
         }
@@ -3864,17 +3809,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        ///// <summary>
-        ///// menu remove selected agents from meeting
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //private void toolStripMenuItemRemoveParticipant_Click(object sender, EventArgs e)
-        //{
-        //    if (_scheduleView != null)
-        //        _schedulerMeetingHelper.MeetingRemoveAttendees(GridHelper.MeetingsFromSelection(_scheduleView.ViewGrid));
-        //}
-
         private void _optimizationHelper_ResourcesChanged(object sender, ResourceChangedEventArgs e)
         {
             if (InvokeRequired)
@@ -4046,34 +3980,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             _undoRedo.CommitBatch();
 
-        }
-
-        private void deleteAssignment()
-        {
-            var deleteOption = new DeleteOption();
-            deleteOption.MainShift = true;
-            deleteFromSchedulePart(deleteOption);
-        }
-
-        private void deleteAbsence()
-        {
-            var deleteOption = new DeleteOption();
-            deleteOption.Absence = true;
-            deleteFromSchedulePart(deleteOption);
-        }
-
-        private void deleteDayOff()
-        {
-            var deleteOption = new DeleteOption();
-            deleteOption.DayOff = true;
-            deleteFromSchedulePart(deleteOption);
-        }
-
-        private void deletePersonalShift()
-        {
-            var deleteOption = new DeleteOption();
-            deleteOption.PersonalShift = true;
-            deleteFromSchedulePart(deleteOption);
         }
 
         private void tabSkillData_SelectedIndexChanged(object sender, EventArgs e)
@@ -4409,58 +4315,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        private void deleteShift()
-        {
-            switch (_controlType)
-            {
-                case ControlType.ShiftEditor:
-                    clipboardMessage("ShiftEditor delete ass");
-
-                    break;
-                case ControlType.SchedulerGridMain:
-                    deleteAssignment();
-                    break;
-                case ControlType.SchedulerGridSkillData:
-                    //readonly
-                    break;
-
-            }
-        }
-
-        private void deleteAbsenceSwitch()
-        {
-            switch (_controlType)
-            {
-                case ControlType.ShiftEditor:
-                    clipboardMessage("ShiftEditor delete abs");
-                    break;
-                case ControlType.SchedulerGridMain:
-                    deleteAbsence();
-                    break;
-                case ControlType.SchedulerGridSkillData:
-                    //read only
-                    break;
-            }
-        }
-
-        private void deleteDayOffSwitch()
-        {
-            switch (_controlType)
-            {
-                case ControlType.ShiftEditor:
-                    clipboardMessage("ShiftEditor delete day off");
-
-                    break;
-                case ControlType.SchedulerGridMain:
-                    deleteDayOff();
-                    break;
-                case ControlType.SchedulerGridSkillData:
-                    //not possible
-                    break;
-
-            }
-        }
-
         private void deleteSpecialSwitch()
         {
             switch (_controlType)
@@ -4499,23 +4353,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     //not possible
                     break;
 
-            }
-        }
-
-        private void deletePersonalShiftSwitch()
-        {
-            switch (_controlType)
-            {
-                case ControlType.ShiftEditor:
-                    clipboardMessage("ShiftEditor delete personal shift");
-
-                    break;
-                case ControlType.SchedulerGridMain:
-                    deletePersonalShift();
-                    break;
-                case ControlType.SchedulerGridSkillData:
-                    //not possible
-                    break;
             }
         }
 
@@ -6639,61 +6476,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                 toolStripMenuItemSwapAndReschedule.Enabled = false;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
-            "CA1303:Do not pass literals as localized parameters",
-            MessageId = "System.Windows.Forms.ToolStripItem.set_Text(System.String)")]
         private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)
         {
-            if (_scheduleView != null)
-            {
-                IDictionary<IPerson, IScheduleRange> personDic = new Dictionary<IPerson, IScheduleRange>();
-                HashSet<DateOnly> dateList = new HashSet<DateOnly>();
-                TimeSpan totalTime = TimeSpan.Zero;
-
-                var selectedTags = new List<IScheduleTag>();
-
-                foreach (IScheduleDay scheduleDay in selectedSchedules)
-                {
-                    IProjectionService projSvc = scheduleDay.ProjectionService();
-                    totalTime += projSvc.CreateProjection().ContractTime();
-
-                    dateList.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
-                    if (!personDic.ContainsKey(scheduleDay.Person))
-                        personDic.Add(scheduleDay.Person, _schedulerState.Schedules[scheduleDay.Person]);
-
-
-                    if (!selectedTags.Contains(scheduleDay.ScheduleTag())) 
-						selectedTags.Add(scheduleDay.ScheduleTag());
-                }
-
-                if (_agentInfo != null)
-                    _agentInfo.UpdateData(personDic, dateList, _schedulerState.SchedulingResultState,
-                                          SchedulerState.SchedulingResultState.AllPersonAccounts);
-
-                toolStripStatusLabelContractTime.Text = string.Concat(Resources.ContractScheduledTime, " ",
-                                                                      DateHelper.HourMinutesString(
-                                                                          totalTime.TotalMinutes));
-
-                var selectedTagsText = string.Empty;
-                var counter = 0;
-
-                foreach (var selectedTag in selectedTags)
-                {
-                    if (string.Concat(selectedTagsText, selectedTag.Description).Length > 100)
-                    {
-                        selectedTagsText = string.Concat(selectedTagsText, Resources.ThreeDots);
-                        break;
-                    }
-
-                    selectedTagsText = string.Concat(selectedTagsText, selectedTag.Description);
-
-                    counter++;
-
-                    if (counter != selectedTags.Count) selectedTagsText = string.Concat(selectedTagsText, ", ");
-                }
-
-                toolStripStatusLabelScheduleTag.Text = string.Concat(Resources.ScheduleTagColon, " ", selectedTagsText);
-            }
+        	var updater = new UpdateSelectionInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag);
+			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfo);
         }
 
         private void deleteInMainGrid(PasteOptions deleteOptions)
@@ -7910,172 +7696,17 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
-            "CA1303:Do not pass literals as localized parameters",
-            MessageId = "System.Windows.Forms.FileDialog.set_Filter(System.String)")]
         private void ToolStripMenuItemExportToPdfGraphicalMouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
-
-            var model = new ScheduleReportDialogGraphicalModel();
-
-            using (var dialog = new ScheduleReportDialogGraphicalView(model))
-            {
-                dialog.ShowDialog(this);
-
-                if (dialog.DialogResult != DialogResult.OK)
-                    return;
-            }
-
-            var selection = _scheduleView.SelectedSchedules();
-
-            if (selection.Count == 0)
-                return;
-
-            var culture = TeleoptiPrincipal.Current.Regional.Culture;
-            var rightToLeft = TeleoptiPrincipal.Current.Regional.UICulture.TextInfo.IsRightToLeft;
-
-            IDictionary<IPerson, string> personDic = new Dictionary<IPerson, string>();
-
-            foreach (var part in selection)
-            {
-
-                if (!personDic.ContainsKey(part.Person))
-                    personDic.Add(part.Person, _schedulerState.CommonAgentNameScheduleExport(part.Person));
-                //personDic.Add(part.Person, _schedulerState.CommonAgentName(part.Person));
-
-            }
-
-            string path;
-
-            if (!model.Team && !model.OneFileForSelected)
-            {
-                using (var browser = new FolderBrowser())
-                {
-                    browser.StartLocation = FolderBrowserFolder.Personal;
-                    var result = browser.ShowDialog(this);
-                    if (result != DialogResult.OK)
-                        return;
-                    path = browser.DirectoryPath;
-                }
-            }
-            else
-            {
-                using (var dialog = new SaveFileDialog())
-                {
-                    dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                    dialog.DefaultExt = ".PDF";
-                    dialog.Filter = "PDF(*.PDF)|*.PDF";
-                    dialog.AddExtension = true;
-                    var result = dialog.ShowDialog(this);
-                    if (result != DialogResult.OK)
-                        return;
-                    path = dialog.FileName;
-                }
-            }
-
-            var period = ViewBaseHelper.GetPeriod(selection);
-
-            if (model.Team)
-                ScheduleToPdfManager.ExportShiftPerDayTeamViewGraphical(culture, personDic, period,
-                                                                        SchedulerState.SchedulingResultState,
-                                                                        rightToLeft, this, path, model);
-            else
-                ScheduleToPdfManager.ExportShiftPerDayAgentViewGraphical(culture, personDic, period,
-                                                                         SchedulerState.SchedulingResultState,
-                                                                         rightToLeft, this, path, model);
+			var exporter = new ExportToPdfGraphical(_scheduleView, this, _schedulerState, TeleoptiPrincipal.Current.Regional.Culture, TeleoptiPrincipal.Current.Regional.UICulture.TextInfo.IsRightToLeft);
+            exporter.Export();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.FileDialog.set_Filter(System.String)")]
         private void ExportToPdf(bool shiftsPerDay)
         {
-            bool individualReport;
-            bool teamReport;
-            bool singleFile;
-            ScheduleReportDetail detail;
-            bool publicNote;
-
-            IList<IScheduleDay> selection = _scheduleView.SelectedSchedules();
-
-            // Temporary solution for SPI 7833
-            if (selection.Count == 0) return;
-
-            using (var dialog = new ScheduleReportDialog(shiftsPerDay))
-            {
-                dialog.ShowDialog(this);
-                if (dialog.DialogResult != DialogResult.OK)
-                    return;
-
-                teamReport = dialog.TeamReport;
-                individualReport = dialog.Individual;
-                singleFile = dialog.OneFile;
-                detail = dialog.DetailLevel;
-                publicNote = dialog.ShowPublicNote;
-            }
-
-            CultureInfo culture = TeleoptiPrincipal.Current.Regional.Culture;
-
-            bool rightToLeft = TeleoptiPrincipal.Current.Regional.UICulture.TextInfo.IsRightToLeft;
-
-            IDictionary<IPerson, string> personDic = new Dictionary<IPerson, string>();
-
-            foreach (var part in selection)
-            {
-                if (!personDic.ContainsKey(part.Person))
-                    personDic.Add(part.Person, _schedulerState.CommonAgentNameScheduleExport(part.Person));
-            }
-
-            var period = ViewBaseHelper.GetPeriod(selection);
-
-            string path;
-
-            if (individualReport && !singleFile)
-            {
-                using (var browser = new FolderBrowser())
-                {
-                    browser.StartLocation = FolderBrowserFolder.Personal;
-                    DialogResult result = browser.ShowDialog(this);
-                    if (result != DialogResult.OK)
-                        return;
-                    path = browser.DirectoryPath;
-                }
-            }
-            else
-            {
-                using (var dialog = new SaveFileDialog())
-                {
-                    dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                    dialog.DefaultExt = ".PDF";
-                    dialog.Filter = "PDF(*.PDF)|*.PDF";
-                    dialog.AddExtension = true;
-                    DialogResult result = dialog.ShowDialog(this);
-                    if (result != DialogResult.OK)
-                        return;
-                    path = dialog.FileName;
-                }
-
-            }
-
-            var manager = new ScheduleToPdfManager();
-
-            if (teamReport)
-            {
-                manager.ExportTeam(_schedulerState.TimeZoneInfo, culture, personDic,
-                                   period, SchedulerState.SchedulingResultState,
-                                   rightToLeft, detail, this, path);
-                return;
-            }
-            if (shiftsPerDay)
-            {
-                ScheduleToPdfManager.ExportShiftsPerDay(_schedulerState.TimeZoneInfo, culture, personDic,
-									 period, SchedulerState.SchedulingResultState, 
-                                                         detail, publicNote, this, path);
-                return;
-            }
-
-            manager.ExportIndividual(_schedulerState.TimeZoneInfo, culture, personDic,
-                                     period, SchedulerState.SchedulingResultState,
-                                     rightToLeft, detail, this, singleFile, path);   
+			var exporter = new ExportToPdf(_scheduleView, this, _schedulerState, TeleoptiPrincipal.Current.Regional.Culture, TeleoptiPrincipal.Current.Regional.UICulture.TextInfo.IsRightToLeft);
+			exporter.Export(shiftsPerDay);
         }
 
         private void ToolStripMenuItemExportToPdfMouseUp(object sender, MouseEventArgs e)
@@ -8091,13 +7722,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 return;
 
             ((RestrictionPresenter) view.Presenter).UseStudent = toolStripMenuItemUseStudentAvailability.Checked;
-
             ((RestrictionPresenter) view.Presenter).UseSchedule = toolStripMenuItemUseSchedule.Checked;
-
             ((RestrictionPresenter) view.Presenter).UseRotation = toolStripMenuItemUseRotation.Checked;
-
             ((RestrictionPresenter) view.Presenter).UsePreference = toolStripMenuItemUsePreference.Checked;
-
             ((RestrictionPresenter) view.Presenter).UseAvailability = toolStripMenuItemUseAvailability.Checked;
 
             disableAllExceptCancelInRibbon();
@@ -8761,15 +8388,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripMenuItemRestrictionPaste_Click(object sender, EventArgs e)
 		{
 			((AgentRestrictionsDetailView)_scheduleView).PasteSelectedRestrictions(_undoRedo);
-			//var options = new PasteOptions {Preference = true, StudentAvailability = true};
-			//_scheduleView.GridClipboardPaste(options, _undoRedo);
 		}
 
 		private void toolStripMenuItemRestrictionDelete_Click(object sender, EventArgs e)
 		{
 			((AgentRestrictionsDetailView)_scheduleView).DeleteSelectedRestrictions(_undoRedo, _defaultScheduleTag);
-			//var options = new PasteOptions { Preference = true, StudentAvailability = true };
-			//deleteInMainGrid(options);
 		}
 
     }

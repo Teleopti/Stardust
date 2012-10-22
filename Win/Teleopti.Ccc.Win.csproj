@@ -1213,9 +1213,12 @@
     <Compile Include="Scheduling\AuditHistoryView.Designer.cs">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\ExportToPdf.cs" />
+    <Compile Include="Scheduling\ExportToPdfGraphical.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Scheduling\SkillGridMenuItemUpdate.cs" />
     <Compile Include="Scheduling\SkillMonthGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -1417,6 +1420,7 @@
       <DependentUpon>TeleoptiLessIntelligentSplitContainer.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\TagsMenuLoader.cs" />
+    <Compile Include="Scheduling\UpdateSelectionInfo.cs" />
     <Compile Include="Scheduling\VirtualSkillHelper.cs" />
     <Compile Include="SearchPersonView.cs">
       <SubType>UserControl</SubType>
