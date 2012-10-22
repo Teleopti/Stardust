@@ -287,6 +287,24 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var currentDateTime = new Date(new Date().getTeleoptiTime());
 		_setTimeIndicator(currentDateTime);
 	}
+	
+	function _subscribeForChanges() {
+		ajax.Ajax({
+			url: 'MessageBroker/FetchUserData',
+			dataType: "json",
+			type: 'GET',
+			success: function (data) {
+				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
+					url: data.Url,
+					callback: Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener,
+					domainType: 'IScheduleChangedInDefaultScenario',
+					businessUnitId: data.BusinessUnitId,
+					datasource: data.DataSourceName,
+					referenceId: data.AgentId
+				});
+			}
+		});
+	}
 
 	return {
 		Init: function () {
@@ -325,6 +343,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
 					_initTodayButton();
 					$('.body-weekview-inner').show();
+
+					_subscribeForChanges();
 				}
 			});
 		},
