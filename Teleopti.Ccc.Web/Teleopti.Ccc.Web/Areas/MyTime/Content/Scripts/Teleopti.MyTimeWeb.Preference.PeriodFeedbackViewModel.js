@@ -6,7 +6,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
 
-Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewModels, date, mustHaveCountViewModel) {
+Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewModels, date) {
 	var self = this;
 
 	this.LoadFeedback = function () {
@@ -21,8 +21,6 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 				self.PossibleResultDaysOff(data.PossibleResultDaysOff);
 				self.TargetContractTimeLower(data.TargetContractTime.Lower);
 				self.TargetContractTimeUpper(data.TargetContractTime.Upper);
-				if (mustHaveCountViewModel)
-					mustHaveCountViewModel.MaxMustHave(data.MaxMustHave);
 			}
 		});
 	};

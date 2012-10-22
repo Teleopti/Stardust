@@ -16,7 +16,7 @@
 		<asp:HiddenField ID="ParametersValid" runat="server" Value="0" /> 
 
 		<div style="float: right">
-			<div style="float:right; margin-left:10px;margin-right: 10px;padding-bottom: 5px"><asp:LinkButton runat="server" ID="SignOutButton" CssClass="SignOut" OnClick="SignOut" Text="xxSign Out"></asp:LinkButton></div>
+			<div style="float:right; margin-left:10px;margin-right: 10px;padding-bottom: 5px"><asp:LinkButton CausesValidation="False" runat="server"  ID="SignOutButton" CssClass="SignOut" OnClick="SignOut" Text="xxSign Out"></asp:LinkButton></div>
 			<div style="white-space:nowrap; float:right" ><asp:Label ID="LoggedOnUser" runat="server" Text=""></asp:Label></div>
 		</div>
 			

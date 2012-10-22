@@ -3,29 +3,6 @@
 	As an agent
 	I want feedback for my preferences
 
-Scenario: Feedback for a day without restrictions
-	Given I am an agent
-	And I have a shift bag with start times 8 to 9 and end times 16 to 17
-	When I view preferences
-	Then I should see the start time boundry 8 to 9
-	And I should see the end time boundry 16 to 17
-	And I should see the contract time boundry 7 to 9  
-
-Scenario: Feedback for a day with day off preference
-	Given I am an agent
-	And I have a shift bag
-	And I have a day off preference
-	When I view preferences
-	Then I should see no feedback
-
-Scenario: Feedback for a day with absence preference
-	Given I am an agent
-	And I should work 8 hours per day according to my contract
-	And I have a shift bag
-	And I have a contract time absence preference on weekday 3
-	When I view preferences
-	Then I should see the contract time boundry 8 to 8 on weekday 3
-
 Scenario: Feedback for a day with shift category preference
 	Given I am an agent
 	And I am american

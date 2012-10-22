@@ -22,17 +22,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void Setup()
 		{
 			data = new PreferenceDomainData
-			       	{
-			       		SelectedDate = DateOnly.Today,
-			       		Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)),
-			       		Days = new[] {new PreferenceDayDomainData {Date = DateOnly.Today}},
-			       		WorkflowControlSet =
-			       			new WorkflowControlSet(null)
-			       				{
-			       					PreferencePeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)),
-			       					PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today)
-			       				}
-			       	};
+					{
+						SelectedDate = DateOnly.Today,
+						Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)),
+						Days = new[] { new PreferenceDayDomainData { Date = DateOnly.Today } },
+						WorkflowControlSet =
+							new WorkflowControlSet(null)
+								{
+									PreferencePeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1)),
+									PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today)
+								},
+						MaxMustHave = 8
+					};
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
@@ -297,6 +298,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
 			result.PreferencePeriod.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldMapMaxMustHave()
+		{
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			result.MaxMustHave.Should().Be.EqualTo(8);
 		}
 
 	}

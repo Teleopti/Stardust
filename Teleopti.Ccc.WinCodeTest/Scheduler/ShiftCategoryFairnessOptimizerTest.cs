@@ -179,6 +179,27 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_mocks.VerifyAll();
 		}
 
+		[Test]
+		public void ShouldStripOutNullList()
+		{
+			var persons = new List<IPerson> { new Person() };
+			var dateOnly = new DateOnly(2012, 9, 21);
+			var days = new List<DateOnly> { dateOnly };
+			var matrixes = new List<IScheduleMatrixPro>();
+			var gropPage = new GroupPageLight();
+			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0 };
+			var list = new List<IShiftCategoryFairnessCompareResult> { compare1};
+			
+			var groupPerson = new GroupPerson(persons, dateOnly, "name", null);
+			Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(dateOnly, persons, false, null)).Return(new List<IGroupPerson> { groupPerson });
+			Expect.Call(_shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, gropPage, dateOnly)).Return(list).IgnoreArguments();
+			_mocks.ReplayAll();
+			_target.ReportProgress += reportProgress;
+			_target.ExecutePersonal(_bgWorker, persons, days, matrixes, gropPage, _rollbackService);
+			_target.ReportProgress -= reportProgress;
+			_mocks.VerifyAll();
+		}
+
 		void reportProgress(object sender, ResourceOptimizerProgressEventArgs e)
 		{
 			Debug.WriteLine(e.Message);

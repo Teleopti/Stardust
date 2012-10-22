@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		public DateOnlyPeriod Period { get; set; }
 		public IWorkflowControlSet WorkflowControlSet { get; set; }
 		public IEnumerable<PreferenceDayDomainData> Days { get; set; }
+		public int MaxMustHave { get; set; }
 	}
 
 	public class PreferenceDayDomainData

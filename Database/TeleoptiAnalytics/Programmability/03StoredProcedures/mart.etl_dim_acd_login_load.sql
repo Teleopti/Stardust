@@ -1,3 +1,31 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_dim_acd_login_load_identity_on]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[etl_dim_acd_login_load_identity_on]
+GO
+
+CREATE PROCEDURE [mart].[etl_dim_acd_login_load_identity_on]
+WITH EXECUTE AS OWNER
+AS
+BEGIN
+	--------------
+	-- Not Defined 
+	--------------
+	SET IDENTITY_INSERT mart.dim_acd_login ON
+	INSERT INTO mart.dim_acd_login
+		(
+		acd_login_id,
+		acd_login_name,
+		datasource_id	
+		)
+	SELECT 
+		acd_login_id		=-1,
+		acd_login_name		='Not Defined',
+		datasource_id		=-1
+	WHERE NOT EXISTS (SELECT * FROM mart.dim_acd_login where acd_login_id = -1)
+	SET IDENTITY_INSERT mart.dim_acd_login OFF
+
+END
+GO
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_dim_acd_login_load]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[etl_dim_acd_login_load]
 GO
@@ -16,7 +44,6 @@ GO
 --mart.etl_dim_acd_login_load 1
 CREATE PROCEDURE [mart].[etl_dim_acd_login_load]
 @datasource_id smallint
-WITH EXECUTE AS OWNER
 AS
 DECLARE @internal bit
 DECLARE @sqlstring nvarchar(4000)
@@ -46,23 +73,9 @@ BEGIN
 
 	--is this an internal or external datasource?
 	SELECT @internal = internal FROM mart.sys_datasource WHERE datasource_id = @datasource_id
-
-	--------------
-	-- Not Defined 
-	--------------
-	SET IDENTITY_INSERT mart.dim_acd_login ON
-	INSERT INTO mart.dim_acd_login
-		(
-		acd_login_id,
-		acd_login_name,
-		datasource_id	
-		)
-	SELECT 
-		acd_login_id		=-1,
-		acd_login_name		='Not Defined',
-		datasource_id		=-1
-	WHERE NOT EXISTS (SELECT * FROM mart.dim_acd_login where acd_login_id = -1)
-	SET IDENTITY_INSERT mart.dim_acd_login OFF
+	
+	--default row
+	EXEC [mart].[etl_dim_acd_login_load_identity_on]
 
 	--------------
 	-- update changes

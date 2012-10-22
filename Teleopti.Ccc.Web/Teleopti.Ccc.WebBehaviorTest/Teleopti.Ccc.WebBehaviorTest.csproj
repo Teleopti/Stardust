@@ -121,6 +121,11 @@
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\ScheduledShiftConfigurable.cs" />
     <Compile Include="ConfigSanityCheck.cs" />
+    <Compile Include="PreferencesFeedbackRefact.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreferencesFeedbackRefact.feature</DependentUpon>
+    </Compile>
     <Compile Include="PreferencesFollowUpStepDefinition.cs" />
     <Compile Include="PreferencesFollowUp.feature.cs">
       <DependentUpon>PreferencesFollowUp.feature</DependentUpon>
@@ -471,7 +476,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="PreferencesFeedbackRewrite.txt" />
+    <None Include="PreferencesFeedbackRefact.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesFeedbackRefact.feature.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="AbsenceRequestFromRequests.feature">

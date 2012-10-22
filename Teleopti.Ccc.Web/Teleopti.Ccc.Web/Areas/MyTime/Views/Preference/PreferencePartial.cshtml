@@ -52,7 +52,7 @@
 	</div>
 </div>
 
-<div id="Preference-body" class="body-calendarview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
+<div id="Preference-body" class="body-calendarview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)' data-mytime-maxmusthave="@Model.MaxMustHave">
 		
 	<div id="Preference-body-inner" class="body-calendarview-inner clearfix">
 		<ul class="weekdays">
@@ -87,11 +87,11 @@
 									<div class="preference">
 										<span class="displayinline-block">
 											<div class="preference-indicator">
-												<div class="heart-small preference-must-have @(day.Editable ? "" : "grey-out")" data-bind="css: {'icon': MustHave}"></div>
+												<div class="heart-small preference-must-have" data-bind="css: {'icon': MustHave}"></div>
 											</div>
 											<div class="preference-text" data-bind="text: Preference, css: {'preference-fulfilled': Fulfilled(), 'preference-not-fulfilled': !Fulfilled()}" />
 											<div class="preference-indicator">
-												<div class="extended-indication" style="display: none" data-bind="visible: Extended">&raquo;</div>
+												<div class="extended-indication" style="display: none" data-bind="visible: Extended, css: {'preference-fulfilled': Fulfilled(), 'preference-not-fulfilled': !Fulfilled()}">&raquo;</div>
 												<div class="extended-panel" style="display: none">
 													<div class="extended-part">
 														<div class="extended-part-title" data-bind="text: ExtendedTitle"></div>

@@ -19540,6 +19540,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected file destination does not exist, please enter valid file path.
+        /// </summary>
+        public static string SelectedFileDestinationDoesNotExist {
+            get {
+                return ResourceManager.GetString("SelectedFileDestinationDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected period should not be longer than {0}..
         /// </summary>
         public static string SelectedPeriodShouldNotBeLongerThanParameterDot {

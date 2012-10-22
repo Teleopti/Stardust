@@ -14,6 +14,8 @@ namespace Teleopti.Support.Tool
     public partial class MainForm : Form
     {
         private UserControl activeControl;
+        private Version _productVersion;
+
         public MainForm()
         {
             InitializeComponent();
@@ -48,7 +50,7 @@ namespace Teleopti.Support.Tool
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             panelContent.Controls.Remove(activeControl);
-            Version version = new Version(7, 2, 370);
+            Version version = new Version(_productVersion.Major, _productVersion.Minor, _productVersion.Build);
             activeControl = new ManageDatabaseVersions(this, version);
             activeControl.Dock = DockStyle.Fill;
             this.PTracks.Hide();
@@ -61,7 +63,13 @@ namespace Teleopti.Support.Tool
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
+            _productVersion = new Version(Application.ProductVersion);
+#if (DEBUG)
+            {
+                _productVersion = new Version(7, 9, 999);
+            }
+#endif
+            smoothLabelVersion.Text = _productVersion.ToString();
         }
 
         private void BClose_Click(object sender, EventArgs e)
