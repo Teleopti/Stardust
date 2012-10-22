@@ -212,6 +212,7 @@
     <Compile Include="Optimization\BlockDayOffOptimizationServiceTest.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleanerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerTest.cs" />
+    <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictorTest.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerExecuterTest.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandlerTest.cs" />
@@ -339,11 +340,14 @@
     <Compile Include="ResourceCalculation\ScheduleDayAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\ScheduleServiceTest.cs" />
     <Compile Include="Optimization\SkillExtractorForGroupOfPeopleTest.cs" />
+    <Compile Include="ResourceCalculation\SingleSkillCalculatorTest.cs" />
+    <Compile Include="ResourceCalculation\SingleSkillLoadedDeciderTest.cs" />
     <Compile Include="ResourceCalculation\SwapRawServiceTest.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNewTest.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNewTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorsManagerTest.cs" />
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecificationTest.cs" />
+    <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateServiceTest.cs" />
     <Compile Include="Scheduling\Assignment\GroupShiftCategoryFairnessCreatorTest.cs" />
     <Compile Include="Scheduling\Assignment\HasDayOffDefinitionTest.cs" />
     <Compile Include="Scheduling\Assignment\NewDynamicDayOffSchedulePeriodTargetCalculatorTest.cs" />

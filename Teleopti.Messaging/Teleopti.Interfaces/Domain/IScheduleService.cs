@@ -34,20 +34,20 @@ namespace Teleopti.Interfaces.Domain
             IPerson person = null);
 
 		/// <summary>
-		/// 
+		/// Schedules the person on day.
 		/// </summary>
-		/// <param name="schedulePart"></param>
-		/// <param name="schedulingOptions"></param>
-		/// <param name="useOccupancyAdjustment"></param>
-		/// <param name="effectiveRestriction"></param>
-		/// <param name="resourceCalculateDelayer"></param>
+		/// <param name="schedulePart">The schedule part.</param>
+		/// <param name="schedulingOptions">The scheduling options.</param>
+		/// <param name="effectiveRestriction">The effective restriction.</param>
+		/// <param name="resourceCalculateDelayer">The resource calculate delayer.</param>
+		/// <param name="rollbackService">The rollback service.</param>
 		/// <returns></returns>
 		bool SchedulePersonOnDay(
 			IScheduleDay schedulePart,
 			ISchedulingOptions schedulingOptions,
-			bool useOccupancyAdjustment,
 			IEffectiveRestriction effectiveRestriction,
-			IResourceCalculateDelayer resourceCalculateDelayer);
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			ISchedulePartModifyAndRollbackService rollbackService);
 	    ///<summary>
 	    ///</summary>
 	    void ClearFinderResults();
