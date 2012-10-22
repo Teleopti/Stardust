@@ -117,8 +117,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.timeLines = ko.observableArray();
 		self.days = ko.observableArray();
 		self.styles = ko.observable();
-		self.minDate ={};
-		self.maxDate ={};
+		self.minDate = {};
+		self.maxDate = {};
 
 		self.isWithinSelected = function (startDate, endDate) {
 			return (startDate <= self.maxDate && endDate >= self.minDate);
@@ -132,6 +132,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
 			self.asmPermission(data.AsmPermission);
 			self.isCurrentWeek(data.IsCurrentWeek);
+			var styleToSet = {};
+			$.each(data.Styles, function (key, value) {
+				styleToSet[value.Name] = 'rgb({0})'.format(value.RgbColor);
+			});
+			self.styles(styleToSet);
 			var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
 				return new TimelineViewModel(item);
 			});
@@ -140,14 +145,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return new DayViewModel(item, self);
 			});
 			self.days(days);
-			self.styles(function () {
-				var ret = '';
-				$.each(data.Styles, function (key, value) {
-					ret += "li.third.{0} {background-color: rgb({1});} ".format(value.Name, value.RgbColor);
-				});
-				return ret;
-			});
-
 			self.minDate = new Date(data.PeriodSelection.SelectedDateRange.MinDate).addDays(-1);
 			self.maxDate = new Date(data.PeriodSelection.SelectedDateRange.MaxDate).addDays(1);
 		}
@@ -179,7 +176,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.classForDaySummary = ko.computed(function () {
 			var showRequestClass = self.textRequestPermission() ? 'show-request ' : '';
-			return 'third category ' + showRequestClass + self.summaryStyleClassName();
+			return 'third category ' + showRequestClass + self.summaryStyleClassName(); //last one needs to be becuase of "stripes" and similar
+		});
+		self.colorForDaySummary = ko.computed(function () {
+			return parent.styles()[self.summaryStyleClassName()];
 		});
 		self.layers = ko.utils.arrayMap(day.Periods, function (item) {
 			return new LayerViewModel(item, parent);
