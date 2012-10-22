@@ -4041,13 +4041,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (!list.IsEmpty())
             {
-                //Denna gör att lång absence inte kan tas bort
-                //IScheduleDayChangeCallback scheduleDayChangedCallback =
-                //    new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState);
-                //deleteService.Delete(list, _deleteOption, _backgroundWorkerDelete, scheduleDayChangedCallback,
-                //                     new ScheduleTagSetter(_defaultScheduleTag), NewBusinessRuleCollection.AllForDelete(SchedulerState.SchedulingResultState));
-
-                deleteService.Delete(list, _deleteOption, rollbackService, _backgroundWorkerDelete);
+				deleteService.Delete(list, _deleteOption, rollbackService, _backgroundWorkerDelete, NewBusinessRuleCollection.AllForDelete(SchedulerState.SchedulingResultState));
             }
 
             _undoRedo.CommitBatch();

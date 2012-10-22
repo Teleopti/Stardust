@@ -10742,4 +10742,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="FairnessOptimizationValueBefore" xml:space="preserve">
     <value> - värdet innan =</value>
   </data>
+  <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
+    <value>Den valda fildestinationen finns inte, var god ange en giltig sökväg. </value>
+  </data>
 </root>

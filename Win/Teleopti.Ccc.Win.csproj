@@ -787,6 +787,7 @@
     <Compile Include="Matrix\MatrixNavigationView.Designer.cs">
       <DependentUpon>MatrixNavigationView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Meetings\DateTimePickerExtensions.cs" />
     <Compile Include="Meetings\Overview\CalendarAndTextPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>

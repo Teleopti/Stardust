@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 		protected override void AuditSetup()
 		{
-			regional = new Regional(new CccTimeZoneInfo(TimeZoneInfo.Local), null, null);
+			regional = new Regional(new CccTimeZoneInfo(TimeZoneInfo.Local), 0, 0);
 			target = new ScheduleHistoryReport(UnitOfWorkFactory.Current, regional);
 			personProvider = new UnsafePersonProvider();
 		}

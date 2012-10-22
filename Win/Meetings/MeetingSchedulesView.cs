@@ -52,6 +52,9 @@ namespace Teleopti.Ccc.Win.Meetings
 			outlookTimePickerEndTime.KeyDown += OutlookTimePickerEndTimeKeyDown;
 			outlookTimePickerStartTime.SelectedIndexChanged += OutlookTimePickerStartTimeSelectedIndexChanged;
 			outlookTimePickerEndTime.SelectedIndexChanged += OutlookTimePickerEndTimeSelectedIndexChanged;
+
+			dateTimePickerAdvStartDate.SetSafeBoundary();
+			dateTimePickerAdvEndDate.SetSafeBoundary();
             
             gridControlSchedules.HScrollPixel = true;
             gridControlSchedules.MouseUp += GridControlSchedulesMouseUp;
