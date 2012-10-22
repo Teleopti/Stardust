@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Win.Common;
@@ -193,8 +194,8 @@ namespace Teleopti.Ccc.Win.Meetings
             outlookTimePickerStartTime.SetTimeValue(_presenter.Model.StartTime);
             outlookTimePickerEndTime.SetTimeValue(_presenter.Model.EndTime);
             dateTimePickerAdvEndDate.Value = _presenter.Model.EndDate;
-            //outlookTimePickerStartTime.TextChanged += outlookTimePickerStartTime_TextChanged;
-            //outlookTimePickerEndTime.TextChanged += outlookTimePickerEndTime_TextChanged;
+        	//outlookTimePickerStartTime.TextChanged += outlookTimePickerStartTime_TextChanged;
+        	//outlookTimePickerEndTime.TextChanged += outlookTimePickerEndTime_TextChanged;
         }
 
     	public IMeetingDetailPresenter Presenter
@@ -215,8 +216,8 @@ namespace Teleopti.Ccc.Win.Meetings
 		private void OutlookTimePickerStartTimeLeave(object sender, EventArgs e)
 		{
 			if (_presenter == null) return;
-            if (outlookTimePickerStartTime.Disposing)
-                return;
+			if (outlookTimePickerStartTime.Disposing)
+				return;
 			_presenter.OnOutlookTimePickerStartTimeLeave(outlookTimePickerStartTime.Text);
 		}
 
@@ -228,8 +229,8 @@ namespace Teleopti.Ccc.Win.Meetings
 		private void OutlookTimePickerEndTimeLeave(object sender, EventArgs e)
 		{
 			if (_presenter == null) return;
-            if (outlookTimePickerEndTime.Disposing)
-                return;
+			if (outlookTimePickerEndTime.Disposing)
+				return;
 			_presenter.OnOutlookTimePickerEndTimeLeave(outlookTimePickerEndTime.Text);
 		}
 
@@ -237,18 +238,6 @@ namespace Teleopti.Ccc.Win.Meetings
 		{
 			_presenter.OnOutlookTimePickerEndTimeKeyDown(e.KeyCode, outlookTimePickerEndTime.Text);
 		}
-		
-    	private void outlookTimePickerStartTime_SelectedIndexChanged(object sender, EventArgs e)
-    	{
-			if (outlookTimePickerStartTime.SelectedIndex > -1)
-				_presenter.OnOutlookTimePickerStartTimeLeave(outlookTimePickerStartTime.Items[outlookTimePickerStartTime.SelectedIndex].ToString());
-    	}
-
-    	private void outlookTimePickerEndTime_SelectedIndexChanged(object sender, EventArgs e)
-    	{
-			if (outlookTimePickerEndTime.SelectedIndex > -1)
-				_presenter.OnOutlookTimePickerEndTimeLeave(outlookTimePickerEndTime.Items[outlookTimePickerEndTime.SelectedIndex].ToString());
-    	}
 
     	private void dateTimePickerAdvStartDate_PopupClosed(object sender, PopupClosedEventArgs e)
     	{
@@ -274,5 +263,10 @@ namespace Teleopti.Ccc.Win.Meetings
             
             e.SuppressKeyPress = true;
         }
+
+		public void DescriptionFocus()
+		{
+			textBoxExtDescription.Focus();
+		}
     }
 }
