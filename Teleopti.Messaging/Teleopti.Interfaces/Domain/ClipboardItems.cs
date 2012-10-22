@@ -3,6 +3,7 @@
 	/// <summary>
 	/// Clipboard items
 	/// </summary>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1717:OnlyFlagsEnumsShouldHavePluralNames")]
 	public enum ClipboardItems
 	{
 		/// <summary>
