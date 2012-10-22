@@ -101,6 +101,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (firstDayDate == secondDayDate)
                 return false;
 
+			if (firstDayContractTime > secondDayContractTime)
+			{
+				lockDay(secondDayDate);
+				return true;
+			}
+				
             //delete schedule on the two days
             IList<IScheduleDay> listToDelete = new List<IScheduleDay> { firstDay.DaySchedulePart(), secondDay.DaySchedulePart() };
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService);

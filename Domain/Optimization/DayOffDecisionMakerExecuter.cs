@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				if (predictedNewValue >= oldValue)
 				{
 					writeToLogValueNotBetter();
-					return false;
+					return true;
 				}	
 			}
 			else
