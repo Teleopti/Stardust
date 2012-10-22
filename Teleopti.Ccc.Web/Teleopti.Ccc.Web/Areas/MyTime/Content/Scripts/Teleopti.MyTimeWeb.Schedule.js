@@ -71,7 +71,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	function _bindData(data) {
 		vm.Initialize(data);
 		_initTimeIndicator();
-		_setTimeIndicatorFirstTime();
 		_initTooltip();
 		_initPeriodSelection();
 		Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
@@ -329,6 +328,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		PartialInit: function () {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
+			_setTimeIndicatorFirstTime();
 		},
 		SetupViewModel: function (userTexts) {
 			vm = new WeekScheduleViewModel(userTexts);
