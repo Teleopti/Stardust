@@ -153,7 +153,6 @@
       <DependentUpon>ManageDatabaseVersions.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\NotepadStarter.cs" />
-    <Compile Include="Controls\ThreadInputAttachment.cs" />
     <Compile Include="Controls\ThreadSafeControlDelegation.cs" />
     <Compile Include="DataLayer\DBHelper.cs" />
     <Compile Include="DataLayer\IOHelper.cs" />
