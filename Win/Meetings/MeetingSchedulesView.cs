@@ -69,7 +69,12 @@ namespace Teleopti.Ccc.Win.Meetings
             get { return gridControlSchedules.IsRightToLeft(); }
         }
 
-        public void SetSizeWECursor()
+    	public bool TimeFocused
+    	{
+			get { return outlookTimePickerStartTime.Focused || outlookTimePickerEndTime.Focused; }
+    	}
+
+    	public void SetSizeWECursor()
         {
             gridControlSchedules.Cursor = Cursors.SizeWE;
         }
