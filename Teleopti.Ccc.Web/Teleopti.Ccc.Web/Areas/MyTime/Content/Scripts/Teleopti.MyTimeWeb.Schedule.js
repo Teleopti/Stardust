@@ -132,6 +132,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
 			self.asmPermission(data.AsmPermission);
 			self.isCurrentWeek(data.IsCurrentWeek);
+			var styleToSet = {};
+			$.each(data.Styles, function (key, value) {
+				console.log(value.Name);
+				console.log(value.RgbColor);
+				styleToSet[value.Name] = 'rgb({0})'.format(value.RgbColor);
+			});
+			self.styles(styleToSet);
 			var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
 				return new TimelineViewModel(item);
 			});
@@ -140,11 +147,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return new DayViewModel(item, self);
 			});
 			self.days(days);
-			var styleToSet = '';
-			$.each(data.Styles, function (key, value) {
-				styleToSet += "li.third.{0} {background-color: rgb({1});} ".format(value.Name, value.RgbColor);
-			});
-			self.styles(styleToSet);
 			self.minDate = new Date(data.PeriodSelection.SelectedDateRange.MinDate).addDays(-1);
 			self.maxDate = new Date(data.PeriodSelection.SelectedDateRange.MaxDate).addDays(1);
 		}
@@ -176,7 +178,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.classForDaySummary = ko.computed(function () {
 			var showRequestClass = self.textRequestPermission() ? 'show-request ' : '';
-			return 'third category ' + showRequestClass + self.summaryStyleClassName();
+			return 'third category ' + showRequestClass;
+		});
+		self.colorForDaySummary = ko.computed(function () {
+			return parent.styles()[self.summaryStyleClassName()];
 		});
 		self.layers = ko.utils.arrayMap(day.Periods, function (item) {
 			return new LayerViewModel(item, parent);
