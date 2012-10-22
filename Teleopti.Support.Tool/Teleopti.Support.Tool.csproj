@@ -152,9 +152,12 @@
     <Compile Include="Controls\ManageDatabaseVersions.Designer.cs">
       <DependentUpon>ManageDatabaseVersions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NotepadStarter.cs" />
+    <Compile Include="Controls\ThreadSafeControlDelegation.cs" />
     <Compile Include="DataLayer\DBHelper.cs" />
     <Compile Include="DataLayer\IOHelper.cs" />
     <Compile Include="DataLayer\Nhib.cs" />
+    <Compile Include="DataLayer\NHibDatasource.cs" />
     <Compile Include="DataLayer\XmlHandler.cs" />
     <Compile Include="DataLayer\XmlHandlerException.cs" />
     <Compile Include="GlobalSuppressions.cs" />
