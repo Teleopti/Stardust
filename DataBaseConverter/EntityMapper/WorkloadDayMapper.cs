@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: micke
         /// Created date: 4.12.2007
         /// </remarks>
-        public WorkloadDayMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone,int intervalLength)
+        public WorkloadDayMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone,int intervalLength)
             : base(mappedObjectPair, timeZone)
         {
             _intervalLength = intervalLength;

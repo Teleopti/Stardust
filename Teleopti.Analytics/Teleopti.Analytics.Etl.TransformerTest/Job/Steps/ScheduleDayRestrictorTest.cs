@@ -25,9 +25,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
             IList<IScheduleDay> scheduleDayList = new List<IScheduleDay>{scheduleDayEndsInsidePeriod, scheduleDayEndsOutsidePeriod};
             var givenDate = new DateTime(2011, 1, 1, 23, 59, 59, DateTimeKind.Utc);
 
-            ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            var insideDateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1), cccTimeZoneInfo);
-            var outsideDateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 2), cccTimeZoneInfo);
+            TimeZoneInfo TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            var insideDateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1), TimeZoneInfo);
+            var outsideDateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 2), TimeZoneInfo);
 
             using (mock.Record())
             {

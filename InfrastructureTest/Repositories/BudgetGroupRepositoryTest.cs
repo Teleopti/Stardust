@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     public class BudgetGroupRepositoryTest : RepositoryTest<IBudgetGroup>
     {
         private string description;
-        private CccTimeZoneInfo timeZone;
+        private TimeZoneInfo timeZone;
         private ISkill _skill;
 
         protected override void ConcreteSetup()
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override IBudgetGroup CreateAggregateWithCorrectBusinessUnit()
         {
             description = "budget";
-            timeZone = new CccTimeZoneInfo(TimeZoneInfo.GetSystemTimeZones()[0]);
+            timeZone = TimeZoneInfo.GetSystemTimeZones()[0];
             var budgetGroup = new BudgetGroup { Name = description, TimeZone = timeZone };
             budgetGroup.TrySetDaysPerYear(365);
             budgetGroup.AddCustomShrinkage(new CustomShrinkage("Vacation"));

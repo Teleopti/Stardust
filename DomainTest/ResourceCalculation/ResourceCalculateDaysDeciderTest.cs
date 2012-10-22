@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
         private void mockExpectations()
         {
-            ICccTimeZoneInfo tz = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo tz = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             ((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.SetDefaultTimeZone(tz);
             IPerson person = PersonFactory.CreatePerson();
             person.PermissionInformation.SetDefaultTimeZone(tz);

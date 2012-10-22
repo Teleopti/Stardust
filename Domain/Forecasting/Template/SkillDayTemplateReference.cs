@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
 
             if (template.VersionNumber > VersionNumber)
             {
-				var localUpdatedDateTime = _skill.TimeZone.ConvertTimeFromUtc(UpdatedDate);
+                var localUpdatedDateTime = TimeZoneHelper.ConvertFromUtc(UpdatedDate, _skill.TimeZone);
 				return string.Format(CultureInfo.CurrentUICulture, "<{0} {1} {2}>", TrimNameDecorations(template.Name), localUpdatedDateTime.ToShortDateString(), localUpdatedDateTime.ToShortTimeString());
             }
             return template.Name;

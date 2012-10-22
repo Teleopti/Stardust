@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		private MockRepository _mocks;
 		private ISchedulerStateHolder _schedulerStateHolder;
 		private IMeetingImpactView _meetingImpactView;
-		private ICccTimeZoneInfo _timeZone;
+		private TimeZoneInfo _timeZone;
 		private IBestSlotForMeetingFinder _bestSlotFinder;
 		private IMeetingViewModel _meetingViewModel;
 		private ISkill _skill;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			_schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
 			_meetingImpactView = _mocks.StrictMock<IMeetingImpactView>();
 			_meetingViewModel = _mocks.StrictMock<IMeetingViewModel>();
-			_timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			_timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			_bestSlotFinder = _mocks.StrictMock<IBestSlotForMeetingFinder>();
 	        _gridHandler = _mocks.StrictMock<IMeetingImpactSkillGridHandler>();
 	        _transparentMeetingHandler = _mocks.DynamicMock<IMeetingImpactTransparentWindowHandler>();

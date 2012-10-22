@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         private IRotation _rotation;
         private DateOnly _startDate;
         private int _startRow;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
 
         [SetUp]
         public void Setup()
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             _rotation = new Rotation("My rotation", 14);
             _startRow = 0;
             _startDate = new DateOnly(2008,7,16);
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _person = PersonFactory.CreatePerson();
             _person.PermissionInformation.SetDefaultTimeZone(_timeZone);
             _target = new PersonRotation(_person, _rotation, _startDate, _startRow);
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             Assert.AreEqual(_startDate, _target.StartDate);
             Assert.AreEqual(_startRow,_target.StartDay);
             Assert.AreEqual(
-                _timeZone.ConvertTimeToUtc(DateTime.SpecifyKind(_startDate.Date, DateTimeKind.Unspecified), _timeZone),
+				_timeZone.SafeConvertTimeToUtc(DateTime.SpecifyKind(_startDate.Date, DateTimeKind.Unspecified)),
                 _target.StartDateAsUtc);
 
             IRotation another = new Rotation("My other rotation", 7);
@@ -70,8 +70,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             _target.StartDate = new DateOnly(2008,8,8);
             Assert.AreEqual(new DateOnly(2008, 8, 8),_target.StartDate);
             Assert.AreEqual(
-                _timeZone.ConvertTimeToUtc(
-                    DateTime.SpecifyKind(new DateOnly(2008, 8, 8).Date, DateTimeKind.Unspecified), _timeZone),
+				_timeZone.SafeConvertTimeToUtc(
+                    DateTime.SpecifyKind(new DateOnly(2008, 8, 8).Date, DateTimeKind.Unspecified)),
                 _target.StartDateAsUtc);
             _target.StartDay = 0;
             Assert.AreEqual(0, _target.StartDay);

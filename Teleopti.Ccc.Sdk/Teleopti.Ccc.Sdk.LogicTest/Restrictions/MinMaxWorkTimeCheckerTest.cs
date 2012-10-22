@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 
             _person = PersonFactory.CreatePersonWithBasicPermissionInfo("mycket", "hemligt");
             //_person.SetId(Guid.NewGuid());
-            _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             _person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
             _permissionInformation = new PermissionInformation(_person);
         }
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         public void ShouldGetMinMaxWorkTimeFromScheduleIfScheduled()
         {
             var dateTime = new DateTime(2010, 12, 16, 8, 0, 0, DateTimeKind.Utc);
-            var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var projection = _mocks.StrictMock<IVisualLayerCollection>();
 

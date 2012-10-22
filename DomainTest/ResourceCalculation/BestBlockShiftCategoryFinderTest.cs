@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _permissionInformation = new PermissionInformation(_person);
             _permissionInformation.SetDefaultTimeZone(
-                new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")));
+                (TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")));
 
             _shiftProjectionCacheManager = _mocks.StrictMock<IShiftProjectionCacheManager>();
             _options = new SchedulingOptions();

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private IPersonAssignment _personAssignmentJustAfterDayOff;
         private IPersonAssignment _personAssignmentJustBeforeDayOff;
         private PersonDayOff _personDayOff1;
-        private CccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
     	private IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
     	private DateTimePeriod _personAssignmentConflictingWithDayOffStartPeriod;
     	private DateTimePeriod _personAssignmentJustAfterDayOffPeriod;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _dayAfter = _mocks.StrictMock<IScheduleDay>();
             _dayBeforeDayAfter = new List<IScheduleDay> { _dayBefore,_day, _dayAfter };
 
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
             _person = PersonFactory.CreatePerson();
             _person.PermissionInformation.SetDefaultTimeZone(_timeZone);
            

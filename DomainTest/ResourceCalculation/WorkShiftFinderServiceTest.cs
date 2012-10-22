@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IWorkShift _workShift3;
 		private IShiftCategory _category;
 		private IActivity _activity;
-		private ICccTimeZoneInfo _timeZoneInfo;
+		private TimeZoneInfo _timeZoneInfo;
 
 		private IShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private IPersonSkillPeriodsDataHolderManager _personSkillPeriodsDataHolderManager;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			var zone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
-			_timeZoneInfo = new CccTimeZoneInfo(zone);
+			_timeZoneInfo = (zone);
              _scheduleDateOnlyPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 10),_timeZoneInfo);
 			_info = new PermissionInformation(_person);
 			_info.SetDefaultTimeZone(_timeZoneInfo);

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--EXTERNAL_PROPERTIES: CCNetWorkingDirectory;CCCVersion-->
-<Project DefaultTargets="MyTimeClickOnce" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="MyTimeClickOnce" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
   <PropertyGroup>
     <MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
     <MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
+	<Mage>\\hebe\Installation\Dependencies\ccc7_server\mage.exe</Mage>
   </PropertyGroup>
 
   <Import Project="Microsoft.Sdc.Common.tasks"/>
@@ -83,41 +84,35 @@
       <Output TaskParameter="Include" ItemName="MyTimeAppManifestContents"/>
     </CreateItem>
 
-    <ModifyFile
-			  Path="default.htm"
-			  RegularExpression="#APPLICATION_NAME#"
-			  NewValue="$(SolutionName)"
-			  Force="true"/>
-    <ModifyFile
-			  Path="default.htm"
-			  RegularExpression="#TITLE#"
-			  NewValue="TELEOPTI CCC, version 7 - MyTime"
-			  Force="true"/>
-    <ModifyFile
-			  Path="default.htm"
-			  RegularExpression="#VERSION#"
-			  NewValue="$(CCCVersion)"
-			  Force="true"/>
-    <ModifyFile
-			  Path="default.htm"
-			  RegularExpression="#COMPANY#"
-			  NewValue="$(Company)"
-			  Force="true"/>
-    <ModifyFile
-			  Path="default.htm"
-			  RegularExpression="#SUPPORT_URL#"
-			  NewValue="$(SupportUrl)"
-			  Force="true"/>
+	<FileUpdate
+			  Files="default.htm"
+			  Regex="#APPLICATION_NAME#"
+			  ReplacementText="$(SolutionName)"/>
+    <FileUpdate
+			  Files="default.htm"
+			  Regex="#TITLE#"
+			  ReplacementText="TELEOPTI CCC, version 7 - MyTime"/>
+    <FileUpdate
+			  Files="default.htm"
+			  Regex="#VERSION#"
+			  ReplacementText="$(CCCVersion)"/>
+	<FileUpdate	
+			  Files="default.htm"
+			  Regex="#COMPANY#"
+			  ReplacementText="$(Company)"/>
+    <FileUpdate
+			  Files="default.htm"
+			  Regex="#SUPPORT_URL#"
+			  ReplacementText="$(SupportUrl)"/>
 
 
-    <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\ClickOnce\mage.exe&quot; -New Application -TrustLevel FullTrust -ToFile $(SolutionName).exe.manifest -Name &quot;$(SolutionName)&quot; -Version $(CCCVersion) -FromDirectory &quot;$(PublishDirAP)&quot;"/>
+    <Exec Command="&quot;$(Mage)&quot; -New Application -TrustLevel FullTrust -ToFile $(SolutionName).exe.manifest -Name &quot;$(SolutionName)&quot; -Version $(CCCVersion) -FromDirectory &quot;$(PublishDirAP)&quot;"/>
 
 
-    <ModifyFile
-		  Path="$(SolutionName).exe.manifest"
-		  RegularExpression="&lt;application /&gt;"
-		  NewValue="&lt;description asmv2:iconFile=&quot;$(SolutionName).ico&quot; xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot; /&gt;&lt;application /&gt;"
-		  Force="true"/>
+    <FileUpdate
+		  Files="$(SolutionName).exe.manifest"
+		  Regex="&lt;application /&gt;"
+		  ReplacementText="&lt;description asmv2:iconFile=&quot;$(SolutionName).ico&quot; xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot; /&gt;&lt;application /&gt;"/>
 
     <GenerateDeploymentManifest AssemblyName="$(ClickOnceAppTitle).application"
 												  AssemblyVersion="$(CCCVersion)"
@@ -132,6 +127,7 @@
 												  OutputManifest="$(SolutionName).application"
 												  MapFileExtensions="true"
 												  MinimumRequiredVersion="$(CCCVersion)"
+												  TargetFrameworkMoniker=".NETFramework,Version=v4.0"
                           TrustUrlParameters="true"/>
 
 
@@ -140,20 +136,20 @@
       <Output TaskParameter="Path" PropertyName="SdkPath" />
     </GetFrameworkSdkPath>
 
-    <GenerateBootstrapper
-		  ApplicationFile="$(SolutionName).application"
-		  ApplicationName="$(ClickOnceAppTitle)"
-		  ApplicationUrl="$(ClickOnceUrl)"
-		  BootstrapperItems="@(MyTimeBootstrapperFile)"
-		  Culture="en"
-		  FallbackCulture="en-US"
-		  ComponentsLocation="HomeSite"
-		  CopyComponents="true"
-		  Validate="false"
-		  SupportUrl="http://www.microsoft.com/downloads/details.aspx?FamilyID=333325FD-AE52-4E35-B531-508D977D32A6"
-		  Path="C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bootstrapper"
-		  OutputPath="." />
-
+	<GenerateBootstrapper
+	  ApplicationFile="$(SolutionName).application"
+	  ApplicationName="$(ClickOnceAppTitle)"
+	  ApplicationUrl="$(ClickOnceUrl)"
+	  BootstrapperItems="@(MyTimeBootstrapperFile)"
+	  Culture="en"
+	  FallbackCulture="en-US"
+	  ComponentsLocation="HomeSite"
+	  CopyComponents="true"
+	  Validate="false"
+	  SupportUrl="http://www.microsoft.com/downloads/details.aspx?FamilyID=333325FD-AE52-4E35-B531-508D977D32A6"
+	  Path="C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bootstrapper"
+	  OutputPath="." />
+	  
   </Target>
 
   <Target Name="MyTimeDeleteRootFiles">

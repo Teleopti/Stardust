@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             DateOnly latestValidated = validatedVolumeDayRepository.FindLastValidatedDay(validatedVolumeDay1.Workload);
 
             var timeZone = validatedVolumeDay1.Workload.Skill.TimeZone;
-            Assert.AreEqual(new DateOnly(timeZone.ConvertTimeFromUtc(validatedVolumeDay1.VolumeDayDate,timeZone)), latestValidated);
+            Assert.AreEqual(new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(validatedVolumeDay1.VolumeDayDate, timeZone)), latestValidated);
         }
 
         /// <summary>

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
     {
         private IPeriodViewModelFactory target;
         private MockRepository mocks;
-        private ICccTimeZoneInfo timeZone;
+        private TimeZoneInfo timeZone;
         private IVisualLayerCollection visualLayerCollection;
         private IPrincipal principalBefore;
         private DateTimePeriod period;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         {
             mocks = new MockRepository();
 
-            timeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
+            timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 
             setPrincipal();
 

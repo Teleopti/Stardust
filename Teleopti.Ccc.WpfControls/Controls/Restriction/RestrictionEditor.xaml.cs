@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.WpfControls.Controls.Restriction
             if (schedulePart!=null) ChangeTimeZoneToCurrent(schedulePart.TimeZone);
         }
 
-        private void ChangeTimeZoneToCurrent(ICccTimeZoneInfo timeZone)
+        private void ChangeTimeZoneToCurrent(TimeZoneInfo timeZone)
         {
-            TimeZoneInfo info = timeZone.TimeZoneInfoObject as TimeZoneInfo;
+            TimeZoneInfo info = timeZone;
             if (info != null)
             {
                 TimeZoneInfo current = VisualTreeTimeZoneInfo.GetTimeZoneInfo(this);

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Windows;
 using Syncfusion.Windows.Forms;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.WpfControls.FileImport
             InitializeComponent();
         }
 
-        public ImportWizardWindow(string fileName, ICccTimeZoneInfo defaultTimeZone)
+        public ImportWizardWindow(string fileName, TimeZoneInfo defaultTimeZone)
         {
             InitializeComponent();
             DataContext = new PrepareTextViewModel(fileName, defaultTimeZone);

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows.Input;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -30,8 +31,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction.Commands
             IScheduleDay part = _target.SchedulePart;
 
             IPreferenceRestriction restriction = new PreferenceRestriction();
-            ICccTimeZoneInfo timeZoneInfo = part.TimeZone;
-            var agentLocalDate = new DateOnly(timeZoneInfo.ConvertTimeFromUtc(part.Period.StartDateTime, timeZoneInfo));
+            TimeZoneInfo timeZoneInfo = part.TimeZone;
+            var agentLocalDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(part.Period.StartDateTime, timeZoneInfo));
             var preferenceDay = new PreferenceDay(part.Person, agentLocalDate, restriction);
 
             _target.AddPreferenceDay(preferenceDay, part);

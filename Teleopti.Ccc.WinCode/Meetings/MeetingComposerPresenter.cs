@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                                         schedulerStateHolder.CommonNameDescription, schedulerStateHolder.TimeZoneInfo);
         }
 
-        public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, IScenario scenario, IActivity activity, DateOnly startDate, IEnumerable<IPerson> participants, CommonNameDescriptionSetting commonNameDescriptionSetting, ICccTimeZoneInfo timeZoneInfo)
+        public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, IScenario scenario, IActivity activity, DateOnly startDate, IEnumerable<IPerson> participants, CommonNameDescriptionSetting commonNameDescriptionSetting, TimeZoneInfo timeZoneInfo)
         {
             var meeting = new Meeting(organizer,
                                            participants.Select(p => (IMeetingPerson)new MeetingPerson(p, false)),

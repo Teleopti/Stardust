@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _person.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1),
                                        new PersonContract(_contract, new PartTimePercentage("sdf"), new ContractSchedule("sdf")),
                                        TeamFactory.CreateSimpleTeam()));
-            _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
             var pointInTime = new DateOnly(2007, 8, 2);
             var start = new DateTime(2007, 8, 2, 1, 0, 0, DateTimeKind.Utc);
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _person.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1),
                                        new PersonContract(_contract, new PartTimePercentage("sdf"), new ContractSchedule("sdf")),
                                        TeamFactory.CreateSimpleTeam()));
-            _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")));
+            _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")));
 
             var pointInTime = new DateOnly(2007, 8, 2);
             var start = new DateTime(2007, 8, 2, 1, 0, 0, DateTimeKind.Utc);

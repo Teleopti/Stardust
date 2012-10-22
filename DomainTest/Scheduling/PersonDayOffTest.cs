@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _dayOff.Anchor = TimeSpan.FromHours(10);
             _dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
             _person = PersonFactory.CreatePerson("testAgent");
-            _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
             _target = new PersonDayOff(_person,
                                     ScenarioFactory.CreateScenarioAggregate(),
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             IPerson person = PersonFactory.CreatePerson("testAgent");
 
-            ICccTimeZoneInfo timeZoneInfo = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
+            TimeZoneInfo timeZoneInfo = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
             person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
 
             PersonDayOff personDayOff = new PersonDayOff(person,
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
             IPerson person = PersonFactory.CreatePerson("testAgent");
 
-            ICccTimeZoneInfo timeZoneInfo = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
+            TimeZoneInfo timeZoneInfo = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
             person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
 
             IPersonDayOff personDayOff = new PersonDayOff(person,
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             IDayOffTemplate dayOffTemplate2 = DayOffFactory.CreateDayOff(new Description("DayOff2", "DO2"));
 
             _person = PersonFactory.CreatePerson("testAgent");
-            ICccTimeZoneInfo timeZoneInfo = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
+            TimeZoneInfo timeZoneInfo = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
             _person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
 
             IPersonDayOff personDayOff1 = new PersonDayOff(_person,

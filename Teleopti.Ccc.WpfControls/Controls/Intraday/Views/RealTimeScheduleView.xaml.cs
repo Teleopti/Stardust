@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
             get { return DataContext as RealTimeScheduleViewModel; }
         }
 
-        private DataGridColumn ScheduleColumn
+        private Microsoft.Windows.Controls.DataGridColumn ScheduleColumn
         {
             get
             {

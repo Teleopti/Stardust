@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private StudentSchedulingService _studentSchedulingService;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private MockRepository _mocks;
-        private ICccTimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private IEffectiveRestriction _effectiveRestriction;
     	private IScheduleService _scheduleService;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks = new MockRepository();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-            _timeZoneInfo = new CccTimeZoneInfo(zone);
+            _timeZoneInfo = (zone);
         	_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
         	_scheduleService = _mocks.StrictMock<IScheduleService>();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();

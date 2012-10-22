@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void TestDifferentFilterShiftCategory()
         {
             IPerson person = new Person();
-            ICccTimeZoneInfo agentTimeZone = new CccTimeZoneInfo();
+            TimeZoneInfo agentTimeZone = TimeZoneInfo.Utc;
             var personList = new List<IPerson> { person };
             IWorkShiftFinderResult finderResult = new WorkShiftFinderResult(person, _dateOnly);
             var notAllowedShiftCategory = new List<IShiftCategory> { new ShiftCategory("test") };

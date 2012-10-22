@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 	[TestFixture]
 	public class TeamScheduleProjectionProviderTest
 	{
-		private readonly ICccTimeZoneInfo timeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
+		private readonly TimeZoneInfo timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 		private IPrincipal principalBefore;
 		private IPerson person;
 

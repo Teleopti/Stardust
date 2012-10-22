@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using Teleopti.Ccc.Domain.Helper;
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     public static class ScheduleDayStringVisualizer
     {
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public static string GetToolTipPersonalAssignments(IScheduleDay scheduleDay, ICccTimeZoneInfo timeZoneInfo, CultureInfo cultureInfo)
+		public static string GetToolTipPersonalAssignments(IScheduleDay scheduleDay, TimeZoneInfo timeZoneInfo, CultureInfo cultureInfo)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return sb.ToString();
         }
 
-        private static string ToLocalStartEndTimeString(DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo, CultureInfo cultureInfo)
+        private static string ToLocalStartEndTimeString(DateTimePeriod period, TimeZoneInfo timeZoneInfo, CultureInfo cultureInfo)
         {
             const string separator = " - ";
             string start = period.StartDateTimeLocal(timeZoneInfo).ToString("t", cultureInfo);

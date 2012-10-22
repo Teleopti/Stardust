@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
         private IPersonAccountCollection _personAccount;
         private EventAggregator _eventAggregator;
-        private CccTimeZoneInfo _cccTimeZoneInfo;
+        private TimeZoneInfo _TimeZoneInfo;
 
         [SetUp]
         public void Setup()
@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var gris = new PersonAbsenceAccount(_person, absence);
             gris.Add(_personTime);
             _personAccount.Add(gris);
-            _cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-            _personRequestViewModel = new PersonRequestViewModel(_source, _shiftTradeRequestStatusChecker, _personAccount, _eventAggregator, _cccTimeZoneInfo);
+            _TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+            _personRequestViewModel = new PersonRequestViewModel(_source, _shiftTradeRequestStatusChecker, _personAccount, _eventAggregator, _TimeZoneInfo);
 
             ReflectionHelper.SetUpdatedOn(_source,new DateTime(2009,12,22,23,0,0,DateTimeKind.Utc));
         }
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             _source.TrySetMessage("message");
             _source.Subject = "subject";
-            _personRequestViewModel = new PersonRequestViewModel(_source, _shiftTradeRequestStatusChecker, _personAccount, null, _cccTimeZoneInfo);
+            _personRequestViewModel = new PersonRequestViewModel(_source, _shiftTradeRequestStatusChecker, _personAccount, null, _TimeZoneInfo);
 
             Assert.AreEqual(_source.Request.Period.StartDateTime.ToShortDateString() + " - " + _source.Request.Period.EndDateTime.ToShortDateString(), _personRequestViewModel.RequestedDate);
             Assert.AreEqual(_source.Person.Name.ToString(), _personRequestViewModel.Name);
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             bool causesBrokenBusinessRuleChangedCalled = false;
 
-            _personRequestViewModel = new PersonRequestViewModel(_source, _shiftTradeRequestStatusChecker, _personAccount, null, _cccTimeZoneInfo);
+            _personRequestViewModel = new PersonRequestViewModel(_source, _shiftTradeRequestStatusChecker, _personAccount, null, _TimeZoneInfo);
             _personRequestViewModel.CausesBrokenBusinessRuleChanged += (x,y) => {
                                                                                 causesBrokenBusinessRuleChangedCalled =
                                                                                     true;};
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                     DateOnly.Today.AddDays(3)});
 
             PersonRequestViewModel shiftTradePersonRequestViewModel =
-                new PersonRequestViewModel(shiftTradePersonRequest, _shiftTradeRequestStatusChecker, _personAccount, null, _cccTimeZoneInfo);
+                new PersonRequestViewModel(shiftTradePersonRequest, _shiftTradeRequestStatusChecker, _personAccount, null, _TimeZoneInfo);
             Assert.IsFalse(shiftTradePersonRequestViewModel.IsEditable);
             shiftTradePersonRequest.Request.Accept(tradeWithPerson, new EmptyShiftTradeRequestSetChecksum(), new PersonRequestAuthorizationCheckerForTest());
             Assert.IsTrue(shiftTradePersonRequestViewModel.IsEditable);
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                     DateOnly.Today.AddDays(1)});
 
             PersonRequestViewModel shiftTradePersonRequestViewModel =
-                new PersonRequestViewModel(shiftTradePersonRequest, _shiftTradeRequestStatusChecker, _personAccount, null, _cccTimeZoneInfo);
+                new PersonRequestViewModel(shiftTradePersonRequest, _shiftTradeRequestStatusChecker, _personAccount, null, _TimeZoneInfo);
             Assert.AreEqual(DateOnly.Today.AddDays(1).ToShortDateString(),shiftTradePersonRequestViewModel.RequestedDate);
         }
 
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                     DateOnly.Today.AddDays(2)});
 
             PersonRequestViewModel shiftTradePersonRequestViewModel =
-                new PersonRequestViewModel(shiftTradePersonRequest, _shiftTradeRequestStatusChecker, _personAccount, null, _cccTimeZoneInfo);
+                new PersonRequestViewModel(shiftTradePersonRequest, _shiftTradeRequestStatusChecker, _personAccount, null, _TimeZoneInfo);
             Assert.IsTrue(shiftTradePersonRequestViewModel.RequestedDate.Contains(UserTexts.Resources.MultipleValuesParanteses));
         }
 

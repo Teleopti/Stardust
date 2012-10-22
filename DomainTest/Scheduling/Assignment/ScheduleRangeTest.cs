@@ -72,13 +72,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     _target.Add(early);
                     _target.Add(late);
 
-                    _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+                    _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
                     _target.ExtractAllScheduleData(extractor, periodToExtract);
                     CollectionAssert.IsEmpty(extractor.ScheduleDataCollection);
 
                     extractor.ScheduleDataCollection.Clear();
                     _person.PermissionInformation.SetDefaultTimeZone(
-                        new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"))); //+1
+                        (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"))); //+1
                     _target.ExtractAllScheduleData(extractor, periodToExtract);
                     Assert.AreEqual(2, extractor.ScheduleDataCollection.Count(),
                                     "Yes it looks a bit strange, but it _should_ be 2 not 1");
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
                     extractor.ScheduleDataCollection.Clear();
                     _person.PermissionInformation.SetDefaultTimeZone(
-                        new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time"))); //-6h
+                        (TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time"))); //-6h
                     _target.ExtractAllScheduleData(extractor, periodToExtract);
                     Assert.AreEqual(2, extractor.ScheduleDataCollection.Count(),
                                     "Yes it looks a bit strange, but it _should_ be 2 not 1");
@@ -136,8 +136,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IScheduleDay partWithHit = _mocks.StrictMock<IScheduleDay>();
 			IScheduleDay partWithNoHit = _mocks.StrictMock<IScheduleDay>();
-			var hit = new DateOnlyAsDateTimePeriod(new DateOnly(2000, 1, 2), new CccTimeZoneInfo(TimeZoneInfo.Utc));
-			var noHit = new DateOnlyAsDateTimePeriod(new DateOnly(2000, 1, 1), new CccTimeZoneInfo(TimeZoneInfo.Utc));
+			var hit = new DateOnlyAsDateTimePeriod(new DateOnly(2000, 1, 2), (TimeZoneInfo.Utc));
+			var noHit = new DateOnlyAsDateTimePeriod(new DateOnly(2000, 1, 1), (TimeZoneInfo.Utc));
 			using(_mocks.Record())
 			{
 				fullPermission(true);
@@ -360,7 +360,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
 
                     _target.TimeZone =
-                        new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+                        (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
                     Assert.AreEqual(0, _target.ScheduledDay(dateOnly.AddDays(-1)).PersonAssignmentCollection().Count);
                     Assert.AreEqual(1, _target.ScheduledDay(dateOnly).PersonAssignmentCollection().Count);
                     Assert.AreEqual(0, _target.ScheduledDay(dateOnly.AddDays(1)).PersonAssignmentCollection().Count);
@@ -383,7 +383,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
 
                     _person.PermissionInformation.SetDefaultTimeZone(
-                        new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")));
+                        (TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")));
 
                     Assert.AreEqual(1, _target.ScheduledDay(dateOnly.AddDays(-1)).PersonAssignmentCollection().Count);
                     Assert.AreEqual(0, _target.ScheduledDay(dateOnly).PersonAssignmentCollection().Count);
@@ -398,7 +398,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
             using (_mocks.Record())
             {
-                _target.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+                _target.TimeZone = (TimeZoneInfo.Utc);
                 fullPermission(true);
             }
             using (_mocks.Playback())

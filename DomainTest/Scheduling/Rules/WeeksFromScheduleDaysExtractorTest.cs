@@ -47,10 +47,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _person1.FirstDayOfWeek = DayOfWeek.Sunday;
             _person2.FirstDayOfWeek = DayOfWeek.Monday;
 
-            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod1 = new DateOnlyAsDateTimePeriod(dateOnly1, new CccTimeZoneInfo(
+            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod1 = new DateOnlyAsDateTimePeriod(dateOnly1, (
                                                                                                    TimeZoneInfo.Utc));
             IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod2 = new DateOnlyAsDateTimePeriod(dateOnly2,
-                                                                                               new CccTimeZoneInfo(
+                                                                                               (
                                                                                                    TimeZoneInfo.Utc));
 
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _person1.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
             var personContract = _mocks.DynamicMock<IPersonContract>();
             _person1.AddPersonPeriod(new PersonPeriod(dateOnly1.AddDays(-100), personContract, new Team()));
-            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod1 = new DateOnlyAsDateTimePeriod(dateOnly1, new CccTimeZoneInfo(
+            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod1 = new DateOnlyAsDateTimePeriod(dateOnly1, (
                                                                                                    TimeZoneInfo.Utc));
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
             IList<IScheduleDay> days = new List<IScheduleDay> { _scheduleDay1 };
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var personContract = _mocks.DynamicMock<IPersonContract>();
             _person1.AddPersonPeriod(new PersonPeriod(dateOnly1.AddDays(-100), personContract, new Team()));
 
-            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod1 = new DateOnlyAsDateTimePeriod(dateOnly1, new CccTimeZoneInfo(
+            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod1 = new DateOnlyAsDateTimePeriod(dateOnly1, (
                                                                                                    TimeZoneInfo.Utc));
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
             IList<IScheduleDay> days = new List<IScheduleDay> { _scheduleDay1 };
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _person1.AddPersonPeriod(new PersonPeriod(dateOnly1.AddDays(-3), personContract, new Team()));
             _person1.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
             
-            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod1 = new DateOnlyAsDateTimePeriod(dateOnly1, new CccTimeZoneInfo(
+            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod1 = new DateOnlyAsDateTimePeriod(dateOnly1, (
                                                                                                    TimeZoneInfo.Utc));
             
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _person1.TerminalDate = dateOnly1.AddDays(2);
             _person1.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
 
-            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod1 = new DateOnlyAsDateTimePeriod(dateOnly1, new CccTimeZoneInfo(
+            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod1 = new DateOnlyAsDateTimePeriod(dateOnly1, (
                                                                                                    TimeZoneInfo.Utc));
 
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();

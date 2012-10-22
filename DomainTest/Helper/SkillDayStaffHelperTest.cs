@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             ITask task = CreatePeriod(1, 2).Task;
             ServiceAgreement sa = CreateSaPeriod(1, 2).ServiceAgreement;
             DateTimePeriod period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_dt.Date.Add(TimeSpan.FromHours(1)),
-                    _dt.Date.Add(TimeSpan.FromHours(2)),CccTimeZoneInfoFactory.UtcTimeZoneInfo());
+                    _dt.Date.Add(TimeSpan.FromHours(2)),TimeZoneInfoFactory.UtcTimeZoneInfo());
 
             ISkillStaffPeriod ssp1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period.ChangeEndTime(TimeSpan.FromHours(2)), task, sa);
             ISkillStaffPeriod ssp2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period.MovePeriod(TimeSpan.FromHours(3)), task, sa);
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             ITask task = CreatePeriod(1, 2).Task;
             ServiceAgreement sa = CreateSaPeriod(1, 2).ServiceAgreement;
             DateTimePeriod period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_dt.Date.Add(TimeSpan.FromHours(1)),
-                    _dt.Date.Add(TimeSpan.FromHours(2)), CccTimeZoneInfoFactory.UtcTimeZoneInfo());
+                    _dt.Date.Add(TimeSpan.FromHours(2)), TimeZoneInfoFactory.UtcTimeZoneInfo());
 
             ISkillStaffPeriod ssp1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period, task, sa);
             ssp1.Payload.Shrinkage = new Percent(0.5);
@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             _taskPeriod = new TemplateTaskPeriod(
                     new Task(100, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(20)),
                     TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_dt.Date.Add(TimeSpan.FromHours(fromHours)),
-                    _dt.Date.Add(TimeSpan.FromHours(toHours)),CccTimeZoneInfoFactory.UtcTimeZoneInfo()));
+                    _dt.Date.Add(TimeSpan.FromHours(toHours)),TimeZoneInfoFactory.UtcTimeZoneInfo()));
             _taskPeriod.AggregatedTasks = 15d;
             return _taskPeriod;
         }
@@ -341,7 +341,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             _taskPeriod = new TemplateTaskPeriod(
                     new Task(100, TimeSpan.FromSeconds(240), TimeSpan.FromSeconds(40)),
                     TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_dt.Date.Add(TimeSpan.FromHours(fromHours)),
-                    _dt.Date.Add(TimeSpan.FromHours(toHours)),CccTimeZoneInfoFactory.UtcTimeZoneInfo()));
+                    _dt.Date.Add(TimeSpan.FromHours(toHours)),TimeZoneInfoFactory.UtcTimeZoneInfo()));
             return _taskPeriod;
         }
 
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
                 new ServiceAgreement(), 
                 new SkillPersonData(),
                 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_dt.Date.Add(TimeSpan.FromHours(fromHours)),
-                    _dt.Date.Add(TimeSpan.FromHours(toHours)),CccTimeZoneInfoFactory.UtcTimeZoneInfo()));
+                    _dt.Date.Add(TimeSpan.FromHours(toHours)),TimeZoneInfoFactory.UtcTimeZoneInfo()));
             _saPeriod.MaximumPersons = 10;
             _saPeriod.MinimumPersons = 2;
             return _saPeriod;

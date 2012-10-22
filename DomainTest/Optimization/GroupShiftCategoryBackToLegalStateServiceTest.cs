@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var person = new Person() ;
             var dateOnly = new DateOnly();
             var groupPerson = _mockRepository.DynamicMock<IGroupPerson>();
-            var dateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, new CccTimeZoneInfo());
+            var dateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, TimeZoneInfo.Utc);
 
             using (_mockRepository.Record())
             {

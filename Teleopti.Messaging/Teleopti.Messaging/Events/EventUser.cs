@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using System.Xml;
 using System.Xml.Schema;
@@ -147,7 +148,7 @@ namespace Teleopti.Messaging.Events
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+		[SecurityCritical]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("UserId", _userId, _userId.GetType());

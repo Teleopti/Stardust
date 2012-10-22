@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             _skill = new Skill ("name","afas", Color.Red,15,_type);
             _skill.Activity = _activity;
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+            _skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
             PersistAndRemoveFromUnitOfWork(_skill);
 
             _dayOff = DayOffFactory.CreateDayOff(new Description("dayOff"));

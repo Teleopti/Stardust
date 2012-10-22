@@ -21,16 +21,16 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		{
 			//Deviation data is never loaded into .net memory, just SQL Server stuff. Hardcode bigger chunks!
 			const int chunkTimeSpan = 30;
-			var affectedRows = 0;
-			DateTime toDate;
-			var includedTodayUtc = convertDateToUtc(DateTime.Now.Date.AddDays(1).AddMilliseconds(-1), JobParameters.DefaultTimeZone);
+		    var affectedRows = 0;
+            var includedTodayUtc = JobParameters.DefaultTimeZone.SafeConvertTimeToUtc(DateTime.Today.AddDays(1).AddMilliseconds(-1));
+
 
 			if (JobCategoryDatePeriod.StartDateUtc > includedTodayUtc)
 				return affectedRows;
 
-			toDate = JobCategoryDatePeriod.EndDateUtc.AddDays(1).AddMilliseconds(-1) > includedTodayUtc
-			         	? includedTodayUtc.AddDays(chunkTimeSpan)
-			         	: JobCategoryDatePeriod.EndDateUtc.AddDays(1).AddMilliseconds(-1).AddDays(chunkTimeSpan);
+			var toDate = JobCategoryDatePeriod.EndDateUtc.AddDays(1).AddMilliseconds(-1) > includedTodayUtc
+			                      ? includedTodayUtc.AddDays(chunkTimeSpan)
+			                      : JobCategoryDatePeriod.EndDateUtc.AddDays(1).AddMilliseconds(-1).AddDays(chunkTimeSpan);
 
 			for (DateTime startDateTime = JobCategoryDatePeriod.StartDateUtc;
 				startDateTime.AddDays(chunkTimeSpan) < toDate;
@@ -52,12 +52,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			}
 
 			return affectedRows;
-		}
-
-		private static DateTime convertDateToUtc(DateTime dateTime, TimeZoneInfo timeZone)
-		{
-			var cccTimeZone = new CccTimeZoneInfo(timeZone);
-			return cccTimeZone.ConvertTimeToUtc(dateTime);
 		}
 	}
 }

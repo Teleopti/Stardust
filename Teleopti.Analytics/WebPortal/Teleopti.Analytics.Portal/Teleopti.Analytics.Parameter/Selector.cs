@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -549,8 +550,8 @@ namespace Teleopti.Analytics.Parameters
             writer.RenderBeginTag(HtmlTextWriterTag.Td);
 
             var panel = new Panel();
-            _valSum = new ValidationSummary();
-            panel.Controls.Add(_valSum);
+            _valSum = new ValidationSummary {ForeColor = Color.Red};
+	        panel.Controls.Add(_valSum);
             Controls.Add(panel);
             panel.RenderControl(writer);
 

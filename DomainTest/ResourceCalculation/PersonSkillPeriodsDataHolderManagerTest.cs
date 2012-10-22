@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
        public void CanGetPersonSkillPeriodsDataHolderDictionary()
         {
-            ICccTimeZoneInfo timeZoneInfo =
-                new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
+            TimeZoneInfo timeZoneInfo =
+                (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
             ISkill skill = SkillFactory.CreateSkill("Skill");
             IList<ISkill> skills = new List<ISkill>{skill};
 
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void CanGetPersonMaxSeatSkillSkillStaffPeriods()
         {
             var site = _mocks.StrictMock<ISite>();
-            ICccTimeZoneInfo timeZoneInfo =
-                new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
+            TimeZoneInfo timeZoneInfo =
+                (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
             ISkill skill = SkillFactory.CreateSiteSkill("siteSkill");
             IList<ISkill> skills = new List<ISkill> { skill };
             var team = _mocks.StrictMock<ITeam>();
@@ -124,8 +124,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void CanGetPersonNonBlendSkillSkillStaffPeriods()
         {
-            ICccTimeZoneInfo timeZoneInfo =
-                new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
+            TimeZoneInfo timeZoneInfo =
+                (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
             ISkill skill = SkillFactory.CreateNonBlendSkill("noneBlendSkill");
             IList<ISkill> skills = new List<ISkill> { skill };
 

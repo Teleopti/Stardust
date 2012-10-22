@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
             set
             {
                 InParameter.NotStringEmptyOrNull(value, "TimeZone");
-                ContainedEntity.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(value)));
+                ContainedEntity.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById(value));
             }
         }
 
@@ -287,11 +287,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
         /// </remarks>
         public TimeZoneInfo TimeZoneInformation
         {
-            get { return (TimeZoneInfo)ContainedEntity.PermissionInformation.DefaultTimeZone().TimeZoneInfoObject; }
+            get { return (TimeZoneInfo)ContainedEntity.PermissionInformation.DefaultTimeZone(); }
             set
             {
                 InParameter.NotNull("TimeZoneInfo", value);
-                ContainedEntity.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(value));
+                ContainedEntity.PermissionInformation.SetDefaultTimeZone(value);
             }
         }
 

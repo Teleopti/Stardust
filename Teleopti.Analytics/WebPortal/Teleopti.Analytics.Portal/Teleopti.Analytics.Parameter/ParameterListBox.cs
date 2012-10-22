@@ -1,7 +1,9 @@
 using System;
+using System.Drawing;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Image = System.Web.UI.WebControls.Image;
 
 namespace Teleopti.Analytics.Parameters
 {
@@ -116,7 +118,8 @@ namespace Teleopti.Analytics.Parameters
 								ErrorMessage = Selector.ErrorMessage + " '" + Text + "'",
 								Display = ValidatorDisplay.Dynamic,
 								ControlToValidate = _textBox.ID,
-								Text = "*"
+								Text = "*",
+								ForeColor = Color.Red
 							};
 
 
@@ -442,7 +445,7 @@ namespace Teleopti.Analytics.Parameters
 					txtVal.value = str;
 					
 					if (SubmitOrNo == 'Yes')
-						{window.document.aspnetForm.submit();}
+						{window.document.getElementById('aspnetForm').submit();}
 				}
                 function callMoveOneButton(buttonId)
                 {

@@ -11,14 +11,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     public class DateTimePeriodAssemblerTest
     {
         private DateTimePeriodAssembler _target;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private DateTimePeriod _dateTimePeriod;
         private DateTimePeriodDto _dateTimePeriodDto;
 
         [SetUp]
         public void Setup()
         {
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _target = new DateTimePeriodAssembler {TimeZone = _timeZone};
 
             // Create domain object
@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             _dateTimePeriod = _target.DtoToDomainEntity(_dateTimePeriodDto);
 
-            Assert.AreEqual(_timeZone.ConvertTimeToUtc(_dateTimePeriodDto.LocalStartDateTime), _dateTimePeriod.StartDateTime);
-            Assert.AreEqual(_timeZone.ConvertTimeToUtc(_dateTimePeriodDto.LocalEndDateTime), _dateTimePeriod.EndDateTime);
+            Assert.AreEqual(TimeZoneInfo.ConvertTimeToUtc(_dateTimePeriodDto.LocalStartDateTime, _timeZone), _dateTimePeriod.StartDateTime);
+            Assert.AreEqual(TimeZoneInfo.ConvertTimeToUtc(_dateTimePeriodDto.LocalEndDateTime, _timeZone), _dateTimePeriod.EndDateTime);
         }
     }
 }

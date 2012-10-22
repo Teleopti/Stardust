@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
 			_target.StartDate = startDate;
 			_target.StartTime = startTime;
 
-			ICccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+			TimeZoneInfo tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
 
 			Assert.Throws<ArgumentOutOfRangeException>(() =>_target.ConvertToLayer(tzInfo));
 			Assert.Throws<ArgumentOutOfRangeException>(() =>_target.GetLayersForPeriod(new DateOnlyPeriod(startDate, endDate), tzInfo));
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         {
             _target = new DateTimeMultiplicatorDefinition(_multiplicator, _startDate, _startDate, _startTime, _endTime);
             
-            ICccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+            TimeZoneInfo tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
 
             _target.ConvertToLayer(tzInfo).Should().Not.Be.Null();
             _target.GetLayersForPeriod(new DateOnlyPeriod(_startDate, _endDate), tzInfo).Count.Should().Be.EqualTo(1);
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         [Test]
         public void VerifyConvertToLayer()
         {
-            ICccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+            TimeZoneInfo tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
             DateTime agentLocalStart = new DateTime(2008, 1, 1, 6, 0, 0, DateTimeKind.Unspecified);
             DateTime agentLocalEnd = new DateTime(2008, 1, 3, 18, 0, 0, DateTimeKind.Unspecified);
             DateTimePeriod periodUtc = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(agentLocalStart, agentLocalEnd, tzInfo);
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         [Test]
         public void VerifyGetLayersForPeriodInside()
         {
-            ICccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             DateTime agentLocalStart = new DateTime(2008, 1, 2, 0, 0, 0, DateTimeKind.Unspecified);
             DateTime agentLocalEnd = new DateTime(2008, 1, 3, 0, 0, 0, DateTimeKind.Unspecified);
             DateTimePeriod periodUtc = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(agentLocalStart, agentLocalEnd, tzInfo);
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         [Test]
         public void VerifyGetLayersForPeriodOutside()
         {
-            ICccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             DateTime agentLocalStart = new DateTime(2008, 1, 2, 0, 0, 0, DateTimeKind.Unspecified);
             DateTime agentLocalEnd = new DateTime(2008, 1, 3, 0, 0, 0, DateTimeKind.Unspecified);
             DateTimePeriod periodUtc = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(agentLocalStart, agentLocalEnd, tzInfo);
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         [Test]
         public void VerifyGetLayersForPeriodWhenDefinitionIsMovedOutside()
         {
-            ICccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _target = new DateTimeMultiplicatorDefinition(_multiplicator, new DateOnly(2008, 1, 2), new DateOnly(2008, 1, 3), TimeSpan.Zero, TimeSpan.Zero);
             
             //Vad ska hända om man gör så här?
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
 		[Test]
 		public void ShouldHandleProjectionForNextDay()
 		{
-			ICccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			TimeZoneInfo tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			DateTime agentLocalStart = new DateTime(2008, 1, 2, 0, 0, 0, DateTimeKind.Unspecified);
 			DateTime agentLocalEnd = new DateTime(2008, 1, 2, 6, 0, 0, DateTimeKind.Unspecified);
 			DateTimePeriod periodUtc = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(agentLocalStart, agentLocalEnd, tzInfo);

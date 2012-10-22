@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
             _createPerson = PersonFactory.CreatePerson();
             _createDate = new DateTime(2009, 1, 1);
-            _createPerson.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(
+            _createPerson.PermissionInformation.SetDefaultTimeZone((
                                                                        TimeZoneInfo.FindSystemTimeZoneById(
                                                                            "W. Europe Standard Time")));
             foreach (AlarmType alarmType in alarms)
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
             DateTime expectedDate =
                 _createDate = TimeZoneHelper.ConvertFromUtc(_createDate,
-                                                            new CccTimeZoneInfo(
+                                                            (
                                                                 TimeZoneInfo.FindSystemTimeZoneById(
                                                                     "W. Europe Standard Time")));
 

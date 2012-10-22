@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void ShouldSplitMidnightUsingPassedInTimeZone()
         {
-            var userDefinedTimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
+            var userDefinedTimeZone = (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
             target = new ProjectionMidnightSplitterMerger(userDefinedTimeZone);
             var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
             var end = new DateTime(2000, 1, 2, 10, 0, 0, DateTimeKind.Utc);

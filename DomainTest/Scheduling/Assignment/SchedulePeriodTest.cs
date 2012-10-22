@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             _person1 = PersonFactory.CreatePerson();
             _person1.PermissionInformation.SetCulture(new CultureInfo("en-US"));
-            _person1.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
+            _person1.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
             ITeam simpleTeam = TeamFactory.CreateSimpleTeam();
             IContract contract = ContractFactory.CreateContract("MyContract");
             IPartTimePercentage partTime = PartTimePercentageFactory.CreatePartTimePercentage("Full time");
@@ -63,17 +63,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             
 			_person2 = PersonFactory.CreatePerson();
             _person2.PermissionInformation.SetCulture(new CultureInfo("en-US"));
-            _person2.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
+            _person2.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
             _person2.AddPersonPeriod(new PersonPeriod(new DateOnly(2007, 12, 30), _personContract, simpleTeam));
 
             _person3 = PersonFactory.CreatePerson();
             _person3.PermissionInformation.SetCulture(new CultureInfo("en-US"));
-            _person3.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
+            _person3.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
             _person3.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 1), _personContract, simpleTeam));
 
 			_person4 = PersonFactory.CreatePerson();
 			_person4.PermissionInformation.SetCulture(new CultureInfo("en-US"));
-			_person4.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
+			_person4.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))); //GMT-3
 			_person4.AddPersonPeriod(new PersonPeriod(new DateOnly(2008, 1, 1), _personContract, simpleTeam));
 
 

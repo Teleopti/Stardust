@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
             _endTime = endTime;
         }
 
-        public override IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnlyPeriod period, ICccTimeZoneInfo timeZoneInfo)
+        public override IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnlyPeriod period, TimeZoneInfo timeZoneInfo)
         {
 			validatePeriod(_startDate, _endDate, _startTime, _endTime, "value");
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
             }
         }
 
-        public virtual IMultiplicatorLayer ConvertToLayer(ICccTimeZoneInfo timeZoneInfo)
+        public virtual IMultiplicatorLayer ConvertToLayer(TimeZoneInfo timeZoneInfo)
         {
 			validatePeriod(StartDate, EndDate, StartTime, EndTime, "value");
             DateTimePeriod period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(StartDate.Date.Add(StartTime), EndDate.Date.Add(EndTime), timeZoneInfo);

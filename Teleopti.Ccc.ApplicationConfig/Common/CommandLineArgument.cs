@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
         private string _destinationDatabase;
         private string _destinationUserName;
         private string _destinationPassword;
-        private ICccTimeZoneInfo _timeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+        private TimeZoneInfo _timeZone = (TimeZoneInfo.Local);
         private DateTime _fromDate;
         private DateTime _toDate;
         private string _businessUnit;
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
             get { return _destinationPassword; }
         }
 
-        public ICccTimeZoneInfo TimeZone
+        public TimeZoneInfo TimeZone
         {
             get { return _timeZone; }
         }
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
                         _destinationPassword= switchValue;
                         break;
                     case "-TZ":   // TimeZone.
-                        _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(switchValue));
+                        _timeZone = (TimeZoneInfo.FindSystemTimeZoneById(switchValue));
                         break;
                     case "-FD":   // Date From.
                         _fromDate = DateTime.Parse(switchValue, CultureInfo.CurrentCulture);

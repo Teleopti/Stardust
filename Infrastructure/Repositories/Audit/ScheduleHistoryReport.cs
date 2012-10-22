@@ -102,8 +102,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			}
 			else
 			{
-				ret.ScheduleStart = _regional.TimeZone.ConvertTimeFromUtc(auditedAssignment.Entity.DatabasePeriod.StartDateTime);
-				ret.ScheduleEnd = _regional.TimeZone.ConvertTimeFromUtc(auditedAssignment.Entity.DatabasePeriod.EndDateTime);
+				ret.ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(auditedAssignment.Entity.DatabasePeriod.StartDateTime, _regional.TimeZone);
+				ret.ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(auditedAssignment.Entity.DatabasePeriod.EndDateTime, _regional.TimeZone);
 			}
 
 			return ret;
@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			{
 				ShiftType = Resources.AuditingReportDayOff,
 				Detail = auditedDayOff.Entity.DayOff.Description.Name,
-				ScheduleStart = _regional.TimeZone.ConvertTimeFromUtc(auditedDayOff.Entity.Period.StartDateTime),
-				ScheduleEnd = _regional.TimeZone.ConvertTimeFromUtc(auditedDayOff.Entity.Period.EndDateTime)
+				ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(auditedDayOff.Entity.Period.StartDateTime, _regional.TimeZone),
+				ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(auditedDayOff.Entity.Period.EndDateTime, _regional.TimeZone)
 			};
 			addCommonScheduleData(ret, auditedDayOff.Entity, auditedDayOff.RevisionEntity, auditedDayOff.Operation);
 			return ret;
@@ -139,8 +139,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			{
 				ShiftType = Resources.AuditingReportAbsence,
 				Detail = auditedAbsence.Entity.Layer.Payload.Description.Name,
-				ScheduleStart = _regional.TimeZone.ConvertTimeFromUtc(auditedAbsence.Entity.Period.StartDateTime),
-				ScheduleEnd = _regional.TimeZone.ConvertTimeFromUtc(auditedAbsence.Entity.Period.EndDateTime)
+				ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(auditedAbsence.Entity.Period.StartDateTime, _regional.TimeZone),
+                ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(auditedAbsence.Entity.Period.EndDateTime, _regional.TimeZone)
 			};
 			addCommonScheduleData(ret, auditedAbsence.Entity, auditedAbsence.RevisionEntity, auditedAbsence.Operation);
 			return ret;
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 																Revision revision,
 																RevisionType revisionType)
 		{
-			scheduleAuditingReportData.ModifiedAt = _regional.TimeZone.ConvertTimeFromUtc(revision.ModifiedAt);
+            scheduleAuditingReportData.ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(revision.ModifiedAt, _regional.TimeZone);
 			scheduleAuditingReportData.ModifiedBy = revision.ModifiedBy.Name.ToString(NameOrderOption.FirstNameLastName);
 			scheduleAuditingReportData.ScheduledAgent = auditedEntity.Person.Name.ToString(NameOrderOption.FirstNameLastName);
 			addRevisionType(scheduleAuditingReportData, revisionType);

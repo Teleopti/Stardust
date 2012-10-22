@@ -108,8 +108,8 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [Test]
         public void CanSetTimeZone()
         {
-            ((PermissionInformation)target).SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Utc));
-            Assert.AreEqual(TimeZoneInfo.Utc, ((PermissionInformation)target).DefaultTimeZone().TimeZoneInfoObject);
+            ((PermissionInformation)target).SetDefaultTimeZone((TimeZoneInfo.Utc));
+            Assert.AreEqual(TimeZoneInfo.Utc, ((PermissionInformation)target).DefaultTimeZone());
         }
 
         /// <summary>

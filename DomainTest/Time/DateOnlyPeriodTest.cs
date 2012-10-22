@@ -12,14 +12,13 @@ namespace Teleopti.Ccc.DomainTest.Time
         private readonly DateOnly _start = new DateOnly(2007, 06, 01);
         private readonly DateOnly _end = new DateOnly(2008, 02, 28);
         private DateOnlyPeriod _period;
-        private CccTimeZoneInfo _cccTimeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
 
         [SetUp]
         public void TestSetup()
         {
             _period = new DateOnlyPeriod(_start, _end);
-            TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time");
-            _cccTimeZoneInfo = new CccTimeZoneInfo(timeZone);
+            _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time");
         }
 
         [Test]
@@ -28,16 +27,22 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(_start, _period.StartDate);
             Assert.AreEqual(_end,_period.EndDate);
             Assert.IsNotNull(_period.DateString);
-            DateOnlyPeriod _period2 = new DateOnlyPeriod(_start, _end);
-            Assert.IsTrue(_period.Equals(_period2));
+            DateOnlyPeriod period2 = new DateOnlyPeriod(_start, _end);
+            Assert.IsTrue(_period.Equals(period2));
         }
+
+		[Test]
+		public void ShouldDisplayInfoInStringFormat()
+		{
+			_period.ArabicSafeDateString().Should().Be.EqualTo(_period.ToString());
+		}
 
         [Test]
         public void VerifyToDateTimePeriod()
         {
-            DateTime startDate =  TimeZoneHelper.ConvertToUtc(_start,_cccTimeZoneInfo);
-            DateTime endDate = TimeZoneHelper.ConvertToUtc(_end.AddDays(1), _cccTimeZoneInfo);
-            DateTimePeriod dateTimePeriod = _period.ToDateTimePeriod(_cccTimeZoneInfo);
+            DateTime startDate =  TimeZoneHelper.ConvertToUtc(_start,_timeZoneInfo);
+            DateTime endDate = TimeZoneHelper.ConvertToUtc(_end.AddDays(1), _timeZoneInfo);
+            DateTimePeriod dateTimePeriod = _period.ToDateTimePeriod(_timeZoneInfo);
             Assert.AreEqual(startDate, dateTimePeriod.StartDateTime);
             Assert.AreEqual(endDate, dateTimePeriod.EndDateTime);
 

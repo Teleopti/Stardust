@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.WinCode.Meetings
         private readonly IMeetingGeneralView _view;
         private readonly IMeetingViewModel _model;
 
-        private static readonly IList<ICccTimeZoneInfo> TimeZoneList =
-            TimeZoneInfo.GetSystemTimeZones().Select(t => (ICccTimeZoneInfo) new CccTimeZoneInfo(t)).ToList();
+        private static readonly IList<TimeZoneInfo> TimeZoneList =
+            TimeZoneInfo.GetSystemTimeZones().Select(t => t).ToList();
 
 	    private bool _disposed;
 

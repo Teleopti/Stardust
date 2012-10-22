@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
         private readonly ISettingDataRepository _settingDataRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly CommonNameDescriptionSetting _commonNameDescription;
-        private readonly ICccTimeZoneInfo _userTimeZone;
+        private readonly TimeZoneInfo _userTimeZone;
 
         public InfoWindowTextFormatter(ISettingDataRepository settingDataRepository, IUnitOfWorkFactory unitOfWorkFactory)
         {
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
                     text = text + "\r\n" + meeting.GetDescription(new NoFormatting()) + "\r\n\r\n";
 
                     if (meeting.UpdatedOn.HasValue)
-                        text = text + _userTimeZone.ConvertTimeFromUtc(meeting.UpdatedOn.Value, _userTimeZone);
+                        text = text + TimeZoneInfo.ConvertTimeFromUtc(meeting.UpdatedOn.Value, _userTimeZone);
                 }
             }
             catch (DataSourceException)

@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.DatabaseConverterTest.CollectionConverter
             mocks = new MockRepository();
             uow = mocks.StrictMock<IUnitOfWork>();
             mappedObjectPair = new MappedObjectPair();
-            mapper = mocks.StrictMock<Mapper<IRuleSetBag, FakeOldEntityRuleSetBag>>(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Local));
-            mapper2 = mocks.StrictMock<Mapper<IWorkShiftRuleSet, global::Domain.ShiftClass>>(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Local));
+            mapper = mocks.StrictMock<Mapper<IRuleSetBag, FakeOldEntityRuleSetBag>>(mappedObjectPair, (TimeZoneInfo.Local));
+            mapper2 = mocks.StrictMock<Mapper<IWorkShiftRuleSet, global::Domain.ShiftClass>>(mappedObjectPair, (TimeZoneInfo.Local));
             target = new RuleSetBagConverter(uow, mapper, mappedObjectPair);
             target2 = new WorkShiftRuleSetConverter(uow, mapper2);
         }

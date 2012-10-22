@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
 
             //setup GroupingMapper
 
-            _groupingMapper = new GroupingMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _groupingMapper = new GroupingMapper(mappedObjectPair, (TimeZoneInfo.Utc));
 
         }
 

@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private readonly DateOnlyPeriodDto _periodDto = new DateOnlyPeriodDto
                                                         {
                                                             Id = Guid.NewGuid(),
-                                                            StartDate = new DateOnlyDto(new DateOnly(new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc))),
-                                                            EndDate = new DateOnlyDto(new DateOnly(new DateTime(2012, 1, 2, 0, 0, 0, DateTimeKind.Utc)))
+															StartDate = new DateOnlyDto { DateTime = new DateOnly(new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc)) },
+															EndDate = new DateOnlyDto { DateTime = new DateOnly(new DateTime(2012, 1, 2, 0, 0, 0, DateTimeKind.Utc)) }
                                                         };
 
         private ExportMultisiteSkillToSkillCommandDto _exportMultisiteSkillToSkillCommandDto;

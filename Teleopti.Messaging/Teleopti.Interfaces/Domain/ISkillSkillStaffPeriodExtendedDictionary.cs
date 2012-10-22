@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
+using System.Security;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -85,7 +85,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2009-01-25
         /// </remarks>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+		[SecurityCritical]
         void GetObjectData(SerializationInfo info, StreamingContext context);
 
         /// <summary>

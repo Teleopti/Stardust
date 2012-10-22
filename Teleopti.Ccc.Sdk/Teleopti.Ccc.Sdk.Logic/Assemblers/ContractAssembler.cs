@@ -20,10 +20,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             var contract = new ContractDto
                                {
                                    Description = entity.Description.ToString(),
-                                   EmploymentType = entity.EmploymentType,
+								   EmploymentType = entity.EmploymentType,
                                    Id = entity.Id.GetValueOrDefault(Guid.Empty),
                                    IsDeleted = ((IDeleteTag)entity).IsDeleted
                                };
+
             foreach (IMultiplicatorDefinitionSet multiplicatorDefinitionSet in entity.MultiplicatorDefinitionSetCollection)
             {
                 if (multiplicatorDefinitionSet.MultiplicatorType != MultiplicatorType.OBTime)

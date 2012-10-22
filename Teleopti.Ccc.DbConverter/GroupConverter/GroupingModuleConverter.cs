@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(GroupingModuleConverter));
 
-        public GroupingModuleConverter(MappedObjectPair mappedObjectPair, DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo)
+        public GroupingModuleConverter(MappedObjectPair mappedObjectPair, DateTimePeriod period, TimeZoneInfo timeZoneInfo)
             : base(mappedObjectPair, period, timeZoneInfo)
         {
         }
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
 
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                GroupingMapper groupingMapper = new GroupingMapper(MappedObjectPair, new CccTimeZoneInfo(System.TimeZoneInfo.Utc));
+                GroupingMapper groupingMapper = new GroupingMapper(MappedObjectPair, TimeZoneInfo.Utc);
                 GroupingConverter groupingConverter = new GroupingConverter(uow, groupingMapper);
                 groupingConverter.ConvertAndPersist(new GroupingReader().LoadAllFromDBForConversionToRaptor().Values);
             }

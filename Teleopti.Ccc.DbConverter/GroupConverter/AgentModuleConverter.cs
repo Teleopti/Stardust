@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(AgentModuleConverter));
 
-        public AgentModuleConverter(MappedObjectPair mappedObjectPair, DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo)
+        public AgentModuleConverter(MappedObjectPair mappedObjectPair, DateTimePeriod period, TimeZoneInfo timeZoneInfo)
             : base(mappedObjectPair, period, timeZoneInfo)
         {
         }

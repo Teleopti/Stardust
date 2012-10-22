@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
             var budgetGroup = new BudgetGroup
                                   {
                                       Name = "BG",
-                                      TimeZone = new CccTimeZoneInfo(TimeZoneInfo.GetSystemTimeZones()[7])
+                                      TimeZone = (TimeZoneInfo.GetSystemTimeZones()[7])
                                   };
             budgetGroup.TrySetDaysPerYear(365);
             var scenario = ScenarioFactory.CreateScenarioAggregate();

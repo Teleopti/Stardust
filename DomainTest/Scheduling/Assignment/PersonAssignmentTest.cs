@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyBelongsToPeriod()
         {
             DateOnlyPeriod period =
-                PersonAssignment.UndefinedPeriod.ToDateOnlyPeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo());
+                PersonAssignment.UndefinedPeriod.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
             Assert.IsTrue(target.BelongsToPeriod(period));
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Reporting;
 using Teleopti.Interfaces.Domain;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.Presentation
         IScenario Scenario { get; }
         DateOnlyPeriod Period { get; }
         IList<IPerson> Persons { get; }
-        ICccTimeZoneInfo TimeZone { get; }
+        TimeZoneInfo TimeZone { get; }
         IList<IActivity> Activities { get; }
         ReportSettingsScheduledTimePerActivityModel ScheduleTimePerActivitySettingsModel { get; }
         void InitAgentSelector();

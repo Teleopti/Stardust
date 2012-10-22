@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
         public void ShouldExtractRowFromString()
         {
             const string rowString = "Insurance,20120326 02:00,20120326 02:15,17,179,0,4.05";
-            var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             var row = _target.Extract(rowString, timeZone);
 
             Assert.That(row.Tasks, Is.EqualTo(17));
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
         [ExpectedException(typeof (ValidationException))]
         public void ShouldDetectInvalidTime()
         {
-            var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             const string rowString = "Insurance,201203025 02:00,20120325 02:15,17,179,0,4.05";
             _target.Extract(rowString, timeZone);
         }

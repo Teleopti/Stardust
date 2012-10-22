@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private ClipHandler<IScheduleDay> _clipHandlerSchedulePart;
         private MockRepository _mocks;
         private readonly DateOnly _date = new DateOnly(2008, 11, 04);
-        private ICccTimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
         private DateOnlyPeriod _period;
         private GridControl _grid;
         private IAddLayerViewModel<IAbsence> _dialog;
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             _target = new SchedulePresenterBase(_viewBase, _schedulerState, _gridlockManager, _clipHandlerSchedulePart, SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance);
             TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
-            _timeZoneInfo = new CccTimeZoneInfo(zone);
+            _timeZoneInfo = (zone);
             _grid = new GridControl();
             _person = PersonFactory.CreatePerson("person");
 
@@ -809,7 +809,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(businessRuleResponse.Mandatory).Return(true);
             Expect.Call(businessRuleResponse.Message).Return("testar");
             Expect.Call(_scheduleDictionary.Modify(ScheduleModifier.Scheduler, (IEnumerable<IScheduleDay>)null, null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).IgnoreArguments().Return(_businessRuleResponses);
-            Expect.Call(schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(_date), new CccTimeZoneInfo(TimeZoneInfo.Utc)));
+            Expect.Call(schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(_date), (TimeZoneInfo.Utc)));
             Expect.Call(schedulePart.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAssignment })).Repeat.AtLeastOnce();
             Expect.Call(personAssignment.CheckRestrictions).Repeat.AtLeastOnce();
@@ -903,7 +903,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(() => _ass.CheckRestrictions()).Repeat.AtLeastOnce();
 			Expect.Call(_day1.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { _ass }.AsReadOnly()).Repeat.AtLeastOnce();
             var scheduleDictionary = CreateExpectationForModifySchedulePart(_day1, _person);
-            Expect.Call(_day1.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+            Expect.Call(_day1.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
             IScheduleRange range1 = _mocks.StrictMock<IScheduleRange>();
             Expect.Call(scheduleDictionary[_person]).Return(range1).Repeat.AtLeastOnce();
@@ -979,7 +979,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_day2.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(() => _day1.CreateAndAddAbsence(null)).IgnoreArguments().Repeat.AtLeastOnce();
             Expect.Call(_day1.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { _ass }.AsReadOnly()).Repeat.AtLeastOnce();
-            Expect.Call(_day1.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+            Expect.Call(_day1.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
         }
 
         private void ExpectCallsDialogOnVerifyAddAbsenceMultipleDays(DateTimePeriod period)
@@ -1085,7 +1085,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(schedulePart.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { ass }.AsReadOnly()).Repeat.AtLeastOnce();
 			Expect.Call(ass.CheckRestrictions);
 			var scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, _person);
-			Expect.Call(schedulePart.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+			Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
 
 			Expect.Call(scheduleDictionary[_person])
@@ -1138,7 +1138,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IScheduleDictionary scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, _person);
             
             Expect.Call(_viewBase.TheGrid).Return(_grid);
-            Expect.Call(schedulePart.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+            Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
 			Expect.Call(scheduleDictionary[_person])
 				.Return(scheduleRange).Repeat.AtLeastOnce();
@@ -1165,7 +1165,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null)).IgnoreArguments().Return(dialog);
             Expect.Call(dialog.Result).Return(false);
             LastCall.Repeat.Once();
-            Expect.Call(schedulePart.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+            Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
             _mocks.ReplayAll();
             _target.AddAbsence();
@@ -1385,7 +1385,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPerson person2 = PersonFactory.CreatePerson("Person1");
             IPersonPeriod period1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2009, 1, 1));
             IPersonPeriod period2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2009, 1, 1));
-            var schedulePartPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            var schedulePartPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), (TimeZoneInfo.Utc));
             period1.PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(overtimeSet1);
             period2.PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(overtimeSet2);
             period2.PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(overtimeSet1);
@@ -1409,7 +1409,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyAddOvertimeNewWhenUserCancelsDialog()
         {
-            var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2001, 1, 1), new CccTimeZoneInfo());
+            var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2001, 1, 1), (TimeZoneInfo.Local));
             var person = _mocks.StrictMock<IPerson>();
             var personPeriod = _mocks.StrictMock<IPersonPeriod>();
             var ass = _mocks.StrictMock<IPersonAssignment>();
@@ -1438,7 +1438,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void ShouldNotAddOvertimeWhenNoPeriod()
         {
-            var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2001, 1, 1), new CccTimeZoneInfo());
+            var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2001, 1, 1), (TimeZoneInfo.Local));
             var person = _mocks.StrictMock<IPerson>();
             var ass = _mocks.StrictMock<IPersonAssignment>();
             IMainShift mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
@@ -1471,7 +1471,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
             Expect.Call(schedulePart.AssignmentHighZOrder()).Return(null);
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
-            Expect.Call(_viewBase.CreateAddPersonalActivityViewModel(null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), new CccTimeZoneInfo())).IgnoreArguments().Return(dialog);
+            Expect.Call(_viewBase.CreateAddPersonalActivityViewModel(null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), (TimeZoneInfo.Local))).IgnoreArguments().Return(dialog);
             Expect.Call(dialog.Result).Return(true);
             Expect.Call(dialog.SelectedItem).Return(selectedItem);
             Expect.Call(dialog.SelectedPeriod).Return(period);
@@ -1485,7 +1485,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(personAssignment.CheckRestrictions);
 
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(person, period));
-            Expect.Call(schedulePart.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+            Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
             _mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
             _target.AddPersonalShift();
@@ -1528,7 +1528,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private void AddActivityViewBaseExpectations(IScheduleDay schedulePartDayOne, IScheduleDay schedulePartDayTwo, DateTimePeriod defaultPeriod, IAddActivityViewModel dialog, IPerson person)
         {
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePartDayOne, schedulePartDayTwo });
-            Expect.Call(_viewBase.CreateAddActivityViewModel(null, null, defaultPeriod, new CccTimeZoneInfo())).IgnoreArguments().Return(dialog);
+            Expect.Call(_viewBase.CreateAddActivityViewModel(null, null, defaultPeriod, (TimeZoneInfo.Local))).IgnoreArguments().Return(dialog);
             Expect.Call(_viewBase.TheGrid).Return(_grid);
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(person, defaultPeriod));
         }
@@ -1562,7 +1562,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(personAssignment.Period).Return(period);
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
             Expect.Call(_viewBase.CreateAddPersonalActivityViewModel(null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2),
-                                                                    new CccTimeZoneInfo())).Constraints(Is.Anything(),
+                                                                    (TimeZoneInfo.Local))).Constraints(Is.Anything(),
                                                                                                         Is.Equal(period), Is.Anything()).Return(dialog);
             Expect.Call(dialog.Result).Return(true);
             Expect.Call(dialog.SelectedItem).Return(selectedItem);
@@ -1573,7 +1573,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IScheduleDictionary scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, person);
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(person, period));
             Expect.Call(_viewBase.TheGrid).Return(_grid);
-            Expect.Call(schedulePart.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+            Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
             _mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
             _target.AddPersonalShift();
@@ -1586,7 +1586,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             Expect.Call(scheduleDictionary.Modify(ScheduleModifier.Scheduler, (IEnumerable<IScheduleDay>)null, null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).IgnoreArguments().Return(
                 businessRuleResponses).Repeat.AtLeastOnce();
-            Expect.Call(schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(_date), new CccTimeZoneInfo(TimeZoneInfo.Utc))).Repeat.AtLeastOnce();
+            Expect.Call(schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(_date), (TimeZoneInfo.Utc))).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.Person).Return(person).Repeat.AtLeastOnce();
             return scheduleDictionary;
         }
@@ -1601,9 +1601,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(schedulePart.Person).Return(person).Repeat.Twice();
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
             Expect.Call(schedulePart.AssignmentHighZOrder()).Return(null);
-            Expect.Call(_viewBase.CreateAddPersonalActivityViewModel(null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), new CccTimeZoneInfo())).IgnoreArguments().Return(dialog);
+            Expect.Call(_viewBase.CreateAddPersonalActivityViewModel(null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), (TimeZoneInfo.Local))).IgnoreArguments().Return(dialog);
             Expect.Call(dialog.Result).Return(false);
-            Expect.Call(schedulePart.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+            Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
             _mocks.ReplayAll();
             _target.AddPersonalShift();

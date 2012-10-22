@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             mapper.SkillType = skillTypeCollection;
             mapper.Activity = activityCollection;
 
-            _skillMapper = new SkillMapper(mapper, new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(_timeZoneId)), 15);
+            _skillMapper = new SkillMapper(mapper, (TimeZoneInfo.FindSystemTimeZoneById(_timeZoneId)), 15);
             _forecastPeriods = new global::Infrastructure.CccListCollection<global::Domain.Forecast>();
             _forecastPeriods.Add(oldForecast);
         }

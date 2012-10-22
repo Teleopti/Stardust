@@ -70,17 +70,17 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
 
             _oldAgent = new global::Domain.Agent(-1, "AgentKalle", "Kula", "Kalle@Kula.nu", "", null, agPeriods, null, "Test note");
 
-            AgentMapper agentMapper = new AgentMapper(_mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            AgentMapper agentMapper = new AgentMapper(_mapped, (TimeZoneInfo.Utc));
             IPerson newAgent = agentMapper.Map(_oldAgent);
             _mapped.Agent.Add(_oldAgent, newAgent);
 
-            UserMapper uMap = new UserMapper(_mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
+            UserMapper uMap = new UserMapper(_mapped, (TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
             IPerson newUser = uMap.Map(_oldUser);
 
             //Agent name and email should be used
             Assert.AreEqual("AgentKalle Kula", newUser.Name.ToString());
             Assert.AreEqual("Kalle@Kula.nu", newUser.Email);
-            Assert.AreEqual(TimeZoneInfo.Utc, ((PermissionInformation)newUser.PermissionInformation).DefaultTimeZone().TimeZoneInfoObject);
+            Assert.AreEqual(TimeZoneInfo.Utc, ((PermissionInformation)newUser.PermissionInformation).DefaultTimeZone());
             Assert.AreEqual("Knut", newUser.ApplicationAuthenticationInfo.ApplicationLogOnName);
         }
 
@@ -88,13 +88,13 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void VerifyUserThatIsNotAgentCanBeMapped()
         {
             _oldUser = new User(99, "UserKalle", "Kula", "Kalle@Kula.nu", 40, null, MessageLevel.High, "", "Knut", "", "", false);
-            UserMapper uMap = new UserMapper(_mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
+            UserMapper uMap = new UserMapper(_mapped, (TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
             IPerson newUser = uMap.Map(_oldUser);
 
             //do not test dbid
             Assert.AreEqual("UserKalle Kula", newUser.Name.ToString());
             Assert.AreEqual("Kalle@Kula.nu", newUser.Email);
-            Assert.AreEqual(TimeZoneInfo.Utc, ((PermissionInformation)newUser.PermissionInformation).DefaultTimeZone().TimeZoneInfoObject);
+            Assert.AreEqual(TimeZoneInfo.Utc, ((PermissionInformation)newUser.PermissionInformation).DefaultTimeZone());
             Assert.AreEqual("Knut", newUser.ApplicationAuthenticationInfo.ApplicationLogOnName);
 
         }
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void UserShouldHavePasswordSameAsUserName()
         {
             _oldUser = new User(99, "UserKalle", "Kula", "Kalle@Kula.nu", 40, null, MessageLevel.High, "", "Knut", "", "EnKnut", false);
-            UserMapper uMap = new UserMapper(_mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
+            UserMapper uMap = new UserMapper(_mapped, (TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
             IPerson newUser = uMap.Map(_oldUser);
             Assert.AreEqual("Knut", newUser.ApplicationAuthenticationInfo.Password);
         }
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void UserShouldBeWinAuthenticatedIfHavingDomain()
         {
             _oldUser = new User(99, "UserKalle", "Kula", "Kalle@Kula.nu", 40, null, MessageLevel.High, "", "Knut", "workgroup", "", false);
-            UserMapper uMap = new UserMapper(_mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
+            UserMapper uMap = new UserMapper(_mapped, (TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
             IPerson newUser = uMap.Map(_oldUser);
             Assert.AreEqual("workgroup", newUser.WindowsAuthenticationInfo.DomainName);
         }
@@ -120,11 +120,11 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         [Test]
         public void SameApplicationUserShouldBeConvertedOnlyOnce()
         {
-            AgentMapper agentMapper = new AgentMapper(_mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            AgentMapper agentMapper = new AgentMapper(_mapped, (TimeZoneInfo.Utc));
             IPerson newAgent = agentMapper.Map(_oldAgent);
             _mapped.Agent.Add(_oldAgent, newAgent);
 
-            UserMapper uMap = new UserMapper(_mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>(){_newApplicationUser, _newDomainUser});
+            UserMapper uMap = new UserMapper(_mapped, (TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>(){_newApplicationUser, _newDomainUser});
             IPerson newUser = uMap.Map(_oldUser);
             Assert.AreEqual(_newApplicationUser, newUser);
         }
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         [Test]
         public void SameDomainUserShouldBeConvertedOnlyOnce()
         {
-            UserMapper uMap = new UserMapper(_mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>() { _newApplicationUser, _newDomainUser });
+            UserMapper uMap = new UserMapper(_mapped, (TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>() { _newApplicationUser, _newDomainUser });
             IPerson newUser = uMap.Map(_oldDomainUser);
             Assert.AreEqual(_newDomainUser, newUser);
         }
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void DoNotMapUserWithIdMinusOne()
         {
             _oldUser = new User(-1, "UserKalle", "Kula", "Kalle@Kula.nu", 40, null, MessageLevel.High, "", "Knut", "", "", false);
-            UserMapper uMap = new UserMapper(_mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
+            UserMapper uMap = new UserMapper(_mapped, (TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
             IPerson newPerson = uMap.Map(_oldUser);
             Assert.IsNull(newPerson);
         }
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void VerifyNullIsReturnedIfUserNameIsNullOrEmpty()
         {
             _oldUser = new User(99, "UserKalle", "Kula", "Kalle@Kula.nu", 40, null, MessageLevel.High, "", null, "", "", false);
-            UserMapper uMap = new UserMapper(_mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc), new ApplicationRole(), new ApplicationRole(), new List<IPerson>());
+            UserMapper uMap = new UserMapper(_mapped, (TimeZoneInfo.Utc), new ApplicationRole(), new ApplicationRole(), new List<IPerson>());
             IPerson newPerson = uMap.Map(_oldUser);
             Assert.IsNull(newPerson);
 
@@ -176,14 +176,14 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
 
             // Verify user gets admin role
             _oldUser = new User(99, "UserKalle", "Kula", "Kalle@Kula.nu", 40, null, MessageLevel.High, "", "Knut", "workgroup", "", true);
-            UserMapper uMap = new UserMapper(_mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
+            UserMapper uMap = new UserMapper(_mapped, (TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
             IPerson newUser = uMap.Map(_oldUser);
             Assert.AreEqual(1, newUser.PermissionInformation.ApplicationRoleCollection.Count);
             Assert.AreEqual(_administratorRole.Id, newUser.PermissionInformation.ApplicationRoleCollection[0].Id);
 
             // Verify user gets agent role
             _oldUser = new User(99, "UserKalle", "Kula", "Kalle@Kula.nu", 40, null, MessageLevel.High, "", "Knut", "workgroup", "", false);
-            uMap = new UserMapper(_mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
+            uMap = new UserMapper(_mapped, (TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
             newUser = uMap.Map(_oldUser);
             Assert.AreEqual(1, newUser.PermissionInformation.ApplicationRoleCollection.Count);
             Assert.AreEqual(_agentRole.Id, newUser.PermissionInformation.ApplicationRoleCollection[0].Id);

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using System.Text;
 using Syncfusion.Windows.Forms.Grid;
@@ -27,7 +28,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells
         {
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
 

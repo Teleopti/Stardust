@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: rogerkr
         /// Created date: 10/26/2007
         /// </remarks>
-        public AgentAbsenceMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
+        public AgentAbsenceMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
         {
         }
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                  oldEntity.AgentDayAssignment.AssignmentType == global::Domain.AssignedType.AbsenceWithSavedWorkShift) &&
                 (!oldEntity.AgentDayAssignment.Assigned.AssignedAbsence.UseCountRules))
             {
-                DateTimePeriod period = new DateTimePeriod(TimeZone.ConvertTimeToUtc(DateTime.SpecifyKind(oldEntity.AgentDate, DateTimeKind.Unspecified), TimeZone), TimeZone.ConvertTimeToUtc(DateTime.SpecifyKind(oldEntity.AgentDate, DateTimeKind.Unspecified), TimeZone).AddDays(1));
+                DateTimePeriod period = new DateTimePeriod(TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(oldEntity.AgentDate, DateTimeKind.Unspecified), TimeZone), TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(oldEntity.AgentDate, DateTimeKind.Unspecified), TimeZone).AddDays(1));
                 agAbs = new PersonAbsence(MappedObjectPair.Agent.GetPaired(oldEntity.AssignedAgent), MappedObjectPair.Scenario.GetPaired(oldEntity.AgentScenario), new AbsenceLayer(MappedObjectPair.Absence.GetPaired(oldEntity.AgentDayAssignment.Assigned.AssignedAbsence), period));
             }
 

@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var skills = new List<ISkill> {SkillFactory.CreateSkill("test")};
 			var requestedPeople = new List<IPerson> {person};
 			var peopleInOrganization = new List<IPerson> {person};
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo());
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
 
 			using (_mocks.Record())
 			{
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var requestedPeople = new List<IPerson> { person };
 			var peopleInOrganization = new List<IPerson>();
 			var visiblePeople = new List<IPerson>();
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo());
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
 
 			using (_mocks.Record())
 			{

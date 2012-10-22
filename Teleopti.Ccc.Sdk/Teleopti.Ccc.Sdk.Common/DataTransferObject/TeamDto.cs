@@ -1,5 +1,4 @@
 ﻿using System.Runtime.Serialization;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 {
@@ -10,18 +9,6 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
     public class TeamDto : Dto
     {
         private string _siteAndTeam;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TeamDto"/> class.
-        /// </summary>
-        /// <param name="team">The team.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public TeamDto(ITeam team)
-        {
-            Id = team.Id;
-            Description = team.Description.Name;
-            _siteAndTeam = team.SiteAndTeam;
-        }
 
         /// <summary>
         /// Gets or sets the description.

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.CollectionConverter
         {
             mocks = new MockRepository();
             uow = mocks.StrictMock<IUnitOfWork>();
-            mapper = mocks.StrictMock<Mapper<IEntity, int>>(new MappedObjectPair(), new CccTimeZoneInfo(TimeZoneInfo.Local));
+            mapper = mocks.StrictMock<Mapper<IEntity, int>>(new MappedObjectPair(), (TimeZoneInfo.Local));
             rep = mocks.StrictMock<IRepository<IEntity>>();
             target = new testPersister(uow, mapper, rep);
         }
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.CollectionConverter
         [Test]
         public void VerifyRestrictionsAreChecked()
         {
-            Mapper<IEntity, int> restrictionMapper = mocks.StrictMock<Mapper<IEntity, int>>(new MappedObjectPair(), new CccTimeZoneInfo(TimeZoneInfo.Local));
+            Mapper<IEntity, int> restrictionMapper = mocks.StrictMock<Mapper<IEntity, int>>(new MappedObjectPair(), (TimeZoneInfo.Local));
             CccConverter<IEntity, int> restrictionTarget = mocks.PartialMock<CccConverter<IEntity, int>>(uow, restrictionMapper);
             IEntity restrictionChecker = mocks.StrictMultiMock<IEntity>(typeof(IRestrictionChecker));
             IList<int> checkerList = new List<int>();

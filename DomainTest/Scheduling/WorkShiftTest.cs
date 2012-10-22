@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             target.LayerCollection.Add(layer1);
             target.LayerCollection.Add(layer2);
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Arabian Standard Time"));
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Arabian Standard Time"));
             DateTime baseDateLocal = TimeZoneHelper.ConvertFromUtc(WorkShift.BaseDate, timeZoneInfo).Date.AddDays(77);
             IMainShift mainShift = target.ToMainShift(baseDateLocal, timeZoneInfo);
             Assert.AreEqual(2, mainShift.LayerCollection.Count);
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                 new WorkShiftActivityLayer(act2, tp2);
             target.LayerCollection.Add(layer1);
             target.LayerCollection.Add(layer2);
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             DateTime baseDateLocal = new DateTime(2009,3,29);
             IMainShift mainShift = target.ToMainShift(baseDateLocal, timeZoneInfo);
             IVisualLayerCollection layerCollectionWorkShift = target.ProjectionService().CreateProjection();
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             target.LayerCollection.Add(layer1);
             target.LayerCollection.Add(layer2);
             
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
             
             DateTime baseDateLocal = new DateTime(2011, 4, 1);
             IMainShift mainShift = target.ToMainShift(baseDateLocal, timeZoneInfo);
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             target.LayerCollection.Add(layer1);
             target.LayerCollection.Add(layer2);
 
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
 
             DateTime baseDateLocal = new DateTime(2011, 3, 31);
             IMainShift mainShift = target.ToMainShift(baseDateLocal, timeZoneInfo);
@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             target.LayerCollection.Add(layer1);
             //target.LayerCollection.Add(layer2);
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             DateTime baseDateLocal = new DateTime(2009, 10, 25);
             IMainShift mainShift = target.ToMainShift(baseDateLocal, timeZoneInfo);
             IVisualLayerCollection layerCollectionWorkShift = target.ProjectionService().CreateProjection();
@@ -320,7 +320,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             ILayer<IActivity> layer2 = new WorkShiftActivityLayer(act2, tp2);
             target.LayerCollection.Add(layer1);
             target.LayerCollection.Add(layer2);
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Arabian Standard Time"));
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Arabian Standard Time"));
             DateTime shiftDate = new DateTime(2000,1,1).ToUniversalTime();
             DateTime baseDateLocal = TimeZoneHelper.ConvertFromUtc(shiftDate, timeZoneInfo);
             IMainShift mainShift = target.ToMainShift(baseDateLocal, timeZoneInfo);

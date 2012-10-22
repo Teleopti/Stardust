@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         private DateTime _end = new DateTime(2001, 12, 27, 17, 0, 0, DateTimeKind.Utc);
         private TimeZoneInfo _timeZone;
         private DateTimePeriod _targetDateTimePeriod;
-        private ICccTimeZoneInfo _info;
+        private TimeZoneInfo _info;
         private IScheduleDay _scheduleDay;
 
         private DateTimePeriod _defaultLocal;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             TimeSpan localEndTimeOfDay = TimeSpan.FromHours(13);
 
             _timeZone = TimeZoneInfo.CreateCustomTimeZone("MyOwn", TimeSpan.FromMinutes(12), "MyOwn", "MyOwn");
-            _info = new CccTimeZoneInfo(_timeZone);
+            _info = (_timeZone);
             _start = new DateTime(2001, 12, 27, 2, 0, 0, DateTimeKind.Utc);
             _end = new DateTime(2001, 12, 31, 12, 0, 0, DateTimeKind.Utc);
             
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyGetsEightToFiveUtc()
         {
-            _target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal,null, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _target = new SetupDateTimePeriodToDefaultLocalHours(_defaultLocal,null, (TimeZoneInfo.Utc));
 
             DateTimePeriod result = _target.Period;
             Assert.AreEqual(_defaultLocal.LocalStartDateTime.TimeOfDay, result.StartDateTime.TimeOfDay);

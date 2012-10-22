@@ -35,7 +35,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 
                 var requestInfo = (IChangeInfo) personRequest;
                 var requestCreatedOn = requestInfo.CreatedOn;
-                DateTime convertedTimeFromUtc = personTimeZone.ConvertTimeFromUtc(requestCreatedOn.GetValueOrDefault(), personTimeZone);
+                DateTime convertedTimeFromUtc = TimeZoneInfo.ConvertTimeFromUtc(requestCreatedOn.GetValueOrDefault(), personTimeZone);
 
                 foreach (var dateOnly in dayCollection)
                 {

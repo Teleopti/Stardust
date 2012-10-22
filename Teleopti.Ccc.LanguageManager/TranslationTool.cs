@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.LanguageManager
             textBoxResXFile.Text = ConfigurationManager.AppSettings[resourceFileKeyName];
             comboBoxCultures.DisplayMember = "DisplayName";
             comboBoxCultures.ValueMember = "LCID";
-            comboBoxCultures.DataSource = CultureInfo.GetCultures(CultureTypes.FrameworkCultures).OrderBy(c => c.DisplayName).ToList();
+            comboBoxCultures.DataSource = CultureInfo.GetCultures(CultureTypes.AllCultures).OrderBy(c => c.DisplayName).ToList();
 
             textBoxResXFile.Text = ConfigurationManager.AppSettings[resourceFileKeyName];
             string synchronizedLanguage = ConfigurationManager.AppSettings[synchronizedLanguageKeyName];

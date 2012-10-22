@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -288,7 +289,7 @@ namespace Teleopti.Messaging.Events
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+		[SecurityCritical]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("FilterId", _filterId, _filterId.GetType());

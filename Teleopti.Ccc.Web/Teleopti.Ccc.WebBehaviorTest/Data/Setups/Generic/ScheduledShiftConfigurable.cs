@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
-			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(StartTime);
-			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(EndTime);
+			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
+			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
 
 			// create main shift
 			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);

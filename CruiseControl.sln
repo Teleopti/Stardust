@@ -96,11 +96,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.PayrollTest", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.AnalysisServicesManager", "Teleopti.Ccc.AnalysisServicesManager\Teleopti.Ccc.AnalysisServicesManager.csproj", "{951EB8C1-D650-4512-AC0E-CA21015DA7EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Messaging.Management", "Teleopti.Messaging\Teleopti.Messaging.Management\Teleopti.Messaging.Management.csproj", "{77F53055-9FD8-489E-B697-5525A40519BE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.ServiceHost", "Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\Teleopti.Analytics.Etl.ServiceHost.csproj", "{E0F90B7B-64BC-497B-AA23-C335338808CB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Messaging.Svc", "Teleopti.Messaging\Teleopti.Messaging.Svc\Teleopti.Messaging.Svc.csproj", "{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Rta.Interfaces", "Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Interfaces\Teleopti.Ccc.Rta.Interfaces.csproj", "{DD380C37-8FC1-4209-BC63-9B88B483264D}"
 EndProject
@@ -188,7 +184,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Paramete
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Portal.AnalyzerProxy", "Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal.AnalyzerProxy\Teleopti.Analytics.Portal.AnalyzerProxy.csproj", "{0B9B4EE2-0F67-401C-B6DC-8183EDEDA2E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportTexts", "Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\ReportTexts.csproj", "{82A5CB58-9CBC-45A2-B13E-F8917C846B1A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.ReportTexts", "Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\Teleopti.Analytics.ReportTexts.csproj", "{82A5CB58-9CBC-45A2-B13E-F8917C846B1A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.DBManager.Library", "Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.Library\Teleopti.Ccc.DBManager.Library.csproj", "{CF33F7A6-78D3-4167-A42D-20E453F8B1B6}"
 EndProject
@@ -756,18 +752,6 @@ Global
 		{951EB8C1-D650-4512-AC0E-CA21015DA7EB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{951EB8C1-D650-4512-AC0E-CA21015DA7EB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{951EB8C1-D650-4512-AC0E-CA21015DA7EB}.Release|x86.ActiveCfg = Release|Any CPU
-		{77F53055-9FD8-489E-B697-5525A40519BE}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{77F53055-9FD8-489E-B697-5525A40519BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77F53055-9FD8-489E-B697-5525A40519BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77F53055-9FD8-489E-B697-5525A40519BE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{77F53055-9FD8-489E-B697-5525A40519BE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{77F53055-9FD8-489E-B697-5525A40519BE}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{77F53055-9FD8-489E-B697-5525A40519BE}.Release|.NET.ActiveCfg = Release|Any CPU
-		{77F53055-9FD8-489E-B697-5525A40519BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77F53055-9FD8-489E-B697-5525A40519BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{77F53055-9FD8-489E-B697-5525A40519BE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{77F53055-9FD8-489E-B697-5525A40519BE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{77F53055-9FD8-489E-B697-5525A40519BE}.Release|x86.ActiveCfg = Release|Any CPU
 		{E0F90B7B-64BC-497B-AA23-C335338808CB}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{E0F90B7B-64BC-497B-AA23-C335338808CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E0F90B7B-64BC-497B-AA23-C335338808CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -780,18 +764,6 @@ Global
 		{E0F90B7B-64BC-497B-AA23-C335338808CB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E0F90B7B-64BC-497B-AA23-C335338808CB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E0F90B7B-64BC-497B-AA23-C335338808CB}.Release|x86.ActiveCfg = Release|Any CPU
-		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Release|.NET.ActiveCfg = Release|Any CPU
-		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{1F6DBD1D-EDBF-4E2D-93FF-E34BC0000B87}.Release|x86.ActiveCfg = Release|Any CPU
 		{DD380C37-8FC1-4209-BC63-9B88B483264D}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{DD380C37-8FC1-4209-BC63-9B88B483264D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DD380C37-8FC1-4209-BC63-9B88B483264D}.Debug|Any CPU.Build.0 = Debug|Any CPU

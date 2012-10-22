@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapFullDayAbsence()
 		{
-			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
+			var timeZone = (TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 			var form = new AbsenceRequestForm {FullDay = true};
 
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapPeriod()
 		{
-			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
+			var timeZone = (TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 			var form = new AbsenceRequestForm
 			{

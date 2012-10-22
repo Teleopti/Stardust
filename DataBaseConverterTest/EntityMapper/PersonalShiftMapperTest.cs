@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         {
             global::Domain.FillupShift oldShift = agdFactory.FillUpShift();
 
-            PersonalShiftMapper msMap = new PersonalShiftMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc), new DateTime(2007, 1, 1));
+            PersonalShiftMapper msMap = new PersonalShiftMapper(mappedObjectPair, (TimeZoneInfo.Utc), new DateTime(2007, 1, 1));
             PersonalShift newShift = msMap.Map(oldShift);
 
             Assert.AreEqual(3, newShift.LayerCollection.Count);

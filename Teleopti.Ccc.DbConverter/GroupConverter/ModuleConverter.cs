@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
     internal abstract class ModuleConverter
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ModuleConverter));
-        private readonly ICccTimeZoneInfo _timeZoneInfo;
+        private readonly TimeZoneInfo _timeZoneInfo;
         private readonly MappedObjectPair _mappedObjectPair;
         private readonly DateTimePeriod _period;
 
         public ModuleConverter(MappedObjectPair mappedObjectPair, 
                                DateTimePeriod period,
-                               ICccTimeZoneInfo timeZoneInfo)
+                               TimeZoneInfo timeZoneInfo)
         {
             _timeZoneInfo = timeZoneInfo;
             _period = period;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
 
         protected abstract IEnumerable<Type> DependedOn { get;}
 
-        protected ICccTimeZoneInfo TimeZoneInfo
+        protected TimeZoneInfo TimeZoneInfo
         {
             get { return _timeZoneInfo; }
         }

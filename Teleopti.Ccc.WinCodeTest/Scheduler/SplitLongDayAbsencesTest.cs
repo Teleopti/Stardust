@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IPerson _person;
 		private IScenario _scenario;
 		private IAbsence _absence;
-		private ICccTimeZoneInfo _originalTimeZone;
+		private TimeZoneInfo _originalTimeZone;
 
 		[SetUp]
 		public void Setup()
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldNotAddLayerIfStarTimeIsLessThanEndTime()
 		{
-			StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+			StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone = (TimeZoneInfo.Utc);
 			DateTime absenceStart = new DateTime(2012, 1, 2, 0, 15, 0, DateTimeKind.Utc);
 			DateTime absenceEnd = new DateTime(2012, 1, 2, 1, 15, 0, DateTimeKind.Utc);
 			DateTimePeriod absencePeriod = new DateTimePeriod(absenceStart, absenceEnd);

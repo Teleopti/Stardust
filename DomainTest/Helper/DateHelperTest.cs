@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using System.Globalization;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Helper
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 
             Assert.AreEqual(expected, DateHelper.GetFirstDateInMonth(dateToUse, culture));
 
-            expected = new DateTime(2006, 12, 21);
+            expected = new DateTime(2006, 12, 22);
             culture = CultureInfo.GetCultureInfo(1025); //Arabic - Saudi
             Assert.AreEqual(expected, DateHelper.GetFirstDateInMonth(dateToUse, culture));
         }
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 
             Assert.AreEqual(expected, DateHelper.GetLastDateInMonth(dateToUse, culture));
 
-            expected = new DateTime(2007, 1, 18);
+            expected = new DateTime(2007, 1, 19);
             culture = CultureInfo.GetCultureInfo(1025); //Arabic - Saudi
             Assert.AreEqual(expected, DateHelper.GetLastDateInMonth(dateToUse, culture));
         }
@@ -145,6 +145,33 @@ namespace Teleopti.Ccc.DomainTest.Helper
             culture = CultureInfo.GetCultureInfo(1025); //Arabic - Saudi
             Assert.AreEqual(expected, DateHelper.GetLastDateInWeek(dateToUse, culture));
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		public void ShouldGetQuarter()
+		{
+			DateHelper.GetQuarter(1).Should().Be.EqualTo(1);
+			DateHelper.GetQuarter(2).Should().Be.EqualTo(1);
+			DateHelper.GetQuarter(3).Should().Be.EqualTo(1);
+			DateHelper.GetQuarter(4).Should().Be.EqualTo(2);
+			DateHelper.GetQuarter(5).Should().Be.EqualTo(2);
+			DateHelper.GetQuarter(6).Should().Be.EqualTo(2);
+			DateHelper.GetQuarter(7).Should().Be.EqualTo(3);
+			DateHelper.GetQuarter(8).Should().Be.EqualTo(3);
+			DateHelper.GetQuarter(9).Should().Be.EqualTo(3);
+			DateHelper.GetQuarter(10).Should().Be.EqualTo(4);
+			DateHelper.GetQuarter(11).Should().Be.EqualTo(4);
+			DateHelper.GetQuarter(12).Should().Be.EqualTo(4);
+			DateHelper.GetQuarter(13).Should().Be.EqualTo(0);
+			DateHelper.GetQuarter(-1).Should().Be.EqualTo(0);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		public void ShouldGetWeekPeriod()
+		{
+			var result = DateHelper.GetWeekPeriod(new DateOnly(2012, 10, 16), DayOfWeek.Monday);
+			result.StartDate.Should().Be.EqualTo(new DateOnly(2012, 10, 15));
+			result.EndDate.Should().Be.EqualTo(new DateOnly(2012, 10, 21));
+		}
 
         /// <summary>
         /// Verifies the day of week collection is returned.

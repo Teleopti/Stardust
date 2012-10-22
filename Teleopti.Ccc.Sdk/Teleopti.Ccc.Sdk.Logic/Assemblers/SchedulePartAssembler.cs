@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         public IScheduleRepository ScheduleRepository { get; set; }
 
     	public string SpecialProjection { get; set; }
-    	public ICccTimeZoneInfo TimeZone { get; set; }
+    	public TimeZoneInfo TimeZone { get; set; }
 
     	public SchedulePartAssembler(IScenarioProvider scenarioProvider,
                                     IScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto> personAssignmentAssembler,
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                                                                      skaVaraPersonernaIListansFullaSchemaPeriod,
                                                                      _scenarioProvider.DefaultScenario());
             //vad ska hända här?
-            //CccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(schedulePartDto.TimeZoneId));
+            //TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById(schedulePartDto.TimeZoneId));
             //scheduleDictionary.SetTimeZone(timeZoneInfo);
             DateOnly date = new DateOnly(schedulePartDto.Date.DateTime);
             return scheduleDictionary[person].ScheduledDay(date);
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             if (schedulePart != null)
             {
                 retDto.PersonId = schedulePart.Person.Id.Value;
-                retDto.Date = new DateOnlyDto(schedulePart.DateOnlyAsPeriod.DateOnly);
+				retDto.Date = new DateOnlyDto { DateTime = schedulePart.DateOnlyAsPeriod.DateOnly };
                 retDto.TimeZoneId = schedulePart.Person.PermissionInformation.DefaultTimeZone().Id;
 
                 DateTimePeriodDto dateOnlyPeriodDto = _dateTimePeriodAssembler.DomainEntityToDto(schedulePart.DateOnlyAsPeriod.Period());

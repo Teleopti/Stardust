@@ -36,11 +36,11 @@ namespace Teleopti.Ccc.DomainTest.Helper
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void VerifySerializeAndDeserializeBinary()
         {
-            ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.Utc);
-            byte[] serializedValue = SerializationHelper.SerializeAsBinary(cccTimeZoneInfo);
+            TimeZoneInfo TimeZoneInfo = (TimeZoneInfo.Utc);
+            byte[] serializedValue = SerializationHelper.SerializeAsBinary(TimeZoneInfo);
             Assert.Greater(serializedValue.Length,0);
-            cccTimeZoneInfo = SerializationHelper.Deserialize<ICccTimeZoneInfo>(serializedValue);
-            Assert.AreEqual(TimeZoneInfo.Utc.Id, cccTimeZoneInfo.Utc.Id);
+            TimeZoneInfo = SerializationHelper.Deserialize<TimeZoneInfo>(serializedValue);
+            Assert.AreEqual(TimeZoneInfo.Utc.Id, TimeZoneInfo.Utc.Id);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This should only be used for this test!")]

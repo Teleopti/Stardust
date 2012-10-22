@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 throw new InvalidOperationException("Cannot add layer to overtime shift before shift is connected to assignment.");
 
             IPersonAssignment ass = ((IPersonAssignment) Root());
-            ICccTimeZoneInfo timeZoneInfo = ass.Person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo timeZoneInfo = ass.Person.PermissionInformation.DefaultTimeZone();
             DateOnly dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(layer.Period.StartDateTime, timeZoneInfo).Date);
             IPersonPeriod period = ass.Person.Period(dateOnlyPerson);
             if(period!=null)

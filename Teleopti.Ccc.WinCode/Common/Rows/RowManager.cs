@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCode.Common.Rows
         /// Created by: micke
         /// Created date: 2009-03-21
         /// </remarks>
-        public virtual ICccTimeZoneInfo TimeZoneInfo
+        public virtual TimeZoneInfo TimeZoneInfo
         {
             get { return StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone; }
         }

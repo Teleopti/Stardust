@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     {
         private IList<IApplicationRole> personInApplicationRole = new List<IApplicationRole>();
         private string defaultTimeZone;
-        private ICccTimeZoneInfo _defaultTimeZoneCache;
+        private TimeZoneInfo _defaultTimeZoneCache;
         private int? culture;
         private int? uiCulture;
         private IPerson _belongsTo;
@@ -108,20 +108,20 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             return new List<IBusinessUnit>(retColl);
         }
 
-        public void SetDefaultTimeZone(ICccTimeZoneInfo value)
+        public void SetDefaultTimeZone(TimeZoneInfo value)
         {
             InParameter.NotNull("DefaultTimeZone", value);
             _defaultTimeZoneCache = value;
             defaultTimeZone = value.Id;
         }
 
-        public ICccTimeZoneInfo DefaultTimeZone()
+        public TimeZoneInfo DefaultTimeZone()
         {
             if (_defaultTimeZoneCache == null || _defaultTimeZoneCache.Id != defaultTimeZone)
             {
                 _defaultTimeZoneCache = string.IsNullOrEmpty(defaultTimeZone)
-                                            ? new CccTimeZoneInfo(TimeZoneInfo.Local)
-                                            : new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(defaultTimeZone));
+                                            ? TimeZoneInfo.Local
+                                            : TimeZoneInfo.FindSystemTimeZoneById(defaultTimeZone);
             }
             return _defaultTimeZoneCache;
         }

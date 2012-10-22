@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         {
             int org = 3;
             string orgSting = org.ToString(CultureInfo.CurrentCulture);
-            QueueSourceMapper mapper = new QueueSourceMapper(new MappedObjectPair(), new CccTimeZoneInfo(TimeZoneInfo.Local));
+            QueueSourceMapper mapper = new QueueSourceMapper(new MappedObjectPair(), (TimeZoneInfo.Local));
             IQueueSource theNew = mapper.Map(org);
             Assert.AreEqual(orgSting, theNew.Name);
             Assert.AreEqual(orgSting, theNew.Description);

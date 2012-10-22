@@ -10,10 +10,10 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IOptimizerActivitiesPreferences _optimizerActivitiesPreferences;
 		private readonly IMainShift _originalMainShift;
 		private readonly DateOnly _viewerDate;
-        private readonly ICccTimeZoneInfo _viewerTimeZone;
+        private readonly TimeZoneInfo _viewerTimeZone;
         private readonly IVisualLayerCollection _visualLayerColl;
 
-		public MainShiftOptimizeActivitiesSpecification(IOptimizerActivitiesPreferences optimizerActivitiesPreferences, IMainShift originalMainShift, DateOnly viewerDate, ICccTimeZoneInfo viewerTimeZone)
+		public MainShiftOptimizeActivitiesSpecification(IOptimizerActivitiesPreferences optimizerActivitiesPreferences, IMainShift originalMainShift, DateOnly viewerDate, TimeZoneInfo viewerTimeZone)
         {
             _optimizerActivitiesPreferences = optimizerActivitiesPreferences;
 			_originalMainShift = originalMainShift;

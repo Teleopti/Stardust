@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private DateTime _cachedLocalDateTime;
         private DateTime _cachedUtcDateTime;
 
-        public DateTime GetLocalDateTime(DateTime dateTimeUtc, ICccTimeZoneInfo timeZoneInfo)
+        public DateTime GetLocalDateTime(DateTime dateTimeUtc, TimeZoneInfo timeZoneInfo)
         {
             if (timeZoneInfo.Id!=_timeZoneInfoId || _cachedUtcDateTime!=dateTimeUtc)
             {
                 _timeZoneInfoId = timeZoneInfo.Id;
                 _cachedUtcDateTime = dateTimeUtc;
-                _cachedLocalDateTime = timeZoneInfo.ConvertTimeFromUtc(dateTimeUtc, timeZoneInfo).Date;
+                _cachedLocalDateTime = TimeZoneHelper.ConvertFromUtc(dateTimeUtc, timeZoneInfo).Date;
             }
             return _cachedLocalDateTime;
         }

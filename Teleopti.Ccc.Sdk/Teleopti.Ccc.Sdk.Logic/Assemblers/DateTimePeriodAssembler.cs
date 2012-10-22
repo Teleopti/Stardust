@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
         }
 
-        public ICccTimeZoneInfo TimeZone { get; set; }
+        public TimeZoneInfo TimeZone { get; set; }
 
         public override DateTimePeriodDto DomainEntityToDto(DateTimePeriod entity)
         {

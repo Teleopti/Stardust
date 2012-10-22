@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void Setup()
 		{
 			var person = PersonFactory.CreatePerson();
-			person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 			dic = new ScheduleDictionary(new Scenario("sd"), new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)));
 			scheduleDay = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2000, 1, 1));
 			target = new ScheduleProjectionService(scheduleDay, new ProjectionPayloadMerger());
@@ -434,7 +434,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyDayOffOnNonShiftDay()
 		{
-			scheduleDay.Person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+			scheduleDay.Person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
 			DayOffTemplate dOff = new DayOffTemplate(new Description("test"));
 			dOff.Anchor = TimeSpan.FromHours(12);

@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.MultipleDate
@@ -9,16 +8,16 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.MultipleDate
     {
         private readonly DateTime _startDateLocal;
         private readonly DateTime _endDateLocal;
-        private readonly ICccTimeZoneInfo _cccTimeZoneInfo;
+        private readonly TimeZoneInfo _timeZoneInfo;
 
         public JobMultipleDateItem(DateTimeKind dateTimeKind, DateTime startDate, DateTime endDate, TimeZoneInfo timeZone)
         {
-            _cccTimeZoneInfo = new CccTimeZoneInfo(timeZone);
+            _timeZoneInfo = timeZone;
             if (dateTimeKind == DateTimeKind.Utc)
             {
                 //UTC incoming
-                _startDateLocal = _cccTimeZoneInfo.ConvertTimeFromUtc(startDate, _cccTimeZoneInfo);
-                _endDateLocal = _cccTimeZoneInfo.ConvertTimeFromUtc(endDate, _cccTimeZoneInfo);
+                _startDateLocal = TimeZoneInfo.ConvertTimeFromUtc(startDate, _timeZoneInfo);
+                _endDateLocal = TimeZoneInfo.ConvertTimeFromUtc(endDate, _timeZoneInfo);
             }
             else
             {
@@ -37,12 +36,12 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.MultipleDate
         }
         public DateTime StartDateUtc
         {
-            get { return _cccTimeZoneInfo.ConvertTimeToUtc(StartDateLocal); }
+            get { return _timeZoneInfo.SafeConvertTimeToUtc(StartDateLocal); }
         }
 
         public DateTime EndDateUtc
         {
-            get { return _cccTimeZoneInfo.ConvertTimeToUtc(EndDateLocal); }
+            get { return _timeZoneInfo.SafeConvertTimeToUtc(EndDateLocal); }
         }
 
         public DateTime StartDateUtcFloor

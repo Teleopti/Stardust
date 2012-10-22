@@ -71,12 +71,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(activity);
 
             ISkill skill = SkillFactory.CreateSkill("NewName",type,15);
-            skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.GetSystemTimeZones()[1]);
+            skill.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
             skill.Activity = activity;
             PersistAndRemoveFromUnitOfWork(skill);
 
             IPerson person = PersonFactory.CreatePerson("test");
-            person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time")));
+            person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time")));
             PersistAndRemoveFromUnitOfWork(person);
 
             IEnumerable<TimeZoneInfo> allTimeZones = new BusinessUnitRepository(UnitOfWork).LoadAllTimeZones();

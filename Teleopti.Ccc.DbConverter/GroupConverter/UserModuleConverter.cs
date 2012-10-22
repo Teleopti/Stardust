@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
 
         public UserModuleConverter(MappedObjectPair mappedObjectPair, 
                                 DateTimePeriod period, 
-                                ICccTimeZoneInfo timeZoneInfo,
+                                TimeZoneInfo timeZoneInfo,
                                 DefaultAggregateRoot defaultAggregateRoot)
             : base(mappedObjectPair, period, timeZoneInfo)
         {

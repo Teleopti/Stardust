@@ -86,9 +86,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         {
             get
             {
-                ICccTimeZoneInfo timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
-                return timeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(StartDate.Date, DateTimeKind.Unspecified),
-                                                     timeZoneInfo);
+                TimeZoneInfo timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
+                return timeZoneInfo.SafeConvertTimeToUtc(DateTime.SpecifyKind(StartDate.Date, DateTimeKind.Unspecified));
             }
         }
 

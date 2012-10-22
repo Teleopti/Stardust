@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private MenuItem _menuItemMerge;
         private MenuItem _menuItemSaveAsTemplate;
         private MenuItem _menuItemModifySelection;
-        private readonly ICccTimeZoneInfo _timeZone;
+        private readonly TimeZoneInfo _timeZone;
         private bool _timeSpanAsMinutes;
         private readonly ChartSettings _chartSettings;
 
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         /// Created by: robink
         /// Created date: 2008-02-24
         /// </remarks>
-        protected ICccTimeZoneInfo TimeZone
+        protected TimeZoneInfo TimeZone
         {
             get { return _timeZone; }
         }
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         #region Constructor
 
         internal BaseIntradayGridControl(ITaskOwner taskOwnerDay, TaskOwnerHelper taskOwnerPeriodHelper,
-            ICccTimeZoneInfo timeZone, int resolution, AbstractDetailView owner, bool timeSpanAsMinutes, ChartSettings chartSettings)
+            TimeZoneInfo timeZone, int resolution, AbstractDetailView owner, bool timeSpanAsMinutes, ChartSettings chartSettings)
         {
             _owner = owner;
             _taskOwnerDay = taskOwnerDay;
@@ -752,7 +752,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 if (_intervals.Count == 0) return SkillDayTemplate.BaseDate;
                 if (_taskOwnerDay != null)
                 {
-                    return _timeZone.ConvertTimeFromUtc(_intervals[0].DateTime, _timeZone);
+                    return TimeZoneInfo.ConvertTimeFromUtc(_intervals[0].DateTime, _timeZone);
                 }
 
                 //Template usage...
@@ -767,7 +767,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 if (_intervals.Count == 0) return SkillDayTemplate.BaseDate;
                 if (_taskOwnerDay != null)
                 {
-                    return _timeZone.ConvertTimeFromUtc(_intervals.Last().DateTime.Add(ChartResolution), _timeZone);
+                    return TimeZoneInfo.ConvertTimeFromUtc(_intervals.Last().DateTime.Add(ChartResolution), _timeZone);
                 }
 
                 //Template usage...
@@ -824,7 +824,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                         }
                 }
 
-                keyValueCollection.Add(_timeZone.ConvertTimeFromUtc(_intervals[i - colHeaders].DateTime, _timeZone), cellValue);
+                keyValueCollection.Add(TimeZoneInfo.ConvertTimeFromUtc(_intervals[i - colHeaders].DateTime, _timeZone), cellValue);
             }
 
             return keyValueCollection;

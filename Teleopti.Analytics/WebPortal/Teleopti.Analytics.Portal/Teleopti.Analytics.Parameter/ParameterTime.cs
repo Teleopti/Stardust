@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -66,14 +67,17 @@ namespace Teleopti.Analytics.Parameters
 			_dropDown.CssClass = "ControlStyle";
 			_dropDown.DataTextField = "name";
 			_dropDown.DataValueField = "id";
-
-			_validator = new RequiredFieldValidator();
 			_dropDown.ID = "Drop" + Dbid;
-			_validator.ControlToValidate = _dropDown.ID;
-			_validator.Text = "*";
 
-			_validator.ErrorMessage = Selector.ErrorMessage + " '" + Text + "'";
-			_validator.Display = ValidatorDisplay.Dynamic;
+			_validator = new RequiredFieldValidator
+				{
+					ControlToValidate = _dropDown.ID,
+					Text = "*",
+					ErrorMessage = Selector.ErrorMessage + " '" + Text + "'",
+					Display = ValidatorDisplay.Dynamic,
+					ForeColor = Color.Red
+				};
+
 			_label.Text = Text;
 			base.Controls.Add(_label);
 			base.Controls.Add(_dropDown);

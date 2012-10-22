@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
 
         public CommonConverter(MappedObjectPair mappedObjectPair, 
                                DateTimePeriod period, 
-                               ICccTimeZoneInfo timeZoneInfo,
+                               TimeZoneInfo timeZoneInfo,
                                DefaultAggregateRoot defaultAggregateRoot, string connectionString)
             : base(mappedObjectPair, period, timeZoneInfo)
         {

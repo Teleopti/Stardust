@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 DateTimePeriod validPeriod = day.Period;
                 DateTime scheduleDayUtc = validPeriod.StartDateTime;
 
-                ICccTimeZoneInfo timeZoneInfo = day.Person.PermissionInformation.DefaultTimeZone();
+                TimeZoneInfo timeZoneInfo = day.Person.PermissionInformation.DefaultTimeZone();
                 var startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(scheduleDayUtc, timeZoneInfo));
                 periods.Add(day.Person.VirtualSchedulePeriod(startDate));
             }

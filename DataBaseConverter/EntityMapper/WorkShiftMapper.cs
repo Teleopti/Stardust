@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created date: 10/26/2007
         /// </remarks>
         public WorkShiftMapper(MappedObjectPair mappedObjectPair, 
-                               ICccTimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
+                               TimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
         {
         }
 

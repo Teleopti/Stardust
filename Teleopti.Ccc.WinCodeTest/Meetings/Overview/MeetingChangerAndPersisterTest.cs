@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
         private MeetingChangerAndPersister _target;
         private IMeetingOverviewViewModel _model;
         private IScenario _scenario;
-        private CccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private IMeetingOverviewView _view;
         private IMeetingParticipantPermittedChecker _meetingParticipantPermittedChecker;
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
 			_model = new MeetingOverviewViewModel { CurrentScenario = _scenario }; //_mocks.StrictMock<IMeetingOverviewViewModel>();
             _target = new MeetingChangerAndPersister(_meetingRepository, _unitOfWorkFactory, _model, _meetingParticipantPermittedChecker);
 
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"));   
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"));   
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             var userStartDateTime = new DateTime(2011, 3, 30, 9, 0, 0);
             var meeting = _mocks.DynamicMock<IMeeting>();
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
-            var userTimeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
+            var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
             var period = new DateOnlyPeriod(2011, 4, 3, 2011, 4, 3);
     		_model.SelectedPeriod = period;
             var bu = _mocks.StrictMock<IBusinessUnit>(); 

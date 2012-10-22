@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 
@@ -177,22 +178,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             if(OnlyPositiveValues && d<0)
                 return "";
 
-            //return d.ToString(ci).Replace((char)160, (char)32);
             return d.ToString(ci);
         }
 
-        //Serialization stuff to make FxCop Happy
-        /// <summary>
-        /// Gets the object data.
-        /// </summary>
-        /// <param name="info">The info.</param>
-        /// <param name="context">The context.</param>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2008-01-08
-        /// </remarks>
-        
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             

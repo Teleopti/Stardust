@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void VerifyPropertiesCanBeRead()
         {
             MappedObjectPair mappedObjectPair = new MappedObjectPair();
-            ICccTimeZoneInfo timeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+            TimeZoneInfo timeZone = (TimeZoneInfo.Local);
             testMapper target = new testMapper(mappedObjectPair, timeZone);
             Assert.AreSame(mappedObjectPair, target.MappedObjectPair);
             Assert.AreSame(timeZone, target.TimeZone);
@@ -37,13 +37,13 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyMappedObjectPairIsNotNull()
         {
-            new testMapper(null, new CccTimeZoneInfo(TimeZoneInfo.Local));
+            new testMapper(null, (TimeZoneInfo.Local));
         }
 
         private class testMapper : Mapper<int, string>
         {
             public testMapper(MappedObjectPair mappedObjectPair,
-                                ICccTimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
+                                TimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
             {
             }
 

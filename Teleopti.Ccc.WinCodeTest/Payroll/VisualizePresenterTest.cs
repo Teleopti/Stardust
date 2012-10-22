@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll
         [Test]
         public void VerifyLoadModel()
         {
-            ICccTimeZoneInfo timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
             multiplicatorDefinitionSets.Add(new MultiplicatorDefinitionSet("OB",MultiplicatorType.OBTime));
             multiplicatorDefinitionSets[0].AddDefinition(new DayOfWeekMultiplicatorDefinition(new Multiplicator(MultiplicatorType.OBTime),DayOfWeek.Monday,new TimePeriod(0,0,23,59)));

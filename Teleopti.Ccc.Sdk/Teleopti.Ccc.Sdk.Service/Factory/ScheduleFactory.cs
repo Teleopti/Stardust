@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         {
             IList<MultiplicatorDataDto> multiplicatorDataDtos = new List<MultiplicatorDataDto>();
 
-            var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId));
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId));
             var datePeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
             DateTimePeriod period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
             
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         {
             IList<SchedulePartDto> returnList = new List<SchedulePartDto>();
 
-            var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId));
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId));
             var datePeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
             DateTimePeriod period = new DateOnlyPeriod(datePeriod.StartDate,datePeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
 

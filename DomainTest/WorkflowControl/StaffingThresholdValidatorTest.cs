@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
             IAbsenceRequest absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
-            absenceRequest.Person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            absenceRequest.Person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
             IScheduleRange range = _mocks.StrictMock<IScheduleRange>();
             IScheduleDay scheduleDay = _mocks.StrictMock<IScheduleDay>();
             IProjectionService projectionService = _mocks.StrictMock<IProjectionService>();
