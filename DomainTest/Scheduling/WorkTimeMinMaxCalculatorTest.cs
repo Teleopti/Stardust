@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -47,7 +43,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			result.WorkTimeMinMax.Should().Be.EqualTo(workTimeMineMax);
 		}
 
-		public void ShouldReturnIfRestrictionCouldNeverMatchWithAnyShifts()
+		[Test]
+		public static void ShouldReturnIfRestrictionCouldNeverMatchWithAnyShifts()
 		{
 			var ruleSetBag = MockRepository.GenerateMock<IRuleSetBag>();
 			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
@@ -211,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
-		public void ShouldReturnMinMaxWorkTimeForMeeting()
+		public static void ShouldReturnMinMaxWorkTimeForMeeting()
 		{
 			var effectiveRestrictionForMeeting = MockRepository.GenerateMock<IMeetingRestrictionCombiner>();
 			var target = new WorkTimeMinMaxCalculator(null, new WorkTimeMinMaxRestrictionCreator(new EffectiveRestrictionForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner(), effectiveRestrictionForMeeting, null)));
@@ -226,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
-		public void ShouldReturnMinMaxWorkTimeForPersonalShift()
+		public static void ShouldReturnMinMaxWorkTimeForPersonalShift()
 		{
 			var effectiveRestrictionForPersonalShift = MockRepository.GenerateMock<IPersonalShiftRestrictionCombiner>();
 			var target = new WorkTimeMinMaxCalculator(null, new WorkTimeMinMaxRestrictionCreator(new EffectiveRestrictionForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner(), null, effectiveRestrictionForPersonalShift)));
@@ -240,8 +237,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			effectiveRestrictionForPersonalShift.AssertWasCalled(x => x.Combine(Arg<IScheduleDay>.Is.Same(scheduleDay), Arg<IEffectiveRestriction>.Is.NotNull));
 		}
 
-		[Test]
-		public void ShouldReturnFlagIfRestrictionNeverHadThePosibilityToMatchAShift()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flag"), Test]
+		public static void ShouldReturnFlagIfRestrictionNeverHadThePossibilityToMatchAShift()
 		{
 			var workTimeMinMaxRestrictionCreator = MockRepository.GenerateMock<IWorkTimeMinMaxRestrictionCreator>();
 			var workTimeMinMaxRestriction = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();

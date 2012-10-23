@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			return categories;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IWorkTimeMinMax MinMaxWorkTime(IWorkShiftWorkTime workShiftWorkTime, DateOnly onDate, IWorkTimeMinMaxRestriction restriction)
 		{
 			if (restriction == null)

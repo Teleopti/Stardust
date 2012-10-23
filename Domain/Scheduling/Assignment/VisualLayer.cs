@@ -117,6 +117,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return HighestPriorityActivity != null ? HighestPriorityActivity.Id.GetValueOrDefault() : Guid.Empty; }
     	}
 
-		public bool ActivityAllowesOverwrite { get { return HighestPriorityActivity.AllowOverwrite; } }
+		public bool ActivityAllowsOverwrite { get { return HighestPriorityActivity.AllowOverwrite; } }
     }
 }

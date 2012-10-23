@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_combiner = combiner;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IEffectiveRestriction Combine(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction)
 		{
 			if (effectiveRestriction == null)

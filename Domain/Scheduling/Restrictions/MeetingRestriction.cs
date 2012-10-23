@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			                    from l in workShiftProjection.Layers
 			                    where m.Period.Intersect(l.Period)
 			                    select l;
-			return intersectingActivities.All(x => x.ActivityAllowesOverwrite);
+			return intersectingActivities.All(x => x.ActivityAllowsOverwrite);
 		}
 	}
 }
