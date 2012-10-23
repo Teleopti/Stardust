@@ -18,11 +18,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 					ShiftCategoryId = workShift.ShiftCategory.Id.Value,
 					TimePeriod = workShift.ToTimePeriod().Value,
 					Layers = (from l in workShift.Projection
+					          let activity = l.Payload as IActivity
 					          let payloadId = l.Payload.Id ?? Guid.Empty
 					          select new WorkShiftProjectionLayer
 						          {
 							          ActivityId = payloadId,
-							          Period = l.Period
+							          Period = l.Period,
+									  ActivityAllowesOverwrite = activity != null && activity.AllowOverwrite
 						          }
 					         ).ToArray()
 				};
