@@ -151,16 +151,20 @@ Scenario: See reply dialogue in message text
 	| Title					| Work late					|
 	| Message				| Can u work late today?	|
 	| Text reply allowed	| True						|
-	| Reply 1				| Ok if you buy me dinner?	|
-	| Reply 2				| It´s a deal!				|
+	And I have replied with
+	| Field					| Value						|
+	| Reply					| Ok if you buy me dinner?  |
+	And I have received a reply with
+	| Field					| Value						|
+	| Reply					| It´s a deal!				|
 	And I am viewing week schedule
 	And I navigate to messages
 	When I click on the message at position '1' in the list
-	Then I should see the message details form with
-	| Field					| Value						|
-	| Message containing	| Can u work late today?	|
-	| Message containing	| Ok if you buy me dinner?	|
-	| Message containing	| It´s a deal!	|
+	Then I should see this conversation
+	| Messages					|
+	| Can u work late today?    |
+	| Ok if you buy me dinner?  |
+	| It´s a deal!				|
 
 Scenario: Do not allow empty reply
 	Given I have the role 'Full access to mytime'
