@@ -1424,6 +1424,7 @@
     <Compile Include="Scheduling\SingleAgentRestriction\TeleoptiLessIntelligentSplitContainer.Designer.cs">
       <DependentUpon>TeleoptiLessIntelligentSplitContainer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\Swapper.cs" />
     <Compile Include="Scheduling\TagsMenuLoader.cs" />
     <Compile Include="Scheduling\UpdateSelectionInfo.cs" />
     <Compile Include="Scheduling\VirtualSkillHelper.cs" />
