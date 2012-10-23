@@ -134,7 +134,6 @@ Scenario: Feedback from a pre-scheduled meeting outside of possible shifts
 	| Date           | 2012-10-19         |
 	| Feedback error | No available shift |
 
-@ignore
 Scenario: Feedback from a pre-scheduled meeting with activity that disallows meetings
 	Given I have a person period with 
 	| Field        | Value            |
