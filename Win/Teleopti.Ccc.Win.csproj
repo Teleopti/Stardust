@@ -1216,8 +1216,10 @@
     <Compile Include="Scheduling\ClipboardControlBuilder.cs" />
     <Compile Include="Scheduling\ExportToPdf.cs" />
     <Compile Include="Scheduling\ExportToPdfGraphical.cs" />
+    <Compile Include="Scheduling\LockExecuter.cs" />
     <Compile Include="Scheduling\PermissionClipboardControl.cs" />
     <Compile Include="Scheduling\PermissionEditControl.cs" />
+    <Compile Include="Scheduling\QuickAccessState.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
