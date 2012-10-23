@@ -14,12 +14,14 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
+using log4net;
 
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
     public partial class SelectFileDestination : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(SelectFileDestination));
         private ExportSkillModel _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
         private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
@@ -127,8 +129,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
                 return false;
             }
 
-            catch
+            catch (IOException ex)
             {
+                log.Error("Something went wrong with file export", ex);
                 MessageBoxAdv.Show(Resources.CouldNotExportForecastToFile,
                                    Resources.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
