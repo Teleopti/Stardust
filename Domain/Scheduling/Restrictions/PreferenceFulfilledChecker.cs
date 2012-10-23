@@ -22,11 +22,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 	public class PreferenceFulfilledChecker : IPreferenceFulfilledChecker
 	{
+		private readonly ICheckerRestriction _restrictionChecker;
+
+		public PreferenceFulfilledChecker(ICheckerRestriction restrictionChecker)
+		{
+			_restrictionChecker = restrictionChecker;
+		}
+
 		public bool? IsPreferenceFulfilled(IScheduleDay day)
 		{
-
-			var restrictionChecker = new RestrictionChecker {ScheduleDay = day};
-			var result = restrictionChecker.CheckPreference();
+			_restrictionChecker.ScheduleDay = day;
+			var result = _restrictionChecker.CheckPreference();
 			switch (result)
 			{
 				case PermissionState.Satisfied:

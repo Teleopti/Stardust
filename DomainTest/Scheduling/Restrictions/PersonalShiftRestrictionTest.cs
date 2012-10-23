@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -159,6 +160,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var result = target.Match(shift);
 
 			result.Should().Be.False();
+		}
+
+		[Test]
+		public static void ShouldGetHash()
+		{
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
+			var target = new PersonalShiftRestriction(new IPersonAssignment[] {personAssignment, personAssignment});
+
+			target.GetHashCode().Should().Be.EqualTo((personAssignment.GetHashCode() * 398) ^ personAssignment.GetHashCode());
 		}
 	}
 }

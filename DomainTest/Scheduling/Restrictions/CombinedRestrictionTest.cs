@@ -1,9 +1,13 @@
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
@@ -218,6 +222,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var workShiftProjection = new WorkShiftProjection();
 
 			target.Match(workShiftProjection).Should().Be.False();
+		}
+
+		[Test]
+		public static void ShouldGetHash()
+		{
+			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
+			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
+			var target = new CombinedRestriction(one, two);
+			var result = 0;
+			result = (result*398) ^ one.GetHashCode();
+			result = (result * 398) ^ two.GetHashCode();
+
+			target.GetHashCode().Should().Be.EqualTo(result);
 		}
 
 

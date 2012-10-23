@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -153,6 +154,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var result = target.Match(shift);
 
 			result.Should().Be.False();
+		}
+
+		[Test]
+		public static void ShouldGetHash()
+		{
+			var person = new Person();
+			var meetingPerson = new MeetingPerson(person, true);
+			var meeting = new PersonMeeting(new Meeting(person, new[] { meetingPerson }, " ", " ", " ", new Activity(" "), new Scenario(" ")), meetingPerson, new DateTimePeriod(DateTime.UtcNow.Date.AddHours(8), DateTime.UtcNow.Date.AddHours(19)));
+			var target = new MeetingRestriction(new[] { meeting, meeting });
+
+			target.GetHashCode().Should().Be.EqualTo((meeting.GetHashCode() * 398) ^ meeting.GetHashCode());
 		}
 
 	}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -777,6 +778,49 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             Assert.IsFalse(_target.ShiftCategory != null || _target.NotAvailable);
 
         }
+
+		[Test]
+		public void ShouldMayMatchWithShifts()
+		{
+			_target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
+											   new WorkTimeLimitation(), null, null, null,
+											   new List<IActivityRestriction>());
+			_target.MayMatchWithShifts().Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMayMatchBlacklistedShifts()
+		{
+			_target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
+											   new WorkTimeLimitation(), null, null, null,
+											   new List<IActivityRestriction>());
+			_target.MayMatchBlacklistedShifts().Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMatchShiftCategory()
+		{
+			_target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
+											   new WorkTimeLimitation(), new ShiftCategory("Late"), null, null,
+											   new List<IActivityRestriction>());
+			_target.Match(new ShiftCategory("Late")).Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMatchWorkShiftProjection()
+		{
+			_startTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9));
+			_endTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(22), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(6)));
+
+			_target = new EffectiveRestriction(
+				_startTimeLimitation,
+				_endTimeLimitation,
+				_workTimeLimitation,
+				null,
+				null, null, new List<IActivityRestriction>());
+
+			Assert.IsFalse(_target.Match(_info1));
+		}
 
         [Test]
         public void VerifyHashCode()
