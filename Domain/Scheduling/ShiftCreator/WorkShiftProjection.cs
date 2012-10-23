@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 						          {
 							          ActivityId = payloadId,
 							          Period = l.Period,
-									  ActivityAllowesOverwrite = activity != null && activity.AllowOverwrite
+									  ActivityAllowsOverwrite = activity != null && activity.AllowOverwrite
 						          }
 					         ).ToArray()
 				};
