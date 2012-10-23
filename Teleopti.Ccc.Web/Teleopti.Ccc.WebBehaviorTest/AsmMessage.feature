@@ -56,13 +56,12 @@ Scenario: Navigate to message tab
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
 
-Scenario: Navigate to message tab with an unread message
+Scenario: View unread messages
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
 	| Field         | Value          |
 	| Title         | New message	 |
-	And I am viewing week schedule
-	When I navigate to messages
+	When I am viewing messages
 	Then I should see '1' message(s) in the list
 
 Scenario: Open unread message
@@ -71,8 +70,7 @@ Scenario: Open unread message
 	| Field		| Value				|
 	| Title		| New message		|
 	| Message	| Text in message	|	
-	And I am viewing week schedule
-	When I navigate to messages
+	When I am viewing messages
 	And I click on the message at position '1' in the list
 	Then I should see the message details form with
 	| Field		| Value				|
@@ -84,8 +82,7 @@ Scenario: Confirm message is read
 	And I have an unread message with
 	| Field         | Value          |
 	| Title         | New message	 |
-	And I am viewing week schedule
-	And I navigate to messages
+	When I am viewing messages
 	And I click on the message at position '1' in the list
 	When I click the confirm button
 	Then I should not see any messages
@@ -100,8 +97,7 @@ Scenario: Sort messages in list by latest message
 	And I have an unread message with
 	| Field         | Value				|
 	| Title         | Latest message	|
-	And I am viewing week schedule
-	When I navigate to messages
+	When I am viewing messages
 	Then I should see the message with title 'Latest message' at position '1' in the list
 	And I should see the message with title 'Message' at position '2' in the list
 
@@ -121,8 +117,7 @@ Scenario: Reduce number of unread messages in message tab title
 
 Scenario: Receive a new message when viewing message page
 	Given I have the role 'Full access to mytime'
-	And I am viewing week schedule
-	And I navigate to messages
+	And I am viewing messages
 	When I receive message number '1'
 	Then I should see '1' message(s) in the list
 
@@ -135,8 +130,7 @@ Scenario: Open unread message where text reply is allowed
 	| Title					| New message		|
 	| Message				| Text in message	|
 	| Text reply allowed	| True				|
-	And I am viewing week schedule
-	And I navigate to messages
+	And I am viewing messages
 	When I click on the message at position '1' in the list
 	Then I should see the message details form with
 	| Field				| Value				|
@@ -157,8 +151,7 @@ Scenario: See reply dialogue in message text
 	And I have received a reply with
 	| Field					| Value						|
 	| Reply					| It´s a deal!				|
-	And I am viewing week schedule
-	And I navigate to messages
+	And I am viewing messages
 	When I click on the message at position '1' in the list
 	Then I should see this conversation
 	| Messages					|
@@ -173,8 +166,7 @@ Scenario: Do not allow empty reply
 	| Title					| New message		|
 	| Message				| Text in message	|
 	| Text reply allowed	| True				|
-	And I am viewing week schedule
-	And I navigate to messages
+	And I am viewing messages
 	And I click on the message at position '1' in the list
 	When I click the send button
 	Then I should see validation error about empty reply is not allowed
@@ -187,8 +179,7 @@ Scenario: Send text reply message
 	| Title					| New message		|
 	| Message				| Text in message	|
 	| Text reply allowed	| True				|
-	And I am viewing week schedule
-	And I navigate to messages
+	And I am viewing messages
 	And I click on the message at position '1' in the list
 	When I enter the text reply 'my reply'
 	And I click the send button
@@ -202,8 +193,7 @@ Scenario: Do not allow too long replies
 	| Title					| New message		|
 	| Message				| Text in message	|
 	| Text reply allowed	| True				|
-	And I am viewing week schedule
-	And I navigate to messages
+	And I am viewing messages
 	And I click on the message at position '1' in the list
 	When I write too long text reply
 	And I click the send button
@@ -217,8 +207,7 @@ Scenario: Show remaining characters when writing text reply
 	| Title					| New message		|
 	| Message				| Text in message	|
 	| Text reply allowed	| True				|
-	And I am viewing week schedule
-	And I navigate to messages
+	And I am viewing messages
 	And I click on the message at position '1' in the list
 	When I enter the text reply 'my reply'
 	Then I should see that I have '242' characters left
