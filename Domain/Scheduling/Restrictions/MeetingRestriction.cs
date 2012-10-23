@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
 	public class MeetingRestriction : IWorkTimeMinMaxRestriction
 	{
-		private readonly IEnumerable<PersonMeeting> _personMeetings;
+		private readonly IEnumerable<IPersonMeeting> _personMeetings;
 
-		public MeetingRestriction(IEnumerable<PersonMeeting> personMeetings)
+		public MeetingRestriction(IEnumerable<IPersonMeeting> personMeetings)
 		{
 			_personMeetings = personMeetings;
 		}

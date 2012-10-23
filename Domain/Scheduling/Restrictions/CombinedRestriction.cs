@@ -4,33 +4,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
 	public class CombinedRestriction : IWorkTimeMinMaxRestriction
 	{
-		private readonly IWorkTimeMinMaxRestriction _one;
-		private readonly IWorkTimeMinMaxRestriction _two;
+		public IWorkTimeMinMaxRestriction One { get; private set; }
+		public IWorkTimeMinMaxRestriction Two { get; private set; }
 
 		public CombinedRestriction(IWorkTimeMinMaxRestriction one, IWorkTimeMinMaxRestriction two)
 		{
-			_one = one;
-			_two = two;
+			One = one;
+			Two = two;
 		}
 
 		public bool MayMatchWithShifts()
 		{
-			return _one.MayMatchWithShifts() && _two.MayMatchWithShifts();
+			return One.MayMatchWithShifts() && Two.MayMatchWithShifts();
 		}
 
 		public bool MayMatchBlacklistedShifts()
 		{
-			return _one.MayMatchBlacklistedShifts() || _two.MayMatchBlacklistedShifts();
+			return One.MayMatchBlacklistedShifts() || Two.MayMatchBlacklistedShifts();
 		}
 
 		public bool Match(IShiftCategory shiftCategory)
 		{
-			return _one.Match(shiftCategory) && _two.Match(shiftCategory);
+			return One.Match(shiftCategory) && Two.Match(shiftCategory);
 		}
 
 		public bool Match(IWorkShiftProjection workShiftProjection)
 		{
-			return _one.Match(workShiftProjection) && _two.Match(workShiftProjection);
+			return One.Match(workShiftProjection) && Two.Match(workShiftProjection);
 		}
 
 	}

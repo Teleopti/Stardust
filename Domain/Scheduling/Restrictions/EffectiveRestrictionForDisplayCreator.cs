@@ -5,14 +5,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
-	public class EffectiveRestrictionForDisplayForDisplayCreator : IEffectiveRestrictionForDisplayCreator
+	public class EffectiveRestrictionForDisplayCreator : IEffectiveRestrictionForDisplayCreator
 	{
 		private readonly IRestrictionRetrievalOperation _retrievalOperation;
 		private readonly IRestrictionCombiner _restrictionCombiner;
 		private readonly IMeetingRestrictionCombiner _meetingRestrictionCombiner;
 		private readonly IPersonalShiftRestrictionCombiner _personalShiftRestrictionCombiner;
 
-		public EffectiveRestrictionForDisplayForDisplayCreator(IRestrictionRetrievalOperation retrievalOperation, IRestrictionCombiner restrictionCombiner, IMeetingRestrictionCombiner meetingRestrictionCombiner, IPersonalShiftRestrictionCombiner personalShiftRestrictionCombiner)
+		public EffectiveRestrictionForDisplayCreator(IRestrictionRetrievalOperation retrievalOperation, IRestrictionCombiner restrictionCombiner, IMeetingRestrictionCombiner meetingRestrictionCombiner, IPersonalShiftRestrictionCombiner personalShiftRestrictionCombiner)
 		{
 			_retrievalOperation = retrievalOperation;
 			_restrictionCombiner = restrictionCombiner;

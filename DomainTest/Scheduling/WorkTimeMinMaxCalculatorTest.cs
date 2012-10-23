@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldReturnMinMaxWorkTimeForMeeting()
 		{
 			var effectiveRestrictionForMeeting = MockRepository.GenerateMock<IMeetingRestrictionCombiner>();
-			var target = new WorkTimeMinMaxCalculator(null, new WorkTimeMinMaxRestrictionCreator(new EffectiveRestrictionForDisplayForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner(), effectiveRestrictionForMeeting, null)));
+			var target = new WorkTimeMinMaxCalculator(null, new WorkTimeMinMaxRestrictionCreator(new EffectiveRestrictionForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner(), effectiveRestrictionForMeeting, null)));
 			var personPeriod = new PersonPeriod(DateOnly.Today, new PersonContract(new Contract(" "), new PartTimePercentage(" "), new ContractSchedule(" ")), new Team()) {RuleSetBag = MockRepository.GenerateMock<IRuleSetBag>()};
 			var person = new Person();
 			person.AddPersonPeriod(personPeriod);
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldReturnMinMaxWorkTimeForPersonalShift()
 		{
 			var effectiveRestrictionForPersonalShift = MockRepository.GenerateMock<IPersonalShiftRestrictionCombiner>();
-			var target = new WorkTimeMinMaxCalculator(null, new WorkTimeMinMaxRestrictionCreator(new EffectiveRestrictionForDisplayForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner(), null, effectiveRestrictionForPersonalShift)));
+			var target = new WorkTimeMinMaxCalculator(null, new WorkTimeMinMaxRestrictionCreator(new EffectiveRestrictionForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner(), null, effectiveRestrictionForPersonalShift)));
 			var personPeriod = new PersonPeriod(DateOnly.Today, new PersonContract(new Contract(" "), new PartTimePercentage(" "), new ContractSchedule(" ")), new Team()) {RuleSetBag = MockRepository.GenerateMock<IRuleSetBag>()};
 			var person = new Person();
 			person.AddPersonPeriod(personPeriod);
