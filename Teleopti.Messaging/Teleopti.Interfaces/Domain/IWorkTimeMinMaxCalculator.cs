@@ -14,9 +14,9 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		public IWorkTimeMinMax WorkTimeMinMax { get; set; }
 		/// <summary>
-		/// true if the restriction never had the posibility to match anything
+		/// true if the restriction never had the possibility to match anything
 		/// </summary>
-		public bool RestrictionNeverHadThePosibilityToMatchWithShifts { get; set; }
+		public bool RestrictionNeverHadThePossibilityToMatchWithShifts { get; set; }
 	}
 
 	/// <summary>

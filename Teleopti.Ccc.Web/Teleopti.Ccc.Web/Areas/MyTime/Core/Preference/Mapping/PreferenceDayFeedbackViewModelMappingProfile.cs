@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				              		var result = _preferenceFeedbackProvider.Invoke().WorkTimeMinMaxForDate(s) ?? new WorkTimeMinMaxCalculationResult();
 				              		if (result.WorkTimeMinMax == null)
 				              		{
-				              			if (result.RestrictionNeverHadThePosibilityToMatchWithShifts)
+				              			if (result.RestrictionNeverHadThePossibilityToMatchWithShifts)
 											return _mapper.Invoke().Map<Tuple<DateOnly, string>, PreferenceDayFeedbackViewModel>(new Tuple<DateOnly, string>(s, ""));
 										return _mapper.Invoke().Map<Tuple<DateOnly, string>, PreferenceDayFeedbackViewModel>(new Tuple<DateOnly, string>(s, Resources.NoAvailableShifts));
 									}

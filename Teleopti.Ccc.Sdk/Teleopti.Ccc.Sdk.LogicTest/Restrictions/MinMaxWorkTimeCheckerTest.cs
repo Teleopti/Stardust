@@ -7,7 +7,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Time;
@@ -28,11 +27,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         private IWorkShiftWorkTime _workShiftWorkTime;
         private readonly IEffectiveRestriction _restriction = new EffectiveRestriction(new StartTimeLimitation(null, null),
             new EndTimeLimitation(null, null), new WorkTimeLimitation(null, null), null, null, null, new List<IActivityRestriction>());
-
         private IPerson _person;
-        private IPermissionInformation _permissionInformation;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -45,7 +42,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             //_person.SetId(Guid.NewGuid());
             _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             _person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-            _permissionInformation = new PermissionInformation(_person);
         }
         
         [Test, ExpectedException(typeof(ArgumentNullException))]

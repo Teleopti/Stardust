@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var createdRestriction = _workTimeMinMaxRestrictionCreator.MakeWorkTimeMinMaxRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll());
 			if (createdRestriction.Restriction != null)
-				result.RestrictionNeverHadThePosibilityToMatchWithShifts = !createdRestriction.Restriction.MayMatchWithShifts();
+				result.RestrictionNeverHadThePossibilityToMatchWithShifts = !createdRestriction.Restriction.MayMatchWithShifts();
 			if (createdRestriction.IsAbsenceInContractTime)
 			{
 				result.WorkTimeMinMax = WorkTimeMinMaxForAbsence(scheduleDay);

@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			var target = new WorkTimeMinMaxCalculator(workShiftWorkTime, new WorkTimeMinMaxRestrictionCreator(effectiveRestrictionForDisplayCreator));
 			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
-			result.RestrictionNeverHadThePosibilityToMatchWithShifts.Should().Be(true);
+			result.RestrictionNeverHadThePossibilityToMatchWithShifts.Should().Be(true);
 		}
 
 		[Test]
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
 
-			result.RestrictionNeverHadThePosibilityToMatchWithShifts.Should().Be.True();
+			result.RestrictionNeverHadThePossibilityToMatchWithShifts.Should().Be.True();
 		}
 	}
 
