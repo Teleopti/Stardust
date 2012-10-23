@@ -674,6 +674,7 @@
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayCreator.cs" />
     <Compile Include="Scheduling\Restrictions\MeetingRestriction.cs" />
     <Compile Include="Scheduling\Restrictions\MeetingRestrictionCombiner.cs" />
+    <Compile Include="Scheduling\Restrictions\PersonalShiftRestriction.cs" />
     <Compile Include="Scheduling\Restrictions\PersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionOptions.cs" />
     <Compile Include="Scheduling\Restrictions\ExtendedPreferencePredicate.cs" />

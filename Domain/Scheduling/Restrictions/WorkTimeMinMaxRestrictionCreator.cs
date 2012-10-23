@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				result.IsAbsenceInContractTime = effectiveRestriction.Absence.InContractTime;
 
 			var meetings = scheduleDay.PersonMeetingCollection();
+
 			if (meetings != null && meetings.Any())
 				result.Restriction = new CombinedRestriction(effectiveRestriction, new MeetingRestriction(meetings));
 			else

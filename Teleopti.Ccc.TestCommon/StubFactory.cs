@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -218,6 +219,17 @@ namespace Teleopti.Ccc.TestCommon
 			var personalShift = MockRepository.GenerateStub<IPersonalShift>();
 			personAssignment.Stub(x => x.PersonalShiftCollection).Return(
 				new ReadOnlyCollection<IPersonalShift>(new[] {personalShift}));
+			return personAssignment;
+		}
+
+		public IPersonAssignment PersonAssignmentPersonalShiftStub(IPersonalShiftActivityLayer activity)
+		{
+			var personAssignment = MockRepository.GenerateStub<IPersonAssignment>();
+			var personalShift = MockRepository.GenerateStub<IPersonalShift>();
+			var layers = new LayerCollection<IActivity> {activity};
+			personalShift.Stub(x => x.LayerCollection).Return(layers);
+			personAssignment.Stub(x => x.PersonalShiftCollection).Return(
+				new ReadOnlyCollection<IPersonalShift>(new[] { personalShift }));
 			return personAssignment;
 		}
 
