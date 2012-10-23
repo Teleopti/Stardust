@@ -694,6 +694,46 @@ this.FeatureBackground();
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Show remaining characters when writing text reply")]
+        public virtual void ShowRemainingCharactersWhenWritingTextReply()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show remaining characters when writing text reply", ((string[])(null)));
+#line 209
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 210
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table20.AddRow(new string[] {
+                        "Title",
+                        "New message"});
+            table20.AddRow(new string[] {
+                        "Message",
+                        "Text in message"});
+            table20.AddRow(new string[] {
+                        "Text reply allowed",
+                        "True"});
+#line 211
+ testRunner.And("I have an unread message with", ((string)(null)), table20);
+#line 216
+ testRunner.And("I am viewing week schedule");
+#line 217
+ testRunner.And("I navigate to messages");
+#line 218
+ testRunner.And("I click on the message at position \'1\' in the list");
+#line 219
+ testRunner.When("I enter the text reply \'my reply\'");
+#line 220
+ testRunner.Then("I should see that I have \'242\' characters left");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

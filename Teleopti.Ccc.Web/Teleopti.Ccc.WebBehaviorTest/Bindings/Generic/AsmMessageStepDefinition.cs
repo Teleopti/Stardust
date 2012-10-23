@@ -174,5 +174,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			EventualAssert.That(() => _page.FriendlyMessage.Style.GetAttributeValue("display"), Is.Not.EqualTo("none"));
 		}
+
+		[When(@"I enter the text reply '(.*)'")]
+		public void WhenIEnterTheTextReply(string reply)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"I should see that I have '(.*)' characters left")]
+		public void ThenIShouldSeeThatIHaveCharactersLeft(int characters)
+		{
+			ScenarioContext.Current.Pending();
+		}
 	}
 }

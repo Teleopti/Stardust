@@ -205,3 +205,16 @@ Scenario: Do not allow too long replies
 	And I click the send button
 	Then I should see validation error about too long text reply
 	And I should see '1' message(s) in the list
+
+Scenario: Show remaining characters when writing text reply
+	Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field					| Value				|
+	| Title					| New message		|
+	| Message				| Text in message	|
+	| Text reply allowed	| True				|
+	And I am viewing week schedule
+	And I navigate to messages
+	And I click on the message at position '1' in the list
+	When I enter the text reply 'my reply'
+	Then I should see that I have '242' characters left
