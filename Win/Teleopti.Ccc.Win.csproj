@@ -1213,6 +1213,7 @@
     <Compile Include="Scheduling\AuditHistoryView.Designer.cs">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\ClipboardControlBuilder.cs" />
     <Compile Include="Scheduling\ExportToPdf.cs" />
     <Compile Include="Scheduling\ExportToPdfGraphical.cs" />
     <Compile Include="Scheduling\PermissionClipboardControl.cs" />
