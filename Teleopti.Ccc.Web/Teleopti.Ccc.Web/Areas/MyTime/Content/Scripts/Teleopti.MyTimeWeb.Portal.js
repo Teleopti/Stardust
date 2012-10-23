@@ -115,7 +115,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 		$('#asm-link').click(function (ev) {
 			$(".dropdown dd ul").hide();
-			var asmWindow = window.open(_settings.baseUrl + 'Asm', 'AsmWindow', 'width=850,height=100;channelmode=1,directories=0,left=0,location=0,menubar=0,resizable=1,scrollbars=0,status=0,titlebar=0,toolbar=0,top=0');
+			var asmWindow = window.open(_settings.baseUrl + 'Asm', 'AsmWindow', 'width=435,height=100;channelmode=1,directories=0,left=0,location=0,menubar=0,resizable=1,scrollbars=0,status=0,titlebar=0,toolbar=0,top=0');
 
 			if (asmWindow.focus) {
 				asmWindow.focus();

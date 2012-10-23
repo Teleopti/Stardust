@@ -22,7 +22,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	function resize() {
 		var innerWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 		var innerHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-		var targetWidth = 600;
+		var targetWidth = 435;
 		var targetHeight = 66;
 		window.resizeBy(targetWidth - innerWidth, targetHeight - innerHeight);
 	}
