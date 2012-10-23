@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var restrictionCollection = new[] {preference};
 			scheduleDay.Stub(x => x.RestrictionCollection()).Return(restrictionCollection);
 
-			var target = new EffectiveRestrictionForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner(), new MeetingRestrictionCombiner(new RestrictionCombiner()), new PersonalShiftRestrictionCombiner(new RestrictionCombiner()));
-			var result = target.GetEffectiveRestrictionForDisplay(scheduleDay, effectiveRestrictionOptions);
+			var target = new EffectiveRestrictionForDisplayForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner(), new MeetingRestrictionCombiner(new RestrictionCombiner()), new PersonalShiftRestrictionCombiner(new RestrictionCombiner()));
+			var result = target.MakeEffectiveRestriction(scheduleDay, effectiveRestrictionOptions);
 
 			result.ShiftCategory.Should().Be.EqualTo(preference.ShiftCategory);
 			result.IsPreferenceDay.Should().Be.True();
@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var restrictionCollection = new[] { availability };
 			scheduleDay.Stub(x => x.RestrictionCollection()).Return(restrictionCollection);
 
-			var target = new EffectiveRestrictionForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner(), new MeetingRestrictionCombiner(new RestrictionCombiner()), new PersonalShiftRestrictionCombiner(new RestrictionCombiner()));
-			var result = target.GetEffectiveRestrictionForDisplay(scheduleDay, effectiveRestrictionOptions);
+			var target = new EffectiveRestrictionForDisplayForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner(), new MeetingRestrictionCombiner(new RestrictionCombiner()), new PersonalShiftRestrictionCombiner(new RestrictionCombiner()));
+			var result = target.MakeEffectiveRestriction(scheduleDay, effectiveRestrictionOptions);
 
 			result.StartTimeLimitation.Should().Be.EqualTo(availability.StartTimeLimitation);
 			result.EndTimeLimitation.Should().Be.EqualTo(availability.EndTimeLimitation);

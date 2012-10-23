@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -18,9 +19,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var target = new CombinedRestriction(one, two);
 
-			one.Stub(x => x.MayMatch()).Return(true);
+			one.Stub(x => x.MayMatchWithShifts()).Return(true);
 
-			target.MayMatch().Should().Be.False();
+			target.MayMatchWithShifts().Should().Be.False();
 		}
 
 		[Test]
@@ -30,9 +31,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var target = new CombinedRestriction(one, two);
 
-			two.Stub(x => x.MayMatch()).Return(true);
+			two.Stub(x => x.MayMatchWithShifts()).Return(true);
 
-			target.MayMatch().Should().Be.False();
+			target.MayMatchWithShifts().Should().Be.False();
 		}
 
 		[Test]
@@ -42,10 +43,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var target = new CombinedRestriction(one, two);
 
-			one.Stub(x => x.MayMatch()).Return(true);
-			two.Stub(x => x.MayMatch()).Return(true);
+			one.Stub(x => x.MayMatchWithShifts()).Return(true);
+			two.Stub(x => x.MayMatchWithShifts()).Return(true);
 
-			target.MayMatch().Should().Be.True();
+			target.MayMatchWithShifts().Should().Be.True();
 		}
 
 		[Test]
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var target = new CombinedRestriction(one, two);
 
-			target.MayMatch().Should().Be.False();
+			target.MayMatchWithShifts().Should().Be.False();
 		}
 
 
@@ -219,6 +220,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			target.Match(workShiftProjection).Should().Be.False();
 		}
+
 
 	}
 }

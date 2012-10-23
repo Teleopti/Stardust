@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             if (restriction == null)
                 return null;
 
-			if (!restriction.MayMatch())
+			if (!restriction.MayMatchWithShifts())
 				return null;
 
 			//if (restriction.DayOffTemplate != null)

@@ -9,8 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	/// </summary>
 	public class ActivityLayer : Layer<IActivity>, IActivityLayer, IActivityRestrictableVisualLayer
 	{
-		private readonly IActivity _activity;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActivityLayer"/> class.
 		/// </summary>
@@ -19,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public ActivityLayer(IActivity activity, DateTimePeriod period)
 			: base(activity, period)
 		{
-			_activity = activity;
 			InParameter.EnsureNoSecondsInPeriod(period);
 		}
 
@@ -68,9 +65,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return Payload.Id.Value; }
 		}
 
-		public bool ActivityAllowesOverwrite
+		public virtual bool ActivityAllowesOverwrite
 		{
-			get { return _activity.AllowOverwrite; }
+			get { return Payload.AllowOverwrite; }
 		}
 	}
 }

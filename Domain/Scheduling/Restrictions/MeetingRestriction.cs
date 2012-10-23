@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_personMeetings = personMeetings;
 		}
 
-		public bool MayMatch()
+		public bool MayMatchWithShifts()
 		{
 			return true;
 		}

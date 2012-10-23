@@ -1,5 +1,6 @@
 namespace Teleopti.Interfaces.Domain
 {
+	
 	/// <summary>
 	/// A restriction that can match shifts to calculate work time min max
 	/// </summary>
@@ -9,7 +10,7 @@ namespace Teleopti.Interfaces.Domain
 		/// returns true if the restriction has the posibility to match a work shift
 		/// </summary>
 		/// <returns></returns>
-		bool MayMatch();
+		bool MayMatchWithShifts();
 
 		/// <summary>
 		/// returns true if this restriction can match with blacklisted shifts
@@ -30,6 +31,5 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="workShiftProjection"></param>
 		/// <returns></returns>
 		bool Match(IWorkShiftProjection workShiftProjection);
-
 	}
 }

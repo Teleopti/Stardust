@@ -24,15 +24,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			CreateMap<DateOnly, PreferenceDayFeedbackViewModel>()
 				.ConvertUsing(s =>
 				              	{
-				              		PreferenceType? preferenceType;
-				              		var minMaxWorkTime = _preferenceFeedbackProvider.Invoke().WorkTimeMinMaxForDate(s, out preferenceType);
-				              		if (minMaxWorkTime == null)
+				              		var result = _preferenceFeedbackProvider.Invoke().WorkTimeMinMaxForDate(s) ?? new WorkTimeMinMaxCalculationResult();
+				              		if (result.WorkTimeMinMax == null)
 				              		{
-				              			if (preferenceType == PreferenceType.DayOff || preferenceType == PreferenceType.Absence)
+				              			if (result.RestrictionNeverHadThePosibilityToMatchWithShifts)
 											return _mapper.Invoke().Map<Tuple<DateOnly, string>, PreferenceDayFeedbackViewModel>(new Tuple<DateOnly, string>(s, ""));
 										return _mapper.Invoke().Map<Tuple<DateOnly, string>, PreferenceDayFeedbackViewModel>(new Tuple<DateOnly, string>(s, Resources.NoAvailableShifts));
 									}
-				              		var source = new Tuple<DateOnly, IWorkTimeMinMax>(s, minMaxWorkTime);
+				              		var source = new Tuple<DateOnly, IWorkTimeMinMax>(s, result.WorkTimeMinMax);
 				              		return _mapper.Invoke().Map<Tuple<DateOnly, IWorkTimeMinMax>, PreferenceDayFeedbackViewModel>(source);
 				              	});
 

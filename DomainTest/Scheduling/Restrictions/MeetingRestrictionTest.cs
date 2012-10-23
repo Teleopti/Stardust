@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		{
 			var target = new MeetingRestriction(null);
 
-			target.MayMatch().Should().Be.True();
+			target.MayMatchWithShifts().Should().Be.True();
 		}
 
 		[Test]

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public IWorkTimeMinMax CalculateMinMax(IWorkShiftRuleSet workShiftRuleSet, IWorkTimeMinMaxRestriction restriction)
 		{
-			if (!restriction.MayMatch())
+			if (!restriction.MayMatchWithShifts())
 				return null;
 
 			var infoList = _ruleSetProjectionService.ProjectionCollection(workShiftRuleSet);

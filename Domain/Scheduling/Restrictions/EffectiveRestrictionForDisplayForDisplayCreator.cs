@@ -5,14 +5,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
-	public class EffectiveRestrictionForDisplayCreator : IEffectiveRestrictionForDisplayCreator
+	public class EffectiveRestrictionForDisplayForDisplayCreator : IEffectiveRestrictionForDisplayCreator
 	{
 		private readonly IRestrictionRetrievalOperation _retrievalOperation;
 		private readonly IRestrictionCombiner _restrictionCombiner;
 		private readonly IMeetingRestrictionCombiner _meetingRestrictionCombiner;
 		private readonly IPersonalShiftRestrictionCombiner _personalShiftRestrictionCombiner;
 
-		public EffectiveRestrictionForDisplayCreator(IRestrictionRetrievalOperation retrievalOperation, IRestrictionCombiner restrictionCombiner, IMeetingRestrictionCombiner meetingRestrictionCombiner, IPersonalShiftRestrictionCombiner personalShiftRestrictionCombiner)
+		public EffectiveRestrictionForDisplayForDisplayCreator(IRestrictionRetrievalOperation retrievalOperation, IRestrictionCombiner restrictionCombiner, IMeetingRestrictionCombiner meetingRestrictionCombiner, IPersonalShiftRestrictionCombiner personalShiftRestrictionCombiner)
 		{
 			_retrievalOperation = retrievalOperation;
 			_restrictionCombiner = restrictionCombiner;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_personalShiftRestrictionCombiner = personalShiftRestrictionCombiner;
 		}
 
-		public IEffectiveRestriction GetEffectiveRestrictionForDisplay(IScheduleDay scheduleDay, IEffectiveRestrictionOptions effectiveRestrictionOptions)
+		public IEffectiveRestriction MakeEffectiveRestriction(IScheduleDay scheduleDay, IEffectiveRestrictionOptions effectiveRestrictionOptions)
 		{
 			var startTime = new TimeSpan(0, 0, 0);
 			var endTime = new TimeSpan(23, 59, 59);

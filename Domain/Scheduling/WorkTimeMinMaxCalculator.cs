@@ -8,18 +8,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class WorkTimeMinMaxCalculator : IWorkTimeMinMaxCalculator
 	{
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
-		private readonly IEffectiveRestrictionForDisplayCreator _effectiveRestrictionCreator;
+		private readonly IWorkTimeMinMaxRestrictionCreator _workTimeMinMaxRestrictionCreator;
 
-		public WorkTimeMinMaxCalculator(IWorkShiftWorkTime workShiftWorkTime, IEffectiveRestrictionForDisplayCreator effectiveRestrictionCreator)
+		public WorkTimeMinMaxCalculator(IWorkShiftWorkTime workShiftWorkTime, IWorkTimeMinMaxRestrictionCreator workTimeMinMaxRestrictionCreator)
 		{
 			_workShiftWorkTime = workShiftWorkTime;
-			_effectiveRestrictionCreator = effectiveRestrictionCreator;
+			_workTimeMinMaxRestrictionCreator = workTimeMinMaxRestrictionCreator;
 		}
 
-		public IWorkTimeMinMax WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay, out PreferenceType? preferenceType)
+		public WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay)
 		{
 			if (person == null) throw new ArgumentNullException("person");
-			preferenceType = null;
+			var result = new WorkTimeMinMaxCalculationResult();
+
 			var personPeriod = person.PersonPeriods(new DateOnlyPeriod(date, date)).SingleOrDefault();
 			if (personPeriod == null)
 				return null;
@@ -28,32 +29,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (ruleSetBag == null)
 				return null;
 
-			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForDisplay(scheduleDay, EffectiveRestrictionOptions.UseAll());
-			if (effectiveRestriction != null)
+			var createdRestriction = _workTimeMinMaxRestrictionCreator.MakeWorkTimeMinMaxRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll());
+			if (createdRestriction.Restriction != null)
+				result.RestrictionNeverHadThePosibilityToMatchWithShifts = !createdRestriction.Restriction.MayMatchWithShifts();
+			if (createdRestriction.IsAbsenceInContractTime)
 			{
-				if (effectiveRestriction.DayOffTemplate != null)
-				{
-					preferenceType = PreferenceType.DayOff;
-				}
-				else if (effectiveRestriction.Absence != null)
-				{
-					preferenceType = PreferenceType.Absence;
-				}
-				else if (effectiveRestriction.ShiftCategory != null)
-				{
-					preferenceType = PreferenceType.ShiftCategory;
-				}
+				result.WorkTimeMinMax = WorkTimeMinMaxForAbsence(scheduleDay);
+				return result;
 			}
 
-			if (effectiveRestriction != null && effectiveRestriction.Absence != null)
-			{
-				return WorkTimeMinMaxForAbsence(scheduleDay, effectiveRestriction);
-			}
-
-			return ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, date, effectiveRestriction);
+			result.WorkTimeMinMax = ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, date, createdRestriction.Restriction);
+			return result;
 		}
 
-		private static IWorkTimeMinMax WorkTimeMinMaxForAbsence(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction)
+		private static IWorkTimeMinMax WorkTimeMinMaxForAbsence(IScheduleDay scheduleDay)
 		{
 			var person = scheduleDay.Person;
 			var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
@@ -62,9 +51,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var avgWorkTime = new TimeSpan((long)(person.AverageWorkTimeOfDay(scheduleDate).Ticks * personContract.PartTimePercentage.Percentage.Value));
 
 			if (!personContract.ContractSchedule.IsWorkday(personPeriod.StartDate, scheduleDate))
-				return null;
-
-			if (!effectiveRestriction.Absence.InContractTime)
 				return null;
 
 			return new WorkTimeMinMax {WorkTimeLimitation = new WorkTimeLimitation(avgWorkTime, avgWorkTime)};

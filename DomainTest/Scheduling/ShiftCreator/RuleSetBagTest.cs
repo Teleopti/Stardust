@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 
             using (_mocks.Record())
             {
-                Expect.Call(effectiveRestriction.MayMatch()).Return(true);
+                Expect.Call(effectiveRestriction.MayMatchWithShifts()).Return(true);
                 Expect.Call(effectiveRestriction.Match(shiftCategory)).Return(true).Repeat.AtLeastOnce();
             	Expect.Call(workShiftWorkTime.CalculateMinMax(ruleSet1, effectiveRestriction)).Return(minMax1);
             	Expect.Call(workShiftWorkTime.CalculateMinMax(ruleSet2, effectiveRestriction)).Return(minMax2);
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 
             using (_mocks.Record())
             {
-                Expect.Call(effectiveRestriction.MayMatch()).Return(false);
+                Expect.Call(effectiveRestriction.MayMatchWithShifts()).Return(false);
             }
 
             using (_mocks.Playback())
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 
             using (_mocks.Record())
             {
-                Expect.Call(effectiveRestriction.MayMatch()).Return(true);
+                Expect.Call(effectiveRestriction.MayMatchWithShifts()).Return(true);
                 Expect.Call(ruleSet.IsValidDate(new DateOnly())).IgnoreArguments().Return(false);
                 Expect.Call(effectiveRestriction.MayMatchBlacklistedShifts()).Return(false);
             }
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 
             using (_mocks.Record())
             {
-                Expect.Call(effectiveRestriction.MayMatch()).Return(true);
+                Expect.Call(effectiveRestriction.MayMatchWithShifts()).Return(true);
                 Expect.Call(effectiveRestriction.Match(shiftCategory)).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(ruleSet.IsValidDate(new DateOnly())).IgnoreArguments().Return(true);
 	            Expect.Call(ruleSet.TemplateGenerator).Return(templateGenerator);

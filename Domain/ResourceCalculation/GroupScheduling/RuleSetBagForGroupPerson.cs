@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			if (restriction == null)
 				return null;
 
-			if (!restriction.MayMatch())
+			if (!restriction.MayMatchWithShifts())
 				return null;
 
 			IWorkTimeMinMax retVal = null;

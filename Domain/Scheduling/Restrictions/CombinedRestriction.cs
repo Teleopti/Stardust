@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_two = two;
 		}
 
-		public bool MayMatch()
+		public bool MayMatchWithShifts()
 		{
-			return _one.MayMatch() && _two.MayMatch();
+			return _one.MayMatchWithShifts() && _two.MayMatchWithShifts();
 		}
 
 		public bool MayMatchBlacklistedShifts()
@@ -32,5 +32,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		{
 			return _one.Match(workShiftProjection) && _two.Match(workShiftProjection);
 		}
+
 	}
 }

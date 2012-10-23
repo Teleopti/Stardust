@@ -45,11 +45,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 		#region Implementation of IIWorkTimeMinMaxRestriction
 
-		public bool MayMatch()
+		public bool MayMatchWithShifts()
 		{
 			var available = !NotAvailable;
 			var noDayOff = DayOffTemplate == null;
-			return available && noDayOff;
+			var noAbsence = Absence == null;
+			return available && noDayOff && noAbsence;
 		}
 
 		public bool MayMatchBlacklistedShifts()

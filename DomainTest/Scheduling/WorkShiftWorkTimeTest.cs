@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			projectionService.Expect(proj => proj.ProjectionCollection(ruleSet)).Return(new[] {info1, info2});
 			restriction.Expect(r => r.Match(info1)).Return(true);
 			restriction.Expect(r => r.Match(info2)).Return(true);
-			restriction.Expect(r => r.MayMatch()).Return(true);
+			restriction.Expect(r => r.MayMatchWithShifts()).Return(true);
 
 			var result = target.CalculateMinMax(ruleSet, restriction);
 			Assert.AreEqual(TimeSpan.FromHours(7), result.StartTimeLimitation.StartTime);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			projectionService.Expect(proj => proj.ProjectionCollection(ruleSet)).Return(new[] { info1, info2 });
 			restriction.Expect(r => r.Match(info1)).Return(true);
 			restriction.Expect(r => r.Match(info2)).Return(false);
-			restriction.Expect(r => r.MayMatch()).Return(true);
+			restriction.Expect(r => r.MayMatchWithShifts()).Return(true);
 
 			var result = target.CalculateMinMax(ruleSet, restriction);
 			Assert.AreEqual(TimeSpan.FromHours(8), result.StartTimeLimitation.StartTime);

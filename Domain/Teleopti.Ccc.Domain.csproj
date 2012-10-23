@@ -671,7 +671,7 @@
     <Compile Include="Scheduling\Restrictions\CombinedRestriction.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestriction.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreator.cs" />
-    <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayCreator.cs" />
+    <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayForDisplayCreator.cs" />
     <Compile Include="Scheduling\Restrictions\MeetingRestriction.cs" />
     <Compile Include="Scheduling\Restrictions\MeetingRestrictionCombiner.cs" />
     <Compile Include="Scheduling\Restrictions\PersonalShiftRestrictionCombiner.cs" />
@@ -690,6 +690,7 @@
     <Compile Include="Scheduling\Restrictions\RotationSpecification.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayRotationRestrictionExtractor.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayStudentAvailabilityRestrictionExtractor.cs" />
+    <Compile Include="Scheduling\Restrictions\WorkTimeMinMaxRestrictionCreator.cs" />
     <Compile Include="Scheduling\Restriction\ActivityRestriction.cs" />
     <Compile Include="Scheduling\Restriction\AvailabilityDay.cs" />
     <Compile Include="Scheduling\Restriction\AvailabilityRotation.cs" />
