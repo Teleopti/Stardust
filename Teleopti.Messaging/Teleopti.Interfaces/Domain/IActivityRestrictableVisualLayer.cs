@@ -12,5 +12,10 @@ namespace Teleopti.Interfaces.Domain
 		/// The activity id
 		/// </summary>
 		Guid ActivityId { get; }
+
+		/// <summary>
+		/// This activity may be overritten by meetings and personal shifts
+		/// </summary>
+		bool ActivityAllowesOverwrite { get; }
 	}
 }

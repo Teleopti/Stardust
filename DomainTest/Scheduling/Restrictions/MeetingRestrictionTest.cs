@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 						{
 							new WorkShiftProjectionLayer
 								{
-									AllowOverwrite = true,
+									ActivityAllowesOverwrite = true,
 									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
 								}
 						}
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 						{
 							new WorkShiftProjectionLayer
 								{
-									AllowOverwrite = false,
+									ActivityAllowesOverwrite = false,
 									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
 								}
 						}
@@ -99,5 +100,60 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			result.Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldNotMatchWithIntersectingActivitiesWhereMeetingsIsDisallowed()
+		{
+			var meeting = new PersonMeeting(null, null, new DateTimePeriod(DateTime.UtcNow.Date.AddHours(8), DateTime.UtcNow.Date.AddHours(10)));
+			var target = new MeetingRestriction(new[] { meeting });
+			var shift = new WorkShiftProjection
+			{
+				Layers = new[]
+						{
+							new WorkShiftProjectionLayer
+								{
+									ActivityAllowesOverwrite = true,
+									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(7), DateTime.UtcNow.Date.AddHours(9))
+								},
+							new WorkShiftProjectionLayer
+								{
+									ActivityAllowesOverwrite = false,
+									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
+								}
+						}
+			};
+
+			var result = target.Match(shift);
+
+			result.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotMatchWithOverlapingActivitiesWhereMeetingsIsDisallowed()
+		{
+			var meeting = new PersonMeeting(null, null, new DateTimePeriod(DateTime.UtcNow.Date.AddHours(8), DateTime.UtcNow.Date.AddHours(19)));
+			var target = new MeetingRestriction(new[] { meeting });
+			var shift = new WorkShiftProjection
+			{
+				Layers = new[]
+						{
+							new WorkShiftProjectionLayer
+								{
+									ActivityAllowesOverwrite = true,
+									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(7), DateTime.UtcNow.Date.AddHours(9))
+								},
+							new WorkShiftProjectionLayer
+								{
+									ActivityAllowesOverwrite = false,
+									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
+								}
+						}
+			};
+
+			var result = target.Match(shift);
+
+			result.Should().Be.False();
+		}
+
 	}
 }

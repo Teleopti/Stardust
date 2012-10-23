@@ -4,64 +4,73 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-    /// <summary>
-    /// Payload layer class containing Activity
-    /// </summary>
+	/// <summary>
+	/// Payload layer class containing Activity
+	/// </summary>
 	public class ActivityLayer : Layer<IActivity>, IActivityLayer, IActivityRestrictableVisualLayer
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ActivityLayer"/> class.
-        /// </summary>
-        /// <param name="activity">The activity.</param>
-        /// <param name="period">The period.</param>
-        public ActivityLayer(IActivity activity, DateTimePeriod period) : base(activity, period)
-        {
-            InParameter.EnsureNoSecondsInPeriod(period);
-        }
+	{
+		private readonly IActivity _activity;
 
-        /// <summary>
-        /// Used by nhibernate to reconstitute from datasource
-        /// </summary>
-        protected ActivityLayer()
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ActivityLayer"/> class.
+		/// </summary>
+		/// <param name="activity">The activity.</param>
+		/// <param name="period">The period.</param>
+		public ActivityLayer(IActivity activity, DateTimePeriod period)
+			: base(activity, period)
+		{
+			_activity = activity;
+			InParameter.EnsureNoSecondsInPeriod(period);
+		}
 
-        public override DateTimePeriod Period
-        {
-            get
-            {
-                return base.Period;
-            }
-            set
-            {
-                InParameter.EnsureNoSecondsInPeriod(value);
-                base.Period = value;
-            }
-        }
+		/// <summary>
+		/// Used by nhibernate to reconstitute from datasource
+		/// </summary>
+		protected ActivityLayer()
+		{
+		}
 
-        public override void ChangeLayerPeriodEnd(TimeSpan timeSpan)
-        {
-            InParameter.EnsureNoSecondsInTimeSpan(timeSpan);
-            base.ChangeLayerPeriodEnd(timeSpan);
-        }
+		public override DateTimePeriod Period
+		{
+			get { return base.Period; }
+			set
+			{
+				InParameter.EnsureNoSecondsInPeriod(value);
+				base.Period = value;
+			}
+		}
 
-        public override void ChangeLayerPeriodStart(TimeSpan timeSpan)
-        {
-            InParameter.EnsureNoSecondsInTimeSpan(timeSpan);
-            base.ChangeLayerPeriodStart(timeSpan);
-        }
+		public override void ChangeLayerPeriodEnd(TimeSpan timeSpan)
+		{
+			InParameter.EnsureNoSecondsInTimeSpan(timeSpan);
+			base.ChangeLayerPeriodEnd(timeSpan);
+		}
 
-        public override void MoveLayer(TimeSpan timeSpan)
-        {
-            InParameter.EnsureNoSecondsInTimeSpan(timeSpan);
-            base.MoveLayer(timeSpan);
-        }
+		public override void ChangeLayerPeriodStart(TimeSpan timeSpan)
+		{
+			InParameter.EnsureNoSecondsInTimeSpan(timeSpan);
+			base.ChangeLayerPeriodStart(timeSpan);
+		}
 
-        public virtual IMultiplicatorDefinitionSet DefinitionSet
-        {
-            get { return null; }
-        }
+		public override void MoveLayer(TimeSpan timeSpan)
+		{
+			InParameter.EnsureNoSecondsInTimeSpan(timeSpan);
+			base.MoveLayer(timeSpan);
+		}
 
-		public virtual Guid ActivityId { get { return Payload.Id.Value; } }
-    }
+		public virtual IMultiplicatorDefinitionSet DefinitionSet
+		{
+			get { return null; }
+		}
+
+		public virtual Guid ActivityId
+		{
+			get { return Payload.Id.Value; }
+		}
+
+		public bool ActivityAllowesOverwrite
+		{
+			get { return _activity.AllowOverwrite; }
+		}
+	}
 }
