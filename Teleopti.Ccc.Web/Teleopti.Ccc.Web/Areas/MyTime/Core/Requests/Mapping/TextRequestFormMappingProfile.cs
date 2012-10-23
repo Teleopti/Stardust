@@ -61,10 +61,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				{
 					period = _mapper.Invoke().Map<DateTimePeriodForm, DateTimePeriod>(source.Period);
 				}
-				var textRequest = new TextRequest(period);
-				destination.Request = textRequest;
 
 				destination.TrySetMessage(source.Message ?? "");
+
+				var textRequest = new TextRequest(period);
+				destination.Request = textRequest;
 
 				if (source.EntityId != null)
 					destination.SetId(source.EntityId);

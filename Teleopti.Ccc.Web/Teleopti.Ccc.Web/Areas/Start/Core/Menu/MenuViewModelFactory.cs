@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
+﻿using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+
+namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 {
 	using System.Collections.Generic;
 	using System.Linq;

@@ -3,12 +3,14 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 {
 	public class PortalViewModelFactory : IPortalViewModelFactory
 	{
@@ -16,17 +18,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 		private readonly IPreferenceOptionsProvider _preferenceOptionsProvider;
 		private readonly ILicenseActivator _licenseActivator;
 		private readonly IIdentityProvider _identityProvider;
+	    private readonly IPushMessageProvider _pushMessageProvider;
 
-		public PortalViewModelFactory(
-			IPermissionProvider permissionProvider,
-												IPreferenceOptionsProvider preferenceOptionsProvider,
-												ILicenseActivator licenseActivator,
-			IIdentityProvider identityProvider)
+	    public PortalViewModelFactory(IPermissionProvider permissionProvider, IPreferenceOptionsProvider preferenceOptionsProvider, ILicenseActivator licenseActivator, IIdentityProvider identityProvider, IPushMessageProvider pushMessageProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_preferenceOptionsProvider = preferenceOptionsProvider;
 			_licenseActivator = licenseActivator;
 			_identityProvider = identityProvider;
+		    _pushMessageProvider = pushMessageProvider;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -48,13 +48,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests))
 			{
 				navigationItems.Add(createRequestsNavigationItem());
-			}
+            }
+            if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
+            {
+				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
+            }
 			return new PortalViewModel
 			       	{
 			       		NavigationItems = navigationItems,
 			       		CustomerName = _licenseActivator.CustomerName,
 			       		ShowChangePassword = showChangePassword(),
-							ShowAsm = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)
+						HasAsmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)
 			       	};
 		}
 
@@ -109,6 +113,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal
 						}
 					};
 		}
+
+        private SectionNavigationItem createMessageNavigationItem(int unreadMessageCount)
+        {
+            return new SectionNavigationItem	
+            {
+                Action = "Index",
+                Controller = "Message",
+                Title = Resources.Messages,
+                NavigationItems = new NavigationItem[0],
+                ToolBarItems = new List<ToolBarItemBase>(),
+				PayAttention = unreadMessageCount != 0,
+				UnreadMessageCount = unreadMessageCount
+            };
+        }
 
 		private PreferenceNavigationItem createPreferenceNavigationItem()
 		{

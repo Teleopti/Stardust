@@ -10,7 +10,7 @@ Background:
 	And there is a role with
 	| Field                   | Value                      |
 	| Name                    | No access to text requests |
-	| Access to text requests | False                      |
+	| Access To Text Requests | False                      |
 
 Scenario: Open add text request form
 	Given I have the role 'Full access to mytime'

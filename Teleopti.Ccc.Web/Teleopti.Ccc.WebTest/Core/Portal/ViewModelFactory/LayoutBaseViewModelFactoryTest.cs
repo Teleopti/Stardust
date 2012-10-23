@@ -8,7 +8,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.Portal
+namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 {
 	public class LayoutBaseViewModelFactoryTest
 	{
