@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -20,7 +19,6 @@ using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using Teleopti.Ccc.WinCode.Grouping;
 using log4net;
-using MbCache.Core;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Chart;
@@ -44,7 +42,6 @@ using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Persisters;
@@ -62,7 +59,6 @@ using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.Win.Reporting;
-using Teleopti.Ccc.Win.Scheduling.ScheduleReporting;
 using Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences;
 using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction;
 using Teleopti.Ccc.WinCode.Common;
@@ -75,7 +71,6 @@ using Teleopti.Ccc.WinCode.Scheduling.Editor;
 using Teleopti.Ccc.WinCode.Scheduling.GridlockCommands;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
-using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Ccc.WpfControls.Controls.Editor;
 using Teleopti.Ccc.WpfControls.Controls.Notes;
@@ -96,7 +91,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private readonly ILifetimeScope _container;
         private IScheduleScreenPersister _persister;
-		//private readonly ISchedulingOptions _schedulingOptions;
         private static readonly ILog Log = LogManager.GetLogger(typeof (SchedulingScreen));
         private ISchedulerStateHolder _schedulerState;
         private readonly ClipHandler<IScheduleDay> _clipHandlerSchedule;
@@ -107,7 +101,6 @@ namespace Teleopti.Ccc.Win.Scheduling
     	private readonly SkillMonthGridControl _skillMonthGridControl;
     	private readonly SkillFullPeriodGridControl _skillFullPeriodGridControl;
     	private readonly SkillResultHighlightGridControl _skillResultHighlightGridControl;
-        //private bool _intradayMode;
         private DateOnly _currentIntraDayDate;
         private DockingManager _dockingManager;
         private FormAgentInfo _agentInfo;
@@ -177,17 +170,12 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly BackgroundWorker _backgroundWorkerOptimization = new BackgroundWorker();
         private readonly IUndoRedoContainer _undoRedo = new UndoRedoContainer(500);
     	private IDayOffTemplate _dayOffTemplate;
-
-        private readonly ICollection<IPersonWriteProtectionInfo> _modifiedWriteProtections =
-            new HashSet<IPersonWriteProtectionInfo>();
-                                                                 //shouldn't be here, but GridHelper is static... I hate those static classes
-
+        private readonly ICollection<IPersonWriteProtectionInfo> _modifiedWriteProtections = new HashSet<IPersonWriteProtectionInfo>();
         private SchedulingScreenSettings _currentSchedulingScreenSettings;
         private ZoomLevel _currentZoomLevel;
         private SplitterManagerRestrictionView _splitterManager;
         private readonly IWorkShiftWorkTime _workShiftWorkTime;
         private DateOnly _defaultFilterDate;
-
         private bool _inUpdate;
         private int _totalScheduled;
         private readonly IPersonRequestCheckAuthorization _personRequestAuthorizationChecker;
@@ -690,12 +678,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-
         private void _editControl_DeleteClicked(object sender, EventArgs e)
         {
             deleteSwitch();
         }
-
 
         private void _editControl_NewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
         {
@@ -839,46 +825,13 @@ namespace Teleopti.Ccc.Win.Scheduling
             _clipboardControl = new ClipboardControl();
             var clipboardhost = new ToolStripControlHost(_clipboardControl);
             toolStripExClipboard.Items.Add(clipboardhost);
-
             _clipboardControl.CopyClicked += _clipboardControl_CopyClicked;
-
-            _clipboardControl.CutSpecialItems.Add(new ToolStripButton
-                                                      {Text = Resources.CutShift, Tag = ClipboardItems.Shift});
-            _clipboardControl.CutSpecialItems.Add(new ToolStripButton
-                                                      {Text = Resources.CutAbsence, Tag = ClipboardItems.Absence});
-            _clipboardControl.CutSpecialItems.Add(new ToolStripButton
-                                                      {Text = Resources.CutDayOff, Tag = ClipboardItems.DayOff});
-            _clipboardControl.CutSpecialItems.Add(new ToolStripButton
-                                                      {
-                                                          Text = Resources.CutPersonalShift,
-                                                          Tag = ClipboardItems.PersonalShift
-                                                      });
-            _clipboardControl.CutSpecialItems.Add(new ToolStripButton
-                                                      {Text = Resources.CutSpecial, Tag = ClipboardItems.Special});
+        	var clipboardControlBuilder = new ClipboardControlBuilder(_clipboardControl);
+			clipboardControlBuilder.Build();
             _clipboardControl.CutSpecialClicked += _clipboardControl_CutSpecialClicked;
             _clipboardControl.CutClicked += _clipboardControl_CutClicked;
-
-            _clipboardControl.PasteSpecialItems.Add(new ToolStripButton
-                                                        {Text = Resources.PasteShift, Tag = ClipboardItems.Shift});
-            _clipboardControl.PasteSpecialItems.Add(new ToolStripButton
-                                                        {Text = Resources.PasteAbsence, Tag = ClipboardItems.Absence});
-            _clipboardControl.PasteSpecialItems.Add(new ToolStripButton
-                                                        {Text = Resources.PasteDayOff, Tag = ClipboardItems.DayOff});
-            _clipboardControl.PasteSpecialItems.Add(new ToolStripButton
-                                                        {
-                                                            Text = Resources.PastePersonalShift,
-                                                            Tag = ClipboardItems.PersonalShift
-                                                        });
-            _clipboardControl.PasteSpecialItems.Add(new ToolStripButton
-                                                        {Text = Resources.PasteNew, Tag = ClipboardItems.Special});
-            _clipboardControl.PasteSpecialItems.Add(new ToolStripButton
-                                                        {
-                                                            Text = Resources.PasteShiftFromShifts,
-                                                            Tag = ClipboardItems.ShiftFromShifts
-                                                        });
             _clipboardControl.PasteSpecialClicked += _clipboardControl_PasteSpecialClicked;
             _clipboardControl.PasteClicked += _clipboardControl_PasteClicked;
-
         }
 
         /// <summary>
