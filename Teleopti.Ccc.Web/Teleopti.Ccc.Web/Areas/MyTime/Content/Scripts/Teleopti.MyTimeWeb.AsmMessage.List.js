@@ -71,7 +71,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.isRead = ko.observable(item.IsRead);
 		self.isConfirmButtonEnabled = ko.observable(true);
 		self.isSelected = ko.observable(false);
-		self.allowtextReply = ko.observable(item.AllowTextReply);
+		self.allowDialogueReply = ko.observable(item.AllowDialogueReply);
 
 		self.isRead.subscribe(function () {
 			vm.asmMessageList.remove(self);

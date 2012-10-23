@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
                                   {
                                       Title = "my title",
                                       Message = "message text",
-                                      //AllowDialogueReply = true,
+									  AllowDialogueReply = true,
                                       //TranslateMessage = true,
                                       Sender = _person,
                                   };
@@ -96,11 +96,11 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 			_result.First().Message.Should().Be.EqualTo(_pushMessage.GetMessage(new NoFormatting()));
 		}
 
-        //[Test]
-        //public void ShouldMapAllowDialogueReply()
-        //{
-        //    _result.First().AllowDialogueReply.Should().Be.EqualTo(_pushMessage.AllowDialogueReply);
-        //}
+		[Test]
+		public void ShouldMapAllowDialogueReply()
+		{
+			_result.First().AllowDialogueReply.Should().Be.EqualTo(_pushMessage.AllowDialogueReply);
+		}
         
         //[Test]
         //public void ShouldMapTranslateMessage()
