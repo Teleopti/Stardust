@@ -13,8 +13,8 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Asm = (function () {
 	var refreshSeconds = 1;
-	var pixelPerHours = 50;
-	var timeLineMarkerWidth = 100;
+	var pixelPerHours = 40;
+	var timeLineMarkerWidth = 40;
 	var vm;
 	var notifyOptions;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
