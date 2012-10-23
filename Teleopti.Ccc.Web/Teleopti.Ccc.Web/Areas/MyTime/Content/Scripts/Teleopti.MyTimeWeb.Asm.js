@@ -19,6 +19,14 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var notifyOptions;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 
+	function resize() {
+		var innerWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		var innerHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		var targetWidth = 600;
+		var targetHeight = 65;
+		window.resizeBy(targetWidth - innerWidth, targetHeight - innerHeight);
+	}
+
 	function asmViewModel(yesterday) {
 		var self = this;
 		self.intervalPointer = null;
@@ -112,6 +120,14 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 	function _showAsm() {
 		_setFixedElementAttributes();
+		
+		if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+			setTimeout(function () {
+				resize();
+			}, 200);
+		} else {
+			resize();
+		}
 
 		var yesterDayFromNow = new Date(new Date().getTeleoptiTime()).addDays(-1).clearTime();
 		vm = new asmViewModel(yesterDayFromNow);
