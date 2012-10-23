@@ -10,5 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Message
         public string Date { get; set; }
         public string MessageId { get; set; }
         public bool IsRead { get; set; }
+    	public bool AllowTextReply { get; set; }
+		}
     }
 }

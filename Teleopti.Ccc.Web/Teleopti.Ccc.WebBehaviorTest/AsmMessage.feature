@@ -132,11 +132,7 @@ Scenario: Open unread message where text reply is allowed
 	| Text reply allowed	| True				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	Then I should see the message details form with
-	| Field				| Value				|
-	| Title				| New message		|
-	| Message			| Text in message	|	
-	| Editable text box	| My reply			|
+	Then I should see the message details form with an editable text box
 
 Scenario: See reply dialogue in message text
 	Given I have the role 'Full access to mytime'
@@ -186,7 +182,7 @@ Scenario: Send text reply message
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
 
-Scenario: Do not allow too long replies
+Scenario: Do not allow replies that are too long
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
 	| Field					| Value				|
@@ -195,9 +191,9 @@ Scenario: Do not allow too long replies
 	| Text reply allowed	| True				|
 	And I am viewing messages
 	And I click on the message at position '1' in the list
-	When I write too long text reply
+	When I write a text reply that is too long
 	And I click the send button
-	Then I should see validation error about too long text reply
+	Then I should see validation error about text reply being too long
 	And I should see '1' message(s) in the list
 
 Scenario: Show remaining characters when writing text reply
