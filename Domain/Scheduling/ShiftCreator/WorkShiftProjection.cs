@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 	{
 		public Guid ActivityId { get; set; }
 		public DateTimePeriod Period { get; set; }
-		public bool ActivityAllowesOverwrite { get; set; }
+		public bool ActivityAllowsOverwrite { get; set; }
 	}
 
 }

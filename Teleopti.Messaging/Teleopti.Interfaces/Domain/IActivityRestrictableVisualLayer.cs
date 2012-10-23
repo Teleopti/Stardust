@@ -16,6 +16,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// This activity may be overritten by meetings and personal shifts
 		/// </summary>
-		bool ActivityAllowesOverwrite { get; }
+		bool ActivityAllowsOverwrite { get; }
 	}
 }

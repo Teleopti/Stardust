@@ -623,6 +623,7 @@
     <Compile Include="Scheduling\Restrictions\ScheduleDayRotationRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayStudentAvailabilityRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\StudentSpecificationTest.cs" />
+    <Compile Include="Scheduling\Restrictions\WorkTimeMinMaxRestrictionCreatorTest.cs" />
     <Compile Include="Scheduling\Restriction\AvailabilityRotationTest.cs" />
     <Compile Include="Scheduling\Restrictions\PersonalShiftRestrictionCombinerTest.cs" />
     <Compile Include="Scheduling\Restrictions\MeetingRestrictionCombinerTest.cs" />

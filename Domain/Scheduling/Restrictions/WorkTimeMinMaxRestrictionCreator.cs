@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_effectiveRestrictionForDisplayCreator = effectiveRestrictionForDisplayCreator;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public WorkTimeMinMaxRestrictionCreationResult MakeWorkTimeMinMaxRestriction(IScheduleDay scheduleDay, IEffectiveRestrictionOptions effectiveRestrictionOptions)
 		{
 			var result = new WorkTimeMinMaxRestrictionCreationResult();

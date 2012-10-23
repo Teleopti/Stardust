@@ -1,4 +1,3 @@
-using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -9,11 +8,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 {
-	[TestFixture]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1053:StaticHolderTypesShouldNotHaveConstructors"), TestFixture]
 	public class CombinedRestrictionTest
 	{
 		[Test]
-		public void MayNotMatchIfOnlyFirstMatch()
+		public static void MayNotMatchIfOnlyFirstMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void MayNotMatchIfOnlySecondMatch()
+		public static void MayNotMatchIfOnlySecondMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void MayMatchIfBothMatch()
+		public static void MayMatchIfBothMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void MayNotMatchIfNoneMatch()
+		public static void MayNotMatchIfNoneMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 
 		[Test]
-		public void MayMatchBlacklistedShiftsIfFirstMatch()
+		public static void MayMatchBlacklistedShiftsIfFirstMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -76,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void MayMatchBlacklistedShiftsIfSecondMatch()
+		public static void MayMatchBlacklistedShiftsIfSecondMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -88,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void MayMatchBlacklistedShiftsIfBothMatch()
+		public static void MayMatchBlacklistedShiftsIfBothMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void MayNotMatchBlacklistedShiftsIfNoneMatch()
+		public static void MayNotMatchBlacklistedShiftsIfNoneMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -115,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 
 		[Test]
-		public void ShouldNotMatchShiftCategoryIfOnlyFirstMatch()
+		public static void ShouldNotMatchShiftCategoryIfOnlyFirstMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -128,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void ShouldNotMatchShiftCategoryIfOnlySecondMatch()
+		public static void ShouldNotMatchShiftCategoryIfOnlySecondMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -141,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void ShouldMatchShiftCategoryIfBothMatch()
+		public static void ShouldMatchShiftCategoryIfBothMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -155,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void ShouldNotMatchShiftCategoryIfNoneMatch()
+		public static void ShouldNotMatchShiftCategoryIfNoneMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -171,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 
 		[Test]
-		public void ShouldNotMatchIfOnlyFirstMatch()
+		public static void ShouldNotMatchIfOnlyFirstMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -184,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void ShouldNotMatchIfOnlySecondMatch()
+		public static void ShouldNotMatchIfOnlySecondMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -197,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void ShouldMatchIfBothMatch()
+		public static void ShouldMatchIfBothMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
@@ -211,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void ShouldNotMatchIfNoneMatch()
+		public static void ShouldNotMatchIfNoneMatch()
 		{
 			var one = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
 			var two = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
