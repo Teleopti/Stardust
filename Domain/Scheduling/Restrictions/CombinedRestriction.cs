@@ -33,5 +33,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			return One.Match(workShiftProjection) && Two.Match(workShiftProjection);
 		}
 
+
+
+
+
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var result = 0;
+				result = (result * 398) ^ One.GetHashCode();
+				result = (result * 398) ^ Two.GetHashCode();
+				return result;
+			}
+		}
 	}
 }

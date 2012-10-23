@@ -381,44 +381,44 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return false;
         }
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var result = 0;
-                result = (result * 398) ^ StartTimeLimitation.GetHashCode();
-                result = (result * 398) ^ EndTimeLimitation.GetHashCode();
-                result = (result * 398) ^ WorkTimeLimitation.GetHashCode();
-                if(ShiftCategory != null)
-                    result = (result * 398) ^ ShiftCategory.GetHashCode();
-                if(DayOffTemplate != null)
-                    result = (result * 398) ^ DayOffTemplate.GetHashCode();
-				if(Absence != null)
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var result = 0;
+				result = (result * 398) ^ StartTimeLimitation.GetHashCode();
+				result = (result * 398) ^ EndTimeLimitation.GetHashCode();
+				result = (result * 398) ^ WorkTimeLimitation.GetHashCode();
+				if (ShiftCategory != null)
+					result = (result * 398) ^ ShiftCategory.GetHashCode();
+				if (DayOffTemplate != null)
+					result = (result * 398) ^ DayOffTemplate.GetHashCode();
+				if (Absence != null)
 					result = (result * 398) ^ Absence.GetHashCode();
-                foreach (IActivityRestriction activityRestriction in ActivityRestrictionCollection)
-                {
-                    result = (result * 398) ^ activityRestriction.GetHashCode();
-                }
-            	result = (result * 398) ^ NotAvailable.GetHashCode();
+				foreach (IActivityRestriction activityRestriction in ActivityRestrictionCollection)
+				{
+					result = (result * 398) ^ activityRestriction.GetHashCode();
+				}
+				result = (result * 398) ^ NotAvailable.GetHashCode();
 				result = (result * 398) ^ IsAvailabilityDay.GetHashCode();
-                return result;
-            }
-        }
+				return result;
+			}
+		}
 
-        public override bool Equals(object obj)
-        {
-            var restriction = obj as EffectiveRestriction;
-            if (restriction == null)
-            {
-                return false;
-            }
-            return Equals(restriction);
-        }
+		public override bool Equals(object obj)
+		{
+			var restriction = obj as EffectiveRestriction;
+			if (restriction == null)
+			{
+				return false;
+			}
+			return Equals(restriction);
+		}
 
-        public bool Equals(EffectiveRestriction restriction)
-        {
-            return restriction.GetHashCode() == GetHashCode();
-        }
+		public bool Equals(EffectiveRestriction restriction)
+		{
+			return restriction.GetHashCode() == GetHashCode();
+		}
 
 		public bool NotAllowedForDayOffs { get; set; }
     }

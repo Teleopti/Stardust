@@ -37,5 +37,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			                    select l;
 			return intersectingActivities.All(x => x.ActivityAllowesOverwrite);
 		}
+
+
+
+
+
+		public override int GetHashCode()
+		{
+			var result = 0;
+			foreach (var meeting in _personMeetings)
+			{
+				result = (result * 398) ^ meeting.GetHashCode();
+			}
+			return result;
+		}
 	}
 }

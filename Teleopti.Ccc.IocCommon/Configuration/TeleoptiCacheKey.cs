@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override string ParameterValue(object parameter)
 		{
 			var entity = parameter as IEntity;
-			var restriction = parameter as IEffectiveRestriction;
+			var restriction = parameter as IWorkTimeMinMaxRestriction;
 			if(entity!=null)
 				return entity.Id.HasValue ? entity.Id.Value.ToString() : null;
 			if (restriction != null)
