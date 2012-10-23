@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             using (PerformanceOutput.ForOperation("Optimizing days off for " + optimizers.Count() + " agents"))
             {
                 executeOptimizersWhileActiveFound(optimizers);
-				//if (_cancelMe)
-				//    return;
+				if (_cancelMe)
+					return;
 				//executeOptimizersWhileActiveFound(optimizers);
             }
         }
@@ -85,14 +85,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 				if (lastPeriodValue <= newPeriodValue)
 					retList.Add(optimizer);
 
-                string who = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " " + optimizer.Owner.Name.ToString(NameOrderOption.FirstNameLastName);
+            	string progress = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers.Count + ")" +
+            	                  executes + " ";
+                string who = optimizer.Owner.Name.ToString(NameOrderOption.FirstNameLastName);
                 string success;
                 if (result)
                     success = " " + Resources.wasSuccessful;
                 else
                     success = " " + Resources.wasNotSuccessful;
-                string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ")";
-                OnReportProgress(who + success + values);
+                string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ") ";
+                OnReportProgress(progress + values + who + success);
                 lastPeriodValue = newPeriodValue;
                 if (_cancelMe)
                     break;

@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -12,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly double _absoluteDeviation;
         private readonly double _relativeDeviation;
         private readonly double _relativeDeviationForDisplay;
-        private const double MAX_RELATIVE_DEVIATION_FACTOR = 9.99d;
+        private const double maxRelativeDeviationFactor = 9.99d;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviationStatisticData"/> class.
@@ -21,10 +20,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <param name="realValue">The real value.</param>
         public DeviationStatisticData(double expectedValue, double realValue)
         {
-            _absoluteDeviation = CalculateAbsoluteDeviation(expectedValue, realValue);
+            _absoluteDeviation = calculateAbsoluteDeviation(expectedValue, realValue);
             _relativeDeviation = CalculateRelativeDeviation(expectedValue, realValue);
-            _relativeDeviationForDisplay = CalculateRelativeDeviationForDisplay(expectedValue, realValue);
+            _relativeDeviationForDisplay = calculateRelativeDeviationForDisplay(expectedValue, realValue);
         }
+
+		public DeviationStatisticData()
+		{
+			_absoluteDeviation = calculateAbsoluteDeviation(0, 0);
+			_relativeDeviation = CalculateRelativeDeviation(0, 0);
+			_relativeDeviationForDisplay = calculateRelativeDeviationForDisplay(0, 0);
+		}
 
         public double AbsoluteDeviation
         {
@@ -44,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <summary>
         /// Calculates the absolut deviation.
         /// </summary>
-        private static double CalculateAbsoluteDeviation(double expectedValue, double realValue)
+        private static double calculateAbsoluteDeviation(double expectedValue, double realValue)
         {
             return (realValue - expectedValue);
         }
@@ -54,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// </summary>
         /// <param name="expectedValue">The expected value.</param>
         /// <param name="realValue">The real value.</param>
-        private static double CalculateRelativeDeviationForDisplay(double expectedValue, double realValue)
+        private double calculateRelativeDeviationForDisplay(double expectedValue, double realValue)
         {
             double result = CalculateRelativeDeviation(expectedValue, realValue);
             //if (expectedValue >= 0 && expectedValue < 1)
@@ -63,13 +69,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             //        return double.NaN;
             //}
 
-            return result >= MAX_RELATIVE_DEVIATION_FACTOR ? double.NaN : result;
+            return result >= maxRelativeDeviationFactor ? double.NaN : result;
         }
 
         /// <summary>
         /// Calculates the absolut deviation.
         /// </summary>
-        private static double CalculateRelativeDeviation(double expectedValue, double realValue)
+        public double CalculateRelativeDeviation(double expectedValue, double realValue)
         {
             if (expectedValue == realValue)
                 return 0;
@@ -78,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (expectedValue > 0 && realValue == 0)
                 return -1;
             if (expectedValue >= 0 && expectedValue < 1)
-                return Math.Min((realValue - expectedValue) / expectedValue, MAX_RELATIVE_DEVIATION_FACTOR);
+                return Math.Min((realValue - expectedValue) / expectedValue, maxRelativeDeviationFactor);
             return (realValue - expectedValue) / expectedValue;
         }
 

@@ -6,6 +6,7 @@ using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -529,6 +530,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
 
+			var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(_stateHolder);
+			var populationStatisticsCalculator = new PopulationStatisticsCalculator();
+			var deviationStatisticData = new DeviationStatisticData();
+			var dayOffOptimizerPreMoveResultPredictor =
+				new DayOffOptimizerPreMoveResultPredictor(dailySkillForecastAndScheduledValueCalculator,
+														  populationStatisticsCalculator, deviationStatisticData);
+
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,
                                                   dayOffBackToLegalStateService,
@@ -546,7 +554,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   optimizerOverLimitDecider,
                                                   null,
                                                   schedulingOptionsCreator,
-												  mainShiftOptimizeActivitySpecificationSetter
+												  mainShiftOptimizeActivitySpecificationSetter,
+												  dayOffOptimizerPreMoveResultPredictor
                                                   );
 
             var optimizerContainer =
