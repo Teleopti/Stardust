@@ -586,7 +586,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _scheduleView.ViewGrid != null)
             {
                 _scheduleView.ViewGrid.InvalidateRange(_scheduleView.ViewGrid.ViewLayout.VisibleCellsRange);
-                recalculateResources();
+                RecalculateResources();
             }
         }
 
@@ -689,7 +689,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
             }
 
-            recalculateResources();
+            RecalculateResources();
             updateShiftEditor();
         }
 
@@ -767,7 +767,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
                     _schedulerState.MarkDateToBeRecalculated(date);
                 }
-                recalculateResources();
+                RecalculateResources();
                 statusStrip1.BackColor = SystemColors.Control;
             }
         }
@@ -1176,7 +1176,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         }
                     }
                 }
-                recalculateResources();
+                RecalculateResources();
             }
         }
 
@@ -1190,104 +1190,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void SwapRaw()
         {
-            var selectedSchedules = _scheduleView.SelectedSchedulesPerEqualTwoRanges();
-
-            if (selectedSchedules.IsEmpty())
-                return;
-
-            ISwapRawService swapRawService = new SwapRawService(PrincipalAuthorization.Instance());
-            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState,
-                                                         new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState),new ScheduleTagSetter(_defaultScheduleTag));
-
-            _undoRedo.CreateBatch(Resources.UndoRedoPaste);
-
-            try
-            {
-                swapRawService.Swap(schedulePartModifyAndRollbackService, selectedSchedules[0], selectedSchedules[1],_scheduleView.LockedDatesOnPerson(_gridLockManager));
-            }
-
-            catch (ValidationException ex)
-            {
-                schedulePartModifyAndRollbackService.Rollback();
-                _undoRedo.RollbackBatch();
-                ShowErrorMessage(string.Format(CultureInfo.CurrentCulture, Resources.PersonAssignmentIsNotValidDot, ex.Message),Resources.ValidationError);
-                return;
-            }
-            catch (PermissionException ex)
-            {
-                schedulePartModifyAndRollbackService.Rollback();
-                _undoRedo.RollbackBatch();
-                ShowErrorMessage(string.Format(CultureInfo.CurrentCulture, ex.Message), "");
-                return;
-            }
-
-            _undoRedo.CommitBatch();
-            recalculateResources();
+			var swapper = new Swapper(_scheduleView, _undoRedo, _schedulerState, _gridLockManager, this, _defaultScheduleTag);
+			swapper.SwapRaw();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability","CA1506:AvoidExcessiveClassCoupling"),System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",MessageId = "System.String.Format(System.IFormatProvider,System.String,System.Object[])")]
         private void swapSelectedSchedules()
         {
-            ISwapServiceNew swapService = new SwapServiceNew();
-            //var swapAndModifyService = new SwapAndModifyService(swapService);
-            var swapAndModifyServiceNew = new SwapAndModifyServiceNew(swapService,new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(),SchedulerState));
-
-            IList<IScheduleDay> selectedSchedules = _scheduleView.SelectedSchedules();
-            if (selectedSchedules.Count > 1)
-            {
-                var personList = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedSchedules));
-                if (personList.Count != 2)
-                    return;
-
-                _undoRedo.CreateBatch(Resources.UndoRedoPaste);
-                IList<DateOnly> dates = ScheduleViewBase.AllSelectedDates(selectedSchedules).ToList();
-                IEnumerable<IBusinessRuleResponse> lstBusinessRuleResponse;
-
-                INewBusinessRuleCollection newRules = _schedulerState.SchedulingResultState.GetRulesToRun();
-                try
-                {
-                    lstBusinessRuleResponse = swapAndModifyServiceNew.Swap(personList[0], personList[1], dates,_scheduleView.LockedDates(_gridLockManager),_schedulerState.Schedules, newRules,new ScheduleTagSetter(_defaultScheduleTag));
-                }
-                catch (ValidationException ex)
-                {
-                    _undoRedo.RollbackBatch();
-                    ShowErrorMessage(string.Format(CultureInfo.CurrentUICulture, Resources.PersonAssignmentIsNotValidDot, ex.Message),Resources.ValidationError);
-                    return;
-                }
-                catch (PermissionException ex)
-                {
-                    _undoRedo.RollbackBatch();
-                    ShowErrorMessage(string.Format(CultureInfo.CurrentUICulture, ex.Message), "");
-                    return;
-                }
-
-                var lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
-                var handleBusinessRules = new HandleBusinessRules(_handleBusinessRuleResponse, this,_overriddenBusinessRulesHolder);
-                lstBusinessRuleResponseToOverride.AddRange(handleBusinessRules.Handle(lstBusinessRuleResponse,lstBusinessRuleResponseToOverride));
-                if (lstBusinessRuleResponseToOverride.Any())
-                {
-                    lstBusinessRuleResponseToOverride.ForEach(newRules.Remove);
-                    lstBusinessRuleResponse = swapAndModifyServiceNew.Swap(personList[0], personList[1], dates,_scheduleView.LockedDates(_gridLockManager),_schedulerState.Schedules, newRules,new ScheduleTagSetter(_defaultScheduleTag));
-                    lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
-                    foreach (var response in lstBusinessRuleResponse)
-                    {
-                        if (!response.Overridden)
-                            lstBusinessRuleResponseToOverride.Add(response);
-                    }
-                }
-
-                //if it's more than zero now. Cancel!!!
-                if (lstBusinessRuleResponseToOverride.Any())
-                {
-                    // show a MessageBox, another not overridable rule (Mandatory) might have been found later in the SheduleRange
-                    // will probably not happen
-                    ShowErrorMessage(lstBusinessRuleResponse.First().Message, Resources.ViolationOfABusinessRule);
-                    _undoRedo.RollbackBatch();
-                    return;
-                }
-                _undoRedo.CommitBatch();
-                recalculateResources();
-            }
+        	var swapper = new Swapper(_scheduleView, _undoRedo, _schedulerState, _gridLockManager, this, _defaultScheduleTag);
+			swapper.SwapSelectedSchedules(_handleBusinessRuleResponse, _overriddenBusinessRulesHolder);
         }
 
         private void toolStripMenuItemSchedule_Click(object sender, EventArgs e)
@@ -1883,7 +1793,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _backgroundWorkerRunning = true;
                 _scheduleView.GridClipboardPaste(options, _undoRedo);
                 _backgroundWorkerRunning = false;
-                recalculateResources();
+                RecalculateResources();
                 checkCutMode();
             }
         }
@@ -2460,11 +2370,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void _currentView_viewPasteCompleted(object sender, EventArgs e)
         {
-            recalculateResources();
+            RecalculateResources();
             _grid.Invalidate();
         }
 
-        private void recalculateResources()
+        public void RecalculateResources()
         {
             if (_backgroundWorkerRunning) return;
 
@@ -3172,7 +3082,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 releaseUserInterface(e.Cancelled);
 
             updateShiftEditor();
-            recalculateResources();
+            RecalculateResources();
         }
 
         private DeleteOption _deleteOption;
@@ -3633,7 +3543,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             //Next line will start work on another background thread.
             //No code after next line please.
-            recalculateResources();
+            RecalculateResources();
 
         }
 
@@ -3767,7 +3677,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             //Next line will start work on another background thread.
             //No code after next line please.
-            recalculateResources();
+            RecalculateResources();
         }
 
         private void _backgroundWorkerOptimization_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -4528,7 +4438,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
             updateRequestCommandsAvailability();
             updateShiftEditor();
-            recalculateResources();
+            RecalculateResources();
         }
 
         private void showPleaseSaveAgainDialog()
@@ -6315,7 +6225,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var days = personRequestViewModel.PersonRequest.Request.Period.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).DayCollection();
                 days.ForEach(_schedulerState.MarkDateToBeRecalculated);
             }
-            recalculateResources();
+            RecalculateResources();
         }
 
         private void toolStripButtonReplyAndDeny_Click(object sender, EventArgs e)
@@ -6427,7 +6337,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void refreshView()
         {
-            recalculateResources();
+            RecalculateResources();
             if (_requestView != null)
                 updateShiftEditor();
         }
@@ -6659,7 +6569,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             try
             {
                 refreshEntitiesUsingMessageBroker();
-                recalculateResources();
+                RecalculateResources();
             }
             catch (DataSourceException dataSourceException)
             {
@@ -6825,7 +6735,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _schedulerState.MarkDateToBeRecalculated(new DateOnly(period.Period.StartDateTimeLocal(_schedulerState.TimeZoneInfo)));
             }
 
-            recalculateResources();
+            RecalculateResources();
             ((ToolStripMenuItem) _contextMenuSkillGrid.Items["UseShrinkage"]).Checked = useShrinkage;
             toolStripButtonShrinkage.Checked = useShrinkage;
             Cursor = Cursors.Default;
