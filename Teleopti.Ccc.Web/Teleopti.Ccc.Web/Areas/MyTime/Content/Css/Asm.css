@@ -65,15 +65,6 @@
 	font-size: 8px;
 }
 
-.asm-info-canvas
-{
-	overflow: hidden;
-	background: #F8F8F8;
-	height: 50px;
-	border: 1px solid rgb(216, 216, 216);	
-	width: 400px;
-}
-
 .asm-time-marker
 {
 	height: 72px;
@@ -82,38 +73,6 @@
 	z-index: 1;
 	border-right: 1px solid black;
 }
-
-.asm-info-canvas table {
-	width: 100%; 
-	table-layout: fixed;
-	overflow: hidden;
-	white-space: nowrap;
-	text-align: left;
-	font-family: verdana;
-	font-size: 10px;
-}
-
-.asm-info-canvas td.asm-info-time-column
-{
-	width: 34px;
-}
-
-.asm-info-canvas td.asm-info-next-day-column 
-{
-	width: 18px;
-	text-align: left;	
-}
-
-.asm-info-canvas tr
-{
-	opacity: 0.4;
-}
-
-.asm-info-current-activity 
-{
-	font-weight: bold;
-}
-
 
 .asm-info-canvas div 
 {
@@ -125,10 +84,13 @@
 
 .asm-info-canvas 
 {
+	background: #F8F8F8;
+	border: 1px solid rgb(216, 216, 216);	
 	font-family: verdana;
 	font-size: 9px;
 	opacity: 0.7;
 	filter: alpha(opacity=70);
+	width: 400px;
 	overflow-x: hidden;
 	height: 12px;
 	margin-top: 3px;
