@@ -11151,4 +11151,12 @@ These options are activated:
     <value>Selected file destination does not exist, please enter valid file path</value>
     <comment>Selected file destination does not exist, please enter valid filepath</comment>
   </data>
+  <data name="CouldNotExportForecastToFile" xml:space="preserve">
+    <value>Something went wrong with the file export, please try a different location</value>
+    <comment>Something went wrong with the file export, please try a different location</comment>
+  </data>
+  <data name="SelectedFileDestinationIsTooLong" xml:space="preserve">
+    <value>Selected file destination is too long, please enter valid file path</value>
+    <comment>Selected file destination does not exist, please enter valid file path</comment>
+  </data>
 </root>
