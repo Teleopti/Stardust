@@ -1,6 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
@@ -31,10 +32,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 		public bool Match(IWorkShiftProjection workShiftProjection)
 		{
+			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
 			var intersectingActivities = from m in _personMeetings
-			                    from l in workShiftProjection.Layers
-			                    where m.Period.Intersect(l.Period)
-			                    select l;
+			                             from l in workShiftProjection.Layers
+			                             where m.Period.TimePeriod(timeZone).Intersect(l.Period.TimePeriod(timeZone))
+			                             select l;
 			return intersectingActivities.All(x => x.ActivityAllowesOverwrite);
 		}
 
