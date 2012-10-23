@@ -74,47 +74,68 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
                                    Resources.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
-            
-            var path = Path.GetDirectoryName(txtFileName.Text);
-            var fileName = Path.GetFileNameWithoutExtension(txtFileName.Text);
-            var fileExtension = Path.GetExtension(txtFileName.Text);
-            var drives = Environment.GetLogicalDrives();
 
-            if (path == null || fileName ==  null || fileExtension == null
-                || path.Length < 4
-                || drives.All(t => path.Substring(0, 3) != t)
-                || !Directory.Exists(path)
-                || path.IndexOfAny(Path.GetInvalidPathChars()) != -1
-                || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1
-                || fileExtension != ".csv")
+            try
             {
-                MessageBoxAdv.Show(Resources.SelectedFileDestinationDoesNotExist,
+                var path = Path.GetDirectoryName(txtFileName.Text);
+                var fileName = Path.GetFileNameWithoutExtension(txtFileName.Text);
+                var fileExtension = Path.GetExtension(txtFileName.Text);
+                var drives = Environment.GetLogicalDrives();
+
+                if (path == null || fileName == null || fileExtension == null
+                    || path.Length < 4
+                    || drives.All(t => path.Substring(0, 3) != t)
+                    || !Directory.Exists(path)
+                    || path.IndexOfAny(Path.GetInvalidPathChars()) != -1
+                    || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1
+                    || fileExtension != ".csv")
+                {
+                    MessageBoxAdv.Show(Resources.SelectedFileDestinationDoesNotExist,
+                                       Resources.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return false;
+                }
+
+
+                var commandModel = stateObj.ExportSkillToFileCommandModel;
+                var pathExists = txtFileName.Text.Contains("\\");
+
+                if (pathExists)
+                    commandModel.FileName = txtFileName.Text;
+                else
+                    commandModel.FileName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" +
+                                            txtFileName.Text;
+
+                GetSelectedCheckBox(stateObj);
+                using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                {
+                    var skill = _repositoryFactory.CreateSkillRepository(uow).LoadSkill(commandModel.Skill);
+                    var skillDays = _repositoryFactory.CreateSkillDayRepository(uow).FindRange(commandModel.Period,
+                                                                                               skill,
+                                                                                               commandModel.Scenario);
+                    var exportForecastDataToFile = new ExportForecastDataToFile(skill, commandModel, skillDays);
+
+                    exportForecastDataToFile.ExportForecastData();
+
+                }
+                return true;
+            }
+
+            catch (PathTooLongException)
+            {
+                MessageBoxAdv.Show(Resources.SelectedFileDestinationIsTooLong,
                                    Resources.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
 
-
-            var commandModel = stateObj.ExportSkillToFileCommandModel;
-            var pathExists = txtFileName.Text.Contains("\\");
-            
-            if (pathExists)
-                commandModel.FileName = txtFileName.Text;
-            else
-                commandModel.FileName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + txtFileName.Text;
-
-            GetSelectedCheckBox(stateObj);
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            catch
             {
-                var skill = _repositoryFactory.CreateSkillRepository(uow).LoadSkill(commandModel.Skill);
-                var skillDays = _repositoryFactory.CreateSkillDayRepository(uow).FindRange(commandModel.Period, skill,
-                                                                                           commandModel.Scenario);
-                var exportForecastDataToFile = new ExportForecastDataToFile(skill, commandModel, skillDays);
-                exportForecastDataToFile.ExportForecastData();
+                MessageBoxAdv.Show(Resources.CouldNotExportForecastToFile,
+                                   Resources.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
             }
-            return true;
         }
 
-       
+
         public void SetEditMode()
         {
         }
