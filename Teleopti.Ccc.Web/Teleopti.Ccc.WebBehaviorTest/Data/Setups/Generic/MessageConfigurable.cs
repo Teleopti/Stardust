@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			{
 				uow.PersistAll();
 				var repository = new PushMessageDialogueRepository(uow);
-				var messageDialogue = repository.LoadAll().First(t => t.Equals(Title));
+				var messageDialogue = repository.LoadAll().First(t => t.PushMessage.GetTitle(new NoFormatting()).Equals(Title));
 				messageDialogue.DialogueReply(MyReply,user);
 				if(SendersReply!=string.Empty) messageDialogue.DialogueReply(SendersReply,user);
 			}

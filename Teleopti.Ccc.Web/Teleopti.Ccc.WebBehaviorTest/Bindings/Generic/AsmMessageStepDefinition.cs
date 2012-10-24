@@ -189,5 +189,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.Reply.Style.GetAttributeValue("display"), Is.Not.EqualTo("none"));
 		}
 
+		[Then(@"I should see this conversation")]
+		public void ThenIShouldSeeThisConversation(Table table)
+		{
+			foreach (var tableRow in table.Rows)
+			{
+				EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.DialogueMessages.InnerHtml.Contains(tableRow[0]), Is.EqualTo(true));						
+			}
+		}
 	}
 }

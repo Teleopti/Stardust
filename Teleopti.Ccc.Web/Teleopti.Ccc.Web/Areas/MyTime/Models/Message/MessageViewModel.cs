@@ -1,4 +1,5 @@
-using System;
+using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Message
 {
@@ -10,6 +11,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Message
         public string Date { get; set; }
         public string MessageId { get; set; }
         public bool IsRead { get; set; }
-    	public bool AllowDialogueReply { get; set; }
+		public bool AllowDialogueReply { get; set; }
+		public IList<DialogueMessageViewModel> DialogueMessages { get; set; }
     }
+
+	public class DialogueMessageViewModel
+	{
+		public string Text { get; set; }
+	}
 }

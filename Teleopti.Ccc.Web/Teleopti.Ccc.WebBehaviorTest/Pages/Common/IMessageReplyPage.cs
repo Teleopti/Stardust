@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
         Label Title { get; }
         Label Message { get; }
 		TextField Reply { get; }
+		Div DialogueMessages { get; }
 
     }
 }

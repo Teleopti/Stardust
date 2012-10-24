@@ -72,6 +72,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.isConfirmButtonEnabled = ko.observable(true);
 		self.isSelected = ko.observable(false);
 		self.allowDialogueReply = ko.observable(item.AllowDialogueReply);
+		self.dialogueMessages = ko.utils.arrayMap(item.DialogueMessages, function (data) {
+			return new dialogueMessageViewModel(data);
+		});
 
 		self.isRead.subscribe(function () {
 			vm.asmMessageList.remove(self);
@@ -81,6 +84,11 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			_replyToMessage(self);
 		};
 	}
+
+	var dialogueMessageViewModel = function (dialogueMessage) {
+		var self = this;
+		self.text = ko.observable(dialogueMessage.Text);
+	};
 
 	function _addNewMessageAtTop(messageItem) {
 		vm.asmMessageList.unshift(new asmMessageItemViewModel(messageItem));

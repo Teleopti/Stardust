@@ -45,6 +45,8 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
                                   };
             _pushMessageDialogue = new PushMessageDialogue(_pushMessage, _person);
             _pushMessageDialogue.SetId(Guid.NewGuid());
+			_pushMessageDialogue.DialogueMessages.Add(new DialogueMessage("A reply", _person));
+			_pushMessageDialogue.DialogueMessages.Add(new DialogueMessage("Another reply", _person));
 			SetDate(_pushMessageDialogue, DateTime.UtcNow, "_updatedOn");
 
             _domainMessages = new[] {_pushMessageDialogue};
@@ -100,6 +102,13 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 		public void ShouldMapAllowDialogueReply()
 		{
 			_result.First().AllowDialogueReply.Should().Be.EqualTo(_pushMessage.AllowDialogueReply);
+		}
+
+		[Test]
+		public void ShouldMapDialogueMessages()
+		{
+			//_result.First().DialogueMessages.Should().Have.SameValuesAs(_pushMessageDialogue.DialogueMessages);
+			_result.First().DialogueMessages.First().Text.Should().Be.EqualTo(_pushMessageDialogue.DialogueMessages.First().Text);
 		}
         
         //[Test]

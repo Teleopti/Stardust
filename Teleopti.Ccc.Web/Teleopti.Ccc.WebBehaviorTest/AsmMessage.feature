@@ -141,13 +141,12 @@ Scenario: See reply dialogue in message text
 	| Title					| Work late					|
 	| Message				| Can u work late today?	|
 	| Text reply allowed	| True						|
-	| MyReply				| Ok if you buy me dinner?  |
-	| SendersReply			| It´s a deal!				|
+	| My reply				| Ok if you buy me dinner?  |
+	| Senders reply			| It´s a deal!				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
 	Then I should see this conversation
 	| Messages					|
-	| Can u work late today?    |
 	| Ok if you buy me dinner?  |
 	| It´s a deal!				|
 
