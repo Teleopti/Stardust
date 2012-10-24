@@ -95,7 +95,8 @@ namespace Teleopti.Ccc.Win.Meetings
         private void buttonAdvGo_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
-
+            if (string.IsNullOrEmpty(textBoxExtFilterCriteria.Text))
+                PrepareGridView(_presenter.AddressBookViewModel.PersonModels);
             // Restores origin list to refilter.
             _gridHelper.RestoreToOriginalList();
             var date = new DateOnly(dateTimePickerAdvtDate.Value);
@@ -310,9 +311,11 @@ namespace Teleopti.Ccc.Win.Meetings
                                     : SortingModes.Descending;
 
             ISort<ContactPersonViewModel> iSort = new SortingBase<ContactPersonViewModel>();
-
+            var personList = string.IsNullOrEmpty(textBoxExtFilterCriteria.Text)
+                                 ? _presenter.AddressBookViewModel.PersonModels
+                                 : _gridHelper.SourceList;
             List<ContactPersonViewModel> personViewDataList =
-                iSort.Sort(selectedColumn,new ReadOnlyCollection<ContactPersonViewModel>(_presenter.AddressBookViewModel.PersonModels), mode).ToList();
+                iSort.Sort(selectedColumn, new ReadOnlyCollection<ContactPersonViewModel>(personList), mode).ToList();
 
             SetSortingStatus(columnIndex);
             PrepareGridView(personViewDataList);
