@@ -51,6 +51,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target = new scheduleExposingInternalCollections(_dic, _parameters);
 		}
 
+
+		[Test]
+		public void PersonAssignmentConflictsShouldBePartOfDifferenceSinceSnapshot()
+		{
+			using (_mocks.Record())
+			{
+				fullPermission(true);
+			}
+			using (_mocks.Playback())
+			{
+				using (new CustomAuthorizationContext(_principalAuthorization))
+				{
+					var ass1 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
+					var ass2 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
+					_target.Add(ass1);
+					_target.Add(ass2);
+
+					_target.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()).Count()
+						.Should().Be.EqualTo(2);
+				}
+			}
+		}
+
 		[Test]
 		public void VerifyExtractAllDataRegardingTimeZones()
 		{
