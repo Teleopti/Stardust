@@ -1,13 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IGroupShiftCategoryBackToLegalStateService
     {
-        List<IScheduleMatrixPro> Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup);
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
+		List<IScheduleMatrixPro> Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup, IDictionary<Guid, bool> teamSteadyStates, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
     }
 
     public class GroupShiftCategoryBackToLegalStateService : IGroupShiftCategoryBackToLegalStateService
@@ -15,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IRemoveShiftCategoryBackToLegalService _shiftCategoryBackToLegalService;
         private readonly IGroupSchedulingService _scheduleService;
         private readonly IGroupPersonsBuilder _groupPersonsBuilder;
+
         public GroupShiftCategoryBackToLegalStateService(IRemoveShiftCategoryBackToLegalService shiftCategoryBackToLegalService,
             IGroupSchedulingService scheduleService,
             IGroupPersonsBuilder groupPersonsBuilder)
@@ -24,8 +28,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupPersonsBuilder = groupPersonsBuilder;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
-        public List<IScheduleMatrixPro> Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
+		public List<IScheduleMatrixPro> Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup, IDictionary<Guid, bool> teamSteadyStates, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
             var resultList = new List<IScheduleDayPro>();
             if (schedulePeriod != null)
@@ -39,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var groupMatrixs = new List<IScheduleMatrixPro>();
             foreach (var scheduleDayPro in resultList)
             {
+            	var dateOnly = scheduleDayPro.Day;
                 var schedulePart = scheduleDayPro.DaySchedulePart();
                 var scheduleDate = schedulePart.DateOnlyAsPeriod.DateOnly;
                 var person = schedulePart.Person;
@@ -61,7 +66,30 @@ namespace Teleopti.Ccc.Domain.Optimization
                 }
                 var groupPerson = _groupPersonsBuilder.BuildListOfGroupPersons(scheduleDate, groupMatrixs.Select(x => x.Person).ToList(), true, schedulingOptions).FirstOrDefault();
 
-                _scheduleService.ScheduleOneDay(scheduleDate, schedulingOptions, groupPerson, allMatrixes);
+				var teamSteadyStateSuccess = false;
+
+				if (teamSteadyStates != null)
+				{
+					if (groupPerson != null && groupPerson.Id.HasValue)
+					{
+						if (teamSteadyStates[groupPerson.Id.Value])
+						{
+							if (teamSteadyStateMainShiftScheduler != null &&
+								!teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, _scheduleService, rollbackService,
+								                                                schedulingOptions, groupPersonBuilderForOptimization,
+								                                                allMatrixes, scheduleDictionary))
+							{
+								teamSteadyStates.Remove(groupPerson.Id.Value);
+								teamSteadyStates.Add(groupPerson.Id.Value, false);
+							}
+
+							else teamSteadyStateSuccess = true;
+						}
+					}
+				}
+
+            	if(!teamSteadyStateSuccess)
+					_scheduleService.ScheduleOneDay(scheduleDate, schedulingOptions, groupPerson, allMatrixes);
             }
             return removeList;
         }

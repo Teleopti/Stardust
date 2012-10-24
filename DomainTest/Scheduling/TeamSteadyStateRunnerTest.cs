@@ -146,21 +146,47 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
-		public void ShouldSetTeamSteadyStateToFalseWhenNoPersonPeriod()
+		public void ShouldSetTeamSteadyStateToFalseWhenNoPersonPeriodOnFirstPerson()
 		{
 			_person1.RemoveAllPersonPeriods();
 			var result = _target.Run(_groupPerson1, _dateOnly);
 			Assert.IsNotNull(result);
-			Assert.IsFalse(result.Value);			
+			Assert.IsFalse(result.Value);				
 		}
 
 		[Test]
-		public void ShouldSetTeamSteadyStateToFalseWhenNoScheduleMatrixPro()
+		public void ShouldSetTeamSteadyStateToFalseWhenNoPersonPeriod()
+		{
+			_person2.RemoveAllPersonPeriods();
+
+			var result = _target.Run(_groupPerson1, _dateOnly);
+			Assert.IsNotNull(result);
+			Assert.IsFalse(result.Value);	
+		}
+
+		[Test]
+		public void ShouldSetTeamSteadyStateToFalseWhenNoScheduleMatrixProOnFirstPerson()
 		{
 			_matrixes.RemoveAt(0);
 			var result = _target.Run(_groupPerson1, _dateOnly);
 			Assert.IsNotNull(result);
 			Assert.IsFalse(result.Value);
+		}
+
+		[Test]
+		public void ShouldSetTeamSteadyStateToFalseWhenNoScheduleMatrixPro()
+		{
+			_matrixes.RemoveAt(1);
+			var result = _target.Run(_groupPerson1, _dateOnly);
+			Assert.IsNotNull(result);
+			Assert.IsFalse(result.Value);
+		}
+		
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullGroupPersonId()
+		{
+			_groupPerson1 = new GroupPerson(new List<IPerson> { _person1, _person2 }, _dateOnly, "groupPerson1", null);
+			_target.Run(_groupPerson1, _dateOnly);
 		}
 	}
 }
