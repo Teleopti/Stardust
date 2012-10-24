@@ -96,9 +96,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 			if (!restriction.MayMatchWithShifts())
 				return null;
 
-			//if (restriction.DayOffTemplate != null)
-			//    return null;
-
 		  	var validRuleSets = _ruleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.IsValidDate(onDate)).ToList();
             
             var nonRestrictionSets = validRuleSets.Where(workShiftRuleSet => !workShiftRuleSet.OnlyForRestrictions).ToList();
@@ -122,10 +119,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
 				if (!restriction.Match(workShiftRuleSet.TemplateGenerator.Category))
 					continue;
-
-				//if (restriction.ShiftCategory != null &&
-				//    !workShiftRuleSet.TemplateGenerator.Category.Equals(restriction.ShiftCategory))
-				//    continue;
 
             	var ruleSetWorkTimeMinMax = workShiftWorkTime.CalculateMinMax(workShiftRuleSet, restriction);
                 if (ruleSetWorkTimeMinMax != null)
