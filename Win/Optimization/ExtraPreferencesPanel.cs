@@ -186,7 +186,6 @@ namespace Teleopti.Ccc.Win.Optimization
 			checkBoxCommonStart.Enabled = checkBoxTeams.Checked;
 			checkBoxCommonEnd.Enabled = checkBoxTeams.Checked;
             checkBoxCommonActivity.Enabled = checkBoxTeams.Checked;
-            comboBoxActivity.Enabled = checkBoxTeams.Checked;
         }
 
       
