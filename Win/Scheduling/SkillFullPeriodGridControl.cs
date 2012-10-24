@@ -92,13 +92,15 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new TimeSpanLongHourMinutesStaticCellModel(Model);
         }
 
-        private GridCellModelBase initializeCallPercentReadOnlyCell()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private GridCellModelBase initializeCallPercentReadOnlyCell()
         {
 			var model = new PercentReadOnlyCellModel(Model) {NumberOfDecimals = 1};
         	return model;
         }
 
-        private GridCellModelBase initializeCallPercentReadOnlyPercentCell()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private GridCellModelBase initializeCallPercentReadOnlyPercentCell()
         {
 			var model = new PercentFromPercentReadOnlyCellModel(Model) { NumberOfDecimals = 1 };
         	return model;
