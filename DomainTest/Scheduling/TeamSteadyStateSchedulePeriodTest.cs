@@ -174,5 +174,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Assert.IsTrue(_target.SchedulePeriodEquals(_schedulePeriod, _scheduleMatrix));
 			}	
 		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullSchedulePeriod()
+		{
+			_target.SchedulePeriodEquals(null, _scheduleMatrix);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullVirtualPeriod()
+		{
+			_target.SchedulePeriodEquals(_schedulePeriod, null);
+		}
 	}
 }

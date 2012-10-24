@@ -19,7 +19,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         public GroupShiftCategoryBackToLegalStateServiceBuilder(IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator,
             IGroupSchedulingService scheduleService,
            IGroupPersonsBuilder groupPersonsBuilder,
-            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup)
+            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup
+			)
         {
             _scheduleMatrixValueCalculator = scheduleMatrixValueCalculator;
             _scheduleService = scheduleService;
