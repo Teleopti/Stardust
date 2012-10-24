@@ -47,12 +47,6 @@ Scenario: Show title in popup
 	When I click ASM link
 	Then I should see a popup with title AgentScheduleMessenger 
 
-Scenario: Write all upcoming activities
-	Given I have the role 'Full access to mytime'
-	And Current time is '2030-01-01 07:00'
-	When I click ASM link
-	Then I should see '3' upcoming activities
-
 Scenario: Current activity should be shown
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 16:00'
@@ -63,7 +57,7 @@ Scenario: No current activity to show
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 07:00'
 	When I click ASM link
-	Then I should not see as current activity
+	Then I should not see a current activity
 
 Scenario: Current activity changes
 	Given I have the role 'Full access to mytime'

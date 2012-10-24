@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml;
 using NUnit.Framework;
+using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -29,13 +30,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Browser.Current.Spans.Filter(Find.ByClass("asm-layer", false)).Count, Is.GreaterThan(0));
 		}
 
-		[Then(@"I should see '(.*)' upcoming activities")]
-		public void ThenIShouldSeeUpcomingActivities(int numberOfUpcomingActivities)
-		{
-			EventualAssert.That(() => Browser.Current.Table("asm-current-info-table").TableRows.Count, Is.EqualTo(numberOfUpcomingActivities));
-		}
-
-
 		[Then(@"I should see Phone as current activity")]
 		public void ThenIShouldSeePhoneAsCurrentActivity()
 		{
@@ -44,10 +38,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				Is.StringContaining(TestData.ActivityPhone.Description.Name));
 		}
 
-		[Then(@"I should not see as current activity")]
+		[Then(@"I should not see a current activity")]
 		public void ThenIShouldNotSeeAsCurrentActivity()
 		{
-			EventualAssert.That(() => Browser.Current.Table("asm-current-info-table").TableRow(Find.ByClass("asm-info-current-activity")).Exists, Is.False);
+			Browser.Current.Element(Find.ByClass("asm-outer-canvas", false)).WaitUntilDisplayed();
+			Browser.Current.Div(Find.ByClass("asm-info-canvas-column-current", false)).Text.Should().Be.Null();
 		}
 
 		[Then(@"ASM link should not be visible")]
