@@ -22,7 +22,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.chosenMessage = ko.observable();
 		self.chosenMessageId = ko.observable();
 		self.shouldShowMessage = ko.observable(false);
-
 		self.CreateAsmMessageList = function (dataList) {
 			var asmMessageItems = new Array();
 			$.each(dataList, function (position, element) {
@@ -69,9 +68,10 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.sender = ko.observable(item.Sender);
 		self.messageId = ko.observable(item.MessageId);
 		self.isRead = ko.observable(item.IsRead);
-		self.isConfirmButtonEnabled = ko.observable(true);
 		self.isSelected = ko.observable(false);
 		self.allowDialogueReply = ko.observable(item.AllowDialogueReply);
+		self.isSending = ko.observable(false);
+		self.reply = ko.observable("hello");
 		self.dialogueMessages = ko.utils.arrayMap(item.DialogueMessages, function (data) {
 			return new dialogueMessageViewModel(data);
 		});
@@ -81,8 +81,15 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			vm.chosenMessage(null);
 		});
 		self.confirmReadMessage = function (data, event) {
+			self.isSending(true);
 			_replyToMessage(self);
 		};
+		self.isConfirmButtonEnabled = ko.computed(function () {
+			if (self.isSending() || (self.allowDialogueReply() && self.reply().length == 0)) {
+				return false;
+			}
+			return true;
+		});
 	}
 
 	var dialogueMessageViewModel = function (dialogueMessage) {
@@ -115,7 +122,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			type: 'POST',
 			contentType: 'application/json; charset=utf-8',
 			beforeSend: function () {
-				_setConfirmButtonState(messageItem, false);
 				_loading();
 			},
 			data: JSON.stringify({
@@ -129,10 +135,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 				alert('felfelfel! ' + messageItem.messageId());
 			}
 		});
-	}
-
-	function _setConfirmButtonState(messageItem, isEnabled) {
-		messageItem.isConfirmButtonEnabled(isEnabled);
 	}
 
 	function _initScrollPaging() {

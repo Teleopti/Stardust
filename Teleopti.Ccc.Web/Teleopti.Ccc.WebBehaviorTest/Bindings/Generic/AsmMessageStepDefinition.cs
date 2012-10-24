@@ -197,5 +197,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.DialogueMessages.InnerHtml.Contains(tableRow[0]), Is.EqualTo(true));						
 			}
 		}
+
+		[Then(@"the send button should be disabled")]
+		public void ThenTheSendButtonShouldBeDisabled()
+		{
+			EventualAssert.That(() => Pages.Pages.CurrentOkButton.OkButton.Enabled, Is.False);
+		}
+
 	}
 }

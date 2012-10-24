@@ -158,10 +158,8 @@ Scenario: Do not allow empty reply
 	| Message				| Text in message	|
 	| Text reply allowed	| True				|
 	And I am viewing messages
-	And I click on the message at position '1' in the list
-	When I click the send button
-	Then I should see validation error about empty reply is not allowed
-	And I should see '1' message(s) in the list
+	When I click on the message at position '1' in the list
+	Then the send button should be disabled
 
 Scenario: Send text reply message
 	Given I have the role 'Full access to mytime'

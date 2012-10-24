@@ -561,13 +561,9 @@ this.FeatureBackground();
 #line 160
  testRunner.And("I am viewing messages");
 #line 161
- testRunner.And("I click on the message at position \'1\' in the list");
+ testRunner.When("I click on the message at position \'1\' in the list");
 #line 162
- testRunner.When("I click the send button");
-#line 163
- testRunner.Then("I should see validation error about empty reply is not allowed");
-#line 164
- testRunner.And("I should see \'1\' message(s) in the list");
+ testRunner.Then("the send button should be disabled");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -577,11 +573,11 @@ this.FeatureBackground();
         public virtual void SendTextReplyMessage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Send text reply message", ((string[])(null)));
-#line 166
+#line 164
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 167
+#line 165
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
@@ -596,19 +592,19 @@ this.FeatureBackground();
             table17.AddRow(new string[] {
                         "Text reply allowed",
                         "True"});
-#line 168
+#line 166
  testRunner.And("I have an unread message with", ((string)(null)), table17);
-#line 173
+#line 171
  testRunner.And("I am viewing messages");
-#line 174
+#line 172
  testRunner.And("I click on the message at position \'1\' in the list");
-#line 175
+#line 173
  testRunner.When("I enter the text reply \'my reply\'");
-#line 176
+#line 174
  testRunner.And("I click the send button");
-#line 177
+#line 175
  testRunner.Then("I should not see any messages");
-#line 178
+#line 176
  testRunner.And("I should see a user-friendly message explaining I dont have any messages");
 #line hidden
             this.ScenarioCleanup();
@@ -619,11 +615,11 @@ this.FeatureBackground();
         public virtual void DoNotAllowRepliesThatAreTooLong()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Do not allow replies that are too long", ((string[])(null)));
-#line 180
+#line 178
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 181
+#line 179
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
@@ -638,19 +634,19 @@ this.FeatureBackground();
             table18.AddRow(new string[] {
                         "Text reply allowed",
                         "True"});
-#line 182
+#line 180
  testRunner.And("I have an unread message with", ((string)(null)), table18);
-#line 187
+#line 185
  testRunner.And("I am viewing messages");
-#line 188
+#line 186
  testRunner.And("I click on the message at position \'1\' in the list");
-#line 189
+#line 187
  testRunner.When("I write a text reply that is too long");
-#line 190
+#line 188
  testRunner.And("I click the send button");
-#line 191
+#line 189
  testRunner.Then("I should see validation error about text reply being too long");
-#line 192
+#line 190
  testRunner.And("I should see \'1\' message(s) in the list");
 #line hidden
             this.ScenarioCleanup();
@@ -661,11 +657,11 @@ this.FeatureBackground();
         public virtual void ShowRemainingCharactersWhenWritingTextReply()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show remaining characters when writing text reply", ((string[])(null)));
-#line 194
+#line 192
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 195
+#line 193
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
@@ -680,15 +676,15 @@ this.FeatureBackground();
             table19.AddRow(new string[] {
                         "Text reply allowed",
                         "True"});
-#line 196
+#line 194
  testRunner.And("I have an unread message with", ((string)(null)), table19);
-#line 201
+#line 199
  testRunner.And("I am viewing messages");
-#line 202
+#line 200
  testRunner.And("I click on the message at position \'1\' in the list");
-#line 203
+#line 201
  testRunner.When("I enter the text reply \'my reply\'");
-#line 204
+#line 202
  testRunner.Then("I should see that I have \'242\' characters left");
 #line hidden
             this.ScenarioCleanup();
