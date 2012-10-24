@@ -418,12 +418,47 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
 				finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.EndTime == shift.WorkShiftEndTime));
             }
-
-			finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstKeepStartAndEndTime, cnt, finalShiftList.Count));
+            
+            finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstKeepStartAndEndTime, cnt, finalShiftList.Count));
 
             return finalShiftList;
 
         }
+
+        public IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonActivity(IList<IShiftProjectionCache> shiftList, ISchedulingOptions schedulingOptions,
+                                        IPossibleStartEndCategory possibleStartEndCategory, IWorkShiftFinderResult finderResult)
+        {
+            IList<IShiftProjectionCache> activtyfinalShiftList = new List<IShiftProjectionCache>();
+            if (shiftList != null)
+            {
+                var cnt = shiftList.Count;
+                if (schedulingOptions.UseCommonActivity)
+                {
+                    foreach (var shift in shiftList)
+                    {
+                        IList<DateTimePeriod> visualLayerPeriodList = new List<DateTimePeriod>();
+                        foreach (var visualLayer in   shift.TheMainShift.ProjectionService().CreateProjection().Where(   c => c.Payload.Id == schedulingOptions.CommonActivity.Id))
+                        {
+                            visualLayerPeriodList.Add(visualLayer.Period  );
+                        }
+                        if (possibleStartEndCategory != null && possibleStartEndCategory.ActivityPeriods.All(visualLayerPeriodList.Contains))
+                        {
+                            activtyfinalShiftList.Add(shift);
+                        }
+                    
+                    }
+                }
+                else
+                {
+                    activtyfinalShiftList = shiftList;
+                }
+                if (finderResult != null)
+                    finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstKeepActivity, cnt, activtyfinalShiftList.Count));
+            }
+
+            return activtyfinalShiftList;
+        }
+
 
         public IList<IShiftProjectionCache> FilterOnNotOverWritableActivities(IList<IShiftProjectionCache> shiftList, IScheduleDay part, IWorkShiftFinderResult finderResult)
         {

@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 						if (schedulingOptions.UseGroupSchedulingCommonEnd)
 							poss.EndTime = period.LocalEndDateTime.TimeOfDay;
 					}
-
+                    ExtractCommonActivity(schedulingOptions, poss, shift);
 					if (schedulingOptions.UseGroupSchedulingCommonCategory)
 						poss.ShiftCategory = shift.ShiftCategory;
 
@@ -67,7 +67,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			return _possible.Count < 2;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+	    private static void ExtractCommonActivity(ISchedulingOptions schedulingOptions, PossibleStartEndCategory poss,
+	                                              IMainShift shift)
+	    {
+	        if (schedulingOptions.UseCommonActivity)
+	            foreach (var activity in shift.ProjectionService().CreateProjection())
+	                if (activity.Payload.Id == schedulingOptions.CommonActivity.Id)
+	                    poss.ActivityPeriods.Add(activity.Period);
+	    }
+
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool AllPersonsHasSameOrNoneScheduled(IScheduleDictionary scheduleDictionary, IList<IPerson> persons,
 			DateOnly dateOnly, ISchedulingOptions schedulingOptions)
 		{
@@ -97,7 +106,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 					if (schedulingOptions.UseGroupSchedulingCommonCategory)
 						poss.ShiftCategory = shift.ShiftCategory;
-
+                    //if (schedulingOptions.UseCommonActivity)
+                    //{
+                    //    foreach (var activity in shift.ProjectionService().CreateProjection())
+                    //        if (activity.Payload.Id == schedulingOptions.CommonActivity.Id)
+                    //            poss.ActivityPeriods.Add( activity.Period);
+                    //}
+                    ExtractCommonActivity(schedulingOptions, poss, shift);
 					_possible.Add(poss);
 				}
 			}
