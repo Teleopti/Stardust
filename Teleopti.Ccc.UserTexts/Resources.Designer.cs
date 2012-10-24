@@ -1268,6 +1268,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to After checking against keep activity.
+        /// </summary>
+        public static string AfterCheckingAgainstKeepActivity {
+            get {
+                return ResourceManager.GetString("AfterCheckingAgainstKeepActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Checking against keep start and end time.
         /// </summary>
         public static string AfterCheckingAgainstKeepStartAndEndTime {
@@ -18548,6 +18557,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RunningBackgroundJob {
             get {
                 return ResourceManager.GetString("RunningBackgroundJob", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Same activity.
+        /// </summary>
+        public static string SameActivity {
+            get {
+                return ResourceManager.GetString("SameActivity", resourceCulture);
             }
         }
         

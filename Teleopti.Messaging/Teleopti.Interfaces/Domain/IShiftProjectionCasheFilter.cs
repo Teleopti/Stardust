@@ -185,5 +185,15 @@ namespace Teleopti.Interfaces.Domain
                                                                     IScheduleDay part,
                                                                     IWorkShiftFinderResult finderResult);
 
+        /// <summary>
+        /// Filters the on group scheduling common activity.
+        /// </summary>
+        /// <param name="shiftList"></param>
+        /// <param name="schedulingOptions"></param>
+        /// <param name="possibleStartEndCategory"></param>
+        /// <param name="finderResult"></param>
+        /// <returns></returns>
+        IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonActivity(IList<IShiftProjectionCache> shiftList, ISchedulingOptions schedulingOptions,
+                                                                          IPossibleStartEndCategory possibleStartEndCategory, IWorkShiftFinderResult finderResult);
     }
 }

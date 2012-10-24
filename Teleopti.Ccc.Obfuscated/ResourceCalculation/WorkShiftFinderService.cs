@@ -189,7 +189,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 				_shiftList = _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(_shiftList, possibleStartEndCategory, schedulingOptions, FinderResult);
 
-                _shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList, schedulingOptions.MainShiftOptimizeActivitySpecification);
+                _shiftList = _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonActivity(_shiftList, schedulingOptions, possibleStartEndCategory, FinderResult);
+
+			    _shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList, schedulingOptions.MainShiftOptimizeActivitySpecification);
 
 				_shiftList = _shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(dateOnly,
 				                                                                                         person.
@@ -242,6 +244,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             return result;
         }
 
+      
         #endregion
     }
 }
