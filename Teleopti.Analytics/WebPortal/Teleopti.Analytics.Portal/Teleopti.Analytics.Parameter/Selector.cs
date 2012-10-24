@@ -546,17 +546,17 @@ namespace Teleopti.Analytics.Parameters
             }
 
             writer.RenderBeginTag(HtmlTextWriterTag.Tr);
-            writer.AddAttribute(HtmlTextWriterAttribute.Colspan, "3");
-            writer.RenderBeginTag(HtmlTextWriterTag.Td);
+			writer.AddAttribute(HtmlTextWriterAttribute.Colspan, "3");
+			writer.AddStyleAttribute("border-bottom", "none");
+			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 
-            var panel = new Panel();
-            _valSum = new ValidationSummary {ForeColor = Color.Red};
-	        panel.Controls.Add(_valSum);
-            Controls.Add(panel);
-            panel.RenderControl(writer);
+			_valSum = new ValidationSummary { ForeColor = Color.Red };
 
-            writer.RenderEndTag();
-            writer.RenderEndTag();
+			Controls.Add(_valSum);
+			_valSum.RenderControl(writer);
+
+			writer.RenderEndTag();
+			writer.RenderEndTag();
 
         }
 
