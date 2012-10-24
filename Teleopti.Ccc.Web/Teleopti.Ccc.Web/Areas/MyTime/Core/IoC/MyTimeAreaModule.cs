@@ -118,6 +118,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferenceFulfilledChecker>().As<IPreferenceFulfilledChecker>().SingleInstance();
 			builder.RegisterType<MeetingRestrictionCombiner>().As<IMeetingRestrictionCombiner>().SingleInstance();
 			builder.RegisterType<PersonalShiftRestrictionCombiner>().As<IPersonalShiftRestrictionCombiner>().SingleInstance();
+			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
 		}
 		 
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)
