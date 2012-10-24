@@ -31,6 +31,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var conversation = SendPushMessageService.CreateConversation(Title, Message, TextReplyAllowed).To(user).From(user).AddReplyOption("OK");
 			conversation.SendConversation(new PushMessageRepository(uow), new PushMessageDialogueRepository(uow));
 
+			if(MyReply!=string.Empty)
+			{
+				uow.PersistAll();
+				var repository = new PushMessageDialogueRepository(uow);
+				var messageDialogue = repository.LoadAll().First(t => t.Equals(Title));
+				messageDialogue.DialogueReply(MyReply,user);
+				if(SendersReply!=string.Empty) messageDialogue.DialogueReply(SendersReply,user);
+			}
+
 			if (IsOldestMessage)
 				Thread.Sleep(1010);
 		}
