@@ -208,6 +208,8 @@
     <Compile Include="Helper\PersonPeriodChangedMessageTest.cs" />
     <Compile Include="Helper\ProcessDenormalizeQueueTest.cs" />
     <Compile Include="Helper\StringExtensionsTest.cs" />
+    <Compile Include="Infrastructure\PagingDetailTest.cs" />
+    <Compile Include="Infrastructure\PagingTest.cs" />
     <Compile Include="Optimization\AdvancedPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerContainerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizationServiceTest.cs" />
@@ -994,6 +996,11 @@
     <Compile Include="UndoRedo\UndoRedoContainerTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WebReport\ReportDataServiceLevelAgentsReadyTest.cs" />
+    <Compile Include="WebReport\ReportMobileReportInitTest.cs" />
+    <Compile Include="WebReport\ReportControlSkillGetTest.cs" />
+    <Compile Include="WebReport\ReportDataQueueStatAbandonedTest.cs" />
+    <Compile Include="WebReport\ReportDataForecastVersusActualWorkloadTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestNoneValidatorTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenDatePeriodTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodMergerTest.cs" />
