@@ -32,11 +32,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 		public bool Match(IWorkShiftProjection workShiftProjection)
 		{
-			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
 			var intersectingActivities = from m in _personMeetings
-			                             from l in workShiftProjection.Layers
-			                             where m.Period.TimePeriod(timeZone).Intersect(l.Period.TimePeriod(timeZone))
-			                             select l;
+										 from l in workShiftProjection.Layers
+										 let t = m.Person.PermissionInformation.DefaultTimeZone()
+										 let layerPeriod = new TimePeriod(l.Period.StartDateTime.Subtract(WorkShift.BaseDate), l.Period.EndDateTime.Subtract(WorkShift.BaseDate))
+										 where m.Period.TimePeriod(t).Intersect(layerPeriod)
+										 select l;
 			return intersectingActivities.All(x => x.ActivityAllowsOverwrite);
 		}
 

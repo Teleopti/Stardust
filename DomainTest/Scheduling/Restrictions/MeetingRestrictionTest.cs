@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public static void ShouldMatchWithMeetingsOutsideShifts()
 		{
-			var meeting = new PersonMeeting(null, null, new DateTimePeriod(DateTime.UtcNow.Date.AddHours(8), DateTime.UtcNow.Date.AddHours(9)));
+			var meeting = new PersonMeeting(null, new MeetingPerson(new Person(), false), new DateTimePeriod(DateTime.UtcNow.Date.AddHours(3), DateTime.UtcNow.Date.AddHours(4)));
 			var target = new MeetingRestriction(new[] { meeting });
 			var shift = new WorkShiftProjection
 				{
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 						{
 							new WorkShiftProjectionLayer
 								{
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(9), WorkShift.BaseDate.AddHours(17))
 								}
 						}
 				};
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public static void ShouldMatchWithActivitiesWhereMeetingsIsAllowed()
 		{
-			var meeting = new PersonMeeting(null, null, new DateTimePeriod(DateTime.UtcNow.Date.AddHours(10), DateTime.UtcNow.Date.AddHours(11)));
+			var meeting = new PersonMeeting(null, new MeetingPerson(new Person(), false), new DateTimePeriod(DateTime.UtcNow.Date.AddHours(10), DateTime.UtcNow.Date.AddHours(11)));
 			var target = new MeetingRestriction(new[] { meeting });
 			var shift = new WorkShiftProjection
 				{
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 							new WorkShiftProjectionLayer
 								{
 									ActivityAllowsOverwrite = true,
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(9), WorkShift.BaseDate.AddHours(17))
 								}
 						}
 				};
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public static void ShouldNotMatchWithActivitiesWhereMeetingsIsDisallowed()
 		{
-			var meeting = new PersonMeeting(null, null, new DateTimePeriod(DateTime.UtcNow.Date.AddHours(10), DateTime.UtcNow.Date.AddHours(11)));
+			var meeting = new PersonMeeting(null, new MeetingPerson(new Person(), false), new DateTimePeriod(DateTime.UtcNow.Date.AddHours(11), DateTime.UtcNow.Date.AddHours(12)));
 			var target = new MeetingRestriction(new[] { meeting });
 			var shift = new WorkShiftProjection
 				{
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 							new WorkShiftProjectionLayer
 								{
 									ActivityAllowsOverwrite = false,
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(9), WorkShift.BaseDate.AddHours(17))
 								}
 						}
 				};
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public static void ShouldNotMatchWithIntersectingActivitiesWhereMeetingsIsDisallowed()
 		{
-			var meeting = new PersonMeeting(null, null, new DateTimePeriod(DateTime.UtcNow.Date.AddHours(8), DateTime.UtcNow.Date.AddHours(10)));
+			var meeting = new PersonMeeting(null, new MeetingPerson(new Person(), false), new DateTimePeriod(DateTime.UtcNow.Date.AddHours(6), DateTime.UtcNow.Date.AddHours(10)));
 			var target = new MeetingRestriction(new[] { meeting });
 			var shift = new WorkShiftProjection
 			{
@@ -114,12 +115,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 							new WorkShiftProjectionLayer
 								{
 									ActivityAllowsOverwrite = true,
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(7), DateTime.UtcNow.Date.AddHours(9))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(6), WorkShift.BaseDate.AddHours(9))
 								},
 							new WorkShiftProjectionLayer
 								{
 									ActivityAllowsOverwrite = false,
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(9), WorkShift.BaseDate.AddHours(17))
 								}
 						}
 			};
@@ -132,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public static void ShouldNotMatchWithOverlappingActivitiesWhereMeetingsIsDisallowed()
 		{
-			var meeting = new PersonMeeting(null, null, new DateTimePeriod(DateTime.UtcNow.Date.AddHours(8), DateTime.UtcNow.Date.AddHours(19)));
+			var meeting = new PersonMeeting(null, new MeetingPerson(new Person(), false), new DateTimePeriod(DateTime.UtcNow.Date.AddHours(6), DateTime.UtcNow.Date.AddHours(19)));
 			var target = new MeetingRestriction(new[] { meeting });
 			var shift = new WorkShiftProjection
 			{
@@ -141,12 +142,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 							new WorkShiftProjectionLayer
 								{
 									ActivityAllowsOverwrite = true,
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(7), DateTime.UtcNow.Date.AddHours(9))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(6), WorkShift.BaseDate.AddHours(9))
 								},
 							new WorkShiftProjectionLayer
 								{
 									ActivityAllowsOverwrite = false,
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(9), WorkShift.BaseDate.AddHours(17))
 								}
 						}
 			};

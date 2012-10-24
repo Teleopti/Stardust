@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -31,10 +30,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			var asEffectiveRestrictions = from m in meetings
 			                              let meetingPeriod = m.Period
+			                              let period = meetingPeriod.TimePeriod(timeZoneInfo)
 			                              select new EffectiveRestriction(
-				                                     new StartTimeLimitation(null, meetingPeriod.TimePeriod(timeZoneInfo).StartTime),
-				                                     new EndTimeLimitation(meetingPeriod.TimePeriod(timeZoneInfo).EndTime, null),
-				                                     new WorkTimeLimitation(meetingPeriod.TimePeriod(timeZoneInfo).SpanningTime(), null),
+				                                     new StartTimeLimitation(null, period.StartTime),
+				                                     new EndTimeLimitation(period.EndTime, null),
+				                                     new WorkTimeLimitation(period.SpanningTime(), null),
 				                                     null,
 				                                     null,
 				                                     null,
