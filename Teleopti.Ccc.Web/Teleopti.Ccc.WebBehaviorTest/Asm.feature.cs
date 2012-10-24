@@ -303,7 +303,7 @@ this.FeatureBackground();
 #line 78
  testRunner.When("I click ASM link");
 #line 79
- testRunner.Then("I should see last activity starttime as \'12:00\'");
+ testRunner.Then("I should see next activity time as \'08:00-11:00\'");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -326,7 +326,7 @@ this.FeatureBackground();
 #line 84
  testRunner.When("I click ASM link");
 #line 85
- testRunner.Then("I should see last activity starttime as \'12:00+1\'");
+ testRunner.Then("I should see next activity time as \'08:00+1-11:00\'");
 #line hidden
             this.ScenarioCleanup();
         }

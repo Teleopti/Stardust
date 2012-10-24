@@ -76,13 +76,13 @@ Scenario: Upcoming activity starttime should be displayed
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 00:01'
 	When I click ASM link
-	Then I should see last activity starttime as '12:00'
+	Then I should see next activity time as '08:00-11:00'
 
 Scenario: Upcoming activity starttime starting after midnight should be indicated as next day
 	Given I have the role 'Full access to mytime'
 	And Current time is '2029-12-31 23:59'
 	When I click ASM link
-	Then I should see last activity starttime as '12:00+1'
+	Then I should see next activity time as '08:00+1-11:00'
 
 Scenario: Agent should from ASM popup be notified when current shift has changed
 	Given I have the role 'Full access to mytime'

@@ -68,21 +68,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 										}, Is.EqualTo(hours));
 		}
 
-		[Then(@"I should see last activity starttime as '(.*)'")]
+		[Then(@"I should see next activity time as '(.*)'")]
 		public void ThenIShouldSeeLastActivityStarttimeAs(string startTime)
 		{
 			Browser.Current.Element(Find.ByClass("asm-outer-canvas", false)).WaitUntilDisplayed();
-
-			Element nextDayIndicationElement = Browser.Current.Table("asm-current-info-table")
-				.Elements.Filter(Find.ByClass("asm-info-next-day-column")).Last();
-
-			var nextDayIndication = isDisplayed(nextDayIndicationElement) ? nextDayIndicationElement.Text : string.Empty;
-
 			EventualAssert.That(() =>
-									  Browser.Current.Table("asm-current-info-table")
-										  .Elements.Filter(Find.ByClass("asm-info-time-column"))
-										  .Last().Text + nextDayIndication.Trim(),
-										Is.EqualTo(startTime));
+									  Browser.Current.Div(Find.ByClass("asm-info-canvas-column-next", false)).Text,
+										Is.StringContaining(startTime));
 		}
 
 		[Then(@"I should see a popup with title AgentScheduleMessenger")]
