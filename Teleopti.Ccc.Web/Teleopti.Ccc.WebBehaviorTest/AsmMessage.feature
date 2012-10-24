@@ -141,12 +141,8 @@ Scenario: See reply dialogue in message text
 	| Title					| Work late					|
 	| Message				| Can u work late today?	|
 	| Text reply allowed	| True						|
-	And I have replied with
-	| Field					| Value						|
-	| Reply					| Ok if you buy me dinner?  |
-	And I have received a reply with
-	| Field					| Value						|
-	| Reply					| It´s a deal!				|
+	| MyReply				| Ok if you buy me dinner?  |
+	| SendersReply			| It´s a deal!				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
 	Then I should see this conversation
