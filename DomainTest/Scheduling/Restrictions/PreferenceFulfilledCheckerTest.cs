@@ -6,11 +6,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 {
-	[TestFixture]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1053:StaticHolderTypesShouldNotHaveConstructors"), TestFixture]
 	public class PreferenceFulfilledCheckerTest
 	{
 		[Test]
-		public void ShouldFulfilled()
+		public static void ShouldFulfilled()
 		{
 			var restrictionChecker = MockRepository.GenerateMock<ICheckerRestriction>();
 			restrictionChecker.Stub(x => x.CheckPreference()).Return(PermissionState.Satisfied);
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void ShouldNotFulfilled()
+		public static void ShouldNotFulfilled()
 		{
 			var restrictionChecker = MockRepository.GenerateMock<ICheckerRestriction>();
 			restrictionChecker.Stub(x => x.CheckPreference()).Return(PermissionState.Broken);
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		public void ShouldReturnNull()
+		public static void ShouldReturnNull()
 		{
 			var restrictionChecker = MockRepository.GenerateMock<ICheckerRestriction>();
 			restrictionChecker.Stub(x => x.CheckPreference()).Return(PermissionState.Unspecified);
