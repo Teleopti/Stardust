@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
@@ -9,15 +8,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	{
 		private readonly IRestrictionRetrievalOperation _retrievalOperation;
 		private readonly IRestrictionCombiner _restrictionCombiner;
-		private readonly IMeetingRestrictionCombiner _meetingRestrictionCombiner;
-		private readonly IPersonalShiftRestrictionCombiner _personalShiftRestrictionCombiner;
 
-		public EffectiveRestrictionForDisplayCreator(IRestrictionRetrievalOperation retrievalOperation, IRestrictionCombiner restrictionCombiner, IMeetingRestrictionCombiner meetingRestrictionCombiner, IPersonalShiftRestrictionCombiner personalShiftRestrictionCombiner)
+		public EffectiveRestrictionForDisplayCreator(IRestrictionRetrievalOperation retrievalOperation, IRestrictionCombiner restrictionCombiner)
 		{
 			_retrievalOperation = retrievalOperation;
 			_restrictionCombiner = restrictionCombiner;
-			_meetingRestrictionCombiner = meetingRestrictionCombiner;
-			_personalShiftRestrictionCombiner = personalShiftRestrictionCombiner;
 		}
 
 		public IEffectiveRestriction MakeEffectiveRestriction(IScheduleDay scheduleDay, IEffectiveRestrictionOptions effectiveRestrictionOptions)
@@ -46,18 +41,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 						effectiveRestriction = _restrictionCombiner.CombineAvailabilityRestrictions(
 							_retrievalOperation.GetAvailabilityRestrictions(restrictions),
 							effectiveRestriction);
-				}
-
-				if (effectiveRestrictionOptions.UseMeetings)
-				{
-					if (_meetingRestrictionCombiner != null)
-						effectiveRestriction = _meetingRestrictionCombiner.Combine(scheduleDay, effectiveRestriction);
-				}
-
-				if (effectiveRestrictionOptions.UsePersonalShifts)
-				{
-					if (_personalShiftRestrictionCombiner != null)
-						effectiveRestriction = _personalShiftRestrictionCombiner.Combine(scheduleDay, effectiveRestriction);
 				}
 
 			}

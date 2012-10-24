@@ -11,26 +11,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				{
 					UseAvailability = true,
 					UsePreference = true,
-					UseMeetings = true,
-					UsePersonalShifts = true
 				};
 		}
 
 		public bool UsePreference { get; set; }
 		public bool UseAvailability { get; set; }
-		public bool UseMeetings { get; set; }
-		public bool UsePersonalShifts { get; set; }
-
-
-
-
 
 
 		public bool Equals(EffectiveRestrictionOptions other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return UsePreference.Equals(other.UsePreference) && UseAvailability.Equals(other.UseAvailability) && UseMeetings.Equals(other.UseMeetings) && UsePersonalShifts.Equals(other.UsePersonalShifts);
+			return UsePreference.Equals(other.UsePreference) && UseAvailability.Equals(other.UseAvailability);
 		}
 
 		public override bool Equals(object obj)
@@ -47,8 +39,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			{
 				int hashCode = UsePreference.GetHashCode();
 				hashCode = (hashCode*397) ^ UseAvailability.GetHashCode();
-				hashCode = (hashCode*397) ^ UseMeetings.GetHashCode();
-				hashCode = (hashCode*397) ^ UsePersonalShifts.GetHashCode();
 				return hashCode;
 			}
 		}

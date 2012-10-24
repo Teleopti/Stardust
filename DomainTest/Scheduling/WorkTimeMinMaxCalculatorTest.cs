@@ -207,36 +207,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			result.WorkTimeMinMax.Should().Be.Null();
 		}
 
-		[Test]
-		public static void ShouldReturnMinMaxWorkTimeForMeeting()
-		{
-			var effectiveRestrictionForMeeting = MockRepository.GenerateMock<IMeetingRestrictionCombiner>();
-			var target = new WorkTimeMinMaxCalculator(null, new WorkTimeMinMaxRestrictionCreator(new EffectiveRestrictionForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner(), effectiveRestrictionForMeeting, null)));
-			var personPeriod = new PersonPeriod(DateOnly.Today, new PersonContract(new Contract(" "), new PartTimePercentage(" "), new ContractSchedule(" ")), new Team()) {RuleSetBag = MockRepository.GenerateMock<IRuleSetBag>()};
-			var person = new Person();
-			person.AddPersonPeriod(personPeriod);
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, person);
-
-			target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
-
-			effectiveRestrictionForMeeting.AssertWasCalled(x => x.Combine(Arg<IScheduleDay>.Is.Same(scheduleDay), Arg<IEffectiveRestriction>.Is.NotNull));
-		}
-
-		[Test]
-		public static void ShouldReturnMinMaxWorkTimeForPersonalShift()
-		{
-			var effectiveRestrictionForPersonalShift = MockRepository.GenerateMock<IPersonalShiftRestrictionCombiner>();
-			var target = new WorkTimeMinMaxCalculator(null, new WorkTimeMinMaxRestrictionCreator(new EffectiveRestrictionForDisplayCreator(new RestrictionRetrievalOperation(), new RestrictionCombiner(), null, effectiveRestrictionForPersonalShift)));
-			var personPeriod = new PersonPeriod(DateOnly.Today, new PersonContract(new Contract(" "), new PartTimePercentage(" "), new ContractSchedule(" ")), new Team()) {RuleSetBag = MockRepository.GenerateMock<IRuleSetBag>()};
-			var person = new Person();
-			person.AddPersonPeriod(personPeriod);
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, person);
-			
-			target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
-
-			effectiveRestrictionForPersonalShift.AssertWasCalled(x => x.Combine(Arg<IScheduleDay>.Is.Same(scheduleDay), Arg<IEffectiveRestriction>.Is.NotNull));
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flag"), Test]
 		public static void ShouldReturnFlagIfRestrictionNeverHadThePossibilityToMatchAShift()
 		{

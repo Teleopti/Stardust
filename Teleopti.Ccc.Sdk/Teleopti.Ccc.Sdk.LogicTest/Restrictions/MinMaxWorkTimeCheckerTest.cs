@@ -8,7 +8,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Logic.Restrictions;
 using Teleopti.Ccc.TestCommon.FakeData;

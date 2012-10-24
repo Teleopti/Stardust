@@ -668,13 +668,10 @@
     <Compile Include="Scheduling\ResourceCalculateDelayer.cs" />
     <Compile Include="Scheduling\Restrictions\AbsencePreferenceScheduler.cs" />
     <Compile Include="Scheduling\Restrictions\AvailabilitySpecification.cs" />
-    <Compile Include="Scheduling\Restrictions\CombinedRestriction.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestriction.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreator.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayCreator.cs" />
-    <Compile Include="Scheduling\Restrictions\MeetingRestriction.cs" />
     <Compile Include="Scheduling\Restrictions\MeetingRestrictionCombiner.cs" />
-    <Compile Include="Scheduling\Restrictions\PersonalShiftRestriction.cs" />
     <Compile Include="Scheduling\Restrictions\PersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionOptions.cs" />
     <Compile Include="Scheduling\Restrictions\ExtendedPreferencePredicate.cs" />

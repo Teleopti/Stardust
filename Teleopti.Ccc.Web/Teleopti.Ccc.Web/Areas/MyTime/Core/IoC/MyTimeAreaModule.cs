@@ -116,8 +116,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>().SingleInstance();
 			builder.RegisterType<ExtendedPreferencePredicate>().As<IExtendedPreferencePredicate>().SingleInstance();
 			builder.RegisterType<PreferenceFulfilledChecker>().As<IPreferenceFulfilledChecker>().SingleInstance();
-			builder.RegisterType<MeetingRestrictionCombiner>().As<IMeetingRestrictionCombiner>().SingleInstance();
-			builder.RegisterType<PersonalShiftRestrictionCombiner>().As<IPersonalShiftRestrictionCombiner>().SingleInstance();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
 		}
 		 

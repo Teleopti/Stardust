@@ -64,10 +64,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get { return Payload.Id.Value; }
 		}
-
-		public virtual bool ActivityAllowsOverwrite
-		{
-			get { return Payload.AllowOverwrite; }
-		}
 	}
 }

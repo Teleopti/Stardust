@@ -605,14 +605,11 @@
     <Compile Include="Scheduling\PersonalAccount\PersonAccountCollectionTest.cs" />
     <Compile Include="Scheduling\ResourceCalculateDelayerTest.cs" />
     <Compile Include="Scheduling\Restrictions\AvailabilitySpecificationTest.cs" />
-    <Compile Include="Scheduling\Restrictions\CombinedRestrictionTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreatorTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayCreatorTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionTest.cs" />
     <Compile Include="Scheduling\Restrictions\ExtendedPreferencePredicateTest.cs" />
-    <Compile Include="Scheduling\Restrictions\MeetingRestrictionTest.cs" />
     <Compile Include="Scheduling\Restrictions\MustHaveRestrictionSetterTest.cs" />
-    <Compile Include="Scheduling\Restrictions\PersonalShiftRestrictionTest.cs" />
     <Compile Include="Scheduling\Restrictions\PreferenceAbsenceCheckerTest.cs" />
     <Compile Include="Scheduling\Restrictions\PreferenceFulfilledCheckerTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayAvailabilityRestrictionExtractorTest.cs" />
