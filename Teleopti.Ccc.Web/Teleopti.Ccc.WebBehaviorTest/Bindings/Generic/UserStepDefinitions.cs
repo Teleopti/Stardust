@@ -1,3 +1,4 @@
+using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -23,6 +24,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(personPeriod);
 		}
 
+		[Given(@"I have a person period that starts on '(.*)'")]
+		public void GivenIHaveAPersonPeriodThatStartsOn(DateTime date)
+		{
+			var personPeriod = new PersonPeriodConfigurable
+				{
+					StartDate = date,
+					RuleSetBag = "Common"
+				};
+			UserFactory.User().Setup(personPeriod);
+		}
+
+
 		[Given(@"there is a shift with")]
 		public void GivenThereIsAShiftWith(Table table)
 		{
@@ -42,11 +55,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			}
 		}
 
+		[Given(@"I have a pre-scheduled meeting with")]
 		[Given(@"I have a meeting scheduled")]
 		public void GivenIHaveAMeetingScheduled(Table table)
 		{
 			var meeting = table.CreateInstance<MeetingConfigurable>();
 			UserFactory.User().Setup(meeting);
+		}
+
+		[Given(@"I have a pre-scheduled personal shift with")]
+		public void GivenIHaveAPersonalShiftWith(Table table)
+		{
+			var personalShift = table.CreateInstance<PersonalShiftConfigurable>();
+			UserFactory.User().Setup(personalShift);
 		}
 
 		[Given(@"I have a public note with")]
@@ -72,5 +93,4 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 
 	}
-
 }

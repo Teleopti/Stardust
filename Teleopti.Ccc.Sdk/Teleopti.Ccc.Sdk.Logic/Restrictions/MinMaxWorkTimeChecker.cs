@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
@@ -46,8 +44,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
                 return GetWorkTimeAbsencePreference(scheduleDay, effectiveRestriction);
             }
 
-            effectiveRestriction = GetEffectiveRestrictionForMeeting(scheduleDay, effectiveRestriction);
-            effectiveRestriction = GetEffectiveRestrictionForPersonalShift(scheduleDay, effectiveRestriction);
+			effectiveRestriction = new PersonalShiftRestrictionCombiner(new RestrictionCombiner()).Combine(scheduleDay, effectiveRestriction);
+			effectiveRestriction = new MeetingRestrictionCombiner(new RestrictionCombiner()).Combine(scheduleDay, effectiveRestriction);
 
             var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
 				return ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, dateOnly, effectiveRestriction);
@@ -103,67 +101,6 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             }
 
             return minMaxLength;
-        }
-
-        public static IEffectiveRestriction GetEffectiveRestrictionForPersonalShift(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction)
-        {
-            if (scheduleDay == null)
-                throw new ArgumentNullException("scheduleDay");
-
-            if (effectiveRestriction == null)
-                return null;
-
-            if (scheduleDay.PersonAssignmentCollection().IsEmpty())
-                return effectiveRestriction;
-
-            //inte på parten här??????????
-            IPerson person = scheduleDay.Person;
-            ICccTimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
-
-            foreach (IPersonAssignment assignment in scheduleDay.PersonAssignmentCollection())
-            {
-                foreach (IPersonalShift shift in assignment.PersonalShiftCollection)
-                {
-                    var personalShiftPeriod = shift.LayerCollection.Period();
-                    if (!personalShiftPeriod.HasValue) continue;
-                    var personalShiftRestriction = new EffectiveRestriction(
-                        new StartTimeLimitation(null, personalShiftPeriod.Value.TimePeriod(timeZoneInfo).StartTime),
-                        new EndTimeLimitation(personalShiftPeriod.Value.TimePeriod(timeZoneInfo).EndTime, null),
-                        new WorkTimeLimitation(personalShiftPeriod.Value.TimePeriod(timeZoneInfo).SpanningTime(), null),
-                        null, null, null, new List<IActivityRestriction>());
-                    effectiveRestriction = effectiveRestriction.Combine(personalShiftRestriction);
-                }
-            }
-            return effectiveRestriction;
-        }
-
-
-        public static IEffectiveRestriction GetEffectiveRestrictionForMeeting(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction)
-        {
-            if (scheduleDay == null)
-                throw new ArgumentNullException("scheduleDay");
-
-            if (effectiveRestriction == null)
-                return null;
-
-            if (scheduleDay.PersonMeetingCollection().IsEmpty())
-                return effectiveRestriction;
-
-            //inte på parten här??????????
-            IPerson person = scheduleDay.Person;
-            ICccTimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
-
-            foreach (IPersonMeeting meeting in scheduleDay.PersonMeetingCollection())
-            {
-                DateTimePeriod personalShiftPeriod = meeting.Period;
-                var personalShiftRestriction = new EffectiveRestriction(
-                        new StartTimeLimitation(null, personalShiftPeriod.TimePeriod(timeZoneInfo).StartTime),
-                        new EndTimeLimitation(personalShiftPeriod.TimePeriod(timeZoneInfo).EndTime, null),
-                        new WorkTimeLimitation(personalShiftPeriod.TimePeriod(timeZoneInfo).SpanningTime(), null), null,
-                        null, null, new List<IActivityRestriction>());
-                effectiveRestriction = effectiveRestriction.Combine(personalShiftRestriction);
-            }
-            return effectiveRestriction;
         }
     }
 }

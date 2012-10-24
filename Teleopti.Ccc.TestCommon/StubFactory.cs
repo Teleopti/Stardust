@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -82,6 +83,11 @@ namespace Teleopti.Ccc.TestCommon
 			return ScheduleDayStub(date, person, significantPartToDisplay, null, null, new[] { personAbsence }, null);
 		}
 
+		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonMeeting personMeeting)
+		{
+			return ScheduleDayStub(date, person, significantPartToDisplay, null, null, null, null, new[] {personMeeting});
+		}
+
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IEnumerable<IPersonAbsence> personAbsences)
 		{
 			return ScheduleDayStub(date, significantPartToDisplay, null, null, personAbsences, null);
@@ -99,6 +105,12 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote)
 		{
+			return ScheduleDayStub(date, person, significantPartToDisplay, personDayOff, personAssignment, personAbsences,
+			                       publicNote, null);
+		}
+
+		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote, IEnumerable<IPersonMeeting> meetings)
+		{
 			var timeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(date), timeZone);
 			var scheduleDay = MockRepository.GenerateStub<IScheduleDay>();
@@ -106,6 +118,7 @@ namespace Teleopti.Ccc.TestCommon
 			scheduleDay.Stub(x => x.SignificantPartForDisplay()).Return(significantPartToDisplay);
 			scheduleDay.Stub(x => x.SignificantPart()).Return(significantPartToDisplay);
 			scheduleDay.Stub(x => x.TimeZone).Return(timeZone);
+			//scheduleDay.Stub(x => x.RestrictionCollection()).Return(new IRestrictionBase[] {});
 			if (person != null)
 				scheduleDay.Stub(x => x.Person).Return(person);
 			if (publicNote != null)
@@ -131,6 +144,11 @@ namespace Teleopti.Ccc.TestCommon
 			{
 				var personAbsencesCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>(personAbsences));
 				scheduleDay.Stub(x => x.PersonAbsenceCollection()).Return(personAbsencesCollection);
+			}
+			if (meetings != null)
+			{
+				var personMeetingCollection = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>(meetings));
+				scheduleDay.Stub(x => x.PersonMeetingCollection()).Return(personMeetingCollection);
 			}
 			return scheduleDay;
 		}
@@ -201,6 +219,18 @@ namespace Teleopti.Ccc.TestCommon
 			var personalShift = MockRepository.GenerateStub<IPersonalShift>();
 			personAssignment.Stub(x => x.PersonalShiftCollection).Return(
 				new ReadOnlyCollection<IPersonalShift>(new[] {personalShift}));
+			return personAssignment;
+		}
+
+		public IPersonAssignment PersonAssignmentPersonalShiftStub(IPersonalShiftActivityLayer activity)
+		{
+			var personAssignment = MockRepository.GenerateStub<IPersonAssignment>();
+			var personalShift = MockRepository.GenerateStub<IPersonalShift>();
+			var layers = new LayerCollection<IActivity> {activity};
+			personalShift.Stub(x => x.LayerCollection).Return(layers);
+			personAssignment.Stub(x => x.Person).Return(new Person());
+			personAssignment.Stub(x => x.PersonalShiftCollection).Return(
+				new ReadOnlyCollection<IPersonalShift>(new[] { personalShift }));
 			return personAssignment;
 		}
 

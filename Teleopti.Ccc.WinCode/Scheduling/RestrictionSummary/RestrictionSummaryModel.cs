@@ -317,7 +317,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
             return dateOnlyPeriod.DayCollection();
         }
 
-        public IWorkTimeMinMax GetMinMaxLength(AgentInfoHelper agentInfoHelper, DateOnly dateOnly, IEffectiveRestriction totalRestriction)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+		public IWorkTimeMinMax GetMinMaxLength(AgentInfoHelper agentInfoHelper, DateOnly dateOnly, IEffectiveRestriction totalRestriction)
         {
             IPersonPeriod personPeriod = agentInfoHelper.Person.Period(dateOnly);
             if (personPeriod == null)

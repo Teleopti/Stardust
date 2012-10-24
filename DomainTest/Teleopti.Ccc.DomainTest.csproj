@@ -614,6 +614,7 @@
     <Compile Include="Scheduling\Restrictions\ExtendedPreferencePredicateTest.cs" />
     <Compile Include="Scheduling\Restrictions\MustHaveRestrictionSetterTest.cs" />
     <Compile Include="Scheduling\Restrictions\PreferenceAbsenceCheckerTest.cs" />
+    <Compile Include="Scheduling\Restrictions\PreferenceFulfilledCheckerTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayAvailabilityRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayPreferenceRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayRestrictionExtractorTest.cs" />
@@ -624,7 +625,10 @@
     <Compile Include="Scheduling\Restrictions\ScheduleDayRotationRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayStudentAvailabilityRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\StudentSpecificationTest.cs" />
+    <Compile Include="Scheduling\Restrictions\WorkTimeMinMaxRestrictionCreatorTest.cs" />
     <Compile Include="Scheduling\Restriction\AvailabilityRotationTest.cs" />
+    <Compile Include="Scheduling\Restrictions\PersonalShiftRestrictionCombinerTest.cs" />
+    <Compile Include="Scheduling\Restrictions\MeetingRestrictionCombinerTest.cs" />
     <Compile Include="Scheduling\Restriction\StudentAvailabilityRestrictionTest.cs" />
     <Compile Include="Scheduling\Restriction\PreferenceRestrictionTest.cs" />
     <Compile Include="Scheduling\Restriction\RotationTest.cs" />

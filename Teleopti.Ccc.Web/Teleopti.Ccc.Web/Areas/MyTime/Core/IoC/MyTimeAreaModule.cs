@@ -105,8 +105,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<MustHaveRestrictionSetter>().As<IMustHaveRestrictionSetter>();
 			builder.RegisterType<PreferenceFeedbackProvider>().As<IPreferenceFeedbackProvider>().SingleInstance();
 			builder.RegisterType<PreferencePeriodFeedbackProvider>().As<IPreferencePeriodFeedbackProvider>().SingleInstance();
+			builder.RegisterType<WorkTimeMinMaxRestrictionCreator>().As<IWorkTimeMinMaxRestrictionCreator>();
 			builder.RegisterType<EffectiveRestrictionForDisplayCreator>().As<IEffectiveRestrictionForDisplayCreator>();
 			builder.RegisterType<RestrictionCombiner>().As<IRestrictionCombiner>();
+			builder.RegisterType<RestrictionCombiner>().As<IEffectiveRestrictionCombiner>();
 			builder.RegisterType<RestrictionRetrievalOperation>().As<IRestrictionRetrievalOperation>();
 			builder.RegisterType<WorkTimeMinMaxCalculator>().As<IWorkTimeMinMaxCalculator>();
 			builder.RegisterType<SchedulePeriodTargetDayOffCalculator>().As<ISchedulePeriodTargetDayOffCalculator>().SingleInstance();
@@ -114,6 +116,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>().SingleInstance();
 			builder.RegisterType<ExtendedPreferencePredicate>().As<IExtendedPreferencePredicate>().SingleInstance();
 			builder.RegisterType<PreferenceFulfilledChecker>().As<IPreferenceFulfilledChecker>().SingleInstance();
+			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
 		}
 		 
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)
