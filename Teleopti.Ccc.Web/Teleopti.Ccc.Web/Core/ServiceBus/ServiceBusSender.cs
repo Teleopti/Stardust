@@ -1,7 +1,9 @@
 using System;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using Autofac;
+using Rhino.ServiceBus.Hosting;
 using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
@@ -32,7 +34,12 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 							.UseAutofac(_customHost)
 							.UseStandaloneConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Teleopti.Ccc.Web.ServiceBus.Client.config"))
 							.Configure();
-							
+
+						using (var defaultHost = new DefaultHost())
+						{
+							defaultHost.SetQueueConnectionString(ConfigurationManager.ConnectionStrings["Queue"].ConnectionString);
+						}
+
 						_isRunning = true;
 						if (Logger.IsInfoEnabled)
 							Logger.Info("Client started");
