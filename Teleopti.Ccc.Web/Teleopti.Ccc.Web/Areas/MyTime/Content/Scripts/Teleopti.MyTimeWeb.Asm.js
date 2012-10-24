@@ -65,6 +65,26 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				return n.visible();
 			});
 		});
+		self.currentLayerString = ko.computed(function () {
+			var layer = self.visibleLayers()[0];
+			if (typeof layer != "undefined" && layer.active()) {
+				return layer.title;
+			}
+
+			return null;
+		});
+		self.nextLayerString = ko.computed(function () {
+			var layer;
+			if (self.currentLayerString() == null) {
+				layer = self.visibleLayers()[0];
+			} else {
+				layer = self.visibleLayers()[1];
+			}
+			if(typeof layer !="undefined") {
+				return layer.title;
+			}
+			return null;
+		});
 		self.now = ko.observable(new Date().getTeleoptiTime());
 		self.yesterday = ko.observable(yesterday);
 		self.canvasPosition = ko.computed(function () {
@@ -120,7 +140,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 	function _showAsm() {
 		_setFixedElementAttributes();
-		
+
 		if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
 			setTimeout(function () {
 				resize();

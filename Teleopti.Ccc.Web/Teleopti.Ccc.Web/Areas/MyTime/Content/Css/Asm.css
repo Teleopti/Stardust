@@ -78,12 +78,33 @@
 {
 	background: #F8F8F8;
 	border: 1px solid rgb(216, 216, 216);	
-	font-family: verdana;
-	font-size: 9px;
-	opacity: 0.7;
-	filter: alpha(opacity=70);
 	width: 400px;
-	overflow-x: hidden;
+	overflow: hidden;
 	height: 12px;
 	margin-top: 3px;
+}
+
+.asm-info-canvas-column {
+	width: 200px;
+	font-family: verdana;
+	font-size: 9px;
+	white-space: nowrap;
+}
+
+.asm-info-canvas-column:first-child 
+{
+	position:relative;
+	text-align: left;
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+}
+
+.asm-info-canvas-column:last-child 
+{
+	top: 0px;
+	left: 200px;
+	position: absolute;
+	text-align: right;
+	opacity: 0.5;
+	filter: alpha(opacity=50);
 }

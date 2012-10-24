@@ -35,30 +35,11 @@
 		</div>
 	</div>
 		<div class="asm-info-canvas ui-corner-all">
-			<div style="position: relative">
-				<div style="width: 200px; position:relative;text-align: left;">
-					<span style="padding-left: 2px;">xxxCurrent</span>
-					<span>15:00 Phone</span>
+			<div class="relative">
+				<div class="asm-info-canvas-column" data-bind="text: currentLayerString">
 				</div>
-				<div style="width: 200px; top:0px; left:200px; position: absolute; text-align: right;">
-					<span><i>xxNext</i></span>
-					<span style="padding-right: 2px;"><i>16:00 Administrator</i></span>
+				<div class="asm-info-canvas-column" data-bind="text: nextLayerString">
 				</div>				
 			</div>
-			@*			<!-- ko foreach: visibleLayers -->
-			<span data-bind="text: payload, css: { 'asm-info-current-activity' : active }"></span>
-			<span data-bind="text: '(' + startTimeText + ')', css: { 'asm-info-current-activity' : active }"></span>
-			<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<!-- /ko -->*@
-			@*				<table id="asm-current-info-table">
-				<tbody data-bind="foreach: visibleLayers">
-					<tr data-bind="css: { 'asm-info-current-activity' : active }">
-						<td class="asm-info-time-column" data-bind="text: startTimeText"></td>
-						<td class="asm-info-next-day-column" data-bind="text: isNextday">+1</td>
-						<td data-bind="text: payload"></td>
-					</tr>
-				</tbody>
-			</table>*@
-			<div class="clearboth" />
 		</div>
 </div>
