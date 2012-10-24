@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeePhoneAsCurrentActivity()
 		{
 			EventualAssert.That(() =>
-				Browser.Current.Table("asm-current-info-table").TableRow(Find.ByClass("asm-info-current-activity")).Children().Filter(Find.ByText(TestData.ActivityPhone.Description.Name)).Count,
-				Is.EqualTo(1));
+				Browser.Current.Div(Find.ByClass("asm-info-canvas-column-current", false)).Text,
+				Is.StringContaining(TestData.ActivityPhone.Description.Name));
 		}
 
 		[Then(@"I should not see as current activity")]

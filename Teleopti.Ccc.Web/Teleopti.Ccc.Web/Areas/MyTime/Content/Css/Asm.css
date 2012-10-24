@@ -91,7 +91,7 @@
 	white-space: nowrap;
 }
 
-.asm-info-canvas-column:first-child 
+.asm-info-canvas-column-current
 {
 	position:relative;
 	text-align: left;
@@ -99,7 +99,7 @@
 	filter: alpha(opacity=80);
 }
 
-.asm-info-canvas-column:last-child 
+.asm-info-canvas-column-next
 {
 	top: 0px;
 	left: 200px;
