@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public static void ShouldMatchWithPersonalShiftOutsideShifts()
 		{
-			var personalShiftActivityLayer = new PersonalShiftActivityLayer(new Activity(" "), new DateTimePeriod(DateTime.UtcNow.Date.AddHours(8), DateTime.UtcNow.Date.AddHours(9)));
+			var personalShiftActivityLayer = new PersonalShiftActivityLayer(new Activity(" "), new DateTimePeriod(DateTime.UtcNow.Date.AddHours(3), DateTime.UtcNow.Date.AddHours(4)));
 			var personAssignment = new StubFactory().PersonAssignmentPersonalShiftStub(personalShiftActivityLayer);
 			var target = new PersonalShiftRestriction(new[] { personAssignment });
 			var shift = new WorkShiftProjection
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 						{
 							new WorkShiftProjectionLayer
 								{
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(9), WorkShift.BaseDate.AddHours(17))
 								}
 						}
 				};
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 							new WorkShiftProjectionLayer
 								{
 									ActivityAllowsOverwrite = true,
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(9), WorkShift.BaseDate.AddHours(17))
 								}
 						}
 				};
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public static void ShouldNotMatchWithActivitiesWherePersonalShiftIsDisallowed()
 		{
-			var personalShiftActivityLayer = new PersonalShiftActivityLayer(new Activity(" "), new DateTimePeriod(DateTime.UtcNow.Date.AddHours(10), DateTime.UtcNow.Date.AddHours(11)));
+			var personalShiftActivityLayer = new PersonalShiftActivityLayer(new Activity(" "), new DateTimePeriod(DateTime.UtcNow.Date.AddHours(11), DateTime.UtcNow.Date.AddHours(12)));
 			var personAssignment = new StubFactory().PersonAssignmentPersonalShiftStub(personalShiftActivityLayer);
 			var target = new PersonalShiftRestriction(new[] { personAssignment });
 			var shift = new WorkShiftProjection
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 							new WorkShiftProjectionLayer
 								{
 									ActivityAllowsOverwrite = false,
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(9), WorkShift.BaseDate.AddHours(17))
 								}
 						}
 				};
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public static void ShouldNotMatchWithIntersectingActivitiesWherePersonalShiftIsDisallowed()
 		{
-			var personalShiftActivityLayer = new PersonalShiftActivityLayer(new Activity(" "), new DateTimePeriod(DateTime.UtcNow.Date.AddHours(8), DateTime.UtcNow.Date.AddHours(10)));
+			var personalShiftActivityLayer = new PersonalShiftActivityLayer(new Activity(" "), new DateTimePeriod(DateTime.UtcNow.Date.AddHours(6), DateTime.UtcNow.Date.AddHours(10)));
 			var personAssignment = new StubFactory().PersonAssignmentPersonalShiftStub(personalShiftActivityLayer);
 			var target = new PersonalShiftRestriction(new[] { personAssignment });
 			var shift = new WorkShiftProjection
@@ -119,12 +119,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 							new WorkShiftProjectionLayer
 								{
 									ActivityAllowsOverwrite = true,
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(7), DateTime.UtcNow.Date.AddHours(9))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(6), WorkShift.BaseDate.AddHours(9))
 								},
 							new WorkShiftProjectionLayer
 								{
 									ActivityAllowsOverwrite = false,
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(9), WorkShift.BaseDate.AddHours(17))
 								}
 						}
 				};
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public static void ShouldNotMatchWithOverlappingActivitiesWherePersonalShiftIsDisallowed()
 		{
-			var personalShiftActivityLayer = new PersonalShiftActivityLayer(new Activity(" "), new DateTimePeriod(DateTime.UtcNow.Date.AddHours(8), DateTime.UtcNow.Date.AddHours(19)));
+			var personalShiftActivityLayer = new PersonalShiftActivityLayer(new Activity(" "), new DateTimePeriod(DateTime.UtcNow.Date.AddHours(6), DateTime.UtcNow.Date.AddHours(19)));
 			var personAssignment = new StubFactory().PersonAssignmentPersonalShiftStub(personalShiftActivityLayer);
 			var target = new PersonalShiftRestriction(new[] { personAssignment });
 			var shift = new WorkShiftProjection
@@ -147,12 +147,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 							new WorkShiftProjectionLayer
 								{
 									ActivityAllowsOverwrite = true,
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(7), DateTime.UtcNow.Date.AddHours(9))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(6), WorkShift.BaseDate.AddHours(9))
 								},
 							new WorkShiftProjectionLayer
 								{
 									ActivityAllowsOverwrite = false,
-									Period = new DateTimePeriod(DateTime.UtcNow.Date.AddHours(9), DateTime.UtcNow.Date.AddHours(17))
+									Period = new DateTimePeriod(WorkShift.BaseDate.AddHours(9), WorkShift.BaseDate.AddHours(17))
 								}
 						}
 				};

@@ -2,6 +2,8 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.TestCommon;
@@ -45,6 +47,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var combined = result.Restriction as CombinedRestriction;
 			combined.One.Should().Be(effectiveRestriction);
 			combined.Two.Should().Be.OfType<MeetingRestriction>();
+		}
+
+		[Test]
+		public static void ShouldReturnCombinedRestrictionIfDayHasPersonalShifts()
+		{
+			var effectiveRestrictionForDisplayCreator = MockRepository.GenerateMock<IEffectiveRestrictionForDisplayCreator>();
+			var stubFactory = new StubFactory();
+			var scheduleDay = stubFactory.ScheduleDayStub();
+			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
+			var target = new WorkTimeMinMaxRestrictionCreator(effectiveRestrictionForDisplayCreator);
+
+			var personAssignment = stubFactory.PersonAssignmentPersonalShiftStub(new PersonalShiftActivityLayer(new Activity(" "), new DateTimePeriod()));
+			scheduleDay.Stub(x => x.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new []{ personAssignment}));
+			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll())).Return(effectiveRestriction);
+
+			var result = target.MakeWorkTimeMinMaxRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll());
+
+			result.Restriction.Should().Be.OfType<CombinedRestriction>();
+			var combined = result.Restriction as CombinedRestriction;
+			combined.One.Should().Be(effectiveRestriction);
+			combined.Two.Should().Be.OfType<PersonalShiftRestriction>();
 		}
 	}
 }

@@ -228,6 +228,7 @@ namespace Teleopti.Ccc.TestCommon
 			var personalShift = MockRepository.GenerateStub<IPersonalShift>();
 			var layers = new LayerCollection<IActivity> {activity};
 			personalShift.Stub(x => x.LayerCollection).Return(layers);
+			personAssignment.Stub(x => x.Person).Return(new Person());
 			personAssignment.Stub(x => x.PersonalShiftCollection).Return(
 				new ReadOnlyCollection<IPersonalShift>(new[] { personalShift }));
 			return personAssignment;
