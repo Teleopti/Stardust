@@ -132,6 +132,7 @@
     <Compile Include="AgentInfo\Requests\RequestApprovalServiceSchedulerTest.cs" />
     <Compile Include="Analytics\BaseConfigurationTest.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />
+    <Compile Include="Auditing\RevisionTest.cs" />
     <Compile Include="Budgeting\BudgetCalculatorTest.cs" />
     <Compile Include="Budgeting\BudgetDayCalculationsTest.cs" />
     <Compile Include="Budgeting\BudgetDayTest.cs" />
@@ -208,6 +209,8 @@
     <Compile Include="Helper\PersonPeriodChangedMessageTest.cs" />
     <Compile Include="Helper\ProcessDenormalizeQueueTest.cs" />
     <Compile Include="Helper\StringExtensionsTest.cs" />
+    <Compile Include="Infrastructure\PagingDetailTest.cs" />
+    <Compile Include="Infrastructure\PagingTest.cs" />
     <Compile Include="Optimization\AdvancedPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerContainerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizationServiceTest.cs" />
@@ -612,6 +615,7 @@
     <Compile Include="Scheduling\Restrictions\ExtendedPreferencePredicateTest.cs" />
     <Compile Include="Scheduling\Restrictions\MustHaveRestrictionSetterTest.cs" />
     <Compile Include="Scheduling\Restrictions\PreferenceAbsenceCheckerTest.cs" />
+    <Compile Include="Scheduling\Restrictions\PreferenceFulfilledCheckerTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayAvailabilityRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayPreferenceRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayRestrictionExtractorTest.cs" />
@@ -622,7 +626,10 @@
     <Compile Include="Scheduling\Restrictions\ScheduleDayRotationRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayStudentAvailabilityRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\StudentSpecificationTest.cs" />
+    <Compile Include="Scheduling\Restrictions\WorkTimeMinMaxRestrictionCreatorTest.cs" />
     <Compile Include="Scheduling\Restriction\AvailabilityRotationTest.cs" />
+    <Compile Include="Scheduling\Restrictions\PersonalShiftRestrictionCombinerTest.cs" />
+    <Compile Include="Scheduling\Restrictions\MeetingRestrictionCombinerTest.cs" />
     <Compile Include="Scheduling\Restriction\StudentAvailabilityRestrictionTest.cs" />
     <Compile Include="Scheduling\Restriction\PreferenceRestrictionTest.cs" />
     <Compile Include="Scheduling\Restriction\RotationTest.cs" />
@@ -994,6 +1001,11 @@
     <Compile Include="UndoRedo\UndoRedoContainerTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WebReport\ReportDataServiceLevelAgentsReadyTest.cs" />
+    <Compile Include="WebReport\ReportMobileReportInitTest.cs" />
+    <Compile Include="WebReport\ReportControlSkillGetTest.cs" />
+    <Compile Include="WebReport\ReportDataQueueStatAbandonedTest.cs" />
+    <Compile Include="WebReport\ReportDataForecastVersusActualWorkloadTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestNoneValidatorTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenDatePeriodTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodMergerTest.cs" />

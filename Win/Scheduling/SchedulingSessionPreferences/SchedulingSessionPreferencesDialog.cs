@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
     	private readonly IList<IGroupPageLight> _groupPages;
         private readonly IList<IScheduleTag> _scheduleTags;
         private readonly string _settingValue;
+        private readonly IList<IActivity> _availableActivity;
         private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
         private SchedulingOptionsExtraPersonalSetting _defaultExtraSettings;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public SchedulingSessionPreferencesDialog(ISchedulingOptions schedulingOptions, IDaysOffPreferences daysOffPreferences, IList<IShiftCategory> shiftCategories,
             bool reschedule, bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider,
-            IList<IScheduleTag> scheduleTags, string settingValue)
+            IList<IScheduleTag> scheduleTags, string settingValue, IList<IActivity> availableActivity)
             : this()
         {
             _schedulingOptions = schedulingOptions;
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         	_groupPages = groupPagesProvider.GetGroups(true);
             _scheduleTags = scheduleTags;
             _settingValue = settingValue;
+		    _availableActivity = availableActivity;
         }
 
         private SchedulingSessionPreferencesDialog()
@@ -78,7 +80,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             if (hasMissedloadingSettings()) return;
 			_defaultGeneralSettings.MapTo(_schedulingOptions, _scheduleTags);
 			_defaultAdvancedSettings.MapTo(_schedulingOptions, _shiftCategories);
-            _defaultExtraSettings.MapTo(_schedulingOptions,_scheduleTags,_groupPages );
+            _defaultExtraSettings.MapTo(_schedulingOptions, _scheduleTags, _groupPages, _availableActivity);
 		}
 
         private bool hasMissedloadingSettings()
@@ -115,7 +117,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         	loadPersonalSettings();
 
 			schedulingSessionPreferencesTabPanel1.Initialize(_schedulingOptions, _shiftCategories, _reschedule,
-				_backToLegal, _groupPagesProvider, _scheduleTags);
+                _backToLegal, _groupPagesProvider, _scheduleTags, _availableActivity);
             dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
             dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;
 			dayOffPreferencesPanel1.Initialize(_daysOffPreferences);

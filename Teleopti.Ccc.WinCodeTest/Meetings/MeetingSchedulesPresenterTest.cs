@@ -416,6 +416,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
+				Expect.Call(_view.TimeFocused).Return(true);
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
 				Expect.Call(() => _view.SetStartTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
 			}
@@ -431,6 +432,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
+				Expect.Call(_view.TimeFocused).Return(true);
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
 				Expect.Call(() => _view.SetEndTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
 			}
@@ -441,7 +443,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			}
 		}
 
-        [Test]
+		[Test]
         public void ShouldKnowIfDayOff()
         {
             var person = new Person();

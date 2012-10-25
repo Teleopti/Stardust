@@ -259,6 +259,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 				.Should().Have.SameValuesAs(new[] { Color.Blue.ToStyleClass(), Color.Red.ToStyleClass() });
 			result.Styles.Select(s => s.ColorHex)
 				.Should().Have.SameValuesAs(new[] { Color.Blue.ToHtml(), Color.Red.ToHtml() });
+			result.Styles.Select(s => s.RgbColor)
+				.Should().Have.SameValuesAs(new[] {Color.Blue.ToCSV(), Color.Red.ToCSV()});
 		}
 
 		[Test]
@@ -301,25 +303,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 
 			result.RequestPermission.AbsenceRequestPermission.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldMapAbsenceTypes()
-		{
-			var absence = new Absence { Description = new Description("Vacation")};
-			absence.SetId(Guid.NewGuid());
-
-			var absences = new List<IAbsence> { absence };
-			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(absences);
-			var domainData = new WeekScheduleDomainData
-			{
-				Days = new WeekScheduleDayDomainData[] { }
-			};
-
-			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
-
-			result.AbsenceTypes.FirstOrDefault().Name.Should().Be.EqualTo(absence.Description.Name);
-			result.AbsenceTypes.FirstOrDefault().Id.Should().Be.EqualTo(absence.Id);
 		}
 
 		[Test]

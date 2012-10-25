@@ -21,5 +21,6 @@ namespace Teleopti.Ccc.WinCode.Meetings.Interfaces
         void SetLocation(string location);
         void SetDescription(string description);
     	void NotifyMeetingTimeChanged();
+		void DescriptionFocus();
     }
 }

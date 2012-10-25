@@ -67,7 +67,7 @@ namespace Teleopti.Interfaces.Domain
             int weekNo = cult.Calendar.GetWeekOfYear(date, calendarWeekRule, cult.DateTimeFormat.FirstDayOfWeek);
 
             if (weekNo == 53 && cult.DateTimeFormat.Calendar.GetType() == typeof(GregorianCalendar)
-                && cult.DateTimeFormat.CalendarWeekRule == CalendarWeekRule.FirstFourDayWeek)
+                && calendarWeekRule == CalendarWeekRule.FirstFourDayWeek)
             {
                 weekNo = cult.DateTimeFormat.Calendar.GetWeekOfYear(
                              date.AddDays(7),

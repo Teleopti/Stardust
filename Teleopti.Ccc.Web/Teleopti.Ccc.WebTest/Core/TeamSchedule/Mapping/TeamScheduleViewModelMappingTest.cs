@@ -79,11 +79,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		{
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			result.PeriodSelection.Navigation.CanPickPeriod.Should().Be.True();
-			result.PeriodSelection.Navigation.HasNextPeriod.Should().Be.True();
-			result.PeriodSelection.Navigation.HasPrevPeriod.Should().Be.True();
-			result.PeriodSelection.Navigation.FirstDateNextPeriod.Should().Be.EqualTo(data.Date.AddDays(1).ToFixedClientDateOnlyFormat());
-			result.PeriodSelection.Navigation.LastDatePreviousPeriod.Should().Be.EqualTo(data.Date.AddDays(-1).ToFixedClientDateOnlyFormat());
+			result.PeriodSelection.PeriodNavigation.CanPickPeriod.Should().Be.True();
+			result.PeriodSelection.PeriodNavigation.HasNextPeriod.Should().Be.True();
+			result.PeriodSelection.PeriodNavigation.HasPrevPeriod.Should().Be.True();
+			result.PeriodSelection.PeriodNavigation.NextPeriod.Should().Be.EqualTo(data.Date.AddDays(1).ToFixedClientDateOnlyFormat());
+			result.PeriodSelection.PeriodNavigation.PrevPeriod.Should().Be.EqualTo(data.Date.AddDays(-1).ToFixedClientDateOnlyFormat());
 		}
 
 		[Test]

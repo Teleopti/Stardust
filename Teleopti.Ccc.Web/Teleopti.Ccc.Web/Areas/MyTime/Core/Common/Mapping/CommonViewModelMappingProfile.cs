@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping
 			CreateMap<Color, StyleClassViewModel>()
 				.ForMember(d => d.Name, o => o.MapFrom(s => s.ToStyleClass()))
 				.ForMember(d => d.ColorHex, o => o.MapFrom(s => s.ToHtml()))
+				.ForMember(d => d.RgbColor, o => o.MapFrom(s => s.ToCSV()))
 				;
 		}
 	}

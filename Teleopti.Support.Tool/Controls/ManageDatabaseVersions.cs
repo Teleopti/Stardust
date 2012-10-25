@@ -17,19 +17,22 @@ namespace Teleopti.Support.Tool.Controls
 {
     public partial class ManageDatabaseVersions : UserControl
     {
-        private const string ApplicationDatabaseTextConstant = "Application DB";
-        private const string AnalyticsDatabaseTextConstant = "Analytics DB";
-        private const string AggregationDatabaseTextConstant = "Aggregation DB";
+        private const int ImageIndexDatabaseVersionOk = 0;
+        private const int ImageIndexDatabaseVersionNotOk = 1;
+        private const int ImageIndexDatabaseConnecting = 2;
+        private const int ImageIndexDatabaseNotConnected = 3;
         private const string DOUBLEQUOTE = @"""";
         private const String SPACE = " ";
         private readonly MainForm _mainForm;
         private readonly Version _currentVersion;
         private string _teleoptiCccBaseInstallFolder;
         private string _lastSelectedItemText;
+        private IList<NotepadStarter> _notepadStarters;
 
 
         public ManageDatabaseVersions(MainForm mainForm, Version currentVersion)
         {
+            _notepadStarters = new List<NotepadStarter>();
             _mainForm = mainForm;
             _currentVersion = currentVersion;
             InitializeComponent();
@@ -72,16 +75,22 @@ namespace Teleopti.Support.Tool.Controls
 
         private void RefreshDatabaseList()
         {
+            ThreadSafeControlDelegation.SetCursor(Cursors.WaitCursor, buttonRefresh);
             //buttonUpdate.Enabled = false;
-            _mainForm.Cursor = Cursors.WaitCursor;
+            if (backgroundWorkerConnectionAndVersion.IsBusy)
+            {
+                backgroundWorkerConnectionAndVersion.CancelAsync();
+            }
+
             listViewDatabases.BeginUpdate();
             listViewDatabases.Items.Clear();
             IList<Nhib> nhibs = XmlHandler.GetNhibSettings(textBoxNHibFolder.Text).ToList();
             foreach (Nhib nhib in nhibs)
             {
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(nhib.CccConnectionString);
-                string groupCaption = nhib.FactoryName + " ("+ builder.DataSource + ")";
+                
+                string groupCaption = nhib.FactoryName + " ("+ nhib.CccDataSource.ServerName + ")";
                 ListViewGroup listViewGroup = listViewDatabases.Groups.Add(nhib.FactoryName, groupCaption);
+                listViewGroup.Tag = nhib;
                 ListViewItem[] listViewItems = CreateDatabaseListViewItems(nhib, listViewGroup);
                 listViewDatabases.Items.AddRange(listViewItems);
             }
@@ -95,58 +104,59 @@ namespace Teleopti.Support.Tool.Controls
                     preselectedListViewItem.Selected = true;
                 }
             }
-            _mainForm.Cursor = Cursors.Default;
+            backgroundWorkerConnectionAndVersion.RunWorkerAsync();
+        }
+
+
+        private void backgroundWorkerConnectionAndVersion_DoWork(object sender, DoWorkEventArgs e)
+        {
+            foreach (ListViewItem listViewItem in GetListViewItems(listViewDatabases))
+            {
+                NHibDataSource nHibDataSource = (NHibDataSource)listViewItem.Tag;
+                SetListviewIcon(nHibDataSource, listViewItem);
+            }
+
+            ThreadSafeControlDelegation.SetEnabled(true, buttonRefresh);
+            ThreadSafeControlDelegation.SetCursor(Cursors.Default, buttonRefresh);
         }
 
         private ListViewItem[] CreateDatabaseListViewItems(Nhib nhib, ListViewGroup listViewGroup)
         {
             Collection<ListViewItem> items = new Collection<ListViewItem>();
             ListViewItem listViewItem;
-            if (!listViewDatabases.Items.ContainsKey(nhib.CccDatabase))
+            NHibDataSource nHibDataSource = nhib.CccDataSource;
+            if (!listViewDatabases.Items.ContainsKey(nHibDataSource.DatabaseName))
             {
-                listViewItem = CreateDatabaseListViewItem(nhib.CccDatabase, ApplicationDatabaseTextConstant, nhib.CccVersion);
-                listViewItem.Tag = nhib;
-                listViewItem.Group = listViewGroup;
+                listViewItem = CreateDatasourceListViewItem(listViewGroup, nHibDataSource);
                 items.Add(listViewItem);
             }
-            if (!listViewDatabases.Items.ContainsKey(nhib.AnalyticDatabase))
+            nHibDataSource = nhib.AnalyticsDataSource;
+            if (!listViewDatabases.Items.ContainsKey(nHibDataSource.DatabaseName))
             {
-                listViewItem = CreateDatabaseListViewItem(nhib.AnalyticDatabase, AnalyticsDatabaseTextConstant, nhib.AnalyticVersion);
-                listViewItem.Tag = nhib;
-                listViewItem.Group = listViewGroup;
-                items.Add(listViewItem);
-            }
-            if (!listViewDatabases.Items.ContainsKey(nhib.AggregationDatabase))
-            {
-                listViewItem = CreateDatabaseListViewItem(nhib.AggregationDatabase, AggregationDatabaseTextConstant, nhib.AggVersion);
-                listViewItem.Tag = nhib;
-                listViewItem.Group = listViewGroup;
+                listViewItem = CreateDatasourceListViewItem(listViewGroup, nHibDataSource);
                 items.Add(listViewItem);
             }
             return items.ToArray();
         }
 
-        private ListViewItem CreateDatabaseListViewItem(string databaseName, string type, string version)
+        private static ListViewItem CreateDatasourceListViewItem(ListViewGroup listViewGroup, NHibDataSource nHibDataSource)
         {
-            ListViewItem listViewItem = new ListViewItem(databaseName);
-            Version dbVersion = new Version(version);
-            listViewItem.Name = databaseName;
-            if (
-                dbVersion.Major < _currentVersion.Major ||
-                dbVersion.Minor < _currentVersion.Minor ||
-                dbVersion.Build < _currentVersion.Build
-                )
-            {
-                listViewItem.ImageIndex = 1;
-            }
-            else
-            {
-                listViewItem.ImageIndex = 0;
-            }
+            ListViewItem listViewItem;
+            listViewItem = CreateDatabaseListViewItem(nHibDataSource);
+            listViewItem.Group = listViewGroup;
+            return listViewItem;
+        }
+
+        private static ListViewItem CreateDatabaseListViewItem(NHibDataSource nHibDataSource)
+        {
+            ListViewItem listViewItem = new ListViewItem(nHibDataSource.DatabaseName);
+            listViewItem.Name = nHibDataSource.DatabaseName;
+            listViewItem.Tag = nHibDataSource;
+            listViewItem.ImageIndex = ImageIndexDatabaseConnecting;
             ListViewItem.ListViewSubItem listViewSubItem;
-            listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, type);
+            listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, nHibDataSource.CccDatabaseType);
             listViewItem.SubItems.Add(listViewSubItem);
-            listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, version);
+            listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, nHibDataSource.Version);
             listViewItem.SubItems.Add(listViewSubItem);
             return listViewItem;
         }
@@ -191,22 +201,22 @@ namespace Teleopti.Support.Tool.Controls
             {
                 foreach (ListViewItem listViewItem in listViewDatabases.SelectedItems)
                 {
-                    Nhib nhib = (Nhib)listViewItem.Tag;
+                    NHibDataSource nHibDataSource = (NHibDataSource) listViewItem.Tag;
                     string databaseTypeString = listViewItem.SubItems[1].Text;
 
                     ProcessStartInfo processStartInfo;
-                    processStartInfo = CreateProcessStartInfoForDBManager(nhib, listViewItem, databaseTypeString);
+                    processStartInfo = CreateProcessStartInfoForDBManager(nHibDataSource, listViewItem, databaseTypeString);
                     RunProcess(processStartInfo);
 
-                    if (databaseTypeString == ApplicationDatabaseTextConstant)
+                    if (databaseTypeString == Nhib.ApplicationDatabaseTextConstant)
                     {
-                        processStartInfo = createProcessStartInfoForApplicationSecurity(nhib, listViewItem);
+                        processStartInfo = createProcessStartInfoForApplicationSecurity(nHibDataSource, listViewItem);
                         RunProcess(processStartInfo);
                     }
 
-                    if (databaseTypeString == AnalyticsDatabaseTextConstant)
+                    if (databaseTypeString == Nhib.AnalyticsDatabaseTextConstant)
                     {
-                        processStartInfo = CreateProcessStartInfoForAnalyticsSecurity(nhib, listViewItem);
+                        processStartInfo = CreateProcessStartInfoForAnalyticsSecurity(nHibDataSource, listViewItem);
                         RunProcess(processStartInfo);
                     }
                 }
@@ -223,10 +233,10 @@ namespace Teleopti.Support.Tool.Controls
 
 //                  3 – If TeleoptiAnalytics DbType
 //                  Teleopti.Support.Security.exe -DS%MyServerInstance% -DD%DATABASE% -CD%TeleoptiCCCAgg% -EE    
-        private ProcessStartInfo CreateProcessStartInfoForAnalyticsSecurity(Nhib nhib, ListViewItem listViewItem)
+        private ProcessStartInfo CreateProcessStartInfoForAnalyticsSecurity(NHibDataSource nHibDataSource, ListViewItem listViewItem)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nhib.CccConnectionString);
+            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nHibDataSource.ConnectionString);
             string workingDirectory = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\Enrypted\";
 
             string command = workingDirectory + @"Teleopti.Support.Security.exe";
@@ -238,7 +248,7 @@ namespace Teleopti.Support.Tool.Controls
             stringBuilder.Append(@"-DD");
             stringBuilder.Append(listViewItem.Name + SPACE);
             stringBuilder.Append(@"-CD");
-            stringBuilder.Append(nhib.AggregationDatabase + SPACE);
+            stringBuilder.Append(nHibDataSource.DatabaseName + SPACE);
             processStartInfo.Arguments = stringBuilder.ToString();
 
             processStartInfo.WorkingDirectory = workingDirectory;
@@ -253,10 +263,10 @@ namespace Teleopti.Support.Tool.Controls
 
         //          2- If TeleoptiCCC7 DbType
         //          Teleopti.Support.Security.exe -DS%MyServerInstance% -DD%DATABASE% -EE
-        private ProcessStartInfo createProcessStartInfoForApplicationSecurity(Nhib nhib, ListViewItem listViewItem)
+        private ProcessStartInfo createProcessStartInfoForApplicationSecurity(NHibDataSource nHibDataSource, ListViewItem listViewItem)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nhib.CccConnectionString);
+            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nHibDataSource.ConnectionString);
             string workingDirectory = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\Enrypted\";
 
             string command = workingDirectory + @"Teleopti.Support.Security.exe";
@@ -319,10 +329,10 @@ namespace Teleopti.Support.Tool.Controls
 
         //          1 - alltid
         //          DBManager.exe -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E -T
-        private ProcessStartInfo CreateProcessStartInfoForDBManager(Nhib nhib, ListViewItem listViewItem, string databaseTypeString)
+        private ProcessStartInfo CreateProcessStartInfoForDBManager(NHibDataSource nHibDataSource, ListViewItem listViewItem, string databaseTypeString)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nhib.CccConnectionString);
+            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nHibDataSource.ConnectionString);
             string workingDirectory = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\";
 
             string command = workingDirectory + @"DBManager.exe";
@@ -371,11 +381,11 @@ namespace Teleopti.Support.Tool.Controls
 
             switch (databaseTypeString)
             {
-                case ApplicationDatabaseTextConstant :
+                case Nhib.ApplicationDatabaseTextConstant :
                     return "TeleoptiCCC7";
-                case AnalyticsDatabaseTextConstant :
+                case Nhib.AnalyticsDatabaseTextConstant :
                     return "TeleoptiAnalytics";
-                case AggregationDatabaseTextConstant:
+                case Nhib.AggregationDatabaseTextConstant:
                     return "TeleoptiCCCAgg";
             }
             return "";
@@ -414,13 +424,14 @@ namespace Teleopti.Support.Tool.Controls
 
         private void listViewDatabases_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            if (listViewDatabases.SelectedItems.Count > 0)
+            buttonBack.Enabled = false;
+            foreach (ListViewItem listViewItem in listViewDatabases.SelectedItems)
             {
-                buttonUpdate.Enabled = true;
-            }
-            else
-            {
-                buttonBack.Enabled = false;
+                if (listViewItem.ImageIndex == ImageIndexDatabaseVersionNotOk)
+                {
+                    buttonUpdate.Enabled = true;
+                    break;
+                }
             }
             _lastSelectedItemText = e.Item.Text;
         }
@@ -428,6 +439,117 @@ namespace Teleopti.Support.Tool.Controls
         private void listViewDatabases_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private delegate void ChangeListViewIconDelegate(int newImageIndex, int listViewItemIndex);
+
+        private void ChangeListViewIcon(int newImageIndex, int listViewItemIndex)
+        {
+            ListViewItem listViewItem = listViewDatabases.Items[listViewItemIndex];
+            NHibDataSource nHibDataSource = (NHibDataSource) listViewItem.Tag;
+            listViewItem.ImageIndex = newImageIndex;
+            switch (newImageIndex)
+            {
+                case ImageIndexDatabaseNotConnected:
+                    listViewItem.SubItems[2].Text = NHibDataSource.NotConnected;
+                    break;
+                case ImageIndexDatabaseVersionNotOk :
+                case ImageIndexDatabaseVersionOk :
+                    listViewItem.SubItems[2].Text = nHibDataSource.Version;
+                    if (nHibDataSource.CccDatabaseType == Nhib.AnalyticsDatabaseTextConstant)
+                    {
+                        DBHelper dbHelper = new DBHelper(nHibDataSource.ConnectionString);
+                        string aggDbName = dbHelper.GetAggDatabaseName();
+                        SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(nHibDataSource.ConnectionString);
+                        builder.InitialCatalog = aggDbName;
+                        NHibDataSource aggNHibDataSource = new NHibDataSource(builder.ConnectionString, Nhib.AggregationDatabaseTextConstant);
+                        ListViewItem aggListViewItem = CreateDatasourceListViewItem(listViewItem.Group, aggNHibDataSource);
+                        listViewDatabases.Items.Add(aggListViewItem);
+                        SetListviewIcon(aggNHibDataSource, aggListViewItem);
+                    }
+                    break;
+            }
+        }
+
+        private delegate ListView.ListViewItemCollection GetItemsDelegate(ListView lstview);
+        private ListView.ListViewItemCollection GetListViewItems(ListView listView)
+        {
+            ListView.ListViewItemCollection temp = new ListView.ListViewItemCollection(new ListView());
+            if (!listView.InvokeRequired)
+            {
+                foreach (ListViewItem item in listView.Items)
+                    temp.Add((ListViewItem)item.Clone());
+                return temp;
+            }
+            else
+                return (ListView.ListViewItemCollection)this.Invoke(new GetItemsDelegate(GetListViewItems), new object[] { listView });
+        }
+
+        
+
+
+        private void SetListviewIcon(NHibDataSource nHibDataSource, ListViewItem listViewItem)
+        {
+            
+            DBHelper dbHelper = new DBHelper(nHibDataSource.ConnectionString);
+            if (dbHelper.TestConnection())
+            {
+                nHibDataSource.Version = dbHelper.GetDatabaseVersion();
+                Version dbVersion = new Version(nHibDataSource.Version);
+                if (
+                    dbVersion.Major < _currentVersion.Major ||
+                    dbVersion.Minor < _currentVersion.Minor ||
+                    dbVersion.Build < _currentVersion.Build
+                    )
+                {
+                    CallSetListViewIcon(ImageIndexDatabaseVersionNotOk, listViewItem.Index);
+                }
+                else
+                {
+                    CallSetListViewIcon(ImageIndexDatabaseVersionOk, listViewItem.Index);
+                }
+            }
+            else
+            {
+                CallSetListViewIcon(ImageIndexDatabaseNotConnected, listViewItem.Index);
+            }
+        }
+
+        private void CallSetListViewIcon(int imageIndex, int listviewItemIndex)
+        {
+            if (listViewDatabases.InvokeRequired)
+            {
+                listViewDatabases.Invoke(
+                    new ChangeListViewIconDelegate((ChangeListViewIcon)),
+                    new object[] { imageIndex, listviewItemIndex });
+            }
+            else
+            {
+                ChangeListViewIcon(imageIndex, listviewItemIndex);
+            }
+        }
+
+        private void toolStripMenuItemEdit_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(_lastSelectedItemText))
+            {
+                ListViewItem preselectedListViewItem = listViewDatabases.FindItemWithText(_lastSelectedItemText);
+                if (preselectedListViewItem != null)
+                {
+                    Nhib nhib = (Nhib) preselectedListViewItem.Group.Tag;
+                    NotepadStarter notepadStarter = new NotepadStarter(nhib.FileName);
+                    _notepadStarters.Add(notepadStarter);
+                    notepadStarter.NotepadExited += new NotepadStarter.NotepadExitedDelegate(notepadStarter_NotepadExited);
+                    notepadStarter.Run();
+                }
+            }
+
+        }
+
+        void notepadStarter_NotepadExited(object sender, EventArgs e)
+        {
+            NotepadStarter notepadStarter = (NotepadStarter) sender;
+            _notepadStarters.Remove(notepadStarter);
         }
     }
 }

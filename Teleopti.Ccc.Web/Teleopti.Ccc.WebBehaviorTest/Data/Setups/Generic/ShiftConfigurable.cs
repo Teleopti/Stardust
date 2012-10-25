@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -26,10 +27,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		{
 			//för nu sparar ett shiftcategory hårt
 			//var shiftCat =new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategoryName));
-			var shiftCat = new ShiftCategory("will be removed");
+			var shiftCat = new ShiftCategory("will be removed") {DisplayColor = Color.Red};
 			new ShiftCategoryRepository(uow).Add(shiftCat);
 
-			var endDateUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime.Date);
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
 			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);

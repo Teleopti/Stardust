@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.WinCode.Meetings.Interfaces
     	//void FindPanel();
     	void NotifyMeetingDatesChanged();
         bool IsRightToLeft { get; }
-        void SetSizeWECursor();
+    	bool TimeFocused { get; set; }
+    	void SetSizeWECursor();
         void SetDefaultCursor();
         void SetHandCursor();
         void RefreshGridSchedules();

@@ -48,8 +48,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool UseGroupSchedulingCommonEnd { get; set; }
 		public bool UseGroupSchedulingCommonCategory { get; set; }
 
-    	
-    	public ISpecification<IMainShift> MainShiftOptimizeActivitySpecification
+        public IActivity CommonActivity { get; set; }
+        public bool UseCommonActivity { get; set; }
+        
+        public ISpecification<IMainShift> MainShiftOptimizeActivitySpecification
     	{
     		get
     		{
@@ -65,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			new SchedulingOptionsGeneralPersonalSetting().MapTo(this, new List<IScheduleTag>());
 			new SchedulingOptionsAdvancedPersonalSetting().MapTo(this, new List<IShiftCategory>());
-            new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>());
+            new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>(),new List<IActivity>( ));
 		}
 
     	public BlockFinderType UseBlockScheduling

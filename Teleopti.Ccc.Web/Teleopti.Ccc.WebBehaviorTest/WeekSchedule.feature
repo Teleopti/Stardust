@@ -25,7 +25,7 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
-	
+
 Scenario: View current week
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-10-03 12:00'
@@ -293,3 +293,25 @@ Scenario: Show activity at correct times
 	| First activity times  | 08:00 - 11:00 |
 	| Second activity times | 11:00 - 12:00 |
 	| Third activity times  | 12:00 - 18:00 |
+
+Scenario: Update schedule when schedule has changed
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	When I view my week schedule for date '2012-08-28'
+	And there is a shift with 
+	| Field                 | Value            |
+	| StartTime             | 2012-08-28 12:00 |
+	| EndTime               | 2012-08-28 15:00 |
+	| ShiftCategoryName     | ForTest          |
+	And My schedule between '2012-08-28 08:00' to '2012-08-28 18:00' reloads
+	Then I should see activities on date '2012-08-28'
+
+Scenario: Keep user request input when schedules are refreshed
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I view my week schedule for date '2013-10-03'
+	When I click on the day symbol area for date '2013-10-03'
+	And I input text request values for date '2013-10-03'
+	And My schedule between '2013-10-03 08:00' to '2013-10-03 18:00' reloads
+	Then I should see the text request form
+	And Subject should not be empty

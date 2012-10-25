@@ -130,7 +130,7 @@ namespace Teleopti.Messaging.SignalR
 			if (handler!=null)
 			{
 				var d = ((JObject)obj[0]).ToObject<Notification>();
-				handler.BeginInvoke(d,onNotificationCallback,handler);
+				handler.BeginInvoke(d, onNotificationCallback,handler);
 			}
 		}
 

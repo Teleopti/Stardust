@@ -1,6 +1,8 @@
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
@@ -13,11 +15,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	{
 		private readonly IResolve<IProjectionProvider> _projectionProvider;
 		private readonly IResolve<IPreferenceFulfilledChecker> _preferenceFulfilledChecker;
+		private readonly IResolve<IUserTimeZone> _userTimeZone;
 
-		public PreferenceAndScheduleDayViewModelMappingProfile(IResolve<IProjectionProvider> projectionProvider, IResolve<IPreferenceFulfilledChecker> preferenceFulfilledChecker)
+		public PreferenceAndScheduleDayViewModelMappingProfile(IResolve<IProjectionProvider> projectionProvider, IResolve<IPreferenceFulfilledChecker> preferenceFulfilledChecker, IResolve<IUserTimeZone> userTimeZone)
 		{
 			_projectionProvider = projectionProvider;
 			_preferenceFulfilledChecker = preferenceFulfilledChecker;
+			_userTimeZone = userTimeZone;
 		}
 
 		protected override void Configure()
@@ -63,11 +67,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					{
 						if (s != null)
 						{
-							if((s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff))
+							if ((s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff))
 							{
 								if (s.PersonAbsenceCollection() != null)
 									return s.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
-								
+
 							}
 							if (s.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence)
 								return s.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
@@ -75,6 +79,39 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 								return s.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor.ToHtml();
 							if (s.SignificantPartForDisplay() == SchedulePartView.DayOff)
 								return null;
+						}
+						return null;
+					}))
+				.ForMember(d => d.Meetings, o => o.MapFrom(s =>
+					{
+						var meetings = s.PersonMeetingCollection();
+						if (meetings.Count > 0)
+						{
+							return meetings.Select(personMeeting => new MeetingViewModel
+								{
+									Subject = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
+									TimeSpan = ScheduleDayStringVisualizer.ToLocalStartEndTimeString(personMeeting.Period,
+									                                     _userTimeZone.Invoke().TimeZone(), CultureInfo.CurrentCulture),
+									IsOptional = personMeeting.Optional
+								}).ToList();
+						}
+						return null;
+					}))
+				.ForMember(d => d.PersonalShifts, o => o.MapFrom(s =>
+					{
+						var assignments = s.PersonAssignmentCollection();
+						if (assignments.Count > 0)
+						{
+							return (from personAssignment in assignments
+							        from personalShift in personAssignment.PersonalShiftCollection
+							        from layer in personalShift.LayerCollection
+							        select new PersonalShiftViewModel
+								        {
+									        Subject =
+										        layer.Payload.ConfidentialDescription(personAssignment.Person, s.DateOnlyAsPeriod.DateOnly).Name,
+									        TimeSpan =
+												ScheduleDayStringVisualizer.ToLocalStartEndTimeString(layer.Period, _userTimeZone.Invoke().TimeZone(), CultureInfo.CurrentCulture)
+								        }).ToList();
 						}
 						return null;
 					}))

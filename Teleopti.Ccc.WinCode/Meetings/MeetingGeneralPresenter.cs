@@ -149,6 +149,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 			_view.SetSubject(_model.GetSubject(new NoFormatting()));
 			_view.SetLocation(_model.GetLocation(new NoFormatting()));
 			_view.SetDescription(_model.GetDescription(new NoFormatting()));
+			_view.DescriptionFocus();
 		}
 
 	    public void CancelAllLoads()

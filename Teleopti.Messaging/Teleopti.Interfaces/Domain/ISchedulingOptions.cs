@@ -322,5 +322,15 @@ namespace Teleopti.Interfaces.Domain
 		/// 
 		/// </summary>
 		bool UseGroupSchedulingCommonCategory { get; set; }
+
+        /// <summary>
+        /// Common Activty
+        /// </summary>
+        bool UseCommonActivity { get; set; }
+
+        /// <summary>
+        /// Common Activity
+        /// </summary>
+        IActivity CommonActivity { get; set; }
     }
 }

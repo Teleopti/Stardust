@@ -80,12 +80,12 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule
 			                                 			new PeriodDateRangeViewModel { MinDate = new DateOnly(2011, 01, 01).ToFixedClientDateOnlyFormat(),
 																					   MaxDate = new DateOnly(2011, 12, 31).ToFixedClientDateOnlyFormat()
 														},
-			                                 		Navigation =
+			                                 		PeriodNavigation =
 			                                 			new PeriodNavigationViewModel
 			                                 				{
-			                                 					FirstDateNextPeriod = new DateOnly(2011, 05, 23).ToFixedClientDateOnlyFormat(),
+			                                 					NextPeriod = new DateOnly(2011, 05, 23).ToFixedClientDateOnlyFormat(),
 			                                 					HasNextPeriod = true,
-			                                 					LastDatePreviousPeriod = new DateOnly(2011, 05, 14).ToFixedClientDateOnlyFormat(),
+			                                 					PrevPeriod = new DateOnly(2011, 05, 14).ToFixedClientDateOnlyFormat(),
 			                                 					HasPrevPeriod = false,
 			                                 					CanPickPeriod = true
 			                                 				}

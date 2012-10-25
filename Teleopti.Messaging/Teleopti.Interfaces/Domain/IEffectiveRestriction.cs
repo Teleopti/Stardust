@@ -6,7 +6,7 @@ namespace Teleopti.Interfaces.Domain
     /// <summary>
     /// Represents the restrictions on a workshift
     /// </summary>
-    public interface IEffectiveRestriction
+    public interface IEffectiveRestriction : IWorkTimeMinMaxRestriction
     {
         /// <summary>
         /// Gets the start time limitation.
@@ -42,13 +42,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The day off.</value>
         IDayOffTemplate DayOffTemplate { get; set; }
-
-        /// <summary>
-        /// Validates the work shift if that complies with the restrictions.
-        /// </summary>
-        /// <param name="workShiftProjection">The work shift.</param>
-        /// <returns></returns>
-		bool ValidateWorkShiftInfo(IWorkShiftProjection workShiftProjection);
 
         /// <summary>
         /// Combines the specified effective restriction.
@@ -126,18 +119,4 @@ namespace Teleopti.Interfaces.Domain
     	/// </summary>
     	bool NotAllowedForDayOffs { get; set; }
     }
-
-
-	/// <summary>
-	/// Layer that can be used by IEffectiveRestriction.VisualLayerCollectionSatisfiesActivityRestriction
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Restrictable")]
-	public interface IActivityRestrictableVisualLayer : IPeriodized
-	{
-		/// <summary>
-		/// The activity id
-		/// </summary>
-		Guid ActivityId { get; }
-	}
-
 }

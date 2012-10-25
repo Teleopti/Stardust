@@ -44,6 +44,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
             Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
         }
 
+		[Then(@"Subject should not be empty")]
+		public void SubjectShouldNotBeEmpty()
+		{
+			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value.Trim(), Is.Not.Empty);
+		}
+
 		[When(@"I input new text request values")]
 		public void WhenIInputNewTextRequestValues()
 		{

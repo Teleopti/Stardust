@@ -99,6 +99,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			_view.SetSubject(_model.GetSubject(new NoFormatting()));
 			_view.SetLocation(_model.GetLocation(new NoFormatting()));
 			_view.SetDescription(_model.GetDescription(new NoFormatting()));
+			_view.DescriptionFocus();
 
             _mocks.ReplayAll();
             _target.Initialize();

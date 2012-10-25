@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Xml;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
@@ -11,6 +12,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest
@@ -24,8 +26,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I hover over the meeting on date '(.*)'")]
 		public void WhenIHoverOverTheMeetingOnDate(DateTime date)
 		{
-			Div meetingLayer =
-				_page.DayLayers(date).Filter(Find.BySelector("[tooltip-text*=" + Resources.SubjectColon + "]")).First();
+			Div meetingLayer=null;
+			EventualAssert.That(()=>
+			                    	{
+			                    		var meetingLayers =_page.DayLayers(date).Filter(Find.BySelector(@"[tooltip-text*=<div>]"));
+											if (meetingLayers.Count == 0)
+											{
+												return false;												
+											}
+			                    		meetingLayer = meetingLayers.First();
+			                    		return true;
+			                    	}, Is.True);
 			meetingLayer.FireEvent("onmouseover");
 		}
 
@@ -143,6 +154,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Height"), Is.EqualTo("400px"));
 		}
 
+		[Then(@"I should see activities on date '(.*)'")]
+		public void ThenIShouldSeeActivitiesOnDate(DateTime date)
+		{
+			EventualAssert.That(()=>_page.DayLayers(date),Is.Not.Empty);
+		}
 
 		[Then(@"I should see request page")]
 		public void ThenIShouldSeeRequestPage()
@@ -168,13 +184,24 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.DayLayers(date).Count.Should().Be.EqualTo(0);
 		}
 
+		[When(@"My schedule between '(.*)' to '(.*)' reloads")]
+		public void WhenMyScheduleBetweenToReloads(DateTime start, DateTime end)
+		{
+			var xmlStartDate = "D" + XmlConvert.ToString(start, XmlDateTimeSerializationMode.Unspecified);
+			var xmlEndDate = "D" + XmlConvert.ToString(end, XmlDateTimeSerializationMode.Unspecified);
+
+			const string js = @"var notification = {{StartDate : '{0}', EndDate : '{1}'}};Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener(notification);";
+
+			var formattedJs = string.Format(js, xmlStartDate, xmlEndDate);
+			Browser.Current.Eval(formattedJs);
+		}
+
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{
 			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, UserFactory.User().Culture);
 			var lastDayOfWeek = DateHelper.GetLastDateInWeek(anyDayOfWeek, UserFactory.User().Culture);
-			EventualAssert.WhenElementExists(_page.FirstDay, d => d.GetAttributeValue("data-mytime-date"), Is.EqualTo(firstDayOfWeek.ToString("yyyy-MM-dd")));
-			EventualAssert.WhenElementExists(_page.SeventhDay, d => d.GetAttributeValue("data-mytime-date"), Is.EqualTo(lastDayOfWeek.ToString("yyyy-MM-dd")));
+			EventualAssert.That(() => _page.FirstDay.GetAttributeValue("data-mytime-date"), Is.EqualTo(firstDayOfWeek.ToString("yyyy-MM-dd")));
+			EventualAssert.That(() => _page.SeventhDay.GetAttributeValue("data-mytime-date"), Is.EqualTo(lastDayOfWeek.ToString("yyyy-MM-dd")));
 		}
-
 	}
 }

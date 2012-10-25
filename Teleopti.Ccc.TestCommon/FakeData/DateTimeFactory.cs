@@ -19,6 +19,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return CreateDateTimePeriod(newDateTime1, newDateTime2);
         }
 
+		/// <summary>
+		/// Creates a half day time period in Utc.
+		/// </summary>
+		/// <returns></returns>
+		public static DateTimePeriod CreateDateTimePeriodUtc()
+		{
+			DateTime newDateTime1 = DateTime.Today.ToUniversalTime();
+			DateTime newDateTime2 = DateTime.Today.AddHours(12).ToUniversalTime();
+			return CreateDateTimePeriod(newDateTime1, newDateTime2);
+		}
+
         /// <summary>
         /// Creates the time period.
         /// </summary>

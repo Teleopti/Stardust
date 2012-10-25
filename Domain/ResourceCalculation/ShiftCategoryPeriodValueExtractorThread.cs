@@ -103,8 +103,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                                                         _schedulingOptions.UseMinimumPersons,
                                                         _schedulingOptions.UseMaximumPersons,
                                                         _schedulingOptions);
-
-			possible.ShiftValue = shiftValue;
+            if (_schedulingOptions.UseCommonActivity)
+                possible.ActivityPeriods = shiftValue.ActivityPeriods ;
+			possible.ShiftValue = shiftValue.Value ;
 			if (_manualResetEvent != null)
         		_manualResetEvent.Set();
         }

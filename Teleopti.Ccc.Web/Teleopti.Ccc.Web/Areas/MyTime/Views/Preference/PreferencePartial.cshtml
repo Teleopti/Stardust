@@ -86,6 +86,7 @@
 
 									<div class="preference">
 										<span class="displayinline-block">
+											<div class="preference-indicator"/>
 											<div class="preference-indicator">
 												<div class="heart-small preference-must-have" data-bind="css: {'icon': MustHave}"></div>
 											</div>
@@ -106,6 +107,42 @@
 														<div class="time-limitation icon doublearrow-blue truncate" data-bind="text: ActivityTimeLimitation"></div>
 													</div>
 												</div>
+											</div>
+											<div class="preference-indicator">
+												<!-- ko if: Meetings().length > 0 || PersonalShifts().length > 0 -->
+												<div class="icon meeting-small">
+												</div>
+												<div class="meeting-tooltip" style="display: none">
+													<!-- ko if: Meetings().length > 0 -->
+													<table>
+														<thead>@Resources.Meeting</thead>
+														<tbody data-bind="foreach: Meetings">
+															<tr>
+																<td data-bind="text: Subject"></td>
+																<!-- ko if: IsOptional -->
+																<td>(@Resources.Optional)</td>
+																<!-- /ko -->
+																<td>:</td>
+																<td data-bind="text: TimeSpan"></td>
+															
+															</tr>
+														</tbody>
+													</table>
+													<!-- /ko -->
+													<!-- ko if: PersonalShifts().length > 0 -->
+													<table>
+														<thead>@Resources.PersonalShift</thead>
+														<tbody data-bind="foreach: PersonalShifts">
+															<tr>
+																<td data-bind="text: Subject"></td>
+																<td>:</td>
+																<td data-bind="text: TimeSpan"></td>
+															</tr>
+														</tbody>
+													</table>
+													<!-- /ko -->
+												</div>
+												<!-- /ko -->
 											</div>
 										</span>
 									</div>

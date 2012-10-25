@@ -28,6 +28,7 @@
 	font-family: Verdana;
 	white-space: nowrap;
 	font-size: 0;
+	display: none;
 }
 .rgba .body-weekview-inner {
 	border: 1px solid rgba(0, 0, 0, 0.15);
@@ -245,7 +246,7 @@ select.absence-input
 	display: none;
 }
 
-.week-schedule-ASM-permission-granted .week-schedule-current-week
+.week-schedule-ASM-permission-granted, .week-schedule-current-week
 {
 	display: none;
 }

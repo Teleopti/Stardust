@@ -28,8 +28,9 @@ namespace Teleopti.Ccc.Win.Meetings
         private int _suggestionRows;
         private IList<DateOnly> _availableDates;
         private readonly ISchedulerStateHolder _stateHolder;
-		
-        protected MeetingSchedulesView()
+    	private bool _timeFocused;
+
+    	protected MeetingSchedulesView()
         {
             InitializeComponent();
             if (DesignMode) return;
@@ -69,7 +70,13 @@ namespace Teleopti.Ccc.Win.Meetings
             get { return gridControlSchedules.IsRightToLeft(); }
         }
 
-        public void SetSizeWECursor()
+    	public bool TimeFocused
+    	{
+			get { return outlookTimePickerStartTime.Focused || outlookTimePickerEndTime.Focused || _timeFocused; }
+			set { _timeFocused = value; }
+    	}
+
+    	public void SetSizeWECursor()
         {
             gridControlSchedules.Cursor = Cursors.SizeWE;
         }
