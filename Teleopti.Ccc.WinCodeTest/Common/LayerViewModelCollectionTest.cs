@@ -55,10 +55,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             using(mocks.Record())
             {
                 Expect.Call(range.Person).Return(part.Person);
+				Expect.Call(range.ScheduledDay(new DateOnly(2000, 12, 31))).Return(emptyPart);
                 Expect.Call(range.ScheduledDay(new DateOnly(2001, 1, 1))).Return(part);
                 Expect.Call(range.ScheduledDay(new DateOnly(2001, 1, 2))).Return(emptyPart);
                 Expect.Call(range.ScheduledDay(new DateOnly(2001, 1, 3))).Return(emptyPart);
-                Expect.Call(emptyPart.HasProjection).Return(false).Repeat.Times(2);
+                Expect.Call(emptyPart.HasProjection).Return(false).Repeat.Times(3);
             }
             using (mocks.Playback())
             {
