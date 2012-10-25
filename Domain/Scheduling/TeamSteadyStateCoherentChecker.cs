@@ -5,16 +5,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public interface ITeamSteadyStateCoherentChecker
 	{
-		IScheduleDay CheckCoherent(IEnumerable<IScheduleMatrixPro> matrixes, DateOnly dateOnly, IScheduleDictionary scheduleDictionary, IScheduleDay scheduleDay);
+		IScheduleDay CheckCoherent(IEnumerable<IScheduleMatrixPro> matrixes, DateOnly dateOnly, IScheduleDictionary scheduleDictionary, IScheduleDay scheduleDay, IList<IPerson> groupMembers);
 	}
 
 	public class TeamSteadyStateCoherentChecker : ITeamSteadyStateCoherentChecker
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IScheduleDay CheckCoherent(IEnumerable<IScheduleMatrixPro> matrixes, DateOnly dateOnly, IScheduleDictionary scheduleDictionary, IScheduleDay scheduleDay)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IScheduleDay CheckCoherent(IEnumerable<IScheduleMatrixPro> matrixes, DateOnly dateOnly, IScheduleDictionary scheduleDictionary, IScheduleDay scheduleDay, IList<IPerson> groupMembers)
 		{
 			foreach (var scheduleMatrixPro in matrixes)
 			{
+				if (!groupMembers.Contains(scheduleMatrixPro.Person)) continue;
 				var scheduleRangeSource = scheduleDictionary[scheduleMatrixPro.Person];
 				var scheduleDaySource = scheduleRangeSource.ScheduledDay(dateOnly);
 				var schedulePartViewSource = scheduleDaySource.SignificantPart();
@@ -31,7 +32,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						scheduleDay = scheduleDaySource;
 					}
 				}
-
 			}
 
 			return scheduleDay;

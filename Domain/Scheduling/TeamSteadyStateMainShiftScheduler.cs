@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var theMatrix = _teamSteadyStateScheduleMatrixProFinder.MatrixPro(matrixes, scheduleDaySource);
 				if (theMatrix == null) continue;
 
-				scheduleDaySource = _coherentChecker.CheckCoherent(matrixes, dateOnly, scheduleDictionary, scheduleDaySource);
+				scheduleDaySource = _coherentChecker.CheckCoherent(matrixes, dateOnly, scheduleDictionary, scheduleDaySource, groupPerson.GroupMembers);
 
 				if (scheduleDaySource == null)
 					return false;
