@@ -37,7 +37,7 @@
 
 .asm-timeline-line
 {
-	height: 70px;
+	height: 40px;
 	float: left;
 	border-right: 1px solid rgb(216, 216, 216);	
 }
@@ -45,7 +45,7 @@
 .asm-time-marker-inner 
 {	
 	background-color: black;
-	height: 70px;	
+	height: 40px;	
 	zoom: 1;
 	filter: alpha(opacity=15);
 	opacity: 0.15;
@@ -53,12 +53,9 @@
 
 .asm-timeline-number
 {
-	/*padding: 1px;*/
 	padding-left: 2px;
 	padding-right: 3px;
 	position: relative;
-	/*border: 1px solid rgb(216, 216, 216);
-	background: white;*/
 	top: -16px;
 	left: -20px;
 	font-family: verdana;
@@ -67,7 +64,7 @@
 
 .asm-time-marker
 {
-	height: 72px;
+	height: 40px;
 	float: left;
 	position: relative;
 	z-index: 1;
