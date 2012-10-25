@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IProjectionProvider _projectionProvider;
 		private IPreferenceFulfilledChecker _preferenceFulfilledChecker;
 		private IUserTimeZone _userTimeZone;
-		private CccTimeZoneInfo _timeZone;
+		private TimeZoneInfo _timeZone;
 
 		[SetUp]
 		public void Setup()
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			_preferenceFulfilledChecker = MockRepository.GenerateMock<IPreferenceFulfilledChecker>();
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			_timeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+			_timeZone = TimeZoneInfo.Local;
 			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
 			Mapper.Reset();
 			Mapper.Initialize(c =>
