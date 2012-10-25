@@ -61,6 +61,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	}
 
 	function asmMessageItemViewModel(item) {
+		var maxLength = 250;
 		var self = this;
 		self.title = ko.observable(item.Title);
 		self.message = ko.observable(item.Message);
@@ -73,7 +74,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.isSending = ko.observable(false);
 		self.reply = ko.observable('');
 		self.remainingCharacters = ko.computed(function () {
-			return ('('+(250 - self.reply().length)+')');
+			return ('(' + (maxLength - self.reply().length) + ')');
 		});
 		self.dialogueMessages = ko.utils.arrayMap(item.DialogueMessages, function (data) {
 			return new dialogueMessageViewModel(data);
@@ -88,7 +89,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			_replyToMessage(self);
 		};
 		self.isConfirmButtonEnabled = ko.computed(function () {
-			if (self.isSending() || (self.allowDialogueReply() && self.reply().length == 0)) {
+			if (self.isSending() || (self.allowDialogueReply() && self.reply().length == 0) || (self.allowDialogueReply() && self.reply().length > maxLength)) {
 				return false;
 			}
 			return true;
