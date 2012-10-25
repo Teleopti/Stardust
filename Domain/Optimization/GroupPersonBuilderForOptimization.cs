@@ -44,6 +44,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var personsInGroup = curentPersonsInGroup(personGroup);
 			var guid = ((IEntity) personGroup).Id;
+
+			if(personGroup.GetType() == typeof(ChildPersonGroup))
+			{
+				var entity = ((ChildPersonGroup) personGroup).Entity;
+				if (entity.Id.HasValue)
+					guid = entity.Id.Value;	
+			}
+
+			if(personGroup.GetType() == typeof(RootPersonGroup))
+			{
+				var entity = ((RootPersonGroup)personGroup).Entity;
+				if (entity.Id.HasValue)
+					guid = entity.Id.Value;	
+			}
+	
 			var groupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, personGroup.Description.Name, guid);
 			
 			return groupPerson;
