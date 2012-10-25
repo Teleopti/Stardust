@@ -69,14 +69,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 					var guid = ((IEntity)personGroup).Id;
 
-					if (personGroup.GetType() == typeof(ChildPersonGroup))
+					if (guid == null && personGroup.GetType() == typeof(ChildPersonGroup))
 					{
 						var entity = ((ChildPersonGroup)personGroup).Entity;
 						if (entity.Id.HasValue)
 							guid = entity.Id.Value;
 					}
 
-					if (personGroup.GetType() == typeof(RootPersonGroup))
+					if (guid == null && personGroup.GetType() == typeof(RootPersonGroup))
 					{
 						var entity = ((RootPersonGroup)personGroup).Entity;
 						if (entity.Id.HasValue)
