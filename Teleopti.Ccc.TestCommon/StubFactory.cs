@@ -105,13 +105,12 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote)
 		{
-			return ScheduleDayStub(date, person, significantPartToDisplay, personDayOff, personAssignment, personAbsences,
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			                       publicNote, null);
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote, IEnumerable<IPersonMeeting> meetings)
 		{
-			var timeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(date), timeZone);
 			var scheduleDay = MockRepository.GenerateStub<IScheduleDay>();
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);

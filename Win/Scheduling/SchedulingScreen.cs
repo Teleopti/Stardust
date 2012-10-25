@@ -6333,14 +6333,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             _schedulerState.TimeZoneInfo = TeleoptiPrincipal.Current.Regional.TimeZone;
             toolStripMenuItemLoggedOnUserTimeZone.Tag = _schedulerState.TimeZoneInfo;
             wpfShiftEditor1.SetTimeZone(_schedulerState.TimeZoneInfo);
-            IList<ICccTimeZoneInfo> otherList = new List<ICccTimeZoneInfo> {_schedulerState.TimeZoneInfo};
+            IList<TimeZoneInfo> otherList = new List<TimeZoneInfo> {_schedulerState.TimeZoneInfo};
             foreach (IPerson person in _schedulerState.AllPermittedPersons)
             {
                 if (!otherList.Contains(person.PermissionInformation.DefaultTimeZone()))
                     otherList.Add(person.PermissionInformation.DefaultTimeZone());
             }
 
-            foreach (ICccTimeZoneInfo info in otherList)
+            foreach (TimeZoneInfo info in otherList)
             {
                 if (info != _schedulerState.TimeZoneInfo)
                 {
@@ -6731,7 +6731,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (e.Button != MouseButtons.Left) return;
             var item = (ToolStripMenuItem) sender;
-            _schedulerState.TimeZoneInfo = (ICccTimeZoneInfo) item.Tag;
+            _schedulerState.TimeZoneInfo = (TimeZoneInfo) item.Tag;
             wpfShiftEditor1.SetTimeZone(_schedulerState.TimeZoneInfo);
             foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
             {

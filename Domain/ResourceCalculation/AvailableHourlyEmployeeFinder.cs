@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return false;
 
 			DateTimePeriod period = visualLayerCollection.Period().Value;
-			ICccTimeZoneInfo tzInfo = person.PermissionInformation.DefaultTimeZone();
+			TimeZoneInfo tzInfo = person.PermissionInformation.DefaultTimeZone();
 			DateTime baseDate = _dateOnly.Date;
 			TimeSpan startTime = period.StartDateTimeLocal(tzInfo).Subtract(baseDate);
 			TimeSpan endTime = period.EndDateTimeLocal(tzInfo).Subtract(baseDate);

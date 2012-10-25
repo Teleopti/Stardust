@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         public ActivityLayerMapper(MappedObjectPair mappedObjectPair,
                                     ActivityLayerBelongsTo typeOfLayer,
                                     DateTime date,
-                                    ICccTimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
+                                    TimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
         {
             _layerContainsOvertime = new LayerContainsOvertime(mappedObjectPair);
             _typeOfLayer = typeOfLayer;

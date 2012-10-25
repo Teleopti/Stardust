@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             IPerson person = PersonFactory.CreatePerson();
-            person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
             _agent = PersonFactory.CreatePersonWithPersonPeriod(person, new DateOnly(1999, 1, 1), new List<ISkill>());
             underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();

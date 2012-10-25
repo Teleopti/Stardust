@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             ISchedulingResultStateHolder stateHolder = new SchedulingResultStateHolder();
 
-            DateTimePeriod dayPeriod = period.ToDateTimePeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            DateTimePeriod dayPeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
             IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(dayPeriod);
             IScenario scenario = new Scenario("Scenario");
             var scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());

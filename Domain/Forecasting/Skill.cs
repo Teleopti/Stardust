@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private string _description = string.Empty;
         private Color _displayColor;
         private ISkillType _skillType;
-        private ISet<IWorkload> _workloadCollection;
+		private Iesi.Collections.Generic.ISet<IWorkload> _workloadCollection;
         private IDictionary<int, ISkillDayTemplate> _templateWeekCollection;
         private IActivity _activity;
         private string _timeZone;
-        private ICccTimeZoneInfo _cachedTimeZone;
+        private TimeZoneInfo _cachedTimeZone;
         private int _defaultResolution;
         private StaffingThresholds _staffingThresholds;
         private TimeSpan _midnightBreakOffset;
@@ -158,18 +158,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
             set { _midnightBreakOffset = value; }
         }
 
-        public virtual ICccTimeZoneInfo TimeZone
+        public virtual TimeZoneInfo TimeZone
         {
             get
             {
                 if (String.IsNullOrEmpty(_timeZone))
                 {
-                    _cachedTimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+                    _cachedTimeZone = TimeZoneInfo.Utc;
                     _timeZone = _cachedTimeZone.Id;
                 }
                 if (_cachedTimeZone == null)
                 {
-                    _cachedTimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(_timeZone));
+                    _cachedTimeZone = TimeZoneInfo.FindSystemTimeZoneById(_timeZone);
                 }
 
                 return _cachedTimeZone;

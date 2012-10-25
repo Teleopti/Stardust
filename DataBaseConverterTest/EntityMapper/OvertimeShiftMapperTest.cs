@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             mappedObjectPair.MultiplicatorDefinitionSet = new ObjectPairCollection<Overtime, IMultiplicatorDefinitionSet>();
             mappedObjectPair.MultiplicatorDefinitionSet.Add(overtime, new MultiplicatorDefinitionSet("test",MultiplicatorType.Overtime));
 
-            OvertimeShiftMapper msMap = new OvertimeShiftMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc), new DateTime(2007, 1, 1));
+            OvertimeShiftMapper msMap = new OvertimeShiftMapper(mappedObjectPair, (TimeZoneInfo.Utc), new DateTime(2007, 1, 1));
             OvertimeShift newShift = msMap.Map(oldShift);
 
             Assert.AreEqual(2, newShift.LayerCollection.Count);

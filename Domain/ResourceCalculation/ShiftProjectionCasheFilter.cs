@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         	_rules = rules;
         }
 
-    	public IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, 
+    	public IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, 
             IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IList<IShiftCategory> notAllowedCategories, IWorkShiftFinderResult finderResult)
         {
             if (restriction == null)
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
 
-        public static IList<IShiftProjectionCache> FilterOnActivityRestrictions(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction , IWorkShiftFinderResult finderResult)
+        public static IList<IShiftProjectionCache> FilterOnActivityRestrictions(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction , IWorkShiftFinderResult finderResult)
         {
             IList<IActivityRestriction> activityRestrictions = restriction.ActivityRestrictionCollection;
             if (activityRestrictions.Count == 0)
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return true;
         }
 
-        public IList<IShiftProjectionCache> FilterOnRestrictionTimeLimits(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList,
+        public IList<IShiftProjectionCache> FilterOnRestrictionTimeLimits(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList,
                                                                    IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult)
         {
             if (shiftList.Count == 0)

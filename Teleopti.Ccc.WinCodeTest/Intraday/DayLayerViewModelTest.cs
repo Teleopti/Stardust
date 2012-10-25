@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             person.SetId(Guid.NewGuid());
             person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(), team));
             person.PermissionInformation.SetDefaultTimeZone(
-                new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+                (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             
             unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
             repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();

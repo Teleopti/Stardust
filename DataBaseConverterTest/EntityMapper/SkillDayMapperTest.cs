@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void Setup()
         {
             _mop = new MappedObjectPair();
-            _mapper = new SkillDayMapper(_mop, new CccTimeZoneInfo(TimeZoneInfo.Utc), intervalLength);
+            _mapper = new SkillDayMapper(_mop, (TimeZoneInfo.Utc), intervalLength);
         }
 
         [Test, SetUICulture("en-GB")]

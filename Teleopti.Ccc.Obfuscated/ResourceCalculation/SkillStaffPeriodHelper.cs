@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             InParameter.NotNull("person", person);
 
             IList<ISkill> returnSkills = new List<ISkill>();
-            ICccTimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
             DateOnly scheduleDay = new DateOnly(TimeZoneHelper.ConvertFromUtc(utcScheduleDate, timeZoneInfo).Date);
             IPersonPeriod personPeriod = person.Period(scheduleDay);
             if (personPeriod == null) 

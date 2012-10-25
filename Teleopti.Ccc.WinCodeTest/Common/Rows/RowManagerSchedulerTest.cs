@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Rows
         [Test] 
         public void VerifyTimeZoneInfo()
         {
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
             using (_mocks.Record())
             {
                 Expect.Call(_schedulerState.TimeZoneInfo).Return(timeZoneInfo);

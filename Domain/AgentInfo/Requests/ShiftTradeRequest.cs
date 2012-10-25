@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             if (_shiftTradeSwapDetails.Count>0)
             {
                 DateOnly minDate = DateOnly.MaxValue, maxDate = DateOnly.MinValue;
-                ICccTimeZoneInfo timeZoneInfo = PersonFrom.PermissionInformation.DefaultTimeZone();
+                TimeZoneInfo timeZoneInfo = PersonFrom.PermissionInformation.DefaultTimeZone();
                 foreach (IShiftTradeSwapDetail shiftTradeSwapDetail in _shiftTradeSwapDetails)
                 {
                     shiftTradeSwapDetail.SetParent(this);

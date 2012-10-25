@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private TimeSpan? _workShiftProjectionContractTime;
         private DateTimePeriod? _workShiftProjectionPeriod;
         private  IVisualLayerCollection _mainshiftProjection;
-        private ICccTimeZoneInfo _localTimeZoneInfo;
+        private TimeZoneInfo _localTimeZoneInfo;
         private DayOfWeek _dayOfWeek;
 
         protected ShiftProjectionCache()
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _workShift = workShift;
         }
 
-        public void SetDate(DateOnly schedulingDate, ICccTimeZoneInfo localTimeZoneInfo)
+        public void SetDate(DateOnly schedulingDate, TimeZoneInfo localTimeZoneInfo)
         {
 
             if (_schedulingDate != schedulingDate || !_localTimeZoneInfo.Equals(localTimeZoneInfo))

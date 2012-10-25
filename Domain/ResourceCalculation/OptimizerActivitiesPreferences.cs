@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _doNotMoveActivities = activities;
         }
 
-        public DateTimePeriod? UtcPeriodFromDateAndTimePeriod(DateOnly dateOnly, ICccTimeZoneInfo timeZoneInfo)
+        public DateTimePeriod? UtcPeriodFromDateAndTimePeriod(DateOnly dateOnly, TimeZoneInfo timeZoneInfo)
         {
             if(!AllowAlterBetween.HasValue)
                 return null;

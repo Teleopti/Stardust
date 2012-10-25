@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             if (scheduleDay == null)
                 throw new ArgumentNullException("scheduleDay");
 
-            ICccTimeZoneInfo timeZoneInfo = scheduleDay.TimeZone;
+            TimeZoneInfo timeZoneInfo = scheduleDay.TimeZone;
             IWorkTimeMinMax minMaxLength = new WorkTimeMinMax();
             IProjectionService projSvc = scheduleDay.ProjectionService();
             var proj = projSvc.CreateProjection();

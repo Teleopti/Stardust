@@ -39,11 +39,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyConstructor()
         {
-            IPermissionInformation permissionInformation = _mockRepository.StrictMock<IPermissionInformation>();
-            ICccTimeZoneInfo timeZoneInfo = _mockRepository.StrictMock<ICccTimeZoneInfo>();
+            var permissionInformation = _mockRepository.StrictMock<IPermissionInformation>();
+            var timeZoneInfo = TimeZoneInfo.Utc;
 
-            DateTimePeriod dateTimePeriod  = new DateTimePeriod(_dateTime, _dateTime.AddDays(1));
-            DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(_startDate, _startDate.AddDays(1));
+            var dateTimePeriod  = new DateTimePeriod(_dateTime, _dateTime.AddDays(1));
+            var dateOnlyPeriod = new DateOnlyPeriod(_startDate, _startDate.AddDays(1));
             
             _mockRepository.BackToRecordAll();
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulePart.Period).Return(dateTimePeriod).Repeat.Once();
             Expect.Call(_person.PermissionInformation).Return(permissionInformation).Repeat.Once();
             Expect.Call(permissionInformation.DefaultTimeZone()).Return(timeZoneInfo).Repeat.Once();
-            Expect.Call(timeZoneInfo.ConvertTimeFromUtc(_dateTime, timeZoneInfo)).Return(_dateTime).Repeat.Once();
+            //Expect.Call(TimeZoneInfo.ConvertTimeFromUtc(_dateTime, timeZoneInfo)).Return(_dateTime).Repeat.Once();
             Expect.Call(_schedulePart.Person).Return(_person).Repeat.Once();
             Expect.Call(_person.VirtualSchedulePeriod(_startDate)).Return(_schedulePeriod).Repeat.Once();
             Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod).Repeat.Once();
@@ -93,11 +93,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyConstructorSchedulePeriod()
         {
-            IPermissionInformation permissionInformation = _mockRepository.StrictMock<IPermissionInformation>();
-            ICccTimeZoneInfo timeZoneInfo = _mockRepository.StrictMock<ICccTimeZoneInfo>();
-            IVirtualSchedulePeriod schedulePeriod = _mockRepository.StrictMock<IVirtualSchedulePeriod>();
+            var permissionInformation = _mockRepository.StrictMock<IPermissionInformation>();
+            var timeZoneInfo = TimeZoneInfo.Utc;
+            var schedulePeriod = _mockRepository.StrictMock<IVirtualSchedulePeriod>();
 
-            DateTimePeriod dateTimePeriod = new DateTimePeriod(_dateTime, _dateTime.AddDays(1));
+            var dateTimePeriod = new DateTimePeriod(_dateTime, _dateTime.AddDays(1));
             //DateOnlyPeriod? dateOnlyPeriod = null;
 
             _mockRepository.BackToRecordAll();
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulePart.Period).Return(dateTimePeriod).Repeat.Once();
             Expect.Call(_person.PermissionInformation).Return(permissionInformation).Repeat.Once();
             Expect.Call(permissionInformation.DefaultTimeZone()).Return(timeZoneInfo).Repeat.Once();
-            Expect.Call(timeZoneInfo.ConvertTimeFromUtc(_dateTime, timeZoneInfo)).Return(_dateTime).Repeat.Once();
+            //Expect.Call(TimeZoneInfo.ConvertTimeFromUtc(_dateTime, timeZoneInfo)).Return(_dateTime).Repeat.Once();
             Expect.Call(_schedulePart.Person).Return(_person).Repeat.Once();
             Expect.Call(_person.VirtualSchedulePeriod(_startDate)).Return(schedulePeriod).Repeat.Once();
             Expect.Call(schedulePeriod.IsValid).Return(false).Repeat.Once().Repeat.Any();
@@ -122,14 +122,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyNotValidSchedulePeriod()
         {
-            DateTime dateTime = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
-            DateOnly dateOnly = new DateOnly(dateTime);
-            IScheduleDay schedulePart = _mockRepository.StrictMock<IScheduleDay>();
-            IPermissionInformation permissionInformation = _mockRepository.StrictMock<IPermissionInformation>();
-            ICccTimeZoneInfo timeZoneInfo = _mockRepository.StrictMock<ICccTimeZoneInfo>();
+            var dateTime = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
+            var dateOnly = new DateOnly(dateTime);
+            var schedulePart = _mockRepository.StrictMock<IScheduleDay>();
+            var permissionInformation = _mockRepository.StrictMock<IPermissionInformation>();
+            var timeZoneInfo = TimeZoneInfo.Utc;
 
 
-            DateTimePeriod dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddDays(1));
+            var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddDays(1));
 
 
             _mockRepository.BackToRecordAll();
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(schedulePart.Period).Return(dateTimePeriod).Repeat.Once();
             Expect.Call(_person.PermissionInformation).Return(permissionInformation).Repeat.Once();
             Expect.Call(permissionInformation.DefaultTimeZone()).Return(timeZoneInfo).Repeat.Once();
-            Expect.Call(timeZoneInfo.ConvertTimeFromUtc(dateTime, timeZoneInfo)).Return(dateTime).Repeat.Once();
+            //Expect.Call(TimeZoneInfo.ConvertTimeFromUtc(dateTime, timeZoneInfo)).Return(dateTime).Repeat.Once();
             Expect.Call(schedulePart.Person).Return(_person).Repeat.Once();
             Expect.Call(_person.VirtualSchedulePeriod(dateOnly)).Return(_schedulePeriod).Repeat.Once();
             Expect.Call(_schedulePeriod.IsValid).Return(false);

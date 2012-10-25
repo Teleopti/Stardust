@@ -29,14 +29,14 @@ namespace Teleopti.Analytics.Etl.Transformer
         {
             DataRow row = table.NewRow();
 
-            ICccTimeZoneInfo cccTimeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+            System.TimeZoneInfo TimeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 
             row["skill_date"] = personPeriod.StartDate.Date;
             row["interval_id"] = -1;
             row["person_code"] = person.Id;
             if (personSkill.Skill.Id != null) row["skill_code"] = personSkill.Skill.Id;
-            row["date_from"] = cccTimeZoneInfo.ConvertTimeToUtc(personPeriod.StartDate.Date);
-            row["date_to"] = cccTimeZoneInfo.ConvertTimeToUtc(personPeriod.EndDate().Date);
+            row["date_from"] = TimeZoneInfo.SafeConvertTimeToUtc(personPeriod.StartDate.Date);
+            row["date_to"] = TimeZoneInfo.SafeConvertTimeToUtc(personPeriod.EndDate().Date);
             row["datasource_id"] = 1;
 
             table.Rows.Add(row);

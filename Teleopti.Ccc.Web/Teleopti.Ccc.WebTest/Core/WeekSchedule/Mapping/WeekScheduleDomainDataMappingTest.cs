@@ -31,14 +31,14 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private IPersonRequestProvider personRequestProvider;
 		private IUserTimeZone userTimeZone;
 		private IPrincipal principalBefore;
-		private ICccTimeZoneInfo timeZone;
+		private TimeZoneInfo timeZone;
 		private IPermissionProvider permissionProvider;
 		private INow now;
 
 		[SetUp]
 		public void Setup()
 		{
-			timeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
+			timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			setPrincipal();
 
 			scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 
-			var localMidnightInUtc = timeZone.ConvertTimeToUtc(date.Date);
+			var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(date.Date);
 
 			var personRequest = new PersonRequest(new Person(),
 			                                      new TextRequest(
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var scheduleDay = new StubFactory().ScheduleDayStub(date);
 
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-			var localMidnightInUtc = timeZone.ConvertTimeToUtc(date.Date);
+			var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(date.Date);
 			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(8), localMidnightInUtc.AddHours(17));
 
 			var layer = new StubFactory().VisualLayerStub();
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
             var scheduleDay = new StubFactory().ScheduleDayStub(date);
 
             userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-            var localMidnightInUtc = timeZone.ConvertTimeToUtc(date.Date);
+            var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(date.Date);
             var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
 
             var layer = new StubFactory().VisualLayerStub();
@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
             var scheduleDay = new StubFactory().ScheduleDayStub(firstDayOfWeek.AddDays(-1).Date);   
 
             userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-            var localMidnightInUtc = timeZone.ConvertTimeToUtc(firstDayOfWeek.AddDays(-1).Date);
+            var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(firstDayOfWeek.AddDays(-1).Date);
             var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
 
             var layer = new StubFactory().VisualLayerStub();
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
             var scheduleDay = new StubFactory().ScheduleDayStub(lastDayOfWeek.Date);
 
             userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-            var localMidnightInUtc = timeZone.ConvertTimeToUtc(lastDayOfWeek.Date);
+            var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(lastDayOfWeek.Date);
             var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
 
             var layer = new StubFactory().VisualLayerStub();
@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var scheduleDay = new StubFactory().ScheduleDayStub(lastDayOfWeek.Date);
 
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-			var localMidnightInUtc = timeZone.ConvertTimeToUtc(lastDayOfWeek.Date);
+			var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(lastDayOfWeek.Date);
 			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
 
 			var layer = new StubFactory().VisualLayerStub();
@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var scheduleDay = new StubFactory().ScheduleDayStub(lastDayOfWeek.Date);
 
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-			var localMidnightInUtc = timeZone.ConvertTimeToUtc(lastDayOfWeek.Date);
+			var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(lastDayOfWeek.Date);
 			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
 
 			var layer = new StubFactory().VisualLayerStub();

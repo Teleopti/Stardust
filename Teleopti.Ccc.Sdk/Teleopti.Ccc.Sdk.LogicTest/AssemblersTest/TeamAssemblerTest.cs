@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             _teamDomain.SetId(Guid.NewGuid());
 
             // Create Dto object
-            _teamDto = new TeamDto(_teamDomain);
+			_teamDto = new TeamDto { Description = _teamDomain.Description.Name, Id = _teamDomain.Id};
         }
 
         [Test]

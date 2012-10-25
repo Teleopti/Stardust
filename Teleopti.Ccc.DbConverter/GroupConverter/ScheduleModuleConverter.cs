@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
 
         public ScheduleModuleConverter(MappedObjectPair mappedObjectPair, 
             DateTimePeriod period,
-            ICccTimeZoneInfo timeZoneInfo, string connectionString)
+            TimeZoneInfo timeZoneInfo, string connectionString)
             : base(mappedObjectPair, period, timeZoneInfo)
         {
                

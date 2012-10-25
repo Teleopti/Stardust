@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
             _targetScenario = _mocks.StrictMock<IScenario>();
             _selectedSkill = _mocks.StrictMock<ISkill>();
-			_targetStateHolder = new SchedulerStateHolder(_targetScenario, new DateOnlyPeriodAsDateTimePeriod(_targetPeriod, CccTimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople);
+			_targetStateHolder = new SchedulerStateHolder(_targetScenario, new DateOnlyPeriodAsDateTimePeriod(_targetPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople);
         	_lazyManager = _mocks.DynamicMock<ILazyLoadingManager>();
         }
 
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _mocks.ReplayAll();
 
             var scheduleDateTimePeriod =
-                new ScheduleDateTimePeriod(_targetPeriod.ToDateTimePeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo()));
+                new ScheduleDateTimePeriod(_targetPeriod.ToDateTimePeriod(TimeZoneInfoFactory.UtcTimeZoneInfo()));
             _targetStateLoader.LoadSchedules(scheduleDateTimePeriod);
             _targetStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
             _targetStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, uow, new BackgroundWorker(), new List<ISkill> { _selectedSkill });
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             var skillType = _mocks.StrictMock<ISkillType>();
             IActivity activity = ActivityFactory.CreateActivity("testact");
-            Expect.Call(skill.TimeZone).Return(new CccTimeZoneInfo(TimeZoneInfo.Utc)).Repeat.Any();
+            Expect.Call(skill.TimeZone).Return((TimeZoneInfo.Utc)).Repeat.Any();
             Expect.Call(skill.DefaultResolution).Return(15).Repeat.Any();
             Expect.Call(skill.Activity).Return(activity).Repeat.Any();
             Expect.Call(skill.SkillType).Return(skillType).Repeat.Any();

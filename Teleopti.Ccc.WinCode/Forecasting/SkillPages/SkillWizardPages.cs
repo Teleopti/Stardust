@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.SkillPages
             newSkill.Activity = null;
             var culture = TeleoptiPrincipal.Current.Regional.Culture;
             ServiceAgreement serviceAgreement = ServiceAgreement.DefaultValues();
-            DateTime startDateUtc = newSkill.TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate, newSkill.TimeZone);
+            DateTime startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, newSkill.TimeZone);
             DateTimePeriod timePeriod = new DateTimePeriod(
                 startDateUtc, startDateUtc.AddDays(1)).MovePeriod(newSkill.MidnightBreakOffset);
             TemplateSkillDataPeriod templateSkillDataPeriod = new TemplateSkillDataPeriod(serviceAgreement, new SkillPersonData(), timePeriod);

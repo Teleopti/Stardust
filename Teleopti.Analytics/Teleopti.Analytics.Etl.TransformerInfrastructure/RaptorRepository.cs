@@ -1078,7 +1078,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 				ISkillDayRepository skillDayRepository = new SkillDayRepository(uow);
 				IMultisiteDayRepository multisiteDayRepository = new MultisiteDayRepository(uow);
-				IDictionary<ISkill, IList<ISkillDay>> skillDays = new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository).LoadSchedulerSkillDays(period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc)),
+				IDictionary<ISkill, IList<ISkillDay>> skillDays = new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository).LoadSchedulerSkillDays(period.ToDateOnlyPeriod(TimeZoneInfo.Utc),
 																										   skills,
 																										   scenario);
 				foreach (KeyValuePair<ISkill, IList<ISkillDay>> keyValuePair in skillDays)

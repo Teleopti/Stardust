@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					_activityRepository.LoadAll();
 				}
 
-				var timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId));
+				var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId);
 				person = _personRepository.Load(personDto.Id.Value);
 
 				if (person.PermissionInformation.Culture() == null && personDto.CultureLanguageId.HasValue)

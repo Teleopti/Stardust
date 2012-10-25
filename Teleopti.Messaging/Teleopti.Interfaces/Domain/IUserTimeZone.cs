@@ -1,7 +1,9 @@
+using System;
+
 namespace Teleopti.Interfaces.Domain
 {
 	/// <summary>
-	/// Returns logged on user's <see cref="ICccTimeZoneInfo"/>.
+	/// Returns logged on user's <see cref="TimeZoneInfo"/>.
 	/// </summary>
 	public interface IUserTimeZone
 	{
@@ -9,6 +11,6 @@ namespace Teleopti.Interfaces.Domain
 		/// Gets the time zone
 		/// </summary>
 		/// <returns></returns>
-		ICccTimeZoneInfo TimeZone();
+		TimeZoneInfo TimeZone();
 	}
 }

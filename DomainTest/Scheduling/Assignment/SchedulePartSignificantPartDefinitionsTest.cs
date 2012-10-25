@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyHasDayOffDefinition()
         {
             //Definition: PersonDayOffCollection > 0
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             IList<IPersonDayOff> pDayOffs = new List<IPersonDayOff>
                                                 {
                                                     new PersonDayOff(_person, _scenario, new DayOff(),

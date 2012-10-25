@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			return false;
 		}
 
-		public ICccTimeZoneInfo TimeZone
+		public TimeZoneInfo TimeZone
 		{
 			get { return _personRequestViewModel.PersonRequest.Request.PersonFrom.PermissionInformation.DefaultTimeZone(); }
 		}

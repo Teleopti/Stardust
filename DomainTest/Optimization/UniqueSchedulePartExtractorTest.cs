@@ -67,14 +67,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private void setupPersons()
         {
             _person1 = PersonFactory.CreatePerson();
-            _person1.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _person1.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
             ISchedulePeriod schedulePeriod = new SchedulePeriod(new DateOnly(2009, 12, 31), SchedulePeriodType.Day, 2);
             _person1.AddSchedulePeriod(schedulePeriod);
             schedulePeriod = new SchedulePeriod(new DateOnly(2010, 1, 4), SchedulePeriodType.Day, 7);
             _person1.AddSchedulePeriod(schedulePeriod);
 
             _person2 = PersonFactory.CreatePerson();
-            _person2.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _person2.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
             schedulePeriod = new SchedulePeriod(new DateOnly(2009, 12, 1), SchedulePeriodType.Month, 1);
             _person2.AddSchedulePeriod(schedulePeriod);
 
@@ -86,12 +86,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private void setupPersons2()
         {
             _person1 = PersonFactory.CreatePerson();
-            _person1.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _person1.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
             ISchedulePeriod schedulePeriod = new SchedulePeriod(new DateOnly(2010, 1, 4), SchedulePeriodType.Day, 7);
             _person1.AddSchedulePeriod(schedulePeriod);
 
             _person2 = PersonFactory.CreatePerson();
-            _person2.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _person2.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
             schedulePeriod = new SchedulePeriod(new DateOnly(2009, 12, 1), SchedulePeriodType.Month, 1);
             _person2.AddSchedulePeriod(schedulePeriod);
             IPersonContract personContract = PersonContractFactory.CreateFulltimePersonContractWithWorkingWeekContractSchedule();

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		private IPersonAssignment personAssignmentDest;
 		private IScheduleDictionary dic;
 		private MockRepository _mocks;
-		private ICccTimeZoneInfo timeZoneInfo;
+		private TimeZoneInfo timeZoneInfo;
 		private IDictionary<IPerson, IScheduleRange> underlyingDictionary;
 		private INote _note;
 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_mocks = new MockRepository();
 			range = _mocks.StrictMock<IScheduleRange>();
 			rangePeriod = new DateTimePeriod(2000, 1, 1, 2001, 6, 1);
-			timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+			timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
 			parameters =
 				new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), PersonFactory.CreatePerson(), new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			scenario = parameters.Scenario;
@@ -968,7 +968,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(2, source.PersistableScheduleDataCollection().Count());
 			source.DeleteAbsence(false);
 			Assert.AreEqual(1, source.PersistableScheduleDataCollection().Count());
-			Assert.AreEqual(personAbsence1, source.PersonAbsenceCollection()[0]);
+		    var a = source.PersonAbsenceCollection()[0];
+			Assert.AreEqual(personAbsence1, a);
 		}
 
 		[Test]
@@ -1072,7 +1073,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyMergeAbsenceDaylightSaving()
 		{
 			IPerson person = PersonFactory.CreatePerson();
-			person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 			DateOnly date = new DateOnly(2010,3,22);
 			//source
 			DateTime dateTimeSourceStart = new DateTime(2010,3,22,8,0,0,DateTimeKind.Utc);
@@ -1111,7 +1112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IPerson person = PersonFactory.CreatePerson();
 
 			//paste from wintertime to wintertime("W. Europe Standard Time")
-			person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"))); 
+			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"))); 
 			expectedDiff = new TimeSpan(2, 0, 0, 0);
 			var testSource = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2010, 3, 23));
 			var testDestination = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2010, 3, 25));
@@ -1403,13 +1404,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyCopyPasteToAnotherTimeZoneChangesDateOnlyAsPeriod()
         {
             IPerson sourcePerson = PersonFactory.CreatePerson();
-            sourcePerson.PermissionInformation.SetDefaultTimeZone(CccTimeZoneInfoFactory.HawaiiTimeZoneInfo());
+            sourcePerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
 
             IPerson targetPersonInSameTimezone = PersonFactory.CreatePerson();
-            targetPersonInSameTimezone.PermissionInformation.SetDefaultTimeZone(CccTimeZoneInfoFactory.HawaiiTimeZoneInfo());
+            targetPersonInSameTimezone.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
 
             IPerson targetPersonInDifferentTimezone = PersonFactory.CreatePerson();
-            targetPersonInDifferentTimezone.PermissionInformation.SetDefaultTimeZone(CccTimeZoneInfoFactory.SingaporeTimeZoneInfo());
+            targetPersonInDifferentTimezone.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.SingaporeTimeZoneInfo());
 
             DateOnly day = new DateOnly(2011, 02, 10);
             DateTime start = new DateTime(2011, 2, 10, 16, 0, 0, 0, DateTimeKind.Utc);
@@ -1441,13 +1442,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyMergingWithAnotherTimeZoneNotChangesDateOnlyAsPeriod()
         {
             IPerson sourcePerson = PersonFactory.CreatePerson();
-            sourcePerson.PermissionInformation.SetDefaultTimeZone(CccTimeZoneInfoFactory.HawaiiTimeZoneInfo());
+            sourcePerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
 
             IPerson targetPersonInSameTimezone = PersonFactory.CreatePerson();
-            targetPersonInSameTimezone.PermissionInformation.SetDefaultTimeZone(CccTimeZoneInfoFactory.HawaiiTimeZoneInfo());
+            targetPersonInSameTimezone.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
 
             IPerson targetPersonInDifferentTimezone = PersonFactory.CreatePerson();
-            targetPersonInDifferentTimezone.PermissionInformation.SetDefaultTimeZone(CccTimeZoneInfoFactory.SingaporeTimeZoneInfo());
+            targetPersonInDifferentTimezone.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.SingaporeTimeZoneInfo());
 
             DateOnly day = new DateOnly(2011, 02, 10);
             DateTime start = new DateTime(2011, 2, 10, 16, 0, 0, 0, DateTimeKind.Utc);

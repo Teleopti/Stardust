@@ -1,5 +1,4 @@
 ﻿using System.Runtime.Serialization;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 {
@@ -36,8 +35,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 
 		/// <summary>
 		/// Used if normal projection is not wanted.
-		/// <see cref="IProjectionMerger" />
-        /// If set to "midnightSplit" or "excludeAbsencesMidnightSplit" it will be used as <see cref="IProjectionMerger"/>.
+        /// If set to "midnightSplit" or "excludeAbsencesMidnightSplit" it will be used as something/>.
 		/// 
 		/// All other values use Teleopti.Ccc.Domain.Scheduling.Assignment.ProjectionPayloadMerger
 		/// to build projection.

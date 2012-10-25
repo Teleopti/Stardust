@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private TimeSpan? _calculatedTargettTimeHolder;
         private int? _calculatedTargetScheduleDaysOff;
         private int? _calculatedScheduleDaysOff;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private ICollection<DateOnly> _availableDates;
         private IEnumerable<DateOnlyPeriod> _availablePeriods;
         private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
@@ -316,7 +316,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			set { _calculatedTargetScheduleDaysOff = value; }
 		}
 
-        public ICccTimeZoneInfo TimeZone
+        public TimeZoneInfo TimeZone
         {
             get
             {
@@ -426,7 +426,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (_shiftCategoryFairnessHolder == null)
             {
                 ShiftCategoryFairnessCreator creator = new ShiftCategoryFairnessCreator();
-                ICccTimeZoneInfo timeZoneInfo = this.Person.PermissionInformation.DefaultTimeZone();
+                TimeZoneInfo timeZoneInfo = this.Person.PermissionInformation.DefaultTimeZone();
                 DateOnlyPeriod period = VisiblePeriodMinusFourWeeksPeriod().ToDateOnlyPeriod(timeZoneInfo);
                 _shiftCategoryFairnessHolder = creator.CreatePersonShiftCategoryFairness(this, period);
             }

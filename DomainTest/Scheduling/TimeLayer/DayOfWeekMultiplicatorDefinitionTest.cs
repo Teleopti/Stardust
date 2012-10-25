@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         private DayOfWeekMultiplicatorDefinition _target;
         private Multiplicator _multiplicator;
         private TimePeriod _tp;
-        private ICccTimeZoneInfo _tzInfo;
+        private TimeZoneInfo _tzInfo;
 
 
         [SetUp]
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             _multiplicator = new Multiplicator(MultiplicatorType.OBTime);
             _multiplicator.MultiplicatorValue = 3.5;
             _tp = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9));
-            _tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+            _tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
             _target = new DayOfWeekMultiplicatorDefinition(_multiplicator, DayOfWeek.Monday, _tp);
         }
 

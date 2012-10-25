@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void CanMapSite6XAndShrinkName()
         {
             string oldName = "12345678901234567890123456789012345678901234567890123456789012345678901234567890";
-            SiteMapper map = new SiteMapper(new MappedObjectPair(), new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            SiteMapper map = new SiteMapper(new MappedObjectPair(), (TimeZoneInfo.Utc));
             global::Domain.Unit old = new global::Domain.Unit(-1, oldName, false, false, null, null, false);
             ISite newSite = map.Map(old);
             Assert.AreEqual(50, newSite.Description.Name.Length);
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void CanMapWithZeroLengthName()
         {
             string oldName = "";
-            SiteMapper map = new SiteMapper(new MappedObjectPair(), new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            SiteMapper map = new SiteMapper(new MappedObjectPair(), (TimeZoneInfo.Utc));
             global::Domain.Unit old = new global::Domain.Unit(-1, oldName, false, false, null, null, false);
             ISite newSite = map.Map(old);
             Assert.Greater(newSite.Description.Name.Length,0);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void DoNotMapUnitWithAllUnitProperty()
         {
             _oldName = "abc";
-            SiteMapper map = new SiteMapper(new MappedObjectPair(), new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            SiteMapper map = new SiteMapper(new MappedObjectPair(), (TimeZoneInfo.Utc));
             global::Domain.Unit old = new global::Domain.Unit(-1, _oldName, true, false, null, null, false);
             ISite newSite = map.Map(old);
             Assert.IsNull(newSite);

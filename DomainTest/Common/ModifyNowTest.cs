@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void ShouldReturnFixedDate()
 		{
 			var date = new DateTime(2000, 1, 1, 2, 3, 4);
-			var cccTimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+			var cccTimeZone = (TimeZoneInfo.Local);
 			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			userTimeZone.Expect(mock => mock.TimeZone()).Return(cccTimeZone);
 			var target = new Now(() => userTimeZone);

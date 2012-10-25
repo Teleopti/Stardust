@@ -21,12 +21,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
         private IPerson _p1;
         private IPerson _p2;
         private DateOnly _dt;
-        private ICccTimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
 
         [SetUp]
         public void Setup()
         {
-            _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             IList<IPerson> data = new List<IPerson>();
             _p1 = PersonFactory.CreatePerson("Kalle", "Kula");
             _p1.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo);

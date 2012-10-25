@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using SignalR.Client;
 using SignalR.Client.Hubs;
-using SignalR.Client.Net20.Infrastructure;
 using SignalR.Client.Transports;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
@@ -30,7 +31,7 @@ namespace Teleopti.Messaging.SignalR
 			_hubConnection = hubConnection;
 		}
 
-		public Task<object> NotifyClients(Notification notification)
+		public Task NotifyClients(Notification notification)
 		{
 			if (verifyStillConnected())
 			{
@@ -39,7 +40,7 @@ namespace Teleopti.Messaging.SignalR
 			return emptyTask();
 		}
 
-		public Task<object> NotifyClients(IEnumerable<Notification> notifications)
+		public Task NotifyClients(IEnumerable<Notification> notifications)
 		{
 			if (verifyStillConnected())
 			{
@@ -79,8 +80,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartListening()
 		{
-			var subscription = _hubProxy.Subscribe(EventName);
-			subscription.Data += subscription_Data;
+			_hubProxy.Subscribe(EventName).Data += subscription_Data;
 
 			startHubConnection();
 			_hubProxy.Subscribe(EventName);
@@ -91,28 +91,36 @@ namespace Teleopti.Messaging.SignalR
 		{
 			try
 			{
-				var resetEvent = new ManualResetEvent(false);
-				Exception startException = null;
-				_hubConnection.Start(new LongPollingTransport()).ContinueWith(t =>
+				Exception exception = null;
+				var startTask = _hubConnection.Start(new LongPollingTransport());
+				startTask.ContinueWith(t =>
+				                       	{
+				                       		if (t.IsFaulted && t.Exception != null)
+				                       		{
+				                       			exception = t.Exception.GetBaseException();
+				                       		}
+				                       	}, TaskContinuationOptions.OnlyOnFaulted);
+				
+				if (!startTask.Wait(TimeSpan.FromSeconds(10)))
 				{
-					if (t.IsFaulted)
-					{
-						startException = t.Exception;
-					}
-					resetEvent.Set();
-				});
-				if (resetEvent.WaitOne()==false)
-				{
-					throw new InvalidOperationException("Time out occurred upon startup of Message Broker.");
+					exception = new InvalidOperationException("Could not start within given time limit.");
 				}
-				if (startException!=null)
+				if (exception!=null)
 				{
-					throw startException;
+					throw exception;
 				}
+			}
+			catch (AggregateException aggregateException)
+			{
+				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", aggregateException);
+			}
+			catch (SocketException socketException)
+			{
+				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", socketException);
 			}
 			catch (InvalidOperationException exception)
 			{
-				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.",exception);
+				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", exception);
 			}
 		}
 
@@ -131,7 +139,7 @@ namespace Teleopti.Messaging.SignalR
 			((Action<Notification>)ar.AsyncState).EndInvoke(ar);
 		}
 
-		public Task<object> AddSubscription(Subscription subscription)
+		public Task AddSubscription(Subscription subscription)
 		{
 			if (verifyStillConnected())
 			{
@@ -140,14 +148,14 @@ namespace Teleopti.Messaging.SignalR
 			return emptyTask();
 		}
 
-		private static Task<object> emptyTask()
+		private static Task emptyTask()
 		{
-			var task = new Task<object>();
-			task.OnFinished(null, null);
-			return task;
+			var tcs = new TaskCompletionSource<object>();
+			tcs.SetResult(null);
+			return tcs.Task;
 		}
 
-		public Task<object> RemoveSubscription(string route)
+		public Task RemoveSubscription(string route)
 		{
 			if (verifyStillConnected())
 			{
@@ -167,20 +175,10 @@ namespace Teleopti.Messaging.SignalR
 					var subscriptionList = new List<string>(proxy.GetSubscriptions());
 					if (subscriptionList.Contains(EventName))
 					{
-						var subscription = _hubProxy.Subscribe(EventName);
-						subscription.Data -= subscription_Data;
+						_hubProxy.Subscribe(EventName).Data -= subscription_Data;
 					}
 
-					ThreadPool.QueueUserWorkItem(state =>
-					                             	{
-					                             		try
-					                             		{
-															_hubConnection.Stop();
-					                             		}
-					                             		catch (Exception)
-					                             		{
-					                             		}
-					                             	});
+					_hubConnection.Stop();
 				}
 				catch (Exception)
 				{

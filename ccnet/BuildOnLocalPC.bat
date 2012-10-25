@@ -15,10 +15,7 @@ ECHO %CCNetWorkingDirectory%
 
 ::Standard build
 ::Select build type
-CHOICE /C wn /M "Do you want to include (w)eb-test or run (n)ot"
-IF ERRORLEVEL 1 SET CCNetProject=RaptorMain
-IF ERRORLEVEL 2 SET CCNetProject=ThisIsDummyName
-ECHO.
+SET CCNetProject=RaptorMain
 
 ::Run Build
 ECHO "%MSBUILD%" /nologo /p:Configuration=Debug "%CCNetWorkingDirectory%\%MsbuildProjRaptor2%"

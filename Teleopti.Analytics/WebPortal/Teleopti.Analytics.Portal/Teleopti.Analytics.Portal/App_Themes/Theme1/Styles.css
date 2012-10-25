@@ -68,6 +68,7 @@ body
 	/*background-image: url(images/gridheaditem_bg.gif);
 	background-color:  #6e92a4;*/
 	background-color:  #96bacc;
+	border-bottom: solid 1px #6e92a4;
 	height: 22px;
 }   
     #Reports_HeaderPanel .Caption 

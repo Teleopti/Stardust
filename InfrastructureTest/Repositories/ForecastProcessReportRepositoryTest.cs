@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             skill = new Skill("SkillName", "xxx", Color.DodgerBlue, 15, skillType);
             skill.Activity = activity;
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
             skill.TimeZone = timeZoneInfo;
             PersistAndRemoveFromUnitOfWork(skill);
 

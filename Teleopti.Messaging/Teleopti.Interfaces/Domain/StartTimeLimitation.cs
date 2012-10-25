@@ -214,7 +214,12 @@ namespace Teleopti.Interfaces.Domain
         {
             if (string.IsNullOrEmpty(value)) return null;
             TimeSpan timeSpan;
-            if (TimeHelper.TryParse(value, out timeSpan)) return timeSpan;
+            if (TimeHelper.TryParse(value, out timeSpan))
+            {
+				verifyTimes(timeSpan, null);
+				return timeSpan;
+            }
+				
             throw new ArgumentOutOfRangeException("value", value, "The string can not be converted to a TimeSpan");
         }
 

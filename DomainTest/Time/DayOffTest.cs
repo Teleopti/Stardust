@@ -173,14 +173,14 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyLocalAnchorWorks()
         {
-            TimeSpan duration = new TimeSpan(4, 0, 0);
+            var duration = new TimeSpan(4, 0, 0);
             //Percent flexibility = new Percent(0.10d);
-			DayOff per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode);
-            ICccTimeZoneInfo cccTimeZoneInfo =
-                new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            DateTime expectedLocalAnchor = TimeZoneHelper.ConvertFromUtc(anchor, cccTimeZoneInfo);// StateHolder.Instance.StateReader.SessionScopeData.TimeZone.ConvertTimeFromUtc(anchor, StateHolder.Instance.StateReader.SessionScopeData.TimeZone);
+			var per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode);
+            var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+            var expectedLocalAnchor = TimeZoneInfo.ConvertTimeFromUtc(anchor, timeZoneInfo);
+            // StateHolder.Instance.StateReader.SessionScopeData.TimeZone.ConvertTimeFromUtc(anchor, StateHolder.Instance.StateReader.SessionScopeData.TimeZone);
 
-            Assert.AreEqual(expectedLocalAnchor, per.AnchorLocal(cccTimeZoneInfo));
+            Assert.AreEqual(expectedLocalAnchor, per.AnchorLocal(timeZoneInfo));
         }
 
         /// <summary>

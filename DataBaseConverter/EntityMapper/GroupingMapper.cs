@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using System;
+using Domain;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// </summary>
         /// <param name="mappedObjectPair">The mapped object pair.</param>
         /// <param name="timeZone">The time zone.</param>
-        public GroupingMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
+        public GroupingMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
         {
         }
 

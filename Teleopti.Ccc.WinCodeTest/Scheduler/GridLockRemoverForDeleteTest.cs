@@ -142,8 +142,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_dateOnlyAsDateTimePeriod2.DateOnly).Return(new DateOnly(2011, 1, 2)).Repeat.Any();
             Expect.Call(_day1.Period).Return(_period1).Repeat.Any();
             Expect.Call(_day2.Period).Return(_period2).Repeat.Any();
-            Expect.Call(_day1.TimeZone).Return(CccTimeZoneInfoFactory.UtcTimeZoneInfo()).Repeat.Any();
-            Expect.Call(_day2.TimeZone).Return(CccTimeZoneInfoFactory.UtcTimeZoneInfo()).Repeat.Any();
+            Expect.Call(_day1.TimeZone).Return(TimeZoneInfoFactory.UtcTimeZoneInfo()).Repeat.Any();
+            Expect.Call(_day2.TimeZone).Return(TimeZoneInfoFactory.UtcTimeZoneInfo()).Repeat.Any();
             Expect.Call(_dateOnlyAsDateTimePeriod1.Period()).Return(_period1).Repeat.Any();
             Expect.Call(_dateOnlyAsDateTimePeriod2.Period()).Return(_period2).Repeat.Any();
         }

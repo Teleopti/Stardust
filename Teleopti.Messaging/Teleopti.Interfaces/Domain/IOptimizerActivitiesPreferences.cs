@@ -49,6 +49,6 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="dateOnly">The date only.</param>
         /// <param name="timeZoneInfo">The timezone info.</param>
         /// <returns></returns>
-        DateTimePeriod? UtcPeriodFromDateAndTimePeriod(DateOnly dateOnly, ICccTimeZoneInfo timeZoneInfo);
+        DateTimePeriod? UtcPeriodFromDateAndTimePeriod(DateOnly dateOnly, TimeZoneInfo timeZoneInfo);
     }
 }

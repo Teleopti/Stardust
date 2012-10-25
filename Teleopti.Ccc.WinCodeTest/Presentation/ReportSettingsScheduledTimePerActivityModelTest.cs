@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Time;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
             IScenario scenario = new Scenario("scenario");
             DateOnlyPeriod period = new DateOnlyPeriod();
             IList<IPerson> persons = new List<IPerson>();
-            ICccTimeZoneInfo timeZone = new CccTimeZoneInfo();
+            TimeZoneInfo timeZone = TimeZoneInfo.Local;
             IList<IActivity> activities = new List<IActivity>();
 
             _target.Scenario = scenario;

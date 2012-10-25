@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             _oldRuleSetBag.AddWorkShiftRuleSet(_workShiftRuleSet);
             MappedObjectPair mappedObjectPair = new MappedObjectPair();
             mappedObjectPair.RuleSetBag = new ObjectPairCollection<UnitEmploymentType, IRuleSetBag>();
-            _ruleSetBagMapper = new RuleSetBagMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _ruleSetBagMapper = new RuleSetBagMapper(mappedObjectPair, (TimeZoneInfo.Utc));
         }
 
         [Test]
         public void CanCreateMapper()
         {
-            _ruleSetBagMapper = new RuleSetBagMapper(new MappedObjectPair(), new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _ruleSetBagMapper = new RuleSetBagMapper(new MappedObjectPair(), (TimeZoneInfo.Utc));
             Assert.IsNotNull(_ruleSetBagMapper);
         }
 

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Security;
 using System.Security.Permissions;
 using System.Threading;
 using System.Windows.Forms;
@@ -184,7 +185,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             RefilterOnTracker();
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             const int WM_KEYDOWN = 0x100;

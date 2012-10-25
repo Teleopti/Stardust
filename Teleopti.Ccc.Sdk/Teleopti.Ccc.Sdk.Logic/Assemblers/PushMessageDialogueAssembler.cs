@@ -24,14 +24,14 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             }
             dto.IsReplied = entity.IsReplied;
             dto.Receiver = PersonAssembler.DomainEntityToDto(entity.Receiver);
-            ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(dto.Receiver.TimeZoneId));
+            TimeZoneInfo TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(dto.Receiver.TimeZoneId);
             int cultureId = CultureInfo.CurrentCulture.LCID;
             if (dto.Receiver.CultureLanguageId.HasValue)
                 cultureId = dto.Receiver.CultureLanguageId.Value;
             dto.OriginalDate = "";
             CultureInfo c = new CultureInfo(cultureId);
             if (entity.CreatedOn != null)
-                dto.OriginalDate = TimeZoneHelper.ConvertFromUtc((DateTime)entity.CreatedOn, cccTimeZoneInfo).ToString(c);
+                dto.OriginalDate = TimeZoneHelper.ConvertFromUtc((DateTime)entity.CreatedOn, TimeZoneInfo).ToString(c);
             dto.Message = entity.Message;
 
             return dto;

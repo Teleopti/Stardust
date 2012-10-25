@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             //var pushMessageDialogue = (PushMessageDialogue)((DialogueMessage)reply).Parent;
             ////Reciver...
             //IPerson receiver = pushMessageDialogue.Receiver;
-            //ICccTimeZoneInfo cccTimeZoneInfo = receiver.PermissionInformation.DefaultTimeZone();
-            //CreatedOn = TimeZoneHelper.ConvertFromUtc(reply.Created, cccTimeZoneInfo).ToShortDateString();
+            //TimeZoneInfo TimeZoneInfo = receiver.PermissionInformation.DefaultTimeZone();
+            //CreatedOn = TimeZoneHelper.ConvertFromUtc(reply.Created, TimeZoneInfo).ToShortDateString();
             dto.CreatedOn = reply.Created.ToString(CultureInfo.CurrentCulture);
         }
     }

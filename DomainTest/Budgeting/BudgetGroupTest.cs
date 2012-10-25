@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
         public void Properties()
         {
             const string description = "budget";
-            var timezone = new CccTimeZoneInfo(TimeZoneInfo.GetSystemTimeZones()[1]);
+            var timezone = (TimeZoneInfo.GetSystemTimeZones()[1]);
             
             target.Name = description;
             target.TimeZone = timezone;

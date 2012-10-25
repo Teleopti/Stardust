@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Xaml;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Teleopti.Ccc.WinCode.Common.CustomPanels.Grouping

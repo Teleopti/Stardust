@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var startTime = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(Date);
+			var startTime = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(Date);
 			var endTime = startTime.AddHours(24);
 			var period = new DateTimePeriod(startTime, endTime);
 

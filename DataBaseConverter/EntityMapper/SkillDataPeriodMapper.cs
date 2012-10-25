@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created date: 2007-11-02
         /// </remarks>
         public SkillDataPeriodMapper(MappedObjectPair mappedObjectPair,
-                                ICccTimeZoneInfo timeZone,
+                                TimeZoneInfo timeZone,
                                 DateTime dateTime,
                                 int intervalLength)
             : base(mappedObjectPair, timeZone)

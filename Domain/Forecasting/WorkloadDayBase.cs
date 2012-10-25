@@ -1567,7 +1567,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             TemplateTaskPeriod taskPeriod = (TemplateTaskPeriod)periodized;
             if (taskPeriod.LocalPeriodCache == null)
             {
-                ICccTimeZoneInfo timeZone = Workload.Skill.TimeZone;
+                TimeZoneInfo timeZone = Workload.Skill.TimeZone;
                 DateTime localStart = periodized.Period.StartDateTimeLocal(timeZone);
                 DateTime localEnd = periodized.Period.EndDateTimeLocal(timeZone);
                 if (timeZone.IsAmbiguousTime(localStart) &&

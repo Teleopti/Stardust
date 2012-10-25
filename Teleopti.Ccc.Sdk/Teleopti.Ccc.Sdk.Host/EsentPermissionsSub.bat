@@ -17,6 +17,7 @@
 :: 2012-01-10	AF		#17583 - Need to give disk perm to IIS APPPOOL\Teleopti ASP.NET v3.5
 :: 2012-02-16	DJ		#18290 - Adding some EHCO fro output from batch file
 :: 2012-05-14	DJ		possible bug where we now use quotes as input from Wise
+:: 2012-10-23	DJ		Change AppPool name as part of .net
 :: =============================================
 SET WindowsNT=%~1
 SET SPLevel=%~2
@@ -58,7 +59,7 @@ SET WinXP=501
 SET Win2003=502
 SET IIS6=6
 SET IIS7=7
-SET IIS7PoolUser=IIS APPPOOL\Teleopti ASP.NET v3.5
+SET IIS7PoolUser=IIS APPPOOL\Teleopti ASP.NET v4.0
 SET IIS6PoolUser=NT AUTHORITY\Network Service
 SET IIS5PoolUser=IUSR_%COMPUTERNAME%
 

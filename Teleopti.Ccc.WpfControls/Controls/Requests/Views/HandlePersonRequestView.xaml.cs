@@ -22,15 +22,15 @@ namespace Teleopti.Ccc.WpfControls.Controls.Requests.Views
         //Sorry Hank, had to put all this shit here to make this expand/collapse thing work Teleopti style
         private void Expander_Expanded(object sender, RoutedEventArgs e)
         {
-            requestGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.VisibleWhenSelected;
+            requestGrid.RowDetailsVisibilityMode = Microsoft.Windows.Controls.DataGridRowDetailsVisibilityMode.VisibleWhenSelected;
         }
 
         private void Expander_Collapsed(object sender, RoutedEventArgs e)
         {
-            requestGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.Collapsed;
+            requestGrid.RowDetailsVisibilityMode = Microsoft.Windows.Controls.DataGridRowDetailsVisibilityMode.Collapsed;
         }
 
-        private void requestGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        private void requestGrid_SelectedCellsChanged(object sender, Microsoft.Windows.Controls.SelectedCellsChangedEventArgs e)
         {
             var dataContext = requestGrid.DataContext as HandlePersonRequestViewModel;
             var selectedItems = 0;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Requests.Views
                         i++;
                     }
                 }
-            requestGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.Collapsed;
+            requestGrid.RowDetailsVisibilityMode = Microsoft.Windows.Controls.DataGridRowDetailsVisibilityMode.Collapsed;
         }
 
         private void Expander_LostFocus(object sender, RoutedEventArgs e)

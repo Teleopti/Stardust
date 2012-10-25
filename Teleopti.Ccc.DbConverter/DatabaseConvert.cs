@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DBConverter
             _init.CreateOldDomainAndLogOn(new StateOldVersion(), argument.SourceServer, argument.SourceDatabase, 30);
         }
 
-        public void StartConverter(DateTime fromDate, DateTime toDate, ICccTimeZoneInfo timeZone, DefaultAggregateRoot defaultAggregateRoot, int defaultResolution)
+        public void StartConverter(DateTime fromDate, DateTime toDate, TimeZoneInfo timeZone, DefaultAggregateRoot defaultAggregateRoot, int defaultResolution)
         {
             converterClient = new DatabaseConverterClient(fromDate, toDate, defaultAggregateRoot, timeZone, _argument.SourceConnectionString, defaultResolution);
             converterClient.StatusChanged += converter_StatusChanged;
@@ -54,14 +54,14 @@ namespace Teleopti.Ccc.DBConverter
         public void MergeToResolution(
             DateTime fromDate, 
             DateTime toDate, 
-            ICccTimeZoneInfo timeZone, 
+            TimeZoneInfo timeZone, 
             int defaultResolution)
         {
             ForecastModuleConverter forecastModuleConverter = new ForecastModuleConverter(
                 new MappedObjectPair(),
                 new DateTimePeriod(
-                    timeZone.ConvertTimeToUtc(fromDate, timeZone),
-                    timeZone.ConvertTimeToUtc(toDate, timeZone)),
+                    TimeZoneInfo.ConvertTimeToUtc(fromDate, timeZone),
+                    TimeZoneInfo.ConvertTimeToUtc(toDate, timeZone)),
                 timeZone,
                 _argument.SourceConnectionString,
                 defaultResolution);

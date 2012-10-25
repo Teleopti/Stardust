@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             Assert.AreEqual(_dt, _workloadDay.CurrentDate);
             ISkill skill = SkillFactory.CreateSkill("MySkill");
-            skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+            skill.TimeZone = (TimeZoneInfo.Local);
             _workloadDay.Workload.Skill = skill;
 
             Assert.AreEqual(_dt, _workloadDay.CurrentDate);
@@ -433,7 +433,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void CanApplyTemplate()
         {
             DateOnly createDate = new DateOnly(2008, 01, 14);
-			var createLocalDate = _workload.Skill.TimeZone.ConvertTimeFromUtc(createDate);
+			var createLocalDate = TimeZoneInfo.ConvertTimeFromUtc(createDate, _workload.Skill.TimeZone);
             string templateName = "JULDAGEN";
             IWorkloadDayTemplate workloadDayTemplate = new WorkloadDayTemplate();
            
@@ -531,7 +531,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyApplyTemplateDuringDstSwitch()
         {
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _skill.MidnightBreakOffset = TimeSpan.FromHours(4);
 
             var createDate = new DateOnly(2008, 10, 25);
@@ -561,7 +561,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyApplyTemplateDuringDstSwitchWithMidnightBreak()
         {
             _skill.MidnightBreakOffset = TimeSpan.FromHours(2);
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 
             var createDate = new DateOnly(2009, 10, 24);
             string templateName = "SUNDAY";
@@ -590,7 +590,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyApplyTemplateDuringDstSwitchWithNotAffectedOpenHours()
         {
             _skill.MidnightBreakOffset = TimeSpan.FromHours(2);
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 
             var createDate = new DateOnly(2009, 10, 24);
             const string templateName = "SUNDAY";
@@ -620,7 +620,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             workloadDay.RecalculateDailyTasks();
 
             Assert.AreEqual(44, workloadDay.TaskPeriodList.Count);
-            Assert.AreEqual(_skill.TimeZone.ConvertTimeToUtc(new DateTime(2009,03,29,7,0,0),_skill.TimeZone),
+            Assert.AreEqual(TimeZoneInfo.ConvertTimeToUtc(new DateTime(2009, 03, 29, 7, 0, 0), _skill.TimeZone),
                 workloadDay.SortedTaskPeriodList[0].Period.StartDateTime);
             Assert.IsTrue(workloadDay.TaskPeriodList.All(t => t.Tasks == 10));
         }
@@ -733,7 +733,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyChangingOpenHoursWithNoExistingTemplateTaskPeriods()
         {
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             IWorkloadDayTemplate template1 = new WorkloadDayTemplate();
             template1.Create("Template1", DateTime.SpecifyKind(_dt,DateTimeKind.Utc), _workload, new List<TimePeriod>());
             _workloadDay.ApplyTemplate(template1);

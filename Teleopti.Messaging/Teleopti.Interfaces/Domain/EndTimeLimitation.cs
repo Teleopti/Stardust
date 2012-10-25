@@ -226,6 +226,7 @@ namespace Teleopti.Interfaces.Domain
             TimeSpan timeSpan;
             if (TimeHelper.TryParse(value, out timeSpan))
             {
+				verifyTimes(timeSpan, null);
                 return timeSpan;
             }
 

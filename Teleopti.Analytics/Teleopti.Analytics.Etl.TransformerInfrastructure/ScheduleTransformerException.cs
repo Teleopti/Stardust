@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
@@ -50,7 +51,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             }
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("StackTrace", _stackTrace);

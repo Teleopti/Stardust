@@ -32,7 +32,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private ChangePersonEmploymentCommandHandler _target;
         private ExternalLogOnDto _externalLogOnDto;
         private IList<ExternalLogOnDto> _externalLogOnList;
-        private readonly DateOnlyPeriodDto _dateOnlyPeriodDto = new DateOnlyPeriodDto(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+
+	    private readonly DateOnlyPeriodDto _dateOnlyPeriodDto = new DateOnlyPeriodDto
+		    {StartDate = new DateOnlyDto{DateTime = DateOnly.Today}, EndDate = new DateOnlyDto {DateTime = DateOnly.Today}};
         private PersonDto _personDto;
         private PersonContractDto _personContractDto;
         private IPerson _person;
@@ -79,8 +81,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
             _personSkillPeriodDto = new PersonSkillPeriodDto
             {
-                DateFrom = new DateOnlyDto(DateOnly.Today),
-                DateTo = new DateOnlyDto(DateOnly.Today),
+                DateFrom = new DateOnlyDto{DateTime = DateOnly.Today},
+				DateTo = new DateOnlyDto { DateTime = DateOnly.Today },
                 Id = Guid.NewGuid(),
                 PersonId = _person.Id.GetValueOrDefault()
             };
@@ -90,7 +92,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _team = TeamFactory.CreateSimpleTeam("Test Team");
             _team.SetId(Guid.NewGuid());
             _team.Site = new Site("test site");
-            _teamDto = new TeamDto(_team) { Id = Guid.NewGuid() };
+            _teamDto = new TeamDto { Id = Guid.NewGuid(), Description = _team.Description.Name, SiteAndTeam = _team.SiteAndTeam};
 
             _skill = SkillFactory.CreateSkill("TestSkill");
             _skill.SetId(Guid.NewGuid());

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [SetUp]
         public void Setup()
         {
-             var timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+             var timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
             _mocks = new MockRepository();
             _scenario = new Scenario("hej");
             _dic = _mocks.StrictMock<IScheduleDictionary>();

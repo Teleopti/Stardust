@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
             Expect.Call(unitOfWorkFactory.Name).Return("name").Repeat.AtLeastOnce();
 
             mocks.ReplayAll();
-            target = new DataSourceDto(dataSource, AuthenticationTypeOptionDto.Application);
+			target = new DataSourceDto(AuthenticationTypeOptionDto.Application) { Name = dataSource.Application.Name };
         }
 
         [Test]

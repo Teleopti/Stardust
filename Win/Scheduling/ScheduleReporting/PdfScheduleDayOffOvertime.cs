@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
     {
         private const int MAX_NUMBER_OF_CHARACTERS = 20;
 
-        public PdfScheduleDayOffOvertime(float columnWidth, IScheduleDay schedulePart, IPersonDayOff dayOff, ICccTimeZoneInfo timeZoneInfo, bool rightToLeft, ScheduleReportDetail details, CultureInfo culture)
+        public PdfScheduleDayOffOvertime(float columnWidth, IScheduleDay schedulePart, IPersonDayOff dayOff, TimeZoneInfo timeZoneInfo, bool rightToLeft, ScheduleReportDetail details, CultureInfo culture)
         {
             CultureInfo = culture;
             Brush = new PdfSolidBrush(Color.DimGray);
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
         }
 
 
-        private float render(float top, DateTime startDateTime, string text, IVisualLayerCollection projection, ScheduleReportDetail details, ICccTimeZoneInfo timeZoneInfo)
+        private float render(float top, DateTime startDateTime, string text, IVisualLayerCollection projection, ScheduleReportDetail details, TimeZoneInfo timeZoneInfo)
         {
             top = RenderDate(startDateTime, top);
             top = RenderText(text, top);
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
             return top + RowSpace + 21;
         }
-        private float render(float top, IVisualLayerCollection payLoads, ICccTimeZoneInfo timeZoneInfo, ScheduleReportDetail details)
+        private float render(float top, IVisualLayerCollection payLoads, TimeZoneInfo timeZoneInfo, ScheduleReportDetail details)
         {
             if (details != ScheduleReportDetail.None)
             {
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.TimePeriod.ToShortTimeString")]
-        private float RenderPayLoad(IVisualLayer visualLayer, float top, ICccTimeZoneInfo timeZoneInfo)
+        private float RenderPayLoad(IVisualLayer visualLayer, float top, TimeZoneInfo timeZoneInfo)
         {
             Format.Alignment = PdfTextAlignment.Center;
             const float fontSize = 7f;

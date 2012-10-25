@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         [Test]
         public void VerifyTimeZoneCanBeSet()
         {
-            target.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+            target.TimeZone = TimeZoneInfo.Local;
 
-            Assert.AreEqual(TimeZoneInfo.Local, target.TimeZone.TimeZoneInfoObject);
+            Assert.AreEqual(TimeZoneInfo.Local, target.TimeZone);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
         /// Created by: tamasb
         /// Created date: 12/5/2007
         /// </remarks>
-        public SecurityModuleConverter(MappedObjectPair mappedObjectPair, DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo, DefaultAggregateRoot defaultAggregateRoot)
+        public SecurityModuleConverter(MappedObjectPair mappedObjectPair, DateTimePeriod period, TimeZoneInfo timeZoneInfo, DefaultAggregateRoot defaultAggregateRoot)
             : base(mappedObjectPair, period, timeZoneInfo)
         {
             _defaultAggregateRoot = defaultAggregateRoot;

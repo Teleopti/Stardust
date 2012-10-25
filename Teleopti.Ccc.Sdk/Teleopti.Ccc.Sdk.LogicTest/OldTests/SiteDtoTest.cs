@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
                     .Return(_guid);
             }
 
-            _target = new SiteDto(site);
+			_target = new SiteDto { DescriptionName = site.Description.Name, Id = site.Id};
 
         }
 

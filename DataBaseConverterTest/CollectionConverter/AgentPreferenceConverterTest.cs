@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.CollectionConverter
             mocks = new MockRepository();
             uow = mocks.StrictMock<IUnitOfWork>();
             mappedObjectPair = new MappedObjectPair();
-            mapper = mocks.StrictMock<Mapper<IPreferenceDay, AgentDayPreference>>(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Local));
+            mapper = mocks.StrictMock<Mapper<IPreferenceDay, AgentDayPreference>>(mappedObjectPair, (TimeZoneInfo.Local));
             target = new AgentPreferenceConverter(uow, mapper);
             _rep = mocks.StrictMock<IRepository<IPreferenceDay>>();
         }

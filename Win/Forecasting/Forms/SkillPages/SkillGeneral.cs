@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             comboBoxTimeZones.DisplayMember = "DisplayName";
             foreach (TimeZoneInfo timeZoneInfo in TimeZoneInfo.GetSystemTimeZones())
             {
-                ICccTimeZoneInfo tzi = (new CccTimeZoneInfo(timeZoneInfo));
+                TimeZoneInfo tzi = ((timeZoneInfo));
                 comboBoxTimeZones.Items.Add(tzi);
                 if (skill.TimeZone.Id == tzi.Id)
                     comboBoxTimeZones.SelectedItem = tzi;
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             thisSkill.DisplayColor = pictureBoxDisplayColor.BackColor;
             thisSkill.SkillType = (ISkillType)comboBoxSkillType.SelectedItem;
             thisSkill.Activity = activity;
-            thisSkill.TimeZone = (ICccTimeZoneInfo)comboBoxTimeZones.SelectedItem;
+            thisSkill.TimeZone = (TimeZoneInfo)comboBoxTimeZones.SelectedItem;
             thisSkill.MidnightBreakOffset = office2007OutlookTimePickerMidnightOffsetBreak.TimeValue();
 
             if (office2007OutlookTimePickerMidnightOffsetBreak.Enabled)
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
                 {
                     IList<ITemplateSkillDataPeriod> templateSkillDataPeriods = new List<ITemplateSkillDataPeriod>();
                     DateTime startDateUtc =
-                        thisSkill.TimeZone.ConvertTimeToUtc(
+                        TimeZoneInfo.ConvertTimeToUtc(
                             SkillDayTemplate.BaseDate.Date.Add(thisSkill.MidnightBreakOffset), thisSkill.TimeZone);
                     var timePeriod = new DateTimePeriod(startDateUtc, startDateUtc.AddDays(1));
 

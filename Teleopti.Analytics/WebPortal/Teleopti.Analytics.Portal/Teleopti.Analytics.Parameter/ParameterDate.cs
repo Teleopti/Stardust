@@ -1,8 +1,10 @@
 using System;
+using System.Drawing;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
 using AjaxControlToolkit;
+using Image = System.Web.UI.WebControls.Image;
 
 namespace Teleopti.Analytics.Parameters
 {
@@ -77,7 +79,8 @@ namespace Teleopti.Analytics.Parameters
 			                   {
 			                       ControlToValidate = _textBox.ID,
 			                       Display = ValidatorDisplay.Dynamic,
-			                       Text = "*"
+			                       Text = "*",
+								   ForeColor = Color.Red
 			                   };
 		    regexp.Append(@"^\d{1,2}(\-|\/|\.)\d{1,2}(\-|\/|\.)\d{2}$|");
 			regexp.Append(@"^\d{1,2}(\-|\/|\.)\d{1,2}(\-|\/|\.)\d{4}$|");

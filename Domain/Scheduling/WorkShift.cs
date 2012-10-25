@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             }
         }
 
-        public IMainShift ToMainShift(DateTime localMainShiftBaseDate, ICccTimeZoneInfo localTimeZoneInfo)
+        public IMainShift ToMainShift(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
         {
             
             DateTime utcDateBaseDate = TimeZoneHelper.ConvertToUtc(localMainShiftBaseDate, localTimeZoneInfo);
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return ret;
         }
 
-        private IMainShift ToMainShiftOnDaylightSavingChange(DateTime localMainShiftBaseDate, ICccTimeZoneInfo localTimeZoneInfo)
+        private IMainShift ToMainShiftOnDaylightSavingChange(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
         {
             MainShift ret = new MainShift(ShiftCategory);
             int hoursToChange = 0;
@@ -165,8 +165,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                 localEnd = localEnd.AddHours(hoursToChange);
 
-                DateTime start = localTimeZoneInfo.ConvertTimeToUtc(localStart, localTimeZoneInfo);
-                DateTime end = localTimeZoneInfo.ConvertTimeToUtc(localEnd, localTimeZoneInfo);
+                DateTime start = localTimeZoneInfo.SafeConvertTimeToUtc(localStart);
+                DateTime end = localTimeZoneInfo.SafeConvertTimeToUtc(localEnd);
                 DateTimePeriod outPeriod = new DateTimePeriod(start, end);
 
                 MainShiftActivityLayer mainShiftLayer = new MainShiftActivityLayer(layer.Payload, outPeriod);

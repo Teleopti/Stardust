@@ -141,7 +141,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             _alarmSituationCollection.Clear();
         }
 
-        public void AnalyzeAlarmSituations(IEnumerable<IStateGroupActivityAlarm> stateGroupActivityAlarms, DateTime timestamp)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		public void AnalyzeAlarmSituations(IEnumerable<IStateGroupActivityAlarm> stateGroupActivityAlarms, DateTime timestamp)
         {
             if (_visualLayerCollection == null)
                 throw new InvalidOperationException("The schedule must be set prior to using this method.");

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				var definitionSetDtoList = new List<DefinitionSetDto>();
 
 				var period = query.Period.ToDateOnlyPeriod();
-				var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId));
+				var timeZone = TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId);
 				_dateTimePeriodAssembler.TimeZone = timeZone;
 
 				foreach (var multiplicatorDefinitionSet in multiplicatorDefinitionSetList)

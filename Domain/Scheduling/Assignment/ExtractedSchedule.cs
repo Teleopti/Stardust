@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return ret;
         }
 
-        public ICccTimeZoneInfo TimeZone { get; private set; }
+        public TimeZoneInfo TimeZone { get; private set; }
 
         public IDateOnlyAsDateTimePeriod DateOnlyAsPeriod { get; private set; }
 
@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             splitList.ForEach(Add);
             DateOnly date = new DateOnly(Period.StartDateTimeLocal(TimeZone));
-            ICccTimeZoneInfo timeZoneInfo = workingCopyOfDayOff.Person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo timeZoneInfo = workingCopyOfDayOff.Person.PermissionInformation.DefaultTimeZone();
             if (workingCopyOfDayOff.UsedTimeZone != null)
                 timeZoneInfo = workingCopyOfDayOff.UsedTimeZone;
             PersonDayOff personDayOff = new PersonDayOff(Person, Scenario, workingCopyOfDayOff.DayOff, date, timeZoneInfo);
@@ -781,7 +781,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void CreateAndAddDayOff(IDayOffTemplate dayOff)
         {
-            //ICccTimeZoneInfo timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
+            //TimeZoneInfo timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
             DateOnly dateOnly = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, TimeZone));
             PersonDayOff personDayOff = new PersonDayOff(Person, Scenario, dayOff, dateOnly);
             // clear if there already is one
@@ -849,7 +849,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void MergeOvertime(ISchedulePart source)
         {
-            ICccTimeZoneInfo timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
             DateOnly dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, timeZoneInfo));
             IPersonPeriod period = Person.Period(dateOnlyPerson);
             TimeSpan diff = CalculatePeriodOffset(source.Period);

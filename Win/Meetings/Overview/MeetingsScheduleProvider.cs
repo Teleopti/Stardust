@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
         DateTimePeriod _lastPeriod;
         private IScheduleAppointmentList _lastList;
         private readonly AppointmentFromMeetingCreator _appointmentFromMeetingCreator;
-        private readonly ICccTimeZoneInfo _userTimeZone;
+        private readonly TimeZoneInfo _userTimeZone;
        private readonly IMeetingChangerAndPersister _meetingChangerAndPersister;
         private readonly IMeetingOverviewViewModel _model;
     	private readonly IOverlappingAppointmentsHelper _overlappingAppointmentsHelper;

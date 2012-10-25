@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
@@ -56,16 +57,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells
             return dateOnlyString;
         }
         
-        /// <summary>
-        /// Gets the object data.
-        /// </summary>
-        /// <param name="info">The info.</param>
-        /// <param name="context">The context.</param>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2008-01-08
-        /// </remarks>
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
 

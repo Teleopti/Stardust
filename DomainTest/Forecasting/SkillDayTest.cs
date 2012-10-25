@@ -504,7 +504,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.Less(_skillDay.TemplateReference.VersionNumber, skillDayTemplate.VersionNumber);
 
 			var dateTime = new DateTime(2008, 12, 9, 0, 0, 0, DateTimeKind.Utc);
-			var localDateTime = _skill.TimeZone.ConvertTimeFromUtc(dateTime);
+			var localDateTime = TimeZoneInfo.ConvertTimeFromUtc(dateTime, _skill.TimeZone);
 			_skillDay.TemplateReference.UpdatedDate = localDateTime;
 			var expectedTemplateName = string.Format(CultureInfo.CurrentUICulture, "<{0} {1} {2}>", baseTemplateName, localDateTime.ToShortDateString(), localDateTime.ToShortTimeString());
 			Assert.AreEqual(expectedTemplateName, _skillDay.TemplateReference.TemplateName);
@@ -1386,7 +1386,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void ShouldHaveMinStaffingFirstAndLastDuringDaylightSavingsTransition()
         {
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             var createDate = new DateOnly(2009, 10, 25);
             IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
 
@@ -1416,7 +1416,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void ShouldHaveMinStaffingFirstAndLastDuringDaylightSavingsTransitionToSummertime()
         {
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             var createDate = new DateOnly(2010, 03, 28);
             IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
 
@@ -1446,7 +1446,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void ShouldHaveMinStaffingFirstWhenNoDaylightSavingChange()
         {
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             var createDate = new DateOnly(2010, 03, 30);
             IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
 
@@ -1480,7 +1480,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             const string name = "<SOME>";
             ServiceAgreement serviceAgreement = ServiceAgreement.DefaultValues();
-            DateTime startDateUtc = _skill.TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone);
+            DateTime startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone);
             DateTimePeriod timePeriod = new DateTimePeriod(
                 startDateUtc, startDateUtc.AddDays(1)).MovePeriod(_skill.MidnightBreakOffset);
             ITemplateSkillDataPeriod templateSkillDataPeriod = new TemplateSkillDataPeriod(serviceAgreement,

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+﻿using System;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// </summary>
         /// <param name="mappedObjectPair"></param>
         /// <param name="timeZone"></param>
-        public RuleSetBagMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
+        public RuleSetBagMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
         {
             
         }

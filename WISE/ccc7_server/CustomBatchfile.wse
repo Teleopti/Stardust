@@ -122,59 +122,50 @@ item: Remark
   Text=----------------------------------------
 end
 item: Remark
-  Text=Teleopti ASP.NET 3.5 (e.g 2.0 in IIS)
-end
-item: Remark
-  Text=----------------------------------------
-end
-item: Execute Program
-  Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" Analytics v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
-  Flags=00001010
-end
-item: Execute Program
-  Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" Client v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
-  Flags=00001010
-end
-item: Execute Program
-  Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" ContextHelp v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
-  Flags=00001010
-end
-item: Execute Program
-  Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" MyTime v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
-  Flags=00001010
-end
-item: Execute Program
-  Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" PMService v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
-  Flags=00001010
-end
-item: Execute Program
-  Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" RTA v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
-  Flags=00001010
-end
-item: Execute Program
-  Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" SDK v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
-  Flags=00001010
-end
-item: Execute Program
-  Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v3.5" TeleoptiCCC v2.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
-  Flags=00001010
-end
-item: Remark
-  Text=----------------------------------------
-end
-item: Remark
   Text=Teleopti ASP.NET 4.0
 end
 item: Remark
   Text=----------------------------------------
+end
+item: Execute Program
+  Pathname=CMD
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" Analytics v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Flags=00001010
+end
+item: Execute Program
+  Pathname=CMD
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" Client v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Flags=00001010
+end
+item: Execute Program
+  Pathname=CMD
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" ContextHelp v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Flags=00001010
+end
+item: Execute Program
+  Pathname=CMD
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" MyTime v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Flags=00001010
+end
+item: Execute Program
+  Pathname=CMD
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" PMService v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Flags=00001010
+end
+item: Execute Program
+  Pathname=CMD
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" RTA v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Flags=00001010
+end
+item: Execute Program
+  Pathname=CMD
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" SDK v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Flags=00001010
+end
+item: Execute Program
+  Pathname=CMD
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" TeleoptiCCC v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Flags=00001010
 end
 item: Execute Program
   Pathname=CMD

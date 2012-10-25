@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             }
         }
 
-        public ICccTimeZoneInfo TimeZone
+        public TimeZoneInfo TimeZone
         {
             get { return _meeting.TimeZone; }
             set
