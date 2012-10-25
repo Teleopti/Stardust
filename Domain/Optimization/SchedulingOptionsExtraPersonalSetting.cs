@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
@@ -49,10 +50,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.UseGroupSchedulingCommonEnd = _useGroupSchedulingCommonEnd;
             schedulingOptions.UseGroupSchedulingCommonCategory = _useGroupSchedulingCommonCategory;
             schedulingOptions.UseCommonActivity = _useCommmonActivity;
-            if (activityList != null)
-                foreach(var activity in activityList )
-                    if (activity.Id == _commonActivtyId)
-                        schedulingOptions.CommonActivity = activity ;
+            if (activityList != null & _commonActivtyId.HasValue)
+                schedulingOptions.CommonActivity = activityList.FirstOrDefault(x => x.Id == _commonActivtyId);
 
             schedulingOptions.Fairness = new Percent(_fairnessValue);
 
@@ -88,8 +87,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _fairnessGroupPageKey = schedulingOptions.GroupPageForShiftCategoryFairness.Key;
             _resourceCalculateFrequency = schedulingOptions.ResourceCalculateFrequency;
             _screenRefreshRate = schedulingOptions.RefreshRate;
-            _commonActivtyId = schedulingOptions.CommonActivity.Id;
+            _commonActivtyId = schedulingOptions.CommonActivity != null ? schedulingOptions.CommonActivity.Id : null;
         }
-
     }
 }

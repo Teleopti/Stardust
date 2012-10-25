@@ -623,6 +623,7 @@
             this.checkBoxCommonActivity.Name = "checkBoxCommonActivity";
             this.checkBoxCommonActivity.Size = new System.Drawing.Size(97, 17);
             this.checkBoxCommonActivity.TabIndex = 39;
+            this.checkBoxCommonActivity.Enabled = false;
             this.checkBoxCommonActivity.Text = "xxSameActivity";
             this.checkBoxCommonActivity.UseVisualStyleBackColor = true;
             this.checkBoxCommonActivity.CheckedChanged += new System.EventHandler(this.checkBoxCommonActivity_CheckedChanged);
@@ -633,6 +634,7 @@
             this.comboBoxActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxActivity.Location = new System.Drawing.Point(165, 192);
             this.comboBoxActivity.Name = "comboBoxActivity";
+            this.comboBoxActivity.Enabled = false;
             this.comboBoxActivity.Size = new System.Drawing.Size(173, 21);
             this.comboBoxActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxActivity.TabIndex = 40;
