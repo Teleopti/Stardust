@@ -71,7 +71,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.isSelected = ko.observable(false);
 		self.allowDialogueReply = ko.observable(item.AllowDialogueReply);
 		self.isSending = ko.observable(false);
-		self.reply = ko.observable("hello");
+		self.reply = ko.observable('');
 		self.dialogueMessages = ko.utils.arrayMap(item.DialogueMessages, function (data) {
 			return new dialogueMessageViewModel(data);
 		});
