@@ -158,3 +158,8 @@
 	float: right;
 	position: absolute;
 }
+.asmMessage-reply-validation-error
+{
+	color: red;
+}
+

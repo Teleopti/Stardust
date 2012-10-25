@@ -32,7 +32,7 @@
 		</div>
 		
 		<input id="AsmMessage-detail-ok-button" type="button" class="button mb5 floatright" data-bind="click : confirmReadMessage, enable : isConfirmButtonEnabled" value="@Html.AttributeEncode(Resources.Ok)"/>
-		<span class="floatright" data-bind="text: remainingCharacters, visibility: allowDialogueReply"></span>
+		<span class="floatright" data-bind="text: remainingCharacters, visibility: allowDialogueReply, css: { 'asmMessage-reply-validation-error': replyIsTooLong() }"></span>
 	</div>
 	<div class="asmMessage-list">
 		<div class="friendly-message ui-corner-all floatleft" data-bind="visible: shouldShowMessage">
