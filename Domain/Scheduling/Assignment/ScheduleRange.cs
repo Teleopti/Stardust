@@ -191,8 +191,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot(IDifferenceCollectionService<IPersistableScheduleData> differenceService)
 		{
-			return differenceService.Difference(new List<IPersistableScheduleData>(Snapshot.PersistableScheduleDataInternalCollection()),
-												new List<IPersistableScheduleData>(PersistableScheduleDataInternalCollection()));
+			var org = new List<IPersistableScheduleData>(Snapshot.PersistableScheduleDataInternalCollection());
+			Snapshot.PersonAssignmentConflictInternalCollection.ForEach(org.Add);
+			var current = new List<IPersistableScheduleData>(PersistableScheduleDataInternalCollection());
+			PersonAssignmentConflictInternalCollection.ForEach(current.Add);
+
+			return differenceService.Difference(org, current);
 		}
 
 		//don't use this from client. use scheduledictionary.modify instead!
