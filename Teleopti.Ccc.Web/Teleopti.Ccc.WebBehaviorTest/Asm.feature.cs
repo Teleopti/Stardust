@@ -267,10 +267,10 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Upcoming activity starttime should be displayed")]
-        public virtual void UpcomingActivityStarttimeShouldBeDisplayed()
+        [NUnit.Framework.DescriptionAttribute("Upcoming activity time period should be displayed")]
+        public virtual void UpcomingActivityTimePeriodShouldBeDisplayed()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity starttime should be displayed", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity time period should be displayed", ((string[])(null)));
 #line 69
 this.ScenarioSetup(scenarioInfo);
 #line 7
@@ -288,12 +288,12 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Upcoming activity starttime starting after midnight should be indicated as next d" +
-            "ay")]
-        public virtual void UpcomingActivityStarttimeStartingAfterMidnightShouldBeIndicatedAsNextDay()
+        [NUnit.Framework.DescriptionAttribute("Upcoming activity time period starting after midnight should be indicated as next" +
+            " day")]
+        public virtual void UpcomingActivityTimePeriodStartingAfterMidnightShouldBeIndicatedAsNextDay()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity starttime starting after midnight should be indicated as next d" +
-                    "ay", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity time period starting after midnight should be indicated as next" +
+                    " day", ((string[])(null)));
 #line 75
 this.ScenarioSetup(scenarioInfo);
 #line 7

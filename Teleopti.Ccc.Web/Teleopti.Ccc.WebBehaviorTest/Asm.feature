@@ -66,13 +66,13 @@ Scenario: Current activity changes
 	And Current browser time has changed to '2030-01-01 12:00'
 	Then I should see Phone as current activity
 
-Scenario: Upcoming activity starttime should be displayed
+Scenario: Upcoming activity time period should be displayed
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 00:01'
 	When I click ASM link
 	Then I should see next activity time as '08:00-11:00'
 
-Scenario: Upcoming activity starttime starting after midnight should be indicated as next day
+Scenario: Upcoming activity time period starting after midnight should be indicated as next day
 	Given I have the role 'Full access to mytime'
 	And Current time is '2029-12-31 23:59'
 	When I click ASM link
