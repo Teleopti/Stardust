@@ -161,6 +161,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		$('.asm-time-marker').css('width', timeLineMarkerWidth);
 		$('.asm-sliding-schedules').css('width', (3 * 24 * pixelPerHours));
 		$('.asm-timeline-line').css('width', (pixelPerHours - 1)); //"1" due to border size
+		$('.col-1').hide(); //hide footer that takes "empty" space
 	}
 
 	function _listenForEvents(listeners) {
