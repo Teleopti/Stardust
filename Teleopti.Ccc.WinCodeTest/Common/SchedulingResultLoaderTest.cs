@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         {
             var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             var scheduleRepository = _mocks.StrictMock<IScheduleRepository>();
-        	var period = _schedulerState.RequestedPeriod;
+        	var period = _schedulerState.RequestedPeriod.Period();
 
             Expect.Call(_repositoryFactory.CreateScheduleRepository(_uow))
                 .Return(scheduleRepository);

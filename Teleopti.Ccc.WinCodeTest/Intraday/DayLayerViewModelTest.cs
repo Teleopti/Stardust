@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             testDispatcher = new TestDispatcher();
             team = TeamFactory.CreateSimpleTeam();
             period = new DateTimePeriod(2012,10,25,2012,10,25);
-            dateOnlyPeriod = new DateOnlyPeriod();
+			dateOnlyPeriod = new DateOnlyPeriod(2012, 10, 25, 2012, 10, 25);
             person = PersonFactory.CreatePerson();
             person.SetId(Guid.NewGuid());
             person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(), team));
