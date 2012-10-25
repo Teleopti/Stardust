@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             eventAggregator = mocks.DynamicMock<IEventAggregator>();
             testDispatcher = new TestDispatcher();
             team = TeamFactory.CreateSimpleTeam();
-            period = new DateTimePeriod();
+            period = new DateTimePeriod(2012,10,25,2012,10,25);
             person = PersonFactory.CreatePerson();
             person.SetId(Guid.NewGuid());
             person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(), team));

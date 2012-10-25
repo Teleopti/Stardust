@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.WinCode.Common
             IList<ILayerViewModel> retList = new List<ILayerViewModel>();
             var timeZone = scheduleRange.Person.PermissionInformation.DefaultTimeZone();
             var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
+			dateOnlyPeriod = new DateOnlyPeriod(dateOnlyPeriod.StartDate.AddDays(-1),dateOnlyPeriod.EndDate);
             foreach (DateOnly day in dateOnlyPeriod.DayCollection())
             {
                 IScheduleDay scheduleDay = scheduleRange.ScheduledDay(day);
