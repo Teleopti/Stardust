@@ -643,11 +643,7 @@ this.FeatureBackground();
 #line 187
  testRunner.When("I write a text reply that is too long");
 #line 188
- testRunner.And("I click the send button");
-#line 189
- testRunner.Then("I should see validation error about text reply being too long");
-#line 190
- testRunner.And("I should see \'1\' message(s) in the list");
+ testRunner.Then("the send button should be disabled");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -657,11 +653,11 @@ this.FeatureBackground();
         public virtual void ShowRemainingCharactersWhenWritingTextReply()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show remaining characters when writing text reply", ((string[])(null)));
-#line 192
+#line 190
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 193
+#line 191
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
@@ -676,15 +672,15 @@ this.FeatureBackground();
             table19.AddRow(new string[] {
                         "Text reply allowed",
                         "True"});
-#line 194
+#line 192
  testRunner.And("I have an unread message with", ((string)(null)), table19);
-#line 199
+#line 197
  testRunner.And("I am viewing messages");
-#line 200
+#line 198
  testRunner.And("I click on the message at position \'1\' in the list");
-#line 201
+#line 199
  testRunner.When("I enter the text reply \'my reply\'");
-#line 202
+#line 200
  testRunner.Then("I should see that I have \'242\' characters left");
 #line hidden
             this.ScenarioCleanup();

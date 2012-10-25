@@ -185,9 +185,7 @@ Scenario: Do not allow replies that are too long
 	And I am viewing messages
 	And I click on the message at position '1' in the list
 	When I write a text reply that is too long
-	And I click the send button
-	Then I should see validation error about text reply being too long
-	And I should see '1' message(s) in the list
+	Then the send button should be disabled
 
 Scenario: Show remaining characters when writing text reply
 	Given I have the role 'Full access to mytime'
