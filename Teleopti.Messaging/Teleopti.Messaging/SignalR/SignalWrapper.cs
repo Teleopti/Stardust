@@ -159,7 +159,15 @@ namespace Teleopti.Messaging.SignalR
 		{
 			if (verifyStillConnected())
 			{
-				return _hubProxy.Invoke("RemoveSubscription", route);
+				var startTask = _hubProxy.Invoke("RemoveSubscription", route);
+				startTask.ContinueWith(t =>
+				{
+					if (t.IsFaulted && t.Exception != null)
+					{
+						 t.Exception.GetBaseException();
+					}
+				}, TaskContinuationOptions.OnlyOnFaulted);
+				return startTask;
 			}
 			return emptyTask();
 		}
