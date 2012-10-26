@@ -42,6 +42,10 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.AreEqual(typeof(ConsecutiveDaysOffSolver), solvers[3].GetType());
             Assert.AreEqual(typeof(ConsecutiveWorkdaysSolver), solvers[4].GetType());
             Assert.AreEqual(typeof(TuiCaseSolver), solvers[5].GetType());
+        	_daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 5);
+			solvers = _target.BuildSolverList(array);
+			Assert.AreEqual(7, solvers.Count);
+			Assert.AreEqual(typeof(FiveConsecutiveWorkdaysSolver), solvers[6].GetType());
         }
 
         [Test]
