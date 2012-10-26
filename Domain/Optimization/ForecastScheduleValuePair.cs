@@ -1,8 +1,22 @@
-﻿namespace Teleopti.Ccc.Domain.Optimization
+﻿using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.Optimization
 {
-    public class ForecastScheduleValuePair
-    {
-        public double ForecastValue { get; set; }
-        public double ScheduleValue { get; set; }
-    }
+	public class ForecastScheduleValuePair : IForecastScheduleValuePair
+	{
+		private double _forecastValue;
+		private double _scheduleValue;
+
+		public double ForecastValue
+		{
+			get { return _forecastValue; }
+			set { _forecastValue = value; }
+		}
+
+		public double ScheduleValue
+		{
+			get { return _scheduleValue; }
+			set { _scheduleValue = value; }
+		}
+	}
 }
