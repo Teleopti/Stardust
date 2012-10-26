@@ -45,9 +45,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             }
             if (eventMessages.Count > 0)
             {
-            	_messageBroker.SendEventMessages(UnitOfWorkFactory.Current.Name,
-            	                                 ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.
-            	                                 	GetValueOrDefault(), eventMessages.ToArray());
+            	var businessUnitId = Guid.Empty;
+				if (TeleoptiPrincipal.Current!=null)
+				{
+					businessUnitId = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+				}
+            	_messageBroker.SendEventMessages(UnitOfWorkFactory.Current.Name, businessUnitId, eventMessages.ToArray());
             }
         }
 

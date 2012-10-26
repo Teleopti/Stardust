@@ -127,6 +127,7 @@
     <Compile Include="DayOffOptimizationWeekendLegalStateValidatorListCreatorTest.cs" />
     <Compile Include="ExtendReduceDaysOffDecisionMakerTest.cs" />
     <Compile Include="ExtendReduceTimeDecisionMakerTest.cs" />
+    <Compile Include="FiveConsecutiveWorkdaysSolverTest.cs" />
     <Compile Include="LockableBitArrayChangesTrackerTest.cs" />
     <Compile Include="Scheduling\DesiredShiftLengthCalculatorTest.cs" />
     <Compile Include="Scheduling\GroupShiftLengthDeciderTest.cs" />

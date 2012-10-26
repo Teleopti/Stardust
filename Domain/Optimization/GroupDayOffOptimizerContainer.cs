@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -22,6 +24,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IList<IScheduleMatrixPro> _allMatrixes;
         private readonly IGroupDayOffOptimizerCreator _groupDayOffOptimizerCreator;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+    	private readonly ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
+    	private readonly IDictionary<Guid, bool> _teamSteadyStates;
+    	private readonly IScheduleDictionary _scheduleDictionary;
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5")]
@@ -32,7 +37,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
             IList<IScheduleMatrixPro> allMatrixes,
             IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator, 
-            ISchedulingOptionsCreator schedulingOptionsCreator)
+            ISchedulingOptionsCreator schedulingOptionsCreator,
+			ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler,
+			IDictionary<Guid, bool> teamSteadyStates,
+			IScheduleDictionary scheduleDictionary)
         {
             _converter = converter;
             _decisionMakers = new List<IDayOffDecisionMaker>(decisionMakers);
@@ -42,6 +50,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             _allMatrixes = allMatrixes;
             _groupDayOffOptimizerCreator = groupDayOffOptimizerCreator;
             _schedulingOptionsCreator = schedulingOptionsCreator;
+        	_teamSteadyStateMainShiftScheduler = teamSteadyStateMainShiftScheduler;
+        	_teamSteadyStates = teamSteadyStates;
+        	_scheduleDictionary = scheduleDictionary;
         }
 
         public bool Execute()
@@ -64,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var dayOffOptimizer =
                 _groupDayOffOptimizerCreator.CreateDayOffOptimizer(_converter, decisionMaker, _dayOffDecisionMakerExecuter , daysOffPreferences);
 
-			bool dayOffOptimizerResult = dayOffOptimizer.Execute(_matrix, _allMatrixes, schedulingOptions, _optimizationPreferences);
+			bool dayOffOptimizerResult = dayOffOptimizer.Execute(_matrix, _allMatrixes, schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
             return dayOffOptimizerResult;
         }
 

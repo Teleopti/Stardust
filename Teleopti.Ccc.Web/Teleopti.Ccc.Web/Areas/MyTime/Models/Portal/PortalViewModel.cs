@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 {

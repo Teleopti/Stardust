@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -9,8 +11,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IGroupMoveTimeOptimizationExecuter
     {
-        bool Execute(IList<IScheduleDay> daysToDelete, IList<KeyValuePair<DayReadyToMove, IScheduleDay>> daysToSave,
-            IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider);
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+		bool Execute(IList<IScheduleDay> daysToDelete, IList<KeyValuePair<DayReadyToMove, IScheduleDay>> daysToSave,
+			IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IDictionary<Guid, bool> teamSteadyStates, IScheduleDictionary scheduleDictionary);
         void Rollback(DateOnly dateOnly);
         ISchedulingOptions SchedulingOptions { get; }
     }
@@ -44,6 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IGroupSchedulingService groupSchedulingService,
             IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
             IResourceOptimizationHelper resourceOptimizationHelper)
+			
         {
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
             _deleteService = deleteService;
@@ -57,8 +61,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             _isSignificantPartFullDayAbsenceOrDayOffSpecification = new IsSignificantPartFullDayAbsenceOrDayOffSpecification();
         }
 
-        public bool Execute(IList<IScheduleDay> daysToDelete, IList<KeyValuePair<DayReadyToMove, IScheduleDay>> daysToSave,
-            IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		public bool Execute(IList<IScheduleDay> daysToDelete, IList<KeyValuePair<DayReadyToMove, IScheduleDay>> daysToSave,
+			IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IDictionary<Guid, bool> teamSteadyStates, IScheduleDictionary scheduleDictionary)
         {
             _schedulePartModifyAndRollbackService.ClearModificationCollection();
             
@@ -72,27 +77,101 @@ namespace Teleopti.Ccc.Domain.Optimization
                 _deleteService.Delete(cleanedList, _schedulePartModifyAndRollbackService);
                 cleanedList.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct().ForEach(recalculateDay);
             }
+
             if (daysToSave != null)
             {
-                foreach(var pair in daysToSave)
-                {
-                    switch (pair.Key)
-                    {
-                        case DayReadyToMove.FirstDay:
-                            SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
-                            if (!reSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value, SchedulingOptions))
-                                return false;
-                            break;
-                        case DayReadyToMove.SecondDay:
-                            SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short;
-                            if (!reSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value, SchedulingOptions)) 
-                                return false;
-                            break;
-                    }
-                }
+            	var scheduledFirstDate = false;
+            	var scheduledSecondDate = false;
+            	var teamSteadyStateSuccess = false;
+
+            	foreach (var keyValuePair in daysToSave)
+            	{
+					if (!scheduledFirstDate && keyValuePair.Key.Equals(DayReadyToMove.FirstDay))
+					{
+						var firstDate = keyValuePair.Value.DateOnlyAsPeriod.DateOnly;
+						scheduledFirstDate = true;
+						teamSteadyStateSuccess = ReScheduleTeamSteadyState(allMatrixes, optimizationOverLimitByRestrictionDecider, firstDate, keyValuePair, teamSteadyStateMainShiftScheduler, teamSteadyStates, scheduleDictionary);
+						if (!teamSteadyStateSuccess) 
+							break;
+					}	
+						
+					if (!scheduledSecondDate && keyValuePair.Key.Equals(DayReadyToMove.SecondDay))
+					{
+						var secondDate = keyValuePair.Value.DateOnlyAsPeriod.DateOnly;
+						scheduledSecondDate = true;
+						teamSteadyStateSuccess = ReScheduleTeamSteadyState(allMatrixes, optimizationOverLimitByRestrictionDecider, secondDate, keyValuePair, teamSteadyStateMainShiftScheduler, teamSteadyStates, scheduleDictionary);
+						if (!teamSteadyStateSuccess) 
+							break;
+					}
+
+					if (scheduledFirstDate && scheduledSecondDate)
+					{
+						break;
+					}
+            	}
+
+				if (!teamSteadyStateSuccess)
+				{
+					foreach (var pair in daysToSave)
+					{
+						switch (pair.Key)
+						{
+							case DayReadyToMove.FirstDay:
+								SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;	
+								if (!reSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value, SchedulingOptions))
+									return false;
+								break;
+							case DayReadyToMove.SecondDay:
+								SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short;
+								if (!reSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value, SchedulingOptions))
+									return false;
+								break;
+						}
+					}
+				}
             }
             return true;
         }
+
+		private bool ReScheduleTeamSteadyState(IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider, DateOnly dateOnly, KeyValuePair<DayReadyToMove, IScheduleDay> keyValuePair, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IDictionary<Guid, bool> teamSteadyStates, IScheduleDictionary scheduleDictionary)
+		{
+			if (keyValuePair.Key.Equals(DayReadyToMove.FirstDay))
+				SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
+
+			if (keyValuePair.Key.Equals(DayReadyToMove.SecondDay))
+				SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short;
+
+			dateOnly = keyValuePair.Value.DateOnlyAsPeriod.DateOnly;
+			var groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(keyValuePair.Value.Person, dateOnly);
+			if (groupPerson.Id.HasValue && teamSteadyStates[groupPerson.Id.Value])
+			{
+				var teamSteadyStateSuccess = teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, SchedulingOptions, _groupPersonBuilderForOptimization, allMatrixes, scheduleDictionary);
+				if (teamSteadyStateSuccess)
+				{
+					if (optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit())
+					{
+						Rollback(dateOnly);
+						return false;
+					}
+
+					if (optimizationOverLimitByRestrictionDecider.OverLimit().Count > 0)
+					{
+						Rollback(dateOnly);
+						return false;
+					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+			
+			return true;
+		}
 
         public ISchedulingOptions SchedulingOptions
         {
