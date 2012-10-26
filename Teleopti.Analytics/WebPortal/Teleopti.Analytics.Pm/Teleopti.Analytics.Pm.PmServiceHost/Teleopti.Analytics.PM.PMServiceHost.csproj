@@ -142,4 +142,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\..\..\..\BuildArtifacts\PMWeb.config" "$(ProjectDir)web.config"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

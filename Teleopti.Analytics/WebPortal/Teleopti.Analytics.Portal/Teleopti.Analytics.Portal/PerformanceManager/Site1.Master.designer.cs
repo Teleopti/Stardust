@@ -58,6 +58,24 @@ namespace Teleopti.Analytics.Portal.PerformanceManager {
         protected global::System.Web.UI.WebControls.ImageButton ImageButtonHelp;
         
         /// <summary>
+        /// ContentPlaceHolder3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder ContentPlaceHolder3;
+        
+        /// <summary>
+        /// LabelMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LabelMessage;
+        
+        /// <summary>
         /// ActionBarView1 control.
         /// </summary>
         /// <remarks>
@@ -83,23 +101,5 @@ namespace Teleopti.Analytics.Portal.PerformanceManager {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Teleopti.Analytics.Portal.PerformanceManager.View.ReportTreeView ReportTreeView1;
-        
-        /// <summary>
-        /// ContentPlaceHolder3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder ContentPlaceHolder3;
-        
-        /// <summary>
-        /// LabelMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelMessage;
     }
 }
