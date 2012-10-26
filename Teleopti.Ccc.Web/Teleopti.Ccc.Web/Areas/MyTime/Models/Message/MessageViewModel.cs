@@ -24,5 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Message
 	public class DialogueMessageViewModel
 	{
 		public string Text { get; set; }
+		public Guid SenderId { get; set; }
 	}
 }

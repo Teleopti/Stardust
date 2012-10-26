@@ -28,12 +28,15 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
     	private IPerson _person;
     	private PushMessageDialogue _pushMessageDialogue;
     	private ICccTimeZoneInfo _cccTimeZone;
+	    private IPerson _replier;
 
-    	[SetUp]
+	    [SetUp]
         public void Setup()
     	{
 			var timeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			
+
+		    _replier = new Person();
+			 _replier.SetId(new Guid());
 			_person = new Person {Name = new Name("ashley", "andeen")};
             _pushMessage = new PushMessage(new [] {"OK"})
                                   {
@@ -45,8 +48,8 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
                                   };
             _pushMessageDialogue = new PushMessageDialogue(_pushMessage, _person);
             _pushMessageDialogue.SetId(Guid.NewGuid());
-			_pushMessageDialogue.DialogueMessages.Add(new DialogueMessage("A reply", _person));
-			_pushMessageDialogue.DialogueMessages.Add(new DialogueMessage("Another reply", _person));
+				_pushMessageDialogue.DialogueMessages.Add(new DialogueMessage("A reply", _replier));
+				_pushMessageDialogue.DialogueMessages.Add(new DialogueMessage("Another reply", _replier));
 			SetDate(_pushMessageDialogue, DateTime.UtcNow, "_updatedOn");
 
             _domainMessages = new[] {_pushMessageDialogue};
@@ -74,6 +77,12 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
         {
             _result.Count.Should().Be.EqualTo(1);
         }
+
+		 [Test]
+		 public void ShouldMapSenderOfDialogueMessage()
+		 {
+			 _result.First().DialogueMessages.First().SenderId.Should().Be.EqualTo(_replier.Id);
+		 }
 
         [Test]
         public void ShouldMapTitle()
