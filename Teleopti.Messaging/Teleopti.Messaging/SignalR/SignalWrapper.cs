@@ -19,6 +19,7 @@ namespace Teleopti.Messaging.SignalR
 		private const string EventName = "OnEventMessage";
 		private int _retryCount = 0;
 		private static readonly object LockObject = new object();
+		private bool _isRunning;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
@@ -109,6 +110,11 @@ namespace Teleopti.Messaging.SignalR
 				{
 					throw startException;
 				}
+
+				_isRunning = true;
+				_hubConnection.Closed += () => { _isRunning = false; };
+				_hubConnection.Reconnected += () => { _isRunning = true; };
+				_hubConnection.StateChanged += s => { _isRunning = s.NewState == ConnectionState.Connected; };
 			}
 			catch (InvalidOperationException exception)
 			{
@@ -181,6 +187,8 @@ namespace Teleopti.Messaging.SignalR
 					                             		{
 					                             		}
 					                             	});
+
+					_isRunning = false;
 				}
 				catch (Exception)
 				{
@@ -190,7 +198,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public bool IsInitialized()
 		{
-			return _hubProxy != null;
+			return _hubProxy != null && _isRunning;
 		}
 	}
 }
