@@ -36,7 +36,15 @@ namespace Teleopti.Messaging.SignalR
 		{
 			if (verifyStillConnected())
 			{
-				return _hubProxy.Invoke("NotifyClients", notification);
+				var startTask = _hubProxy.Invoke("NotifyClients", notification);
+				startTask.ContinueWith(t =>
+				{
+					if (t.IsFaulted && t.Exception != null)
+					{
+						t.Exception.GetBaseException();
+					}
+				}, TaskContinuationOptions.OnlyOnFaulted);
+				return startTask;
 			}
 			return emptyTask();
 		}
@@ -45,7 +53,15 @@ namespace Teleopti.Messaging.SignalR
 		{
 			if (verifyStillConnected())
 			{
-				return _hubProxy.Invoke("NotifyClientsMultiple", notifications);
+				var startTask = _hubProxy.Invoke("NotifyClientsMultiple", notifications);
+				startTask.ContinueWith(t =>
+				{
+					if (t.IsFaulted && t.Exception != null)
+					{
+						t.Exception.GetBaseException();
+					}
+				}, TaskContinuationOptions.OnlyOnFaulted);
+				return startTask;
 			}
 			return emptyTask();
 		}
@@ -149,7 +165,15 @@ namespace Teleopti.Messaging.SignalR
 		{
 			if (verifyStillConnected())
 			{
-				return _hubProxy.Invoke("AddSubscription", subscription);
+				var startTask = _hubProxy.Invoke("AddSubscription", subscription);
+				startTask.ContinueWith(t =>
+				{
+					if (t.IsFaulted && t.Exception != null)
+					{
+						t.Exception.GetBaseException();
+					}
+				}, TaskContinuationOptions.OnlyOnFaulted);
+				return startTask;
 			}
 			return emptyTask();
 		}
