@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IReschedulingPreferences _reschedulingPreferences;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
     	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
+        private IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 
         [SetUp]
         public void Setup()
@@ -70,6 +71,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _reschedulingPreferences = _mockRepository.StrictMock<IReschedulingPreferences>();
         	_mainShiftOptimizeActivitySpecificationSetter =
         		_mockRepository.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
+            _deleteAndResourceCalculateService = _mockRepository.StrictMock<IDeleteAndResourceCalculateService>();
+            _resourceCalculateDelayer = _mockRepository.StrictMock<IResourceCalculateDelayer>();
 
 
             _target = new IntradayOptimizer2(
@@ -80,14 +83,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _scheduleService,
                 _optimizerPreferences,
                 _rollbackService,
-                _deleteService,
                 _resourceOptimizationHelper,
                 _effectiveRestrictionCreator,
-                _resourceCalculateDaysDecider,
                 _optimizationOverLimitDecider,
                 _workShiftOriginalStateContainer,
                 _schedulingOptionsCreator,
-				_mainShiftOptimizeActivitySpecificationSetter
+                _mainShiftOptimizeActivitySpecificationSetter,
+                _deleteAndResourceCalculateService,
+                _resourceCalculateDelayer
                 );
         }
 
