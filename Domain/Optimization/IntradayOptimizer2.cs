@@ -203,7 +203,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private class changedDay
         {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public IScheduleDay PrevoiousSchedule { get; set; }
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public IScheduleDay CurrentSchedule { get; set; }
         }
     }
