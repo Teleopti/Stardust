@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public JsonResult Reply(Guid messageId)
+		public JsonResult Reply(ConfirmMessageViewModel messageViewModel)
 		{
-			return Json(_pushMessageDialoguePersister.Persist(messageId));
+			return Json(_pushMessageDialoguePersister.Persist(messageViewModel.Id));
 		}
 
 		[UnitOfWorkAction]

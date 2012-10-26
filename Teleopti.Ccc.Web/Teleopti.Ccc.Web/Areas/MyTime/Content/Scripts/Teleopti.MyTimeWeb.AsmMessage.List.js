@@ -94,7 +94,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			self.isSending(true);
 			_replyToMessage(self);
 		};
-		self.isConfirmButtonEnabled = ko.computed(function () {
+		self.canConfirm = ko.computed(function () {
 			if (self.isSending() || (self.allowDialogueReply() && self.reply().length == 0) || (self.allowDialogueReply() && self.replyIsTooLong())) {
 				return false;
 			}
@@ -135,7 +135,8 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 				_loading();
 			},
 			data: JSON.stringify({
-				messageId: messageItem.messageId()
+				Id: messageItem.messageId(),
+				Reply: messageItem.reply()
 			}),
 			success: function (data, textStatus, jqXHR) {
 				messageItem.isRead(true);

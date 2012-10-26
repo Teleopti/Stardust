@@ -38,24 +38,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReplyToSimpleMessage()
 		{
 			var pushMessageDialoguePersister = MockRepository.GenerateMock<IPushMessageDialoguePersister>();
 
 			var target = new MessageController(null, pushMessageDialoguePersister, null);
 
-		    var messageId = Guid.NewGuid();
-            var messageViewModel = new MessageViewModel { MessageId = messageId.ToString() };
+			var messageId = Guid.NewGuid();
+			var messageViewModel = new MessageViewModel { MessageId = messageId.ToString() };
 
 			pushMessageDialoguePersister.Stub(x => x.Persist(messageId)).Return(messageViewModel);
 
-			var result = target.Reply(messageId);
+			var result = target.Reply(new ConfirmMessageViewModel() { Id = messageId });
 
 			result.Data.Should().Be.SameInstanceAs(messageViewModel);
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnMessageCount()
 		{
 			var pushMessageProvider = MockRepository.GenerateMock<IPushMessageProvider>();
@@ -70,10 +70,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			((MessagesInformationViewModel)result.Data).UnreadMessagesCount.Should().Be.EqualTo(messageInfo.UnreadMessagesCount);
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnMessageCountAndMessageAskedFor()
 		{
-		    var messageId = Guid.NewGuid();
+			var messageId = Guid.NewGuid();
 			var viewModelFactory = MockRepository.GenerateMock<IMessageViewModelFactory>();
 			var messageViewModel = new MessageViewModel { MessageId = messageId.ToString() };
 			var messageInfo = new MessagesInformationViewModel

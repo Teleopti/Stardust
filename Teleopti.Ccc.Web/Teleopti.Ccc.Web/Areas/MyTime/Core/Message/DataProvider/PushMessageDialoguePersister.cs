@@ -25,5 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 
 			return _mapper.Map<IPushMessageDialogue, MessageViewModel>(pushMessageDialogue);
 		}
+
+		public MessageViewModel PersistMessage(ConfirmMessageViewModel confirmMessage)
+		{
+			var pushMessageDialogue = _pushMessageDialogueRepository.Get(confirmMessage.Id);
+			//pushMessageDialogue.SetReply(pushMessageDialogue.PushMessage.ReplyOptions.First());
+			pushMessageDialogue.DialogueReply(confirmMessage.Reply, pushMessageDialogue.Receiver);
+			return _mapper.Map<IPushMessageDialogue, MessageViewModel>(pushMessageDialogue);
+		}
 	}
 }

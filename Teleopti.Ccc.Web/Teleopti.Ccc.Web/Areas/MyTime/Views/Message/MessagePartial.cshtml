@@ -31,7 +31,7 @@
 			<textarea id="AsmMessage-detail-reply" rows="5" cols="63" data-bind="visible: allowDialogueReply, value: reply, valueUpdate:['afterkeydown', 'afterpaste']"></textarea>
 		</div>
 		
-		<input id="AsmMessage-detail-ok-button" type="button" class="button mb5 floatright" data-bind="click : confirmReadMessage, enable : isConfirmButtonEnabled" value="@Html.AttributeEncode(Resources.Ok)"/>
+		<input id="AsmMessage-detail-ok-button" type="button" class="button mb5 floatright" data-bind="click : confirmReadMessage, enable : canConfirm" value="@Html.AttributeEncode(Resources.Ok)"/>
 		<span class="floatright" data-bind="text: remainingCharacters, visibility: allowDialogueReply, css: { 'asmMessage-reply-validation-error': replyIsTooLong() }"></span>
 	</div>
 	<div class="asmMessage-list">
