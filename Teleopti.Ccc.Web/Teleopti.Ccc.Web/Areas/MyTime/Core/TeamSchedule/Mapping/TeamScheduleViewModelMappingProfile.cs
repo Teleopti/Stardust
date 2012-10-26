@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				;
 
 			CreateMap<TimeLineMappingData, TimeLineViewModel>()
-				.ForMember(d => d.ShortTime, o => o.MapFrom(s => s.Time.TimeOfDay.Minutes != 0 ? s.Time.TimeOfDay.Minutes.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.TimeSeparator + "00") : _userTimeZone().TimeZone().ConvertTimeFromUtc(s.Time).TimeOfDay.Hours.ToString("00")))
-				.ForMember(d => d.LongTime, o => o.MapFrom(s => TimeHelper.TimeOfDayFromTimeSpan(_userTimeZone().TimeZone().ConvertTimeFromUtc(s.Time).TimeOfDay)))
+                .ForMember(d => d.ShortTime, o => o.MapFrom(s => s.Time.TimeOfDay.Minutes != 0 ? s.Time.TimeOfDay.Minutes.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.TimeSeparator + "00") : TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone()).TimeOfDay.Hours.ToString("00")))
+				.ForMember(d => d.LongTime, o => o.MapFrom(s => TimeHelper.TimeOfDayFromTimeSpan(TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone()).TimeOfDay)))
 				.ForMember(d => d.PositionPercent, o => o.MapFrom(s =>
 																					{
 																						var displayedTicks = (decimal)s.DisplayTimePeriod.EndDateTime.Ticks - s.DisplayTimePeriod.StartDateTime.Ticks;

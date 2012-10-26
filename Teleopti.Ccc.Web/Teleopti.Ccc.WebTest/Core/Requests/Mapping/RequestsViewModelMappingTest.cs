@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void Setup()
 		{
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			_userTimeZone.Stub(x => x.TimeZone()).Return(TimeZoneInfo.Local);
 			_linkProvider = MockRepository.GenerateMock<ILinkProvider>();
 
 			Mapper.Reset();
@@ -147,7 +148,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapDate()
 		{
-			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 
 			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddHours(5));
@@ -182,14 +183,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapUpdatedOn()
 		{
-			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 
 			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod())) {UpdatedOn = DateTime.UtcNow};
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.UpdatedOn.Should().Be(timeZone.ConvertTimeFromUtc(request.UpdatedOn.Value).ToShortDateTimeString());
+            result.UpdatedOn.Should().Be(TimeZoneInfo.ConvertTimeFromUtc(request.UpdatedOn.Value, timeZone).ToShortDateTimeString());
 		}
 
 		[Test]
@@ -216,7 +217,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapRawDateInfo()
 		{
-			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 
 			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);

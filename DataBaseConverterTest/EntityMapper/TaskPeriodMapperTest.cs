@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             TimeSpan expectedIntervallTime = new TimeSpan(6, 30, 0);
 
 
-            TaskPeriodMapper target = new TaskPeriodMapper(mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc), forecastDate, intervalLength);
+            TaskPeriodMapper target = new TaskPeriodMapper(mapped, (TimeZoneInfo.Utc), forecastDate, intervalLength);
 
             //Map the tasklayer
             TemplateTaskPeriod newTaskLayer = target.Map(oldForecastData);

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IWorkShiftRuleSet> ruleSets = new List<IWorkShiftRuleSet> { _ruleSet };
             var readOnlyRuleSets = new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets);
             var dateOnly = new DateOnly(2009, 2, 2);
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
             using (_mocks.Record())
             {
                 Expect.Call(_ruleSetBag.RuleSetCollection).Return(readOnlyRuleSets);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var ruleSets = new List<IWorkShiftRuleSet> { _ruleSet };
 			var readOnlyRuleSets = new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets);
 			var dateOnly = new DateOnly(2009, 2, 2);
-			var timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+			var timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
 			using (_mocks.Record())
 			{
 				Expect.Call(_ruleSetBag.RuleSetCollection).Return(readOnlyRuleSets);
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var ruleSets = new List<IWorkShiftRuleSet> { _ruleSet };
 			var readOnlyRuleSets = new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets);
 			var dateOnly = new DateOnly(2009, 2, 2);
-			var timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+			var timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
 			using (_mocks.Record())
 			{
 				Expect.Call(_ruleSetBag.RuleSetCollection).Return(readOnlyRuleSets);
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var ruleSets = new List<IWorkShiftRuleSet> { _ruleSet, ruleSet2 };
             var readOnlyRuleSets = new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets);
             var dateOnly = new DateOnly(2009, 2, 2);
-            var timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+            var timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
             using (_mocks.Record())
             {
                 Expect.Call(_ruleSetBag.RuleSetCollection).Return(readOnlyRuleSets);

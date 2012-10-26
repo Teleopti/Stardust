@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	/// </summary>
 	public class ProjectionMidnightSplitterMerger : ProjectionMerger
 	{
-		private readonly ICccTimeZoneInfo _userZone;
+		private readonly TimeZoneInfo _userZone;
 
-		public ProjectionMidnightSplitterMerger(ICccTimeZoneInfo userZone)
+		public ProjectionMidnightSplitterMerger(TimeZoneInfo userZone)
 		{
 			_userZone = userZone;
 		}

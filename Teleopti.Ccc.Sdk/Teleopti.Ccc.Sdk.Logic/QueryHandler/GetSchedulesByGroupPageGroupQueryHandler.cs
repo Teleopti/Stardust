@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		{
 			IList<SchedulePartDto> returnList = new List<SchedulePartDto>();
 
-			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId));
+			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId));
 			var datePeriod = new DateOnlyPeriod(new DateOnly(query.QueryDate.DateTime), new DateOnly(query.QueryDate.DateTime));
 			var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
 

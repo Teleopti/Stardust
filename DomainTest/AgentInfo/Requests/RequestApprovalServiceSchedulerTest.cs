@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         public void ShouldApproveBasicAbsence()
         {
             var person = PersonFactory.CreatePerson();
-            person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
             var absence = AbsenceFactory.CreateAbsence("Holiday");
             var period = new DateTimePeriod(2011, 3, 4, 2011, 3, 4);
             var range = mocks.DynamicMock<IScheduleRange>();

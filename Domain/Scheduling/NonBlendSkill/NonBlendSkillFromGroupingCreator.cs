@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 
             IList<ITemplateSkillDataPeriod> templateSkillDataPeriods = new List<ITemplateSkillDataPeriod>();
             var baseDate = SkillDayTemplate.BaseDate.Date.AddHours(8);
-            var timeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            var timeZone = TimeZoneInfo.Utc;
             for (int i = 0; i < 40; i++)
             {
                 DateTimePeriod period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(baseDate.AddMinutes(15 * i),

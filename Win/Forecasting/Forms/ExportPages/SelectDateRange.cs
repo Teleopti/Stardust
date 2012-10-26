@@ -43,8 +43,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public bool Depopulate(ExportSkillModel stateObj)
         {
-            stateObj.ExportMultisiteSkillToSkillCommandModel.Period = new DateOnlyPeriodDto(new DateOnlyPeriod(reportDateFromToSelector1.WorkPeriodStart, reportDateFromToSelector1.WorkPeriodEnd));
-            return true;
+	        stateObj.ExportMultisiteSkillToSkillCommandModel.Period = new DateOnlyPeriodDto
+		        {
+			        StartDate = new DateOnlyDto {DateTime = reportDateFromToSelector1.WorkPeriodStart},
+			        EndDate = new DateOnlyDto {DateTime = reportDateFromToSelector1.WorkPeriodEnd}
+		        };
+            return true;	
         }
 
         public void SetEditMode()

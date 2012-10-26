@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             using (_mockRepository.Record())
             {
                 Expect.Call(_scheduleDay.Period).Return(new DateTimePeriod(startTime, endTime)).Repeat.Twice();
-                Expect.Call(_scheduleDay.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+                Expect.Call(_scheduleDay.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
             }
             using (_mockRepository.Playback())
             {

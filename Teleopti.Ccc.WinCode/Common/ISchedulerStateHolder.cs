@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WinCode.Common
         /// Created by: micke
         /// Created date: 2009-03-21
         /// </remarks>
-        ICccTimeZoneInfo TimeZoneInfo { get; set; }
+        TimeZoneInfo TimeZoneInfo { get; set; }
 
         /// <summary>
         /// Gets the person requests.

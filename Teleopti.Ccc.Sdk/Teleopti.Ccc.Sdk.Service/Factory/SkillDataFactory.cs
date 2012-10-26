@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         {
             IRepositoryFactory repositoryFactory = new RepositoryFactory();
             ICollection<SkillDayDto> returnList = new List<SkillDayDto>();
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 IScenarioRepository scenarioRepository = repositoryFactory.CreateScenarioRepository(unitOfWork);
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             return returnList;
         }
 
-        private static DateTimePeriod PreparePeriod(ICccTimeZoneInfo timeZoneInfo, DateOnlyDto dateOnlyDto)
+        private static DateTimePeriod PreparePeriod(TimeZoneInfo timeZoneInfo, DateOnlyDto dateOnlyDto)
         {
             DateTime fromDateTime = TimeZoneHelper.ConvertToUtc(dateOnlyDto.DateTime, timeZoneInfo);
             DateTime toDateTime = TimeZoneHelper.ConvertToUtc(dateOnlyDto.DateTime.AddDays(1), timeZoneInfo);

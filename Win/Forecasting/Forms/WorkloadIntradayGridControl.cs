@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             get { return _rowManagerTemplateTaskPeriod; }
         }
 
-        public WorkloadIntradayGridControl(ITaskOwner taskOwner, TaskOwnerHelper taskOwnerPeriodHelper, ICccTimeZoneInfo timeZone, int resolution, AbstractDetailView owner, ChartSettings chartSettings)
+        public WorkloadIntradayGridControl(ITaskOwner taskOwner, TaskOwnerHelper taskOwnerPeriodHelper, TimeZoneInfo timeZone, int resolution, AbstractDetailView owner, ChartSettings chartSettings)
             : base(taskOwner, taskOwnerPeriodHelper, timeZone, resolution, owner, ((IWorkloadDayBase)taskOwner).Workload.Skill.SkillType.DisplayTimeSpanAsMinutes, chartSettings)
         {
             _rowManagerTemplateTaskPeriod = new RowManager<TemplateTaskPeriodGridRow, ITemplateTaskPeriod>(this, Intervals, Resolution);

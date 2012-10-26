@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         public static IList<ISkill> SkillsOnPerson(DateTime dateToCheckOn, IPerson person)
         {
             var skills = new List<ISkill>();
-            ICccTimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
             var scheduleDateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(dateToCheckOn, timeZoneInfo).Date);
             
 			var period = person.Period(scheduleDateOnlyPerson);

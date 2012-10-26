@@ -21,14 +21,14 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
     {
         private PersonCreator _target;
         private ISessionFactory _sessionFactory;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
 
         [SetUp]
         public void Setup()
         {
             _sessionFactory = SetupFixtureForAssembly.SessionFactory;
             _target = new PersonCreator(_sessionFactory);
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
         }
 
         [Test]

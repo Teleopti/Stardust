@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return composer.Result();
         }
 
-        public IAddLayerViewModel<IActivity> CreateAddPersonalActivityViewModel(IList<IActivity> activities, DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo)
+        public IAddLayerViewModel<IActivity> CreateAddPersonalActivityViewModel(IList<IActivity> activities, DateTimePeriod period, TimeZoneInfo timeZoneInfo)
         {
             var model = new AddPersonalActivityViewModel(activities, period, WorkingInterval);
             SetBoundary(model);
@@ -44,14 +44,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new AddDialogComposer<AddOvertimeViewModel>(model).Result();
         }
 
-        public IAddLayerViewModel<IDayOffTemplate> CreateAddDayOffViewModel(IList<IDayOffTemplate> dayOffTemplates, ICccTimeZoneInfo timeZoneInfo, DateTimePeriod period)
+        public IAddLayerViewModel<IDayOffTemplate> CreateAddDayOffViewModel(IList<IDayOffTemplate> dayOffTemplates, TimeZoneInfo timeZoneInfo, DateTimePeriod period)
         {
             var model = new AddDayOffViewModel(dayOffTemplates, period);
             SetBoundary(model);
             return new AddDialogComposer<AddDayOffViewModel>(model).Result();
         }
 
-        public IAddActivityViewModel CreateAddActivityViewModel(IList<IActivity> activities, IList<IShiftCategory> shiftCategories, DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo)
+        public IAddActivityViewModel CreateAddActivityViewModel(IList<IActivity> activities, IList<IShiftCategory> shiftCategories, DateTimePeriod period, TimeZoneInfo timeZoneInfo)
         {
             var model = new AddActivityViewModel(activities, shiftCategories, period, WorkingInterval);
             SetBoundary(model);

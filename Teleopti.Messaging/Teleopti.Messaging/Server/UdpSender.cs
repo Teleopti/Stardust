@@ -146,7 +146,7 @@ namespace Teleopti.Messaging.Server
             {
                 if (_clientSocket == null)
                 {
-                    if (Socket.SupportsIPv4)
+                    if (Socket.OSSupportsIPv4)
                     {
                         socket2 = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                     }

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             _agDay.AgentDayAssignment.SetAssigned(_agdFactory.Absence("Semester", "SE", false),
                                                   new global::Domain.SchedType(-1, "Web", true, false, false));
 
-            AgentAbsenceMapper agAbsMapper = new AgentAbsenceMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            AgentAbsenceMapper agAbsMapper = new AgentAbsenceMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAbsence newAgAbs = agAbsMapper.Map(_agDay);
 
             Assert.IsNotNull(newAgAbs.Person);

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCode.Payroll
         /// <summary>
         /// Loads the model.
         /// </summary>
-        public void LoadModel(DateOnly selectedDate, ICccTimeZoneInfo timeZoneInfo)
+        public void LoadModel(DateOnly selectedDate, TimeZoneInfo timeZoneInfo)
         {
             ModelCollection.Clear();
             if (ExplorerPresenter.Model.FilteredDefinitionSetCollection != null &&

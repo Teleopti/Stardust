@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.Infrastructure
@@ -15,7 +16,7 @@ namespace Teleopti.Interfaces.Infrastructure
         /// Created by: robink
         /// Created date: 2007-10-22
         /// </remarks>
-        ICccTimeZoneInfo TimeZone { get; set; }
+        TimeZoneInfo TimeZone { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether Micke is in the mode or not.

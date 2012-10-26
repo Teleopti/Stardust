@@ -248,8 +248,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
     	/// </remarks>
     	private void calculateTemplateDay(IWorkloadDayTemplate workloadDayTemplate, IEnumerable<IWorkloadDayBase> workloadDays, bool includeStatistics = false)
     	{
-    		ICccTimeZoneInfo raptorTimeZoneInfo = _workload.Skill.TimeZone;
-    		DateTime startDateTime = raptorTimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, raptorTimeZoneInfo);
+    		TimeZoneInfo raptorTimeZoneInfo = _workload.Skill.TimeZone;
+            DateTime startDateTime = raptorTimeZoneInfo.SafeConvertTimeToUtc(SkillDayTemplate.BaseDate);
             
     		//Create the list with all periods
     		IEnumerable<ITemplateTaskPeriod> taskPeriods = createExtendedTaskPeriodList(workloadDays,startDateTime);

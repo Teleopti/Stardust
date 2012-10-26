@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private const bool _useTrend = true;
         private IWorkload workload;
         private TaskOwnerPeriod historicalDepth;
-        private readonly ICccTimeZoneInfo _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+        private readonly TimeZoneInfo _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
         private MockRepository mocks;
         private IList<IVolumeYear> volumes;
 
@@ -168,13 +168,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyAddDateToOutlier()
         {
-            DateTime dateHistory = _timeZone.ConvertTimeToUtc(new DateTime(2006, 1, 1), _timeZone);
+            DateTime dateHistory = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2006, 1, 1), _timeZone);
             var dateCurrent1 = new DateOnly(2008, 4, 10);
             var dateCurrent2 = new DateOnly(2008, 4, 13);
 
             IList<IOutlier> outliers = new List<IOutlier>();
             IOutlier outlier1 = new Outlier(new Description("Easter day"));
-            outlier1.AddDate(new DateOnly(_timeZone.ConvertTimeFromUtc(dateHistory, _timeZone)));
+            outlier1.AddDate(new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(dateHistory, _timeZone)));
             outlier1.AddDate(dateCurrent1);
             outliers.Add(outlier1);
 
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 Math.Round(target.TotalDayItemCollection.First(d => dateCurrent1 == d.CurrentDate).TaskIndex, 4),
                 Math.Round(target.TotalDayItemCollection.First(d => dateCurrent2 == d.CurrentDate).TaskIndex, 4));
 
-            outlier1.AddDate(new DateOnly(_timeZone.ConvertTimeFromUtc(dateCurrent2, _timeZone)));
+            outlier1.AddDate(new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(dateCurrent2, _timeZone)));
             target.RecalculateOutlier(outlier1);
 
             Assert.AreEqual(
@@ -195,19 +195,19 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[Test]
 		public void ShouldNotCrashWhenAddingOutlierForClosedDay()
 		{
-			DateTime dateHistory = _timeZone.ConvertTimeToUtc(new DateTime(2006, 1, 1), _timeZone);
-			DateTime dateCurrent1 = _timeZone.ConvertTimeToUtc(new DateTime(2008, 4, 10), _timeZone);
+            DateTime dateHistory = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2006, 1, 1), _timeZone);
+            DateTime dateCurrent1 = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2008, 4, 10), _timeZone);
 			DateOnly dateCurrent2 = new DateOnly(2008, 4, 13);
 
 			IList<IOutlier> outliers = new List<IOutlier>();
 			Outlier outlier1 = new Outlier(new Description("Easter day"));
-			outlier1.AddDate(new DateOnly(_timeZone.ConvertTimeFromUtc(dateHistory, _timeZone)));
-			outlier1.AddDate(new DateOnly(_timeZone.ConvertTimeFromUtc(dateCurrent1, _timeZone)));
+            outlier1.AddDate(new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(dateHistory, _timeZone)));
+            outlier1.AddDate(new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(dateCurrent1, _timeZone)));
 			outliers.Add(outlier1);
 
             target.Create(historicalDepth, _taskOwnerCollection, volumes, outliers, 1, 1, false, workload);
 
-			outlier1.AddDate(new DateOnly(_timeZone.ConvertTimeFromUtc(dateCurrent2, _timeZone)));
+            outlier1.AddDate(new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(dateCurrent2, _timeZone)));
 			((IWorkloadDayBase)_taskOwnerCollection.First(d => dateCurrent2 == d.CurrentDate)).Close();
 
 			target.RecalculateOutlier(outlier1);
@@ -392,9 +392,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
             var dateLocal = new DateOnly(2010, 5, 9);
-            var cccTimeZoneInfo = new CccTimeZoneInfo(timeZoneInfo);
 
-            workload.Skill.TimeZone = cccTimeZoneInfo;
+            workload.Skill.TimeZone = timeZoneInfo;
             IWorkloadDay workloadDay = new WorkloadDay();
             workloadDay.Create(dateLocal, workload, new List<TimePeriod> { new TimePeriod(8, 0, 8, 15) });
             workloadDay.MergeTemplateTaskPeriods(workloadDay.TaskPeriodList);
@@ -430,9 +429,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
             var dateLocal = new DateOnly(2010, 5, 9);
-            var cccTimeZoneInfo = new CccTimeZoneInfo(timeZoneInfo);
 
-            workload.Skill.TimeZone = cccTimeZoneInfo;
+            workload.Skill.TimeZone = timeZoneInfo;
             IWorkloadDay workloadDay = new WorkloadDay();
             workloadDay.Create(dateLocal, workload, new List<TimePeriod> { new TimePeriod(8, 0, 8, 15) });
             workloadDay.MergeTemplateTaskPeriods(workloadDay.TaskPeriodList);
@@ -468,9 +466,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
             var dateLocal = new DateOnly(2010, 5, 9);
-            var cccTimeZoneInfo = new CccTimeZoneInfo(timeZoneInfo);
 
-            workload.Skill.TimeZone = cccTimeZoneInfo;
+            workload.Skill.TimeZone = timeZoneInfo;
             IWorkloadDay workloadDay = new WorkloadDay();
             workloadDay.Create(dateLocal, workload, new List<TimePeriod> { new TimePeriod(8, 0, 8, 15) });
             workloadDay.MergeTemplateTaskPeriods(workloadDay.TaskPeriodList);

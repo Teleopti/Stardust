@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.CollectionConverter
             mocks = new MockRepository();
             uow = mocks.StrictMock<IUnitOfWork>();
             mappedObjectPair = new MappedObjectPair();
-            mapper = mocks.StrictMock<Mapper<IActivity, global::Domain.Activity>>(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Local));
+            mapper = mocks.StrictMock<Mapper<IActivity, global::Domain.Activity>>(mappedObjectPair, (TimeZoneInfo.Local));
             target = new ActivityConverter(uow, mapper);
         }
 

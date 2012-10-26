@@ -7,6 +7,7 @@ using System.Windows.Markup;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration;
 using Teleopti.Analytics.Etl.Transformer;
 using log4net.Config;
+using System.Xaml;
 using Application = System.Windows.Application;
 
 namespace Teleopti.Analytics.Etl.ConfigTool

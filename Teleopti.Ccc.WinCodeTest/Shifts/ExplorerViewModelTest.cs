@@ -117,8 +117,8 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             Assert.AreEqual(1.45f, _target.WidthPerPixel);
             Assert.AreEqual(970, _target.VisualColumnWidth);
             Assert.AreEqual(19, _target.VisualizeGridColumnCount);
-            Assert.AreEqual(new TimePeriod(TimeSpan.Parse("8:00"), TimeSpan.Parse("9:00")), _target.DefaultStartPeriod);
-            Assert.AreEqual(new TimePeriod(TimeSpan.Parse("17:00"), TimeSpan.Parse("18:00")), _target.DefaultEndPeriod);
+            Assert.AreEqual(new TimePeriod(8,0,9,0), _target.DefaultStartPeriod);
+            Assert.AreEqual(new TimePeriod(17,0,18,0), _target.DefaultEndPeriod);
             Assert.AreEqual(TimeSpan.FromMinutes(15), _target.StartPeriodSegment);
             Assert.AreEqual(TimeSpan.FromMinutes(15), _target.EndPeriodSegment);
 

@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
                                                              new WorkTimeLimitation(), null, null, null,
                                                              new List<IActivityRestriction>());
-            _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, (TimeZoneInfo.Utc));
 			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.MainShift.ShiftCategory };
             using (_mocks.Record())
             {
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
                                                              new WorkTimeLimitation(), null, null, null,
                                                              new List<IActivityRestriction>());
-            _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, (TimeZoneInfo.Utc));
 			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.MainShift.ShiftCategory };
             using (_mocks.Record())
             {
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
                                                              new WorkTimeLimitation(), null, null, null,
                                                              new List<IActivityRestriction>());
-            _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, (TimeZoneInfo.Utc));
 			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.MainShift.ShiftCategory };
             using (_mocks.Record())
             {

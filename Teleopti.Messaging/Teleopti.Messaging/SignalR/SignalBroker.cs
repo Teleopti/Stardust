@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Security;
@@ -19,7 +20,7 @@ namespace Teleopti.Messaging.SignalR
 	public class SignalBroker : IMessageBroker
 	{
 		private const string HubClassName = "MessageBrokerHub";
-		private readonly IDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new Dictionary<string, IList<SubscriptionWithHandler>>();
+		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
 		private SignalWrapper _wrapper;
 		private readonly object WrapperLock = new object();
 
@@ -200,16 +201,11 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 			{
 				if (_wrapper == null) return;
 
-				_wrapper.AddSubscription(subscription).Then(_ =>
+				_wrapper.AddSubscription(subscription).ContinueWith(_ =>
 				{
 					var route = subscription.Route();
 
-					IList<SubscriptionWithHandler> handlers;
-					if (!_subscriptionHandlers.TryGetValue(route, out handlers))
-					{
-						handlers = new List<SubscriptionWithHandler>();
-						_subscriptionHandlers.Add(route, handlers);
-					}
+					var handlers = _subscriptionHandlers.GetOrAdd(route, key => new List<SubscriptionWithHandler>());
 					handlers.Add(new SubscriptionWithHandler { Handler = eventMessageHandler, Subscription = subscription });
 				});
 			}
@@ -256,7 +252,8 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 
 			foreach (var route in handlersToRemove)
 			{
-				_subscriptionHandlers.Remove(route);
+				IList<SubscriptionWithHandler> removed;
+				_subscriptionHandlers.TryRemove(route,out removed);
 			}
 		}
 

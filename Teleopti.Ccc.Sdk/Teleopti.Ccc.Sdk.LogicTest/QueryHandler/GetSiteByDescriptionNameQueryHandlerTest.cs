@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Record())
 			{
 				Expect.Call(siteRepository.FindSiteByDescriptionName("MySite")).Return(siteList);
-				Expect.Call(assembler.DomainEntitiesToDtos(siteList)).Return(new[] {new SiteDto(siteList[0])});
+				Expect.Call(assembler.DomainEntitiesToDtos(siteList)).Return(new[] { new SiteDto { DescriptionName = siteList[0].Description.Name, Id = siteList[0].Id } });
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			}
 			using (mocks.Playback())

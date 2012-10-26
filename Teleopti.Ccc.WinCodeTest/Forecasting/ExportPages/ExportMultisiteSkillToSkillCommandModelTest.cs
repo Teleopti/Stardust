@@ -27,7 +27,11 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
             multisiteSkillGuid = Guid.NewGuid();
             sourceSkillGuid = Guid.NewGuid();
             targetSkillGuid = Guid.NewGuid();
-            period = new DateOnlyPeriodDto(new DateOnlyPeriod(2010,12,13,2010,12,22));
+	        period = new DateOnlyPeriodDto
+		        {
+			        StartDate = new DateOnlyDto {DateTime = new DateTime(2010, 12, 13)},
+			        EndDate = new DateOnlyDto {DateTime = new DateTime(2010, 12, 22)}
+		        };
 
             var multisiteSkillSelectionModel = new MultisiteSkillSelectionModel();
             

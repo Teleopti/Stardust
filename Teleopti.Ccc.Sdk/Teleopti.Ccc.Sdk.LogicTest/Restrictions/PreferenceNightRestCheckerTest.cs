@@ -26,9 +26,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 		[Test]
 		public void ShouldSetWarningOnDtoIfNightRestWillBeBroken()
 		{
-			var date1 = new DateOnlyDto(new DateOnly(2011, 9, 1)) ;
-			var date2 = new DateOnlyDto(new DateOnly(2011, 9, 2)) ;
-			var date3 = new DateOnlyDto(new DateOnly(2011, 9, 3)) ;
+			var date1 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 1) };
+			var date2 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 2) };
+			var date3 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 3) };
+
 			var day1 = new ValidatedSchedulePartDto { DateOnly = date1, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(15).TotalMinutes };
 			var day2 = new ValidatedSchedulePartDto { DateOnly = date2, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(8).TotalMinutes };
 			var day3 = new ValidatedSchedulePartDto { DateOnly = date3, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(8).TotalMinutes };
@@ -51,9 +52,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 		[Test]
 		public void ShouldNotSetWarningOnDtoIfNightRestNotWillBeBroken()
 		{
-			var date1 = new DateOnlyDto(new DateOnly(2011, 9, 1));
-			var date2 = new DateOnlyDto(new DateOnly(2011, 9, 2));
-			var date3 = new DateOnlyDto(new DateOnly(2011, 9, 3));
+			var date1 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 1) };
+			var date2 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 2) };
+			var date3 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 3) };
 			var day1 = new ValidatedSchedulePartDto { DateOnly = date1, MinEndTimeMinute = (int)TimeSpan.FromHours(20).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(15).TotalMinutes };
 			var day2 = new ValidatedSchedulePartDto { DateOnly = date2, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(8).TotalMinutes };
 			var day3 = new ValidatedSchedulePartDto { DateOnly = date3, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(8).TotalMinutes };
@@ -76,9 +77,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 		[Test]
 		public void ShouldNotSetWarningOnDtoIfOneDayIsDayOff()
 		{
-			var date1 = new DateOnlyDto(new DateOnly(2011, 9, 1));
-			var date2 = new DateOnlyDto(new DateOnly(2011, 9, 2));
-			var date3 = new DateOnlyDto(new DateOnly(2011, 9, 3));
+			var date1 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 1) };
+			var date2 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 2) };
+			var date3 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 3) };
 			var day1 = new ValidatedSchedulePartDto {  DateOnly = date1, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(15).TotalMinutes };
 			var day2 = new ValidatedSchedulePartDto { HasDayOff = true, DateOnly = date2, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(8).TotalMinutes };
 			var day3 = new ValidatedSchedulePartDto {  DateOnly = date3, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(8).TotalMinutes };
@@ -101,9 +102,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 		[Test]
 		public void ShouldNotSetWarningOnDtoIfOneDayIsPreferredDayOff()
 		{
-			var date1 = new DateOnlyDto(new DateOnly(2011, 9, 1));
-			var date2 = new DateOnlyDto(new DateOnly(2011, 9, 2));
-			var date3 = new DateOnlyDto(new DateOnly(2011, 9, 3));
+			var date1 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 1) };
+			var date2 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 2) };
+			var date3 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 3) };
 			var restriction = new PreferenceRestrictionDto {DayOff = new DayOffInfoDto()};
 			var day1 = new ValidatedSchedulePartDto { DateOnly = date1, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(15).TotalMinutes };
 			var day2 = new ValidatedSchedulePartDto { PreferenceRestriction = restriction, DateOnly = date2, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(8).TotalMinutes };
@@ -127,9 +128,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         [Test]
         public void ShouldNotSetWarningOnDtoIfOneDayIsPreferredAbsence()
         {
-            var date1 = new DateOnlyDto(new DateOnly(2011, 9, 1));
-            var date2 = new DateOnlyDto(new DateOnly(2011, 9, 2));
-            var date3 = new DateOnlyDto(new DateOnly(2011, 9, 3));
+			var date1 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 1) };
+			var date2 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 2) };
+			var date3 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 3) };
             var restriction = new PreferenceRestrictionDto { Absence = new AbsenceDto() };
             var day1 = new ValidatedSchedulePartDto { DateOnly = date1, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(15).TotalMinutes};
             var day2 = new ValidatedSchedulePartDto { PreferenceRestriction = restriction, DateOnly = date2, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(8).TotalMinutes};
@@ -153,9 +154,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 		[Test]
 		public void ShouldNotSetWarningOnDtoIfOneDayIsScheduledWithFullDayAbsence()
 		{
-			var date1 = new DateOnlyDto(new DateOnly(2011, 9, 1));
-			var date2 = new DateOnlyDto(new DateOnly(2011, 9, 2));
-			var date3 = new DateOnlyDto(new DateOnly(2011, 9, 3));
+			var date1 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 1) };
+			var date2 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 2) };
+			var date3 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 3) };
 			var day1 = new ValidatedSchedulePartDto { DateOnly = date1, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(15).TotalMinutes };
 			var day2 = new ValidatedSchedulePartDto { HasAbsence = true, DateOnly = date2, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(8).TotalMinutes };
 			var day3 = new ValidatedSchedulePartDto { DateOnly = date3, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(8).TotalMinutes };

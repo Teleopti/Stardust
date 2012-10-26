@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Rows
         [Test]
         public void VerifyTimeZoneInfo()
         {
-            ICccTimeZoneInfo timeZoneInfo = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
+            TimeZoneInfo timeZoneInfo = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
             Assert.AreEqual(timeZoneInfo.DisplayName, _target.TimeZoneInfo.DisplayName);
         }
     }

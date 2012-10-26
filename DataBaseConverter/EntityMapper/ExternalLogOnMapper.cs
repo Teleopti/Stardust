@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Interfaces.Domain;
 
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: rogerkr
         /// Created date: 2007-10-31
         /// </remarks>
-        public ExternalLogOnMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone)
+        public ExternalLogOnMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone)
             : base(mappedObjectPair, timeZone)
         {
         }

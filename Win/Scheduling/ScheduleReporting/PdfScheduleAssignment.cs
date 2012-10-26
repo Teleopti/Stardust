@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 {
     public class PdfScheduleAssignment : PdfScheduleTemplate
     {
-        public PdfScheduleAssignment(float columnWidth, IScheduleDay schedulePart, ICccTimeZoneInfo timeZoneInfo, bool rightToLeft, ScheduleReportDetail details, CultureInfo culture)
+        public PdfScheduleAssignment(float columnWidth, IScheduleDay schedulePart, TimeZoneInfo timeZoneInfo, bool rightToLeft, ScheduleReportDetail details, CultureInfo culture)
         {
             CultureInfo = culture;
             Brush = new PdfSolidBrush(Color.DimGray);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
 
         private float render(float top, DateTime startDateTime, string category, DateTime endDateTime, TimeSpan contractTime,
-            Color categoryColor, float headerTop, IVisualLayerCollection payLoads, ICccTimeZoneInfo timeZoneInfo, ScheduleReportDetail details)
+            Color categoryColor, float headerTop, IVisualLayerCollection payLoads, TimeZoneInfo timeZoneInfo, ScheduleReportDetail details)
         {
             top = RenderDate(startDateTime, top);
             top = RenderCategory(category, top);
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
         private const int MAX_NUMBER_OF_CHARACTERS = 20;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.TimePeriod.ToShortTimeString")]
-        private float RenderPayLoad(IVisualLayer visualLayer, float top, ICccTimeZoneInfo timeZoneInfo)
+        private float RenderPayLoad(IVisualLayer visualLayer, float top, TimeZoneInfo timeZoneInfo)
         {
             Format.Alignment = PdfTextAlignment.Center;
             const float fontSize = 7f;

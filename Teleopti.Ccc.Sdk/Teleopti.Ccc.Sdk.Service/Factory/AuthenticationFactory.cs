@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                     IEnumerable<IBusinessUnit> buList =
                         dataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits();
                     authenticationResultDto.Successful = true;
-                    buList.ForEach(unit => authenticationResultDto.BusinessUnitCollection.Add(new BusinessUnitDto(unit)));
+					buList.ForEach(unit => authenticationResultDto.BusinessUnitCollection.Add(new BusinessUnitDto { Id = unit.Id, Name = unit.Name}));
                 }
             }
             catch
@@ -70,11 +70,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             IList<DataSourceDto> dataSources = new List<DataSourceDto>();
             foreach (DataSourceContainer dataSource in dataSourceList)
             {
-                dataSources.Add(new DataSourceDto(dataSource.DataSource,
-                                                  dataSource.AuthenticationTypeOption ==
+                dataSources.Add(new DataSourceDto(dataSource.AuthenticationTypeOption ==
                                                   AuthenticationTypeOption.Windows
                                                       ? AuthenticationTypeOptionDto.Windows
-                                                      : AuthenticationTypeOptionDto.Application));
+													  : AuthenticationTypeOptionDto.Application) { Name = dataSource.DataSource.Application.Name });
             }
             return dataSources;
         }
@@ -121,7 +120,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 throw new FaultException("The requested business unit is not available");
             }
 
-            SetBusinessUnit(new BusinessUnitDto(businessUnit));
+			SetBusinessUnit(new BusinessUnitDto { Id = businessUnit.Id, Name = businessUnit.Name });
         }
 
         public AuthenticationResultDto LogOnApplication(string userName, string password, DataSourceDto dataSource)
@@ -140,7 +139,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 {
                     IEnumerable<IBusinessUnit> buList =
                         dataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits();
-                    buList.ForEach(unit => resultDto.BusinessUnitCollection.Add(new BusinessUnitDto(unit)));
+					buList.ForEach(unit => resultDto.BusinessUnitCollection.Add(new BusinessUnitDto { Id = unit.Id, Name = unit.Name }));
                 }
             }
             else

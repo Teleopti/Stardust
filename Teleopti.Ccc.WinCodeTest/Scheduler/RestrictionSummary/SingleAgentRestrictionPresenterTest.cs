@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
         private ISchedulingResultStateHolder _stateHolder;
         private ISchedulingOptions _schedulingOptions;
         private ISchedulePeriod _schedulePeriod;
-        private ICccTimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
         private ScheduleDictionaryForTest _dic;
         private ScheduleRange _range;
         private IWorkShiftWorkTime _workShiftWorkTime;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
                 UseRotations = true,
                 UseScheduling = true
             };
-            _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             DateTime start = new DateTime(2010, 3, 31, 22, 0, 0, DateTimeKind.Utc); 
             DateTime end = new DateTime(2010, 4, 30, 22, 0,0, DateTimeKind.Utc);
             _person = PersonFactory.CreatePerson("Lars", "Lagerbäck");

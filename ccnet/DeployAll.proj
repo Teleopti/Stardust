@@ -401,9 +401,7 @@
 
 			<!-- ClickOnceSign -->
 			<ClickOnceSign Include="$(CCNetWorkingDirectory)\WISE\tools\ClickOnceSign\ClickOnceSign\bin\Release\**\*.*;
-				   $(CCNetWorkingDirectory)\WISE\tools\ClickOnceSign\ClickOnceSign\TemporaryKey.pfx;
-            $(CCNetWorkingDirectory)\WISE\tools\ClickOnceSign\ClickOnceSign\mage.exe"/>
-
+				   $(CCNetWorkingDirectory)\WISE\tools\ClickOnceSign\ClickOnceSign\TemporaryKey.pfx"/>
 
 			<!-- Pre-Req -->
 			<PreReq

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var workTimeMineMax = new WorkTimeMinMax();
 
 			scheduleDay.Stub(x => x.Person).Return(person);
-			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new[] { personPeriod });
 			personPeriod.Stub(x => x.RuleSetBag).Return(ruleSetBag);
 			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll()))
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var workTimeMineMax = new WorkTimeMinMax();
 
 			scheduleDay.Stub(x => x.Person).Return(person);
-			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new[] { personPeriod });
 			personPeriod.Stub(x => x.RuleSetBag).Return(ruleSetBag);
 			effectiveRestriction.Stub(x => x.ShiftCategory).Return(new ShiftCategory("Kategori"));
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 
 			scheduleDay.Stub(x => x.Person).Return(person);
-			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new List<IPersonPeriod>());
 
 			var target = new WorkTimeMinMaxCalculator(null, null);
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 
 			scheduleDay.Stub(x => x.Person).Return(person);
-			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			person.Stub(x => x.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new[] { personPeriod });
 			personPeriod.Stub(x => x.RuleSetBag).Return(null);
 
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			personPeriod.RuleSetBag = ruleSetBag;
 			person.AddPersonPeriod(personPeriod);
 			scheduleDay.Stub(x => x.Person).Return(person);
-			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012,01,02), CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012,01,02), TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll())).Return(effectiveRestriction);
 			effectiveRestriction.Stub(x => x.Absence).Return(new Absence(){InContractTime = true});
 
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             schedulePeriod.AverageWorkTimePerDayOverride = TimeSpan.FromHours(6);
             person.AddSchedulePeriod(schedulePeriod);
             scheduleDay.Stub(x => x.Person).Return(person);
-            scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012, 01, 02), CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+            scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012, 01, 02), TimeZoneInfoFactory.StockholmTimeZoneInfo()));
             effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll())).Return(effectiveRestriction);
             effectiveRestriction.Stub(x => x.Absence).Return(new Absence { InContractTime = true });
 
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			personPeriod.RuleSetBag = ruleSetBag;
 			person.AddPersonPeriod(personPeriod);
 			scheduleDay.Stub(x => x.Person).Return(person);
-			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012, 01, 07), CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012, 01, 07), TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll())).Return(effectiveRestriction);
 			effectiveRestriction.Stub(x => x.Absence).Return(new Absence() { InContractTime = true });
 
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			personPeriod.RuleSetBag = ruleSetBag;
 			person.AddPersonPeriod(personPeriod);
 			scheduleDay.Stub(x => x.Person).Return(person);
-			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012, 01, 02), CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012, 01, 02), TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll())).Return(effectiveRestriction);
 			effectiveRestriction.Stub(x => x.Absence).Return(new Absence() { InContractTime = false });
 

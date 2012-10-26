@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Globalization;
 using System.IO;
 using Autofac;
+using Rhino.ServiceBus.Hosting;
 using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
@@ -36,6 +37,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                         	builder.RegisterType<DateOnlyPeriodSerializer>().As<ICustomElementSerializer>();
                         	builder.RegisterType<LargeGuidCollectionSerializer>().As<ICustomElementSerializer>();
                         	_customHost = builder.Build();
+
+                        	using (var defaultHost = new DefaultHost())
+                        	{
+                        		defaultHost.SetQueueConnectionString(ConfigurationManager.ConnectionStrings["Queue"].ConnectionString);
+                        	}
 
                         	new OnewayRhinoServiceBusConfiguration()
 								.UseAutofac(_customHost)

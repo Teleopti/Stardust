@@ -56,10 +56,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanCalculateAverageCallsForPacificTimeZone()
         {
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
             TaskOwnerHelper periodForMonth =
                 SkillDayFactory.GenerateStatisticsForDayTests(
-                    _skill.TimeZone.ConvertTimeToUtc(new DateTime(2001, 09, 18), _skill.TimeZone), _workload);
+                    TimeZoneInfo.ConvertTimeToUtc(new DateTime(2001, 09, 18), _skill.TimeZone), _workload);
             var monthPeriod = new TaskOwnerPeriod(_dateInMonth, periodForMonth.TaskOwnerDays, TaskOwnerPeriodType.Other);
             MonthOfYear monthOfYear = new MonthOfYear(monthPeriod, new MonthOfYearCreator());
 
@@ -627,10 +627,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyAverageCallsForWeekPacific()
         {
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+            _skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
             TaskOwnerHelper periodForWeek =
                 SkillDayFactory.GenerateStatisticsForDayTests(
-                    _skill.TimeZone.ConvertTimeToUtc(new DateTime(2001, 09, 01), _skill.TimeZone), _workload);
+                    TimeZoneInfo.ConvertTimeToUtc(new DateTime(2001, 09, 01), _skill.TimeZone), _workload);
             var weekPeriod = new TaskOwnerPeriod(_dateInMonth, periodForWeek.TaskOwnerDays, TaskOwnerPeriodType.Other);
             WeekOfMonth weekOfMonth = new WeekOfMonth(weekPeriod, new WeekOfMonthCreator());
 

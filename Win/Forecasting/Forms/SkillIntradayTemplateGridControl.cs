@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private readonly ISkillDayTemplate _skillDayTemplate;
         private readonly ISkillType _skillType;
         
-        public SkillIntradayTemplateGridControl(ISkillDayTemplate skillDayTemplate, ICccTimeZoneInfo timeZone, int resolution, ISkillType skillType) 
+        public SkillIntradayTemplateGridControl(ISkillDayTemplate skillDayTemplate, TimeZoneInfo timeZone, int resolution, ISkillType skillType) 
             : base(null,null,timeZone,resolution,null, skillType.DisplayTimeSpanAsMinutes, new ChartSettings())
         {
             _skillType = skillType;
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             if (_skillDayTemplate == null) return;
             IList<ITemplateSkillDataPeriod> templateSkillDataPeriods = new List<ITemplateSkillDataPeriod>(_skillDayTemplate.TemplateSkillDataPeriodCollection);
 
-            DateTime baseDateUtc = TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate, TimeZone);
+            DateTime baseDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, TimeZone);
             if (templateSkillDataPeriods.Count > 0)
             {
                 IEnumerable<ITemplateSkillDataPeriod> sortedList = templateSkillDataPeriods.OrderBy(p => p.Period.StartDateTime.Ticks);

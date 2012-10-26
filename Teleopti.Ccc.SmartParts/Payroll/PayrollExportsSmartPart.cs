@@ -22,7 +22,7 @@ using Teleopti.Messaging.Coders;
 
 namespace Teleopti.Ccc.SmartParts.Payroll
 {
-    public partial class PayrollExportsSmartPart : ExtendedSmartPartBase, IObservable<IPayrollResult>
+    public partial class PayrollExportsSmartPart : ExtendedSmartPartBase, Teleopti.Ccc.WinCode.Common.IObservable<IPayrollResult>
     {
         private ICollection<IPayrollResult> _payrollResults;
         private PayrollExportSmartPartViewModel _model;

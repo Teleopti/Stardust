@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             global::Domain.WorkShift ws = _agdFactory.WorkShift();
             _agDay.AgentDayAssignment.SetAssigned(ws, _agdFactory.ScheduleType);
 
-            AgentAbsenceActivityMapper mapper = new AgentAbsenceActivityMapper(_mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            AgentAbsenceActivityMapper mapper = new AgentAbsenceActivityMapper(_mappedObjectPair, (TimeZoneInfo.Utc));
             IList<IPersonAbsence> retList = mapper.Map(_agDay);
             Assert.AreEqual(1, retList.Count);
         }
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             
             _agDay.AgentDayAssignment.SetAssigned(ws, _agdFactory.ScheduleType);
 
-            AgentAbsenceActivityMapper mapper = new AgentAbsenceActivityMapper(_mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            AgentAbsenceActivityMapper mapper = new AgentAbsenceActivityMapper(_mappedObjectPair, (TimeZoneInfo.Utc));
             IList<IPersonAbsence> retList = mapper.Map(_agDay);
             Assert.AreEqual(0, retList.Count);
         }

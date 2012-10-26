@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WpfControls.Common.Interop
                     (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay) ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
                 
                 //Set timezone:
-                VisualTreeTimeZoneInfo.SetTimeZoneInfo(window, StateHolder.Instance.StateReader.SessionScopeData.TimeZone.TimeZoneInfoObject as TimeZoneInfo);
+                VisualTreeTimeZoneInfo.SetTimeZoneInfo(window, StateHolder.Instance.StateReader.SessionScopeData.TimeZone);
                 
                 //Set ui-culture
                 //FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(TeleoptiPrincipal.Current.Regional.Culture.ToString())));

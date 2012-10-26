@@ -33,7 +33,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             IList<ISkill> skills =
                 new List<ISkill>(
                     _jobParameters.Helper.Repository.LoadSkillWithSkillDays(
-                        period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc))));
+                        period.ToDateOnlyPeriod(TimeZoneInfo.Utc)));
             IList<IPerson> persons = _jobParameters.StateHolder.PersonCollection.ToList();
 
             foreach (IScenario scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)

@@ -1,3 +1,5 @@
+using System;
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -53,7 +55,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets the used time zone.
         /// </summary>
         /// <value>The used time zone.</value>
-        ICccTimeZoneInfo UsedTimeZone
+        TimeZoneInfo UsedTimeZone
         { get; }
     }
 }

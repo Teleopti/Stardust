@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			budgetGroup = new BudgetGroup();
 			skill = SkillFactory.CreateSkill("Test");
 			budgetGroup.AddSkill(skill);
-			budgetGroup.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			budgetGroup.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			scenario = ScenarioFactory.CreateScenarioAggregate();
 
 			budgetDay1 = new BudgetDay(budgetGroup, scenario, new DateOnly(2010, 10, 20));

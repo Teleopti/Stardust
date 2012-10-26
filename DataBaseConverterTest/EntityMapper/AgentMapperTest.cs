@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             SetupObjectPairs();
 
             
-            _simpleAgentMapper = new AgentMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc), new PersonContract(new Contract("test"),new PartTimePercentage("test"),new ContractSchedule("test")));
+            _simpleAgentMapper = new AgentMapper(mappedObjectPair, (TimeZoneInfo.Utc), new PersonContract(new Contract("test"),new PartTimePercentage("test"),new ContractSchedule("test")));
 
             // Person  Period
             global::Domain.ICccListCollection<global::Domain.AgentPeriod> agPeriods = new global::Infrastructure.CccListCollection<global::Domain.AgentPeriod>();
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         //[Test]
         //public void CanMapAgentTerminalDateWithLocalDate()
         //{
-        //    ICccTimeZoneInfo timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+        //    TimeZoneInfo timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
         //    _simpleAgentMapper = new AgentMapper(mappedObjectPair, timeZone, new PersonContract(new Contract("test"), new PartTimePercentage("test"), new ContractSchedule("test")));
             
         //    IPerson newAgent = _simpleAgentMapper.Map(_oldAgent);

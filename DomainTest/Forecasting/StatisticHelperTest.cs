@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCanExcludeOutliersFromWorkloadDays()
         {
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            _skill.TimeZone = (TimeZoneInfo.Utc);
             IList<IOutlier> outliers = new List<IOutlier>();
             IList<ITaskOwner> workloadDays = new List<ITaskOwner>();
 

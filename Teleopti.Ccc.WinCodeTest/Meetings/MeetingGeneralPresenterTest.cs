@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private IScenario _scenario;
         private IMeeting _meeting;
         private IList<IActivity> _activityList;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private IRepositoryFactory _repositoryFactory;
         private IUnitOfWorkFactory _unitOfWorkFactory;
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _firstActivity = ActivityFactory.CreateActivity("Meeting");
 			_secondActivity = ActivityFactory.CreateActivity("Training");
 			_activityList = new List<IActivity> { _firstActivity, _secondActivity };
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+            _timeZone = (TimeZoneInfo.Local);
             
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             _meeting = new Meeting(_person,

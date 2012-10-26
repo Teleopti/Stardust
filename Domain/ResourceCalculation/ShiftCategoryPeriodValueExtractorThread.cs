@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
-		public IList<IShiftProjectionCache> FilterShiftCategoryPeriodOnSchedulingOptions(ICccTimeZoneInfo agentTimeZone, 
+		public IList<IShiftProjectionCache> FilterShiftCategoryPeriodOnSchedulingOptions(TimeZoneInfo agentTimeZone, 
             IEffectiveRestriction effectiveRestriction,IList<IPerson>persons,
 			IWorkShiftFinderResult finderResult, IPossibleStartEndCategory possibleStartEndCategory)
         {

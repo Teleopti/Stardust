@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void Setup()
         {
             _mop = new MappedObjectPair();
-            _mapper = new WorkloadDayMapper(_mop, new CccTimeZoneInfo(TimeZoneInfo.Utc), intervalLength);
+            _mapper = new WorkloadDayMapper(_mop, (TimeZoneInfo.Utc), intervalLength);
 
             _skillDayFactory = new SkillDayFactory();
             _mop.Scenario = _skillDayFactory.ScenarioPair;
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             const int startInterval = 3;
             const int endInterval = 16;
 
-            _mapper = new WorkloadDayMapper(_mop, new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), intervalLength);
+            _mapper = new WorkloadDayMapper(_mop, (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), intervalLength);
 
             //Create open hours
             IList<global::Domain.TimePeriod> openHours = new List<global::Domain.TimePeriod>
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             const int startInterval = 3;
             const int endInterval = 16;
 
-            _mapper = new WorkloadDayMapper(_mop, new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), intervalLength);
+            _mapper = new WorkloadDayMapper(_mop, (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), intervalLength);
 
             //Create open hours
             IList<global::Domain.TimePeriod> openHours = new List<global::Domain.TimePeriod>

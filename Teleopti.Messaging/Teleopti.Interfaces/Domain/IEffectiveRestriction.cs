@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
@@ -100,7 +101,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="layers">The layers.</param>
         /// <returns></returns>
         bool VisualLayerCollectionSatisfiesActivityRestriction(DateOnly scheduleDayDateOnly,
-                                                               ICccTimeZoneInfo agentTimeZone,
+                                                               TimeZoneInfo agentTimeZone,
 															   IEnumerable<IActivityRestrictableVisualLayer> layers);
 
        

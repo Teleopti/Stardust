@@ -1,7 +1,7 @@
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
-    /// Holds a date only and a iccctimezoneinfor
+    /// Holds a date only and a TimeZoneInfor
     /// to get a local date time
     /// </summary>
     /// <remarks>

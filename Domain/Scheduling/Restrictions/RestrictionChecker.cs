@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                     return PermissionState.Broken;
                 permissionState = PermissionState.Satisfied;
                 DateTimePeriod schedulePeriod = (DateTimePeriod)visualLayerCollection.Period();
-                ICccTimeZoneInfo timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
+                TimeZoneInfo timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
 
                 bool withinStartTimeSpan = isWithinTimeSpan(restriction.StartTimeLimitation.StartTime, restriction.StartTimeLimitation.EndTime, schedulePeriod.StartDateTime, timeZoneInfo);
                 bool withinEndTimeSpan = isWithinTimeSpan(restriction.EndTimeLimitation.StartTime, restriction.EndTimeLimitation.EndTime, schedulePeriod.EndDateTime, timeZoneInfo);
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 permissionState = PermissionState.Satisfied;
 
                 var schedulePeriod = (DateTimePeriod)visualLayerCollection.Period();
-                ICccTimeZoneInfo timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
+                TimeZoneInfo timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
 
                 bool withinStartTimeSpan = isWithinTimeSpan(rotation.StartTimeLimitation.StartTime, rotation.StartTimeLimitation.EndTime, schedulePeriod.StartDateTime, timeZoneInfo);
                 bool withinEndTimeSpan = isWithinTimeSpan(rotation.EndTimeLimitation.StartTime, rotation.EndTimeLimitation.EndTime, schedulePeriod.EndDateTime, timeZoneInfo);
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                         return PermissionState.Broken;
                     permissionState = PermissionState.Satisfied;
                     DateTimePeriod schedulePeriod = (DateTimePeriod)visualLayerCollection.Period();
-                    ICccTimeZoneInfo timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
+                    TimeZoneInfo timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
 
                     bool withinStartTimeSpan = isWithinTimeSpan(restriction.StartTimeLimitation.StartTime, restriction.StartTimeLimitation.EndTime, schedulePeriod.StartDateTime, timeZoneInfo);
                     bool withinEndTimeSpan = isWithinTimeSpan(restriction.EndTimeLimitation.StartTime, restriction.EndTimeLimitation.EndTime, schedulePeriod.EndDateTime, timeZoneInfo);
@@ -478,12 +478,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return permissionState;
         }
 
-        private static bool isWithinTimeSpan(TimeSpan? startTime, TimeSpan? endTime, DateTime timeToCheck, ICccTimeZoneInfo cccTimeZoneInfo)
+        private static bool isWithinTimeSpan(TimeSpan? startTime, TimeSpan? endTime, DateTime timeToCheck, TimeZoneInfo TimeZoneInfo)
         {
             bool a = true;
             bool b = true;
 
-            timeToCheck = cccTimeZoneInfo.ConvertTimeFromUtc(timeToCheck, cccTimeZoneInfo);
+            timeToCheck = TimeZoneInfo.ConvertTimeFromUtc(timeToCheck, TimeZoneInfo);
             if (startTime.HasValue)
             {
                 TimeSpan stripped = new TimeSpan(startTime.Value.Hours, startTime.Value.Minutes, 0);

@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 			var activity = new ActivityRepository(uow).LoadAll().Single(a => a.Name == Activity);
 
-			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(StartTime);
-			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(EndTime);
+			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
+			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
 
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
 				activity,

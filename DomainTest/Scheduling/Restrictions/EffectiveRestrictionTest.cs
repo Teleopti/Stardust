@@ -671,7 +671,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void CanCheckIfVisualLayerCollectionSatisfiesActivityRestriction()
         {
-            var cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+            var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("UTC");
             IActivity activity = ActivityFactory.CreateActivity("lunch");
 			activity.SetId(Guid.NewGuid());
             IActivity activity2 = ActivityFactory.CreateActivity("another one");
@@ -693,7 +693,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                                                             new DateTime(2009, 2, 2, 13, 0, 0, DateTimeKind.Utc)),_person);
 
 			var layerCollection = new WorkShiftProjectionLayer[] { };
-            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
         	layerCollection = new[]
         	                  	{
@@ -708,30 +708,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         	                  				ActivityId = layerLunch.Payload.Id.Value
         	                  			}
         	                  	};
-            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
             activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(12, 0, 0), null);
             activityRestriction.EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(13, 0, 0));
-            Assert.IsTrue(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsTrue(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
             activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(10, 0, 0), new TimeSpan(10, 30, 0));
             activityRestriction.EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(13, 0, 0));
-            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
             activityRestriction.StartTimeLimitation = new StartTimeLimitation(null, null);
             activityRestriction.EndTimeLimitation = new EndTimeLimitation(new TimeSpan(13, 30, 0), new TimeSpan(15, 0, 0));
-            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
             activityRestriction.StartTimeLimitation = new StartTimeLimitation(null, null);
             activityRestriction.EndTimeLimitation = new EndTimeLimitation(null, null);
             activityRestriction.WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(1, 30, 0), null);
-            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
             activityRestriction.WorkTimeLimitation = new WorkTimeLimitation(null, new TimeSpan(0, 30, 0));
-            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
             activityRestriction.WorkTimeLimitation = new WorkTimeLimitation();
-            Assert.IsTrue(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsTrue(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
         }
 
         [Test]

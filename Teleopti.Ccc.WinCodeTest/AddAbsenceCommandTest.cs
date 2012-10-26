@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest
                 Expect.Call(() => _schedulePart.CreateAndAddAbsence(null)).IgnoreArguments().Repeat.Once();
                 Expect.Call(scheduleDictionary[_person]).Return(_scheduleRange).Repeat.Times(2);
                 Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2012, 07, 16))).Return(_schedulePart);
-                Expect.Call(_schedulePart.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+                Expect.Call(_schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
                 Expect.Call(_schedulePresenterBase.ModifySchedulePart(_selectedSchedules)).Return(false);
                 Expect.Call(() => ((IValidateScheduleRange)_scheduleRange).ValidateBusinessRules(null)).IgnoreArguments();
                 _schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WinCodeTest
 				Expect.Call(scheduleDictionary[_person]).Return(_scheduleRange).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2012, 07, 16))).Return(_schedulePart);
 				Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2012, 07, 17))).Return(_schedulePart2);
-				Expect.Call(_schedulePart.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+				Expect.Call(_schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 				Expect.Call(() => ((IValidateScheduleRange)_scheduleRange).ValidateBusinessRules(null)).IgnoreArguments();
 				_schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 			}
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest
         private IScheduleDictionary CreateExpectationForModifySchedulePart(IScheduleDay schedulePart, IPerson person)
         {
             var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            Expect.Call(schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(_date), new CccTimeZoneInfo(TimeZoneInfo.Utc))).Repeat.AtLeastOnce();
+            Expect.Call(schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(_date), (TimeZoneInfo.Utc))).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.Person).Return(person).Repeat.AtLeastOnce();
             return scheduleDictionary;
         }
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WinCodeTest
 			var startDate = _date;
 			foreach (IScheduleDay schedulePart in scheduleParts)
 			{
-				Expect.Call(schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(startDate), new CccTimeZoneInfo(TimeZoneInfo.Utc))).Repeat.AtLeastOnce();
+				Expect.Call(schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(startDate), (TimeZoneInfo.Utc))).Repeat.AtLeastOnce();
 				Expect.Call(schedulePart.Person).Return(person).Repeat.AtLeastOnce();
 				startDate = startDate.AddDays(1);
 

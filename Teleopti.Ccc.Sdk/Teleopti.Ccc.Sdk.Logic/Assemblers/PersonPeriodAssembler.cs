@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 		{
 			if(entity == null)
 				throw new ArgumentNullException("entity");
-
+    		var team = entity.Team;
 			var personPeriodDto = new PersonPeriodDetailDto();
 			
 			personPeriodDto.PersonId = entity.Parent.Id.GetValueOrDefault(Guid.Empty);
-			personPeriodDto.StartDate = new DateOnlyDto(entity.StartDate);
-			personPeriodDto.Team = new TeamDto(entity.Team);
+			personPeriodDto.StartDate = new DateOnlyDto { DateTime = entity.StartDate };
+			personPeriodDto.Team = new TeamDto { Id = team.Id, Description = team.Description.Name, SiteAndTeam = team.SiteAndTeam };
 			personPeriodDto.Note = entity.Note;
 			personPeriodDto.ContractId = entity.PersonContract.Contract.Id.GetValueOrDefault(Guid.Empty);
 			personPeriodDto.PartTimePercentageId = entity.PersonContract.PartTimePercentage.Id.GetValueOrDefault(Guid.Empty);

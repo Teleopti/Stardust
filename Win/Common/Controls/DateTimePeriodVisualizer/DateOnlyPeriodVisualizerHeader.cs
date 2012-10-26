@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer
 
         private void paintDates(PaintEventArgs e)
         {
-            DateTimePeriod containedDateTimePeriod = _containedPeriod.ToDateTimePeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            DateTimePeriod containedDateTimePeriod = _containedPeriod.ToDateTimePeriod((TimeZoneInfo.Utc));
             LengthToTimeCalculator calculatior = new LengthToTimeCalculator(containedDateTimePeriod, Width);
             int lastStartX = 0;
             if (IsRightToLeft)
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer
 
         private void paintGuideLines(PaintEventArgs e)
         {
-            DateTimePeriod containedDateTimePeriod = _containedPeriod.ToDateTimePeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            DateTimePeriod containedDateTimePeriod = _containedPeriod.ToDateTimePeriod((TimeZoneInfo.Utc));
             LengthToTimeCalculator calculatior = new LengthToTimeCalculator(containedDateTimePeriod, Width);
             DateTime displayDate = containedDateTimePeriod.StartDateTime;
             do

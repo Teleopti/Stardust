@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             _groupingActivity.AddActivity(_activity);
 
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
             _skill.TimeZone = timeZoneInfo;
             PersistAndRemoveFromUnitOfWork(_activity);
             PersistAndRemoveFromUnitOfWork(_skill);
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _workload = WorkloadFactory.CreateWorkloadWithFullOpenHours(_skill);
             PersistAndRemoveFromUnitOfWork(_workload);
 
-            _date = timeZoneInfo.ConvertTimeToUtc(new DateTime(2008, 1, 8, 0, 0, 0));
+            _date = timeZoneInfo.SafeConvertTimeToUtc(new DateTime(2008, 1, 8, 0, 0, 0));
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldSetCorrectLocalDateForSkillDayInJordanStandardTime()
         {
             SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
 
             ICollection<ISkillDay> skillDays =
                 skillDayRepository.GetAllSkillDays(new DateOnlyPeriod(new DateOnly(2011, 3, 30), new DateOnly(2011,4,3)),

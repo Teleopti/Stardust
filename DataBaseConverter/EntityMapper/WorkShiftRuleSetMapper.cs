@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// </summary>
         /// <param name="mappedObjectPair"></param>
         /// <param name="timeZone"></param>
-        public WorkShiftRuleSetMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone) : base(mappedObjectPair, timeZone){}
+        public WorkShiftRuleSetMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone) : base(mappedObjectPair, timeZone){}
 
 		#endregion Constructors 
 

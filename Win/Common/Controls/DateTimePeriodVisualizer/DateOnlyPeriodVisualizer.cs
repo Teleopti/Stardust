@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer
             for (int i = 0; i < _dateOnlyPeriodVisualizerRow.Periods.Count; i++)
             {
                 DateOnlyPeriod period = _dateOnlyPeriodVisualizerRow.Periods[i];
-                DateTimePeriod containedDateTimePeriod = _containedPeriod.ToDateTimePeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc));
-                DateTimePeriod periodDateTimePeriod = period.ToDateTimePeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+                DateTimePeriod containedDateTimePeriod = _containedPeriod.ToDateTimePeriod((TimeZoneInfo.Utc));
+                DateTimePeriod periodDateTimePeriod = period.ToDateTimePeriod((TimeZoneInfo.Utc));
                 LengthToTimeCalculator calculatior = new LengthToTimeCalculator(containedDateTimePeriod, Width);
                 Control label = Controls.Find("periodLabel" + i, false)[0];
                 double left = calculatior.PositionFromDateTime(periodDateTimePeriod.StartDateTime, IsRightToLeft);
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer
 
         private void paintGuideLines(PaintEventArgs e)
         {
-            DateTimePeriod containedDateTimePeriod = _containedPeriod.ToDateTimePeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            DateTimePeriod containedDateTimePeriod = _containedPeriod.ToDateTimePeriod((TimeZoneInfo.Utc));
             LengthToTimeCalculator calculatior = new LengthToTimeCalculator(containedDateTimePeriod, Width);
             DateTime displayDate = containedDateTimePeriod.StartDateTime;
             do

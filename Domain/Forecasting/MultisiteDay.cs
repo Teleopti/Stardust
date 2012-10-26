@@ -96,10 +96,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
             InParameter.NotNull("templateDay", templateDay);
 
             //Copy the TemplateMultisitePeriod to the MultisiteDay
-            ICccTimeZoneInfo raptorTimeZoneInfo = _skill.TimeZone;
+            TimeZoneInfo raptorTimeZoneInfo = _skill.TimeZone;
 
             var multisiteUtcDate = TimeZoneHelper.ConvertToUtc(_multisiteDayDate, raptorTimeZoneInfo);
-            TimeSpan timeDiff = multisiteUtcDate.Subtract(raptorTimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, raptorTimeZoneInfo));
+            TimeSpan timeDiff = multisiteUtcDate.Subtract(raptorTimeZoneInfo.SafeConvertTimeToUtc(SkillDayTemplate.BaseDate));
             IList<IMultisitePeriod> multisitePeriods = new List<IMultisitePeriod>();
             foreach (ITemplateMultisitePeriod multisitePeriod in templateDay.TemplateMultisitePeriodCollection)
             {

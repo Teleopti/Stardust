@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Interfaces</RootNamespace>
     <AssemblyName>Teleopti.Interfaces</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
     </SccProjectName>
@@ -44,6 +44,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -525,7 +526,6 @@
     <Compile Include="Domain\IScheduleDictionary.cs" />
     <Compile Include="Domain\IScheduleExtractor.cs" />
     <Compile Include="Domain\IScheduleRange.cs" />
-    <Compile Include="Domain\ICccTimeZoneInfo.cs" />
     <Compile Include="Domain\ISchedulerRangeToLoadCalculator.cs" />
     <Compile Include="Domain\ISkillDataPeriod.cs" />
     <Compile Include="Domain\ISkillDay.cs" />
@@ -598,6 +598,7 @@
     <Compile Include="Domain\IMyReportVisualPayloadInfo.cs" />
     <Compile Include="Domain\MultiplicatorType.cs" />
     <Compile Include="Domain\TimeOfDay.cs" />
+    <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
     <Compile Include="Domain\WeekNumber.cs" />
     <Compile Include="Domain\WorkShiftLengthHintOption.cs" />
     <Compile Include="Domain\WorkTimeLimitation.cs" />

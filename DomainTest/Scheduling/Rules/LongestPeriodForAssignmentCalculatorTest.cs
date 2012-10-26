@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             //var category = ShiftCategoryFactory.CreateShiftCategory("myCategory");
             //var activity = ActivityFactory.CreateActivity("Phone");
             var person = PersonFactory.CreatePerson();
-            person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
             var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
             var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(range), underlyingDictionary);

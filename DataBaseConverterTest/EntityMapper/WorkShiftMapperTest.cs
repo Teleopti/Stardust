@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             mappedObjectPair.ShiftCategory = new ObjectPairCollection<ShiftCategory, IShiftCategory>();
             mappedObjectPair.ShiftCategory.Add(oldShiftCat1, new Domain.Scheduling.ShiftCategory("fsdfsd"));
 
-            WorkShiftMapper msMap = new WorkShiftMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            WorkShiftMapper msMap = new WorkShiftMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IWorkShift newShift1 = msMap.Map(oldWorkShift1);
             IWorkShift newShift2 = msMap.Map(oldWorkShift2);
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             mappedObjectPair.ShiftCategory = new ObjectPairCollection<ShiftCategory, IShiftCategory>();
             mappedObjectPair.ShiftCategory.Add(oldShiftCat1, new Domain.Scheduling.ShiftCategory("fsdfsd"));
             
-            WorkShiftMapper msMap = new WorkShiftMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            WorkShiftMapper msMap = new WorkShiftMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IWorkShift newShift1 = msMap.Map(oldWorkShift1);
 
             Assert.AreEqual(2, newShift1.LayerCollection.Count);

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WpfControls.FileImport.ViewModels
         public string Separator { set; get; }
 
 
-        public PrepareTextViewModel(string streamPath, ICccTimeZoneInfo defaultTimeZone)
+        public PrepareTextViewModel(string streamPath, TimeZoneInfo defaultTimeZone)
         {
             
             TimeZoneCollection = prepareTimeZones(defaultTimeZone);
@@ -69,11 +69,11 @@ namespace Teleopti.Ccc.WpfControls.FileImport.ViewModels
             }
         }
 
-        public ICccTimeZoneInfo TimeZone
+        public TimeZoneInfo TimeZone
         {
             get
             {
-                return TimeZoneCollection.CurrentItem as ICccTimeZoneInfo;
+                return TimeZoneCollection.CurrentItem as TimeZoneInfo;
             }
         }
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WpfControls.FileImport.ViewModels
 
         public IModel NextStep()
         {
-            TimeZoneInfo timeZoneInfo = TimeZone.TimeZoneInfoObject as TimeZoneInfo;
+            TimeZoneInfo timeZoneInfo = TimeZone;
             return new PreviewQueueGridViewModel(_streamPath, Separator, timeZoneInfo, _encoding);
         }
 
@@ -142,11 +142,11 @@ namespace Teleopti.Ccc.WpfControls.FileImport.ViewModels
             
         }
 
-        private static ICollectionView prepareTimeZones(ICccTimeZoneInfo defaultTimeZone)
+        private static ICollectionView prepareTimeZones(TimeZoneInfo defaultTimeZone)
         {
             List<TimeZoneInfo> timeZoneCollection = TimeZoneInfo.GetSystemTimeZones().ToList();
-            IList<ICccTimeZoneInfo> selectableTimeZones = new List<ICccTimeZoneInfo>();
-            timeZoneCollection.ForEach(t => selectableTimeZones.Add(new CccTimeZoneInfo(t)));
+            IList<TimeZoneInfo> selectableTimeZones = new List<TimeZoneInfo>();
+            timeZoneCollection.ForEach(t => selectableTimeZones.Add((t)));
             
             if (!selectableTimeZones.Contains(defaultTimeZone)) 
                 selectableTimeZones.Add(defaultTimeZone);

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
         /// Created date: 8/13/2008
         /// </remarks>
         public EmployeeOptionalColumnModuleConverter(MappedObjectPair mappedObjectPair, DateTimePeriod period,
-                                                     ICccTimeZoneInfo timeZoneInfo)
+                                                     TimeZoneInfo timeZoneInfo)
             : base(mappedObjectPair, period, timeZoneInfo)
         {
             moduleName = "OptionalColumn";
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
             {
                 ICollection<Agent> agents = new AgentReader().GetAll().Values;
                 EmployeeOptionalColumnMapper employeeOptionalColumnMapper =
-                    new EmployeeOptionalColumnMapper(MappedObjectPair, new CccTimeZoneInfo(System.TimeZoneInfo.Utc), agents);
+                    new EmployeeOptionalColumnMapper(MappedObjectPair, TimeZoneInfo.Utc, agents);
 
                 EmployeeOptionalColumnConverter employeeOptionalColumnConverter =
                     new EmployeeOptionalColumnConverter(unitOfWork, employeeOptionalColumnMapper);

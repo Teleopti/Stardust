@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Teleopti.Interfaces.MessageBroker.Core;
 
@@ -167,7 +168,7 @@ namespace Teleopti.Logging.Core
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+		[SecurityCritical]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("LogId", _logId, _logId.GetType());

@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (finderService == null) throw new ArgumentNullException("finderService");
 
             DateTime scheduleDayUtc = schedulePart.Period.StartDateTime;
-            ICccTimeZoneInfo timeZoneInfo = schedulePart.Person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo timeZoneInfo = schedulePart.Person.PermissionInformation.DefaultTimeZone();
             var scheduleDateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(scheduleDayUtc, timeZoneInfo).Date);
             IPersonPeriod personPeriod = schedulePart.Person.Period(scheduleDateOnlyPerson);
             if (personPeriod != null)

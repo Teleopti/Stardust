@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
         void ChangeDurationAndPersist(IMeeting meeting, TimeSpan durationChange, IViewBase view);
 
         void ChangeStartDateTimeAndPersist(IMeeting meeting, DateTime userStartDateTime, TimeSpan durationChange,
-                                           ICccTimeZoneInfo userTimeZone, IViewBase view);
+                                           TimeZoneInfo userTimeZone, IViewBase view);
     }
 
     public class MeetingChangerAndPersister : IMeetingChangerAndPersister
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
             
         }
 
-        public void ChangeStartDateTimeAndPersist(IMeeting meeting, DateTime userStartDateTime, TimeSpan durationChange, ICccTimeZoneInfo userTimeZone, IViewBase view)
+        public void ChangeStartDateTimeAndPersist(IMeeting meeting, DateTime userStartDateTime, TimeSpan durationChange, TimeZoneInfo userTimeZone, IViewBase view)
         {
             if (meeting != null)
             {

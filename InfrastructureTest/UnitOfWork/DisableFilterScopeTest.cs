@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		protected override void SetupForRepositoryTest()
 		{
 			deletedPerson = new Person();
-			deletedPerson.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Local));
+			deletedPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
 			((IDeleteTag)deletedPerson).SetDeleted();
 			PersistAndRemoveFromUnitOfWork(deletedPerson);
 		}

@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Win.Reporting
             }
         }
 
-        public ICccTimeZoneInfo TimeZone
+        public TimeZoneInfo TimeZone
         {
             get
             {

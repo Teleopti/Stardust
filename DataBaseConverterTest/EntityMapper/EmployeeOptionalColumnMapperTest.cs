@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
     		                       		Agent = new ObjectPairCollection<Agent, IPerson>{{_agent, person}}
     		                       	};
 			
-    		_target = new EmployeeOptionalColumnMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc), agentCollection);
+    		_target = new EmployeeOptionalColumnMapper(mappedObjectPair, (TimeZoneInfo.Utc), agentCollection);
         }
 
     	[Test]

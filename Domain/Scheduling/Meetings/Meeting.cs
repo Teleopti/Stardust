@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 	public class Meeting : AggregateRootWithBusinessUnit, IMeeting, IProvideCustomChangeInfo
 	{
 		private IPerson _organizer;
-		private ISet<IMeetingPerson> _meetingPersons;
+		private Iesi.Collections.Generic.ISet<IMeetingPerson> _meetingPersons;
 		private String _subject;
 		private String _location;
 		private String _description;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 		private DateOnly _endDate;
 		private IActivity _activity;
 		private IList<IRecurrentMeetingOption> meetingRecurrenceOptions = new List<IRecurrentMeetingOption>(1);
-		private ICccTimeZoneInfo _timeZoneCache;
+		private TimeZoneInfo _timeZoneCache;
 		private string _timeZone;
 		private Guid _originalMeetingId;
 		private readonly IChangeTracker<IMeeting> _meetingChangeTracker = new MeetingChangeTracker();
@@ -141,13 +141,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 			return formatter.Format(_description);
 		}
 
-		public virtual ICccTimeZoneInfo TimeZone
+		public virtual TimeZoneInfo TimeZone
 		{
 			get
 			{
 				if (_timeZoneCache == null)
 				{
-					_timeZoneCache = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(_timeZone));
+					_timeZoneCache = TimeZoneInfo.FindSystemTimeZoneById(_timeZone);
 				}
 				return _timeZoneCache;
 			}
@@ -313,13 +313,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 			if (TimeZone.IsInvalidTime(localStartTime))
 				localStartTime = localStartTime.AddHours(1);
 
-			DateTime startTime = TimeZone.ConvertTimeToUtc(localStartTime, TimeZone);
+            DateTime startTime = TimeZone.SafeConvertTimeToUtc(localStartTime);
 
 			DateTime localEndTime = dateOnly.Date.Add(_endTime);
 			if (TimeZone.IsInvalidTime(localEndTime) || localEndTime < localStartTime)
 				localEndTime = localEndTime.AddHours(1);
 
-			DateTime endTime = TimeZone.ConvertTimeToUtc(localEndTime, TimeZone);
+            DateTime endTime = TimeZone.SafeConvertTimeToUtc(localEndTime);
 
 			return new DateTimePeriod(startTime, endTime);
 		}

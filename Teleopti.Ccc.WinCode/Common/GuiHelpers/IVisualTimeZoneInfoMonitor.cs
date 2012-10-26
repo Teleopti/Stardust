@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
         /// <summary>
         /// Times the zone info changed.
         /// </summary>
-        /// <param name="newTimeZoneInfo">The new TimeZoneInfo.</param>
+        /// <param name="newTimeZoneInfo">The .</param>
         /// <remarks>
         /// Created by: henrika
         /// Created date: 2009-08-25

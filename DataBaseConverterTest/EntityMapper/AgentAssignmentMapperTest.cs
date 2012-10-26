@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void CanMapAgentBaseShiftAssignment()
         {
             _agDay.AgentDayAssignment.SetAssigned(_agdFactory.WorkShift(), _agdFactory.ScheduleType);
-            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
             Assert.IsNotNull(newAgAss.Person);
             Assert.IsNotNull(newAgAss.MainShift);
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             _agDay.AgentDayAssignment.SetAssigned(_agdFactory.WorkShift(), _agdFactory.ScheduleType);
             _agDay.AgentDayAssignment.SetAssigned(_agdFactory.Absence("Semester", "SE", false),
                                                   new global::Domain.SchedType(-1, "Web", true, false, false));
-            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
             Assert.IsNotNull(newAgAss.Person);
             Assert.IsNotNull(newAgAss.MainShift);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             _agDay.AgentDayAssignment.SetAssigned(_agdFactory.WorkShift(), _agdFactory.ScheduleType);
             _agDay.AgentDayAssignment.SetAssigned(_agdFactory.Absence("Day Off", "DO", true),
                                                   new global::Domain.SchedType(-1, "Web", true, false, false));
-            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
             Assert.IsNull(newAgAss);
         }
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             _agDay.AgentDayAssignment.SetAssigned(_agdFactory.WorkShift(), _agdFactory.ScheduleType);
             _agDay.AgentDayAssignment.SetAssigned(_agdFactory.Absence("Semester", "SE", false),
                                                   new global::Domain.SchedType(-1, "Web", true, false, false));
-            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
             Assert.IsNotNull(newAgAss.Person);
             Assert.IsNotNull(newAgAss.MainShift);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void CanMapAgentPersonalAssignment()
         {
             _agDay.AgentDayAssignment.AddFillup(_agdFactory.FillUpShift(), _agdFactory.ScheduleType);
-            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
             Assert.IsNotNull(newAgAss.Person);
             Assert.AreEqual(1, newAgAss.PersonalShiftCollection.Count);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         {
             SetOvertime();
             _agDay.AgentDayAssignment.SetAssigned(_agdFactory.WorkShift(), _agdFactory.ScheduleType);
-            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
             Assert.IsNotNull(newAgAss.Person);
             Assert.IsNotNull(newAgAss.MainShift);
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         {
             SetOvertime();
             _agDay.AgentDayAssignment.AddFillup(_agdFactory.FillUpShift(), _agdFactory.ScheduleType);
-            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
             Assert.IsNotNull(newAgAss.Person);
             Assert.AreEqual(1, newAgAss.PersonalShiftCollection.Count);

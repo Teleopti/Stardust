@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             }
 
             var dateOnly = new DateOnly(WorkShift.BaseDate);
-            ICccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            TimeZoneInfo tzInfo = TimeZoneInfo.Utc;
             if (!VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, tzInfo, workShiftProjection.Layers))
             {
                 return false;
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public bool MustHave { get; set; }
 
-		public bool VisualLayerCollectionSatisfiesActivityRestriction(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layers)
+		public bool VisualLayerCollectionSatisfiesActivityRestriction(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layers)
         {
 			if (scheduleDayDateOnly == new DateOnly(2050, 1, 1))
 				return false;
@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             }
         }
 
-		private static bool visualLayerCollectionSatisfiesOneActivityRestriction(ICccTimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layerCollection, IActivityRestriction activityRestriction)
+		private static bool visualLayerCollectionSatisfiesOneActivityRestriction(TimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layerCollection, IActivityRestriction activityRestriction)
         {
             IActivityRestriction actRestriction = activityRestriction;
             

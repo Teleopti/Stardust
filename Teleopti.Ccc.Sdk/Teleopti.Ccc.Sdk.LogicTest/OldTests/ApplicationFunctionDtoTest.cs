@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
     public class ApplicationFunctionDtoTest
     {
         private ApplicationFunctionDto _target;
-        private IApplicationFunction applicationFunction;
+        private IApplicationFunction _applicationFunction;
 
         /// <summary>
         /// Setups this instance.
@@ -23,50 +23,58 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         public void Setup()
         {
             MockRepository mocks = new MockRepository();
-            applicationFunction = mocks.StrictMock<IApplicationFunction>();
+            _applicationFunction = mocks.StrictMock<IApplicationFunction>();
 
             Guid guid = new Guid("018794DA-A984-4C0E-AFF9-FCCE1923ACF6");
 
             using (mocks.Record())
             {
-                Expect.On(applicationFunction)
-                    .Call(applicationFunction.Id)
+                Expect.On(_applicationFunction)
+                    .Call(_applicationFunction.Id)
                     .Return(guid)
                     .Repeat.Any();
 
-                Expect.On(applicationFunction)
-                    .Call(applicationFunction.FunctionDescription)
+                Expect.On(_applicationFunction)
+                    .Call(_applicationFunction.FunctionDescription)
                     .Return("Desc")
                     .Repeat.Any();
 
-                Expect.On(applicationFunction)
-                    .Call(applicationFunction.ForeignId)
+                Expect.On(_applicationFunction)
+                    .Call(_applicationFunction.ForeignId)
                     .Return("100")
                     .Repeat.Any();
 
-                Expect.On(applicationFunction)
-                    .Call(applicationFunction.ForeignSource)
+                Expect.On(_applicationFunction)
+                    .Call(_applicationFunction.ForeignSource)
                     .Return("")
                     .Repeat.Any();
 
-                Expect.On(applicationFunction)
-                    .Call(applicationFunction.FunctionCode)
+                Expect.On(_applicationFunction)
+                    .Call(_applicationFunction.FunctionCode)
                     .Return("code707")
                     .Repeat.Any();
 
-                Expect.On(applicationFunction)
-                    .Call(applicationFunction.FunctionPath)
+                Expect.On(_applicationFunction)
+                    .Call(_applicationFunction.FunctionPath)
                     .Return(@"Raptor\MyTime")
                     .Repeat.Any();
 
-                Expect.On(applicationFunction)
-                    .Call(applicationFunction.IsPreliminary )
+                Expect.On(_applicationFunction)
+                    .Call(_applicationFunction.IsPreliminary )
                     .Return(true)
                     .Repeat.Any();
                 
             }
 
-            _target = new ApplicationFunctionDto(applicationFunction);
+	        _target = new ApplicationFunctionDto
+		        {
+			        FunctionDescription = _applicationFunction.FunctionDescription,
+			        ForeignId = _applicationFunction.ForeignId,
+			        ForeignSource = _applicationFunction.ForeignSource,
+			        FunctionCode = _applicationFunction.FunctionCode,
+			        FunctionPath = _applicationFunction.FunctionPath,
+			        IsPreliminary = _applicationFunction.IsPreliminary
+		        };
             Assert.IsNull(_target.Id);
         }
 

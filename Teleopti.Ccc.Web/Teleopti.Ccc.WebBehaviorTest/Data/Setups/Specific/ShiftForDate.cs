@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		{
 			Date = ApplyDate(cultureInfo);
 			ShiftCategory = TestData.ShiftCategory;
-			var dateUtc = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(Date);
+			var dateUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(Date);
 
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
     public class VisualLayerCalendarDayExtractor
     {
-        public IList<VisualLayerForWebDisplay> CreateVisualPeriods(DateTime date, IEnumerable<IVisualLayer> visualLayerCollection, ICccTimeZoneInfo timeZone)
+        public IList<VisualLayerForWebDisplay> CreateVisualPeriods(DateTime date, IEnumerable<IVisualLayer> visualLayerCollection, TimeZoneInfo timeZone)
         {
             var returnList = new List<VisualLayerForWebDisplay>();
             

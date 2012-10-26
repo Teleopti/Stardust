@@ -28,8 +28,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             person.SetId(Guid.NewGuid());
             person.EmploymentNumber = "4321";
             person.PermissionInformation.SetDefaultTimeZone(
-                //new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
-                new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time")));
+                //(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+                (TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time")));
             //FLE Standard Time
             IPersonContract personContract = PersonContractFactory.CreatePersonContract("PartTime", "xxx", "100");
             personContract.Contract.SetId(Guid.NewGuid());
@@ -67,7 +67,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             person = Ccc.TestCommon.FakeData.PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
             person.SetId(Guid.NewGuid());
             person.PermissionInformation.SetDefaultTimeZone(
-                new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+                (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             RaptorTransformerHelper.SetCreatedOn(person, DateTime.Now);
             retList.Add(person);
 
@@ -75,7 +75,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("arne", "anka");
             person.SetId(Guid.NewGuid());
             person.PermissionInformation.SetDefaultTimeZone(
-                new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+                (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             personPeriod = PersonPeriodFactory.CreatePersonPeriod(date2, personContract, businessUnitGraph.SiteCollection[0].TeamCollection[1]);
 
             businessUnitGraph.SiteCollection[0].TeamCollection[1].SetId(Guid.NewGuid());
@@ -112,7 +112,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("oswald", "oblad");
             person.SetId(Guid.NewGuid());
             person.PermissionInformation.SetDefaultTimeZone(
-                new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC")));
+                (TimeZoneInfo.FindSystemTimeZoneById("UTC")));
             businessUnitGraph.SiteCollection[0].TeamCollection[1].SetId(Guid.NewGuid());
 
             personPeriod =

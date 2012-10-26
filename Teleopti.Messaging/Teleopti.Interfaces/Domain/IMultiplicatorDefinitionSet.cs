@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -98,7 +99,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2008-12-10
         /// </remarks>
-        IList<IMultiplicatorLayer> CreateProjectionForPeriod(DateOnlyPeriod period, ICccTimeZoneInfo timeZoneInfo);
+        IList<IMultiplicatorLayer> CreateProjectionForPeriod(DateOnlyPeriod period, TimeZoneInfo timeZoneInfo);
 
         /// <summary>
         /// Indicates if this definition set is deleted.

@@ -24,10 +24,20 @@ namespace Teleopti.Analytics.Portal
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-
+			// Original fix credit to Stefan Mohr
+			// Bug fix for MS SSRS Blank.gif 500 server error missing parameter IterationId
+			// https://connect.microsoft.com/VisualStudio/feedback/details/556989/
+			if (HttpContext.Current.Request.Url.PathAndQuery.StartsWith("/Reserved.ReportViewerWebControl.axd",StringComparison.OrdinalIgnoreCase) &&
+				!HttpContext.Current.Request.Url.ToString().ToUpperInvariant().Contains("ITERATION") &&
+				!String.IsNullOrEmpty(HttpContext.Current.Request.QueryString["ResourceStreamID"]) &&
+				HttpContext.Current.Request.QueryString["ResourceStreamID"].ToUpperInvariant().Equals("BLANK.GIF"))
+			{
+				Context.RewritePath(String.Concat(HttpContext.Current.Request.Url.PathAndQuery, "&IterationId=0"));
+			}
         }
 
-        protected void Application_AuthenticateRequest(object sender, EventArgs e)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {
 			var cookieFound = false;
 
@@ -51,11 +61,18 @@ namespace Teleopti.Analytics.Portal
 			{
 				// Extract the roles from the cookie, and assign to our current principal, which is attached to the
 				// HttpContext.
-				var winAuthTicket = FormsAuthentication.Decrypt(authCookie.Value);
-				var roles = winAuthTicket.UserData.Split(';');
-				var formsId = new FormsIdentity(winAuthTicket);
-				var princ = new GenericPrincipal(formsId, roles);
-				HttpContext.Current.User = princ;
+				try
+				{
+					var winAuthTicket = FormsAuthentication.Decrypt(authCookie.Value);
+					var roles = winAuthTicket.UserData.Split(';');
+					var formsId = new FormsIdentity(winAuthTicket);
+					var princ = new GenericPrincipal(formsId, roles);
+					HttpContext.Current.User = princ;
+				}
+				catch (Exception)
+				{
+				}
+				
 			}
 			else
 			{

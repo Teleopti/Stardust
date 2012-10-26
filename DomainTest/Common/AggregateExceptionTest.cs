@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest.Common
     /// Tests for aggregateexception
     /// </summary>
     [TestFixture]
-    public class AggregateExceptionTest : ExceptionTest<AggregateException>
+	public class AggregateExceptionTest : ExceptionTest<Teleopti.Ccc.Domain.Common.AggregateException>
     {
         /// <summary>
         /// Creates the test instance.
@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.DomainTest.Common
         /// <param name="message">The message.</param>
         /// <param name="innerException">The inner exception.</param>
         /// <returns></returns>
-        protected override AggregateException CreateTestInstance(string message, Exception innerException)
+		protected override Teleopti.Ccc.Domain.Common.AggregateException CreateTestInstance(string message, Exception innerException)
         {
-            return new AggregateException(message, innerException);
+			return new Teleopti.Ccc.Domain.Common.AggregateException(message, innerException);
         }
 
         /// <summary>
@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.DomainTest.Common
         /// </summary>
         /// <param name="message">The message.</param>
         /// <returns></returns>
-        protected override AggregateException CreateTestInstance(string message)
+        protected override Teleopti.Ccc.Domain.Common.AggregateException CreateTestInstance(string message)
         {
-            return new AggregateException(message);
+			return new Teleopti.Ccc.Domain.Common.AggregateException(message);
         }
     }
 }

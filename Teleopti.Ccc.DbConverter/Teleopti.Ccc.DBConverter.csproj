@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Ccc.DBConverter</RootNamespace>
     <AssemblyName>Teleopti.Ccc.DBConverter</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
@@ -43,6 +43,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -122,7 +123,6 @@
     <Compile Include="GroupConverter\EmployeeOptionalColumnModuleConverter.cs" />
     <Compile Include="GroupConverter\ForecastModuleConverter.cs" />
     <Compile Include="GroupConverter\GroupingModuleConverter.cs" />
-    <Compile Include="GroupConverter\KpiModuleConverter.cs" />
     <Compile Include="GroupConverter\ModuleChecker.cs" />
     <Compile Include="GroupConverter\ModuleConverter.cs" />
     <Compile Include="GroupConverter\ScheduleModuleConverter.cs" />

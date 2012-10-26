@@ -1,9 +1,12 @@
 using System;
+using System.Drawing;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Diagnostics;
 using System.Collections.Specialized;
+using Image = System.Web.UI.WebControls.Image;
+
 namespace Teleopti.Analytics.Parameters
 {
 	/// <summary>
@@ -57,11 +60,15 @@ namespace Teleopti.Analytics.Parameters
 			                   DataTextField = "name",
 			                   DataValueField = "id"
 			               };
-		    _Validator = new RequiredFieldValidator();
+		    
 			_ListBox.ID = "Double" + Dbid;
-			
-			_Validator.ErrorMessage = Selector.ErrorMessage + " '" + Text + "'";
-			_Validator.Display = ValidatorDisplay.Dynamic;
+			_Validator = new RequiredFieldValidator
+				{
+					ErrorMessage = Selector.ErrorMessage + " '" + Text + "'",
+					Display = ValidatorDisplay.Dynamic,
+					Text = "*",
+					ForeColor = Color.Red
+				};
 			_Label.Text = Text;
 
 			//ListBox nummer två

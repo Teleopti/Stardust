@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using Syncfusion.Diagnostics;
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         {
             showTodayButton = false;
         }
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
+
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)

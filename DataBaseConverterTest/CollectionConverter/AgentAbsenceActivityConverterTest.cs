@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.CollectionConverter
             _mappedObjectPair.Agent = _factory.AgentPairList;
             _mappedObjectPair.Scenario = _factory.ScenarioPairList;
             _mappedObjectPair.AbsenceActivity = _factory.AbsenceActivityList;
-            _mapper = new AgentAbsenceActivityMapper(_mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Local));
+            _mapper = new AgentAbsenceActivityMapper(_mappedObjectPair, (TimeZoneInfo.Local));
         }
         
         [Test]

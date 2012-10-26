@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     public class BudgetDayRepositoryTest : RepositoryTest<IBudgetDay>
     {
         private string description;
-        private CccTimeZoneInfo timeZone;
+        private TimeZoneInfo timeZone;
         private BudgetGroup budgetGroup;
         private IScenario scenario;
         private ICustomShrinkage customShrinkage;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override void ConcreteSetup()
         {
             description = "budget";
-            timeZone = new CccTimeZoneInfo(TimeZoneInfo.GetSystemTimeZones()[0]);
+            timeZone = TimeZoneInfo.GetSystemTimeZones()[0];
             budgetGroup = new BudgetGroup { Name = description, TimeZone = timeZone };
             budgetGroup.TrySetDaysPerYear(365);
             customShrinkage = new CustomShrinkage("Vacation");
