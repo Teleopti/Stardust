@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 		public static IDataSourceConfigurationSetter ForServiceBus()
 		{
-			return new DataSourceConfigurationSetter(false, true, "thread_static", "Teleopti.Ccc.Sdk.ServiceBus.Host");
+			return new DataSourceConfigurationSetter(false, true, "thread_static", "Teleopti.Ccc.ServiceBus.Host");
 		}
 		public static IDataSourceConfigurationSetter ForWeb()
 		{
