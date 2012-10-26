@@ -28,17 +28,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _removedSchedulePart;
         private IDictionary<DateOnly, IScheduleDayPro> _fullWeeksPeriodDictionary;
         private ISchedulePartModifyAndRollbackService _rollbackService;
-        private IDeleteSchedulePartService _deleteService;
         private IResourceOptimizationHelper _resourceOptimizationHelper;
         private ISchedulingOptions _schedulingOptions;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private IEffectiveRestriction _effectiveRestriction;
-        private IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
         private IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
         private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
         private ISchedulingOptionsCreator _schedulingOptionsCreator;
-        private IReschedulingPreferences _reschedulingPreferences;
-		private IResourceCalculateDelayer _resourceCalculateDelayer;
+        private IResourceCalculateDelayer _resourceCalculateDelayer;
     	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
         private IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 
@@ -59,17 +56,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _removedSchedulePart = _mockRepository.StrictMock<IScheduleDay>();
             _fullWeeksPeriodDictionary = new Dictionary<DateOnly, IScheduleDayPro> { { _removedDate, _removedScheduleDay } };
             _rollbackService = _mockRepository.StrictMock<ISchedulePartModifyAndRollbackService>();
-            _deleteService = _mockRepository.StrictMock<IDeleteSchedulePartService>();
             _resourceOptimizationHelper = _mockRepository.StrictMock<IResourceOptimizationHelper>();
             _schedulingOptions = _mockRepository.StrictMock<ISchedulingOptions>();
             _effectiveRestrictionCreator = _mockRepository.StrictMock<IEffectiveRestrictionCreator>();
             _effectiveRestriction = _mockRepository.StrictMock<IEffectiveRestriction>();
-            _resourceCalculateDaysDecider = _mockRepository.StrictMock<IResourceCalculateDaysDecider>();
             _workShiftOriginalStateContainer = _mockRepository.StrictMock<IScheduleMatrixOriginalStateContainer>();
             _optimizationOverLimitDecider = _mockRepository.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
             _schedulingOptionsCreator = _mockRepository.StrictMock<ISchedulingOptionsCreator>();
-            _reschedulingPreferences = _mockRepository.StrictMock<IReschedulingPreferences>();
-        	_mainShiftOptimizeActivitySpecificationSetter =
+            _mainShiftOptimizeActivitySpecificationSetter =
         		_mockRepository.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
             _deleteAndResourceCalculateService = _mockRepository.StrictMock<IDeleteAndResourceCalculateService>();
             _resourceCalculateDelayer = _mockRepository.StrictMock<IResourceCalculateDelayer>();
