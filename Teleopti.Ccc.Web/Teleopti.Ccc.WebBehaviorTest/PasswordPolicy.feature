@@ -129,3 +129,40 @@ Scenario: Change password failed when password already expired
 	| Reason          | Rule1 |
 	And I should not be signed in
 
+Scenario: Fail to change password with wrong old password
+	Given My password has already expired
+	And I am viewing the change password page
+	When I change my password with
+	| Field             | Value			|
+	| Username          | aa			|
+	| Password          | P@sswordNew	|
+	| ConfirmedPassword | P@sswordNew	|
+	| OldPassword       | P@sswordWrong	|
+	Then I should see information with
+	| Field           | Value |
+	| Success updated | false |
+	And I should not be signed in
+	And I should remain on the screen
+	And I should see the input fields get empty
+	And I should see an error message
+
+Scenario: Lock person after trying to change password many times
+	Given I input wrong password 3 times in 30 minutes
+	And I am viewing the change password page
+	When I change my password with
+	| Field             | Value			|
+	| Username          | aa			|
+	| Password          | P@sswordNew	|
+	| ConfirmedPassword | P@sswordNew	|
+	| OldPassword       | P@sswordWrong	|
+	Then I should see information with
+	| Field           | Value |
+	| Success updated | false |
+	And I should not be signed in
+	And I should remain on the screen
+	And I should see an error message
+
+# scenario> Redirect to change password page if agent tries to navigate from the change password page after password has expired 
+
+
+
