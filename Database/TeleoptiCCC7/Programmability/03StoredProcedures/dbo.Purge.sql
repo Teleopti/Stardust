@@ -75,6 +75,8 @@ and wdb.WorkloadDate > '19600101' --Avoid hitting templates
 delete WorkloadDayBase
 from WorkloadDayBase wdb
 where 1=1
+and Not exists (select 1 from WorkloadDayTemplate wdt
+				where wdt.WorkloadDayBase = wdb.Id) --At one customer I found templates on incorrect dates, avoid those and do not try to fix them here in the purge.
 and wdb.WorkloadDate < @ForecastsKeepUntil
 and wdb.WorkloadDate < @MaxDate
 and wdb.WorkloadDate > '19600101' --Avoid hitting templates
