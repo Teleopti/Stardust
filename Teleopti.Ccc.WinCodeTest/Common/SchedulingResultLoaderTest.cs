@@ -239,13 +239,20 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         {
             var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             var scheduleRepository = _mocks.StrictMock<IScheduleRepository>();
+        	var period = _schedulerState.RequestedPeriod.Period();
 
             Expect.Call(_repositoryFactory.CreateScheduleRepository(_uow))
                 .Return(scheduleRepository);
 
-            Expect.Call(scheduleRepository.FindSchedulesForPersons(null, null, null, null, null))
-                .IgnoreArguments()
-                .Return(scheduleDictionary);
+        	Expect.Call(scheduleRepository.FindSchedulesForPersons(null, null, null, null, null)).Constraints(
+        		Rhino.Mocks.Constraints.Is.Matching(
+        			new Predicate<IScheduleDateTimePeriod>(
+        				x =>
+        				x.VisiblePeriod.StartDateTime == period.StartDateTime.AddHours(-24) &&
+        				x.VisiblePeriod.EndDateTime == period.EndDateTime.AddHours(24))),
+        		Rhino.Mocks.Constraints.Is.Equal(_scenario), Rhino.Mocks.Constraints.Is.Anything(),
+        		Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Equal(_permittedPeople)).Return(
+        			scheduleDictionary);
 
             return scheduleDictionary;
         }

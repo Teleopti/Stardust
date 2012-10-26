@@ -3655,7 +3655,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             	schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
                 if (schedulingOptions.UseShiftCategoryLimitations)
                 {
-                    _scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixList, _backgroundWorkerScheduling, _optimizationPreferences, schedulingOptions);
+					IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(scheduleDays));
+					var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+					 var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+                    var rollbackService = _container.Resolve<ISchedulePartModifyAndRollbackService>();
+					_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixList, _backgroundWorkerScheduling, _optimizationPreferences, schedulingOptions, selectedPersons,selectedPeriod, rollbackService);
                 }
             }
             _schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
@@ -3841,26 +3845,24 @@ namespace Teleopti.Ccc.Win.Scheduling
                 selectedGroupPage = _optimizationPreferences.Extra.GroupPageOnCompareWith;
             }
 
-			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
-				   .CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(),selectedGroupPage);
+			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(),selectedGroupPage);
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
             switch (options.OptimizationMethod)
             {
                 case OptimizationMethod.BackToLegalState:
-
                     IList<IDayOffTemplate> displayList = (from item in _schedulerState.CommonStateHolder.DayOffs
                                                           where ((IDeleteTag) item).IsDeleted == false
                                                           select item).ToList();
-                    _scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,_backgroundWorkerOptimization,
-																	 displayList[0], false, _optimizerOriginalPreferences.SchedulingOptions, options.DaysOffPreferences);
-
+                    _scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,_backgroundWorkerOptimization, displayList[0], false, _optimizerOriginalPreferences.SchedulingOptions, options.DaysOffPreferences);
                     _optimizationHelperWin.ResourceCalculateMarkedDays(e, null, _optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
 					IList<IScheduleMatrixPro> matrixList = OptimizerHelperHelper.CreateMatrixList(selectedSchedules, _schedulerState.SchedulingResultState, _container);
-                    _scheduleOptimizerHelper.GetBackToLegalState(matrixList, _schedulerState, _backgroundWorkerOptimization, _optimizerOriginalPreferences.SchedulingOptions);
+					IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedSchedules));
+					var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+					var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedSchedules, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedSchedules, currentPersonTimeZone));
+					_scheduleOptimizerHelper.GetBackToLegalState(matrixList, _schedulerState, _backgroundWorkerOptimization, _optimizerOriginalPreferences.SchedulingOptions, selectedPersons, selectedPeriod);
                     break;
-                case OptimizationMethod.ReOptimize:
-					
+                case OptimizationMethod.ReOptimize:	
 					if (optimizerPreferences.Extra.UseTeams)
                     {
                         _groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules);

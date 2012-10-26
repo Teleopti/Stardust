@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			return retLis;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void checkGroupCollection(DateOnly dateOnly, IEnumerable<IPersonGroup> groups, List<IGroupPerson> retLis, bool checkShiftCategoryConsistency, ISchedulingOptions schedulingOptions)
 		{
             if (groups.IsEmpty())
@@ -67,6 +68,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                     }
 
 					var guid = ((IEntity)personGroup).Id;
+
+					if (guid == null && personGroup.GetType() == typeof(ChildPersonGroup))
+					{
+						var entity = ((ChildPersonGroup)personGroup).Entity;
+						if (entity.Id.HasValue)
+							guid = entity.Id.Value;
+					}
+
+					if (guid == null && personGroup.GetType() == typeof(RootPersonGroup))
+					{
+						var entity = ((RootPersonGroup)personGroup).Entity;
+						if (entity.Id.HasValue)
+							guid = entity.Id.Value;
+					}
+
                     var newGroupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, personGroup.Description.Name, guid);
                     if (!newGroupPerson.GroupMembers.IsEmpty())
                     {
