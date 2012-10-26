@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
@@ -29,13 +28,14 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 			var pushMessage = new PushMessage(new []{"OK"});
 
 			var pushMessageDialogue = new PushMessageDialogue(pushMessage, new Person());
-			pushMessageDialogue.SetId(Guid.NewGuid());
+			var id = new Guid();
+			pushMessageDialogue.SetId(id);
 			var mappedViewModel = new MessageViewModel { MessageId = pushMessageDialogue.Id.ToString(), IsRead = true};
 
-			pushMessageDialogueRepository.Stub(x => x.Get(pushMessageDialogue.Id.Value)).Return(pushMessageDialogue);
+			pushMessageDialogueRepository.Stub(x => x.Get(id)).Return(pushMessageDialogue);
 			mapper.Stub(x => x.Map<IPushMessageDialogue, MessageViewModel>(pushMessageDialogue)).Return(mappedViewModel);
 
-			var viewModel = target.Persist(pushMessageDialogue.Id.Value);
+			var viewModel = target.PersistMessage(new ConfirmMessageViewModel() { Id = id });
 
 			viewModel.MessageId.Should().Be.EqualTo(mappedViewModel.MessageId);
             viewModel.IsRead.Should().Be.True();
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 		{			
 			var sender = new Person();
 			var dialogueId = Guid.NewGuid();
-			var pushMessage = new PushMessage(){Sender = sender};
+			var pushMessage = new PushMessage(new[] { "OK" }) { Sender = sender };
 			var pushMessageDialogue = new PushMessageDialogue(pushMessage, sender);
 			pushMessageDialogue.SetId(dialogueId);
 			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();

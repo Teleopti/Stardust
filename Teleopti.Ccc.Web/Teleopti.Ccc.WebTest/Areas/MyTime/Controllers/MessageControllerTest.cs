@@ -39,19 +39,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
-		public void ShouldReplyToSimpleMessage()
+		public void ShouldReplyToSimpleMessageWithResultFromPersister()
 		{
 			var pushMessageDialoguePersister = MockRepository.GenerateMock<IPushMessageDialoguePersister>();
-
 			var target = new MessageController(null, pushMessageDialoguePersister, null);
-
 			var messageId = Guid.NewGuid();
 			var messageViewModel = new MessageViewModel { MessageId = messageId.ToString() };
+			var confirmMessageViewModel = new ConfirmMessageViewModel() {Id = messageId};
+			pushMessageDialoguePersister.Stub(x => x.PersistMessage(confirmMessageViewModel)).Return(messageViewModel);
 
-			pushMessageDialoguePersister.Stub(x => x.Persist(messageId)).Return(messageViewModel);
-
-			var result = target.Reply(new ConfirmMessageViewModel() { Id = messageId });
-
+			var result = target.Reply(confirmMessageViewModel);
 			result.Data.Should().Be.SameInstanceAs(messageViewModel);
 		}
 
