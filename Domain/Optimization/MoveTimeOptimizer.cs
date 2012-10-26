@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -25,10 +24,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleService _scheduleService;
         private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly ISchedulePartModifyAndRollbackService _rollbackService;
-        private readonly IDeleteSchedulePartService _deleteService;
-        private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+    	private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+    	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-        private readonly IResourceCalculateDaysDecider _decider;
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
         private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
@@ -42,10 +40,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleService scheduleService,
             IOptimizationPreferences optimizerPreferences,
             ISchedulePartModifyAndRollbackService rollbackService,
-            IDeleteSchedulePartService deleteService,
+            IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
             IResourceOptimizationHelper resourceOptimizationHelper,
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
-            IResourceCalculateDaysDecider decider,
             IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer,
             IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider, 
             ISchedulingOptionsCreator schedulingOptionsCreator,
@@ -58,10 +55,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             _scheduleService = scheduleService;
             _optimizerPreferences = optimizerPreferences;
             _rollbackService = rollbackService;
-            _deleteService = deleteService;
-            _resourceOptimizationHelper = resourceOptimizationHelper;
+    		_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
+    		_resourceOptimizationHelper = resourceOptimizationHelper;
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
-            _decider = decider;
             _workShiftOriginalStateContainer = workShiftOriginalStateContainer;
             _optimizationOverLimitDecider = optimizationOverLimitDecider;
             _schedulingOptionsCreator = schedulingOptionsCreator;
@@ -91,148 +87,106 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleDayPro firstDay = _matrixConverter.SourceMatrix.GetScheduleDayByKey(daysToBeMoved[0]);
             DateOnly firstDayDate = daysToBeMoved[0];
             IScheduleDay firstScheduleDay = firstDay.DaySchedulePart();
-
+			//IScheduleDay originalFirstScheduleDay = (IScheduleDay) firstScheduleDay.Clone();
             var firstDayEffectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(firstScheduleDay, schedulingOptions);
+			TimeSpan firstDayContractTime = firstDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
 
             IScheduleDayPro secondDay = _matrixConverter.SourceMatrix.GetScheduleDayByKey(daysToBeMoved[1]);
             DateOnly secondDayDate = daysToBeMoved[1];
             IScheduleDay secondScheduleDay = secondDay.DaySchedulePart();
+			//IScheduleDay originalSecondScheduleDay = (IScheduleDay)secondScheduleDay.Clone();
             var secondDayEffectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(secondScheduleDay, schedulingOptions);
+			TimeSpan secondDayContractTime = secondDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
 
             if (firstDayDate == secondDayDate)
                 return false;
 
+			if (firstDayContractTime > secondDayContractTime)
+			{
+				lockDay(secondDayDate);
+				return true;
+			}
+				
             //delete schedule on the two days
             IList<IScheduleDay> listToDelete = new List<IScheduleDay> { firstDay.DaySchedulePart(), secondDay.DaySchedulePart() };
+			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService);
 
-			TimeSpan firstDayContractTime = firstDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
-			TimeSpan secondDayContractTime = secondDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
-            IDictionary<DateOnly, changedDay> dic = new Dictionary<DateOnly, changedDay>();
-            changedDay changedDay = new changedDay();
-            changedDay.DateChanged = firstDay.Day;
-            changedDay.PrevoiousSchedule = (IScheduleDay)firstDay.DaySchedulePart().Clone();
-            dic.Add(changedDay.DateChanged, changedDay);
-            changedDay = new changedDay
-                             {
-                                 DateChanged = secondDay.Day,
-                                 PrevoiousSchedule = (IScheduleDay)secondDay.DaySchedulePart().Clone()
-                             };
-            dic.Add(changedDay.DateChanged, changedDay);
-
-            var deleteOption = new DeleteOption { Default = true };
-            using (var bgWorker = new BackgroundWorker())
-            {
-                _deleteService.Delete(listToDelete, deleteOption, _rollbackService, bgWorker);
-            }
-            
-            foreach (changedDay changed in dic.Values)
-            {
-                changed.CurrentSchedule = _matrixConverter.SourceMatrix.GetScheduleDayByKey(changed.DateChanged).DaySchedulePart();
-            }
-
-            resourceCalculateMovedDays(dic.Values);
 
             if (!tryScheduleFirstDay(firstDayDate, schedulingOptions, firstDayEffectiveRestriction, firstDayContractTime))
             {
-
-                resourceCalculateDays(firstDayDate, secondDayDate);
+				safeCalculateDate(firstDayDate);
+				safeCalculateDate(secondDayDate);
                 return true;
             }
-
 
             // Back to legal state
             // leave it for now
 
             if (!tryScheduleSecondDay(secondDayDate, schedulingOptions, secondDayEffectiveRestriction, secondDayContractTime))
             {
-                resourceCalculateDays(firstDayDate, secondDayDate);
+				safeCalculateDate(firstDayDate);
+				safeCalculateDate(secondDayDate);
                 return true;
             }
 
             // Step: Check that there are no white spots
 
             double newPeriodValue = calculatePeriodValue();
-
-            dic = new Dictionary<DateOnly, changedDay>();
-            changedDay changedToRollback = new changedDay
-                                               {
-                                                   PrevoiousSchedule = (IScheduleDay)firstScheduleDay.Clone(),
-                                                   DateChanged = firstDayDate
-                                               };
-            dic.Add(changedToRollback.DateChanged, changedToRollback);
-            changedToRollback = new changedDay
-                                    {
-                                        PrevoiousSchedule = (IScheduleDay)secondScheduleDay.Clone(),
-                                        DateChanged = secondDayDate
-                                    };
-            dic.Add(changedToRollback.DateChanged, changedToRollback);
-
             bool isPeriodWorse = newPeriodValue > oldPeriodValue;
             if (isPeriodWorse)
             {
-                rollbackAndLockDays(firstDayDate, secondDayDate, dic);
+            	rollbackLockAndCalculate(firstDayDate, secondDayDate);
                 return true;
             }
 
             if (daysOverMax())
             {
-                rollbackAndLockDays(firstDayDate, secondDayDate, dic);
+				rollbackLockAndCalculate(firstDayDate, secondDayDate);
                 return false;
             }
 
             if (restrictionsOverMax().Count > 0)
             {
-                rollbackAndLockDays(firstDayDate, secondDayDate, dic);
+				rollbackLockAndCalculate(firstDayDate, secondDayDate);
                 return true;
             }
 
-            lockDays(firstDayDate, secondDayDate);
+            //lockDays(firstDayDate, secondDayDate);
 
             return true;
         }
 
-        private void rollbackAndLockDays(DateOnly firstDayDate, DateOnly secondDayDate, IDictionary<DateOnly, changedDay> dic)
-        {
-            doRollback(firstDayDate, secondDayDate, dic);
-            
-            // Always lock days we moved
-            lockDays(firstDayDate, secondDayDate);
-        }
+		private void rollbackLockAndCalculate(DateOnly firstDayDate, DateOnly secondDayDate)
+		{
+			_rollbackService.Rollback();
+			lockDays(firstDayDate, secondDayDate);
+			safeCalculateDate(firstDayDate);
+			safeCalculateDate(secondDayDate);
+		}
+
+		private void safeCalculateDate(DateOnly dayDate)
+		{
+			_resourceOptimizationHelper.ResourceCalculateDate(dayDate, true, true);
+			_resourceOptimizationHelper.ResourceCalculateDate(dayDate.AddDays(1), true, true);
+		}
+
+		//private void calculateDate(DateOnly dayDate, IScheduleDay originalScheduleDay)
+		//{
+		//    IScheduleDay currentFirstScheduleDay =
+		//        _matrixConverter.SourceMatrix.GetScheduleDayByKey(dayDate).DaySchedulePart();
+		//    IList<DateOnly> dates = _decider.DecideDates(currentFirstScheduleDay, originalScheduleDay);
+		//    foreach (var dateOnly in dates)
+		//    {
+		//        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true,
+		//                                                      new List<IScheduleDay> { currentFirstScheduleDay },
+		//                                                      new List<IScheduleDay> { originalScheduleDay });
+		//    }
+		//}
 
         private void lockDays(DateOnly firstDayDate, DateOnly secondDayDate)
         {
             lockDay(firstDayDate);
             lockDay(secondDayDate);
-        }
-
-        private void doRollback(DateOnly firstDayDate, DateOnly secondDayDate, IDictionary<DateOnly, changedDay> dic)
-        {
-            _rollbackService.Rollback();
-            dic[firstDayDate].CurrentSchedule = _matrixConverter.SourceMatrix.GetScheduleDayByKey(firstDayDate).DaySchedulePart();
-            dic[secondDayDate].CurrentSchedule = _matrixConverter.SourceMatrix.GetScheduleDayByKey(secondDayDate).DaySchedulePart();
-            resourceCalculateMovedDays(dic.Values);
-        }
-
-        private void resourceCalculateDays(DateOnly firstDayDate, DateOnly secondDayDate)
-        {
-            bool considerShortBreaks = _optimizerPreferences.Rescheduling.ConsiderShortBreaks;
-            _resourceOptimizationHelper.ResourceCalculateDate(firstDayDate, true, considerShortBreaks);
-            _resourceOptimizationHelper.ResourceCalculateDate(firstDayDate.AddDays(1), true, considerShortBreaks);
-            _resourceOptimizationHelper.ResourceCalculateDate(secondDayDate, true, considerShortBreaks);
-            _resourceOptimizationHelper.ResourceCalculateDate(secondDayDate.AddDays(1), true, considerShortBreaks);
-        }
-
-        private void resourceCalculateMovedDays(IEnumerable<changedDay> changedDays)
-        {
-            bool considerShortBreaks = _optimizerPreferences.Rescheduling.ConsiderShortBreaks;
-            foreach (changedDay changed in changedDays)
-            {
-                IList<DateOnly> days = _decider.DecideDates(changed.CurrentSchedule, changed.PrevoiousSchedule);
-                foreach (var dateOnly in days)
-                {
-                    _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks);
-                }
-            }
         }
 
         private IList<DateOnly> restrictionsOverMax()
@@ -244,7 +198,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             return _optimizationOverLimitDecider.MoveMaxDaysOverLimit();
         }
-
 
         public IPerson ContainerOwner
         {
@@ -268,7 +221,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, WorkShiftLengthHintOption workShiftLengthHintOption, TimeSpan originalLength )
         {
-            IScheduleDayPro scheduleDay = _matrixConverter.SourceMatrix.FullWeeksPeriodDictionary[day];
+			IScheduleDayPro scheduleDay = _matrixConverter.SourceMatrix.GetScheduleDayByKey(day);
             schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
@@ -279,13 +232,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IMainShift originalShift = personAssignment.MainShift;
 			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, day);
 
-        	bool success = _scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false,
-        	                                                    effectiveRestriction, resourceCalculateDelayer);
+        	bool success = _scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions,
+        	                                                    effectiveRestriction, resourceCalculateDelayer, _rollbackService);
+
 			if (success && scheduleDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime() == originalLength)
 				success = false;
 			if (!success)
-			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer, null))
-            {
+			{
                 _rollbackService.Rollback();
                 lockDay(day);
                 return false;
@@ -304,11 +257,5 @@ namespace Teleopti.Ccc.Domain.Optimization
             _matrixConverter.SourceMatrix.LockPeriod(new DateOnlyPeriod(day, day));
         }
 
-        private class changedDay
-        {
-            public DateOnly DateChanged { get; set; }
-            public IScheduleDay PrevoiousSchedule { get; set; }
-            public IScheduleDay CurrentSchedule { get; set; }
-        }
     }
 }
