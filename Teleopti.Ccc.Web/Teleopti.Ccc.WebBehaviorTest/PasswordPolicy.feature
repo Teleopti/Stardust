@@ -4,7 +4,7 @@
 	I have a password policy
 
 Background:
-	Given I am an agent with
+	Given I am a user with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
@@ -85,7 +85,7 @@ Scenario: Sign in with password already expired
 	| Field   | Value       |
 	| Message | has expired |
 
-Scenario: Navigate to week schedule page when sign in with password already expired
+Scenario: Navigate to other page when sign in with password already expired
 	Given My password has already expired
 	And I am viewing the sign in page
 	When I sign in with

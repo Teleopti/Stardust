@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Password",
                         "P@ssword1"});
 #line 7
- testRunner.Given("I am an agent with", ((string)(null)), table1);
+ testRunner.Given("I am a user with", ((string)(null)), table1);
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -335,10 +335,10 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Navigate to week schedule page when sign in with password already expired")]
-        public virtual void NavigateToWeekSchedulePageWhenSignInWithPasswordAlreadyExpired()
+        [NUnit.Framework.DescriptionAttribute("Navigate to other page when sign in with password already expired")]
+        public virtual void NavigateToOtherPageWhenSignInWithPasswordAlreadyExpired()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate to week schedule page when sign in with password already expired", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate to other page when sign in with password already expired", ((string[])(null)));
 #line 88
 this.ScenarioSetup(scenarioInfo);
 #line 6
