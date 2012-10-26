@@ -37,14 +37,14 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 			       			ToDateFieldOrderArray(dateTimeFormatInfo.ShortDatePattern, dateTimeFormatInfo.DateSeparator, currentCulture),
 			       		HeaderFormat = dateTimeFormatInfo.LongDatePattern,
 			       		DateFormat =
-			       			AdjustDateFormat(dateTimeFormatInfo.ShortDatePattern, dateTimeFormatInfo.DateSeparator, currentCulture),
+			       			AdjustDateFormat(dateTimeFormatInfo.ShortDatePattern, dateTimeFormatInfo.DateSeparator),
 							CalStartDay = (int)dateTimeFormatInfo.FirstDayOfWeek
 			       	};
 		}
 
 		#endregion
 
-		private string AdjustDateFormat(string shortDatePattern, string dateSeparator, CultureInfo currentCulture)
+		private string AdjustDateFormat(string shortDatePattern, string dateSeparator)
 		{
 			string[] strings = shortDatePattern.Split(new[] {dateSeparator}, StringSplitOptions.RemoveEmptyEntries);
 			return string.Join(dateSeparator, strings.Select(s =>
