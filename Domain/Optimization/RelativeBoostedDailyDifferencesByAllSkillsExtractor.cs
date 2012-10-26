@@ -29,7 +29,28 @@ namespace Teleopti.Ccc.Domain.Optimization
             return ret;
         }
 
-        private double? dayValue(DateOnly scheduleDay)
+    	public IDictionary<DateOnly, IForecastScheduleValuePair> RawDataDictionary()
+    	{
+    		var retDic = new Dictionary<DateOnly, IForecastScheduleValuePair>();
+    		foreach (DateOnly key in _period.DayCollection())
+    		{
+				double dailyForecast = 0;
+				double dailyScheduled = 0;
+				foreach (ISkill skill in _skillExtractor.ExtractSkills())
+				{
+					IForecastScheduleValuePair forecastScheduleValuePairForSkill = _dailySkillForecastAndScheduledValueCalculator.CalculateDailyForecastAndScheduleDataForSkill(skill, key);
+					dailyForecast += forecastScheduleValuePairForSkill.ForecastValue;
+					dailyScheduled += forecastScheduleValuePairForSkill.ScheduleValue;
+				}
+
+    			var value = new ForecastScheduleValuePair {ForecastValue = dailyForecast, ScheduleValue = dailyScheduled};
+				retDic.Add(key, value);
+    		}
+
+    		return retDic;
+    	}
+
+    	private double? dayValue(DateOnly scheduleDay)
         {
             double dailyForecast = 0;
             double tweakedBoostedDailyScheduled = 0;

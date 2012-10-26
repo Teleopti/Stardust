@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -81,6 +82,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
+                var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
+                var deleteAndResourceCalculateService = new DeleteAndResourceCalculateService(deleteSchedulePartService, resourceOptimizationHelper);
+                var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
+                
                 IIntradayOptimizer2 optimizer =
                     new IntradayOptimizer2(
                         dailyValueCalculator,
@@ -90,14 +95,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						_scheduleService,
                         _optimizerPreferences,
                         _rollbackService,
-                        deleteSchedulePartService,
-						resourceOptimizationHelper,
+                        resourceOptimizationHelper,
                         effectiveRestrictionCreator,
-                        new ResourceCalculateDaysDecider(),  
                         optimizerOverLimitDecider,
                         workShiftStateContainer,
                         schedulingOptionsCreator,
-						mainShiftOptimizeActivitySpecificationSetter);
+						mainShiftOptimizeActivitySpecificationSetter,
+                        deleteAndResourceCalculateService,
+                        resourceCalculateDelayer);
 
                 result.Add(optimizer);
             }
