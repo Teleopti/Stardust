@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			scheduleMatrixList.Add((scheduleMatrix));
 			var person = new Person();
 			var dateOnly = new DateOnly();
-			var dateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, new CccTimeZoneInfo());
+			var dateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, TimeZoneInfo.Utc);
 			var groupPerson = _mockRepository.StrictMock<IGroupPerson>();
 			var groupPersons = new List<IGroupPerson> { groupPerson };
 
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			scheduleMatrixList.Add((scheduleMatrix));
 			var person = new Person();
 			var dateOnly = new DateOnly();
-			var dateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, new CccTimeZoneInfo());
+            var dateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, TimeZoneInfo.Utc);
 			var groupPerson = _mockRepository.StrictMock<IGroupPerson>();
 			var groupPersons = new List<IGroupPerson> { groupPerson };
 
