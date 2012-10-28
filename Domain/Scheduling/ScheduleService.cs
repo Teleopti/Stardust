@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly IWorkShiftFinderService _finderService;
         private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
         private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
-        private readonly ISchedulePartModifyAndRollbackService _rollbackService;
+        private ISchedulePartModifyAndRollbackService _rollbackService;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly Hashtable _finderResults = new Hashtable();
 
@@ -71,6 +71,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			                           resourceCalculateDelayer, null);
 		}
 
+		public bool SchedulePersonOnDay(
+			IScheduleDay schedulePart,
+			ISchedulingOptions schedulingOptions,
+			IEffectiveRestriction effectiveRestriction,
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			IPossibleStartEndCategory possibleStartEndCategory,
+			ISchedulePartModifyAndRollbackService rollbackService)
+		{
+			_rollbackService = rollbackService;
+			return SchedulePersonOnDay(schedulePart, schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer,
+			                           possibleStartEndCategory);
+		}
+
+
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool SchedulePersonOnDay(
             IScheduleDay schedulePart,
@@ -78,7 +92,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
             bool useOccupancyAdjustment, 
             IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			IPossibleStartEndCategory possibleStartEndCategory)
+			IPossibleStartEndCategory possibleStartEndCategory
+			)
+
         {
             using (PerformanceOutput.ForOperation("SchedulePersonOnDay"))
             {

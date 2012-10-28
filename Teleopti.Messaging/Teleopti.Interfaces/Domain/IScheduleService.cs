@@ -32,6 +32,24 @@ namespace Teleopti.Interfaces.Domain
 			IPossibleStartEndCategory possibleStartEndCategory);
 
 		/// <summary>
+		/// Schedules the person on day.
+		/// </summary>
+		/// <param name="schedulePart">The schedule part.</param>
+		/// <param name="schedulingOptions">The scheduling options.</param>
+		/// <param name="effectiveRestriction">The effective restriction.</param>
+		/// <param name="resourceCalculateDelayer">The resource calculate delayer.</param>
+		/// <param name="possibleStartEndCategory">The possible start end category.</param>
+		/// <param name="rollbackService">The _rollback service.</param>
+		/// <returns></returns>
+		bool SchedulePersonOnDay(
+			IScheduleDay schedulePart,
+			ISchedulingOptions schedulingOptions,
+			IEffectiveRestriction effectiveRestriction,
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			IPossibleStartEndCategory possibleStartEndCategory,
+			ISchedulePartModifyAndRollbackService rollbackService);
+
+		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="schedulePart"></param>
