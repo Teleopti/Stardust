@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly IWorkShiftFinderService _finderService;
         private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
         private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
-        private readonly ISchedulePartModifyAndRollbackService _rollbackService;
+        private ISchedulePartModifyAndRollbackService _rollbackService;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly Hashtable _finderResults = new Hashtable();
 
@@ -44,7 +44,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
             }
         }
 
-        public void ClearFinderResults()
+		public bool SchedulePersonOnDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IResourceCalculateDelayer resourceCalculateDelayer, IPossibleStartEndCategory possibleStartEndCategory, ISchedulePartModifyAndRollbackService rollbackService)
+		{
+			_rollbackService = rollbackService;
+			return SchedulePersonOnDay(schedulePart, schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer);
+		}
+
+    	public void ClearFinderResults()
         {
             _finderResults.Clear();
         }
