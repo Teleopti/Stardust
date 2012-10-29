@@ -12,18 +12,20 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 {
 	[TestFixture]
 	public class PushMessageDialoguePersisterTest
 	{
-	
+		private ILoggedOnUser _loggedOnUser;
+
 		[Test]
 		public void ShouldLoadDialogueFromRepositoryWithTheIdFromTheConfirmMessageViewModel()
 		{
 			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();
-			var target = new PushMessageDialoguePersister(pushMessageDialogueRepository, SetupMapper(), null);
+			var target = CreateTarget(pushMessageDialogueRepository);
 			var pushMessageDialogue = new PushMessageDialogue(new PushMessage(), new Person());
 			var id = new Guid();
 			pushMessageDialogue.SetId(id);
@@ -32,44 +34,34 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 				.Return(pushMessageDialogue)
 				.Repeat.Once();
 
-			target.PersistMessage(new ConfirmMessageViewModel() { Id = id });
+			var result = target.PersistMessage(new ConfirmMessageViewModel() { Id = id });
+			Assert.That(result.MessageId, Is.EqualTo(id.ToString()));
 		}
 
 		[Test]
 		public void ShouldConfirmIsRead()
 		{
-			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();
-			var target = new PushMessageDialoguePersister(pushMessageDialogueRepository, SetupMapper(), null);
-
 			var pushMessage = new PushMessage(new []{"OK"});
-
 			var pushMessageDialogue = new PushMessageDialogue(pushMessage, new Person());
 			var id = new Guid();
 			pushMessageDialogue.SetId(id);
-		
-			pushMessageDialogueRepository.Stub(x => x.Get(id)).Return(pushMessageDialogue);
 
+			var target = CreateTargetWithDialogueInRepository(pushMessageDialogue);
 			var viewModel = target.PersistMessage(new ConfirmMessageViewModel() { Id = id });
-
-         viewModel.IsRead.Should().Be.True();
+         
+			viewModel.IsRead.Should().Be.True();
 		}
 
 		[Test]
 		public void ReplyingToMessageShouldAddThatReplyToTheConversationOnTheDialogue()
 		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var user = new Person();
-			user.SetId(Guid.NewGuid());
-			var sender = new Person();
-			loggedOnUser.Stub(l => l.CurrentUser()).Return(user);
+			const string newMessage = "new message!!";
 			var dialogueId = Guid.NewGuid();
-			var pushMessage = new PushMessage(new[] { "OK" }) { Sender = sender };
-			var pushMessageDialogue = new PushMessageDialogue(pushMessage, sender);
+			var pushMessage = new PushMessage();
+			var pushMessageDialogue = new PushMessageDialogue(pushMessage, new Person());
 			pushMessageDialogue.SetId(dialogueId);
-			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();
-			pushMessageDialogueRepository.Stub(x => x.Get(dialogueId)).Return(pushMessageDialogue);
-			var target = new PushMessageDialoguePersister(pushMessageDialogueRepository, SetupMapper(), loggedOnUser);
-			string newMessage="new message!!";
+
+			var target = CreateTargetWithDialogueInRepository(pushMessageDialogue);
 			var viewModel = target.PersistMessage(new ConfirmMessageViewModel() { Id = dialogueId, Reply = newMessage });
 
 			Assert.That(viewModel.DialogueMessages.First().Text,Is.EqualTo(newMessage));
@@ -77,24 +69,34 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 
 		[Test]
 		public void ReplyingToMessageShouldSetLoggedOnUserAsSenderToThatReply()
-		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var user = new Person();
-			user.SetId(Guid.NewGuid());			
+		{			
 			var sender = new Person();
-			loggedOnUser.Expect(l => l.CurrentUser()).Return(user);
 			var dialogueId = Guid.NewGuid();
 			var pushMessage = new PushMessage(new[] { "OK" }) { Sender = sender };
 			var confirmMessage = new ConfirmMessageViewModel() { Id = dialogueId, Reply = "the reply" };
 			var pushMessageDialogue = new PushMessageDialogue(pushMessage, sender);
+			pushMessageDialogue.SetId(dialogueId);
 
-			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();
-			pushMessageDialogueRepository.Stub(x => x.Get(dialogueId)).Return(pushMessageDialogue);
-			var target = new PushMessageDialoguePersister(pushMessageDialogueRepository, SetupMapper(), loggedOnUser);
-
+			var target = CreateTargetWithDialogueInRepository(pushMessageDialogue);
 			var result = target.PersistMessage(confirmMessage);
-			Assert.That(result.DialogueMessages.First(m => m.Text.Equals("the reply")).SenderId, Is.EqualTo(user.Id));
+			
+			Assert.That(result.DialogueMessages.First(m => m.Text.Equals("the reply")).SenderId, Is.EqualTo(_loggedOnUser.CurrentUser().Id));
+		}
 
+		private PushMessageDialoguePersister CreateTargetWithDialogueInRepository(IPushMessageDialogue dialogue)
+		{
+			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();
+			pushMessageDialogueRepository.Stub(x => x.Get((Guid)dialogue.Id)).Return(dialogue);
+			return CreateTarget(pushMessageDialogueRepository);
+		}
+
+		private PushMessageDialoguePersister CreateTarget(IPushMessageDialogueRepository repository)
+		{
+			var user = new Person();
+			user.SetId(Guid.NewGuid());
+			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			_loggedOnUser.Stub(l => l.CurrentUser()).Return(user);
+			return new PushMessageDialoguePersister(repository, SetupMapper(), _loggedOnUser); 
 		}
 
 		private static IMappingEngine SetupMapper()
