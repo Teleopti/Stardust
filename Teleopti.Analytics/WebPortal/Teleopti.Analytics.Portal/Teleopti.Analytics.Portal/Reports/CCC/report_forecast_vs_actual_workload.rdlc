@@ -683,7 +683,7 @@
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Left>0.25cm</Left>
-        <Height>3.52645cm</Height>
+        <Height>3.52643cm</Height>
         <Width>18.49999cm</Width>
         <Style />
       </Tablix>
@@ -2293,7 +2293,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Code.TimeString(Fields!avg_forecasted_talk_time.Value)</Value>
+                              <Value>=Code.TimeString(Code.Divide(Fields!sum_forecast_talk_time_s.Value, Fields!forecasted_calls.Value))</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
@@ -2315,6 +2315,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2326,7 +2327,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Code.TimeString(Fields!avg_actual_talk_time.Value)</Value>
+                              <Value>=Code.TimeString(Code.Divide(Fields!sum_talk_time_s.Value, Fields!answered_calls.Value))</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
@@ -2359,7 +2360,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Code.TimeString(Fields!avg_forecasted_acw.Value)</Value>
+                              <Value>=Code.TimeString(Code.Divide(Fields!sum_forecast_acw_s.Value, Fields!forecasted_calls.Value))</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
@@ -2392,7 +2393,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Code.TimeString(Fields!avg_actual_acw.Value)</Value>
+                              <Value>=Code.TimeString(Code.Divide(Fields!sum_acw_s.Value, Fields!answered_calls.Value))</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
@@ -2838,8 +2839,8 @@
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <Top>25.25cm</Top>
-        <Height>3.42892cm</Height>
-        <Width>18.75cm</Width>
+        <Height>3.42895cm</Height>
+        <Width>18.75008cm</Width>
         <ZIndex>3</ZIndex>
         <Style />
       </Tablix>
@@ -3195,7 +3196,7 @@
         </Style>
       </Chart>
     </ReportItems>
-    <Height>28.67892cm</Height>
+    <Height>28.67895cm</Height>
     <Style />
   </Body>
   <ReportParameters>
