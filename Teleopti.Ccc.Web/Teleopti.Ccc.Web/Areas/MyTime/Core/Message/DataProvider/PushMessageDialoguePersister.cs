@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -24,8 +25,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 		public MessageViewModel PersistMessage(ConfirmMessageViewModel confirmMessage)
 		{
 			var pushMessageDialogue = _pushMessageDialogueRepository.Get(confirmMessage.Id);
-			if(!string.IsNullOrEmpty(confirmMessage.Reply)) pushMessageDialogue.DialogueReply(confirmMessage.Reply, _loggedOnUser.CurrentUser());
-			pushMessageDialogue.SetReply(pushMessageDialogue.PushMessage.ReplyOptions.First());
+
+			if(!string.IsNullOrEmpty(confirmMessage.Reply))
+			{
+				pushMessageDialogue.DialogueReply(confirmMessage.Reply, _loggedOnUser.CurrentUser());
+			}
+
+			if (!pushMessageDialogue.PushMessage.ReplyOptions.IsEmpty())
+			{
+				pushMessageDialogue.SetReply(pushMessageDialogue.PushMessage.ReplyOptions.First());
+			}
+
 			return _mapper.Map<IPushMessageDialogue, MessageViewModel>(pushMessageDialogue);
 		}
 	}

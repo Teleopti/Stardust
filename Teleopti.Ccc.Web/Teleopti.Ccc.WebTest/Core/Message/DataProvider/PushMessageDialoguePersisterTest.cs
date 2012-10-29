@@ -12,45 +12,56 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 {
 	[TestFixture]
 	public class PushMessageDialoguePersisterTest
 	{
-
+	
 		[Test]
-		public void ShouldPersistMessage()
+		public void ShouldLoadDialogueFromRepositoryWithTheIdFromTheConfirmMessageViewModel()
 		{
 			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();
-			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new PushMessageDialoguePersister(pushMessageDialogueRepository, mapper, null);
+			var target = new PushMessageDialoguePersister(pushMessageDialogueRepository, SetupMapper(), null);
+			var pushMessageDialogue = new PushMessageDialogue(new PushMessage(), new Person());
+			var id = new Guid();
+			pushMessageDialogue.SetId(id);
+
+			pushMessageDialogueRepository.Expect(x => x.Get(id))
+				.Return(pushMessageDialogue)
+				.Repeat.Once();
+
+			target.PersistMessage(new ConfirmMessageViewModel() { Id = id });
+		}
+
+		[Test]
+		public void ShouldConfirmIsRead()
+		{
+			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();
+			var target = new PushMessageDialoguePersister(pushMessageDialogueRepository, SetupMapper(), null);
 
 			var pushMessage = new PushMessage(new []{"OK"});
 
 			var pushMessageDialogue = new PushMessageDialogue(pushMessage, new Person());
 			var id = new Guid();
 			pushMessageDialogue.SetId(id);
-			var mappedViewModel = new MessageViewModel { MessageId = pushMessageDialogue.Id.ToString(), IsRead = true};
-
+		
 			pushMessageDialogueRepository.Stub(x => x.Get(id)).Return(pushMessageDialogue);
-			mapper.Stub(x => x.Map<IPushMessageDialogue, MessageViewModel>(pushMessageDialogue)).Return(mappedViewModel);
 
 			var viewModel = target.PersistMessage(new ConfirmMessageViewModel() { Id = id });
 
-			viewModel.MessageId.Should().Be.EqualTo(mappedViewModel.MessageId);
-            viewModel.IsRead.Should().Be.True();
+         viewModel.IsRead.Should().Be.True();
 		}
 
 		[Test]
-		public void CanAddDialogueMessage()
+		public void ReplyingToMessageShouldAddThatReplyToTheConversationOnTheDialogue()
 		{
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var user = new Person();
 			user.SetId(Guid.NewGuid());
 			var sender = new Person();
-			loggedOnUser.Expect(l => l.CurrentUser()).Return(user);
+			loggedOnUser.Stub(l => l.CurrentUser()).Return(user);
 			var dialogueId = Guid.NewGuid();
 			var pushMessage = new PushMessage(new[] { "OK" }) { Sender = sender };
 			var pushMessageDialogue = new PushMessageDialogue(pushMessage, sender);
