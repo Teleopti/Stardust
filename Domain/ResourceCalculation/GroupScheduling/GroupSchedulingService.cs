@@ -186,8 +186,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 				                                                            schedulingOptions.ConsiderShortBreaks);
 
-				bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, effectiveRestriction,
-				                                                   resourceCalculateDelayer, best);
+				bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, effectiveRestriction,
+				                                                   resourceCalculateDelayer, best, _rollbackService);
 				if (!sucess)
 				{
 					return false;
@@ -264,8 +264,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
 
-			bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, effectiveRestriction,
-															   resourceCalculateDelayer, best);
+			bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, effectiveRestriction,
+															   resourceCalculateDelayer, best, _rollbackService);
 			if (!sucess)
 			{
 				return false;

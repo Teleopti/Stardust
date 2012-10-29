@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         IList<IWorkShiftFinderResult> FinderResults { get; }
         void ClearFinderResults();
-        bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule);
+        bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
 
     }
 
@@ -46,21 +46,22 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule)
+        public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule,
+			ISchedulePartModifyAndRollbackService rollbackService)
         {
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
 																		useOccupancyAdjustment,
 																		schedulingOptions.ConsiderShortBreaks);
 
             schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
-			doTheSchedulingLoop(selectedParts, schedulingOptions, useOccupancyAdjustment, breakIfPersonCannotSchedule, true, resourceCalculateDelayer);
+			doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true, resourceCalculateDelayer, rollbackService);
 
             schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
-			doTheSchedulingLoop(selectedParts, schedulingOptions, useOccupancyAdjustment, breakIfPersonCannotSchedule, true, resourceCalculateDelayer);
+			doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, true, resourceCalculateDelayer, rollbackService);
 
             schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
 
-			return doTheSchedulingLoop(selectedParts, schedulingOptions, useOccupancyAdjustment, breakIfPersonCannotSchedule, false, resourceCalculateDelayer);
+			return doTheSchedulingLoop(selectedParts, schedulingOptions, breakIfPersonCannotSchedule, false, resourceCalculateDelayer, rollbackService);
         }
 
 
@@ -89,7 +90,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             }
         }
 
-        private bool doTheSchedulingLoop(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule, bool excludeStudentsWithEnoughHours, IResourceCalculateDelayer resourceCalculateDelayer)
+        private bool doTheSchedulingLoop(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
+			bool breakIfPersonCannotSchedule, bool excludeStudentsWithEnoughHours, IResourceCalculateDelayer resourceCalculateDelayer,
+			ISchedulePartModifyAndRollbackService rollbackService)
         {
 			bool everyPersonScheduled = true;
 			bool tempOnlyShiftsWhenUnderstaffed =
@@ -130,7 +133,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					if (part != null)
 					{
 						var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
-						schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(part, schedulingOptions, useOccupancyAdjustment, effectiveRestriction, resourceCalculateDelayer, null);
+						schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(part, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, null, rollbackService);
 						everyPersonScheduled = everyPersonScheduled && schedulePersonOnDayResult;
 
 					}

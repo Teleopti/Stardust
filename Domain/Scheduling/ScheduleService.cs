@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly IWorkShiftFinderService _finderService;
         private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
         private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
-        private readonly ISchedulePartModifyAndRollbackService _rollbackService;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly Hashtable _finderResults = new Hashtable();
 
@@ -21,13 +20,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
             IWorkShiftFinderService finderService, 
             IScheduleMatrixListCreator scheduleMatrixListCreator,
             IShiftCategoryLimitationChecker shiftCategoryLimitationChecker, 
-            ISchedulePartModifyAndRollbackService rollbackService,
             IEffectiveRestrictionCreator effectiveRestrictionCreator)
         {
             _finderService = finderService;
             _scheduleMatrixListCreator = scheduleMatrixListCreator;
             _shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
-            _rollbackService = rollbackService;
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
         }
 
@@ -49,15 +46,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _finderResults.Clear();
         }
 
+		//only one usage of this, try to remove
         public bool SchedulePersonOnDay(
 			IScheduleDay schedulePart, 
 			ISchedulingOptions schedulingOptions, 
-			bool useOccupancyAdjustment, 
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			IPossibleStartEndCategory possibleStartEndCategory)
+			IPossibleStartEndCategory possibleStartEndCategory,
+			ISchedulePartModifyAndRollbackService rollbackService)
         {
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
-            return SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment, effectiveRestriction, resourceCalculateDelayer, possibleStartEndCategory);
+            return SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, possibleStartEndCategory, rollbackService);
         }
 
 		public bool SchedulePersonOnDay(
@@ -65,22 +63,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			ISchedulingOptions schedulingOptions,
 			IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
+			IPossibleStartEndCategory possibleStartEndCategory,
 			ISchedulePartModifyAndRollbackService rollbackService)
 		{
-			return schedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction,
-			                           resourceCalculateDelayer, null, null, rollbackService);
-		}
-
-		public bool SchedulePersonOnDay(
-			IScheduleDay schedulePart,
-			ISchedulingOptions schedulingOptions,
-			bool useOccupancyAdjustment,
-			IEffectiveRestriction effectiveRestriction,
-			IResourceCalculateDelayer resourceCalculateDelayer,
-			IPossibleStartEndCategory possibleStartEndCategory, IPerson person = null)
-		{
 			return schedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer,
-			                           possibleStartEndCategory, person, _rollbackService);
+			                           possibleStartEndCategory, null, rollbackService);
 		}
 
 
