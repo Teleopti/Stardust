@@ -171,30 +171,7 @@ Scenario: Send text reply message
 	And I am viewing messages
 	And I click on the message at position '1' in the list
 	When I enter the text reply 'my reply'
-	And I click the send button
+	And I click the confirm button
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
 
-Scenario: Do not allow replies that are too long
-	Given I have the role 'Full access to mytime'
-	And I have an unread message with
-	| Field					| Value				|
-	| Title					| New message		|
-	| Message				| Text in message	|
-	| Text reply allowed	| True				|
-	And I am viewing messages
-	And I click on the message at position '1' in the list
-	When I write a text reply that is too long
-	Then the send button should be disabled
-
-Scenario: Show remaining characters when writing text reply
-	Given I have the role 'Full access to mytime'
-	And I have an unread message with
-	| Field					| Value				|
-	| Title					| New message		|
-	| Message				| Text in message	|
-	| Text reply allowed	| True				|
-	And I am viewing messages
-	And I click on the message at position '1' in the list
-	When I enter the text reply 'my reply'
-	Then I should see that I have '242' characters left
