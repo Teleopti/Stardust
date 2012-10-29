@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
         private readonly IMeetingRepository _meetingRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IMeetingOverviewViewModel _model;
-        private readonly ICccTimeZoneInfo _userTimeZone;
+        private readonly TimeZoneInfo _userTimeZone;
 
         public ExportMeetingsProvider(IMeetingRepository meetingRepository,
             IUnitOfWorkFactory unitOfWorkFactory, IMeetingOverviewViewModel model)

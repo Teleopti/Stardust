@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             var scenario = ScenarioFactory.CreateScenarioAggregate();
             var budgetGroup = new BudgetGroup { Name = "Group" };
             budgetGroup.TrySetDaysPerYear(365);
-            budgetGroup.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.GetSystemTimeZones()[3]); 
+            budgetGroup.TimeZone = (TimeZoneInfo.GetSystemTimeZones()[3]); 
             var date = new DateOnly(2010, 10, 4);
             var budgetDay1 = new BudgetDay(budgetGroup, scenario, date) { AttritionRate = new Percent(0.1), StaffEmployed = 777, Recruitment = 0, Contractors = 22.8, DaysOffPerWeek = 2, ForecastedHours = 171, FulltimeEquivalentHours = 7.6, OvertimeHours = 2, StudentHours = 3 };
 			var budgetDay2 = new BudgetDay(budgetGroup, scenario, date.AddDays(1)) { AttritionRate = new Percent(0.1), Recruitment = 0, Contractors = 22.8, DaysOffPerWeek = 2, ForecastedHours = 168, FulltimeEquivalentHours = 7.6, OvertimeHours = 2, StudentHours = 3 };

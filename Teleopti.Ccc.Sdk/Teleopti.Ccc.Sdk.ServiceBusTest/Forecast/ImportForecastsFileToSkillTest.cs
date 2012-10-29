@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
         private IMessageBroker _messageBroker;
         private IServiceBus _serviceBus;
         private IForecastsFileContentProvider _contentProvider;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private IUnitOfWork _unitOfWork;
         private IJobResult _jobResult;
         private IForecastFile _forecastFile;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             _feedback = _mocks.DynamicMock<IJobResultFeedback>();
             _messageBroker = _mocks.StrictMock<IMessageBroker>();
             _serviceBus = _mocks.StrictMock<IServiceBus>();
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            _timeZone = (TimeZoneInfo.Utc);
             _unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
             _jobResult = _mocks.DynamicMock<IJobResult>();
             _forecastFile = _mocks.DynamicMock<IForecastFile>();

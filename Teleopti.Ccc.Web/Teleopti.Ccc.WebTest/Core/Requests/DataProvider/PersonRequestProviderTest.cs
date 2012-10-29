@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var personRequests = new IPersonRequest[] {};
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			userTimeZone.Stub(x => x.TimeZone()).Return(new CccTimeZoneInfo(TimeZoneInfo.Local));
+			userTimeZone.Stub(x => x.TimeZone()).Return((TimeZoneInfo.Local));
 			repository.Stub(x => x.FindAllRequestsForAgent(person, period.ToDateTimePeriod(userTimeZone.TimeZone()))).Return(personRequests);
 
 			var result = target.RetrieveRequests(period);

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public CultureInfo Culture { get { return CultureLCID == 0 ? CultureInfo.CurrentCulture : CultureInfo.GetCultureInfo(CultureLCID); } }
 		public CultureInfo UICulture { get { return UICultureLCID == 0 ? CultureInfo.CurrentUICulture : CultureInfo.GetCultureInfo(UICultureLCID); } }
 
-		public ICccTimeZoneInfo TimeZone { get; set; }
+		public TimeZoneInfo TimeZone { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static IRegional FromPerson(IPerson person)
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "LCID")]
-		public Regional(ICccTimeZoneInfo defaultTimeZone, int cultureLCID, int uiCultureLCID)
+		public Regional(TimeZoneInfo defaultTimeZone, int cultureLCID, int uiCultureLCID)
 		{
 			TimeZone = defaultTimeZone;
 			CultureLCID = cultureLCID;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public Regional(ICccTimeZoneInfo defaultTimeZone, CultureInfo culture, CultureInfo uiCulture)
+		public Regional(TimeZoneInfo defaultTimeZone, CultureInfo culture, CultureInfo uiCulture)
         {
             TimeZone = defaultTimeZone;
 			CultureLCID = culture.LCID;

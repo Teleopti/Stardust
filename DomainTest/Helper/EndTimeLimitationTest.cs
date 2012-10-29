@@ -90,9 +90,9 @@ namespace Teleopti.Ccc.DomainTest.Helper
 
 		  [Test]
 		  [ExpectedException(typeof(ArgumentOutOfRangeException))]
-		  public void VerifyEndToBigViaString()
+		  public void VerifyToBigViaString()
 		  {
-			  target.TimeSpanFromString("1:1:16:33");
+			  target.TimeSpanFromString("2:1:16:33");
 		  }
 		  [Test]
 		  public void VerifySetEndDateWithString()

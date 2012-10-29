@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (_cachedResult.TryGetValue(person,out res))
                 return res;
 
-            ICccTimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
             IList<ISchedulePeriod> validPeriods = person.PersonSchedulePeriods(_requestedDateTimePeriod.ToDateOnlyPeriod(timeZoneInfo));
 
             if (validPeriods.Count == 0)
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 if (_justiceValue > -7)
                     _justiceValue = -7;
                 DateTime justiceStart =
-                    timeZoneInfo.ConvertTimeFromUtc(_requestedDateTimePeriod.StartDateTime, timeZoneInfo).AddDays(_justiceValue);
+                    TimeZoneHelper.ConvertFromUtc(_requestedDateTimePeriod.StartDateTime, timeZoneInfo).AddDays(_justiceValue);
                 if (justiceStart < firstPeriodsFirstDateLocal)
                     firstPeriodsFirstDateLocal = justiceStart;
 
@@ -116,12 +116,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return res;
         }
 
-        private DateTime getLastPeriodsLastDateLocal(ISchedulePeriod maxSchedulePeriod, CultureInfo culture, ICccTimeZoneInfo timeZoneInfo)
+        private DateTime getLastPeriodsLastDateLocal(ISchedulePeriod maxSchedulePeriod, CultureInfo culture, TimeZoneInfo timeZoneInfo)
         {
             DateTime lastPeriodsLastDate;
             DateOnlyPeriod? maxPeriod =
                 maxSchedulePeriod.GetSchedulePeriod(
-                    new DateOnly(timeZoneInfo.ConvertTimeFromUtc(_requestedDateTimePeriod.EndDateTime, timeZoneInfo).AddTicks(-1)));
+                    new DateOnly(TimeZoneHelper.ConvertFromUtc(_requestedDateTimePeriod.EndDateTime, timeZoneInfo).AddTicks(-1)));
 
             if (maxPeriod.HasValue)
             {
@@ -135,13 +135,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return DateTime.SpecifyKind(lastPeriodsLastDate.Date, DateTimeKind.Local).AddDays(1);
         }
 
-        private DateTime getFirstPeriodsFirstDateLocal(ISchedulePeriod minSchedulePeriod, CultureInfo culture, ICccTimeZoneInfo timeZoneInfo)
+        private DateTime getFirstPeriodsFirstDateLocal(ISchedulePeriod minSchedulePeriod, CultureInfo culture, TimeZoneInfo timeZoneInfo)
         {
             DateTime firstPeriodsFirstDate;
 
             DateOnlyPeriod? minPeriod =
                 minSchedulePeriod.GetSchedulePeriod(
-                    new DateOnly(timeZoneInfo.ConvertTimeFromUtc(_requestedDateTimePeriod.StartDateTime, timeZoneInfo)));
+                    new DateOnly(TimeZoneHelper.ConvertFromUtc(_requestedDateTimePeriod.StartDateTime, timeZoneInfo)));
             if (minPeriod.HasValue)
             {
                 firstPeriodsFirstDate = DateHelper.GetFirstDateInWeek(minPeriod.Value.StartDate, culture);

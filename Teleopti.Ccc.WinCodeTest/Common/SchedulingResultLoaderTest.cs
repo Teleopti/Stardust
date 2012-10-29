@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _permittedPeople = new List<IPerson> { _mocks.StrictMock<IPerson>() };
             _scenario = _mocks.StrictMock<IScenario>();
 
-			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, CccTimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople);
+			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople);
 
             target = new SchedulingResultLoader(_schedulerState, _repositoryFactory, _eventAggregator, _lazyManager, _peopleAndSkillLoaderDecider, _peopleLoader, _skillDayLoadHelper, _resourceOptimizationHelper, _loadScheduleByPersonSpecification);
         }
@@ -239,13 +239,20 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         {
             var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             var scheduleRepository = _mocks.StrictMock<IScheduleRepository>();
+        	var period = _schedulerState.RequestedPeriod.Period();
 
             Expect.Call(_repositoryFactory.CreateScheduleRepository(_uow))
                 .Return(scheduleRepository);
 
-            Expect.Call(scheduleRepository.FindSchedulesForPersons(null, null, null, null, null))
-                .IgnoreArguments()
-                .Return(scheduleDictionary);
+        	Expect.Call(scheduleRepository.FindSchedulesForPersons(null, null, null, null, null)).Constraints(
+        		Rhino.Mocks.Constraints.Is.Matching(
+        			new Predicate<IScheduleDateTimePeriod>(
+        				x =>
+        				x.VisiblePeriod.StartDateTime == period.StartDateTime.AddHours(-24) &&
+        				x.VisiblePeriod.EndDateTime == period.EndDateTime.AddHours(24))),
+        		Rhino.Mocks.Constraints.Is.Equal(_scenario), Rhino.Mocks.Constraints.Is.Anything(),
+        		Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Equal(_permittedPeople)).Return(
+        			scheduleDictionary);
 
             return scheduleDictionary;
         }

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
@@ -73,6 +77,30 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		}
 
 		[Test]
+		public void ShouldReturnTrueIfAllUnscheduledForGroupPerson()
+		{
+			var date = new DateOnly(2010,10,4);
+			var schedulingOptions = new SchedulingOptions{UseGroupSchedulingCommonCategory = true, UseGroupSchedulingCommonStart = true};
+            var groupPerson = _mocks.StrictMock<IGroupPerson>();
+            Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+		    Expect.Call(groupPerson.GroupMembers).Return(
+		        new ReadOnlyCollection<IPerson>(new List<IPerson> {_person1, _person2}));
+            Expect.Call(_person1.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
+            Expect.Call(_person2.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
+            Expect.Call(_virtualPeriod.IsValid).Return(true).Repeat.Twice();
+
+			Expect.Call(_scheduleDictionary[_person1]).Return(_rangeUnscheduled);
+			Expect.Call(_scheduleDictionary[_person2]).Return(_rangeUnscheduled);
+
+			Expect.Call(_rangeUnscheduled.ScheduledDay(date)).Return(_unscheduledDay).Repeat.Twice();
+			Expect.Call(_unscheduledDay.SignificantPart()).Return(SchedulePartView.None).Repeat.Twice();
+			_mocks.ReplayAll();
+            var result = _target.AllPersonsHasSameOrNoneScheduled(groupPerson,date, schedulingOptions);
+			Assert.That(result,Is.True);
+			_mocks.VerifyAll();
+		}
+
+		[Test]
 		public void ShouldReturnTrueIfSameCategory()
 		{
 			var date = new DateOnly(2010, 10, 4);
@@ -94,6 +122,38 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var result = _target.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, _persons, date, schedulingOptions);
 			Assert.That(result, Is.True);
 			Assert.That(_target.CommonPossibleStartEndCategory.ShiftCategory,Is.EqualTo(_category1));
+			_mocks.VerifyAll();
+		}
+        
+        [Test]
+		public void ShouldReturnTrueIfSameActivity()
+		{
+			var date = new DateOnly(2010, 10, 4);
+			var ass = _mocks.StrictMock<IPersonAssignment>();
+			var mainShift = _mocks.StrictMock<IMainShift>();
+            var projectionService = _mocks.StrictMock<IProjectionService>();
+            var activity = ActivityFactory.CreateActivity("lunch");
+            var schedulingOptions = new SchedulingOptions { UseCommonActivity = true, CommonActivity = activity};
+            var lunch = new DateTimePeriod(new DateTime(2010, 10, 4, 12, 0, 0, DateTimeKind.Utc), new DateTime(2010, 10, 4, 13, 0, 0, DateTimeKind.Utc));
+            var layerLunch = new VisualLayer(activity, lunch, activity, null);
+            
+            Expect.Call(_person1.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
+            Expect.Call(_person2.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
+            Expect.Call(_virtualPeriod.IsValid).Return(true).Repeat.Twice();
+			Expect.Call(_scheduleDictionary[_person1]).Return(_rangeScheduled);
+			Expect.Call(_scheduleDictionary[_person2]).Return(_rangeScheduled);
+
+			Expect.Call(_rangeScheduled.ScheduledDay(date)).Return(_scheduledDay).Repeat.Twice();
+			Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
+			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass).Repeat.Twice();
+			Expect.Call(ass.MainShift).Return(mainShift).Repeat.Twice();
+            Expect.Call(mainShift.ProjectionService()).Return(projectionService).Repeat.Twice();
+            Expect.Call(projectionService.CreateProjection()).Return(new VisualLayerCollection(_person1,
+                                                                                               new List<IVisualLayer> { layerLunch }, new ProjectionPayloadMerger())).Repeat.Twice();
+			_mocks.ReplayAll();
+			var result = _target.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, _persons, date, schedulingOptions);
+			Assert.That(result, Is.True);
+			Assert.That(_target.CommonPossibleStartEndCategory.ActivityPeriods.Count,Is.EqualTo(1));
 			_mocks.VerifyAll();
 		}
 

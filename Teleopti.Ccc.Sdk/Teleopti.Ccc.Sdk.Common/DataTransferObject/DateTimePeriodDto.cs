@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.Serialization;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 {
@@ -11,29 +10,6 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
     [Serializable]
     public class DateTimePeriodDto : Dto
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DateTimePeriodDto"/> class.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        [Obsolete("This constructor should not be used. Use empty constructor and set datetimes if you need a new instance, or use the dedicated assembler.")]
-        public DateTimePeriodDto(DateTimePeriod period) : this()
-        {
-            UtcStartTime = period.StartDateTime;
-            UtcEndTime = period.EndDateTime;
-            if (StateHolderReader.IsInitialized)
-            {
-                LocalStartDateTime = period.LocalStartDateTime;
-                LocalEndDateTime = period.LocalEndDateTime;
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DateTimePeriodDto"/> class.
-        /// </summary>
-        public DateTimePeriodDto()
-        {
-        }
-
         /// <summary>
         /// Gets or sets the UTC start time.
         /// </summary>

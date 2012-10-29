@@ -48,20 +48,20 @@ namespace Teleopti.Ccc.Win.PerformanceManager
 
             var bUnitID = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.ToString();
 
-            //var proc = new Process {EnableRaisingEvents = false, StartInfo = {FileName = "iexplore.exe"}};
+            var proc = new Process {EnableRaisingEvents = false, StartInfo = {FileName = "iexplore.exe"}};
 
 			var matrixUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["MatrixWebSiteUrl"] + "/PmContainer.aspx?pm=1&forceformslogin={0}&buid={1}";
 			matrixUrl = string.Format(CultureInfo.CurrentCulture, matrixUrl, forceFormsLogin, bUnitID);
-			//proc.StartInfo.Arguments = string.Format(CultureInfo.CurrentCulture, matrixUrl, forceFormsLogin, bUnitID);
+			proc.StartInfo.Arguments = string.Format(CultureInfo.CurrentCulture, matrixUrl, forceFormsLogin, bUnitID);
             //proc.Start();
 			try
 			{
-				//proc.Start();
-				Process.Start(matrixUrl);
+				proc.Start();
+				//Process.Start(matrixUrl);
 			}
 			catch (System.ComponentModel.Win32Exception ex)
 			{
-				MessageDialogs.ShowError(this, ex.Message, "Cannot load the Default Browser");
+				MessageDialogs.ShowError(this, ex.Message, "Cannot load Internet Explorer");
 			}
         }
     }

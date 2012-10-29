@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Models
         {
             get
             {
-                return new TimePeriod(TimeSpan.Parse("8:00"), TimeSpan.Parse("9:00"));
+                return new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9));
             }
         }
 
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Models
         {
             get
             {
-                return new TimePeriod(TimeSpan.Parse("17:00"), TimeSpan.Parse("18:00"));
+                return new TimePeriod(TimeSpan.FromHours(17), TimeSpan.FromHours(18));
             }
         }
 

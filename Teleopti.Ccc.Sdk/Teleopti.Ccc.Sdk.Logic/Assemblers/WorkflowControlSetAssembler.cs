@@ -28,10 +28,26 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             {
                 workflowControlSetDto.AllowedPreferenceActivity = _activityAssembler.DomainEntityToDto(entity.AllowedPreferenceActivity);
             }
-            workflowControlSetDto.PreferencePeriod = new DateOnlyPeriodDto(entity.PreferencePeriod);
-            workflowControlSetDto.PreferenceInputPeriod = new DateOnlyPeriodDto(entity.PreferenceInputPeriod);
-            workflowControlSetDto.StudentAvailabilityPeriod = new DateOnlyPeriodDto(entity.StudentAvailabilityPeriod);
-            workflowControlSetDto.StudentAvailabilityInputPeriod = new DateOnlyPeriodDto(entity.StudentAvailabilityInputPeriod);
+			workflowControlSetDto.PreferencePeriod = new DateOnlyPeriodDto
+			{
+				StartDate = new DateOnlyDto { DateTime = entity.PreferencePeriod.StartDate },
+				EndDate = new DateOnlyDto { DateTime = entity.PreferencePeriod.EndDate }
+			};
+			workflowControlSetDto.PreferenceInputPeriod = new DateOnlyPeriodDto
+			{
+				StartDate = new DateOnlyDto { DateTime = entity.PreferenceInputPeriod.StartDate },
+				EndDate = new DateOnlyDto { DateTime = entity.PreferenceInputPeriod.EndDate }
+			};
+			workflowControlSetDto.StudentAvailabilityPeriod = new DateOnlyPeriodDto
+			{
+				StartDate = new DateOnlyDto { DateTime = entity.StudentAvailabilityPeriod.StartDate },
+				EndDate = new DateOnlyDto { DateTime = entity.StudentAvailabilityPeriod.EndDate }
+			};
+			workflowControlSetDto.StudentAvailabilityInputPeriod = new DateOnlyPeriodDto
+			{
+				StartDate = new DateOnlyDto { DateTime = entity.StudentAvailabilityInputPeriod.StartDate },
+				EndDate = new DateOnlyDto { DateTime = entity.StudentAvailabilityInputPeriod.EndDate }
+			};
         	workflowControlSetDto.SchedulesPublishedToDate = entity.SchedulePublishedToDate;
 
             foreach (IShiftCategory shiftCategory in entity.AllowedPreferenceShiftCategories)

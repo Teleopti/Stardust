@@ -1,5 +1,4 @@
 using System.Runtime.Serialization;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 {
@@ -24,9 +23,8 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         public AuthenticationTypeOptionDto AuthenticationTypeOptionDto { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public DataSourceDto(IDataSource dataSource, AuthenticationTypeOptionDto authenticationTypeOptionDto)
+        public DataSourceDto(AuthenticationTypeOptionDto authenticationTypeOptionDto)
         {
-            Name = dataSource.Application.Name;
             AuthenticationTypeOptionDto = authenticationTypeOptionDto;
         }
 

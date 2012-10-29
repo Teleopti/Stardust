@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Common
     public class ContractSchedule : AggregateRootWithBusinessUnit, IContractSchedule, IDeleteTag
     {
         private Description _description;
-        private readonly ISet<IContractScheduleWeek> _contractScheduleWeeks; //byt till BCL's ISet<T> när vi går över till .net 4.0!
+		private readonly Iesi.Collections.Generic.ISet<IContractScheduleWeek> _contractScheduleWeeks; //byt till BCL's ISet<T> när vi går över till .net 4.0!
         private bool _isDeleted;
 
         /// <summary>

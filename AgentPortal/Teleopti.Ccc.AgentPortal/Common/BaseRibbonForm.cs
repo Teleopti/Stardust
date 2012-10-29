@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
@@ -65,7 +66,6 @@ namespace Teleopti.Ccc.AgentPortal.Common
         {
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             bool local = keyData != (Keys.F1 | Keys.Shift);

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         {
             int org = 3;
             string orgSting = org.ToString(CultureInfo.CurrentCulture);
-            ExternalLogOnMapper mapper = new ExternalLogOnMapper(new MappedObjectPair(), new CccTimeZoneInfo(TimeZoneInfo.Local));
+            ExternalLogOnMapper mapper = new ExternalLogOnMapper(new MappedObjectPair(), (TimeZoneInfo.Local));
             IExternalLogOn theNew = mapper.Map(org);
             Assert.AreEqual(orgSting, theNew.AcdLogOnOriginalId);
             Assert.AreEqual(orgSting, theNew.AcdLogOnName);

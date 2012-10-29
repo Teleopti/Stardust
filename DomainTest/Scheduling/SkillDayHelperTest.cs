@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void VerifyForecastedHoursAndForecastedTime()
         {
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             DateOnly startDateLocal;
             IList<ISkillDay> skillDays = GetBaseData(_skill, out startDateLocal);
 
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void VerifyScheduledHoursAndScheduledTime()
         {
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             DateOnly startDateLocal;
             IList<ISkillDay> skillDays = GetBaseData(_skill, out startDateLocal);
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void VerifyEstimatedServiceLevel()
         {
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             DateOnly startDateLocal;
             IList<ISkillDay> baseData = GetBaseData(_skill, out startDateLocal);
 
@@ -337,7 +337,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             IWorkload workload = WorkloadFactory.CreateWorkload(skill);
 
             startDateLocal = new DateOnly(2008, 1, 2);
-            DateTime startDate = skill.TimeZone.ConvertTimeToUtc(startDateLocal, skill.TimeZone);
+            DateTime startDate = TimeZoneInfo.ConvertTimeToUtc(startDateLocal, skill.TimeZone);
 
             SkillPersonData skillPersonData = new SkillPersonData(1, 99);
             TimeSpan interval = TimeSpan.FromMinutes(15);
@@ -480,12 +480,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             DateOnly theDate = new DateOnly(2008, 12, 1);
             IPermissionInformation permissionInformation = _mocks.StrictMock<IPermissionInformation>();
             TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-            ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(timeZoneInfo);
            using (_mocks.Record())
            {
                Expect.Call(person.Period(theDate)).Repeat.Once().Return(null);
                Expect.Call(person.PermissionInformation).Return(permissionInformation).Repeat.Any();
-               Expect.Call(permissionInformation.DefaultTimeZone()).Return(cccTimeZoneInfo);
+               Expect.Call(permissionInformation.DefaultTimeZone()).Return(timeZoneInfo);
            }
             using (_mocks.Playback())
             {
@@ -505,7 +504,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             IPersonSkill skill2 = PersonSkillFactory.CreatePersonSkill("s2", 1);
             IPermissionInformation permissionInformation = _mocks.StrictMock<IPermissionInformation>();
             TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-            ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(timeZoneInfo);
 
             IList<IPersonSkill> personSkills = new List<IPersonSkill>(){skill1,skill2};
             using (_mocks.Record())
@@ -513,7 +511,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                 Expect.Call(person.Period(theDate)).Repeat.Once().Return(period);
                 Expect.Call(period.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
                 Expect.Call(person.PermissionInformation).Return(permissionInformation).Repeat.Any();
-                Expect.Call(permissionInformation.DefaultTimeZone()).Return(cccTimeZoneInfo);
+                Expect.Call(permissionInformation.DefaultTimeZone()).Return(timeZoneInfo);
             }
             using (_mocks.Playback())
             {

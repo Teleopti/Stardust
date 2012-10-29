@@ -25,7 +25,7 @@
 	</script>
 </head>
 <body onunload="onClose();" >
-	<form id="form1" runat="server">
+	<form style="height:100%" id="form1" runat="server">
 
 		<div style="width: 100%">
 			<div style="float:left">
@@ -35,45 +35,45 @@
 					<img alt="" src="images/1x1.png" width="150px" height="1"/>
 				</div>
 				<div class="banneri2" style="height: 54px;margin-left: 280px">
-					<asp:ContentPlaceHolder ID="ReportTitle" runat="server"></asp:ContentPlaceHolder>
-					<div style="float: right;margin-top: 5px">
-						<div>
+                    <div style="float: left;margin-top: 5px;">
+                            <asp:ContentPlaceHolder ID="ReportTitle" runat="server"></asp:ContentPlaceHolder>
+                    </div>
+					
+					<div style="float: right;margin-top: 5px;">
+						<div style="float: right;margin-top: 5px;margin-right:10px">
 							<asp:LinkButton ID="linkButtonLogOut" runat="server" Text="Log out" 
 									onclick="linkButtonLogOut_Click" CssClass="actionLink"></asp:LinkButton>
 						</div>
-						<div style="float:right; margin-top:  5px;margin-right: 25px">
+						<div style="float:right; margin-top: 5px;margin-right: 25px;clear:both">
 							<asp:ImageButton ID="ImageButtonHelp" runat="server" ImageUrl="~/images/Question_16x16.png" ToolTip="Help" OnClientClick="javascript:return false;" />
 						</div>
 					</div>
 				</div>
 		</div>
 				
-	<table style="width: 100%; height: 100%" >
-		<tr style="height: 99%">
-			<td  style="height: 100%;">
-				<table>
-					<tr>
-						<td style="height: 1px">
-							<uc3:ActionBarView ID="ActionBarView1" runat="server" Visible="false" />
-							<div id="divNewPopup"> 
-								<uc4:NewView ID="NewView1" runat="server" />
-							</div> 
-						</td>
-					</tr>
-					<tr>
-						<td valign="top" align="left" style="width: 10px">
-							<uc1:ReportTreeView ID="ReportTreeView1" runat="server" Visible="false" />
-						</td>
-					</tr>
-				</table>
-			</td>
-			<td rowspan="4" style="width: 100%; height: 99%" valign="top" align="left">
-				<asp:ContentPlaceHolder ID="ContentPlaceHolder3" runat="server">
-				</asp:ContentPlaceHolder>
-				<asp:Label ID="LabelMessage" runat="server" Text="" CssClass="systemMessage"></asp:Label>
-			</td>
-		</tr>
-	</table>
+	<div style="width: 100%; height: 100%" >
+        <div style="height:100%;width:89%;float:right;clear:both">
+		    <asp:ContentPlaceHolder ID="ContentPlaceHolder3" runat="server"></asp:ContentPlaceHolder>
+		    <asp:Label ID="LabelMessage" runat="server" Text="" CssClass="systemMessage"></asp:Label>
+	        </div>
+			<div  style="height: 100%;width:10%">
+            <div style="width:100%">
+			    <uc3:ActionBarView ID="ActionBarView1" runat="server" Visible="false" />
+			    <div id="divNewPopup"> 
+				    <uc4:NewView ID="NewView1" runat="server" />
+			    </div> 
+		    </div>
+
+		<div align="left" style="width:100%" >
+			<uc1:ReportTreeView ID="ReportTreeView1" runat="server" Visible="false" />
+		</div>
+
+            </div>
+			
+            
+            	
+
+	</div>
 	</form>
 </body>
 </html>

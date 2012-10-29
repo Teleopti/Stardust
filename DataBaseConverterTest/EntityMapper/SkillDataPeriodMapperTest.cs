@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             //CreateProjection Expected date Intervall=26	= 06:30 Will be -> '2006-12-15 06:30'
             DateTime expectedIntervallDate = new DateTime(2006, 12, 15, 6, 30, 0, DateTimeKind.Utc);
 
-            SkillDataPeriodMapper target = new SkillDataPeriodMapper(mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc), expectedIntervallDate.Date, intervalLength);
+            SkillDataPeriodMapper target = new SkillDataPeriodMapper(mapped, (TimeZoneInfo.Utc), expectedIntervallDate.Date, intervalLength);
 
             SkillDataPeriod newSkillDataPeriod = target.Map(oldSkillData);
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             //CreateProjection Expected date Intervall=26	= 06:30 Will be -> '2006-12-15 06:30'
             DateTime expectedIntervallDate = new DateTime(2006, 12, 15, 6, 30, 0, DateTimeKind.Utc);
 
-            SkillDataPeriodMapper target = new SkillDataPeriodMapper(mapped, new CccTimeZoneInfo(TimeZoneInfo.Utc), expectedIntervallDate.Date, intervalLength);
+            SkillDataPeriodMapper target = new SkillDataPeriodMapper(mapped, (TimeZoneInfo.Utc), expectedIntervallDate.Date, intervalLength);
 
             SkillDataPeriod newSkillDataPeriod = target.Map(oldSkillData);
 

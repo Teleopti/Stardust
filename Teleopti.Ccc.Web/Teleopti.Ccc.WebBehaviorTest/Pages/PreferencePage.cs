@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 
@@ -89,10 +90,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			return CalendarCellForDate(date).Div(Find.ByClass("extended-indication", false));
 		}
+
+		public Div MeetingAndPersonalShiftIndicationForDate(DateTime date)
+		{
+			return CalendarCellForDate(date).Div(Find.ByClass("meeting-small", false)).EventualGet();
+		}
+
+		public Div MeetingAndPersonalShiftTooltipForDate(DateTime date)
+		{
+			return CalendarCellForDate(date).Div(Find.ByClass("meeting-tooltip", false)).EventualGet();
+		}
 		
 		public Div ExtendedPreferenceForDate(DateTime date)
 		{
 			return Document.Div("ui-tooltip-extended-" + date.ToString("yyyy-MM-dd"));
+		}
+
+		public Div MeetingAndPersonalShiftForDate(DateTime date)
+		{
+			return Document.Div("ui-tooltip-meeting-" + date.ToString("yyyy-MM-dd")).EventualGet();
 		}
 	}
 }

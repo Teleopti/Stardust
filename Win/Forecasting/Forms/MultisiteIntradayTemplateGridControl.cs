@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private readonly IMultisiteDayTemplate _multisiteDayTemplate;
         private readonly IMultisiteSkill _multisiteSkill;
 
-        public MultisiteIntradayTemplateGridControl(IMultisiteSkill multisiteSkill, IMultisiteDayTemplate multisiteDayTemplate, ICccTimeZoneInfo timeZone, int resolution)
+        public MultisiteIntradayTemplateGridControl(IMultisiteSkill multisiteSkill, IMultisiteDayTemplate multisiteDayTemplate, TimeZoneInfo timeZone, int resolution)
             : base(null, null, timeZone, resolution, null, multisiteSkill.SkillType.DisplayTimeSpanAsMinutes, new ChartSettings())
         {
             _multisiteDayTemplate = multisiteDayTemplate;
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             IList<ITemplateMultisitePeriod> templateMultisitePeriods = new 
                 List<ITemplateMultisitePeriod>(_multisiteDayTemplate.TemplateMultisitePeriodCollection);
 
-            DateTime baseDateUtc = TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate, TimeZone);
+            DateTime baseDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, TimeZone);
             if (templateMultisitePeriods.Count > 0)
             {
                 IEnumerable<ITemplateMultisitePeriod> sortedList = templateMultisitePeriods.OrderBy(p => p.Period.StartDateTime);

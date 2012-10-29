@@ -1,5 +1,4 @@
 ﻿using System.Runtime.Serialization;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 {
@@ -17,23 +16,20 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// <param name="functionCode">The function code.</param>
         public ApplicationFunctionDto(string functionCode)
         {
-            InParameter.NotStringEmptyOrNull("functionCode", functionCode);
             FunctionCode = functionCode;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationFunctionDto"/> class.
         /// </summary>
-        /// <param name="applicationFunction">The application function.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public ApplicationFunctionDto(IApplicationFunction applicationFunction)
+        public ApplicationFunctionDto()
         {
-            FunctionDescription = applicationFunction.FunctionDescription;
-            ForeignId = applicationFunction.ForeignId;
-            ForeignSource = applicationFunction.ForeignSource;
-            FunctionCode = applicationFunction.FunctionCode;
-            FunctionPath = applicationFunction.FunctionPath;
-            IsPreliminary = applicationFunction.IsPreliminary;
+			//FunctionDescription = applicationFunction.FunctionDescription;
+			//ForeignId = applicationFunction.ForeignId;
+			//ForeignSource = applicationFunction.ForeignSource;
+			//FunctionCode = applicationFunction.FunctionCode;
+			//FunctionPath = applicationFunction.FunctionPath;
+			//IsPreliminary = applicationFunction.IsPreliminary;
         }
 
         /// <summary>

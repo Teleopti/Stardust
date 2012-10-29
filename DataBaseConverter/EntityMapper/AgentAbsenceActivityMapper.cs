@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Activity=Domain.Activity;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: micke
         /// Created date: 2008-08-09
         /// </remarks>
-        public AgentAbsenceActivityMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
+        public AgentAbsenceActivityMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
         {
         }
 

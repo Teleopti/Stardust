@@ -449,7 +449,7 @@ namespace Teleopti.Analytics.Parameters
 					txtVal.value = str;
 					
 					if (SubmitOrNo == 'Yes')
-						{window.document.aspnetForm.submit();}
+						{window.document.getElementById('aspnetForm').submit();}
 				}
                 function callMoveOneButton(buttonId)
                 {

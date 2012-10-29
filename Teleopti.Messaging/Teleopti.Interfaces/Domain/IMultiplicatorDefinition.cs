@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -37,6 +38,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2008-12-10
         /// </remarks>
-        IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnlyPeriod period, ICccTimeZoneInfo timeZoneInfo);
+        IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnlyPeriod period, TimeZoneInfo timeZoneInfo);
     }
 }

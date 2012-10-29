@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
     public abstract class Mapper<TNew, TOld>
     {
         private readonly MappedObjectPair _mappedObjectPair;
-        private readonly ICccTimeZoneInfo _timeZone;
+        private readonly TimeZoneInfo _timeZone;
 
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: rogerkr
         /// Created date: 10/26/2007
         /// </remarks>
-        protected Mapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone)
+        protected Mapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone)
         {
             InParameter.NotNull("mappedObjectPair", mappedObjectPair);
             _mappedObjectPair = mappedObjectPair;
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: rogerkr
         /// Created date: 10/26/2007
         /// </remarks>
-        public ICccTimeZoneInfo TimeZone
+        public TimeZoneInfo TimeZone
         {
             get { return _timeZone; }
         }

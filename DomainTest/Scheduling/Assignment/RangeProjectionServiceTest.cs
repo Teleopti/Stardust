@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                                             new DateTime(2010, 5, 26, 10, 0, 0, DateTimeKind.Utc));
             var activity = ActivityFactory.CreateActivity("Phone");
             var person = PersonFactory.CreatePerson();
-            person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
             var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
             var projectionService1 = _mocks.StrictMock<IProjectionService>();

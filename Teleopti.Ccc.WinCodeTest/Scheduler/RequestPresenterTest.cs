@@ -40,12 +40,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IPerson _person2;
         private IPerson _person3;
         private IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
-        private CccTimeZoneInfo _cccTimeZoneInfo;
+        private TimeZoneInfo _TimeZoneInfo;
 
         [SetUp]
         public void Setup()
         {
-            _cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _requestViewAdapters = new List<PersonRequestViewModel>();
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             DateTime startDateTime = DateTime.UtcNow.Date.AddDays(7);
@@ -60,11 +60,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
 
             _person1 = PersonFactory.CreatePerson("A", "B");
-            _person1.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            _person1.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             _person2 = PersonFactory.CreatePerson("A", "A");
-            _person2.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            _person2.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             _person3 = PersonFactory.CreatePerson("A", "B");
-            _person3.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            _person3.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
             IAbsence absence = AbsenceFactory.CreateAbsence("abs");
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             personRequest1.Request = new AbsenceRequest(absence, period1);
             personRequest1.Pending();
 
-            _request1 = new PersonRequestViewModel(personRequest1, _shiftTradeRequestStatusChecker, null, null, _cccTimeZoneInfo);
+            _request1 = new PersonRequestViewModel(personRequest1, _shiftTradeRequestStatusChecker, null, null, _TimeZoneInfo);
 
             DateTimePeriod period2 = new DateTimePeriod(startDateTime,
                                                 endDateTime);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             personRequest2.TrySetMessage("b");
             personRequest2.Request = new AbsenceRequest(absence, period2);
             personRequest2.Pending();
-            _request2 = new PersonRequestViewModel(personRequest2, _shiftTradeRequestStatusChecker, null, null, _cccTimeZoneInfo);
+            _request2 = new PersonRequestViewModel(personRequest2, _shiftTradeRequestStatusChecker, null, null, _TimeZoneInfo);
 
             DateTimePeriod period3 = new DateTimePeriod(startDateTime,
                                                 endDateTime);
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             personRequest3.TrySetMessage("a");
             personRequest3.Request = new AbsenceRequest(absence, period3);
             personRequest3.Pending();
-            _request3 = new PersonRequestViewModel(personRequest3, _shiftTradeRequestStatusChecker, null, null, _cccTimeZoneInfo);
+            _request3 = new PersonRequestViewModel(personRequest3, _shiftTradeRequestStatusChecker, null, null, _TimeZoneInfo);
 
             _requestViewAdapters.Add(_request1);
             _requestViewAdapters.Add(_request2);
@@ -360,7 +360,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonRequest req = new PersonRequest(_person1);
             req.Request = part;
             req.Pending();
-            PersonRequestViewModel adp = new PersonRequestViewModel(req, _shiftTradeRequestStatusChecker, null, null, _cccTimeZoneInfo);
+            PersonRequestViewModel adp = new PersonRequestViewModel(req, _shiftTradeRequestStatusChecker, null, null, _TimeZoneInfo);
 
             _requestPresenter.SetUndoRedoContainer(undo);
             _requestPresenter.ApproveOrDeny(new List<PersonRequestViewModel> {adp},
@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonRequest req = new PersonRequest(person);
             req.Request = part;
             req.Pending();
-            PersonRequestViewModel adp = new PersonRequestViewModel(req, _shiftTradeRequestStatusChecker, null, null, _cccTimeZoneInfo);
+            PersonRequestViewModel adp = new PersonRequestViewModel(req, _shiftTradeRequestStatusChecker, null, null, _TimeZoneInfo);
 
             _requestPresenter.SetUndoRedoContainer(undo);
             _requestPresenter.ApproveOrDeny(new List<PersonRequestViewModel> {adp},

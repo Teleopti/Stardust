@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		public void ShouldGetTimeZoneFromLoggedOnUser()
 		{
 			var user = new Person();
-			user.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+			user.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(user);
 			var target = new UserTimeZone(loggedOnUser);

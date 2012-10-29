@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         private string _name = string.Empty;
         private bool _isDeleted;
         private IList<IAbsenceRequestOpenPeriod> _absenceRequestOpenPeriods;
-        private ISet<ISkill> _mustMatchSkills;
-        private ISet<IShiftCategory> _allowedPreferenceShiftCategories;
-        private ISet<IDayOffTemplate> _allowedPreferenceDayOffs;
-        private ISet<IAbsence> _allowedPreferenceAbsences;
+        private Iesi.Collections.Generic.ISet<ISkill> _mustMatchSkills;
+        private Iesi.Collections.Generic.ISet<IShiftCategory> _allowedPreferenceShiftCategories;
+        private Iesi.Collections.Generic.ISet<IDayOffTemplate> _allowedPreferenceDayOffs;
+        private Iesi.Collections.Generic.ISet<IAbsence> _allowedPreferenceAbsences;
         private DateOnly preferencePeriodFromDate;
         private DateOnly preferencePeriodToDate;
         private DateOnly preferenceInputFromDate;

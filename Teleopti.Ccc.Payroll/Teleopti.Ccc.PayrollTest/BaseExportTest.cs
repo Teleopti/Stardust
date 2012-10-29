@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.PayrollTest
         {
             public DateOnlyPeriodDtoForPayrollTest(DateOnly startDate, DateOnly endDate)
             {
-                StartDate = new DateOnlyDto(startDate);
-                EndDate = new DateOnlyDto(endDate);
+				StartDate = new DateOnlyDto { DateTime = startDate };
+				EndDate = new DateOnlyDto { DateTime = endDate };
             }
         }
 

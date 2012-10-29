@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 
 		public virtual IEnumerable<IAccount> Find(DateOnlyPeriod dateOnlyPeriod)
 		{
-			var retList = new SortedSet<IAccount>(new AccountDateDescendingComparer());
+			var retList = new Iesi.Collections.Generic.SortedSet<IAccount>(new AccountDateDescendingComparer());
 			foreach (var account in accountCollection)
 			{
 				if (account.Period().Intersection(dateOnlyPeriod).HasValue)

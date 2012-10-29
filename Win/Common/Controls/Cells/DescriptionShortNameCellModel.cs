@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Interfaces.Domain;
@@ -45,13 +46,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         public override string GetFormattedText(GridStyleInfo style, object value, int textInfo)
         {
             String ret = string.Empty;
-            if (value.GetType() == typeof(Description))
+            if (value is Description)
                 ret = ((Description)value).ShortName;
 
             return ret;
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
 

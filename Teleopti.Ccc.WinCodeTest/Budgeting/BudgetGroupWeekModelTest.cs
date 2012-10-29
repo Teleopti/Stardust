@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 
             var budgetGroup = new BudgetGroup();
             budgetGroup.Name = "BG";
-            budgetGroup.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.GetSystemTimeZones()[7]);
+            budgetGroup.TimeZone = (TimeZoneInfo.GetSystemTimeZones()[7]);
             budgetGroup.TrySetDaysPerYear(365);
             customShrinkage = new CustomShrinkage("Gaffa");
             var customShrinkageGuid = Guid.NewGuid();

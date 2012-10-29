@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private ReadOnlyCollection<IShiftCategoryLimitation> _limitations;
         private IShiftCategory _shiftCategory;
         private IPermissionInformation _permissionInformation;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
 
         [SetUp]
         public void Setup()
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _limitations = new ReadOnlyCollection<IShiftCategoryLimitation>(_limits);
             _shiftCategory = new ShiftCategory("Dummy");
             _permissionInformation = _mocks.StrictMock<IPermissionInformation>();
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
         }
 
         [Test]

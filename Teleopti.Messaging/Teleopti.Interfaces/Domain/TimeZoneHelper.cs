@@ -22,8 +22,8 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static DateTime ConvertToUtc(DateTime localDateTime)
         {
-            ICccTimeZoneInfo sourceTimeZone = CurrentSessionTimeZone;
-            return sourceTimeZone.ConvertTimeToUtc(DateTime.SpecifyKind(localDateTime, DateTimeKind.Unspecified), sourceTimeZone);
+            TimeZoneInfo sourceTimeZone = CurrentSessionTimeZone;
+            return sourceTimeZone.SafeConvertTimeToUtc(DateTime.SpecifyKind(localDateTime, DateTimeKind.Unspecified));
         }
 
         /// <summary>
@@ -36,10 +36,9 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2007-10-23
         /// </remarks>
-        public static DateTime ConvertToUtc(DateTime localDateTime, ICccTimeZoneInfo sourceTimeZone)
+        public static DateTime ConvertToUtc(DateTime localDateTime, TimeZoneInfo sourceTimeZone)
         {
-            return sourceTimeZone.ConvertTimeToUtc(DateTime.SpecifyKind(localDateTime, DateTimeKind.Unspecified),
-                                                   sourceTimeZone);
+            return sourceTimeZone.SafeConvertTimeToUtc(DateTime.SpecifyKind(localDateTime, DateTimeKind.Unspecified));
         }
 
         /// <summary>
@@ -53,7 +52,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static DateTime ConvertFromUtc(DateTime utcDateTime)
         {
-            ICccTimeZoneInfo targetTimeZone = CurrentSessionTimeZone;
+            TimeZoneInfo targetTimeZone = CurrentSessionTimeZone;
             return ConvertFromUtc(utcDateTime, targetTimeZone);
         }
 
@@ -67,9 +66,9 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2008-11-26
         /// </remarks>
-        public static DateTime ConvertFromUtc(DateTime utcDateTime, ICccTimeZoneInfo sourceTimeZone)
+        public static DateTime ConvertFromUtc(DateTime utcDateTime, TimeZoneInfo sourceTimeZone)
         {
-            return sourceTimeZone.ConvertTimeFromUtc(DateTime.SpecifyKind(utcDateTime, DateTimeKind.Unspecified),
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utcDateTime, DateTimeKind.Unspecified),
                                               sourceTimeZone);
         }
 
@@ -96,7 +95,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2007-10-23
         /// </remarks>
-        public static ICccTimeZoneInfo CurrentSessionTimeZone
+        public static TimeZoneInfo CurrentSessionTimeZone
         {
             get { return StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone; }
         }
@@ -112,12 +111,12 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2008-01-29
         /// </remarks>
-        public static DateTimePeriod NewUtcDateTimePeriodFromLocalDateTime(DateTime localStartDateTime, DateTime localEndDateTime, ICccTimeZoneInfo timeZone)
+        public static DateTimePeriod NewUtcDateTimePeriodFromLocalDateTime(DateTime localStartDateTime, DateTime localEndDateTime, TimeZoneInfo timeZone)
         {
             InParameter.NotNull("timeZone", timeZone);
 
-            DateTime utcStartDateTime = timeZone.ConvertTimeToUtc(localStartDateTime, timeZone);
-            DateTime utcEndDateTime = timeZone.ConvertTimeToUtc(localEndDateTime, timeZone);
+            DateTime utcStartDateTime = timeZone.SafeConvertTimeToUtc(localStartDateTime);
+            DateTime utcEndDateTime = timeZone.SafeConvertTimeToUtc(localEndDateTime);
 
             DateTimePeriod dateTimePeriod = new DateTimePeriod(utcStartDateTime, utcEndDateTime);
             return dateTimePeriod;

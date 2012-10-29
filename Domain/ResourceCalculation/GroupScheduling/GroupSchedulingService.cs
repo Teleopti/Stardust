@@ -85,7 +85,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 					var teamSteadyStateSuccess = false;
 
-					//to hide pbi on default, remove when done
 					if (teamSteadyStates != null) 
 					{
 						if (groupPerson.Id.HasValue)

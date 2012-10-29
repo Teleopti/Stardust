@@ -80,7 +80,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: ankarlp
         /// Created date: 2008-08-19
         /// </remarks>
-        ICccTimeZoneInfo TimeZone { get; set; }
+        TimeZoneInfo TimeZone { get; set; }
 
         /// <summary>
         /// Gets or sets the staffing thresholds.

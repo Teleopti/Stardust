@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		private readonly ISkillType _skillType;
 		private IList<IGridRow> _gridRows;
 		private IList<DateOnly> _dateTimes;
-		private readonly ICccTimeZoneInfo _timeZone;
+		private readonly TimeZoneInfo _timeZone;
 		private readonly RowManager<TaskOwnerDayFilterGridRow, WorkloadDayWithFilterStatus> _rowManagerTaskOwner;
 		private readonly IDictionary<DateOnly, Outlier> _outliers = new Dictionary<DateOnly, Outlier>();
 		private IList<WorkloadDayWithFilterStatus> _workloadDays;
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		private void formatCell(GridStyleInfo gridStyleInfo, DateTime dateTime)
 		{
 			bool headerCell = (gridStyleInfo.BaseStyle == "Header");
-			weekendOrWeekday(gridStyleInfo, _timeZone.ConvertTimeFromUtc(dateTime, _timeZone), !headerCell, headerCell);
+            weekendOrWeekday(gridStyleInfo, TimeZoneInfo.ConvertTimeFromUtc(dateTime, _timeZone), !headerCell, headerCell);
 		}
 
 		private void weekendOrWeekday(GridStyleInfo gridStyleInfo, DateTime date, bool backColor, bool textColor)
@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 				if (!GetRowHeaderName(rowIndex).Equals(GridRowShowInChart)) continue;
 				for(var intervalIndex = 0; intervalIndex < intervals.Count; intervalIndex++)
 				{
-					var key = _timeZone.ConvertTimeFromUtc(intervals[intervalIndex].DateTime, _timeZone);
+                    var key = TimeZoneInfo.ConvertTimeFromUtc(intervals[intervalIndex].DateTime, _timeZone);
 					var	value = GetIntervalValueFromRowName(currentCellWorkloadDay, key.TimeOfDay, GridRowShowInChart);
 					if (!keyValueCollection.ContainsKey(key))
 						keyValueCollection.Add(key, value);
@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		{
 			get
 			{
-				return _timeZone.ConvertTimeFromUtc(_firstTime);
+                return TimeZoneInfo.ConvertTimeFromUtc(_firstTime, _timeZone);
 			}
 		}
 
@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		{
 			get
 			{
-				return _timeZone.ConvertTimeFromUtc(_lastTime);
+                return TimeZoneInfo.ConvertTimeFromUtc(_lastTime, _timeZone);
 			}
 		}
 

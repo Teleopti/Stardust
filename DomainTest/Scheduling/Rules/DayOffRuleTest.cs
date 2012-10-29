@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
            _category = ShiftCategoryFactory.CreateShiftCategory("myCategory");
            _activity = ActivityFactory.CreateActivity("Phone");
            _person = PersonFactory.CreatePerson();
-           _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+           _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
            
 
            DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));

@@ -43,13 +43,6 @@ exec mart.sys_configuration_save @key=N'TimeZoneCode',@value=N'W. Europe Standar
 EXEC mart.etl_job_delete_schedule_All
 
 --Get Agg Data into Analytics
-INSERT [TeleoptiAnalytics_Demo].[dbo].[ccc_system_info]
-SELECT [id]
-      ,[desc]
-      ,[int_value]
-      ,[varchar_value]
-  FROM [TeleoptiCCC7Agg_Demo].[dbo].[ccc_system_info]
-
 INSERT [TeleoptiAnalytics_Demo].[dbo].[acd_type]
 SELECT [acd_type_id]
       ,[acd_type_desc]

@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         private NoteMapper _target;
         private AgentDayFactory _agdFactory;
         private MappedObjectPair _mappedObjectPair;
-        private ICccTimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
 
         [SetUp]
         public void Setup()
         {
-            _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _agdFactory = new AgentDayFactory();
             _mappedObjectPair = new MappedObjectPair();
             _mappedObjectPair.Agent = _agdFactory.AgentPairList;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         [Test]
         public void CanCreateMapper()
         {
-            _target = new NoteMapper(new MappedObjectPair(), new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _target = new NoteMapper(new MappedObjectPair(), (TimeZoneInfo.Utc));
             Assert.IsNotNull(_target);
         }
         [Test]

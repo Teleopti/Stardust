@@ -60,16 +60,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private static TimeSpan CalculateTimeZoneRecorrection(IScheduleDay target, IScheduleDay source)
         {
-            ICccTimeZoneInfo sourceTimeZone = source.TimeZone;
-            ICccTimeZoneInfo targetTimeZone = target.TimeZone;
+            TimeZoneInfo sourceTimeZone = source.TimeZone;
+            TimeZoneInfo targetTimeZone = target.TimeZone;
             return targetTimeZone.GetUtcOffset(target.Period.LocalStartDateTime)
                     .Subtract(sourceTimeZone.GetUtcOffset(source.Period.LocalStartDateTime));
         }
 
         private static TimeSpan CalculateDaylightSavingsRecorrection(IScheduleDay target, IScheduleDay source, DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod)
         {
-            ICccTimeZoneInfo sourceTimeZone = source.TimeZone;
-            ICccTimeZoneInfo targetTimeZone = target.TimeZone;
+            TimeZoneInfo sourceTimeZone = source.TimeZone;
+            TimeZoneInfo targetTimeZone = target.TimeZone;
 
             if (targetShiftPeriod.StartDateTime == sourceShiftPeriod.StartDateTime)
                 return TimeSpan.FromHours(0);

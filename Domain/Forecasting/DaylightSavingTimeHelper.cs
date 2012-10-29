@@ -5,12 +5,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 {
     public static class DaylightSavingTimeHelper
     {
-        public static DateTime GetUtcEndTimeOfOneDay(DateTime localDateTime, ICccTimeZoneInfo timeZone)
+        public static DateTime GetUtcEndTimeOfOneDay(DateTime localDateTime, TimeZoneInfo timeZone)
         {
             return GetUtcStartTimeOfOneDay(localDateTime.AddDays(1), timeZone);
         }
 
-        public static DateTime GetUtcStartTimeOfOneDay(DateTime localDateTime, ICccTimeZoneInfo timeZone)
+        public static DateTime GetUtcStartTimeOfOneDay(DateTime localDateTime, TimeZoneInfo timeZone)
         {
             InParameter.NotNull("timeZone", timeZone);
             var startTime = localDateTime;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 } while (timeZone.IsInvalidTime(startTime));
             }
 
-            return timeZone.ConvertTimeToUtc(startTime, timeZone);
+            return timeZone.SafeConvertTimeToUtc(startTime);
         }
     }
 }

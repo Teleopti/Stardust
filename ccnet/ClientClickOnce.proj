@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--EXTERNAL_PROPERTIES: CCNetWorkingDirectory-->
-<Project DefaultTargets="ClientClickOnce" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!--EXTERNAL_PROPERTIES: CCNetWorkingDirectory, Configuration-->
+<Project DefaultTargets="ClientClickOnce" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
   <PropertyGroup>
     <MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
     <MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
+	<Mage>\\hebe\Installation\Dependencies\ccc7_server\mage.exe</Mage>
   </PropertyGroup>
 
   <Import Project="Microsoft.Sdc.Common.tasks"/>
@@ -21,7 +22,7 @@
       <SigningCert>TeleoptiCodeSigningCertificate.pfx</SigningCert>
       <SigningCertPassword>chefen00</SigningCertPassword>
       <Company>Teleopti</Company>
-      <SourceDir>Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release</SourceDir>
+      <SourceDir>Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)</SourceDir>
       <ConfigDir>Config\Local</ConfigDir>
       <ClickOnceServer>Integration</ClickOnceServer>
       <PublishDir>$(CCNetWorkingDirectory)\ccnet\Publish</PublishDir>
@@ -41,17 +42,17 @@
       <NHibFiles Include="$(CCNetWorkingDirectory)\BuildArtifacts\TeleoptiCCC7.nhib.xml"/>
 
       <IconFile Include="$(CCNetWorkingDirectory)\BuildArtifacts\ccc_Menu.ico"/>
-      <SourceFiles	Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release\**\*.*"
-          Exclude="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release\Teleopti.Ccc.Agentp*.*;
-		 	  		 $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release\*.pdb;
-                 	  		 $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release\Detect35SP1.exe" />
-      <SourceFiles 	Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatter\bin\Release\Teleopti.Ccc.PayrollFormatter.dll"/>
+      <SourceFiles	Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\**\*.*"
+          Exclude="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\Teleopti.Ccc.Agentp*.*;
+		 	  		 $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\*.pdb;
+                 	  		 $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\Detect35SP1.exe" />
+      <SourceFiles 	Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatter\bin\$(Configuration)\Teleopti.Ccc.PayrollFormatter.dll"/>
 
       <SourceFiles 	Include="$(CCNetWorkingDirectory)\BuildArtifacts\Teleopti.Ccc.SmartClientPortal.Shell.ico"/>
       <SourceFiles 	Include="$(CCNetWorkingDirectory)\BuildArtifacts\TeleoptiCCCv7.ico"/>
 
-      <SourceFiles 	Include="$(CCNetWorkingDirectory)\syncfusion*.dll" Exclude="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release\*.application" />
-      <SourceFiles 	Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\Release\Teleopti.Ccc.SmartParts.dll"/>
+      <SourceFiles 	Include="$(CCNetWorkingDirectory)\syncfusion*.dll" Exclude="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\*.application" />
+      <SourceFiles 	Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\$(Configuration)\Teleopti.Ccc.SmartParts.dll"/>
       <SourceFiles	Include="$(CCNetWorkingDirectory)\SyncFusion\*.dll" />
       <SourceFiles	Include="$(CCNetWorkingDirectory)\BuildArtifacts\licensecontext.slf"/>
 
@@ -90,40 +91,35 @@
     <CreateItem Include="$(PublishDir)\**\*.*">
       <Output TaskParameter="Include" ItemName="AppManifestContents"/>
     </CreateItem>
-    <ModifyFile
-			  Path="default.htm"
-			  RegularExpression="#APPLICATION_NAME#"
-			  NewValue="$(SolutionName)"
-			  Force="true"/>
-    <ModifyFile
-			  Path="default.htm"
-			  RegularExpression="#TITLE#"
-			  NewValue="TELEOPTI CCC, version 7"
-			  Force="true"/>
-    <ModifyFile
-			  Path="default.htm"
-			  RegularExpression="#VERSION#"
-			  NewValue="$(CCCVersion)"
-			  Force="true"/>
-    <ModifyFile
-			  Path="default.htm"
-			  RegularExpression="#COMPANY#"
-			  NewValue="$(Company)"
-			  Force="true"/>
-    <ModifyFile
-			  Path="default.htm"
-			  RegularExpression="#SUPPORT_URL#"
-			  NewValue="$(SupportUrl)"
-			  Force="true"/>
+	
+	<FileUpdate
+			  Files="default.htm"
+			  Regex="#APPLICATION_NAME#"
+			  ReplacementText="$(SolutionName)"/>
+    <FileUpdate
+			  Files="default.htm"
+			  Regex="#TITLE#"
+			  ReplacementText="TELEOPTI CCC, version 7"/>
+    <FileUpdate
+			  Files="default.htm"
+			  Regex="#VERSION#"
+			  ReplacementText="$(CCCVersion)"/>
+    <FileUpdate
+			  Files="default.htm"
+			  Regex="#COMPANY#"
+			  ReplacementText="$(Company)"/>
+    <FileUpdate
+			  Files="default.htm"
+			  Regex="#SUPPORT_URL#"
+			  ReplacementText="$(SupportUrl)"/>
 
 
-    <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\ClickOnce\mage.exe&quot; -New Application -TrustLevel FullTrust -ToFile $(SolutionName).exe.manifest -Name &quot;$(SolutionName)&quot; -Version $(CCCVersion) -FromDirectory &quot;$(PublishDir)&quot;"/>
+    <Exec Command="&quot;$(Mage)&quot; -New Application -TrustLevel FullTrust -ToFile $(SolutionName).exe.manifest -Name &quot;$(SolutionName)&quot; -Version $(CCCVersion) -FromDirectory &quot;$(PublishDir)&quot;"/>
 
-    <ModifyFile
-		  Path="$(SolutionName).exe.manifest"
-		  RegularExpression="&lt;application /&gt;"
-		  NewValue="&lt;description asmv2:iconFile=&quot;$(SolutionName).ico&quot; xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot; /&gt;&lt;application /&gt;"
-		  Force="true"/>
+    <FileUpdate
+		  Files="$(SolutionName).exe.manifest"
+		  Regex="&lt;application /&gt;"
+		  ReplacementText="&lt;description asmv2:iconFile=&quot;$(SolutionName).ico&quot; xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot; /&gt;&lt;application /&gt;"/>
 
     <GenerateDeploymentManifest AssemblyName="$(ClickOnceAppTitle).application"
 												  AssemblyVersion="$(CCCVersion)"
@@ -138,32 +134,32 @@
 												  OutputManifest="$(SolutionName).application"
 												  MapFileExtensions="true"
 												  MinimumRequiredVersion="$(CCCVersion)"
+												  TargetFrameworkMoniker=".NETFramework,Version=v4.0"
                           TrustUrlParameters="false"/>
 
 
     <!-- UPDATE APPLICATION -->
-    <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\ClickOnce\mage.exe&quot; -u $(SolutionName).application -MinVersion $(CCCVersion) "/>
+    <Exec Command="&quot;$(Mage)&quot; -u $(SolutionName).application -MinVersion $(CCCVersion) "/>
 
     <Exec Command="PING 127.0.0.1 -n 5 > NUL"/>
 
     <GetFrameworkSdkPath>
       <Output TaskParameter="Path" PropertyName="SdkPath" />
     </GetFrameworkSdkPath>
-
-
-    <GenerateBootstrapper
-		  ApplicationFile="$(SolutionName).application"
-		  ApplicationName="$(ClickOnceAppTitle)"
-		  ApplicationUrl="$(ClickOnceUrl)"
-		  BootstrapperItems="@(BootstrapperFile)"
-		  Culture="en"
-		  FallbackCulture="en-US"
-		  ComponentsLocation="HomeSite"
-		  CopyComponents="false"
-		  Validate="false"
-		  SupportUrl="http://www.microsoft.com/downloads/details.aspx?FamilyID=333325FD-AE52-4E35-B531-508D977D32A6"
-		  Path="C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bootstrapper"
-		  OutputPath="." />
+	
+	<GenerateBootstrapper
+	  ApplicationFile="$(SolutionName).application"
+	  ApplicationName="$(ClickOnceAppTitle)"
+	  ApplicationUrl="$(ClickOnceUrl)"
+	  BootstrapperItems="@(BootstrapperFile)"
+	  Culture="en"
+	  FallbackCulture="en-US"
+	  ComponentsLocation="HomeSite"
+	  CopyComponents="false"
+	  Validate="false"
+	  SupportUrl="http://www.microsoft.com/downloads/details.aspx?FamilyID=333325FD-AE52-4E35-B531-508D977D32A6"
+	  Path="C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bootstrapper"
+	  OutputPath="." />
 
   </Target>
 

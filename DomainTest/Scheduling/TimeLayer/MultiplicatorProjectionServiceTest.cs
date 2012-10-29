@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         private IMultiplicatorDefinitionSet _definitionSet;
         private IMultiplicator _obTimeMultiplicator;
         private IMultiplicator _overtimeMultiplicator;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private DateTime _baseDateTime;
         private VisualLayerFactory _factory;
         private IScheduleDay _schedulePart;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         public void Setup()
         {
             _factory = new VisualLayerFactory();
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            _timeZone = (TimeZoneInfo.Utc);
             _baseDateTime = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             _dateOnly = new DateOnly(_baseDateTime);
             _obTimeMultiplicator = new Multiplicator(MultiplicatorType.OBTime);

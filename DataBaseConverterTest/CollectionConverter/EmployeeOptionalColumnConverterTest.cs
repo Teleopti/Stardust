@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.CollectionConverter
             uow = mocks.StrictMock<IUnitOfWork>();
             mappedObjectPair = new MappedObjectPair();
             mapper =
-                mocks.StrictMock<Mapper<IOptionalColumn, global::Domain.EmployeeOptionalColumn>>(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Local));
+                mocks.StrictMock<Mapper<IOptionalColumn, global::Domain.EmployeeOptionalColumn>>(mappedObjectPair, (TimeZoneInfo.Local));
             target = new EmployeeOptionalColumnConverter(uow, mapper);
         }
 

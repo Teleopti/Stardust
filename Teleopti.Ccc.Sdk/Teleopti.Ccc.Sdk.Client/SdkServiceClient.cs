@@ -22,12 +22,10 @@ namespace Teleopti.Ccc.Sdk.Client
 		private TeleoptiOrganizationService _organizationService;
 		private TeleoptiOrganizationService1 _internalService;
 
-		private readonly ISessionStateProvider _sessionStateProvider;
 		private readonly string _serviceUrl;
 
-		public SdkServiceClient(ISessionStateProvider sessionStateProvider, string serviceUrl)
+		public SdkServiceClient(string serviceUrl)
 		{
-			_sessionStateProvider = sessionStateProvider;
 			_serviceUrl = serviceUrl;
 		}
 
@@ -48,51 +46,14 @@ namespace Teleopti.Ccc.Sdk.Client
 		private void CheckState()
 		{
 			InitializeIfNeeded();
-			if (_sessionStateProvider.IsLoggedIn)
-			{
-                /*
-				bool isAuthenticated;
-				bool isAuthenticatedSpecified;
-				_logOnServiceClient.IsAuthenticated(out isAuthenticated, out isAuthenticatedSpecified);
-
-				if (!isAuthenticated)
-				{
-					_logOnServiceClient.TransferSession(MakeSessionDataDto());
-					_schedulingService = null;
-					_organizationService = null;
-					_teleoptiSdkService = null;
-				}*/
-			}
 		}
-        /*
-		private SessionDataDto MakeSessionDataDto()
-		{
-			var sessionDataDto = new SessionDataDto();
-			sessionDataDto.LoggedOnPerson = _sessionStateProvider.LoggedOnPerson;
-			sessionDataDto.BusinessUnit = _sessionStateProvider.BusinessUnit;
-			sessionDataDto.DataSource = _sessionStateProvider.DataSource;
-			sessionDataDto.AuthenticationType = sessionDataDto.DataSource.AuthenticationTypeOptionDto;
-			sessionDataDto.AuthenticationTypeSpecified = true;
-			sessionDataDto.LoggedOnPassword = _sessionStateProvider.Password;
-			return sessionDataDto;
-		}*/
 
 		public TeleoptiCccLogOnService LogOnServiceClient
 		{
 			get
 			{
 				CheckState();
-                /*
-				if (_sessionStateProvider.IsLoggedIn)
-				{
-					bool isAuthenticated, isAuthenticatedSpecified;
-					_logOnServiceClient.IsAuthenticated(out isAuthenticated, out isAuthenticatedSpecified);
-					if (!isAuthenticated)
-					{
-						_logOnServiceClient.TransferSession(MakeSessionDataDto());
-					}
-				}*/
-
+                
 				return _logOnServiceClient;
 			}
 		}
@@ -160,7 +121,6 @@ namespace Teleopti.Ccc.Sdk.Client
 			            	{new Uri(_serviceUrl), "NTLM", CredentialCache.DefaultNetworkCredentials},
 			            	{new Uri(_serviceUrl), "Kerberos", CredentialCache.DefaultNetworkCredentials}
 			            };
-			//service.CookieContainer = _cookieContainer;
 			service.Credentials = cache;
 			service.Url = _serviceUrl;
 		}

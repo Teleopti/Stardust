@@ -19,8 +19,8 @@ namespace Teleopti.Analytics.Etl.Transformer
         public TimeZoneBridge(DateTime date, TimeZoneInfo timeZoneInfo, int intervalsPerDay)
             : this()
         {
-            ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(timeZoneInfo);
-            var localDateTime = cccTimeZoneInfo.ConvertTimeFromUtc(date, cccTimeZoneInfo);
+            TimeZoneInfo TimeZoneInfo = timeZoneInfo;
+            var localDateTime = TimeZoneInfo.ConvertTimeFromUtc(date, TimeZoneInfo);
 
             _date = date.Date;
             _intervalId = new Interval(date, intervalsPerDay).Id;

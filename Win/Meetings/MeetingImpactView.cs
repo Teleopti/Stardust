@@ -100,8 +100,8 @@ namespace Teleopti.Ccc.Win.Meetings
 			dateTimePickerAdvStartDate.SetSafeBoundary();
 			dateTimePickerAdvEndDate.SetSafeBoundary();
 
-			dateTimePickerAdvStartDate.SetSafeBoundary();
-			dateTimePickerAdvStartDate.SetSafeBoundary();
+			dateTimePickerAdvStartSlotPeriod.SetSafeBoundary();
+			dateTimePickerAdvEndSlotPeriod.SetSafeBoundary();
 
 			dateTimePickerAdvEndSlotPeriod.ValueChanged += DateTimePickerAdvEndSlotPeriodValueChanged;
 			dateTimePickerAdvStartSlotPeriod.ValueChanged += DateTimePickerAdvStartSlotPeriodValueChanged;

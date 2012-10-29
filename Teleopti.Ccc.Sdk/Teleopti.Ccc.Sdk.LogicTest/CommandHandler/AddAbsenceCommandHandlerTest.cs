@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                                                Period = _periodDto,
                                                AbsenceId = _absence.Id.GetValueOrDefault(),
                                                PersonId = _person.Id.GetValueOrDefault(),
-                                               Date = new DateOnlyDto(_startDate)
+											   Date = new DateOnlyDto { DateTime = _startDate }
                                            };
         	var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Period = _periodDto,
 				AbsenceId = _absence.Id.GetValueOrDefault(),
 				PersonId = _person.Id.GetValueOrDefault(),
-				Date = new DateOnlyDto(_startDate),
+				Date = new DateOnlyDto { DateTime = _startDate },
 				ScenarioId = scenarioId
 			};
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();

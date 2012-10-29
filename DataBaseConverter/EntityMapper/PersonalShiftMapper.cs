@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: rogerkr
         /// Created date: 10/26/2007
         /// </remarks>
-        public PersonalShiftMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone, DateTime date) : base(mappedObjectPair, timeZone)
+        public PersonalShiftMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone, DateTime date) : base(mappedObjectPair, timeZone)
         {
             _date = date;
         }

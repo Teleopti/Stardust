@@ -18,15 +18,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			_scheduleProvider = scheduleProvider;
 		}
 
-		public IWorkTimeMinMax WorkTimeMinMaxForDate(DateOnly date, IScheduleDay scheduleDay, out PreferenceType? preferenceType)
+		public WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date, IScheduleDay scheduleDay)
 		{
-			return _workTimeMinMaxCalculator.WorkTimeMinMax(date, _loggedOnUser.CurrentUser(), scheduleDay, out preferenceType);
+			return _workTimeMinMaxCalculator.WorkTimeMinMax(date, _loggedOnUser.CurrentUser(), scheduleDay);
 		}
 
-		public IWorkTimeMinMax WorkTimeMinMaxForDate(DateOnly date, out PreferenceType? preferenceType)
+		public WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date)
 		{
 			var scheduleDay = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(date, date)) ?? new IScheduleDay[] {};
-			return WorkTimeMinMaxForDate(date, scheduleDay.SingleOrDefault(),  out preferenceType);
+			return WorkTimeMinMaxForDate(date, scheduleDay.SingleOrDefault());
 		}
 	}
 }

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
         private ShiftsPerDayToPdfManager _target;
         private MockRepository _mocks;
         private ISchedulingResultStateHolder _stateHolder;
-        private ICccTimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
         private IPerson _person1;
         private IPerson _person2;
         private DateOnlyPeriod _period;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             _mocks = new MockRepository();
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _dic = _mocks.StrictMock<IScheduleDictionary>();
-            _timeZoneInfo = new CccTimeZoneInfo(
+            _timeZoneInfo = (
                 TimeZoneInfo.FindSystemTimeZoneById(
                     "W. Europe Standard Time"));
             _person1 = new Person();

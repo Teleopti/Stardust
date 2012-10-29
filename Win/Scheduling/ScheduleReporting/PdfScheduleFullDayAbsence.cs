@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 {
     public class PdfScheduleFullDayAbsence : PdfScheduleTemplate
     {
-        public PdfScheduleFullDayAbsence(float columnWidth, IScheduleDay schedulePart, ICccTimeZoneInfo timeZoneInfo, bool rightToLeft, CultureInfo culture)
+        public PdfScheduleFullDayAbsence(float columnWidth, IScheduleDay schedulePart, TimeZoneInfo timeZoneInfo, bool rightToLeft, CultureInfo culture)
         {
             CultureInfo = culture;
             //IPersonAbsence absence = schedulePart.PersonAbsenceCollection()[0];

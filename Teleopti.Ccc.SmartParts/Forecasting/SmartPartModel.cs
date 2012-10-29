@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                     ISkillDay skillDay = skillRepository.FindLatestUpdated(_skill, DefaultScenario, longterm);
                     if (skillDay != null)
                     {
-                        ICccTimeZoneInfo timeZoneInfo =
+                        TimeZoneInfo timeZoneInfo =
                             TeleoptiPrincipal.Current.Regional.TimeZone;
                         values.LastUpdate = TimeZoneHelper.ConvertFromUtc(skillDay.UpdatedOn.GetValueOrDefault(skillDay.CreatedOn.Value), timeZoneInfo);
                         values.Name = skillDay.UpdatedBy != null ? skillDay.UpdatedBy.Name : skillDay.CreatedBy.Name;
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                         if (skillDay != null)
                         {
                             EntityUpdateInformation values = new EntityUpdateInformation();
-                            ICccTimeZoneInfo timeZoneInfo =
+                            TimeZoneInfo timeZoneInfo =
                                 TeleoptiPrincipal.Current.Regional.TimeZone;
                             values.LastUpdate = TimeZoneHelper.ConvertFromUtc(skillDay.UpdatedOn.GetValueOrDefault(skillDay.CreatedOn.Value), timeZoneInfo);
                             values.Name = skillDay.UpdatedBy != null ? skillDay.UpdatedBy.Name : skillDay.CreatedBy.Name;
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                     IValidatedVolumeDay validatedVolumeDay = validatedVolumeDayRepository.FindLatestUpdated(_skill);
                     if (validatedVolumeDay != null)
                     {
-                        ICccTimeZoneInfo timeZoneInfo =
+                        TimeZoneInfo timeZoneInfo =
                             TeleoptiPrincipal.Current.Regional.TimeZone;
                         values.LastUpdate = TimeZoneHelper.ConvertFromUtc(validatedVolumeDay.UpdatedOn.GetValueOrDefault(validatedVolumeDay.CreatedOn.Value),
                                                                           timeZoneInfo);
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                 _workloadUpdatedInfo = new List<EntityUpdateInformation>();
                 _workloadNames = new List<NamedEntity>();
                 var workloads = _skill.WorkloadCollection.OrderBy(s => s.Name);
-                ICccTimeZoneInfo timeZoneInfo = TeleoptiPrincipal.Current.Regional.TimeZone;
+                TimeZoneInfo timeZoneInfo = TeleoptiPrincipal.Current.Regional.TimeZone;
 
                 foreach (IWorkload workload in workloads)
                 {

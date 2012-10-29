@@ -1,6 +1,4 @@
-using System;
 using System.Runtime.Serialization;
-using Teleopti.Interfaces.Domain;
 
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
@@ -11,25 +9,6 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
     [DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2010/04/")]
     public class ScenarioDto : Dto
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ScenarioDto"/> class.
-        /// </summary>
-        /// <param name="scenario">The scenario.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"),Obsolete("Use default constructor and set property values.")]
-        public ScenarioDto(IScenario scenario)
-        {
-            Name = scenario.Description.Name;
-            ShortName = scenario.Description.ShortName;
-            Id = scenario.Id;
-        }
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ScenarioDto"/> class.
-		/// </summary>
-		public ScenarioDto()
-    	{
-    	}
-
         /// <summary>
         /// Gets or sets the name.
         /// </summary>

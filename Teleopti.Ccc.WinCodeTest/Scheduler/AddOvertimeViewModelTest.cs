@@ -18,13 +18,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IActivity _defaultActivity;
         private DateTimePeriod _period;
         private AddOvertimeViewModel _target;
-        private ICccTimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
         private DateTimePeriod _defaultTimePeriod;
 
         [SetUp]
         public void Setup()
         {
-            _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            _timeZoneInfo = (TimeZoneInfo.Utc);
             _period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
             _defaultTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_period.LocalStartDateTime.Add(TimeSpan.FromHours(9)), _period.LocalStartDateTime.Add(TimeSpan.FromHours(13)));
             _defaultActivity = ActivityFactory.CreateActivity("default");

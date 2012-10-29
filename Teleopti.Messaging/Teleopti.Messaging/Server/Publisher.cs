@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Security;
 using System.Security.Permissions;
 using System.Threading;
 using Teleopti.Core;
@@ -75,7 +76,7 @@ namespace Teleopti.Messaging.Server
         /// Created by: ankarlp
         /// Created date: 02/05/2010
         /// </remarks>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.Infrastructure)]
+        [SecurityCritical]
         public override object InitializeLifetimeService()
         {
             return null;

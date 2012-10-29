@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private IList<IScheduleDay> _days;
         private Dictionary<IPerson, IScheduleRange> _dic;
         private IPermissionInformation _permissionInformation;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
 
         [SetUp]
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         {
             _mocks = new MockRepository();
             _permissionInformation = _mocks.StrictMock<IPermissionInformation>();
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time"));
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time"));
 
             _date = new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc);
             _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZone);

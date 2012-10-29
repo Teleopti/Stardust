@@ -128,15 +128,21 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			minMax2.EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(17), TimeSpan.FromHours(20));
 			minMax2.WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(4), TimeSpan.FromHours(8));
 
+			var shiftCategory = new ShiftCategory(" ");
+			var workShiftTemplateGenerator = MockRepository.GenerateMock<IWorkShiftTemplateGenerator>();
+			workShiftTemplateGenerator.Stub(x => x.Category).Return(shiftCategory);
+
 			using (_mocks.Record())
 			{
-				Expect.Call(effectiveRestriction.DayOffTemplate).Return(null);
-				Expect.Call(effectiveRestriction.ShiftCategory).Return(null).Repeat.AtLeastOnce();
+				Expect.Call(effectiveRestriction.MayMatchWithShifts()).Return(true);
+				Expect.Call(effectiveRestriction.Match(shiftCategory)).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(workShiftWorkTime.CalculateMinMax(ruleSet1, effectiveRestriction)).Return(minMax1);
 				Expect.Call(workShiftWorkTime.CalculateMinMax(ruleSet2, effectiveRestriction)).Return(minMax2);
 
 				Expect.Call(ruleSet2.IsValidDate(new DateOnly(2008, 1, 1))).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+				Expect.Call(ruleSet2.TemplateGenerator).Return(workShiftTemplateGenerator);
 				Expect.Call(ruleSet1.IsValidDate(new DateOnly(2008, 1, 1))).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+				Expect.Call(ruleSet1.TemplateGenerator).Return(workShiftTemplateGenerator);
 			}
 
 			using (_mocks.Playback())
@@ -202,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			IEffectiveRestriction effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
 			using (_mocks.Record())
 			{
-				Expect.Call(effectiveRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("af")));
+				Expect.Call(effectiveRestriction.MayMatchWithShifts()).Return(false);
 			}
 
 			using (_mocks.Playback())
@@ -222,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
 			using (_mocks.Record())
 			{
-				Expect.Call(effectiveRestriction.DayOffTemplate).Return(null);
+				Expect.Call(effectiveRestriction.MayMatchWithShifts()).Return(true);
 				Expect.Call(ruleSet.IsValidDate(new DateOnly())).IgnoreArguments().Return(false);
 			}
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.AgentPortal.Schedules;
@@ -45,10 +46,8 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells
             return string.Empty;
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-
             if (info == null)
                 throw new ArgumentNullException("info");
 

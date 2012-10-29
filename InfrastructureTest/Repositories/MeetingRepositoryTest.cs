@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             meeting.EndDate = meeting.StartDate;
             meeting.StartTime = TimeSpan.FromHours(10);
             meeting.EndTime = TimeSpan.FromHours(11);
-            meeting.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            meeting.TimeZone = (TimeZoneInfo.Utc);
 
             return meeting;
         }

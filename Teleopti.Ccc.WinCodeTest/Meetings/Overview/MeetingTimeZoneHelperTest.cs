@@ -10,16 +10,16 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
     [TestFixture]
     public class MeetingTimeZoneHelperTest
     {
-        private ICccTimeZoneInfo _timeZone;
-        private ICccTimeZoneInfo _userZone;
+        private TimeZoneInfo _timeZone;
+        private TimeZoneInfo _userZone;
         private MeetingTimeZoneHelper _target;
 
         [SetUp]
         public void Setup()
         {
             //finland +2
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"));
-            _userZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"));
+            _userZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
             _target = new MeetingTimeZoneHelper(_userZone);
         }
 
@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
         [Test]
         public void ShouldAddOneHourWhenConvertingToNotValidTimeToMeeting()
         {
-            _timeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
-            _userZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"));
+            _timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+            _userZone = (TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"));
 
             // 3:30 in Finland becomes 2:30 in sweden = invalid
             // should add one more hour to 3:30
@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
         [Test]
         public void ShouldConvertCorrectFromOtherSideOfAtlantic()
         {
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Alaskan Standard Time")); // -8
-            _userZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo(); // +1
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("Alaskan Standard Time")); // -8
+            _userZone = TimeZoneInfoFactory.StockholmTimeZoneInfo(); // +1
 
             // 26:e 17:30 in Alaska becomes 27:e 2:30 in sweden = invalid
             // should add one more hour to 3:30

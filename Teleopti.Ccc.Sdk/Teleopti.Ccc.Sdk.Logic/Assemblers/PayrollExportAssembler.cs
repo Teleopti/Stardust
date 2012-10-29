@@ -32,7 +32,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             dto.Id = entity.Id;
             dto.PayrollFormat = new PayrollFormatDto(entity.PayrollFormatId, entity.PayrollFormatName);
             dto.Period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period.ToDateTimePeriod(timeZone));
-            dto.DatePeriod = new DateOnlyPeriodDto(entity.Period);
+	        dto.DatePeriod = new DateOnlyPeriodDto
+		        {
+			        StartDate = new DateOnlyDto {DateTime = entity.Period.StartDate},
+			        EndDate = new DateOnlyDto {DateTime = entity.Period.EndDate}
+		        };
             dto.TimeZoneId = timeZone.Id;
             dto.Name = entity.Name;
             foreach (IPerson person in entity.Persons)

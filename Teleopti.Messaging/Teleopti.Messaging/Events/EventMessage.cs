@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -525,7 +526,7 @@ namespace Teleopti.Messaging.Events
             return 0;
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+		[SecurityCritical]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("EventId", _eventId, _eventId.GetType());

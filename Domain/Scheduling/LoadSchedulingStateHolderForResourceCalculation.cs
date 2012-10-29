@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons)
 		{
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
 
 			_schedulingResultStateHolder.PersonsInOrganization = _personRepository.FindPeopleInOrganization(dateOnlyPeriod, true);
 

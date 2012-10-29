@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Scheduling.Panels;
@@ -11,9 +12,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
     [Serializable]
     public class VisualProjectionColumnHeaderCellModel : GridHeaderCellModel
     {
-        public ICccTimeZoneInfo TimeZoneInfo { get; set; }
+        public TimeZoneInfo TimeZoneInfo { get; set; }
 
-        public VisualProjectionColumnHeaderCellModel(GridModel grid, ICccTimeZoneInfo timeZoneInfo)
+        public VisualProjectionColumnHeaderCellModel(GridModel grid, TimeZoneInfo timeZoneInfo)
             : base(grid)
         {
             TimeZoneInfo = timeZoneInfo;
@@ -39,7 +40,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             return string.Empty;
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             base.Draw(g, cellRectangle, rowIndex, colIndex, style);
             base.OnDrawDisplayText(g, cellRectangle, rowIndex, colIndex, style);
 
-            ICccTimeZoneInfo timeZoneInfo;
+            TimeZoneInfo timeZoneInfo;
             VisualProjectionColumnHeaderCellModel cellModel = style.CellModel as VisualProjectionColumnHeaderCellModel;
             if (cellModel != null && cellModel.TimeZoneInfo!=null)
                 timeZoneInfo = cellModel.TimeZoneInfo;

@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
                 new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
-                                                    new DeleteSchedulePartService(schedulerStateHolder.SchedulingResultState), schedulePartModifyAndRollbackService,
+                                                    new DeleteAndResourceCalculateService(new DeleteSchedulePartService( schedulerStateHolder.SchedulingResultState), resourceOptimizationHelper), schedulePartModifyAndRollbackService,
 													scheduleServiceForFlexibleAgents, _allResults, resourceCalculateDelayer);
 
                 IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =

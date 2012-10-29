@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapToUtcPeriod()
 		{
-			var timeZone = new CccTimeZoneInfo(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
+			var timeZone = (TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", ""));
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 
 			var periodForm = new DateTimePeriodForm

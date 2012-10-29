@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             DateOnly dateOnly1 = new DateOnly(2009,2,2);
             DateOnly dateOnly2 = new DateOnly(2009,3,1);
             IPermissionInformation permissionInformation = _mocks.StrictMock<IPermissionInformation>();
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 
             IVirtualSchedulePeriod vPeriod1 = _mocks.StrictMock<IVirtualSchedulePeriod>();
             IVirtualSchedulePeriod vPeriod2 = _mocks.StrictMock<IVirtualSchedulePeriod>();

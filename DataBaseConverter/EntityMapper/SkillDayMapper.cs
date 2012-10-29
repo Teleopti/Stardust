@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: micke
         /// Created date: 4.12.2007
         /// </remarks>
-        public SkillDayMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone, int intervalLength) : base(mappedObjectPair, timeZone)
+        public SkillDayMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone, int intervalLength) : base(mappedObjectPair, timeZone)
         {
             _intervalLength = intervalLength;
         }
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                 workloadDays.Add(workloadDayMapper.Map(forecastDay));
             }
 
-            DateTime dateTime = TimeZone.ConvertTimeToUtc(oldEntity.SkillDate, TimeZone);
+            DateTime dateTime = TimeZone.SafeConvertTimeToUtc(oldEntity.SkillDate);
             IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
             SkillDataPeriodMapper skillDataPeriodMapper = new SkillDataPeriodMapper(MappedObjectPair, TimeZone, dateTime, _intervalLength);
             foreach (global::Domain.SkillData skillData in oldEntity.SkillDataCollection.Values)

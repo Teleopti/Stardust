@@ -27,10 +27,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public class SkillDayGridControl : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext
     {
-        private AbstractDetailView _owner;
-        private const int RowHeaderWidth = 200;
-        private const int CellWidth = 50;
-        private const string SettingName = "SchedulerSkillDayGridAndChart";
+		private const int rowHeaderWidth = 200;
+        private const int cellWidth = 55;
+        private const string settingName = "SchedulerSkillDayGridAndChart";
         private RowManagerScheduler<SkillDayGridRow, IDictionary<DateTime,IList<ISkillStaffPeriod>>> _rowManager;
         //todo :(    -> guihelper is there for a reason
         private static readonly Color ColorCells = Color.AntiqueWhite;
@@ -41,6 +40,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly ChartSettings _chartSettings;
         private readonly ChartSettings _defaultChartSettings = new ChartSettings();
 
+		public AbstractDetailView Owner { get; set; }
+
         //constructor
         public SkillDayGridControl()
         {
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             //flytta, i alla fall från konstruktor
             using(IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                _chartSettings = new PersonalSettingDataRepository(uow).FindValueByKey(SettingName, _defaultChartSettings);
+                _chartSettings = new PersonalSettingDataRepository(uow).FindValueByKey(settingName, _defaultChartSettings);
             }
         }
 
@@ -99,16 +100,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private GridCellModelBase initializeCallPercentReadOnlyCell()
         {
-            PercentReadOnlyCellModel cellModel = new PercentReadOnlyCellModel(Model);
-            cellModel.NumberOfDecimals = 0;
-            return cellModel;
+        	var cellModel = new PercentReadOnlyCellModel(Model) {NumberOfDecimals = 1};
+        	return cellModel;
         }
 
         private GridCellModelBase initializeCallPercentReadOnlyPercentCell()
         {
-            PercentFromPercentReadOnlyCellModel cellModel = new PercentFromPercentReadOnlyCellModel(Model);
-            cellModel.NumberOfDecimals = 0;
-            return cellModel;
+        	var cellModel = new PercentFromPercentReadOnlyCellModel(Model) {NumberOfDecimals = 1};
+        	return cellModel;
         }
 
         //event col width
@@ -116,12 +115,12 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (e.Index <= Cols.HeaderCount)
             {
-                e.Size = RowHeaderWidth;
+                e.Size = rowHeaderWidth;
             }
 
             if (e.Index > Cols.HeaderCount)
             {
-                e.Size = CellWidth;
+                e.Size = cellWidth;
                 e.Handled = true;
             }
         }
@@ -158,19 +157,17 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void createGridRows(ISkill skill,IList<DateOnly> dates, ISchedulerStateHolder schedulerStateHolder)
         {
             ((NumericReadOnlyCellModel)CellModels["NumericReadOnlyCell"]).NumberOfDecimals = 2;
-            DateOnly baseDate;
 
-            _gridRows = new List<IGridRow>();
-            _gridRows.Add(new DateHeaderGridRow(DateHeaderType.WeekDates, dates));
-            _gridRows.Add(new DateHeaderGridRow(DateHeaderType.MonthDayNumber, dates));
+        	_gridRows = new List<IGridRow>
+                        	{
+                        		new DateHeaderGridRow(DateHeaderType.WeekDates, dates),
+                        		new DateHeaderGridRow(DateHeaderType.MonthDayNumber, dates)
+                        	};
 
-            if (dates.Count > 0)
-                baseDate = dates.First();
-            else
-                baseDate = DateOnly.MinValue;
+        	DateOnly baseDate = dates.Count > 0 ? dates.First() : DateOnly.MinValue;
 
-            _rowManager = new RowManagerScheduler<SkillDayGridRow, IDictionary<DateTime, IList<ISkillStaffPeriod>>>(this, new List<IntervalDefinition>(), 15, schedulerStateHolder);
-            _rowManager.BaseDate = baseDate;
+        	_rowManager = new RowManagerScheduler<SkillDayGridRow, IDictionary<DateTime, IList<ISkillStaffPeriod>>>(
+        		this, new List<IntervalDefinition>(), 15, schedulerStateHolder) {BaseDate = baseDate};
 
         	SkillDayGridRow gridRow;
 			if (skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
@@ -261,7 +258,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _gridRows.Add(_rowManager.AddRow(gridRow));
             }
 
-            this.Rows.HeaderCount = 1;
+            Rows.HeaderCount = 1;
         }
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SetDataSource(ISchedulerStateHolder stateHolder,ISkill skill)
@@ -298,7 +295,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             	SetDataSource(stateHolder, skill);
                 ColCount = _dates.Count;
                 RowCount = _gridRows.Count - 1;
-                ColWidths[0] = RowHeaderWidth;
+                ColWidths[0] = rowHeaderWidth;
 
                 Model.MergeCells.DelayMergeCells(GridRangeInfo.Table());
             }
@@ -403,13 +400,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             return -1;
         }
 
-        public AbstractDetailView Owner
-        {
-            get { return _owner; }
-            set { _owner = value; }
-        }
+		
 
-        public void GoToDate(DateTime theDate)
+		public void GoToDate(DateTime theDate)
         {
             RefreshGrid();
         }
@@ -498,7 +491,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (e.Range.Top > 1)
             {
-                GridRow gridRow = _gridRows[e.Range.Top] as GridRow;
+                var gridRow = _gridRows[e.Range.Top] as GridRow;
 
                 if (gridRow != null)
                 {

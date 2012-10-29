@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			_target = new PersonPeriod(startDate, personContract, team);
 
 			IPerson person = PersonFactory.CreatePerson();
-			person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Local));
+			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Local));
 			person.AddPersonPeriod(_target);
 		}
 

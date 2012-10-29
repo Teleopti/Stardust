@@ -73,10 +73,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IPerson person = PersonFactory.CreatePerson("p");
             PersistAndRemoveFromUnitOfWork(person);
-            ICccTimeZoneInfo timeZone = person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo timeZone = person.PermissionInformation.DefaultTimeZone();
 
             var thePeriod = DateTimeFactory.CreateDateTimePeriod(
-                timeZone.ConvertTimeToUtc(DateTime.SpecifyKind(org.StartDate, DateTimeKind.Unspecified), timeZone), 1);
+                TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(org.StartDate, DateTimeKind.Unspecified), timeZone), 1);
             ICollection<IPersonAvailability> result = new PersonAvailabilityRepository(UnitOfWork).Find(new List<IPerson>{org.Person},thePeriod);
             Assert.AreEqual(1,result.Count);
 

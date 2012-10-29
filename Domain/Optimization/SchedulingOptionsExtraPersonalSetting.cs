@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
@@ -16,6 +17,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         private bool _useGroupSchedulingCommonStart;
         private bool _useGroupSchedulingCommonEnd;
         private bool _useGroupSchedulingCommonCategory;
+        private bool _useCommmonActivity;
+        private Guid?  _commonActivtyId;
+
 
         private double _fairnessValue;
         private string _fairnessGroupPageKey;
@@ -23,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private int _screenRefreshRate = 10;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags, IList<IGroupPageLight> groupPages)
+        public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags, IList<IGroupPageLight> groupPages, IList<IActivity > activityList )
         {
             foreach (var scheduleTag in scheduleTags)
             {
@@ -41,11 +45,13 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (_groupSchedulingGroupPageKey == groupPage.Key)
                     schedulingOptions.GroupOnGroupPage = groupPage;
             }
-
-
+            
             schedulingOptions.UseGroupSchedulingCommonStart = _useGroupSchedulingCommonStart;
             schedulingOptions.UseGroupSchedulingCommonEnd = _useGroupSchedulingCommonEnd;
             schedulingOptions.UseGroupSchedulingCommonCategory = _useGroupSchedulingCommonCategory;
+            schedulingOptions.UseCommonActivity = _useCommmonActivity;
+            if (activityList != null & _commonActivtyId.HasValue)
+                schedulingOptions.CommonActivity = activityList.FirstOrDefault(x => x.Id == _commonActivtyId);
 
             schedulingOptions.Fairness = new Percent(_fairnessValue);
 
@@ -75,13 +81,13 @@ namespace Teleopti.Ccc.Domain.Optimization
            _useGroupSchedulingCommonStart = schedulingOptions.UseGroupSchedulingCommonStart;
             _useGroupSchedulingCommonEnd = schedulingOptions.UseGroupSchedulingCommonEnd;
             _useGroupSchedulingCommonCategory = schedulingOptions.UseGroupSchedulingCommonCategory;
+            _useCommmonActivity = schedulingOptions.UseCommonActivity;
 
             _fairnessValue = schedulingOptions.Fairness.Value;
             _fairnessGroupPageKey = schedulingOptions.GroupPageForShiftCategoryFairness.Key;
             _resourceCalculateFrequency = schedulingOptions.ResourceCalculateFrequency;
             _screenRefreshRate = schedulingOptions.RefreshRate;
-
+            _commonActivtyId = schedulingOptions.CommonActivity != null ? schedulingOptions.CommonActivity.Id : null;
         }
-
     }
 }

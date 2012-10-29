@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -59,7 +60,8 @@ namespace Teleopti.Analytics.Parameters
 			                     EnableClientScript = true,
 			                     Display = ValidatorDisplay.Dynamic,
 			                     Text = "*",
-			                     ErrorMessage = Selector.ErrorMessageValText + " '" + Text + "'"
+			                     ErrorMessage = Selector.ErrorMessageValText + " '" + Text + "'",
+								 ForeColor = Color.Red
 			                 };
 
 		    _textBox.TextChanged += textBoxTextChanged;

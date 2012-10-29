@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             _d1 = new DayOfWeekMultiplicatorDefinition(_ob1, DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(18), TimeSpan.FromHours(30)));
             _d2 = new DateTimeMultiplicatorDefinition(_ob2, new DateOnly(2008, 12, 2), new DateOnly(2008, 12, 3), TimeSpan.FromHours(0), TimeSpan.FromHours(6));
             _d3 = new DayOfWeekMultiplicatorDefinition(_ob1, DayOfWeek.Tuesday, new TimePeriod(TimeSpan.FromHours(18), TimeSpan.FromHours(30)));
-            CccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));          
+            TimeZoneInfo tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));          
 
             _target = new MultiplicatorDefinitionSet("Hello", MultiplicatorType.OBTime);
             _target.AddDefinition(_d1);
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             DayOfWeekMultiplicatorDefinition d1 = new DayOfWeekMultiplicatorDefinition(_ob1, DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(18), TimeSpan.FromHours(30)));
             DayOfWeekMultiplicatorDefinition d2 = new DayOfWeekMultiplicatorDefinition(_ob1, DayOfWeek.Tuesday, new TimePeriod(TimeSpan.FromHours(18), TimeSpan.FromHours(30)));
             DateTimeMultiplicatorDefinition d3 = new DateTimeMultiplicatorDefinition(_ob2, new DateOnly(2008, 12, 2), new DateOnly(2008, 12, 3), TimeSpan.FromHours(0), TimeSpan.FromHours(6));
-            CccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _target = new MultiplicatorDefinitionSet("Hello", MultiplicatorType.OBTime);
             _target.AddDefinition(d1);
             _target.AddDefinition(d2);
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             DayOfWeekMultiplicatorDefinition d1 = new DayOfWeekMultiplicatorDefinition(_ob1, DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(18), TimeSpan.FromHours(30)));
             DayOfWeekMultiplicatorDefinition d2 = new DayOfWeekMultiplicatorDefinition(_ob1, DayOfWeek.Tuesday, new TimePeriod(TimeSpan.FromHours(18), TimeSpan.FromHours(30)));
             DateTimeMultiplicatorDefinition d3 = new DateTimeMultiplicatorDefinition(_ob2, new DateOnly(2008, 12, 1), new DateOnly(2008, 12, 3), TimeSpan.FromHours(0), TimeSpan.FromHours(6));
-            CccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _target = new MultiplicatorDefinitionSet("Hello", MultiplicatorType.OBTime);
             _target.AddDefinition(d1);
             _target.AddDefinition(d2);
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             DayOfWeekMultiplicatorDefinition d1 = new DayOfWeekMultiplicatorDefinition(_ob1, DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(18), TimeSpan.FromHours(30)));
             DayOfWeekMultiplicatorDefinition d2 = new DayOfWeekMultiplicatorDefinition(_ob1, DayOfWeek.Tuesday, new TimePeriod(TimeSpan.FromHours(18), TimeSpan.FromHours(30)));
             DateTimeMultiplicatorDefinition d3 = new DateTimeMultiplicatorDefinition(_ob2, new DateOnly(2008, 12, 1), new DateOnly(2008, 12, 9), TimeSpan.FromHours(0), TimeSpan.FromHours(0));
-            CccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _target = new MultiplicatorDefinitionSet("Hello", MultiplicatorType.OBTime);
             _target.AddDefinition(d1);
             _target.AddDefinition(d2);
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             _target.AddDefinition(definition1);
             _target.AddDefinition(definition2);
 
-            CccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            TimeZoneInfo tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             var layers = _target.CreateProjectionForPeriod(new DateOnlyPeriod(2009, 9, 1, 2009, 9, 30), tzInfo);
 
             Assert.AreEqual(8,layers.Count);

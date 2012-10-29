@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
             return appointments;
         }
 
-        private ISimpleAppointment getAppointment(IMeeting meeting, DateTime localStartTime, ICccTimeZoneInfo meetingTimeZone)
+        private ISimpleAppointment getAppointment(IMeeting meeting, DateTime localStartTime, TimeZoneInfo meetingTimeZone)
         {
             var duration = meeting.MeetingDuration();
             var app = new SimpleAppointment

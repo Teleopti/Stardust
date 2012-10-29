@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: zoet
         /// Created date: 2008-12-03
         /// </remarks>
-        public PreferenceMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone)
+        public PreferenceMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone)
             : base(mappedObjectPair, timeZone)
         {
         }

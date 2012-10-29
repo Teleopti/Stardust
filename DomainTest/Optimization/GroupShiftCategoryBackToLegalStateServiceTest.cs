@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -25,20 +27,34 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISchedulingOptions _schedulingOptions;
         private IGroupPersonsBuilder _groupPersonsBuilder;
         private IGroupOptimizerFindMatrixesForGroup _groupOptimerFindMatrixesForGroup;
+		private Dictionary<Guid, bool> _teamSteadyStates;
+		private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
+    	private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+    	private IScheduleDictionary _scheduleDictionary;
+    	private ISchedulePartModifyAndRollbackService _rollbackService;
+    	private DateOnly _dateOnly;
+    	private Guid _guid;
 
         [SetUp]
         public void Setup()
         {
+        	_guid = Guid.NewGuid();
             _mockRepository = new MockRepository();
             _shiftCategoryBackToLegalService =
                 _mockRepository.StrictMock<IRemoveShiftCategoryBackToLegalService>();
             _scheduleService = _mockRepository.StrictMock<IGroupSchedulingService>();
             _groupPersonsBuilder = _mockRepository.StrictMock<IGroupPersonsBuilder>();
-            _target = new GroupShiftCategoryBackToLegalStateService(_shiftCategoryBackToLegalService, _scheduleService, _groupPersonsBuilder);
+			_groupPersonBuilderForOptimization = _mockRepository.StrictMock<IGroupPersonBuilderForOptimization>();
+			_target = new GroupShiftCategoryBackToLegalStateService(_shiftCategoryBackToLegalService, _scheduleService, _groupPersonsBuilder);
             _scheduleDayPro = _mockRepository.StrictMock<IScheduleDayPro>();
             _schedulePart = _mockRepository.StrictMock<IScheduleDay>();
             _schedulingOptions = new SchedulingOptions();
             _groupOptimerFindMatrixesForGroup = _mockRepository.DynamicMock<IGroupOptimizerFindMatrixesForGroup>();
+			_teamSteadyStates = new Dictionary<Guid, bool> { { _guid, false } };
+			_teamSteadyStateMainShiftScheduler = _mockRepository.StrictMock<ITeamSteadyStateMainShiftScheduler>();
+        	_scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
+        	_rollbackService = _mockRepository.StrictMock<ISchedulePartModifyAndRollbackService>();
+			_dateOnly = new DateOnly(2012, 1, 1);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -50,8 +66,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             scheduleMatrixList.Add((scheduleMatrix));
             var person = new Person() ;
             var dateOnly = new DateOnly();
-            var groupPerson = _mockRepository.DynamicMock<IGroupPerson>();
-            var dateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, new CccTimeZoneInfo());
+            //var groupPerson = _mockRepository.DynamicMock<IGroupPerson>();
+            var dateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, TimeZoneInfo.Utc);
+        	var groupPerson = _mockRepository.StrictMock<IGroupPerson>();
+        	var groupPersons = new List<IGroupPerson> {groupPerson};
 
             using (_mockRepository.Record())
             {
@@ -67,14 +85,108 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(scheduleMatrix.Person).Return(person);
                 Expect.Call(scheduleMatrix.SchedulePeriod).Return(virtualSchedulePeriod);
                 Expect.Call(virtualSchedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1))).Repeat.AtLeastOnce() ;
-                Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(dateOnly,new List<IPerson>{person}, true, _schedulingOptions)).IgnoreArguments().Repeat.AtLeastOnce();
+                //Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(dateOnly,new List<IPerson>{person}, true, _schedulingOptions)).IgnoreArguments().Repeat.AtLeastOnce();
+            	Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(dateOnly, new List<IPerson> {person}, true,_schedulingOptions)).Return(groupPersons).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_scheduleService.ScheduleOneDay(dateOnly, _schedulingOptions,groupPerson,scheduleMatrixList )).IgnoreArguments().Return(true).Repeat.Times(6);
+
+            	Expect.Call(_scheduleDayPro.Day).Return(_dateOnly).Repeat.AtLeastOnce();
+            	Expect.Call(groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
             }
             using (_mockRepository.Playback())
             {
-                Assert.AreEqual( 1, _target.Execute(virtualSchedulePeriod, _schedulingOptions, scheduleMatrixList, _groupOptimerFindMatrixesForGroup).Count );
-            }
+				Assert.AreEqual(1, _target.Execute(virtualSchedulePeriod, _schedulingOptions, scheduleMatrixList, _groupOptimerFindMatrixesForGroup, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _scheduleDictionary, _rollbackService, _groupPersonBuilderForOptimization).Count);
+            }	
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldUseTeamSteadyState()
+		{
+			_teamSteadyStates = new Dictionary<Guid, bool> { { _guid, true } };
+
+			var virtualSchedulePeriod = _mockRepository.StrictMock<IVirtualSchedulePeriod>();
+			var scheduleMatrix = _mockRepository.DynamicMock<IScheduleMatrixPro>();
+			var scheduleMatrixList = new List<IScheduleMatrixPro>();
+			scheduleMatrixList.Add((scheduleMatrix));
+			var person = new Person();
+			var dateOnly = new DateOnly();
+			var dateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, TimeZoneInfo.Utc);
+			var groupPerson = _mockRepository.StrictMock<IGroupPerson>();
+			var groupPersons = new List<IGroupPerson> { groupPerson };
+
+			using (_mockRepository.Record())
+			{
+				Expect.Call(_shiftCategoryBackToLegalService.Execute(null, _schedulingOptions))
+					.Return(new List<IScheduleDayPro> { _scheduleDayPro, _scheduleDayPro, _scheduleDayPro })
+					.IgnoreArguments()
+					.Repeat.Times(2);
+				Expect.Call(virtualSchedulePeriod.ShiftCategoryLimitationCollection()).Return(Limitations());
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_schedulePart).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePart.DateOnlyAsPeriod).Return(dateTimePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePart.Person).Return(person).Repeat.AtLeastOnce();
+				Expect.Call(_groupOptimerFindMatrixesForGroup.Find(person, dateOnly)).IgnoreArguments().Return(scheduleMatrixList).Repeat.AtLeastOnce();
+				Expect.Call(scheduleMatrix.Person).Return(person);
+				Expect.Call(scheduleMatrix.SchedulePeriod).Return(virtualSchedulePeriod);
+				Expect.Call(virtualSchedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1))).Repeat.AtLeastOnce();
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(dateOnly, new List<IPerson> { person }, true, _schedulingOptions)).Return(groupPersons).IgnoreArguments().Repeat.AtLeastOnce();
+				
+
+				Expect.Call(_scheduleDayPro.Day).Return(_dateOnly).Repeat.AtLeastOnce();
+				Expect.Call(groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
+
+				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(_dateOnly, groupPerson, _scheduleService, null, null,
+																			_groupPersonBuilderForOptimization, scheduleMatrixList,
+																			_scheduleDictionary)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+			}
+			using (_mockRepository.Playback())
+			{
+				Assert.AreEqual(1, _target.Execute(virtualSchedulePeriod, _schedulingOptions, scheduleMatrixList, _groupOptimerFindMatrixesForGroup, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _scheduleDictionary, _rollbackService, _groupPersonBuilderForOptimization).Count);
+			}	
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldUseRegularIfTeamSteadyStateFails()
+		{
+			_teamSteadyStates = new Dictionary<Guid, bool> { { _guid, true } };
+
+			var virtualSchedulePeriod = _mockRepository.StrictMock<IVirtualSchedulePeriod>();
+			var scheduleMatrix = _mockRepository.DynamicMock<IScheduleMatrixPro>();
+			var scheduleMatrixList = new List<IScheduleMatrixPro>();
+			scheduleMatrixList.Add((scheduleMatrix));
+			var person = new Person();
+			var dateOnly = new DateOnly();
+            var dateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, TimeZoneInfo.Utc);
+			var groupPerson = _mockRepository.StrictMock<IGroupPerson>();
+			var groupPersons = new List<IGroupPerson> { groupPerson };
+
+			using (_mockRepository.Record())
+			{
+				Expect.Call(_shiftCategoryBackToLegalService.Execute(null, _schedulingOptions))
+					.Return(new List<IScheduleDayPro> { _scheduleDayPro, _scheduleDayPro, _scheduleDayPro })
+					.IgnoreArguments()
+					.Repeat.Times(2);
+				Expect.Call(virtualSchedulePeriod.ShiftCategoryLimitationCollection()).Return(Limitations());
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_schedulePart).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePart.DateOnlyAsPeriod).Return(dateTimePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePart.Person).Return(person).Repeat.AtLeastOnce();
+				Expect.Call(_groupOptimerFindMatrixesForGroup.Find(person, dateOnly)).IgnoreArguments().Return(scheduleMatrixList).Repeat.AtLeastOnce();
+				Expect.Call(scheduleMatrix.Person).Return(person);
+				Expect.Call(scheduleMatrix.SchedulePeriod).Return(virtualSchedulePeriod);
+				Expect.Call(virtualSchedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1))).Repeat.AtLeastOnce();
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(dateOnly, new List<IPerson> { person }, true, _schedulingOptions)).Return(groupPersons).IgnoreArguments().Repeat.AtLeastOnce();
+				Expect.Call(_scheduleService.ScheduleOneDay(dateOnly, _schedulingOptions, groupPerson, scheduleMatrixList)).IgnoreArguments().Return(true).Repeat.Times(6);
+
+				Expect.Call(_scheduleDayPro.Day).Return(_dateOnly).Repeat.AtLeastOnce();
+				Expect.Call(groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
+
+				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(_dateOnly, groupPerson, _scheduleService, null, null,
+																			_groupPersonBuilderForOptimization, scheduleMatrixList,
+																			_scheduleDictionary)).IgnoreArguments().Return(false);
+			}
+			using (_mockRepository.Playback())
+			{
+				Assert.AreEqual(1, _target.Execute(virtualSchedulePeriod, _schedulingOptions, scheduleMatrixList, _groupOptimerFindMatrixesForGroup, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _scheduleDictionary, _rollbackService, _groupPersonBuilderForOptimization).Count);
+			}
+		}
 
         private static ReadOnlyCollection<IShiftCategoryLimitation> Limitations()
         {

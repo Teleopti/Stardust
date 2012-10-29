@@ -103,8 +103,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                                                         _schedulingOptions.UseMinimumPersons,
                                                         _schedulingOptions.UseMaximumPersons,
                                                         _schedulingOptions);
-
-			possible.ShiftValue = shiftValue;
+            if (_schedulingOptions.UseCommonActivity)
+                possible.ActivityPeriods = shiftValue.ActivityPeriods ;
+			possible.ShiftValue = shiftValue.Value ;
 			if (_manualResetEvent != null)
         		_manualResetEvent.Set();
         }
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
-		public IList<IShiftProjectionCache> FilterShiftCategoryPeriodOnSchedulingOptions(ICccTimeZoneInfo agentTimeZone, 
+		public IList<IShiftProjectionCache> FilterShiftCategoryPeriodOnSchedulingOptions(TimeZoneInfo agentTimeZone, 
             IEffectiveRestriction effectiveRestriction,IList<IPerson>persons,
 			IWorkShiftFinderResult finderResult, IPossibleStartEndCategory possibleStartEndCategory)
         {

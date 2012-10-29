@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Interfaces
 		string Description { set; }
 		string GetDescription(ITextFormatter formatter);
 		IActivity Activity { get; set; }
-		ICccTimeZoneInfo TimeZone { get; set; }
+		TimeZoneInfo TimeZone { get; set; }
 		string Participants { get; }
         IList<ContactPersonViewModel> RequiredParticipants { get; }
         IList<ContactPersonViewModel> OptionalParticipants { get; }

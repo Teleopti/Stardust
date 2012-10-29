@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         private Dictionary<IPerson, IPersonAccountCollection> _allAccounts;
         private IEventAggregator _eventAggregator;
         private int _propertyChangedEventCallCount;
-        private CccTimeZoneInfo _cccTimeZoneInfo;
+        private TimeZoneInfo _TimeZoneInfo;
 
         [SetUp]
         public void Setup()
@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             _shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
 
             _allAccounts = new Dictionary<IPerson, IPersonAccountCollection> { { _person, acc } };
-            _cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+            _TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
             _target = new HandlePersonRequestViewModel(_schedulePeriod, new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts,
-                _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _cccTimeZoneInfo);
+                _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
         }
 
         [Test]
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void VerifyValidatesAgainstSchedulePeriod()
         {
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime()),
-                new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _cccTimeZoneInfo);
+                new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
 
             IList<IPersonRequest> requests = new List<IPersonRequest> { _source };
             _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             Assert.IsTrue(_target.SelectedModel.IsWithinSchedulePeriod, "The model is within the period, so its set to true");
 
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MinValue.AddDays(2).ToUniversalTime()),
-                new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _cccTimeZoneInfo);
+                new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
             _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
             _target.PersonRequestViewModels.MoveCurrentToFirst();
             Assert.IsFalse(_target.SelectedModel.IsWithinSchedulePeriod, "Model is outside the period, so it should be set to false when created");
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void VerifyValidatesAgainstSchedulePeriodAndPerson()
         {
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime()),
-                new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _cccTimeZoneInfo);
+                new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
 
             IList<IPersonRequest> requests = new List<IPersonRequest> { _source };
             _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             Assert.IsTrue(_target.SelectedModel.IsWithinSchedulePeriod, "The model is within the period, so its set to true");
 
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime()),
-                new List<IPerson> { PersonFactory.CreatePerson("Tommy") }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _cccTimeZoneInfo);
+                new List<IPerson> { PersonFactory.CreatePerson("Tommy") }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
             _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
             _target.PersonRequestViewModels.MoveCurrentToFirst();
             Assert.IsFalse(_target.SelectedModel.IsWithinSchedulePeriod, "Model is within the period but purson is not within, so it should be set to false when created");
@@ -271,9 +271,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             ReflectionHelper.SetUpdatedOn(pr2, now.Subtract(oneWeek));
             ReflectionHelper.SetUpdatedOn(pr3, now.Subtract(thirtyDays));
 
-            PersonRequestViewModel model1 = new PersonRequestViewModel(pr1, _shiftTradeRequestStatusChecker, null, _eventAggregator, _cccTimeZoneInfo);
-            PersonRequestViewModel model2 = new PersonRequestViewModel(pr2, _shiftTradeRequestStatusChecker, null, _eventAggregator, _cccTimeZoneInfo);
-            PersonRequestViewModel model3 = new PersonRequestViewModel(pr3, _shiftTradeRequestStatusChecker, null, _eventAggregator, _cccTimeZoneInfo);
+            PersonRequestViewModel model1 = new PersonRequestViewModel(pr1, _shiftTradeRequestStatusChecker, null, _eventAggregator, _TimeZoneInfo);
+            PersonRequestViewModel model2 = new PersonRequestViewModel(pr2, _shiftTradeRequestStatusChecker, null, _eventAggregator, _TimeZoneInfo);
+            PersonRequestViewModel model3 = new PersonRequestViewModel(pr3, _shiftTradeRequestStatusChecker, null, _eventAggregator, _TimeZoneInfo);
 
 
             _target.AddPersonRequestViewModel(model1);
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 
         private PersonRequestViewModel CreateModel(IPerson person)
         {
-            return new PersonRequestViewModel(_source, _shiftTradeRequestStatusChecker, _allAccounts[person], _eventAggregator, _cccTimeZoneInfo);
+            return new PersonRequestViewModel(_source, _shiftTradeRequestStatusChecker, _allAccounts[person], _eventAggregator, _TimeZoneInfo);
         }
 
         private IList<PersonRequestViewModel> GetAllModels()

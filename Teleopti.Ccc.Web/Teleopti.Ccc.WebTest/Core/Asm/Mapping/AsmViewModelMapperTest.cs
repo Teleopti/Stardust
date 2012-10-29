@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		private IProjectionProvider projectionProvider;
 		private IAsmViewModelMapper target;
 		private IUserTimeZone userTimeZone;
-		private CccTimeZoneInfo timeZone;
+		private TimeZoneInfo timeZone;
 
 		[SetUp]
 		public void Setup()
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			projectionProvider = MockRepository.GenerateStub<IProjectionProvider>();
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			scheduleFactory = new StubFactory();
-			timeZone = new CccTimeZoneInfo((TimeZoneInfo) CccTimeZoneInfoFactory.StockholmTimeZoneInfo().TimeZoneInfoObject);
+			timeZone = ((TimeZoneInfo) TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);
 			target = new AsmViewModelMapper(projectionProvider, userTimeZone);
 		}

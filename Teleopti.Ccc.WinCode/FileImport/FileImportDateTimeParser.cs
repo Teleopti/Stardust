@@ -15,15 +15,15 @@ namespace Teleopti.Ccc.WinCode.FileImport
         private DateTime ParseToUtc(string dateValue, string timeValue)
         {
             DateTime dateTime = DateTime.ParseExact(dateValue, "yyyyMMdd", _cultureInfo);
-            TimeSpan timeSpan = TimeSpan.Parse(timeValue);
+			TimeSpan timeSpan = TimeSpan.Parse(timeValue, CultureInfo.InvariantCulture);
             DateTime local = dateTime.Add(timeSpan);
-            return TimeZoneHelper.ConvertToUtc(local, new CccTimeZoneInfo(_timeZone));
+            return _timeZone.SafeConvertTimeToUtc(local);
         }
 
         public bool DateTimeIsValid(string dateValue, string timeValue)
         {
             DateTime dateTime = DateTime.ParseExact(dateValue, "yyyyMMdd", _cultureInfo);
-            TimeSpan timeSpan = TimeSpan.Parse(timeValue);
+            TimeSpan timeSpan = TimeSpan.Parse(timeValue,CultureInfo.InvariantCulture);
             DateTime local = dateTime.Add(timeSpan);
             return !_timeZone.IsInvalidTime(local);
         }

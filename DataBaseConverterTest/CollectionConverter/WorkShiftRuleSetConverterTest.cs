@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.CollectionConverter
             mocks2 = new MockRepository();
             uow = mocks.StrictMock<IUnitOfWork>();
             mappedObjectPair = new MappedObjectPair();
-            mapper = mocks.StrictMock<Mapper<IWorkShiftRuleSet, global::Domain.ShiftClass>>(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Local));
+            mapper = mocks.StrictMock<Mapper<IWorkShiftRuleSet, global::Domain.ShiftClass>>(mappedObjectPair, (TimeZoneInfo.Local));
             target = new WorkShiftRuleSetConverter(uow, mapper);
 
             generator = mocks2.StrictMock<IWorkShiftTemplateGenerator>();

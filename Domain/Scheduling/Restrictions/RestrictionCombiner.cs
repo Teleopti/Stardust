@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
-	public class RestrictionCombiner : IRestrictionCombiner
+	public class RestrictionCombiner : IRestrictionCombiner, IEffectiveRestrictionCombiner
 	{
 		public IEffectiveRestriction CombinePreferenceRestrictions(IEnumerable<IPreferenceRestriction> preferenceRestrictions, IEffectiveRestriction effectiveRestriction, bool mustHavesOnly)
 		{

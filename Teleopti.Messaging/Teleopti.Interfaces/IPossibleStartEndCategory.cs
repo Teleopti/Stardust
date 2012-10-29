@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces
@@ -16,6 +17,10 @@ namespace Teleopti.Interfaces
         /// 
         /// </summary>
 		TimeSpan EndTime { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        IList<DateTimePeriod> ActivityPeriods { get; set; }
         /// <summary>
         /// 
         /// </summary>

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             DateTime min = DateTime.MaxValue;
             DateTime max = DateTime.MinValue;
-            ICccTimeZoneInfo timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+            TimeZoneInfo timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
             foreach (var person in schedulerState.FilteredPersonDictionary.Values)
             {
                 IScheduleRange range = schedulerState.Schedules[person];

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 	{
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			user.PermissionInformation.SetDefaultTimeZone(CccTimeZoneInfoFactory.HawaiiTimeZoneInfo());
+			user.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
 		}
 	}
 }

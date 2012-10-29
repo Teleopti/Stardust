@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private IHeaderViewModelFactory headerViewModelFactory;
 		private IScheduleColorProvider scheduleColorProvider;
 		private IPermissionProvider permissionProvider;
-		private IAbsenceTypesProvider absenceTypesProvider;
 
 		[SetUp]
 		public void Setup()
@@ -46,7 +45,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			headerViewModelFactory = MockRepository.GenerateMock<IHeaderViewModelFactory>();
 			scheduleColorProvider = MockRepository.GenerateMock<IScheduleColorProvider>();
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
@@ -57,10 +55,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                  		             	() => periodViewModelFactory,
 			                  		             	() => headerViewModelFactory,
 			                  		             	() => scheduleColorProvider,
-													() => permissionProvider,
-													() => absenceTypesProvider
+			                  		             	() => permissionProvider
 			                  		             	));
-									c.AddProfile(new CommonViewModelMappingProfile());
+			                  		c.AddProfile(new CommonViewModelMappingProfile());
 			                  	});
 		}
 
@@ -88,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			periodViewModelFactory.Stub(
 				x =>
 				x.CreatePeriodViewModels(Arg<IVisualLayerCollection>.Is.Anything, Arg<TimePeriod>.Is.Anything,
-				                         Arg<DateTime>.Is.Anything, Arg<ICccTimeZoneInfo>.Is.Anything)).Return(periodViewModels);
+				                         Arg<DateTime>.Is.Anything, Arg<TimeZoneInfo>.Is.Anything)).Return(periodViewModels);
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 

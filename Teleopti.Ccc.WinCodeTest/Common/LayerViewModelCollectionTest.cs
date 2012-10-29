@@ -51,14 +51,15 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             IScheduleRange range = mocks.StrictMock<IScheduleRange>();
             IScheduleDay part = _partFactory.CreatePartWithMainShiftWithDifferentActivities();
             IScheduleDay emptyPart = mocks.StrictMock<IScheduleDay>();
-            part.Person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            part.Person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             using(mocks.Record())
             {
                 Expect.Call(range.Person).Return(part.Person);
+				Expect.Call(range.ScheduledDay(new DateOnly(2000, 12, 31))).Return(emptyPart);
                 Expect.Call(range.ScheduledDay(new DateOnly(2001, 1, 1))).Return(part);
                 Expect.Call(range.ScheduledDay(new DateOnly(2001, 1, 2))).Return(emptyPart);
                 Expect.Call(range.ScheduledDay(new DateOnly(2001, 1, 3))).Return(emptyPart);
-                Expect.Call(emptyPart.HasProjection).Return(false).Repeat.Times(2);
+                Expect.Call(emptyPart.HasProjection).Return(false).Repeat.Times(3);
             }
             using (mocks.Playback())
             {

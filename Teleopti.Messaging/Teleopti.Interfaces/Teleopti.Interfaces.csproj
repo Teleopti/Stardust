@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Interfaces</RootNamespace>
     <AssemblyName>Teleopti.Interfaces</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
     </SccProjectName>
@@ -44,6 +44,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -107,6 +108,9 @@
     <Compile Include="Domain\ChartSeriesDisplayType.cs" />
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
+    <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
+    <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
+    <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
     <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
     <Compile Include="Domain\DetailLevel.cs" />
@@ -126,9 +130,11 @@
     <Compile Include="Domain\IDayOffOptimizerConflictHandler.cs" />
     <Compile Include="Domain\IDayOffOptimizerValidator.cs" />
     <Compile Include="Domain\IAuditSetter.cs" />
+    <Compile Include="Domain\IMeetingRestrictionCombiner.cs" />
     <Compile Include="Domain\IEffectiveRestrictionForDisplayCreator.cs" />
     <Compile Include="Domain\IEffectiveRestrictionOptions.cs" />
     <Compile Include="Domain\IExtendedPreferencePredicate.cs" />
+    <Compile Include="Domain\IForecastScheduleValuePair.cs" />
     <Compile Include="Domain\IGroupPageLight.cs" />
     <Compile Include="Domain\ILicenseStatus.cs" />
     <Compile Include="Domain\IDetailedJobResult.cs" />
@@ -520,7 +526,6 @@
     <Compile Include="Domain\IScheduleDictionary.cs" />
     <Compile Include="Domain\IScheduleExtractor.cs" />
     <Compile Include="Domain\IScheduleRange.cs" />
-    <Compile Include="Domain\ICccTimeZoneInfo.cs" />
     <Compile Include="Domain\ISchedulerRangeToLoadCalculator.cs" />
     <Compile Include="Domain\ISkillDataPeriod.cs" />
     <Compile Include="Domain\ISkillDay.cs" />
@@ -543,6 +548,8 @@
     <Compile Include="Domain\IWorkTimeMinMax.cs" />
     <Compile Include="Domain\IPersonWriteProtectionInfo.cs" />
     <Compile Include="Domain\IWorkTimeMinMaxCalculator.cs" />
+    <Compile Include="Domain\IWorkTimeMinMaxRestriction.cs" />
+    <Compile Include="Domain\IWorkTimeMinMaxRestrictionCreator.cs" />
     <Compile Include="Domain\MeetingChangedDetail.cs" />
     <Compile Include="Domain\MeetingChangedEntity.cs" />
     <Compile Include="Domain\MinMaxStaffBroken.cs" />
@@ -591,6 +598,7 @@
     <Compile Include="Domain\IMyReportVisualPayloadInfo.cs" />
     <Compile Include="Domain\MultiplicatorType.cs" />
     <Compile Include="Domain\TimeOfDay.cs" />
+    <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
     <Compile Include="Domain\WeekNumber.cs" />
     <Compile Include="Domain\WorkShiftLengthHintOption.cs" />
     <Compile Include="Domain\WorkTimeLimitation.cs" />

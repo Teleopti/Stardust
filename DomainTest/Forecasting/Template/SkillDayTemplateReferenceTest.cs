@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
                                 new Percent(0.3),
                                 new Percent(0.88));
 			var dateTime = new DateTime(2008, 12, 9, 0, 0, 0, DateTimeKind.Utc);
-			var localDateTime = _skill.TimeZone.ConvertTimeFromUtc(dateTime);
+			var localDateTime = TimeZoneInfo.ConvertTimeFromUtc(dateTime, _skill.TimeZone);
 			_skillDay.TemplateReference.UpdatedDate = localDateTime;
 			var expectedTemplateName = string.Format(CultureInfo.CurrentUICulture, "<{0} {1} {2}>", baseTemplateName, localDateTime.ToShortDateString(), localDateTime.ToShortTimeString());
 

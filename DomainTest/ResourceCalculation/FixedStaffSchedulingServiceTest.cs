@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private FixedStaffSchedulingService _schedulingService;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private MockRepository _mocks;
-		private ICccTimeZoneInfo _timeZoneInfo;
+		private TimeZoneInfo _timeZoneInfo;
 		private IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private IEffectiveRestriction _effectiveRestriction;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks.DynamicMock<IScheduleDayChangeCallback>();
 			
 			TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-			_timeZoneInfo = new CccTimeZoneInfo(zone);
+			_timeZoneInfo = (zone);
 			_dayOffsInPeriodCalculator = _mocks.StrictMock<IDayOffsInPeriodCalculator>();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
 			_effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),

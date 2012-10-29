@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -12,10 +13,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 {
-    [TestFixture]
+	[TestFixture]
     public class EffectiveRestrictionTest
     {
-        private IEffectiveRestriction _target;
+        private EffectiveRestriction _target;
         private StartTimeLimitation _startTimeLimitation;
         private EndTimeLimitation _endTimeLimitation;
         private WorkTimeLimitation _workTimeLimitation;
@@ -565,7 +566,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				null,
 				null, null, new List<IActivityRestriction>());
 			other.NotAvailable = true;
-			_target = _target.Combine(other);
+			_target = _target.Combine(other) as EffectiveRestriction;
 			Assert.IsTrue(_target.NotAvailable);
 
 			other = new EffectiveRestriction(
@@ -575,7 +576,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				null,
 				null, null, new List<IActivityRestriction>());
 
-			_target = _target.Combine(other);
+			_target = _target.Combine(other) as EffectiveRestriction;
 			Assert.IsTrue(_target.NotAvailable);
 		}
 
@@ -670,7 +671,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void CanCheckIfVisualLayerCollectionSatisfiesActivityRestriction()
         {
-            var cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+            var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("UTC");
             IActivity activity = ActivityFactory.CreateActivity("lunch");
 			activity.SetId(Guid.NewGuid());
             IActivity activity2 = ActivityFactory.CreateActivity("another one");
@@ -692,7 +693,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                                                             new DateTime(2009, 2, 2, 13, 0, 0, DateTimeKind.Utc)),_person);
 
 			var layerCollection = new WorkShiftProjectionLayer[] { };
-            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
         	layerCollection = new[]
         	                  	{
@@ -707,30 +708,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         	                  				ActivityId = layerLunch.Payload.Id.Value
         	                  			}
         	                  	};
-            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
             activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(12, 0, 0), null);
             activityRestriction.EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(13, 0, 0));
-            Assert.IsTrue(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsTrue(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
             activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(10, 0, 0), new TimeSpan(10, 30, 0));
             activityRestriction.EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(13, 0, 0));
-            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
             activityRestriction.StartTimeLimitation = new StartTimeLimitation(null, null);
             activityRestriction.EndTimeLimitation = new EndTimeLimitation(new TimeSpan(13, 30, 0), new TimeSpan(15, 0, 0));
-            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
             activityRestriction.StartTimeLimitation = new StartTimeLimitation(null, null);
             activityRestriction.EndTimeLimitation = new EndTimeLimitation(null, null);
             activityRestriction.WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(1, 30, 0), null);
-            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
             activityRestriction.WorkTimeLimitation = new WorkTimeLimitation(null, new TimeSpan(0, 30, 0));
-            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
 
             activityRestriction.WorkTimeLimitation = new WorkTimeLimitation();
-            Assert.IsTrue(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, cccTimeZoneInfo, layerCollection));
+            Assert.IsTrue(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));
         }
 
         [Test]
@@ -777,6 +778,49 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             Assert.IsFalse(_target.ShiftCategory != null || _target.NotAvailable);
 
         }
+
+		[Test]
+		public void ShouldMayMatchWithShifts()
+		{
+			_target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
+											   new WorkTimeLimitation(), null, null, null,
+											   new List<IActivityRestriction>());
+			_target.MayMatchWithShifts().Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMayMatchBlacklistedShifts()
+		{
+			_target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
+											   new WorkTimeLimitation(), null, null, null,
+											   new List<IActivityRestriction>());
+			_target.MayMatchBlacklistedShifts().Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMatchShiftCategory()
+		{
+			_target = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
+											   new WorkTimeLimitation(), new ShiftCategory("Late"), null, null,
+											   new List<IActivityRestriction>());
+			_target.Match(new ShiftCategory("Late")).Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMatchWorkShiftProjection()
+		{
+			_startTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9));
+			_endTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(22), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(6)));
+
+			_target = new EffectiveRestriction(
+				_startTimeLimitation,
+				_endTimeLimitation,
+				_workTimeLimitation,
+				null,
+				null, null, new List<IActivityRestriction>());
+
+			Assert.IsFalse(_target.Match(_info1));
+		}
 
         [Test]
         public void VerifyHashCode()

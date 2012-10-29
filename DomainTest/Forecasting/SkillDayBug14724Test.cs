@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             _dt = new DateOnly(2007, 1, 1);
             _skill = SkillFactory.CreateSkill("E-mail",SkillTypeFactory.CreateSkillTypeEmail(),60);
-            _skill.TimeZone = CccTimeZoneInfoFactory.UtcTimeZoneInfo();
+            _skill.TimeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
             _workload = WorkloadFactory.CreateWorkload(_skill);
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             _skillDataPeriods1 = new[]

@@ -87,14 +87,16 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new TimeSpanLongHourMinutesStaticCellModel(Model);
         }
 
-        private GridCellModelBase initializeCallPercentReadOnlyCell()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private GridCellModelBase initializeCallPercentReadOnlyCell()
         {
-        	return new PercentReadOnlyCellModel(Model);
+        	return new PercentReadOnlyCellModel(Model) {NumberOfDecimals = 1};
         }
 
-        private GridCellModelBase initializeCallPercentReadOnlyPercentCell()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private GridCellModelBase initializeCallPercentReadOnlyPercentCell()
         {
-        	return new PercentFromPercentReadOnlyCellModel(Model);
+			return new PercentFromPercentReadOnlyCellModel(Model) { NumberOfDecimals = 1 };
         }
 
         private void gridSkillDataQueryColWidth(object sender, GridRowColSizeEventArgs e)
@@ -126,8 +128,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
 			if (skill == null || dates == null) return;
 
-			((PercentReadOnlyCellModel)CellModels["ReadOnlyPercentCell"]).NumberOfDecimals = 0;
-			((PercentFromPercentReadOnlyCellModel)CellModels["PercentCellModel"]).NumberOfDecimals = 0;
             ((NumericReadOnlyCellModel)CellModels["NumericReadOnlyCell"]).NumberOfDecimals = 2;
             DateOnly baseDate;
 

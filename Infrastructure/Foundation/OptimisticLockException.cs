@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using NHibernate;
 using Teleopti.Interfaces.Domain;
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         }
 
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             InParameter.NotNull("info", info);

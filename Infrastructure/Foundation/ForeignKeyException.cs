@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public string Sql { get; private set; }
 
-		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+		[SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Sql", Sql);

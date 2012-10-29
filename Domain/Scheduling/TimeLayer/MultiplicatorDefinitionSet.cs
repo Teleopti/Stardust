@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
             }
         }
 
-        public virtual IList<IMultiplicatorLayer> CreateProjectionForPeriod(DateOnlyPeriod period, ICccTimeZoneInfo timeZoneInfo)
+        public virtual IList<IMultiplicatorLayer> CreateProjectionForPeriod(DateOnlyPeriod period, TimeZoneInfo timeZoneInfo)
         {
             List<IMultiplicatorLayer> unMergedList = new List<IMultiplicatorLayer>();
             foreach (var definition in _definitionCollection)

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Common
         private  IScenario _requestedScenario;
         private readonly IList<IPersonRequest> _workingPersonRequests = new List<IPersonRequest>();
         private ShiftTradeRequestStatusCheckerWithSchedule _shiftTradeRequestStatusChecker;
-        private ICccTimeZoneInfo _timeZoneInfo = TeleoptiPrincipal.Current.Regional.TimeZone;
+        private TimeZoneInfo _timeZoneInfo = TeleoptiPrincipal.Current.Regional.TimeZone;
         private CommonNameDescriptionSetting _commonNameDescription = new CommonNameDescriptionSetting();
         private CommonNameDescriptionSettingScheduleExport _commonNameDescriptionScheduleExport = new CommonNameDescriptionSettingScheduleExport();
         private DefaultSegment _defaultSegment = new DefaultSegment();
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WinCode.Common
             get { return _schedulingResultState; }
         }
 
-        public ICccTimeZoneInfo TimeZoneInfo
+        public TimeZoneInfo TimeZoneInfo
         {
             get { return _timeZoneInfo; }
             set { _timeZoneInfo = value; }

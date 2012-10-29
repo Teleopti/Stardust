@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
         [Test]
         public void ShouldGetHeaderText()
         {
-            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2000, 1, 1), CccTimeZoneInfoFactory.UtcTimeZoneInfo());
+            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2000, 1, 1), TimeZoneInfoFactory.UtcTimeZoneInfo());
 
             using(_mocks.Record())
             {
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
         private void mockExpectationsFirst()
         {
             IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2000, 1, 1),
-                                                                                          CccTimeZoneInfoFactory.
+                                                                                          TimeZoneInfoFactory.
                                                                                               UtcTimeZoneInfo());
             
             

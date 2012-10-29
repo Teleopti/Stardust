@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
         private ReadOnlyCollection<IPerson> _loadedPersons;
         private DateOnlyPeriod _loadedDateOnlyPeriod;
         private readonly DateTimePeriod _loadedDateTimePeriod;
-        private readonly ICccTimeZoneInfo _timeZoneInfo;
+        private readonly TimeZoneInfo _timeZoneInfo;
     	private readonly IWorkShiftWorkTime _workShiftWorkTime;
     	private ISchedulingResultStateHolder _stateHolder;
         private readonly IList<KeyValuePair<IPerson, DateOnly>> _personsAffectedPeriodDates = new List<KeyValuePair<IPerson, DateOnly>>();
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
         private ISchedulingOptions _schedulingOptions;
         private KeyValuePair<IPerson, DateOnly> _selectedPersonDate;
 
-        public SingleAgentRestrictionModel(DateTimePeriod dateTimePeriod, ICccTimeZoneInfo timeZoneInfo, IWorkShiftWorkTime workShiftWorkTime)
+        public SingleAgentRestrictionModel(DateTimePeriod dateTimePeriod, TimeZoneInfo timeZoneInfo, IWorkShiftWorkTime workShiftWorkTime)
         {
             _loadedDateTimePeriod = dateTimePeriod;
             _timeZoneInfo = timeZoneInfo;

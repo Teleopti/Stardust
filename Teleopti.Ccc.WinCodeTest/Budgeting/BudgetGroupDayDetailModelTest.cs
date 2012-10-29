@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
             var budgetGroup = new BudgetGroup();
             budgetGroup.Name = "BG";
             budgetGroup.TrySetDaysPerYear(365);
-            budgetGroup.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.GetSystemTimeZones()[5]);
+            budgetGroup.TimeZone = (TimeZoneInfo.GetSystemTimeZones()[5]);
             _budgetDay = new BudgetDay(budgetGroup, ScenarioFactory.CreateScenarioAggregate(), new DateOnly(2010, 8, 17));
             _budgetDay.AttritionRate = new Percent(0.1);
             _budgetDay.Contractors = 12d;

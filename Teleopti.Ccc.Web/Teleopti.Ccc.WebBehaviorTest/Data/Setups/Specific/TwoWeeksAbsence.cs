@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		{
 			var date = DateTime.Now.Date.AddDays(-7);
 
-			var startTime = user.PermissionInformation.DefaultTimeZone().ConvertTimeToUtc(date);
+			var startTime = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(date);
 			var endTime = startTime.AddDays(14);
 			var period = new DateTimePeriod(startTime, endTime);
 

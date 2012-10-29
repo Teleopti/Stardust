@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
 			var regional = target.MakeRegionalFromPerson(person);
 
-			regional.CultureLCID.Should().Be(0);
-			regional.UICultureLCID.Should().Be(0);
+            Assert.That(regional.CultureLCID, Is.EqualTo(0));
+            Assert.That(regional.UICultureLCID, Is.EqualTo(0));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
