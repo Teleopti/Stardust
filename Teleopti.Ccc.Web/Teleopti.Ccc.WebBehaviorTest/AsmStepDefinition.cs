@@ -119,14 +119,5 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				throw new NotSupportedException("Missing hour to read from");
 			return Convert.ToInt32(firstHour.Style.GetAttributeValue("width").TrimEnd('p', 'x')) + hackExtra;
 		}
-
-		private static bool isDisplayed(Element element)
-		{
-			if(string.Equals(element.Style.Display,"none"))
-			{
-				return false;
-			}
-			return element.Parent == null || isDisplayed(element.Parent);
-		}
 	}
 }
