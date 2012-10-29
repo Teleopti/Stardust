@@ -169,7 +169,7 @@
   </Target>
   
 			
-	<Target Name="AllFilesIncluded" DependsOnTargets="DeletePBIMSI">
+	<Target Name="AllFilesIncluded" DependsOnTargets="GetVersion;DeletePBIMSI">
 		<ItemGroup>
 
 
