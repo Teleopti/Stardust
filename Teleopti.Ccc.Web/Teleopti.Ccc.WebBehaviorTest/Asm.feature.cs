@@ -202,10 +202,10 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Write all upcoming activities")]
-        public virtual void WriteAllUpcomingActivities()
+        [NUnit.Framework.DescriptionAttribute("Current activity should be shown")]
+        public virtual void CurrentActivityShouldBeShown()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Write all upcoming activities", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Current activity should be shown", ((string[])(null)));
 #line 50
 this.ScenarioSetup(scenarioInfo);
 #line 7
@@ -213,31 +213,10 @@ this.FeatureBackground();
 #line 51
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line 52
- testRunner.And("Current time is \'2030-01-01 07:00\'");
+ testRunner.And("Current time is \'2030-01-01 16:00\'");
 #line 53
  testRunner.When("I click ASM link");
 #line 54
- testRunner.Then("I should see \'3\' upcoming activities");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Current activity should be shown")]
-        public virtual void CurrentActivityShouldBeShown()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Current activity should be shown", ((string[])(null)));
-#line 56
-this.ScenarioSetup(scenarioInfo);
-#line 7
-this.FeatureBackground();
-#line 57
- testRunner.Given("I have the role \'Full access to mytime\'");
-#line 58
- testRunner.And("Current time is \'2030-01-01 16:00\'");
-#line 59
- testRunner.When("I click ASM link");
-#line 60
  testRunner.Then("I should see Phone as current activity");
 #line hidden
             this.ScenarioCleanup();
@@ -248,18 +227,18 @@ this.FeatureBackground();
         public virtual void NoCurrentActivityToShow()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No current activity to show", ((string[])(null)));
-#line 62
+#line 56
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 63
+#line 57
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 64
+#line 58
  testRunner.And("Current time is \'2030-01-01 07:00\'");
-#line 65
+#line 59
  testRunner.When("I click ASM link");
-#line 66
- testRunner.Then("I should not see as current activity");
+#line 60
+ testRunner.Then("I should not see a current activity");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -269,29 +248,52 @@ this.FeatureBackground();
         public virtual void CurrentActivityChanges()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Current activity changes", ((string[])(null)));
-#line 68
+#line 62
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 69
+#line 63
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 70
+#line 64
  testRunner.And("Current time is \'2030-01-01 11:59\'");
-#line 71
+#line 65
  testRunner.When("I click ASM link");
-#line 72
+#line 66
  testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'");
-#line 73
+#line 67
  testRunner.Then("I should see Phone as current activity");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Upcoming activity starttime should be displayed")]
-        public virtual void UpcomingActivityStarttimeShouldBeDisplayed()
+        [NUnit.Framework.DescriptionAttribute("Upcoming activity time period should be displayed")]
+        public virtual void UpcomingActivityTimePeriodShouldBeDisplayed()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity starttime should be displayed", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity time period should be displayed", ((string[])(null)));
+#line 69
+this.ScenarioSetup(scenarioInfo);
+#line 7
+this.FeatureBackground();
+#line 70
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 71
+ testRunner.And("Current time is \'2030-01-01 00:01\'");
+#line 72
+ testRunner.When("I click ASM link");
+#line 73
+ testRunner.Then("I should see next activity time as \'08:00-11:00\'");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Upcoming activity time period starting after midnight should be indicated as next" +
+            " day")]
+        public virtual void UpcomingActivityTimePeriodStartingAfterMidnightShouldBeIndicatedAsNextDay()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity time period starting after midnight should be indicated as next" +
+                    " day", ((string[])(null)));
 #line 75
 this.ScenarioSetup(scenarioInfo);
 #line 7
@@ -299,34 +301,11 @@ this.FeatureBackground();
 #line 76
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line 77
- testRunner.And("Current time is \'2030-01-01 00:01\'");
+ testRunner.And("Current time is \'2029-12-31 23:59\'");
 #line 78
  testRunner.When("I click ASM link");
 #line 79
- testRunner.Then("I should see last activity starttime as \'12:00\'");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Upcoming activity starttime starting after midnight should be indicated as next d" +
-            "ay")]
-        public virtual void UpcomingActivityStarttimeStartingAfterMidnightShouldBeIndicatedAsNextDay()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Upcoming activity starttime starting after midnight should be indicated as next d" +
-                    "ay", ((string[])(null)));
-#line 81
-this.ScenarioSetup(scenarioInfo);
-#line 7
-this.FeatureBackground();
-#line 82
- testRunner.Given("I have the role \'Full access to mytime\'");
-#line 83
- testRunner.And("Current time is \'2029-12-31 23:59\'");
-#line 84
- testRunner.When("I click ASM link");
-#line 85
- testRunner.Then("I should see last activity starttime as \'12:00+1\'");
+ testRunner.Then("I should see next activity time as \'08:00+1-11:00\'");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -336,19 +315,19 @@ this.FeatureBackground();
         public virtual void AgentShouldFromASMPopupBeNotifiedWhenCurrentShiftHasChanged()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should from ASM popup be notified when current shift has changed", ((string[])(null)));
-#line 87
+#line 81
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 88
+#line 82
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 89
+#line 83
  testRunner.And("Current time is \'2030-01-01 00:00\'");
-#line 90
+#line 84
  testRunner.When("I click ASM link");
-#line 91
+#line 85
  testRunner.And("My schedule between \'2030-01-01 08:00\' to \'2030-01-01 17:00\' change");
-#line 92
+#line 86
  testRunner.Then("I should see one notify message");
 #line hidden
             this.ScenarioCleanup();
@@ -359,19 +338,19 @@ this.FeatureBackground();
         public virtual void AgentShouldFromPortalBeNotifiedWhenCurrentShiftHasChanged()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should from portal be notified when current shift has changed", ((string[])(null)));
-#line 94
+#line 88
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 95
+#line 89
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 96
+#line 90
  testRunner.And("Current time is \'2030-01-01 00:00\'");
-#line 97
+#line 91
  testRunner.When("I view preferences");
-#line 98
+#line 92
  testRunner.And("My schedule between \'2030-01-01 08:00\' to \'2030-01-01 17:00\' change");
-#line 99
+#line 93
  testRunner.Then("I should see one notify message");
 #line hidden
             this.ScenarioCleanup();
@@ -382,21 +361,21 @@ this.FeatureBackground();
         public virtual void AsmShouldBeAutomaticallyReloadedWhenTimePasses()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Asm should be automatically reloaded when time passes", ((string[])(null)));
-#line 101
+#line 95
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 102
+#line 96
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 103
+#line 97
  testRunner.And("Current time is \'2030-01-01 23:59\'");
-#line 104
+#line 98
  testRunner.When("I click ASM link");
-#line 105
+#line 99
  testRunner.Then("Now indicator should be at hour \'47\'");
-#line 106
+#line 100
  testRunner.When("Current browser time has changed to \'2030-01-02 00:01\'");
-#line 107
+#line 101
  testRunner.Then("Now indicator should be at hour \'24\'");
 #line hidden
             this.ScenarioCleanup();
@@ -409,19 +388,19 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should be notified when activity changes", new string[] {
                         "ignore"});
-#line 112
+#line 106
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 113
+#line 107
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 114
+#line 108
  testRunner.And("Current time is \'2030-01-01 11:59\'");
-#line 115
+#line 109
  testRunner.When("I click ASM link");
-#line 116
+#line 110
  testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'");
-#line 117
+#line 111
  testRunner.Then("I should see only one alert containing \'Phone\'");
 #line hidden
             this.ScenarioCleanup();
