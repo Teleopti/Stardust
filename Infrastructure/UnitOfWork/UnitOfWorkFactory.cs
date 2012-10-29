@@ -12,6 +12,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
         {
             get
             {
+				if (TeleoptiPrincipal.Current == null)
+				{
+					return null;
+				}
                 var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
                 return identity.DataSource.Application;
             }
