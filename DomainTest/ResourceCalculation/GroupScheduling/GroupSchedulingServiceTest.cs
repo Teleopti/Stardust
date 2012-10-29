@@ -205,22 +205,22 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 Expect.Call(_scheduleDictionary[_person1]).Return(range1);
                 Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer, useCategory)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, useCategory, _rollbackService)).IgnoreArguments()
 					.Return(true);
                 Expect.Call(_scheduleDictionary[_person2]).Return(range1);
                 Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer, useCategory)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, useCategory, _rollbackService)).IgnoreArguments()
                     .Return(true);
                 Expect.Call(_scheduleDictionary[_person1]).Return(range1);
                 Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true,_effectiveRestriction, _resourceCalculateDelayer, useCategory)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, useCategory, _rollbackService)).IgnoreArguments()
                     .Return(true);
                 Expect.Call(_scheduleDictionary[_person2]).Return(range1);
                 Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true,_effectiveRestriction, _resourceCalculateDelayer, useCategory)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, useCategory, _rollbackService)).IgnoreArguments()
                     .Return(true);
 
                 Expect.Call(_scheduleMatrixPro.Person).Return(_person1).Repeat.AtLeastOnce();
@@ -261,13 +261,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction,_resourceCalculateDelayer, _useCategory)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _useCategory, _rollbackService)).IgnoreArguments()
                     .Return(true);
 
                 Expect.Call(_scheduleDictionary[_person2]).Return(range1);
                 Expect.Call(range1.ScheduledDay(_date1)).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction,_resourceCalculateDelayer, _useCategory)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _useCategory, _rollbackService)).IgnoreArguments()
                     .Return(false);
                 Expect.Call(() => _rollbackService.Rollback());
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date1, true, true));
@@ -275,13 +275,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 Expect.Call(_scheduleDictionary[_person1]).Return(range1);
                 Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer, _useCategory)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _useCategory, _rollbackService)).IgnoreArguments()
                     .Return(true);
 
                 Expect.Call(_scheduleDictionary[_person2]).Return(range1);
                 Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer, _useCategory)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _useCategory, _rollbackService)).IgnoreArguments()
                     .Return(true);
 
                 Expect.Call(_scheduleMatrixPro.Person).Return(_person1).Repeat.AtLeastOnce();
@@ -318,13 +318,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 Expect.Call(_scheduleDictionary[_person1]).Return(range1);
                 Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction,_resourceCalculateDelayer, _useCategory)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _useCategory, _rollbackService)).IgnoreArguments()
                     .Return(true);
 
                 Expect.Call(_scheduleDictionary[_person2]).Return(range1);
                 Expect.Call(range1.ScheduledDay(_date2)).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer, _useCategory)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _useCategory, _rollbackService)).IgnoreArguments()
                     .Return(true);
 
                 Expect.Call(_scheduleMatrixPro.Person).Return(_person1).Repeat.AtLeastOnce();

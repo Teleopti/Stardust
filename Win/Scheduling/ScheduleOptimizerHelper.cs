@@ -6,7 +6,6 @@ using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -222,10 +221,15 @@ namespace Teleopti.Ccc.Win.Scheduling
             _backgroundWorker = backgroundWorker;
             studentSchedulingService.DayScheduled += schedulingServiceDayScheduled;
             DateTime schedulingTime = DateTime.Now;
-
+        	ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder,
+        	                                                                                                 _scheduleDayChangeCallback,
+        	                                                                                                 new ScheduleTagSetter
+        	                                                                                                 	(schedulingOptions
+        	                                                                                                 	 	.
+        	                                                                                                 	 	TagToUseOnScheduling));
             using (PerformanceOutput.ForOperation("Scheduling " + unlockedSchedules.Count))
             {
-                studentSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, false, false);
+                studentSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, false, false, rollbackService);
             }
 
             _allResults.AddResults(studentSchedulingService.FinderResults, schedulingTime);
@@ -270,14 +274,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService =
 				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(_stateHolder), resourceOptimizationHelper);
-            INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
+			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder,
+			                                                                                                 _scheduleDayChangeCallback,
+			                                                                                                 new ScheduleTagSetter
+			                                                                                                 	(schedulingOptions.
+			                                                                                                 	 	TagToUseOnScheduling));
+            INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService = 
                         new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
 															deleteAndResourceCalculateService,
-                                                            new SchedulePartModifyAndRollbackService(_stateHolder,
-                                                                                                     _scheduleDayChangeCallback,
-                                                                                                     new ScheduleTagSetter
-                                                                                                         (schedulingOptions.
-                                                                                                              TagToUseOnScheduling)),
+															rollbackService,
                                                             _container.Resolve<IScheduleService>(), WorkShiftFinderResultHolder,
 															new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks));
 
@@ -297,7 +302,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     }
                 }
 
-                fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, useOccupancyAdjustment, false);
+                fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, useOccupancyAdjustment, false, rollbackService);
                 _allResults.AddResults(fixedStaffSchedulingService.FinderResults, schedulingTime);
                 fixedStaffSchedulingService.FinderResults.Clear();
 
@@ -765,11 +770,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             // Schedule White Spots after back to legal state
             var scheduleService = _container.Resolve<IScheduleService>();
+			ISchedulePartModifyAndRollbackService rollbackService =
+			   new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 
             // schedule those are the white spots after back to legal state
-            OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container);
-            ISchedulePartModifyAndRollbackService rollbackService =
-				new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+            OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container, rollbackService);
+           
 
             bool notFullyScheduledMatrixFound = false;
             IList<IScheduleMatrixOriginalStateContainer> validMatrixContainerList = new List<IScheduleMatrixOriginalStateContainer>();

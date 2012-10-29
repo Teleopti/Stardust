@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null,
 														new List<IScheduleDay>(), new List<IScheduleDay> { originalDay });
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
-			bool result = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, true, effectiveRestriction, _resourceCalculateDelayer, null);
+			bool result = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService);
 
 			return result;
 		}
