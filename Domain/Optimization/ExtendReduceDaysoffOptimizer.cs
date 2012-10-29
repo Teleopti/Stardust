@@ -228,12 +228,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 				if (effectiveRestriction.ShiftCategory == null && originalShiftCategory != null)
 				{
                 	var possibleShiftOption = new PossibleStartEndCategory {ShiftCategory = originalShiftCategory};
-					schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, true, resourceCalculateDelayer, possibleShiftOption);
+					schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions,effectiveRestriction, resourceCalculateDelayer, possibleShiftOption, _rollbackService);
 					if (!schedulingResult)
-						schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, true, effectiveRestriction, resourceCalculateDelayer, null);
+						schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, null, _rollbackService);
 				}
 				else
-					schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, true, effectiveRestriction, resourceCalculateDelayer, null);
+					schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, null, _rollbackService);
 
 				if (!schedulingResult)
 				{

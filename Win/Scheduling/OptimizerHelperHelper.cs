@@ -18,11 +18,12 @@ namespace Teleopti.Ccc.Win.Scheduling
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public static class OptimizerHelperHelper
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "schedulingOptions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "schedulingOptions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public static void ScheduleBlankSpots(
             IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
             IScheduleService scheduleService, 
-            IComponentContext container)
+            IComponentContext container,
+			ISchedulePartModifyAndRollbackService rollbackService)
         {
 
             var effectiveRestrictionCreator = container.Resolve<IEffectiveRestrictionCreator>();
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						var resourceCalculateDelayer = new ResourceCalculateDelayer(container.Resolve<IResourceOptimizationHelper>(), 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
 
-						result = scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer, null);
+						result = scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, null, rollbackService);
                     }
                     if (!result)
                     {

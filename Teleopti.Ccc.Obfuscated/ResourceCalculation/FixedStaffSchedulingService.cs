@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         IList<IWorkShiftFinderResult> FinderResults { get; }
         void ClearFinderResults();
 		void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions);
-        bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule);
+		bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
     }
 
     public class FixedStaffSchedulingService : IFixedStaffSchedulingService
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule)
+		public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService)
         {
         	var result = true;
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                                 schedulePart, schedulingOptions);
 
                             bool schedulePersonOnDayResult =
-								_scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment,effectiveRestriction, resourceCalculateDelayer, null);
+								_scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, null, rollbackService);
 
                                 result = result && schedulePersonOnDayResult;
                                 if (!result && breakIfPersonCannotSchedule)
