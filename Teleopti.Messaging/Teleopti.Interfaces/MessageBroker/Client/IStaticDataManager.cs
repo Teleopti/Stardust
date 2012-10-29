@@ -35,11 +35,6 @@ namespace Teleopti.Interfaces.MessageBroker.Client
         /// <returns></returns>
         IEventHeartbeat[] RetrieveHeartbeats();
         /// <summary>
-        /// Retrieves the logbook entries.
-        /// </summary>
-        /// <returns></returns>
-        ILogbookEntry[] RetrieveLogbookEntries();
-        /// <summary>
         /// Retrieves the event users.
         /// </summary>
         /// <returns></returns>

@@ -224,12 +224,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         IEventHeartbeat[] RetrieveHeartbeats();
 
         /// <summary>
-        /// Used by Management Client, can be ignored by Raptor Developer.
-        /// </summary>
-        /// <returns></returns>
-        ILogbookEntry[] RetrieveLogbookEntries();
-
-        /// <summary>
         /// Retrieves Event User Info
         /// </summary>
         /// <returns></returns>
@@ -386,12 +380,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// </summary>
         /// <returns></returns>
         bool Restart();
-
-        /// <summary>
-        /// Used by Management Client, can be ignored by Raptor Developer.
-        /// </summary>
-        /// <param name="eventLogEntry"></param>
-        void Log(ILogEntry eventLogEntry);
 
         /// <summary>
         /// Sends the receipt.

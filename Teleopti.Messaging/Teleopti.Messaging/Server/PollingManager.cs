@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Sockets;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Logging;
+using log4net;
 
 namespace Teleopti.Messaging.Server
 {
@@ -13,6 +12,7 @@ namespace Teleopti.Messaging.Server
     /// </summary>
     public class PollingManager : IPollingManager
     {
+		private static ILog Logger = LogManager.GetLogger(typeof(PollingManager));
         private readonly IDictionary<Guid, PollingClient> _clients = new Dictionary<Guid, PollingClient>();
         private static object _lockObject = new object();
         private static IPollingManager _instance;
@@ -107,7 +107,7 @@ namespace Teleopti.Messaging.Server
                 }
                 catch (SocketException exception)
                 {
-                    BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exception.ToString());
+                    Logger.Error("PollingManager error.", exception);
                 }
             }
         }

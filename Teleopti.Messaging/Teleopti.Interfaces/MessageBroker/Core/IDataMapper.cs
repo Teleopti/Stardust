@@ -105,17 +105,6 @@ namespace Teleopti.Interfaces.MessageBroker.Core
                                 string raisedBy);
 
         /// <summary>
-        /// Inserts a log entry into the database on whether the event was propagated successfully or not.
-        /// </summary>
-        /// <param name="processId"></param>
-        /// <param name="description"></param>
-        /// <param name="exception"></param>
-        /// <param name="message"></param>
-        /// <param name="stackTrace"></param>
-        /// <param name="changeBy"></param>
-        /// <returns></returns>
-        Guid InsertEventLogEntry(Int32 processId, string description, string exception, string message, string stackTrace, string changeBy);
-        /// <summary>
         /// Inserts the configuration info.
         /// </summary>
         /// <param name="configurationType">Type of the configuration.</param>
@@ -181,11 +170,6 @@ namespace Teleopti.Interfaces.MessageBroker.Core
         /// </summary>
         /// <returns></returns>
         IEventFilter[] ReadFilters();
-        /// <summary>
-        /// Reads the logbook entries.
-        /// </summary>
-        /// <returns></returns>
-        ILogbookEntry[] ReadLogbookEntries();
 
         /// <summary>
         /// Updates the port for subscriber.

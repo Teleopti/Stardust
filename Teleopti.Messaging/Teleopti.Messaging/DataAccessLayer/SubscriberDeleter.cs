@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Diagnostics;
 using Teleopti.Core;
-using Teleopti.Logging;
 using Teleopti.Messaging.Exceptions;
+using log4net;
 
 namespace Teleopti.Messaging.DataAccessLayer
 {
     public class SubscriberDeleter : ObjectDeleter
     {
+		private static ILog Logger = LogManager.GetLogger(typeof(SubscriberDeleter));
         private const string SubscriberIdParameter = "@SubscriberId";
         private const string DeleteSubscriberById = "msg.sp_Subscriber_Delete";
 
@@ -27,7 +27,7 @@ namespace Teleopti.Messaging.DataAccessLayer
             }
             catch (Exception exception)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exception.Message + exception.StackTrace);
+                Logger.Error("Unregister subscription error.", exception);
                 throw new DatabaseException("UnregisterSubscription(Guid subscriberId)", exception);
             }
         }

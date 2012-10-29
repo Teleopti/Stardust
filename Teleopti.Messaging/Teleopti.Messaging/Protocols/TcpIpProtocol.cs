@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
@@ -8,20 +7,20 @@ using System.Threading;
 using Teleopti.Interfaces.MessageBroker.Coders;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Logging;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Coders;
 using Teleopti.Messaging.Exceptions;
 using Teleopti.Messaging.Server;
+using log4net;
 
 namespace Teleopti.Messaging.Protocols
 {
-
     /// <summary>
     /// Implements the TcpIpProtocol for sending message information.
     /// </summary>
     public class TcpIpProtocol : Protocol
     {
+		private static ILog Logger = LogManager.GetLogger(typeof(TcpIpProtocol));
         private CustomTcpListener _tcpListener;
 
         /// <summary>
@@ -63,14 +62,8 @@ namespace Teleopti.Messaging.Protocols
                     try
                     {
                         IPAddress ipAddress = IPAddress.Parse(Address);
-                        if (ipAddress != null)
-                        {
-                            sender.Connect(new IPEndPoint(ipAddress, Port));
-                        }
-                        else
-                        {
-                            throw new ArgumentException("IP Address string could not be parsed.");
-                        }
+                    	sender.Connect(new IPEndPoint(ipAddress, Port));
+
                         NetworkStream networkStream = sender.GetStream();
                         networkStream.Write(value, 0, value.Length);
                         networkStream.Close();
@@ -79,28 +72,28 @@ namespace Teleopti.Messaging.Protocols
                     catch (ArgumentException exc)
                     {
                         DeregisterSubscriber();
-                        BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exc.ToString());
+                        Logger.Error("Send package error.", exc);
                     }
                     catch (SocketException socketException)
                     {
                         ClientNotConnectedException clientNotConnected = new ClientNotConnectedException(String.Format(CultureInfo.InvariantCulture, "Client {0} on port {1} is not connected. WinSocket Error: {2}, Inner Exception: {3}.", Address, Port, socketException.ErrorCode, socketException.Message), socketException);
                         DeregisterSubscriber();
-                        BaseLogger.Instance.WriteLine(EventLogEntryType.Warning, GetType(), clientNotConnected.Message);
+                        Logger.Warn("Send package warning.", clientNotConnected);
                     }
                     catch (NullReferenceException nullReferenceException)
                     {
                         DeregisterSubscriber();
-                        BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), nullReferenceException.ToString());
+                        Logger.Error("Send package error.", nullReferenceException);
                     }
                     catch (Exception exc)
                     {
-                        BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exc.ToString());
+                        Logger.Error("Send package error.", exc);
                     }
                 }
             }
             catch (Exception exception)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exception.ToString());
+                Logger.Error("Send package error (outer).", exception);
             }
         }
 
@@ -120,7 +113,7 @@ namespace Teleopti.Messaging.Protocols
             }
             catch (SocketException socketException)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, typeof(SocketException), socketException.ToString());
+                Logger.Error("Start listener error.", socketException);
                 throw;
             }
         }
@@ -139,13 +132,9 @@ namespace Teleopti.Messaging.Protocols
                 _tcpListener.BeginAcceptTcpSender(OnEndAcceptTcpSender);
                 _acceptReset.WaitOne();
             }
-            catch (SocketException socketException)
-            {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), String.Format(CultureInfo.InvariantCulture, "ErrorCode: {0}, Exception Description: {1}.", socketException.ErrorCode, socketException));
-            }
             catch (Exception exc)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exc.ToString());
+                Logger.Error("Read byte stream error.", exc);
             }
         }
 
@@ -185,13 +174,9 @@ namespace Teleopti.Messaging.Protocols
                 }
                 sender.Dispose();
             }
-            catch (SocketException socketException)
-            {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), String.Format(CultureInfo.InvariantCulture, "ErrorCode: {0}, Exception Description: {1}.", socketException.ErrorCode, socketException));
-            }
             catch (Exception exc)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exc.ToString());
+                Logger.Error("Accept tcp sender error.", exc);
             }
         }
 
@@ -218,7 +203,7 @@ namespace Teleopti.Messaging.Protocols
             }
             catch (Exception exc)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exc.ToString());
+                Logger.Error("Read callback error.", exc);
             }
         }
 

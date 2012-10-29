@@ -457,27 +457,6 @@ namespace Teleopti.Messaging.Server
         }
 
         /// <summary>
-        /// Logs the specified process id.
-        /// </summary>
-        /// <param name="processId">The process id.</param>
-        /// <param name="description">The description.</param>
-        /// <param name="exception">The exception.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="stackTrace">The stack trace.</param>
-        /// <param name="userName">Name of the user.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 2008-08-07
-        /// </remarks>
-        public void Log(Int32 processId, string description, string exception, string message, string stackTrace, string userName)
-        {
-            IDomainObjectFactory factory = new DomainObjectFactory();
-            ILogEntry eventLogEntry = factory.CreateEventLogEntry(processId, description, exception, message, stackTrace, userName);
-            if (CustomThreadPool != null)
-                CustomThreadPool.QueueUserWorkItem(LogAsync, eventLogEntry);
-        }
-
-        /// <summary>
         /// Retrieves the configurations.
         /// </summary>
         /// <param name="configurationType">Type of the configuration.</param>
@@ -643,14 +622,6 @@ namespace Teleopti.Messaging.Server
             IDataMapper mapper = new DataMapper(ConnectionString, RestartTime);
             return mapper.ReadHeartbeats();
         }
-
-
-        public ILogbookEntry[] RetrieveLogbookEntries()
-        {
-            IDataMapper mapper = new DataMapper(ConnectionString, RestartTime);
-            return mapper.ReadLogbookEntries();
-        }
-
 
         public IConcurrentUsers RetrieveLogbookEntries(string ipAddress)
         {

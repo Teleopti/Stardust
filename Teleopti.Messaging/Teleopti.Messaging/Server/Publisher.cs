@@ -1,29 +1,20 @@
-﻿#pragma warning disable 168
-
-// ReSharper disable MemberCanBeMadeStatic
-// ReSharper disable MemberCanBeMadeStatic.Local
-// ReSharper disable UnusedParameter.Local
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Security;
-using System.Security.Permissions;
 using System.Threading;
 using Teleopti.Core;
-using Teleopti.Logging;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Messaging.Exceptions;
 using Teleopti.Messaging.Protocols;
+using log4net;
 
 namespace Teleopti.Messaging.Server
 {
     public class Publisher : MarshalByRefObject, IPublisher
     {
-        #region Fields
-        
-        private const string TeleoptiPublisherThread = " Teleopti Publisher Thread";
+    	private static ILog Logger = LogManager.GetLogger(typeof (Publisher));
+    	private const string TeleoptiPublisherThread = " Teleopti Publisher Thread";
         private EventHandler<UnhandledExceptionEventArgs> _unhandledException;
         private CustomThreadPool _threadPool;
         private readonly int _numberOfThreads;
@@ -32,11 +23,7 @@ namespace Teleopti.Messaging.Server
         private readonly int _serverThrottle;
         private readonly ManualResetEvent _resetEvent = new ManualResetEvent(false);
 
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
+    	/// <summary>
         /// Initializes a new instance of the <see cref="Publisher"/> class.
         /// </summary>
         /// <param name="serverThrottle">The server throttle.</param>
@@ -58,9 +45,7 @@ namespace Teleopti.Messaging.Server
             _serverThrottle = serverThrottle;
         }
 
-        #endregion
-
-        /// <summary>
+    	/// <summary>
         /// Obtains a lifetime service object to control the lifetime policy for this instance.
         /// </summary>
         /// <returns>
@@ -182,7 +167,7 @@ namespace Teleopti.Messaging.Server
             }
             else
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Warning, GetType(), "Send(IMessageInfo messageInfo): Send thread pool is null. This can occur on application exit.");
+                Logger.Warn("Send(IMessageInfo messageInfo): Send thread pool is null. This can occur on application exit.");
             }
         }
 
@@ -200,7 +185,7 @@ namespace Teleopti.Messaging.Server
                 }
                 else
                 {
-                    BaseLogger.Instance.WriteLine(EventLogEntryType.Warning, GetType(), "Send(IList<IMessageInfo> messages): TCP/IP thread pool is null. This occurs on application exit.");
+                    Logger.Warn("Send(IList<IMessageInfo> messages): TCP/IP thread pool is null. This occurs on application exit.");
                 }
             }
         }

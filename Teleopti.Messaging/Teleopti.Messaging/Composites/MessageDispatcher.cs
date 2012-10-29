@@ -5,9 +5,9 @@ using System.Runtime.Remoting;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Logging;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Events;
+using log4net;
 
 namespace Teleopti.Messaging.Composites
 {
@@ -16,6 +16,7 @@ namespace Teleopti.Messaging.Composites
         private readonly IBrokerService _brokerService;
         private readonly MessageBrokerImplementation _messageBroker;
         private readonly IMessageFilterManager _messageFilterManager;
+		private static ILog Logger = LogManager.GetLogger(typeof(MessageDispatcher));
 
         public MessageDispatcher(MessageBrokerImplementation messageBroker, IBrokerService brokerService, IMessageFilterManager messageFilterManager)
         {
@@ -104,11 +105,11 @@ namespace Teleopti.Messaging.Composites
     		}
     		catch (SocketException exception)
     		{
-    			BaseLogger.Instance.WriteLine(EventLogEntryType.Error,GetType(),string.Format(System.Globalization.CultureInfo.InvariantCulture, "An error occured while trying to notify broker: {0}",exception.Message));
+    			Logger.Error("An error occured while trying to notify broker.",exception);
     		}
     		catch(RemotingException exception)
     		{
-    			BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), string.Format(System.Globalization.CultureInfo.InvariantCulture, "A remoting error occured while trying to notify broker: {0}", exception.Message));
+    			Logger.Error("A remoting error occured while trying to notify broker.", exception);
     		}
     	}
 

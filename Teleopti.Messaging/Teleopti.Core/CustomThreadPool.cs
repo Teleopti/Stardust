@@ -99,7 +99,7 @@ namespace Teleopti.Core
                         {
                             OnUnhandledException(new UnhandledExceptionEventArgs(ex, false));
                         }
-                        catch (SocketException)
+                        catch (Exception)
                         {
                         }
                     }

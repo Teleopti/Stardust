@@ -184,21 +184,6 @@ namespace Teleopti.Interfaces.MessageBroker.Core
         void SendEventMessages(IEventMessage[] eventMessages);
 
         /// <summary>
-        /// Logs the specified process id.
-        /// </summary>
-        /// <param name="processId">The process id.</param>
-        /// <param name="description">The description.</param>
-        /// <param name="exception">The exception.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="stackTrace">The stack trace.</param>
-        /// <param name="userName">Name of the user.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 2008-08-07
-        /// </remarks>
-        void Log(Int32 processId, string description, string exception, string message, string stackTrace, string userName);
-
-        /// <summary>
         /// Retrieves the configurations.
         /// </summary>
         /// <param name="configurationType">Type of the configuration.</param>
@@ -353,15 +338,6 @@ namespace Teleopti.Interfaces.MessageBroker.Core
         /// Created date: 12/04/2009
         /// </remarks>
         IEventHeartbeat[] RetrieveHeartbeats();
-        /// <summary>
-        /// Retrieves the logbook entries.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 12/04/2009
-        /// </remarks>
-        ILogbookEntry[] RetrieveLogbookEntries();
 
         /// <summary>
         /// Retrieves Event User Info

@@ -40,10 +40,6 @@
 				<Merging />
 				<Embedding />
 			</Assembly>
-			<Assembly AssemblyName="Teleopti.Logging, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-				<Merging />
-				<Embedding />
-			</Assembly>
 			<Assembly AssemblyName="Teleopti.Ccc.Infrastructure, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
 				<Merging>
 					<ResourcesCompression Compress="1" />

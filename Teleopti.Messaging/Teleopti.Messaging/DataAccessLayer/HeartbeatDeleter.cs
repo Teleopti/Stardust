@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 using Teleopti.Core;
-using Teleopti.Logging;
 using Teleopti.Messaging.Exceptions;
+using log4net;
 
 namespace Teleopti.Messaging.DataAccessLayer
 {
     public class HeartbeatDeleter : ObjectDeleter
     {
         private const string HeartbeatDeleteAll = "msg.sp_Heartbeat_Delete_All";
+		private static ILog Logger = LogManager.GetLogger(typeof(HeartbeatDeleter));
 
         public HeartbeatDeleter(string connectionString) : base(connectionString)
         {
@@ -19,11 +20,11 @@ namespace Teleopti.Messaging.DataAccessLayer
             try
             {
                 DeleteRecords(HeartbeatDeleteAll);
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Warning, GetType(), "Deleted all heartbeats to clear up database.");
+                Logger.Warn("Deleted all heartbeats to clear up database.");
             }
             catch (Exception exception)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exception.ToString());
+                Logger.Error("Heartbeat deleter error.", exception);
                 throw new DatabaseException("DeleteHeartbeats()", exception);
             }
         }

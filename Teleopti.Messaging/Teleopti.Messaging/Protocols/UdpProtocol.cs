@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
@@ -7,10 +6,10 @@ using System.Net.Sockets;
 using Teleopti.Interfaces.MessageBroker.Coders;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Logging;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Coders;
 using Teleopti.Messaging.Exceptions;
+using log4net;
 
 namespace Teleopti.Messaging.Protocols
 {
@@ -19,6 +18,7 @@ namespace Teleopti.Messaging.Protocols
     /// </summary>
     public class UdpProtocol : Protocol
     {
+		private static ILog Logger = LogManager.GetLogger(typeof(UdpProtocol));
         private CustomUdpListener _udpListener;
         
         /// <summary>
@@ -75,28 +75,28 @@ namespace Teleopti.Messaging.Protocols
                     catch (ArgumentException exc)
                     {
                         DeregisterSubscriber();
-                        BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exc.ToString());
+                        Logger.Error("Send package error.", exc);
                     }
                     catch (SocketException socketException)
                     {
                         ClientNotConnectedException clientNotConnected = new ClientNotConnectedException(String.Format(CultureInfo.InvariantCulture, "Client {0} on port {1} is not connected. WinSocket Error: {2}, Inner Exception: {3}.", Address, Port, socketException.ErrorCode, socketException.Message), socketException);
                         DeregisterSubscriber();
-                        BaseLogger.Instance.WriteLine(EventLogEntryType.Warning, GetType(), clientNotConnected.Message);
+                        Logger.Warn("Client not connected.", clientNotConnected);
                     }
                     catch (NullReferenceException nullReferenceException)
                     {
                         DeregisterSubscriber();
-                        BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), nullReferenceException.ToString());
+                        Logger.Error("Send package error.", nullReferenceException);
                     }
                     catch (Exception exc)
                     {
-                        BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exc.ToString());
+                        Logger.Error("Send package error.", exc);
                     }
                 }
             }
             catch (Exception exception)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exception.ToString());
+                Logger.Error("Send package error (outer).", exception);
             }
         }
 
@@ -116,7 +116,7 @@ namespace Teleopti.Messaging.Protocols
             }
             catch (SocketException socketException)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, typeof(SocketException), socketException.ToString());
+                Logger.Error("Start listener error.", socketException);
                 throw;
             }
         }
@@ -141,7 +141,7 @@ namespace Teleopti.Messaging.Protocols
                         }
                         catch (SocketException socketException)
                         {
-                            BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), String.Format(CultureInfo.InvariantCulture, "ErrorCode: {0}, Exception Description: {1}.", socketException.ErrorCode, socketException));
+                            Logger.Error("Read byte stream error.", socketException);
                         }
                     }
                     while (sender.Available > 0);
@@ -149,11 +149,11 @@ namespace Teleopti.Messaging.Protocols
             }
             catch (SocketException socketException)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), String.Format(CultureInfo.InvariantCulture, "ErrorCode: {0}, Exception Description: {1}.", socketException.ErrorCode, socketException));
+                Logger.Error("Read byte stream error.", socketException);
             }
             catch (Exception exc)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exc.ToString());
+                Logger.Error("Read byte stream error.", exc);
             }
         }
 

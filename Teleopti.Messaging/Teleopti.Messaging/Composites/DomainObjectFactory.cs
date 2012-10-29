@@ -1,7 +1,6 @@
 ﻿using System;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Logging.Core;
 using Teleopti.Messaging.Events;
 
 namespace Teleopti.Messaging.Composites
@@ -79,22 +78,6 @@ namespace Teleopti.Messaging.Composites
         {
             return new EventReceipt(Guid.NewGuid(), eventId, processId, userName, DateTime.Now);
         }
-
-        /// <summary>
-        /// Creates a new Event Log Entry.
-        /// </summary>
-        /// <param name="processId">The process id.</param>
-        /// <param name="description">The description.</param>
-        /// <param name="exception">The exception.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="stackTrace">The stack trace.</param>
-        /// <param name="userName">Name of the user.</param>
-        /// <returns></returns>
-        public ILogEntry CreateEventLogEntry(Int32 processId, string description, string exception, string message, string stackTrace, string userName)
-        {
-            return new LogEntry(Guid.NewGuid(), processId, description, exception, message, stackTrace, userName, DateTime.Now);
-        }
-
 
         /// <summary>
         /// Create a Heartbeat to signal messaging is still working.

@@ -12,6 +12,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.Events;
 using Teleopti.Messaging.Exceptions;
+using log4net;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
@@ -23,6 +24,7 @@ namespace Teleopti.Messaging.SignalR
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
 		private SignalWrapper _wrapper;
 		private readonly object WrapperLock = new object();
+		private static ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public SignalBroker(IDictionary<Type, IList<Type>> typeFilter)
@@ -348,11 +350,6 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 			return new IEventHeartbeat[] { };
 		}
 
-		public ILogbookEntry[] RetrieveLogbookEntries()
-		{
-			return new ILogbookEntry[] { };
-		}
-
 		public IEventUser[] RetrieveEventUsers()
 		{
 			return new IEventUser[] { };
@@ -476,10 +473,6 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 			return true;
 		}
 
-		public void Log(ILogEntry eventLogEntry)
-		{
-		}
-
 		public void SendReceipt(IEventMessage message)
 		{
 		}
@@ -496,6 +489,7 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 
 		public void InternalLog(Exception exception)
 		{
+			Logger.Error("Internal log error.", exception);
 		}
 
 		public void ServiceGuard(IBrokerService service)

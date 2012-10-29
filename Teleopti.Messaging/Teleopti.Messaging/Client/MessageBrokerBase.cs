@@ -13,8 +13,6 @@ using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Coders;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Logging;
-using Teleopti.Logging.Core;
 using Teleopti.Messaging.Coders;
 using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.Core;
@@ -22,6 +20,7 @@ using Teleopti.Messaging.DataAccessLayer;
 using Teleopti.Messaging.Events;
 using Teleopti.Messaging.Exceptions;
 using Teleopti.Messaging.Server;
+using log4net;
 using Timer = System.Timers.Timer;
 
 namespace Teleopti.Messaging.Client
@@ -29,7 +28,6 @@ namespace Teleopti.Messaging.Client
     [SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
     public abstract class MessageBrokerBase
     {
-        // Private const strings
         private const string ConnectionStringConstant = "MessageBroker";
         private const string NameConstant = "TeleoptiBrokerService";
         private const string PortConstant = "Port";
@@ -37,10 +35,8 @@ namespace Teleopti.Messaging.Client
         private const string ThreadsConstant = "Threads";
         private const string SubscriberTypeConstant = "SubscriberType";
         public const string RestartTimeConstant = "RestartTime";
+		private static ILog Logger = LogManager.GetLogger(typeof(MessageBrokerBase));
 
-        // Static fields
-
-        // Private fields
         private Int32 _initialized = -1;
     	private string _server;
         private string _connectionString;
@@ -106,8 +102,8 @@ namespace Teleopti.Messaging.Client
                     MessageRegistrationManager.UnregisterFilters();
                     UnregisterSubscriber(SubscriberId);
                 }
-                if (BrokerService != null)
-                    BrokerService.Log(Process.GetCurrentProcess().Id, String.Format(CultureInfo.InvariantCulture, "{0},{1},{2}{3}.", DateTime.Now, EventLogEntryType.Information, "Broker has been disconnected. Machine ", Environment.MachineName), string.Empty, string.Empty, string.Empty, _userName);
+            	Logger.InfoFormat(CultureInfo.InvariantCulture, "{0},{1},{2}{3}.", DateTime.Now, EventLogEntryType.Information,
+            	                  "Broker has been disconnected. Machine ", Environment.MachineName);
 
                 UnregisterClient();
             }
@@ -309,19 +305,10 @@ namespace Teleopti.Messaging.Client
                 {
                     try
                     {
-                        if (BrokerService != null)
-                        {
-                            BrokerService.Log(Process.GetCurrentProcess().Id,
-                                              String.Format(CultureInfo.InvariantCulture, "{0},{1},{2}{3}.", DateTime.Now,
-                                                            EventLogEntryType.Error,
-                                                            "Broker has been disconnected. Attempting reconnection of ",
-                                                            Environment.MachineName),
-                                              string.Empty,
-                                              string.Empty,
-                                              string.Empty,
-                                              _userName);
-                        }
-
+						Logger.ErrorFormat(CultureInfo.InvariantCulture, "{0},{1},{2}{3}.", DateTime.Now, EventLogEntryType.Error,
+                    	                   "Broker has been disconnected. Attempting reconnection of ",
+                    	                   Environment.MachineName);
+                     
                         IDataMapper processor = new DataMapper(_connectionString, RestartTime);
                         // double check, we really do not want to start anything unneccessary.
                         bool isSubscribing = processor.CheckSubscriptionStatus(SubscriberId);
@@ -332,19 +319,14 @@ namespace Teleopti.Messaging.Client
                             Restart();
                         }
                         
-                        if (IsInitialized && BrokerService != null)
-                            BrokerService.Log(Process.GetCurrentProcess().Id,
-                                              String.Format(CultureInfo.InvariantCulture, "{0},{1},{2}{3} successful.", DateTime.Now, EventLogEntryType.SuccessAudit, "Broker has been connected. Reconnection of ", Environment.MachineName),
-                                              string.Empty,
-                                              string.Empty,
-                                              string.Empty,
-                                              _userName);
+                        if (IsInitialized)
+                            Logger.InfoFormat(CultureInfo.InvariantCulture, "{0},{1},{2}{3} successful.", DateTime.Now, EventLogEntryType.SuccessAudit, "Broker has been connected. Reconnection of ", Environment.MachineName);
 
                     }
                     catch (SocketException exception)
                     {
                         Initialized = -1;
-                        BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), string.Format(CultureInfo.InvariantCulture, "An error occured while trying check connection with broker: {0}", exception.Message));
+                        Logger.Error("An error occured while trying check connection with broker.", exception);
                     }
                 }
             }
@@ -414,24 +396,6 @@ namespace Teleopti.Messaging.Client
             InternalLog("Client successfully got Broker Service Handle.");
         }
 
-
-        /// <summary>
-        /// Used by Management Client, can be ignored by Raptor Developer.
-        /// </summary>
-        /// <param name="eventLogEntry"></param>
-        public void Log(ILogEntry eventLogEntry)
-        {
-            if (!String.IsNullOrEmpty(ConnectionString) && Initialized == 0)
-            {
-                BrokerService.Log(eventLogEntry.ProcessId,
-                                   eventLogEntry.Description,
-                                   eventLogEntry.Exception,
-                                   eventLogEntry.Message,
-                                   eventLogEntry.StackTrace,
-                                   _userName);
-            }
-        }
-
         /// <summary>
         /// Unregisters the subscriber.
         /// </summary>
@@ -444,9 +408,9 @@ namespace Teleopti.Messaging.Client
             {
                 BrokerService.UnregisterSubscriber(subscriberId);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Information, null, "BrokerService proxy is null. This is normal when client is disconnecting.");
+                Logger.Info("BrokerService proxy is null. This is normal when client is disconnecting.",exception);
             }
         }
 
@@ -535,7 +499,7 @@ namespace Teleopti.Messaging.Client
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Exception exceptionObject = (Exception)e.ExceptionObject;
-            Log(new LogEntry(Guid.Empty, Process.GetCurrentProcess().Id, "Interprocess Message Failed.", exceptionObject.GetType().Name, exceptionObject.Message, exceptionObject.StackTrace, _userName, DateTime.Now));
+            Logger.Error("Interprocess Message Failed.", exceptionObject);
         }
 
         /// <summary>
@@ -547,7 +511,7 @@ namespace Teleopti.Messaging.Client
         protected void OnUnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
             Exception exc = (Exception)e.ExceptionObject;
-            BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), String.Format(CultureInfo.InvariantCulture, "MessageBrokerBase::OnUnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e). {0} {1} {2}", exc.Message, exc.StackTrace, Thread.CurrentThread.ManagedThreadId));
+            Logger.Error("MessageBrokerBase::OnUnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e).", exc);
             if (_exceptionHandler != null)
                 _exceptionHandler(sender, e);
 
@@ -590,10 +554,8 @@ namespace Teleopti.Messaging.Client
         public void InternalLog(Exception exception)
         {
             ServiceGuard(_brokerService);
-            _brokerService.Log(Process.GetCurrentProcess().Id, String.Format(CultureInfo.InvariantCulture, "{0},{1},{2}", DateTime.Now, EventLogEntryType.Error, exception.Message), exception.GetType().Name, exception.Message, exception.StackTrace, _userName);
+            Logger.Error("Internal log error.", exception);
         }
-
-
 
         /// <summary>
         /// Services the guard.
@@ -616,7 +578,7 @@ namespace Teleopti.Messaging.Client
         protected void InternalLog(string message)
         {
             ServiceGuard(BrokerService);
-            BrokerService.Log(Process.GetCurrentProcess().Id, String.Format(CultureInfo.InvariantCulture, "{0},{1},{2}", DateTime.Now, EventLogEntryType.SuccessAudit, message), String.Empty, String.Empty, String.Empty, _userName);
+            Logger.InfoFormat("{0},{1},{2}", DateTime.Now, EventLogEntryType.SuccessAudit, message);
         }
 
         #region IDisposable Implementation

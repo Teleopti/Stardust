@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using SignalR.Client;
@@ -9,6 +8,7 @@ using SignalR.Client.Hubs;
 using SignalR.Client.Transports;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
+using log4net;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
@@ -18,9 +18,10 @@ namespace Teleopti.Messaging.SignalR
 		private readonly IHubProxy _hubProxy;
 		private readonly HubConnection _hubConnection;
 		private const string EventName = "OnEventMessage";
-		private int _retryCount = 0;
+		private int _retryCount;
 		private static readonly object LockObject = new object();
-		private bool _isRunning = false;
+		private bool _isRunning;
+		private static ILog Logger = LogManager.GetLogger(typeof (SignalWrapper));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
@@ -28,6 +29,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public SignalWrapper(IHubProxy hubProxy, HubConnection hubConnection)
 		{
+			_isRunning = false;
 			_hubProxy = hubProxy;
 			_hubConnection = hubConnection;
 		}
@@ -41,7 +43,7 @@ namespace Teleopti.Messaging.SignalR
 				{
 					if (t.IsFaulted && t.Exception != null)
 					{
-						t.Exception.GetBaseException();
+						Logger.Error("An error happened when notifying.",t.Exception.GetBaseException());
 					}
 				}, TaskContinuationOptions.OnlyOnFaulted);
 				return startTask;
@@ -58,7 +60,7 @@ namespace Teleopti.Messaging.SignalR
 				{
 					if (t.IsFaulted && t.Exception != null)
 					{
-						t.Exception.GetBaseException();
+						Logger.Error("An error happened when notifying multiple.", t.Exception.GetBaseException());
 					}
 				}, TaskContinuationOptions.OnlyOnFaulted);
 				return startTask;
@@ -84,9 +86,10 @@ namespace Teleopti.Messaging.SignalR
 						_retryCount = 0;
 						return true;
 					}
-					catch (Exception)
+					catch (Exception ex)
 					{
 						//Suppress! Already logged upon startup for general failures.
+						Logger.Error("An error happened when verifying that we still are connected.", ex);
 						_retryCount++;
 						return false;
 					}
@@ -114,7 +117,8 @@ namespace Teleopti.Messaging.SignalR
 				                       	{
 				                       		if (t.IsFaulted && t.Exception != null)
 				                       		{
-				                       			exception = t.Exception.GetBaseException();
+												exception = t.Exception.GetBaseException();
+												Logger.Error("An error happened when starting hub connection.", exception);
 				                       		}
 				                       	}, TaskContinuationOptions.OnlyOnFaulted);
 				
@@ -134,14 +138,17 @@ namespace Teleopti.Messaging.SignalR
 			}
 			catch (AggregateException aggregateException)
 			{
+				Logger.Error("An error happened when starting hub connection.", aggregateException);
 				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", aggregateException);
 			}
 			catch (SocketException socketException)
 			{
+				Logger.Error("An error happened when starting hub connection.", socketException);
 				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", socketException);
 			}
 			catch (InvalidOperationException exception)
 			{
+				Logger.Error("An error happened when starting hub connection.", exception);
 				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", exception);
 			}
 		}
@@ -170,7 +177,7 @@ namespace Teleopti.Messaging.SignalR
 				{
 					if (t.IsFaulted && t.Exception != null)
 					{
-						t.Exception.GetBaseException();
+						Logger.Error("An error happened when adding subscription.", t.Exception.GetBaseException());
 					}
 				}, TaskContinuationOptions.OnlyOnFaulted);
 				return startTask;
@@ -194,7 +201,7 @@ namespace Teleopti.Messaging.SignalR
 				{
 					if (t.IsFaulted && t.Exception != null)
 					{
-						 t.Exception.GetBaseException();
+						Logger.Error("An error happened when removing subscription.", t.Exception.GetBaseException());
 					}
 				}, TaskContinuationOptions.OnlyOnFaulted);
 				return startTask;
@@ -219,8 +226,9 @@ namespace Teleopti.Messaging.SignalR
 					_hubConnection.Stop();
 					_isRunning = false;
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
+					Logger.Error("An error happened when stopping connection.", ex);
 				}
 			}
 		}

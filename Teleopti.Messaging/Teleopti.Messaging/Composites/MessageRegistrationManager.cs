@@ -6,10 +6,10 @@ using System.Net.Sockets;
 using System.Reflection;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Logging;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Events;
 using Teleopti.Messaging.Exceptions;
+using log4net;
 
 namespace Teleopti.Messaging.Composites
 {
@@ -24,6 +24,7 @@ namespace Teleopti.Messaging.Composites
     public class MessageRegistrationManager : IMessageRegistrationManager
     {
         private static readonly object _lockFilters = new object();
+		private static ILog Logger = LogManager.GetLogger(typeof(MessageRegistrationManager));
         private readonly MessageBrokerImplementation _messageBroker;
         private readonly IDictionary<EventHandler<EventMessageArgs>, IList<IEventFilter>> _filters = new Dictionary<EventHandler<EventMessageArgs>, IList<IEventFilter>>();
         private IBrokerService _brokerService;
@@ -153,7 +154,7 @@ namespace Teleopti.Messaging.Composites
             }
             catch (SocketException exception)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exception.ToString());
+                Logger.Error("Internal unregister filter error.", exception);
             }
         }
 
@@ -250,7 +251,7 @@ namespace Teleopti.Messaging.Composites
                 }
                 catch (Exception exception)
                 {
-                    BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), string.Format(System.Globalization.CultureInfo.InvariantCulture, "An error occured while trying register subscription with broker: {0}", exception.Message));
+                    Logger.Error("An error occured while trying register subscription with broker.", exception);
                     filter = new EventFilter(Guid.Empty, Guid.Empty, parentObjectId, parentObjectType.AssemblyQualifiedName, domainObjectId, domainObjectType.AssemblyQualifiedName, startDate, endDate, Environment.UserName, DateTime.Now);
                 }
                 return filter;
@@ -282,7 +283,7 @@ namespace Teleopti.Messaging.Composites
                     }
                     catch (Exception exception)
                     {
-                        BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exception.ToString());
+                        Logger.Error("Reinitialize filters error.", exception);
                     }
                 }
             }
@@ -348,12 +349,11 @@ namespace Teleopti.Messaging.Composites
                 }
                 catch (TargetInvocationException exc)
                 {
-                    if (exc.InnerException != null)
-                        BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exc.ToString());
+                	Logger.Error("Invoke delegate error.", exc);
                 }
                 catch (Exception deadClientEx)
                 {
-                    BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), "DeadClientException: " + deadClientEx);
+                    Logger.Error("Dead client error.", deadClientEx);
                     _messageBroker.InternalLog(deadClientEx);
                     Delegate.Remove(key, del);
                     removeList.Add(key);
