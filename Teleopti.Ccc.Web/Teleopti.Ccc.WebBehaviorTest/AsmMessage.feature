@@ -46,8 +46,6 @@ Scenario: Indicate new message at logon
 	When I am viewing week schedule
 	Then I should be notified that I have '1' unread message(s)
 
-
-
 Scenario: Navigate to message tab
 	Given I have the role 'Full access to mytime'
 	And I have no unread messages
@@ -121,8 +119,6 @@ Scenario: Receive a new message when viewing message page
 	When I receive message number '1'
 	Then I should see '1' message(s) in the list
 
-
-
 Scenario: Open unread message where text reply is allowed
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -172,6 +168,35 @@ Scenario: Send text reply message
 	And I click on the message at position '1' in the list
 	When I enter the text reply 'my reply'
 	And I click the confirm button
+	Then I should not see any messages
+	And I should see a user-friendly message explaining I dont have any messages
+
+Scenario: Show replyoptions for message with multiple options
+Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field					| Value				|
+	| Title					| New message		|
+	| Message				| Text in message	|
+	| Text reply allowed	| False				|
+	| ReplyOption1			| Yes					|
+	| ReplyOption2			| No					|
+	And I am viewing messages
+	When I click on the message at position '1' in the list
+	Then I should see a confirmbutton with caption 'Yes'
+	And I should see a confirmbutton with caption 'No'
+
+Scenario: Confirm message with multiple options
+Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field        | Value                 |
+	| Title        | Ashley is ill			|
+	| Message      | Can you work tomorrow?|
+	| ReplyOption2 | Probably              |
+	| ReplyOption2 | Probably not          |
+	| ReplyOption3 | Defenitly not         |					|
+	And I am viewing messages
+	When I click on the message at position '1' in the list
+	And I click the confirmbutton with caption 'Probably not'
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
 

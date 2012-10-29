@@ -178,12 +178,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Pages.Pages.CurrentMessageReplyPage.Reply.KeyPress();
 		}
 
-		[Then(@"I should see that I have '(.*)' characters left")]
-		public void ThenIShouldSeeThatIHaveCharactersLeft(int characters)
-		{
-			ScenarioContext.Current.Pending();
-		}
-
 		[Then(@"I should see the message details form with an editable text box")]
 		public void ThenIShouldSeeTheMessageDetailsFormWithAnEditableTextBox()
 		{
@@ -209,6 +203,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenTheSendButtonShouldBeEnabled()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentOkButton.OkButton.Enabled, Is.True);
+		}
+
+		[Then(@"I should see a confirmbutton with caption '(.*)'")]
+		public void ThenIShouldSeeAConfirmbuttonWithCaption(string caption)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[When(@"I click the confirmbutton with caption '(.*)'")]
+		public void WhenIClickTheConfirmbuttonWithCaption(string caption)
+		{
+			ScenarioContext.Current.Pending();
 		}
 	}
 }
