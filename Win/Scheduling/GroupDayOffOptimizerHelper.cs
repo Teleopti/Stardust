@@ -382,11 +382,13 @@ namespace Teleopti.Ccc.Win.Scheduling
             // Schedule White Spots after back to legal state
             var scheduleService = _container.Resolve<IScheduleService>();
 
+			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
+
             // schedule those are the white spots after back to legal state
             // ??? check if all white spots could be scheduled ??????
-            OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container);
+			OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container, rollbackService);
 
-            ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
+            
             bool found = false;
             foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixContainerList)
             {
