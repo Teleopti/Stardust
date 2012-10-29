@@ -14,7 +14,7 @@ SC query %ServiceName% | FIND "1060" > NUL
 IF %errorlevel% NEQ 0 GOTO :svc_exist
 
 ::Install service
-"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe" "%ExePath%\%ExeName%"
+"C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" "%ExePath%\%ExeName%"
 if %errorlevel% NEQ 0 goto :failed_create
 
 GOTO :finished

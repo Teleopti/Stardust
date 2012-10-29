@@ -8,7 +8,7 @@ NET STOP TeleoptiBrokerService
 
 ::Un-install Message Broker service
 ECHO Un-Install MsgBroker Service
-"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe" /u "%OutputDir%\Teleopti.Messaging.Svc.exe" /LogFile=""
+"C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" /u "%OutputDir%\Teleopti.Messaging.Svc.exe" /LogFile=""
 
 ::Safty ...
 ECHO Safty stop. Wait for a few secs ...

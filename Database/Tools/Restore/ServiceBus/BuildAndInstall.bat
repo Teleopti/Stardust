@@ -14,7 +14,7 @@ NET STOP TeleoptiServiceBus
 
 ::Un-install  ServiceBus Service
 ECHO Un-Install ServiceBus Service
-"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe" /u "%OutputDir%\Teleopti.Ccc.Sdk.ServiceBus.Host.exe" /LogFile="" > "%OutputDir%\BusUninstall.log"
+"C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" /u "%OutputDir%\Teleopti.Ccc.Sdk.ServiceBus.Host.exe" /LogFile="" > "%OutputDir%\BusUninstall.log"
 
 ::Safty ...
 ECHO Safty stop. Wait for a few secs ...
@@ -33,4 +33,4 @@ XCOPY "%ROOTDIR%\..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\bin\
 
 ::Install
 ECHO Install ServiceBus Service
-"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe" "%OutputDir%\Teleopti.Ccc.Sdk.ServiceBus.Host.exe" /LogFile="" > "%OutputDir%\BusInstall.log"
+"C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" "%OutputDir%\Teleopti.Ccc.Sdk.ServiceBus.Host.exe" /LogFile="" > "%OutputDir%\BusInstall.log"

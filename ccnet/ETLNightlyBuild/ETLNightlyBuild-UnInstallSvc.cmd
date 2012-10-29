@@ -18,8 +18,8 @@ GOTO :uninstall
 
 ::Service Is installed and stopped Then uninstall
 :uninstall
-ECHO "C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe" /u "%ExePath%\%ExeName%"
-"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe" /u "%ExePath%\%ExeName%"
+ECHO "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" /u "%ExePath%\%ExeName%"
+"C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" /u "%ExePath%\%ExeName%"
 ::SC delete %ServiceName%
 if %errorlevel% NEQ 0 goto :failed
 

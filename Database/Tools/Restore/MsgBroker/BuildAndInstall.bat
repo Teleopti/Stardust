@@ -14,7 +14,7 @@ NET STOP TeleoptiBrokerService
 
 ::Un-install Message Broker service
 ECHO Un-Install MsgBroker Service
-"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe" /u "%OutputDir%\Teleopti.Messaging.Svc.exe" /LogFile="" > "%OutputDir%\BrokerUninstall.log"
+"C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" /u "%OutputDir%\Teleopti.Messaging.Svc.exe" /LogFile="" > "%OutputDir%\BrokerUninstall.log"
 
 ::Safty ...
 ECHO Safty stop. Wait for a few secs ...
@@ -30,4 +30,4 @@ XCOPY "%ROOTDIR%\..\..\..\Teleopti.Messaging\TeleOpti.Messaging.Bin\*" "%OutputD
 
 ::Install
 ECHO Install MsgBroker Service
-"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe" /LogFile="" "%OutputDir%\Teleopti.Messaging.Svc.exe" > "%OutputDir%\BrokerInstall.log"
+"C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" /LogFile="" "%OutputDir%\Teleopti.Messaging.Svc.exe" > "%OutputDir%\BrokerInstall.log"
