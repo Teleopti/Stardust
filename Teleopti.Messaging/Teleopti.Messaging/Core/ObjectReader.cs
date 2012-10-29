@@ -4,7 +4,7 @@ using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using Teleopti.Interfaces.MessageBroker.Core;
 
-namespace Teleopti.Core
+namespace Teleopti.Messaging.Core
 {
     public abstract class ObjectReader<T> : IObjectReader<T>
     {

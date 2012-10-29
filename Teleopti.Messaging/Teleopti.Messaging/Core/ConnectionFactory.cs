@@ -1,7 +1,7 @@
-﻿using System.Data.SqlClient;
+using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Teleopti.Core
+namespace Teleopti.Messaging.Core
 {
     public class ConnectionFactory
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Teleopti.Core;
+using Teleopti.Messaging.Core;
 using log4net;
 
 namespace Teleopti.Messaging.DataAccessLayer

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Teleopti.Core;
+using Teleopti.Messaging.Core;
 using Teleopti.Messaging.Exceptions;
 using log4net;
 

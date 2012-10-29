@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using Teleopti.Core;
+using Teleopti.Messaging.Core;
 using Teleopti.Messaging.Exceptions;
 using log4net;
 

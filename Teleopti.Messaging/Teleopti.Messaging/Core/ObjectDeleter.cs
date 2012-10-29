@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Teleopti.Core
+namespace Teleopti.Messaging.Core
 {
     public class ObjectDeleter
     {

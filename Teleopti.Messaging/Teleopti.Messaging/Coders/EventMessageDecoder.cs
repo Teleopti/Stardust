@@ -2,10 +2,10 @@ using System;
 using System.Globalization;
 using System.Text;  
 using System.IO;
-using Teleopti.Core;
 using Teleopti.Interfaces.MessageBroker.Coders;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Messaging.Core;
 using Teleopti.Messaging.Events;
 
 namespace Teleopti.Messaging.Coders

@@ -261,10 +261,6 @@
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Core\Teleopti.Core.csproj">
-      <Project>{7C03979A-6973-4D71-BF6B-27585CC933B5}</Project>
-      <Name>Teleopti.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>

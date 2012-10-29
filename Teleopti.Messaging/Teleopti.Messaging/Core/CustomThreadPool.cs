@@ -1,12 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Net.Sockets;
 using System.Threading;
 using Teleopti.Interfaces.MessageBroker.Core;
 
-namespace Teleopti.Core
+namespace Teleopti.Messaging.Core
 {
     /// <summary>
     /// This thread pool is based on MSDN Magazine .Net Matters article February 2005 (Stephen Toub)

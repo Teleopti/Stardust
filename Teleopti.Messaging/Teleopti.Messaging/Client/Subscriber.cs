@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Security;
 using System.Threading;
-using Teleopti.Core;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Messaging.Core;
 using log4net;
 
 namespace Teleopti.Messaging.Client

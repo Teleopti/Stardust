@@ -170,9 +170,16 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\ConfigurationInfo.cs" />
+    <Compile Include="Core\ConnectionFactory.cs" />
+    <Compile Include="Core\CustomThreadPool.cs" />
+    <Compile Include="Core\FramerUtility.cs" />
+    <Compile Include="Core\MapperBase.cs" />
     <Compile Include="Core\MessageInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\ObjectDeleter.cs" />
+    <Compile Include="Core\ObjectInserter.cs" />
+    <Compile Include="Core\ObjectReader.cs" />
     <Compile Include="Core\SocketInfo.cs" />
     <Compile Include="Coders\EventFilterDecoder.cs" />
     <Compile Include="Coders\EventFilterEncoder.cs" />
@@ -300,10 +307,6 @@
     <Compile Include="SignalR\SignalWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Teleopti.Core\Teleopti.Core.csproj">
-      <Project>{7C03979A-6973-4D71-BF6B-27585CC933B5}</Project>
-      <Name>Teleopti.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>

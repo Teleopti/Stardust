@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Teleopti.Interfaces.MessageBroker.Core;
 
-namespace Teleopti.Core
+namespace Teleopti.Messaging.Core
 {
     public class FramerUtility : IFramerUtility
     {

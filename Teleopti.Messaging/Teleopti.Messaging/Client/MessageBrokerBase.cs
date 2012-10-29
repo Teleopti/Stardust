@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Net.Sockets;
 using System.Threading;
 using System.Timers;
-using Teleopti.Core;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Coders;
 using Teleopti.Interfaces.MessageBroker.Core;

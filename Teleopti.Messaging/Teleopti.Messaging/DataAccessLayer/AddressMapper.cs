@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using Teleopti.Core;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Messaging.Core;
 

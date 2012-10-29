@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using Teleopti.Interfaces.MessageBroker.Core;
 
-namespace Teleopti.Core
+namespace Teleopti.Messaging.Core
 {
     public abstract class ObjectInserter<T> : IObjectInserter<T> where T : class
     {
