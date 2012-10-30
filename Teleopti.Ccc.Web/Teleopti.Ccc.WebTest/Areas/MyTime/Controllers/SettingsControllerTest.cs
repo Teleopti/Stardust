@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
-			modifyPassword.Expect(x => x.Change(person, "old", "new")).Return(true);
+			modifyPassword.Expect(x => x.Change(person, "old", "new")).Return(new ChangePasswordResultInfo {IsSuccessful = true});
 			using (var target = new SettingsController(null, loggedOnUser, modifyPassword, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null)))
 			{
 				target.ChangePassword(new ChangePasswordViewModel {NewPassword = "new", OldPassword = "old"});
