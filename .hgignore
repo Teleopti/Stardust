@@ -58,3 +58,4 @@ Database/Tools/Restore/output
 Packages.dgml
 RaptorHgOla.gpState
 CruiseControl.gpState
+Logs/WebApps.log.1
