@@ -44,7 +44,6 @@
 			this.toolStripComboBoxScenario = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripExFilter = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripButtonFilter = new System.Windows.Forms.ToolStripButton();
-			this.toolStripExView = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripButtonFetchForUser = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonExport = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -57,7 +56,6 @@
 			this.toolStripMenuItemCut = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemPaste = new System.Windows.Forms.ToolStripMenuItem();
-			this.scheduleControl1 = new Syncfusion.Windows.Forms.Schedule.ScheduleControl();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			this.ribbonControlAdv1.SuspendLayout();
 			this.toolStripTabItem1.Panel.SuspendLayout();
@@ -65,7 +63,6 @@
 			this.toolStripExClipboard.SuspendLayout();
 			this.toolStripExScenario.SuspendLayout();
 			this.toolStripExFilter.SuspendLayout();
-			this.toolStripExView.SuspendLayout();
 			this.contextMenuStripSchedule.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -75,6 +72,7 @@
 			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Tahoma", 8.25F);
 			this.ribbonControlAdv1.Header.AddMainItem(toolStripTabItem1);
 			this.ribbonControlAdv1.MenuButtonImage = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Menu;
+			this.ribbonControlAdv1.MenuButtonText = "";
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
 			// 
 			// ribbonControlAdv1.OfficeMenu
@@ -90,6 +88,7 @@
 			this.ribbonControlAdv1.ShowCaption = false;
 			this.ribbonControlAdv1.ShowContextMenu = false;
 			this.ribbonControlAdv1.ShowLauncher = false;
+			this.ribbonControlAdv1.ShowMinimizeButton = false;
 			this.ribbonControlAdv1.ShowQuickItemsDropDownButton = false;
 			this.ribbonControlAdv1.SystemText.QuickAccessAddItemText = "";
 			this.ribbonControlAdv1.SystemText.QuickAccessCustomizeCaptionText = "";
@@ -116,7 +115,6 @@
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExClipboard);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExScenario);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExFilter);
-			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExView);
 			this.toolStripTabItem1.Panel.Name = "ribbonPanel1";
 			this.toolStripTabItem1.Panel.ScrollPosition = 0;
 			this.toolStripTabItem1.Panel.ShowCaption = true;
@@ -233,7 +231,8 @@
 			this.toolStripExFilter.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExFilter.Image = null;
 			this.toolStripExFilter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonFilter});
+            this.toolStripButtonFilter,
+            this.toolStripButtonFetchForUser});
 			this.toolStripExFilter.Name = "toolStripExFilter";
 			this.toolStripExFilter.ShowLauncher = false;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExFilter, false);
@@ -246,18 +245,6 @@
 			this.SetShortcut(this.toolStripButtonFilter, System.Windows.Forms.Keys.None);
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonFilter, false);
 			this.toolStripButtonFilter.Click += new System.EventHandler(this.toolStripButtonFilterClick);
-			// 
-			// toolStripExView
-			// 
-			resources.ApplyResources(this.toolStripExView, "toolStripExView");
-			this.toolStripExView.ForeColor = System.Drawing.Color.MidnightBlue;
-			this.toolStripExView.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-			this.toolStripExView.Image = null;
-			this.toolStripExView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonFetchForUser});
-			this.toolStripExView.Name = "toolStripExView";
-			this.toolStripExView.ShowLauncher = false;
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExView, false);
 			// 
 			// toolStripButtonFetchForUser
 			// 
@@ -362,28 +349,10 @@
 			resources.ApplyResources(this.toolStripMenuItemPaste, "toolStripMenuItemPaste");
 			this.toolStripMenuItemPaste.Click += new System.EventHandler(this.pasteClick);
 			// 
-			// scheduleControl1
-			// 
-			this.scheduleControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(201)))), ((int)(((byte)(219)))));
-			this.scheduleControl1.ContextMenuStrip = this.contextMenuStripSchedule;
-			this.scheduleControl1.Culture = new System.Globalization.CultureInfo("");
-			this.scheduleControl1.DataSource = null;
-			resources.ApplyResources(this.scheduleControl1, "scheduleControl1");
-			this.scheduleControl1.ISO8601CalenderFormat = false;
-			this.scheduleControl1.Name = "scheduleControl1";
-			this.scheduleControl1.NavigationPanelPosition = Syncfusion.Schedule.CalendarNavigationPanelPosition.Left;
-			this.scheduleControl1.ShowAllSpansInAllDayPanel = true;
-			this.scheduleControl1.ShowRoundedCorners = true;
-			this.scheduleControl1.ShowingAppointmentForm += new Syncfusion.Windows.Forms.Schedule.ShowingAppointmentFormHandler(this.ScheduleControl1ShowingAppointmentForm);
-			this.scheduleControl1.ItemChanging += new Syncfusion.Schedule.ScheduleAppointmentChangingEventHandler(this.scheduleControl1ItemChanging);
-			this.scheduleControl1.SetupContextMenu += new System.ComponentModel.CancelEventHandler(this.scheduleControl1SetupContextMenu);
-			this.scheduleControl1.ScheduleAppointmentClick += new Syncfusion.Windows.Forms.Schedule.ScheduleAppointmentClickEventHandler(this.scheduleControl1ScheduleAppointmentClick);
-			// 
 			// MeetingOverviewView
 			// 
 			resources.ApplyResources(this, "$this");
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.scheduleControl1);
 			this.Controls.Add(this.ribbonControlAdv1);
 			this.Name = "MeetingOverviewView";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.meetingOverviewViewFormClosed);
@@ -401,8 +370,6 @@
 			this.toolStripExScenario.PerformLayout();
 			this.toolStripExFilter.ResumeLayout(false);
 			this.toolStripExFilter.PerformLayout();
-			this.toolStripExView.ResumeLayout(false);
-			this.toolStripExView.PerformLayout();
 			this.contextMenuStripSchedule.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -436,8 +403,7 @@
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExFilter;
         private System.Windows.Forms.ToolStripButton toolStripButtonFilter;
         private System.Windows.Forms.ToolStripButton toolStripButtonExport;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExView;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripButton toolStripButtonFetchForUser;
 
        
