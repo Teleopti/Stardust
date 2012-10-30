@@ -205,14 +205,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.CurrentOkButton.OkButton.Enabled, Is.True);
 		}
 
-		[Then(@"I should see a confirmbutton with caption '(.*)'")]
-		public void ThenIShouldSeeAConfirmbuttonWithCaption(string caption)
+		[When(@"I click the radiobutton with caption '(.*)'")]
+		public void WhenIClickTheRadiobuttonWithCaption(string p0)
 		{
 			ScenarioContext.Current.Pending();
 		}
 
-		[When(@"I click the confirmbutton with caption '(.*)'")]
-		public void WhenIClickTheConfirmbuttonWithCaption(string caption)
+		[Then(@"I should see a radiobutton with caption '(.*)'")]
+		public void ThenIShouldSeeARadiobuttonWithCaption(string p0)
 		{
 			ScenarioContext.Current.Pending();
 		}

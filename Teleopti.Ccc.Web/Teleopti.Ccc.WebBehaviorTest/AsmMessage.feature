@@ -182,10 +182,10 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption2			| No					|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	Then I should see a confirmbutton with caption 'Yes'
-	And I should see a confirmbutton with caption 'No'
+	Then I should see a radiobutton with caption 'Yes'
+	And I should see a radiobutton with caption 'No'
 
-Scenario: Confirm message with multiple options
+Scenario: Confirm message with multiple replyoptions
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
 	| Field        | Value                 |
@@ -193,10 +193,37 @@ Given I have the role 'Full access to mytime'
 	| Message      | Can you work tomorrow?|
 	| ReplyOption2 | Probably              |
 	| ReplyOption2 | Probably not          |
-	| ReplyOption3 | Defenitly not         |					|
+	| ReplyOption3 | Defenitly not         |
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	And I click the confirmbutton with caption 'Probably not'
+	And I click the radiobutton with caption 'Probably not'
+	And I click the confirm button
 	Then I should not see any messages
-	And I should see a user-friendly message explaining I dont have any messages
 
+Scenario: Enable confirmbutton when user has selceted a replyoption
+Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field					| Value				|
+	| Title					| New message		|
+	| Message				| Text in message	|
+	| Text reply allowed	| False				|
+	| ReplyOption1			| Yes					|
+	| ReplyOption2			| No					|
+	And I am viewing messages
+	When I click on the message at position '1' in the list
+	And I click the radiobutton with caption 'No'
+	Then the send button should be enabled
+
+Scenario: Confirmbutton should be disabled when user hasnt selected a replyoption
+Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field					| Value				|
+	| Title					| New message		|
+	| Message				| Text in message	|
+	| Text reply allowed	| False				|
+	| ReplyOption1			| Yes					|
+	| ReplyOption2			| No					|
+	And I am viewing messages
+	When I click on the message at position '1' in the list
+	Then the send button should be disabled
+	

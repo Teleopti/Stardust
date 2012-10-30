@@ -216,21 +216,21 @@ this.FeatureBackground();
         public virtual void NavigateToMessageTab()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate to message tab", ((string[])(null)));
-#line 51
+#line 49
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 52
+#line 50
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 53
+#line 51
  testRunner.And("I have no unread messages");
-#line 54
+#line 52
  testRunner.And("I am viewing week schedule");
-#line 55
+#line 53
  testRunner.When("I navigate to messages");
-#line 56
+#line 54
  testRunner.Then("I should not see any messages");
-#line 57
+#line 55
  testRunner.And("I should see a user-friendly message explaining I dont have any messages");
 #line hidden
             this.ScenarioCleanup();
@@ -241,11 +241,11 @@ this.FeatureBackground();
         public virtual void ViewUnreadMessages()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View unread messages", ((string[])(null)));
-#line 59
+#line 57
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 60
+#line 58
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
@@ -254,11 +254,11 @@ this.FeatureBackground();
             table5.AddRow(new string[] {
                         "Title",
                         "New message"});
-#line 61
+#line 59
  testRunner.And("I have an unread message with", ((string)(null)), table5);
-#line 64
+#line 62
  testRunner.When("I am viewing messages");
-#line 65
+#line 63
  testRunner.Then("I should see \'1\' message(s) in the list");
 #line hidden
             this.ScenarioCleanup();
@@ -269,11 +269,11 @@ this.FeatureBackground();
         public virtual void OpenUnreadMessage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Open unread message", ((string[])(null)));
-#line 67
+#line 65
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 68
+#line 66
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
@@ -285,11 +285,11 @@ this.FeatureBackground();
             table6.AddRow(new string[] {
                         "Message",
                         "Text in message"});
-#line 69
+#line 67
  testRunner.And("I have an unread message with", ((string)(null)), table6);
-#line 73
+#line 71
  testRunner.When("I am viewing messages");
-#line 74
+#line 72
  testRunner.And("I click on the message at position \'1\' in the list");
 #line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
@@ -301,7 +301,7 @@ this.FeatureBackground();
             table7.AddRow(new string[] {
                         "Message",
                         "Text in message"});
-#line 75
+#line 73
  testRunner.Then("I should see the message details form with", ((string)(null)), table7);
 #line hidden
             this.ScenarioCleanup();
@@ -312,11 +312,11 @@ this.FeatureBackground();
         public virtual void ConfirmMessageIsRead()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Confirm message is read", ((string[])(null)));
-#line 80
+#line 78
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 81
+#line 79
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
@@ -325,17 +325,17 @@ this.FeatureBackground();
             table8.AddRow(new string[] {
                         "Title",
                         "New message"});
-#line 82
+#line 80
  testRunner.And("I have an unread message with", ((string)(null)), table8);
-#line 85
+#line 83
  testRunner.When("I am viewing messages");
-#line 86
+#line 84
  testRunner.And("I click on the message at position \'1\' in the list");
-#line 87
+#line 85
  testRunner.When("I click the confirm button");
-#line 88
+#line 86
  testRunner.Then("I should not see any messages");
-#line 89
+#line 87
  testRunner.And("I should see a user-friendly message explaining I dont have any messages");
 #line hidden
             this.ScenarioCleanup();
@@ -346,11 +346,11 @@ this.FeatureBackground();
         public virtual void SortMessagesInListByLatestMessage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sort messages in list by latest message", ((string[])(null)));
-#line 91
+#line 89
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 92
+#line 90
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
@@ -362,7 +362,7 @@ this.FeatureBackground();
             table9.AddRow(new string[] {
                         "Is oldest message",
                         "True"});
-#line 93
+#line 91
  testRunner.And("I have an unread message with", ((string)(null)), table9);
 #line hidden
             TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
@@ -371,13 +371,13 @@ this.FeatureBackground();
             table10.AddRow(new string[] {
                         "Title",
                         "Latest message"});
-#line 97
+#line 95
  testRunner.And("I have an unread message with", ((string)(null)), table10);
-#line 100
+#line 98
  testRunner.When("I am viewing messages");
-#line 101
+#line 99
  testRunner.Then("I should see the message with title \'Latest message\' at position \'1\' in the list");
-#line 102
+#line 100
  testRunner.And("I should see the message with title \'Message\' at position \'2\' in the list");
 #line hidden
             this.ScenarioCleanup();
@@ -388,11 +388,11 @@ this.FeatureBackground();
         public virtual void ReduceNumberOfUnreadMessagesInMessageTabTitle()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Reduce number of unread messages in message tab title", ((string[])(null)));
-#line 104
+#line 102
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 105
+#line 103
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
@@ -401,7 +401,7 @@ this.FeatureBackground();
             table11.AddRow(new string[] {
                         "Title",
                         "New message"});
-#line 106
+#line 104
  testRunner.And("I have an unread message with", ((string)(null)), table11);
 #line hidden
             TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
@@ -410,17 +410,17 @@ this.FeatureBackground();
             table12.AddRow(new string[] {
                         "Title",
                         "Another new message"});
-#line 109
+#line 107
  testRunner.And("I have an unread message with", ((string)(null)), table12);
-#line 112
+#line 110
  testRunner.And("I am viewing week schedule");
-#line 113
+#line 111
  testRunner.And("I should be notified that I have \'2\' unread message(s)");
-#line 114
+#line 112
  testRunner.When("I navigate to messages");
-#line 115
+#line 113
  testRunner.And("I confirm reading the message at position \'1\' of \'2\' in the list");
-#line 116
+#line 114
  testRunner.Then("I should be notified that I have \'1\' unread message(s)");
 #line hidden
             this.ScenarioCleanup();
@@ -431,17 +431,17 @@ this.FeatureBackground();
         public virtual void ReceiveANewMessageWhenViewingMessagePage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Receive a new message when viewing message page", ((string[])(null)));
-#line 118
+#line 116
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 119
+#line 117
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 120
+#line 118
  testRunner.And("I am viewing messages");
-#line 121
+#line 119
  testRunner.When("I receive message number \'1\'");
-#line 122
+#line 120
  testRunner.Then("I should see \'1\' message(s) in the list");
 #line hidden
             this.ScenarioCleanup();
@@ -452,11 +452,11 @@ this.FeatureBackground();
         public virtual void OpenUnreadMessageWhereTextReplyIsAllowed()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Open unread message where text reply is allowed", ((string[])(null)));
-#line 126
+#line 122
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 127
+#line 123
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
@@ -471,13 +471,13 @@ this.FeatureBackground();
             table13.AddRow(new string[] {
                         "Text reply allowed",
                         "True"});
-#line 128
+#line 124
  testRunner.And("I have an unread message with", ((string)(null)), table13);
-#line 133
+#line 129
  testRunner.And("I am viewing messages");
-#line 134
+#line 130
  testRunner.When("I click on the message at position \'1\' in the list");
-#line 135
+#line 131
  testRunner.Then("I should see the message details form with an editable text box");
 #line hidden
             this.ScenarioCleanup();
@@ -488,11 +488,11 @@ this.FeatureBackground();
         public virtual void SeeReplyDialogueInMessageText()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See reply dialogue in message text", ((string[])(null)));
-#line 137
+#line 133
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 138
+#line 134
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
@@ -513,11 +513,11 @@ this.FeatureBackground();
             table14.AddRow(new string[] {
                         "Senders reply",
                         "It´s a deal!"});
-#line 139
+#line 135
  testRunner.And("I have an unread message with", ((string)(null)), table14);
-#line 146
+#line 142
  testRunner.And("I am viewing messages");
-#line 147
+#line 143
  testRunner.When("I click on the message at position \'1\' in the list");
 #line hidden
             TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
@@ -526,7 +526,7 @@ this.FeatureBackground();
                         "Ok if you buy me dinner?"});
             table15.AddRow(new string[] {
                         "It´s a deal!"});
-#line 148
+#line 144
  testRunner.Then("I should see this conversation", ((string)(null)), table15);
 #line hidden
             this.ScenarioCleanup();
@@ -537,11 +537,11 @@ this.FeatureBackground();
         public virtual void DoNotAllowEmptyReply()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Do not allow empty reply", ((string[])(null)));
-#line 153
+#line 149
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 154
+#line 150
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
@@ -556,13 +556,13 @@ this.FeatureBackground();
             table16.AddRow(new string[] {
                         "Text reply allowed",
                         "True"});
-#line 155
+#line 151
  testRunner.And("I have an unread message with", ((string)(null)), table16);
-#line 160
+#line 156
  testRunner.And("I am viewing messages");
-#line 161
+#line 157
  testRunner.When("I click on the message at position \'1\' in the list");
-#line 162
+#line 158
  testRunner.Then("the send button should be disabled");
 #line hidden
             this.ScenarioCleanup();
@@ -573,11 +573,11 @@ this.FeatureBackground();
         public virtual void SendTextReplyMessage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Send text reply message", ((string[])(null)));
-#line 164
+#line 160
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 165
+#line 161
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
@@ -592,20 +592,196 @@ this.FeatureBackground();
             table17.AddRow(new string[] {
                         "Text reply allowed",
                         "True"});
-#line 166
+#line 162
  testRunner.And("I have an unread message with", ((string)(null)), table17);
-#line 171
+#line 167
  testRunner.And("I am viewing messages");
-#line 172
+#line 168
  testRunner.And("I click on the message at position \'1\' in the list");
-#line 173
+#line 169
  testRunner.When("I enter the text reply \'my reply\'");
-#line 174
+#line 170
  testRunner.And("I click the confirm button");
-#line 175
+#line 171
  testRunner.Then("I should not see any messages");
-#line 176
+#line 172
  testRunner.And("I should see a user-friendly message explaining I dont have any messages");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Show replyoptions for message with multiple options")]
+        public virtual void ShowReplyoptionsForMessageWithMultipleOptions()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show replyoptions for message with multiple options", ((string[])(null)));
+#line 174
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 175
+testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table18.AddRow(new string[] {
+                        "Title",
+                        "New message"});
+            table18.AddRow(new string[] {
+                        "Message",
+                        "Text in message"});
+            table18.AddRow(new string[] {
+                        "Text reply allowed",
+                        "False"});
+            table18.AddRow(new string[] {
+                        "ReplyOption1",
+                        "Yes"});
+            table18.AddRow(new string[] {
+                        "ReplyOption2",
+                        "No"});
+#line 176
+ testRunner.And("I have an unread message with", ((string)(null)), table18);
+#line 183
+ testRunner.And("I am viewing messages");
+#line 184
+ testRunner.When("I click on the message at position \'1\' in the list");
+#line 185
+ testRunner.Then("I should see a radiobutton with caption \'Yes\'");
+#line 186
+ testRunner.And("I should see a radiobutton with caption \'No\'");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Confirm message with multiple replyoptions")]
+        public virtual void ConfirmMessageWithMultipleReplyoptions()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Confirm message with multiple replyoptions", ((string[])(null)));
+#line 188
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 189
+testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table19.AddRow(new string[] {
+                        "Title",
+                        "Ashley is ill"});
+            table19.AddRow(new string[] {
+                        "Message",
+                        "Can you work tomorrow?"});
+            table19.AddRow(new string[] {
+                        "ReplyOption2",
+                        "Probably"});
+            table19.AddRow(new string[] {
+                        "ReplyOption2",
+                        "Probably not"});
+            table19.AddRow(new string[] {
+                        "ReplyOption3",
+                        "Defenitly not"});
+#line 190
+ testRunner.And("I have an unread message with", ((string)(null)), table19);
+#line 197
+ testRunner.And("I am viewing messages");
+#line 198
+ testRunner.When("I click on the message at position \'1\' in the list");
+#line 199
+ testRunner.And("I click the radiobutton with caption \'Probably not\'");
+#line 200
+ testRunner.And("I click the confirm button");
+#line 201
+ testRunner.Then("I should not see any messages");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Enable confirmbutton when user has selceted a replyoption")]
+        public virtual void EnableConfirmbuttonWhenUserHasSelcetedAReplyoption()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Enable confirmbutton when user has selceted a replyoption", ((string[])(null)));
+#line 203
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 204
+testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table20.AddRow(new string[] {
+                        "Title",
+                        "New message"});
+            table20.AddRow(new string[] {
+                        "Message",
+                        "Text in message"});
+            table20.AddRow(new string[] {
+                        "Text reply allowed",
+                        "False"});
+            table20.AddRow(new string[] {
+                        "ReplyOption1",
+                        "Yes"});
+            table20.AddRow(new string[] {
+                        "ReplyOption2",
+                        "No"});
+#line 205
+ testRunner.And("I have an unread message with", ((string)(null)), table20);
+#line 212
+ testRunner.And("I am viewing messages");
+#line 213
+ testRunner.When("I click on the message at position \'1\' in the list");
+#line 214
+ testRunner.And("I click the radiobutton with caption \'No\'");
+#line 215
+ testRunner.Then("the send button should be enabled");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Confirmbutton should be disabled when user hasnt selected a replyoption")]
+        public virtual void ConfirmbuttonShouldBeDisabledWhenUserHasntSelectedAReplyoption()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Confirmbutton should be disabled when user hasnt selected a replyoption", ((string[])(null)));
+#line 217
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 218
+testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table21.AddRow(new string[] {
+                        "Title",
+                        "New message"});
+            table21.AddRow(new string[] {
+                        "Message",
+                        "Text in message"});
+            table21.AddRow(new string[] {
+                        "Text reply allowed",
+                        "False"});
+            table21.AddRow(new string[] {
+                        "ReplyOption1",
+                        "Yes"});
+            table21.AddRow(new string[] {
+                        "ReplyOption2",
+                        "No"});
+#line 219
+ testRunner.And("I have an unread message with", ((string)(null)), table21);
+#line 226
+ testRunner.And("I am viewing messages");
+#line 227
+ testRunner.When("I click on the message at position \'1\' in the list");
+#line 228
+ testRunner.Then("the send button should be disabled");
 #line hidden
             this.ScenarioCleanup();
         }
