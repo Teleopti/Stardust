@@ -56,6 +56,7 @@
 			this.toolStripMenuItemCut = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemPaste = new System.Windows.Forms.ToolStripMenuItem();
+			this.scheduleControl1 = new Syncfusion.Windows.Forms.Schedule.ScheduleControl();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			this.ribbonControlAdv1.SuspendLayout();
 			this.toolStripTabItem1.Panel.SuspendLayout();
@@ -348,6 +349,23 @@
 			this.SetShortcut(this.toolStripMenuItemPaste, System.Windows.Forms.Keys.None);
 			resources.ApplyResources(this.toolStripMenuItemPaste, "toolStripMenuItemPaste");
 			this.toolStripMenuItemPaste.Click += new System.EventHandler(this.pasteClick);
+			// 
+			// scheduleControl1
+			// 
+			this.scheduleControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(201)))), ((int)(((byte)(219)))));
+			this.scheduleControl1.ContextMenuStrip = this.contextMenuStripSchedule;
+			this.scheduleControl1.Culture = new System.Globalization.CultureInfo("");
+			this.scheduleControl1.DataSource = null;
+			this.scheduleControl1.ISO8601CalenderFormat = false;
+			resources.ApplyResources(this.scheduleControl1, "scheduleControl1");
+			this.scheduleControl1.Name = "scheduleControl1";
+			this.scheduleControl1.NavigationPanelPosition = Syncfusion.Schedule.CalendarNavigationPanelPosition.Left;
+			this.scheduleControl1.ShowAllSpansInAllDayPanel = true;
+			this.scheduleControl1.ShowRoundedCorners = true;
+			this.scheduleControl1.ShowingAppointmentForm += new Syncfusion.Windows.Forms.Schedule.ShowingAppointmentFormHandler(this.ScheduleControl1ShowingAppointmentForm);
+			this.scheduleControl1.ItemChanging += new Syncfusion.Schedule.ScheduleAppointmentChangingEventHandler(this.scheduleControl1ItemChanging);
+			this.scheduleControl1.SetupContextMenu += new System.ComponentModel.CancelEventHandler(this.scheduleControl1SetupContextMenu);
+			this.scheduleControl1.ScheduleAppointmentClick += new Syncfusion.Windows.Forms.Schedule.ScheduleAppointmentClickEventHandler(this.scheduleControl1ScheduleAppointmentClick);
 			// 
 			// MeetingOverviewView
 			// 
