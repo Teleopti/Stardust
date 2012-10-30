@@ -115,13 +115,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, period, scenario));
                 addPersonAssignments(retDic, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, period, scenario));
                 addPersonDayOffs(retDic, _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork).Find(people, period, scenario));
-                addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, period, scenario), false, people);
 
-                // ugly to be safe to get all
-                // roger risk att det smäller om man för med grejer utanför laddad period??? (longPeriod)
-                DateOnlyPeriod longDateOnlyPeriod =
-                    new DateOnlyPeriod(new DateOnly(period.StartDateTime.AddDays(-1)),
-                                       new DateOnly(period.EndDateTime.AddDays(1)));
+				// ugly to be safe to get all
+				// roger risk att det smäller om man för med grejer utanför laddad period??? (longPeriod)
+				DateOnlyPeriod longDateOnlyPeriod =
+					new DateOnlyPeriod(new DateOnly(period.StartDateTime.AddDays(-1)),
+									   new DateOnly(period.EndDateTime.AddDays(1)));
+				
+				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), false, people);
 
                 if(scheduleDictionaryLoadOptions.LoadNotes)
                 //if (personsProvider.LoadNotes)
@@ -158,6 +159,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 new DateTimePeriod(searchPeriods.Min(p => p.StartDateTime), searchPeriods.Max(p => p.EndDateTime).AddMonths(1)):
                 new DateTimePeriod(period.StartDateTime,period.StartDateTime.AddDays(1));
 
+			var longDateOnlyPeriod = new DateOnlyPeriod(new DateOnly(optimizedPeriod.StartDateTime.AddDays(-1)), new DateOnly(optimizedPeriod.EndDateTime.AddDays(1)));
             var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod),
                                                                new DifferenceEntityCollectionService
                                                                    <IPersistableScheduleData>());
@@ -168,7 +170,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, p, scenario));
                     addPersonAssignments(retDic, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, p, scenario));
                     addPersonDayOffs(retDic, _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork).Find(people, p, scenario));
-                    addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, p, scenario),false,people);
+                    addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario),false,people);
                 }                
             }
 
@@ -199,9 +201,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             {
                 if (personsProvider.DoLoadByPerson)
                 {
-                    loadScheduleByPersons(scenario, scheduleDictionary, longPeriod, personsInOrganization);
+                    loadScheduleByPersons(scenario, scheduleDictionary, longPeriod, longDateOnlyPeriod, personsInOrganization);
                     
-                    //if (personsProvider.LoadNotes)
                     if(scheduleDictionaryLoadOptions.LoadNotes)
                     {
                         addNotes(scheduleDictionary, _repositoryFactory.CreateNoteRepository(UnitOfWork).Find(longDateOnlyPeriod, personsInOrganization, scenario));
@@ -213,7 +214,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 else
                 {
                     loadScheduleForAll(scenario, scheduleDictionary, longPeriod);
-                    //if(personsProvider.LoadNotes)
+
                     if(scheduleDictionaryLoadOptions.LoadNotes)
                     {
                         addNotes(scheduleDictionary, _repositoryFactory.CreateNoteRepository(UnitOfWork).Find(longPeriod, scenario));
@@ -249,12 +250,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(longPeriod, scenario),false,new List<IPerson>());
         }
 
-        private void loadScheduleByPersons(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, IEnumerable<IPerson> persons)
+        private void loadScheduleByPersons(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> persons)
         {
             addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(persons, longPeriod, scenario));
             addPersonAssignments(scheduleDictionary, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(persons, longPeriod, scenario));
             addPersonDayOffs(scheduleDictionary, _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork).Find(persons, longPeriod, scenario));
-            addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(persons, longPeriod, scenario),true,persons);
+            addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(persons, longDateOnlyPeriod, scenario),true,persons);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ScheduleDictionary")]
@@ -262,10 +263,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             foreach (var person in personsInOrganization)
             {
-                //if(person.Name.FirstName == "xyzxyz")
-                //{
-                //    string foo = string.Empty;
-                //}
                 if (!scheduleDictionary[person].Person.Equals(person))
                     throw new InvalidDataException("ScheduleDictionary could not be initiated");
             }

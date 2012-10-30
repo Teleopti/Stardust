@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// <param name="period"></param>
         /// <param name="scenario"></param>
         /// <returns></returns>
-        ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateTimePeriod period, IScenario scenario);
+        ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario);
 
        /// <summary>
        /// Find by period, scenario
@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.Domain.Repositories
 
        IList<IMeeting> FindMeetingsWithTheseOriginals(ICollection<IMeeting> meetings, IScenario scenario);
 
-    	ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateTimePeriod period, IScenario scenario,
+    	ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario,
     	                           bool includeForOrganizer);
 
-        ICollection<IMeeting> Find(IEnumerable<Guid> persons, DateTimePeriod period, IScenario scenario,
+        ICollection<IMeeting> Find(IEnumerable<Guid> persons, DateOnlyPeriod period, IScenario scenario,
                                    bool includeForOrganizer);
     }
 }

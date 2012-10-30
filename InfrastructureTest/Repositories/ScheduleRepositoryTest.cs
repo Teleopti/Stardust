@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 .Return(_assignments);
             Expect.Call(_dayOffRep.Find(peopleInOrganization, _longPeriod, _scenario))
                 .Return(_dayOffs);
-            Expect.Call(_meetingRepository.Find(peopleInOrganization, _longPeriod, _scenario))
+            Expect.Call(_meetingRepository.Find(peopleInOrganization, _longDateOnlyPeriod, _scenario))
                 .Return(_meetings);
             Expect.Call(_notesRepository.Find(_longDateOnlyPeriod, peopleInOrganization, _scenario))
                 .Return(_notes);
@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 .Return(_assignments);
             Expect.Call(_dayOffRep.Find(visiblePeople, _longPeriod, _scenario))
                 .Return(_dayOffs);
-            Expect.Call(_meetingRepository.Find(visiblePeople, _longPeriod, _scenario))
+            Expect.Call(_meetingRepository.Find(visiblePeople, _longDateOnlyPeriod, _scenario))
                 .Return(_meetings);
             Expect.Call(_notesRepository.Find(periodToLoad(_longPeriod), visiblePeople, _scenario))
                 .Return(_notes);
@@ -530,12 +530,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 Expect.Call(_absRep.Find(people, period1, _scenario)).Return(_absences);
                 Expect.Call(_assRep.Find(people, period1, _scenario)).Return(_assignments);
                 Expect.Call(_dayOffRep.Find(people, period1, _scenario)).Return(_dayOffs);
-                Expect.Call(_meetingRepository.Find(people, period1, _scenario)).Return(_meetings);
+                Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000,1,31,2000,4,11), _scenario)).Return(_meetings);
 
                 Expect.Call(_absRep.Find(people, period2, _scenario)).Return(_absences);
                 Expect.Call(_assRep.Find(people, period2, _scenario)).Return(new List<IPersonAssignment>());
                 Expect.Call(_dayOffRep.Find(people, period2, _scenario)).Return(_dayOffs);
-                Expect.Call(_meetingRepository.Find(people, period2, _scenario)).Return(_meetings);
+				Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000, 1, 31, 2000, 4, 11), _scenario)).Return(_meetings);
             }
             using (_mocks.Playback())
             {
@@ -567,12 +567,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 Expect.Call(_absRep.Find(people, period1, _scenario)).Return(_absences);
                 Expect.Call(_assRep.Find(people, period1, _scenario)).Return(_assignments);
                 Expect.Call(_dayOffRep.Find(people, period1, _scenario)).Return(_dayOffs);
-                Expect.Call(_meetingRepository.Find(people, period1, _scenario)).Return(_meetings);
+                Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000,1,31,2001,4,11), _scenario)).Return(_meetings);
 
                 Expect.Call(_absRep.Find(people, period2, _scenario)).Return(_absences);
                 Expect.Call(_assRep.Find(people, period2, _scenario)).Return(new List<IPersonAssignment>());
                 Expect.Call(_dayOffRep.Find(people, period2, _scenario)).Return(_dayOffs);
-                Expect.Call(_meetingRepository.Find(people, period2, _scenario)).Return(_meetings);
+				Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000, 1, 31, 2001, 4, 11), _scenario)).Return(_meetings);
             }
             using (_mocks.Playback())
             {
