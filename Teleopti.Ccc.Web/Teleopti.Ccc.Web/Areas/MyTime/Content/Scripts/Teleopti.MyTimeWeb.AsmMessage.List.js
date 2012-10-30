@@ -102,7 +102,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	};
 
 	var replyOptionsViewModel = function (replyOption) {
-		console.log(replyOption);
 		var self = this;
 		self.text = ko.observable(replyOption);
 	};
