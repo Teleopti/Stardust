@@ -9626,7 +9626,7 @@ period</comment>
     <comment>Also show meetings created by me but where I not participate in the meeting.</comment>
   </data>
   <data name="MeetingsCreatedByMe" xml:space="preserve">
-    <value>Mötens skapade av mig</value>
+    <value>Möten skapade av mig</value>
     <comment>Meetings created by me</comment>
   </data>
   <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">

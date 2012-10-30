@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Meetings.Overview;
 
@@ -38,12 +39,12 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
 		public void ShouldReduceOverlappingToFive()
 		{
 			var left = _target.ReduceOverlappingToFive(_appointments);
-			Assert.That(left.Count,Is.LessThanOrEqualTo(5));
-			Assert.That(left[0].OtherHasBeenDeleted,Is.True);
-			Assert.That(left[1].OtherHasBeenDeleted,Is.True);
-			Assert.That(left[2].OtherHasBeenDeleted,Is.True);
-			Assert.That(left[3].OtherHasBeenDeleted,Is.True);
-			Assert.That(left[4].OtherHasBeenDeleted,Is.True);
+			Assert.That(left.Count(),Is.EqualTo(5));
+			Assert.That(left.ElementAt(0).OtherHasBeenDeleted,Is.True);
+			Assert.That(left.ElementAt(1).OtherHasBeenDeleted,Is.True);
+			Assert.That(left.ElementAt(2).OtherHasBeenDeleted,Is.True);
+			Assert.That(left.ElementAt(3).OtherHasBeenDeleted,Is.True);
+			Assert.That(left.ElementAt(4).OtherHasBeenDeleted,Is.True);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
