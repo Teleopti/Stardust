@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _target.FinishedReloading += TargetFinishedReloading;
 			_mocks.BackToRecord(_schedulerStateHolder);
 	        Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(
-				new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+				TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 
             Expect.Call(() =>_peopleAndSkillLoaderDecider.Execute(_scenario, _period, _persons));
             Expect.Call(() => _schedulerStateLoader.EnsureSkillsLoaded(new DateOnlyPeriod())).IgnoreArguments();
