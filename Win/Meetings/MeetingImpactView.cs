@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		    var transparentWindowHandler = new MeetingImpactTransparentWindowHandler(this, meetingViewModel,
 		                                                                             schedulerStateHolder.
 		                                                                                 SchedulingResultState);
-            _meetingStateHolderLoaderHelper = new MeetingStateHolderLoaderHelper(decider, schedulerStateHolder.SchedulingResultState, stateHolderLoader, UnitOfWorkFactory.Current);
+            _meetingStateHolderLoaderHelper = new MeetingStateHolderLoaderHelper(decider, schedulerStateHolder, stateHolderLoader, UnitOfWorkFactory.Current);
 			_presenter = new MeetingImpactPresenter(schedulerStateHolder, this, meetingViewModel, _meetingStateHolderLoaderHelper,
                 slotFinder, new MeetingImpactCalculator(schedulerStateHolder,optimizationHelperWin,meetingViewModel.Meeting),
                 gridHandler,transparentWindowHandler, UnitOfWorkFactory.Current);
