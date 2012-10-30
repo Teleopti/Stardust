@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(1));
 			_page.MessageListItems[position-1].Click();
 		}
-
+		
 		[When(@"I click the confirm button")]
 		public void WhenIClickTheConfirmButton()
 		{
@@ -174,8 +174,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I enter the text reply '(.*)'")]
 		public void WhenIEnterTheTextReply(string reply)
 		{
-			Pages.Pages.CurrentMessageReplyPage.Reply.Value = reply;
-			Pages.Pages.CurrentMessageReplyPage.Reply.KeyPress();
+			const string js = @"Teleopti.MyTimeWeb.AsmMessageList.AddReplyText('{0}');";
+			Browser.Current.Eval(string.Format(js, reply));
 		}
 
 		[Then(@"I should see the message details form with an editable text box")]
@@ -215,6 +215,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldSeeARadiobuttonWithCaption(string p0)
 		{
 			ScenarioContext.Current.Pending();
+			//	var xmlStartDate = "D" + XmlConvert.ToString(start, XmlDateTimeSerializationMode.Unspecified);
+			//	var xmlEndDate = "D" + XmlConvert.ToString(end, XmlDateTimeSerializationMode.Unspecified);
+
+				//const string js = @"var notification = {{StartDate : '{0}', EndDate : '{1}'}};Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);";
+			const string js = @"Teleopti.MyTimeWeb.AsmMessageList.TestStuff();";
+			Browser.Current.Eval(js);
+			//	var formattedJs = string.Format(js, xmlStartDate, xmlEndDate);
+			//	Browser.Current.Eval(formattedJs);
 		}
 	}
 }
