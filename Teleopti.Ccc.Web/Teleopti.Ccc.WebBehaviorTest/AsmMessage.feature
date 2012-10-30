@@ -31,7 +31,7 @@ Scenario: Indicate new message while logged on
 Scenario: Indicate another new message while logged on
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
-	| Field         | Value          |
+	| Field         | Value        |
 	| Title         | New message	 |
 	And I am viewing week schedule
 	And I should be notified that I have '1' unread message(s)
@@ -41,7 +41,7 @@ Scenario: Indicate another new message while logged on
 Scenario: Indicate new message at logon
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
-	| Field         | Value          |
+	| Field         | Value        |
 	| Title         | New message	 |
 	When I am viewing week schedule
 	Then I should be notified that I have '1' unread message(s)
@@ -57,7 +57,7 @@ Scenario: Navigate to message tab
 Scenario: View unread messages
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
-	| Field         | Value          |
+	| Field         | Value        |
 	| Title         | New message	 |
 	When I am viewing messages
 	Then I should see '1' message(s) in the list

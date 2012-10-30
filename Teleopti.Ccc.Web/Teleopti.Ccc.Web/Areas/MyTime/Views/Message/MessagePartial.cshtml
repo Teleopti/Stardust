@@ -28,7 +28,7 @@
 		<!-- /ko -->
 		</div>
 		<div class="edit-module-element" >
-			<textarea id="AsmMessage-detail-reply" rows="5" cols="63" data-bind="visible: allowDialogueReply, value: reply, valueUpdate:['afterkeydown', 'afterpaste']"></textarea>
+			<textarea id="AsmMessage-detail-reply" rows="5" cols="63" data-bind="visible: allowDialogueReply, value: reply, valueUpdate:['afterkeydown', 'afterpaste', 'change']"></textarea>
 		<!-- ko foreach: replyOptions -->
 			<input type="radio" data-bind="value : text"/>
 			<label data-bind="text: text"></label>

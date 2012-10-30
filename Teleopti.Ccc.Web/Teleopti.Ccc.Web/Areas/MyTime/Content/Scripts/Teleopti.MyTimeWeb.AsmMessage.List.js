@@ -255,6 +255,12 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		},
 		AddNewMessageAtTop: function (messageItem) {
 			_addNewMessageAtTop(messageItem);
+		},
+		//For testing:
+		AddReplyText: function (theReply) {
+			$.each(vm.asmMessageList(), function (index, value) {
+				value.reply(theReply);
+			});
 		}
 	};
 
