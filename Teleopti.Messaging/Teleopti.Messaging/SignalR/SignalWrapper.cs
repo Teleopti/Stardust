@@ -114,7 +114,6 @@ namespace Teleopti.Messaging.SignalR
 				_isRunning = true;
 				_hubConnection.Closed += () => { _isRunning = false; };
 				_hubConnection.Reconnected += () => { _isRunning = true; };
-				_hubConnection.StateChanged += s => { _isRunning = s.NewState == ConnectionState.Connected; };
 			}
 			catch (InvalidOperationException exception)
 			{
