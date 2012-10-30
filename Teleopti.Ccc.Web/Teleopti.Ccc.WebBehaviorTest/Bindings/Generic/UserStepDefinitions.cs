@@ -91,6 +91,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(absenceRequest);
 		}
 
+		[Given(@"There is a password policy with")]
+		public void GivenThereIsAPasswordPolicyWith(Table table)
+		{
+			var passwordPolicy = table.CreateInstance<PasswordPolicyConfigurable>();
+			if (passwordPolicy.Rule1.Equals("PasswordLengthMin8"))
+			{
 
+			}
+		}
 	}
 }

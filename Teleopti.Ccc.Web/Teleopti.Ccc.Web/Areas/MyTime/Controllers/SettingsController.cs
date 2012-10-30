@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		[HttpPut]
-		public void ChangePassword(ChangePasswordViewModel model)
+		[HttpPostOrPut]
+		public JsonResult ChangePassword(ChangePasswordViewModel model)
 		{
 			var result = _modifyPassword.Change(_loggedOnUser.CurrentUser(), model.OldPassword, model.NewPassword);
 			if (!result.IsSuccessful)
@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				Response.TrySkipIisCustomErrors = true;
 				Response.StatusCode = 400;
 			}
+			return Json(result);
 		}
 	}
 }

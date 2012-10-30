@@ -1,7 +1,10 @@
 using System;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
@@ -33,6 +36,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				UserFactory.User().Setup(new Agent());
 			TestControllerMethods.Logon();
 		}
+
+		[Given(@"I am signed in with")]
+		public void GivenIAmSignedInWith(Table table)
+		{
+			var user = table.CreateInstance<UserConfigurable>();
+			var userName = user.UserName;
+			var password = user.Password;
+			Navigation.GotoGlobalSignInPage();
+			Pages.Pages.CurrentSignInPage.SignInApplication(userName, password);
+		}
+
 
 		[Given(@"I am viewing an application page")]
 		public void WhenIAmViewingAnApplicationPage()

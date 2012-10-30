@@ -54,18 +54,24 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			url: "Settings/ChangePassword",
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
-			type: "PUT",
+			type: 'POST',
 			data: JSON.stringify(data),
 			success: function (data, textStatus, jqXHR) {
 				var updatedLabel = $("label#updated");
 				updatedLabel.show();
 				$("#incorrectOldPassword").hide();
+				$("#invalidNewPassword").hide();
 				$("#passwordDiv input").reset();
 				setTimeout(function () { updatedLabel.hide(); }, 2000);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {
-					$("#incorrectOldPassword").show();
+					var error = $.parseJSON(jqXHR.responseText);
+					if (error.IsAuthenticationSuccessful) {
+						$("#invalidNewPassword").show();
+					} else {
+						$("#incorrectOldPassword").show();
+					}
 					return;
 				}
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);

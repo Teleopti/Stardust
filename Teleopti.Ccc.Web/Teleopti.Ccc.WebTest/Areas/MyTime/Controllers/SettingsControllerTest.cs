@@ -110,7 +110,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			modifyPassword.Expect(x => x.Change(person, "old", "new")).Return(new ChangePasswordResultInfo {IsSuccessful = true});
 			using (var target = new SettingsController(null, loggedOnUser, modifyPassword, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null)))
 			{
-				target.ChangePassword(new ChangePasswordViewModel {NewPassword = "new", OldPassword = "old"});
+				var result=target.ChangePassword(new ChangePasswordViewModel {NewPassword = "new", OldPassword = "old"}).Data as IChangePasswordResultInfo;
+				Assert.IsTrue(result.IsSuccessful);
 			}
 		}
 	}
