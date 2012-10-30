@@ -1,7 +1,6 @@
 using System;
 using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			SigninDataSources.Filter(Find.ByValue("TestData")).First().Click();
 		}
-
+		
 		public void SignInWindows()
 		{
 			throw new NotImplementedException();
@@ -51,12 +50,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SignInApplication(string userName, string password)
 		{
+			TrySignInApplication(userName,password);
+
+			WaitForSigninResult();
+		}
+
+		public void TrySignInApplication(string userName, string password)
+		{
 			SigninDataSources.Filter(Find.ByValue("TestData")).First().Click();
 			UserNameTextField.Value = userName;
 			PasswordTextField.Value = password;
 			SignInButton.EventualClick();
-
-			WaitForSigninResult();
 		}
 
 		private void WaitForSigninResult()

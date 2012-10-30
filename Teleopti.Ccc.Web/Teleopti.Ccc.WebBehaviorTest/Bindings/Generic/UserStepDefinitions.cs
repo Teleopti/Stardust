@@ -91,6 +91,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(absenceRequest);
 		}
 
+		[Given(@"I have user logon details with")]
+		public void GivenIHaveUserLogonDetailsWith(Table table)
+		{
+			var userLogonDetai = table.CreateInstance<UserLogonDetailConfigurable>();
+			UserFactory.User().Setup(userLogonDetai);
+		}
+
+
 		[Given(@"There is a password policy with")]
 		public void GivenThereIsAPasswordPolicyWith(Table table)
 		{

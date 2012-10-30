@@ -47,6 +47,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, password);
 		}
 
+		[When(@"I try to sign in with")]
+		public void WhenITryToSignInWith(Table table)
+		{
+			var user = table.CreateInstance<UserConfigurable>();
+			var userName = user.UserName;
+			var password = user.Password;
+			Navigation.GotoGlobalSignInPage();
+			Pages.Pages.CurrentSignInPage.TrySignInApplication(userName, password);
+		}
 
 		[Given(@"I am viewing an application page")]
 		public void WhenIAmViewingAnApplicationPage()

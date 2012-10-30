@@ -185,8 +185,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => page.UpdatedLabel.DisplayVisible(), Is.True);
 		}
 
-		[Then(@"I should see password changed failed with ""(.*)""")]
-		public void ThenIShouldSeePasswordChangedFailedWith(string msg)
+		[Then(@"I should see password changed failed with message")]
+		public void ThenIShouldSeePasswordChangedFailedWithMessage()
 		{
 			var page = Browser.Current.Page<PasswordPage>();
 			EventualAssert.That(() => page.InvalidNewPassword.DisplayVisible(), Is.True);

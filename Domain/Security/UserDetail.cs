@@ -63,7 +63,44 @@ namespace Teleopti.Ccc.Domain.Security
             _isLocked = true;
         }
 
-        public virtual void RegisterInvalidAttempt(IPasswordPolicy passwordPolicy)
+
+		/// <summary>
+		/// Sets the invalid attempts.
+		/// </summary>
+		/// <param name="attempts">The attempts.</param>
+		/// <remarks>
+		/// Only for test
+		/// </remarks>
+		public virtual void SetInvalidAttempts(int attempts)
+		{
+			_invalidAttempts = attempts;
+		}
+
+		/// <summary>
+		/// Sets the invalid attempts sequence start.
+		/// </summary>
+		/// <param name="startTime">The start time.</param>
+		/// <remarks>
+		/// Only for test
+		/// </remarks>
+		public virtual void SetInvalidAttemptsSequenceStart(DateTime startTime)
+		{
+			_invalidAttemptsSequenceStart = startTime;
+		}
+
+		/// <summary>
+		/// Sets the last password change.
+		/// </summary>
+		/// <param name="lastPasswordChange">The last password change.</param>
+		/// <remarks>
+		/// Only for test
+		/// </remarks>
+		public virtual void SetLastPasswordChange(DateTime lastPasswordChange)
+		{
+			_lastPasswordChange = lastPasswordChange;
+		}
+
+	    public virtual void RegisterInvalidAttempt(IPasswordPolicy passwordPolicy)
         {
             DateTime utcNow = DateTime.UtcNow;
             if (utcNow>_invalidAttemptsSequenceStart.Add(passwordPolicy.InvalidAttemptWindow) ||

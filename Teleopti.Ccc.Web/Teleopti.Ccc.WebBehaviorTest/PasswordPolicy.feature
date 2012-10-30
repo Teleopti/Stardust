@@ -4,11 +4,7 @@
 	I have a password policy
 
 Background:
-    Given I am a user with
-    | Field    | Value     |
-    | UserName | aa        |
-    | Password | P@ssword1 |
-	And There is a password policy with
+	Given There is a password policy with
 	| Field                         | Value              |
 	| MaxNumberOfAttempts           | 3                  |
 	| InvalidAttemptWindow          | 30                 |
@@ -18,7 +14,11 @@ Background:
 
 
 Scenario: Change password successfully against the policy
-	Given I am signed in with
+	Given I am a user with
+    | Field    | Value     |
+    | UserName | aa        |
+    | Password | P@ssword1 |
+	And I am signed in with
 	| Field    | Value     |
     | UserName | aa        |
     | Password | P@ssword1 |
@@ -31,7 +31,11 @@ Scenario: Change password successfully against the policy
 	Then I should see password changed successfully
 
 Scenario: Change password failed against the policy
-	Given I am signed in with
+	Given I am a user with
+    | Field    | Value     |
+    | UserName | aa        |
+    | Password | P@ssword1 |
+	And I am signed in with
 	| Field    | Value     |
     | UserName | aa        |
     | Password | P@ssword1 |
@@ -41,19 +45,25 @@ Scenario: Change password failed against the policy
 	| Password          | aa        |
 	| ConfirmedPassword | aa        |
 	| OldPassword       | P@ssword1 |
-	Then I should see password changed failed with "Password policy requires a safer password"
+	Then I should see password changed failed with message
 
-Scenario: Sign in failed after wrong password many times
-	Given I input wrong password 3 times in 30 minutes
+Scenario: Sign in failed after account is locked
+	Given I have user logon details with
+	| Field                           | Value |
+	| IsLocked                        | true  |
+	And I am a user with
+    | Field                           | Value     |
+    | UserName                        | aa        |
+    | Password                        | P@ssword1 |
 	And I am viewing the sign in page
-	When I sign in with
+	When I try to sign in with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	Then I should not be signed in
-	And I should see an error message "Your account is locked"
+	And I should see an log on error
 
-Scenario: Sign in with password will expire soon 
+Scenario: Sign in with password will expire soon
 	Given My password will expire in 2 days
 	And I am viewing the sign in page
 	When I sign in with

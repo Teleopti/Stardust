@@ -60,13 +60,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SignInApplication(string username, string password)
 		{
+			TrySignInApplication(username, password);
+			WaitForSigninResult();
+		}
+
+		public void TrySignInApplication(string username, string password)
+		{
 			ApplicationTabLink.EventualClick();
 			SelectApplicationTestDataSource();
 			UserNameTextField.Value = username;
 			PasswordTextField.Value = password;
 			ApplicationOkButton.EventualClick();
-
-			WaitForSigninResult();
 		}
 
 		public void SignInWindows()

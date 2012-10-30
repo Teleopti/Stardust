@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		void SelectApplicationTestDataSource();
 		void SignInApplication(string username, string password);
+		void TrySignInApplication(string username, string password);
 		void SignInWindows();
 		void SelectFirstBusinessUnit();
 		void ClickBusinessUnitOkButton();

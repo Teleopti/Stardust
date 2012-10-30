@@ -94,6 +94,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new StringContainsAnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
 		}
 
+		[Then(@"I should see an error message ""(.*)""")]
+		public void ThenIShouldSeeAnErrorMessage(string msg)
+		{
+		}
+
+
 		[Then(@"I should not be signed in")]
 		[Then(@"I should be signed out")]
 		[Then(@"I should see the login page")]
