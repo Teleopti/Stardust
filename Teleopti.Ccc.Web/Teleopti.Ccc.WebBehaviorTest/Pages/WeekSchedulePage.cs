@@ -99,12 +99,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Schedule-addRequest-ok-button")]
 		public Button OkButton { get; set; }
 
+		public Div TimeLineDiv
+		{
+			get { return Document.Div(Find.ByClass("weekview-timeline", false)); }
+		}
+		
 		public DivCollection TimelineLabels
 		{
 			get
 			{
-				var timelineDiv = Document.Div(Find.ByClass("weekview-timeline", false));
-				return timelineDiv.Divs.Filter(Find.ByClass("weekview-timeline-label", false)); 
+				return TimeLineDiv.Divs.Filter(Find.ByClass("weekview-timeline-label", false)); 
+			}
+		}
+
+		public Div AnyTimelineLabel
+		{
+			get
+			{
+				return Document.Div(Find.ByClass("weekview-timeline-label", false));
 			}
 		}
 
@@ -122,8 +134,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get
 			{
-				var timelineDiv = Document.Div(Find.ByClass("weekview-timeline", false));
-				return timelineDiv.Div(Find.ByClass("week-schedule-time-indicator-small", false)); 
+				return TimeLineDiv.Div(Find.ByClass("week-schedule-time-indicator-small", false)); 
 			}
 		}
 
