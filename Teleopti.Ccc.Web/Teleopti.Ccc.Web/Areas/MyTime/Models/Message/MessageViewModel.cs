@@ -13,12 +13,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Message
 		public bool IsRead { get; set; }
 		public bool AllowDialogueReply { get; set; }
 		public IList<DialogueMessageViewModel> DialogueMessages { get; set; }
+		public IList<string> ReplyOptions { get; set; }
 	}
 
 	public class ConfirmMessageViewModel
 	{
 		public Guid Id { get; set; }
 		public string Reply { get; set; }
+		public string ReplyOption { get; set; }
 	}
 
 	public class DialogueMessageViewModel

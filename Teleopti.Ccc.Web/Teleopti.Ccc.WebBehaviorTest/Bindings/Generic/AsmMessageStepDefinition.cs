@@ -206,13 +206,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 		[When(@"I click the radiobutton with caption '(.*)'")]
-		public void WhenIClickTheRadiobuttonWithCaption(string p0)
+		public void WhenIClickTheRadiobuttonWithCaption(string option)
 		{
-			ScenarioContext.Current.Pending();
+			//ScenarioContext.Current.Pending();
 		}
 
 		[Then(@"I should see a radiobutton with caption '(.*)'")]
-		public void ThenIShouldSeeARadiobuttonWithCaption(string p0)
+		public void ThenIShouldSeeARadiobuttonWithCaption(string option)
 		{
 			ScenarioContext.Current.Pending();
 		}

@@ -73,6 +73,10 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.isSending = ko.observable(false);
 		self.reply = ko.observable('');
 
+		self.replyOptions = ko.utils.arrayMap(item.ReplyOptions, function (data) {
+			return new replyOptionsViewModel(data);
+		});
+
 		self.dialogueMessages = ko.utils.arrayMap(item.DialogueMessages, function (data) {
 			return new dialogueMessageViewModel(data);
 		});
@@ -95,6 +99,12 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	var dialogueMessageViewModel = function (dialogueMessage) {
 		var self = this;
 		self.text = ko.observable(dialogueMessage.Text);
+	};
+
+	var replyOptionsViewModel = function (replyOption) {
+		console.log(replyOption);
+		var self = this;
+		self.text = ko.observable(replyOption);
 	};
 
 	function _addNewMessageAtTop(messageItem) {
@@ -126,7 +136,8 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			},
 			data: JSON.stringify({
 				Id: messageItem.messageId(),
-				Reply: messageItem.reply()
+				Reply: messageItem.reply(),
+				ReplyOption: "hej"
 			}),
 			success: function (data, textStatus, jqXHR) {
 				messageItem.isRead(true);

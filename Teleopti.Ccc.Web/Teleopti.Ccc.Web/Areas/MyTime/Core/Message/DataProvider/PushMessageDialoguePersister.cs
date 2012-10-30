@@ -30,11 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 			{
 				pushMessageDialogue.DialogueReply(confirmMessage.Reply, _loggedOnUser.CurrentUser());
 			}
-
-			if (!pushMessageDialogue.PushMessage.ReplyOptions.IsEmpty())
-			{
-				pushMessageDialogue.SetReply(pushMessageDialogue.PushMessage.ReplyOptions.First());
-			}
+				
+			pushMessageDialogue.SetReply(confirmMessage.ReplyOption);
 
 			return _mapper.Map<IPushMessageDialogue, MessageViewModel>(pushMessageDialogue);
 		}

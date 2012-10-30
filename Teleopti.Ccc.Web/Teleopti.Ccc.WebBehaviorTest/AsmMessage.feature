@@ -189,9 +189,9 @@ Scenario: Confirm message with multiple replyoptions
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
 	| Field        | Value                 |
-	| Title        | Ashley is ill			|
+	| Title        | Ashley is ill		|
 	| Message      | Can you work tomorrow?|
-	| ReplyOption2 | Probably              |
+	| ReplyOption1 | Probably              |
 	| ReplyOption2 | Probably not          |
 	| ReplyOption3 | Defenitly not         |
 	And I am viewing messages
@@ -221,8 +221,8 @@ Given I have the role 'Full access to mytime'
 	| Title					| New message		|
 	| Message				| Text in message	|
 	| Text reply allowed	| False				|
-	| ReplyOption1			| Yes					|
-	| ReplyOption2			| No					|
+	| ReplyOption1			| Yep					|
+	| ReplyOption2			| Nope					|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
 	Then the send button should be disabled

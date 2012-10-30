@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
 				.ForMember(d => d.IsRead, o => o.MapFrom(m => m.IsReplied))
 				.ForMember(d => d.AllowDialogueReply, o => o.MapFrom(m => m.PushMessage.AllowDialogueReply))
 				.ForMember(d => d.DialogueMessages, o => o.MapFrom(m => m.DialogueMessages))
+				.ForMember(d => d.ReplyOptions, o => o.MapFrom(m => m.PushMessage.ReplyOptions))
             ;
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -44,8 +45,11 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
                                       Message = "message text",
 									  AllowDialogueReply = true,
                                       //TranslateMessage = true,
-                                      Sender = _person,
+                                      Sender = _person
                                   };
+			_pushMessage.ReplyOptions.Add("Yes");
+			_pushMessage.ReplyOptions.Add("No");
+			_pushMessage.ReplyOptions.Add("Maybe");
             _pushMessageDialogue = new PushMessageDialogue(_pushMessage, _person);
             _pushMessageDialogue.SetId(Guid.NewGuid());
 				_pushMessageDialogue.DialogueMessages.Add(new DialogueMessage("A reply", _replier));
@@ -118,6 +122,12 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 		{
 			//_result.First().DialogueMessages.Should().Have.SameValuesAs(_pushMessageDialogue.DialogueMessages);
 			_result.First().DialogueMessages.First().Text.Should().Be.EqualTo(_pushMessageDialogue.DialogueMessages.First().Text);
+		}
+
+		[Test]
+		public void ShouldMapReplyOptions()
+		{
+			_result.First().ReplyOptions.Count.Should().Be.EqualTo(_pushMessageDialogue.PushMessage.ReplyOptions.Count);
 		}
         
         //[Test]
