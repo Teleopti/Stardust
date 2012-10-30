@@ -5,7 +5,6 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
-using Teleopti.Ccc.Domain.Time;
 using Rhino.Mocks;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -1107,7 +1106,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             openHours.Add(new TimePeriod("8:00-17:00"));
 
             WorkloadDayBase workloadDayBase = new TestWorkloadDayBase();
-            _workload.Skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time")); //Sets the timezone to Stockholm, Vienna
+            _workload.Skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
             DateOnly dateTime = new DateOnly(1800,1,1);
 
             workloadDayBase.Create(dateTime, _workload, openHours);

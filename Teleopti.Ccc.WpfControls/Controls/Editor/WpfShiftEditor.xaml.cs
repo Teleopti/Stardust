@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
 
         public void SetTimeZone(TimeZoneInfo timeZoneInfo)
         {
-            VisualTreeTimeZoneInfo.SetTimeZoneInfo(this, (TimeZoneInfo)timeZoneInfo);
+            VisualTreeTimeZoneInfo.SetTimeZoneInfo(this, timeZoneInfo);
         }
     }
 }

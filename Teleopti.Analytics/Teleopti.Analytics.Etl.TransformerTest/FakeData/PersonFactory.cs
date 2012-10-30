@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -111,8 +110,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             //UTC agent with two periods with no terminal date set.
             person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("oswald", "oblad");
             person.SetId(Guid.NewGuid());
-            person.PermissionInformation.SetDefaultTimeZone(
-                (TimeZoneInfo.FindSystemTimeZoneById("UTC")));
+            person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
             businessUnitGraph.SiteCollection[0].TeamCollection[1].SetId(Guid.NewGuid());
 
             personPeriod =

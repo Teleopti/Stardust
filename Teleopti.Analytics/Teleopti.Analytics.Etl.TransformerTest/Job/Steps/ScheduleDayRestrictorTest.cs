@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
@@ -25,9 +24,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
             IList<IScheduleDay> scheduleDayList = new List<IScheduleDay>{scheduleDayEndsInsidePeriod, scheduleDayEndsOutsidePeriod};
             var givenDate = new DateTime(2011, 1, 1, 23, 59, 59, DateTimeKind.Utc);
 
-            TimeZoneInfo TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            var insideDateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1), TimeZoneInfo);
-            var outsideDateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 2), TimeZoneInfo);
+            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+            var insideDateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1), timeZoneInfo);
+            var outsideDateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 2), timeZoneInfo);
 
             using (mock.Record())
             {
