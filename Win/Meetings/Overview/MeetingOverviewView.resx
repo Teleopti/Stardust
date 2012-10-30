@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ribbonControlAdv1.AutoSize" type="System.Boolean, mscorlib">
@@ -135,9 +135,9 @@
   <data name="toolStripButtonExport.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <data name="$this.Localizable" type="System.Boolean, mscorlib">
     <value>True</value>
-  </metadata>
+  </data>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 13</value>
   </data>
@@ -246,121 +246,121 @@
     <value>toolStripTabItem1</value>
   </data>
   <data name="&gt;&gt;toolStripTabItem1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripTabItem, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripTabItem, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;toolStripButtonAdd.Name" xml:space="preserve">
     <value>toolStripButtonAdd</value>
   </data>
   <data name="&gt;&gt;toolStripButtonAdd.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripButtonOpen.Name" xml:space="preserve">
     <value>toolStripButtonOpen</value>
   </data>
   <data name="&gt;&gt;toolStripButtonOpen.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripButtonDelete.Name" xml:space="preserve">
     <value>toolStripButtonDelete</value>
   </data>
   <data name="&gt;&gt;toolStripButtonDelete.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripButtonCut.Name" xml:space="preserve">
     <value>toolStripButtonCut</value>
   </data>
   <data name="&gt;&gt;toolStripButtonCut.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripButtonCopy.Name" xml:space="preserve">
     <value>toolStripButtonCopy</value>
   </data>
   <data name="&gt;&gt;toolStripButtonCopy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripButtonPaste.Name" xml:space="preserve">
     <value>toolStripButtonPaste</value>
   </data>
   <data name="&gt;&gt;toolStripButtonPaste.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripComboBoxScenario.Name" xml:space="preserve">
     <value>toolStripComboBoxScenario</value>
   </data>
   <data name="&gt;&gt;toolStripComboBoxScenario.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripButtonFilter.Name" xml:space="preserve">
     <value>toolStripButtonFilter</value>
   </data>
   <data name="&gt;&gt;toolStripButtonFilter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripButtonFetchForUser.Name" xml:space="preserve">
     <value>toolStripButtonFetchForUser</value>
   </data>
   <data name="&gt;&gt;toolStripButtonFetchForUser.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripButtonExport.Name" xml:space="preserve">
     <value>toolStripButtonExport</value>
   </data>
   <data name="&gt;&gt;toolStripButtonExport.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
     <value>toolStripSeparator2</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripButtonClose.Name" xml:space="preserve">
     <value>toolStripButtonClose</value>
   </data>
   <data name="&gt;&gt;toolStripButtonClose.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemNew.Name" xml:space="preserve">
     <value>toolStripMenuItemNew</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemNew.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemOpen.Name" xml:space="preserve">
     <value>toolStripMenuItemOpen</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemOpen.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemDelete.Name" xml:space="preserve">
     <value>toolStripMenuItemDelete</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemDelete.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
     <value>toolStripSeparator1</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemCut.Name" xml:space="preserve">
     <value>toolStripMenuItemCut</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemCut.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemCopy.Name" xml:space="preserve">
     <value>toolStripMenuItemCopy</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemCopy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemPaste.Name" xml:space="preserve">
     <value>toolStripMenuItemPaste</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemPaste.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MeetingOverviewView</value>
@@ -396,14 +396,14 @@
     <value>ribbonControlAdv1.OfficeMenu</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.OfficeMenu.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
-  <metadata name="toolStripTabItem1.TabGroup" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <data name="toolStripTabItem1.TabGroup" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
-  </metadata>
-  <metadata name="toolStripExEdit.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  </data>
+  <data name="toolStripExEdit.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>394, 58</value>
-  </metadata>
+  </data>
   <data name="toolStripExEdit.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -509,7 +509,7 @@
     <value>toolStripExEdit</value>
   </data>
   <data name="&gt;&gt;toolStripExEdit.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;toolStripExEdit.Parent" xml:space="preserve">
     <value>ribbonControlAdv1.ribbonPanel1</value>
@@ -517,9 +517,9 @@
   <data name="&gt;&gt;toolStripExEdit.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <metadata name="toolStripExClipboard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <data name="toolStripExClipboard.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>532, 58</value>
-  </metadata>
+  </data>
   <data name="toolStripExClipboard.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -584,7 +584,7 @@
     <value>toolStripExClipboard</value>
   </data>
   <data name="&gt;&gt;toolStripExClipboard.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;toolStripExClipboard.Parent" xml:space="preserve">
     <value>ribbonControlAdv1.ribbonPanel1</value>
@@ -592,9 +592,9 @@
   <data name="&gt;&gt;toolStripExClipboard.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <metadata name="toolStripExScenario.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <data name="toolStripExScenario.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>649, 58</value>
-  </metadata>
+  </data>
   <data name="toolStripExScenario.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -617,7 +617,7 @@
     <value>toolStripExScenario</value>
   </data>
   <data name="&gt;&gt;toolStripExScenario.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;toolStripExScenario.Parent" xml:space="preserve">
     <value>ribbonControlAdv1.ribbonPanel1</value>
@@ -625,9 +625,9 @@
   <data name="&gt;&gt;toolStripExScenario.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <metadata name="toolStripExFilter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <data name="toolStripExFilter.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>806, 58</value>
-  </metadata>
+  </data>
   <data name="toolStripExFilter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -680,7 +680,7 @@
     <value>toolStripExFilter</value>
   </data>
   <data name="&gt;&gt;toolStripExFilter.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;toolStripExFilter.Parent" xml:space="preserve">
     <value>ribbonControlAdv1.ribbonPanel1</value>
@@ -698,7 +698,7 @@
     <value>ribbonControlAdv1.ribbonPanel1</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.RibbonPanel, Syncfusion.Tools.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.RibbonPanel, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Parent" xml:space="preserve">
     <value>ribbonControlAdv1</value>
@@ -733,9 +733,9 @@
   <data name="&gt;&gt;ribbonControlAdv1.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <metadata name="contextMenuStripSchedule.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <data name="contextMenuStripSchedule.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>153, 13</value>
-  </metadata>
+  </data>
   <data name="toolStripMenuItemNew.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -841,21 +841,33 @@
     <value>contextMenuStripSchedule</value>
   </data>
   <data name="&gt;&gt;contextMenuStripSchedule.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="scheduleControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="scheduleControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
   </data>
   <data name="scheduleControl1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
+    <value>6, 134</value>
   </data>
   <data name="scheduleControl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>640, 448</value>
+    <value>1090, 511</value>
   </data>
   <data name="scheduleControl1.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="&gt;&gt;scheduleControl1.Name" xml:space="preserve">
     <value>scheduleControl1</value>
   </data>
   <data name="&gt;&gt;scheduleControl1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Schedule.ScheduleControl, Syncfusion.Schedule.Windows, Version=9.403.0.62, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Schedule.ScheduleControl, Syncfusion.Schedule.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+  </data>
+  <data name="&gt;&gt;scheduleControl1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;scheduleControl1.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
 </root>
