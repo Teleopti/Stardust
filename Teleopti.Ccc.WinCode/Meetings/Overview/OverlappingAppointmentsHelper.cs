@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Teleopti.Ccc.WinCode.Meetings.Overview
 {
 	public interface IOverlappingAppointmentsHelper
 	{
 		bool HasTooManyOverlapping(IList<ISimpleAppointment> simpleAppointments);
-		IList<ISimpleAppointment> ReduceOverlappingToFive(IList<ISimpleAppointment> appointments);
+		IEnumerable<ISimpleAppointment> ReduceOverlappingToFive(IEnumerable<ISimpleAppointment> appointments);
 	}
 
 	public class OverlappingAppointmentsHelper : IOverlappingAppointmentsHelper
@@ -17,16 +18,18 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
 			return false;
 		}
 
-		public IList<ISimpleAppointment> ReduceOverlappingToFive(IList<ISimpleAppointment> appointments)
+		public IEnumerable<ISimpleAppointment> ReduceOverlappingToFive(IEnumerable<ISimpleAppointment> appointments)
 		{
 			if (appointments != null)
 			{
-				var nextAppointment = getFirstOverlappingWhenMoreThanFive(appointments);
+				var newAppointmentList = appointments.ToList();
+				var nextAppointment = getFirstOverlappingWhenMoreThanFive(newAppointmentList);
 				while (nextAppointment != null)
 				{
-					appointments.Remove(nextAppointment);
-					nextAppointment = getFirstOverlappingWhenMoreThanFive(appointments);
+					newAppointmentList.Remove(nextAppointment);
+					nextAppointment = getFirstOverlappingWhenMoreThanFive(newAppointmentList);
 				}
+				appointments = newAppointmentList;
 			}
 			return appointments;
 		}
