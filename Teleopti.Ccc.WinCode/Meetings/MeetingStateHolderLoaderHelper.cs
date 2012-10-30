@@ -50,7 +50,8 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         public event FinishedEventHandler FinishedReloading;
 
-        public MeetingStateHolderLoaderHelper(
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public MeetingStateHolderLoaderHelper(
                                                 IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider,
                                                 ISchedulerStateHolder schedulerStateHolder,
                                                 ISchedulerStateLoader schedulerStateLoader,
