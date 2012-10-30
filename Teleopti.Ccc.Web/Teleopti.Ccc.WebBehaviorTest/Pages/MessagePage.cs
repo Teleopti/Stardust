@@ -36,5 +36,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "AsmMessage-detail-ok-button")]
 		public Button OkButton { get; set; }
+
+		[FindBy(Id = "AsmMessage-detail-replyOption")]
+		public Div ReplyOptions { get; set; }
 	}
 }

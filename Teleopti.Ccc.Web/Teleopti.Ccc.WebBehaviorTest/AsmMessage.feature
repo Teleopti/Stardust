@@ -170,7 +170,7 @@ Scenario: Send text reply message
 	And I click the confirm button
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
-
+ 
 Scenario: Show replyoptions for message with multiple options
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -178,22 +178,24 @@ Given I have the role 'Full access to mytime'
 	| Title					| New message		|
 	| Message				| Text in message	|
 	| Text reply allowed	| False				|
-	| ReplyOption1			| Yes					|
-	| ReplyOption2			| No					|
+	| ReplyOption1			| Yes				|
+	| ReplyOption2			| No				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	Then I should see a radiobutton with caption 'Yes'
-	And I should see a radiobutton with caption 'No'
+	Then I should see radiobuttons with 
+	| Captions	|
+	| Yes		|
+	| No		|
 
 Scenario: Confirm message with multiple replyoptions
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
-	| Field        | Value                 |
-	| Title        | Ashley is ill		|
-	| Message      | Can you work tomorrow?|
-	| ReplyOption1 | Probably              |
-	| ReplyOption2 | Probably not          |
-	| ReplyOption3 | Defenitly not         |
+	| Field        | Value					|
+	| Title        | Ashley is ill			|
+	| Message      | Can you work tomorrow?	|
+	| ReplyOption1 | Probably				|
+	| ReplyOption2 | Probably not			|
+	| ReplyOption3 | Defenitly not			|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
 	And I click the radiobutton with caption 'Probably not'
@@ -207,13 +209,13 @@ Given I have the role 'Full access to mytime'
 	| Title					| New message		|
 	| Message				| Text in message	|
 	| Text reply allowed	| False				|
-	| ReplyOption1			| Yes					|
-	| ReplyOption2			| No					|
+	| ReplyOption1			| Yes				|
+	| ReplyOption2			| No				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
 	And I click the radiobutton with caption 'No'
 	Then the send button should be enabled
-
+#######
 Scenario: Confirmbutton should be disabled when user hasnt selected a replyoption
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -221,8 +223,8 @@ Given I have the role 'Full access to mytime'
 	| Title					| New message		|
 	| Message				| Text in message	|
 	| Text reply allowed	| False				|
-	| ReplyOption1			| Yep					|
-	| ReplyOption2			| Nope					|
+	| ReplyOption1			| Yes				|
+	| ReplyOption2			| No				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
 	Then the send button should be disabled

@@ -211,18 +211,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			//ScenarioContext.Current.Pending();
 		}
 
-		[Then(@"I should see a radiobutton with caption '(.*)'")]
-		public void ThenIShouldSeeARadiobuttonWithCaption(string option)
+		[Then(@"I should see radiobuttons with")]
+		public void ThenIShouldSeeRadiobuttonsWith(Table table)
 		{
-			ScenarioContext.Current.Pending();
-			//	var xmlStartDate = "D" + XmlConvert.ToString(start, XmlDateTimeSerializationMode.Unspecified);
-			//	var xmlEndDate = "D" + XmlConvert.ToString(end, XmlDateTimeSerializationMode.Unspecified);
-
-				//const string js = @"var notification = {{StartDate : '{0}', EndDate : '{1}'}};Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);";
-			const string js = @"Teleopti.MyTimeWeb.AsmMessageList.TestStuff();";
-			Browser.Current.Eval(js);
-			//	var formattedJs = string.Format(js, xmlStartDate, xmlEndDate);
-			//	Browser.Current.Eval(formattedJs);
+			foreach (var tableRow in table.Rows)
+			{
+				EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.ReplyOptions.InnerHtml.Contains(tableRow[0]), Is.EqualTo(true));
+			}	
 		}
+
 	}
 }

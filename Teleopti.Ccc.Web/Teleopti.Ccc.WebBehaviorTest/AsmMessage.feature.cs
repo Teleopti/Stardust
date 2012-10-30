@@ -646,10 +646,15 @@ testRunner.Given("I have the role \'Full access to mytime\'");
  testRunner.And("I am viewing messages");
 #line 184
  testRunner.When("I click on the message at position \'1\' in the list");
+#line hidden
+            TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Captions"});
+            table19.AddRow(new string[] {
+                        "Yes"});
+            table19.AddRow(new string[] {
+                        "No"});
 #line 185
- testRunner.Then("I should see a radiobutton with caption \'Yes\'");
-#line 186
- testRunner.And("I should see a radiobutton with caption \'No\'");
+ testRunner.Then("I should see radiobuttons with", ((string)(null)), table19);
 #line hidden
             this.ScenarioCleanup();
         }
@@ -659,42 +664,42 @@ testRunner.Given("I have the role \'Full access to mytime\'");
         public virtual void ConfirmMessageWithMultipleReplyoptions()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Confirm message with multiple replyoptions", ((string[])(null)));
-#line 188
+#line 190
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 189
+#line 191
 testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
-            TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table19.AddRow(new string[] {
+            table20.AddRow(new string[] {
                         "Title",
                         "Ashley is ill"});
-            table19.AddRow(new string[] {
+            table20.AddRow(new string[] {
                         "Message",
                         "Can you work tomorrow?"});
-            table19.AddRow(new string[] {
+            table20.AddRow(new string[] {
                         "ReplyOption1",
                         "Probably"});
-            table19.AddRow(new string[] {
+            table20.AddRow(new string[] {
                         "ReplyOption2",
                         "Probably not"});
-            table19.AddRow(new string[] {
+            table20.AddRow(new string[] {
                         "ReplyOption3",
                         "Defenitly not"});
-#line 190
- testRunner.And("I have an unread message with", ((string)(null)), table19);
-#line 197
- testRunner.And("I am viewing messages");
-#line 198
- testRunner.When("I click on the message at position \'1\' in the list");
+#line 192
+ testRunner.And("I have an unread message with", ((string)(null)), table20);
 #line 199
- testRunner.And("I click the radiobutton with caption \'Probably not\'");
+ testRunner.And("I am viewing messages");
 #line 200
- testRunner.And("I click the confirm button");
+ testRunner.When("I click on the message at position \'1\' in the list");
 #line 201
+ testRunner.And("I click the radiobutton with caption \'Probably not\'");
+#line 202
+ testRunner.And("I click the confirm button");
+#line 203
  testRunner.Then("I should not see any messages");
 #line hidden
             this.ScenarioCleanup();
@@ -705,55 +710,11 @@ testRunner.Given("I have the role \'Full access to mytime\'");
         public virtual void EnableConfirmbuttonWhenUserHasSelcetedAReplyoption()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Enable confirmbutton when user has selceted a replyoption", ((string[])(null)));
-#line 203
-this.ScenarioSetup(scenarioInfo);
-#line 6
-this.FeatureBackground();
-#line 204
-testRunner.Given("I have the role \'Full access to mytime\'");
-#line hidden
-            TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table20.AddRow(new string[] {
-                        "Title",
-                        "New message"});
-            table20.AddRow(new string[] {
-                        "Message",
-                        "Text in message"});
-            table20.AddRow(new string[] {
-                        "Text reply allowed",
-                        "False"});
-            table20.AddRow(new string[] {
-                        "ReplyOption1",
-                        "Yes"});
-            table20.AddRow(new string[] {
-                        "ReplyOption2",
-                        "No"});
 #line 205
- testRunner.And("I have an unread message with", ((string)(null)), table20);
-#line 212
- testRunner.And("I am viewing messages");
-#line 213
- testRunner.When("I click on the message at position \'1\' in the list");
-#line 214
- testRunner.And("I click the radiobutton with caption \'No\'");
-#line 215
- testRunner.Then("the send button should be enabled");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Confirmbutton should be disabled when user hasnt selected a replyoption")]
-        public virtual void ConfirmbuttonShouldBeDisabledWhenUserHasntSelectedAReplyoption()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Confirmbutton should be disabled when user hasnt selected a replyoption", ((string[])(null)));
-#line 217
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 218
+#line 206
 testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
@@ -770,17 +731,61 @@ testRunner.Given("I have the role \'Full access to mytime\'");
                         "False"});
             table21.AddRow(new string[] {
                         "ReplyOption1",
-                        "Yep"});
+                        "Yes"});
             table21.AddRow(new string[] {
                         "ReplyOption2",
-                        "Nope"});
-#line 219
+                        "No"});
+#line 207
  testRunner.And("I have an unread message with", ((string)(null)), table21);
-#line 226
+#line 214
  testRunner.And("I am viewing messages");
-#line 227
+#line 215
  testRunner.When("I click on the message at position \'1\' in the list");
+#line 216
+ testRunner.And("I click the radiobutton with caption \'No\'");
+#line 217
+ testRunner.Then("the send button should be enabled");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Confirmbutton should be disabled when user hasnt selected a replyoption")]
+        public virtual void ConfirmbuttonShouldBeDisabledWhenUserHasntSelectedAReplyoption()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Confirmbutton should be disabled when user hasnt selected a replyoption", ((string[])(null)));
+#line 219
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 220
+testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table22.AddRow(new string[] {
+                        "Title",
+                        "New message"});
+            table22.AddRow(new string[] {
+                        "Message",
+                        "Text in message"});
+            table22.AddRow(new string[] {
+                        "Text reply allowed",
+                        "False"});
+            table22.AddRow(new string[] {
+                        "ReplyOption1",
+                        "Yes"});
+            table22.AddRow(new string[] {
+                        "ReplyOption2",
+                        "No"});
+#line 221
+ testRunner.And("I have an unread message with", ((string)(null)), table22);
 #line 228
+ testRunner.And("I am viewing messages");
+#line 229
+ testRunner.When("I click on the message at position \'1\' in the list");
+#line 230
  testRunner.Then("the send button should be disabled");
 #line hidden
             this.ScenarioCleanup();
