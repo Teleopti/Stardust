@@ -21,5 +21,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "incorrectOldPassword")]
 		public Span IncorrectPassword;
+
+		[FindBy(Id = "updated")]
+		public Label UpdatedLabel;
 	}
 }
