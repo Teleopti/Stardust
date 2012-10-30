@@ -40,11 +40,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			ApplicationDataSourceList.ListItem(Find.ByText("TestData")).EventualClick();
 		}
 
-		public void ClickApplicationOkButton()
-		{
-			ApplicationOkButton.EventualClick();
-		}
-
 		public void SelectWindowsTestDataSource()
 		{
 			WindowsDataSourceList.ListItem(Find.ByText("TestData")).EventualClick();
