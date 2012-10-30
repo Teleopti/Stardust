@@ -849,6 +849,9 @@
   <data name="scheduleControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
+  <data name="scheduleControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
   <data name="scheduleControl1.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 134</value>
   </data>
