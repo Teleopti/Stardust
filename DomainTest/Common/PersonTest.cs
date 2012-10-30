@@ -673,7 +673,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             var details = mocks.StrictMock<IUserDetail>();
 
             //Send in same
-            Assert.IsFalse(_target.ChangePassword(oldNotEncrypted, oldNotEncrypted, service, details));
+            Assert.IsFalse(_target.ChangePassword(oldNotEncrypted, oldNotEncrypted, service, details).IsSuccessful);
          }
 
         [Test]
