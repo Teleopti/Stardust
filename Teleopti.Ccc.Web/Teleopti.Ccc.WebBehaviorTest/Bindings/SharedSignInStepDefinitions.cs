@@ -88,6 +88,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			EventualAssert.That(() => Browser.Current.Link("signout").Exists || Browser.Current.Link("signout-button").Exists, Is.True);
 		}
 
+		[Then(@"I should see a warning message that password will be expired")]
+		public void ThenIShouldSeeAWarningMessageThatPasswordWillBeExpired()
+		{
+		}
+
 		[Then(@"I should see an log on error")]
 		public void ThenIShouldSeeAnLogOnError()
 		{

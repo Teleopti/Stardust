@@ -49,12 +49,12 @@ Scenario: Change password failed against the policy
 
 Scenario: Sign in failed after account is locked
 	Given I have user logon details with
-	| Field                           | Value |
-	| IsLocked                        | true  |
+	| Field    | Value |
+	| IsLocked | true  |
 	And I am a user with
-    | Field                           | Value     |
-    | UserName                        | aa        |
-    | Password                        | P@ssword1 |
+    | Field    | Value     |
+    | UserName | aa        |
+    | Password | P@ssword1 |
 	And I am viewing the sign in page
 	When I try to sign in with
 	| Field    | Value     |
@@ -64,14 +64,20 @@ Scenario: Sign in failed after account is locked
 	And I should see an log on error
 
 Scenario: Sign in with password will expire soon
-	Given My password will expire in 2 days
+	Given I have user logon details with
+	| Field                      | Value |
+	| LastPasswordChangeXDaysAgo | 29    |
+	And I am a user with
+    | Field    | Value     |
+    | UserName | aa        |
+    | Password | P@ssword1 |
 	And I am viewing the sign in page
-	When I sign in with
+	When I try to sign in with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	Then I should be signed in
-	And I should see a warning message that "password will be expired" 
+	And I should see a warning message that password will be expired
 
 Scenario: Sign in with password already expired
 	Given My password has already expired

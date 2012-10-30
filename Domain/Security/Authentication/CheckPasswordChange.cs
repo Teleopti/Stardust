@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
                 result.HasMessage = true;
                 result.Message = string.Format(CultureInfo.CurrentUICulture, UserTexts.Resources.LogOnWarningPasswordWillSoonExpire,
                                                (int) expirationDate.Subtract(DateTime.UtcNow).TotalDays);
+	            result.ChangePasswordWarning = true;
             }
             return result;
         }

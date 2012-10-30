@@ -81,7 +81,8 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             {
                 AuthenticationResult result = target.Check(userDetail);
                 Assert.IsTrue(result.Successful);
-                Assert.IsTrue(result.HasMessage);
+	            Assert.IsTrue(result.HasMessage);
+				Assert.IsTrue(result.ChangePasswordWarning);
                 Assert.IsFalse(string.IsNullOrEmpty(result.Message));
             }
         }
