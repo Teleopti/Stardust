@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _target.Dispose();    
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldExecuteDeciderAndLoadWhenNewPeriod()
         {
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
