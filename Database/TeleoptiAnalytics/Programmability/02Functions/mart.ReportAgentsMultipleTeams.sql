@@ -45,7 +45,7 @@ BEGIN
 	BEGIN
 		-- Business hierarchy
 		INSERT INTO @agents
-			SELECT 
+			SELECT DISTINCT
 				aoa.id 
 			FROM 
 				mart.AllOwnedAgents(@person_code, @report_id, @business_unit_code) aoa
@@ -58,7 +58,7 @@ BEGIN
 	BEGIN
 		-- Grouping
 		INSERT INTO @agents
-			SELECT 
+			SELECT DISTINCT
 				aoa.id 
 			FROM 
 				mart.AllOwnedAgents(@person_code, @report_id, @business_unit_code) aoa
