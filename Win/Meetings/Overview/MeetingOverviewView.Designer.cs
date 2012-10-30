@@ -371,6 +371,7 @@
 			// 
 			resources.ApplyResources(this, "$this");
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.scheduleControl1);
 			this.Controls.Add(this.ribbonControlAdv1);
 			this.Name = "MeetingOverviewView";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.meetingOverviewViewFormClosed);
