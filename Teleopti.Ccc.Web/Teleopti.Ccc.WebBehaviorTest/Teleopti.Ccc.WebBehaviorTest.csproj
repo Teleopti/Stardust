@@ -101,6 +101,7 @@
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
+    <Compile Include="Data\Setups\Generic\UserLogonDetailConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
     <Compile Include="Bindings\Transform.cs" />
@@ -483,7 +484,7 @@
     <Content Include="BeforeTestRun.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\PasswordPolicy.xml" >
+    <Content Include="Data\PasswordPolicy.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

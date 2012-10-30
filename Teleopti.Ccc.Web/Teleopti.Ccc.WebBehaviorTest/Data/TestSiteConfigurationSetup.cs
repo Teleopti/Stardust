@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		private static readonly string AgentPortalWebNhibConfPath = Path.Combine(IniFileInfo.SitePath, "bin");
 		private static readonly string TargetTestDataNHibFile = Path.Combine(AgentPortalWebNhibConfPath, "TestData.nhib.xml");
-		private static readonly string TargetTestPasswordPolicyFile = Path.Combine(AgentPortalWebNhibConfPath, "PasswordPolicy.xml");
 
 		public static Uri Url;
 		
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				Url = new Uri(IniFileInfo.Url);
 			}
 			GenerateAndWriteTestDataNHibFileFromTemplate();
-			GenerateAndWriteTestPasswordPolicyFile();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
@@ -56,12 +54,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			contents = contents.Replace("_connectionStringMatrix_", IniFileInfo.ConnectionStringMatrix);
 			contents = contents.Replace("_database_", IniFileInfo.Database);
 			File.WriteAllText(TargetTestDataNHibFile, contents);
-		}
-
-		private static void GenerateAndWriteTestPasswordPolicyFile()
-		{
-			var contents = File.ReadAllText("Data\\PasswordPolicy.xml");
-			File.WriteAllText(TargetTestPasswordPolicyFile, contents);
 		}
 	}
 }
