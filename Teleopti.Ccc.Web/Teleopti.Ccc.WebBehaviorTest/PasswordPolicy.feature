@@ -12,16 +12,16 @@ Background:
 	| PasswordExpireWarningDayCount | 3                  |
 	| Rule1                         | PasswordLengthMin8 |
 
-
+@ignore
 Scenario: Change password successfully against the policy
 	Given I am a user with
-    | Field    | Value     |
-    | UserName | aa        |
-    | Password | P@ssword1 |
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
 	And I am signed in with
 	| Field    | Value     |
-    | UserName | aa        |
-    | Password | P@ssword1 |
+	| UserName | aa        |
+	| Password | P@ssword1 |
 	When I view password setting page
 	And I change my password with
 	| Field             | Value        |
@@ -32,13 +32,13 @@ Scenario: Change password successfully against the policy
 
 Scenario: Change password failed against the policy
 	Given I am a user with
-    | Field    | Value     |
-    | UserName | aa        |
-    | Password | P@ssword1 |
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
 	And I am signed in with
 	| Field    | Value     |
-    | UserName | aa        |
-    | Password | P@ssword1 |
+	| UserName | aa        |
+	| Password | P@ssword1 |
 	When I view password setting page
 	And I change my password with
 	| Field             | Value     |
@@ -52,9 +52,9 @@ Scenario: Sign in failed after account is locked
 	| Field    | Value |
 	| IsLocked | true  |
 	And I am a user with
-    | Field    | Value     |
-    | UserName | aa        |
-    | Password | P@ssword1 |
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
 	And I am viewing the sign in page
 	When I try to sign in with
 	| Field    | Value     |
@@ -68,9 +68,9 @@ Scenario: Sign in with password will expire soon
 	| Field                      | Value |
 	| LastPasswordChangeXDaysAgo | 29    |
 	And I am a user with
-    | Field    | Value     |
-    | UserName | aa        |
-    | Password | P@ssword1 |
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
 	And I am viewing the sign in page
 	When I try to sign in with
 	| Field    | Value     |
@@ -80,20 +80,32 @@ Scenario: Sign in with password will expire soon
 	And I should see a warning message that password will be expired
 
 Scenario: Sign in with password already expired
-	Given My password has already expired
+	Given I have user logon details with
+	| Field                      | Value |
+	| LastPasswordChangeXDaysAgo | 31    |
+	And I am a user with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
 	And I am viewing the sign in page
-	When I sign in with
+	When I try to sign in with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	Then I should not be signed in
 	And I should be redirected to the must change password page
-	And I should see an error message "password has already expired"
+	And I should see an error message password has already expired
 
 Scenario: Navigate to other page when sign in with password already expired
-	Given My password has already expired
+	Given I have user logon details with
+	| Field                      | Value |
+	| LastPasswordChangeXDaysAgo | 31    |
+	And I am a user with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
 	And I am viewing the sign in page
-	When I sign in with
+	When I try to sign in with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
@@ -101,9 +113,15 @@ Scenario: Navigate to other page when sign in with password already expired
 	Then I should be redirected to the sign in page
 
 Scenario: Change password successfully when password already expired
-	Given My password has already expired
+	Given I have user logon details with
+	| Field                      | Value |
+	| LastPasswordChangeXDaysAgo | 31    |
+	And I am a user with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
 	And I am viewing the sign in page
-	When I sign in with
+	When I try to sign in with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
@@ -115,9 +133,15 @@ Scenario: Change password successfully when password already expired
 	Then I should be signed in
 
 Scenario: Change password failed when password already expired
-	Given My password has already expired
+	Given I have user logon details with
+	| Field                      | Value |
+	| LastPasswordChangeXDaysAgo | 31    |
+	And I am a user with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
 	And I am viewing the sign in page
-	When I sign in with
+	When I try to sign in with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
@@ -126,5 +150,112 @@ Scenario: Change password failed when password already expired
 	| Password          | aa        |
 	| ConfirmedPassword | aa        |
 	| OldPassword       | P@ssword1 |
-	Then I should see an error message "password changed failed"
+	Then I should see an error message password changed failed
+	And I should not be signed in
+
+#Belows are for the mobile sign in.
+Scenario: Mobile Sign in failed after account is locked
+	Given I have user logon details with
+	| Field    | Value |
+	| IsLocked | true  |
+	And I am a mobile user with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	And I am viewing the sign in page
+	When I try to sign in with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	Then I should not be signed in
+	And I should see an log on error
+
+Scenario: Mobile Sign in with password will expire soon
+	Given I have user logon details with
+	| Field                      | Value |
+	| LastPasswordChangeXDaysAgo | 29    |
+	And I am a mobile user with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	And I am viewing the sign in page
+	When I try to sign in with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	Then I should be signed in
+	And I should see a warning message that password will be expired
+
+Scenario: Mobile Sign in with password already expired
+	Given I have user logon details with
+	| Field                      | Value |
+	| LastPasswordChangeXDaysAgo | 31    |
+	And I am a mobile user with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	And I am viewing the sign in page
+	When I try to sign in with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	Then I should not be signed in
+	And I should be redirected to the must change password page
+	And I should see an error message password has already expired
+
+Scenario: Navigate to other page when mobile sign in with password already expired
+	Given I have user logon details with
+	| Field                      | Value |
+	| LastPasswordChangeXDaysAgo | 31    |
+	And I am a mobile user with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	And I am viewing the sign in page
+	When I try to sign in with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	And I navigate to week schedule page
+	Then I should be redirected to the sign in page
+
+Scenario: Change password successfully when mobile sign in with password already expired
+	Given I have user logon details with
+	| Field                      | Value |
+	| LastPasswordChangeXDaysAgo | 31    |
+	And I am a mobile user with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	And I am viewing the sign in page
+	When I try to sign in with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	And I change my password with
+	| Field             | Value        |
+	| Password          | NewP@ssword1 |
+	| ConfirmedPassword | NewP@ssword1 |
+	| OldPassword       | P@ssword1    |
+	Then I should be signed in
+
+Scenario: Change password failed when mobile sign in with password already expired
+	Given I have user logon details with
+	| Field                      | Value |
+	| LastPasswordChangeXDaysAgo | 31    |
+	And I am a mobile user with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	And I am viewing the sign in page
+	When I try to sign in with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	And I change my password with
+	| Field             | Value     |
+	| Password          | aa        |
+	| ConfirmedPassword | aa        |
+	| OldPassword       | P@ssword1 |
+	Then I should see an error message password changed failed
 	And I should not be signed in
