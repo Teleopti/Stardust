@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -31,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
     	private IScheduleDay _scheduleDay;
     	private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
+    	private ISchedulePartModifyAndRollbackService _rollbackService;
 
         [SetUp]
         public void Setup()
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         	_person = _mocks.StrictMock<IPerson>();
         	_scheduleDay = _mocks.StrictMock<IScheduleDay>();
         	_dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-
+        	_rollbackService = _mocks.Stub<ISchedulePartModifyAndRollbackService>();
         }
 
 		[Test]
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_activeScheduleMatrix.Person).Return(person);
 				Expect.Call(_activeScheduleMatrix.SchedulePeriod).Return(schedulePeriod);
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(date, date));
-				Expect.Call(_workShiftBackToLegalStateServicePro.Execute(_activeScheduleMatrix, _schedulingOptions)).Return(true);
+				Expect.Call(_workShiftBackToLegalStateServicePro.Execute(_activeScheduleMatrix, _schedulingOptions, _rollbackService)).Return(true);
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(date);
 				Expect.Call(_workShiftBackToLegalStateServicePro.RemovedSchedules).Return(new List<IScheduleDay> { _scheduleDay });
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mocks.Playback())
 			{
-				result = _target.GoBackToLegalState(daysOffToReschedule, groupPerson, _schedulingOptions, _allScheduleMatrixes);
+				result = _target.GoBackToLegalState(daysOffToReschedule, groupPerson, _schedulingOptions, _allScheduleMatrixes, _rollbackService);
 			}
 
 			Assert.AreEqual(1, result.Count);

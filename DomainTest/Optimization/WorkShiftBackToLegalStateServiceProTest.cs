@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISchedulingOptions _schedulingOptions;
     	private IScheduleDay _scheduleDay;
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
+    	private ISchedulePartModifyAndRollbackService _rollbackService;
 
         [SetUp]
         public void Setup()
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
         	_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
+        	_rollbackService = _mocks.Stub<ISchedulePartModifyAndRollbackService>();
         }
 
         [Test]
@@ -41,12 +43,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(1);
                 Expect.Call(_workShiftMinMaxCalculator.IsWeekInLegalState(0, _matrix, _schedulingOptions))
                     .Return(false);
-                Expect.Call(_workShiftBackToLegalStateStep.ExecuteWeekStep(0, _matrix))
+				Expect.Call(_workShiftBackToLegalStateStep.ExecuteWeekStep(0, _matrix, _rollbackService))
                     .Return(null);
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.Execute(_matrix, _schedulingOptions));
+				Assert.IsFalse(_target.Execute(_matrix, _schedulingOptions, _rollbackService));
                 Assert.IsNotNull(_target.RemovedDays);
                 Assert.AreEqual(0, _target.RemovedDays.Count);
             }
@@ -67,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using(_mocks.Playback())
             {
-                Assert.IsTrue(_target.Execute(_matrix, _schedulingOptions));
+				Assert.IsTrue(_target.Execute(_matrix, _schedulingOptions, _rollbackService));
                 Assert.IsNotNull(_target.RemovedDays);
                 Assert.AreEqual(0, _target.RemovedDays.Count);
             }
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_workShiftMinMaxCalculator.PeriodLegalStateStatus(_matrix, _schedulingOptions))
                     .Return(0);
 
-                Expect.Call(_workShiftBackToLegalStateStep.ExecutePeriodStep(true, _matrix))
+				Expect.Call(_workShiftBackToLegalStateStep.ExecutePeriodStep(true, _matrix, _rollbackService))
                     .Return(_scheduleDay);
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(DateOnly.MaxValue);
@@ -96,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mocks.Playback())
             {
-                Assert.IsTrue(_target.Execute(_matrix, _schedulingOptions));
+				Assert.IsTrue(_target.Execute(_matrix, _schedulingOptions, _rollbackService));
                 Assert.IsNotNull(_target.RemovedDays);
                 Assert.AreEqual(1, _target.RemovedDays.Count);
                 Assert.AreEqual(DateOnly.MaxValue, _target.RemovedDays[0]);
@@ -119,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_workShiftMinMaxCalculator.PeriodLegalStateStatus(_matrix, _schedulingOptions))
                     .Return(0);
 
-                Expect.Call(_workShiftBackToLegalStateStep.ExecuteWeekStep(0, _matrix))
+				Expect.Call(_workShiftBackToLegalStateStep.ExecuteWeekStep(0, _matrix, _rollbackService))
 					.Return(_scheduleDay);
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
             	Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(DateOnly.MaxValue);
@@ -127,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mocks.Playback())
             {
-                Assert.IsTrue(_target.Execute(_matrix, _schedulingOptions));
+				Assert.IsTrue(_target.Execute(_matrix, _schedulingOptions, _rollbackService));
                 Assert.IsNotNull(_target.RemovedDays);
                 Assert.AreEqual(1, _target.RemovedDays.Count);
                 Assert.AreEqual(DateOnly.MaxValue, _target.RemovedDays[0]);
