@@ -706,10 +706,10 @@ testRunner.Given("I have the role \'Full access to mytime\'");
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Enable confirmbutton when user has selceted a replyoption")]
-        public virtual void EnableConfirmbuttonWhenUserHasSelcetedAReplyoption()
+        [NUnit.Framework.DescriptionAttribute("Enable confirmbutton when user has selected a replyoption")]
+        public virtual void EnableConfirmbuttonWhenUserHasSelectedAReplyoption()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Enable confirmbutton when user has selceted a replyoption", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Enable confirmbutton when user has selected a replyoption", ((string[])(null)));
 #line 205
 this.ScenarioSetup(scenarioInfo);
 #line 6

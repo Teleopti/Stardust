@@ -72,9 +72,10 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.allowDialogueReply = ko.observable(item.AllowDialogueReply);
 		self.isSending = ko.observable(false);
 		self.reply = ko.observable('');
+		self.selectedReply = ko.observable();
 
 		self.replyOptions = ko.utils.arrayMap(item.ReplyOptions, function (data) {
-			return new replyOptionsViewModel(data);
+			return new replyOptionViewModel(data, self);
 		});
 
 		self.dialogueMessages = ko.utils.arrayMap(item.DialogueMessages, function (data) {
@@ -85,11 +86,13 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			vm.chosenMessage(null);
 		});
 		self.confirmReadMessage = function (data, event) {
+			if (self.selectedReply() == undefined) self.selectedReply(self.replyOptions[0].text);
+			alert(self.replyOptions.length);
 			self.isSending(true);
 			_replyToMessage(self);
 		};
 		self.canConfirm = ko.computed(function () {
-			if (self.isSending() || (self.allowDialogueReply() && self.reply().length == 0)) {
+			if (self.isSending() || (self.allowDialogueReply() && self.reply().length == 0) || self.selectedReply() == undefined && self.replyOptions.length > 1) {
 				return false;
 			}
 			return true;
@@ -101,9 +104,13 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.text = ko.observable(dialogueMessage.Text);
 	};
 
-	var replyOptionsViewModel = function (replyOption) {
+	var replyOptionViewModel = function (replyOption, parent) {
 		var self = this;
 		self.text = ko.observable(replyOption);
+		self.selected = ko.observable();
+		self.selected.subscribe(function (newValue) {
+			parent.selectedReply(newValue);
+		});
 	};
 
 	function _addNewMessageAtTop(messageItem) {
@@ -136,7 +143,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			data: JSON.stringify({
 				Id: messageItem.messageId(),
 				Reply: messageItem.reply(),
-				ReplyOption: "hej"
+				ReplyOption: messageItem.selectedReply()
 			}),
 			success: function (data, textStatus, jqXHR) {
 				messageItem.isRead(true);

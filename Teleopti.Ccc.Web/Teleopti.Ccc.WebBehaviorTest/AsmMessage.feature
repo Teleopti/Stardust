@@ -202,7 +202,7 @@ Given I have the role 'Full access to mytime'
 	And I click the confirm button
 	Then I should not see any messages
 
-Scenario: Enable confirmbutton when user has selceted a replyoption
+Scenario: Enable confirmbutton when user has selected a replyoption
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
 	| Field					| Value				|
@@ -215,7 +215,7 @@ Given I have the role 'Full access to mytime'
 	When I click on the message at position '1' in the list
 	And I click the radiobutton with caption 'No'
 	Then the send button should be enabled
-#######
+ 
 Scenario: Confirmbutton should be disabled when user hasnt selected a replyoption
 Given I have the role 'Full access to mytime'
 	And I have an unread message with

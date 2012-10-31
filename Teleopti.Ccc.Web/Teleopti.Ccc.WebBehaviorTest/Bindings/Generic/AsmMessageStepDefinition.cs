@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
@@ -208,7 +210,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click the radiobutton with caption '(.*)'")]
 		public void WhenIClickTheRadiobuttonWithCaption(string option)
 		{
-			//ScenarioContext.Current.Pending();
+			Pages.Pages.CurrentMessageReplyPage.ReplyOptions.RadioButtons.First(r => r.Text.Equals(option)).EventualClick();
 		}
 
 		[Then(@"I should see radiobuttons with")]
