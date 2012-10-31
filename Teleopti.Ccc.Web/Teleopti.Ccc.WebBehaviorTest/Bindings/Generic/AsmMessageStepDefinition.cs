@@ -211,6 +211,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			//ScenarioContext.Current.Pending();
 		}
 
+		[Then(@"the radiobutton with caption '(.*)' should not be checked")]
+		public void ThenTheRadiobuttonWithCaptionShouldNotBeChecked(string p0)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
 		[Then(@"I should see radiobuttons with")]
 		public void ThenIShouldSeeRadiobuttonsWith(Table table)
 		{
