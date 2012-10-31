@@ -663,6 +663,16 @@
     <Content Include="Content\Scripts\excanvas.original.js" />
     <Content Include="Content\Scripts\jquery.hoverIntent.js" />
     <Content Include="Content\Scripts\knockout-jquery-ui-widget.js" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\bg_left.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\bg_repeat_left.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\bg_right.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\branding_bar_custom_bg.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\close.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\left_image.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\right_image.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\toolbar-bg.png" />
+    <Content Include="Content\Scripts\Pinify\Content\jquery.pinify.min.css" />
+    <Content Include="Content\Scripts\Pinify\Scripts\jquery.pinify.min.js" />
     <Content Include="Content\Scripts\qunit.css" />
     <Content Include="Content\Scripts\qunit.js" />
     <Content Include="Content\Scripts\RGraph.bar.js" />

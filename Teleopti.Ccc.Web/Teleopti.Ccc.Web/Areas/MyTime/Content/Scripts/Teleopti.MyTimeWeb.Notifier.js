@@ -52,12 +52,20 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 			}
 		}
 	}
+	function _pinnedNotification() {
+		$.pinify.addOverlay({
+			title: 'gurka', //don't know where this is suppose to be shown?
+			icon: baseUrl + 'content/favicon.ico'
+		});
+		$.pinify.flashTaskbar();
+	}
 
 	return {
 		Notify: function (options) {
 			_setOptions(options);
 			_notify();
 			_webNotification();
+			_pinnedNotification();
 		}
 	};
 })(jQuery);
