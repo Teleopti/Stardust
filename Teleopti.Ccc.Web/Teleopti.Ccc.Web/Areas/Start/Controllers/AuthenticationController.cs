@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			var businessUnitViewModel = _viewModelFactory.CreateBusinessUnitViewModel(authenticationResult.DataSource,
 			                                                                          authenticationResult.Person,
-																											  authenticationType);
+			                                                                          authenticationType, authenticationResult.Message);
 			switch (businessUnitViewModel.BusinessUnits.Count())
 			{
 				case 0:
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 					var businessUnitId = businessUnitViewModel.BusinessUnits.First().Id;
 					var persionId = authenticationResult.Person.Id.Value;
 					var dataSourceName = authenticationResult.DataSource.DataSourceName;
-					return tryLogOnAndReturnResult(businessUnitId, dataSourceName, persionId, authenticationType);
+					return tryLogOnAndReturnResult(businessUnitId, dataSourceName, persionId, authenticationType, authenticationResult.Message);
 				default:
 					if (IsJsonRequest())
 					{
@@ -133,14 +133,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpPost]
 		public ActionResult Logon([Bind(Prefix = "SignIn")] SignInBusinessUnitModel model)
 		{
-			return tryLogOnAndReturnResult(model.BusinessUnitId, model.DataSourceName, model.PersonId, (AuthenticationTypeOption)model.AuthenticationType);
+			return tryLogOnAndReturnResult(model.BusinessUnitId, model.DataSourceName, model.PersonId, (AuthenticationTypeOption)model.AuthenticationType, model.WarningMessage);
 		}
 
-		private ActionResult tryLogOnAndReturnResult(Guid buisinessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType)
+		private ActionResult tryLogOnAndReturnResult(Guid businessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType, string warningMessage)
 		{
 			try
 			{
-				_logon.LogOn(buisinessUnitId, dataSourceName, personId, authenticationType);
+				_logon.LogOn(businessUnitId, dataSourceName, personId, authenticationType, warningMessage);
 
 				return _redirector.SignInRedirect();
 			}
@@ -153,6 +153,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				}
 				return PartialView("ErrorPartial", errorViewModel);
 			}
+		}
+
+		[HttpGet]
+		public JsonResult PopWarningMessage()
+		{
+			var message = _logon.PopWarningMessage();
+			return Json(new {Message = message, HasMessage = !string.IsNullOrEmpty(message)},JsonRequestBehavior.AllowGet);
 		}
 
 		private JsonResult PrepareAndReturnJsonError(JsonResult result)

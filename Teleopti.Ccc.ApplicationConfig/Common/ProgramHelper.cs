@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using Teleopti.Ccc.ApplicationConfig.Creators;
 using Teleopti.Ccc.DatabaseConverter;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
                                                           new CheckSuperUser(
                                                               new FindUserDetail(
                                                                   new CheckUserDetail(
-                                                                      new CheckPassword(new OneWayEncryption(),new CheckBruteForce(passwordPolicy), new CheckPasswordChange(passwordPolicy))),
+                                                                      new CheckPassword(new OneWayEncryption(),new CheckBruteForce(passwordPolicy), new CheckPasswordChange(passwordPolicy, new UtcNow()))),
                                                                   repositoryFactory), new SystemUserSpecification(),
                                                               new SystemUserPasswordSpecification())), repositoryFactory));
             DataSourceContainer dataSourceContainer = applicationDataSourceProvider.DataSourceList().First();

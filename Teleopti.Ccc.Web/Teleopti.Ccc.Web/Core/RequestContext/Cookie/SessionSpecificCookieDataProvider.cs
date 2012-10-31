@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			var userData = _dataStringSerializer.Serialize(data);
 			var userName = data.PersonId.ToString();
 
-			MakeCookie(userName, _now.LocalDateTime(), userData);
+			MakeCookie(userName, DateTime.Now, userData);
 		}
 
 		public SessionSpecificData GrabFromCookie()

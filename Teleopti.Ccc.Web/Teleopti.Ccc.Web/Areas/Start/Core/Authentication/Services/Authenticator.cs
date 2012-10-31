@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			{
 				var authResult = _findApplicationUser.CheckLogOn(uow, userName, password);
 				uow.PersistAll();
-				return new AuthenticateResult { DataSource = dataSource, Person = authResult.Person, Successful = authResult.Successful };
+				return new AuthenticateResult {DataSource = dataSource, Person = authResult.Person, Successful = authResult.Successful, HasMessage = authResult.HasMessage, Message = authResult.Message};
 			}
 
 		}

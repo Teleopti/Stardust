@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		private const int dataSourcePosition = 1;
 		private const int personPosition = 2;
 		private const int authenticateTypePosition = 3;
-		private static readonly string stringFormat = "{0}" + delimiter + "{1}" + delimiter + "{2}" + delimiter + "{3}";
+		private const int messagePosition = 4;
+		private const string stringFormat = "{1}{0}{2}{0}{3}{0}{4}{0}{5}";
 
 		public SessionSpecificDataStringSerializer(ILog logger)
 		{
@@ -21,11 +22,14 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 		public string Serialize(SessionSpecificData data)
 		{
-			var dataArray = new object[4];
-			dataArray[businessUnitPosition] = data.BusinessUnitId;
-			dataArray[dataSourcePosition] = data.DataSourceName;
-			dataArray[personPosition] = data.PersonId;
-			dataArray[authenticateTypePosition] = (int)data.AuthenticationType;
+			var dataArray = new object[6];
+			dataArray[0] = delimiter;
+			dataArray[businessUnitPosition+1] = data.BusinessUnitId;
+			dataArray[dataSourcePosition+1] = data.DataSourceName;
+			dataArray[personPosition+1] = data.PersonId;
+			dataArray[authenticateTypePosition+1] = (int)data.AuthenticationType;
+			dataArray[messagePosition+1] = data.WarningMessage ?? string.Empty;
+
 			return string.Format(stringFormat, dataArray);
 		}
 
@@ -36,10 +40,12 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			var split = stringData.Split(delimiter);
 			try
 			{
+				var message = (split.Length > messagePosition) ? split[messagePosition] : null;
 				return new SessionSpecificData(new Guid(split[businessUnitPosition]),
 															split[dataSourcePosition],
 															new Guid(split[personPosition]),
-															(AuthenticationTypeOption)Convert.ToInt32(split[authenticateTypePosition]));
+															(AuthenticationTypeOption)Convert.ToInt32(split[authenticateTypePosition]),
+															message);
 
 			}
 			catch (FormatException)

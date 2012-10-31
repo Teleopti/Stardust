@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.ViewModelFactory
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.CreateBusinessUnitViewModel(_datasoure, _person, AuthenticationTypeOption.Windows);
+				var result = _target.CreateBusinessUnitViewModel(_datasoure, _person, AuthenticationTypeOption.Windows, null);
 
 				result.HasBusinessUnits.Should().Be.True();
 				result.BusinessUnits.Select(x => x.Name).Should().Have.SameValuesAs(_businessUnits.Select(x => x.Name));
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.ViewModelFactory
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.CreateBusinessUnitViewModel(_datasoure, _person, AuthenticationTypeOption.Application);
+				var result = _target.CreateBusinessUnitViewModel(_datasoure, _person, AuthenticationTypeOption.Application, null);
 				result.SignIn.BusinessUnitId.Should().Not.Be.EqualTo(Guid.Empty);
 				result.SignIn.BusinessUnitId.Should().Be.EqualTo(_businessUnits.First().Id);
 				result.SignIn.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Application);

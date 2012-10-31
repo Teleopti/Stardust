@@ -129,6 +129,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			return false;
 		});
 
+		_loadWarning();
 	}
 
 	// Bind an event to window.onhashchange that, when the history state changes,
@@ -226,6 +227,19 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				$('#body-inner').html(html);
 				_invokeInitCallback(viewId);
 				currentViewId = viewId;
+			}
+		});
+	}
+
+	function _loadWarning() {
+		ajax.Ajax({
+			url: '/Start/Authentication/PopWarningMessage',
+			global: true,
+			success: function (result) {
+				if (result.HasMessage) {
+					$('#warning').html(result.Message);
+					$('#warning').click(function () { $(this).hide(); });
+				}
 			}
 		});
 	}

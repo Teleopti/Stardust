@@ -11,16 +11,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public int InvalidAttempts { get; set; }
 		public int InvalidAttemptsStartXMinutesAgo { get; set; }
-		public bool IsLocked { get; set; }
-		public int LastPasswordChangeXDaysAgo { get; set; }
+		public bool? IsLocked { get; set; }
+		public DateTime? LastPasswordChange { get; set; }
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var userDetail = new UserDetail(user);
 			userDetail.SetInvalidAttempts(InvalidAttempts);
 			userDetail.SetInvalidAttemptsSequenceStart(DateTime.Now.AddMinutes(-InvalidAttemptsStartXMinutesAgo));
-			userDetail.SetLastPasswordChange(DateTime.Now.AddDays(-LastPasswordChangeXDaysAgo));
-			if(IsLocked)
+			if(LastPasswordChange!=null)
+				userDetail.SetLastPasswordChange(LastPasswordChange.Value);
+			if (IsLocked != null && IsLocked.Value)
 				userDetail.Lock();
 
 			var userDetailRepository = new UserDetailRepository(uow);

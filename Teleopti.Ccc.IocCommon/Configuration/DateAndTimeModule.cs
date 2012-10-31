@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<Now>().AsImplementedInterfaces().SingleInstance();
+			builder.RegisterType<UtcNow>().AsImplementedInterfaces().SingleInstance();
 			builder.RegisterType<TimeFormatter>().As<ITimeFormatter>().SingleInstance();
 		}
 	}

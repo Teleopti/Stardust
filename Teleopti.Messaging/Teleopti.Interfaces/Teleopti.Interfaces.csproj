@@ -319,6 +319,7 @@
     <Compile Include="Domain\IUserCulture.cs" />
     <Compile Include="Domain\IUserDetail.cs" />
     <Compile Include="Domain\IUserTimeZone.cs" />
+    <Compile Include="Domain\IUtcNow.cs" />
     <Compile Include="Domain\IValidatedVolumeDay.cs" />
     <Compile Include="Domain\IVirtualSchedulePeriod.cs" />
     <Compile Include="Domain\IVirtualSchedulePeriodSplitChecker.cs" />
