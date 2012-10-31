@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
+{
+	public class PushMessageProvider : IPushMessageProvider
+	{
+		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IPushMessageDialogueRepository _repository;
+
+		public PushMessageProvider(ILoggedOnUser loggedOnUser, IPushMessageDialogueRepository repository)
+		{
+			_loggedOnUser = loggedOnUser;
+			_repository = repository;
+		}
+
+		public int UnreadMessageCount
+		{
+			get { return _repository.CountUnread(_loggedOnUser.CurrentUser()); }
+		}
+
+		public IList<IPushMessageDialogue> GetMessages(Paging paging)
+		{
+			return new List<IPushMessageDialogue>(_repository.FindUnreadMessages(paging, _loggedOnUser.CurrentUser()));
+		}
+
+		public IPushMessageDialogue GetMessage(Guid messageId)
+		{
+			return _repository.Get(messageId);
+		}
+	}
+}

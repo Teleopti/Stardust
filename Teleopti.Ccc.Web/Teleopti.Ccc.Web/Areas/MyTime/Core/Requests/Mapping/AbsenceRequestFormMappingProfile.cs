@@ -59,10 +59,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				{
 					period = _mapper.Invoke().Map<DateTimePeriodForm, DateTimePeriod>(source.Period);
 				}
-
-				destination.Request = new AbsenceRequest(_absenceRepository.Invoke().Load(source.AbsenceId), period);
+				
 
 				destination.TrySetMessage(source.Message ?? "");
+
+				destination.Request = new AbsenceRequest(_absenceRepository.Invoke().Load(source.AbsenceId), period);
 
 				if (source.EntityId != null)
 					destination.SetId(source.EntityId);

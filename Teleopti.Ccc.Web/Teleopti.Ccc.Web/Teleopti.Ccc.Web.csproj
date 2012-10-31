@@ -196,11 +196,21 @@
     <Compile Include="Areas\MyTime\Controllers\MessageBrokerController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceAndScheduleDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\AbsenceDayViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Message\MessageForm.cs" />
+    <Compile Include="Areas\MyTime\Models\Message\MessagesInformationViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PersonAssignmentDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceAndScheduleDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\DayOffDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\MustHaveInput.cs" />
+    <Compile Include="Areas\MyTime\Controllers\MessageController.cs" />
     <Compile Include="Areas\MyTime\Core\Asm\Mapping\AsmViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Message\DataProvider\IPushMessageDialoguePersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Message\DataProvider\PushMessageDialoguePersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Message\Mapping\MessageViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Message\ViewModelFactory\IMessageViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Message\ViewModelFactory\MessageViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Message\DataProvider\IPushMessageProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Message\DataProvider\PushMessageProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractor.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\VisualLayerForWebDisplay.cs" />
     <Compile Include="Areas\MyTime\Core\Asm\Mapping\IAsmViewModelMapper.cs" />
@@ -211,6 +221,7 @@
     <Compile Include="Areas\MyTime\Models\MessageBroker\IUserDataFactory.cs" />
     <Compile Include="Areas\MyTime\Models\MessageBroker\UserData.cs" />
     <Compile Include="Areas\MyTime\Models\MessageBroker\UserDataFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\Message\MessageViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferencePeriodFeedbackViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferencePeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferencePeriodFeedbackProvider.cs" />
@@ -378,7 +389,7 @@
     <Compile Include="Areas\MyTime\Controllers\PreferenceController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\DefaultDateCalculator.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IDefaultDateCalculator.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\IPreferenceOptionsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\IPreferenceOptionsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferencePersister.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IStudentAvailabilityProvider.cs" />
@@ -429,9 +440,9 @@
     <Compile Include="Areas\MyTime\Core\JsonSerializationExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\LayoutBase\DatePickerGlobalizationViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\LayoutBase\IDatePickerGlobalizationViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\IPermissionProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\PermissionProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\PortalViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\IPermissionProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\PermissionProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\ViewModelFactory\PortalViewModelFactory.cs" />
     <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificCookieDataProviderSettings.cs" />
     <Compile Include="Core\RequestContext\ISetThreadCulture.cs" />
     <Compile Include="Core\RequestContext\Cookie\ISessionSpecificCookieDataProviderSettings.cs" />
@@ -447,7 +458,7 @@
     <Compile Include="Areas\MyTime\Core\ColorExtensions.cs" />
     <Compile Include="Areas\Start\Core\LayoutBase\CultureSpecificViewModelFactory.cs" />
     <Compile Include="Areas\Start\Core\LayoutBase\ICultureSpecificViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\IPortalViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\ViewModelFactory\IPortalViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\PortalHtmlHelper.cs" />
     <Compile Include="Core\RequestContext\LoggedOnUser.cs" />
     <Compile Include="Core\RequestContext\ILoggedOnUser.cs" />
@@ -501,6 +512,7 @@
     <Content Include="Areas\MyTime\Content\Css\Asm.css" />
     <Content Include="Areas\MyTime\Content\Css\CalendarView.css" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Index.js" />
+    <Content Include="Areas\MyTime\Content\Css\AsmMessage.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.combobox.css" />
     <Content Include="Areas\MyTime\Content\Css\TooltipCustom.css" />
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
@@ -509,6 +521,9 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AsmMessageDetail.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AsmMessage.List.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AsmMessage.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.signalR-0.5.3.min.js" />
     <Content Include="Areas\MyTime\Content\Images\icon_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\knockout.bindings.js" />
@@ -579,6 +594,7 @@
     <Content Include="Areas\MyTime\Views\Preference\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\WeekRequestPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
+    <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
     <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
     <None Include="Areas\Start\Views\Test\Message.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -876,7 +892,7 @@
           <UseIIS>False</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>52858</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <DevelopmentServerVPath>/MyTimeWeb</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

@@ -182,6 +182,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			Browser.Current.GoTo("about:blank");
 		}
+
+	    public static void GotoMessagePage()
+        {
+            GoTo("MyTime#Message/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
+            Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
+	    }
 	}
 
 
