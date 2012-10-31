@@ -16,10 +16,10 @@
 		    @if(Model.HasAsmPermission)
 			{
 				<text>
-//				Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
-//				{ notifyText: '@Resources.YourScheduleHasChanged', timeout: 4000, baseUrl: '@Url.Content("~/")', header: '@Resources.Teleopti' },
-//					function (notification) { Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);}
-//				);
+				Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
+				{ notifyText: '@Resources.YourScheduleHasChanged', timeout: 4000, baseUrl: '@Url.Content("~/")', header: '@Resources.Teleopti' },
+					function (notification) { Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);}
+				);
 
                 Teleopti.MyTimeWeb.AsmMessage.Init();
 				</text>
