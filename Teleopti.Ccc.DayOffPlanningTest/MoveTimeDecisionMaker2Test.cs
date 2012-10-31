@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.AreEqual(2, result.Count);
 
             DateOnly mostUnderStaffingDay = new DateOnly(2010, 02, 09);
-            DateOnly mostOverStaffingDay = new DateOnly(2010, 02, 11);
+            DateOnly mostOverStaffingDay = new DateOnly(2010, 02, 12);
 
             Assert.AreEqual(mostUnderStaffingDay, result[0]);
             Assert.AreEqual(mostOverStaffingDay, result[1]);
