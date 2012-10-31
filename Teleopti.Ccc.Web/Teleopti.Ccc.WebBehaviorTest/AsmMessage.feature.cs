@@ -796,11 +796,11 @@ testRunner.Given("I have the role \'Full access to mytime\'");
         public virtual void UserCanOnlySelectOneReplyoption()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User can only select one replyoption", ((string[])(null)));
-#line 233
+#line 232
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 234
+#line 233
 testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
@@ -821,18 +821,59 @@ testRunner.Given("I have the role \'Full access to mytime\'");
             table23.AddRow(new string[] {
                         "ReplyOption2",
                         "No"});
-#line 235
+#line 234
  testRunner.And("I have an unread message with", ((string)(null)), table23);
-#line 242
+#line 241
  testRunner.And("I am viewing messages");
-#line 243
+#line 242
  testRunner.When("I click on the message at position \'1\' in the list");
-#line 244
+#line 243
  testRunner.And("I click the radiobutton with caption \'No\'");
-#line 245
+#line 244
  testRunner.And("I click the radiobutton with caption \'Yes\'");
-#line 246
+#line 245
  testRunner.Then("the radiobutton with caption \'No\' should not be checked");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Do not show replyoptions if there is only one option")]
+        public virtual void DoNotShowReplyoptionsIfThereIsOnlyOneOption()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Do not show replyoptions if there is only one option", ((string[])(null)));
+#line 247
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 248
+testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table24.AddRow(new string[] {
+                        "Title",
+                        "New message"});
+            table24.AddRow(new string[] {
+                        "Message",
+                        "Text in message"});
+            table24.AddRow(new string[] {
+                        "Text reply allowed",
+                        "False"});
+            table24.AddRow(new string[] {
+                        "ReplyOption1",
+                        "Ok"});
+#line 249
+ testRunner.And("I have an unread message with", ((string)(null)), table24);
+#line 255
+ testRunner.And("I am viewing messages");
+#line 256
+ testRunner.When("I click on the message at position \'1\' in the list");
+#line 257
+ testRunner.Then("I should not see any options");
+#line 258
+ testRunner.And("the send button should be enabled");
 #line hidden
             this.ScenarioCleanup();
         }

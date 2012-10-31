@@ -87,16 +87,20 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		});
 		self.confirmReadMessage = function (data, event) {
 			if (self.selectedReply() == undefined) self.selectedReply(self.replyOptions[0].text);
-			alert(self.replyOptions.length);
 			self.isSending(true);
 			_replyToMessage(self);
 		};
+		self.userMustSelectReplyOption = ko.computed(function () {
+			return self.replyOptions.length > 1;
+		});
+		
 		self.canConfirm = ko.computed(function () {
-			if (self.isSending() || (self.allowDialogueReply() && self.reply().length == 0) || self.selectedReply() == undefined && self.replyOptions.length > 1) {
+			if (self.isSending() || (self.allowDialogueReply() && self.reply().length == 0) || self.selectedReply() == undefined && self.userMustSelectReplyOption()) {
 				return false;
 			}
 			return true;
 		});
+		
 	}
 
 	var dialogueMessageViewModel = function (dialogueMessage) {

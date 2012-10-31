@@ -228,5 +228,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			}	
 		}
 
+		[Then(@"I should not see any options")]
+		public void ThenIShouldNotSeeAnyOptions()
+		{
+			foreach (var radioButton in Pages.Pages.CurrentMessageReplyPage.ReplyOptions.RadioButtons)
+			{
+				Assert.That(IsDisplayed(radioButton), Is.False);
+			}
+		}
+
+		private static bool IsDisplayed(Element element)
+		{
+			if(string.Equals(element.Style.Display,"none"))
+			{
+				return false;
+			}
+			if(element.Parent!=null)
+			{
+				return IsDisplayed(element.Parent);
+			}
+			return true;
+		}
 	}
 }

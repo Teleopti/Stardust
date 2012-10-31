@@ -229,7 +229,6 @@ Given I have the role 'Full access to mytime'
 	When I click on the message at position '1' in the list
 	Then the send button should be disabled
 
-	
 Scenario: User can only select one replyoption
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -244,4 +243,17 @@ Given I have the role 'Full access to mytime'
 	And I click the radiobutton with caption 'No'
 	And I click the radiobutton with caption 'Yes'
 	Then the radiobutton with caption 'No' should not be checked
+
+Scenario: Do not show replyoptions if there is only one option
+Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field					| Value				|
+	| Title					| New message		|
+	| Message				| Text in message	|
+	| Text reply allowed	| False				|
+	| ReplyOption1			| Ok					|
+	And I am viewing messages
+	When I click on the message at position '1' in the list
+	Then I should not see any options
+	And the send button should be enabled
 	
