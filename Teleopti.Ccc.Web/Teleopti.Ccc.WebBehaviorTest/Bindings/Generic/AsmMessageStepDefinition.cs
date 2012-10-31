@@ -214,9 +214,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 		[Then(@"the radiobutton with caption '(.*)' should not be checked")]
-		public void ThenTheRadiobuttonWithCaptionShouldNotBeChecked(string p0)
+		public void ThenTheRadiobuttonWithCaptionShouldNotBeChecked(string option)
 		{
-			ScenarioContext.Current.Pending();
+			EventualAssert.That(()=>Pages.Pages.CurrentMessageReplyPage.ReplyOptions.RadioButtons.First(r => r.Text.Equals(option)).Checked,Is.False);
 		}
 
 		[Then(@"I should see radiobuttons with")]
