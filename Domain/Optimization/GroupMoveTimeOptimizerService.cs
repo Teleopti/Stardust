@@ -105,11 +105,6 @@ namespace Teleopti.Ccc.Domain.Optimization
                         _groupMoveTimeOptimizerExecuter.Rollback(dayToBeShorten);
                     }
                 }
-                else
-                {
-                    removedOptimizers.AddRange(runnableOptimizers);
-                }
-                skippedOptimizers.AddRange(runnableOptimizers);
                 reportProgress(dayToBeLengthen,dayToBeShorten, success, pendingOptimizers.Count, executes, person);
             }
             return removedOptimizers;

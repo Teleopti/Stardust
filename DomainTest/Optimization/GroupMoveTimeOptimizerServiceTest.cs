@@ -70,7 +70,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             
             using (_mock.Record())
             {
-                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> { date, date2 }).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> { date, date2 });
+                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly>());
                 Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date)).Return(_allMatrixes).Repeat.AtLeastOnce();
                 Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date2)).Return(_allMatrixes).Repeat.AtLeastOnce() ;
@@ -161,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void verifyReportProgressEventExecutedAndCanCancelExpectValues(DateOnly date2, DateOnly date)
         {
-            Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> {date, date2}).Repeat.AtLeastOnce();
+            Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> {date, date2});
             Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date)).Return(_allMatrixes).Repeat.AtLeastOnce();
             Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date2)).Return(_allMatrixes).Repeat.AtLeastOnce();
