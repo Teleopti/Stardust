@@ -104,13 +104,21 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 			invoker.BeginInvoke(notificationList, callProxyCallback, invoker);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void callProxy(IEnumerable<Notification> state)
 		{
 			lock (WrapperLock)
 			{
 				if (_wrapper == null) return;
 
-				_wrapper.NotifyClients(state);
+				try
+				{
+					_wrapper.NotifyClients(state);
+				}
+				catch (Exception)
+				{
+					//Log this when we have log4net
+				}
 			}
 		}
 
