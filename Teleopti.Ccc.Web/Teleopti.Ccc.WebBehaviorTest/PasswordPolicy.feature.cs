@@ -210,7 +210,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line 49
- testRunner.Given("Current time is \'2012-01-29\'");
+ testRunner.Given("Current time is \'2012-01-30\'");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",

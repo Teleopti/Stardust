@@ -34,6 +34,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "signout-button")]
 		public Link SignoutButton { get; set; }
 
+		[FindBy(Id = "warning")]
+		public Div WarningMessage { get; set; }
 
 		public void SelectApplicationTestDataSource()
 		{

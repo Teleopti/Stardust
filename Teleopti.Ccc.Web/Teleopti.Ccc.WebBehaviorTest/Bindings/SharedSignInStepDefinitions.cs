@@ -90,7 +90,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		[Then(@"I should see a warning message that password will be expired")]
 		public void ThenIShouldSeeAWarningMessageThatPasswordWillBeExpired()
-		{
+		{                                                                                              
+			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.WarningMessage.InnerHtml.Contains("Du måste ändra ditt lösenord. Det går ut om 1 dagar."), Is.True);
 		}
 
 		[Then(@"I should see an log on error")]

@@ -46,7 +46,7 @@ Scenario: Sign in failed after account is locked
 	And I should see an log on error
 
 Scenario: Sign in with password will expire soon
-	Given Current time is '2012-01-29'
+	Given Current time is '2012-01-30'
 	And I have user logon details with
 	| Field                | Value      |
 	| Last Password Change | 2012-01-01 |

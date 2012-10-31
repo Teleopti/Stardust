@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "ApplicationSignIn_SignIn_UserName")] public TextField UserNameTextField { get; set; }
 
 		public Element ValidationSummary { get { return Document.Span(Find.ByClass("error")); } }
+		public Div WarningMessage { get; private set; }
 
 		[FindBy(Id = "businessunit-ok-button")]public Button SignInBusinessInitsOkButton;
 
