@@ -101,6 +101,11 @@
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
+    <Compile Include="PasswordPolicyMobile.feature.cs">
+      <DependentUpon>PasswordPolicyMobile.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Data\Setups\Generic\UserLogonDetailConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
@@ -496,6 +501,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="PasswordPolicyMobile.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PasswordPolicyMobile.feature.cs</LastGenOutput>
+    </None>
     <None Include="PasswordPolicy.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PasswordPolicy.feature.cs</LastGenOutput>

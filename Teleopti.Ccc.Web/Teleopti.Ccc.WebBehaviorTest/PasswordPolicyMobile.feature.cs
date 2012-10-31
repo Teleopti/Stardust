@@ -19,21 +19,21 @@ namespace Teleopti.Ccc.WebBehaviorTest
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "1.8.1.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Password Policy")]
-    public partial class PasswordPolicyFeature
+    [NUnit.Framework.DescriptionAttribute("Password Policy Mobile")]
+    public partial class PasswordPolicyMobileFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "PasswordPolicy.feature"
+#line 1 "PasswordPolicyMobile.feature"
 #line hidden
         
         [NUnit.Framework.TestFixtureSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Password Policy", "In order to have a good security\r\nAs a user that is trying to sign in or change p" +
-                    "assword\r\nI have a password policy", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Password Policy Mobile", "In order to have a good security\r\nAs a mobile user that is trying to sign in\r\nI h" +
+                    "ave a password policy", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -93,10 +93,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Change password failed against the policy")]
-        public virtual void ChangePasswordFailedAgainstThePolicy()
+        [NUnit.Framework.DescriptionAttribute("Sign in failed after account is locked")]
+        public virtual void SignInFailedAfterAccountIsLocked()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Change password failed against the policy", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in failed after account is locked", ((string[])(null)));
 #line 15
 this.ScenarioSetup(scenarioInfo);
 #line 6
@@ -106,13 +106,10 @@ this.FeatureBackground();
                         "Field",
                         "Value"});
             table2.AddRow(new string[] {
-                        "UserName",
-                        "aa"});
-            table2.AddRow(new string[] {
-                        "Password",
-                        "P@ssword1"});
+                        "IsLocked",
+                        "true"});
 #line 16
- testRunner.Given("I am a user with", ((string)(null)), table2);
+ testRunner.Given("I have user logon details with", ((string)(null)), table2);
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -123,37 +120,36 @@ this.FeatureBackground();
             table3.AddRow(new string[] {
                         "Password",
                         "P@ssword1"});
-#line 20
- testRunner.And("I am signed in with", ((string)(null)), table3);
-#line 24
- testRunner.When("I view password setting page");
+#line 19
+ testRunner.And("I am a mobile user with", ((string)(null)), table3);
+#line 23
+ testRunner.And("I am viewing the sign in page");
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table4.AddRow(new string[] {
+                        "UserName",
+                        "aa"});
+            table4.AddRow(new string[] {
                         "Password",
-                        "aa"});
-            table4.AddRow(new string[] {
-                        "Confirmed Password",
-                        "aa"});
-            table4.AddRow(new string[] {
-                        "Old Password",
                         "P@ssword1"});
-#line 25
- testRunner.And("I change my password with", ((string)(null)), table4);
-#line 30
- testRunner.Then("I should see password changed failed with message");
+#line 24
+ testRunner.When("I try to sign in with", ((string)(null)), table4);
+#line 28
+ testRunner.Then("I should not be signed in");
+#line 29
+ testRunner.And("I should see an log on error");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Sign in failed after account is locked")]
-        public virtual void SignInFailedAfterAccountIsLocked()
+        [NUnit.Framework.DescriptionAttribute("Sign in with password will expire soon")]
+        public virtual void SignInWithPasswordWillExpireSoon()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in failed after account is locked", ((string[])(null)));
-#line 32
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with password will expire soon", ((string[])(null)));
+#line 31
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
@@ -162,9 +158,9 @@ this.FeatureBackground();
                         "Field",
                         "Value"});
             table5.AddRow(new string[] {
-                        "IsLocked",
-                        "true"});
-#line 33
+                        "Last Password Change X Days Ago",
+                        "29"});
+#line 32
  testRunner.Given("I have user logon details with", ((string)(null)), table5);
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
@@ -176,9 +172,9 @@ this.FeatureBackground();
             table6.AddRow(new string[] {
                         "Password",
                         "P@ssword1"});
-#line 36
- testRunner.And("I am a user with", ((string)(null)), table6);
-#line 40
+#line 35
+ testRunner.And("I am a mobile user with", ((string)(null)), table6);
+#line 39
  testRunner.And("I am viewing the sign in page");
 #line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
@@ -190,22 +186,22 @@ this.FeatureBackground();
             table7.AddRow(new string[] {
                         "Password",
                         "P@ssword1"});
-#line 41
+#line 40
  testRunner.When("I try to sign in with", ((string)(null)), table7);
+#line 44
+ testRunner.Then("I should be signed in");
 #line 45
- testRunner.Then("I should not be signed in");
-#line 46
- testRunner.And("I should see an log on error");
+ testRunner.And("I should see a warning message that password will be expired");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Sign in with password will expire soon")]
-        public virtual void SignInWithPasswordWillExpireSoon()
+        [NUnit.Framework.DescriptionAttribute("Sign in with password already expired")]
+        public virtual void SignInWithPasswordAlreadyExpired()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with password will expire soon", ((string[])(null)));
-#line 48
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with password already expired", ((string[])(null)));
+#line 47
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
@@ -215,8 +211,8 @@ this.FeatureBackground();
                         "Value"});
             table8.AddRow(new string[] {
                         "Last Password Change X Days Ago",
-                        "29"});
-#line 49
+                        "31"});
+#line 48
  testRunner.Given("I have user logon details with", ((string)(null)), table8);
 #line hidden
             TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
@@ -228,9 +224,9 @@ this.FeatureBackground();
             table9.AddRow(new string[] {
                         "Password",
                         "P@ssword1"});
-#line 52
- testRunner.And("I am a user with", ((string)(null)), table9);
-#line 56
+#line 51
+ testRunner.And("I am a mobile user with", ((string)(null)), table9);
+#line 55
  testRunner.And("I am viewing the sign in page");
 #line hidden
             TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
@@ -242,21 +238,23 @@ this.FeatureBackground();
             table10.AddRow(new string[] {
                         "Password",
                         "P@ssword1"});
-#line 57
+#line 56
  testRunner.When("I try to sign in with", ((string)(null)), table10);
+#line 60
+ testRunner.Then("I should not be signed in");
 #line 61
- testRunner.Then("I should be signed in");
+ testRunner.And("I should be redirected to the must change password page");
 #line 62
- testRunner.And("I should see a warning message that password will be expired");
+ testRunner.And("I should see an error message password has already expired");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Sign in with password already expired")]
-        public virtual void SignInWithPasswordAlreadyExpired()
+        [NUnit.Framework.DescriptionAttribute("Navigate to other page when sign in with password already expired")]
+        public virtual void NavigateToOtherPageWhenSignInWithPasswordAlreadyExpired()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with password already expired", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate to other page when sign in with password already expired", ((string[])(null)));
 #line 64
 this.ScenarioSetup(scenarioInfo);
 #line 6
@@ -281,7 +279,7 @@ this.FeatureBackground();
                         "Password",
                         "P@ssword1"});
 #line 68
- testRunner.And("I am a user with", ((string)(null)), table12);
+ testRunner.And("I am a mobile user with", ((string)(null)), table12);
 #line 72
  testRunner.And("I am viewing the sign in page");
 #line hidden
@@ -297,21 +295,19 @@ this.FeatureBackground();
 #line 73
  testRunner.When("I try to sign in with", ((string)(null)), table13);
 #line 77
- testRunner.Then("I should not be signed in");
+ testRunner.And("I navigate to week schedule page");
 #line 78
- testRunner.And("I should be redirected to the must change password page");
-#line 79
- testRunner.And("I should see an error message password has already expired");
+ testRunner.Then("I should be redirected to the sign in page");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Navigate to other page when sign in with password already expired")]
-        public virtual void NavigateToOtherPageWhenSignInWithPasswordAlreadyExpired()
+        [NUnit.Framework.DescriptionAttribute("Change password successfully when sign in with password already expired")]
+        public virtual void ChangePasswordSuccessfullyWhenSignInWithPasswordAlreadyExpired()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate to other page when sign in with password already expired", ((string[])(null)));
-#line 81
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Change password successfully when sign in with password already expired", ((string[])(null)));
+#line 80
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
@@ -322,7 +318,7 @@ this.FeatureBackground();
             table14.AddRow(new string[] {
                         "Last Password Change X Days Ago",
                         "31"});
-#line 82
+#line 81
  testRunner.Given("I have user logon details with", ((string)(null)), table14);
 #line hidden
             TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
@@ -334,9 +330,9 @@ this.FeatureBackground();
             table15.AddRow(new string[] {
                         "Password",
                         "P@ssword1"});
-#line 85
- testRunner.And("I am a user with", ((string)(null)), table15);
-#line 89
+#line 84
+ testRunner.And("I am a mobile user with", ((string)(null)), table15);
+#line 88
  testRunner.And("I am viewing the sign in page");
 #line hidden
             TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
@@ -348,48 +344,47 @@ this.FeatureBackground();
             table16.AddRow(new string[] {
                         "Password",
                         "P@ssword1"});
-#line 90
+#line 89
  testRunner.When("I try to sign in with", ((string)(null)), table16);
-#line 94
- testRunner.And("I navigate to week schedule page");
-#line 95
- testRunner.Then("I should be redirected to the sign in page");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Change password successfully when password already expired")]
-        public virtual void ChangePasswordSuccessfullyWhenPasswordAlreadyExpired()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Change password successfully when password already expired", ((string[])(null)));
-#line 97
-this.ScenarioSetup(scenarioInfo);
-#line 6
-this.FeatureBackground();
 #line hidden
             TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table17.AddRow(new string[] {
-                        "Last Password Change X Days Ago",
-                        "31"});
+                        "Password",
+                        "NewP@ssword1"});
+            table17.AddRow(new string[] {
+                        "Confirmed Password",
+                        "NewP@ssword1"});
+            table17.AddRow(new string[] {
+                        "Old Password",
+                        "P@ssword1"});
+#line 93
+ testRunner.And("I change my password with", ((string)(null)), table17);
 #line 98
- testRunner.Given("I have user logon details with", ((string)(null)), table17);
+ testRunner.Then("I should be signed in");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Change password failed when sign in with password already expired")]
+        public virtual void ChangePasswordFailedWhenSignInWithPasswordAlreadyExpired()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Change password failed when sign in with password already expired", ((string[])(null)));
+#line 100
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
 #line hidden
             TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table18.AddRow(new string[] {
-                        "UserName",
-                        "aa"});
-            table18.AddRow(new string[] {
-                        "Password",
-                        "P@ssword1"});
+                        "Last Password Change X Days Ago",
+                        "31"});
 #line 101
- testRunner.And("I am a user with", ((string)(null)), table18);
-#line 105
- testRunner.And("I am viewing the sign in page");
+ testRunner.Given("I have user logon details with", ((string)(null)), table18);
 #line hidden
             TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -400,91 +395,40 @@ this.FeatureBackground();
             table19.AddRow(new string[] {
                         "Password",
                         "P@ssword1"});
-#line 106
- testRunner.When("I try to sign in with", ((string)(null)), table19);
+#line 104
+ testRunner.And("I am a mobile user with", ((string)(null)), table19);
+#line 108
+ testRunner.And("I am viewing the sign in page");
 #line hidden
             TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table20.AddRow(new string[] {
+                        "UserName",
+                        "aa"});
+            table20.AddRow(new string[] {
                         "Password",
-                        "NewP@ssword1"});
-            table20.AddRow(new string[] {
-                        "Confirmed Password",
-                        "NewP@ssword1"});
-            table20.AddRow(new string[] {
-                        "Old Password",
                         "P@ssword1"});
-#line 110
- testRunner.And("I change my password with", ((string)(null)), table20);
-#line 115
- testRunner.Then("I should be signed in");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Change password failed when password already expired")]
-        public virtual void ChangePasswordFailedWhenPasswordAlreadyExpired()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Change password failed when password already expired", ((string[])(null)));
-#line 117
-this.ScenarioSetup(scenarioInfo);
-#line 6
-this.FeatureBackground();
+#line 109
+ testRunner.When("I try to sign in with", ((string)(null)), table20);
 #line hidden
             TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table21.AddRow(new string[] {
-                        "Last Password Change X Days Ago",
-                        "31"});
-#line 118
- testRunner.Given("I have user logon details with", ((string)(null)), table21);
-#line hidden
-            TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table22.AddRow(new string[] {
-                        "UserName",
-                        "aa"});
-            table22.AddRow(new string[] {
-                        "Password",
-                        "P@ssword1"});
-#line 121
- testRunner.And("I am a user with", ((string)(null)), table22);
-#line 125
- testRunner.And("I am viewing the sign in page");
-#line hidden
-            TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table23.AddRow(new string[] {
-                        "UserName",
-                        "aa"});
-            table23.AddRow(new string[] {
-                        "Password",
-                        "P@ssword1"});
-#line 126
- testRunner.When("I try to sign in with", ((string)(null)), table23);
-#line hidden
-            TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table24.AddRow(new string[] {
                         "Password",
                         "aa"});
-            table24.AddRow(new string[] {
+            table21.AddRow(new string[] {
                         "Confirmed Password",
                         "aa"});
-            table24.AddRow(new string[] {
+            table21.AddRow(new string[] {
                         "Old Password",
                         "P@ssword1"});
-#line 130
- testRunner.And("I change my password with", ((string)(null)), table24);
-#line 135
+#line 113
+ testRunner.And("I change my password with", ((string)(null)), table21);
+#line 118
  testRunner.Then("I should see an error message password changed failed");
-#line 136
+#line 119
  testRunner.And("I should not be signed in");
 #line hidden
             this.ScenarioCleanup();

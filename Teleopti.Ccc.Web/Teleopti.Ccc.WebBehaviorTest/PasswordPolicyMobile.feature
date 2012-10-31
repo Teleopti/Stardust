@@ -1,6 +1,6 @@
-﻿Feature: Password Policy
+﻿Feature: Password Policy Mobile
 	In order to have a good security
-	As a user that is trying to sign in or change password
+	As a mobile user that is trying to sign in
 	I have a password policy
 
 Background:
@@ -12,28 +12,11 @@ Background:
 	| Password Expire Warning Day Count | 3                  |
 	| Rule1                             | PasswordLengthMin8 |
 
-Scenario: Change password failed against the policy
-	Given I am a user with
-	| Field    | Value     |
-	| UserName | aa        |
-	| Password | P@ssword1 |
-	And I am signed in with
-	| Field    | Value     |
-	| UserName | aa        |
-	| Password | P@ssword1 |
-	When I view password setting page
-	And I change my password with
-	| Field              | Value     |
-	| Password           | aa        |
-	| Confirmed Password | aa        |
-	| Old Password       | P@ssword1 |
-	Then I should see password changed failed with message
-
 Scenario: Sign in failed after account is locked
 	Given I have user logon details with
 	| Field    | Value |
 	| IsLocked | true  |
-	And I am a user with
+	And I am a mobile user with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
@@ -49,7 +32,7 @@ Scenario: Sign in with password will expire soon
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 29    |
-	And I am a user with
+	And I am a mobile user with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
@@ -65,7 +48,7 @@ Scenario: Sign in with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 31    |
-	And I am a user with
+	And I am a mobile user with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
@@ -82,7 +65,7 @@ Scenario: Navigate to other page when sign in with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 31    |
-	And I am a user with
+	And I am a mobile user with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
@@ -94,11 +77,11 @@ Scenario: Navigate to other page when sign in with password already expired
 	And I navigate to week schedule page
 	Then I should be redirected to the sign in page
 
-Scenario: Change password successfully when password already expired
+Scenario: Change password successfully when sign in with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 31    |
-	And I am a user with
+	And I am a mobile user with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
@@ -114,11 +97,11 @@ Scenario: Change password successfully when password already expired
 	| Old Password       | P@ssword1    |
 	Then I should be signed in
 
-Scenario: Change password failed when password already expired
+Scenario: Change password failed when sign in with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 31    |
-	And I am a user with
+	And I am a mobile user with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
