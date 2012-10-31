@@ -62,7 +62,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             
             using (_mock.Record())
             {
-                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> { date, date2 }).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> { date, date2 });
+                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly>());
                 Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date)).Return(_allMatrixes).Repeat.AtLeastOnce();
                 Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date2)).Return(_allMatrixes).Repeat.AtLeastOnce() ;
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_optimizer.PeriodValue()).Return(2).Repeat.AtLeastOnce();
                 Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
                 Expect.Call(() => _optimizer.LockDate(date)).Repeat.AtLeastOnce();
-                Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
+                Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo() )).Repeat.AtLeastOnce();
                 Expect.Call(_groupMoveTimeOptimizerExecuter.SchedulingOptions).Return(_schedulingOptions);
                 Expect.Call(_schedulingOptions.UseSameDayOffs).Return(true).Repeat.AtLeastOnce();
@@ -153,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void verifyReportProgressEventExecutedAndCanCancelExpectValues(DateOnly date2, DateOnly date)
         {
-            Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> {date, date2}).Repeat.AtLeastOnce();
+            Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> {date, date2});
             Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date)).Return(_allMatrixes).Repeat.AtLeastOnce();
             Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date2)).Return(_allMatrixes).Repeat.AtLeastOnce();
