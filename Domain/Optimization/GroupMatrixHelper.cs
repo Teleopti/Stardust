@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IList<IScheduleMatrixPro> allMatrixes);
 
     	IList<IScheduleDay> GoBackToLegalState(IList<DateOnly> daysOffToReschedule, IGroupPerson groupPerson,
-										   ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes);
+										   ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes, ISchedulePartModifyAndRollbackService rollbackService);
 
     	bool ScheduleSinglePerson(DateOnly dayToReschedule, IPerson person,
     	                          IGroupSchedulingService groupSchedulingService,
@@ -133,19 +133,34 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             IList<GroupMatrixContainer> containers = new List<GroupMatrixContainer>();
 
+			//GroupMatrixContainer lastContainer = null;
             foreach (var groupMember in groupPerson.GroupMembers)
             {
+				
             	GroupMatrixContainer container = findContainerForPerson(allMatrixes, daysOffToRemove, daysOffToAdd,
             	                                                        groupMember, daysOffPreferences);
+				//if (lastContainer != null)
+				//{
+				//    for (int i = 0; i < container.OriginalArray.DaysOffBitArray.Count; i++)
+				//    {
+				//        if (lastContainer.OriginalArray.DaysOffBitArray[i] != container.OriginalArray.DaysOffBitArray[i])
+				//            return null;
+				//        if (lastContainer.WorkingArray.DaysOffBitArray[i] != container.WorkingArray.DaysOffBitArray[i])
+				//            return null;
+				//    }
+				//}
+
 				if (container == null)
 					return null;
 					
 				containers.Add(container);
+
+				//lastContainer = container;
             }
             return containers;
         }
 
-		private GroupMatrixContainer findContainerForPerson(IList<IScheduleMatrixPro> allMatrixes, 
+		private GroupMatrixContainer findContainerForPerson(IEnumerable<IScheduleMatrixPro> allMatrixes, 
             IList<DateOnly> daysOffToRemove, 
             IList<DateOnly> daysOffToAdd, 
 			IPerson groupMember,
@@ -260,9 +275,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IScheduleDay> GoBackToLegalState(IList<DateOnly> daysOffToReschedule, IGroupPerson groupPerson,
-			ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes)
+			ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes, ISchedulePartModifyAndRollbackService rollbackService)
 		{
-			List<IScheduleDay> returnList = new List<IScheduleDay>();
+			var returnList = new List<IScheduleDay>();
 			foreach (var groupMember in groupPerson.GroupMembers)
 			{
 				foreach (var dateOnly in daysOffToReschedule)
@@ -273,7 +288,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 						{
 							if (scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
 							{
-								var result = removeIllegalWorkTimeDays(scheduleMatrixPro, schedulingOptions);
+								var result = removeIllegalWorkTimeDays(scheduleMatrixPro, schedulingOptions, rollbackService);
 								if (result == null)
 									return null;
 
@@ -285,7 +300,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 			}
 
-			HashSet<DateOnly> uniqeDates = new HashSet<DateOnly>();
+			var uniqeDates = new HashSet<DateOnly>();
 			foreach (var scheduleDay in returnList)
 			{
 				uniqeDates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
@@ -302,9 +317,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		}
 
-		private IList<IScheduleDay> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+		private IEnumerable<IScheduleDay> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
 		{
-			if (!_workShiftBackToLegalStateServicePro.Execute(matrix, schedulingOptions))
+			if (!_workShiftBackToLegalStateServicePro.Execute(matrix, schedulingOptions, rollbackService))
 				return null;
 
 			var removedIllegalDates = _workShiftBackToLegalStateServicePro.RemovedSchedules;

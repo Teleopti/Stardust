@@ -39,8 +39,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						result = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, relevantProjections, skill);
 					}
 
-					skillStaffPeriod.Payload.CalculatedLoggedOn = result;
-					skillStaffPeriod.SetCalculatedResource65(result);
+					if (!skillStaffPeriod.Payload.CalculatedLoggedOn.Equals(result))
+					{
+						skillStaffPeriod.Payload.CalculatedLoggedOn = result;
+						skillStaffPeriod.SetCalculatedResource65(result);
+					}
+					
 				}
 			}
 		}

@@ -183,11 +183,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         public static IList<IScheduleMatrixPro> CreateMatrixList(ClipHandler clipHandler, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
         {
             if (clipHandler == null) throw new ArgumentNullException("clipHandler");
-            IEnumerable<IScheduleDay> scheduleDays = ContainedSchedulePartList(clipHandler.ClipList);
+            IList<IScheduleDay> scheduleDays = ContainedSchedulePartList(clipHandler.ClipList);
             return CreateMatrixList(scheduleDays, resultStateHolder, container);
         }
 
-        public static IList<IScheduleMatrixPro> CreateMatrixList(IEnumerable<IScheduleDay> scheduleDays, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
+        public static IList<IScheduleMatrixPro> CreateMatrixList(IList<IScheduleDay> scheduleDays, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
         {
             if (scheduleDays == null) throw new ArgumentNullException("scheduleDays");
 
@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-        public static IWorkShiftBackToLegalStateServicePro CreateWorkShiftBackToLegalStateServicePro(ISchedulePartModifyAndRollbackService rollbackService, ILifetimeScope container)
+        public static IWorkShiftBackToLegalStateServicePro CreateWorkShiftBackToLegalStateServicePro(ILifetimeScope container)
         {
             var workShiftMinMaxCalculator = container.Resolve<IWorkShiftMinMaxCalculator>();
             //var bitArrayCreator = container.Resolve<IWorkShiftBackToLegalStateBitArrayCreator>();
@@ -392,7 +392,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IWorkShiftBackToLegalStateDecisionMaker decisionMaker = new WorkShiftBackToLegalStateDecisionMaker(dataExtractor, dayIndexCalculator);
             var deleteService = container.Resolve<IDeleteSchedulePartService>();
             IWorkShiftBackToLegalStateStep workShiftBackToLegalStateStep =
-                new WorkShiftBackToLegalStateStep(bitArrayCreator, decisionMaker, deleteService, rollbackService);
+                new WorkShiftBackToLegalStateStep(bitArrayCreator, decisionMaker, deleteService);
             return new WorkShiftBackToLegalStateServicePro(workShiftBackToLegalStateStep, workShiftMinMaxCalculator);
         }
 
