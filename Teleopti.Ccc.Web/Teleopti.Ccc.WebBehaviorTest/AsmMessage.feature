@@ -256,4 +256,19 @@ Given I have the role 'Full access to mytime'
 	When I click on the message at position '1' in the list
 	Then I should not see any options
 	And the send button should be enabled
+
+Scenario: User do not have to write textreply if she selects one of the replyoptions
+Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field					| Value				|
+	| Title					| New message		|
+	| Message				| Text in message	|
+	| Text reply allowed	| True				|
+	| ReplyOption1			| First				|
+	| ReplyOption2			| Second				|
+	| ReplyOption3			| Third				|
+	And I am viewing messages
+	When I click on the message at position '1' in the list
+	And I click the radiobutton with caption 'Second'
+	Then the send button should be enabled
 	

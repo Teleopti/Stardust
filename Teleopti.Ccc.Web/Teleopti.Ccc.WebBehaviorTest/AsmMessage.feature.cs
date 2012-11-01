@@ -877,6 +877,53 @@ testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("User do not have to write textreply if she selects one of the replyoptions")]
+        public virtual void UserDoNotHaveToWriteTextreplyIfSheSelectsOneOfTheReplyoptions()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User do not have to write textreply if she selects one of the replyoptions", ((string[])(null)));
+#line 260
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 261
+testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table25.AddRow(new string[] {
+                        "Title",
+                        "New message"});
+            table25.AddRow(new string[] {
+                        "Message",
+                        "Text in message"});
+            table25.AddRow(new string[] {
+                        "Text reply allowed",
+                        "True"});
+            table25.AddRow(new string[] {
+                        "ReplyOption1",
+                        "First"});
+            table25.AddRow(new string[] {
+                        "ReplyOption2",
+                        "Second"});
+            table25.AddRow(new string[] {
+                        "ReplyOption3",
+                        "Third"});
+#line 262
+ testRunner.And("I have an unread message with", ((string)(null)), table25);
+#line 270
+ testRunner.And("I am viewing messages");
+#line 271
+ testRunner.When("I click on the message at position \'1\' in the list");
+#line 272
+ testRunner.And("I click the radiobutton with caption \'Second\'");
+#line 273
+ testRunner.Then("the send button should be enabled");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

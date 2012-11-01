@@ -95,7 +95,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		});
 		
 		self.canConfirm = ko.computed(function () {
-			if (self.isSending() || (self.allowDialogueReply() && self.reply().length == 0) || self.selectedReply() == undefined && self.userMustSelectReplyOption()) {
+			if (self.isSending() || (self.allowDialogueReply() && self.reply().length == 0 && self.selectedReply() == undefined) || self.selectedReply() == undefined && self.userMustSelectReplyOption()) {
 				return false;
 			}
 			return true;
