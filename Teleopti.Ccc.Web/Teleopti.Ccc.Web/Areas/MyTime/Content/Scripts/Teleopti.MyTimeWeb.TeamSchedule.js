@@ -1,4 +1,4 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.6.4.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.8.2.js" />
 /// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
 /// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
