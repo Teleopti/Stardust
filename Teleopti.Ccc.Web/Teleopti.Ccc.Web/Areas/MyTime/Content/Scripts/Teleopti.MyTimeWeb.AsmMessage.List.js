@@ -107,6 +107,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		var self = this;
 		self.text = ko.observable(dialogueMessage.Text);
 		self.sender = ko.observable(dialogueMessage.Sender);
+		self.created = ko.observable(dialogueMessage.Created);
 	};
 
 	var replyOptionViewModel = function (replyOption, parent) {

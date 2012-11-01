@@ -28,6 +28,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Message
 		public string Text { get; set; }
 		public Guid SenderId { get; set; }
 		public string Sender { get; set; }
-		public DateTime Created { get; set; }
+		public string Created { get; set; }
 	}
 }

@@ -123,7 +123,8 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 		{
 			_result.First().DialogueMessages.First().Text.Should().Be.EqualTo(_pushMessageDialogue.DialogueMessages.First().Text);
 			_result.First().DialogueMessages.First().Sender.Should().Be.EqualTo(_pushMessageDialogue.DialogueMessages.First().Sender.Name.ToString());
-			_result.First().DialogueMessages.First().Created.Should().Be.EqualTo(_pushMessageDialogue.DialogueMessages.First().Created);
+			var localDateTimeString = _cccTimeZone.ConvertTimeFromUtc(_pushMessageDialogue.DialogueMessages.First().Created).ToShortDateTimeString();
+			_result.First().DialogueMessages.First().Created.Should().Be.EqualTo(localDateTimeString);
 		}
 
 		[Test]

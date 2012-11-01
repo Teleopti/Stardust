@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
+			var sender = new Person();
 			var replyOptions = new List<string>() {ReplyOption1, ReplyOption2, ReplyOption3};
 			var addOptions = new List<string>();
 			foreach (var replyOption in replyOptions)
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 					addOptions.Add(replyOption);
 			}
 			var conversation =
-			SendPushMessageService.CreateConversation(Title, Message, TextReplyAllowed).To(user).From(user).AddReplyOption(addOptions);
+			SendPushMessageService.CreateConversation(Title, Message, TextReplyAllowed).To(user).From(sender).AddReplyOption(addOptions);
 			conversation.SendConversation(new PushMessageRepository(uow), new PushMessageDialogueRepository(uow));
 
 			if(MyReply!=string.Empty)
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				var repository = new PushMessageDialogueRepository(uow);
 				var messageDialogue = repository.LoadAll().First(t => t.PushMessage.GetTitle(new NoFormatting()).Equals(Title));
 				messageDialogue.DialogueReply(MyReply,user);
-				if (SendersReply != string.Empty) messageDialogue.DialogueReply(SendersReply, user);
+				if (SendersReply != string.Empty) messageDialogue.DialogueReply(SendersReply, sender);
 			}
 
 			if (IsOldestMessage)

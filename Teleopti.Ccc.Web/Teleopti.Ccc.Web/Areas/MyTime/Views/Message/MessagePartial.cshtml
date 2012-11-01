@@ -24,9 +24,21 @@
 		</div>
 		<div id="AsmMessage-detail-dialogueMessages" class="edit-module-element">
 			<!-- ko foreach: dialogueMessages -->
-			<label data-bind="text: sender"></label>
-			<label data-bind="text : text"></label>
-		<!-- /ko -->
+			@*<label data-bind="text: sender"></label>
+			<label data-bind="text : created"></label>
+			<label data-bind="text : text"></label>*@
+			<div class="asmMessage-reply-details"></div>
+				<div class="asmMessage-details">
+					<div>
+						<span class="asmMessage-caption">@Resources.Sender: </span>
+						<span class="asmMessage-data-type" data-bind="text : sender"></span>
+						<span class="asmMessage-caption">@Resources.Sent: </span>
+						<span class="asmMessage-data-updatedon" data-bind="text : created"></span>
+					</div>
+				</div>
+				<span data-bind="text : text"></span>
+				<br/>
+			<!-- /ko -->
 		</div>
 		<div id="AsmMessage-detail-replyOption" class="edit-module-element" >
 			<textarea id="AsmMessage-detail-reply" rows="5" cols="63" data-bind="visible: allowDialogueReply, value: reply, valueUpdate:['afterkeydown', 'afterpaste', 'change']"></textarea>
