@@ -123,7 +123,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             IAvailabilityRestriction availabilityDayRestriction620 = new AvailabilityRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -306,7 +305,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IAvailabilityRestriction dayRestriction = new AvailabilityRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -350,7 +348,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IAvailabilityRestriction dayRestriction = new AvailabilityRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 WorkTimeLimitation =
                     new WorkTimeLimitation(
                     new TimeSpan(1, 0, 0),
@@ -390,7 +387,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IRotationRestriction dayRestriction = new RotationRestriction
                         {
-                            //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                             StartTimeLimitation =
                                 new StartTimeLimitation(
                                 new TimeSpan(9, 0, 0),
@@ -417,7 +413,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             IRotationRestriction dayRestriction = new RotationRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -445,7 +440,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IRotationRestriction dayRestriction = new RotationRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -477,7 +471,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IRotationRestriction dayRestriction = new RotationRestriction
                                                       {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -568,7 +561,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             RotationRestriction dayRestriction = new RotationRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -611,7 +603,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             RotationRestriction dayRestriction = new RotationRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -620,7 +611,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 new EndTimeLimitation(
                     new TimeSpan(6, 0, 0),
                     new TimeSpan(20, 0, 0)),
-                WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(4, 0, 0), new TimeSpan(10, 0, 0))//new TimePeriod(4, 0, 10, 0)
+                WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(4, 0, 0), new TimeSpan(10, 0, 0))
 
             };
 
@@ -666,7 +657,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IRotationRestriction dayRestriction = new RotationRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -720,7 +710,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IRotationRestriction dayRestriction = new RotationRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -773,7 +762,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IRotationRestriction dayRestriction = new RotationRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -838,7 +826,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IRotationRestriction dayRestriction = new RotationRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -970,7 +957,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(9, 0, 0),
@@ -1029,7 +1015,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -1087,7 +1072,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -1146,7 +1130,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(23, 0, 0),
@@ -1205,7 +1188,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(23, 0, 0),
@@ -1262,7 +1244,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IPreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -1271,7 +1252,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 new EndTimeLimitation(
                     new TimeSpan(6, 0, 0),
                     new TimeSpan(20, 0, 0)),
-                WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(12,0,0), new TimeSpan(14,0,0)) //TimePeriod(12,0,14,0)
+                WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(12,0,0), new TimeSpan(14,0,0))
             };
 
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
@@ -1320,7 +1301,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -1410,7 +1390,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             var dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -1460,7 +1439,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -1517,7 +1495,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -1577,7 +1554,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -1636,7 +1612,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IPreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -1701,7 +1676,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -1745,7 +1719,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
         }
 
-
 		[Test]
 		public void ShouldGetUnspecifiedIfPreferenceIsDayOffAndNotScheduled()
 		{
@@ -1758,7 +1731,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			};
 			IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
 			ReadOnlyCollection<IPersistableScheduleData> scheduleData = new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { personRestriction });
-
 
 			using (_mockRepository.Record())
 			{
@@ -1802,7 +1774,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -1862,7 +1833,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
-                //Add timezone compensation to make the test runnable on all machines(independent of local timezone)
                 StartTimeLimitation =
                     new StartTimeLimitation(
                     new TimeSpan(6, 0, 0),
@@ -1886,7 +1856,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_schedulePartMock.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment })).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePartMock.SignificantPart()).Return(SchedulePartView.None);
-				Expect.Call((_schedulePartMock.IsScheduled())).Return(true);
+				Expect.Call(_schedulePartMock.IsScheduled()).Return(true);
 				Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
 					new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { personDayOff }));
 
@@ -1916,7 +1886,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			PreferenceRestriction dayRestriction = new PreferenceRestriction
 			{
-				//Add timezone compensation to make the test runnable on all machines(independent of local timezone)
 				StartTimeLimitation =
 					new StartTimeLimitation(
 					new TimeSpan(6, 0, 0),
@@ -1955,10 +1924,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyCanCalculateNoPreferencePermissionState()
         {
-            IActivity activity = new Activity("Activity");
-            IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
-            layerCollection.Add(_layerFactory.CreateShiftSetupLayer(activity, _dateTimePeriod));
-
             IShiftCategory shiftCategory = new ShiftCategory("TopCat");
             IMainShift mainShift = new MainShift(shiftCategory);
             IPersonAssignment assignment = new PersonAssignment(_person, new Scenario("Default"));
@@ -2173,10 +2138,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
                 Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService).Repeat.Any();
                 Expect.Call(_projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.Any();
-                Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod).Repeat.Any();
-                Expect.Call(_visualLayerCollection.ContractTime()).Return(
-                    _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime)).Repeat.Any();
             }
             using (_mockRepository.Playback())
             {
@@ -2184,6 +2145,45 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Assert.AreEqual(PermissionState.Unspecified, _target.CheckStudentAvailability());
             }
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void VerifyCanCalculateLegalTimesOverMidnightStudentAvailabilityPermissionState()
+		{
+			IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
+
+			DateTime dateTimeStart = new DateTime(2010, 1, 10, 16, 0, 0, DateTimeKind.Utc);
+			DateTime dateTimeEnd = dateTimeStart.AddHours(5);
+			DateTimePeriod period = new DateTimePeriod(dateTimeStart, dateTimeEnd);
+			layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, period));
+
+			IVisualLayerCollection visualLayerCollection = new VisualLayerCollection(_person, layerCollection, new ProjectionPayloadMerger());
+			
+			IStudentAvailabilityRestriction restriction = new StudentAvailabilityRestriction();
+            
+			restriction.StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(17), null);
+			restriction.EndTimeLimitation = new EndTimeLimitation(null, TimeSpan.FromHours(24));
+			IStudentAvailabilityDay studentAvailabilityDay = new StudentAvailabilityDay(_person, new DateOnly(_dateTime), new List<IStudentAvailabilityRestriction> { restriction });
+
+			var dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { studentAvailabilityDay });
+
+			using (_mockRepository.Record())
+			{
+				Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>())).Repeat.Any();
+				Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions);
+
+				Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Any();
+				Expect.Call(_schedulePartMock.Period).Return(_dateTimePeriod).Repeat.Any();
+
+				Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService).Repeat.Any();
+				Expect.Call(_projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.Any();
+			}
+
+			using (_mockRepository.Playback())
+			{
+				_target = new RestrictionChecker(_schedulePartMock);
+				Assert.AreEqual(PermissionState.Satisfied, _target.CheckStudentAvailability());
+			}
+		}
 
         #endregion
 
