@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _workShiftRangeCalculator = workShiftRangeCalculator;
         }
 
-        public bool Execute(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+		public bool Execute(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
         {
             _removedDays.Clear();
 			_removedSchedules.Clear();
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 while (!_workShiftRangeCalculator.IsWeekInLegalState(weekIndex, matrix, schedulingOptions))
                 {
-                    IScheduleDay removedDay = _workShiftBackToLegalStateStep.ExecuteWeekStep(weekIndex, matrix);
+                    IScheduleDay removedDay = _workShiftBackToLegalStateStep.ExecuteWeekStep(weekIndex, matrix, rollbackService);
                     if (removedDay == null)
                         return false;
                     _removedDays.Add(removedDay.DateOnlyAsPeriod.DateOnly);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             while ((legalStateStatus = _workShiftRangeCalculator.PeriodLegalStateStatus(matrix, schedulingOptions)) != 0)
             {
                 bool raise = legalStateStatus < 0;
-				IScheduleDay removedDay = _workShiftBackToLegalStateStep.ExecutePeriodStep(raise, matrix);
+				IScheduleDay removedDay = _workShiftBackToLegalStateStep.ExecutePeriodStep(raise, matrix, rollbackService);
 				if (removedDay == null)
                     return false;
 				_removedDays.Add(removedDay.DateOnlyAsPeriod.DateOnly);

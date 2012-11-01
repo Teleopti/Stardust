@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (goBackToLegalState)
 			{
-				removedIllegalWorkTimeDays = removeIllegalWorkTimeDays(currentScheduleMatrix, schedulingOptions);
+				removedIllegalWorkTimeDays = removeIllegalWorkTimeDays(currentScheduleMatrix, schedulingOptions, _schedulePartModifyAndRollbackService);
 				if (removedIllegalWorkTimeDays == null)
 					return false;
 
@@ -283,6 +283,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                         IScheduleDayPro scheduleDayPro =
                         matrix.OuterWeeksPeriodDays[i + bitArrayToMatrixOffset];
                         IScheduleDay part = scheduleDayPro.DaySchedulePart();
+                    	IPersonAssignment assignment = part.AssignmentHighZOrder();
+						if(assignment == null || assignment.MainShift == null )
+							return new dayOffOptimizerMoveDaysResult { Result = false, MovedDays = movedDays };
                         var changed = new changedDay
                                           {
                                               DateChanged = scheduleDayPro.Day,
@@ -462,9 +465,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        private IList<DateOnly> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+        private IList<DateOnly> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
         {
-			if (!_workTimeBackToLegalStateService.Execute(matrix, schedulingOptions))
+			if (!_workTimeBackToLegalStateService.Execute(matrix, schedulingOptions, rollbackService))
 				return null;
 
             IList<DateOnly> removedIllegalDates = _workTimeBackToLegalStateService.RemovedDays;

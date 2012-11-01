@@ -3657,9 +3657,14 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
 					IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(scheduleDays));
 					var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-					 var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
-                    var rollbackService = _container.Resolve<ISchedulePartModifyAndRollbackService>();
-					_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixList, _backgroundWorkerScheduling, _optimizationPreferences, schedulingOptions, selectedPersons,selectedPeriod, rollbackService);
+                	var selectedPeriod =
+                		new DateOnlyPeriod(
+                			OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
+                			OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+                	_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixList, _backgroundWorkerScheduling,
+                	                                                             _optimizationPreferences,
+                	                                                             schedulingOptions, selectedPersons,
+                	                                                             selectedPeriod);
                 }
             }
             _schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;

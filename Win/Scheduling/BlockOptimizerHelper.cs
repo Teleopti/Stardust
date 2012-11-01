@@ -6,7 +6,6 @@ using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -234,8 +233,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (optimizerPreferences.General.UseShiftCategoryLimitations)
             {
-				var rollbackService = _container.Resolve<ISchedulePartModifyAndRollbackService>();
-                removeShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker, schedulingOptions, optimizerPreferences, selectedPersons, selectedPeriod, rollbackService);
+                removeShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker, schedulingOptions, optimizerPreferences, selectedPersons, selectedPeriod);
             }
             //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = originalOnlyShiftsWhenUnderstaffed;
@@ -350,7 +348,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void removeShiftCategoryBackToLegalState(
             IList<IScheduleMatrixPro> matrixList,
-			BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, ISchedulePartModifyAndRollbackService rollbackService)
+			BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod)
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -369,11 +367,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 
 					IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
-			   OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container);
-					IGroupMatrixContainerCreator groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
-					IGroupPersonConsistentChecker groupPersonConsistentChecker =
+			   OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
+					var groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
+					var groupPersonConsistentChecker =
 						_container.Resolve<IGroupPersonConsistentChecker>();
-					IResourceOptimizationHelper resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+					var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 					var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 					IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
 																			 groupPersonConsistentChecker,
@@ -420,7 +418,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IScheduleMatrixOriginalStateContainer originalStateContainer)
         {
             IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
-                 OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(rollbackService, _container);
+                 OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
 
             IScheduleMatrixLockableBitArrayConverter scheduleMatrixArrayConverter = new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);
             IDaysOffPreferences daysOffPreferences = optimizerPreferences.DaysOff;

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DayOffPlanning
                 moveToWorkShiftLength = currentMoveToDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
             if (moveFromWorkShiftLength.HasValue
                 && moveToWorkShiftLength.HasValue
-                && moveFromWorkShiftLength.Value < moveToWorkShiftLength.Value)
+                && moveFromWorkShiftLength.Value > moveToWorkShiftLength.Value)
                 return false;
 
             return true;

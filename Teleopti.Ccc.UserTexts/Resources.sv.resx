@@ -10745,4 +10745,25 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
     <value>Den valda fildestinationen finns inte, var god ange en giltig sökväg. </value>
   </data>
+  <data name="CouldNotExportForecastToFile" xml:space="preserve">
+    <value>Något gick fel med filexporten, var god försök spara på annan plats.</value>
+  </data>
+  <data name="SelectedFileDestinationIsTooLong" xml:space="preserve">
+    <value>Den valda fildestinationen är för lång, var god ange en giltig sökväg.</value>
+  </data>
+  <data name="SameActivity" xml:space="preserve">
+    <value>Samma aktivitet</value>
+  </data>
+  <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
+    <value>Efter kontroll mot behåll aktivitet</value>
+  </data>
+  <data name="NoMessagesFound" xml:space="preserve">
+    <value>Inga meddelanden kunde hittas</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Avsändare</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Skickat</value>
+  </data>
 </root>

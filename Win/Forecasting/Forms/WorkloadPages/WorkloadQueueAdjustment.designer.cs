@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxCalculatedTasks")]
+		private void InitializeComponent()
         {
             this.labelOffered = new System.Windows.Forms.Label();
             this.tableLayoutPanelForRtl = new System.Windows.Forms.TableLayoutPanel();
@@ -284,7 +285,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             this.labelCalculatedCalls.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.labelCalculatedCalls.Size = new System.Drawing.Size(81, 16);
             this.labelCalculatedCalls.TabIndex = 2;
-            this.labelCalculatedCalls.Text = "xxOfferedTasks";
+            this.labelCalculatedCalls.Text = "xxCalculatedTasks";
             // 
             // labelMultiplyOffered
             // 

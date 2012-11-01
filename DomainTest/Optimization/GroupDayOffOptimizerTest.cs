@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, true)).IgnoreArguments().Return(_validatorResult);
 				Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).IgnoreArguments()
 					.Return(true);
-				Expect.Call(_groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, _schedulingOptions, _allScheduleMatrixes)).IgnoreArguments().Return
+				Expect.Call(_groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, _schedulingOptions, _allScheduleMatrixes, _schedulePartModifyAndRollbackService)).IgnoreArguments().Return
 					(new List<IScheduleDay>());
 				Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson,
 																		 _groupSchedulingService,
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, true)).IgnoreArguments().Return(_validatorResult);
 				Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).IgnoreArguments()
 					.Return(true);
-				Expect.Call(_groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, _schedulingOptions, _allScheduleMatrixes)).IgnoreArguments().Return
+				Expect.Call(_groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, _schedulingOptions, _allScheduleMatrixes, _schedulePartModifyAndRollbackService)).IgnoreArguments().Return
 					(new List<IScheduleDay>());
 				
 				Expect.Call(_groupMatrixHelper.ScheduleBackToLegalStateDays(new List<IScheduleDay>(),
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, true)).IgnoreArguments().Return(	_validatorResult);
                 Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter,_schedulePartModifyAndRollbackService)).IgnoreArguments()
                     .Return(true);
-            	Expect.Call(_groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, _schedulingOptions, _allScheduleMatrixes)).IgnoreArguments().Return
+				Expect.Call(_groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, _schedulingOptions, _allScheduleMatrixes, _schedulePartModifyAndRollbackService)).IgnoreArguments().Return
 					(new List<IScheduleDay>());
             	Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson,
             	                                                         _groupSchedulingService,
@@ -576,7 +576,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(groupMatrixContainers);
                 Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).IgnoreArguments()
                     .Return(true);
-				Expect.Call(_groupMatrixHelper.GoBackToLegalState(new List<DateOnly> { dayOffToRemove }, groupPerson, _schedulingOptions, _allScheduleMatrixes)).Return(
+				Expect.Call(_groupMatrixHelper.GoBackToLegalState(new List<DateOnly> { dayOffToRemove }, groupPerson, _schedulingOptions, _allScheduleMatrixes, _schedulePartModifyAndRollbackService)).Return(
 					new List<IScheduleDay>());
                 Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _allScheduleMatrixes)).IgnoreArguments()
                     .Return(false);

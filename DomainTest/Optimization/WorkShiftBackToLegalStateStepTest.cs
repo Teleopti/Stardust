@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDayList = new List<IScheduleDay>{_scheduleDay};
             _modifyAndRollbackService = _mockRepository.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_period = new DateOnlyPeriod(DateOnly.MaxValue, DateOnly.MaxValue);
-            _target = new WorkShiftBackToLegalStateStep(_bitArrayCreator, _decisionMaker, _deleteService, _modifyAndRollbackService);
+            _target = new WorkShiftBackToLegalStateStep(_bitArrayCreator, _decisionMaker, _deleteService);
         	_dateOnlyAsDateTimePeriod = _mockRepository.StrictMock<IDateOnlyAsDateTimePeriod>();
         }
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using(_mockRepository.Playback())
             {
-                IScheduleDay result = _target.ExecuteWeekStep(_weekIndex, _scheduleMatrix);
+				IScheduleDay result = _target.ExecuteWeekStep(_weekIndex, _scheduleMatrix, _modifyAndRollbackService);
                 Assert.AreEqual(DateOnly.MaxValue, result.DateOnlyAsPeriod.DateOnly);
             }
         }
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mockRepository.Playback())
             {
-                IScheduleDay result = _target.ExecutePeriodStep(raise, _scheduleMatrix);
+				IScheduleDay result = _target.ExecutePeriodStep(raise, _scheduleMatrix, _modifyAndRollbackService);
                 Assert.AreEqual(DateOnly.MaxValue, result.DateOnlyAsPeriod.DateOnly);
             }
         }
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mockRepository.Playback())
             {
-                IScheduleDay result = _target.ExecutePeriodStep(raise, _scheduleMatrix);
+				IScheduleDay result = _target.ExecutePeriodStep(raise, _scheduleMatrix, _modifyAndRollbackService);
                 Assert.AreEqual(DateOnly.MaxValue, result.DateOnlyAsPeriod.DateOnly);
             }
         }

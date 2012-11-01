@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_groupPerson2 = new GroupPerson(new List<IPerson> { _person3, _person4 }, _dateOnly, "groupPerson2", _guid2);
 			_groupPersons = new List<IGroupPerson> { _groupPerson1, _groupPerson2 };
 
-			SetupStateHolder();
+			setupStateHolder();
 
 			_scheduleMatrixPro1 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person1, _person1.VirtualSchedulePeriod(_dateOnly));
 			_scheduleMatrixPro2 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person2, _person2.VirtualSchedulePeriod(_dateOnly));
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private void SetupStateHolder()
+		private void setupStateHolder()
 		{
 			var wholePeriod = new DateTimePeriod(2012, 1, 1, 2012, 1, 31);
 			IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(wholePeriod);
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_stateHolder = new SchedulingResultStateHolder { Schedules = scheduleDictionary };
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldCreateDictionary()
 		{
 			var timePeriod = new TimePeriod();
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			}		
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldSetTeamSteadyStateToFalseWhenPersonPeriodValueDiffers()
 		{
 			var timePeriod = new TimePeriod();
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			}	
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldSetTeamSteadyStateToFalseWhenSchedulePeriodValueDiffers()
 		{
 			var timePeriod1 = new TimePeriod();
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			}		
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldSetTeamSteadyStateToFalseWhenStateIsDifferentOverPeriod()
 		{
 			var timePeriod1 = new TimePeriod();
