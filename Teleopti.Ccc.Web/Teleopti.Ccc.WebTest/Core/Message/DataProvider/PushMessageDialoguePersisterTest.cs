@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 			pushMessageDialogue.SetId(id);
 
 			var target = CreateTargetWithDialogueInRepository(pushMessageDialogue);
-			var viewModel = target.PersistMessage(new ConfirmMessageViewModel() { Id = id });
+			var viewModel = target.PersistMessage(new ConfirmMessageViewModel() { Id = id , ReplyOption = "OK"});
          
 			viewModel.IsRead.Should().Be.True();
 		}

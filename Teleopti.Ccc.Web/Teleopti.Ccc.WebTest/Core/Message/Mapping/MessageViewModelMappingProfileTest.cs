@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -12,7 +10,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
@@ -28,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 		private IList<MessageViewModel> _result;
 		private IPerson _person;
 		private PushMessageDialogue _pushMessageDialogue;
-		private ICccTimeZoneInfo _cccTimeZone;
+		private TimeZoneInfo _cccTimeZone;
 		private IPerson _replier;
 
 		[SetUp]
@@ -45,7 +42,6 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 											 Title = "my title",
 											 Message = "message text",
 											 AllowDialogueReply = true,
-											 //TranslateMessage = true,
 											 Sender = _person
 										 };
 			_pushMessage.ReplyOptions.Add("Yes");
@@ -64,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 				() => timeZone
 				)));
 
-			_cccTimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			_cccTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			timeZone.Stub(x => x.TimeZone()).Return(_cccTimeZone);
 
 			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
@@ -123,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 		{
 			_result.First().DialogueMessages.First().Text.Should().Be.EqualTo(_pushMessageDialogue.DialogueMessages.First().Text);
 			_result.First().DialogueMessages.First().Sender.Should().Be.EqualTo(_pushMessageDialogue.DialogueMessages.First().Sender.Name.ToString());
-			var localDateTimeString = _cccTimeZone.ConvertTimeFromUtc(_pushMessageDialogue.DialogueMessages.First().Created).ToShortDateTimeString();
+			var localDateTimeString = TimeZoneInfo.ConvertTimeFromUtc(_pushMessageDialogue.DialogueMessages.First().Created,_cccTimeZone).ToShortDateTimeString();
 			_result.First().DialogueMessages.First().Created.Should().Be.EqualTo(localDateTimeString);
 		}
 
@@ -142,7 +138,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 		[Test]
 		public void ShouldMapDate()
 		{
-			var localDateTimeString = _cccTimeZone.ConvertTimeFromUtc(_pushMessageDialogue.UpdatedOn.Value).ToShortDateTimeString();
+			var localDateTimeString = TimeZoneInfo.ConvertTimeFromUtc(_pushMessageDialogue.UpdatedOn.Value,_cccTimeZone).ToShortDateTimeString();
 			_result.First().Date.Should().Be.EqualTo(localDateTimeString);
 		}
 

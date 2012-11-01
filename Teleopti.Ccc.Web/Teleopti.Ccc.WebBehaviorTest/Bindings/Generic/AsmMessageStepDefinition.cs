@@ -210,13 +210,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click the radiobutton with caption '(.*)'")]
 		public void WhenIClickTheRadiobuttonWithCaption(string option)
 		{
-			Pages.Pages.CurrentMessageReplyPage.ReplyOptions.RadioButtons.First(r => r.Text.Equals(option)).EventualClick();
+			var label = Pages.Pages.CurrentMessageReplyPage.ReplyOptions.Labels.First(r => r.Text.Equals(option));
+			var indexOfLabel = Pages.Pages.CurrentMessageReplyPage.ReplyOptions.Labels.ToList().IndexOf(label);
+			Pages.Pages.CurrentMessageReplyPage.ReplyOptions.RadioButtons.ElementAt(indexOfLabel).EventualClick();
 		}
 
 		[Then(@"the radiobutton with caption '(.*)' should not be checked")]
 		public void ThenTheRadiobuttonWithCaptionShouldNotBeChecked(string option)
 		{
-			EventualAssert.That(()=>Pages.Pages.CurrentMessageReplyPage.ReplyOptions.RadioButtons.First(r => r.Text.Equals(option)).Checked,Is.False);
+			var label = Pages.Pages.CurrentMessageReplyPage.ReplyOptions.Labels.First(r => r.Text.Equals(option));
+			var indexOfLabel = Pages.Pages.CurrentMessageReplyPage.ReplyOptions.Labels.ToList().IndexOf(label);
+			EventualAssert.That(()=>Pages.Pages.CurrentMessageReplyPage.ReplyOptions.RadioButtons.ElementAt(indexOfLabel).Checked,Is.False);
 		}
 
 		[Then(@"I should see radiobuttons with")]
