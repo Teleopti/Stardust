@@ -156,20 +156,6 @@ Scenario: Do not allow empty reply
 	And I am viewing messages
 	When I click on the message at position '1' in the list
 	Then the send button should be disabled
-
-Scenario: Send text reply message
-	Given I have the role 'Full access to mytime'
-	And I have an unread message with
-	| Field					| Value				|
-	| Title					| New message		|
-	| Message				| Text in message	|
-	| Text reply allowed	| True				|
-	And I am viewing messages
-	And I click on the message at position '1' in the list
-	When I enter the text reply 'my reply'
-	And I click the confirm button
-	Then I should not see any messages
-	And I should see a user-friendly message explaining I dont have any messages
  
 Scenario: Show replyoptions for message with multiple options
 Given I have the role 'Full access to mytime'
