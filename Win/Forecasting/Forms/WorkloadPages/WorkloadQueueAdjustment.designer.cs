@@ -284,7 +284,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             this.labelCalculatedCalls.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.labelCalculatedCalls.Size = new System.Drawing.Size(81, 16);
             this.labelCalculatedCalls.TabIndex = 2;
-            this.labelCalculatedCalls.Text = "xxOfferedTasks";
+            this.labelCalculatedCalls.Text = "xxCalculatedTasks";
             // 
             // labelMultiplyOffered
             // 

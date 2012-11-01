@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			if (workload.Skill == null) return;
 
         	var textManager = new TextManager(workload.Skill.SkillType);
-        	labelCalculatedCalls.Text = textManager.WordDictionary["OfferedTasks"];
+			labelCalculatedCalls.Text = textManager.WordDictionary["TotalStatisticCalculatedTasks"];
         }
 
         public bool Depopulate(IAggregateRoot aggregateRoot)
