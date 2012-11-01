@@ -8408,7 +8408,7 @@ Periods</comment>
     <value>招聘</value>
   </data>
   <data name="StaffEmployed" xml:space="preserve">
-    <value>雇佣人数</value>
+    <value>员工人数</value>
   </data>
   <data name="StudentHours" xml:space="preserve">
     <value>学生小时数</value>
@@ -8444,7 +8444,7 @@ Periods</comment>
     <value>客户化缩减</value>
   </data>
   <data name="LoadStaffEmployed" xml:space="preserve">
-    <value>载入雇佣人数</value>
+    <value>载入员工人数</value>
   </data>
   <data name="BudgetGroup" xml:space="preserve">
     <value>预算组</value>
