@@ -1,6 +1,5 @@
 Teleopti.MyTimeWeb.Notifier = (function () {
 	var notifyText;
-	var timeout = 5000;
 	var baseUrl;
 	var header = '';
 	var webNotification = function () { return true; }; //default also send as web not if possible
@@ -26,22 +25,18 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 		}
 	}
 	function _notify() {
+		var time = new Date(new Date().getTeleoptiTime()).toString('hh:mm tt');
 		return noty({
-			text: notifyText,
+			text: notifyText + ' (' + time + ')',
 			layout: 'bottom',
-			timeout: timeout,
-			animation: {
-				open: { height: 'toggle' },
-				close: { height: 'toggle' },
-				easing: 'swing',
-				speed: 500 // opening & closing animation speed
-			}
+			closeWith: ['button']
 		});
 	}
 	function _webNotification() {
 		if (window.webkitNotifications) {
 			if (window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
 				if (webNotification()) {
+					var timeout = 5000;
 					var iconUrl = baseUrl + 'content/favicon.ico';
 					var notification = window.webkitNotifications.createNotification(iconUrl, header, notifyText);
 					notification.show();
