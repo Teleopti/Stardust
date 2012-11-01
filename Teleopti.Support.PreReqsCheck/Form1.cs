@@ -100,13 +100,6 @@ namespace CheckPreRequisites
 
             //Check database client softwares
             DBSoftwareCheck();
-
-            //Check MsDtc
-            if (comboBoxServerSetup.SelectedItem.ToString().Contains("Web"))
-            {
-                //do nothing
-            }
-            else MSDTCCheck();
         }
 
         #endregion
@@ -138,10 +131,6 @@ namespace CheckPreRequisites
 
             //Check MVC registered
             //CheckMVC();
-
-            //Check MsDtc Outbound
-            MSDTCCheck();
-
         }
         #endregion
 
@@ -171,9 +160,6 @@ namespace CheckPreRequisites
 
                 //Collation
                 DBCollationCheck(connString);
-
-                //kick MsDTC transaction
-                DistrubutedTransactionCheck(connString);
             }
 
        }
@@ -424,66 +410,6 @@ namespace CheckPreRequisites
                 }
             }
         }
-
-        private void DistrubutedTransactionCheck(string connString)
-        {
-            string connectString1 = connString;
-            string connectString2 = connString;
-            string commandText1 = "SELECT TOP 1 * FROM master.sys.sysprocesses";
-            string commandText2 = "SELECT TOP 1 * FROM master.sys.sysprocesses";
-
-            printNewFeature("Database", "Distributed transaction", "", "Executing distributed transaction to: " + textBoxSQLServerName.Text.ToString());
-            // Initialize the return value to zero and create a StringWriter to display results.
-            int returnValue = 0;
-            try
-            {
-                // Create the TransactionScope to execute the commands, guaranteeing
-                // that both commands can commit or roll back as a single unit of work.
-                using (TransactionScope scope = new TransactionScope())
-                {
-                    using (SqlConnection connection1 = new SqlConnection(connectString1))
-                    {
-                        // Opening the connection automatically enlists it in the 
-                        // TransactionScope as a lightweight transaction.
-                        connection1.Open();
-
-                        // Create the SqlCommand object and execute the first command.
-                        SqlCommand command1 = new SqlCommand(commandText1, connection1);
-                        returnValue = command1.ExecuteNonQuery();
-
-                        // If you get here, this means that command1 succeeded. By nesting
-                        // the using block for connection2 inside that of connection1, you
-                        // conserve server and network resources as connection2 is opened
-                        // only when there is a chance that the transaction can commit.   
-                        using (SqlConnection connection2 = new SqlConnection(connectString2))
-                        {
-                            // The transaction is escalated to a full distributed
-                            // transaction when connection2 is opened.
-                            connection2.Open();
-
-                            // Execute the second command in the second database.
-                            returnValue = 0;
-                            SqlCommand command2 = new SqlCommand(commandText2, connection2);
-                            returnValue = command2.ExecuteNonQuery();
-                        }
-                    }
-
-                    // The Complete method commits the transaction. If an exception has been thrown,
-                    // Complete is not  called and the transaction is rolled back.
-                    scope.Complete();
-                }
-                listView1.Items[listView1.Items.Count - 1].SubItems[2].Text = "Success!";
-                printFeatureStatus(true);
-            }
-
-            catch (Exception ex)
-            {
-                MessageBox.Show("Distributed transaction failed with exception: " + ex.Message);
-                listView1.Items[listView1.Items.Count - 1].SubItems[2].Text = "Failed: " + ex.Message.ToString();
-                printFeatureStatus(false);
-            }
-        }
-
 
         private void DBSoftwareCheck()
         {
@@ -1068,50 +994,6 @@ namespace CheckPreRequisites
 
         #endregion
 
-        private void MSDTCCheck()
-        {
-            string direction = "";
-
-            printNewFeature("MsDtc", "Exists", "Installed", "HKLM\\Software\\Microsoft\\MSDTC");
-            if (MSDTCExists())
-            {
-                printFeatureStatus(true);
-
-                printNewFeature("MsDtc Network", "Network enabled", "Enabled", "Enabled");
-                if (MSDTCNetworkDtcAccessCheck())
-                {
-                    printFeatureStatus(true);
-
-                    direction = "Outbound";
-                    printNewFeature("MsDtc Network", "Direction=" + direction.ToString(), "Enabled", "Disabled");
-                    if (MSDTCNetworkDtcAccessDirectionCheck(direction))
-                    {
-                        listView1.Items[listView1.Items.Count - 1].SubItems[2].Text = "Enabled";            
-                        printFeatureStatus(true);
-                    }
-                    else
-                        printFeatureStatus(false);
-
-                    direction = "Inbound";
-
-                    printNewFeature("MsDtc Network", "Direction=" + direction.ToString(), "Enabled", "Disabled");
-                    if (MSDTCNetworkDtcAccessDirectionCheck(direction))
-                    {
-                        listView1.Items[listView1.Items.Count - 1].SubItems[2].Text = "Enabled";
-                        printFeatureStatus(true);
-                    }
-                    else
-                        printFeatureStatus(false);
-                }
-                else
-                    printFeatureStatus(false);
-
-                ServiceCheck(".","MSDTC");
-            }
-            else //Can't find MSDTC in registry
-                printFeatureStatus(false);
-        }
-
         private void ServiceCheck(string Target, string ServiceName)
         {
             //print something that people might recongise for SSIS
@@ -1133,48 +1015,6 @@ namespace CheckPreRequisites
 
                 }
         }
-
-        private static bool MSDTCExists()
-        {
-            bool returnValue = false;
-
-            using (RegistryKey componentsKey =
-            Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\MSDTC", false))
-            {
-                if (componentsKey != null)
-                {
-                        returnValue = true;
-                }
-            }
-            return returnValue;
-        }
-
-
-        private static bool MSDTCNetworkDtcAccessCheck()
-        {
-            bool returnValue = false;
-            if (InternetInformationServicesDetection.IsInstalled(MsDtcSecurity.NetworkDtcAccess))
-                returnValue = true;
-            return returnValue;
-        }
-
-        private static bool MSDTCNetworkDtcAccessDirectionCheck(string direction)
-        {
-            bool returnValue = false;
-            if (direction.ToString() == "Inbound")
-            {
-                if (InternetInformationServicesDetection.IsInstalled(MsDtcSecurity.NetworkDtcAccessInbound))
-                    returnValue = true;
-            }
-            if (direction.ToString() == "Outbound")
-            {
-                if (InternetInformationServicesDetection.IsInstalled(MsDtcSecurity.NetworkDtcAccessOutbound))
-                    returnValue = true;
-            }
-
-            return returnValue;
-        }
-
 
         private void CheckDatabaseServices()
         {

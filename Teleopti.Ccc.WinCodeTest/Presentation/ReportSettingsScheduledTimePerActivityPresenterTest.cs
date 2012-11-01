@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
         private readonly IScenario _scenario = new Scenario("scenario");
         private readonly DateOnlyPeriod _period = new DateOnlyPeriod();
         private readonly IList<IPerson> _persons = new List<IPerson>();
-        private readonly ICccTimeZoneInfo _timeZone = new CccTimeZoneInfo();
+        private readonly TimeZoneInfo _timeZone = TimeZoneInfo.Local;
         private readonly IList<IActivity> _activities = new List<IActivity>();
 
         [SetUp]

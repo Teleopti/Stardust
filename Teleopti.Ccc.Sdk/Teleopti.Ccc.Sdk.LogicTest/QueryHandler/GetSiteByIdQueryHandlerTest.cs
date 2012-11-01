@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -43,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Record())
 			{
 				Expect.Call(siteRepository.Get(siteId)).Return(site);
-				Expect.Call(assembler.DomainEntityToDto(site)).Return(new SiteDto(site));
+				Expect.Call(assembler.DomainEntityToDto(site)).Return(new SiteDto { DescriptionName = site.Description.Name, Id = site.Id});
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			}
 			using (mocks.Playback())

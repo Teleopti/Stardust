@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Diagnostics;
-using Teleopti.Core;
-using Teleopti.Logging;
+using Teleopti.Messaging.Core;
 using Teleopti.Messaging.Exceptions;
+using log4net;
 
 namespace Teleopti.Messaging.DataAccessLayer
 {
     public class EventDeleter : ObjectDeleter
     {
+		private static ILog Logger = LogManager.GetLogger(typeof(EventDeleter));
         private const string CommandText = "msg.sp_Scavage_Events";
 
         public EventDeleter(string connectionString) : base(connectionString)
@@ -22,7 +22,7 @@ namespace Teleopti.Messaging.DataAccessLayer
             }
             catch (Exception exc)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exc.Message + exc.StackTrace);
+                Logger.Error("Event deleter error.", exc);
                 throw new DatabaseException("DeleteEvent()", exc);
             }
         }

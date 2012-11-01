@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
     {
 		private readonly Func<IUserTimeZone> _userTimeZone;
 
-    	public MessageViewModelMappingProfile(Func<IUserTimeZone> timeZone)
-    	{
+	    public MessageViewModelMappingProfile(Func<IUserTimeZone> timeZone)
+		{
 			_userTimeZone = timeZone;
-    	}
+		}
 
-    	protected override void Configure()
+	    protected override void Configure()
         {
 
             base.Configure();
@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
                                                           	}))
                 .ForMember(d => d.Sender, o => o.MapFrom(m => m.PushMessage.Sender.Name.ToString()))
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.UpdatedOn.HasValue
-																	? _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(
-																		s.UpdatedOn.Value).ToShortDateTimeString()
+																	? TimeZoneInfo.ConvertTimeFromUtc(s.UpdatedOn.Value,_userTimeZone.Invoke().TimeZone()).ToShortDateTimeString()
 																	: null))
 				.ForMember(d => d.IsRead, o => o.MapFrom(m => m.IsReplied))
 				.ForMember(d => d.AllowDialogueReply, o => o.MapFrom(m => m.PushMessage.AllowDialogueReply))

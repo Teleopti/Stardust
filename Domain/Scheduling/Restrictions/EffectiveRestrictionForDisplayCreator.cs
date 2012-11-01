@@ -1,22 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
 	public class EffectiveRestrictionForDisplayCreator : IEffectiveRestrictionForDisplayCreator
 	{
-		private readonly IRestrictionCombiner _restrictionCombiner;
 		private readonly IRestrictionRetrievalOperation _retrievalOperation;
+		private readonly IRestrictionCombiner _restrictionCombiner;
 
-		public EffectiveRestrictionForDisplayCreator(IRestrictionCombiner restrictionCombiner, IRestrictionRetrievalOperation retrievalOperation)
+		public EffectiveRestrictionForDisplayCreator(IRestrictionRetrievalOperation retrievalOperation, IRestrictionCombiner restrictionCombiner)
 		{
-			_restrictionCombiner = restrictionCombiner;
 			_retrievalOperation = retrievalOperation;
+			_restrictionCombiner = restrictionCombiner;
 		}
 
-		public IEffectiveRestriction GetEffectiveRestrictionForDisplay(IScheduleDay scheduleDay, IEffectiveRestrictionOptions effectiveRestrictionOptions)
+		public IEffectiveRestriction MakeEffectiveRestriction(IScheduleDay scheduleDay, IEffectiveRestrictionOptions effectiveRestrictionOptions)
 		{
 			var startTime = new TimeSpan(0, 0, 0);
 			var endTime = new TimeSpan(23, 59, 59);
@@ -26,19 +25,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			if (scheduleDay != null && effectiveRestrictionOptions != null)
 			{
+				var restrictions = scheduleDay.RestrictionCollection();
+
 				if (effectiveRestrictionOptions.UsePreference)
 				{
-					effectiveRestriction = _restrictionCombiner.CombinePreferenceRestrictions(
-						_retrievalOperation.GetPreferenceRestrictions(scheduleDay.RestrictionCollection()),
-						effectiveRestriction, false);
+					if (restrictions != null)
+						effectiveRestriction = _restrictionCombiner.CombinePreferenceRestrictions(
+							_retrievalOperation.GetPreferenceRestrictions(restrictions),
+							effectiveRestriction, false);
 				}
 
 				if (effectiveRestrictionOptions.UseAvailability)
 				{
-					effectiveRestriction = _restrictionCombiner.CombineAvailabilityRestrictions(
-						_retrievalOperation.GetAvailabilityRestrictions(scheduleDay.RestrictionCollection()),
-						effectiveRestriction);
+					if (restrictions != null)
+						effectiveRestriction = _restrictionCombiner.CombineAvailabilityRestrictions(
+							_retrievalOperation.GetAvailabilityRestrictions(restrictions),
+							effectiveRestriction);
 				}
+
 			}
 
 			return effectiveRestriction;

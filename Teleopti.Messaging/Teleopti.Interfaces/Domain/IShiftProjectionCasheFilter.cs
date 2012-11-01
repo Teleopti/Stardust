@@ -28,7 +28,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="notAllowedCategories">The not allowed categories.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList,
+        IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList,
                                                                                    IEffectiveRestriction restriction, IList<IShiftCategory> notAllowedCategories, IWorkShiftFinderResult finderResult);
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="restriction">The restriction.</param>
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
-        IList<IShiftProjectionCache> FilterOnRestrictionTimeLimits(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList,
+        IList<IShiftProjectionCache> FilterOnRestrictionTimeLimits(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList,
                                                                                    IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult);
 
         /// <summary>
@@ -185,5 +185,15 @@ namespace Teleopti.Interfaces.Domain
                                                                     IScheduleDay part,
                                                                     IWorkShiftFinderResult finderResult);
 
+        /// <summary>
+        /// Filters the on group scheduling common activity.
+        /// </summary>
+        /// <param name="shiftList"></param>
+        /// <param name="schedulingOptions"></param>
+        /// <param name="possibleStartEndCategory"></param>
+        /// <param name="finderResult"></param>
+        /// <returns></returns>
+        IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonActivity(IList<IShiftProjectionCache> shiftList, ISchedulingOptions schedulingOptions,
+                                                                          IPossibleStartEndCategory possibleStartEndCategory, IWorkShiftFinderResult finderResult);
     }
 }

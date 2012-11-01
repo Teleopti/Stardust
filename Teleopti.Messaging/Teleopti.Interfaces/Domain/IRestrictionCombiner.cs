@@ -39,13 +39,5 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="effectiveRestriction"></param>
 		/// <returns></returns>
 		IEffectiveRestriction CombineRotationRestrictions(IEnumerable<IRotationRestriction> rotationRestrictions, IEffectiveRestriction effectiveRestriction);
-		
-		/// <summary>
-		/// Combines effective restrictions to into the given effective restriction
-		/// </summary>
-		/// <param name="effectiveRestrictions"></param>
-		/// <param name="effectiveRestriction"></param>
-		/// <returns></returns>
-		IEffectiveRestriction CombineEffectiveRestrictions(IEnumerable<IEffectiveRestriction> effectiveRestrictions, IEffectiveRestriction effectiveRestriction);
 	}
 }

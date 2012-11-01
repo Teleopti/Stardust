@@ -1348,8 +1348,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             var savedSettings = settingProvider.ExportAcrossBusinessUnitsSettings;
             settingProvider.TransformSerializableToSelectionModels().ForEach(
                 model.ExportMultisiteSkillToSkillCommandModel.MultisiteSkillSelectionModels.Add);
-            if (!savedSettings.Period.Equals(new DateOnlyPeriod()))
-                model.ExportMultisiteSkillToSkillCommandModel.Period = new DateOnlyPeriodDto(savedSettings.Period);
+			if (!savedSettings.Period.Equals(new DateOnlyPeriod()))
+				model.ExportMultisiteSkillToSkillCommandModel.Period = new DateOnlyPeriodDto
+					{
+						StartDate = new DateOnlyDto {DateTime = savedSettings.Period.StartDate},
+						EndDate = new DateOnlyDto {DateTime = savedSettings.Period.EndDate}
+					};
         }
 
 	    private void toolStripMenuItemJobHistory_Click(object sender, EventArgs e)

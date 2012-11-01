@@ -12,7 +12,7 @@ SET /A Win2003=502
 SET IIS6=6
 SET IIS7=7
 SET IIS5=5
-SET IIS7PoolUser35=IIS APPPOOL\Teleopti ASP.NET v3.5
+SET IIS7PoolUser40=IIS APPPOOL\Teleopti ASP.NET v4.0
 SET IIS7PoolUser40Web=IIS APPPOOL\Teleopti ASP.NET v4.0 Web
 SET IIS7PoolUser40Broker=IIS APPPOOL\Teleopti ASP.NET v4.0 Broker
 SET IIS6PoolUser=NT AUTHORITY\Network Service
@@ -27,7 +27,7 @@ SET /A localError=%errorlevel%
 
 ::IIS Log permissions
 IF %IISVersion% EQU %IIS7% (
-Call:SetPermissions "%IIS7PoolUser35%" %localError% localError
+Call:SetPermissions "%IIS7PoolUser40%" %localError% localError
 Call:SetPermissions "%IIS7PoolUser40Web%" %localError% localError
 Call:SetPermissions "%IIS7PoolUser40Broker%" %localError% localError
 )

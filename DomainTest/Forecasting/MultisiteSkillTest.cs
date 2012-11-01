@@ -638,8 +638,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             IList<ITemplateMultisitePeriod> multisitePeriods3 = new List<ITemplateMultisitePeriod>();
 
             DateTimePeriod timePeriod = new DateTimePeriod(
-            skill.TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
-            skill.TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(19, 0, 0)), skill.TimeZone));
+            TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
+            TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(19, 0, 0)), skill.TimeZone));
 
             multisitePeriods3.Add(
                 new TemplateMultisitePeriod(timePeriod,

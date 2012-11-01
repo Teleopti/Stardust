@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             CurrentPeriod = period;
             CurrentSkill = skill;
             CurrentPerson = PersonFactory.CreatePersonWithPersonPeriod(person,new DateOnly(CurrentPeriod.StartDateTime), new List<ISkill> { CurrentSkill });
-            CurrentPerson.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            CurrentPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
             _part = createPart(new DateOnly(CurrentPeriod.StartDateTime));
 
         }

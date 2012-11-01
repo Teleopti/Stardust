@@ -11,16 +11,16 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
     /// </summary>
     public class MeetingTimeZoneHelper
     {
-        private readonly ICccTimeZoneInfo _userTimeZone;
+        private readonly TimeZoneInfo _userTimeZone;
 
-        public MeetingTimeZoneHelper(ICccTimeZoneInfo userTimeZone)
+        public MeetingTimeZoneHelper(TimeZoneInfo userTimeZone)
         {
             _userTimeZone = userTimeZone;
         }
 
-        public ICccTimeZoneInfo UserTimeZone { get { return _userTimeZone; } }
+        public TimeZoneInfo UserTimeZone { get { return _userTimeZone; } }
 
-        public DateTime ConvertToUserTimeZone(DateTime dateTime, ICccTimeZoneInfo meetingTimeZone)
+        public DateTime ConvertToUserTimeZone(DateTime dateTime, TimeZoneInfo meetingTimeZone)
         {
             if (meetingTimeZone == null)
                 throw new ArgumentNullException("meetingTimeZone");
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
             
         }
 
-        public static DateTime CheckSoValidInTimeZone(DateTime dateTime, ICccTimeZoneInfo timeZone)
+        public static DateTime CheckSoValidInTimeZone(DateTime dateTime, TimeZoneInfo timeZone)
         {
             if (timeZone != null && timeZone.IsInvalidTime(dateTime))
                 dateTime = dateTime.AddHours(1);
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
             return dateTime;
         }
 
-        public DateTime ConvertToMeetingTimeZone(DateTime dateTime, ICccTimeZoneInfo meetingTimeZone)
+        public DateTime ConvertToMeetingTimeZone(DateTime dateTime, TimeZoneInfo meetingTimeZone)
         {
             if (meetingTimeZone == null)
                 throw new ArgumentNullException("meetingTimeZone");

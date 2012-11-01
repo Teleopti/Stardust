@@ -26,8 +26,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
         protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
         {
             // Get max date in dim_date (to be able to avoid gaps in the date_id sequence)
-            ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(_jobParameters.DefaultTimeZone);
-            DateTime startDate = cccTimeZoneInfo.ConvertTimeToUtc(_jobParameters.Helper.Repository.GetMaxDateInDimDate());
+            TimeZoneInfo timeZoneInfo = _jobParameters.DefaultTimeZone;
+            DateTime startDate = timeZoneInfo.SafeConvertTimeToUtc(_jobParameters.Helper.Repository.GetMaxDateInDimDate());
             DateTime endDate = startDate;
 
             IJobMultipleDateItem minMaxDatePeriodFromAllJobCategorys = _jobParameters.JobCategoryDates.MinMaxDatesUtc;

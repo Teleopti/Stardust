@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IActivity activity;
 		private TimeSpan start;
 		private TimeSpan end;
-		private ICccTimeZoneInfo timeZoneInfo;
+		private TimeZoneInfo timeZoneInfo;
 
 		[SetUp]
 		public void Setup()
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(activity, period));
 
 			target = new ShiftProjectionCache(workShift);
-			timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Central Africa Standard Time"));
+			timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Central Africa Standard Time"));
 			// blir 7 - 16 med denna tidszon (W. Central Africa Standard Time)
 			target.SetDate(schedulingDate, timeZoneInfo);
 

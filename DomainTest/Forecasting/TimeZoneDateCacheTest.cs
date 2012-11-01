@@ -21,11 +21,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCanGetCachedTimeAndThenTimeFromOtherTimeZone()
         {
-            var timeZone1 = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            var timeZone2 = new CccTimeZoneInfo(TimeZoneInfo.GetSystemTimeZones()[2]);
+            var timeZone1 = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+            var timeZone2 = TimeZoneInfo.GetSystemTimeZones()[2];
 
             Assert.AreEqual(new DateTime(2010, 3, 3), _target.GetLocalDateTime(_dateTimeUtc, timeZone1));
-            Assert.AreEqual(timeZone2.ConvertTimeFromUtc(_dateTimeUtc,timeZone2).Date,_target.GetLocalDateTime(_dateTimeUtc,timeZone2).Date);
+            Assert.AreEqual(TimeZoneInfo.ConvertTimeFromUtc(_dateTimeUtc, timeZone2).Date, _target.GetLocalDateTime(_dateTimeUtc, timeZone2).Date);
         }
     }
 }

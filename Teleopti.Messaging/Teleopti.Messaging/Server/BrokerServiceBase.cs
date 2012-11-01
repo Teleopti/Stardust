@@ -6,22 +6,23 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Security.Permissions;
 using System.Threading;
-using Teleopti.Core;
 using Teleopti.Interfaces.MessageBroker.Coders;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Logging;
-using Teleopti.Logging.Core;
 using Teleopti.Messaging.Coders;
 using Teleopti.Messaging.Composites;
+using Teleopti.Messaging.Core;
 using Teleopti.Messaging.DataAccessLayer;
 using Teleopti.Messaging.Events;
+using log4net;
 using Timer = System.Timers.Timer;
 
 namespace Teleopti.Messaging.Server
 {
     public abstract class BrokerServiceBase : MarshalByRefObject, IDisposable
     {
+		private static ILog Logger = LogManager.GetLogger(typeof(BrokerServiceBase));
+
         private const string NameConstant = "TeleoptiBrokerService";
         private const string ThreadsConstant = "Threads";
         private const string IntervalConstant = "Intervall";
@@ -142,18 +143,13 @@ namespace Teleopti.Messaging.Server
             }
             catch (Exception exc)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exc.Message + exc.StackTrace);
+                Logger.Error("Initialise thread pools error.", exc);
             }
         }
 
-        protected void InternalInformationLog(string message)
+        protected static void InternalInformationLog(string message)
         {
-            BaseLogger.Instance.WriteLine(EventLogEntryType.Information, GetType(), message);
-        }
-
-        protected void InternalErrorLog(string message)
-        {
-            BaseLogger.Instance.WriteLine(EventLogEntryType.Information, GetType(), message);
+            Logger.Info(message);
         }
 
         protected void AcceptReceipt(object state)
@@ -176,10 +172,7 @@ namespace Teleopti.Messaging.Server
         private void OnUnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
             Exception exc = (Exception) e.ExceptionObject;
-            BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), String.Format(CultureInfo.InvariantCulture, "BrokerServiceBase::OnUnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e). {0} {1} {2}", exc.Message, exc.StackTrace, Thread.CurrentThread.ManagedThreadId));            
-            IDataMapper mapper = new DataMapper(_connectionString, _restartTime);
-            mapper.InsertEventLogEntry(Process.GetCurrentProcess().Id, "Unhandled exception on background thread", e.ExceptionObject.GetType().ToString(), exc.Message, exc.StackTrace, Environment.UserName);
-            Debug.WriteLine(((Exception)e.ExceptionObject).Message + ((Exception)e.ExceptionObject).StackTrace);
+			Logger.Error("Unhandled exception on background thread.", exc);
         }
 
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.Infrastructure)]
@@ -276,13 +269,6 @@ namespace Teleopti.Messaging.Server
         /// <returns></returns>
         [SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
         protected abstract List<IMessageInformation> CreateMessageInformationList(IEventMessage eventMessage);
-
-        protected void LogAsync(object state)
-        {
-            ILogEntry eventLogEntry = (ILogEntry) state;
-            LogEntryInserter inserter = new LogEntryInserter(_connectionString);
-            inserter.Execute(eventLogEntry);
-        }
 
         /// <summary>
         /// Gets the subscriber.

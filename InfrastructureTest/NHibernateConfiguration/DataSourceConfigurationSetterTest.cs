@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.True();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
-			target.ApplicationName.Should().Be.EqualTo("Teleopti.Ccc.Sdk.ServiceBus.Host");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Ccc.ServiceBus.Host");
 		}
 
 		[Test]

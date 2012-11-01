@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 		private readonly IMeetingImpactView _meetingImpactView;
 		private readonly IBestSlotForMeetingFinder _bestSlotForMeetingFinder;
 		private readonly IMeetingViewModel _meetingViewModel;
-		private ICccTimeZoneInfo _timeZone;
+		private TimeZoneInfo _timeZone;
 		private DateTimePeriod _currentPeriod;
 		private IList<BestMeetingSlotResult> _pickBestResult = new List<BestMeetingSlotResult>();
 		private BestMeetingSlotResult _currentResult;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             _meetingImpactView.RefreshMeetingControl();
         }
 
-        private ICccTimeZoneInfo TimeZone()
+        private TimeZoneInfo TimeZone()
         {
             return _timeZone ?? (_timeZone = _meetingViewModel.TimeZone);
         }

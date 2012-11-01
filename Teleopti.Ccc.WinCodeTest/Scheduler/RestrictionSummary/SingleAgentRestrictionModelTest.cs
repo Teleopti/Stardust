@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
         private IList<IPerson> _loadedPersons;
         private IPerson _person;
         private DateTimePeriod _loadedDateTimePeriod;
-        private ICccTimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
         private ISchedulingResultStateHolder _stateHolder;
         private ISchedulingOptions _schedulingOptions;
         private MockRepository _mocks;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
                 UseScheduling = true
             };
             _person = PersonFactory.CreatePerson("Lars", "Lagerbäck");
-            _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.MinValue);
             _person.AddPersonPeriod(personPeriod);
             _schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2010, 5, 3),
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             DateTime startDate = new DateTime(2010, 5, 2, 22, 0, 0, DateTimeKind.Utc);
             DateTime endDate = new DateTime(2010, 5, 31, 22, 0, 0, DateTimeKind.Utc);
             _loadedDateTimePeriod = new DateTimePeriod(startDate, endDate);
-            _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _workShiftWorkTime = _mocks.StrictMock<IWorkShiftWorkTime>();
             _target = new SingleAgentRestrictionModel(_loadedDateTimePeriod, _timeZoneInfo, _workShiftWorkTime);
         }

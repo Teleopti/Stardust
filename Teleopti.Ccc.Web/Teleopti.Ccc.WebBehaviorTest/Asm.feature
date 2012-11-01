@@ -47,12 +47,6 @@ Scenario: Show title in popup
 	When I click ASM link
 	Then I should see a popup with title AgentScheduleMessenger 
 
-Scenario: Write all upcoming activities
-	Given I have the role 'Full access to mytime'
-	And Current time is '2030-01-01 07:00'
-	When I click ASM link
-	Then I should see '3' upcoming activities
-
 Scenario: Current activity should be shown
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 16:00'
@@ -63,7 +57,7 @@ Scenario: No current activity to show
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 07:00'
 	When I click ASM link
-	Then I should not see as current activity
+	Then I should not see a current activity
 
 Scenario: Current activity changes
 	Given I have the role 'Full access to mytime'
@@ -72,17 +66,17 @@ Scenario: Current activity changes
 	And Current browser time has changed to '2030-01-01 12:00'
 	Then I should see Phone as current activity
 
-Scenario: Upcoming activity starttime should be displayed
+Scenario: Upcoming activity time period should be displayed
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01 00:01'
 	When I click ASM link
-	Then I should see last activity starttime as '12:00'
+	Then I should see next activity time as '08:00-11:00'
 
-Scenario: Upcoming activity starttime starting after midnight should be indicated as next day
+Scenario: Upcoming activity time period starting after midnight should be indicated as next day
 	Given I have the role 'Full access to mytime'
 	And Current time is '2029-12-31 23:59'
 	When I click ASM link
-	Then I should see last activity starttime as '12:00+1'
+	Then I should see next activity time as '08:00+1-11:00'
 
 Scenario: Agent should from ASM popup be notified when current shift has changed
 	Given I have the role 'Full access to mytime'

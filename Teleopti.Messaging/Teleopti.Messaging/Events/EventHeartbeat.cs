@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -66,7 +67,7 @@ namespace Teleopti.Messaging.Events
             set { _changedDateTime = value; }
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+		[SecurityCritical]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("HeartbeatId", _heartbeatId, _heartbeatId.GetType());

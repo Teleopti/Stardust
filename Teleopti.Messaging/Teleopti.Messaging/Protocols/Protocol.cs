@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Logging;
 using Teleopti.Messaging.Coders;
 using Teleopti.Messaging.Core;
+using log4net;
 
 namespace Teleopti.Messaging.Protocols
 {
@@ -33,6 +32,7 @@ namespace Teleopti.Messaging.Protocols
         private bool _isStarted;
         private int _port;
         private Guid _subscriberId;
+		private static ILog Logger = LogManager.GetLogger(typeof(Protocol));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Protocol"/> class.
@@ -266,9 +266,9 @@ namespace Teleopti.Messaging.Protocols
                 EventMessageDecoder decoder = new EventMessageDecoder();
                 eventMessage = decoder.Decode(package);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), "Could not decode event message.");
+                Logger.Error("Could not decode event message.", exception);
             }
             if(eventMessage != null)
             {

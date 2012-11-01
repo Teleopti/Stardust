@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             // CreateProjection persons
             // CreateProjection Skill Type
-            var timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+            var timeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
 
             ISkill skPhoneA = SkillFactory.CreateSkill("PhoneA");
             skPhoneA.Activity = container.ContainedActivities["Phone"];

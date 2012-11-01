@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
         private void selectWholeWeekInCalendar(DateTime selectedDate)
         {
             _selectedItem = null;
-            DateTime firstDay = selectedDate;
+            DateTime firstDay = selectedDate.Date;
             // use used culture (UI or not?????)
             
             var firstDayOfWeek = CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             }
         }
 
-        public ICccTimeZoneInfo UserTimeZone { get; set; }
+        public TimeZoneInfo UserTimeZone { get; set; }
 
         private void deleteClick(object sender, EventArgs e)
         {

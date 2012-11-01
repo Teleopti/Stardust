@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
     {
         private AgentInfoHelper _target;
         private IPerson _person;
-        private ICccTimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
         private DateTime _dateTime;
         private ISchedulingResultStateHolder _stateHolder;
         private ISchedulingOptions _schedulingOptions;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _stateHolder = SchedulingResultStateHolderFactory.Create(new DateTimePeriod(_dateTime, _dateTime.AddDays(7)));
             _scenario = ScenarioFactory.CreateScenarioAggregate();
 
-            _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            _timeZoneInfo = (TimeZoneInfo.Utc);
 
             var dic = new ScheduleDictionaryForTest(_scenario,
                                                     new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2020, 1, 1)),

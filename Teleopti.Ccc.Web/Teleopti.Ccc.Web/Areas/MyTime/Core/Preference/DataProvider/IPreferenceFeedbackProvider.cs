@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 {
 	public interface IPreferenceFeedbackProvider
 	{
-		IWorkTimeMinMax WorkTimeMinMaxForDate(DateOnly date, IScheduleDay scheduleDay, out PreferenceType? preferenceType);
-		IWorkTimeMinMax WorkTimeMinMaxForDate(DateOnly date, out PreferenceType? preferenceType);
+		WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date, IScheduleDay scheduleDay);
+		WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date);
 	}
 }

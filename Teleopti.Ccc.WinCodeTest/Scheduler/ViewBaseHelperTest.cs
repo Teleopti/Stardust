@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                       DateOnly.Today, _agent)).Return(false);
                 Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)).
                     Return(true);
-                DateOnlyPeriod dop = _param.Period.ToDateOnlyPeriod(CccTimeZoneInfoFactory.UtcTimeZoneInfo());
+                DateOnlyPeriod dop = _param.Period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
                 Expect.Call(authorization.PermittedPeriods(dummyFunction, dop, _agent))
                     .Return(new List<DateOnlyPeriod> { dop });
             }
@@ -595,7 +595,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             IPerson person = _mockRep.StrictMock<IPerson>();
 
-            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(), new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(), (TimeZoneInfo.Utc));
 
             TimeSpan totalContractTime = TimeSpan.Zero;
 
@@ -632,7 +632,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IVisualLayerCollection visualLayerCollection = VisualLayerCollectionFactory.CreateForWorkShift(person, TimeSpan.FromHours(8), TimeSpan.FromHours(14),
                                                             new TimePeriod(TimeSpan.FromHours(10), TimeSpan.FromHours(11)));
 
-            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(), new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(), (TimeZoneInfo.Utc));
 
             TimeSpan totalContractTime = visualLayerCollection.ContractTime();
 
@@ -807,7 +807,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonDayOff persondayOff1 = PersonDayOffFactory.CreatePersonDayOff(new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(1), TimeSpan.FromHours(1), TimeSpan.Zero);
             IPersonDayOff persondayOff2 = PersonDayOffFactory.CreatePersonDayOff(new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(1), TimeSpan.FromHours(1), TimeSpan.Zero);
 
-            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(), new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(), (TimeZoneInfo.Utc));
             var dayOffs = new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { persondayOff1, persondayOff2 });
 
             var part = _mockRep.StrictMock<IScheduleDay>();
@@ -903,7 +903,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _baseDateTime = new DateOnly(2009, 6, 1);
             var dateOnlyPeriod = new DateOnlyPeriod(_baseDateTime, _baseDateTime.AddDays(6));
             IPerson person = new Person();
-            var info = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            var info = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             person.PermissionInformation.SetDefaultTimeZone(info);
             var schedulePeriod = new SchedulePeriod(new DateOnly(2009, 6, 1), SchedulePeriodType.Week, 1);
             schedulePeriod.SetDaysOff(2);
@@ -938,7 +938,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _baseDateTime = new DateOnly(2009, 6, 1);
             var dateOnlyPeriod = new DateOnlyPeriod(_baseDateTime, _baseDateTime.AddDays(6));
             IPerson person = new Person();
-            var info = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            var info = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             person.PermissionInformation.SetDefaultTimeZone(info);
             var schedulePeriod = new SchedulePeriod(new DateOnly(2009, 6, 1), SchedulePeriodType.Week, 1)
                                      {
@@ -1071,7 +1071,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyToLocalStartEndTimeString()
         {
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
             string expected = string.Concat(_periodEndsToday.StartDateTimeLocal(timeZoneInfo).ToShortTimeString(), " - ",
                                             _periodEndsToday.EndDateTimeLocal(timeZoneInfo).ToShortTimeString());
             Assert.AreEqual(expected, ViewBaseHelper.ToLocalStartEndTimeString(_periodEndsToday, timeZoneInfo));
@@ -1098,7 +1098,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_schedulePart3.PersonAbsenceCollection()).Return(_personAbsenceCollection).Repeat.AtLeastOnce();
 
                 Expect.Call(_schedulePart3.TimeZone).Return(
-                    new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"))).Repeat.AtLeastOnce();
+                    (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"))).Repeat.AtLeastOnce();
             }
 
             _underlyingDictionary.Clear();

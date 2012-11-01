@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             mappedObjectPair.ShiftCategory = shiftCatPairList;
             mappedObjectPair.Activity = agdFactory.ActPairList;
 
-            MainShiftMapper msMap = new MainShiftMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc), new DateTime(2007, 1, 1));
+            MainShiftMapper msMap = new MainShiftMapper(mappedObjectPair, (TimeZoneInfo.Utc), new DateTime(2007, 1, 1));
             MainShift newShift = msMap.Map(oldShift);
 
             Assert.AreEqual(oldShift.Category.Name.Substring(0,50), newShift.ShiftCategory.Description.Name);
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             mappedObjectPair.ShiftCategory = shiftCatPairList;
             mappedObjectPair.Activity = agdFactory.ActPairList;
 
-            MainShiftMapper msMap = new MainShiftMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc), new DateTime(2007, 1, 1));
+            MainShiftMapper msMap = new MainShiftMapper(mappedObjectPair, (TimeZoneInfo.Utc), new DateTime(2007, 1, 1));
             MainShift newShift = msMap.Map(oldShift);
 
             Assert.AreEqual(oldShift.Category.Name.Substring(0, 50), newShift.ShiftCategory.Description.Name);

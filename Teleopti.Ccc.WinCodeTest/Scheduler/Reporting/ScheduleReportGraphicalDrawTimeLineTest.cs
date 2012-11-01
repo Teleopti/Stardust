@@ -109,9 +109,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 			var dateTime4 = new DateTime(2011, 1, 2, 7, 0, 0, DateTimeKind.Utc);
 			var period2 = new DateTimePeriod(dateTime3, dateTime4);
 
-			var dateTimeExpectedStart = new DateTime(2011, 1, 1, 8, 0, 0, 0, _culture.Calendar,  DateTimeKind.Utc);
-			var dateTimeExpectedEnd = new DateTime(2011, 1, 2, 7, 0, 0, 0, _culture.Calendar, DateTimeKind.Utc);
-
+			var dateTimeExpectedStart = new DateTime(1432, 1, 26, 8, 0, 0, 0, _culture.Calendar,  DateTimeKind.Utc);
+			var dateTimeExpectedEnd = new DateTime(1432, 1, 27, 7, 0, 0, 0, _culture.Calendar, DateTimeKind.Utc);
+		    
 			var dateOnly = new DateOnly(2011, 1, 1);
 			var expectedPeriod = new DateTimePeriod(dateTimeExpectedStart, dateTimeExpectedEnd);
 

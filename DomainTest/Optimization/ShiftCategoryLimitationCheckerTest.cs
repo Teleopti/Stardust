@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new ShiftCategoryLimitationChecker(_stateHolder);
             _dateTimePeriod = new DateTimePeriod(2010,1,1,2010,1,2);
             _person = PersonFactory.CreatePerson();
-            _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
             _person.FirstDayOfWeek = DayOfWeek.Monday;
             _schedulePeriod = new SchedulePeriod(new DateOnly(2010, 1, 1), SchedulePeriodType.Day, 1);
             _person.AddSchedulePeriod(_schedulePeriod);

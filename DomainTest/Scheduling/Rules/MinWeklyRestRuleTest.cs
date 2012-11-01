@@ -7,7 +7,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
         private MinWeeklyRestRule _target;
         private IPermissionInformation _permissionInformation;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private IContract _contract;
         private IPersonContract _personContract;
         private IPersonPeriod _personPeriod;
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			_workTimeStartEndExtractor = _mocks.StrictMock<IWorkTimeStartEndExtractor>();
             _target = new MinWeeklyRestRule(_weeksFromScheduleDaysExtractor,_workTimeStartEndExtractor);
             _permissionInformation = _mocks.StrictMock<IPermissionInformation>();
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
             var maxTimePerWeek = new TimeSpan(40, 0, 0);
             var nightlyRest = new TimeSpan(8, 0, 0);
             var weeklyRest = new TimeSpan(50, 0, 0);

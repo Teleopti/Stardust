@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         public override TeamDto DomainEntityToDto(ITeam entity)
         {
-            TeamDto teamDto = new TeamDto(entity)
+            var teamDto = new TeamDto
                                         {
                                             Id = entity.Id,
                                             Description = entity.Description.Name,

@@ -5,7 +5,6 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
-using Teleopti.Ccc.Domain.Time;
 using Rhino.Mocks;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -287,7 +286,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyOpenDuringDstSwitch()
         {
             _skill.MidnightBreakOffset = TimeSpan.FromHours(1);
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _workloadDayBase.Create(new DateOnly(2009, 3, 29), _workload, new List<TimePeriod>());
             _workloadDayBase.MakeOpen24Hours();
 
@@ -801,7 +800,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyMergeTemplateTaskPeriodOnDstSwitch()
         {
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _skill.MidnightBreakOffset = TimeSpan.FromHours(1);
             _openHours = new List<TimePeriod> { new TimePeriod(1, 0, 18, 0) };
             _workloadDayBase.Create(new DateOnly(2009, 3, 29), _workload, _openHours);
@@ -821,7 +820,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyMergeTemplateTaskPeriodWhenGoingFromDst()
         {
             _skill.MidnightBreakOffset = TimeSpan.FromHours(1);
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _openHours = new List<TimePeriod> { new TimePeriod(1, 0, 18, 0) };
             _workloadDayBase.Create(new DateOnly(2009, 10, 24), _workload, _openHours);
             _workloadDayBase.Tasks = 999;
@@ -1107,7 +1106,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             openHours.Add(new TimePeriod("8:00-17:00"));
 
             WorkloadDayBase workloadDayBase = new TestWorkloadDayBase();
-            _workload.Skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time")); //Sets the timezone to Stockholm, Vienna
+            _workload.Skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
             DateOnly dateTime = new DateOnly(1800,1,1);
 
             workloadDayBase.Create(dateTime, _workload, openHours);
@@ -1135,7 +1134,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanAddPeriodsToWorkloadWithSkillWithAnotherMidnightBreak()
         {
-            ISkill skill = SkillFactory.CreateSkill("testSkill", SkillTypeFactory.CreateSkillType(), 15, new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), new TimeSpan(2, 0, 0));
+            ISkill skill = SkillFactory.CreateSkill("testSkill", SkillTypeFactory.CreateSkillType(), 15, (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), new TimeSpan(2, 0, 0));
 
             IWorkload workload = new Workload(skill);
 
@@ -1144,7 +1143,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             WorkloadDayBase workloadDayBase = new TestWorkloadDayBase();
 
             ITask t1 = new Task();
-            var baseDateTime = skill.TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone);
+            var baseDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone);
             ITemplateTaskPeriod p1 = new TemplateTaskPeriod(
                 t1,
                 new DateTimePeriod(baseDateTime.AddHours(8), baseDateTime.AddHours(26)));
@@ -1166,7 +1165,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanAddPeriodsToWorkloadWithEmailSkillWithAnotherMidnightBreak()
         {
-            ISkill skill = SkillFactory.CreateSkill("testSkill", SkillTypeFactory.CreateSkillTypeEmail(), 60, new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), new TimeSpan(2, 0, 0));
+            ISkill skill = SkillFactory.CreateSkill("testSkill", SkillTypeFactory.CreateSkillTypeEmail(), 60, (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), new TimeSpan(2, 0, 0));
 
             IWorkload workload = new Workload(skill);
 
@@ -1175,7 +1174,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             WorkloadDayBase workloadDayBase = new TestWorkloadDayBase();
 
             ITask t1 = new Task();
-            DateTime baseDateTime = skill.TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone);
+            DateTime baseDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone);
             ITemplateTaskPeriod p1 = new TemplateTaskPeriod(
                 t1,
                 new DateTimePeriod(baseDateTime.AddHours(8), baseDateTime.AddHours(26)));

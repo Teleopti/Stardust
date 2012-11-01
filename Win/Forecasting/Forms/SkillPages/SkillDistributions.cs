@@ -95,10 +95,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 
             Percent efficiency = new Percent(efficiencyPercentTextBox.DoubleValue);
 
-            DateTime startDateTime = skill.TimeZone.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone);
+            DateTime startDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone);
             startDateTime = startDateTime.Add(skill.MidnightBreakOffset);
 
-            DateTime endDateTime = skill.TimeZone.ConvertTimeToUtc(
+            DateTime endDateTime = TimeZoneInfo.ConvertTimeToUtc(
                 SkillDayTemplate.BaseDate.AddDays(1), skill.TimeZone);
             endDateTime = endDateTime.Add(skill.MidnightBreakOffset);
             DateTimePeriod timePeriod = new DateTimePeriod(startDateTime, endDateTime);

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Interfaces
     {
         DateTime SelectedDate { get; }
         IMeeting SelectedMeeting { get; }
-        ICccTimeZoneInfo UserTimeZone { get; set; }
+        TimeZoneInfo UserTimeZone { get; set; }
         bool ConfirmDeletion(IMeeting theMeeting);
         void ReloadMeetings();
         void EditMeeting(IMeetingViewModel meetingViewModel);

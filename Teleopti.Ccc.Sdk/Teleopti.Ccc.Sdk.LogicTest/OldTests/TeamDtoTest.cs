@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
                     .Return("Site/Team");
             }
 
-            _target = new TeamDto(team);
+			_target = new TeamDto { Description = team.Description.Name, Id = team .Id};
         }
        
         [Test]
@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
             _target.Description = "test";
             Assert.AreEqual("test", _target.Description);
             _target.Id = GuidFactory.GetGuid();
+	        _target.SiteAndTeam = "ngt";
             Assert.AreEqual(GuidFactory.GetGuid(), _target.Id);
             Assert.AreEqual(GuidFactory.GetGuid(), _target.Id);
             Assert.IsFalse(string.IsNullOrEmpty(_target.SiteAndTeam));

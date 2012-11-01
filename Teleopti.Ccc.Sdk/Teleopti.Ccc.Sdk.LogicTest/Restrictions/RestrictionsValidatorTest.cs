@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             _person = PersonFactory.CreatePersonWithBasicPermissionInfo("mycket", "hemligt");
             _person.SetId(Guid.NewGuid());
             _person.WorkflowControlSet = _workflowControlSet;
-            _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             _person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
             IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2009, 1, 2));
             IRuleSetBag bag = new RuleSetBag();
@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             var baseDate = new DateTime(2009, 2, 1);
             var validatedSchedulePartDto = new ValidatedSchedulePartDto
                                                {
-                                                   DateOnly = new DateOnlyDto(new DateOnly(baseDate))
+												   DateOnly = new DateOnlyDto { DateTime = new DateOnly(baseDate) }
                                                };
             IList<ValidatedSchedulePartDto> partsOrg = new List<ValidatedSchedulePartDto>{validatedSchedulePartDto};
 

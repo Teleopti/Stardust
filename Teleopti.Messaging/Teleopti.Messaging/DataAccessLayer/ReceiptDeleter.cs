@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Diagnostics;
-using Teleopti.Core;
-using Teleopti.Logging;
+using Teleopti.Messaging.Core;
 using Teleopti.Messaging.Exceptions;
+using log4net;
 
 namespace Teleopti.Messaging.DataAccessLayer
 {
     public class ReceiptDeleter : ObjectDeleter
     {
+    	private static ILog Logger = LogManager.GetLogger(typeof (ReceiptDeleter));
         private const string ReceiptDelete = "msg.sp_Receipt_Delete_All";
 
         public ReceiptDeleter(string connectionString) : base(connectionString)
@@ -19,11 +19,11 @@ namespace Teleopti.Messaging.DataAccessLayer
             try
             {
                 DeleteRecords(ReceiptDelete);
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Warning, GetType(), "Deleted all receipts to clear up database.");
+                Logger.Warn("Deleted all receipts to clear up database.");
             }
             catch (Exception exception)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exception.ToString());
+                Logger.Error("Delete receipts error.", exception);
                 throw new DatabaseException("DeleteReceipts()", exception);
             }
         }

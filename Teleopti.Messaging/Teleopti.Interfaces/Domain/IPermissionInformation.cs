@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Teleopti.Interfaces.Domain
@@ -152,7 +153,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2007-11-28
         /// </remarks>
-        void SetDefaultTimeZone(ICccTimeZoneInfo value);
+        void SetDefaultTimeZone(TimeZoneInfo value);
 
         /// <summary>
         /// Gets the default time zone.
@@ -162,6 +163,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2007-11-28
         /// </remarks>
-        ICccTimeZoneInfo DefaultTimeZone();
+        TimeZoneInfo DefaultTimeZone();
     }
 }

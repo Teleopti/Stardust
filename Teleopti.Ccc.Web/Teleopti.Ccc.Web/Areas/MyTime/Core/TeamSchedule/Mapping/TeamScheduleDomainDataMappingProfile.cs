@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				                		maxLocal = maxLocal.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.EndTime);
 
 				                		var timeZone = _userTimeZone().TimeZone();
-				                		var min = timeZone.ConvertTimeToUtc(minLocal);
-				                		var max = timeZone.ConvertTimeToUtc(maxLocal);
+				                		var min = timeZone.SafeConvertTimeToUtc(minLocal);
+				                		var max = timeZone.SafeConvertTimeToUtc(maxLocal);
 
 				                		if (periods.Any())
 				                		{

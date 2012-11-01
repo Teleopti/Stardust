@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         public override SiteDto DomainEntityToDto(ISite entity)
         {
-            var siteDto = new SiteDto(entity)
+            var siteDto = new SiteDto
                               {
                                   Id = entity.Id,
                                   DescriptionName = entity.Description.Name

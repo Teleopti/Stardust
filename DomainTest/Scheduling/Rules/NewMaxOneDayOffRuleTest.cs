@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private MockRepository _mocks;
 
         private IPermissionInformation _permissionInformation;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private IPerson _person;
         private IScheduleRange _range;
         private Dictionary<IPerson, IScheduleRange> _dic;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _target = new NewMaxOneDayOffRule();
             _mocks = new MockRepository();
             _permissionInformation = _mocks.StrictMock<IPermissionInformation>();
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             
             _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZone);
             _person = _mocks.StrictMock<IPerson>();

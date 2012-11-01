@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NHibernate.Util;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _schedulingOptions = new SchedulingOptions { UseGroupScheduling = true, UseGroupSchedulingCommonStart = true };
             
             _shiftProjectionList = _mocks.DynamicMock<IList<IShiftProjectionCache>>();
-            _workShiftFinderService = _mocks.DynamicMock<IBlockSchedulingWorkShiftFinderService>();
+            _workShiftFinderService = _mocks.StrictMock<IBlockSchedulingWorkShiftFinderService>();
             _dateOnly = new DateOnly(new DateTime(2012, 6, 8, 8, 0, 0));
             _schedulingResultStateHolder = _mocks.DynamicMock<ISchedulingResultStateHolder>();
             _personSkillPeriodDataHolderManager = _mocks.DynamicMock<IPersonSkillPeriodsDataHolderManager>();
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void TestDifferentFilterShiftCategory()
         {
             IPerson person = new Person();
-            ICccTimeZoneInfo agentTimeZone = new CccTimeZoneInfo();
+            TimeZoneInfo agentTimeZone = TimeZoneInfo.Utc;
             var personList = new List<IPerson> { person };
             IWorkShiftFinderResult finderResult = new WorkShiftFinderResult(person, _dateOnly);
             var notAllowedShiftCategory = new List<IShiftCategory> { new ShiftCategory("test") };
@@ -148,8 +149,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
+               Expect.Call(_workShiftFinderService.BestShiftValue(_dateOnly, _shiftProjectionList, null, null, null, 5,
+                                                                   TimeSpan.FromHours(8), false, null, 4, true, true,
+                                                                   _schedulingOptions)).IgnoreArguments().Return(
+                                                                       new ShiftProjectionShiftValue
+                                                                           {
+                                                                               ShiftProjection = _shiftProjectionList[0],
+                                                                               Value = 100
+                                                                           });
             }
-
+            _schedulingOptions.UseCommonActivity = true;
+            
             using (_mocks.Playback())
             {
 				_target = new ShiftCategoryPeriodValueExtractorThread(_shiftProjectionList, _schedulingOptions, _workShiftFinderService, _dateOnly,
@@ -158,11 +168,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				_target.ExtractShiftCategoryPeriodValue(_possibleStartEndCategory);
             }
-
-           
-
-        
-
+            
         }
 		public void Dispose()
 		{

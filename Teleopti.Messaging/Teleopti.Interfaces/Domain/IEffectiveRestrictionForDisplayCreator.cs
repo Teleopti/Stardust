@@ -9,6 +9,6 @@ namespace Teleopti.Interfaces.Domain
 		/// Creates the effective restriction
 		/// </summary>
 		/// <returns></returns>
-		IEffectiveRestriction GetEffectiveRestrictionForDisplay(IScheduleDay scheduleDay, IEffectiveRestrictionOptions effectiveRestrictionOptions);
+		IEffectiveRestriction MakeEffectiveRestriction(IScheduleDay scheduleDay, IEffectiveRestrictionOptions effectiveRestrictionOptions);
 	}
 }

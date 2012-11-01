@@ -14,11 +14,13 @@ using Teleopti.Messaging.Core;
 using Teleopti.Messaging.DataAccessLayer;
 using Teleopti.Messaging.Exceptions;
 using Teleopti.Messaging.Server;
+using log4net;
 
 namespace Teleopti.Messaging.Client
 {
 	public class MessageSender : IMessageSender
     {
+		private static ILog Logger = LogManager.GetLogger(typeof(MessageSender));
         private const string Name = "TeleoptiBrokerService";
         private const string Port = "Port";
         private const string Server = "Server";
@@ -92,12 +94,12 @@ namespace Teleopti.Messaging.Client
                     {
                         try
                         {
-                            _brokerService.Log(Process.GetCurrentProcess().Id, "RTA", string.Empty, String.Format(CultureInfo.CurrentCulture, "Error trying to send object {0} through Message Broker. Attempt {1}.", externalAgentState, sendAttempt), string.Empty, externalAgentState.ExternalLogOn);
+                            Logger.ErrorFormat("Error trying to send object {0} through Message Broker. Attempt {1}.", externalAgentState, sendAttempt);
                             InstantiateBrokerService();
                         }
-                        catch (BrokerNotInstantiatedException)
+                        catch (BrokerNotInstantiatedException exception)
                         {
-                            Logging.BaseLogger.Instance.WriteLine(EventLogEntryType.Error,typeof(MessageSender),"Could not reach the message broker when trying to send RTA data.");
+                            Logger.Error("Could not reach the message broker when trying to send RTA data.", exception);
                         }
                     }
                 }
@@ -130,14 +132,9 @@ namespace Teleopti.Messaging.Client
                                                         _userName);
                         break;
                     }
-                    catch (Exception)
+                    catch (Exception exception)
                     {
-                        _brokerService.Log(Process.GetCurrentProcess().Id,
-                                            "MessageSender",
-                                            string.Empty,
-                                            "Trying to send event message with the MessageSender through the Message Broker failed, will try to send three times before exit.",
-                                            string.Empty,
-                                            _userName);
+                        Logger.Error("Trying to send event message with the MessageSender through the Message Broker failed, will try to send three times before exit.", exception);
                         InstantiateBrokerService();
                     }
                 }
@@ -159,8 +156,7 @@ namespace Teleopti.Messaging.Client
                 _brokerService = (BrokerService)Activator.GetObject(typeof(BrokerService), String.Format(CultureInfo.InvariantCulture, "tcp://{0}:{1}/{2}", _server, _port, Name));
                 _userName = (Environment.UserName.Length > 10 ? Environment.UserName.Substring(0, 10) : Environment.UserName);
                 _user = _brokerService.RegisterUser(Environment.UserDomainName, _userName);
-                string message = String.Format(CultureInfo.InvariantCulture, "Successfully got BrokerService proxy, connecting to server {0} on port {1}.", _server, _port);
-                _brokerService.Log(Process.GetCurrentProcess().Id, "MessageSender", string.Empty, message, string.Empty, Environment.UserName);
+				Logger.InfoFormat("Successfully got BrokerService proxy, connecting to server {0} on port {1}.", _server, _port);
             }
             catch (NullReferenceException ex)
             {

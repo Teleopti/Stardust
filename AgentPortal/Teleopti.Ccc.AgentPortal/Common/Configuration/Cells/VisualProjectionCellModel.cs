@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
@@ -18,8 +19,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells
     [Serializable]
     public class VisualProjectionCellModel : GridStaticCellModel
     {
-        //private VisualProjection _cellValue;
-
         public VisualProjectionCellModel(GridModel grid)
             : base(grid)
         {
@@ -30,14 +29,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells
         {
         }
 
-        //protected internal VisualProjection CellValue
-        //{
-        //    get { return _cellValue; }
-        //    set { _cellValue = value; }
-        //}
-
-
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
 

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created date: 10/26/2007
         /// </remarks>
         public MainShiftMapper( MappedObjectPair mappedObjectPair, 
-                                ICccTimeZoneInfo timeZone,
+                                TimeZoneInfo timeZone,
                                 DateTime date) : base(mappedObjectPair, timeZone)
         {
             _date = date;

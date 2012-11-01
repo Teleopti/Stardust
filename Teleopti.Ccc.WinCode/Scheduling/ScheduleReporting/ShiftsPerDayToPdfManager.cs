@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
         private string _reportTitle;
 
         private const float RowSpace = 1;
-		public PdfDocument Export(ICccTimeZoneInfo timeZoneInfo, CultureInfo culture, IDictionary<IPerson, string> persons, DateOnlyPeriod period, 
+		public PdfDocument Export(TimeZoneInfo timeZoneInfo, CultureInfo culture, IDictionary<IPerson, string> persons, DateOnlyPeriod period, 
             ISchedulingResultStateHolder stateHolder, ScheduleReportDetail details, bool publicNote)
         {
 			if(persons == null)
@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
         }
 
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting.ShiftsPerDayToPdfManager.DrawColumnData(System.Single,System.Single,System.String,System.Single,System.Boolean,System.Globalization.CultureInfo)")]
-		private float DrawPersonSchedule(ICccTimeZoneInfo timeZoneInfo, float top, IScheduleDay part, ScheduleReportDetail details, bool publicNote, CultureInfo culture, float pageWidth, IDictionary<IPerson, string> persons)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting.ShiftsPerDayToPdfManager.DrawColumnData(System.Single,System.Single,System.String,System.Single,System.Boolean,System.Globalization.CultureInfo)")]
+		private float DrawPersonSchedule(TimeZoneInfo timeZoneInfo, float top, IScheduleDay part, ScheduleReportDetail details, bool publicNote, CultureInfo culture, float pageWidth, IDictionary<IPerson, string> persons)
 		{
 			var personString = persons[part.Person];
             var font = PdfFontManager.GetFont(9f, PdfFontStyle.Regular, culture);

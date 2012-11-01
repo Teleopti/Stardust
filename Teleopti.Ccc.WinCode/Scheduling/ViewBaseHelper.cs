@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             return string.Empty;
         }
 
-        public static string ToLocalStartEndTimeString(DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo)
+        public static string ToLocalStartEndTimeString(DateTimePeriod period, TimeZoneInfo timeZoneInfo)
         {
 			var culture = TeleoptiPrincipal.Current.Regional.Culture;
             const string separator = " - ";
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                                  TimeHelper.TimeOfDayFromTimeSpan(period.EndDateTimeLocal(timeZoneInfo).TimeOfDay, culture));
         }
 
-        public static string ToLocalStartEndTimeStringAbsences(DateTimePeriod partPeriod, DateTimePeriod absencePeriod, ICccTimeZoneInfo timeZoneInfo)
+        public static string ToLocalStartEndTimeStringAbsences(DateTimePeriod partPeriod, DateTimePeriod absencePeriod, TimeZoneInfo timeZoneInfo)
         {
 			var culture = TeleoptiPrincipal.Current.Regional.Culture;
             const string separator = " - ";

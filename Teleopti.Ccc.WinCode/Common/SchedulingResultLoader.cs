@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             IScheduleRepository scheduleRepository = _repositoryFactory.CreateScheduleRepository(uow);
 
-            var requestedPeriod = SchedulerState.RequestedPeriod.Period().ChangeEndTime(TimeSpan.FromHours(24));
+			var requestedPeriod = SchedulerState.RequestedPeriod.Period().ChangeEndTime(TimeSpan.FromHours(24)).ChangeStartTime(TimeSpan.FromHours(-24));
 
             IPersonProvider personsInOrganizationProvider =
                 new PersonsInOrganizationProvider(SchedulerState.SchedulingResultState.PersonsInOrganization);

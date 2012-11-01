@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -22,16 +24,21 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private IEnumerable<IPerson> _persons;
         private ISchedulerStateLoader _schedulerStateLoader;
         private IUnitOfWorkFactory _unitOfWorkFactory;
+		private bool _finished;
+		private ISchedulerStateHolder _schedulerStateHolder;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _peopleAndSkillLoaderDecider = _mocks.StrictMock<IPeopleAndSkillLoaderDecider>();
+	        _schedulerStateHolder = _mocks.DynamicMock<ISchedulerStateHolder>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _schedulerStateLoader = _mocks.StrictMock<ISchedulerStateLoader>();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-            _target = new MeetingStateHolderLoaderHelper(_peopleAndSkillLoaderDecider, _schedulingResultStateHolder, _schedulerStateLoader, _unitOfWorkFactory);
+	        Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(_schedulingResultStateHolder);
+			_mocks.Replay(_schedulerStateHolder);
+			_target = new MeetingStateHolderLoaderHelper(_peopleAndSkillLoaderDecider, _schedulerStateHolder, _schedulerStateLoader, _unitOfWorkFactory);
 
             _scenario = new Scenario("s");
             _period = new DateTimePeriod(2011,2,28,2011,3,7);
@@ -44,14 +51,18 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _target.Dispose();    
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldExecuteDeciderAndLoadWhenNewPeriod()
         {
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
             _finished = false;
             _target.FinishedReloading += TargetFinishedReloading;
+			_mocks.BackToRecord(_schedulerStateHolder);
+	        Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(
+				TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+
             Expect.Call(() =>_peopleAndSkillLoaderDecider.Execute(_scenario, _period, _persons));
-            Expect.Call(() => _schedulerStateLoader.EnsureSkillsLoaded());
+            Expect.Call(() => _schedulerStateLoader.EnsureSkillsLoaded(new DateOnlyPeriod())).IgnoreArguments();
             Expect.Call(_schedulingResultStateHolder.Skills).Return(new List<ISkill>());
             Expect.Call(_peopleAndSkillLoaderDecider.FilterSkills(new HashSet<ISkill>())).Return(0).IgnoreArguments();
             Expect.Call(_schedulingResultStateHolder.SkillDays).Return(new Dictionary<ISkill, IList<ISkillDay>>());
@@ -68,8 +79,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _mocks.VerifyAll();
         }
 
-        private bool _finished;
-        void TargetFinishedReloading(object sender, ReloadEventArgs e)
+       
+
+	    void TargetFinishedReloading(object sender, ReloadEventArgs e)
         {
            _finished = true;
         }

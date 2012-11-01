@@ -62,16 +62,6 @@ namespace Teleopti.Messaging.Composites
             return new IEventHeartbeat[0];
         }
 
-        public ILogbookEntry[] RetrieveLogbookEntries()
-        {
-            if (!String.IsNullOrEmpty(_messageBroker.ConnectionString) && _messageBroker.Initialized == 0)
-            {
-                _messageBroker.ServiceGuard(_messageBroker.BrokerService);
-                return _messageBroker.BrokerService.RetrieveLogbookEntries();
-            }
-            return new ILogbookEntry[0];
-        }
-
         public IEventUser[] RetrieveEventUsers()
         {
             if (!String.IsNullOrEmpty(_messageBroker.ConnectionString) && _messageBroker.Initialized == 0)

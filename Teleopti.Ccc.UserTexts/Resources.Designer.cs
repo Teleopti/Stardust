@@ -1268,6 +1268,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to After checking against keep activity.
+        /// </summary>
+        public static string AfterCheckingAgainstKeepActivity {
+            get {
+                return ResourceManager.GetString("AfterCheckingAgainstKeepActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Checking against keep start and end time.
         /// </summary>
         public static string AfterCheckingAgainstKeepStartAndEndTime {
@@ -4748,6 +4757,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CouldNotAddOverTimeNoPersonPeriods {
             get {
                 return ResourceManager.GetString("CouldNotAddOverTimeNoPersonPeriods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong with the file export, please try a different location.
+        /// </summary>
+        public static string CouldNotExportForecastToFile {
+            get {
+                return ResourceManager.GetString("CouldNotExportForecastToFile", resourceCulture);
             }
         }
         
@@ -18552,6 +18570,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Same activity.
+        /// </summary>
+        public static string SameActivity {
+            get {
+                return ResourceManager.GetString("SameActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Same days off.
         /// </summary>
         public static string SameDaysOff {
@@ -19554,6 +19581,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectedFileDestinationDoesNotExist {
             get {
                 return ResourceManager.GetString("SelectedFileDestinationDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected file destination is too long, please enter valid file path.
+        /// </summary>
+        public static string SelectedFileDestinationIsTooLong {
+            get {
+                return ResourceManager.GetString("SelectedFileDestinationIsTooLong", resourceCulture);
             }
         }
         

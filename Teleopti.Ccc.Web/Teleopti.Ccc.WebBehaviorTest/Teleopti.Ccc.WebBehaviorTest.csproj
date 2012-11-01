@@ -107,6 +107,7 @@
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\ContractConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ContractScheduleConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\PersonalShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonAvailabilityConfigurable.cs" />
     <Compile Include="Bindings\Generic\AsmMessageStepDefinition.cs" />
     <Compile Include="Data\Setups\Generic\RuleSetBagConfigurable.cs" />
@@ -158,6 +159,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedbackBlacklisting.feature</DependentUpon>
+    </Compile>
+    <Compile Include="PreferencesFeedbackPreSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreferencesFeedbackPreSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="WeekScheduleTimeIndicator.feature.cs">
       <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
@@ -516,6 +522,18 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmMessage.feature.cs</LastGenOutput>
     </None>
+    <None Include="PreferencesFeedbackPreSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
+    </None>
+   
+
+
+ <None Include="AsmMessage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AsmMessage.feature.cs</LastGenOutput>
+    </None>
+
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />
     <None Include="Testing\StepDefinitionReport.bat" />

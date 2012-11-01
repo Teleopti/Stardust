@@ -1,4 +1,6 @@
 ﻿#region Imports
+
+using System;
 using System.Collections.Generic;
 using Domain;
 using Teleopti.Ccc.Domain.Common;
@@ -32,7 +34,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created date: 8/14/2008
         /// </remarks>
         public EmployeeOptionalColumnMapper(MappedObjectPair mappedObjectPair, 
-                                    ICccTimeZoneInfo timeZone, ICollection<Agent> agents) : base(mappedObjectPair, timeZone)
+                                    TimeZoneInfo timeZone, ICollection<Agent> agents) : base(mappedObjectPair, timeZone)
         {
             agentCollection = agents;
         }

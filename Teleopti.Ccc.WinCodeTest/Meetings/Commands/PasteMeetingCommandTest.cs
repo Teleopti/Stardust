@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
         [Test]
         public void ShouldGetNewDateAndTimeFromViewAndSaveMeeting()
         {
-            var userTimeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
+            var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
             var meeting = _mocks.StrictMock<IMeeting>();
             var startTime = new DateTime(2011, 3, 24, 14, 30, 0, DateTimeKind.Utc);
             var endTime = startTime.AddMinutes(30);

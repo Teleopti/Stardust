@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
         {
             var arabicCulture = CultureInfo.GetCultureInfo("ar-SA");
         	var target = new SetThreadCulture();
-        	var regional = new Regional(CccTimeZoneInfoFactory.StockholmTimeZoneInfo(), arabicCulture, arabicCulture);
+        	var regional = new Regional(TimeZoneInfoFactory.StockholmTimeZoneInfo(), arabicCulture, arabicCulture);
 
 			target.SetCulture(regional);
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void ShouldNotSetThreadCultureIfRegionalHasNoCulture()
 		{
 			var target = new SetThreadCulture();
-			var regional = new Regional(CccTimeZoneInfoFactory.StockholmTimeZoneInfo(), 0, 0);
+			var regional = new Regional(TimeZoneInfoFactory.StockholmTimeZoneInfo(), 0, 0);
 
 			target.SetCulture(regional);
 

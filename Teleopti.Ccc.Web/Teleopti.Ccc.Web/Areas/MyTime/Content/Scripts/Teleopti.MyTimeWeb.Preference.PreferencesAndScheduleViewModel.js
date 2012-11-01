@@ -5,6 +5,16 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
 
+if (typeof (Teleopti) === 'undefined') {
+	Teleopti = {};
+	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+		Teleopti.MyTimeWeb = {};
+		if (typeof (Teleopti.MyTimeWeb.Preference) === 'undefined') {
+			Teleopti.MyTimeWeb.Preference = {};
+		}
+	}
+}
+
 Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax, dayViewModels) {
 
 	this.DayViewModels = dayViewModels;
@@ -44,6 +54,12 @@ Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax,
 						dayViewModel.StyleClassName(element.StyleClassName);
 					if (element.BorderColor)
 						dayViewModel.Color(element.BorderColor);
+					if (element.Meetings) {
+						dayViewModel.Meetings(element.Meetings);
+					}
+					if (element.PersonalShifts) {
+						dayViewModel.PersonalShifts(element.PersonalShifts);
+					}
 					dayViewModel.IsLoading(false);
 				});
 				deferred.resolve();

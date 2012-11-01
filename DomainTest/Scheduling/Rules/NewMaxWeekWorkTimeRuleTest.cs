@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
         private NewMaxWeekWorkTimeRule _target;
         private IPermissionInformation _permissionInformation;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private IContract _contract;
         private IPersonContract _personContract;
         private IPersonPeriod _personPeriod;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _weeksFromScheduleDaysExtractor = _mocks.StrictMock<IWeeksFromScheduleDaysExtractor>();
             _target = new NewMaxWeekWorkTimeRule(_weeksFromScheduleDaysExtractor);
             _permissionInformation = _mocks.StrictMock<IPermissionInformation>();
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             var maxTimePerWeek = new TimeSpan(40, 0, 0);
             var nightlyRest = new TimeSpan(8, 0, 0);
             var weeklyRest = new TimeSpan(50, 0, 0);

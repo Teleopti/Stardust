@@ -11,9 +11,8 @@ namespace Teleopti.Interfaces.Domain
         private readonly double _value;
         private readonly double _delta;
         private readonly IPerson _person;
-        private bool _userCancel;
-        
-        /// <summary>
+
+    	/// <summary>
         /// Initializes a new instance of the <see cref="ResourceOptimizerProgressEventArgs"/> class.
         /// </summary>
         /// <param name="person">The person.</param>
@@ -93,14 +92,10 @@ namespace Teleopti.Interfaces.Domain
             get { return _delta; }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether user cancel.
-        /// </summary>
-        /// <value><c>true</c> if user cancel; otherwise, <c>false</c>.</value>
-        public bool UserCancel
-        {
-            get { return _userCancel; }
-            set { _userCancel = value; }
-        }
+    	/// <summary>
+    	/// Gets or sets a value indicating whether user cancel.
+    	/// </summary>
+    	/// <value><c>true</c> if user cancel; otherwise, <c>false</c>.</value>
+    	public bool UserCancel { get; set; }
     }
 }

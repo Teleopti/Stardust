@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -29,6 +31,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDayPro _scheduleDayPro2;
         private IGroupMoveTimeValidatorRunner _groupMoveTimeValidatorRunner;
         private ISchedulingOptions _schedulingOptions;
+		private IDictionary<Guid, bool> _teamSteadyStates;
+		private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
+		private IScheduleDictionary _scheduleDictionary;
 
         [SetUp]
         public void Setup()
@@ -50,9 +55,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDayPro2 = _mock.DynamicMock<IScheduleDayPro>();
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
             _optimizationOverLimitByRestrictionDecider = _mock.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
+			_scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
+			_teamSteadyStateMainShiftScheduler = _mock.StrictMock<ITeamSteadyStateMainShiftScheduler>();
+			_teamSteadyStates = new Dictionary<Guid, bool>();
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldRunUntilAllOptimizersFailsInSchedulingStep()
         {
             var date = new DateOnly(2012, 1, 1);
@@ -62,7 +70,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             
             using (_mock.Record())
             {
-                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> { date, date2 }).Repeat.AtLeastOnce();
+                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> { date, date2 });
+                Expect.Call(_optimizer.Execute()).Return(new List<DateOnly>());
                 Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date)).Return(_allMatrixes).Repeat.AtLeastOnce();
                 Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date2)).Return(_allMatrixes).Repeat.AtLeastOnce() ;
@@ -80,14 +89,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
                 Expect.Call(() => _optimizer.LockDate(date)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
-                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo() )).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfo.Local )).Repeat.AtLeastOnce();
                 Expect.Call(_groupMoveTimeOptimizerExecuter.SchedulingOptions).Return(_schedulingOptions);
                 Expect.Call(_schedulingOptions.UseSameDayOffs).Return(true).Repeat.AtLeastOnce();
             }
 
             using (_mock.Playback())
             {
-                _target.Execute(_allMatrixes);
+				_target.Execute(_allMatrixes, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
             }
         }
 
@@ -102,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mock.Playback())
             {
-                _target.Execute(_allMatrixes);
+				_target.Execute(_allMatrixes, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
             }
         }
 
@@ -118,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                         _groupMoveTimeOptimizerExecuter, _groupMoveTimeValidatorRunner);
             using (_mock.Playback())
             {
-                _target.Execute(_allMatrixes);
+				_target.Execute(_allMatrixes, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
             }
         }
 
@@ -138,14 +147,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _optimizer.LockDate(date2)).Repeat.AtLeastOnce();
                 Expect.Call(() => _optimizer.LockDate(date)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
-                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, new CccTimeZoneInfo())).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfo.Utc)).Repeat.AtLeastOnce();
                 Expect.Call(_optimizer.PeriodValue()).Return(2).Repeat.AtLeastOnce();
                 Expect.Call(_groupMoveTimeOptimizerExecuter.SchedulingOptions).Return(_schedulingOptions);
                 Expect.Call(_schedulingOptions.UseSameDayOffs).Return(true).Repeat.AtLeastOnce();
             }
             using (_mock.Playback())
             {
-                _target.Execute(_allMatrixes);
+				_target.Execute(_allMatrixes, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
                 _target.ReportProgress -= targetReportProgress;
                 Assert.IsTrue(_eventExecuted);
             }
@@ -153,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void verifyReportProgressEventExecutedAndCanCancelExpectValues(DateOnly date2, DateOnly date)
         {
-            Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> {date, date2}).Repeat.AtLeastOnce();
+            Expect.Call(_optimizer.Execute()).Return(new List<DateOnly> {date, date2});
             Expect.Call(_optimizer.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date)).Return(_allMatrixes).Repeat.AtLeastOnce();
             Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(_person, date2)).Return(_allMatrixes).Repeat.AtLeastOnce();

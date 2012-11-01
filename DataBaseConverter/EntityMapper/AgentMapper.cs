@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: rogerkr
         /// Created date: 10/26/2007
         /// </remarks>
-        public AgentMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
+        public AgentMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
         {
         }
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// Created by: sumeda herath
         /// Created date: 2008-02-05
         /// </remarks>
-        public AgentMapper(MappedObjectPair mappedObjectPair, ICccTimeZoneInfo timeZone, IPersonContract personContract)
+        public AgentMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone, IPersonContract personContract)
             : base(mappedObjectPair, timeZone)
         {
             _dummyPersonContract = personContract;

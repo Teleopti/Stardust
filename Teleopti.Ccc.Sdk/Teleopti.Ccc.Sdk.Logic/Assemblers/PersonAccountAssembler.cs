@@ -16,7 +16,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             personAccountDto.Extra = entity.Extra.Ticks;
             personAccountDto.LatestCalculatedBalance = entity.LatestCalculatedBalance.Ticks;
             personAccountDto.TrackingDescription = entity.Owner.Absence.Name;
-            personAccountDto.Period = new DateOnlyPeriodDto(entity.Period());
+			personAccountDto.Period = new DateOnlyPeriodDto
+			{
+				StartDate = new DateOnlyDto { DateTime = entity.Period().StartDate },
+				EndDate = new DateOnlyDto { DateTime = entity.Period().EndDate }
+			};
             personAccountDto.Remaining = entity.Remaining.Ticks;
             personAccountDto.BalanceOut = entity.BalanceOut.Ticks;
             return personAccountDto;

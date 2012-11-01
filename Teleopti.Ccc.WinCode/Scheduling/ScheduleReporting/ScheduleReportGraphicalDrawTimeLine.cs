@@ -82,7 +82,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 			return _top + Padding;
 		}
 
-        private DateTime MinDateTime(IList<DateOnly> dates, ISchedulingResultStateHolder stateHolder, IList<IPerson> persons, DateOnly day)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		private DateTime MinDateTime(IList<DateOnly> dates, ISchedulingResultStateHolder stateHolder, IList<IPerson> persons, DateOnly day)
         {
             if (dates == null)
                 throw new ArgumentNullException("dates");
@@ -143,10 +144,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
                 startDate = day.AddDays(-1);
             }
 
-            return new DateTime(startDate.Year, startDate.Month, startDate.Day, minTime.Hours, minTime.Minutes, 0, 0, _culture.Calendar, DateTimeKind.Utc);
+            return DateTime.SpecifyKind(startDate.Date.AddHours(minTime.Hours).AddMinutes(minTime.Minutes),DateTimeKind.Utc);
         }
 
-        private DateTime MaxDateTime(IList<DateOnly> dates, ISchedulingResultStateHolder stateHolder, IList<IPerson> persons, DateOnly day)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		private DateTime MaxDateTime(IList<DateOnly> dates, ISchedulingResultStateHolder stateHolder, IList<IPerson> persons, DateOnly day)
         {
             if (dates == null)
                 throw new ArgumentNullException("dates");
@@ -209,7 +211,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
                 endDate = day.AddDays(1);
             }
 
-            return new DateTime(endDate.Year, endDate.Month, endDate.Day, maxTime.Hours, maxTime.Minutes, 0, 0, _culture.Calendar, DateTimeKind.Utc);
+            return DateTime.SpecifyKind(endDate.Date.AddHours(maxTime.Hours).AddMinutes(maxTime.Minutes),DateTimeKind.Utc);
         }
 
         public DateTimePeriod TimelinePeriod(IList<DateOnly> dates, ISchedulingResultStateHolder stateHolder, IList<IPerson> persons, DateOnly day)

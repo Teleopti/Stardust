@@ -18,11 +18,12 @@ namespace Teleopti.Ccc.Win.Scheduling
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public static class OptimizerHelperHelper
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "schedulingOptions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "schedulingOptions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public static void ScheduleBlankSpots(
             IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
             IScheduleService scheduleService, 
-            IComponentContext container)
+            IComponentContext container,
+			ISchedulePartModifyAndRollbackService rollbackService)
         {
 
             var effectiveRestrictionCreator = container.Resolve<IEffectiveRestrictionCreator>();
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						var resourceCalculateDelayer = new ResourceCalculateDelayer(container.Resolve<IResourceOptimizationHelper>(), 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
 
-						result = scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer, null);
+						result = scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, null, rollbackService);
                     }
                     if (!result)
                     {
@@ -133,23 +134,23 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public static DateOnly GetStartDateInSelection(ClipHandler clipHandler, ICccTimeZoneInfo personTimeZone)
+        public static DateOnly GetStartDateInSelection(ClipHandler clipHandler, TimeZoneInfo personTimeZone)
         {
             IEnumerable<IScheduleDay> selectedParts = ContainedSchedulePartList(clipHandler.ClipList);
             return GetStartDateInSelectedDays(selectedParts, personTimeZone);
         }
-        public static DateOnly GetStartDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, ICccTimeZoneInfo personTimeZone)
+        public static DateOnly GetStartDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, TimeZoneInfo personTimeZone)
         {
             return new DateOnly(selectedParts.Min(c => TimeZoneHelper.ConvertFromUtc(c.Period.StartDateTime, personTimeZone)));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public static DateOnly GetEndDateInSelection(ClipHandler clipHandler, ICccTimeZoneInfo personTimeZone)
+        public static DateOnly GetEndDateInSelection(ClipHandler clipHandler, TimeZoneInfo personTimeZone)
         {
             IEnumerable<IScheduleDay> selectedParts = ContainedSchedulePartList(clipHandler.ClipList);
             return GetEndDateInSelectedDays(selectedParts, personTimeZone);
         }
-        public static DateOnly GetEndDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, ICccTimeZoneInfo personTimeZone)
+        public static DateOnly GetEndDateInSelectedDays(IEnumerable<IScheduleDay> selectedParts, TimeZoneInfo personTimeZone)
         {
             return new DateOnly(selectedParts.Max(c => TimeZoneHelper.ConvertFromUtc(c.Period.StartDateTime, personTimeZone)));
         }
@@ -182,11 +183,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         public static IList<IScheduleMatrixPro> CreateMatrixList(ClipHandler clipHandler, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
         {
             if (clipHandler == null) throw new ArgumentNullException("clipHandler");
-            IEnumerable<IScheduleDay> scheduleDays = ContainedSchedulePartList(clipHandler.ClipList);
+            IList<IScheduleDay> scheduleDays = ContainedSchedulePartList(clipHandler.ClipList);
             return CreateMatrixList(scheduleDays, resultStateHolder, container);
         }
 
-        public static IList<IScheduleMatrixPro> CreateMatrixList(IEnumerable<IScheduleDay> scheduleDays, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
+        public static IList<IScheduleMatrixPro> CreateMatrixList(IList<IScheduleDay> scheduleDays, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
         {
             if (scheduleDays == null) throw new ArgumentNullException("scheduleDays");
 
@@ -373,7 +374,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-        public static IWorkShiftBackToLegalStateServicePro CreateWorkShiftBackToLegalStateServicePro(ISchedulePartModifyAndRollbackService rollbackService, ILifetimeScope container)
+        public static IWorkShiftBackToLegalStateServicePro CreateWorkShiftBackToLegalStateServicePro(ILifetimeScope container)
         {
             var workShiftMinMaxCalculator = container.Resolve<IWorkShiftMinMaxCalculator>();
             //var bitArrayCreator = container.Resolve<IWorkShiftBackToLegalStateBitArrayCreator>();
@@ -391,7 +392,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             IWorkShiftBackToLegalStateDecisionMaker decisionMaker = new WorkShiftBackToLegalStateDecisionMaker(dataExtractor, dayIndexCalculator);
             var deleteService = container.Resolve<IDeleteSchedulePartService>();
             IWorkShiftBackToLegalStateStep workShiftBackToLegalStateStep =
-                new WorkShiftBackToLegalStateStep(bitArrayCreator, decisionMaker, deleteService, rollbackService);
+                new WorkShiftBackToLegalStateStep(bitArrayCreator, decisionMaker, deleteService);
             return new WorkShiftBackToLegalStateServicePro(workShiftBackToLegalStateStep, workShiftMinMaxCalculator);
         }
 

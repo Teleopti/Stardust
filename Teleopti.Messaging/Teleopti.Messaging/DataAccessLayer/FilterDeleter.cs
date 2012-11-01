@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Teleopti.Core;
-using Teleopti.Logging;
+using Teleopti.Messaging.Core;
+using log4net;
 
 namespace Teleopti.Messaging.DataAccessLayer
 {
     public class FilterDeleter : ObjectDeleter
     {
+		private static ILog Logger = LogManager.GetLogger(typeof(FilterDeleter));
         private const string FilterIdParameter = "@FilterId";
         private const string DeleteFilterById = "msg.sp_Filter_Delete";
 
@@ -28,7 +29,7 @@ namespace Teleopti.Messaging.DataAccessLayer
             }
             catch (Exception exception)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exception.Message + exception.StackTrace);
+                Logger.Error("Filter deleter error.", exception);
             }
         }
     }

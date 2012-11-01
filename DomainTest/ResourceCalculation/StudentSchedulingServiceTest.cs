@@ -6,7 +6,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -19,21 +18,23 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private StudentSchedulingService _studentSchedulingService;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private MockRepository _mocks;
-        private ICccTimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private IEffectiveRestriction _effectiveRestriction;
     	private IScheduleService _scheduleService;
         private ISchedulingOptions _schedulingOptions;
     	private IResourceOptimizationHelper _resourceOptimizationHelper;
     	private IResourceCalculateDelayer _resourceCalculateDelayer;
+    	private ISchedulePartModifyAndRollbackService _rollbackService;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
+        	_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-            _timeZoneInfo = new CccTimeZoneInfo(zone);
+            _timeZoneInfo = (zone);
         	_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
         	_scheduleService = _mocks.StrictMock<IScheduleService>();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
             using (_mocks.Record())
             {
-				Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments().Return(true)
+				Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments().Return(true)
                     .Repeat.AtLeastOnce();
 
                 Expect.Call(person.VirtualSchedulePeriod(date11)).Return(virtualSchedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
@@ -164,8 +165,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
             using (_mocks.Playback())
             {
-                _studentSchedulingService.DoTheScheduling(new List<IScheduleDay> { part4, part3, part2, part1 }, preferences.SchedulingOptions, true, true);
-                _studentSchedulingService.DoTheScheduling(new List<IScheduleDay> { part4, part3, part2, part1 }, preferences.SchedulingOptions, true, false);
+				_studentSchedulingService.DoTheScheduling(new List<IScheduleDay> { part4, part3, part2, part1 }, preferences.SchedulingOptions, true, true, _rollbackService);
+				_studentSchedulingService.DoTheScheduling(new List<IScheduleDay> { part4, part3, part2, part1 }, preferences.SchedulingOptions, true, false, _rollbackService);
             }
         }
 
@@ -315,7 +316,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			//var periodForPart2 = new DateOnlyAsDateTimePeriod(date12, _timeZoneInfo);
             using (_mocks.Record())
             {
-				Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, true, _effectiveRestriction, _resourceCalculateDelayer, null)).IgnoreArguments().Return(true)
+				Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments().Return(true)
                     .Repeat.AtLeastOnce();
 
                 Expect.Call(person.VirtualSchedulePeriod(date11)).Return(virtualSchedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
@@ -352,7 +353,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
             {
                 _studentSchedulingService.DayScheduled += (sender, e) => { e.Cancel = true; };
-                _studentSchedulingService.DoTheScheduling(new List<IScheduleDay> { part2, part1 }, preferences.SchedulingOptions, true, false);
+				_studentSchedulingService.DoTheScheduling(new List<IScheduleDay> { part2, part1 }, preferences.SchedulingOptions, true, false, _rollbackService);
             }
         }
 

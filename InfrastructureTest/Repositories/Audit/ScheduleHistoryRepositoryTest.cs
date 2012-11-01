@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			//utc +3.00 GMT
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Arabic Standard Time");
-			var arabicTimeZone = new CccTimeZoneInfo(timeZone);
+			var arabicTimeZone = (timeZone);
 
 			//adding absence too early
 			var period = new DateTimePeriod(Today.AddHours(-5), Today.AddHours(-2));

@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Globalization;
-using Teleopti.Core;
 using Teleopti.Interfaces.MessageBroker.Core;
-using Teleopti.Logging;
+using Teleopti.Messaging.Core;
 using Teleopti.Messaging.Exceptions;
+using log4net;
 
 namespace Teleopti.Messaging.DataAccessLayer
 {
     public class ConfigurationDeleter : ObjectDeleter
     {
+		private static ILog Logger = LogManager.GetLogger(typeof(ConfigurationDeleter));
+
         public ConfigurationDeleter(string connectionString) : base(connectionString)
         {
         }
@@ -22,7 +22,7 @@ namespace Teleopti.Messaging.DataAccessLayer
             }
             catch (Exception exc)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), String.Format(CultureInfo.InvariantCulture, "DeleteAddresses(IMessageInfo multicastAddressInfo) failed. {0}.", exc));
+                Logger.Error("DeleteAddresses(IMessageInfo multicastAddressInfo) failed.", exc);
                 throw new DatabaseException("DeleteConfiguration(IConfigurationInfo configurationInfo)", exc);
             }
         }

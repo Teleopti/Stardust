@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												let scheduleYesterday = scheduleDays.SingleOrDefault(d => d.DateOnlyAsPeriod.DateOnly == day.AddDays(-1))
 												let projection = scheduleDay == null ? null : _projectionProvider.Invoke().Projection(scheduleDay)
                                                 let projectionYesterday = scheduleYesterday == null ? null : _projectionProvider.Invoke().Projection(scheduleYesterday)
-												let personRequestsForDay = personRequests == null ? null : (from i in personRequests where _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(i.Request.Period.StartDateTime).Date == day select i).ToArray()
+                                                let personRequestsForDay = personRequests == null ? null : (from i in personRequests where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.Invoke().TimeZone()).Date == day select i).ToArray()
 												select new WeekScheduleDayDomainData
 														{
 															Date = new DateOnly(day),

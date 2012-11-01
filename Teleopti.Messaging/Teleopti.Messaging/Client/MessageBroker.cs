@@ -1,7 +1,4 @@
-﻿// ReSharper disable MemberCanBeMadeStatic
-// ReSharper disable MemberCanBeMadeStatic.Local
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,15 +13,14 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Logging;
 using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.Core;
 using Teleopti.Messaging.Exceptions;
 using Teleopti.Messaging.Protocols;
+using log4net;
 
 namespace Teleopti.Messaging.Client
 {
-    
     /// <summary>
     /// The Message Broker Implementation.
     /// </summary>
@@ -33,10 +29,9 @@ namespace Teleopti.Messaging.Client
         private static readonly object _lockObject = new object();
         private readonly string _userName = Environment.UserName;
         private string channelName;
+		private static ILog Logger = LogManager.GetLogger(typeof(MessageBrokerImplementation));
 
-        #region Constructors
-
-        /// <summary>
+    	/// <summary>
         /// Initializes a new instance of the <see cref="MessageBrokerImplementation"/> class.
         /// </summary>
         private MessageBrokerImplementation()
@@ -72,12 +67,7 @@ namespace Teleopti.Messaging.Client
             IsTypeFilterApplied = true;
         }
 
-
-        #endregion
-
-        #region Initialise()
-
-        /// <summary>
+    	/// <summary>
         /// Initialises this instance.
         /// </summary>
         /// <returns></returns>
@@ -165,13 +155,13 @@ namespace Teleopti.Messaging.Client
                 if (channel!=null)
                 {
                     ChannelServices.UnregisterChannel(channel);
-                    BaseLogger.Instance.WriteLine(EventLogEntryType.Information, GetType(), string.Format(CultureInfo.InvariantCulture,"Successfully unregistered channel {0}.",channelName));
+                    Logger.InfoFormat("Successfully unregistered channel {0}.",channelName);
                 }
                 channelName = string.Empty;
             }
             catch (Exception exc)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Warning, GetType(), exc.Message + exc.StackTrace);
+                Logger.Warn("Unregister client error.", exc);
             }
         }
 
@@ -199,7 +189,7 @@ namespace Teleopti.Messaging.Client
             }
             catch (RemotingException exc)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Warning, GetType(), exc.Message + exc.StackTrace);
+                Logger.Warn("Create channel error.", exc);
             }
         }
 
@@ -311,10 +301,7 @@ namespace Teleopti.Messaging.Client
 
         // ReSharper restore MemberCanBeMadeStatic
 
-
-        #endregion
-
-        #region GetInstance()
+    	#region GetInstance()
 
         /// <summary>
         /// Gets the instance.
@@ -430,7 +417,7 @@ namespace Teleopti.Messaging.Client
             }
             catch (Exception exc)
             {
-                BrokerService.Log(Process.GetCurrentProcess().Id, String.Format(CultureInfo.InvariantCulture, "{0},{1},{2}", DateTime.Now, EventLogEntryType.Error, exc.Message), exc.GetType().Name, exc.Message, exc.StackTrace, _userName);
+                Logger.Error("On event message error.", exc);
             }
 
             // Messages comming from the BrokerService (i.e. !e.Message.IsInterprocess)
@@ -593,15 +580,6 @@ namespace Teleopti.Messaging.Client
         public IEventHeartbeat[] RetrieveHeartbeats()
         {
             return StaticData.RetrieveHeartbeats();
-        }
-
-        /// <summary>
-        /// Used by Management Client, can be ignored by Raptor Developer.
-        /// </summary>
-        /// <returns></returns>
-        public ILogbookEntry[] RetrieveLogbookEntries()
-        {
-            return StaticData.RetrieveLogbookEntries();
         }
 
         /// <summary>

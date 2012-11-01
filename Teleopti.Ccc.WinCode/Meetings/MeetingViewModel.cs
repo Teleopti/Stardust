@@ -12,8 +12,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Meetings
 {
-	
-
 	public class MeetingViewModel : INotifyPropertyChanged, IMeetingViewModel
 	{
         private readonly IMeeting _meeting;
@@ -43,7 +41,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         private void RecreateParticipantLists()
         {
-            
             _requiredParticipants =
                 new List<ContactPersonViewModel>(
                     ContactPersonViewModel.Parse(_meeting.MeetingPersons.Where(m => !m.Optional).Select(p => p.Person), _commonNameSetting));
@@ -81,7 +78,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
         {
             get
             {
-                // return _meeting.EndDate;
                 return new DateOnly(_meeting.StartDate.Date.Add(_meeting.EndTime));
             }
         }
@@ -213,7 +209,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             }
         }
 
-        public ICccTimeZoneInfo TimeZone
+        public TimeZoneInfo TimeZone
         {
             get { return _meeting.TimeZone; }
             set

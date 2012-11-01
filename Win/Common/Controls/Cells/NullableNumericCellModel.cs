@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Security;
 using System.Security.Permissions;
 using Syncfusion.Windows.Forms.Grid;
 
@@ -110,11 +111,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 		public static string GetFormattedTextForCopyPasteExcel(NumberFormatInfo numberFormatInfo, double value)
 		{
 			string fixedText = ((decimal)value).ToString("N", numberFormatInfo).Replace((char)160, (char)32);
-			//fixedText = fixedText.Replace(" ", "");
 			return fixedText;
 		}
 
-		[SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)]
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             target = new ActivityLayerMapper(mappedObjectPair,
                                                 ActivityLayerBelongsTo.PersonalShift,
                                                 usedDate,
-                                                new CccTimeZoneInfo(TimeZoneInfo.Utc));
+                                                (TimeZoneInfo.Utc));
         }
 
         /// <summary>

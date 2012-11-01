@@ -33,38 +33,37 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.Type, o => o.MapFrom(s => s.Request.RequestTypeDescription))
 				.ForMember(d => d.TypeEnum, o => o.MapFrom(s => s.Request.RequestType))
 				.ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn.HasValue
-				                                                 	? _userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(
-				                                                 		s.UpdatedOn.Value).ToShortDateTimeString()
+				                                                 	? TimeZoneInfo.ConvertTimeFromUtc(s.UpdatedOn.Value, _userTimeZone.Invoke().TimeZone()).ToShortDateTimeString()
 				                                                 	: null))
 				.ForMember(d => d.RawDateFrom,
 				           o =>
 				           o.MapFrom(
 				           	s =>
-				           	_userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.StartDateTime).ToShortDateString()))
+                            TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.StartDateTime, _userTimeZone.Invoke().TimeZone()).ToShortDateString()))
 				.ForMember(d => d.RawDateTo,
 				           o =>
 				           o.MapFrom(
 				           	s =>
-				           	_userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.EndDateTime).ToShortDateString()))
+                            TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime, _userTimeZone.Invoke().TimeZone()).ToShortDateString()))
 				.ForMember(d => d.RawTimeFrom,
 				           o =>
 				           o.MapFrom(
 				           	s =>
-				           	_userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.StartDateTime).ToShortTimeString()))
+                            TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.StartDateTime, _userTimeZone.Invoke().TimeZone()).ToShortTimeString()))
 				.ForMember(d => d.RawTimeTo,
 				           o =>
 				           o.MapFrom(
 				           	s =>
-				           	_userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(s.Request.Period.EndDateTime).ToShortTimeString()))
+                                TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime, _userTimeZone.Invoke().TimeZone()).ToShortTimeString()))
 				.ForMember(d => d.Payload, o => o.MapFrom(s => s.Request.RequestPayloadDescription.Name))
 				.ForMember(d => d.IsFullDay, o => o.MapFrom(s =>
 				                                            	{
 				                                            		var start =
-				                                            			_userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(
-				                                            				s.Request.Period.StartDateTime);
+				                                            			TimeZoneInfo.ConvertTimeFromUtc(
+                                                                            s.Request.Period.StartDateTime, _userTimeZone.Invoke().TimeZone());
 				                                            		var end =
-				                                            			_userTimeZone.Invoke().TimeZone().ConvertTimeFromUtc(
-				                                            				s.Request.Period.EndDateTime);
+				                                            			TimeZoneInfo.ConvertTimeFromUtc(
+                                                                            s.Request.Period.EndDateTime, _userTimeZone.Invoke().TimeZone());
 				                                            		var allDayEndDateTime = start.AddDays(1).AddMinutes(-1);
 				                                            		return start.TimeOfDay == TimeSpan.Zero &&
 				                                            		       end.TimeOfDay == allDayEndDateTime.TimeOfDay;

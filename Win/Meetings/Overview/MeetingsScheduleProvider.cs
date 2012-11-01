@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Syncfusion.Schedule;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -24,11 +25,11 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IRepositoryFactory _repositoryFactory;
 
-        DateTimePeriod _lastPeriod;
-        private IScheduleAppointmentList _lastList;
+    	private DateOnlyPeriod _lastPeriod;
+        private readonly IScheduleAppointmentList _lastList = new ScheduleAppointmentList();
         private readonly AppointmentFromMeetingCreator _appointmentFromMeetingCreator;
-        private readonly ICccTimeZoneInfo _userTimeZone;
-       private readonly IMeetingChangerAndPersister _meetingChangerAndPersister;
+        private readonly TimeZoneInfo _userTimeZone;
+    	private readonly IMeetingChangerAndPersister _meetingChangerAndPersister;
         private readonly IMeetingOverviewViewModel _model;
     	private readonly IOverlappingAppointmentsHelper _overlappingAppointmentsHelper;
     	private IList<IScenario> _allowedScenarios;
@@ -107,16 +108,14 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             }
             return _allowedScenarios;
         }
-       //public IEnumerable<IPerson> SelectedPersons { get { return _persons; } set { _persons = value; } }
 
         public override IScheduleAppointmentList GetSchedule(DateTime startDate, DateTime endDate)
         {
-            startDate = DateTime.SpecifyKind(startDate.Date, DateTimeKind.Utc);
-            endDate = DateTime.SpecifyKind(endDate.Date.AddDays(1), DateTimeKind.Utc);
             // when using CustomWeek the dates gets mixed up
-            var period = endDate < startDate ? new DateTimePeriod(endDate, startDate) : new DateTimePeriod(startDate, endDate);
-            period = period.ChangeStartTime(TimeSpan.FromDays(-1));
-            if (!period.Equals(_lastPeriod))
+        	var period = endDate < startDate
+        	             	? new DateOnlyPeriod(new DateOnly(endDate), new DateOnly(startDate))
+        	             	: new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
+            if (period!=_lastPeriod)
             {
                 _lastPeriod = period;
                 try
@@ -128,20 +127,22 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 
                     	var persons = new List<Guid>(_model.FilteredPersonsId);
 						var person = TeleoptiPrincipal.Current.GetPerson(personRepository);
-						if (!persons.Contains(person.Id.Value) && _model.IncludeForOrganizer)
+						if (!persons.Contains(person.Id.GetValueOrDefault()) && _model.IncludeForOrganizer)
 						{
-							persons.Add(person.Id.Value);
+							persons.Add(person.Id.GetValueOrDefault());
 						}
 
                     	new ScenarioRepository(unitOfWork).LoadAll();
 						var meetings = meetingRepository.Find(persons, period, _model.CurrentScenario, _model.IncludeForOrganizer);
                     	meetings = meetings.OrderBy(m => m.StartDate).ThenBy(m => m.StartTime).ToList();
-                        var tempAppointments = _appointmentFromMeetingCreator.GetAppointments(meetings,
-                                                                                              new DateOnly(startDate.AddDays(-1)),
-                                                                                              new DateOnly(endDate));
-						tempAppointments = _overlappingAppointmentsHelper.ReduceOverlappingToFive(tempAppointments);
+                    	IEnumerable<ISimpleAppointment> tempAppointments = _appointmentFromMeetingCreator.GetAppointments(meetings,
+                    	                                                                      period.StartDate.AddDays(-1),
+                    	                                                                      period.EndDate);
 
-                        _lastList = _scheduleAppointmentFromMeetingCreator.GetAppointmentList(tempAppointments, LabelList);
+						tempAppointments = _overlappingAppointmentsHelper.ReduceOverlappingToFive(tempAppointments.OrderBy(t => t.StartDateTime));
+
+						_lastList.Clear();
+                        _scheduleAppointmentFromMeetingCreator.GetAppointmentList(tempAppointments, LabelList).OfType<IScheduleAppointment>().ForEach(_lastList.Add);
                     }
                 }
                 catch (DataSourceException dataSourceException)
@@ -152,7 +153,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
                 }
             }
             _lastList.SortStartTime();
-            removeAppointmentsOutsidePeriod(startDate, endDate);
+            removeAppointmentsOutsidePeriod(period.StartDate, period.EndDate);
             return _lastList;
         }
 
@@ -166,12 +167,12 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
     		}
     	}
 
-    	private void removeAppointmentsOutsidePeriod(DateTime startDate, DateTime endDate)
+    	private void removeAppointmentsOutsidePeriod(DateOnly startDate, DateOnly endDate)
         {
             var toRemove = new List<IScheduleAppointment>();
             foreach (IScheduleAppointment appointment in _lastList)
             {
-                if(appointment.StartTime < startDate || appointment.StartTime > endDate.Date)
+                if(appointment.StartTime < startDate.Date || appointment.StartTime > endDate.Date)
                     toRemove.Add(appointment);
             }
             foreach (var scheduleAppointment in toRemove)
@@ -182,19 +183,15 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 
         public override IScheduleAppointmentList GetScheduleForDay(DateTime day)
         {
-            var startDate = DateTime.SpecifyKind(day, DateTimeKind.Utc);
-            var endDate = DateTime.SpecifyKind(day, DateTimeKind.Utc);
-
-            var period = new DateTimePeriod(startDate, endDate);
+        	var dateOnly = new DateOnly(day);
+            var period = new DateOnlyPeriod(dateOnly, dateOnly);
             try
             {
                 using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
                     var meetingRepository = _repositoryFactory.CreateMeetingRepository(unitOfWork);
                     var meetings = meetingRepository.Find(_model.FilteredPersonsId, period, _model.CurrentScenario, _model.IncludeForOrganizer);
-                    var tempAppointments = _appointmentFromMeetingCreator.GetAppointments(meetings,
-                                                                                              new DateOnly(startDate),
-                                                                                              new DateOnly(endDate));
+                    var tempAppointments = _appointmentFromMeetingCreator.GetAppointments(meetings, period.StartDate, period.EndDate);
                     return _scheduleAppointmentFromMeetingCreator.GetAppointmentList(tempAppointments, LabelList);
                 }
             }
@@ -222,22 +219,24 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             
             var startDifference = currentItem.StartTime - appointment.StartTime;
             var endDifference = appointment.EndTime - currentItem.EndTime;
-            if(startDifference == TimeSpan.FromMinutes(0))
-                //we could do a check here if arabic culture and jump out because syncfusion behave strange changing end time in arabic (and other??)
-                _meetingChangerAndPersister.ChangeDurationAndPersist(meeting, endDifference, viewBase);
-            else
-            {
-                var oldDuration = currentItem.EndTime - currentItem.StartTime;
-                var diff = (appointment.EndTime - appointment.StartTime) - oldDuration;
-                var app = getAppointmentFromChainIfOverMidnight(appointment, currentItem);
-                _meetingChangerAndPersister.ChangeStartDateTimeAndPersist(meeting, app.StartTime, diff, _userTimeZone, viewBase);
-            }
+			if (startDifference == TimeSpan.FromMinutes(0))
+			{
+				//we could do a check here if arabic culture and jump out because syncfusion behave strange changing end time in arabic (and other??)
+				_meetingChangerAndPersister.ChangeDurationAndPersist(meeting, endDifference, viewBase);
+			}
+			else
+			{
+				var oldDuration = currentItem.EndTime - currentItem.StartTime;
+				var diff = (appointment.EndTime - appointment.StartTime) - oldDuration;
+				var app = getAppointmentFromChainIfOverMidnight(appointment, currentItem);
+				_meetingChangerAndPersister.ChangeStartDateTimeAndPersist(meeting, app.StartTime, diff, _userTimeZone, viewBase);
+			}
             ResetLoadedPeriod();
         }
 
         public void ResetLoadedPeriod()
         {
-            _lastPeriod = new DateTimePeriod();
+            _lastPeriod = new DateOnlyPeriod();
         }
 
         private static IScheduleAppointment getAppointmentFromChainIfOverMidnight(IScheduleAppointment appointment, IScheduleAppointment currentItem)

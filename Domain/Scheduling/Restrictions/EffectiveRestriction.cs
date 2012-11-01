@@ -43,7 +43,37 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             _activityRestrictionCollection = activityRestrictionCollection;
         }
 
-        public StartTimeLimitation StartTimeLimitation
+		#region Implementation of IIWorkTimeMinMaxRestriction
+
+		public bool MayMatchWithShifts()
+		{
+			var available = !NotAvailable;
+			var noDayOff = DayOffTemplate == null;
+			var noAbsence = Absence == null;
+			return available && noDayOff && noAbsence;
+		}
+
+		public bool MayMatchBlacklistedShifts()
+		{
+			return IsRestriction;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool Match(IShiftCategory shiftCategory)
+		{
+			if (ShiftCategory == null)
+				return true;
+			return shiftCategory.Equals(ShiftCategory);
+		}
+
+		public bool Match(IWorkShiftProjection workShiftProjection)
+		{
+			return ValidateWorkShiftInfo(workShiftProjection);
+		}
+
+		#endregion
+
+		public StartTimeLimitation StartTimeLimitation
         {
             get { return _startTimeLimitation; }
         }
@@ -110,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             }
 
             var dateOnly = new DateOnly(WorkShift.BaseDate);
-            ICccTimeZoneInfo tzInfo = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            TimeZoneInfo tzInfo = TimeZoneInfo.Utc;
             if (!VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, tzInfo, workShiftProjection.Layers))
             {
                 return false;
@@ -288,7 +318,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public bool MustHave { get; set; }
 
-		public bool VisualLayerCollectionSatisfiesActivityRestriction(DateOnly scheduleDayDateOnly, ICccTimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layers)
+		public bool VisualLayerCollectionSatisfiesActivityRestriction(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layers)
         {
 			if (scheduleDayDateOnly == new DateOnly(2050, 1, 1))
 				return false;
@@ -316,7 +346,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             }
         }
 
-		private static bool visualLayerCollectionSatisfiesOneActivityRestriction(ICccTimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layerCollection, IActivityRestriction activityRestriction)
+		private static bool visualLayerCollectionSatisfiesOneActivityRestriction(TimeZoneInfo agentTimeZone, IEnumerable<IActivityRestrictableVisualLayer> layerCollection, IActivityRestriction activityRestriction)
         {
             IActivityRestriction actRestriction = activityRestriction;
             
@@ -352,44 +382,44 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return false;
         }
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var result = 0;
-                result = (result * 398) ^ StartTimeLimitation.GetHashCode();
-                result = (result * 398) ^ EndTimeLimitation.GetHashCode();
-                result = (result * 398) ^ WorkTimeLimitation.GetHashCode();
-                if(ShiftCategory != null)
-                    result = (result * 398) ^ ShiftCategory.GetHashCode();
-                if(DayOffTemplate != null)
-                    result = (result * 398) ^ DayOffTemplate.GetHashCode();
-				if(Absence != null)
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var result = 0;
+				result = (result * 398) ^ StartTimeLimitation.GetHashCode();
+				result = (result * 398) ^ EndTimeLimitation.GetHashCode();
+				result = (result * 398) ^ WorkTimeLimitation.GetHashCode();
+				if (ShiftCategory != null)
+					result = (result * 398) ^ ShiftCategory.GetHashCode();
+				if (DayOffTemplate != null)
+					result = (result * 398) ^ DayOffTemplate.GetHashCode();
+				if (Absence != null)
 					result = (result * 398) ^ Absence.GetHashCode();
-                foreach (IActivityRestriction activityRestriction in ActivityRestrictionCollection)
-                {
-                    result = (result * 398) ^ activityRestriction.GetHashCode();
-                }
-            	result = (result * 398) ^ NotAvailable.GetHashCode();
+				foreach (IActivityRestriction activityRestriction in ActivityRestrictionCollection)
+				{
+					result = (result * 398) ^ activityRestriction.GetHashCode();
+				}
+				result = (result * 398) ^ NotAvailable.GetHashCode();
 				result = (result * 398) ^ IsAvailabilityDay.GetHashCode();
-                return result;
-            }
-        }
+				return result;
+			}
+		}
 
-        public override bool Equals(object obj)
-        {
-            var restriction = obj as EffectiveRestriction;
-            if (restriction == null)
-            {
-                return false;
-            }
-            return Equals(restriction);
-        }
+		public override bool Equals(object obj)
+		{
+			var restriction = obj as EffectiveRestriction;
+			if (restriction == null)
+			{
+				return false;
+			}
+			return Equals(restriction);
+		}
 
-        public bool Equals(EffectiveRestriction restriction)
-        {
-            return restriction.GetHashCode() == GetHashCode();
-        }
+		public bool Equals(EffectiveRestriction restriction)
+		{
+			return restriction.GetHashCode() == GetHashCode();
+		}
 
 		public bool NotAllowedForDayOffs { get; set; }
     }

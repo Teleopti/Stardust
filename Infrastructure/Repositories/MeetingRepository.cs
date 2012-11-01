@@ -59,60 +59,58 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retList;
         }
 
-        public ICollection<IMeeting> Find(IEnumerable<Guid> persons, DateTimePeriod period, IScenario scenario, bool includeForOrganizer)
+        public ICollection<IMeeting> Find(IEnumerable<Guid> persons, DateOnlyPeriod period, IScenario scenario, bool includeForOrganizer)
         {
             InParameter.NotNull("persons", persons);
             InParameter.NotNull("period", period);
             InParameter.NotNull("scenario", scenario);
 
-            IList<IMeeting> retList = new List<IMeeting>();
+            ICollection<IMeeting> retList = new HashSet<IMeeting>();
 
-            foreach (var personList in persons.Batch(400))
-            {
-                period = period.ChangeStartTime(TimeSpan.FromDays(-1)).ChangeEndTime(TimeSpan.FromDays(1)); //To compensate for time zones
-                IList<IMeeting> tempList = Session.CreateCriteria(typeof(Meeting), "ME")
-                    .Add(Restrictions.Le("StartDate", new DateOnly(period.EndDateTime)))
-                    .Add(Restrictions.Gt("EndDate", new DateOnly(period.StartDateTime)))
-                    .Add(Restrictions.Eq("Scenario", scenario))
-                    .SetFetchMode("MeetingPersons", FetchMode.Join)
-                    .SetFetchMode("meetingRecurrenceOptions", FetchMode.Join)
-                    .SetFetchMode("meetingRecurrenceOptions.WeekDays", FetchMode.Join)
-                    .SetFetchMode("Activity", FetchMode.Join)
-                    .SetFetchMode("Organizer", FetchMode.Join)
-                    .SetResultTransformer(Transformers.DistinctRootEntity)
-                    .List<IMeeting>();
+			period = new DateOnlyPeriod(period.StartDate.AddDays(-1),period.EndDate.AddDays(1)); //To compensate for time zones
+			foreach (var personList in persons.Batch(400))
+			{
+				IList<IMeeting> tempList = Session.CreateCriteria(typeof (Meeting), "ME")
+					.Add(Restrictions.Le("StartDate", period.EndDate))
+					.Add(Restrictions.Gt("EndDate", period.StartDate))
+					.Add(Restrictions.Eq("Scenario", scenario))
+					.SetFetchMode("MeetingPersons", FetchMode.Join)
+					.SetFetchMode("meetingRecurrenceOptions", FetchMode.Join)
+					.SetFetchMode("meetingRecurrenceOptions.WeekDays", FetchMode.Join)
+					.SetFetchMode("Activity", FetchMode.Join)
+					.SetFetchMode("Organizer", FetchMode.Join)
+					.SetResultTransformer(Transformers.DistinctRootEntity)
+					.List<IMeeting>();
 
-                foreach (IMeeting meeting in tempList)
-                {
-                    if (includeForOrganizer && personList.Contains(meeting.Organizer.Id.Value))
-                    {
-                        if (!retList.Contains(meeting))
-                            retList.Add(meeting);
-                    }
-                    else
-                    {
-                        foreach (IMeetingPerson meetingPerson in meeting.MeetingPersons)
-                        {
-                            if (personList.Contains(meetingPerson.Person.Id.Value))
-                            {
-                                if (!retList.Contains(meeting))
-                                    retList.Add(meeting);
-                            }
-                        }
-                    }
-                }
-            }
+				foreach (IMeeting meeting in tempList)
+				{
+					if (includeForOrganizer && personList.Contains(meeting.Organizer.Id.GetValueOrDefault()))
+					{
+						retList.Add(meeting);
+					}
+					else
+					{
+						foreach (IMeetingPerson meetingPerson in meeting.MeetingPersons)
+						{
+							if (personList.Contains(meetingPerson.Person.Id.GetValueOrDefault()))
+							{
+								retList.Add(meeting);
+							}
+						}
+					}
+				}
+			}
 
-            return retList;
+        	return retList;
         }
 
-        public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateTimePeriod period, IScenario scenario, bool includeForOrganizer)
+        public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, bool includeForOrganizer)
 		{
             var peopleId = persons.Select(p => p.Id.GetValueOrDefault());
             return Find(peopleId, period, scenario, includeForOrganizer);
 		}
 
-        public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateTimePeriod period, IScenario scenario)
+        public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
         {
         	return Find(persons, period, scenario, true);
             

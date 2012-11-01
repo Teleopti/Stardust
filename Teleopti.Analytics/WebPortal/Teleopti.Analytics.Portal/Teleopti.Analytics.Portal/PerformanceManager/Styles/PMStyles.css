@@ -259,6 +259,7 @@ FONT.key
 }
 .TreeHeader
 {
+    font-size:12px;
 	font-weight: bold;	
 }
 .normalNodeMode
@@ -287,6 +288,7 @@ hoverDeleteNode, a.hoverDeleteNode:hover
 	color: #000066;
 	font-size: 14pt;
 	font-weight: normal;
+	float:left;
 }
 .dialogTop
 {

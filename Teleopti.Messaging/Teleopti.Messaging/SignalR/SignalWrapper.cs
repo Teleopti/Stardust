@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using SignalR.Client;
 using SignalR.Client.Hubs;
-using SignalR.Client.Net20.Infrastructure;
 using SignalR.Client.Transports;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
+using log4net;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
@@ -17,8 +18,10 @@ namespace Teleopti.Messaging.SignalR
 		private readonly IHubProxy _hubProxy;
 		private readonly HubConnection _hubConnection;
 		private const string EventName = "OnEventMessage";
-		private int _retryCount = 0;
+		private int _retryCount;
 		private static readonly object LockObject = new object();
+		private bool _isRunning;
+		private static ILog Logger = LogManager.GetLogger(typeof (SignalWrapper));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
@@ -26,24 +29,41 @@ namespace Teleopti.Messaging.SignalR
 
 		public SignalWrapper(IHubProxy hubProxy, HubConnection hubConnection)
 		{
+			_isRunning = false;
 			_hubProxy = hubProxy;
 			_hubConnection = hubConnection;
 		}
 
-		public Task<object> NotifyClients(Notification notification)
+		public Task NotifyClients(Notification notification)
 		{
 			if (verifyStillConnected())
 			{
-				return _hubProxy.Invoke("NotifyClients", notification);
+				var startTask = _hubProxy.Invoke("NotifyClients", notification);
+				startTask.ContinueWith(t =>
+				{
+					if (t.IsFaulted && t.Exception != null)
+					{
+						Logger.Error("An error happened when notifying.",t.Exception.GetBaseException());
+					}
+				}, TaskContinuationOptions.OnlyOnFaulted);
+				return startTask;
 			}
 			return emptyTask();
 		}
 
-		public Task<object> NotifyClients(IEnumerable<Notification> notifications)
+		public Task NotifyClients(IEnumerable<Notification> notifications)
 		{
 			if (verifyStillConnected())
 			{
-				return _hubProxy.Invoke("NotifyClientsMultiple", notifications);
+				var startTask = _hubProxy.Invoke("NotifyClientsMultiple", notifications);
+				startTask.ContinueWith(t =>
+				{
+					if (t.IsFaulted && t.Exception != null)
+					{
+						Logger.Error("An error happened when notifying multiple.", t.Exception.GetBaseException());
+					}
+				}, TaskContinuationOptions.OnlyOnFaulted);
+				return startTask;
 			}
 			return emptyTask();
 		}
@@ -66,9 +86,10 @@ namespace Teleopti.Messaging.SignalR
 						_retryCount = 0;
 						return true;
 					}
-					catch (Exception)
+					catch (Exception ex)
 					{
 						//Suppress! Already logged upon startup for general failures.
+						Logger.Error("An error happened when verifying that we still are connected.", ex);
 						_retryCount++;
 						return false;
 					}
@@ -79,8 +100,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartListening()
 		{
-			var subscription = _hubProxy.Subscribe(EventName);
-			subscription.Data += subscription_Data;
+			_hubProxy.Subscribe(EventName).Data += subscription_Data;
 
 			startHubConnection();
 			_hubProxy.Subscribe(EventName);
@@ -91,28 +111,44 @@ namespace Teleopti.Messaging.SignalR
 		{
 			try
 			{
-				var resetEvent = new ManualResetEvent(false);
-				Exception startException = null;
-				_hubConnection.Start(new LongPollingTransport()).ContinueWith(t =>
+				Exception exception = null;
+				var startTask = _hubConnection.Start(new LongPollingTransport());
+				startTask.ContinueWith(t =>
+				                       	{
+				                       		if (t.IsFaulted && t.Exception != null)
+				                       		{
+												exception = t.Exception.GetBaseException();
+												Logger.Error("An error happened when starting hub connection.", exception);
+				                       		}
+				                       	}, TaskContinuationOptions.OnlyOnFaulted);
+				
+				if (!startTask.Wait(TimeSpan.FromSeconds(10)))
 				{
-					if (t.IsFaulted)
-					{
-						startException = t.Exception;
-					}
-					resetEvent.Set();
-				});
-				if (resetEvent.WaitOne()==false)
-				{
-					throw new InvalidOperationException("Time out occurred upon startup of Message Broker.");
+					exception = new InvalidOperationException("Could not start within given time limit.");
 				}
-				if (startException!=null)
+				if (exception!=null)
 				{
-					throw startException;
+					throw exception;
 				}
+
+				_isRunning = true;
+				_hubConnection.Closed += () => { _isRunning = false; };
+				_hubConnection.Reconnected += () => { _isRunning = true; };
+			}
+			catch (AggregateException aggregateException)
+			{
+				Logger.Error("An error happened when starting hub connection.", aggregateException);
+				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", aggregateException);
+			}
+			catch (SocketException socketException)
+			{
+				Logger.Error("An error happened when starting hub connection.", socketException);
+				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", socketException);
 			}
 			catch (InvalidOperationException exception)
 			{
-				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.",exception);
+				Logger.Error("An error happened when starting hub connection.", exception);
+				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", exception);
 			}
 		}
 
@@ -131,27 +167,43 @@ namespace Teleopti.Messaging.SignalR
 			((Action<Notification>)ar.AsyncState).EndInvoke(ar);
 		}
 
-		public Task<object> AddSubscription(Subscription subscription)
+		public Task AddSubscription(Subscription subscription)
 		{
 			if (verifyStillConnected())
 			{
-				return _hubProxy.Invoke("AddSubscription", subscription);
+				var startTask = _hubProxy.Invoke("AddSubscription", subscription);
+				startTask.ContinueWith(t =>
+				{
+					if (t.IsFaulted && t.Exception != null)
+					{
+						Logger.Error("An error happened when adding subscription.", t.Exception.GetBaseException());
+					}
+				}, TaskContinuationOptions.OnlyOnFaulted);
+				return startTask;
 			}
 			return emptyTask();
 		}
 
-		private static Task<object> emptyTask()
+		private static Task emptyTask()
 		{
-			var task = new Task<object>();
-			task.OnFinished(null, null);
-			return task;
+			var tcs = new TaskCompletionSource<object>();
+			tcs.SetResult(null);
+			return tcs.Task;
 		}
 
-		public Task<object> RemoveSubscription(string route)
+		public Task RemoveSubscription(string route)
 		{
 			if (verifyStillConnected())
 			{
-				return _hubProxy.Invoke("RemoveSubscription", route);
+				var startTask = _hubProxy.Invoke("RemoveSubscription", route);
+				startTask.ContinueWith(t =>
+				{
+					if (t.IsFaulted && t.Exception != null)
+					{
+						Logger.Error("An error happened when removing subscription.", t.Exception.GetBaseException());
+					}
+				}, TaskContinuationOptions.OnlyOnFaulted);
+				return startTask;
 			}
 			return emptyTask();
 		}
@@ -167,30 +219,22 @@ namespace Teleopti.Messaging.SignalR
 					var subscriptionList = new List<string>(proxy.GetSubscriptions());
 					if (subscriptionList.Contains(EventName))
 					{
-						var subscription = _hubProxy.Subscribe(EventName);
-						subscription.Data -= subscription_Data;
+						_hubProxy.Subscribe(EventName).Data -= subscription_Data;
 					}
 
-					ThreadPool.QueueUserWorkItem(state =>
-					                             	{
-					                             		try
-					                             		{
-															_hubConnection.Stop();
-					                             		}
-					                             		catch (Exception)
-					                             		{
-					                             		}
-					                             	});
+					_hubConnection.Stop();
+					_isRunning = false;
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
+					Logger.Error("An error happened when stopping connection.", ex);
 				}
 			}
 		}
 
 		public bool IsInitialized()
 		{
-			return _hubProxy != null;
+			return _hubProxy != null && _isRunning;
 		}
 	}
 }

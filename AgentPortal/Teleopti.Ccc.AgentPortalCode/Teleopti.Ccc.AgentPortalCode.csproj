@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Ccc.AgentPortalCode</RootNamespace>
     <AssemblyName>Teleopti.Ccc.AgentPortalCode</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
@@ -43,6 +43,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -108,32 +109,41 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Syncfusion.Compression.Base">
-      <HintPath>..\..\packages\Syncfusion.Pdf.10.2.76\lib\2.0\Syncfusion.Compression.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Compression.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Pdf.10.2.77\lib\4.0\Syncfusion.Compression.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Core">
-      <HintPath>..\..\packages\Syncfusion.Core.10.2.76\lib\2.0\Syncfusion.Core.dll</HintPath>
+    <Reference Include="Syncfusion.Core, Version=10.204.0.75, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Core.10.2.77\lib\4.0\Syncfusion.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Grid.Base">
-      <HintPath>..\..\packages\Syncfusion.Grid.Win.10.2.76\lib\2.0\Syncfusion.Grid.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Grid.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Grid.Win.10.2.77\lib\4.0\Syncfusion.Grid.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Grid.Windows">
-      <HintPath>..\..\packages\Syncfusion.Grid.Win.10.2.76\lib\2.0\Syncfusion.Grid.Windows.dll</HintPath>
+    <Reference Include="Syncfusion.Grid.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Grid.Win.10.2.77\lib\4.0\Syncfusion.Grid.Windows.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Pdf.Base">
-      <HintPath>..\..\packages\Syncfusion.Pdf.10.2.76\lib\2.0\Syncfusion.Pdf.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Pdf.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Pdf.10.2.77\lib\4.0\Syncfusion.Pdf.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Schedule.Base">
-      <HintPath>..\..\packages\Syncfusion.Schedule.Win.10.2.76\lib\2.0\Syncfusion.Schedule.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Schedule.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Schedule.Win.10.2.77\lib\4.0\Syncfusion.Schedule.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Schedule.Windows">
-      <HintPath>..\..\packages\Syncfusion.Schedule.Win.10.2.76\lib\2.0\Syncfusion.Schedule.Windows.dll</HintPath>
+    <Reference Include="Syncfusion.Schedule.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Schedule.Win.10.2.77\lib\4.0\Syncfusion.Schedule.Windows.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Shared.Base">
-      <HintPath>..\..\packages\Syncfusion.Shared.Base.10.2.76\lib\2.0\Syncfusion.Shared.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Shared.Base.10.2.77\lib\4.0\Syncfusion.Shared.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Shared.Windows">
-      <HintPath>..\..\packages\Syncfusion.Shared.Win.10.2.76\lib\2.0\Syncfusion.Shared.Windows.dll</HintPath>
+    <Reference Include="Syncfusion.Shared.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Syncfusion.Shared.Win.10.2.77\lib\4.0\Syncfusion.Shared.Windows.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -297,10 +307,6 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
       <Project>{98105BFE-6C3B-4C57-9141-6BD065C7E966}</Project>
       <Name>Teleopti.Ccc.UserTexts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Core\Teleopti.Core.csproj">
-      <Project>{7C03979A-6973-4D71-BF6B-27585CC933B5}</Project>
-      <Name>Teleopti.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>

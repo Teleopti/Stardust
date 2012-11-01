@@ -6,6 +6,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Teleopti.Messaging.Composites;
 using log4net;
 using NHibernate.Cfg.ConfigurationSchema;
 using Teleopti.Ccc.Domain.Helper;
@@ -189,7 +190,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 						Uri serverUrl;
 						if (Uri.TryCreate(messageBrokerConnection, UriKind.Absolute, out serverUrl))
 						{
-							MessageBroker = new SignalBroker(((MessageBrokerBase)MessageBroker).FilterManager.FilterDictionary);
+							var oldMessageBroker = MessageBroker;
+							MessageBroker = new SignalBroker(MessageFilterManager.Instance.FilterDictionary);
+							oldMessageBroker.Dispose();
 						}
 						MessageBroker.ConnectionString = messageBrokerConnection;
 					}

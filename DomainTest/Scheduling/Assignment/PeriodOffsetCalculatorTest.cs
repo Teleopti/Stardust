@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private DateTime _targetStartDateTime ;
         private DateTime _targetEndDateTime;
 
-        private ICccTimeZoneInfo _singaporeTimeZone;
-        private ICccTimeZoneInfo _hawaiiTimeZone;
+        private TimeZoneInfo _singaporeTimeZone;
+        private TimeZoneInfo _hawaiiTimeZone;
         
         [SetUp]
         public void Setup()
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _sourceScheduleDay = _mocks.StrictMock<IScheduleDay>();
             _targetScheduleDay = _mocks.StrictMock<IScheduleDay>();
             
-            _singaporeTimeZone = CccTimeZoneInfoFactory.SingaporeTimeZoneInfo(); // -10
-            _hawaiiTimeZone = CccTimeZoneInfoFactory.HawaiiTimeZoneInfo(); // +8
+            _singaporeTimeZone = TimeZoneInfoFactory.SingaporeTimeZoneInfo(); // -10
+            _hawaiiTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo(); // +8
 
             _target = new PeriodOffsetCalculator();
         }
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyCalculatePeriodOffsetCalculatesWithDaylightSavingsWithinTimeZoneEvenIfIgnoreTimeZoneChanges()
             {
-                CccTimeZoneInfo stockholmTimeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
+                TimeZoneInfo stockholmTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 
             _sourceStartDateTime = new DateTime(2011, 03, 15, 16, 0, 0, DateTimeKind.Utc); // local - 8 => utc
             _sourceEndDateTime = new DateTime(2011, 03, 16, 16, 0, 0, DateTimeKind.Utc);
@@ -231,8 +231,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             [Test]
             public void VerifyCalculatePeriodOffsetCalculatesWithDaylightSavingsBetweenTimeZonesEvenIfIgnoreTimeZoneChanges()
             {
-                CccTimeZoneInfo stockholmTimeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
-                CccTimeZoneInfo helsinkiTimeZone = CccTimeZoneInfoFactory.HelsinkiTimeZoneInfo();
+                TimeZoneInfo stockholmTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+                TimeZoneInfo helsinkiTimeZone = TimeZoneInfoFactory.HelsinkiTimeZoneInfo();
 
                 _sourceStartDateTime = new DateTime(2011, 03, 15, 23, 0, 0, DateTimeKind.Utc); // local - 1 => utc
                 _sourceEndDateTime = new DateTime(2011, 03, 16, 23, 0, 0, DateTimeKind.Utc);
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             [Test]
             public void ShouldMoveCorrectOnDayOffDaylightSavingChange()
             {
-                CccTimeZoneInfo stockholmTimeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
+                TimeZoneInfo stockholmTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
                 var shiftStart = new DateTime(2012, 03, 24, 3, 0, 0, DateTimeKind.Utc);
                 _sourceStartDateTime = new DateTime(2012, 03, 23, 23, 0, 0, DateTimeKind.Utc); // local - 1 => utc
                 _sourceEndDateTime = new DateTime(2012, 03, 24, 23, 0, 0, DateTimeKind.Utc);

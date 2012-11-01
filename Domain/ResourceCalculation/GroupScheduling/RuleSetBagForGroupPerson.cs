@@ -57,12 +57,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			return categories;
 		}
 
-		public IWorkTimeMinMax MinMaxWorkTime(IWorkShiftWorkTime workShiftWorkTime, DateOnly onDate, IEffectiveRestriction restriction)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IWorkTimeMinMax MinMaxWorkTime(IWorkShiftWorkTime workShiftWorkTime, DateOnly onDate, IWorkTimeMinMaxRestriction restriction)
 		{
 			if (restriction == null)
 				return null;
 
-			if (restriction.DayOffTemplate != null)
+			if (!restriction.MayMatchWithShifts())
 				return null;
 
 			IWorkTimeMinMax retVal = null;
@@ -72,8 +73,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				if (!workShiftRuleSet.IsValidDate(onDate))
 					continue;
 
-				if (restriction.ShiftCategory != null &&
-					!workShiftRuleSet.TemplateGenerator.Category.Equals(restriction.ShiftCategory))
+				if (!restriction.Match(workShiftRuleSet.TemplateGenerator.Category))
 					continue;
 
 				var ruleSetWorkTimeMinMax = workShiftWorkTime.CalculateMinMax(workShiftRuleSet, restriction);

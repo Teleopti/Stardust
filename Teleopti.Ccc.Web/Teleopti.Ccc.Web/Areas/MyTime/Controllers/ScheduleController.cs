@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
@@ -56,11 +55,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public ActionResult Index()
 		{
 			return RedirectToAction("Week");
-		}
-
-		private bool AcceptsJson()
-		{
-			return HttpContext != null && HttpContext.Request.AcceptsJson();
 		}
 	}
 }

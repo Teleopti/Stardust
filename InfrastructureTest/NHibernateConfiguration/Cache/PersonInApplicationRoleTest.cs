@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			dataSource = dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(ConnectionStringHelper.ConnectionStringUsedInTests, null), null);
 			applicationRole = new ApplicationRole { Name = "hejhej" };
 			person = new Person();
-			person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Local));
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
 			person.PermissionInformation.AddApplicationRole(applicationRole);
 
 			StateHolderProxyHelper.ClearAndSetStateHolder(SetupFixtureForAssembly.loggedOnPerson,

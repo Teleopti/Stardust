@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public void Setup()
         {
             _person = PersonFactory.CreatePerson("organizer", "1");
-            _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             
             _requiredPerson = PersonFactory.CreatePerson("required", "2");
             _optionalPerson = PersonFactory.CreatePerson("optional", "3");
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Assert.AreEqual(_target.Meeting.Activity, _target.Activity);
             _propertyChanged = false;
 
-            _target.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            _target.TimeZone = (TimeZoneInfo.Utc);
             Assert.IsTrue(_propertyChanged);
             Assert.AreEqual(_target.Meeting.TimeZone, _target.TimeZone);
         }

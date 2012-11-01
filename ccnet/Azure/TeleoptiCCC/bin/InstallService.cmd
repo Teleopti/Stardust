@@ -18,7 +18,7 @@ IF NOT ERRORLEVEL 1060 (
 	SC QUERY AnalyticsEtlService
 	IF NOT ERRORLEVEL 1060 CALL :ServiceError
 )
-"%SystemRoot%\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe" "..\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe" >> Install.log
+"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" "..\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe" >> Install.log
 
 SC QUERY TeleoptiServiceBus
 IF NOT ERRORLEVEL 1060 (
@@ -26,7 +26,7 @@ IF NOT ERRORLEVEL 1060 (
 	SC QUERY TeleoptiServiceBus
 	IF NOT ERRORLEVEL 1060 CALL :ServiceError
 )
-"%SystemRoot%\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe" "..\Services\ServiceBus\Teleopti.CCC.Sdk.ServiceBus.Host.exe" >> Install.log
+"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" "..\Services\ServiceBus\Teleopti.CCC.Sdk.ServiceBus.Host.exe" >> Install.log
 
 ECHO. >> Install.log
 ECHO Done install! >> Install.log

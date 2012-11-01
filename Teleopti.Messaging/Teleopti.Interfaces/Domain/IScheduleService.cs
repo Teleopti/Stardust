@@ -13,43 +13,28 @@ namespace Teleopti.Interfaces.Domain
 		/// <value>The finder results.</value>
 		ReadOnlyCollection<IWorkShiftFinderResult> FinderResults { get; }
 
-	    /// <summary>
-	    /// Schedules the person on day.
-	    /// </summary>
-	    /// <param name="schedulePart">The schedule part.</param>
-	    /// <param name="schedulingOptions">The scheduling options.</param>
-	    /// <param name="useOccupancyAdjustment">if set to <c>true</c> then use occupancy adjustment.</param>
-	    /// <param name="effectiveRestriction">The effective restriction.</param>
-	    /// <param name="resourceCalculateDelayer">The resource calculate delayer.</param>
-	    /// <param name="possibleStartEndCategory"> </param>
-	    /// <param name="person"> </param>
-	    /// <returns></returns>
+		/// <summary>
+		/// Schedules the person on day.
+		/// </summary>
+		/// <param name="schedulePart">The schedule part.</param>
+		/// <param name="schedulingOptions">The scheduling options.</param>
+		/// <param name="effectiveRestriction">The effective restriction.</param>
+		/// <param name="resourceCalculateDelayer">The resource calculate delayer.</param>
+		/// <param name="possibleStartEndCategory">The possible start end category.</param>
+		/// <param name="rollbackService">The rollback service.</param>
+		/// <returns></returns>
 	    bool SchedulePersonOnDay(
             IScheduleDay schedulePart,
             ISchedulingOptions schedulingOptions,
-            bool useOccupancyAdjustment,
 			IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IPossibleStartEndCategory possibleStartEndCategory,
-            IPerson person = null);
+            ISchedulePartModifyAndRollbackService rollbackService);
+
 
 		/// <summary>
-		/// 
+		/// Clears the finder results.
 		/// </summary>
-		/// <param name="schedulePart"></param>
-		/// <param name="schedulingOptions"></param>
-		/// <param name="useOccupancyAdjustment"></param>
-		/// <param name="effectiveRestriction"></param>
-		/// <param name="resourceCalculateDelayer"></param>
-		/// <returns></returns>
-		bool SchedulePersonOnDay(
-			IScheduleDay schedulePart,
-			ISchedulingOptions schedulingOptions,
-			bool useOccupancyAdjustment,
-			IEffectiveRestriction effectiveRestriction,
-			IResourceCalculateDelayer resourceCalculateDelayer);
-	    ///<summary>
-	    ///</summary>
 	    void ClearFinderResults();
 
 		/// <summary>
@@ -57,15 +42,15 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <param name="schedulePart">The schedule part.</param>
 		/// <param name="schedulingOptions">The scheduling options.</param>
-		/// <param name="useOccupancyAdjustment">if set to <c>true</c> then use occupancy adjustment.</param>
 		/// <param name="resourceCalculateDelayer">The resource calculate delayer.</param>
-		/// <param name="possibleStartEndCategory"> </param>
+		/// <param name="possibleStartEndCategory">The possible start end category.</param>
+		/// <param name="rollbackService">The rollback service.</param>
 		/// <returns></returns>
 		bool SchedulePersonOnDay(
             IScheduleDay schedulePart,
             ISchedulingOptions schedulingOptions,
-            bool useOccupancyAdjustment,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			IPossibleStartEndCategory possibleStartEndCategory);
+			IPossibleStartEndCategory possibleStartEndCategory,
+			ISchedulePartModifyAndRollbackService rollbackService);
 	}
 }

@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             //Assert.AreEqual(_dt, _workloadDayTemplate.LocalWorkloadDate);
             Assert.AreEqual(_dt, _workloadDayTemplate.CreatedDate);
             ISkill skill = SkillFactory.CreateSkill("MySkill");
-            skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+            skill.TimeZone = (TimeZoneInfo.Local);
             _workloadDayTemplate.Workload.Skill = skill;
             Assert.AreEqual(_dt, _workloadDayTemplate.CreatedDate);
             //Assert.AreEqual(TimeZoneInfo.ConvertTimeFromUtc(_dt, TimeZoneInfo.Local), _workloadDayTemplate.LocalWorkloadDate);
@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyChangingOpenHoursWorks()
         {
-            _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _workloadDayTemplate = new WorkloadDayTemplate();
             _workloadDayTemplate.Create(_name,_dt, _workload, new List<TimePeriod>{new TimePeriod(8,0,17,0)});
             int versionBefore = _workloadDayTemplate.VersionNumber;

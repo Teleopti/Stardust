@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 					var person = _personRepository.Get(message.PersonId);
 
 					// Get list of readmodels from class that fetch for person and period and turn into list of readmodels
+					_scheduleDayReadModelsCreator.SetInitialLoad(true);
 					var readModels = _scheduleDayReadModelsCreator.GetReadModels(scenario, period, person);
 					// save them
 					if(readModels.Count > 0)

@@ -17,16 +17,16 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
         private AppointmentFromMeetingCreator _target;
         readonly DateOnly _startDate = new DateOnly(2011,3,21);
         readonly DateOnly _endDate = new DateOnly(2011,3,27);
-        private CccTimeZoneInfo _timeZone;
-        private CccTimeZoneInfo _userZone;
+        private TimeZoneInfo _timeZone;
+        private TimeZoneInfo _userZone;
         private MeetingTimeZoneHelper _meetingTimeZoneHelper;
 
         [SetUp]
         public void Setup()
         {
             //finland +2
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"));
-            _userZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"));
+            _userZone = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
             _meetingTimeZoneHelper = new MeetingTimeZoneHelper(_userZone);
             _mocks = new MockRepository();
             _meeting = _mocks.StrictMock<IMeeting>();
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
         [Test]
         public void ShouldCheckIfStartAndEndTimeIsValid()
         {
-            var userZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
+            var userZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
             _target = new AppointmentFromMeetingCreator(new MeetingTimeZoneHelper(userZone));
 
             _mocks.BackToRecordAll();

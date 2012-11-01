@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private ClipHandler<IScheduleDay> clipHandlerSchedulePart;
         private SchedulerStateHolder schedulerState;
         private readonly DateTime _date = new DateTime(2008, 11, 04, 0, 0, 0, DateTimeKind.Utc);
-        private ICccTimeZoneInfo timeZoneInfo;
+        private TimeZoneInfo timeZoneInfo;
         private IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
         private IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             target = new WeekPresenter(viewBase, schedulerState, gridlockManager, clipHandlerSchedulePart,
                                       SchedulePartFilter.None, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance);
-            timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+            timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
         }
 
         [Test]

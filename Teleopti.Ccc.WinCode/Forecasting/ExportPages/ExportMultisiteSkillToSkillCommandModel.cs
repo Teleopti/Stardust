@@ -51,7 +51,11 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
         public ExportMultisiteSkillToSkillCommandModel()
         {
             MultisiteSkillSelectionModels = new List<MultisiteSkillSelectionModel>();
-            Period = new DateOnlyPeriodDto(new DateOnlyPeriod(DateOnly.Today,DateOnly.Today.AddDays(30)));
+	        Period = new DateOnlyPeriodDto
+		        {
+			        StartDate = new DateOnlyDto {DateTime = DateOnly.Today},
+			        EndDate = new DateOnlyDto {DateTime = DateOnly.Today.AddDays(30)}
+		        };
         }
 
         public bool HasChildSkillMappings

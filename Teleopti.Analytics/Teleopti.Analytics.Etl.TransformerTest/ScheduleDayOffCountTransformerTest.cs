@@ -36,7 +36,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void Setup()
         {
             _person = new Person();
-            _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC")));
+            _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("UTC")));
             _person.SetId(Guid.NewGuid());
             _schedules = new List<IScheduleDay>();
             _schedules2 = new List<IScheduleDay>();

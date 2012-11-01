@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			comboBoxAdvTimeZones.DisplayMember = "DisplayName";
 			foreach (var timeZoneInfo in TimeZoneInfo.GetSystemTimeZones())
 			{
-				var tzi = (new CccTimeZoneInfo(timeZoneInfo));
+				var tzi = ((timeZoneInfo));
 				comboBoxAdvTimeZones.Items.Add(tzi);
 				if (budgetGroup.TimeZone.Id == tzi.Id)
 					comboBoxAdvTimeZones.SelectedItem = tzi;
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			{
 				budgetGroup.Name = textBoxName.Text.Trim();
 				budgetGroup.TrySetDaysPerYear((int)textBoxDaysPerYear.IntegerValue);
-				budgetGroup.TimeZone = (ICccTimeZoneInfo) comboBoxAdvTimeZones.SelectedItem;
+				budgetGroup.TimeZone = (TimeZoneInfo) comboBoxAdvTimeZones.SelectedItem;
 
 				budgetGroup.RemoveAllSkills();
 				foreach (var item in listBoxAddedSkills.Items)

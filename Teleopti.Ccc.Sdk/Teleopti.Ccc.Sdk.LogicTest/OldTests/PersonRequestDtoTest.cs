@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         {
             _person = new PersonDto();
             _id = GuidFactory.GetGuid();
-            _date = new DateOnlyDto(new DateOnly(2008, 01, 01));
+			_date = new DateOnlyDto { DateTime = new DateOnly(2008, 01, 01) };
             _absenceRequest = new AbsenceRequestDto();
             _message = "message";
             _subject = "subject";

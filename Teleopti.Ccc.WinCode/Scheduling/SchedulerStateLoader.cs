@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		void LoadOrganization();
 		void LoadSchedules(IScheduleDateTimePeriod scheduleDateTimePeriod);
         void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills);
-        void EnsureSkillsLoaded();
+		void EnsureSkillsLoaded(DateOnlyPeriod period);
 	}
 
     public class SchedulerStateLoader : ISchedulerStateLoader
@@ -109,19 +110,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             initializeScheduleData();
         }
 
-        public void EnsureSkillsLoaded()
+        public void EnsureSkillsLoaded(DateOnlyPeriod period)
 	    {
             if (!_schedulerState.SchedulingResultState.Skills.IsEmpty())
                 return;
 
             using (PerformanceOutput.ForOperation("Loading skills"))
             {
-                using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+                using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
-                    ISkillRepository service = _repositoryFactory.CreateSkillRepository(uow);
-                    ICollection<ISkill> skills = service.FindAllWithSkillDays(_schedulerState.RequestedPeriod.DateOnlyPeriod);
+                    var service = _repositoryFactory.CreateSkillRepository(uow);
+					var skills = service.FindAllWithSkillDays(period);
 
-                    foreach (ISkill skill in skills)
+                    foreach (var skill in skills)
                     {
                         LazyLoadingManager.Initialize(skill.SkillType);
                         _schedulerState.SchedulingResultState.Skills.Add(skill);
@@ -237,8 +238,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             using (PerformanceOutput.ForOperation("Loading schedule data"))
             {
                 var service = 
-                    new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, false);
-                service.SchedulingResult(_schedulerState.RequestedPeriod.Period());
+                    new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, new SingleSkillLoadedDecider(), new SingleSkillCalculator(), false);
+                service.SchedulingResult(_schedulerState.RequestedPeriod.Period(), new List<IVisualLayerCollection>(), new List<IVisualLayerCollection>());
             }
         }
     }

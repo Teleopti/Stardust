@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -37,7 +39,8 @@ namespace Teleopti.Ccc.WinCode.Meetings
     public class MeetingStateHolderLoaderHelper : IMeetingStateHolderLoaderHelper
     {
         private readonly IPeopleAndSkillLoaderDecider _peopleAndSkillLoaderDecider;
-        private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+	    private readonly ISchedulerStateHolder _schedulerStateHolder;
+	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly ISchedulerStateLoader _schedulerStateLoader;
         private HashSet<ISkill> _filteredSkills = new HashSet<ISkill>();
         private DateTimePeriod _lastPeriod;
@@ -47,14 +50,16 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         public event FinishedEventHandler FinishedReloading;
 
-        public MeetingStateHolderLoaderHelper(
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public MeetingStateHolderLoaderHelper(
                                                 IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider,
-                                                ISchedulingResultStateHolder schedulingResultStateHolder,
+                                                ISchedulerStateHolder schedulerStateHolder,
                                                 ISchedulerStateLoader schedulerStateLoader,
                                                 IUnitOfWorkFactory uowFactory)
         {
             _peopleAndSkillLoaderDecider = peopleAndSkillLoaderDecider;
-            _schedulingResultStateHolder = schedulingResultStateHolder;
+	        _schedulerStateHolder = schedulerStateHolder;
+			_schedulingResultStateHolder = _schedulerStateHolder.SchedulingResultState;
             _schedulerStateLoader = schedulerStateLoader;
             _uowFactory = uowFactory;
             _reloadBackgroundWorker.WorkerSupportsCancellation = true;
@@ -76,7 +81,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             using (var unitOfWork = _uowFactory.CreateAndOpenUnitOfWork())
             {
                 _peopleAndSkillLoaderDecider.Execute(args.Scenario, args.Period, args.Persons);
-                _schedulerStateLoader.EnsureSkillsLoaded();
+				_schedulerStateLoader.EnsureSkillsLoaded(args.Period.ToDateOnlyPeriod(_schedulerStateHolder.TimeZoneInfo));
                 
                var tempSkills = new HashSet<ISkill>(_schedulingResultStateHolder.Skills);
 

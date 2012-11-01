@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void CanAddCustomTemplateFromStatistics()
         {
             IWorkload workload = LoadWorkload();
-            workload.Skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            workload.Skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             
             IList<TimePeriod> openHours = new List<TimePeriod>();
             openHours.Add(new TimePeriod("02:00-1:02:00"));
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void CanAddCustomTemplateFromStatisticsWithMidnightBreak()
         {
             IWorkload workload = LoadWorkload();
-            workload.Skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            workload.Skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             workload.Skill.MidnightBreakOffset = TimeSpan.FromHours(8);
             
             WorkloadDayTemplate template = new WorkloadDayTemplate();
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyCanCreateWorkloadDaysForStatisticsInMemory()
         {
             IWorkload workload = LoadWorkload();
-            workload.Skill.TimeZone = CccTimeZoneInfoFactory.UtcTimeZoneInfo();
+            workload.Skill.TimeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
             DateOnly startDate = new DateOnly(2008, 2, 8);
             DateOnly endDate = new DateOnly(2008, 2, 15);
 

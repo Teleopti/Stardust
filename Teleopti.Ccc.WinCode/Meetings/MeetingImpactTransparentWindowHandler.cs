@@ -87,6 +87,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             var startValue = _meetingImpactView.IntervalStartValue();
 
             var skill = _meetingImpactView.SelectedSkill();
+			if (skill == null) return null;
             var minutes = (_meetingImpactView.GridColCount - 1) * skill.DefaultResolution + skill.DefaultResolution;
             var endValue = startValue.Add(TimeSpan.FromMinutes(minutes));
 

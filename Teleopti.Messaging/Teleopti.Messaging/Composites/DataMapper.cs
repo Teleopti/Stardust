@@ -5,11 +5,10 @@ using System.Diagnostics.CodeAnalysis;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Logging;
-using Teleopti.Logging.Core;
 using Teleopti.Messaging.Core;
 using Teleopti.Messaging.DataAccessLayer;
 using Teleopti.Messaging.Events;
+using log4net;
 
 namespace Teleopti.Messaging.Composites
 {
@@ -25,6 +24,7 @@ namespace Teleopti.Messaging.Composites
         private static readonly object _scavageLock = new object();
         private readonly string _connectionString;
         private readonly long _restartTime;
+		private static ILog Logger = LogManager.GetLogger(typeof(DataMapper));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataMapper"/> class.
@@ -188,24 +188,6 @@ namespace Teleopti.Messaging.Composites
             return message.EventId;
         }
 
-        /// <summary>
-        /// Inserts a log entry into the database on whether the event was propagated successfully or not.
-        /// </summary>
-        /// <param name="processId"></param>
-        /// <param name="description"></param>
-        /// <param name="exception"></param>
-        /// <param name="message"></param>
-        /// <param name="stackTrace"></param>
-        /// <param name="changeBy"></param>
-        /// <returns></returns>
-        public Guid InsertEventLogEntry(Int32 processId, string description, string exception, string message, string stackTrace, string changeBy)
-        {
-            ILogEntry logEntry = new LogEntry(Guid.Empty, processId, description, exception, message, stackTrace, changeBy, DateTime.Now);
-            LogEntryInserter inserter = new LogEntryInserter(_connectionString);
-            inserter.Execute(logEntry);
-            return logEntry.LogId;
-        }
-
         public Int32 InsertConfigurationInfo(string configurationType, string configurationName, string configurationValue, string configurationDataType, string changedBy)
         {
             IConfigurationInfo configurationInfo = new ConfigurationInfo(0,
@@ -307,16 +289,6 @@ namespace Teleopti.Messaging.Composites
             return eventFilter.ToArray();
         }
 
-        public ILogbookEntry[] ReadLogbookEntries()
-        {
-            LogEntryReader reader = new LogEntryReader(_connectionString);
-            IList<ILogEntry> logEntries = reader.Execute();
-            List<ILogbookEntry> logBookEntries = new List<ILogbookEntry>();
-            foreach (ILogEntry entry in logEntries)
-                logBookEntries.Add(new LogbookEntry(entry));
-            return logBookEntries.ToArray();
-        }
-
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void RunScavageEvents()
         {
@@ -363,7 +335,7 @@ namespace Teleopti.Messaging.Composites
             }
             catch (Exception exc)
             {
-                BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), exc.Message + exc.StackTrace);
+                Logger.Error("Update port for subscriber error.", exc);
             }
         }
 

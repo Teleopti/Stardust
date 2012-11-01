@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Security;
@@ -11,6 +12,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.Events;
 using Teleopti.Messaging.Exceptions;
+using log4net;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
@@ -19,9 +21,10 @@ namespace Teleopti.Messaging.SignalR
 	public class SignalBroker : IMessageBroker
 	{
 		private const string HubClassName = "MessageBrokerHub";
-		private readonly IDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new Dictionary<string, IList<SubscriptionWithHandler>>();
+		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
 		private SignalWrapper _wrapper;
 		private readonly object WrapperLock = new object();
+		private static ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public SignalBroker(IDictionary<Type, IList<Type>> typeFilter)
@@ -200,16 +203,11 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 			{
 				if (_wrapper == null) return;
 
-				_wrapper.AddSubscription(subscription).Then(_ =>
+				_wrapper.AddSubscription(subscription).ContinueWith(_ =>
 				{
 					var route = subscription.Route();
 
-					IList<SubscriptionWithHandler> handlers;
-					if (!_subscriptionHandlers.TryGetValue(route, out handlers))
-					{
-						handlers = new List<SubscriptionWithHandler>();
-						_subscriptionHandlers.Add(route, handlers);
-					}
+					var handlers = _subscriptionHandlers.GetOrAdd(route, key => new List<SubscriptionWithHandler>());
 					handlers.Add(new SubscriptionWithHandler { Handler = eventMessageHandler, Subscription = subscription });
 				});
 			}
@@ -256,7 +254,8 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 
 			foreach (var route in handlersToRemove)
 			{
-				_subscriptionHandlers.Remove(route);
+				IList<SubscriptionWithHandler> removed;
+				_subscriptionHandlers.TryRemove(route,out removed);
 			}
 		}
 
@@ -349,11 +348,6 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 		public IEventHeartbeat[] RetrieveHeartbeats()
 		{
 			return new IEventHeartbeat[] { };
-		}
-
-		public ILogbookEntry[] RetrieveLogbookEntries()
-		{
-			return new ILogbookEntry[] { };
 		}
 
 		public IEventUser[] RetrieveEventUsers()
@@ -479,10 +473,6 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 			return true;
 		}
 
-		public void Log(ILogEntry eventLogEntry)
-		{
-		}
-
 		public void SendReceipt(IEventMessage message)
 		{
 		}
@@ -499,6 +489,7 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 
 		public void InternalLog(Exception exception)
 		{
+			Logger.Error("Internal log error.", exception);
 		}
 
 		public void ServiceGuard(IBrokerService service)

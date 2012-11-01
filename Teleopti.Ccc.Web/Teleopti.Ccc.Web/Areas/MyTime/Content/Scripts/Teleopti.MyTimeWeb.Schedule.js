@@ -145,8 +145,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return new DayViewModel(item, self);
 			});
 			self.days(days);
-			self.minDate = new Date(data.PeriodSelection.SelectedDateRange.MinDate).addDays(-1);
-			self.maxDate = new Date(data.PeriodSelection.SelectedDateRange.MaxDate).addDays(1);
+			var minDateArr = data.PeriodSelection.SelectedDateRange.MinDate.split('-');
+			var maxDateArr = data.PeriodSelection.SelectedDateRange.MaxDate.split('-');
+			self.minDate = new Date(minDateArr[0], minDateArr[1] - 1, minDateArr[2]).addDays(-1);
+			self.maxDate = new Date(maxDateArr[0], maxDateArr[1] - 1, maxDateArr[2]).addDays(1);
 		}
 	});
 

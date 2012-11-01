@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
         /// <param name="period">The period.</param>
         /// <param name="timeZoneInfo">The time zone info.</param>
         /// <returns></returns>
-        public abstract IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnlyPeriod period, ICccTimeZoneInfo timeZoneInfo);
+        public abstract IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnlyPeriod period, TimeZoneInfo timeZoneInfo);
 
         public virtual IMultiplicatorDefinition NoneEntityClone()
         {

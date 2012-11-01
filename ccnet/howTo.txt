@@ -272,24 +272,18 @@ From command line:
 XCOPY "C:\Program Files (x86)\Altiris\Wise\Windows Installer Editor\Stub" "C:\Program Files\Altiris\Wise\Windows Installer Editor\Stub\" /S /E
 
 --------------
-SQL Server 2008 R2 Express - instance: "SMARTASSEMBLY"
---------------
-From command line:
-"\\a380\hangaren\#PROGRAM\Develop\SQL Server\2008 R2\Express\64bit\64bit-Install.bat" SMARTASSEMBLY
-DataDir: D:\SQLData
-
---------------
 {smartassembly} (obfuscate)
 --------------
 install:
-\\a380\Hangaren\#PROGRAM\Develop\{smartassembly}\{smartassembly}.Setup_3.2.3343.msi
-installDir: C:\Program Files (x86)\{smartassembly}\
+\\a380\Hangaren\#PROGRAM\Develop\{smartassembly}\6.7\SmartAssembly.exe
+installDir: C:\Program Files\Red Gate\SmartAssembly 6
 
-Add new setting for new machine. Se current machines:
-$branch\ccnet\Obfuscate\{smartassembly}.settings_[COMPUTERNAME]
-Edit your DB-file settings!
-Licens and settings checked into TFS and will be re-deployed as part of every build!
+Start and activate:
+C:\Program Files\Red Gate\SmartAssembly 6\SmartAssembly.exe
 
+You will need the serial number:
+\\a380\Hangaren\#PROGRAM\Develop\{smartassembly}\6.7\serialNumber.txt
+NOTE: This serial number is now used already (Hebe), and will probably be troublesome on next build server ....
 
 --------------------
 Enable file sharing in Win7 to computer outside domain

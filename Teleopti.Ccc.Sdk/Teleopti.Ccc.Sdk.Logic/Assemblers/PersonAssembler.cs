@@ -85,10 +85,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             if (entity.WorkflowControlSet != null)
                 personDto.WorkflowControlSet = _workflowControlSetAssembler.DomainEntityToDto(entity.WorkflowControlSet);
 
-            ICccTimeZoneInfo timeZone = entity.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo timeZone = entity.PermissionInformation.DefaultTimeZone();
             personDto.TimeZoneId = timeZone.Id;
             if (entity.TerminalDate.HasValue)
-                personDto.TerminationDate = new DateOnlyDto(entity.TerminalDate.Value);
+				personDto.TerminationDate = new DateOnlyDto { DateTime = entity.TerminalDate.Value };
 
             if (!IgnorePersonPeriods)
             {
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             else
                 throw new ArgumentException("Both first and last name cannot be empty");
             if (!string.IsNullOrEmpty(dto.TimeZoneId))
-                person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById(dto.TimeZoneId)));
+                person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById(dto.TimeZoneId));
             else
                 throw new ArgumentException("Timezone cannot be empty");
             if (dto.UICultureLanguageId.HasValue)
@@ -169,7 +169,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         private static PersonPeriodDto PersonPeriodDoToDto(IPersonPeriod entity)
         {
             PersonPeriodDto personPeriodDto = new PersonPeriodDto();
-            personPeriodDto.Period = new DateOnlyPeriodDto(entity.Period);
+			personPeriodDto.Period = new DateOnlyPeriodDto
+			{
+				StartDate = new DateOnlyDto { DateTime = entity.Period.StartDate },
+				EndDate = new DateOnlyDto { DateTime = entity.Period.EndDate }
+			};
             
             personPeriodDto.PersonContract = PersonContractDoToDto(entity.PersonContract);
 

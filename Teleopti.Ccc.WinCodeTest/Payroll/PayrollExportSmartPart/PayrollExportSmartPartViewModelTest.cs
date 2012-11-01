@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WinCodeTest.Payroll.PayrollExportSmartPart
 {
     [TestFixture]
-    public class PayrollExportSmartPartViewModelTest : IObservable<IPayrollResult>, IDisposable
+    public class PayrollExportSmartPartViewModelTest : Teleopti.Ccc.WinCode.Common.IObservable<IPayrollResult>, IDisposable
     {
         private PayrollExportSmartPartViewModel _target;
         private IPayrollResult _resultToSave; //Called by IObservable

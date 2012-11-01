@@ -27,17 +27,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             Color displayColor = Color.FromArgb(123);
 
             Skill skill = new Skill(name, description, displayColor,defaultResolution, skillType);
-            skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            skill.TimeZone = TimeZoneInfo.Utc;
             skill.Activity = ActivityFactory.CreateActivity("activity");
 
             return skill;
         }
 
 
-        public static ISkill CreateSkill(string skillName, ISkillType skillType, int defaultResolution, ICccTimeZoneInfo cccTimeZoneInfo, TimeSpan timeSpan)
+        public static ISkill CreateSkill(string skillName, ISkillType skillType, int defaultResolution, TimeZoneInfo TimeZoneInfo, TimeSpan timeSpan)
         {
             ISkill newSkill = CreateSkill(skillName, skillType, defaultResolution);
-            newSkill.TimeZone = cccTimeZoneInfo;
+            newSkill.TimeZone = TimeZoneInfo;
             newSkill.MidnightBreakOffset = timeSpan;
             return newSkill;
         }
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             Color displayColor = Color.FromArgb(123);
 
             MultisiteSkill skill = new MultisiteSkill(name, description, displayColor, defaultSolution, skillType);
-            skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            skill.TimeZone = TimeZoneInfo.Utc;
             skill.Activity = ActivityFactory.CreateActivity("activity");
 
             return skill;
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			SkillType skillType = SkillTypeFactory.CreateSkillType();
 			skillType.ForecastSource = ForecastSource.MaxSeatSkill;
 			ISkill skill = CreateSkill(skillName, skillType, 15);
-		    skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+		    skill.TimeZone = TimeZoneInfo.Utc;
 
 			return skill;
 		}

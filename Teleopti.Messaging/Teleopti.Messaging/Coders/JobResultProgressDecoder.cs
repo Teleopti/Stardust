@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.IO;
 using System.Text;
-using Teleopti.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Core;
+using Teleopti.Messaging.Core;
 
 namespace Teleopti.Messaging.Coders
 {

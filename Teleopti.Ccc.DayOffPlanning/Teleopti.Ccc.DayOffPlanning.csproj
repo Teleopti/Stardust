@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Ccc.DayOffPlanning</RootNamespace>
     <AssemblyName>Teleopti.Ccc.DayOffPlanning</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
     </SccProjectName>
@@ -43,6 +43,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -119,6 +120,7 @@
     <Compile Include="ConsecutiveWorkdayValidator.cs" />
     <Compile Include="ExtendReduceDaysOffDecisionMaker.cs" />
     <Compile Include="ExtendReduceTimeDecisionMaker.cs" />
+    <Compile Include="FiveConsecutiveWorkDaysSolver.cs" />
     <Compile Include="IWorkShiftBackToLegalStateDecisionMaker.cs" />
     <Compile Include="LockableBitArrayChangesTracker.cs" />
     <Compile Include="Scheduling\DesiredShiftLengthCalculator.cs" />

@@ -1,13 +1,10 @@
-﻿// ReSharper disable FieldCanBeMadeReadOnly.Local
-
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.Net.Sockets;
 using System.Runtime.Remoting;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Logging;
 using Teleopti.Messaging.Server;
+using log4net;
 
 namespace Teleopti.Messaging.Protocols
 {
@@ -16,6 +13,8 @@ namespace Teleopti.Messaging.Protocols
     /// </summary>
     public class PollingProtocol : Protocol
     {
+		private static ILog Logger = LogManager.GetLogger(typeof(PollingProtocol));
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PollingProtocol"/> class.
         /// </summary>
@@ -67,11 +66,11 @@ namespace Teleopti.Messaging.Protocols
                 }
                 catch (SocketException socketException)
                 {
-                    BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), socketException.Message);
+                    Logger.Error("Read byte stream error.", socketException);
                 }
                 catch (RemotingException remotingException)
                 {
-                    BaseLogger.Instance.WriteLine(EventLogEntryType.Error, GetType(), remotingException.Message);
+                    Logger.Error("Read byte stream error.", remotingException);
                 }
             }
         }

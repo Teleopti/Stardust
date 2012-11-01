@@ -100,10 +100,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
 			_serviceBus.Invoke().Send(new ProcessDenormalizeQueue
 			                          	{
-			                 		BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-			                 		Datasource = identity.DataSource.Application.Name,
-			                 		Timestamp = DateTime.UtcNow
-			                 	});
+			                          		BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
+			                          		Datasource = identity.DataSource.Application.Name,
+			                          		Timestamp = DateTime.UtcNow
+			                          	});
 		}
 	}
 }

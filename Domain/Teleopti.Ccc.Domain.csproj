@@ -25,7 +25,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -43,6 +43,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -288,6 +289,7 @@
     <Compile Include="Optimization\SchedulingOptionsCreator.cs" />
     <Compile Include="Optimization\SchedulingOptionsExtraPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSetting.cs" />
+    <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictor.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessAggregator.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessContractTimeCheck.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapCategorySorter.cs" />
@@ -386,12 +388,15 @@
     <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryRunner.cs" />
     <Compile Include="ResourceCalculation\PossibleStartEndCategory.cs" />
     <Compile Include="ResourceCalculation\ShiftCategoryPeriodValueExtractorThread.cs" />
+    <Compile Include="ResourceCalculation\SingleSkillCalculator.cs" />
+    <Compile Include="ResourceCalculation\SingleSkillLoadedDecider.cs" />
     <Compile Include="ResourceCalculation\SwapRawService.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedActivityChecker.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecification.cs" />
+    <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateService.cs" />
     <Compile Include="Scheduling\Assignment\IValidateScheduleRange.cs" />
     <Compile Include="Scheduling\Assignment\PeriodOffsetCalculator.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionIntersectingPeriodMerger.cs" />
@@ -671,6 +676,8 @@
     <Compile Include="Scheduling\Restrictions\EffectiveRestriction.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreator.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayCreator.cs" />
+    <Compile Include="Scheduling\Restrictions\MeetingRestrictionCombiner.cs" />
+    <Compile Include="Scheduling\Restrictions\PersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionOptions.cs" />
     <Compile Include="Scheduling\Restrictions\ExtendedPreferencePredicate.cs" />
     <Compile Include="Scheduling\Restrictions\PreferenceAbsenceChecker.cs" />
@@ -686,6 +693,7 @@
     <Compile Include="Scheduling\Restrictions\RotationSpecification.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayRotationRestrictionExtractor.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayStudentAvailabilityRestrictionExtractor.cs" />
+    <Compile Include="Scheduling\Restrictions\WorkTimeMinMaxRestrictionCreator.cs" />
     <Compile Include="Scheduling\Restriction\ActivityRestriction.cs" />
     <Compile Include="Scheduling\Restriction\AvailabilityDay.cs" />
     <Compile Include="Scheduling\Restriction\AvailabilityRotation.cs" />
@@ -756,14 +764,17 @@
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionService.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftFromMasterActivityService.cs" />
     <Compile Include="Scheduling\ShiftCreator\StartTimeLimiter.cs" />
+    <Compile Include="Scheduling\ShiftCreator\WorkShiftProjection.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkShiftVisualLayerInfo.cs" />
     <Compile Include="Scheduling\ShiftTradeChecksumCalculator.cs" />
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplate.cs" />
     <Compile Include="Scheduling\TeamSteadyState.cs" />
+    <Compile Include="Scheduling\TeamSteadyStateCoherentChecker.cs" />
     <Compile Include="Scheduling\TeamSteadyStateDictionaryCreator.cs" />
     <Compile Include="Scheduling\TeamSteadyStateMainShiftScheduler.cs" />
     <Compile Include="Scheduling\TeamSteadyStatePersonPeriod.cs" />
     <Compile Include="Scheduling\TeamSteadyStateRunner.cs" />
+    <Compile Include="Scheduling\TeamSteadyStateScheduleMatrixProFinder.cs" />
     <Compile Include="Scheduling\TeamSteadyStateSchedulePeriod.cs" />
     <Compile Include="Scheduling\TimeLayer\DateTimeMultiplicatorDefinition.cs" />
     <Compile Include="Scheduling\TimeLayer\DayOfWeekMultiplicatorDefinition.cs" />
@@ -1159,7 +1170,6 @@
     <Compile Include="Time\DateTimePeriodMerger.cs" />
     <Compile Include="Time\IntervalRounding.cs" />
     <Compile Include="Time\PeriodScaleUnit.cs" />
-    <Compile Include="Time\CccTimeZoneInfo.cs" />
     <Compile Include="Time\DateTimeExtensions.cs" />
     <Compile Include="Collection\FixedCapacityStack.cs" />
     <Compile Include="Tracking\TrackerCalculator.cs" />

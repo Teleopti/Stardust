@@ -1,9 +1,9 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
-using Teleopti.Core;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Messaging.Core;
 using Teleopti.Messaging.Events;
 
 namespace Teleopti.Messaging.DataAccessLayer

@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         private IPerson _person1;
         private IPerson _person2;
         private IPermissionInformation _permissionInformation;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private IWorkShiftRuleSet _ruleSet1;
         private IWorkShiftRuleSet _ruleSet2;
         private IWorkShiftRuleSet _ruleSet3;
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             _person1 = _mock.StrictMock<IPerson>();
             _person2 = _mock.StrictMock<IPerson>();
             _permissionInformation = _mock.StrictMock<IPermissionInformation>();
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+            _timeZone = TimeZoneInfo.Utc;
 			_personPeriod = _mock.StrictMock<IPersonPeriod>();
 			_personPeriod2 = _mock.StrictMock<IPersonPeriod>();
 			_bag1 = new RuleSetBag();

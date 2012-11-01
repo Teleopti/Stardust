@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly IWorkShiftFinderService _finderService;
         private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
         private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
-        private readonly ISchedulePartModifyAndRollbackService _rollbackService;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly Hashtable _finderResults = new Hashtable();
 
@@ -21,13 +20,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
             IWorkShiftFinderService finderService, 
             IScheduleMatrixListCreator scheduleMatrixListCreator,
             IShiftCategoryLimitationChecker shiftCategoryLimitationChecker, 
-            ISchedulePartModifyAndRollbackService rollbackService,
             IEffectiveRestrictionCreator effectiveRestrictionCreator)
         {
             _finderService = finderService;
             _scheduleMatrixListCreator = scheduleMatrixListCreator;
             _shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
-            _rollbackService = rollbackService;
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
         }
 
@@ -49,36 +46,40 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _finderResults.Clear();
         }
 
+		//only one usage of this, try to remove
         public bool SchedulePersonOnDay(
 			IScheduleDay schedulePart, 
 			ISchedulingOptions schedulingOptions, 
-			bool useOccupancyAdjustment, 
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			IPossibleStartEndCategory possibleStartEndCategory)
+			IPossibleStartEndCategory possibleStartEndCategory,
+			ISchedulePartModifyAndRollbackService rollbackService)
         {
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
-            return SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment, effectiveRestriction, resourceCalculateDelayer, possibleStartEndCategory);
+            return SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, possibleStartEndCategory, rollbackService);
         }
 
 		public bool SchedulePersonOnDay(
 			IScheduleDay schedulePart,
 			ISchedulingOptions schedulingOptions,
-			bool useOccupancyAdjustment,
 			IEffectiveRestriction effectiveRestriction,
-			IResourceCalculateDelayer resourceCalculateDelayer)
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			IPossibleStartEndCategory possibleStartEndCategory,
+			ISchedulePartModifyAndRollbackService rollbackService)
 		{
-			return SchedulePersonOnDay(schedulePart, schedulingOptions, useOccupancyAdjustment, effectiveRestriction,
-			                           resourceCalculateDelayer, null);
+			return schedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer,
+			                           possibleStartEndCategory, null, rollbackService);
 		}
 
+
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public bool SchedulePersonOnDay(
+        private bool schedulePersonOnDay(
             IScheduleDay schedulePart,
             ISchedulingOptions schedulingOptions,
-            bool useOccupancyAdjustment, 
             IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			IPossibleStartEndCategory possibleStartEndCategory, IPerson person = null)
+			IPossibleStartEndCategory possibleStartEndCategory,
+			IPerson person,
+			ISchedulePartModifyAndRollbackService rollbackService)
         {
             using (PerformanceOutput.ForOperation("SchedulePersonOnDay"))
             {
@@ -132,10 +133,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					 	res.Successful = true;
 					 }
                 schedulePart.AddMainShift((IMainShift)cache.ShiftProjection.TheMainShift.EntityClone());
-                _rollbackService.Modify(schedulePart);
+                rollbackService.Modify(schedulePart);
 
             	resourceCalculateDelayer.CalculateIfNeeded(scheduleDateOnly,
-            	                                           cache.ShiftProjection.WorkShiftProjectionPeriod);
+            	                                           cache.ShiftProjection.WorkShiftProjectionPeriod, new List<IScheduleDay>{schedulePart});
 
                 return true;
             }

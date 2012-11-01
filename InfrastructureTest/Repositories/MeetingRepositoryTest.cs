@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             meeting.EndDate = meeting.StartDate;
             meeting.StartTime = TimeSpan.FromHours(10);
             meeting.EndTime = TimeSpan.FromHours(11);
-            meeting.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Utc);
+            meeting.TimeZone = (TimeZoneInfo.Utc);
 
             return meeting;
         }
@@ -135,14 +135,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(meeting);
 
             MeetingRepository meetingRepository = new MeetingRepository(UnitOfWork);
-            meetingList = meetingRepository.Find(persons, new DateTimePeriod(2008, 1, 1, 2009, 1, 2), _scenario);
+            meetingList = meetingRepository.Find(persons, new DateOnlyPeriod(2008, 1, 1, 2009, 1, 2), _scenario);
             Assert.AreEqual(1, meetingList.Count);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(meetingList.First().Organizer));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(meetingList.First().Organizer.Name));
 
             persons.Clear();
             persons.Add(personNotInMeeting);
-            meetingList = meetingRepository.Find(persons, new DateTimePeriod(2008, 1, 1, 2009, 1, 2), _scenario);
+            meetingList = meetingRepository.Find(persons, new DateOnlyPeriod(2008, 1, 1, 2009, 1, 2), _scenario);
             Assert.IsTrue(meetingList.Count == 0);
         }
 
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var meetingPersons = new List<IMeetingPerson>(meeting.MeetingPersons);
 
             MeetingRepository meetingRepository = new MeetingRepository(UnitOfWork);
-            var meetingList = meetingRepository.Find(meetingPersons.Select(p => p.Person), new DateTimePeriod(2008, 1, 1, 2009, 1, 2), _scenario);
+            var meetingList = meetingRepository.Find(meetingPersons.Select(p => p.Person), new DateOnlyPeriod(2008, 1, 1, 2009, 1, 2), _scenario);
             Assert.AreEqual(1, meetingList.Count);
 
             meeting = meetingList.First();
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                                            });
 
             PersistAndRemoveFromUnitOfWork(meeting);
-            meetingList = meetingRepository.Find(meetingPersons.Select(p => p.Person), new DateTimePeriod(2008, 1, 1, 2009, 1, 2), _scenario);
+            meetingList = meetingRepository.Find(meetingPersons.Select(p => p.Person), new DateOnlyPeriod(2008, 1, 1, 2009, 1, 2), _scenario);
             Assert.AreEqual(1, meetingList.Count);
             Assert.IsInstanceOf(typeof(IRecurrentMonthlyByWeekMeeting),meetingList.First().MeetingRecurrenceOption);
         }
@@ -185,12 +185,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(meeting);
 
             MeetingRepository meetingRepository = new MeetingRepository(UnitOfWork);
-            meetingList = meetingRepository.Find(persons, new DateTimePeriod(2008, 1, 1, 2009, 1, 2), _scenario);
+            meetingList = meetingRepository.Find(persons, new DateOnlyPeriod(2008, 1, 1, 2009, 1, 2), _scenario);
             Assert.AreEqual(1, meetingList.Count);
 
             persons.Clear();
             persons.Add(personNotInMeeting);
-            meetingList = meetingRepository.Find(persons, new DateTimePeriod(2008, 1, 1, 2009, 1, 2), _scenario);
+            meetingList = meetingRepository.Find(persons, new DateOnlyPeriod(2008, 1, 1, 2009, 1, 2), _scenario);
             Assert.IsTrue(meetingList.Count == 0);
         }
 
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IMeeting meeting = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(meeting);
 
-            meeting = new MeetingRepository(UnitOfWork).LoadAggregate(meeting.Id.Value);
+            meeting = new MeetingRepository(UnitOfWork).LoadAggregate(meeting.Id.GetValueOrDefault());
             Assert.IsNotNull(meeting);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(meeting.Organizer));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(meeting.Organizer.Name));
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IMeeting meeting = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(meeting);
 
-			Meeting meetingLoaded = (Meeting)new MeetingRepository(UnitOfWork).LoadAggregate(meeting.Id.Value);
+			Meeting meetingLoaded = (Meeting)new MeetingRepository(UnitOfWork).LoadAggregate(meeting.Id.GetValueOrDefault());
 			var changeTracker = new MeetingChangeTracker();
 			changeTracker.TakeSnapshot((IMeeting)meetingLoaded.BeforeChanges());
 			var changes = changeTracker.CustomChanges(meetingLoaded, DomainUpdateType.Update);
@@ -241,16 +241,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var scenario = ScenarioFactory.CreateScenarioAggregate();
             PersistAndRemoveFromUnitOfWork(meeting);
             PersistAndRemoveFromUnitOfWork(scenario);
-            meeting = new MeetingRepository(UnitOfWork).LoadAggregate(meeting.Id.Value);
+            meeting = new MeetingRepository(UnitOfWork).LoadAggregate(meeting.Id.GetValueOrDefault());
 
             var clonedMeeting = meeting.NoneEntityClone();
-            clonedMeeting.OriginalMeetingId = meeting.Id.Value;
+            clonedMeeting.OriginalMeetingId = meeting.Id.GetValueOrDefault();
             clonedMeeting.SetScenario(scenario);
             PersistAndRemoveFromUnitOfWork(clonedMeeting);
 
             var linkedMeetings = new MeetingRepository(UnitOfWork).FindMeetingsWithTheseOriginals(new List<IMeeting>{meeting},scenario);
             Assert.That(linkedMeetings.Count().Equals(1));
-            Assert.That(linkedMeetings[0].OriginalMeetingId.Equals(meeting.Id.Value));
+            Assert.That(linkedMeetings[0].OriginalMeetingId.Equals(meeting.Id.GetValueOrDefault()));
         }
 
         protected override Repository<IMeeting> TestRepository(IUnitOfWork unitOfWork)

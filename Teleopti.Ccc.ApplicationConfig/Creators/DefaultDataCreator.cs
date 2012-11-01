@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
         private readonly ISessionFactory _sessionFactory;
         private readonly string _businessUnitName;
         private readonly CultureInfo _cultureInfo;
-        private readonly ICccTimeZoneInfo _timeZone;
+        private readonly TimeZoneInfo _timeZone;
     	private readonly string _newUserName;
     	private readonly string _newUserPassword;
     	private IPerson _person;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
         private SkillTypeCreator _skillTypeCreator;
         private KeyPerformanceIndicatorCreator _keyPerformanceIndicatorCreator;
 
-        public DefaultDataCreator(string businessUnitName, CultureInfo cultureInfo, ICccTimeZoneInfo timeZone, string newUserName, string newUserPassword, ISessionFactory sessionFactory)
+        public DefaultDataCreator(string businessUnitName, CultureInfo cultureInfo, TimeZoneInfo timeZone, string newUserName, string newUserPassword, ISessionFactory sessionFactory)
         {
             _businessUnitName = businessUnitName;
             _cultureInfo = cultureInfo;

@@ -41,10 +41,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             DateOnly dateOnly = new DateOnly(2009,2,2);
             var shifts = GetCashes();
-            ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+            TimeZoneInfo TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
             foreach (IShiftProjectionCache shiftProjectionCache in shifts)
             {
-                shiftProjectionCache.SetDate(dateOnly, cccTimeZoneInfo);
+                shiftProjectionCache.SetDate(dateOnly, TimeZoneInfo);
             }
             IFairnessValueResult fairnessValueResult = new FairnessValueResult();
             using (_mocks.Record())
@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_fairnessValueCalculator.CalculateFairnessValue(15, 0, 5, fairnessValueResult.FairnessPoints,
 																			fairnessValueResult, 15, _schedulingOptions)).Return(15);
             }
-
+           
             using (_mocks.Playback())
             {
 				var ret = _target.BestShiftValue(dateOnly, shifts, null, fairnessValueResult, fairnessValueResult, 5, TimeSpan.FromHours(48), false, null, 1, true, true, _schedulingOptions);
-                Assert.AreEqual(15,ret);
+                Assert.AreEqual(15,ret.Value );
             }
             
         }
@@ -76,10 +76,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			DateOnly dateOnly = new DateOnly(2009, 2, 2);
 			var shifts = GetCashes();
-			ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+			TimeZoneInfo TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
 			foreach (IShiftProjectionCache shiftProjectionCache in shifts)
 			{
-				shiftProjectionCache.SetDate(dateOnly, cccTimeZoneInfo);
+				shiftProjectionCache.SetDate(dateOnly, TimeZoneInfo);
 			}
 			IFairnessValueResult fairnessValueResult = new FairnessValueResult();
 			var shiftCategoryFairnessFactors = _mocks.DynamicMock<IShiftCategoryFairnessFactors>();
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mocks.Playback())
 			{
 				var ret = _target.BestShiftValue(dateOnly, shifts, null, fairnessValueResult, fairnessValueResult, 5, TimeSpan.FromHours(48), true, shiftCategoryFairnessFactors, 1, true, true, _schedulingOptions);
-				Assert.AreEqual(15, ret);
+				Assert.AreEqual(15, ret.Value);
 			}
 
 		}
@@ -122,6 +122,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                           _activity, _category);
             _workShift3 = WorkShiftFactory.CreateWorkShift(new TimeSpan(10, 0, 0), new TimeSpan(19, 0, 0),
                                                                       _activity, _category);
+
+            _schedulingOptions.UseCommonActivity = true;
+            _schedulingOptions.CommonActivity = _activity;
 
             return new List<IWorkShift> { _workShift1, _workShift2, _workShift3 };
         }

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart
 {
     public class PayrollExportSmartPartViewModel : IDisposable
     {
-        private IObservable<IPayrollResult> _observer;
+        private Teleopti.Ccc.WinCode.Common.IObservable<IPayrollResult> _observer;
         private CollectionViewSource _payrollResults;
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart
             SaveAs = new SaveSelectedAsCommand(this);
         }
 
-        public PayrollExportSmartPartViewModel(IObservable<IPayrollResult> observer)
+		public PayrollExportSmartPartViewModel(Teleopti.Ccc.WinCode.Common.IObservable<IPayrollResult> observer)
             : this()
         {
             _observer = observer;

@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Security;
 using System.Threading;
-using Teleopti.Core;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Logging;
+using Teleopti.Messaging.Core;
+using log4net;
 
 namespace Teleopti.Messaging.Client
 {
 	public class Subscriber : ISubscriber
 	{
+		private static ILog Logger = LogManager.GetLogger(typeof(Subscriber));
 		private const string TeleoptiDeserialisationThread = " Teleopti Deserialisation Thread";
 		private CustomThreadPool _customThreadPool;
 		private bool _isStarted;
@@ -49,21 +49,21 @@ namespace Teleopti.Messaging.Client
 					}
 				}
 			}
-			catch (ThreadInterruptedException)
+			catch (ThreadInterruptedException exception)
 			{
-				BaseLogger.Instance.WriteLine(EventLogEntryType.Warning, GetType(), "Subscriber thread interrupted!");
+				Logger.Warn("Subscriber thread interrupted!",exception);
 			}
-			catch (ThreadAbortException)
+			catch (ThreadAbortException exception)
 			{
-				BaseLogger.Instance.WriteLine(EventLogEntryType.Warning, GetType(), "Subscriber thread aborted!");
+				Logger.Warn("Subscriber thread aborted!", exception);
 			}
-			catch (ObjectDisposedException)
+			catch (ObjectDisposedException exception)
 			{
-				BaseLogger.Instance.WriteLine(EventLogEntryType.Warning, GetType(), "Subscriber thread disposed!");
+				Logger.Warn("Subscriber thread disposed!", exception);
 			}
-			catch (NullReferenceException)
+			catch (NullReferenceException exception)
 			{
-				BaseLogger.Instance.WriteLine(EventLogEntryType.Warning, GetType(), "Protocol disposed!");
+				Logger.Warn("Protocol disposed!", exception);
 			}
 		}
 

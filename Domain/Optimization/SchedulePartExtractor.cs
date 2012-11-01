@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             DateTimePeriod validPeriod = schedulePart.Period;
             DateTime scheduleDayUtc = validPeriod.StartDateTime;
 
-            ICccTimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+            TimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
             DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(scheduleDayUtc, timeZoneInfo));
 
             _schedulePeriod = schedulePart.Person.VirtualSchedulePeriod(startDate); // this method takes care of the terminal date too

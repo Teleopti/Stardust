@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var period = new DateOnlyPeriod(2011, 5, 18, 2011, 5, 19);
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
 			var scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
-			var timeZone = CccTimeZoneInfoFactory.StockholmTimeZoneInfo();
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var person = MockRepository.GenerateMock<IPerson>();
 			var scenario = MockRepository.GenerateMock<IScenario>();
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
@@ -60,10 +60,10 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		public void ShouldGetScheduleForPersons()
 		{
 			var user = new Person();
-			user.PermissionInformation.SetDefaultTimeZone(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+			user.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var date = new DateOnly(2011, 5, 18);
 			var period = new DateOnlyPeriod(date, date);
-			var dateTimePeriod = period.ToDateTimePeriod(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var persons = new IPerson[] {user};
 			var scenario = new Scenario(" ");
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
@@ -97,8 +97,8 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var personRestrictions = new[] {MockRepository.GenerateMock<IScheduleData>(), studentAvailabilityDay, MockRepository.GenerateMock<IScheduleData>()};
 			var studentAvailabilityRestriction = MockRepository.GenerateMock<IStudentAvailabilityRestriction>();
 
-			scheduleDays[0].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
-			scheduleDays[1].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date.AddDays(1), CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDays[0].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDays[1].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date.AddDays(1), TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			scheduleDays[0].Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(personRestrictions)));
 			studentAvailabilityDay.Stub(x => x.RestrictionCollection).Return(new ReadOnlyCollection<IStudentAvailabilityRestriction>(new List<IStudentAvailabilityRestriction>(new[] { studentAvailabilityRestriction })));
 
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 			var date = DateOnly.Today;
 
-			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			scheduleDay.Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>()));
 
 			var result = _target.GetStudentAvailabilityForDate(new[] { scheduleDay }, date);
@@ -134,8 +134,8 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var personRestrictions = new[] { MockRepository.GenerateMock<IScheduleData>(), studentAvailabilityDay, MockRepository.GenerateMock<IScheduleData>() };
 			var studentAvailabilityRestriction = MockRepository.GenerateMock<IStudentAvailabilityRestriction>();
 
-			scheduleDays[0].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
-			scheduleDays[1].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDays[0].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDays[1].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			scheduleDays[0].Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(personRestrictions)));
 			scheduleDays[1].Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(new IScheduleData[] { })));
 			studentAvailabilityDay.Stub(x => x.RestrictionCollection).Return(new ReadOnlyCollection<IStudentAvailabilityRestriction>(new List<IStudentAvailabilityRestriction>(new[] { studentAvailabilityRestriction })));
@@ -156,8 +156,8 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var personRestrictions = new[] { MockRepository.GenerateMock<IScheduleData>(), studentAvailabilityDay, MockRepository.GenerateMock<IScheduleData>() };
 			var studentAvailabilityRestriction = MockRepository.GenerateMock<IStudentAvailabilityRestriction>();
 
-			scheduleDays[0].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
-			scheduleDays[1].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, CccTimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDays[0].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDays[1].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			scheduleDays[0].Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(personRestrictions)));
 			scheduleDays[1].Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(personRestrictions)));
 			studentAvailabilityDay.Stub(x => x.RestrictionCollection).Return(new ReadOnlyCollection<IStudentAvailabilityRestriction>(new List<IStudentAvailabilityRestriction>(new[] { studentAvailabilityRestriction })));

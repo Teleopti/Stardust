@@ -7,7 +7,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private IPersonAssignment _personAssignmentJustAfterDayOff;
         private IPersonAssignment _personAssignmentJustBeforeDayOff;
         private PersonDayOff _personDayOff1;
-        private CccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
     	private IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
     	private DateTimePeriod _personAssignmentConflictingWithDayOffStartPeriod;
     	private DateTimePeriod _personAssignmentJustAfterDayOffPeriod;
@@ -57,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _dayAfter = _mocks.StrictMock<IScheduleDay>();
             _dayBeforeDayAfter = new List<IScheduleDay> { _dayBefore,_day, _dayAfter };
 
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+            _timeZone = TimeZoneInfo.Utc;
             _person = PersonFactory.CreatePerson();
             _person.PermissionInformation.SetDefaultTimeZone(_timeZone);
            

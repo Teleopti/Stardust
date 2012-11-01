@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
 {
@@ -9,6 +10,6 @@ namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
         /// </summary>
         /// <param name="selectedDate">The date.</param>
         /// <param name="timeZoneInfo">The time zone info.</param>
-        void LoadModel(DateOnly selectedDate, ICccTimeZoneInfo timeZoneInfo);
+        void LoadModel(DateOnly selectedDate, TimeZoneInfo timeZoneInfo);
     }
 }

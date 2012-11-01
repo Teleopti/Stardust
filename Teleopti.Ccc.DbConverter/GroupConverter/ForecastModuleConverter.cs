@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
         private readonly string _connectionString;
         private int _newDefaultResolution;
 
-        public ForecastModuleConverter(MappedObjectPair mappedObjectPair, DateTimePeriod period, ICccTimeZoneInfo timeZoneInfo, string connectionString, int newDefaultResolution) : base(mappedObjectPair, period, timeZoneInfo)
+        public ForecastModuleConverter(MappedObjectPair mappedObjectPair, DateTimePeriod period, TimeZoneInfo timeZoneInfo, string connectionString, int newDefaultResolution) : base(mappedObjectPair, period, timeZoneInfo)
         {
             _newDefaultResolution = newDefaultResolution;
             _intervalLength = new SystemSettingReader().GetSystemSetting.IntervalLength();

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 {
     public class RecurrentWeeklyMeeting : RecurrentMeetingOption, IRecurrentWeeklyMeeting
     {
-        private ISet<DayOfWeek> _weekDays = new HashedSet<DayOfWeek>();
+		private Iesi.Collections.Generic.ISet<DayOfWeek> _weekDays = new HashedSet<DayOfWeek>();
 
         public override IList<DateOnly> GetMeetingDays(DateOnly startDate, DateOnly endDate)
         {

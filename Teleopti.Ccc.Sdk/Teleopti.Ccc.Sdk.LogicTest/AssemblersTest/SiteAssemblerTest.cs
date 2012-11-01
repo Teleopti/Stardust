@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             _siteDomain.SetId(Guid.NewGuid());
 
             // Create Dto object
-            _siteDto = new SiteDto(_siteDomain);
+			_siteDto = new SiteDto { DescriptionName = _siteDomain.Description.Name, Id = _siteDomain.Id};
         }
 
         [Test]

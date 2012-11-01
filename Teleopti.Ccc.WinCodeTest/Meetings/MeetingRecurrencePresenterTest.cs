@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private IPerson _requiredPerson;
         private IScenario _scenario;
         private IActivity _activity;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private IMeeting _meeting;
         private MeetingViewModel _meetingViewModel;
         private MeetingRecurrencePresenter _target;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _requiredPerson = PersonFactory.CreatePerson("required", "2");
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             _activity = ActivityFactory.CreateActivity("Meeting");
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+            _timeZone = (TimeZoneInfo.Local);
             _meeting = new Meeting(_person,
                                    new List<IMeetingPerson>
                                        {

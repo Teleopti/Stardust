@@ -755,7 +755,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(skType);
 			ISkill skillWithValidDays = SkillFactory.CreateSkill("skillWithValidDays", skType, 10);
 			skillWithValidDays.Activity=act;
-			skillWithValidDays.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+			skillWithValidDays.TimeZone = (TimeZoneInfo.Local);
 			PersistAndRemoveFromUnitOfWork(skillWithValidDays);
 			ISkillDay skillDayValid = SkillDayFactory.CreateSkillDay(skillWithValidDays, new DateTime(2000, 1, 6, 0, 0, 0, DateTimeKind.Utc), scenOk);
 			PersistAndRemoveFromUnitOfWork(skillWithValidDays.WorkloadCollection);
@@ -789,10 +789,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(act);
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			PersistAndRemoveFromUnitOfWork(skType);
-			ISkill skillWithValidDays = new Skill("skillWithValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local) };
-			ISkill skillWithNonValidDays = new Skill("skillWithNonValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local) };
-			ISkill skillWithNoDays = new Skill("skillWithNonValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local) };
-			ISkill deletedSkill = new Skill("deletedSkill", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local) };
+			ISkill skillWithValidDays = new Skill("skillWithValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = (TimeZoneInfo.Local) };
+			ISkill skillWithNonValidDays = new Skill("skillWithNonValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = (TimeZoneInfo.Local) };
+			ISkill skillWithNoDays = new Skill("skillWithNonValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = (TimeZoneInfo.Local) };
+			ISkill deletedSkill = new Skill("deletedSkill", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = (TimeZoneInfo.Local) };
 			((IDeleteTag)deletedSkill).SetDeleted();
 
 			PersistAndRemoveFromUnitOfWork(skillWithNoDays);
@@ -865,8 +865,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(act);
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			PersistAndRemoveFromUnitOfWork(skType);
-			ISkill skillWithValidDays1 = new Skill("skillWithValidDays1", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local) };
-			ISkill skillWithValidDays2 = new Skill("skillWithValidDays2", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local) };
+			ISkill skillWithValidDays1 = new Skill("skillWithValidDays1", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = (TimeZoneInfo.Local) };
+			ISkill skillWithValidDays2 = new Skill("skillWithValidDays2", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = (TimeZoneInfo.Local) };
 
 
 			PersistAndRemoveFromUnitOfWork(skillWithValidDays1);
@@ -974,7 +974,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			IPerson okPerson = PersonFactory.CreatePerson("hejhej");
 			okPerson.WorkflowControlSet = _workflowControlSet;
-			okPerson.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+			okPerson.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
 			IPerson okPerson2 = PersonFactory.CreatePerson("hejhej2");
 			IPerson noPerson1 = PersonFactory.CreatePerson("bajbaj");
 			IPerson noPerson2 = PersonFactory.CreatePerson("bajbaj");
@@ -990,8 +990,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ISkill skill2 = new Skill("for test2", "sdf", Color.Blue, 3, skType);
 			skill.Activity = act;
 			skill2.Activity = act;
-			skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
-			skill2.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.Local);
+			skill.TimeZone = (TimeZoneInfo.Local);
+			skill2.TimeZone = (TimeZoneInfo.Local);
 
 			PersonPeriod okPeriod = new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team);
 			okPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));

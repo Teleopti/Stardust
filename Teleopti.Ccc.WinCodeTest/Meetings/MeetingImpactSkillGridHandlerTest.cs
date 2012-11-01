@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private MockRepository _mocks;
         private ISchedulerStateHolder _schedulerStateHolder;
         private IMeetingImpactView _meetingImpactView;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private DateTimePeriod _requestedPeriod;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IMeetingViewModel _meetingViewModel;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _meetingImpactView = _mocks.StrictMock<IMeetingImpactView>();
             _meetingViewModel = _mocks.StrictMock<IMeetingViewModel>();
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _decider = _mocks.StrictMock<IPeopleAndSkillLoaderDecider>();
             _uowFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             var startRequestedPeriod = new DateTime(2010, 11, 2, 23, 0, 0, DateTimeKind.Utc);

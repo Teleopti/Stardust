@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.Job.MultipleDate
@@ -54,9 +53,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.MultipleDate
             _target.Add(dt3, dt4, JobCategoryType.AgentStatistics);
 
             IJobMultipleDateItem jobMultipleDateItem = _target.MinMaxDatesUtc;
-            ICccTimeZoneInfo cccTimeZoneInfo = new CccTimeZoneInfo(_timeZone);
-            Assert.AreEqual(cccTimeZoneInfo.ConvertTimeToUtc(dt1), jobMultipleDateItem.StartDateUtc);
-            Assert.AreEqual(cccTimeZoneInfo.ConvertTimeToUtc(dt4), jobMultipleDateItem.EndDateUtc);
+            Assert.AreEqual(_timeZone.SafeConvertTimeToUtc(dt1), jobMultipleDateItem.StartDateUtc);
+            Assert.AreEqual(_timeZone.SafeConvertTimeToUtc(dt4), jobMultipleDateItem.EndDateUtc);
         }
 
         [Test]

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
     {
         private NewOverlappingAssignmentRule _target;
         private MockRepository _mocks;
-        private CccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private IPerson _person;
 
         [SetUp]
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         {
             _mocks = new MockRepository();
             _target = new NewOverlappingAssignmentRule();
-            _timeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _person = PersonFactory.CreatePerson();
             _person.PermissionInformation.SetDefaultTimeZone(_timeZone);
         }

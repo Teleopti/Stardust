@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private TimeSpan? _calculatedTargettTimeHolder;
         private int? _calculatedTargetScheduleDaysOff;
         private int? _calculatedScheduleDaysOff;
-        private ICccTimeZoneInfo _timeZone;
+        private TimeZoneInfo _timeZone;
         private ICollection<DateOnly> _availableDates;
         private IEnumerable<DateOnlyPeriod> _availablePeriods;
         private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
@@ -192,8 +192,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot(IDifferenceCollectionService<IPersistableScheduleData> differenceService)
 		{
-			return differenceService.Difference(new List<IPersistableScheduleData>(Snapshot.PersistableScheduleDataInternalCollection()),
-												new List<IPersistableScheduleData>(PersistableScheduleDataInternalCollection()));
+			var org = new List<IPersistableScheduleData>(Snapshot.PersistableScheduleDataInternalCollection());
+			Snapshot.PersonAssignmentConflictInternalCollection.ForEach(org.Add);
+			var current = new List<IPersistableScheduleData>(PersistableScheduleDataInternalCollection());
+			PersonAssignmentConflictInternalCollection.ForEach(current.Add);
+
+			return differenceService.Difference(org, current);
 		}
 
 		//don't use this from client. use scheduledictionary.modify instead!
@@ -312,7 +316,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			set { _calculatedTargetScheduleDaysOff = value; }
 		}
 
-        public ICccTimeZoneInfo TimeZone
+        public TimeZoneInfo TimeZone
         {
             get
             {
@@ -422,7 +426,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (_shiftCategoryFairnessHolder == null)
             {
                 ShiftCategoryFairnessCreator creator = new ShiftCategoryFairnessCreator();
-                ICccTimeZoneInfo timeZoneInfo = this.Person.PermissionInformation.DefaultTimeZone();
+                TimeZoneInfo timeZoneInfo = this.Person.PermissionInformation.DefaultTimeZone();
                 DateOnlyPeriod period = VisiblePeriodMinusFourWeeksPeriod().ToDateOnlyPeriod(timeZoneInfo);
                 _shiftCategoryFairnessHolder = creator.CreatePersonShiftCategoryFairness(this, period);
             }

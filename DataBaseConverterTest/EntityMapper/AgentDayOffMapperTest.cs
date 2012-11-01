@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             dayOffPairList.Add(_agDay.AgentDayAssignment.Assigned.AssignedAbsence, new DayOffTemplate(new Description("test")));
             mappedObjectPair.DayOff = dayOffPairList;
 
-            AgentDayOffMapper agDayOffMapper = new AgentDayOffMapper(mappedObjectPair, new CccTimeZoneInfo(TimeZoneInfo.Utc));
+            AgentDayOffMapper agDayOffMapper = new AgentDayOffMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonDayOff newPersonDayOff = agDayOffMapper.Map(_agDay);
 
             Assert.IsNotNull(newPersonDayOff.Person);

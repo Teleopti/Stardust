@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             // Create person
             _person = PersonFactory.CreatePerson();
             TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-            _person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(timeZone));
+            _person.PermissionInformation.SetDefaultTimeZone((timeZone));
 
             IAbsence absence = new Absence
             {

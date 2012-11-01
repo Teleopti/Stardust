@@ -20,88 +20,85 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
         void Show();
     }
 
-   public partial class MeetingOverviewFilter : BaseDialogForm, IMeetingOverviewFilter
-    {
-        private readonly IMeetingOverviewViewModel _model;
-        private readonly IEventAggregator _eventAggregator;
-       private readonly IPersonSelectorPresenter _personSelectorPresenter;
-       private bool _treeloaded;
-       private bool _selectionChanged;
+	public partial class MeetingOverviewFilter : BaseDialogForm, IMeetingOverviewFilter
+	{
+		private readonly IMeetingOverviewViewModel _model;
+		private readonly IEventAggregator _eventAggregator;
+		private readonly IPersonSelectorPresenter _personSelectorPresenter;
+		private bool _treeloaded;
+		private bool _selectionChanged;
 
-       public MeetingOverviewFilter(IMeetingOverviewViewModel model, IEventAggregator eventAggregator, IPersonSelectorPresenter personSelectorPresenter)
-        {
-            _model = model;
-            _eventAggregator = eventAggregator;
-            _personSelectorPresenter = personSelectorPresenter;
-            if(_eventAggregator == null)
-                throw new ArgumentNullException("eventAggregator");
-            _eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Subscribe(selectionChanged);
-            
-            InitializeComponent();
-            buttonClose.Text = UserTexts.Resources.Close;
-            
-         }
+		public MeetingOverviewFilter(IMeetingOverviewViewModel model, IEventAggregator eventAggregator,
+		                             IPersonSelectorPresenter personSelectorPresenter)
+		{
+			_model = model;
+			_eventAggregator = eventAggregator;
+			_personSelectorPresenter = personSelectorPresenter;
+			if (_eventAggregator == null)
+				throw new ArgumentNullException("eventAggregator");
+			_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Subscribe(selectionChanged);
 
-        private void meetingOverviewFilterLoad(object sender, EventArgs e)
-        {
-            checkTree();
-        }
+			InitializeComponent();
+			buttonClose.Text = UserTexts.Resources.Close;
 
-        private void checkTree()
-        {
-            if(_treeloaded) return;
-            var appFunction = ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
-                DefinedRaptorApplicationFunctionPaths.OpenSchedulePage);
-            _personSelectorPresenter.ApplicationFunction = appFunction;
-            _personSelectorPresenter.ShowPersons = true;
-           
-            //_personSelectorPresenter.ShowFind = true;
+		}
 
-            var view = (Control)_personSelectorPresenter.View;
-            panel1.Controls.Add(view);
-            view.Dock = DockStyle.Fill;
+		private void meetingOverviewFilterLoad(object sender, EventArgs e)
+		{
+			checkTree();
+		}
 
-            var selectorView = _personSelectorPresenter.View;
-            selectorView.PreselectedPersonIds = _model.FilteredPersonsId;
-            selectorView.ShowCheckBoxes = true;
-            selectorView.ShowDateSelection = false;
-            selectorView.HideMenu = true;
-            _personSelectorPresenter.LoadTabs();
-            
-            _treeloaded = true;
-        }
+		private void checkTree()
+		{
+			if (_treeloaded) return;
+			var appFunction =
+				ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
+				                               DefinedRaptorApplicationFunctionPaths.OpenSchedulePage);
+			_personSelectorPresenter.ApplicationFunction = appFunction;
+			_personSelectorPresenter.ShowPersons = true;
 
-        private void selectionChanged(string something)
-        {
-            _model.FilteredPersonsId = _personSelectorPresenter.CheckedPersonGuids;
-            _selectionChanged = true;
-            //publish this when form hidden instead if changes have been done
-            //_eventAggregator.GetEvent<MeetingModificationOccurred>().Publish(string.Empty);
-        }
+			var view = (Control) _personSelectorPresenter.View;
+			panel1.Controls.Add(view);
+			view.Dock = DockStyle.Fill;
 
-        private void meetingOverviewFilterDeactivate(object sender, EventArgs e)
-        {
-            Hide();
-            sendEvents();
-        }
+			var selectorView = _personSelectorPresenter.View;
+			selectorView.PreselectedPersonIds = _model.FilteredPersonsId;
+			selectorView.ShowCheckBoxes = true;
+			selectorView.ShowDateSelection = false;
+			selectorView.HideMenu = true;
+			_personSelectorPresenter.LoadTabs();
 
-        private void buttonCloseClick(object sender, EventArgs e)
-        {
-            Hide();
-            sendEvents();
-        }
+			_treeloaded = true;
+		}
 
-       private void sendEvents()
-       {
-           _eventAggregator.GetEvent<PersonSelectionFormHideEvent>().Publish(string.Empty);
-           if(_selectionChanged)
-                _eventAggregator.GetEvent<MeetingModificationOccurred>().Publish("");
-       }
+		private void selectionChanged(string something)
+		{
+			_model.FilteredPersonsId = _personSelectorPresenter.CheckedPersonGuids;
+			_selectionChanged = true;
+		}
 
-        private void meetingOverviewFilterFormClosed(object sender, FormClosedEventArgs e)
-        {
-            _eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Unsubscribe(selectionChanged);
-        }
-        
-    }
+		private void meetingOverviewFilterDeactivate(object sender, EventArgs e)
+		{
+			Hide();
+			sendEvents();
+		}
+
+		private void buttonCloseClick(object sender, EventArgs e)
+		{
+			Hide();
+			sendEvents();
+		}
+
+		private void sendEvents()
+		{
+			_eventAggregator.GetEvent<PersonSelectionFormHideEvent>().Publish(string.Empty);
+			if (_selectionChanged)
+				_eventAggregator.GetEvent<MeetingModificationOccurred>().Publish("");
+		}
+
+		private void meetingOverviewFilterFormClosed(object sender, FormClosedEventArgs e)
+		{
+			_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Unsubscribe(selectionChanged);
+		}
+	}
 }

@@ -11159,8 +11159,31 @@ These options are activated:
     <value>Sent</value>
     <comment>Date and time when an asm message has been sent</comment>
   </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Sender</value>
+    <comment>Name of person who has sent an asm message</comment>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Sent</value>
+    <comment>Date and time when an asm message has been sent</comment>
+  </data>
   <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
     <value>Selected file destination does not exist, please enter valid file path</value>
     <comment>Selected file destination does not exist, please enter valid filepath</comment>
+  </data>
+  <data name="CouldNotExportForecastToFile" xml:space="preserve">
+    <value>Something went wrong with the file export, please try a different location</value>
+    <comment>Something went wrong with the file export, please try a different location</comment>
+  </data>
+  <data name="SelectedFileDestinationIsTooLong" xml:space="preserve">
+    <value>Selected file destination is too long, please enter valid file path</value>
+    <comment>Selected file destination does not exist, please enter valid file path</comment>
+  </data>
+  <data name="SameActivity" xml:space="preserve">
+    <value>Same activity</value>
+    <comment>The same activity option in Team scheduling and optimization</comment>
+  </data>
+  <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
+    <value>After checking against keep activity</value>
   </data>
 </root>

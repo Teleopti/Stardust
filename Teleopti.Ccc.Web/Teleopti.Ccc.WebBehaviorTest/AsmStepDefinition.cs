@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml;
 using NUnit.Framework;
+using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -29,25 +30,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Browser.Current.Spans.Filter(Find.ByClass("asm-layer", false)).Count, Is.GreaterThan(0));
 		}
 
-		[Then(@"I should see '(.*)' upcoming activities")]
-		public void ThenIShouldSeeUpcomingActivities(int numberOfUpcomingActivities)
-		{
-			EventualAssert.That(() => Browser.Current.Table("asm-current-info-table").TableRows.Count, Is.EqualTo(numberOfUpcomingActivities));
-		}
-
-
 		[Then(@"I should see Phone as current activity")]
 		public void ThenIShouldSeePhoneAsCurrentActivity()
 		{
 			EventualAssert.That(() =>
-				Browser.Current.Table("asm-current-info-table").TableRow(Find.ByClass("asm-info-current-activity")).Children().Filter(Find.ByText(TestData.ActivityPhone.Description.Name)).Count,
-				Is.EqualTo(1));
+				Browser.Current.Div(Find.ByClass("asm-info-canvas-column-current", false)).Text,
+				Is.StringContaining(TestData.ActivityPhone.Description.Name));
 		}
 
-		[Then(@"I should not see as current activity")]
+		[Then(@"I should not see a current activity")]
 		public void ThenIShouldNotSeeAsCurrentActivity()
 		{
-			EventualAssert.That(() => Browser.Current.Table("asm-current-info-table").TableRow(Find.ByClass("asm-info-current-activity")).Exists, Is.False);
+			Browser.Current.Element(Find.ByClass("asm-outer-canvas", false)).WaitUntilDisplayed();
+			Browser.Current.Div(Find.ByClass("asm-info-canvas-column-current", false)).Text.Should().Be.Null();
 		}
 
 		[Then(@"ASM link should not be visible")]
@@ -68,21 +63,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 										}, Is.EqualTo(hours));
 		}
 
-		[Then(@"I should see last activity starttime as '(.*)'")]
+		[Then(@"I should see next activity time as '(.*)'")]
 		public void ThenIShouldSeeLastActivityStarttimeAs(string startTime)
 		{
 			Browser.Current.Element(Find.ByClass("asm-outer-canvas", false)).WaitUntilDisplayed();
-
-			Element nextDayIndicationElement = Browser.Current.Table("asm-current-info-table")
-				.Elements.Filter(Find.ByClass("asm-info-next-day-column")).Last();
-
-			var nextDayIndication = isDisplayed(nextDayIndicationElement) ? nextDayIndicationElement.Text : string.Empty;
-
 			EventualAssert.That(() =>
-									  Browser.Current.Table("asm-current-info-table")
-										  .Elements.Filter(Find.ByClass("asm-info-time-column"))
-										  .Last().Text + nextDayIndication.Trim(),
-										Is.EqualTo(startTime));
+									  Browser.Current.Div(Find.ByClass("asm-info-canvas-column-next", false)).Text,
+										Is.StringContaining(startTime));
 		}
 
 		[Then(@"I should see a popup with title AgentScheduleMessenger")]
@@ -131,15 +118,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			if (!firstHour.Exists)
 				throw new NotSupportedException("Missing hour to read from");
 			return Convert.ToInt32(firstHour.Style.GetAttributeValue("width").TrimEnd('p', 'x')) + hackExtra;
-		}
-
-		private static bool isDisplayed(Element element)
-		{
-			if(string.Equals(element.Style.Display,"none"))
-			{
-				return false;
-			}
-			return element.Parent == null || isDisplayed(element.Parent);
 		}
 	}
 }

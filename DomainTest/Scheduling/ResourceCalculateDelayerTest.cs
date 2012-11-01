@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -43,8 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 3, true, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
 			}
 
 			using (_mocks.Playback())
@@ -60,8 +61,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 2, true, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
 			}
 
 			using (_mocks.Playback())
@@ -75,12 +76,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldCalculateThisDateAndNextIfLimitIs1AndPeriodOverMidnight()
 		{
 			DateOnlyPeriod dop = new DateOnlyPeriod(new DateOnly(), new DateOnly().AddDays(1));
-			var dp = dop.ToDateTimePeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+			var dp = dop.ToDateTimePeriod((TimeZoneInfo.Utc));
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
 			}
 
 			using (_mocks.Playback())
@@ -93,12 +94,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldCalculateThisDateIfLimitIs1AndPeriodNotOverMidnight()
 		{
 			DateOnlyPeriod dop = new DateOnlyPeriod(new DateOnly(), new DateOnly());
-			var dp = dop.ToDateTimePeriod(new CccTimeZoneInfo(TimeZoneInfo.Utc));
+			var dp = dop.ToDateTimePeriod((TimeZoneInfo.Utc));
 			dp = dp.ChangeEndTime(TimeSpan.FromSeconds(-1));
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
 			}
 
 			using (_mocks.Playback())

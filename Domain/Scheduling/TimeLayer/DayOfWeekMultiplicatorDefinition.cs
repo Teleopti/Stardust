@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
             set { _period = value; }
         }
 
-        public virtual DateTimePeriod ConvertToDateTimePeriod(DateOnly givenDate, ICccTimeZoneInfo timeZoneInfo)
+        public virtual DateTimePeriod ConvertToDateTimePeriod(DateOnly givenDate, TimeZoneInfo timeZoneInfo)
         {
             if (givenDate.DayOfWeek != DayOfWeek)
                 throw new ArgumentException("Day of week for date givenDate correspond to this instance day of week", "givenDate");
@@ -46,12 +46,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
 
         }
 
-        public virtual IMultiplicatorLayer ConvertToLayer(DateOnly givenDate, ICccTimeZoneInfo timeZoneInfo)
+        public virtual IMultiplicatorLayer ConvertToLayer(DateOnly givenDate, TimeZoneInfo timeZoneInfo)
         {
             return new MultiplicatorLayer((IMultiplicatorDefinitionSet) Parent, Multiplicator,ConvertToDateTimePeriod(givenDate, timeZoneInfo));
         }
 
-        public override IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnlyPeriod period, ICccTimeZoneInfo timeZoneInfo)
+        public override IList<IMultiplicatorLayer> GetLayersForPeriod(DateOnlyPeriod period, TimeZoneInfo timeZoneInfo)
         {
         	var dayCollection = period.DayCollection();
 

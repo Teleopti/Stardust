@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
 {
     public static class SdkServiceHelper
     {
-        private static readonly SdkServiceClient Instance = new SdkServiceClient(new SessionStateProvider(), GetServiceUrl());
+        private static readonly SdkServiceClient Instance = new SdkServiceClient(GetServiceUrl());
 
         public static TeleoptiCccLogOnService LogOnServiceClient { get { return Instance.LogOnServiceClient; } }
         public static TeleoptiSchedulingService SchedulingService { get { return Instance.SchedulingService; } }

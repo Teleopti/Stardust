@@ -13,11 +13,19 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Asm = (function () {
 	var refreshSeconds = 1;
-	var pixelPerHours = 50;
-	var timeLineMarkerWidth = 100;
+	var pixelPerHours = 40;
+	var timeLineMarkerWidth = 40;
 	var vm;
 	var notifyOptions;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
+
+	function resize() {
+		var innerWidth = document.documentElement.clientWidth || document.body.clientWidth || window.innerWidth;
+		var innerHeight = document.documentElement.clientHeight || document.body.clientHeight || window.innerHeight;
+		var targetWidth = 415;
+		var targetHeight = 66;
+		window.resizeBy(targetWidth - innerWidth, targetHeight - innerHeight);
+	}
 
 	function asmViewModel(yesterday) {
 		var self = this;
@@ -57,6 +65,25 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				return n.visible();
 			});
 		});
+		self.currentLayerString = ko.computed(function () {
+			var layer = self.visibleLayers()[0];
+			if (typeof layer != "undefined" && layer.active()) {
+				return layer.title();
+			}
+			return null;
+		});
+		self.nextLayerString = ko.computed(function () {
+			var layer;
+			if (self.currentLayerString() == null) {
+				layer = self.visibleLayers()[0];
+			} else {
+				layer = self.visibleLayers()[1];
+			}
+			if (typeof layer != "undefined") {
+				return layer.title();
+			}
+			return null;
+		});
 		self.now = ko.observable(new Date().getTeleoptiTime());
 		self.yesterday = ko.observable(yesterday);
 		self.canvasPosition = ko.computed(function () {
@@ -89,7 +116,13 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		self.paddingLeft = (layer.LengthInMinutes * pixelPerHours) / 60 + 'px';
 		self.startTimeText = layer.StartTimeText;
 		self.endTimeText = layer.EndTimeText;
-		self.title = layer.StartTimeText + '-' + layer.EndTimeText + ' ' + layer.Payload;
+		self.title = ko.computed(function () {
+			var nextDayAdder = '';
+			if (layer.StartMinutesSinceAsmZero > 2 * 24 * 60) {
+				nextDayAdder = '+1';
+			}
+			return layer.StartTimeText + nextDayAdder + '-' + layer.EndTimeText + ' ' + layer.Payload;
+		});
 		self.visible = ko.computed(function () {
 			var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition());
 			var startPos = parseFloat(self.leftPx);
@@ -104,14 +137,18 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			var isActive = startPos <= timelinePosition;
 			return isActive;
 		});
-
-		self.isNextday = ko.computed(function () {
-			return (layer.StartMinutesSinceAsmZero > 2 * 24 * 60) ? "+1" : "  ";
-		});
 	}
 
 	function _showAsm() {
 		_setFixedElementAttributes();
+
+		if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+			setTimeout(function () {
+				resize();
+			}, 200);
+		} else {
+			resize();
+		}
 
 		var yesterDayFromNow = new Date(new Date().getTeleoptiTime()).addDays(-1).clearTime();
 		vm = new asmViewModel(yesterDayFromNow);
@@ -124,6 +161,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		$('.asm-time-marker').css('width', timeLineMarkerWidth);
 		$('.asm-sliding-schedules').css('width', (3 * 24 * pixelPerHours));
 		$('.asm-timeline-line').css('width', (pixelPerHours - 1)); //"1" due to border size
+		$('.col-1').hide(); //hide footer that takes "empty" space
 	}
 
 	function _listenForEvents(listeners) {

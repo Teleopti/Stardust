@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IGroupSchedulingService _scheduleService;
         private IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
         private IGroupPersonsBuilder _groupPersonsBuilder;
+  
 
         [SetUp]
         public void Setup()
