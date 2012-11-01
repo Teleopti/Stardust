@@ -23,7 +23,8 @@
 			<label id="AsmMessage-detail-message" data-bind="text : message"></label>
 		</div>
 		<div id="AsmMessage-detail-dialogueMessages" class="edit-module-element">
-		<!-- ko foreach: dialogueMessages -->
+			<!-- ko foreach: dialogueMessages -->
+			<label data-bind="text: sender"></label>
 			<label data-bind="text : text"></label>
 		<!-- /ko -->
 		</div>
