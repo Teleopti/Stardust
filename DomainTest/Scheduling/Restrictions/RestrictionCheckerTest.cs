@@ -2078,7 +2078,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			DateTime dateTimeStart = new DateTime(2010, 1, 10, 16, 0, 0, DateTimeKind.Utc);
 			DateTime dateTimeEnd = dateTimeStart.AddHours(5);
 			DateTimePeriod period = new DateTimePeriod(dateTimeStart, dateTimeEnd);
-			layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, period));
+			layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, period, _person));
 
 			IVisualLayerCollection visualLayerCollection = new VisualLayerCollection(_person, layerCollection, new ProjectionPayloadMerger());
 			
