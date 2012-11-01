@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -33,15 +32,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
     	[SetUp]
         public void Setup()
-        {
+    	{
+    		var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			_mockRepository = new MockRepository();
             _layerFactory = new VisualLayerFactory();
             _dateTime = new DateTime(2006, 12, 23, 7, 30, 0);
-            _dateTime = TimeZoneHelper.ConvertToUtc(_dateTime);
-            _dateTimePeriod = new DateTimePeriod(_dateTime, TimeZoneHelper.ConvertToUtc(_dateTime.AddHours(12d)));
+            _dateTime = TimeZoneHelper.ConvertToUtc(_dateTime,timeZone);
+            _dateTimePeriod = new DateTimePeriod(_dateTime, TimeZoneHelper.ConvertToUtc(_dateTime.AddHours(12),timeZone));
             _schedulePartMock = _mockRepository.StrictMock<IScheduleDay>();
             _person = PersonFactory.CreatePerson("testAgent");
-            _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            _person.PermissionInformation.SetDefaultTimeZone(timeZone);
         	_scenario = ScenarioFactory.CreateScenarioAggregate();
             _projectionService = _mockRepository.StrictMock<IProjectionService>();
             _visualLayerCollection = _mockRepository.StrictMock<IVisualLayerCollection>();
