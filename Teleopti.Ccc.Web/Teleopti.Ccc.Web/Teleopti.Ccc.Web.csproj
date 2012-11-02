@@ -584,11 +584,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Content\login.htm" />
-    <Content Include="Content\images\ajax-loader.gif" />
-    <Content Include="Content\images\icons-18-black.png" />
-    <Content Include="Content\images\icons-18-white.png" />
-    <Content Include="Content\images\icons-36-black.png" />
-    <Content Include="Content\images\icons-36-white.png" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.css" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.js" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.css" />
