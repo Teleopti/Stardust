@@ -593,6 +593,7 @@
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.js" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.css" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.js" />
+    <Content Include="Content\Mobile\images\ajax-loader.gif" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.css" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.min.css" />
     <Content Include="Content\Mobile\jquery.mobile.structure-1.2.0.css" />
@@ -637,7 +638,6 @@
     <Content Include="Content\favicon.ico" />
     <Content Include="Content\themes\base\images\glyphicons-halflings-white.png" />
     <Content Include="Content\themes\base\images\glyphicons-halflings.png" />
-    <Content Include="Content\Mobile\images\ajax-loader.png" />
     <Content Include="Content\Mobile\images\icons-18-black.png" />
     <Content Include="Content\Mobile\images\icons-18-white.png" />
     <Content Include="Content\Mobile\images\icons-36-black.png" />
