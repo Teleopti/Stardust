@@ -31,13 +31,13 @@ namespace Teleopti.Support.Tool.DataLayer
 
        public Nhib(string cccConnectionString, string analyticConnectionString, string aggregationDatabase, string factoryName, string fileName)
         {
-            _cccDataSource = new NHibDataSource(cccConnectionString, ApplicationDatabaseTextConstant);
-            _analyticsDataSource = new NHibDataSource(analyticConnectionString, AnalyticsDatabaseTextConstant);
-            SqlConnectionStringBuilder aggBuilder = new SqlConnectionStringBuilder(analyticConnectionString);
-            aggBuilder.InitialCatalog = aggregationDatabase;
-            _aggregationDataSource = new NHibDataSource(aggBuilder.ConnectionString, AggregationDatabaseTextConstant);
             FactoryName = factoryName;
             FileName = fileName;
+            _cccDataSource = new NHibDataSource(FactoryName, cccConnectionString, ApplicationDatabaseTextConstant);
+            _analyticsDataSource = new NHibDataSource(FactoryName, analyticConnectionString, AnalyticsDatabaseTextConstant);
+            SqlConnectionStringBuilder aggBuilder = new SqlConnectionStringBuilder(analyticConnectionString);
+            aggBuilder.InitialCatalog = aggregationDatabase;
+            _aggregationDataSource = new NHibDataSource(FactoryName, aggBuilder.ConnectionString, AggregationDatabaseTextConstant);
         }
 
 
