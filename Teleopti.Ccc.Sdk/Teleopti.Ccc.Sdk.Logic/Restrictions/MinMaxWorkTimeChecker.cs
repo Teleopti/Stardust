@@ -102,5 +102,9 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 
             return minMaxLength;
         }
+				if (effectiveRestriction==null)
+				{
+					break;
+				}
     }
 }
