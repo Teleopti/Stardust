@@ -38,8 +38,9 @@
 			<!-- /ko -->
 		</div>
 		<div id="AsmMessage-detail-replyOption" class="edit-module-element" >
-			<textarea id="AsmMessage-detail-reply" rows="5" cols="63" data-bind="visible: allowDialogueReply, value: reply, valueUpdate:['afterkeydown', 'afterpaste', 'change']"></textarea>
-		<!-- ko foreach: replyOptions -->
+			<!--<label class="displayblock ui-labeled-input-label" for="AsmMessage-detail-reply">@Resources.Message</label>-->
+			<textarea id="AsmMessage-detail-reply" class="ui-widget-content ui-corner-all" data-bind="visible: allowDialogueReply, value: reply, valueUpdate:['afterkeydown', 'afterpaste', 'change']"></textarea>
+			<!-- ko foreach: replyOptions -->
 			<input type="radio" name="radioOptions" data-bind="checked : selected, visible : $parent.userMustSelectReplyOption"/>
 			<label data-bind="text: text, visible : $parent.userMustSelectReplyOption"></label>
 			<!-- /ko -->

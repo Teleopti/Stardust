@@ -710,6 +710,10 @@ select.time-input
 	width: 680px;
 	height: 50px;
 }
+#AsmMessage-detail-reply {
+	width: 100%;
+	height: 3em;
+}
 #Schedule-addTextRequest-section .edit-module:nth-child(2) > div > div
 {
 	width: 228px;
@@ -745,7 +749,6 @@ select.time-input
 	width: 96%;
 	height: 5em;
 }
-
 .request-edit-section button.ui-button-icon-only {
 	height: 20px; 
 	width: 1.7em; 
