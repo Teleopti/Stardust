@@ -595,10 +595,10 @@
     <Content Include="Content\Mobile\jquery.mobile.structure-1.2.0.min.css" />
     <Content Include="Content\Mobile\jquery.mobile.theme-1.2.0.css" />
     <Content Include="Content\Mobile\jquery.mobile.theme-1.2.0.min.css" />
-    <Content Include="Content\themes\base\bootstrap-responsive.css" />
-    <Content Include="Content\themes\base\bootstrap-responsive.min.css" />
-    <Content Include="Content\themes\base\bootstrap.css" />
-    <Content Include="Content\themes\base\bootstrap.min.css" />
+    <Content Include="Content\bootstrap\bootstrap-responsive.css" />
+    <Content Include="Content\bootstrap\bootstrap-responsive.min.css" />
+    <Content Include="Content\bootstrap\bootstrap.css" />
+    <Content Include="Content\bootstrap\bootstrap.min.css" />
     <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader.gif" />
@@ -631,8 +631,8 @@
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.labeledinput.js" />
     <Content Include="Content\favicon.ico" />
-    <Content Include="Content\themes\base\images\glyphicons-halflings-white.png" />
-    <Content Include="Content\themes\base\images\glyphicons-halflings.png" />
+    <Content Include="Content\bootstrap\images\glyphicons-halflings-white.png" />
+    <Content Include="Content\bootstrap\images\glyphicons-halflings.png" />
     <Content Include="Content\Mobile\images\icons-18-black.png" />
     <Content Include="Content\Mobile\images\icons-18-white.png" />
     <Content Include="Content\Mobile\images\icons-36-black.png" />
@@ -720,8 +720,8 @@
     <Content Include="Content\Scripts\jquery-1.8.2-vsdoc.js" />
     <Content Include="Content\Scripts\jquery-1.8.2.js" />
     <Content Include="Content\Scripts\jquery-1.8.2.min.js" />
-    <Content Include="Content\Scripts\bootstrap.js" />
-    <Content Include="Content\Scripts\bootstrap.min.js" />
+    <Content Include="Content\bootstrap\bootstrap.js" />
+    <Content Include="Content\bootstrap\bootstrap.min.js" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.js" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.min.js" />
     <Content Include="Web.config">
