@@ -252,25 +252,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             _mocks.VerifyAll();
         }
 
-		[Test]
-		public void ShouldHandleNullEffectiveRestriction()
-		{
-			var dateTime = new DateTime(2010, 1, 1, 10, 0, 0, DateTimeKind.Utc);
-			var period = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-			var meeting = _mocks.StrictMock<IMeeting>();
-			IMeetingPerson meetingPerson = new MeetingPerson(_person, false);
-			IPersonMeeting personMeeting = new PersonMeeting(meeting, meetingPerson, period);
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { personMeeting, personMeeting });
-			IEffectiveRestriction effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-			Expect.Call(effectiveRestriction.Combine(null)).Return(null).IgnoreArguments().Repeat.AtLeastOnce();
-			Expect.Call(_scheduleDay.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-			Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
-			_mocks.ReplayAll();
-			effectiveRestriction = MinMaxWorkTimeChecker.GetEffectiveRestrictionForMeeting(_scheduleDay, effectiveRestriction);
-			Assert.IsNull(effectiveRestriction);
-			_mocks.VerifyAll();
-		}
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldConsiderPartTimePercentageIfRestrictionIsAbsence()
         {
