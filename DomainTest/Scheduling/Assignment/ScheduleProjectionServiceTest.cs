@@ -603,7 +603,62 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			proj.Should().Have.Count.EqualTo(1);
 		}
 
-		[Test]
+        [Test]
+        public void FakeLayerShouldHaveRightContractTimeForFullDayAbsenceIfContractTimeIsFromContract()
+        {
+            var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario,
+                                                               createPeriod(-100, 100));
+            abs.Layer.Payload.InContractTime = true;
+            scheduleDay.Add(abs);
+            var schedWeek = new ContractScheduleWeek();
+            var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1999, 1, 1));
+            scheduleDay.Person.AddPersonPeriod(period);
+            period.PersonContract.PartTimePercentage = new PartTimePercentage("half") {Percentage = new Percent(0.5)};
+            period.PersonContract.Contract.WorkTimeSource = WorkTimeSource.FromContract;
+            period.PersonContract.ContractSchedule.AddContractScheduleWeek(schedWeek);
+            schedWeek.Add(DayOfWeek.Monday, true);
+            schedWeek.Add(DayOfWeek.Tuesday, true);
+            schedWeek.Add(DayOfWeek.Wednesday, true);
+            schedWeek.Add(DayOfWeek.Thursday, true);
+            schedWeek.Add(DayOfWeek.Friday, true);
+            schedWeek.Add(DayOfWeek.Saturday, true);
+            schedWeek.Add(DayOfWeek.Sunday, true);
+
+            var proj = target.CreateProjection();
+            Assert.That(proj.Count(), Is.EqualTo(1));
+            Assert.That(proj.First().Period.ElapsedTime(), Is.EqualTo(TimeSpan.FromHours(4)));
+        }
+        
+        [Test]
+        public void FakeLayerShouldHaveRightContractTimeForFullDayAbsenceIfContractTimeIsFromSchedulePeriod()
+        {
+            var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario,
+                                                               createPeriod(-100, 100));
+            abs.Layer.Payload.InContractTime = true;
+            scheduleDay.Add(abs);
+            var schedWeek = new ContractScheduleWeek();
+            var dateOnly = new DateOnly(1999, 1, 1);
+            var period = PersonPeriodFactory.CreatePersonPeriod(dateOnly);
+            scheduleDay.Person.AddPersonPeriod(period);
+            period.PersonContract.PartTimePercentage = new PartTimePercentage("half") {Percentage = new Percent(0.5)};
+            period.PersonContract.Contract.WorkTimeSource = WorkTimeSource.FromSchedulePeriod;
+            period.PersonContract.ContractSchedule.AddContractScheduleWeek(schedWeek);
+            schedWeek.Add(DayOfWeek.Monday, true);
+            schedWeek.Add(DayOfWeek.Tuesday, true);
+            schedWeek.Add(DayOfWeek.Wednesday, true);
+            schedWeek.Add(DayOfWeek.Thursday, true);
+            schedWeek.Add(DayOfWeek.Friday, true);
+            schedWeek.Add(DayOfWeek.Saturday, true);
+            schedWeek.Add(DayOfWeek.Sunday, true);
+            var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(dateOnly);
+            schedulePeriod.AverageWorkTimePerDayOverride = TimeSpan.FromHours(6);
+            scheduleDay.Person.AddSchedulePeriod(schedulePeriod);
+            var proj = target.CreateProjection();
+            Assert.That(proj.Count(), Is.EqualTo(1));
+            Assert.That(proj.First().Period.ElapsedTime(), Is.EqualTo(TimeSpan.FromHours(6)));
+        }
+
+	    [Test]
 		public void FakeLayerShouldBeCreatedIfDayOffAndAbsenceAndNoContract()
 		{
 			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario, createPeriod(-100, 100));
