@@ -150,7 +150,6 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             if (scheduleDay.PersonMeetingCollection().IsEmpty())
                 return effectiveRestriction;
 
-            //inte på parten här??????????
             IPerson person = scheduleDay.Person;
             ICccTimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 
@@ -163,6 +162,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
                         new WorkTimeLimitation(personalShiftPeriod.TimePeriod(timeZoneInfo).SpanningTime(), null), null,
                         null, null, new List<IActivityRestriction>());
                 effectiveRestriction = effectiveRestriction.Combine(personalShiftRestriction);
+				if (effectiveRestriction==null)
+				{
+					break;
+				}
             }
             return effectiveRestriction;
         }
