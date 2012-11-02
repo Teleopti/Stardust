@@ -700,13 +700,6 @@
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_75_e3f1f4_1x400.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_highlight-soft_75_61abc5_.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-icons_ffffff_256x240.png" />
-    <Content Include="Content\themes\mobile\images\ajax-loader.png" />
-    <Content Include="Content\themes\mobile\images\icons-18-black.png" />
-    <Content Include="Content\themes\mobile\images\icons-18-white.png" />
-    <Content Include="Content\themes\mobile\images\icons-36-black.png" />
-    <Content Include="Content\themes\mobile\images\icons-36-white.png" />
-    <Content Include="Content\themes\mobile\mobile.css" />
-    <Content Include="Content\themes\mobile\mobile.min.css" />
     <Content Include="Content\Scripts\jquery-ui-1.8.16.js" />
     <Content Include="Content\Scripts\jquery-ui-1.8.16.min.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.custominput.js" />
