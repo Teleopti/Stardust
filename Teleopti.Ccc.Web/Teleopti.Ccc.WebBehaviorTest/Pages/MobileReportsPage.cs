@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -116,20 +117,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get
 			{
-				return
-					(ReportSkillSelectionList.Parent.ClassName.Contains("ui-selectmenu")
-					 	? ReportSkillSelectionList.Parent
-					 	: ReportSkillSelectionList.Parent.Parent) as Div;
+				if (ReportSkillSelectionList.Parent.Parent.ClassName.Contains("ui-popup-container"))
+					return ReportSkillSelectionList.Parent.Parent as Div;
+				throw new Exception("Report skill selection container not found. Please rewrite me to use a selector instead!");
 			}
 		}
 
 		public Link ReportSkillSelectionCloseButton
 		{
-			// First A in header
 			get
 			{
-				var headerDiv = ReportSkillSelectionContainer.ChildOfType<Div>(header => header.ClassName.Contains("ui-header"));
-				return headerDiv.ChildOfType<Link>(l => true);
+				// First A in header
+				//var headerDiv = ReportSkillSelectionContainer.ChildOfType<Div>(header => header.ClassName.Contains("ui-header"));
+				//return headerDiv.ChildOfType<Link>(l => true);
+
+				// no, first A in popup container
+				return Document.Link(Find.BySelector(".ui-popup-container a"));
 			}
 		}
 

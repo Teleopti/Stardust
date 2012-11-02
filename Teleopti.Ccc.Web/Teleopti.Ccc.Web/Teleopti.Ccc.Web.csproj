@@ -589,10 +589,10 @@
     <Content Include="Content\images\icons-18-white.png" />
     <Content Include="Content\images\icons-36-black.png" />
     <Content Include="Content\images\icons-36-white.png" />
-    <Content Include="Content\MobileDateBox\jqm-datebox-1.1.0.core.js" />
-    <Content Include="Content\MobileDateBox\jqm-datebox-1.1.0.core.min.js" />
-    <Content Include="Content\MobileDateBox\jqm-datebox-1.1.0.css" />
-    <Content Include="Content\MobileDateBox\jqm-datebox-1.1.0.min.css" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.css" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.js" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.css" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.js" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.css" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.min.css" />
     <Content Include="Content\Mobile\jquery.mobile.structure-1.2.0.css" />
