@@ -51,7 +51,7 @@
 				.appendTo(container)
 				;
 
-			var menu = this._menu = $('<div>');
+			var menu = this._menu = $('<div>').appendTo(container);
 			menu.attr("id", id + '-menu')
 				.addClass('ui-selectbox-menu')
 				.autocomplete({
@@ -75,7 +75,6 @@
 				.click(function (e) {
 					e.stopPropagation();
 				})
-				.appendTo(container)
 				;
 
 			menu.data("autocomplete")._renderItem = function (ul, item) {
