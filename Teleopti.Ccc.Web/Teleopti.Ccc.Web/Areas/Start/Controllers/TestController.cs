@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private void updateIocNow(DateTime? dateTimeSet)
 		{
 			_modifyNow.SetNow(dateTimeSet);
-			_modifyUtcNow.SetUtcNow(dateTimeSet);
+			//_modifyUtcNow.SetUtcNow(dateTimeSet);
 		}
 	}
 }

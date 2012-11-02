@@ -7,12 +7,10 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
     public class CheckPasswordChange : ICheckPasswordChange
     {
         private readonly IPasswordPolicy _passwordPolicy;
-	    private readonly IUtcNow _now;
 
-	    public CheckPasswordChange(IPasswordPolicy passwordPolicy, IUtcNow now)
+	    public CheckPasswordChange(IPasswordPolicy passwordPolicy)
         {
 	        _passwordPolicy = passwordPolicy;
-	        _now = now;
         }
 
 	    public AuthenticationResult Check(IUserDetail userDetail)
@@ -28,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 				expirationDate = lastPasswordChange.AddDays(passwordValidForDayCount);
 			}
 
-			if (expirationDate<=_now.UtcDateTime())
+			if (expirationDate <= DateTime.UtcNow)
             {
                 userDetail.Lock();
                 result.Successful = false;
@@ -37,11 +35,11 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
                 return result;
             }
             DateTime warningDate = expirationDate.AddDays(-_passwordPolicy.PasswordExpireWarningDayCount);
-            if (warningDate <= _now.UtcDateTime())
+			if (warningDate <= DateTime.UtcNow)
             {
                 result.HasMessage = true;
                 result.Message = string.Format(CultureInfo.CurrentUICulture, UserTexts.Resources.LogOnWarningPasswordWillSoonExpire,
-                                               (int) expirationDate.Subtract(_now.UtcDateTime()).TotalDays);
+											   (int)expirationDate.Subtract(DateTime.UtcNow).TotalDays);
             }
             return result;
         }

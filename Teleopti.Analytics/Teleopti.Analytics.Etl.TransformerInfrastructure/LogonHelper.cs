@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Security.Authentication;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
@@ -107,7 +106,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 									new FindUserDetail(
 										new CheckUserDetail(new CheckPassword(new OneWayEncryption(),
 																			  new CheckBruteForce(passwordPolicy),
-																			  new CheckPasswordChange(passwordPolicy, new UtcNow()))),
+																			  new CheckPasswordChange(passwordPolicy))),
 										_repositoryFactory), new SystemUserSpecification(),
 									new SystemUserPasswordSpecification())), _repositoryFactory)), _logOnOff);
 		}

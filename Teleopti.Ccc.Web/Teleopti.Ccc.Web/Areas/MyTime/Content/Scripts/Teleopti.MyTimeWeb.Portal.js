@@ -129,7 +129,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			return false;
 		});
 
-		_loadWarning();
+//		_loadWarning();
 	}
 
 	// Bind an event to window.onhashchange that, when the history state changes,

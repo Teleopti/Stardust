@@ -1,4 +1,5 @@
-﻿Feature: Password Policy Mobile
+﻿@ignore
+Feature: Password Policy Mobile
 	In order to have a good security
 	As a mobile user that is trying to sign in
 	I have a password policy

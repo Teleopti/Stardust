@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             person = mocks.StrictMock<IPerson>();
 	        now = MockRepository.GenerateMock<IUtcNow>();
 		    now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow);
-            target = new CheckPasswordChange(passwordPolicy,now);
+            target = new CheckPasswordChange(passwordPolicy);
         }
 
         [Test]

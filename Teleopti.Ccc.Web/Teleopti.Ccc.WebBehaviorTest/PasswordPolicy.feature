@@ -1,4 +1,5 @@
-﻿Feature: Password Policy
+﻿@ignore
+Feature: Password Policy
 	In order to have a good security
 	As a user that is trying to sign in or change password
 	I have a password policy
