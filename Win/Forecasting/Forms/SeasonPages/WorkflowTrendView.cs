@@ -12,6 +12,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Forecasting.Forms.WFControls;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
@@ -82,29 +83,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 
         private string getChartSeriesString()
         {
-            string chartString;
-			switch (_skillType.ForecastSource)
-			{
-				case ForecastSource.Email:
-					chartString = Resources.ValidatedEmails;
-					break;
-				case ForecastSource.Facsimile:
-					chartString = Resources.ValidatedFacsimiles;
-					break;
-				case ForecastSource.Backoffice:
-					chartString = Resources.ValidatedTasks;
-					break;
-				case ForecastSource.Time:
-					chartString = Resources.ValidatedTasks;
-					break;
-				case ForecastSource.Retail:
-					chartString = Resources.ValidatedCustomers;
-					break;
-				default:
-					chartString = Resources.ValidatedCalls;
-					break;
-			}
-        	return chartString;
+        	var textManager = new TextManager(_skillType);
+        	return textManager.WordDictionary["ValidatedTasks"];
         }
 
         #region chart methods
