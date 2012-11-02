@@ -128,12 +128,16 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
             	_showAsmMessage($(this));
             })
             .hover(function () {
-            	$(this).find('.asmMessage-arrow-right').css({ opacity: 1.0 });
+            	$(this).find('.asmMessage-arrow-right').animate({
+            		opacity: 1.0
+            	}, 300);
             },
             function () {
-            	$(this).find('.asmMessage-arrow-right').css({ opacity: 0.1 });
+            	$(this).find('.asmMessage-arrow-right').animate({
+            		opacity: 0.1
+            	}, 600);
             })
-            .find('.asmMessage-arrow-right').css({ opacity: 0.1 })
+			.find('.asmMessage-arrow-right').css({ opacity: 0.1 })
             ;
 	};
 
@@ -239,10 +243,20 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
             	_showAsmMessage($(this));
             })
             .hover(function () {
-            	$(this).find('.asmMessage-arrow-right').css({ opacity: 1.0 });
+            	$(this).find('.asmMessage-arrow-right').animate({
+            		opacity: 1.0
+            	},100);
+	            $(this).animate({
+            		width: '+=20'
+            	},100);
             },
         	function () {
-        		$(this).find('.asmMessage-arrow-right').css({ opacity: 0.1 });
+        		$(this).find('.asmMessage-arrow-right').animate({
+        			opacity: 0.1
+        		}, 300);
+        		 $(this).animate({
+            		width: '-=20'
+            	},300);
         	})
             .find('.asmMessage-arrow-right').css({ opacity: 0.1 })
             ;
