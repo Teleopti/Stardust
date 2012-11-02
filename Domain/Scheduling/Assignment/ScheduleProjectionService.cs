@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var shouldWork = false;
 				if (personPeriod != null && periodStartDate.HasValue)
 				{
-				    workLengthTicks = person.AverageWorkTimeOfDay(scheduleDate).Ticks;
+				    workLengthTicks = (long)(person.AverageWorkTimeOfDay(scheduleDate).Ticks * personPeriod.PersonContract.PartTimePercentage.Percentage.Value);
 					shouldWork = personPeriod.PersonContract.ContractSchedule.IsWorkday(periodStartDate.Value, scheduleDate) &&
 						ScheduleDay.PersonDayOffCollection().IsEmpty();
 				}
