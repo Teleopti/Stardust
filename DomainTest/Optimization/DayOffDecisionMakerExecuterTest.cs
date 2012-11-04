@@ -741,8 +741,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(_effectiveRestriction).Repeat.AtLeastOnce().IgnoreArguments();
 				Expect.Call(_scheduleService.SchedulePersonOnDay(null, schedulingOptions, null, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments()
 					.Return(false).Repeat.Times(1);
-				Expect.Call(_nightRestWhiteSpotSolverService.Resolve(null, schedulingOptions)).IgnoreArguments().Return(true);
-				Expect.Call(_nightRestWhiteSpotSolverService.Resolve(null, schedulingOptions)).IgnoreArguments().Return(false);
+				Expect.Call(_nightRestWhiteSpotSolverService.Resolve(null, schedulingOptions, _rollbackService)).IgnoreArguments().Return(true);
+				Expect.Call(_nightRestWhiteSpotSolverService.Resolve(null, schedulingOptions, _rollbackService)).IgnoreArguments().Return(false);
 				Expect.Call(_originalStateContainer.IsFullyScheduled()).Return(false);
 				Expect.Call(_rollbackService.ModificationCollection).Return(new List<IScheduleDay> {part});
 				Expect.Call(() => _rollbackService.Rollback());

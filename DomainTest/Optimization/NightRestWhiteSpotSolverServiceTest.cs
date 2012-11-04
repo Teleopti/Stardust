@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _person = PersonFactory.CreatePerson();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
         	_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
-			_target = new NightRestWhiteSpotSolverService(_solver, _deleteAndResourceCalculateService, _schedulePartModifyAndRollbackService, _scheduleService, new WorkShiftFinderResultHolder(), _resourceCalculateDelayer);
+			_target = new NightRestWhiteSpotSolverService(_solver, _deleteAndResourceCalculateService, _scheduleService, new WorkShiftFinderResultHolder(), _resourceCalculateDelayer);
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using(_mocks.Playback())
             {
-                result = _target.Resolve(_matrix, _schedulingOptions);
+                result = _target.Resolve(_matrix, _schedulingOptions, _schedulePartModifyAndRollbackService);
             }
 
             Assert.IsFalse(result);
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using(_mocks.Playback())
             {
-                result = _target.Resolve(_matrix, _schedulingOptions);
+                result = _target.Resolve(_matrix, _schedulingOptions, _schedulePartModifyAndRollbackService);
             }
 
             Assert.IsTrue(result);
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Playback())
             {
-                result = _target.Resolve(_matrix, _schedulingOptions);
+                result = _target.Resolve(_matrix, _schedulingOptions, _schedulePartModifyAndRollbackService);
             }
 
             Assert.IsFalse(result);

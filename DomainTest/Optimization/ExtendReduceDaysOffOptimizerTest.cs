@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(false).Repeat.AtLeastOnce();
 				//Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService))
 				//    .Return(false);
-                Expect.Call(_nightRestWhiteSpotSolverService.Resolve(_matrix, _schedulingOptions)).IgnoreArguments()
+                Expect.Call(_nightRestWhiteSpotSolverService.Resolve(_matrix, _schedulingOptions, _rollbackService)).IgnoreArguments()
                     .Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_originalStateContainerForTagChange.IsFullyScheduled()).Return(false);
                 Expect.Call(_rollbackService.ModificationCollection).Return(

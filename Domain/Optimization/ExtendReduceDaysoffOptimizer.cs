@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				if (!schedulingResult)
 				{
 					int iterations = 0;
-					while (_nightRestWhiteSpotSolverService.Resolve(matrix, schedulingOptions) && iterations < 10)
+					while (_nightRestWhiteSpotSolverService.Resolve(matrix, schedulingOptions, _rollbackService) && iterations < 10)
 					{
 						iterations++;
 					}

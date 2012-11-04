@@ -218,7 +218,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 if (!dayOffDecisionMakerExecuter.Execute(matrixContainer.WorkingArray, matrixContainer.OriginalArray, matrixContainer.Matrix, null, false, false, false))
                 {
+					IList<IScheduleDay> days = new List<IScheduleDay>(schedulePartModifyAndRollbackService.ModificationCollection);
                     schedulePartModifyAndRollbackService.Rollback();
+					SafeResourceCalculate(days);
                     return false;
                 }
             }
@@ -236,8 +238,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPersonToRun,
 																		   dateOnly, schedulingOptions);
 				if (!groupSchedulingService.ScheduleOneDay(dateOnly, schedulingOptions, groupPersonToRun, allMatrixes))
-                {
+				{
+					IList<IScheduleDay> days = new List<IScheduleDay>(schedulePartModifyAndRollbackService.ModificationCollection);
                     schedulePartModifyAndRollbackService.Rollback();
+					SafeResourceCalculate(days);
                     return false;
                 }
             }
@@ -300,8 +304,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 			}
 
+			SafeResourceCalculate(returnList);
+
+			return returnList;
+
+		}
+
+		private void SafeResourceCalculate(IList<IScheduleDay> scheduleDays)
+		{
 			var uniqeDates = new HashSet<DateOnly>();
-			foreach (var scheduleDay in returnList)
+			foreach (var scheduleDay in scheduleDays)
 			{
 				uniqeDates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
 			}
@@ -312,9 +324,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_resourceOptimizationHelper.ResourceCalculateDate(uniqeDate, true, true);
 				_resourceOptimizationHelper.ResourceCalculateDate(uniqeDate.AddDays(1), true, true);
 			}
-
-			return returnList;
-
 		}
 
 		private IEnumerable<IScheduleDay> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)

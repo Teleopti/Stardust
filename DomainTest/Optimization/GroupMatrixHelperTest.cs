@@ -388,7 +388,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(true);
                 Expect.Call(dayOffDecisionMakerExecuter.Execute(lockableBitArray, lockableBitArray, _activeScheduleMatrix, null, false, false, false))
                     .Return(false);
+            	Expect.Call(rollbackService.ModificationCollection).Return(new List<IScheduleDay>{_scheduleDay});
                 rollbackService.Rollback();
+            	Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+            	Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(DateOnly.MinValue);
+            	Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(1), true, true));
             }
             using(_mocks.Playback())
             {
@@ -448,7 +453,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             	Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members)).Repeat.AtLeastOnce();
             	Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, date1)).Return(groupPerson).Repeat.Any();
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, date2)).Return(groupPerson).Repeat.Any();
-                rollbackService.Rollback();
+				Expect.Call(rollbackService.ModificationCollection).Return(new List<IScheduleDay> { _scheduleDay });
+				rollbackService.Rollback();
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(DateOnly.MinValue);
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(1), true, true));
             }
             using (_mocks.Playback())
             {
