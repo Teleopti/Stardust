@@ -258,6 +258,7 @@
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderTest.cs" />
     <Compile Include="Optimization\OptimizationPreferencesTest.cs" />
+    <Compile Include="Optimization\PeriodValueCalculatorProviderTest.cs" />
     <Compile Include="Optimization\PersonListExtractorFromSchedulePartsTest.cs" />
     <Compile Include="Optimization\RemoveGroupShiftCategoryOnBestDateServiceTest.cs" />
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoaderTest.cs" />
