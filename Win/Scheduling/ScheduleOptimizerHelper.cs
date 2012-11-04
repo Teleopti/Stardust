@@ -282,7 +282,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService = 
                         new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
 															deleteAndResourceCalculateService,
-															rollbackService,
                                                             _container.Resolve<IScheduleService>(), WorkShiftFinderResultHolder,
 															new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks));
 
@@ -309,7 +308,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
                 {
                     int iterations = 0;
-                    while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions) && iterations < 10)
+                    while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, rollbackService) && iterations < 10)
                     {
                         iterations++;
                     }
@@ -1234,7 +1233,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(_stateHolder), resourceOptimizationHelper);
             INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
                 new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
-													deleteAndResourceCalculateService, rollbackService,
+													deleteAndResourceCalculateService,
                                                     scheduleService, WorkShiftFinderResultHolder,
 													resourceCalculateDelayer);
 			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
