@@ -165,6 +165,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedbackPreSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="ShiftTradeRequest.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShiftTradeRequest.feature</DependentUpon>
+    </Compile>
     <Compile Include="WeekScheduleTimeIndicator.feature.cs">
       <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -522,14 +527,14 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
     </None>
-   
-
-
- <None Include="AsmMessage.feature">
+    <None Include="AsmMessage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmMessage.feature.cs</LastGenOutput>
     </None>
-
+    <None Include="ShiftTradeRequest.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ShiftTradeRequest.feature.cs</LastGenOutput>
+    </None>
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />
     <None Include="Testing\StepDefinitionReport.bat" />
