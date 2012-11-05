@@ -105,6 +105,43 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			}, Is.EqualTo(hour));
 		}
 
+		[When(@"I have an unread message")]
+		[Given(@"I have an unread message")]
+		public void GivenIHaveAnUnreadMessage()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[When(@"I recieve a new message")]
+		public void WhenIRecieveANewMessage()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"I shoud see an indication that I have '(.*)' unread messages")]
+		public void ThenIShoudSeeAnIndicationThatIHaveUnreadMessages(int unreadMessagesCount)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[When(@"I click the unread message")]
+		public void WhenIClickTheUnreadMessage()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"I should see a window showing messages")]
+		public void ThenIShouldSeeAWindowShowingMessages()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"I shoud see an indication that I have an unread message")]
+		public void ThenIShoudSeeAnIndicationThatIHaveAnUnreadMessage()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
 		private static int pixelLength(Element oneHourLengthLayer)
 		{
 			return Convert.ToInt32(oneHourLengthLayer.Style.GetAttributeValue(attributeUsedForWidth).TrimEnd('p', 'x'));

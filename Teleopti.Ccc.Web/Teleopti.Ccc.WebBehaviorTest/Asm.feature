@@ -99,7 +99,26 @@ Scenario: Asm should be automatically reloaded when time passes
 	Then Now indicator should be at hour '47'
 	When Current browser time has changed to '2030-01-02 00:01'
 	Then Now indicator should be at hour '24'
+
+Scenario: Asm should indicate unread messages
+	Given I have the role 'Full access to mytime'
+	When I click ASM link
+	And I have an unread message
+	Then I shoud see an indication that I have an unread message
 	
+Scenario: Asm should update when I get new messages
+	Given I have the role 'Full access to mytime'
+	When I click ASM link
+	And I have an unread message
+	And I recieve a new message
+	Then I shoud see an indication that I have '2' unread messages
+
+Scenario: Open messages when I click on unread messages
+	Given I have the role 'Full access to mytime'
+	And I have an unread message
+	When I click ASM link
+	And I click the unread message
+	Then I should see a window showing messages
 
 #Not in use until version 8
 @ignore
