@@ -464,7 +464,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(_openHours[0],workloadDay.OpenHourList[0]);
             
             //Apply the template
-            workloadDay.ApplyTemplate(workloadDayTemplate);
+            workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(),day => day.Release());
             Assert.AreEqual(latestTemplateVersionNumber, workloadDay.TemplateReference.VersionNumber);
 
             Assert.AreEqual(templateName, workloadDay.TemplateReference.TemplateName);
@@ -522,7 +522,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 Assert.AreEqual(200, workloadDay.TotalStatisticCalculatedTasks);
 
                 //Apply the template
-                workloadDay.ApplyTemplate(workloadDayTemplate);
+				workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
 
                 Assert.AreEqual(200, workloadDay.TotalStatisticCalculatedTasks);
             }
@@ -544,7 +544,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             workloadDayTemplate.Close();
             workloadDayTemplate.MakeOpen24Hours();
 
-            workloadDay.ApplyTemplate(workloadDayTemplate);
+			workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
             Assert.AreEqual(100, workloadDay.TaskPeriodList.Count);
 
             createDate = new DateOnly(2009, 3, 28);
@@ -553,7 +553,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             workloadDayTemplate.Close();
             workloadDayTemplate.MakeOpen24Hours();
 
-            workloadDay.ApplyTemplate(workloadDayTemplate);
+			workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
             Assert.AreEqual(92, workloadDay.TaskPeriodList.Count);
         }
 
@@ -573,7 +573,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             workloadDayTemplate.Close();
             workloadDayTemplate.MakeOpen24Hours();
 
-            workloadDay.ApplyTemplate(workloadDayTemplate);
+			workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
             Assert.AreEqual(100, workloadDay.TaskPeriodList.Count);
 
             createDate = new DateOnly(2009, 3, 29);
@@ -582,7 +582,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             workloadDayTemplate.Close();
             workloadDayTemplate.MakeOpen24Hours();
 
-            workloadDay.ApplyTemplate(workloadDayTemplate);
+			workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
             Assert.AreEqual(92, workloadDay.TaskPeriodList.Count);
         }
 
@@ -606,7 +606,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             WorkloadDay workloadDay = new WorkloadDay();
             workloadDay.Create(createDate, _workload, _openHours);
             workloadDay.Close();
-            workloadDay.ApplyTemplate(workloadDayTemplate);
+			workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
             workloadDay.RecalculateDailyTasks();
 
             Assert.AreEqual(44, workloadDay.TaskPeriodList.Count);
@@ -616,7 +616,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             workloadDay = new WorkloadDay();
             workloadDay.Create(createDate,_workload,_openHours);
             workloadDay.Close();
-            workloadDay.ApplyTemplate(workloadDayTemplate);
+			workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
             workloadDay.RecalculateDailyTasks();
 
             Assert.AreEqual(44, workloadDay.TaskPeriodList.Count);
@@ -661,7 +661,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 //Add som changes to the template
                 ChangeTemplate(workloadDayTemplate);
                 //Apply the template
-                workloadDay.ApplyTemplate(workloadDayTemplate);
+				workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
 
                 Assert.AreEqual(1000, workloadDay.TotalStatisticCalculatedTasks);
                 Assert.AreEqual(50, workloadDay.TotalStatisticAbandonedTasks);
@@ -695,7 +695,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             workloadDay.Tasks = 1;
 
             //Apply the template
-            workloadDay.ApplyTemplate(workloadDayTemplate);
+			workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
 
             Assert.AreEqual(expectedAverageTaskTime, workloadDay.AverageTaskTime);
         }
@@ -725,7 +725,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             workloadDay.AverageAfterTaskTime = expectedAverageAfterTaskTime;
 
             //Apply the template
-            workloadDay.ApplyTemplate(workloadDayTemplate);
+			workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
 
             Assert.AreEqual(expectedAverageAfterTaskTime, workloadDay.AverageAfterTaskTime);
         }
@@ -736,7 +736,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _skill.TimeZone = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             IWorkloadDayTemplate template1 = new WorkloadDayTemplate();
             template1.Create("Template1", DateTime.SpecifyKind(_dt,DateTimeKind.Utc), _workload, new List<TimePeriod>());
-            _workloadDay.ApplyTemplate(template1);
+			_workloadDay.ApplyTemplate(template1, day => day.Lock(), day => day.Release());
 
             //Assert.IsTrue(_workloadDay.IsClosed);
             Assert.IsFalse(_workloadDay.OpenForWork.IsOpen);
@@ -746,7 +746,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(0, _workloadDay.TaskPeriodList.Count);
 
             template1.ChangeOpenHours(new List<TimePeriod> { new TimePeriod(7, 0, 15, 0) });
-            _workloadDay.ApplyTemplate(template1);
+			_workloadDay.ApplyTemplate(template1, day => day.Lock(), day => day.Release());
 
             //Assert.IsFalse(_workloadDay.IsClosed);
             Assert.IsTrue(_workloadDay.OpenForWork.IsOpen);
@@ -792,7 +792,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             openHours.Add(new TimePeriod(new TimeSpan(12, 0, 0), new TimeSpan(1, 2, 0, 0)));
             openHours.Add(new TimePeriod(new TimeSpan(6, 0, 0), new TimeSpan(9, 0, 0)));
             workloadDayTemplate.Create("Kalle", createDate, _workload, openHours);
-            _workloadDay.ApplyTemplate(workloadDayTemplate);
+			_workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
             var realWorkloadDay = (WorkloadDayBase)_workloadDay;
             realWorkloadDay.TotalStatisticCalculatedTasks = 1000;
             realWorkloadDay.TotalStatisticAbandonedTasks = 50;
@@ -857,7 +857,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             Assert.AreEqual(24, _workloadDay.TaskPeriodList.Count);
 
-            _workloadDay.ApplyTemplate(workloadDayTemplate);
+			_workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
 
             //Assert.IsTrue(_workloadDay.IsClosed);
             Assert.IsFalse(_workloadDay.OpenForWork.IsOpen);
@@ -875,7 +875,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             IWorkloadDayTemplate workloadDayTemplate = new WorkloadDayTemplate();
             workloadDayTemplate.Create("Kalle", createDate, _workload, openHours);
-            _workloadDay.ApplyTemplate(workloadDayTemplate);
+			_workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
 
             Assert.AreEqual(24,_workloadDay.TaskPeriodList.Count);
             Assert.AreEqual(1,_workloadDay.OpenHourList.Count);
