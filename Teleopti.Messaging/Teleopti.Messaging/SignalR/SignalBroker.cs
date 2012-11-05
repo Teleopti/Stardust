@@ -504,7 +504,8 @@ private IEnumerable<Notification> CreateNotifications(string dataSource, string 
 				IList<SubscriptionWithHandler> reference;
 				if (_subscriptionHandlers.TryGetValue(route, out reference))
 				{
-					foreach (var subscriptionWithHandler in reference)
+					var subscriptionList = new List<SubscriptionWithHandler>(reference);
+					foreach (var subscriptionWithHandler in subscriptionList)
 					{
 						if (subscriptionWithHandler.Subscription.LowerBoundaryAsDateTime() <= eventMessage.EventEndDate &&
 						  subscriptionWithHandler.Subscription.UpperBoundaryAsDateTime() >= eventMessage.EventStartDate)
