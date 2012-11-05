@@ -1,11 +1,16 @@
+@echo off
 ::Get a local IIS for Windows 7 only
-call "\\a380\hangaren\#PROGRAM\Develop\IIS7\install.bat"
+CHOICE /C yn /M "Do you want to install IIS on your Windows 7 box?"
+IF ERRORLEVEL 1 SET iis=add
+if %iis%=="add" call "\\a380\hangaren\#PROGRAM\Develop\IIS7\install.bat"
 
 ::uninstall CruiseControl
 SC qc CCService | FIND "The specified service does not exist as an installed service" > NUL
 IF %errorlevel% NEQ 0 (
 "C:\Program Files (x86)\CruiseControl.NET\uninst.exe"
 "%systemroot%\System32\inetsrv\appcmd" delete app "Default Web Site/ccnet"
+echo.
+echo can not controll uninstall process. Press any key when it's done!
 pause
 )
 
