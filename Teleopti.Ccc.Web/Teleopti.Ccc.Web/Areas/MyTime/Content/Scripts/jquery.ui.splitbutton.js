@@ -57,6 +57,7 @@
 
 			var menu = $('<div>');
 			menu.attr("id", buttonset.attr('id') + '-menu')
+				.insertAfter(listButton)
 				.addClass('ui-splitbutton-menu')
 				.autocomplete({
 					appendTo: menu,
@@ -84,7 +85,6 @@
 						}));
 					}
 				})
-				.insertAfter(listButton)
 				;
 
 			menu.data("autocomplete")._renderItem = function (ul, item) {
