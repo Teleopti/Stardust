@@ -10,7 +10,7 @@ pause
 )
 
 ::install
-start /wait "SomeName" "\\a380\hangaren\#PROGRAM\Develop\Cruise control\CruiseControl.NET-1.8.2.0-Setup.exe"
+start /wait "SomeName" "\\a380\hangaren\#PROGRAM\Develop\Cruise control\CruiseControl.NET-1.8.2.0-Setup.exe" /S
 
 ::if this is a re-install, some extra steps are needed
 "%systemroot%\System32\inetsrv\appcmd" delete app "Default Web Site/ccnet"
