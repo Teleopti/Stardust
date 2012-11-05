@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -183,7 +184,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 
         }
 
+		[Test]
+		public void ShouldReturnNullIfNoPeriodIsNotWithinPublished()
+		{
+			var date = DateTime.Now.Date;
+			_person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = new DateOnly(date.AddDays(7)) };
+			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(11)), new DateOnly(date.AddDays(13)));
+			
+			Assert.That(_target.SignificantChangeNotificationMessage(period, _person, null).Subject, Is.Empty);
+			
+		}
 
+		[Test]
+		public void ShouldReturnNullIfPublishedToIsBeforeToday()
+		{
+			var date = DateTime.Now.Date;
+			_person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = new DateOnly(date.AddDays(-7)) };
+			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(11)), new DateOnly(date.AddDays(13)));
+
+			Assert.That(_target.SignificantChangeNotificationMessage(period, _person, null).Subject, Is.Empty);
+
+		}
 	}
 
 }

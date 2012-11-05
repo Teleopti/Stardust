@@ -27,13 +27,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 		public INotificationMessage SignificantChangeNotificationMessage(DateOnlyPeriod dateOnlyPeriod, IPerson person, IList<ScheduleDayReadModel> newReadModels)
 		{
 			var ret = new NotificationMessage();
-            //var date = DateTime.Now.Date;
-            //if (dateOnlyPeriod.StartDate > date.AddDays(14))
-            //    return ret;
-            //if (dateOnlyPeriod.EndDate < date)
-            //    return ret;
             var lang = person.PermissionInformation.UICulture();
-            var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(14));
+			var endDate = DateOnly.Today.AddDays(14);
+
+			var wfc = person.WorkflowControlSet;
+			if (wfc != null && wfc.SchedulePublishedToDate.HasValue && wfc.SchedulePublishedToDate.Value < DateOnly.Today)
+				return ret;
+
+			if (wfc != null && wfc.SchedulePublishedToDate.HasValue && wfc.SchedulePublishedToDate.Value < endDate)
+				endDate = new DateOnly(wfc.SchedulePublishedToDate.Value.Date);
+
+            var period = new DateOnlyPeriod(DateOnly.Today, endDate);
 		    var overlappingPeriod = dateOnlyPeriod.Intersection(period);
             
             if (overlappingPeriod==null)
