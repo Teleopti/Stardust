@@ -36,7 +36,7 @@ exit /b 0
 
 :processServiceList
 for /f "tokens=1* delims=;" %%a in ("%serviceList%") do (
-call :SetSvcModeAndAction "%%a" Start Auto
+call :SetSvcModeAndAction "%%a" Start delayed-auto
 set serviceList=%%b
 )
 if not "%serviceList%" == "" goto :processServiceList
