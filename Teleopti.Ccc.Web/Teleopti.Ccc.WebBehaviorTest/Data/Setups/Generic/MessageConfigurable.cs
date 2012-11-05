@@ -54,9 +54,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				messageDialogue.DialogueReply(MyReply,user);
 				if (SendersReply != string.Empty) messageDialogue.DialogueReply(SendersReply, user);
 			}
-
-			if (IsOldestMessage)
-				Thread.Sleep(1010);
 		}
 	}
 }

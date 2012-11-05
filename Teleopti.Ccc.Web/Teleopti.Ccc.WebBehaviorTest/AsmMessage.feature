@@ -86,19 +86,6 @@ Scenario: Confirm message is read
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
 
-Scenario: Sort messages in list by latest message
-	Given I have the role 'Full access to mytime'
-	And I have an unread message with
-	| Field				| Value			|
-	| Title				| Message		|
-	| Is oldest message	| True			|
-	And I have an unread message with
-	| Field         | Value				|
-	| Title         | Latest message	|
-	When I am viewing messages
-	Then I should see the message with title 'Latest message' at position '1' in the list
-	And I should see the message with title 'Message' at position '2' in the list
-
 Scenario: Reduce number of unread messages in message tab title
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with

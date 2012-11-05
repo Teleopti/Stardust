@@ -245,18 +245,18 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
             .hover(function () {
             	$(this).find('.asmMessage-arrow-right').animate({
             		opacity: 1.0
-            	},100);
-	            $(this).animate({
+            	}, 100);
+            	$(this).animate({
             		width: '+=20'
-            	},100);
+            	}, 100);
             },
         	function () {
         		$(this).find('.asmMessage-arrow-right').animate({
         			opacity: 0.1
         		}, 300);
-        		 $(this).animate({
-            		width: '-=20'
-            	},300);
+        		$(this).animate({
+        			width: '-=20'
+        		}, 300);
         	})
             .find('.asmMessage-arrow-right').css({ opacity: 0.1 })
             ;
