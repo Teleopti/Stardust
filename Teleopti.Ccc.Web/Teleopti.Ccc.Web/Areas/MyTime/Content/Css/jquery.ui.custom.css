@@ -103,9 +103,19 @@ button.ui-button-icon-only
 }
 .ui-tabs.ui-widget-content{background-image: none; background-color: transparent;}
 .ui-tabs .ui-widget-header{background-image: none; background-color: transparent; border: 0px;}
-.ui-tabs .ui-tabs-nav .ui-state-default{background-color: transparent; background-image: none; border: 1px solid transparent;}
-.ui-tabs .ui-tabs-nav .ui-tabs-selected, .ui-tabs .ui-tabs-nav .ui-state-hover {background-color: #fcfcfc; border: 1px solid #CECECE;}
 
+.ui-tabs .ui-tabs-nav .ui-state-default {
+	background-color: transparent; 
+	background-image: none; 
+	border: 1px solid transparent;
+}
+
+.ui-tabs .ui-tabs-nav .ui-state-active, 
+.ui-tabs .ui-tabs-nav .ui-state-hover
+{
+	background-color: #fcfcfc;
+	border: 1px solid #CECECE;
+}
 
 /* Custom for Sign in tabs */
 
