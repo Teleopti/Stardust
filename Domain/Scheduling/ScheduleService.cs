@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public bool SchedulePersonOnDay(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IResourceCalculateDelayer resourceCalculateDelayer, IPossibleStartEndCategory possibleStartEndCategory, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			_rollbackService = rollbackService;
-			return SchedulePersonOnDay(schedulePart, schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer);
+			return SchedulePersonOnDay(schedulePart, schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer, possibleStartEndCategory);
 		}
 
     	public void ClearFinderResults()
