@@ -133,8 +133,21 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShoudSeeAnIndicationThatIHaveAnUnreadMessage()
 		{
 			EventualAssert.That(() =>
-				Browser.Current.Div(Find.ByClass("asm-info-canvas-column-current", false)).Text,
-				Is.StringContaining(TestData.ActivityPhone.Description.Name));
+				IsDisplayed(Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false))),
+				Is.True);
+		}
+
+		private static bool IsDisplayed(Element element)
+		{
+			if (string.Equals(element.Style.Display, "none"))
+			{
+				return false;
+			}
+			if (element.Parent != null)
+			{
+				return IsDisplayed(element.Parent);
+			}
+			return true;
 		}
 
 		private static int pixelLength(Element oneHourLengthLayer)
