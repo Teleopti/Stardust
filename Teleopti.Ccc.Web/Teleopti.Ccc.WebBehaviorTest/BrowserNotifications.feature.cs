@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Browser Notifications")]
+    [NUnit.Framework.IgnoreAttribute()]
     public partial class BrowserNotificationsFeature
     {
         
@@ -32,7 +33,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Browser Notifications", "In order to get attention of system changes\r\nAs an agent\r\nI want to get notified", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Browser Notifications", "In order to get attention of system changes\r\nAs an agent\r\nI want to get notified", ProgrammingLanguage.CSharp, new string[] {
+                        "ignore"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -62,6 +64,137 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void ScenarioCleanup()
         {
             testRunner.CollectScenarioErrors();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Window bar notification")]
+        public virtual void WindowBarNotification()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Window bar notification", ((string[])(null)));
+#line 7
+this.ScenarioSetup(scenarioInfo);
+#line 8
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 9
+ testRunner.And("Current time is \'2000-01-01 12:00\'");
+#line 10
+ testRunner.And("I have a shift from 9:00 to 17:00");
+#line 11
+ testRunner.When("I am viewing requests");
+#line 12
+ testRunner.And("My schedule between \'2000-01-01 08:00\' to \'2000-01-01 17:00\' change");
+#line 13
+ testRunner.Then("I should get a notification in the window");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Minimized IE8 notification")]
+        public virtual void MinimizedIE8Notification()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Minimized IE8 notification", ((string[])(null)));
+#line 15
+this.ScenarioSetup(scenarioInfo);
+#line 16
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 17
+ testRunner.And("Current time is \'2000-01-01 12:00\'");
+#line 18
+ testRunner.And("I have a shift from 9:00 to 17:00");
+#line 19
+ testRunner.When("I am viewing requests");
+#line 20
+ testRunner.And("I have minimized the application");
+#line 21
+ testRunner.And("My schedule between \'2000-01-01 08:00\' to \'2000-01-01 17:00\' change");
+#line 22
+ testRunner.Then("The application icon in task bar should flash");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Minimized IE9/10 notification")]
+        public virtual void MinimizedIE910Notification()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Minimized IE9/10 notification", ((string[])(null)));
+#line 24
+this.ScenarioSetup(scenarioInfo);
+#line 25
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 26
+ testRunner.And("Current time is \'2000-01-01 12:00\'");
+#line 27
+ testRunner.And("I have a shift from 9:00 to 17:00");
+#line 28
+ testRunner.And("I have pinned the application");
+#line 29
+ testRunner.When("I am viewing requests");
+#line 30
+ testRunner.And("I have minimized the application");
+#line 31
+ testRunner.And("My schedule between \'2000-01-01 08:00\' to \'2000-01-01 17:00\' change");
+#line 32
+ testRunner.Then("The application icon in task bar should flash");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Minimized Chrome notification")]
+        public virtual void MinimizedChromeNotification()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Minimized Chrome notification", ((string[])(null)));
+#line 34
+this.ScenarioSetup(scenarioInfo);
+#line 35
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 36
+ testRunner.And("Current time is \'2000-01-01 12:00\'");
+#line 37
+ testRunner.And("I have a shift from 9:00 to 17:00");
+#line 38
+ testRunner.And("I have accepted web notification at logon");
+#line 39
+ testRunner.When("I am viewing requests");
+#line 40
+ testRunner.And("I have minimized the application");
+#line 41
+ testRunner.And("My schedule between \'2000-01-01 08:00\' to \'2000-01-01 17:00\' change");
+#line 42
+ testRunner.Then("I should get a desktop notification");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Minimized Firefox notification")]
+        public virtual void MinimizedFirefoxNotification()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Minimized Firefox notification", ((string[])(null)));
+#line 44
+this.ScenarioSetup(scenarioInfo);
+#line 45
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 46
+ testRunner.And("Current time is \'2000-01-01 12:00\'");
+#line 47
+ testRunner.And("I have a shift from 9:00 to 17:00");
+#line 48
+ testRunner.And("I have installed https://addons.mozilla.org/sv-SE/firefox/addon/tab-notifier/");
+#line 49
+ testRunner.And("I have accepted web notification at logon");
+#line 50
+ testRunner.When("I am viewing requests");
+#line 51
+ testRunner.And("I have minimized the application");
+#line 52
+ testRunner.And("My schedule between \'2000-01-01 08:00\' to \'2000-01-01 17:00\' change");
+#line 53
+ testRunner.Then("I should get a desktop notification");
+#line hidden
+            this.ScenarioCleanup();
         }
     }
 }
