@@ -1,6 +1,7 @@
 using System;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm;
 using Teleopti.Interfaces.Domain;
 
@@ -10,11 +11,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory
 	{
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IAsmViewModelMapper _mapper;
+		private readonly IPushMessageProvider _pushMessageProvider;
 
-		public AsmViewModelFactory(IScheduleProvider scheduleProvider, IAsmViewModelMapper mapper)
+		public AsmViewModelFactory(IScheduleProvider scheduleProvider, IAsmViewModelMapper mapper, IPushMessageProvider pushMessageProvider)
 		{
 			_scheduleProvider = scheduleProvider;
 			_mapper = mapper;
+			_pushMessageProvider = pushMessageProvider;
 		}
 
 		public AsmViewModel CreateViewModel(DateTime asmZero)
@@ -22,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory
 			var theDate = new DateOnly(asmZero);
 			var loadPeriod = new DateOnlyPeriod(theDate, theDate.AddDays(2));
 			var schedules = _scheduleProvider.GetScheduleForPeriod(loadPeriod);
-			return _mapper.Map(asmZero, schedules);
+			return _mapper.Map(asmZero, schedules, _pushMessageProvider.UnreadMessageCount);
 		}
 	}
 }

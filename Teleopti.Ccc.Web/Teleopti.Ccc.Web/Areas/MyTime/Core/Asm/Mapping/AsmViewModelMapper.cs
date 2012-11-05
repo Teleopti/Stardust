@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			_userTimeZoneInfo = userTimeZoneInfo;
 		}
 
-		public AsmViewModel Map(DateTime asmZero, IEnumerable<IScheduleDay> scheduleDays)
+		public AsmViewModel Map(DateTime asmZero, IEnumerable<IScheduleDay> scheduleDays, int unreadMessageCount)
 		{
 			var layers = new List<IVisualLayer>();
 			foreach (var proj in scheduleDays.Select(scheduleDay => _projectionProvider.Projection(scheduleDay)).Where(proj => proj != null))
@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			return new AsmViewModel
 			          	{
 			          		Layers = createAsmLayers(asmZero, timeZone, layers),
-								Hours = createHours(asmZero, timeZone)
+								Hours = createHours(asmZero, timeZone),
+								UnreadMessageCount = unreadMessageCount
 			          	};
 		}
 

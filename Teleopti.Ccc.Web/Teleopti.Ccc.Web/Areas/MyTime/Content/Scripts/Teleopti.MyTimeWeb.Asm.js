@@ -40,6 +40,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				success: function (data) {
 					self.hours(data.Hours);
 					self._createLayers(data.Layers);
+					self.numberOfUnreadMessages(data.UnreadMessageCount);
 
 					$('.asm-outer-canvas').show();
 
@@ -87,6 +88,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		self.now = ko.observable(new Date().getTeleoptiTime());
 		self.yesterday = ko.observable(yesterday);
 		self.unreadMessages = ko.observable(true);
+		self.numberOfUnreadMessages = ko.observable(0);
 		self.canvasPosition = ko.computed(function () {
 			var msSinceStart = self.now() - self.yesterday().getTime();
 			var hoursSinceStart = msSinceStart / 1000 / 60 / 60;

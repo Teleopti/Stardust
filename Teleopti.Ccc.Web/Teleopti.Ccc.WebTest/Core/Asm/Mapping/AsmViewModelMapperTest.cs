@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			projectionProvider.Expect(p => p.Projection(scheduleDay3))
 				.Return(scheduleFactory.ProjectionStub(new[] { scheduleFactory.VisualLayerStub("3") }));
 
-			var result = target.Map(new DateTime(2000,1,1), new[] { scheduleDay1, scheduleDay2, scheduleDay3 }).Layers;
+			var result = target.Map(new DateTime(2000,1,1), new[] { scheduleDay1, scheduleDay2, scheduleDay3 },0).Layers;
 			result.Count().Should().Be.EqualTo(3);
 			result.Any(l => l.Payload.Equals("1")).Should().Be.True();
 		}
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       		scheduleFactory.VisualLayerStub(layerPeriod)
 				                                       	}));
 
-			var result = target.Map(asmZero, new[] { scheduleDay });
+			var result = target.Map(asmZero, new[] { scheduleDay },0);
 
 			result.Layers.First().StartMinutesSinceAsmZero.Should().Be.EqualTo(expected.Subtract(asmZero).TotalMinutes);
 		}
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       	{
 				                                       		scheduleFactory.VisualLayerStub(layerPeriod)
 				                                       	}));
-			var res = target.Map(new DateTime(2000,1,2), new[] {scheduleDay});
+			var res = target.Map(new DateTime(2000,1,2), new[] {scheduleDay},0);
 			res.Layers.First().LengthInMinutes.Should().Be.EqualTo(layerPeriod.ElapsedTime().TotalMinutes);
 		}
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       	{
 				                                       		scheduleFactory.VisualLayerStub(color)
 				                                       	}));
-			var res = target.Map(DateTime.Now, new[] { scheduleDay });
+			var res = target.Map(DateTime.Now, new[] { scheduleDay },0);
 
 			res.Layers.First().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(color));
 		}
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       	{
 				                                       		scheduleFactory.VisualLayerStub(new DateTimePeriod(startDate, startDate.AddHours(2)))
 				                                       	}));
-			var res = target.Map(DateTime.Now, new[] { scheduleDay });
+			var res = target.Map(DateTime.Now, new[] { scheduleDay },0);
 
 			res.Layers.First().StartTimeText.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(startDate, timeZone).ToString("HH:mm"));
 		}
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				                                       	{
 				                                       		scheduleFactory.VisualLayerStub(new DateTimePeriod(endDate.AddHours(-5), endDate))
 				                                       	}));
-			var res = target.Map(DateTime.Now, new[] { scheduleDay });
+			var res = target.Map(DateTime.Now, new[] { scheduleDay },0);
 
 			res.Layers.First().EndTimeText.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(endDate, timeZone).ToString("HH:mm"));
 		}
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 
 			var date = new DateTime(2000, 1, 1);
 			var scheduleDay = scheduleFactory.ScheduleDayStub(date);
-			var res = target.Map(new DateTime(2000,1,1), new[] {scheduleDay});
+			var res = target.Map(new DateTime(2000,1,1), new[] {scheduleDay},0);
 			res.Hours.Should().Have.SameSequenceAs(expected);
 		}
 
@@ -161,8 +161,16 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			var date = new DateTime(2020, 3, 29);
 
 			var scheduleDay = scheduleFactory.ScheduleDayStub();
-			var res = target.Map(date, new[] {scheduleDay});
+			var res = target.Map(date, new[] {scheduleDay},0);
 			res.Hours.Should().Have.SameSequenceAs(expected);
+		}
+
+		[Test]
+		public void ShouldSetNumberOfUnreadMessages()
+		{
+			const int numberOfUnreadMessages = 11;
+			var res = target.Map(new DateTime(2020, 3, 29), new[] { scheduleFactory.ScheduleDayStub() }, numberOfUnreadMessages);
+			res.UnreadMessageCount.Should().Be.EqualTo(11);
 		}
 	}
 }
