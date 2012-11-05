@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 				_workloadDayTemplate = (WorkloadDayTemplate) _workload.GetTemplateAt(TemplateTarget.Workload, _templateIndex);
 			foreach (var day in visibleWorkloadDays.OfType<IWorkloadDay>())
 			{
-				day.ApplyTemplate(_workloadDayTemplate);
+				day.ApplyTemplate(_workloadDayTemplate, workloadDay => workloadDay.Lock(), workloadDay => workloadDay.Release());
 			}
             var templateWorkloadDay = new Statistic(_workload).GetTemplateWorkloadDay(_workloadDayTemplate, visibleWorkloadDays);
             workloadDayDaysWithFilterStatus.Add(new WorkloadDayWithFilterStatus(templateWorkloadDay, true, this));
