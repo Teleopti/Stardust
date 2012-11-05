@@ -344,7 +344,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             foreach (var workloadDay in theDays.OfType<WorkloadDay>())
             {
-                workloadDay.ApplyTemplate((WorkloadDayTemplate)GetTemplate(TemplateTarget.Workload, workloadDay.CurrentDate.DayOfWeek));
+            	workloadDay.ApplyTemplate(
+            		(WorkloadDayTemplate) GetTemplate(TemplateTarget.Workload, workloadDay.CurrentDate.DayOfWeek),
+            		day => day.Lock(), day => day.Release());
             }
         }
 
@@ -358,7 +360,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 IWorkloadDayTemplate newTemplate = new WorkloadDayTemplate();
                 newTemplate.Create(TemplateReference.LongtermTemplateKey, DateTime.UtcNow, this, new List<TimePeriod>(originalTemplate.OpenHourList));
                 newTemplate.MergeTemplateTaskPeriods(newTemplate.TaskPeriodList.ToList());
-                workloadDay.ApplyTemplate(newTemplate);
+                workloadDay.ApplyTemplate(newTemplate, day => day.Lock(), day => day.Release());
             }
         }
 
@@ -449,7 +451,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             period.BeginUpdate();
             foreach (var workloadDay in days.OfType<IWorkloadDay>())
             {
-                workloadDay.ApplyTemplate((IWorkloadDayTemplate)template);
+                workloadDay.ApplyTemplate((IWorkloadDayTemplate)template, day => {}, day => {});
             }
             period.EndUpdate();
         }
