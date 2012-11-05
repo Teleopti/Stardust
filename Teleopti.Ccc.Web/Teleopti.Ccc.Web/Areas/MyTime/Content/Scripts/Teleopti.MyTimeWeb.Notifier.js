@@ -26,7 +26,10 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 		return noty({
 			text: notifyText + ' (' + time + ')',
 			layout: 'bottom',
-			closeWith: ['button']
+			closeWith: ['button'],
+			callback: {
+				afterClose: _messageClosed
+			}
 		});
 	}
 	function _webNotification() {
@@ -44,12 +47,16 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 			}
 		}
 	}
+	function _messageClosed() {
+		$.pinify.clearOverlay();
+	}
+
 	function _pinnedNotification() {
+		$.pinify.flashTaskbar();
 		$.pinify.addOverlay({
 			//title: 'gurka', //don't know where this is suppose to be shown?
 			icon: baseUrl + 'content/favicon.ico'
 		});
-		$.pinify.flashTaskbar();
 	}
 
 	return {
