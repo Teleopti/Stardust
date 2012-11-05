@@ -102,20 +102,26 @@ Scenario: Asm should be automatically reloaded when time passes
 
 Scenario: Asm should indicate unread messages
 	Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field         | Value        |
+	| Title         | New message	 |
 	When I click ASM link
-	And I have an unread message
 	Then I shoud see an indication that I have an unread message
 	
 Scenario: Asm should update when I get new messages
 	Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field         | Value        |
+	| Title         | New message	 |
 	When I click ASM link
-	And I have an unread message
 	And I recieve a new message
 	Then I shoud see an indication that I have '2' unread messages
 
 Scenario: Open messages when I click on unread messages
 	Given I have the role 'Full access to mytime'
-	And I have an unread message
+	And I have an unread message with
+	| Field         | Value        |
+	| Title         | New message	 |
 	When I click ASM link
 	And I click the unread message
 	Then I should see a window showing messages

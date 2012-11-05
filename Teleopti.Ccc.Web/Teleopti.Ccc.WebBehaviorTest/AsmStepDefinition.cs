@@ -105,13 +105,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			}, Is.EqualTo(hour));
 		}
 
-		[When(@"I have an unread message")]
-		[Given(@"I have an unread message")]
-		public void GivenIHaveAnUnreadMessage()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
 		[When(@"I recieve a new message")]
 		public void WhenIRecieveANewMessage()
 		{
@@ -139,7 +132,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I shoud see an indication that I have an unread message")]
 		public void ThenIShoudSeeAnIndicationThatIHaveAnUnreadMessage()
 		{
-			ScenarioContext.Current.Pending();
+			EventualAssert.That(() =>
+				Browser.Current.Div(Find.ByClass("asm-info-canvas-column-current", false)).Text,
+				Is.StringContaining(TestData.ActivityPhone.Description.Name));
 		}
 
 		private static int pixelLength(Element oneHourLengthLayer)

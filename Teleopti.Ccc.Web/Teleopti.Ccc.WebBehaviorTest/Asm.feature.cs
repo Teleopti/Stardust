@@ -392,11 +392,18 @@ this.ScenarioSetup(scenarioInfo);
 this.FeatureBackground();
 #line 104
  testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table7.AddRow(new string[] {
+                        "Title",
+                        "New message"});
 #line 105
+ testRunner.And("I have an unread message with", ((string)(null)), table7);
+#line 108
  testRunner.When("I click ASM link");
-#line 106
- testRunner.And("I have an unread message");
-#line 107
+#line 109
  testRunner.Then("I shoud see an indication that I have an unread message");
 #line hidden
             this.ScenarioCleanup();
@@ -407,19 +414,26 @@ this.FeatureBackground();
         public virtual void AsmShouldUpdateWhenIGetNewMessages()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Asm should update when I get new messages", ((string[])(null)));
-#line 109
+#line 111
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 110
- testRunner.Given("I have the role \'Full access to mytime\'");
-#line 111
- testRunner.When("I click ASM link");
 #line 112
- testRunner.And("I have an unread message");
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table8.AddRow(new string[] {
+                        "Title",
+                        "New message"});
 #line 113
+ testRunner.And("I have an unread message with", ((string)(null)), table8);
+#line 116
+ testRunner.When("I click ASM link");
+#line 117
  testRunner.And("I recieve a new message");
-#line 114
+#line 118
  testRunner.Then("I shoud see an indication that I have \'2\' unread messages");
 #line hidden
             this.ScenarioCleanup();
@@ -430,19 +444,26 @@ this.FeatureBackground();
         public virtual void OpenMessagesWhenIClickOnUnreadMessages()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Open messages when I click on unread messages", ((string[])(null)));
-#line 116
+#line 120
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 117
- testRunner.Given("I have the role \'Full access to mytime\'");
-#line 118
- testRunner.And("I have an unread message");
-#line 119
- testRunner.When("I click ASM link");
-#line 120
- testRunner.And("I click the unread message");
 #line 121
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line hidden
+            TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table9.AddRow(new string[] {
+                        "Title",
+                        "New message"});
+#line 122
+ testRunner.And("I have an unread message with", ((string)(null)), table9);
+#line 125
+ testRunner.When("I click ASM link");
+#line 126
+ testRunner.And("I click the unread message");
+#line 127
  testRunner.Then("I should see a window showing messages");
 #line hidden
             this.ScenarioCleanup();
@@ -455,19 +476,19 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should be notified when activity changes", new string[] {
                         "ignore"});
-#line 125
+#line 131
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 126
+#line 132
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 127
+#line 133
  testRunner.And("Current time is \'2030-01-01 11:59\'");
-#line 128
+#line 134
  testRunner.When("I click ASM link");
-#line 129
+#line 135
  testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'");
-#line 130
+#line 136
  testRunner.Then("I should see only one alert containing \'Phone\'");
 #line hidden
             this.ScenarioCleanup();
