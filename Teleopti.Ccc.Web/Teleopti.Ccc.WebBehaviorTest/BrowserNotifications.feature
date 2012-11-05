@@ -9,7 +9,7 @@ Scenario: Window bar notification
 	When Today's schedule change
 	Then I should get a notification in the window
 
-Scenario: Minimized IE8 notification
+Scenario: Minimized IE8 notification on XP
 	Given I have the role 'Full access to mytime'
 	And I have minimized the application
 	When Today's schedule change

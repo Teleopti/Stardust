@@ -84,10 +84,10 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Minimized IE8 notification")]
-        public virtual void MinimizedIE8Notification()
+        [NUnit.Framework.DescriptionAttribute("Minimized IE8 notification on XP")]
+        public virtual void MinimizedIE8NotificationOnXP()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Minimized IE8 notification", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Minimized IE8 notification on XP", ((string[])(null)));
 #line 12
 this.ScenarioSetup(scenarioInfo);
 #line 13
