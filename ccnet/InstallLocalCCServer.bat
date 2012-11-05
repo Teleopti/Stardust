@@ -42,6 +42,7 @@ MKDIR "C:\Program Files (x86)\CruiseControl.NET\server\ccnetserver\WorkingDirect
 COPY "\\a380\hangaren\#PROGRAM\Develop\Cruise control\Artifacts\ccnet.config" "C:\Program Files (x86)\CruiseControl.NET\server\ccnetserver\WorkingDirectory\%COMPUTERNAME%_ccnet.config" /Y
 
 ::Before first build => register NCover64 once
+CD %~dp0
 CD NCover64
 NCover.Registration.exe //License NC3CMPLIC.lic
 
