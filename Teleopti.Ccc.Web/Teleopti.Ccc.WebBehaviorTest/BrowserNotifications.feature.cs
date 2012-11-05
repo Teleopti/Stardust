@@ -76,7 +76,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 8
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line 9
- testRunner.When("My loaded schedule change");
+ testRunner.When("Today\'s schedule change");
 #line 10
  testRunner.Then("I should get a notification in the window");
 #line hidden
@@ -95,7 +95,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 14
  testRunner.And("I have minimized the application");
 #line 15
- testRunner.When("My loaded schedule change");
+ testRunner.When("Today\'s schedule change");
 #line 16
  testRunner.Then("The application icon in task bar should flash");
 #line hidden
@@ -116,7 +116,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 21
  testRunner.And("I have minimized the application");
 #line 22
- testRunner.When("My loaded schedule change");
+ testRunner.When("Today\'s schedule change");
 #line 23
  testRunner.Then("The application icon in task bar should flash");
 #line hidden
@@ -137,7 +137,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 28
  testRunner.And("I have minimized the application");
 #line 29
- testRunner.When("My loaded schedule change");
+ testRunner.When("Today\'s schedule change");
 #line 30
  testRunner.Then("I should get a desktop notification");
 #line hidden
@@ -160,7 +160,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 36
  testRunner.And("I have minimized the application");
 #line 37
- testRunner.When("My loaded schedule change");
+ testRunner.When("Today\'s schedule change");
 #line 38
  testRunner.Then("I should get a desktop notification");
 #line hidden
