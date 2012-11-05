@@ -3,6 +3,8 @@ ECHO Stopping all local Teleopti CCC 7 services
 ECHO Start mode will be set to "Manual"
 PING -n 4 127.0.0.1>nul
 
+IF "%ROOTDIR%"=="" SET ROOTDIR=%~dp0
+
 ::Set the list of services to manuipulate
 ::note: Order matters!!
 set serviceList=TeleoptiEtlService;TeleoptiServiceBus
