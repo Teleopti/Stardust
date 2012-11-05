@@ -2,13 +2,10 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 	var notifyText;
 	var baseUrl;
 	var header = '';
-	var webNotification = function () { return true; }; //default also send as web not if possible
+	var webNotification = function () { return true; }; //default also send as web notification if possible
 
 	function _setOptions(options) {
 		notifyText = options.notifyText;
-		if (options.timeout) {
-			timeout = options.timeout;
-		}
 		if (options.baseUrl) {
 			baseUrl = options.baseUrl;
 		} else {
