@@ -6167,7 +6167,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Agent kö statistik</comment>
   </data>
   <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agent - Schemauppföljning</value>
+    <value>Agent - Schemaföljsamhet</value>
     <comment>Agent - Schemaföljsamhet</comment>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
