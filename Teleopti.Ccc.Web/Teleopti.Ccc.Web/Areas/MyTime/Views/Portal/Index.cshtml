@@ -13,11 +13,15 @@
 					baseUrl: '@Url.Content("~/MyTime/")',
 					startBaseUrl: '@Url.Content("~/Start/")'
 				});
-		    @if(Model.HasAsmPermission)
+			@if(Model.HasAsmPermission)
 			{
 				<text>
-				Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
-				{ notifyText: '@Resources.YourScheduleHasChanged', baseUrl: '@Url.Content("~/")', header: '@Resources.Teleopti' },
+				Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges({ 
+						notifyText: '@Resources.YourScheduleHasChanged', 
+						originalDocumentTitle: document.title,
+						baseUrl: '@Url.Content("~/")', 
+						header: '@Resources.Teleopti' 
+					},
 					function (notification) { Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);}
 				);
 

@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		    TimeSpan minTimelineTime;
 		    TimeSpan maxTimelineTime;
 			
-			//_page.TimeLineDiv.WaitUntilDisplayed();
 			_page.AnyTimelineLabel.WaitUntilExists();
 
 			if (!TimeSpan.TryParse(_page.TimelineLabels.First().InnerHtml, out minTimelineTime))

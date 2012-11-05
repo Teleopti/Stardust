@@ -130,6 +130,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see start timeline and end timeline according to schedule with:")]
 		public void ThenIShouldSeeStartTimelineAndEndTimelineAccordingToScheduleWith(Table table)
 		{
+			_page.AnyTimelineLabel.WaitUntilExists();			
 			var divs = _page.TimelineLabels;
 			EventualAssert.That(() => divs[0].InnerHtml, Is.StringContaining(table.Rows[0][1]));
 			EventualAssert.That(() => divs[divs.Count - 1].InnerHtml, Is.StringContaining(table.Rows[1][1]));
