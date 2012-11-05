@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var addOptions = new List<string>();
 			foreach (var replyOption in replyOptions)
 			{
-				if (replyOption != string.Empty)
+				if (!string.IsNullOrEmpty(replyOption))
 					addOptions.Add(replyOption);
 			}
 			var conversation =

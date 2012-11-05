@@ -86,6 +86,20 @@ Scenario: Confirm message is read
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
 
+Scenario: Confirm message is read after enetering a textreply
+	Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field					| Value				|
+	| Title					| New message		|
+	| Message				| Text in message	|
+	| Text reply allowed	| True				|
+	And I am viewing messages
+	When I click on the message at position '1' in the list
+	And I enter the text reply 'some text....'
+	And I click the confirm button
+	Then I should not see any messages
+	And I should see a user-friendly message explaining I dont have any messages
+
 Scenario: Reduce number of unread messages in message tab title
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with

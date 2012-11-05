@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 		public MessageViewModel PersistMessage(ConfirmMessageViewModel confirmMessage)
 		{
 			var pushMessageDialogue = _pushMessageDialogueRepository.Get(confirmMessage.Id);
-
 			if(!string.IsNullOrEmpty(confirmMessage.Reply))
 			{
 				pushMessageDialogue.DialogueReply(confirmMessage.Reply, _loggedOnUser.CurrentUser());
