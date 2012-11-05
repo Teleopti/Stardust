@@ -1,11 +1,14 @@
 Teleopti.MyTimeWeb.Notifier = (function () {
 	var notifyText;
+	var originalDocumentTitle;
 	var baseUrl;
 	var header = '';
+	var blinkTitleTimer;
 	var webNotification = function () { return true; }; //default also send as web notification if possible
 
 	function _setOptions(options) {
 		notifyText = options.notifyText;
+		originalDocumentTitle = options.originalDocumentTitle;
 		if (options.baseUrl) {
 			baseUrl = options.baseUrl;
 		} else {
@@ -49,6 +52,7 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 	}
 	function _messageClosed() {
 		$.pinify.clearOverlay();
+		_stopBlinkDocumentTitle();
 	}
 
 	function _pinnedNotification() {
@@ -59,12 +63,24 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 		});
 	}
 
+	function _blinkDocumentTitle() {
+		blinkTitleTimer = window.setInterval(function () {
+			top.document.title == notifyText ? top.document.title = originalDocumentTitle : top.document.title = notifyText;
+		}, 750);
+	}
+
+	function _stopBlinkDocumentTitle() {
+		clearInterval(blinkTitleTimer);
+		top.document.title = originalDocumentTitle;
+	}
+
 	return {
 		Notify: function (options) {
 			_setOptions(options);
 			_notify();
 			_webNotification();
 			_pinnedNotification();
+			_blinkDocumentTitle();
 		}
 	};
 })(jQuery);
