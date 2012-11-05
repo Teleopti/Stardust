@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -232,6 +233,40 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Assert.That(_target.CommonPossibleStartEndCategory,Is.Null);
 			_mocks.VerifyAll();
 		}
+
+        [Test]
+        public void ShouldHandleEndTimeAcrossMidnight()
+        {
+            var date = new DateOnly(2010, 10, 4);
+            var period = new DateTimePeriod(new DateTime(2010, 10, 4, 17, 30, 0, DateTimeKind.Utc),
+                                            new DateTime(2010, 10, 5, 1, 30, 0, DateTimeKind.Utc));
+            var schedulingOptions = new SchedulingOptions
+                                        {UseGroupSchedulingCommonStart = true, UseGroupSchedulingCommonEnd = true};
+            var ass = _mocks.StrictMock<IPersonAssignment>();
+            var mainShift = _mocks.StrictMock<IMainShift>();
+            var groupPerson = _mocks.StrictMock<IGroupPerson>();
+            var projectionService = _mocks.StrictMock<IProjectionService>();
+            var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+            Expect.Call(_person1.VirtualSchedulePeriod(date)).Return(_virtualPeriod);
+            Expect.Call(_virtualPeriod.IsValid).Return(true);
+            Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+            Expect.Call(_scheduleDictionary[_person1]).Return(_rangeScheduled);
+            Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person1}));
+            Expect.Call(_rangeScheduled.ScheduledDay(date)).Return(_scheduledDay);
+            Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift);
+            Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass);
+            Expect.Call(ass.MainShift).Return(mainShift);
+            Expect.Call(mainShift.ProjectionService()).Return(projectionService);
+            Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
+            Expect.Call(visualLayerCollection.Period()).Return(period);
+            Expect.Call(groupPerson.CommonPossibleStartEndCategory).SetPropertyAndIgnoreArgument();
+            _mocks.ReplayAll();
+            var result = _target.AllPersonsHasSameOrNoneScheduled(groupPerson, date, schedulingOptions);
+            Assert.That(result, Is.True);
+            Assert.That(_target.CommonPossibleStartEndCategory.StartTime, Is.EqualTo(period.LocalStartDateTime.TimeOfDay));
+            Assert.That(_target.CommonPossibleStartEndCategory.EndTime, Is.EqualTo(period.LocalEndDateTime.TimeOfDay.Add(TimeSpan.FromDays(1))));
+            _mocks.VerifyAll();
+        }
 
 		[Test]
 		public void PropertyCommonPossibleStartEndCategoryBackingFieldMayNotBeNull()
