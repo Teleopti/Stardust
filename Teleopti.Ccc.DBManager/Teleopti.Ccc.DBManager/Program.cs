@@ -73,11 +73,14 @@ namespace Teleopti.Ccc.DBManager
                     
                     if (_commandLineArgument.WillCreateNewDatabase)
                     {
+                        CreateDB(_commandLineArgument.DatabaseName, _commandLineArgument.TargetDatabaseType);
+                    }
+
+                    if (_commandLineArgument.PermissionMode)
+                    {
                         //check if application user name and password/windowsgroup is submitted
                         if (_commandLineArgument.appUserName.Length > 0 && (_commandLineArgument.appUserPwd.Length > 0 || _commandLineArgument.isWindowsGroupName))
                         {
-
-                            CreateDB(_commandLineArgument.DatabaseName, _commandLineArgument.TargetDatabaseType);
                             CreateLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName);
                         }
                         else
@@ -97,33 +100,50 @@ namespace Teleopti.Ccc.DBManager
 
 						_databaseVersionInformation = new DatabaseVersionInformation(_databaseFolder, _sqlConnection);
 
-						//Set permissions of the newly application user on db.
+                        //if this is the very first create, add VersionControl table
                         if (_commandLineArgument.WillCreateNewDatabase)
                         {
                             CreateDefaultVersionInformation();
-                            CreatePermissions(_commandLineArgument.appUserName, _commandLineArgument.isWindowsGroupName);
                         }
 
-                        //Does the Version Table exist?
-                        if (VersionTableExists())
+                        //Set permissions of the newly application user on db.
+                        if (_commandLineArgument.PermissionMode)
                         {
-                            //Shortcut to release 329, Azure specific script
-                            if (_isAzure && GetDatabaseBuildNumber() == 0)
+                            //check if application user name and password/windowsgroup is submitted
+                            if (_commandLineArgument.appUserName.Length > 0 && (_commandLineArgument.appUserPwd.Length > 0 || _commandLineArgument.isWindowsGroupName))
                             {
-                                applyAzureStartDDL(_commandLineArgument.TargetDatabaseTypeName);
+                                CreatePermissions(_commandLineArgument.appUserName, _commandLineArgument.isWindowsGroupName);
+                            }
+                            else
+                            {
+                                throw new Exception("No Application user/Windows group name submitted!");
                             }
 
-                            //Add Released DDL
-                            applyReleases(_commandLineArgument.TargetDatabaseType);
-                            //Add upcoming DDL (Trunk)
-                            if (_commandLineArgument.WillAddTrunk)
-								applyTrunk(_commandLineArgument.TargetDatabaseType);
-                            //Add Programmabilty
-							applyProgrammability(_commandLineArgument.TargetDatabaseType);
                         }
-                        else
+
+                        //Patch database
+                        if (_commandLineArgument.PatchMode)
                         {
-                            logWrite("Version information is missing, is this a Raptor db?");
+                            //Does the Version Table exist?
+                            if (VersionTableExists())
+                            {
+                                //Shortcut to release 329, Azure specific script
+                                if (_isAzure && GetDatabaseBuildNumber() == 0)
+                                {
+                                    applyAzureStartDDL(_commandLineArgument.TargetDatabaseTypeName);
+                                }
+
+                                //Add Released DDL
+                                applyReleases(_commandLineArgument.TargetDatabaseType);
+                                //Add upcoming DDL (Trunk)
+                                applyTrunk(_commandLineArgument.TargetDatabaseType);
+                                //Add Programmabilty
+                                applyProgrammability(_commandLineArgument.TargetDatabaseType);
+                            }
+                            else
+                            {
+                                logWrite("Version information is missing, is this a Raptor db?");
+                            }
                         }
                     }
                     else
