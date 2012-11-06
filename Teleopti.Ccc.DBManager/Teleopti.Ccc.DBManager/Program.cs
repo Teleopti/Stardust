@@ -61,6 +61,9 @@ namespace Teleopti.Ccc.DBManager
                     //Check Azure
                     _isAzure = IsAzure();
 
+                    if (_isAzure && _commandLineArgument.isWindowsGroupName)
+                        throw new Exception("Windows Azure don't support Windows Login for the moment!");
+
                     _sqlConnection.InfoMessage += _sqlConnection_InfoMessage;
 
                     //Exclude Agg from Azure
@@ -336,7 +339,7 @@ namespace Teleopti.Ccc.DBManager
             if (_isAzure)
             {
                 if (iswingroup)
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Win Logins - Create.sql", _databaseFolder.Path());
+                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\Win Logins - Create.sql", _databaseFolder.Path());
                 else
                     fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\SQL Logins - Create.sql", _databaseFolder.Path());
             }
