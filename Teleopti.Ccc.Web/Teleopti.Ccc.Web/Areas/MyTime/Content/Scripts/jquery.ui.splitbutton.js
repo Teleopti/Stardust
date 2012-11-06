@@ -1,5 +1,10 @@
 ﻿(function ($) {
 	$.widget("ui.splitbutton", {
+
+		options: {
+			opened: false
+		},
+
 		_create: function () {
 			var self = this;
 			var buttonset = this.element
@@ -8,7 +13,7 @@
 			var button = $('button', buttonset)
 				.addClass('ui-splitbutton-button')
 				.html('&nbsp;')
-				.height(20)
+				.height(15)
 				.width(100)
 				.button({
 					text: true
@@ -24,9 +29,9 @@
 					}
 				})
 				;
-			var select = $('select', buttonset)
-				.hide()
-				;
+			var select = this._select =
+				$('select', buttonset)
+					.hide();
 			var listButton = $('<button type="button">&nbsp;</button>')
 				.attr("title", select.attr("title"))
 				.attr("id", buttonset.attr('id') + '-list-button')
@@ -40,81 +45,120 @@
 						primary: 'ui-icon-triangle-1-s'
 					}
 				})
-				.click(function () {
-					// close if already visible
-					if (menu.autocomplete("widget").is(":visible")) {
-						menu.autocomplete("close");
-						return;
-					}
-					// work around a bug (likely same cause as #5265)
-					$(this).blur();
-					// pass empty string as value to search for, displaying all results
-					menu.autocomplete("search", "");
-					menu.focus();
+				.click(function (e) {
+					self._toggleMenu();
+					e.stopPropagation();
 				})
 				;
 			buttonset.buttonset();
 
-			var menu = $('<div>');
-			menu.attr("id", buttonset.attr('id') + '-menu')
-				.insertAfter(listButton)
-				.addClass('ui-splitbutton-menu')
-				.autocomplete({
-					appendTo: menu,
-					minLength: 0,
-					select: function (event, ui) {
-						button.button('option', 'label', $('<div/>').text(ui.item.label).html());
-						button.data('value', ui.item.value);
-						button.data('label', ui.item.label);
-						self._trigger("clicked", event, {
-							label: ui.item.label,
-							value: ui.item.value
-						});
-					},
-					source: function (request, response) {
-						response(select.children("option").map(function () {
-							var text = $(this).text();
-							var value = $(this).val();
-							var color = $(this).attr('data-color');
-							return {
-								label: text,
-								value: value,
-								color: color,
-								option: this
-							};
-						}));
-					}
-				})
+			var menuContainer = this._menuContainer =
+				$('<div />')
+					.insertAfter(listButton)
+					.addClass('ui-splitbutton-menu')
+					.attr("id", buttonset.attr('id') + '-menu')
 				;
 
-			menu.data("autocomplete")._renderItem = function (ul, item) {
-				if (item.value == "-")
-					return $('<li></li>')
-						.addClass('ui-splitbutton-menu-splitter')
-						.append($('<div>'))
-						.appendTo(ul)
-						;
+			var menu = this._menu = $('<ul />')
+				.appendTo(menuContainer);
 
-				var text = $('<span>')
+			this._createMenuItems();
+
+			menu.menu({
+				select: function (event, ui) {
+					var item = ui.item.data("splitbutton-item");
+					button.button('option', 'label', $('<div/>').text(item.label).html());
+					button.data('value', item.value);
+					button.data('label', item.label);
+					self._trigger("clicked", event, {
+						label: item.label,
+						value: item.value
+					});
+					self._displayMenu(false);
+				}
+			});
+
+			this.option(this.options);
+
+		},
+
+		_toggleMenu: function () {
+			this._displayMenu(!this.options.opened);
+		},
+
+		_displayMenu: function (value) {
+			this.options.opened = value;
+			if (value) {
+				this._menu.show();
+			} else
+				this._menu.hide();
+		},
+
+		_createMenuItems: function () {
+			var items = this._select
+				.children("option").map(function () {
+					var text = $(this).text();
+					var value = $(this).val();
+					var color = $(this).attr('data-color');
+					return {
+						label: text,
+						value: value,
+						color: color,
+						option: this
+					};
+				});
+
+			this._menu.empty();
+			for (var i = 0; i < items.length; i++) {
+				var item = this._createMenuItem(items[i]);
+				this._menu.append(item);
+			}
+		},
+
+		_createMenuItem: function (item) {
+
+			if (item.value == "-")
+				return $('<li></li>');
+
+			var text = $('<span>')
 					.addClass('ui-splitbutton-menu-text')
 					.text(item.label)
 					;
-				var secondaryIcon = $("<span>")
+			var secondaryIcon = $("<span>")
 					.addClass('ui-splitbutton-menu-icon-secondary')
 					.addClass('ui-corner-all')
 					.css("background-color", item.color)
 					;
-				var itemButton = $("<a></a>")
+			var itemButton = $("<a></a>")
 					.append(text)
 					.append(secondaryIcon)
 					;
-				return $("<li></li>")
-					.data("item.autocomplete", item)
+			return $("<li></li>")
+					.data("splitbutton-item", item)
 					.append(itemButton)
-					.appendTo(ul)
 					;
-			};
+		},
 
+		_setOption: function (key, value) {
+			switch (key) {
+				case "clear":
+					// handle changes to clear option
+					break;
+				case "opened":
+					this._displayMenu(value);
+					break;
+			}
+
+			if (this._super)
+			// In jQuery UI 1.9 and above, you use the _super method instead
+			{
+				this._super("_setOption", key, value);
+			}
+			else
+			// In jQuery UI 1.8, you have to manually invoke the _setOption method from the base widget
+			{
+				$.Widget.prototype._setOption.apply(this, arguments);
+			}
 		},
 
 		destroy: function () {

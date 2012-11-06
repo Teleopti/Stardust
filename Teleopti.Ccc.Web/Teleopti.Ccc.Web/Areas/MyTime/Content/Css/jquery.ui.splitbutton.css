@@ -28,6 +28,12 @@
 .ui-splitbutton-button .ui-button-text
 {
 }
+.ui-splitbutton-menu ul
+{
+	z-index: 15003;
+	position: absolute;
+}
+
 .ui-splitbutton-menu li
 {
 	position: relative;
