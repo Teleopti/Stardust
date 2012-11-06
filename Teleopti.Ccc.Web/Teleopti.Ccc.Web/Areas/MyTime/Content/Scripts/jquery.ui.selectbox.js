@@ -36,7 +36,7 @@
 					text: true,
 					disabled: true
 				})
-				.click(function(e) {
+				.click(function (e) {
 					self._toggleMenu();
 					e.stopPropagation();
 				})
@@ -55,16 +55,6 @@
 
 			this._createMenu();
 
-			menu.menu({
-				select: function (event, ui) {
-					var item = ui.item.data("selectbox-item");
-					self._selectOption(item.option);
-					self._trigger("changed", event, {
-						item: item.option
-					});
-				}
-			});
-
 			this._selectOption(select.children(":selected"));
 
 			$("html").click(function () {
@@ -82,15 +72,35 @@
 
 		_displayMenu: function (value) {
 			this.options.opened = value;
-
 			if (value) {
 				this._menu.show();
 			} else
 				this._menu.hide();
 		},
 
+		_refreshMenu: function () {
+			this._createMenuItems();
+			this._menu.menu("refresh");
+		},
+
 		_createMenu: function () {
-			this._menu.empty();
+			var self = this;
+
+			this._createMenuItems();
+
+			this._menu.menu({
+				select: function (event, ui) {
+					var dataItem = ui.item.data("selectbox-item");
+					self._selectOption(dataItem.option);
+					self._trigger("changed", event, {
+						item: dataItem.option
+					});
+				}
+			});
+
+		},
+
+		_createMenuItems: function () {
 			var items = this._select
 				.children("option")
 				.map(function () {
@@ -104,6 +114,8 @@
 						option: this
 					};
 				});
+
+			this._menu.empty();
 			for (var i = 0; i < items.length; i++) {
 				var item = this._createMenuItem(items[i]);
 				this._menu.append(item);
@@ -188,6 +200,8 @@
 		},
 
 		_refresh: function (success) {
+			var self = this;
+
 			var url = this.options.source;
 			var select = this._select.empty();
 			$.ajax({
@@ -203,6 +217,7 @@
 								.text(value.Text);
 						select.append(option);
 					});
+					self._refreshMenu();
 					success();
 				}
 			});
