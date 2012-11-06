@@ -12,22 +12,18 @@
 	<div class="container" id="login">
 		<h1>Teleopti CCC</h1>
 		<div data-bind="visible:DataSourceSelectionActive">
-			<div class="btn-group" data-toggle="buttons-radio">
-				<button type="button" id="windowsLogon" class="btn active" >Windows Logon</button>
-				<button type="button" id="applicationLogon" class="btn">Application Logon</button>
-			</div>
 			<div class="row">
 				<div>
 					<div class="span6 well">
 						<div>
-							<select name="datasource" data-bind="options: AvailableDataSources">
+							<select name="datasource" data-bind="options: AvailableDataSources, optionsText: 'DataSourceName', value: SelectedSource">
 							</select>
 						</div>
 						<div>
-							<input type="text" name="username" placeholder="User name" data-bind="visible:ApplicationAuthentication" />
+							<input type="text" name="username" placeholder="User name" data-bind="visible:SelectedSource().ApplicationAuthentication" />
 						</div>
 						<div>
-							<input type="password" name="password" placeholder="Password" data-bind="visible:ApplicationAuthentication" />
+							<input type="password" name="password" placeholder="Password" data-bind="visible:SelectedSource().ApplicationAuthentication" />
 						</div>
 						<button class="btn btn-primary" id="logonButton">Log on</button>
 					</div>
