@@ -12,6 +12,7 @@
 				.attr("id", select.attr('id') + '-input')
 				.val(value)
 				.width(width)
+				.addClass("ui-combobox")
 				.addClass(select.attr('class'))
 				.blur(function () {
 					self._setValue(self.input.val());
@@ -93,6 +94,7 @@
 			this.button = $("<button type='button'>&nbsp;</button>")
 				.attr("tabIndex", -1)
 				.attr("title", "Show All Items")
+				.addClass("ui-combobox-button")
 				.insertAfter(input)
 				.button({
 					icons: {

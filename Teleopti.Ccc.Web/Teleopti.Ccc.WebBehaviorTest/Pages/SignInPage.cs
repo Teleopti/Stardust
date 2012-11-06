@@ -34,15 +34,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "signout-button")]
 		public Link SignoutButton { get; set; }
 
+		[FindBy(Id = "warning")]
+		public Div WarningMessage { get; set; }
 
 		public void SelectApplicationTestDataSource()
 		{
 			ApplicationDataSourceList.ListItem(Find.ByText("TestData")).EventualClick();
-		}
-
-		public void ClickApplicationOkButton()
-		{
-			ApplicationOkButton.EventualClick();
 		}
 
 		public void SelectWindowsTestDataSource()
@@ -65,13 +62,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SignInApplication(string username, string password)
 		{
+			TrySignInApplication(username, password);
+			WaitForSigninResult();
+		}
+
+		public void TrySignInApplication(string username, string password)
+		{
 			ApplicationTabLink.EventualClick();
 			SelectApplicationTestDataSource();
 			UserNameTextField.Value = username;
 			PasswordTextField.Value = password;
 			ApplicationOkButton.EventualClick();
-
-			WaitForSigninResult();
 		}
 
 		public void SignInWindows()

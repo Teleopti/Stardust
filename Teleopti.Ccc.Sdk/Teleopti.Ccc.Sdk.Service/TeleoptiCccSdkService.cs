@@ -1619,7 +1619,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				IUserDetail userDetail = repository.FindByUser(person);
 
 				var policyService = StateHolder.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService;
-				ret = person.ChangePassword(oldPassword, newPassword, policyService, userDetail);
+				ret = person.ChangePassword(oldPassword, newPassword, policyService, userDetail).IsSuccessful;
 
 				unitOfWork.PersistAll();
 			}

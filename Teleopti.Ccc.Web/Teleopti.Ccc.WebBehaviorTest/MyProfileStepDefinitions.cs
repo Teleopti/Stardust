@@ -1,9 +1,11 @@
 ﻿using System.Globalization;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 
 namespace Teleopti.Ccc.WebBehaviorTest
@@ -27,6 +29,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Navigation.GotoPasswordPage();
 		}
 
+		[When(@"I view password setting page")]
+		public void WhenIViewPasswordSettingPage()
+		{
+			Navigation.GotoPasswordPage();
+		}
+
 		[When(@"I change my password")]
 		public void WhenIChangeMyPassword()
 		{
@@ -34,6 +42,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			page.Password.Value = newPassword;
 			page.PasswordValidation.Value = newPassword;
 			page.OldPassword.Value = TestData.CommonPassword;
+			Browser.Current.Eval("$('input#password').keyup();");
+			page.ConfirmButton.EventualClick();
+		}
+
+		[When(@"I change my password with")]
+		public void WhenIChangeMyPasswordWith(Table table)
+		{
+			var password = table.CreateInstance<PasswordConfigurable>();
+			var page = Browser.Current.Page<PasswordPage>();
+			page.Password.Value = password.Password;
+			page.PasswordValidation.Value = password.ConfirmedPassword;
+			page.OldPassword.Value = password.OldPassword;
 			Browser.Current.Eval("$('input#password').keyup();");
 			page.ConfirmButton.EventualClick();
 		}
@@ -158,7 +178,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => page.IncorrectPassword.DisplayVisible(), Is.True);
 		}
 
+		[Then(@"I should see password changed successfully")]
+		public void ThenIShouldSeePasswordChangedSuccessfully()
+		{
+			var page = Browser.Current.Page<PasswordPage>();
+			EventualAssert.That(() => page.UpdatedLabel.DisplayVisible(), Is.True);
+		}
 
+		[Then(@"I should see password changed failed with message")]
+		public void ThenIShouldSeePasswordChangedFailedWithMessage()
+		{
+			var page = Browser.Current.Page<PasswordPage>();
+			EventualAssert.That(() => page.InvalidNewPassword.DisplayVisible(), Is.True);
+		}
 
 		private static void ChangeCulture(string culture)
 		{

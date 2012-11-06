@@ -88,11 +88,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			EventualAssert.That(() => Browser.Current.Link("signout").Exists || Browser.Current.Link("signout-button").Exists, Is.True);
 		}
 
+		[Then(@"I should see a warning message that password will be expired")]
+		public void ThenIShouldSeeAWarningMessageThatPasswordWillBeExpired()
+		{                                                                                              
+			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.WarningMessage.InnerHtml.Contains("Du måste ändra ditt lösenord. Det går ut om 1 dagar."), Is.True);
+		}
+
 		[Then(@"I should see an log on error")]
 		public void ThenIShouldSeeAnLogOnError()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new StringContainsAnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
 		}
+
+		[Then(@"I should see an error message ""(.*)""")]
+		public void ThenIShouldSeeAnErrorMessage(string msg)
+		{
+		}
+
 
 		[Then(@"I should not be signed in")]
 		[Then(@"I should be signed out")]

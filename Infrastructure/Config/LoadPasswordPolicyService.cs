@@ -129,7 +129,8 @@ namespace Teleopti.Ccc.Infrastructure.Config
             {
                 try
                 {
-                    _file = XDocument.Load(System.IO.Path.Combine(_path, FileName));
+	                var policy = System.IO.Path.Combine(_path, FileName);
+	                _file = System.IO.File.Exists(policy) ? XDocument.Load(policy) : defaultXDocument();
                 }
                 catch (Exception e)
                 {

@@ -110,6 +110,7 @@
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
+    <Compile Include="Domain\IChangePasswordResultInfo.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
     <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
@@ -318,6 +319,7 @@
     <Compile Include="Domain\IUserCulture.cs" />
     <Compile Include="Domain\IUserDetail.cs" />
     <Compile Include="Domain\IUserTimeZone.cs" />
+    <Compile Include="Domain\IUtcNow.cs" />
     <Compile Include="Domain\IValidatedVolumeDay.cs" />
     <Compile Include="Domain\IVirtualSchedulePeriod.cs" />
     <Compile Include="Domain\IVirtualSchedulePeriodSplitChecker.cs" />

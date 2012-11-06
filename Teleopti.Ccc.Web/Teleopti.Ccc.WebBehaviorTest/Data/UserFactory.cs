@@ -124,24 +124,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public string MakeUser()
 		{
 			var userName = NextUserName();
-			Person = PersonFactory.CreatePersonWithBasicPermissionInfo(userName.LogOnName, TestData.CommonPassword);
-			Person.Name = new Name("Agent", userName.LastName);
+			return MakeUser(userName.LogOnName, userName.LastName, TestData.CommonPassword);
+		}
+
+		public string MakeUser(string logonName, string lastName, string password)
+		{
+			Person = PersonFactory.CreatePersonWithBasicPermissionInfo(logonName, password);
+			Person.Name = new Name("Agent", lastName);
 
 			Log.Write("Making user " + Person.Name);
 
 			MakePerson(Person);
 
 			_colleagues.ForEach(colleague =>
-			                    	{
-			                    		var colleagueName = NextColleagueName();
-			                    		colleague.Person = PersonFactory.CreatePerson();
-										colleague.Person.Name = new Name("Colleague", colleagueName.LastName);
-			                    		colleague.MakePerson(colleague.Person);
-			                    	});
+			{
+				var colleagueName = NextColleagueName();
+				colleague.Person = PersonFactory.CreatePerson();
+				colleague.Person.Name = new Name("Colleague", colleagueName.LastName);
+				colleague.MakePerson(colleague.Person);
+			});
 
 			Resources.Culture = Culture;
 
-			return userName.LogOnName;
+			return logonName;
 		}
 
 		private void MakePerson(IPerson person)
