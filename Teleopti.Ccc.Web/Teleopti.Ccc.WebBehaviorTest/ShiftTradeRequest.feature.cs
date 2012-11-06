@@ -64,6 +64,182 @@ namespace Teleopti.Ccc.WebBehaviorTest
         {
             testRunner.CollectScenarioErrors();
         }
+        
+        public virtual void FeatureBackground()
+        {
+#line 6
+#line hidden
+            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table1.AddRow(new string[] {
+                        "Name",
+                        "Full access to mytime"});
+#line 7
+ testRunner.Given("there is a role with", ((string)(null)), table1);
+#line hidden
+            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table2.AddRow(new string[] {
+                        "Name",
+                        "No access to Shift Trade"});
+            table2.AddRow(new string[] {
+                        "Access To Shift Trade Requests",
+                        "False"});
+#line 10
+ testRunner.And("there is a role with", ((string)(null)), table2);
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table3.AddRow(new string[] {
+                        "Name",
+                        "Published schedule"});
+            table3.AddRow(new string[] {
+                        "Schedule published to date",
+                        "2040-06-24"});
+#line 14
+ testRunner.And("I have a workflow control set with", ((string)(null)), table3);
+#line hidden
+            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table4.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+            table4.AddRow(new string[] {
+                        "Type",
+                        "Week"});
+            table4.AddRow(new string[] {
+                        "Length",
+                        "1"});
+#line 18
+ testRunner.And("I have a schedule period with", ((string)(null)), table4);
+#line hidden
+            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table5.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+#line 23
+ testRunner.And("I have a person period with", ((string)(null)), table5);
+#line hidden
+            TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table6.AddRow(new string[] {
+                        "StartTime",
+                        "2030-01-01 08:00"});
+            table6.AddRow(new string[] {
+                        "EndTime",
+                        "2030-01-01 17:00"});
+            table6.AddRow(new string[] {
+                        "Lunch3HoursAfterStart",
+                        "true"});
+#line 26
+ testRunner.And("there is a shift with", ((string)(null)), table6);
+#line hidden
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Do not show shift trade request tab if no permission")]
+        [NUnit.Framework.IgnoreAttribute()]
+        public virtual void DoNotShowShiftTradeRequestTabIfNoPermission()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Do not show shift trade request tab if no permission", new string[] {
+                        "ignore"});
+#line 33
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 34
+ testRunner.Given("I have the role \'No access to Shift Trade\'");
+#line 35
+ testRunner.When("I sign in");
+#line 36
+ testRunner.Then("shift trade tab should not be visible");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Show Shift trade reuqest tab")]
+        [NUnit.Framework.IgnoreAttribute()]
+        public virtual void ShowShiftTradeReuqestTab()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show Shift trade reuqest tab", new string[] {
+                        "ignore"});
+#line 39
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 40
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 41
+ testRunner.When("I sign in");
+#line 42
+ testRunner.Then("shift trade tab should be visible");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Default to today when viewing shift trade")]
+        [NUnit.Framework.IgnoreAttribute()]
+        public virtual void DefaultToTodayWhenViewingShiftTrade()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default to today when viewing shift trade", new string[] {
+                        "ignore"});
+#line 45
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 46
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 47
+ testRunner.And("Current time is \'2030-01-01\'");
+#line 48
+ testRunner.When("I navigate to shift trade page");
+#line 49
+ testRunner.Then("the selected date should be \'2030-01-01\'");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Show my scheduled day at the top")]
+        [NUnit.Framework.IgnoreAttribute()]
+        public virtual void ShowMyScheduledDayAtTheTop()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show my scheduled day at the top", new string[] {
+                        "ignore"});
+#line 52
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 53
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 54
+ testRunner.And("Current time is \'2030-01-01\'");
+#line 55
+ testRunner.When("I navigate to shift trade page");
+#line hidden
+            TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table7.AddRow(new string[] {
+                        "Start time",
+                        "08:00"});
+            table7.AddRow(new string[] {
+                        "End time",
+                        "17:00"});
+#line 56
+ testRunner.Then("I should see my schedule with", ((string)(null)), table7);
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
