@@ -16,6 +16,16 @@
 	line-height: 12px;
 }
 
+/* jquery.ui.menu.css */
+.ui-menu li a {
+	font-size: 12px; 
+	text-align: left;
+}
+.rtl .ui-menu li a {
+	text-align: right;
+}
+
+
 /*jquery.ui.button.css*/
 
 .buttonset-nav .ui-button-text-only .ui-button-text { padding: .2em 0.6em; }

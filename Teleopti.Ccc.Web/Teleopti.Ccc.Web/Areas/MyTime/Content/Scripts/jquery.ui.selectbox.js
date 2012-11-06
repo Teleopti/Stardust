@@ -3,7 +3,8 @@
 
 		options: {
 			source: null,
-			value: null
+			value: null,
+			opened: false
 		},
 
 		_create: function () {
@@ -35,99 +36,116 @@
 					text: true,
 					disabled: true
 				})
-				.click(function (e) {
-					// close if already visible
-					if (menu.autocomplete("widget").is(":visible")) {
-						menu.autocomplete("close");
-						return;
-					}
-					// work around a bug (likely same cause as #5265)
-					$(this).blur();
-					// pass empty string as value to search for, displaying all results
-					menu.autocomplete("search", "");
-					menu.focus();
+				.click(function(e) {
+					self._toggleMenu();
 					e.stopPropagation();
 				})
-				.appendTo(container)
+				.appendTo(container);
+
+			var menuContainer = this._menuContainer =
+				$('<div />')
+					.appendTo(container)
+					.addClass('ui-selectbox-menu')
+					.attr("id", id + '-menu')
 				;
 
-			var menu = this._menu = $('<div>').appendTo(container);
-			menu.attr("id", id + '-menu')
-				.addClass('ui-selectbox-menu')
-				.autocomplete({
-					appendTo: menu,
-					minLength: 0,
-					select: function (event, ui) {
-						self._selectOption(ui.item.option);
-						self._trigger("changed", event, {
-							item: ui.item.option
-						});
-					},
-					source: function (request, response) {
-						if (self.options.source == null)
-							self._mapOptions(response);
-						else
-							self._refresh(function () {
-								self._mapOptions(response);
-							});
-					}
-				})
-				.click(function (e) {
-					e.stopPropagation();
-				})
+			var menu = this._menu = $('<ul />')
+				.appendTo(menuContainer)
 				;
 
-			menu.data("autocomplete")._renderItem = function (ul, item) {
-				if (item.label == "-")
-					item.label = "";
-				if (item.value == "-" && item.label != "") {
-					return $('<li></li>')
-						.addClass('ui-selectbox-menu-splitter')
-						.append(item.label)
-						.appendTo(ul);
+			this._createMenu();
+
+			menu.menu({
+				select: function (event, ui) {
+					var item = ui.item.data("selectbox-item");
+					self._selectOption(item.option);
+					self._trigger("changed", event, {
+						item: item.option
+					});
 				}
-				if (item.value == "-") {
-					return $('<li></li>')
-						.addClass('ui-selectbox-menu-splitter')
-						.append($('<div>').text(item.label))
-						.appendTo(ul);
-				}
-
-				if (item.color) {
-					var text = $('<span>')
-						.text(item.label);
-					var secondaryIcon = $("<span>")
-						.addClass('menu-icon-secondary')
-						.addClass('ui-corner-all')
-						.css("background-color", item.color);
-					var itemButton = $("<a></a>")
-						.append(text)
-						.append(secondaryIcon);
-					return $("<li></li>")
-						.data("item.autocomplete", item)
-						.append(itemButton)
-						.appendTo(ul);
-				}
-				return $("<li></li>")
-					.data("item.autocomplete", item)
-					.append($("<a></a>").text(item.label))
-					.appendTo(ul);
-
-
-
-
-			};
+			});
 
 			this._selectOption(select.children(":selected"));
 
 			$("html").click(function () {
-				if (menu.autocomplete("widget").is(":visible")) {
-					menu.autocomplete("close");
-				}
-			})
-			;
+				self._displayMenu(false);
+			});
 
 			button.button('enable');
+
+			this.option(this.options);
+		},
+
+		_toggleMenu: function () {
+			this._displayMenu(!this.options.opened);
+		},
+
+		_displayMenu: function (value) {
+			this.options.opened = value;
+
+			if (value) {
+				this._menu.show();
+			} else
+				this._menu.hide();
+		},
+
+		_createMenu: function () {
+			this._menu.empty();
+			var items = this._select
+				.children("option")
+				.map(function () {
+					var text = $(this).text();
+					var value = this.value;
+					var color = $(this).data('color');
+					return {
+						label: text,
+						value: value,
+						color: color,
+						option: this
+					};
+				});
+			for (var i = 0; i < items.length; i++) {
+				var item = this._createMenuItem(items[i]);
+				this._menu.append(item);
+			}
+		},
+
+		_createMenuItem: function (item) {
+
+			if (item.label == "-")
+				item.label = "";
+			if (item.value == "-" && item.label != "") {
+				return $('<li></li>')
+					.append(item.label);
+			}
+			if (item.value == "-") {
+				return $('<li></li>')
+					.addClass('ui-widget-content')
+					.addClass('ui-menu-divider')
+					.append($('<div>').text(item.label));
+			}
+
+			var text = item.label;
+			var secondaryIcon = null;
+			if (item.color) {
+				text = $('<span>')
+					.text(item.label);
+				secondaryIcon = $("<span>")
+					.addClass('menu-icon-secondary')
+					.addClass('ui-corner-all')
+					.css("background-color", item.color);
+			}
+
+			var link = $('<a>')
+				.append(text);
+			if (secondaryIcon)
+				link.append(secondaryIcon);
+
+			var listItem = $('<li>')
+				.data("selectbox-item", item)
+				.append(link);
+
+			return listItem;
 		},
 
 		_mapOptions: function (response) {
@@ -190,14 +208,6 @@
 			});
 		},
 
-		_setEnabled: function (value) {
-			if (value) {
-				this._button.removeAttr('disabled');
-			} else {
-				this._button.attr('disabled', 'disabled');
-			}
-		},
-
 		_setOption: function (key, value) {
 			switch (key) {
 				case "clear":
@@ -209,14 +219,21 @@
 				case "enabled":
 					this._setEnabled(value);
 					break;
+				case "opened":
+					this._displayMenu(value);
+					break;
 			}
 
 			if (this._super)
 			// In jQuery UI 1.9 and above, you use the _super method instead
+			{
 				this._super("_setOption", key, value);
+			}
 			else
 			// In jQuery UI 1.8, you have to manually invoke the _setOption method from the base widget
+			{
 				$.Widget.prototype._setOption.apply(this, arguments);
+			}
 		},
 
 		_setEnabled: function (value) {
