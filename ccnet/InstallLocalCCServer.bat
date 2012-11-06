@@ -39,6 +39,16 @@ start /wait "SomeName" "\\a380\hangaren\#PROGRAM\Develop\Cruise control\CruiseCo
 ::stop sevice
 NET STOP CCService
 
+::CCNet needs to run under your credetials to fetch your SyncFusion license registry values
+ECHO.
+ECHO CCNet needs to run under your personal credentials, SyncFusion license sits in CURRENT_USER registry hive.
+ECHO.
+ECHO And .... sorry, I can't hide your password, make sure you are alone.
+SET /P password=Please provide the password for %USERDOMAIN%\%USERNAME%:
+
+::Set CCService to run with your credentials
+sc config CCService obj= "%USERDOMAIN%\%USERNAME%" password= "%password%"
+
 ::fix local ccService config
 COPY "\\a380\hangaren\#PROGRAM\Develop\Cruise control\Artifacts\ccService.config" "C:\Program Files (x86)\CruiseControl.NET\server\ccservice.exe.config" /Y
 cscript "\\a380\hangaren\#PROGRAM\Develop\Cruise control\Artifacts\replace.vbs" $COMPUTERNAME$ %COMPUTERNAME% "C:\Program Files (x86)\CruiseControl.NET\server\ccservice.exe.config"
