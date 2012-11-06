@@ -276,11 +276,11 @@ namespace Teleopti.Ccc.Domain.Helper
             }
             if (taskTime > 0)
             {
-                campaignTaskTime = new Percent(totalTaskTime / taskTime - 1d);
+                campaignTaskTime = new Percent(((totalTaskTime/totalTasks) / (taskTime/tasks))-1);
             }
             if (afterTaskTime > 0)
             {
-                campaignAfterTaskTime = new Percent(totalAfterTaskTime / afterTaskTime - 1d);
+                campaignAfterTaskTime = new Percent(((totalAfterTaskTime/totalTasks) / (afterTaskTime/tasks))-1);
             }
 
             ITemplateTaskPeriod resultingTaskPeriod = new TemplateTaskPeriod(
