@@ -104,7 +104,7 @@
 				WorkingDirectory="$(CCNetWorkingDirectory)"/>
 	</Target>
 	
-    <Target Name="BuildSSASXmla">
+    <Target Name="BuildSSASXmla" Condition="Exists('$(vs2008ide)') And Exists('$(AsDBDeploy)')">
 
 		<Message Text="Building dwproj-file ..." Importance="high" />
 		<Exec Command="&quot;$(vs2008ide)&quot; &quot;$(CCNetWorkingDirectory)\Cube\TeleoptiAnalytics\TeleoptiAnalytics.sln&quot; /rebuild CreateDatabase2005 /Log &quot;c:\Temp\devenv_log.txt&quot;" />

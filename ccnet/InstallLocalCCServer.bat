@@ -1,12 +1,27 @@
+@echo off
+COLOR A
 ::Get a local IIS for Windows 7 only
-call "\\a380\hangaren\#PROGRAM\Develop\IIS7\install.bat"
+CHOICE /C yn /M "Do you want to install IIS on your Windows 7 box?"
+IF ERRORLEVEL 1 SET iis=add
+if %iis%=="add" call "\\a380\hangaren\#PROGRAM\Develop\IIS7\install.bat"
+
+CHOICE /C yn /M "Do you want to open your IIS and CCtray for remote access?"
+IF ERRORLEVEL 1 SET /a remoteaccess=1
+IF ERRORLEVEL 2 SET /a remoteaccess=0
 
 ::uninstall CruiseControl
 SC qc CCService | FIND "The specified service does not exist as an installed service" > NUL
 IF %errorlevel% NEQ 0 (
 "C:\Program Files (x86)\CruiseControl.NET\uninst.exe"
 "%systemroot%\System32\inetsrv\appcmd" delete app "Default Web Site/ccnet"
+echo.
+echo ========================
+echo can not control the uninstall process. Press any key when it's done!
+echo ========================
+echo.
+COLOR E
 pause
+COLOR A
 )
 
 ::install
@@ -33,9 +48,16 @@ ROBOCOPY "\\a380\T-files\Develop\Test\Baselines\7zip" "C:\temp"
 COPY "\\a380\hangaren\#PROGRAM\Develop\Cruise control\Artifacts\webdashboard.zip" "C:\temp\webdashboard.zip" /Y
 C:\temp\7z.exe x -y -o"c:\Program Files (x86)\CruiseControl.NET\webdashboard" "C:\temp\webdashboard.zip"
 
-::open up firewall
+::open/close firewall
+if %remoteaccess% equ 1 (
 netsh advfirewall firewall add rule name = IIS_80 dir = in protocol = tcp action = allow localport = 80 remoteip = any profile = DOMAIN
 netsh advfirewall firewall add rule name = CCTray dir = in protocol = tcp action = allow localport = 21234 remoteip = any profile = DOMAIN
+)
+
+if %remoteaccess% equ 0 (
+netsh advfirewall firewall delete rule name = IIS_80
+netsh advfirewall firewall delete rule name = CCTray
+)
 
 ::get TFS config
 MKDIR "C:\Program Files (x86)\CruiseControl.NET\server\ccnetserver\WorkingDirectory"
