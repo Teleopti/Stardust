@@ -102,6 +102,31 @@ namespace Teleopti.Ccc.DomainTest.Helper
             Assert.AreEqual(7.5d, outList.ElementAt(2).AggregatedTasks);
         }
 
+		[Test]
+		public void VerifyCombineCampaignValues()
+		{
+			IList<ITemplateTaskPeriod> taskPeriods = new List<ITemplateTaskPeriod>();
+			taskPeriods.Add(CreatePeriod(1, 2));
+			taskPeriods.Add(CreatePeriod(1, 2));
+
+			taskPeriods[0].Tasks = 10;
+			taskPeriods[0].CampaignTasks = new Percent(0.10);
+			taskPeriods[0].AverageTaskTime = TimeSpan.FromSeconds(10);
+			taskPeriods[0].AverageAfterTaskTime = TimeSpan.FromSeconds(10);
+			taskPeriods[1].Tasks = 0;
+			taskPeriods[1].AverageTaskTime = TimeSpan.Zero;
+			taskPeriods[1].AverageAfterTaskTime = TimeSpan.Zero;
+			
+			var outList = SkillDayStaffHelper.CombineList(taskPeriods);
+
+			Assert.AreEqual(10, outList.ElementAt(0).Task.Tasks);
+			Assert.AreEqual(10, outList.ElementAt(0).Task.AverageTaskTime.TotalSeconds);
+			Assert.AreEqual(10, outList.ElementAt(0).Task.AverageAfterTaskTime.TotalSeconds);
+			Assert.AreEqual(0.1d, Math.Round(outList.ElementAt(0).CampaignTasks.Value,2));
+			Assert.AreEqual(0d, outList.ElementAt(0).CampaignTaskTime.Value);
+			Assert.AreEqual(0d, outList.ElementAt(0).CampaignAfterTaskTime.Value);
+		}
+
         /// <summary>
         /// Verifies the combine list values with campaign information.
         /// </summary>
@@ -121,8 +146,8 @@ namespace Teleopti.Ccc.DomainTest.Helper
             var outList = SkillDayStaffHelper.CombineList(taskPeriods);
             Assert.AreEqual(1, outList.Count());
             Assert.AreEqual(0.1d, Math.Round(outList.ElementAt(0).CampaignTasks.Value,2));
-            Assert.AreEqual(Math.Round(5232d / 3600d - 1d,2), Math.Round(outList.ElementAt(0).CampaignTaskTime.Value,2));
-            Assert.AreEqual(Math.Round(9.2d / 6d - 1d, 2), Math.Round(outList.ElementAt(0).CampaignAfterTaskTime.Value, 2));
+            Assert.AreEqual(Math.Round(0.32d,2), Math.Round(outList.ElementAt(0).CampaignTaskTime.Value,2));
+            Assert.AreEqual(Math.Round(0.39d, 2), Math.Round(outList.ElementAt(0).CampaignAfterTaskTime.Value, 2));
         }
 
         [Test]
