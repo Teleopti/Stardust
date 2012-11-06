@@ -392,14 +392,14 @@ namespace Teleopti.Ccc.DBManager
 
             sql = System.IO.File.ReadAllText(fileName);
 
+            sql = sql.Replace("$(LOGIN)", user);
+
             if (iswingroup)
             {
-                sql = sql.Replace("$(SVCLOGIN)", user);
                 sql = sql.Replace("$(AUTHTYPE)", "WIN");
             }
             else
             {
-                sql = sql.Replace("$(SQLLOGIN)", user);
                 sql = sql.Replace("$(AUTHTYPE)", "SQL");
             }
 
