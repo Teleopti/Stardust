@@ -53,17 +53,15 @@
 				.appendTo(menuContainer)
 				;
 
-			this._createMenu();
-
-			this._selectOption(select.children(":selected"));
-
 			$("html").click(function () {
 				self._displayMenu(false);
 			});
 
-			button.button('enable');
-
 			this.option(this.options);
+
+			this._selectOption(select.children(":selected"));
+
+			button.button('enable');
 		},
 
 		_toggleMenu: function () {
@@ -78,25 +76,24 @@
 				this._menu.hide();
 		},
 
-		_refreshMenu: function () {
-			this._createMenuItems();
-			this._menu.menu("refresh");
-		},
-
-		_createMenu: function () {
+		_createOrRefreshMenu: function () {
 			var self = this;
 
 			this._createMenuItems();
 
-			this._menu.menu({
-				select: function (event, ui) {
-					var dataItem = ui.item.data("selectbox-item");
-					self._selectOption(dataItem.option);
-					self._trigger("changed", event, {
-						item: dataItem.option
-					});
-				}
-			});
+			if (this._menu.hasClass("ui-menu")) {
+				this._menu.menu("refresh");
+			} else {
+				this._menu.menu({
+					select: function (event, ui) {
+						var dataItem = ui.item.data("selectbox-item");
+						self._selectOption(dataItem.option);
+						self._trigger("changed", event, {
+							item: dataItem.option
+						});
+					}
+				});
+			}
 
 		},
 
@@ -199,30 +196,6 @@
 			return $('option[value="' + value + '"]', this._select);
 		},
 
-		_refresh: function (success) {
-			var self = this;
-
-			var url = this.options.source;
-			var select = this._select.empty();
-			$.ajax({
-				url: url,
-				dataType: "json",
-				type: "GET",
-				global: false,
-				cache: false,
-				success: function (data, textStatus, jqXHR) {
-					$.each(data, function (index, value) {
-						var option = $('<option></option>')
-								.attr("value", value.Value)
-								.text(value.Text);
-						select.append(option);
-					});
-					self._refreshMenu();
-					success();
-				}
-			});
-		},
-
 		_setOption: function (key, value) {
 			switch (key) {
 				case "clear":
@@ -233,6 +206,9 @@
 					break;
 				case "enabled":
 					this._setEnabled(value);
+					break;
+				case "source":
+					this._setSource(value);
 					break;
 				case "opened":
 					this._displayMenu(value);
@@ -261,8 +237,42 @@
 			}
 		},
 
-		refresh: function (success) {
-			this._refresh(success);
+		_setSource: function (value) {
+			this.options.source = value;
+			if (value) {
+				this._loadSource();
+				return;
+			}
+			this._createOrRefreshMenu();
+			this._trigger("rendered");
+		},
+
+		_loadSource: function () {
+			var self = this;
+
+			var url = this.options.source;
+			var select = this._select.empty();
+			$.ajax({
+				url: url,
+				dataType: "json",
+				type: "GET",
+				global: false,
+				cache: false,
+				success: function (data, textStatus, jqXHR) {
+					$.each(data, function (index, value) {
+						var option = $('<option></option>')
+							.attr("value", value.Value)
+							.text(value.Text);
+						select.append(option);
+					});
+					self._createOrRefreshMenu();
+					self._trigger("rendered");
+				}
+			});
+		},
+
+		refresh: function () {
+			this._loadSource();
 		},
 
 		contains: function (value) {

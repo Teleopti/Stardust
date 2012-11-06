@@ -31,10 +31,30 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 		$('select.ui-selectbox-init')
 			.removeClass('ui-selectbox-init')
 			.selectbox({
-				source: "MyTime/TeamSchedule/Teams",
 				changed: function (event, item) {
 					var teamId = item.item.value;
 					_navigateTo(_currentFixedDate(), teamId);
+				},
+				rendered: function () {
+					var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
+					if (!teamId)
+						return;
+
+					var self = $(this);
+
+					if (self.selectbox('selectableOptions').length < 2)
+						self.selectbox('hide');
+					else
+						self.selectbox('show');
+					if (self.selectbox('contains', teamId))
+						self.selectbox('select', teamId);
+					else {
+						var date = _currentFixedDate();
+						if (date)
+							_navigateTo(date);
+					}
+					readyForInteraction();
+					completelyLoaded();
 				}
 			})
 			.parent()
@@ -43,25 +63,9 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	}
 
 	function _initTeamPickerSelection() {
-		var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
 		var selectbox = $('#TeamSchedule-TeamPicker-select');
 		selectbox.selectbox({
 			source: "MyTime/TeamSchedule/Teams/" + _currentUrlDate()
-		});
-		selectbox.selectbox('refresh', function () {
-			if (selectbox.selectbox('selectableOptions').length < 2)
-				selectbox.selectbox('hide');
-			else
-				selectbox.selectbox('show');
-			if (selectbox.selectbox('contains', teamId))
-				selectbox.selectbox('select', teamId);
-			else {
-				var date = _currentFixedDate();
-				if (date)
-					_navigateTo(date);
-			}
-			readyForInteraction();
-			completelyLoaded();
 		});
 	}
 
