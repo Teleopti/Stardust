@@ -4,6 +4,7 @@
 		options: {
 			source: null,
 			value: null,
+			enabled: true,
 			opened: false,
 			visible: true
 		},
@@ -232,6 +233,7 @@
 		},
 
 		_setEnabled: function (value) {
+			this.options.enabled = value;
 			if (value) {
 				this._select.removeAttr('disabled');
 				this._button.removeAttr('disabled');
