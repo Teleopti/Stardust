@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 																			_groupPersonBuilderForOptimization,
 																			_allScheduleMatrixes)).Return(true);
 
-				Expect.Call(_groupPerson.Id).Return(guid).Repeat.Twice();
+				Expect.Call(_groupPerson.Id).Return(guid).Repeat.AtLeastOnce();
 				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(dayOffToRemove, _groupPerson, _groupSchedulingService,
 																			_schedulePartModifyAndRollbackService,
 																			_schedulingOptions, _groupPersonBuilderForOptimization,
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 																			_groupPersonBuilderForOptimization,
 																			_allScheduleMatrixes)).Return(true);
 
-				Expect.Call(_groupPerson.Id).Return(guid).Repeat.Twice();
+				Expect.Call(_groupPerson.Id).Return(guid).Repeat.AtLeastOnce();
 				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(dayOffToRemove, _groupPerson, _groupSchedulingService,
 				                                                            _schedulePartModifyAndRollbackService,
 				                                                            _schedulingOptions, _groupPersonBuilderForOptimization,
