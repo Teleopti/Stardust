@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleService _scheduleServiceForFlexibleAgents;
         private IOptimizationPreferences _optimizerPreferences;
         private ISchedulePartModifyAndRollbackService _rollbackService;
-        private IResourceOptimizationHelper _resourceOptimizationHelper;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private IResourceCalculateDaysDecider _decider;
         private IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
@@ -50,6 +48,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
     	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
+        private IProjectionService _projectionService;
+        private IVisualLayerCollection _visualLayerCollection;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleServiceForFlexibleAgents = _mocks.StrictMock<IScheduleService>();
             _optimizerPreferences = new OptimizationPreferences();
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-            _resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
             _effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
             _decider = _mocks.StrictMock<IResourceCalculateDaysDecider>();
             _originalStateContainerForTagChange = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
@@ -79,12 +78,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationOverLimitDecider = _mocks.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
         	_mainShiftOptimizeActivitySpecificationSetter =
         		_mocks.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
-
+            _projectionService = _mocks.StrictMock<IProjectionService>();
+            _visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
             _target = new ExtendReduceDaysOffOptimizer(_personalSkillPeriodValueCalculator,
                                                        _personalScheduleResultDataExtractor, _decisionMaker,
                                                        _matrixConverter, _scheduleServiceForFlexibleAgents,
                                                        _optimizerPreferences, _rollbackService,
-                                                       _resourceOptimizationHelper, _effectiveRestrictionCreator,
+                                                       _resourceCalculateDelayer, _effectiveRestrictionCreator,
                                                        _decider, _originalStateContainerForTagChange,
                                                        _workTimeBackToLegalStateService,
                                                        _nightRestWhiteSpotSolverService, _validatorList,
@@ -137,8 +137,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(true);
                 Expect.Call(_workTimeBackToLegalStateService.RemovedDays)
                     .Return(new List<DateOnly>{DateOnly.MinValue});
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true));
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(1), true, true));
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+                Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService).Repeat.Any();
+                Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Any();
+                Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.Any();
+                Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(), null)).
+                    IgnoreArguments().Return(true).Repeat.Any();
                 Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState)
                     .Return(new Dictionary<DateOnly, IScheduleDay>
                         {
@@ -154,16 +158,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
                 Expect.Call(_decider.DecideDates(_scheduleDay, _scheduleDay)).Return(new List<DateOnly>
                                                                                          {DateOnly.MinValue});
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true));
-                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
                 Expect.Call(_dayOffOptimizerValidator.Validate(_extendReduceTimeDecisionMakerResult.DayToShorten.Value,
                                                                _matrix)).Return(true);
 
                 Expect.Call(_personalSkillPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(1);
                 Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix, _schedulingOptions)).Return(true);
                 Expect.Call(_workTimeBackToLegalStateService.RemovedDays).Return(new List<DateOnly> { DateOnly.MinValue });
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true));
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(1), true, true));
 				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod())).IgnoreArguments().Repeat.AtLeastOnce();
             }
 
@@ -204,8 +204,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
                 Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix, _schedulingOptions)).Return(true);
                 Expect.Call(_workTimeBackToLegalStateService.RemovedDays).Return(new List<DateOnly> { DateOnly.MinValue });
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true));
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(1), true, true));
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+                Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService).Repeat.Any();
+                Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Any();
+                Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.Any();
+                Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(), null)).
+                    IgnoreArguments().Return(true).Repeat.Any();
                 Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState).Return(
                     new Dictionary<DateOnly, IScheduleDay>
                         {
@@ -220,10 +224,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_personalSkillPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(100);
                 Expect.Call(_rollbackService.ModificationCollection).Return(
                     new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay> { _scheduleDay }));
-                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
                 Expect.Call(() => _rollbackService.Rollback());
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_dateOnlyAsDateTimePeriod.DateOnly, true, true));
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_dateOnlyAsDateTimePeriod.DateOnly.AddDays(1), true, true));
             	Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod())).IgnoreArguments();
             }
 
@@ -264,8 +265,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
                 Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix, _schedulingOptions)).Return(true);
                 Expect.Call(_workTimeBackToLegalStateService.RemovedDays).Return(new List<DateOnly> { DateOnly.MinValue });
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true));
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue.AddDays(1), true, true));
                 Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState).Return(
                     new Dictionary<DateOnly, IScheduleDay>
                         {
@@ -282,13 +281,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_rollbackService.ModificationCollection).Return(
                     new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay>{ _scheduleDay }));
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+                Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService).Repeat.Any();
+                Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Any();
+                Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.Any();
+                Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(), null)).
+                    IgnoreArguments().Return(true).Repeat.Any();
                 Expect.Call(() => _rollbackService.Rollback());
-                Expect.Call(
-                    () =>
-                    _resourceOptimizationHelper.ResourceCalculateDate(_dateOnlyAsDateTimePeriod.DateOnly, true, true));
-                Expect.Call(
-                    () =>
-                    _resourceOptimizationHelper.ResourceCalculateDate(_dateOnlyAsDateTimePeriod.DateOnly.AddDays(1), true, true));
                 Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(DateOnly.MaxValue, DateOnly.MaxValue)));
 
                 Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(_schedulePeriod)).Return(true);
