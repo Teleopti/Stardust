@@ -113,6 +113,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public List ReportSkillSelectionList { get; set; }
 
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public Div ReportSkillSelectionContainer
 		{
 			get
