@@ -1,5 +1,3 @@
-using System;
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Message
 {
     public class MessageViewModel
