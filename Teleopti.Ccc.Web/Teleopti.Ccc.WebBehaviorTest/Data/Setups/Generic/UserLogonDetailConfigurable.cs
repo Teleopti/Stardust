@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var userDetail = new UserDetail(user);
-			userDetail.SetInvalidAttempts(InvalidAttempts);
-			userDetail.SetInvalidAttemptsSequenceStart(DateTime.Now.AddMinutes(-InvalidAttemptsStartXMinutesAgo));
-			if(LastPasswordChange!=null)
-				userDetail.SetLastPasswordChange(LastPasswordChange.Value);
+			userDetail.InvalidAttempts = InvalidAttempts;
+			userDetail.InvalidAttemptsSequenceStart = DateTime.Now.AddMinutes(-InvalidAttemptsStartXMinutesAgo);
+			if (LastPasswordChange != null)
+				userDetail.LastPasswordChange = LastPasswordChange.Value;
 			if (IsLocked != null && IsLocked.Value)
 				userDetail.Lock();
 
