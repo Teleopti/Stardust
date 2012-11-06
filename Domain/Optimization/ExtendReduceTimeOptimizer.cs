@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.DayOffPlanning;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
@@ -24,12 +23,12 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly ISchedulePartModifyAndRollbackService _rollbackService;
         private readonly IDeleteSchedulePartService _deleteService;
-        private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+        private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly IResourceCalculateDaysDecider _decider;
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
         private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
-        private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+        private readonly ISchedulingOptions _schedulingOptions;
     	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
     	public ExtendReduceTimeOptimizer(
@@ -41,12 +40,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             IOptimizationPreferences optimizerPreferences,
             ISchedulePartModifyAndRollbackService rollbackService,
             IDeleteSchedulePartService deleteService,
-            IResourceOptimizationHelper resourceOptimizationHelper,
+            IResourceCalculateDelayer resourceCalculateDelayer,
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             IResourceCalculateDaysDecider decider,
             IScheduleMatrixOriginalStateContainer originalStateContainerForTagChange,
             IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider, 
-            ISchedulingOptionsCreator schedulingOptionsCreator,
+            ISchedulingOptions schedulingOptions,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
         {
             _periodValueCalculator = periodValueCalculator;
@@ -57,12 +56,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             _optimizerPreferences = optimizerPreferences;
             _rollbackService = rollbackService;
             _deleteService = deleteService;
-            _resourceOptimizationHelper = resourceOptimizationHelper;
-            _effectiveRestrictionCreator = effectiveRestrictionCreator;
+    	    _resourceCalculateDelayer = resourceCalculateDelayer;
+    	    _effectiveRestrictionCreator = effectiveRestrictionCreator;
             _decider = decider;
             _originalStateContainerForTagChange = originalStateContainerForTagChange;
             _optimizationOverLimitDecider = optimizationOverLimitDecider;
-            _schedulingOptionsCreator = schedulingOptionsCreator;
+            _schedulingOptions = schedulingOptions;
         	_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
         }
 
@@ -73,19 +72,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             bool sucess = false;
 
-            ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
-
             ExtendReduceTimeDecisionMakerResult daysToBeRescheduled = _decisionMaker.Execute(_matrixConverter, _personalSkillsDataExtractor);
 
             if (!daysToBeRescheduled.DayToLengthen.HasValue && !daysToBeRescheduled.DayToShorten.HasValue)
                 return false;
 
-            bool considerShortBreaks = _optimizerPreferences.Rescheduling.ConsiderShortBreaks;
             if(daysToBeRescheduled.DayToLengthen.HasValue)
             {
                 DateOnly dateOnly = daysToBeRescheduled.DayToLengthen.Value;
 
-                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Long, schedulingOptions, dateOnly, considerShortBreaks, _matrixConverter.SourceMatrix))
+                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Long, _schedulingOptions, dateOnly, _matrixConverter.SourceMatrix))
                     sucess = true;
             }
 
@@ -93,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 DateOnly dateOnly = daysToBeRescheduled.DayToShorten.Value;
 
-                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Short, schedulingOptions, dateOnly, considerShortBreaks, _matrixConverter.SourceMatrix))
+                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Short, _schedulingOptions, dateOnly, _matrixConverter.SourceMatrix))
                     sucess = true;
             }
 
@@ -109,7 +105,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             WorkShiftLengthHintOption lenghtHint, 
             ISchedulingOptions schedulingOptions,
             DateOnly dateOnly,
-            bool considerShortBreaks,
             IScheduleMatrixPro matrix)
         {
             double oldPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
@@ -124,27 +119,27 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysToRecalculate = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
             foreach (var dateToRecalculate in daysToRecalculate)
             {
-                _resourceOptimizationHelper.ResourceCalculateDate(dateToRecalculate, true, considerShortBreaks);
+                _resourceCalculateDelayer.CalculateIfNeeded(dateToRecalculate, null);
             }
 
             matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
             if (!tryScheduleDay(dateOnly, schedulingOptions, lenghtHint))
 
             {
-                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks);
+                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
                 return false;
             }
 
             if(daysOverMax())
             {
-                rollbackAndResourceCalculate(dateOnly, considerShortBreaks);
+                rollbackAndResourceCalculate(dateOnly);
                 return false;
             }
 
             IList<DateOnly> daysToLock = restrictionsOverMax();
             if (daysToLock.Count > 0)
             {
-                rollbackAndResourceCalculate(dateOnly, considerShortBreaks);
+                rollbackAndResourceCalculate(dateOnly);
 
                 foreach (var date in daysToLock)
                 {
@@ -156,14 +151,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             double newPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
             if (newPeriodValue > oldPeriodValue)
             {
-                rollbackAndResourceCalculate(dateOnly, considerShortBreaks);
+                rollbackAndResourceCalculate(dateOnly);
                 return false;
             }
 
             return true;
         }
 
-        private void rollbackAndResourceCalculate(DateOnly dateOnly, bool considerShortBreaks)
+        private void rollbackAndResourceCalculate(DateOnly dateOnly)
         {
             IScheduleDay scheduleDayBefore;
             IScheduleDay scheduleDayAfter;
@@ -175,7 +170,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> days = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
             foreach (var date in days)
             {
-                _resourceOptimizationHelper.ResourceCalculateDate(date, true, considerShortBreaks);
+                _resourceCalculateDelayer.CalculateIfNeeded(date, null);
             }
         }
 
@@ -197,15 +192,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay.DaySchedulePart(), schedulingOptions);
 
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
-																		schedulingOptions.ConsiderShortBreaks);
-
-        	IScheduleDay origScheduleDay = _originalStateContainerForTagChange.OldPeriodDaysState[day];
+			IScheduleDay origScheduleDay = _originalStateContainerForTagChange.OldPeriodDaysState[day];
 			IPersonAssignment personAssignment = origScheduleDay.AssignmentHighZOrder();
 			IMainShift originalShift = personAssignment.MainShift;
 			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, day);
 
-			if (!_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false, effectiveRestriction, resourceCalculateDelayer, null))
+			if (!_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, false, effectiveRestriction, _resourceCalculateDelayer, null))
             {
                 _rollbackService.Rollback();
                 return false;
