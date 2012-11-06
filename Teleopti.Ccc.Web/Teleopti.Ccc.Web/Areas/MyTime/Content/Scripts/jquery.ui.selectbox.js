@@ -4,7 +4,8 @@
 		options: {
 			source: null,
 			value: null,
-			opened: false
+			opened: false,
+			visible: true
 		},
 
 		_create: function () {
@@ -213,6 +214,9 @@
 				case "opened":
 					this._displayMenu(value);
 					break;
+				case "visible":
+					this._setVisibility(value);
+					break;
 			}
 
 			if (this._super)
@@ -234,6 +238,14 @@
 			} else {
 				this._select.attr('disabled', 'disabled');
 				this._button.attr('disabled', 'disabled');
+			}
+		},
+
+		_setVisibility: function (value) {
+			if (value) {
+				this._container.show();
+			} else {
+				this._container.hide();
 			}
 		},
 
@@ -281,14 +293,6 @@
 
 		select: function (value) {
 			this._selectValue(value);
-		},
-
-		hide: function () {
-			this._container.hide();
-		},
-
-		show: function () {
-			this._container.show();
 		},
 
 		selectableOptions: function () {

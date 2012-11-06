@@ -43,9 +43,9 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 					var self = $(this);
 
 					if (self.selectbox('selectableOptions').length < 2)
-						self.selectbox('hide');
+						self.selectbox({ visible: false });
 					else
-						self.selectbox('show');
+						self.selectbox({ visible: true });
 					if (self.selectbox('contains', teamId))
 						self.selectbox('select', teamId);
 					else {
