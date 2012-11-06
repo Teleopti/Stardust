@@ -102,8 +102,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if(result.MatrixList.Count == 0)
 			{
+				//kan flytta hur mycket som helst, behöver få veta vad som ska schemaläggas
+				int x = daysOffToRemove.Count;
 				if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
 					return false;
+				daysOffToRemove = _changesTracker.DaysOffRemoved(workingBitArray, originalArray, matrix,
+																			 _daysOffPreferences.ConsiderWeekBefore);
+				if (daysOffToRemove.Count != x)
+					return false;
+
 				IList<IScheduleDay> removedDays = _groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, schedulingOptions, allMatrixes, _schedulePartModifyAndRollbackService);
 				if (removedDays == null)
 					return false;
