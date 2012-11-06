@@ -87,7 +87,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 		self.now = ko.observable(new Date().getTeleoptiTime());
 		self.yesterday = ko.observable(yesterday);
-		self.unreadMessages = ko.observable(true);
 		self.unreadMessageCount = ko.observable(0);
 		self.canvasPosition = ko.computed(function () {
 			var msSinceStart = self.now() - self.yesterday().getTime();
@@ -100,6 +99,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				var todayMinus1 = new Date(currentMs).addDays(-1).clearTime();
 				self.yesterday(todayMinus1);
 			}
+		});
+		self.unreadMessages = ko.computed(function () {
+			return true;
 		});
 		self.yesterday.subscribe(function () {
 			if (self.intervalPointer != null) {

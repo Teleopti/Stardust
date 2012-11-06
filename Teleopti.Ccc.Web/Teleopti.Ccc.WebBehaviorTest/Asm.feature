@@ -111,7 +111,18 @@ Scenario: Asm should indicate unread messages
 	| Field         | Value        |
 	| Title         | New message	 |
 	When I click ASM link
-	Then I shoud see an indication that I have an unread message
+	Then I shoud see an indication that I have '1' unread messages
+
+Scenario: Asm should indicate number of unread messages
+	Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field         | Value        |
+	| Title         | New message	 |
+	And I have an unread message with
+	| Field         | Value					|
+	| Title         | Another Message	|
+	When I click ASM link
+	Then I shoud see an indication that I have '2' unread messages
 	
 Scenario: Asm should update when I get new messages
 	Given I have the role 'Full access to mytime'

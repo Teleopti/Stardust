@@ -114,7 +114,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I shoud see an indication that I have '(.*)' unread messages")]
 		public void ThenIShoudSeeAnIndicationThatIHaveUnreadMessages(int unreadMessagesCount)
 		{
-			ScenarioContext.Current.Pending();
+			EventualAssert.That(() =>
+				IsDisplayed(Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false))),
+				Is.True);
+			EventualAssert.That(() => Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false)).InnerHtml.Contains(unreadMessagesCount.ToString()), Is.True);		
 		}
 
 		[When(@"I click the unread message")]
