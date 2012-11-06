@@ -321,6 +321,17 @@ namespace Teleopti.Ccc.DBManager
             }
         }
 
+        private static bool DBUserExist(string SQLLogin)
+        {
+            const string sql = @"select count(*) from sys.sysusers where name = @SQLLogin";
+
+            using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
+            {
+                sqlCommand.Parameters.AddWithValue("@SQLLogin", SQLLogin);
+                return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+            }
+        }
+
         private static void CreateDB(string databaseName, DatabaseType databaseType)
         {
             logWrite("Creating database " + databaseName + "...");
@@ -383,7 +394,12 @@ namespace Teleopti.Ccc.DBManager
                 sql = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
                 using (var cmd = new SqlCommand(sql, _sqlConnection))
                 {
-                    cmd.ExecuteNonQuery();
+                    if (_isAzure && DBUserExist(user) == true)
+                    {
+                        logWrite("DB user already exist, continue ...");
+                    }
+                    else
+                        cmd.ExecuteNonQuery();
                 }
 
                 fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\permissions - add.sql", _databaseFolder.Path());
