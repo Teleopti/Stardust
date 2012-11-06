@@ -13,8 +13,6 @@
 			var button = $('button', buttonset)
 				.addClass('ui-splitbutton-button')
 				.html('&nbsp;')
-				.height(15)
-				.width(100)
 				.button({
 					text: true
 				})
@@ -38,6 +36,7 @@
 				.height(20)
 				.insertAfter(button)
 				.removeClass("ui-corner-all")
+				.addClass('ui-splitbutton-list-button')
 				.addClass("ui-corner-right ui-button-icon")
 				.button({
 					text: false,

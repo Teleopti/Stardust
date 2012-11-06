@@ -81,8 +81,16 @@ button.ui-button-icon-only
 
 /*Custom for Main nav tabs*/
 
-.ui-tabs .ui-tabs-nav{padding: 0em 1em 0; text-shadow: 1px 1px 0px #fff;}
-.ui-tabs .ui-tabs-nav li a {padding: .3em 1em;}
+.ui-tabs .ui-tabs-nav
+{
+	padding: 0em 1em 0; 
+	text-shadow: 1px 1px 0px #fff;
+}
+.ui-tabs .ui-tabs-nav li a
+{
+	padding: .3em 1em;
+	outline: none;
+}
 .ui-tabs.ui-corner-all{border: 0px;}
 .ui-tabs .ui-corner-bottom {-moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px;}
 .ui-tabs .ui-tabs-panel {
