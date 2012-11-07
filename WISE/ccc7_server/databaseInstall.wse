@@ -255,6 +255,8 @@ item: Set Variable
   Variable=C
   Value=-C
 end
+item: End Block
+end
 item: If/While Statement
   Variable=AUTH
   Value=NT
@@ -268,8 +270,6 @@ end
 item: Set Variable
   Variable=U
   Value=-L"%USER%:%PASS%"
-end
-item: End Block
 end
 item: End Block
 end
@@ -299,7 +299,7 @@ item: End Block
 end
 item: Execute Program
   Pathname=.\DBManager.exe
-  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %C% %U% -T "-F%DIR%
+  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %C% %U% -R -T "-F%DIR%
   Default Directory=%DIR%
   Flags=00000010
 end
@@ -319,7 +319,7 @@ item: End Block
 end
 item: Execute Program
   Pathname=.\DBManager.exe
-  Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %C% %U% -T "-F%DIR%
+  Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %C% %U% -R -T "-F%DIR%
   Default Directory=%DIR%
   Flags=00000010
 end
@@ -339,7 +339,7 @@ item: End Block
 end
 item: Execute Program
   Pathname=DBManager.exe
-  Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %C% %U% -T "-F%DIR%
+  Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %C% %U% -R -T "-F%DIR%
   Default Directory=%DIR%
   Flags=00000010
 end
