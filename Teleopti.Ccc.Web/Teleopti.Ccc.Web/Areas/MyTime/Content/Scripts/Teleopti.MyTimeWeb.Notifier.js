@@ -60,6 +60,9 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 	}
 
 	function _blinkDocumentTitle() {
+		if (blinkTitleTimer) {
+			clearInterval(blinkTitleTimer);
+		}
 		blinkTitleTimer = window.setInterval(function () {
 			top.document.title == notifyText ? top.document.title = originalDocumentTitle : top.document.title = notifyText;
 		}, 750);

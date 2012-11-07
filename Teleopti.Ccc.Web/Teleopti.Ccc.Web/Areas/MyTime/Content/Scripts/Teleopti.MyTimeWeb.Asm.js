@@ -173,7 +173,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
 					url: data.Url,
 					callback: listeners,
-					domainType: 'IScheduleChangedInDefaultScenario',
+					domainType: 'IPersistableScheduleData',
 					businessUnitId: data.BusinessUnitId,
 					datasource: data.DataSourceName,
 					referenceId: data.AgentId
