@@ -9,9 +9,9 @@
   <DataSets>
     <DataSet Name="DataSet1">
       <Fields>
-        <Field Name="person_id">
-          <DataField>person_id</DataField>
-          <rd:TypeName>System.Int3</rd:TypeName>
+        <Field Name="person_code">
+          <DataField>person_code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="person_name">
           <DataField>person_name</DataField>
@@ -2129,7 +2129,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
             <TablixMember>
               <Group Name="table2_Group1">
                 <GroupExpressions>
-                  <GroupExpression>=Fields!person_id.Value</GroupExpression>
+                  <GroupExpression>=Fields!person_code.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
               <SortExpressions>
