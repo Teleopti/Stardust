@@ -1,4 +1,4 @@
-﻿Feature: Shift Trade Request
+﻿Feature: Shift Trade Requests
 	In order to avoid an unwanted scheduled shifts
 	As an agent
 	I want to be able to trade shifts with other agents
@@ -49,6 +49,12 @@ Scenario: Default to today when viewing shift trade
 	Then the selected date should be '2030-01-01'
 
 @ignore
+Scenario: Default time line when I am not scheduled
+	Given I have the role 'Full access to mytime'
+	And Current time is '2020-10-24'
+	When I navigate to shift trade page
+
+@ignore
 Scenario: Show my scheduled day at the top
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01'
@@ -58,3 +64,5 @@ Scenario: Show my scheduled day at the top
 	| Start time	| 08:00 |
 	| End time		| 17:00 |
 
+@ignore
+Scenario: 
