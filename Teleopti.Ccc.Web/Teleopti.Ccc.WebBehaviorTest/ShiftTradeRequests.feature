@@ -3,6 +3,7 @@
 	As an agent
 	I want to be able to trade shifts with other agents
 
+@ignore
 Background:
 	Given there is a role with
 	| Field                    | Value                 |
@@ -23,10 +24,10 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
-	And there is a shift with
+	And I have a shift with
 	| Field                 | Value            |
-	| StartTime             | 2030-01-01 08:00 |
-	| EndTime               | 2030-01-01 17:00 |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
 	| Lunch3HoursAfterStart | true             |
 
 @ignore
@@ -53,16 +54,31 @@ Scenario: Default time line when I am not scheduled
 	Given I have the role 'Full access to mytime'
 	And Current time is '2020-10-24'
 	When I navigate to shift trade page
+	Then I should see the time line span from '7:45' to '17:15'
 
 @ignore
-Scenario: Show my scheduled day at the top
+Scenario: Time line when I have a scheduled shift
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01'
+	When I navigate to shift trade page
+	Then I should see the time line span from '5:45' to '16:15'
+
+@ignore
+Scenario: Show my scheduled shift
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01'
 	When I navigate to shift trade page
 	Then I should see my schedule with
 	| Field | Value |
-	| Start time	| 08:00 |
-	| End time		| 17:00 |
+	| Start time	| 06:00 |
+	| End time		| 16:00 |
 
 @ignore
-Scenario: 
+Scenario: Show my scheduled day off
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-03'
+	When I navigate to shift trade page
+	Then I should see my schedule with
+	| Field | Value |
+	| Start time	| 06:00 |
+	| End time		| 16:00 |

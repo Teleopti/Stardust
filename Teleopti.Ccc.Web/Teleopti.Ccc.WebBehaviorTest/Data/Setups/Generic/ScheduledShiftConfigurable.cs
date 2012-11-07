@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
