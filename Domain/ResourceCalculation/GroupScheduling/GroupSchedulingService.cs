@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 					{
 						if (groupPerson.Id.HasValue)
 						{
-							if (teamSteadyStates[groupPerson.Id.Value])
+							if (teamSteadyStates.ContainsKey(groupPerson.Id.Value) && teamSteadyStates[groupPerson.Id.Value])
 							{
 								if (
 									!teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, this, _rollbackService,

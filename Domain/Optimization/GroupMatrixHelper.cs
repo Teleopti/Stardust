@@ -6,6 +6,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IGroupMatrixHelper
     {
+		/// <summary>
+		/// Calculate resources
+		/// </summary>
+		/// <param name="scheduleDays"></param>
+    	void SafeResourceCalculate(IList<IScheduleDay> scheduleDays);
 
         /// <summary>
         /// Executes the day off moves.
@@ -310,7 +315,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		}
 
-		private void SafeResourceCalculate(IList<IScheduleDay> scheduleDays)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void SafeResourceCalculate(IList<IScheduleDay> scheduleDays)
 		{
 			var uniqeDates = new HashSet<DateOnly>();
 			foreach (var scheduleDay in scheduleDays)

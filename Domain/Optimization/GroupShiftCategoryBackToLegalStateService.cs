@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					if (groupPerson != null && groupPerson.Id.HasValue)
 					{
-						if (teamSteadyStates[groupPerson.Id.Value])
+						if (teamSteadyStates.ContainsKey(groupPerson.Id.Value) && teamSteadyStates[groupPerson.Id.Value])
 						{
 							if (teamSteadyStateMainShiftScheduler != null &&
 								!teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, _scheduleService, rollbackService,
