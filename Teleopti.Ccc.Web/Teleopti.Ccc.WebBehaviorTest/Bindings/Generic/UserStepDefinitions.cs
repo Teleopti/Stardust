@@ -1,8 +1,10 @@
 using System;
 using System.Threading;
+using System.IO;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 
@@ -34,26 +36,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 					RuleSetBag = "Common"
 				};
 			UserFactory.User().Setup(personPeriod);
-		}
-
-
-		[Given(@"there is a shift with")]
-		public void GivenThereIsAShiftWith(Table table)
-		{
-			var schedule = table.CreateInstance<ShiftConfigurable>();
-			UserFactory.User().Setup(schedule);
-		}
-
-		[When(@"there is a shift with")]
-		public void GivenThereIsAShiftWithWhen(Table table)
-		{
-			var schedule = table.CreateInstance<ShiftConfigurable>();
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var user = UserFactory.User().Person;
-				schedule.Apply(uow, user, user.PermissionInformation.Culture());
-				uow.PersistAll();
-			}
 		}
 
 		[Given(@"I have a pre-scheduled meeting with")]
@@ -92,6 +74,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(absenceRequest);
 		}
 
+		[Given(@"I have user logon details with")]
+		public void GivenIHaveUserLogonDetailsWith(Table table)
+		{
+			var userLogonDetai = table.CreateInstance<UserLogonDetailConfigurable>();
+			UserFactory.User().Setup(userLogonDetai);
+		}
 
+
+		[Given(@"There is a password policy with")]
+		public void GivenThereIsAPasswordPolicyWith(Table table)
+		{
+			var targetTestPasswordPolicyFile = Path.Combine(Path.Combine(IniFileInfo.SitePath, "bin"), "PasswordPolicy.xml");
+			var contents = File.ReadAllText("Data\\PasswordPolicy.xml");
+			var passwordPolicy = table.CreateInstance<PasswordPolicyConfigurable>();
+
+			contents = contents.Replace("_MaxNumberOfAttempts_", passwordPolicy.MaxNumberOfAttempts.ToString());
+			contents = contents.Replace("_InvalidAttemptWindow_", passwordPolicy.InvalidAttemptWindow.ToString());
+			contents = contents.Replace("_PasswordValidForDayCount_", passwordPolicy.PasswordValidForDayCount.ToString());
+			contents = contents.Replace("_PasswordExpireWarningDayCount_", passwordPolicy.PasswordExpireWarningDayCount.ToString());
+			
+			if (passwordPolicy.Rule1.Equals("PasswordLengthMin8"))
+			{
+			}
+			
+			File.WriteAllText(targetTestPasswordPolicyFile, contents);
+		}
 	}
 }

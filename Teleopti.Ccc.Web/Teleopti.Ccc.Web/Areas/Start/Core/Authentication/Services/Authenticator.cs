@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Repositories;
+﻿using System;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -50,7 +51,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var authResult = _findApplicationUser.CheckLogOn(uow, userName, password);
-				return new AuthenticateResult { DataSource = dataSource, Person = authResult.Person, Successful = authResult.Successful };
+				uow.PersistAll();
+				return new AuthenticateResult {DataSource = dataSource, Person = authResult.Person, Successful = authResult.Successful, HasMessage = authResult.HasMessage, Message = authResult.Message};
 			}
 
 		}

@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var assignedPersons = new List<IPerson>();
 			IPersonAssignment personAssignmentSource = null;
+			IScheduleDay dayToCalculate = null;
 
 			//schedule first group member or use existing main shift as source, return false if there are non coherent mainshifts
 			foreach (var groupMember in groupPerson.GroupMembers)
@@ -74,8 +75,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					scheduleDaySource = scheduleRangeSource.ScheduledDay(dateOnly);
 					assignedPersons.Add(person);
 				}
-				
 
+				dayToCalculate = scheduleDaySource;
 				personAssignmentSource = scheduleDaySource.AssignmentHighZOrder();
 				break;
 			}
@@ -109,6 +110,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				rollbackService.Modify(scheduleDay);
 			}
 
+			if (dayToCalculate != null)
+				_groupMatrixHelper.SafeResourceCalculate(new List<IScheduleDay> { dayToCalculate });
 			return true;
 		}
 	}

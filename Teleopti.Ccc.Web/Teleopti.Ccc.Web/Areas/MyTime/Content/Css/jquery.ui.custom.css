@@ -16,6 +16,24 @@
 	line-height: 12px;
 }
 
+/* tooltip */
+/* doh! qtip also uses the "ui-tooltip" class, and they get mixed up */
+
+.ui-tooltip {
+	padding: 0px;
+}
+
+
+/* jquery.ui.menu.css */
+.ui-menu li a {
+	font-size: 12px; 
+	text-align: left;
+}
+.rtl .ui-menu li a {
+	text-align: right;
+}
+
+
 /*jquery.ui.button.css*/
 
 .buttonset-nav .ui-button-text-only .ui-button-text { padding: .2em 0.6em; }
@@ -92,8 +110,17 @@ button.ui-button-icon-only
 
 /*Custom for Main nav tabs*/
 
-.ui-tabs .ui-tabs-nav{padding: 0em 1em 0; text-shadow: 1px 1px 0px #fff;}
-.ui-tabs .ui-tabs-nav li a {padding: .3em 1em;}
+
+.ui-tabs .ui-tabs-nav
+{
+	padding: 0em 1em 0; 
+	text-shadow: 1px 1px 0px #fff;
+}
+.ui-tabs .ui-tabs-nav li a
+{
+	padding: .3em 1em;
+	outline: none;
+}
 .ui-tabs.ui-corner-all{border: 0px;}
 .ui-tabs .ui-corner-bottom {-moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px;}
 .ui-tabs .ui-tabs-panel {
@@ -103,9 +130,19 @@ button.ui-button-icon-only
 }
 .ui-tabs.ui-widget-content{background-image: none; background-color: transparent;}
 .ui-tabs .ui-widget-header{background-image: none; background-color: transparent; border: 0px;}
-.ui-tabs .ui-tabs-nav .ui-state-default{background-color: transparent; background-image: none; border: 1px solid transparent;}
-.ui-tabs .ui-tabs-nav .ui-tabs-selected, .ui-tabs .ui-tabs-nav .ui-state-hover {background-color: #fcfcfc; border: 1px solid #CECECE;}
 
+.ui-tabs .ui-tabs-nav .ui-state-default {
+	background-color: transparent; 
+	background-image: none; 
+	border: 1px solid transparent;
+}
+
+.ui-tabs .ui-tabs-nav .ui-state-active, 
+.ui-tabs .ui-tabs-nav .ui-state-hover
+{
+	background-color: #fcfcfc;
+	border: 1px solid #CECECE;
+}
 
 /* Custom for Sign in tabs */
 

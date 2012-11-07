@@ -141,6 +141,8 @@
     <Compile Include="Collection\IdenticalLayersSpecification.cs" />
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
+    <Compile Include="Common\IModifyUtcNow.cs" />
+    <Compile Include="Common\UtcNow.cs" />
     <Compile Include="Common\EntityExtensions.cs" />
     <Compile Include="Common\IModifyNow.cs" />
     <Compile Include="Common\ListAggregator.cs" />
@@ -792,6 +794,7 @@
     <Compile Include="Security\Authentication\AuthenticationResult.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProvider.cs" />
     <Compile Include="Security\Authentication\AvailableDataSourcesProvider.cs" />
+    <Compile Include="Security\Authentication\ChangePasswordResultInfo.cs" />
     <Compile Include="Security\Authentication\CheckBruteForce.cs" />
     <Compile Include="Security\Authentication\CheckNullUser.cs" />
     <Compile Include="Security\Authentication\CheckPassword.cs" />

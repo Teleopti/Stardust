@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Web.Mvc;
 using AutoMapper;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -57,15 +58,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		[HttpPut]
-		public void ChangePassword(ChangePasswordViewModel model)
+		[HttpPostOrPut]
+		public JsonResult ChangePassword(ChangePasswordViewModel model)
 		{
 			var result = _modifyPassword.Change(_loggedOnUser.CurrentUser(), model.OldPassword, model.NewPassword);
-			if (!result)
+			if (!result.IsSuccessful)
 			{
 				Response.TrySkipIisCustomErrors = true;
 				Response.StatusCode = 400;
 			}
+			return Json(result);
 		}
 	}
 }

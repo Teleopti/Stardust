@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_guid = Guid.NewGuid();
 			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2012, 1, 1);
-			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("person1"), _dateOnly);
+			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod	(PersonFactory.CreatePerson("person1"), _dateOnly);
 			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("person2"), _dateOnly);
 
 			_shiftCategory = new ShiftCategory("shiftCategory");
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			
 			SetupStateHolder();
 			_scheduleMatrixPro1 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person1, _person1.VirtualSchedulePeriod(_dateOnly));
-			_scheduleMatrixPro2 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person2, _person2.VirtualSchedulePeriod(_dateOnly));
+			_scheduleMatrixPro2 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person2, _person2.VirtualSchedulePeriod(_dateOnly));	
 
 			_schedulePeriodTargetTimeCalculator = _mocks.StrictMock<ISchedulePeriodTargetTimeCalculator>();
 			_matrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro1, _scheduleMatrixPro2};
@@ -177,6 +178,38 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldSetTeamSteadyStateToFalseWhenNoScheduleMatrixPro()
 		{
 			_matrixes.RemoveAt(1);
+			var result = _target.Run(_groupPerson1, _dateOnly);
+			Assert.IsNotNull(result);
+			Assert.IsFalse(result.Value);
+		}
+
+		[Test]
+		public void ShouldSetTeamSteadyStateToFalseWhenFirstPersonHasDifferentPersonPeriodsOnMatrix()
+		{
+			IPersonPeriod personPeriod = new PersonPeriod(_dateOnly.AddDays(10), PersonContractFactory.CreatePersonContract(), new Team());
+			_person1.AddPersonPeriod(personPeriod);
+			var result = _target.Run(_groupPerson1, _dateOnly);
+			Assert.IsNotNull(result);
+			Assert.IsFalse(result.Value);
+		}
+
+		[Test]
+		public void ShouldSetTeamSteadyStateToFalseWhenPersonHasDifferentPersonPeriodsOnMatrix()
+		{
+			IPersonPeriod personPeriod = new PersonPeriod(_dateOnly.AddDays(10), PersonContractFactory.CreatePersonContract(), new Team());
+			_person2.AddPersonPeriod(personPeriod);
+			var result = _target.Run(_groupPerson1, _dateOnly);
+			Assert.IsNotNull(result);
+			Assert.IsFalse(result.Value);
+		}
+
+		[Test]
+		public void ShouldSetTeamSteadyStateToFalseOnDifferentMatrixPeriods()
+		{
+			var dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(20));
+			_matrixes.RemoveAt(1);
+			_scheduleMatrixPro2 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person2, _person2.VirtualSchedulePeriod(_dateOnly));
+			_matrixes.Add(_scheduleMatrixPro2);
 			var result = _target.Run(_groupPerson1, _dateOnly);
 			Assert.IsNotNull(result);
 			Assert.IsFalse(result.Value);

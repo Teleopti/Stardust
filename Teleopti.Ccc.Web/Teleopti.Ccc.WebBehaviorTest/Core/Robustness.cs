@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
+using WatiN.Core.Exceptions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
@@ -18,9 +20,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			{
 				return action.Invoke();
 			}
-				// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
-				// if so, lets just try again
-				// maybe this behavior should be placed elsewhere and not only apply to asserts..
+			// in some states our javascript "namespaces" havnt been initialized yet, so calling functions at those times will give JS exceptions
+			// maybe we should look for the strings "TypeError" and "ReferenceError" here to be more specific.
+			catch (JavaScriptException ex)
+			{
+				return failureCallback.Invoke(ex);
+			}
+			// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
+			// if so, lets just try again
+			// maybe this behavior should be placed elsewhere and not only apply to asserts..
 			catch (UnauthorizedAccessException ex)
 			{
 				return failureCallback.Invoke(ex);

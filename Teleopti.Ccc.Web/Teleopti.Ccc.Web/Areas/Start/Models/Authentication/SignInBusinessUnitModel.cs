@@ -12,5 +12,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 		public string DataSourceName { get; set; }
 		public Guid PersonId { get; set; }
 		public int AuthenticationType { get; set; }
+		public string WarningMessage { get; set; }
 	}
 }

@@ -48,11 +48,11 @@
 			if (tabContent.length == 0) {
 				this._element
 					.find('.ui-tabs-panel')
-					.addClass('ui-tabs-hide')
+					.hide()
 					;
-				this._emptyContent.removeClass('ui-tabs-hide');
+				this._emptyContent.show();
 			} else {
-				this._emptyContent.addClass('ui-tabs-hide');
+				this._emptyContent.hide();
 			}
 
 		},
