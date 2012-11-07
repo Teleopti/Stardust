@@ -25,6 +25,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var pixelToDisplayTitle = 16;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
+	var completelyLoaded;
 
 	function _initTooltip() {
 		var addTextRequest = $('.show-request');
@@ -77,6 +78,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
 		_initTodayButton();
 		$('.body-weekview-inner').show();
+		completelyLoaded();
 	}
 
 	function _initPeriodSelection() {
@@ -324,9 +326,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 			Teleopti.MyTimeWeb.Schedule.Request.Init();
 		},
-		PartialInit: function () {
+		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
+			readyForInteractionCallback();
+			completelyLoaded = completelyLoadedCallback;
 		},
 		SetupViewModel: function (userTexts) {
 			vm = new WeekScheduleViewModel(userTexts);
