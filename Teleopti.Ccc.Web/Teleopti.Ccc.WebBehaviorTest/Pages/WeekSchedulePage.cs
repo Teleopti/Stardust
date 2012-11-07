@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class WeekSchedulePage : PortalPage, IOkButton, ICancelButton, IEditRequestPage, IDateRangeSelector
 	{
-		private Constraint DayConstraint = Find.By("data-mytime-date", v => v != null);
+		private readonly Constraint DayConstraint = Find.By("data-mytime-date", v => v != null);
 		private ListCollection DayLists { get { return Document.Lists.Filter(DayConstraint); } }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Div DayComment(DateTime date) 
 		{
 			return Document.Div(Find.BySelector(DateSelector(date) + " .icon.comment-day")).EventualGet();
-			//return DayElementForDate(date).Div(QuicklyFind.ByClass("icon comment-day"));
 		}
 
 		public void ClickThirdDayOfOtherWeekInWeekPicker(CultureInfo culture)
@@ -60,7 +59,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Div RequestForDate(DateTime date)
 		{
 			return Document.Div(Find.BySelector(DateSelector(date) + " .text-request")).EventualGet();
-			//return DayElementForDate(date).Div(QuicklyFind.ByClass("text-request"));
 		}
 
 		[FindBy(Id = "Schedule-addRequest-button")]
@@ -135,7 +133,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Div TimeIndicatorForDate(DateTime date)
 		{
 			return Document.Div(Find.BySelector(DateSelector(date) + " .week-schedule-time-indicator")).EventualGet();
-			//return DayElementForDate(date).ListItems[4].Div(QuicklyFind.ByClass("week-schedule-time-indicator"));
 		}
 
 		public Div TimeIndicatorInTimeLine
@@ -164,14 +161,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public DivCollection DayLayers(DateTime date)
         {
 			return Document.Divs.Filter(Find.BySelector(DateSelector(date) + " .week-schedule-layer"));
-			//return DayElementForDate(date).ListItems[4].Divs.Filter(QuicklyFind.ByClass("week-schedule-layer"));
         }
 
 		public Div DayLayerTooltipElement(DateTime date, string tooltipContent)
 		{
-			//var a = Document.Div(Find.BySelector(DateSelector(date) + " .week-schedule-layer[tooltip-text*=<div>]"));
-			var a = Document.Div(Find.BySelector(DateSelector(date) + " .week-schedule-layer[tooltip-text*='" + tooltipContent + "']"));
-			return a;
+			return Document.Div(Find.BySelector(DateSelector(date) + " .week-schedule-layer[tooltip-text*='" + tooltipContent + "']"));
 		}
 	}
 }

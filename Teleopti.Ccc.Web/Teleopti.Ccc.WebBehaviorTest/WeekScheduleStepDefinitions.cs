@@ -71,32 +71,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.DayLayers(date).Count.Should().Be.EqualTo(2);
 		}
 
-
-		//[When(@"I hover over the meeting on date '(.*)'")]
-		//public void WhenIHoverOverTheMeetingOnDate(DateTime date)
-		//{
-		//    Div meetingLayer = null;
-		//    EventualAssert.That(() =>
-		//    {
-		//        return _page.DayLayerTooltipElement(date).Exists;
-		//        //var meetingLayers =_page.DayLayers(date).Filter(Find.BySelector(@"[tooltip-text*=<div>]"));
-		//        //    if (meetingLayers.Count == 0)
-		//        //    {
-		//        //        return false;												
-		//        //    }
-		//        //meetingLayer = meetingLayers.First();
-		//        //return true;
-		//    }, Is.True);
-		//    meetingLayer.FireEvent("onmouseover");
-		//}
-
-
 		[Then(@"I should see the meeting details with subject '(.*)' on date '(.*)'")]
 		public void ThenIShouldSeeTheMeetingDetailsOnDate(string subject, DateTime date)
 		{
 			EventualAssert.That(() => _page.DayLayerTooltipElement(date, subject).Exists, Is.True);
-			//Div meetingLayer = _page.DayLayers(date).Filter(Find.BySelector("[tooltip-text*=" + subject + "]")).First();
-			//meetingLayer.Should().Not.Be.Null();
 		}
 
 		[Then(@"I should see the public note on date '(.*)'")]
