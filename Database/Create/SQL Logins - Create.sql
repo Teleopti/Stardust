@@ -19,10 +19,9 @@ DECLARE @securityadmin			int
 
 	IF @securityadmin = 1
 	BEGIN
-		PRINT 'Creating login: $(SQLLOGIN). Working ...'
-		
 		IF '$(SQLLOGIN)' <> 'sa'  --If user like to run the application with sa, don't add the login.
 		BEGIN
+		PRINT 'Creating login: $(SQLLOGIN). Working ...'
 			--Create login if it doesn't exists
 			IF NOT EXISTS (SELECT * FROM syslogins WHERE name = '$(SQLLOGIN)')
 			BEGIN	
@@ -37,6 +36,7 @@ DECLARE @securityadmin			int
 			BEGIN
 				ALTER LOGIN [$(SQLLOGIN)] WITH PASSWORD=N'$(SQLPWD)'
 			END
+		PRINT 'Creating login: $(SQLLOGIN). Finished!'
 		END
 	END
 	ELSE
@@ -63,7 +63,5 @@ BEGIN CATCH
 		RAISERROR (@ErrorMessage, 16, 127, @ErrorNumber, @ErrorSeverity, @ErrorState, @ErrorLine)
 	END
 END CATCH
-
-PRINT 'Creating login: $(SQLLOGIN). Finished!'
 
 PRINT '---'

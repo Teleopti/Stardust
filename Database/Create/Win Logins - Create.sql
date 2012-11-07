@@ -30,7 +30,6 @@ Date		Who				What
 USE master
 BEGIN TRY
 	
-	PRINT 'Create local Windows group and corresponding SQL Login. Working ...'
 	SET NOCOUNT ON
 	
 	--declare

@@ -61,18 +61,18 @@ SET NOCOUNT ON
 	BEGIN
 	--init
 	
-		PRINT 'Adding permission for $(LOGIN) in database. Working...'
 		IF '$(LOGIN)' <> 'sa'  --If user like to run the application with sa, don't add the user
 		BEGIN
-
+		PRINT 'Adding permission for $(LOGIN) in database. Working...'
 			--Create User for Login: $(LOGIN)
 			IF NOT EXISTS (SELECT * FROM sys.sysusers su INNER JOIN master.sys.syslogins SL ON su.sid = sl.sid WHERE SL.name = @Login)
 			SELECT @SqlCommand = 'CREATE USER [' + @Login + '] FOR LOGIN ['+@Login+']'
 			PRINT @SqlCommand
 			EXEC sp_executesql @SqlCommand
 			
-		END
 		PRINT 'Adding permission for $(LOGIN) in database. Finished!'
+		END
+		
 	END
 	
 	IF @AuthType = 'WIN'--Windows Login
