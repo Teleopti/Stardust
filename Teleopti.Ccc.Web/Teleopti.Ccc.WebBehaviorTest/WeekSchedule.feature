@@ -2,7 +2,7 @@
 	In order to know how to work this week
 	As an agent
 	I want to see my schedule details
-
+	
 Background:
 	Given there is a role with
 	| Field                    | Value                 |
