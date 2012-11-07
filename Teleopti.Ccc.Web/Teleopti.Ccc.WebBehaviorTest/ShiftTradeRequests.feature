@@ -26,7 +26,13 @@ Background:
 	| Start date | 2012-06-18 |
 	And there are shift categories
 	| Name  |
-	| Day  |
+	| Day   |
+	And there is a dayoff with
+	| Field | Value  |
+	| Name  | DayOff |
+	And there is an absence with
+	| Field | Value   |
+	| Name  | Illness |
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
@@ -73,16 +79,36 @@ Scenario: Show my scheduled shift
 	And Current time is '2030-01-01'
 	When I navigate to shift trade page
 	Then I should see my schedule with
-	| Field | Value |
+	| Field			| Value |
 	| Start time	| 06:00 |
 	| End time		| 16:00 |
 
 @ignore
 Scenario: Show my scheduled day off
 	Given I have the role 'Full access to mytime'
+	And I have a day off with
+	| Field | Value      |
+	| Date  | 2030-01-03 |
+	| Name  | DayOff     |
 	And Current time is '2030-01-03'
 	When I navigate to shift trade page
-	Then I should see my schedule with
-	| Field | Value |
-	| Start time	| 06:00 |
-	| End time		| 16:00 |
+	Then I should see my scheduled day off 'DayOff'
+
+@ignore
+Scenario: Show my full-day absence
+	Given I have the role 'Full access to mytime'
+	And I have absence with
+	| Field		| Value      |
+	| Date		| 2030-01-05 |
+	| Name		| Illness	 |
+	| Full Day  | True		 |
+	And Current time is '2030-01-05'
+	When I navigate to shift trade page
+	Then I should see my scheduled absence 'Illness'
+
+@ignore
+Scenario: Show message when no possible shift trades
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-05'
+	When I navigate to shift trade page
+	Then I should see a user-friendly message explaining that shift trades cannot be made
