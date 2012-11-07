@@ -57,10 +57,6 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 
 	function _pinnedNotification() {
 		$.pinify.flashTaskbar();
-		$.pinify.addOverlay({
-			//title: 'gurka', //don't know where this is suppose to be shown?
-			icon: baseUrl + 'content/favicon.ico'
-		});
 	}
 
 	function _blinkDocumentTitle() {
