@@ -60,12 +60,16 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 	}
 
 	function _blinkDocumentTitle() {
+		var blinkTimeout = 750;
 		if (blinkTitleTimer) {
 			clearInterval(blinkTitleTimer);
 		}
 		blinkTitleTimer = window.setInterval(function () {
-			top.document.title == notifyText ? top.document.title = originalDocumentTitle : top.document.title = notifyText;
-		}, 750);
+			var decodedTitle = $('<div/>').html(notifyText).text();
+			top.document.title == decodedTitle ?
+										top.document.title = originalDocumentTitle :
+										top.document.title = decodedTitle;
+		}, blinkTimeout);
 	}
 
 	function _stopBlinkDocumentTitle() {
