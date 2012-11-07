@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					return false;
 
 				var teamSteadyStateSuccess = false;
-				if (groupPerson.Id.HasValue && teamSteadyStates[groupPerson.Id.Value])
+				if (groupPerson.Id.HasValue && teamSteadyStates.ContainsKey(groupPerson.Id.Value) && teamSteadyStates[groupPerson.Id.Value])
 				{
 					foreach (var dateOnly in daysOffToRemove)
 					{

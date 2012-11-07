@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "matrixListForIntradayOptimization"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays)
+        public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays, IList<IScheduleMatrixPro> allMatrixes )
         {
             _backgroundWorker = backgroundWorker;
             var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
@@ -79,7 +79,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
 				var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
 				var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
-				var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(selectedPersons, targetTimeCalculator, matrixListForWorkShiftOptimization, groupPersonsBuilder, schedulingOptions);
+            	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
+				var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, matrixListForWorkShiftOptimization, groupPersonsBuilder, schedulingOptions);
 				IDictionary<Guid, bool> teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
                 if (optimizerPreferences.General.OptimizationStepDaysOff)
 					runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod, teamSteadyStateDictionary);
@@ -97,7 +98,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var schedulingOptionsCreator = new SchedulingOptionsCreator();
                 var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
                 RemoveShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker,
-                                                    optimizerPreferences, schedulingOptions, selectedPersons, selectedPeriod);
+                                                    optimizerPreferences, schedulingOptions, selectedPeriod, allMatrixes);
             }
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public void RemoveShiftCategoryBackToLegalState(
             IList<IScheduleMatrixPro> matrixList,
 			BackgroundWorker backgroundWorker, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, 
-			IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod)
+			DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes)
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -141,7 +142,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(groupMatrixHelper, coherentChecker, scheduleMatrixProFinder);
 				var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
 				var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
-				var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(selectedPersons, targetTimeCalculator, matrixList, groupPersonsBuilder, schedulingOptions);
+            	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
+				var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, matrixList, groupPersonsBuilder, schedulingOptions);
 				IDictionary<Guid, bool> teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
 				IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_stateHolder, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
 

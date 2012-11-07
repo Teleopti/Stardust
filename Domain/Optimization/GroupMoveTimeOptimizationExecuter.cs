@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			dateOnly = keyValuePair.Value.DateOnlyAsPeriod.DateOnly;
 			var groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(keyValuePair.Value.Person, dateOnly);
-			if (groupPerson.Id.HasValue && teamSteadyStates[groupPerson.Id.Value])
+			if (groupPerson.Id.HasValue && teamSteadyStates.ContainsKey(groupPerson.Id.Value) && teamSteadyStates[groupPerson.Id.Value])
 			{
 				var teamSteadyStateSuccess = teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, SchedulingOptions, _groupPersonBuilderForOptimization, allMatrixes, scheduleDictionary);
 				if (teamSteadyStateSuccess)
