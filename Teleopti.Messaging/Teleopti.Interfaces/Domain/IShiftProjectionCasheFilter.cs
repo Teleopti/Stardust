@@ -185,5 +185,15 @@ namespace Teleopti.Interfaces.Domain
                                                                     IScheduleDay part,
                                                                     IWorkShiftFinderResult finderResult);
 
+        /// <summary>
+        /// Filters the on personal shifts.
+        /// </summary>
+        /// <param name="shiftList">The shift list.</param>
+        /// <param name="schedulePart">The schedule part.</param>
+        /// <param name="finderResult">The finder result.</param>
+        /// <returns></returns>
+        IList<IShiftProjectionCache> FilterOnPersonalShifts(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult);
+
+
     }
 }
