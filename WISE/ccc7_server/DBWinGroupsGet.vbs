@@ -21,7 +21,7 @@ if debug Then
 	admAuthModel="NT"
 Else
 	'Get Wise props
-	server		= Session.Property("SQL_SERVER_NAME")
+	server		= Session.Property("WiseSqlServerName")
 	admAuthModel=Session.Property("WiseSqlAuth")
 	admSqlLogin	=Session.Property("WiseSqlUser")
 	admPassword=Session.Property("WiseSqlPass")
