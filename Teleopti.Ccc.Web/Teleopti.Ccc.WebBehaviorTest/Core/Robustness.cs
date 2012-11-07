@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static T SafeIEOperation<T>(Func<T> action, Func<Exception, T> failureCallback)
 		{
-			RunScriptException a;
 			try
 			{
 				return action.Invoke();
