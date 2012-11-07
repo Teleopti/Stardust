@@ -55,6 +55,13 @@ namespace Teleopti.Ccc.DBManager
 					_schemaVersionInformation = new SchemaVersionInformation(_databaseFolder);
                     logWrite("Running from:" + _databaseFolder.Path());
 
+                    //If Permission Mode: check if application user name and password/windowsgroup is submitted
+                    if (_commandLineArgument.PermissionMode)
+                    {
+                        if (!(_commandLineArgument.appUserName.Length > 0 && (_commandLineArgument.appUserPwd.Length > 0 || _commandLineArgument.isWindowsGroupName)))
+                            throw new Exception("No Application user/Windows group name submitted!");
+                    }
+
                     //Connect and open db
                     _sqlConnection = ConnectAndOpen(_commandLineArgument.ConnectionStringToMaster);
 
@@ -79,18 +86,10 @@ namespace Teleopti.Ccc.DBManager
                         CreateDB(_commandLineArgument.DatabaseName, _commandLineArgument.TargetDatabaseType);
                     }
 
+                    //Try create or re-create login
                     if (_commandLineArgument.PermissionMode)
                     {
-                        //check if application user name and password/windowsgroup is submitted
-                        if (_commandLineArgument.appUserName.Length > 0 && (_commandLineArgument.appUserPwd.Length > 0 || _commandLineArgument.isWindowsGroupName))
-                        {
-                            CreateLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName);
-                        }
-                        else
-                        {
-                            throw new Exception("No Application user/Windows group name submitted!");
-                        }
-
+                        CreateLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName);
                     }
 
                     //Does the db exist?
@@ -112,16 +111,7 @@ namespace Teleopti.Ccc.DBManager
                         //Set permissions of the newly application user on db.
                         if (_commandLineArgument.PermissionMode)
                         {
-                            //check if application user name and password/windowsgroup is submitted
-                            if (_commandLineArgument.appUserName.Length > 0 && (_commandLineArgument.appUserPwd.Length > 0 || _commandLineArgument.isWindowsGroupName))
-                            {
-                                CreatePermissions(_commandLineArgument.appUserName, _commandLineArgument.isWindowsGroupName);
-                            }
-                            else
-                            {
-                                throw new Exception("No Application user/Windows group name submitted!");
-                            }
-
+                            CreatePermissions(_commandLineArgument.appUserName, _commandLineArgument.isWindowsGroupName);
                         }
 
                         //Patch database

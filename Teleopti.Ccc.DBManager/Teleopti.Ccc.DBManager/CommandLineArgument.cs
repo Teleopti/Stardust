@@ -61,6 +61,8 @@ namespace Teleopti.Ccc.DBManager
                         break;
                     case "-C":
                         _willCreateNewDatabase = true;
+                        _permissionMode = true;
+                        _patchMode = true;
                         break;
                     case "-B":
                         _businessUnitName = switchValue;
