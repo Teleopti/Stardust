@@ -35,26 +35,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(personPeriod);
 		}
 
-
-		[Given(@"there is a shift with")]
-		public void GivenThereIsAShiftWith(Table table)
-		{
-			var schedule = table.CreateInstance<ShiftConfigurable>();
-			UserFactory.User().Setup(schedule);
-		}
-
-		[When(@"there is a shift with")]
-		public void GivenThereIsAShiftWithWhen(Table table)
-		{
-			var schedule = table.CreateInstance<ShiftConfigurable>();
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var user = UserFactory.User().Person;
-				schedule.Apply(uow, user, user.PermissionInformation.Culture());
-				uow.PersistAll();
-			}
-		}
-
 		[Given(@"I have a pre-scheduled meeting with")]
 		[Given(@"I have a meeting scheduled")]
 		public void GivenIHaveAMeetingScheduled(Table table)

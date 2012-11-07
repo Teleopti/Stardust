@@ -24,10 +24,14 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
+	And there are shift categories
+	| Name  |
+	| Day  |
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
 	| Lunch3HoursAfterStart | true             |
 
 @ignore

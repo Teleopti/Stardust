@@ -99,6 +99,7 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
     <Compile Include="Bindings\Transform.cs" />
     <Compile Include="Core\Robustness.cs" />
@@ -121,7 +122,6 @@
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\ScheduledShiftConfigurable.cs" />
     <Compile Include="ConfigSanityCheck.cs" />
     <Compile Include="PreferencesFeedbackRefact.feature.cs">
       <AutoGen>True</AutoGen>

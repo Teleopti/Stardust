@@ -127,19 +127,29 @@ namespace Teleopti.Ccc.WebBehaviorTest
  testRunner.And("I have a person period with", ((string)(null)), table5);
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Name"});
+            table6.AddRow(new string[] {
+                        "Day"});
+#line 27
+ testRunner.And("there are shift categories", ((string)(null)), table6);
+#line hidden
+            TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table6.AddRow(new string[] {
+            table7.AddRow(new string[] {
                         "StartTime",
                         "2030-01-01 06:00"});
-            table6.AddRow(new string[] {
+            table7.AddRow(new string[] {
                         "EndTime",
                         "2030-01-01 16:00"});
-            table6.AddRow(new string[] {
+            table7.AddRow(new string[] {
+                        "Shift category",
+                        "Day"});
+            table7.AddRow(new string[] {
                         "Lunch3HoursAfterStart",
                         "true"});
-#line 27
- testRunner.And("I have a shift with", ((string)(null)), table6);
+#line 30
+ testRunner.And("I have a shift with", ((string)(null)), table7);
 #line hidden
         }
         
@@ -151,15 +161,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Do not show shift trade request tab if no permission", new string[] {
                         "ignore",
                         "ignore"});
-#line 34
+#line 38
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 35
+#line 39
  testRunner.Given("I have the role \'No access to Shift Trade\'");
-#line 36
+#line 40
  testRunner.When("I sign in");
-#line 37
+#line 41
  testRunner.Then("shift trade tab should not be visible");
 #line hidden
             this.ScenarioCleanup();
@@ -172,15 +182,15 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show Shift trade reuqest tab", new string[] {
                         "ignore"});
-#line 40
+#line 44
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 41
+#line 45
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 42
+#line 46
  testRunner.When("I sign in");
-#line 43
+#line 47
  testRunner.Then("shift trade tab should be visible");
 #line hidden
             this.ScenarioCleanup();
@@ -193,17 +203,17 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default to today when viewing shift trade", new string[] {
                         "ignore"});
-#line 46
+#line 50
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 47
+#line 51
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 48
+#line 52
  testRunner.And("Current time is \'2030-01-01\'");
-#line 49
+#line 53
  testRunner.When("I navigate to shift trade page");
-#line 50
+#line 54
  testRunner.Then("the selected date should be \'2030-01-01\'");
 #line hidden
             this.ScenarioCleanup();
@@ -216,17 +226,17 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default time line when I am not scheduled", new string[] {
                         "ignore"});
-#line 53
+#line 57
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 54
+#line 58
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 55
+#line 59
  testRunner.And("Current time is \'2020-10-24\'");
-#line 56
+#line 60
  testRunner.When("I navigate to shift trade page");
-#line 57
+#line 61
  testRunner.Then("I should see the time line span from \'7:45\' to \'17:15\'");
 #line hidden
             this.ScenarioCleanup();
@@ -239,17 +249,17 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Time line when I have a scheduled shift", new string[] {
                         "ignore"});
-#line 60
+#line 64
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 61
+#line 65
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 62
+#line 66
  testRunner.And("Current time is \'2030-01-01\'");
-#line 63
+#line 67
  testRunner.When("I navigate to shift trade page");
-#line 64
+#line 68
  testRunner.Then("I should see the time line span from \'5:45\' to \'16:15\'");
 #line hidden
             this.ScenarioCleanup();
@@ -262,48 +272,15 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show my scheduled shift", new string[] {
                         "ignore"});
-#line 67
-this.ScenarioSetup(scenarioInfo);
-#line 7
-this.FeatureBackground();
-#line 68
- testRunner.Given("I have the role \'Full access to mytime\'");
-#line 69
- testRunner.And("Current time is \'2030-01-01\'");
-#line 70
- testRunner.When("I navigate to shift trade page");
-#line hidden
-            TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table7.AddRow(new string[] {
-                        "Start time",
-                        "06:00"});
-            table7.AddRow(new string[] {
-                        "End time",
-                        "16:00"});
 #line 71
- testRunner.Then("I should see my schedule with", ((string)(null)), table7);
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Show my scheduled day off")]
-        [NUnit.Framework.IgnoreAttribute()]
-        public virtual void ShowMyScheduledDayOff()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show my scheduled day off", new string[] {
-                        "ignore"});
-#line 77
 this.ScenarioSetup(scenarioInfo);
 #line 7
 this.FeatureBackground();
-#line 78
+#line 72
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 79
- testRunner.And("Current time is \'2030-01-03\'");
-#line 80
+#line 73
+ testRunner.And("Current time is \'2030-01-01\'");
+#line 74
  testRunner.When("I navigate to shift trade page");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
@@ -315,8 +292,41 @@ this.FeatureBackground();
             table8.AddRow(new string[] {
                         "End time",
                         "16:00"});
-#line 81
+#line 75
  testRunner.Then("I should see my schedule with", ((string)(null)), table8);
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Show my scheduled day off")]
+        [NUnit.Framework.IgnoreAttribute()]
+        public virtual void ShowMyScheduledDayOff()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show my scheduled day off", new string[] {
+                        "ignore"});
+#line 81
+this.ScenarioSetup(scenarioInfo);
+#line 7
+this.FeatureBackground();
+#line 82
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 83
+ testRunner.And("Current time is \'2030-01-03\'");
+#line 84
+ testRunner.When("I navigate to shift trade page");
+#line hidden
+            TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table9.AddRow(new string[] {
+                        "Start time",
+                        "06:00"});
+            table9.AddRow(new string[] {
+                        "End time",
+                        "16:00"});
+#line 85
+ testRunner.Then("I should see my schedule with", ((string)(null)), table9);
 #line hidden
             this.ScenarioCleanup();
         }
