@@ -33,15 +33,14 @@ DECLARE @securityadmin			int
 				CHECK_EXPIRATION=OFF,
 				CHECK_POLICY=OFF
 			END
-			
-			--Bulk insert is needed in the ETL-tool so login needs to be part of the server fixed role [ADMINISTER BULK OPERATIONS]
-			PRINT 'Add $(SQLLOGIN) to the fixed server role: [ADMINISTER BULK OPERATIONS]. Working ...'
-				GRANT ADMINISTER BULK OPERATIONS TO [$(SQLLOGIN)]
-			PRINT 'Add $(SQLLOGIN) to the fixed server role: [ADMINISTER BULK OPERATIONS]. Finished!'
+			ELSE
+			BEGIN
+				ALTER LOGIN [$(SQLLOGIN)] WITH PASSWORD=N'$(SQLPWD)'
+			END
 		END
 	END
 	ELSE
-		PRINT 'WARNING: Cannot create server login under the currect credetials!'
+		PRINT 'WARNING: Cannot create or alter server login under the current credetials!'
 	
 END TRY
 

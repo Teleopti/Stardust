@@ -58,7 +58,7 @@ BEGIN TRY
 		PRINT '	Creating Windows login for: $(WINLOGIN). Finished'
 	END
 	ELSE
-		PRINT 'WARNING: Cannot create server login under the currect credetials!'
+		PRINT 'WARNING: Cannot create server login under the current credetials!'
 
 END TRY
 BEGIN CATCH
