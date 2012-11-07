@@ -100,6 +100,7 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
     <Compile Include="PasswordPolicyMobile.feature.cs">
       <DependentUpon>PasswordPolicyMobile.feature</DependentUpon>
@@ -136,7 +137,6 @@
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\ScheduledShiftConfigurable.cs" />
     <Compile Include="ConfigSanityCheck.cs" />
     <Compile Include="PreferencesFeedbackRefact.feature.cs">
       <AutoGen>True</AutoGen>
@@ -179,6 +179,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedbackPreSchedule.feature</DependentUpon>
+    </Compile>
+    <Compile Include="ShiftTradeRequests.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShiftTradeRequests.feature</DependentUpon>
     </Compile>
     <Compile Include="WeekScheduleTimeIndicator.feature.cs">
       <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
@@ -549,14 +554,14 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
     </None>
-   
-
-
- <None Include="AsmMessage.feature">
+    <None Include="AsmMessage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmMessage.feature.cs</LastGenOutput>
     </None>
-
+    <None Include="ShiftTradeRequests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ShiftTradeRequests.feature.cs</LastGenOutput>
+    </None>
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />
     <None Include="Testing\StepDefinitionReport.bat" />

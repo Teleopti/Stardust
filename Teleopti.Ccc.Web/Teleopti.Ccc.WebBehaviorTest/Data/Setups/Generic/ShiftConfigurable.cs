@@ -15,8 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	public class ShiftConfigurable : IUserDataSetup
 	{
 		private DateTimePeriod _assignmentPeriod;
-
-		public string ShiftCategoryName { get; set; }
+		public string ShiftCategory { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 		public bool Lunch3HoursAfterStart { get; set; }
@@ -25,11 +24,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			//för nu sparar ett shiftcategory hårt
-			//var shiftCat =new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategoryName));
-			var shiftCat = new ShiftCategory("will be removed") {DisplayColor = Color.Red};
-			new ShiftCategoryRepository(uow).Add(shiftCat);
-
+			var shiftCat = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
+			
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
 			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);

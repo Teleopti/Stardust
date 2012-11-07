@@ -108,8 +108,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoWeekSchedulePage(DateTime date)
 		{
 			GoTo(string.Format("MyTime#Schedule/Week/{0}/{1}/{2}", 
-				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")), 
-				new ApplicationStartupTimeout(), new LoadingOverlay());
+				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+				new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilCompletelyLoaded());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
@@ -263,6 +263,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public void After(string pageUrl)
 		{
 			TestControllerMethods.WaitUntilReadyForInteraction();
+		}
+	}
+
+	public class WaitUntilCompletelyLoaded : IGoToInterceptor
+	{
+		public void Before(string pageUrl)
+		{
+		}
+
+		public void After(string pageUrl)
+		{
+			TestControllerMethods.WaitUntilCompletelyLoaded();
 		}
 	}
 }
