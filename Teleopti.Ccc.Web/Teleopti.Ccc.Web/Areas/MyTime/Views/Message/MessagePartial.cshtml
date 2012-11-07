@@ -33,7 +33,7 @@
 						<span class="asmMessage-data-updatedon" data-bind="text : created"></span>
 					</div>
 				</div>
-				<span data-bind="text : text"></span>
+				<span class="asmMessage-data-text" data-bind="text : text"></span>
 				<br/>
 			<!-- /ko -->
 		</div>
@@ -42,7 +42,7 @@
 			<textarea id="AsmMessage-detail-reply" class="ui-widget-content ui-corner-all" data-bind="visible: allowDialogueReply, value: reply, valueUpdate:['afterkeydown', 'afterpaste', 'change']"></textarea>
 			<!-- ko foreach: replyOptions -->
 			<input type="radio" name="radioOptions" data-bind="checked : selected, visible : $parent.userMustSelectReplyOption"/>
-			<label data-bind="text: text, visible : $parent.userMustSelectReplyOption"></label>
+			<label class="asmMessage-data-subject" data-bind="text: text, visible : $parent.userMustSelectReplyOption"></label>
 			<!-- /ko -->
 		</div>
 		
