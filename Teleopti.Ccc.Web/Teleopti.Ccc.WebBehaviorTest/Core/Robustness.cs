@@ -16,12 +16,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static T SafeIEOperation<T>(Func<T> action, Func<Exception, T> failureCallback)
 		{
+			RunScriptException a;
 			try
 			{
 				return action.Invoke();
 			}
 			// in some states our javascript "namespaces" havnt been initialized yet, so calling functions at those times will give JS exceptions
 			// maybe we should look for the strings "TypeError" and "ReferenceError" here to be more specific.
+			catch (RunScriptException ex)
+			{
+				return failureCallback.Invoke(ex);
+			}
 			catch (JavaScriptException ex)
 			{
 				return failureCallback.Invoke(ex);
@@ -53,9 +58,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			{
 				action.Invoke();
 			}
-				// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
-				// if so, lets just try again
-				// maybe this behavior should be placed elsewhere and not only apply to asserts..
+			// in some states our javascript "namespaces" havnt been initialized yet, so calling functions at those times will give JS exceptions
+			// maybe we should look for the strings "TypeError" and "ReferenceError" here to be more specific.
+			catch (RunScriptException ex)
+			{
+				failureCallback.Invoke(ex);
+			}
+			catch (JavaScriptException ex)
+			{
+				failureCallback.Invoke(ex);
+			}
+			// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
+			// if so, lets just try again
+			// maybe this behavior should be placed elsewhere and not only apply to asserts..
 			catch (UnauthorizedAccessException ex)
 			{
 				failureCallback.Invoke(ex);
