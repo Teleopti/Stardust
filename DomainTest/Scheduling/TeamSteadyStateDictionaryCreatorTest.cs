@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private Guid _guid1;
 		private Guid _guid2;
 		private ITeamSteadyStateRunner _teamSteadyStateRunner;
+		private IList<IPerson> _persons;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_person3 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("person3"), _dateOnly);
 			_person4 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("person4"), _dateOnly);
 
-			_groupPerson1 = new GroupPerson(new List<IPerson>{_person1, _person2}, _dateOnly, "groupPerson1", _guid1);
+			_groupPerson1 = new GroupPerson(new List<IPerson> { _person1, _person2 }, _dateOnly, "groupPerson1", _guid1);
 			_groupPerson2 = new GroupPerson(new List<IPerson> { _person3, _person4 }, _dateOnly, "groupPerson2", _guid2);
 
 			setupStateHolder();
@@ -62,12 +63,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_scheduleMatrixPro3 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person3, _person3.VirtualSchedulePeriod(_dateOnly));
 			_scheduleMatrixPro4 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person4, _person4.VirtualSchedulePeriod(_dateOnly));
 
-			_matrixes = new List<IScheduleMatrixPro>{_scheduleMatrixPro1, _scheduleMatrixPro2, _scheduleMatrixPro3, _scheduleMatrixPro4};
+			_matrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro1, _scheduleMatrixPro2, _scheduleMatrixPro3, _scheduleMatrixPro4 };
 
 			_groupPersonsBuilder = _mocks.StrictMock<IGroupPersonsBuilder>();
 			_schedulingOptions = new SchedulingOptions();
 			_teamSteadyStateRunner = _mocks.StrictMock<ITeamSteadyStateRunner>();
 			_target = new TeamSteadyStateDictionaryCreator(_teamSteadyStateRunner, _matrixes, _groupPersonsBuilder, _schedulingOptions);
+			_persons = new List<IPerson>{_person1, _person2, _person3, _person4};
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -101,10 +103,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		{
 			using(_mocks.Record())
 			{
-				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, new List<IPerson> { _person1 }, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
-				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, new List<IPerson> { _person2 }, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
-				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, new List<IPerson> { _person3 }, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson2 });
-				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, new List<IPerson> { _person4 }, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson2 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson2 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson2 });
 				Expect.Call(_teamSteadyStateRunner.Run(_groupPerson1, _dateOnly)).Return(new KeyValuePair<Guid, bool>(_guid1, true));
 				Expect.Call(_teamSteadyStateRunner.Run(_groupPerson2, _dateOnly)).Return(new KeyValuePair<Guid, bool>(_guid2, true));
 			}
@@ -124,10 +126,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, new List<IPerson> { _person1 }, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
-				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, new List<IPerson> { _person2 }, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
-				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, new List<IPerson> { _person3 }, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson2 });
-				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, new List<IPerson> { _person4 }, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson2 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson2 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson2 });
 				Expect.Call(_teamSteadyStateRunner.Run(_groupPerson1, _dateOnly)).Return(new KeyValuePair<Guid, bool>(_guid1, false));
 				Expect.Call(_teamSteadyStateRunner.Run(_groupPerson2, _dateOnly)).Return(new KeyValuePair<Guid, bool>(_guid2, true));
 			}

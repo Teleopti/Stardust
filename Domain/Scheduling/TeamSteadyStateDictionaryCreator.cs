@@ -33,10 +33,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    if (_matrixList.Count == 0) return dictionary;
 			var groupPersonDic = new Dictionary<IGroupPerson, DateOnly>();
 
+			IList<IPerson> persons = new List<IPerson>();
+
+			foreach (var scheduleMatrixPro in _matrixList)
+			{
+				if(!persons.Contains(scheduleMatrixPro.Person))
+					persons.Add(scheduleMatrixPro.Person);
+			}
+
 			foreach (var scheduleMatrixPro in _matrixList)
 			{
 				var day = scheduleMatrixPro.EffectivePeriodDays[0].Day;
-				var persons = new List<IPerson> { scheduleMatrixPro.Person };
 				var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(day, persons, true, _schedulingOptions);
 				foreach (var groupPerson in groupPersons)
 				{
