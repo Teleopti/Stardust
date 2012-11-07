@@ -303,7 +303,7 @@ Scenario: Update schedule when schedule has changed
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
 	When I view my week schedule for date '2012-08-28'
-	And I have a shift with
+	And I am assigned this shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-28 12:00 |
 	| EndTime               | 2012-08-28 15:00 |

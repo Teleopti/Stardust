@@ -1042,7 +1042,7 @@ this.FeatureBackground();
                         "Shift category",
                         "Day"});
 #line 306
- testRunner.And("I have a shift with", ((string)(null)), table33);
+ testRunner.And("I am assigned this shift with", ((string)(null)), table33);
 #line 311
  testRunner.And("My schedule between \'2012-08-28 08:00\' to \'2012-08-28 18:00\' reloads");
 #line 312
