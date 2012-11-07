@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		}
 
 		public Div Calendar { get { return Element.DomContainer.Div(Find.ById("ui-datepicker-div")); } }
-		public Table CalendarTable { get { return Calendar.Table(Find.ByClass("ui-datepicker-calendar")); } }
+		public Table CalendarTable { get { return Calendar.Table(QuicklyFind.ByClass("ui-datepicker-calendar")); } }
 
 		public void OpenProcedure()
 		{

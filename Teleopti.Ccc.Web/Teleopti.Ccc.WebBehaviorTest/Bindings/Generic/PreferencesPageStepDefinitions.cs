@@ -50,15 +50,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			indication.EventualClick();
 		}
 
-		[When(@"I hover over the meeting indication on date '(.*)'")]
-		public void WhenIHoverOverTheMeetingIndicationOnDate(DateTime date)
-		{
-			var indication = Pages.Pages.PreferencePage.MeetingAndPersonalShiftIndicationForDate(date);
-			Pages.Pages.PreferencePage.MeetingAndPersonalShiftTooltipForDate(date).WaitUntilExists();
-			indication.FireEvent("onmouseover");
-			Pages.Pages.PreferencePage.MeetingAndPersonalShiftTooltipForDate(date).WaitUntilRemoved();
-		}
-
 		[Then(@"I should see that I have an extended preference on '(.*)'")]
 		[Then(@"I should see an extended preference indication on '(.*)'")]
 		public void ThenIShouldSeeThatIHaveAnExtendedPreferenceOn(DateTime date)

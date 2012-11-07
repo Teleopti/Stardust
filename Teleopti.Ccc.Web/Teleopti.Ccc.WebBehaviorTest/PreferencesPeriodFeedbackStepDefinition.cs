@@ -133,25 +133,25 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a warning for my dayoff preferences outside the target")]
 		public void ThenIShouldSeeAWarningForMyDayoffPreferencesOutsideTheTarget()
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Divs[1].Span(Find.ByClass("preference-warning", false)).Exists, Is.True);
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Divs[1].Span(QuicklyFind.ByClass("preference-warning")).Exists, Is.True);
 		}
 
 		[Then(@"I should not see a warning for my dayoff preferences outside the target")]
 		public void ThenIShouldNotSeeAWarningForMyDayoffPreferencesOutsideTheTarget()
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Divs[1].Span(Find.ByClass("preference-warning", false)).Exists, Is.False);
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Divs[1].Span(QuicklyFind.ByClass("preference-warning")).Exists, Is.False);
 		}
 
 		[Then(@"I should see a warning for my time preferences outside the target")]
 		public void ThenIShouldSeeAWarningForMyTimePreferencesOutsideTheTarget()
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Divs[0].Span(Find.ByClass("preference-warning", false)).Exists, Is.True);
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Divs[0].Span(QuicklyFind.ByClass("preference-warning")).Exists, Is.True);
 		}
 
 		[Then(@"I should not see a warning for my time preferences outside the target")]
 		public void ThenIShouldNotSeeAWarningForMyTimePreferencesOutsideTheTarget()
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Divs[0].Span(Find.ByClass("preference-warning", false)).Exists, Is.False);
+			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Divs[0].Span(QuicklyFind.ByClass("preference-warning")).Exists, Is.False);
 		}
 
 

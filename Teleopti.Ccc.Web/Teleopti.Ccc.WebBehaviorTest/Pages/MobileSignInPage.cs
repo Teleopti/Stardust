@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "application-signin-button")] public Button SignInButton;
 		[FindBy(Id = "ApplicationSignIn_SignIn_UserName")] public TextField UserNameTextField { get; set; }
 
-		public Element ValidationSummary { get { return Document.Span(Find.ByClass("error")); } }
+		public Element ValidationSummary { get { return Document.Span(QuicklyFind.ByClass("error")); } }
 
 		[FindBy(Id = "businessunit-ok-button")]public Button SignInBusinessInitsOkButton;
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			                    			return true;
 			                    		if (Document.RadioButton(Find.ByName("signin-sel-businessunit")).Exists)
 			                    			return true;
-			                    		var span = Document.Span(Find.ByClass("error", false));
+										var span = Document.Span(QuicklyFind.ByClass("error"));
 			                    		if (span.Exists)
 			                    		{
 			                    			if (span.Text == null)

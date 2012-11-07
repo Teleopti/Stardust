@@ -113,8 +113,7 @@ Scenario: View meeting
 	| Subject               | Meeting subject  |
 	| Location              | Meeting location |
 	When I view my week schedule for date '2012-08-28'
-	And I hover over the meeting on date '2012-08-28'
-	Then I should see the meeting details on date '2012-08-28'
+	Then I should see the meeting details with subject 'Meeting subject' on date '2012-08-28'
 	
 Scenario: View public note
 	Given I have the role 'Full access to mytime'

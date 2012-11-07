@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "SignIn_UserName")] public TextField UserNameTextField { get; set; }
 
-		public Element ValidationSummary { get { return Document.Div(Find.ByClass("validation-summary-errors", false)); } }
+		public Element ValidationSummary { get { return Document.Div(QuicklyFind.ByClass("validation-summary-errors")); } }
 
 		[FindBy(Id = "SignIn_Password")] public TextField PasswordTextField;
 

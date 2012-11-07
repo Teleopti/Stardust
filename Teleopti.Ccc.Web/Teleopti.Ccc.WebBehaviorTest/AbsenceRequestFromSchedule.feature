@@ -74,7 +74,7 @@ Scenario: Cancel adding absence request
 	When I click on the day summary for date '2013-10-03'
 	And I click absence request tab
 	And I input absence request values with 'Vacation' for date '2013-10-03'
-	And I click the Cancel button
+	When I click the Cancel button
 	Then I should not see a symbol at the top of the schedule for date '2013-10-03'
 	
 Scenario: Adding invalid absence request values

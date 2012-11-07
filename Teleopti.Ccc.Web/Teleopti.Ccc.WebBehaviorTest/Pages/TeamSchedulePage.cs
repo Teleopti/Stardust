@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 using WatiN.Core.Constraints;
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class TeamSchedulePage : PortalPage, IDateRangeSelector
 	{
-		private readonly Constraint AgentConstraint = Find.ByClass("teamschedule-agent-name", false);
+		private readonly Constraint AgentConstraint = QuicklyFind.ByClass("teamschedule-agent-name");
 
 		public static int PageSize = 20;
 
@@ -29,12 +30,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public ListItemCollection LayersByAgentName(string name)
 		{
-			return RowByAgentName(name).ListItems.Filter(Find.ByClass("layer", false));
+			return RowByAgentName(name).ListItems.Filter(QuicklyFind.ByClass("layer"));
 		}
 
 		public ListItem DayOffByAgentName(string name)
 		{
-			return RowByAgentName(name).ListItem(Find.ByClass("dayoff", false));
+			return RowByAgentName(name).ListItem(QuicklyFind.ByClass("dayoff"));
 		}
 
 
@@ -42,12 +43,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public ListItemCollection TimeLineAll()
 		{
-			return Document.ListItems.Filter(Find.ByClass("teamschedule-timeline-time", false));
+			return Document.ListItems.Filter(QuicklyFind.ByClass("teamschedule-timeline-time"));
 		}
 
 		public ListItem FirstTimeLineItem()
 		{
-			return Document.ListItem(Find.ByClass("teamschedule-timeline-time", false));
+			return Document.ListItem(QuicklyFind.ByClass("teamschedule-timeline-time"));
 		}
 
 		public ListItem LastTimeLineItem()
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public Div ToolTipContainer()
 		{
-			return Document.Div(Find.ByClass("tooltip-container", false));
+			return Document.Div(QuicklyFind.ByClass("tooltip-container"));
 		}
 
 		[FindBy(Id = "TeamSchedule-TeamPicker-select-container")]

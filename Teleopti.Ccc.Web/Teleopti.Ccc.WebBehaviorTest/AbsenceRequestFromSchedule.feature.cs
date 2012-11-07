@@ -287,7 +287,7 @@ this.FeatureBackground();
 #line 76
  testRunner.And("I input absence request values with \'Vacation\' for date \'2013-10-03\'");
 #line 77
- testRunner.And("I click the Cancel button");
+ testRunner.When("I click the Cancel button");
 #line 78
  testRunner.Then("I should not see a symbol at the top of the schedule for date \'2013-10-03\'");
 #line hidden

@@ -14,15 +14,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldSeeOnlyOneAlertContaining(string activity)
 		{
 			EventualAssert.That(() =>
-					 Browser.Current.Elements.Filter(Find.ByClass("notifyLoggerItem")).Exists(Find.ByText(t => t.Contains(activity))),
+					 Browser.Current.Elements.Filter(QuicklyFind.ByClass("notifyLoggerItem")).Exists(Find.ByText(t => t.Contains(activity))),
 					 Is.True);
-			Browser.Current.Elements.Filter(Find.ByClass("notifyLoggerItem")).Count.Should().Be.EqualTo(1);
+			Browser.Current.Elements.Filter(QuicklyFind.ByClass("notifyLoggerItem")).Count.Should().Be.EqualTo(1);
 		}
 
 		[Then(@"I should see one notify message")]
 		public void ThenIShouldSeeAnAlert()
 		{
-			Browser.Current.Elements.Filter(Find.ByClass("notifyLoggerItem")).Count.Should().Be.EqualTo(1);
+			Browser.Current.Elements.Filter(QuicklyFind.ByClass("notifyLoggerItem")).Count.Should().Be.EqualTo(1);
 		}
 	}
 }

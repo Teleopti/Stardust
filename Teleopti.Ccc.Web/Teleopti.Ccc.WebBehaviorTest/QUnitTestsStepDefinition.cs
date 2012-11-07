@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var testResults = Browser.Current.Para("qunit-testresult");
 			EventualAssert.That(() => testResults.Exists, Is.True);
-			EventualAssert.That(() => int.Parse(testResults.Span(Find.ByClass("total", false)).InnerHtml), Is.GreaterThan(0));
+			EventualAssert.That(() => int.Parse(testResults.Span(QuicklyFind.ByClass("total")).InnerHtml), Is.GreaterThan(0));
 		}
 
 		[Then(@"I should see all tests pass")]
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var testResults = Browser.Current.Para("qunit-testresult");
 			EventualAssert.That(() => testResults.Exists, Is.True);
-			EventualAssert.That(() => int.Parse(testResults.Span(Find.ByClass("failed", false)).InnerHtml), Is.EqualTo(0));
+			EventualAssert.That(() => int.Parse(testResults.Span(QuicklyFind.ByClass("failed")).InnerHtml), Is.EqualTo(0));
 		}
 
 	}

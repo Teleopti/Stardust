@@ -101,6 +101,7 @@
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
     <Compile Include="Bindings\Transform.cs" />
+    <Compile Include="Core\QuicklyFind.cs" />
     <Compile Include="Core\Robustness.cs" />
     <Compile Include="Data\Setups\Generic\AvailabilityRotationConfigurable.cs" />
     <Compile Include="Bindings\Generic\AvailabilityStepDefinitions.cs" />
@@ -522,14 +523,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
     </None>
-   
-
-
- <None Include="AsmMessage.feature">
+    <None Include="AsmMessage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmMessage.feature.cs</LastGenOutput>
     </None>
-
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />
     <None Include="Testing\StepDefinitionReport.bat" />

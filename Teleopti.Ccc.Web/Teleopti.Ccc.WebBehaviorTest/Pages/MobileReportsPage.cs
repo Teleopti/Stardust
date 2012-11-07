@@ -12,8 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class MobileReportsPage : Page
 	{
-		private readonly Constraint _datePickerContenainerCellConstraint = Find.ByClass("ui-datebox-griddate", false);
-		                            // By("data-date", v => v != null);
+		private readonly Constraint _datePickerContenainerCellConstraint = QuicklyFind.ByClass("ui-datebox-griddate");
 
 		[FindBy(Id = "sel-report-GetAnsweredAndAbandoned")] public RadioButton ReportGetAnsweredAndAbandonedInput;
 		[FindBy(Id = "report-graph-holder")] public Div ReportGraphContainer;
