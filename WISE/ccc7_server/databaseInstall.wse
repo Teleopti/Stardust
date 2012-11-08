@@ -278,6 +278,10 @@ item: Set Variable
   Variable=U
   Value=-L"%USER%:%PASS%"
 end
+item: Set Variable
+  Variable=U2
+  Value=-L"%USER%:%PASS%"
+end
 item: End Block
 end
 item: If/While Statement
