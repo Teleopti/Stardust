@@ -24,19 +24,19 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void CanUseDefaultInterpretationParseAsMinutes()
         {
             string timeAsText = "15";
-            Assert.IsTrue(TimeHelper.TryParseLongHourStringDefaultInterpretation(timeAsText, out timeValue, TimeFormatsType.HoursMinutes, true));
+            Assert.IsTrue(TimeHelper.TryParseLongHourStringDefaultInterpretation(timeAsText, TimeSpan.FromHours(24), out timeValue, TimeFormatsType.HoursMinutes, true));
             Assert.That(timeValue, Is.EqualTo(new TimeSpan(0, 15, 0)));
 
             timeAsText = "0:15";
-            Assert.IsTrue(TimeHelper.TryParseLongHourStringDefaultInterpretation(timeAsText, out timeValue, TimeFormatsType.HoursMinutes, true));
+            Assert.IsTrue(TimeHelper.TryParseLongHourStringDefaultInterpretation(timeAsText, TimeSpan.FromHours(24), out timeValue, TimeFormatsType.HoursMinutes, true));
             Assert.AreEqual(new TimeSpan(0, 15, 0), timeValue);
 
             timeAsText = "1:15";
-            Assert.IsTrue(TimeHelper.TryParseLongHourStringDefaultInterpretation(timeAsText, out timeValue, TimeFormatsType.HoursMinutes, true));
+            Assert.IsTrue(TimeHelper.TryParseLongHourStringDefaultInterpretation(timeAsText, TimeSpan.FromHours(24), out timeValue, TimeFormatsType.HoursMinutes, true));
             Assert.AreEqual(new TimeSpan(1, 15, 0), timeValue);
 
             timeAsText = "15";
-            Assert.IsTrue(TimeHelper.TryParseLongHourStringDefaultInterpretation(timeAsText, out timeValue, TimeFormatsType.HoursMinutes, false));
+            Assert.IsTrue(TimeHelper.TryParseLongHourStringDefaultInterpretation(timeAsText, TimeSpan.FromHours(24), out timeValue, TimeFormatsType.HoursMinutes, false));
             Assert.That(timeValue, Is.EqualTo(new TimeSpan(15, 0, 0)));
         }
         
@@ -570,7 +570,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         {
             var info = CultureInfo.GetCultureInfo("sv-SE");
             Thread.CurrentThread.CurrentCulture = info;
-            TimeHelper.TryParseLongHourStringDefaultInterpretation("-08:1", out timeValue, TimeFormatsType.HoursMinutes, false);
+            TimeHelper.TryParseLongHourStringDefaultInterpretation("-08:1", TimeSpan.FromHours(24), out timeValue, TimeFormatsType.HoursMinutes, false);
             Assert.That(timeValue, Is.EqualTo(new TimeSpan(-8, -1, 0)));
         }
 

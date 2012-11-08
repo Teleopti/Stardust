@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         private TimeSpan ValidateInput()
         {
            TimeSpan timeValue;
-           if (!TimeHelper.TryParseLongHourStringDefaultInterpretation(maskedTextBox1.Text, out timeValue, TimeFormatsType.HoursMinutes, _defaultInterpretAsMinutes))
+           if (!TimeHelper.TryParseLongHourStringDefaultInterpretation(maskedTextBox1.Text, _maximumValue, out timeValue, TimeFormatsType.HoursMinutes, _defaultInterpretAsMinutes))
            {
                SetErrorStatus(UserTexts.Resources.IllegalInput);
            }
