@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "report-graph-canvas")] public Element ReportGraph;
 		[FindBy(Id = "sel-skill-button")] public Link ReportSkillSelectionOpener;
 		[FindBy(Id = "report-table-holder")] public Div ReportTableContainer;
-		[FindBy(Class = "report-table")] public Table ReportTable;
+		public Table ReportTable{get { return Document.Table(QuicklyFind.ByClass("report-table")); }};
 		[FindBy(Id = "report-settings-interval-week")]
 		public RadioButton ReportIntervalWeekInput;
 		[FindBy(Id = "report-settings-type-graph")] public CheckBox ReportTypeGraphInput;
@@ -137,8 +137,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			}
 		}
 
-		[FindBy(ClassRegex = "^ui-datebox-container .*")]
-		public Div ReportSelectionDatePickerContainer { get; set; }
+		public Div ReportSelectionDatePickerContainer { get { return Document.Div(QuicklyFind.ByClass("ui-datebox-container")); } }
 
 		// Views
 		[FindBy(Id = "home-view")]
