@@ -103,6 +103,10 @@
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
     <Compile Include="Bindings\Generic\WeekSchedulePageStepDefinitions.cs" />
+    <Compile Include="Core\Robustness\EventualAssert.cs" />
+    <Compile Include="Core\Robustness\EventualElementActions.cs" />
+    <Compile Include="Core\Robustness\Timeouts.cs" />
+    <Compile Include="Core\Robustness\Retrying.cs" />
     <Compile Include="PasswordPolicyMobile.feature.cs">
       <DependentUpon>PasswordPolicyMobile.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -119,7 +123,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Core\Robustness.cs" />
+    <Compile Include="Core\Robustness\ExceptionHandling.cs" />
     <Compile Include="Data\Setups\Generic\AvailabilityRotationConfigurable.cs" />
     <Compile Include="Bindings\Generic\AvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
@@ -376,7 +380,7 @@
     <Compile Include="Data\Setups\Specific\AgentWithoutRequestsAccess.cs" />
     <Compile Include="Data\Setups\Specific\ExistingTextRequest.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutPreferencesAccess.cs" />
-    <Compile Include="Core\Eventual.cs" />
+    <Compile Include="Core\Robustness\EventualElementWaits.cs" />
     <Compile Include="Core\Extensions\LogExtensions.cs" />
     <Compile Include="Data\Setups\Specific\Agent.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutStudentAvailabilityAccess.cs" />

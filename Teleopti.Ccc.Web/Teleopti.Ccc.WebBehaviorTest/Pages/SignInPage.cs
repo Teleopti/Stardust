@@ -1,8 +1,11 @@
 ﻿using System;
+using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
+using List = WatiN.Core.List;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
@@ -85,14 +88,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		private void WaitForSigninResult()
 		{
 			// move this to the actual navigation, which is the one that actually acts too early?
-			Func<bool> signedInOrBusinessUnitListExists = () => SignoutButton.IESafeExists() ||
-			                                                    SignOutLink.IESafeExists() ||
-			                                                    BusinessUnitList.IESafeExists() ||
-			                                                    GlobalMenuList.IESafeExists() ||
-			                                                    ValidationSummary.IESafeExists();
-			var found = signedInOrBusinessUnitListExists.WaitUntil(EventualTimeouts.Poll, EventualTimeouts.Timeout);
-			if (!found)
-				throw new ApplicationException("Waiting for signin result failed!");
+			EventualAssert.That(() => SignoutButton.SafeExists() ||
+			                          SignOutLink.SafeExists() ||
+			                          BusinessUnitList.SafeExists() ||
+			                          GlobalMenuList.SafeExists() ||
+			                          ValidationSummary.SafeExists(), Is.True);
 		}
 	}
 }

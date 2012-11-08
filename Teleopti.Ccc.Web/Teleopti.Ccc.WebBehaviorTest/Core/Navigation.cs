@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using log4net;
@@ -19,14 +20,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GoTo(string pageUrl, params IGoToInterceptor[] interceptors)
 		{
-			interceptors.ToList().ForEach(i => i.Before(pageUrl));
+			InnerGoto(new Uri(TestSiteConfigurationSetup.Url, pageUrl), interceptors);
+		}
 
-			var uri = new Uri(TestSiteConfigurationSetup.Url, pageUrl);
+		public static void GotoRaw(string url, params IGoToInterceptor[] interceptors)
+		{
+			InnerGoto(new Uri(url), interceptors);
+		}
+
+		private static void InnerGoto(Uri uri, params IGoToInterceptor[] interceptors)
+		{
+			interceptors.ToList().ForEach(i => i.Before(uri));
+
 			Log.Write("Browsing to: " + uri);
-			Robustness.RetryIEOperation(() => Browser.Current.GoTo(uri));
+			Retrying.Action(() => Browser.Current.GoTo(uri));
 			Log.Write("Ended up in: " + Browser.Current.Url);
 
-			interceptors.Reverse().ToList().ForEach(i => i.After(pageUrl));
+			interceptors.Reverse().ToList().ForEach(i => i.After(uri));
 		}
 
 		public static void GotoAsm()
@@ -194,8 +204,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	public interface IGoToInterceptor
 	{
-		void Before(string pageUrl);
-		void After(string pageUrl);
+		void Before(Uri url);
+		void After(Uri url);
 	}
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
@@ -203,12 +213,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	{
 		private WatiNWaitForCompleteTimeout _timeout;
 
-		public void Before(string pageUrl)
+		public void Before(Uri url)
 		{
 			_timeout = new WatiNWaitForCompleteTimeout(60);
 		}
 
-		public void After(string pageUrl)
+		public void After(Uri url)
 		{
 			_timeout.Dispose();
 			_timeout = null;
@@ -217,12 +227,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	public class LoadingOverlay : IGoToInterceptor
 	{
-		public void Before(string pageUrl)
+		public void Before(Uri url)
 		{
 			WaitUntilLoadingOverlayIsHidden();
 		}
 
-		public void After(string pageUrl)
+		public void After(Uri url)
 		{
 			WaitUntilLoadingOverlayIsHidden();
 		}
@@ -238,11 +248,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	public class OverrideNotifyBehavior : IGoToInterceptor
 	{
-		public void Before(string pageUrl)
+		public void Before(Uri url)
 		{
 		}
 
-		public void After(string pageUrl)
+		public void After(Uri url)
 		{
 			mockNotifyCall();
 		}
@@ -256,11 +266,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	public class WaitUntilReadyForInteraction : IGoToInterceptor
 	{
-		public void Before(string pageUrl)
+		public void Before(Uri url)
 		{
 		}
 
-		public void After(string pageUrl)
+		public void After(Uri url)
 		{
 			TestControllerMethods.WaitUntilReadyForInteraction();
 		}
@@ -268,11 +278,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	public class WaitUntilCompletelyLoaded : IGoToInterceptor
 	{
-		public void Before(string pageUrl)
+		public void Before(Uri url)
 		{
 		}
 
-		public void After(string pageUrl)
+		public void After(Uri url)
 		{
 			TestControllerMethods.WaitUntilCompletelyLoaded();
 		}

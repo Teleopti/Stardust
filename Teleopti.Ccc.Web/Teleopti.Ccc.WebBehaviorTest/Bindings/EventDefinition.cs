@@ -4,6 +4,7 @@ using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				TestSiteConfigurationSetup.Setup();
 
 				log4net.Config.XmlConfigurator.Configure();
-				EventualTimeouts.Set(TimeSpan.FromSeconds(10));
+				Timeouts.Set(TimeSpan.FromSeconds(10));
 
 				TestDataSetup.CreateDataSource();
 

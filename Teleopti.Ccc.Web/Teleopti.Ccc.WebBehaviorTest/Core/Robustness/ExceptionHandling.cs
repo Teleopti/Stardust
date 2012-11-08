@@ -1,20 +1,22 @@
 using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
 using WatiN.Core.Exceptions;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core
+namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 {
-	public static class Robustness
+	public static class ExceptionHandlingElementActions
 	{
-		public static bool IESafeExists(this Element element)
+		public static bool SafeExists(this Element element)
 		{
-			return SafeIEOperation(() => element.Exists, e => false);
+			return ExceptionHandling.Action(() => element.Exists, e => false);
 		}
+	}
 
-		public static T SafeIEOperation<T>(Func<T> action, Func<Exception, T> failureCallback)
+	public static class ExceptionHandling
+	{
+
+		public static T Action<T>(Func<T> action, Func<Exception, T> failureCallback)
 		{
 			try
 			{
@@ -32,8 +34,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				return failureCallback.Invoke(ex);
 			}
 			// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
-			// if so, lets just try again
-			// maybe this behavior should be placed elsewhere and not only apply to asserts..
 			catch (UnauthorizedAccessException ex)
 			{
 				return failureCallback.Invoke(ex);
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			}
 		}
 
-		public static void SafeIEOperation(Action action, Action<Exception> failureCallback)
+		public static void Action(Action action, Action<Exception> failureCallback)
 		{
 			try
 			{
@@ -70,8 +70,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				failureCallback.Invoke(ex);
 			}
 			// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
-			// if so, lets just try again
-			// maybe this behavior should be placed elsewhere and not only apply to asserts..
 			catch (UnauthorizedAccessException ex)
 			{
 				failureCallback.Invoke(ex);
@@ -89,42 +87,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				failureCallback.Invoke(ex);
 			}
 		}
-
-		public static T RetryIEOperation<T>(Func<T> action)
-		{
-			var value = default(T);
-			var success = false;
-			Func<Exception, T> exceptionHandler = e =>
-			                                      	{
-			                                      		success = false;
-			                                      		return default(T);
-			                                      	};
-			Func<bool> safeAction = () =>
-			                        	{
-			                        		success = true;
-			                        		value = SafeIEOperation(action, exceptionHandler);
-			                        		return success;
-			                        	};
-			safeAction.WaitOrThrow(EventualTimeouts.Poll, EventualTimeouts.Timeout);
-			return value;
-		}
-
-
-		public static void RetryIEOperation(Action action)
-		{
-			var success = false;
-			Action<Exception> exceptionHandler = e =>
-			                                     	{
-			                                     		success = false;
-			                                     	};
-			Func<bool> safeAction = () =>
-			                        	{
-			                        		success = true;
-			                        		SafeIEOperation(action, exceptionHandler);
-			                        		return success;
-			                        	};
-			safeAction.WaitOrThrow(EventualTimeouts.Poll, EventualTimeouts.Timeout);
-		}
-
 	}
 }

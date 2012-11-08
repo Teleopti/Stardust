@@ -24,12 +24,14 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 	}
 
 	function _flushPageLog() {
+		var messages = _messages;
+		_messages = [];
 		var page = $('#page');
-		for (var i = 0; i < _messages.length; i++) {
-			var message = _messages[i];
+		for (var i = 0; i < messages.length; i++) {
+			var message = messages[i];
 			page.append(message + "</ br>");
 		}
-		_messages = [];
+		return messages;
 	}
 
 	function _expireMyCookie(message) {
@@ -57,7 +59,7 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 			_pageLog(message);
 		},
 		FlushPageLog: function () {
-			_flushPageLog();
+			return _flushPageLog();
 		},
 		ExpireMyCookie: function (message) {
 			_expireMyCookie(message);
