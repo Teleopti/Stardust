@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public static void BeforeScenario()
 		{
 			// restart browser every 20th scenario
-			if (_scenarioCount % 20 == 0)
+			if (_scenarioCount != 0 && _scenarioCount % 20 == 0)
 				Browser.Restart();
 
 			IncrementScenarioCount();
