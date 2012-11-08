@@ -102,6 +102,7 @@
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
+    <Compile Include="Bindings\Generic\WeekSchedulePageStepDefinitions.cs" />
     <Compile Include="PasswordPolicyMobile.feature.cs">
       <DependentUpon>PasswordPolicyMobile.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -492,7 +493,7 @@
       <DependentUpon>TextRequestFromSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="TextRequestStepDefinitions.cs" />
-    <Compile Include="TextRequestFromScheduleStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\EditRequestPageStepDefinitions.cs" />
     <Compile Include="WeekSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
