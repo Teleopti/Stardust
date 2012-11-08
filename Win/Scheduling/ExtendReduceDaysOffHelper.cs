@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 ICheckerRestriction checkerRestriction = new RestrictionChecker();
                 IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, checkerRestriction, optimizerPreferences, originalStateListForScheduleTag[i]);
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
-
+                
                 IExtendReduceDaysOffOptimizer optimizer = new ExtendReduceDaysOffOptimizer(
                     personalSkillsPeriodValueCalculator, 
                     personalSkillsDataExtractor, 
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     scheduleServiceForFlexibleAgents, 
                     optimizerPreferences, 
                     schedulePartModifyAndRollbackService,
-                    resourceOptimizationHelper, 
+                    resourceCalculateDelayer, 
                     effectiveRestrictionCreator,
                     resourceCalculateDaysDecider, 
                     originalStateListForScheduleTag[i],

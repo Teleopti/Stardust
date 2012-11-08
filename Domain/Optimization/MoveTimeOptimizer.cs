@@ -87,14 +87,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleDayPro firstDay = _matrixConverter.SourceMatrix.GetScheduleDayByKey(daysToBeMoved[0]);
             DateOnly firstDayDate = daysToBeMoved[0];
             IScheduleDay firstScheduleDay = firstDay.DaySchedulePart();
-			//IScheduleDay originalFirstScheduleDay = (IScheduleDay) firstScheduleDay.Clone();
+			var originalFirstScheduleDay = (IScheduleDay) firstScheduleDay.Clone();
             var firstDayEffectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(firstScheduleDay, schedulingOptions);
 			TimeSpan firstDayContractTime = firstDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
 
             IScheduleDayPro secondDay = _matrixConverter.SourceMatrix.GetScheduleDayByKey(daysToBeMoved[1]);
             DateOnly secondDayDate = daysToBeMoved[1];
             IScheduleDay secondScheduleDay = secondDay.DaySchedulePart();
-			//IScheduleDay originalSecondScheduleDay = (IScheduleDay)secondScheduleDay.Clone();
+			var originalSecondScheduleDay = (IScheduleDay)secondScheduleDay.Clone();
             var secondDayEffectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(secondScheduleDay, schedulingOptions);
 			TimeSpan secondDayContractTime = secondDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
 
@@ -110,12 +110,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             //delete schedule on the two days
             IList<IScheduleDay> listToDelete = new List<IScheduleDay> { firstDay.DaySchedulePart(), secondDay.DaySchedulePart() };
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService);
-
+            var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+                                                                        schedulingOptions.ConsiderShortBreaks);
 
             if (!tryScheduleFirstDay(firstDayDate, schedulingOptions, firstDayEffectiveRestriction, firstDayContractTime))
             {
-				safeCalculateDate(firstDayDate);
-				safeCalculateDate(secondDayDate);
+                calculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer);
+                calculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer);
                 return true;
             }
 
@@ -124,8 +125,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (!tryScheduleSecondDay(secondDayDate, schedulingOptions, secondDayEffectiveRestriction, secondDayContractTime))
             {
-				safeCalculateDate(firstDayDate);
-				safeCalculateDate(secondDayDate);
+                calculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer);
+                calculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer);
                 return true;
             }
 
@@ -135,19 +136,19 @@ namespace Teleopti.Ccc.Domain.Optimization
             bool isPeriodWorse = newPeriodValue > oldPeriodValue;
             if (isPeriodWorse)
             {
-            	rollbackLockAndCalculate(firstDayDate, secondDayDate);
+                rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
                 return true;
             }
 
             if (daysOverMax())
             {
-				rollbackLockAndCalculate(firstDayDate, secondDayDate);
+                rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
                 return false;
             }
 
             if (restrictionsOverMax().Count > 0)
             {
-				rollbackLockAndCalculate(firstDayDate, secondDayDate);
+                rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
                 return true;
             }
 
@@ -156,32 +157,21 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-		private void rollbackLockAndCalculate(DateOnly firstDayDate, DateOnly secondDayDate)
+		private void rollbackLockAndCalculate(DateOnly firstDayDate, DateOnly secondDayDate, IScheduleDay originalFirstScheduleDay, IScheduleDay originalSecondScheduleDay,IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			_rollbackService.Rollback();
 			lockDays(firstDayDate, secondDayDate);
-			safeCalculateDate(firstDayDate);
-			safeCalculateDate(secondDayDate);
+            calculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer);
+            calculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer);
 		}
 
-		private void safeCalculateDate(DateOnly dayDate)
-		{
-			_resourceOptimizationHelper.ResourceCalculateDate(dayDate, true, true);
-			_resourceOptimizationHelper.ResourceCalculateDate(dayDate.AddDays(1), true, true);
-		}
-
-		//private void calculateDate(DateOnly dayDate, IScheduleDay originalScheduleDay)
-		//{
-		//    IScheduleDay currentFirstScheduleDay =
-		//        _matrixConverter.SourceMatrix.GetScheduleDayByKey(dayDate).DaySchedulePart();
-		//    IList<DateOnly> dates = _decider.DecideDates(currentFirstScheduleDay, originalScheduleDay);
-		//    foreach (var dateOnly in dates)
-		//    {
-		//        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true,
-		//                                                      new List<IScheduleDay> { currentFirstScheduleDay },
-		//                                                      new List<IScheduleDay> { originalScheduleDay });
-		//    }
-		//}
+        private void calculateDate(DateOnly dayDate, IScheduleDay originalScheduleDay, IResourceCalculateDelayer resourceCalculateDelayer)
+        {
+            var currentScheduleDay = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dayDate).DaySchedulePart();
+            resourceCalculateDelayer.CalculateIfNeeded(dayDate, originalScheduleDay.ProjectionService().CreateProjection().Period(),
+                                                       new List<IScheduleDay> {originalScheduleDay},
+                                                       new List<IScheduleDay> {currentScheduleDay});
+        }
 
         private void lockDays(DateOnly firstDayDate, DateOnly secondDayDate)
         {
