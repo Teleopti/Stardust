@@ -47,6 +47,7 @@
 		</div>
 		
 		<input id="AsmMessage-detail-ok-button" type="button" class="button mb5 floatright" data-bind="click : confirmReadMessage, enable : canConfirm" value="@Html.AttributeEncode(Resources.Ok)"/>
+		<div id="AsmMessage-detail-error" class="error edit-module-element floatleft clearleftfloat"></div>
 	</div>
 	<div class="asmMessage-list">
 		<div class="friendly-message ui-corner-all floatleft" data-bind="visible: shouldShowMessage">

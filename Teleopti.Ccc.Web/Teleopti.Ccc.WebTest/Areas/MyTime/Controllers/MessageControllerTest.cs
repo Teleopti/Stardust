@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
+using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -85,6 +87,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = target.Message(messageId);
 
 			result.Data.Should().Be.SameInstanceAs(messageInfo);
+		}
+
+
+		[Test]
+		public void ShouldReturnErrorMessageOnInvalidModel()
+		{
+			var target = new StubbingControllerBuilder().CreateController<MessageController>(null, null, null);
+			const string message = "Test model validation error";
+			target.ModelState.AddModelError("Test", message);
+
+			var result = target.Reply(new ConfirmMessageViewModel());
+			var data = result.Data as ModelStateResult;
+
+			target.Response.StatusCode.Should().Be(400);
+			target.Response.TrySkipIisCustomErrors.Should().Be.True();
+			data.Errors.Single().Should().Be(message);
 		}
 	}
 }

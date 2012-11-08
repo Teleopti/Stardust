@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Message
 {
@@ -19,6 +21,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Message
 	public class ConfirmMessageViewModel
 	{
 		public Guid Id { get; set; }
+		
+		[StringLength(255, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "MessageTooLong")]
 		public string Reply { get; set; }
 		public string ReplyOption { get; set; }
 	}
