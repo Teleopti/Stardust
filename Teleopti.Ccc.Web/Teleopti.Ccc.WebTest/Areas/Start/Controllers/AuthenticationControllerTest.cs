@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[SetUp]
 		public void Setup()
 		{
-			_target = new AuthenticationController(null, null, null, null, null, null);
+			_target = new AuthenticationController(null, null, null, null, null, null, null);
 		}
 
 		[TearDown]
