@@ -20,12 +20,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			{
 				return action.Invoke();
 			}
-			// in some states our javascript "namespaces" havnt been initialized yet, so calling functions at those times will give JS exceptions
-			// maybe we should look for the strings "TypeError" and "ReferenceError" here to be more specific.
+			// in some states even Sizzle cant be called. if so, Find.BySelector may fail with this exception
 			catch (RunScriptException ex)
 			{
 				return failureCallback.Invoke(ex);
 			}
+			// in some states our javascript "namespaces" havnt been initialized yet, so calling functions at those times will give JS exceptions
+			// maybe we should look for the strings "TypeError" and "ReferenceError" here to be more specific.
 			catch (JavaScriptException ex)
 			{
 				return failureCallback.Invoke(ex);
@@ -57,12 +58,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			{
 				action.Invoke();
 			}
-			// in some states our javascript "namespaces" havnt been initialized yet, so calling functions at those times will give JS exceptions
-			// maybe we should look for the strings "TypeError" and "ReferenceError" here to be more specific.
+			// in some states even Sizzle cant be called. if so, Find.BySelector may fail with this exception
 			catch (RunScriptException ex)
 			{
 				failureCallback.Invoke(ex);
 			}
+			// in some states our javascript "namespaces" havnt been initialized yet, so calling functions at those times will give JS exceptions
+			// maybe we should look for the strings "TypeError" and "ReferenceError" here to be more specific.
 			catch (JavaScriptException ex)
 			{
 				failureCallback.Invoke(ex);
