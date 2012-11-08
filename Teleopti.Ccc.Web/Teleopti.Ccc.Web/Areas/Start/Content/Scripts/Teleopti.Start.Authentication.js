@@ -2,7 +2,8 @@
 /// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
 /// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
-
+/// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.Common.js" />
+/// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.LoginViewModel.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -15,6 +16,8 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.Start.Authentication = (function ($) {
 
+	var signinViewModel = null;
+	
 	function _addSelListValToHiddenfield() {
 		$('.select-list ul li').live("click", function () {
 			$('.select-list ul li.active').removeClass('active');
@@ -24,17 +27,33 @@ Teleopti.Start.Authentication = (function ($) {
 		});
 	}
 
+	function _initViewModels(loader) {
+		signinViewModel = new Teleopti.Start.SignInViewModel();
+//		var data1 = new Teleopti.Start.DataSourceViewModel();
+//		data1.DataSourceName = "Teleopti CCC Main";
+//		data1.ApplicationAuthentication(true);
+//		var datas = [data1];
+		signinViewModel.AvailableDataSources([]);
+//		datas[0].Selected(true);
+//		signinViewModel.SelectedSource(datas[0]);
+		ko.applyBindings(signinViewModel, $('#Login-container')[0]);
+		
+
+	}
+
 	return {
 		Init: function () {
-			Teleopti.Start.Common.Layout.ActivateStdButtons();
-			Teleopti.Start.Authentication.Layout.ActivateSignInTabs();
+//			Teleopti.Start.Common.Layout.ActivateStdButtons();
+			//			Teleopti.Start.Authentication.Layout.ActivateSignInTabs();
+			_initViewModels();
 			Teleopti.Start.Authentication.Layout.SetInputfieldPlaceHolderText();
 			Teleopti.Start.Authentication.Layout.DisableSigninButtonOnSubmit();
 			_addSelListValToHiddenfield();
 		},
 
 		SignInPartialInit: function (ajaxContext) {
-			Teleopti.Start.Common.Layout.ActivateStdButtons();
+			//			Teleopti.Start.Common.Layout.ActivateStdButtons();
+			
 			Teleopti.Start.Authentication.Layout.SetSelectedListVal();
 			Teleopti.Start.Authentication.Layout.SetInputfieldPlaceHolderText();
 			if ($('#business_unit_partial_target').exists() || $('#error_partial_target').exists()) {

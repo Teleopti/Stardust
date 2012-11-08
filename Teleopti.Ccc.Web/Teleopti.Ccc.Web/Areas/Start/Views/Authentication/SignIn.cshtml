@@ -4,7 +4,9 @@
 @section head {
     <script src="@Url.Content("~/Content/Scripts/jquery.validate.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Content/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Content/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+	<script src="@Url.Content("~/Content/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+
+
     <script type="text/javascript">
     	jQuery(function () {
     		Teleopti.Start.Authentication.Init();
@@ -12,7 +14,54 @@
     </script>
 }
 <section id="page-signin">
-    <img src="@Url.Content("~/Areas/Start/Content/Images/login_logo.png")" id="logo" alt="Teleopti MyTime" />
+	<div class="container" id="Login-container">
+		<div class="login-logo">
+			<img src="@Url.Content("~/Areas/Start/Content/Images/mobile_logo.png")"/>
+		</div>
+		<div data-bind="visible:DataSourceSelectionActive" class="login-form well well-large">
+			<ul id="DataSources" data-bind="foreach: AvailableDataSources" class="nav nav-tabs nav-stacked">
+				<li data-bind="css: {'active': Selected}">
+					<a href="#" data-bind="text: DataSourceName, click: $parent.SelectDataSource"></a>
+				</li>
+			</ul>
+			<div>
+				<input type="text" id="Username-input" placeholder="User name" class="input-block-level" data-bind="visible:IsApplicationLogon" />
+			</div>
+			<div>
+				<input type="password" id="Password-input" placeholder="Password" class="input-block-level" data-bind="visible:IsApplicationLogon" />
+			</div>
+			<button class="btn btn-primary" id="Login-button">Log on</button>
+		</div>
+		<div data-bind="visible: (MustChangePasswordActive() || WarningActive())">
+			<div class="alert login-warning" data-bind="visible:MustChangePasswordActive">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+				<strong>Warning!</strong> Your password has already expired. 
+			</div>
+			<div class="alert login-warning" data-bind="visible:WarningActive">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+				<strong>Warning!</strong> Your password will expire soon. Click <a data-bind="click: ToggleChangingPassword">here</a> to change your password.
+			</div>
+			<div class="login-form well well-large" data-bind="visible:ChangingPasswordActive">
+				<input type="password" id="New-password" placeholder="New Password" class="input-block-level" />
+				<input type="password" id="Confirm-new-password" placeholder="Confirm New Password" class="input-block-level" />
+				<input type="password" id="Old-password" placeholder="Old Password" class="input-block-level" />
+				<button class="btn btn-primary" id="Change-password-button" type="submit">Submit</button>
+			</div>
+		</div>
+		<div data-bind="visible:BusinessUnitSelectionActive" class="displaynone login-form well well-large">
+			<h3>Select business unit:</h3>
+			<ul data-bind="foreach: AvailableBusinessUnits" class="nav nav-tabs nav-stacked">
+				<li data-bind="css: {'active': Selected}"><a href="#" data-bind="text: BusinessUnitName, click: $parent.SelectBusinessUnit"></a></li>
+			</ul>
+		</div>
+		<div data-bind="visible:ApplicationSelectionActive" class="displaynone login-form well well-large">
+			<h3>Select application:</h3>
+			<ul data-bind="foreach: AvailableApplications" class="nav nav-tabs nav-stacked">
+				<li data-bind="css: {'active': Selected}"><a href="#" data-bind="text: ApplicationName, click: $parent.SelectApplication"></a></li>
+			</ul>
+		</div>
+	</div>
+	@*<img src="@Url.Content("~/Areas/Start/Content/Images/login_logo.png")" id="logo" alt="Teleopti MyTime" />
     <article id="body-signin" class="col-1 signin pdt5">  
         <section id="tabs-signin" class="sign-in-form">
             <ul>
@@ -39,6 +88,6 @@
             </section>
             }
         </section>
-    </article>
+    </article>*@
 </section>
 

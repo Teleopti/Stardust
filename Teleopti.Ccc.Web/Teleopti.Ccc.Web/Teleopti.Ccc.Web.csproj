@@ -599,8 +599,8 @@
     <None Include="Areas\Start\Views\Test\Message.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="Areas\Start\Content\signonvm.js" />
-    <Content Include="Areas\Start\Content\login.css" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.LoginViewModel.js" />
+    <Content Include="Areas\Start\Content\Css\login.css" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.min.js" />
     <Content Include="Content\jqueryui\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
