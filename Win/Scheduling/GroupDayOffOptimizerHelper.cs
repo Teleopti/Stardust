@@ -145,10 +145,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
 				var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, matrixList, groupPersonsBuilder, schedulingOptions);
 				IDictionary<Guid, bool> teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
+            	var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
 				IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_stateHolder, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
 
                 backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences,
-                                                   groupOptimizerFindMatrixesForGroup, teamSteadyStateDictionary, teamSteadyStateMainShiftScheduler, groupPersonBuilderForOptimization);
+                                                   groupOptimizerFindMatrixesForGroup, teamSteadyStateHolder, teamSteadyStateMainShiftScheduler, groupPersonBuilderForOptimization);
 
             }
         }
@@ -205,9 +206,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var coherentChecker = new TeamSteadyStateCoherentChecker();
 			var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
 			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(groupMatrixHelper, coherentChecker, scheduleMatrixProFinder);
+			var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
 
             service.ReportProgress += resourceOptimizerPersonOptimized;
-            service.Execute(allMatrix, teamSteadyStateMainShiftScheduler, teamSteadyStateDictionary, _stateHolder.Schedules);
+			service.Execute(allMatrix, teamSteadyStateMainShiftScheduler, teamSteadyStateHolder, _stateHolder.Schedules);
             service.ReportProgress -= resourceOptimizerPersonOptimized;
         }
 
@@ -578,6 +580,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
         	var coherentChecker = new TeamSteadyStateCoherentChecker();
         	var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
+        	var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
         	var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(groupMatrixHelper, coherentChecker, scheduleMatrixProFinder);
 			
 
@@ -619,7 +622,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                              groupDayOffOptimizerCreator, 
                                              schedulingOptionsCreator,
 											 teamSteadyStateMainShiftScheduler,
-											 teamSteadyStateDictionary,
+											 teamSteadyStateHolder,
 											 _stateHolder.Schedules);
             return optimizerContainer;
         }
