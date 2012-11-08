@@ -139,6 +139,7 @@ $('#Change-password-button').click(function () {
 	signinViewModel.DataSourceSelectionActive(true);
 	signinViewModel.BusinessUnitSelectionActive(false);
 	signinViewModel.MustChangePasswordActive(false);
+	signinViewModel.ApplicationSelectionActive(false);
 	signinViewModel.WarningActive(false);
 });
 
