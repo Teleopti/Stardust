@@ -226,6 +226,9 @@ item: Set Variable
   Variable=U
 end
 item: Set Variable
+  Variable=U2
+end
+item: Set Variable
   Variable=FAILED_MESS
   Value=Failed to install database
 end
@@ -303,12 +306,6 @@ item: End Block
 end
 item: Execute Program
   Pathname=.\DBManager.exe
-  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %U2% -R "-F%DIR%
-  Default Directory=%DIR%
-  Flags=00000010
-end
-item: Execute Program
-  Pathname=.\DBManager.exe
   Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %C% %U% -R -T "-F%DIR%
   Default Directory=%DIR%
   Flags=00000010
@@ -329,7 +326,7 @@ item: End Block
 end
 item: Execute Program
   Pathname=.\DBManager.exe
-  Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %U2% -R "-F%DIR%
+  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %U2% -R "-F%DIR%
   Default Directory=%DIR%
   Flags=00000010
 end
@@ -354,8 +351,8 @@ end
 item: End Block
 end
 item: Execute Program
-  Pathname=DBManager.exe
-  Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %U2% -R "-F%DIR%
+  Pathname=.\DBManager.exe
+  Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %U2% -R "-F%DIR%
   Default Directory=%DIR%
   Flags=00000010
 end
@@ -378,6 +375,12 @@ remarked item: Exit Installation
   Flags=1
 end
 item: End Block
+end
+item: Execute Program
+  Pathname=DBManager.exe
+  Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %U2% -R "-F%DIR%
+  Default Directory=%DIR%
+  Flags=00000010
 end
 item: Remark
   Text=This step initiate default data via ApplicationConfig.exe

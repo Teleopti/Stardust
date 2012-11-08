@@ -144,7 +144,6 @@ Function addToComboBox(ByVal ComboProp, ByVal ComboOrder, ByVal ComboValue, ByVa
 	else
 		'This statement creates the view object based on our query
 		Set view = Session.Database.OpenView(query)
-		if err.number <> 0 Then DisplayCustomError("Set view") End If
 
 		'This statement executes the view, which actually adds the row into the ComboBox table.
 		view.Execute
