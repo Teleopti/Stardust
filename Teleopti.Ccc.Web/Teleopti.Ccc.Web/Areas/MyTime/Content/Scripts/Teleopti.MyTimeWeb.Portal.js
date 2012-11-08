@@ -258,11 +258,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _readyForInteraction() {
-		Teleopti.MyTimeWeb.Test.PageLog("Ready for interaction");
+		Teleopti.MyTimeWeb.Test.TestMessage("Ready for interaction");
 	}
 
 	function _completelyLoaded() {
-		Teleopti.MyTimeWeb.Test.PageLog("Completely loaded");
+		Teleopti.MyTimeWeb.Test.TestMessage("Completely loaded");
 	}
 
 	return {

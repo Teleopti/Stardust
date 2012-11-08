@@ -64,26 +64,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			// probably depending on how quickly the next request takes place.
 			// making a second request seems to enforce the cookie somehow..
 			Retrying.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
-			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();"), Is.StringContaining("Cookie is expired!"));
+			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Cookie is expired!"));
 
 			Retrying.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
-			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();"), Is.StringContaining("Cookie is expired!"));
+			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Cookie is expired!"));
 		}
 
-		public static void PageLog(string message)
+		public static void TestMessage(string message)
 		{
-			Retrying.Javascript("Teleopti.MyTimeWeb.Test.PageLog('" + message + "');");
-			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();"), Is.StringContaining(message));
+			Retrying.Javascript("Teleopti.MyTimeWeb.Test.TestMessage('" + message + "');");
+			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining(message));
 		}
 
 		public static void WaitUntilReadyForInteraction()
 		{
-			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();"), Is.StringContaining("Ready for interaction"));
+			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Ready for interaction"));
 		}
 
 		public static void WaitUntilCompletelyLoaded()
 		{
-			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();"), Is.StringContaining("Completely loaded"));
+			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Completely loaded"));
 		}
 
 	}

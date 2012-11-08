@@ -19,11 +19,11 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 	var _settings = {};
 	var _messages = [];
 
-	function _pageLog(message) {
+	function _testMessage(message) {
 		_messages.push(message);
 	}
 
-	function _flushPageLog() {
+	function _popTestMessages() {
 		var messages = _messages;
 		_messages = [];
 		var page = $('#page');
@@ -41,11 +41,11 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 			cache: false,
 			async: false,
 			success: function () {
-				_pageLog(message);
+				_testMessage(message);
 			},
 			error: function (r) {
 				if (r.status == 401 || r.status == 403) {
-					_pageLog(message);
+					_testMessage(message);
 				}
 			}
 		});
@@ -55,11 +55,11 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 		Init: function (settings) {
 			_settings = settings;
 		},
-		PageLog: function (message) {
-			_pageLog(message);
+		TestMessage: function (message) {
+			_testMessage(message);
 		},
-		FlushPageLog: function () {
-			return _flushPageLog();
+		PopTestMessages: function () {
+			return _popTestMessages();
 		},
 		ExpireMyCookie: function (message) {
 			_expireMyCookie(message);
