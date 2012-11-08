@@ -1072,7 +1072,7 @@ this.FeatureBackground();
 #line 319
  testRunner.And("My schedule between \'2013-10-03 08:00\' to \'2013-10-03 18:00\' reloads");
 #line 320
- testRunner.Then("I should see the text request form");
+ testRunner.Then("I should see the add text request form");
 #line 321
  testRunner.And("Subject should not be empty");
 #line hidden

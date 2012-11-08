@@ -17,20 +17,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceTypesSelectList.InnerHtml, Is.StringContaining(name));
 		}
 
-		[When(@"I unchecked the full day checkbox")]
-		public void WhenIUncheckedTheFullDayCheckbox()
-		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditRequestPage.FulldayCheck.Checked = false;
-		}
-
-		[When(@"I checked the full day checkbox")]
-		public void WhenIClickFullDayCheckbox()
-		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditRequestPage.FulldayCheck.Checked = true;
-		}
-
         [Then(@"I should see my existing inputs for date '(.*)'")]
         public void ThenIShouldSeeMyExistingInputsForDate(DateTime date)
         {
