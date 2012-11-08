@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.DBManager
         private string _password;
         private string _appUserName = "";
         private string _appPwd = "";
+        private bool _permissionMode;
         private string _currentLanguage = "us_english";
         private int _targetBuildNumber;
         private bool _useIntegratedSecurity;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.DBManager
         private DatabaseType _targetDatabaseType;
         private bool _willCreateNewDatabase;
         private string _businessUnitName;
-        private bool _willAddTrunk;
+        private bool _patchMode;
         private string _pathToDbManager = string.Empty;
 
         private CommandLineArgument() { }
@@ -60,12 +61,14 @@ namespace Teleopti.Ccc.DBManager
                         break;
                     case "-C":
                         _willCreateNewDatabase = true;
+                        _permissionMode = true;
+                        _patchMode = true;
                         break;
                     case "-B":
                         _businessUnitName = switchValue;
                         break;
                     case "-T":
-                        WillAddTrunk = true;
+                        _patchMode = true;
                         break;
                     case "-L":
                         string[] userpwd = switchValue.Split(':');
@@ -89,6 +92,9 @@ namespace Teleopti.Ccc.DBManager
                     //    break;
                     case "-F":
                         _pathToDbManager = switchValue;
+                        break;
+                    case "-R":
+                        _permissionMode = true;
                         break;
                 }
                 
@@ -334,10 +340,16 @@ namespace Teleopti.Ccc.DBManager
             set { _businessUnitName = value; }
         }
 
-        public bool WillAddTrunk
+        public bool PermissionMode
         {
-            get { return _willAddTrunk; }
-            set { _willAddTrunk = value; }
+            get { return _permissionMode; }
+            set { _permissionMode = value; }
+        }
+
+        public bool PatchMode
+        {
+            get { return _patchMode; }
+            set { _patchMode = value; }
         }
 
         //public string SchemaName

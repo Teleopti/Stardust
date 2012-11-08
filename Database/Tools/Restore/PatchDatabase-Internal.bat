@@ -24,13 +24,6 @@ SET /P DATABASE=Database name to patch:
 SET /P DATABASETYPE=Database type [TeleoptiCCC7,TeleoptiCCCAgg,TeleoptiAnalytics]: 
 ECHO %DATABASETYPE% > "%temp%\DATABASETYPE.txt"
 
-::Apply trunk?
-ECHO.
-SET TRUNK=
-SET /P IFTRUNK=Would like to deploy the Trunk on top of the Release code? [Y/N]
-IF "%IFTRUNK%"=="Y" SET TRUNK=-T
-IF "%IFTRUNK%"=="y" SET TRUNK=-T
-
 findstr /C:"TeleoptiAnalytics" /I "%temp%\DATABASETYPE.txt"
 If %ERRORLEVEL% EQU 0 (
 SET /A CROSSDB=1
@@ -62,10 +55,10 @@ GOTO :error
 )
 
 ::Patch DB
-::Upgrade DB to latest version (WITHOUT Trunk)
+::Upgrade DB to latest version, we now always include trunk
 CD "%DBMANAGERPATH%"
-ECHO "%DBMANAGER%" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E  %TRUNK%
-"%DBMANAGER%" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E  %TRUNK%
+ECHO "%DBMANAGER%" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E -R -T -Lsa:dummyPwd
+"%DBMANAGER%" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E -R -T -Lsa:dummyPwd
 IF %ERRORLEVEL% NEQ 0 (
 SET /A ERRORLEV=2
 GOTO :error
@@ -80,25 +73,11 @@ IF %ERRORLEVEL% NEQ 0 (
 SET /A ERRORLEV=10
 GOTO :error
 )
-
-ECHO Changing to Date Only in Forecasts ...
-"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% -FM -EE
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=9
-GOTO :error
-)
-
-ECHO Changing FirstDayInWeek on Person ...
-"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% -PU -EE
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=8
-GOTO :error
-)
 )
 
 IF %CROSSDB% EQU 1 (
-ECHO Adding Crossdatabases
-SQLCMD -S%MyServerInstance% -E -d%DATABASE% -Q"EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%TeleoptiCCCAgg%'"
+ECHO Fix Cross DB stuff
+"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD"%DATABASE%" -CD"%TeleoptiCCCAgg%" -EE
 if %errorlevel% NEQ 0 (
 SET /A ERRORLEV=1
 GOTO :error
