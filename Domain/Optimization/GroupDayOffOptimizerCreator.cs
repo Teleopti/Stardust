@@ -47,6 +47,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter,
 			IDaysOffPreferences daysOffPreferences)
 		{
+			IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions();
+			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
+				= new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, daysOffPreferences, 25);
 			return new GroupDayOffOptimizer(converter,
 			                                decisionMaker,
 			                                _scheduleResultDataExtractorProvider,
@@ -57,7 +60,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			                                _groupSchedulingService,
 			                                _groupMatrixHelper,
 			                                _groupOptimizationValidatorRunner,
-			                                _groupPersonBuilderForOptimization);
+			                                _groupPersonBuilderForOptimization,
+											dayOffBackToLegalStateService);
 
 		}
     }

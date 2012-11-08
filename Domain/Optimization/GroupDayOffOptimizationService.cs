@@ -159,6 +159,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			_schedulePartModifyAndRollbackService.Rollback();
 
+			if(dates.Count == 0)
+			{
+				DateOnly date = optimizer.Matrix.EffectivePeriodDays[0].Day;
+				dates.Add(date);
+			}
 			foreach (var dateOnly in dates)
 			{
 				if (useSameDaysOff)
@@ -191,7 +196,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				dates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
 			}
-
+			if(dates.Count == 0)
+			{
+				DateOnly date = optimizer.Matrix.EffectivePeriodDays[0].Day;
+				dates.Add(date);
+			}
 			foreach (var dateOnly in dates)
 			{
 				if (useSameDaysOff)

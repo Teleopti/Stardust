@@ -16,7 +16,9 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IShiftProjectionCache> FilterList(IList<IShiftProjectionCache> shiftList, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
 		{
-			return shiftList;
+			if(StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+				return shiftList;
+
 			//ta reda på alla skiftlängder i _shiftList, som en lista
 			HashSet<TimeSpan> resultingTimes = new HashSet<TimeSpan>();
 			foreach (var shiftProjectionCache in shiftList)
