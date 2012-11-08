@@ -1,4 +1,7 @@
 Option Explicit
+'====================================
+'main
+'====================================
 On Error Resume Next 'With out this, any error will crash MsiExec
 Dim intMessage
 Dim admConnectString
@@ -39,19 +42,46 @@ End If
 'Loop Windows groups on SQL Server
 AvailableGroupsGet admConnectString, displayGroups
 
+'====================================
 'subs
+'====================================
+Sub DisplayCustomError(strMessage)
+
+    strMessage = VbCrLf & strMessage & VbCrLf & VbCrLf & _
+      "Number (dec) : " & Err.Number & VbCrLf & _	
+      "Number (hex) : &H" & Hex(Err.Number) & VbCrLf & _
+      "Description  : " & Err.Description & VbCrLf & _
+      "Source       : " & Err.Source
+    Err.Clear
+	
+	msgbox strMessage, vbOk + vbExclamation, "Error in MSI calling vbscript!"
+	wscript.quit
+	
+End Sub
+
+'====================================
 'functions
+'====================================
 Public Function AvailableGroupsGet(strCon, strQuery) 
 	On Error Resume Next
 	
 	Dim strGroupNames
 	Dim field
-	Set objConnection = CreateObject("ADODB.Connection") 
-	Set objRecordSet = CreateObject("ADODB.Recordset") 
+	Set objConnection = CreateObject("ADODB.Connection")
+	if err.number <> 0 Then DisplayCustomError("Set objConnection") End If
+	
+	Set objRecordSet = CreateObject("ADODB.Recordset")
+	if err.number <> 0 Then DisplayCustomError("Set objRecordSet") End If
+	
 	objConnection.Open strCon
+	if err.number <> 0 Then DisplayCustomError("objConnection.Open") End If
 	
 	objRecordSet.Open strQuery,objConnection
+	if err.number <> 0 Then DisplayCustomError("objRecordSet.Open") End If
+	
 	objRecordSet.MoveFirst
+	if err.number <> 0 Then DisplayCustomError("objRecordSet.MoveFirst") End If
+	
 	While Not objRecordSet.EOF
 		Combo objRecordSet.Fields.Item("ComboOrder").Value, objRecordSet.Fields.Item("name").Value
 		objRecordSet.MoveNext
@@ -84,12 +114,11 @@ Function Combo(intComboOrder,strComboValueAndText)
 
 '  Call function to add this row of values to the ComboBox table
 	addToComboBox ComboProp, ComboOrder, ComboValue, ComboText
+	if err.number <> 0 Then DisplayCustomError("addToComboBox") End If
 
 
 
 End Function
-
-
 
 Function addToComboBox(ByVal ComboProp, ByVal ComboOrder, ByVal ComboValue, ByVal ComboText)
 
@@ -110,10 +139,16 @@ Function addToComboBox(ByVal ComboProp, ByVal ComboOrder, ByVal ComboValue, ByVa
 	query = "INSERT INTO `ComboBox` (`Property`, `Order`, `Value`, `Text`) VALUES ('" & ComboProp & "', " & ComboOrder & ", '" & ComboValue & "', '" & ComboText & "') TEMPORARY"
 
 
-' This statement creates the view object based on our query
-	Set view = Session.Database.OpenView(query)
+	If debug Then
+		msgbox ComboOrder & " : " & ComboValue
+	else
+		'This statement creates the view object based on our query
+		Set view = Session.Database.OpenView(query)
+		if err.number <> 0 Then DisplayCustomError("Set view") End If
 
-' This statement executes the view, which actually adds the row into the ComboBox table.
-	view.Execute
-
+		'This statement executes the view, which actually adds the row into the ComboBox table.
+		view.Execute
+		if err.number <> 0 Then DisplayCustomError("view.Execute") End If
+	End If
+	
 End Function

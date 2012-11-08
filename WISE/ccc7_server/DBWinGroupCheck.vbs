@@ -1,4 +1,7 @@
 Option Explicit
+'====================================
+'main
+'====================================
 On Error Resume Next 'With out this, any error will crash MsiExec
 Dim intMessage
 Dim admConnectString
@@ -52,26 +55,51 @@ Else
 
 End If
 
+'====================================
+'subs
+'====================================
+Sub DisplayCustomError(strMessage)
 
+    strMessage = VbCrLf & strMessage & VbCrLf & VbCrLf & _
+      "Number (dec) : " & Err.Number & VbCrLf & _	
+      "Number (hex) : &H" & Hex(Err.Number) & VbCrLf & _
+      "Description  : " & Err.Description & VbCrLf & _
+      "Source       : " & Err.Source
+    Err.Clear
+	
+	msgbox strMessage, vbOk + vbExclamation, "Error in MSI calling vbscript!"
+	wscript.quit
+	
+End Sub
+
+'====================================
 'functions
+'====================================
 Public Function CheckSingleValue (strCon, strQuery) 
-    'init as "don't have permissions"
+    'init as zero
 	CheckSingleValue = 0
 	
 	On Error Resume Next
 	Set objConnection = CreateObject("ADODB.Connection") 
-	Set objRecordSet = CreateObject("ADODB.Recordset") 
+		if err.number <> 0 Then DisplayCustomError("Set objConnection") End If
+		
+	Set objRecordSet = CreateObject("ADODB.Recordset")
+		if err.number <> 0 Then DisplayCustomError("Set objRecordSet") End If
+		
 	objConnection.Open strCon
+		if err.number <> 0 Then DisplayCustomError("objConnection.Open") End If
 	
 	objRecordSet.Open strQuery,objConnection
-	If Err.Number = 0 Then
-		objRecordSet.MoveFirst
-		CheckSingleValue=objRecordset(0)
-	End If
+		if err.number <> 0 Then DisplayCustomError("objRecordSet.Open") End If
+		
+	objRecordSet.MoveFirst
+		if err.number <> 0 Then DisplayCustomError("objRecordSet.MoveFirst") End If
+		
+	CheckSingleValue=objRecordset(0)
+	
 	objRecordSet.Close 
 	objConnection.Close
 	
-	On Error Goto 0
 	Set objConnection = Nothing 
 	Set objRecordSet = Nothing 
 End Function
