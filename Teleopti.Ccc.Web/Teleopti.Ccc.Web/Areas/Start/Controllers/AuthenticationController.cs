@@ -59,13 +59,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpGet]
 		public JsonResult LoadDataSources()
 		{
-			var data1 = _dataSourceProvider.RetrieveDatasourcesForApplication()
+			var applicatoinDataSources = _dataSourceProvider.RetrieveDatasourcesForApplication()
 				.SelectOrEmpty(
 					x => new DataSourceViewModel {Name = x.DataSourceName, IsApplicationLogon = true});
-			var data2=_dataSourceProvider.RetrieveDatasourcesForWindows()
+			var windwowsDataSources = _dataSourceProvider.RetrieveDatasourcesForWindows()
 				.SelectOrEmpty(
-					x => new DataSourceViewModel { Name = x.DataSourceName + Resources.WindowsLogonWithBrackets, IsApplicationLogon = false });
-			return Json(data1.Union(data2));
+					x => new DataSourceViewModel {Name = x.DataSourceName + " " + Resources.WindowsLogonWithBrackets, IsApplicationLogon = false});
+			return Json(applicatoinDataSources.Union(windwowsDataSources), JsonRequestBehavior.AllowGet);
 		}
 		[HttpPost]
 		public ActionResult Windows([Bind(Prefix = "SignIn")] SignInWindowsModel model)

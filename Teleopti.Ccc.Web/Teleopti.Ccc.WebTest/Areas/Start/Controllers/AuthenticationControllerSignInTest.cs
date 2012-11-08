@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			result.Count().Should().Be.EqualTo(2);
 			result.First().Name.Should().Be.EqualTo("app");
 			result.First().IsApplicationLogon.Should().Be.True();
-			result.Last().Name.Should().Be.EqualTo("windows" + Resources.WindowsLogonWithBrackets);
+			result.Last().Name.Should().Be.EqualTo("windows" + " " + Resources.WindowsLogonWithBrackets);
 			result.Last().IsApplicationLogon.Should().Be.False();
 		}
 

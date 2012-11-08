@@ -39,13 +39,24 @@ Teleopti.Start.SignInViewModel = function () {
 	};
 
 	this.LoadDataSources = function () {
+		var ajax = new Teleopti.MyTimeWeb.Ajax();
 		ajax.Ajax({
-			url: "Authentication/LoadDataSources",
+			url: "/MytimeWeb/Start/Authentication/LoadDataSources",
 			dataType: "json",
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
-				
-//				self.AvailableDataSources(data);
+				for (var i = 0; i < data.length; i++) {
+					var dataSource = new Teleopti.Start.DataSourceViewModel();
+					dataSource.Selected(false);
+					dataSource.DataSourceName = data[i].Name;
+					dataSource.ApplicationAuthentication(data[i].IsApplicationLogon);
+					if (i == 0) {
+						dataSource.Selected(true);
+						self.SelectedSource(dataSource);
+					}
+					self.AvailableDataSources.push(dataSource);
+				}
+
 			}
 		});
 	};
