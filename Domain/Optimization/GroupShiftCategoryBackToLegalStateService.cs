@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     public interface IGroupShiftCategoryBackToLegalStateService
     {
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
-		List<IScheduleMatrixPro> Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup, IDictionary<Guid, bool> teamSteadyStates, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
+		List<IScheduleMatrixPro> Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup, ITeamSteadyStateHolder teamSteadyStateHolder, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
     }
 
     public class GroupShiftCategoryBackToLegalStateService : IGroupShiftCategoryBackToLegalStateService
@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupPersonsBuilder = groupPersonsBuilder;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
-		public List<IScheduleMatrixPro> Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup, IDictionary<Guid, bool> teamSteadyStates, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
+		public List<IScheduleMatrixPro> Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup, ITeamSteadyStateHolder teamSteadyStateHolder, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
             var resultList = new List<IScheduleDayPro>();
             if (schedulePeriod != null)
@@ -68,24 +68,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				var teamSteadyStateSuccess = false;
 
-				if (teamSteadyStates != null)
+				if(teamSteadyStateHolder.IsSteadyState(groupPerson))
 				{
-					if (groupPerson != null && groupPerson.Id.HasValue)
+					if (teamSteadyStateMainShiftScheduler != null && !teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, _scheduleService, rollbackService,schedulingOptions, groupPersonBuilderForOptimization,allMatrixes, scheduleDictionary))
 					{
-						if (teamSteadyStates.ContainsKey(groupPerson.Id.Value) && teamSteadyStates[groupPerson.Id.Value])
-						{
-							if (teamSteadyStateMainShiftScheduler != null &&
-								!teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, _scheduleService, rollbackService,
-								                                                schedulingOptions, groupPersonBuilderForOptimization,
-								                                                allMatrixes, scheduleDictionary))
-							{
-								teamSteadyStates.Remove(groupPerson.Id.Value);
-								teamSteadyStates.Add(groupPerson.Id.Value, false);
-							}
-
-							else teamSteadyStateSuccess = true;
-						}
+						teamSteadyStateHolder.SetSteadyState(groupPerson, false);
 					}
+
+					else teamSteadyStateSuccess = true;	
 				}
 
             	if(!teamSteadyStateSuccess)

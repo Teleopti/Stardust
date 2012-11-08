@@ -773,6 +773,7 @@
     <Compile Include="Scheduling\TeamSteadyState.cs" />
     <Compile Include="Scheduling\TeamSteadyStateCoherentChecker.cs" />
     <Compile Include="Scheduling\TeamSteadyStateDictionaryCreator.cs" />
+    <Compile Include="Scheduling\TeamSteadyStateHolder.cs" />
     <Compile Include="Scheduling\TeamSteadyStateMainShiftScheduler.cs" />
     <Compile Include="Scheduling\TeamSteadyStatePersonPeriod.cs" />
     <Compile Include="Scheduling\TeamSteadyStateRunner.cs" />

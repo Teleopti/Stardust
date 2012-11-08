@@ -50,17 +50,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
         private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
   		private IDeleteSchedulePartService _deleteSchedulePartService;
         private IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
-    	private Dictionary<Guid, bool> _teamSteadyStates;
     	private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
     	private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
     	private IFairnessValueResult _fairnessValueResult;
-    	private Guid _guid;
+    	private ITeamSteadyStateHolder _teamSteadyStateHolder;
 			
 		[SetUp]
         public void Setup()
     	{
 			_mock = new MockRepository();
-			_guid = Guid.NewGuid();
 			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 			_shiftCategory = new ShiftCategory("kat");
     		_person1 = _mock.StrictMock<IPerson>();
@@ -102,10 +100,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
 
-			_teamSteadyStates = new Dictionary<Guid, bool> {{_guid, false}};
 			_teamSteadyStateMainShiftScheduler = _mock.StrictMock<ITeamSteadyStateMainShiftScheduler>();
 			_groupPersonBuilderForOptimization = _mock.StrictMock<IGroupPersonBuilderForOptimization>();
-			_fairnessValueResult = _mock.StrictMock<IFairnessValueResult>();	
+			_fairnessValueResult = _mock.StrictMock<IFairnessValueResult>();
+			_teamSteadyStateHolder = _mock.StrictMock<ITeamSteadyStateHolder>();
     	}
 
         [TearDown]
@@ -123,7 +121,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		public void ShouldUseSteadyStateMainShiftSchedulerWhenInSteadyState()
 		{
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			_teamSteadyStates = new Dictionary<Guid, bool> { {_guid, true } };
 
 			using(_mock.Record())
 			{
@@ -138,12 +135,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 																			_scheduleDictionary)).IgnoreArguments().Return(true);
 
 				Expect.Call(_stateHolder.Schedules).Return(null).Repeat.Twice();
-				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
+				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true).Repeat.Twice();
 			}
 
 			using(_mock.Playback())
 			{
-				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);	
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStateHolder, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);	
 			}	
 		}
 
@@ -151,7 +148,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		public void ShouldTryToScheduleWithoutSteadyStateWhenSteadyStateFails()
 		{
 			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			_teamSteadyStates = new Dictionary<Guid, bool> { {_guid, true } };
 
 			using (_mock.Record())
 			{
@@ -166,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 																			_scheduleDictionary)).IgnoreArguments().Return(false);
 
 				Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
+				//Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
 				//Expect.Call(() => _rollbackService.Rollback());
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson>()));
@@ -175,13 +171,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, new DateOnly(), null, null)).IgnoreArguments().Return(null);
                 Expect.Call(
                    () => _shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, _person1, _date1)).IgnoreArguments().Repeat.AtLeastOnce();
-            
+
+				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true).Repeat.Twice();
+				Expect.Call(()=>_teamSteadyStateHolder.SetSteadyState(_groupPerson, false));
+
 			}
 
 			using (_mock.Playback())
 			{
-				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
-			}	Assert.IsFalse(_teamSteadyStates[_guid]);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStateHolder, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
+			}	
 		}
 
 
@@ -232,12 +231,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
  				Expect.Call(
                    () => _shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, _person1, _date1)).IgnoreArguments().Repeat.AtLeastOnce();
             
-				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
+				
+            	Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false).Repeat.Twice();
             }
 
             using (_mock.Playback())
             {
-				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);	
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStateHolder, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);	
             }
         }
 
@@ -291,12 +291,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
  				Expect.Call(
                     () => _shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, _person1, _date1)).IgnoreArguments().Repeat.AtLeastOnce();
-				Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
+			
+            	Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false).Repeat.Twice();
             }
 
             using (_mock.Playback())
             {
-				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStateHolder, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
             }
         }
 
@@ -334,13 +335,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
   				Expect.Call(
                    () => _shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, _person1, _date1)).IgnoreArguments().Repeat.AtLeastOnce();
-            	Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
+            	
+            	Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false).Repeat.Twice();
 
             }
 
             using (_mock.Playback())
             {
-				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStateHolder, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
             }
         }
 
@@ -373,12 +375,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				Expect.Call(_scheduleDay.Person).Return(_person1).Repeat.Any();
    				Expect.Call(
                    () => _shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, _person1, _date1)).IgnoreArguments().Repeat.AtLeastOnce();
-            	Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
+            	
+            	Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false).Repeat.Twice();
             }
 
             using (_mock.Playback())
             {
-				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStateHolder, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
             }
         }
 
@@ -404,13 +407,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             	Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.AtLeastOnce();
  				Expect.Call(
                    () => _shiftCategoryLimitationChecker.SetBlockedShiftCategories(_schedulingOptions, _person1, _date1)).IgnoreArguments().Repeat.AtLeastOnce();
-           		Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
-            	
+           		//Expect.Call(_groupPerson.Id).Return(_guid).Repeat.AtLeastOnce();
+            	Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false).Repeat.Twice();
             }
 
             using (_mock.Playback())
             {
-				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
+				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStateHolder, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
             }   
         }
 
@@ -445,14 +448,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowIfMatrixIsNull()
 		{
-			_target.Execute(new DateOnlyPeriod(new DateOnly(), new DateOnly()), null, _schedulingOptions, _persons, _bgWorker, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
+			_target.Execute(new DateOnlyPeriod(new DateOnly(), new DateOnly()), null, _schedulingOptions, _persons, _bgWorker, _teamSteadyStateHolder, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowIfWorkerIsNull()
 		{
 			var matrixProList = new List<IScheduleMatrixPro>();
-			_target.Execute(new DateOnlyPeriod(new DateOnly(), new DateOnly()), matrixProList, _schedulingOptions, _persons, null, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
+			_target.Execute(new DateOnlyPeriod(new DateOnly(), new DateOnly()), matrixProList, _schedulingOptions, _persons, null, _teamSteadyStateHolder, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]

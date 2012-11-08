@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IGroupDayOffOptimizer
     {
-		bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IDictionary<Guid, bool> teamSteadyStates, IScheduleDictionary scheduleDictionary);
+		bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, ITeamSteadyStateHolder teamSteadyStateHolder, IScheduleDictionary scheduleDictionary);
     }
 
     public class GroupDayOffOptimizer : IGroupDayOffOptimizer
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IDictionary<Guid, bool> teamSteadyStates, IScheduleDictionary scheduleDictionary)
+		public bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, ITeamSteadyStateHolder teamSteadyStateHolder, IScheduleDictionary scheduleDictionary)
 		{
 			ILockableBitArray originalArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore,
 			                                                     _daysOffPreferences.ConsiderWeekAfter);
@@ -109,7 +109,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 					return false;
 
 				var teamSteadyStateSuccess = false;
-				if (groupPerson.Id.HasValue && teamSteadyStates.ContainsKey(groupPerson.Id.Value) && teamSteadyStates[groupPerson.Id.Value])
+
+				if(teamSteadyStateHolder.IsSteadyState(groupPerson))
 				{
 					foreach (var dateOnly in daysOffToRemove)
 					{
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 						if (!teamSteadyStateSuccess)
 							break;
-					}
+					}	
 				}
 
 				if (!teamSteadyStateSuccess)

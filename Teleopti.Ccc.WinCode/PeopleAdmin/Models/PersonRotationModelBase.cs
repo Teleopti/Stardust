@@ -187,6 +187,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             get { return _currentRotation; }
             set
             {
+				if (value == null) return;
                 _currentRotation = value;
                 if (_personRotation != null)
                     _personRotation.Rotation = value;
