@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDayChangeCallback _scheduleDayChangeCallback;
         private IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
         private IGroupPersonsBuilder _groupPersonsBuilder;
-		private Dictionary<Guid, bool> _teamSteadyStates;
+    	private ITeamSteadyStateHolder _teamSteadyStateHolder;
 		private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
     	private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
     	private IScheduleDictionary _scheduleDictionary;
@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleService = _mockRepository.StrictMock<IGroupSchedulingService>();
             _groupPersonsBuilder = _mockRepository.StrictMock<IGroupPersonsBuilder>();
             _groupOptimizerFindMatrixesForGroup = _mockRepository.StrictMock<IGroupOptimizerFindMatrixesForGroup>();
-			_teamSteadyStates = new Dictionary<Guid, bool>();
 			_teamSteadyStateMainShiftScheduler = _mockRepository.StrictMock<ITeamSteadyStateMainShiftScheduler>();
         	_groupPersonBuilderForOptimization = _mockRepository.StrictMock<IGroupPersonBuilderForOptimization>();
             _target = new GroupListShiftCategoryBackToLegalStateService(
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _scheduleDayChangeCallback,
                 _groupPersonsBuilder);
 
-			_teamSteadyStates = new Dictionary<Guid, bool> ();
+        	_teamSteadyStateHolder = _mockRepository.StrictMock<ITeamSteadyStateHolder>();
         	_scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
         }
 
@@ -96,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mockRepository.Playback())
             {
-                _target.Execute(_scheduleMatrixList, new SchedulingOptions(), _optimizerPreferences, _groupOptimizerFindMatrixesForGroup, _teamSteadyStates, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
+                _target.Execute(_scheduleMatrixList, new SchedulingOptions(), _optimizerPreferences, _groupOptimizerFindMatrixesForGroup, _teamSteadyStateHolder, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
             }
         }
 

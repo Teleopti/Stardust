@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             ISchedulingOptions schedulingOptions,
             IOptimizationPreferences optimizationPreferences, 
             IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup,
-			IDictionary<Guid, bool> teamSteadyStates,
+			ITeamSteadyStateHolder teamSteadyStateHolder,
 			ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler,
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
     }
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             ISchedulingOptions schedulingOptions,
             IOptimizationPreferences optimizationPreferences,
 			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup, 
-			IDictionary<Guid, bool> teamSteadyStates, 
+			ITeamSteadyStateHolder teamSteadyStateHolder, 
 			ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler,
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                                                             new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
                     var groupBackToLegalStateService =
                         groupackToLegalStateServiceBuilder.Build(matrix, schedulePartModifyAndRollbackService);
-					var toRemove = groupBackToLegalStateService.Execute(matrix.SchedulePeriod, schedulingOptions, scheduleMatrixList, groupOptimizerFindMatrixesForGroup, teamSteadyStates, teamSteadyStateMainShiftScheduler, _stateHolder.Schedules, schedulePartModifyAndRollbackService, groupPersonBuilderForOptimization);
+					var toRemove = groupBackToLegalStateService.Execute(matrix.SchedulePeriod, schedulingOptions, scheduleMatrixList, groupOptimizerFindMatrixesForGroup, teamSteadyStateHolder, teamSteadyStateMainShiftScheduler, _stateHolder.Schedules, schedulePartModifyAndRollbackService, groupPersonBuilderForOptimization);
                     foreach (var matrixPro in toRemove)
                     {
                         if (!removeList.Contains(matrixPro))
