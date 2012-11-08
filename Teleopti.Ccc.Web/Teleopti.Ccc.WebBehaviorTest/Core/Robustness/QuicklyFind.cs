@@ -1,7 +1,7 @@
 using WatiN.Core;
 using WatiN.Core.Constraints;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core
+namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 {
 	public static class QuicklyFind
 	{

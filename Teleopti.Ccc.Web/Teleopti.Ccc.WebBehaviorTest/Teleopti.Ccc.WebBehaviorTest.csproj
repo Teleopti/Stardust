@@ -116,7 +116,7 @@
     <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
     <Compile Include="Bindings\Transform.cs" />
-    <Compile Include="Core\QuicklyFind.cs" />
+    <Compile Include="Core\Robustness\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Generic\PasswordConfigurable.cs" />
     <Compile Include="PasswordPolicy.feature.cs">
       <DependentUpon>PasswordPolicy.feature</DependentUpon>
