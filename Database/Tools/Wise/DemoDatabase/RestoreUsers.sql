@@ -8,29 +8,20 @@ END
 ELSE
 	ALTER LOGIN [TeleoptiDemoUser] WITH PASSWORD=N'TeleoptiDemoPwd2'
 
---Switch context
+--Re-move TeleoptiDemoUser
 USE [TeleoptiAnalytics_Demo]
-
---Adding/re-map: TeleoptiDemoUser
 IF  EXISTS (SELECT * FROM sys.database_principals WHERE name = N'TeleoptiDemoUser')
 DROP USER [TeleoptiDemoUser]
-CREATE USER [TeleoptiDemoUser] FOR LOGIN [TeleoptiDemoUser] WITH DEFAULT_SCHEMA=[dbo]
-EXEC sp_addrolemember N'db_owner', N'TeleoptiDemoUser'
 
---Adding/re-map: TeleoptiDemoUser
 USE [TeleoptiCCC7Agg_Demo]
 IF  EXISTS (SELECT * FROM sys.database_principals WHERE name = N'TeleoptiDemoUser')
 DROP USER [TeleoptiDemoUser]
-CREATE USER [TeleoptiDemoUser] FOR LOGIN [TeleoptiDemoUser] WITH DEFAULT_SCHEMA=[dbo]
-EXEC sp_addrolemember N'db_owner', N'TeleoptiDemoUser'
 
---Adding/re-map: TeleoptiDemoUser
 USE [TeleoptiCCC7_Demo]
 IF  EXISTS (SELECT * FROM sys.database_principals WHERE name = N'TeleoptiDemoUser')
 DROP USER [TeleoptiDemoUser]
-CREATE USER [TeleoptiDemoUser] FOR LOGIN [TeleoptiDemoUser] WITH DEFAULT_SCHEMA=[dbo]
-EXEC sp_addrolemember N'db_owner', N'TeleoptiDemoUser'
 
+/*
 --WorkAround to handle Convert 6.6. See Bug #8490
 delete from ApplicationFunctionInRole
 where ApplicationRole in (
@@ -54,7 +45,7 @@ where ApplicationRole in (
 
 delete from dbo.ApplicationRole
 where isDeleted = 1
-
+*/
 
 --Adding current user to Standard demo-user
 DECLARE @WinUser varchar(50)
@@ -92,7 +83,6 @@ declare @msgBrokerInComingPort varchar(255)
 SET @msgBrokerOutGoingPort = 9090
 SET @msgBrokerInComingPort = 8090
 
-SELECT @msgBrokerConnectionString = 'Data Source=' + CAST(serverproperty('ServerName') as varchar(100)) + ';User Id=TeleoptiDemoUser;Password=TeleoptiDemoPwd;Initial Catalog=TeleoptiAnalytics_Demo'
 SELECT @msgBrokerServer = CAST(serverproperty('MachineName') as varchar(100))  --Will only if the Web and DB are on the same host. Usually true for Demo installations
 
 UPDATE [TeleoptiAnalytics_Demo].[msg].[Configuration]
@@ -102,10 +92,6 @@ WHERE [ConfigurationId]=1
 UPDATE [TeleoptiAnalytics_Demo].[msg].[Configuration]
 SET [ConfigurationValue] = @msgBrokerServer
 WHERE [ConfigurationId]=2
-
-UPDATE [TeleoptiAnalytics_Demo].[msg].[Configuration]
-SET [ConfigurationValue] = @msgBrokerConnectionString
-WHERE [ConfigurationId]=5
 
 UPDATE [TeleoptiAnalytics_Demo].[msg].[Address]
 SET [Address]=@msgBrokerServer,[Port]=@msgBrokerOutGoingPort

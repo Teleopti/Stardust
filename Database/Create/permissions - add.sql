@@ -14,6 +14,7 @@ ChangedLog:
 Date		Who				What
 ---------------------------------
 2010-10-25	David Jonsson	Adding Svc-Account for Windows Auth
+2012-11-06	David Jonsson	use only one login
 ********************************************************************************/
 --This script is executed by DBManager when installing CCC 7 for the very first time
 --You can execute this script manually later on to create the needed SQL user.
@@ -34,7 +35,7 @@ Date		Who				What
 
 --Keep next 2 lines unchanged!
 :SETVAR AUTHTYPE WIN
-:SETVAR SQLLOGIN NotUserByWindows
+:SETVAR LOGIN NotUserByWindows
 */ --remove this line
 
 BEGIN TRY
@@ -48,8 +49,7 @@ SET NOCOUNT ON
 	DECLARE @AuthType				char(3)
 
 	--init
-	SET @Login		= '$(SQLLOGIN)'
-	SET @SvcLogin	= '$(SVCLOGIN)'
+	SET @Login		= '$(LOGIN)'
 	SET @AuthType	= '$(AUTHTYPE)'
 	
 	SELECT 'Adding permission for $(AUTHTYPE)-login in database: ' + name FROM master.sys.databases where database_id = db_id()
@@ -61,53 +61,28 @@ SET NOCOUNT ON
 	BEGIN
 	--init
 	
-		PRINT 'Adding permission for $(SQLLOGIN) in database. Working...'
-		IF '$(SQLLOGIN)' <> 'sa'  --If user like to run the application with sa, don't add the user
+		IF '$(LOGIN)' <> 'sa'  --If user like to run the application with sa, don't add the user
 		BEGIN
-
-			--Create User for Login: $(SQLLOGIN)
+		PRINT 'Adding permission for $(LOGIN) in database. Working...'
+			--Create User for Login: $(LOGIN)
 			IF NOT EXISTS (SELECT * FROM sys.sysusers su INNER JOIN master.sys.syslogins SL ON su.sid = sl.sid WHERE SL.name = @Login)
 			SELECT @SqlCommand = 'CREATE USER [' + @Login + '] FOR LOGIN ['+@Login+']'
 			PRINT @SqlCommand
 			EXEC sp_executesql @SqlCommand
 			
-			--Add users as dbo
-			IF NOT EXISTS (SELECT * FROM sys.sysusers su INNER JOIN master.sys.syslogins SL ON su.sid = sl.sid WHERE SL.name = @Login AND su.name = 'dbo')
-			SELECT @SqlCommand = 'sp_addrolemember N''db_owner'', N''' +@Login+''''
-			PRINT @SqlCommand
-			EXEC sp_executesql @SqlCommand
-				
+		PRINT 'Adding permission for $(LOGIN) in database. Finished!'
 		END
-		PRINT 'Adding permission for $(SQLLOGIN) in database. Finished!'
+		
 	END
 	
 	IF @AuthType = 'WIN'--Windows Login
 	BEGIN
-
-		--get instance name
-		SELECT @InstanceName = COALESCE(CAST(SERVERPROPERTY('InstanceName') AS VARCHAR), 'MSSQLSERVER')
-		
-		--If named instance add instance name to groupname
-		IF @InstanceName = 'MSSQLSERVER'
-			SELECT @Login		= CAST(SERVERPROPERTY('MachineName') AS VARCHAR) + '\' + @GroupName
-		ELSE
-			SELECT @Login		= CAST(SERVERPROPERTY('MachineName') AS VARCHAR) + '\' + @GroupName + '_' + @InstanceName
-
-		--If named instance add instance name to groupname
 		IF NOT EXISTS (SELECT * FROM sys.sysusers su INNER JOIN master.sys.syslogins SL ON su.sid = sl.sid WHERE SL.name = @Login)
 		BEGIN
 			PRINT 'Adding permission for '+@Login+' in database. Working...'		
 			SELECT @SqlCommand = 'CREATE USER [' + @Login + '] FOR LOGIN ['+@Login+']'
 			EXEC sp_executesql @SqlCommand
 			PRINT 'Adding permission for '+@Login+' in database. Finished!'		
-		END
-		
-		IF NOT EXISTS (SELECT * FROM sys.sysusers su INNER JOIN master.sys.syslogins SL ON su.sid = sl.sid WHERE SL.name = @SvcLogin)
-		BEGIN
-			PRINT 'Adding permission for '+@SvcLogin+' in database. Working...'		
-			SELECT @SqlCommand = 'CREATE USER [' + @SvcLogin + '] FOR LOGIN ['+@SvcLogin+']'
-			EXEC sp_executesql @SqlCommand
-			PRINT 'Adding permission for '+@SvcLogin+' in database. Finished!'
 		END
 	END
 	
@@ -155,25 +130,15 @@ SET NOCOUNT ON
 	CREATE ROLE [db_executor] AUTHORIZATION [dbo]
 
 	--Add login to DBrole
-	IF '$(SQLLOGIN)' <> 'sa'  --If user like to run the application with sa, don't try to add it
+	IF '$(LOGIN)' <> 'sa'  --If user like to run the application with sa, don't try to add it
 	BEGIN
 		EXEC sp_addrolemember @rolename=N'db_executor', @membername=@Login
-		IF '$(AUTHTYPE)' = 'WIN'
-			EXEC sp_addrolemember @rolename=N'db_executor', @membername=@SvcLogin
-
 		EXEC sp_addrolemember @rolename='db_datawriter', @membername=@Login
-		IF '$(AUTHTYPE)' = 'WIN'
-			EXEC sp_addrolemember @rolename='db_datawriter', @membername=@SvcLogin
-			
 		EXEC sp_addrolemember @rolename='db_datareader', @membername=@Login
-		IF '$(AUTHTYPE)' = 'WIN'
-				EXEC sp_addrolemember @rolename='db_datareader', @membername=@SvcLogin
 		
 		--Grant Exec to DBrole
 		GRANT EXECUTE TO db_executor
 	END
-	--Remove existing dbo membership
-	--EXEC sp_droprolemember @rolename='db_owner', @membername=@Login
 	
 	PRINT 'DONE!'
 

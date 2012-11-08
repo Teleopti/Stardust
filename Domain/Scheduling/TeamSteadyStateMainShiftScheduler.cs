@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_teamSteadyStateScheduleMatrixProFinder = teamSteadyStateScheduleMatrixProFinder;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool ScheduleTeam(DateOnly dateOnly, IGroupPerson groupPerson, IGroupSchedulingService groupSchedulingService, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, IList<IScheduleMatrixPro> matrixes, IScheduleDictionary scheduleDictionary)	
 		{
 			if(groupPersonBuilderForOptimization == null) throw new ArgumentNullException("groupPersonBuilderForOptimization");
@@ -66,7 +67,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				if (scheduleDaySource.SignificantPart() != SchedulePartView.MainShift)
 				{
-					if (!_groupMatrixHelper.ScheduleSinglePerson(dateOnly, groupMember, groupSchedulingService, schedulingOptions, groupPersonBuilderForOptimization, matrixList))
+					var teamSteadyStateSchedulingOptions = (SchedulingOptions)schedulingOptions.Clone();
+					teamSteadyStateSchedulingOptions.UseGroupSchedulingCommonCategory = false;
+					teamSteadyStateSchedulingOptions.UseGroupSchedulingCommonEnd = false;
+					teamSteadyStateSchedulingOptions.UseGroupSchedulingCommonStart = false;
+					teamSteadyStateSchedulingOptions.UseCommonActivity = false;
+
+					if (!_groupMatrixHelper.ScheduleSinglePerson(dateOnly, groupMember, groupSchedulingService, teamSteadyStateSchedulingOptions, groupPersonBuilderForOptimization, matrixList))
 					{
 						return false;
 					}
