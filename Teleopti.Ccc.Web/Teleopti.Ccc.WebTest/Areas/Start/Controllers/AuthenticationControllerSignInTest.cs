@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void ShouldPopulateApplicationDatasources()
 		{
 			var dataSourceProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
-			var target = new AuthenticationController(new AuthenticationViewModelFactory(dataSourceProvider, null), null, null, null, MockRepository.GenerateMock<ILayoutBaseViewModelFactory>(), null);
+			var target = new AuthenticationController(new AuthenticationViewModelFactory(dataSourceProvider, null), null, null, null, MockRepository.GenerateMock<ILayoutBaseViewModelFactory>(), null, null);
 
 			dataSourceProvider.Stub(x => x.RetrieveDatasourcesForApplication()).Return(new List<IDataSource> { new FakeDataSource { DataSourceName = "ds1" } });
 
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void ShouldPopulateWindowsDatasources()
 		{
 			var dataSourceProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
-			var target = new AuthenticationController(new AuthenticationViewModelFactory(dataSourceProvider, null), null, null, null, MockRepository.GenerateMock<ILayoutBaseViewModelFactory>(), null);
+			var target = new AuthenticationController(new AuthenticationViewModelFactory(dataSourceProvider, null), null, null, null, MockRepository.GenerateMock<ILayoutBaseViewModelFactory>(), null, null);
 
 			dataSourceProvider.Stub(x => x.RetrieveDatasourcesForWindows()).Return(new List<IDataSource> { new FakeDataSource { DataSourceName = "ds2" } });
 
@@ -46,6 +47,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			model.WindowsSignIn.DataSources.Select(x => x.Name)
 				.Should().Have.SameValuesAs(new[] { "ds2" });
+		}
+
+
+		[Test]
+		public void ShouldLoadDataSources()
+		{
+			var dataSourceProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
+			var target = new AuthenticationController(null, null, null, null, null, null, dataSourceProvider);
+
+			dataSourceProvider.Stub(x => x.RetrieveDatasourcesForWindows()).Return(new List<IDataSource> { new FakeDataSource { DataSourceName = "windows" }});
+			dataSourceProvider.Stub(x => x.RetrieveDatasourcesForApplication()).Return(new List<IDataSource> {new FakeDataSource {DataSourceName = "app"}});
+			var result = target.LoadDataSources().Data as IEnumerable<DataSourceViewModel>;
+			result.Count().Should().Be.EqualTo(2);
+			result.First().Name.Should().Be.EqualTo("app");
+			result.First().IsApplicationLogon.Should().Be.True();
+			result.Last().Name.Should().Be.EqualTo("windows" + Resources.WindowsLogonWithBrackets);
+			result.Last().IsApplicationLogon.Should().Be.False();
 		}
 
 		public sealed class FakeDataSource : IDataSource

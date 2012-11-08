@@ -11182,4 +11182,8 @@ These options are activated:
     <value>Password policy requires a safer password.</value>
     <comment>Password policy requires a safer password.</comment>
   </data>
+  <data name="WindowsLogonWithBrackets" xml:space="preserve">
+    <value>(Windows log on)</value>
+    <comment>(Windows log on)</comment>
+  </data>
 </root>

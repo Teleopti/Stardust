@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				logOn = MockRepository.GenerateMock<IWebLogOn>();
 			var target = new StubbingControllerBuilder()
 				.CreateController<AuthenticationController>(
-					viewModelFactory, authenticator, logOn, null, null, redirector);
+					viewModelFactory, authenticator, logOn, null, null, redirector, null);
 			target.ControllerContext.HttpContext.Request.Stub(x => x.Headers).Return(new NameValueCollection
 			                                                                         	{{"Accept", "application/json"}});
 			return target;

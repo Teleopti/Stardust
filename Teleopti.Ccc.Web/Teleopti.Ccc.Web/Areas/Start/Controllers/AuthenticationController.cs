@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
@@ -23,18 +24,17 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ILayoutBaseViewModelFactory _layoutBaseViewModelFactory;
 		private readonly IWebLogOn _logon;
 		private readonly IRedirector _redirector;
+		private readonly IDataSourcesProvider _dataSourceProvider;
 		private readonly IAuthenticationViewModelFactory _viewModelFactory;
 
-		public AuthenticationController(IAuthenticationViewModelFactory viewModelFactory, IAuthenticator authenticator,
-		                                IWebLogOn logon, IFormsAuthentication formsAuthentication,
-		                                ILayoutBaseViewModelFactory layoutBaseViewModelFactory,
-		                                IRedirector redirector)
+		public AuthenticationController(IAuthenticationViewModelFactory viewModelFactory, IAuthenticator authenticator, IWebLogOn logon, IFormsAuthentication formsAuthentication, ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IRedirector redirector, IDataSourcesProvider dataSourceProvider)
 		{
 			_viewModelFactory = viewModelFactory;
 			_logon = logon;
 			_formsAuthentication = formsAuthentication;
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 			_redirector = redirector;
+			_dataSourceProvider = dataSourceProvider;
 			_authenticator = authenticator;
 		}
 
@@ -56,6 +56,17 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			return _redirector.SignOutRedirect(returnUrl);
 		}
 
+		[HttpGet]
+		public JsonResult LoadDataSources()
+		{
+			var data1 = _dataSourceProvider.RetrieveDatasourcesForApplication()
+				.SelectOrEmpty(
+					x => new DataSourceViewModel {Name = x.DataSourceName, IsApplicationLogon = true});
+			var data2=_dataSourceProvider.RetrieveDatasourcesForWindows()
+				.SelectOrEmpty(
+					x => new DataSourceViewModel { Name = x.DataSourceName + Resources.WindowsLogonWithBrackets, IsApplicationLogon = false });
+			return Json(data1.Union(data2));
+		}
 		[HttpPost]
 		public ActionResult Windows([Bind(Prefix = "SignIn")] SignInWindowsModel model)
 		{
