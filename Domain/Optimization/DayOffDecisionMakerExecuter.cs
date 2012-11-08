@@ -125,11 +125,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             var workingBitArrayBeforeBackToLegalState = (ILockableBitArray)workingBitArray.Clone();
 
-            if (!removeIllegalDayOffs(workingBitArray))
-            {
-                writeToLogBackToLegalStateFailed();
-                return false;
-            }
+			if(goBackToLegalState)
+			{
+				if (!removeIllegalDayOffs(workingBitArray))
+				{
+					writeToLogBackToLegalStateFailed();
+					return false;
+				}
+			}
+           
 
             movedDays = changesTracker.DayOffChanges(workingBitArray, workingBitArrayBeforeBackToLegalState, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
             if (movedDays.Count > 0)
