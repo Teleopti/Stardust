@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "report-graph-canvas")] public Element ReportGraph;
 		[FindBy(Id = "sel-skill-button")] public Link ReportSkillSelectionOpener;
 		[FindBy(Id = "report-table-holder")] public Div ReportTableContainer;
-		public Table ReportTable{get { return Document.Table(QuicklyFind.ByClass("report-table")); }};
+		public Table ReportTable{get { return Document.Table(QuicklyFind.ByClass("report-table")); }}
 		[FindBy(Id = "report-settings-interval-week")]
 		public RadioButton ReportIntervalWeekInput;
 		[FindBy(Id = "report-settings-type-graph")] public CheckBox ReportTypeGraphInput;
