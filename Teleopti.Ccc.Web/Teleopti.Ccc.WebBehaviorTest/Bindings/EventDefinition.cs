@@ -55,16 +55,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			}
 		}
 
-		[BeforeFeature]
-		public static void BeforeFeature()
-		{
-			if (_scenarioCount > 0)
-				Browser.Restart();
-		}
-
 		[BeforeScenario]
 		public static void BeforeScenario()
 		{
+			// restart browser every 20th scenario
+			if (_scenarioCount % 20 == 0)
+				Browser.Restart();
+
 			IncrementScenarioCount();
 
 			TestControllerMethods.BeforeScenario();
