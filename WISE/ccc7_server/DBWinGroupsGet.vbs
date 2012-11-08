@@ -79,6 +79,12 @@ Public Function AvailableGroupsGet(strCon, strQuery)
 	objRecordSet.Open strQuery,objConnection
 	if err.number <> 0 Then DisplayCustomError("objRecordSet.Open") End If
 	
+	'Empty Resultset, exit
+	If objRecordSet.EOF Then
+		Combo 1, "No Windows Group found!"
+		Exit Function
+	End If
+	  
 	objRecordSet.MoveFirst
 	if err.number <> 0 Then DisplayCustomError("objRecordSet.MoveFirst") End If
 	
