@@ -38,6 +38,14 @@ namespace Teleopti.Ccc.DomainTest.Time
             timeAsText = "15";
             Assert.IsTrue(TimeHelper.TryParseLongHourStringDefaultInterpretation(timeAsText, TimeSpan.FromHours(24), out timeValue, TimeFormatsType.HoursMinutes, false));
             Assert.That(timeValue, Is.EqualTo(new TimeSpan(15, 0, 0)));
+
+            timeAsText = "256204779";
+            Assert.IsFalse(TimeHelper.TryParseLongHourStringDefaultInterpretation(timeAsText, TimeSpan.FromHours(24), out timeValue, TimeFormatsType.HoursMinutes, false));
+            Assert.That(timeValue, Is.EqualTo(new TimeSpan(24, 0, 0)));
+
+            timeAsText = "256204779";
+            Assert.IsFalse(TimeHelper.TryParseLongHourStringDefaultInterpretation(timeAsText, TimeSpan.FromHours(24), out timeValue, TimeFormatsType.HoursMinutes, true));
+            Assert.That(timeValue, Is.EqualTo(new TimeSpan(24, 0, 0)));
         }
         
         /// <summary>
