@@ -219,15 +219,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool ExecuteDayOffMoves(IList<GroupMatrixContainer> containers, IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
-            foreach (var matrixContainer in containers)
+			for (int index = 0; index < containers.Count; index++)
             {
-                if (!dayOffDecisionMakerExecuter.Execute(matrixContainer.WorkingArray, matrixContainer.OriginalArray, matrixContainer.Matrix, null, false, false, false))
+				//if (containers[0].WorkingArray.ToString() != containers[index].WorkingArray.ToString())
+				//    return false;
+				//if (containers[0].OriginalArray.ToString() != containers[index].OriginalArray.ToString())
+				//    return false;
+				if (!dayOffDecisionMakerExecuter.Execute(containers[index].WorkingArray, containers[index].OriginalArray, containers[index].Matrix, null, false, false, false))
                 {
 					IList<IScheduleDay> days = new List<IScheduleDay>(schedulePartModifyAndRollbackService.ModificationCollection);
                     schedulePartModifyAndRollbackService.Rollback();
 					SafeResourceCalculate(days);
                     return false;
                 }
+				//if (containers[0].WorkingArray.ToString() != containers[index].WorkingArray.ToString())
+				//    return false;
+				//if (containers[0].OriginalArray.ToString() != containers[index].OriginalArray.ToString())
+				//    return false;
             }
             return true;
         }
