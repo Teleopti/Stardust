@@ -41,7 +41,7 @@ Teleopti.Start.SignInViewModel = function () {
 	this.LoadDataSources = function () {
 		var ajax = new Teleopti.MyTimeWeb.Ajax();
 		ajax.Ajax({
-			url: "/MytimeWeb/Start/Authentication/LoadDataSources",
+			url: "/Start/Authentication/LoadDataSources",
 			dataType: "json",
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
