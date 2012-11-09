@@ -422,7 +422,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
         {
         	return
         		GetSchedulesByQuery(new GetSchedulesByPersonQueryDto
-        		                    	{StartDate = startDate, EndDate = endDate, TimeZoneId = timeZoneId});
+        		                    	{PersonId = person.Id.GetValueOrDefault(), StartDate = startDate, EndDate = endDate, TimeZoneId = timeZoneId});
         }
 
 		public ICollection<SchedulePartDto> GetSchedulePartsForPersons(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
