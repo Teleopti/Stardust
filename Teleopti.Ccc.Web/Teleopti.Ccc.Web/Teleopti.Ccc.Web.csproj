@@ -565,6 +565,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\AllTests.html" />
     <Content Include="Areas\Start\Content\Css\mobile.custom.css" />
     <Content Include="Areas\Start\Content\Images\mobile_logo.png" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.AuthenticationNew.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.selectbox.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.connector.css" />
@@ -596,10 +597,12 @@
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
     <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
+    <Content Include="Areas\Start\Views\Authentication\SignInNew.cshtml" />
     <None Include="Areas\Start\Views\Test\Message.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="Areas\Start\Content\signonvm.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.LoginViewModel.js" />
+    <Content Include="Areas\Start\Content\Css\login.css" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.min.js" />
     <Content Include="Content\jqueryui\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -617,7 +620,7 @@
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.9.1.custom.css" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.9.1.custom.min.css" />
-    <Content Include="Areas\Start\Content\login.htm" />
+    <Content Include="Areas\Start\Content\login.html" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.css" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.js" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.css" />

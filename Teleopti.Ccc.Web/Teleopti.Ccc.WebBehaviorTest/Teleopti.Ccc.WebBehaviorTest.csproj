@@ -107,6 +107,16 @@
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\Robustness\Timeouts.cs" />
     <Compile Include="Core\Robustness\Retrying.cs" />
+    <Compile Include="RoutingNew.feature.cs">
+      <DependentUpon>RoutingNew.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="SignInNew.feature.cs">
+      <DependentUpon>SignInNew.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="PasswordPolicyMobile.feature.cs">
       <DependentUpon>PasswordPolicyMobile.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -526,7 +536,15 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="BrowserNotifications.feature">
+    <None Include="RoutingNew.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RoutingNew.feature.cs</LastGenOutput>
+    </None>
+    <None Include="SignInNew.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SignInNew.feature.cs</LastGenOutput>
+    </None>
+    <None Include="PasswordPolicyMobile.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PasswordPolicyMobile.feature.cs</LastGenOutput>
     </None>

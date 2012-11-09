@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var dataSourceProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
 			var target = new AuthenticationController(new AuthenticationViewModelFactory(dataSourceProvider, null), null, null,
-			                                          null, MockRepository.GenerateMock<ILayoutBaseViewModelFactory>(), null);
+			                                          null, MockRepository.GenerateMock<ILayoutBaseViewModelFactory>(), null, null);
 
 			dataSourceProvider.Stub(x => x.RetrieveDatasourcesForApplication()).Return(new List<IDataSource>
 			                                                                           	{

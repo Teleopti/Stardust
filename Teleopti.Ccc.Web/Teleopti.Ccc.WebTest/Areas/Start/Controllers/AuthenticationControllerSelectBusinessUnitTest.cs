@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			logon = mocks.DynamicMock<IWebLogOn>();
 			signInBusinessUnitModel = new SignInBusinessUnitModel {BusinessUnitId = Guid.NewGuid()};
 			_redirector = MockRepository.GenerateMock<IRedirector>();
-			controller = new AuthenticationController(null, null, logon, null, null, _redirector);
+			controller = new AuthenticationController(null, null, logon, null, null, _redirector, null);
 		}
 
 		[TearDown]

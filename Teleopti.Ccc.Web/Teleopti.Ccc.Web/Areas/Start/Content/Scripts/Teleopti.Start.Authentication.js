@@ -2,7 +2,8 @@
 /// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
 /// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
-
+/// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.Common.js" />
+/// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.LoginViewModel.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -35,6 +36,7 @@ Teleopti.Start.Authentication = (function ($) {
 
 		SignInPartialInit: function (ajaxContext) {
 			Teleopti.Start.Common.Layout.ActivateStdButtons();
+
 			Teleopti.Start.Authentication.Layout.SetSelectedListVal();
 			Teleopti.Start.Authentication.Layout.SetInputfieldPlaceHolderText();
 			if ($('#business_unit_partial_target').exists() || $('#error_partial_target').exists()) {

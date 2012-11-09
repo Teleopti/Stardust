@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			mocks = new MockRepository();
 			_formsAuthentication = mocks.DynamicMock<IFormsAuthentication>();
 			_redirector = mocks.DynamicMock<IRedirector>();
-			_target = new AuthenticationController(null, null, null, _formsAuthentication, null, _redirector);
+			_target = new AuthenticationController(null, null, null, _formsAuthentication, null, _redirector, null);
 			new MvcContrib.TestHelper.TestControllerBuilder().InitializeController(_target);
 		}
 

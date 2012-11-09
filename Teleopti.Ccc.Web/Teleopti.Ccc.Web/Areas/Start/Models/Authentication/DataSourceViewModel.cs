@@ -3,5 +3,6 @@
 	public class DataSourceViewModel
 	{
 		public string Name { get; set; }
+		public bool IsApplicationLogon { get; set; }
 	}
 }

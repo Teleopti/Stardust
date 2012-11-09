@@ -24547,6 +24547,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Windows log on).
+        /// </summary>
+        public static string WindowsLogonWithBrackets {
+            get {
+                return ResourceManager.GetString("WindowsLogonWithBrackets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Windows log on.
         /// </summary>
         public static string WinLoginNameDot {
