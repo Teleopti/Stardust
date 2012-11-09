@@ -71,7 +71,7 @@
 		if (toolbarItem is ToolBarSelectBox)
 		{
 			var selectBox = toolbarItem as ToolBarSelectBox;
-						<select title="@Html.AttributeEncode(selectBox.Title)" class="ui-selectbox-init floatleft" id="@string.Format("{0}-{1}-select", navSection.Controller, selectBox.Type)">
+						<select class="ui-selectbox-init floatleft" id="@string.Format("{0}-{1}-select", navSection.Controller, selectBox.Type)">
 							@foreach (var option in selectBox.Options)
 	   {
 								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
