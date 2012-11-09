@@ -12,14 +12,9 @@ if (typeof (Teleopti) === 'undefined') {
 	if (typeof (Teleopti.Start) === 'undefined') {
 		Teleopti.Start = {};
 	}
-	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
-		Teleopti.MyTimeWeb = {};
-	}
 }
 
 Teleopti.Start.Authentication = (function ($) {
-
-	var signinViewModel = null;
 
 	function _addSelListValToHiddenfield() {
 		$('.select-list ul li').live("click", function () {
@@ -30,17 +25,10 @@ Teleopti.Start.Authentication = (function ($) {
 		});
 	}
 
-	function _initViewModels(loader) {
-		signinViewModel = new Teleopti.Start.SignInViewModel();
-		signinViewModel.LoadDataSources();
-		ko.applyBindings(signinViewModel, $('#Login-container')[0]);
-	}
-
 	return {
 		Init: function () {
 			Teleopti.Start.Common.Layout.ActivateStdButtons();
 			Teleopti.Start.Authentication.Layout.ActivateSignInTabs();
-			_initViewModels();
 			Teleopti.Start.Authentication.Layout.SetInputfieldPlaceHolderText();
 			Teleopti.Start.Authentication.Layout.DisableSigninButtonOnSubmit();
 			_addSelListValToHiddenfield();

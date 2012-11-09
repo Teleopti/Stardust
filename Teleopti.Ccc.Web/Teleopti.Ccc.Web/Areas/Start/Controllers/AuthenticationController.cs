@@ -50,6 +50,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			return View(signInViewModel);
 		}
 
+		public ActionResult SignInNew()
+		{
+			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
+			return View();
+		}
+
 		public ActionResult SignOut(string returnUrl)
 		{
 			_formsAuthentication.SignOut();
