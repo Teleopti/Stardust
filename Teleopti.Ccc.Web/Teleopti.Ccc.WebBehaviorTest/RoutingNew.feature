@@ -24,34 +24,23 @@ Background:
 Scenario: Browse to root
 	Given I am not signed in
 	When I navigate to the site's root
-	#Then I should see the global sign in page
 	Then I should see sign in page
 
 Scenario: Browse to MyTime
 	Given I am not signed in
 	When I navigate to MyTime
-	#Then I should see MyTime's sign in page
 	Then I should see sign in page
 
-#(This one will be removed)
 Scenario: Browse to Mobile Reports
 	Given I am not signed in
 	When I navigate to Mobile Reports
-	Then I should see Mobile Report's sign in page
+	Then I should see sign in page
 	
 Scenario: Browse to root and sign in to menu
 	Given I have the role 'Access to mytime and report'
 	When I navigate to the site's root
 	And I sign in
 	Then I should see the global menu
-	#Then I should see MyTime
-
-#(This one will be removed)
-Scenario: Browse to root and sign in to mobile menu
-	Given I have the role 'Access to all areas'
-	When I navigate to the site's root mobile signin page
-	And I sign in 
-	Then I should see the mobile global menu
  
 Scenario: Browse to root and sign in to MyTime
 	Given I have the role 'Access to mytime not report'
