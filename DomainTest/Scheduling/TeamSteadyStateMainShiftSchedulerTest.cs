@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay1, _groupPerson.GroupMembers)).Return(_scheduleDay1);
 				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro);
-				Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(_dateOnly, _person1, _groupSchedulingService, _schedulingOptions, _groupPersonBuilderForOptimization, _matrixes)).Return(true).IgnoreArguments();
+				Expect.Call(_groupSchedulingService.ScheduleOneDayOnePersonSteadyState(_dateOnly, _person1, _schedulingOptions,_groupPerson, _matrixes)).Return(true).IgnoreArguments();
 				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
 				Expect.Call(() => _groupMatrixHelper.SafeResourceCalculate(new List<IScheduleDay> { _scheduleDay1 }));
 			}
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay1, _groupPerson.GroupMembers)).Return(_scheduleDay1);
 				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
 				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro);
-				Expect.Call(_groupMatrixHelper.ScheduleSinglePerson(_dateOnly, _person1, _groupSchedulingService, _schedulingOptions, _groupPersonBuilderForOptimization, _matrixes)).Return(false).IgnoreArguments();
+				Expect.Call(_groupSchedulingService.ScheduleOneDayOnePersonSteadyState(_dateOnly, _person1, _schedulingOptions, _groupPerson, _matrixes)).Return(false).IgnoreArguments();
 			}
 
 			using (_mocks.Playback())
