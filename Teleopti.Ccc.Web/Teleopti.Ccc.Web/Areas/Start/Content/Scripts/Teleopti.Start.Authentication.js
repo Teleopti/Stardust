@@ -33,21 +33,13 @@ Teleopti.Start.Authentication = (function ($) {
 	function _initViewModels(loader) {
 		signinViewModel = new Teleopti.Start.SignInViewModel();
 		signinViewModel.LoadDataSources();
-		//		var data1 = new Teleopti.Start.DataSourceViewModel();
-		//		data1.DataSourceName = "Teleopti CCC Main";
-		//		data1.ApplicationAuthentication(true);
-		//		var datas = [data1];
-		//		datas[0].Selected(true);
-		//		signinViewModel.SelectedSource(datas[0]);
 		ko.applyBindings(signinViewModel, $('#Login-container')[0]);
-
-
 	}
 
 	return {
 		Init: function () {
-			//			Teleopti.Start.Common.Layout.ActivateStdButtons();
-			//			Teleopti.Start.Authentication.Layout.ActivateSignInTabs();
+			Teleopti.Start.Common.Layout.ActivateStdButtons();
+			Teleopti.Start.Authentication.Layout.ActivateSignInTabs();
 			_initViewModels();
 			Teleopti.Start.Authentication.Layout.SetInputfieldPlaceHolderText();
 			Teleopti.Start.Authentication.Layout.DisableSigninButtonOnSubmit();
@@ -55,7 +47,7 @@ Teleopti.Start.Authentication = (function ($) {
 		},
 
 		SignInPartialInit: function (ajaxContext) {
-			//			Teleopti.Start.Common.Layout.ActivateStdButtons();
+			Teleopti.Start.Common.Layout.ActivateStdButtons();
 
 			Teleopti.Start.Authentication.Layout.SetSelectedListVal();
 			Teleopti.Start.Authentication.Layout.SetInputfieldPlaceHolderText();
