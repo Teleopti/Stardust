@@ -103,6 +103,11 @@
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
     <Compile Include="Bindings\Generic\WeekSchedulePageStepDefinitions.cs" />
+    <Compile Include="BrowserNotifications.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BrowserNotifications.feature</DependentUpon>
+    </Compile>
     <Compile Include="Core\Robustness\EventualAssert.cs" />
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\Robustness\Timeouts.cs" />
@@ -126,11 +131,6 @@
     <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
     <Compile Include="Bindings\Transform.cs" />
-    <Compile Include="BrowserNotifications.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BrowserNotifications.feature</DependentUpon>
-    </Compile>
     <Compile Include="Core\Robustness\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Generic\PasswordConfigurable.cs" />
     <Compile Include="PasswordPolicy.feature.cs">
@@ -536,6 +536,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="BrowserNotifications.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>BrowserNotifications.feature.cs</LastGenOutput>
+    </None>
     <None Include="RoutingNew.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>RoutingNew.feature.cs</LastGenOutput>
