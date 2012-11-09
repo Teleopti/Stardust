@@ -445,6 +445,35 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
     	}
 
+		[Test]
+		public void ShouldNotScheduleOneDayOnePersonSteadyStateWhenGroupPersonIsNull()
+		{
+			var result = _target.ScheduleOneDayOnePersonSteadyState(new DateOnly(), _person1, _schedulingOptions, null, new List<IScheduleMatrixPro>());
+			Assert.IsFalse(result);
+		}
+
+		[Test]
+		public void ShouldScheduleOneDayOnePersonSteadyState()
+		{
+			var range = _mock.StrictMock<IScheduleRange>();
+	
+			using(_mock.Record())
+			{
+				Expect.Call(_groupPerson.GroupMembers).Return(_persons);
+				Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_persons, _date1, _schedulingOptions,_scheduleDictionary)).Return(_effectiveRestriction);
+				Expect.Call(_scheduleDictionary[_person1]).Return(range);
+				Expect.Call(range.ScheduledDay(_date1)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
+			}
+
+			using(_mock.Playback())
+			{
+				var result = _target.ScheduleOneDayOnePersonSteadyState(_date1, _person1, _schedulingOptions, _groupPerson, new List<IScheduleMatrixPro>());
+				Assert.IsTrue(result);
+			}	
+		}
+
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowIfMatrixIsNull()
 		{
