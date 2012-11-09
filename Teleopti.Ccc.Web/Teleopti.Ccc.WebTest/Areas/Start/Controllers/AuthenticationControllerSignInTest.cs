@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		}
 
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldLoadDataSources()
 		{
 			var dataSourceProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
