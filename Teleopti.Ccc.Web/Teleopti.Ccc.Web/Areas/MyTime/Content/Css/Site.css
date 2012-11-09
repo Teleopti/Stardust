@@ -466,7 +466,8 @@ button.icon-left{padding-left: 35px;}
 /* Page elements */
 body{background: #fbfdfd url(../Images/body_bg.jpg) top center fixed no-repeat;}
 header {
-	background: transparent url(../Images/header_bg.png) top center no-repeat; 
+	background: transparent url(../Images/header_bg_2x.png) top center no-repeat; 
+	background-size: 975px 67px;
 	font-size: 11px; 
 	height: 67px; 
 	position:fixed; 
