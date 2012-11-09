@@ -420,12 +420,13 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
         public ICollection<SchedulePartDto> GetScheduleParts(PersonDto person, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
         {
-        	return
+            if (person == null) throw new FaultException("PersonId cannot be null.");
+            return
         		GetSchedulesByQuery(new GetSchedulesByPersonQueryDto
         		                    	{PersonId = person.Id.GetValueOrDefault(), StartDate = startDate, EndDate = endDate, TimeZoneId = timeZoneId});
         }
 
-		public ICollection<SchedulePartDto> GetSchedulePartsForPersons(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
+        public ICollection<SchedulePartDto> GetSchedulePartsForPersons(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
 		{
             using (var inner = _lifetimeScope.BeginLifetimeScope())
             {
