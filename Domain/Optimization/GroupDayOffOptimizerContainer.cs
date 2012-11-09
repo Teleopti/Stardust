@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IGroupDayOffOptimizerCreator _groupDayOffOptimizerCreator;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
     	private readonly ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
-    	private readonly IDictionary<Guid, bool> _teamSteadyStates;
+    	private readonly ITeamSteadyStateHolder _teamSteadyStateHolder;
     	private readonly IScheduleDictionary _scheduleDictionary;
 
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator, 
             ISchedulingOptionsCreator schedulingOptionsCreator,
 			ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler,
-			IDictionary<Guid, bool> teamSteadyStates,
+			ITeamSteadyStateHolder teamSteadyStateHolder,
 			IScheduleDictionary scheduleDictionary)
         {
             _converter = converter;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupDayOffOptimizerCreator = groupDayOffOptimizerCreator;
             _schedulingOptionsCreator = schedulingOptionsCreator;
         	_teamSteadyStateMainShiftScheduler = teamSteadyStateMainShiftScheduler;
-        	_teamSteadyStates = teamSteadyStates;
+        	_teamSteadyStateHolder = teamSteadyStateHolder;
         	_scheduleDictionary = scheduleDictionary;
         }
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var dayOffOptimizer =
                 _groupDayOffOptimizerCreator.CreateDayOffOptimizer(_converter, decisionMaker, _dayOffDecisionMakerExecuter , daysOffPreferences);
 
-			bool dayOffOptimizerResult = dayOffOptimizer.Execute(_matrix, _allMatrixes, schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+			bool dayOffOptimizerResult = dayOffOptimizer.Execute(_matrix, _allMatrixes, schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
             return dayOffOptimizerResult;
         }
 

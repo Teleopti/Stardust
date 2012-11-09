@@ -17,7 +17,7 @@ Scenario: Can not add absence request from request view if no permission
 	Given I am an agent without access to absence requests
 	And I am viewing requests
 	When I click add request button in the toolbar
-	Then I should not see the absence request tab
+	Then I should not see the add absence request form
 
 Scenario: Default absence request values from request view
 	Given I am an agent
@@ -25,7 +25,7 @@ Scenario: Default absence request values from request view
 	And I am viewing requests
 	When I click add request button in the toolbar
 	And I click absence request tab
-	Then I should see the absence request form with today's date as default
+	Then I should see the request form with today's date as default
 	And I should see 00:00 - 23:59 as the default times
 	And I should see an absence type called Vacation in droplist
 
@@ -35,7 +35,7 @@ Scenario: Default absence request values from request view when checked Fullday
 	When I click add request button in the toolbar
 	And I click absence request tab
 	And I checked the full day checkbox
-	Then I should see the absence request form with today's date as default
+	Then I should see the request form with today's date as default
 	And I should see 00:00 - 23:59 as the default times
 
 Scenario: Default absence request values from request view when unchecked Fullday
@@ -44,7 +44,7 @@ Scenario: Default absence request values from request view when unchecked Fullda
 	When I click add request button in the toolbar
 	And I click absence request tab
 	And I unchecked the full day checkbox
-	Then I should see the absence request form with today's date as default
+	Then I should see the request form with today's date as default
 	And I should see 08:00 - 17:00 as the default times
 
 Scenario: Adding invalid absence request values
@@ -91,14 +91,14 @@ Scenario: Hide text request tab when view an absence request
 	And I have an existing absence request
 	And I am viewing requests
 	When I click on the request
-	Then I should not see the text request tab (invisible)
+	Then I should not see the add text request tab
 
 Scenario: View absence request details
 	Given I am an agent
 	And I have an existing absence request
 	And I am viewing requests
 	When I click on the request
-	Then I should see the absence request's details form 
+	Then I should see the edit absence request form 
 	And I should see the absence request's values
 
 Scenario: Edit absence request
@@ -123,7 +123,7 @@ Scenario: Can not edit approved absence requests
 	And I have an approved absence request
 	And I am viewing requests
 	When I click on the request
-	Then I should see the absence request's details form
+	Then I should see the edit absence request form
 	And I should not be able to input values for absence request
 	And I should not see a save button
 
@@ -132,7 +132,7 @@ Scenario: Can not edit denied absence requests
 	And I have a denied absence request
 	And I am viewing requests
 	When I click on the request
-	Then I should see the absence request's details form
+	Then I should see the edit absence request form
 	And I should not be able to input values for absence request
 	And I should not see a save button
 
@@ -149,9 +149,9 @@ Scenario: Can not delete denied absence request
 	Then I should not see a delete button
 	
 Scenario: Can see why absence request was denied
-            Given I am an agent
-            And I have a denied absence request beacuse of missing workflow control set
-            And I am viewing requests
-            When I click on the request
-            Then I should see the absence request's details form
-            And I should see that my request was denied with reason 'Din förfrågan kunde inte behandlas. Du har inget arbetsflöde uppsatt.'
+	Given I am an agent
+	And I have a denied absence request beacuse of missing workflow control set
+	And I am viewing requests
+	When I click on the request
+	Then I should see the edit absence request form
+	And I should see that my request was denied with reason 'Din förfrågan kunde inte behandlas. Du har inget arbetsflöde uppsatt.'

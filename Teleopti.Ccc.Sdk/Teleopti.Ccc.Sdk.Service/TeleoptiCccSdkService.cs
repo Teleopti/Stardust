@@ -422,7 +422,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
         {
         	return
         		GetSchedulesByQuery(new GetSchedulesByPersonQueryDto
-        		                    	{StartDate = startDate, EndDate = endDate, TimeZoneId = timeZoneId});
+        		                    	{PersonId = person.Id.GetValueOrDefault(), StartDate = startDate, EndDate = endDate, TimeZoneId = timeZoneId});
         }
 
 		public ICollection<SchedulePartDto> GetSchedulePartsForPersons(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
@@ -1619,7 +1619,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				IUserDetail userDetail = repository.FindByUser(person);
 
 				var policyService = StateHolder.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService;
-				ret = person.ChangePassword(oldPassword, newPassword, policyService, userDetail);
+				ret = person.ChangePassword(oldPassword, newPassword, policyService, userDetail).IsSuccessful;
 
 				unitOfWork.PersistAll();
 			}

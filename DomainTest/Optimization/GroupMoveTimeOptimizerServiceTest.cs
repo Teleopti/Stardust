@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDayPro _scheduleDayPro2;
         private IGroupMoveTimeValidatorRunner _groupMoveTimeValidatorRunner;
         private ISchedulingOptions _schedulingOptions;
-		private IDictionary<Guid, bool> _teamSteadyStates;
+    	private ITeamSteadyStateHolder _teamSteadyStateHolder;
 		private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
 		private IScheduleDictionary _scheduleDictionary;
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationOverLimitByRestrictionDecider = _mock.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
 			_scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
 			_teamSteadyStateMainShiftScheduler = _mock.StrictMock<ITeamSteadyStateMainShiftScheduler>();
-			_teamSteadyStates = new Dictionary<Guid, bool>();
+        	_teamSteadyStateHolder = _mock.StrictMock<ITeamSteadyStateHolder>();
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mock.Playback())
             {
-				_target.Execute(_allMatrixes, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+				_target.Execute(_allMatrixes, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
             }
         }
 
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mock.Playback())
             {
-				_target.Execute(_allMatrixes, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+				_target.Execute(_allMatrixes, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
             }
         }
 
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                         _groupMoveTimeOptimizerExecuter, _groupMoveTimeValidatorRunner);
             using (_mock.Playback())
             {
-				_target.Execute(_allMatrixes, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+				_target.Execute(_allMatrixes, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
             }
         }
 
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             using (_mock.Playback())
             {
-				_target.Execute(_allMatrixes, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+				_target.Execute(_allMatrixes, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
                 _target.ReportProgress -= targetReportProgress;
                 Assert.IsTrue(_eventExecuted);
             }

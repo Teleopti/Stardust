@@ -34,47 +34,21 @@ Date		Who				What
 
 --Keep next 2 lines unchanged!
 :SETVAR AUTHTYPE WIN
-:SETVAR SQLLOGIN NotUserByWindows
+:SETVAR LOGIN NotUserByWindows
 */ --remove this line
 
 BEGIN TRY
 SET NOCOUNT ON
 	--declare
-	DECLARE @InstanceName			nvarchar(36)
-	DECLARE	@GroupName				nvarchar(55)
 	DECLARE @Login					nvarchar(200)
-	DECLARE @SvcLogin				nvarchar(200)
 	DECLARE @SqlCommand				nvarchar(1000)
 	DECLARE @AuthType				char(3)
 
 	--init
-	SET @Login		= '$(SQLLOGIN)'
-	SET @SvcLogin	= '$(SVCLOGIN)'
+	SET @Login		= '$(LOGIN)'
 	SET @AuthType	= '$(AUTHTYPE)'
 	
 	SELECT 'Adding permission for $(AUTHTYPE)-login in database: ' + db_name()
-	SET @GroupName	= 'TeleoptiCCC_Users'
-	
-	IF @AuthType = 'SQL'
-	BEGIN
-	--init
-	
-		PRINT 'Adding permission for $(SQLLOGIN) in database. Working...'
-		IF '$(SQLLOGIN)' <> 'sa'  --If user like to run the application with sa, don't add the user
-		BEGIN
-
-			--Create User for Login: $(SQLLOGIN)
-			--Done from DB-manager
-			
-			--Add users as dbo
-			IF EXISTS (SELECT * FROM sys.sysusers su WHERE su.name = @Login)
-			SELECT @SqlCommand = 'sp_addrolemember N''db_owner'', N''' +@Login+''''
-			PRINT @SqlCommand
-			EXEC sp_executesql @SqlCommand
-				
-		END
-		PRINT 'Adding permission for $(SQLLOGIN) in database. Finished!'
-	END
 	
 	-------------
 	--Permissions
@@ -120,10 +94,12 @@ SET NOCOUNT ON
 	CREATE ROLE [db_executor] AUTHORIZATION [dbo]
 
 	--Add login to DBrole
-	IF '$(SQLLOGIN)' <> 'sa'  --If user like to run the application with sa, don't try to add it
+	IF '$(LOGIN)' <> 'sa'  --If user like to run the application with sa, don't try to add it
 	BEGIN
 		EXEC sp_addrolemember @rolename=N'db_executor', @membername=@Login
-		
+		EXEC sp_addrolemember @rolename='db_datawriter', @membername=@Login
+		EXEC sp_addrolemember @rolename='db_datareader', @membername=@Login
+
 		--Grant Exec to DBrole
 		GRANT EXECUTE TO db_executor
 	END

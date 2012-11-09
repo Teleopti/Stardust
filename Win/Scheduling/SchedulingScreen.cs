@@ -3627,9 +3627,13 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
                     case BlockFinderType.None:
                         {
-                            if (schedulingOptions.UseGroupScheduling)
-								_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixList, matrixListAll, schedulingOptions, _container.Resolve<IGroupPageHelper>());
-                            else
+							if (schedulingOptions.UseGroupScheduling)
+							{
+								var allSchedules = GridHelper.CopyAllSchedules(_scheduleView.TheGrid);
+								var allMatrixes = OptimizerHelperHelper.CreateMatrixList(allSchedules, _schedulerState.SchedulingResultState, _container);
+								_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixList, matrixListAll, schedulingOptions, _container.Resolve<IGroupPageHelper>(), allMatrixes);
+							}
+							else
 								_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixList, matrixListAll, true, _backgroundWorkerScheduling, schedulingOptions);                                  
                             break;
                         }
@@ -3655,16 +3659,24 @@ namespace Teleopti.Ccc.Win.Scheduling
             	schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
                 if (schedulingOptions.UseShiftCategoryLimitations)
                 {
-					IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(scheduleDays));
 					var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
                 	var selectedPeriod =
                 		new DateOnlyPeriod(
                 			OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
                 			OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+
+                	IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
+
+					if(schedulingOptions.UseGroupScheduling)
+					{
+						var allSchedules = GridHelper.CopyAllSchedules(_scheduleView.TheGrid);
+						allMatrixes = OptimizerHelperHelper.CreateMatrixList(allSchedules, _schedulerState.SchedulingResultState, _container);
+					}
+
                 	_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixList, _backgroundWorkerScheduling,
                 	                                                             _optimizationPreferences,
-                	                                                             schedulingOptions, selectedPersons,
-                	                                                             selectedPeriod);
+                	                                                             schedulingOptions,
+                	                                                             selectedPeriod, allMatrixes);
                 }
             }
             _schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
@@ -3853,6 +3865,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(),selectedGroupPage);
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
+			IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
             switch (options.OptimizationMethod)
             {
                 case OptimizationMethod.BackToLegalState:
@@ -3862,27 +3875,45 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,_backgroundWorkerOptimization, displayList[0], false, _optimizerOriginalPreferences.SchedulingOptions, options.DaysOffPreferences);
                     _optimizationHelperWin.ResourceCalculateMarkedDays(e, null, _optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
 					IList<IScheduleMatrixPro> matrixList = OptimizerHelperHelper.CreateMatrixList(selectedSchedules, _schedulerState.SchedulingResultState, _container);
-					IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedSchedules));
 					var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
 					var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedSchedules, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedSchedules, currentPersonTimeZone));
-					_scheduleOptimizerHelper.GetBackToLegalState(matrixList, _schedulerState, _backgroundWorkerOptimization, _optimizerOriginalPreferences.SchedulingOptions, selectedPersons, selectedPeriod);
+
+
+					if (optimizerPreferences.Extra.UseTeams)
+					{
+						var allSchedules = GridHelper.CopyAllSchedules(_scheduleView.TheGrid);
+						allMatrixes = OptimizerHelperHelper.CreateMatrixList(allSchedules, _schedulerState.SchedulingResultState, _container);
+					}
+					
+					_scheduleOptimizerHelper.GetBackToLegalState(matrixList, _schedulerState, _backgroundWorkerOptimization, _optimizerOriginalPreferences.SchedulingOptions, selectedPeriod, allMatrixes);
                     break;
                 case OptimizationMethod.ReOptimize:	
 					if (optimizerPreferences.Extra.UseTeams)
                     {
-                        _groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules);
+						var allSchedules = GridHelper.CopyAllSchedules(_scheduleView.TheGrid);
+						allMatrixes = OptimizerHelperHelper.CreateMatrixList(allSchedules, _schedulerState.SchedulingResultState, _container);
+
+                        _groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, allMatrixes);
 						break;
                     }
 
 					if (optimizerPreferences.Extra.UseBlockScheduling)
                     {
-                        _blockOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, schedulingOptions);
+                        _blockOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, schedulingOptions, allMatrixes);
                     }
                     else
                     {
 						// we need it here for fairness opt. for example
 						_groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
-                        _scheduleOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules);
+
+
+						if (optimizerPreferences.Extra.UseTeams)
+						{
+							var allSchedules = GridHelper.CopyAllSchedules(_scheduleView.TheGrid);
+							allMatrixes = OptimizerHelperHelper.CreateMatrixList(allSchedules, _schedulerState.SchedulingResultState, _container);	
+						}
+
+                        _scheduleOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, allMatrixes);
                     }
                     break;
             }

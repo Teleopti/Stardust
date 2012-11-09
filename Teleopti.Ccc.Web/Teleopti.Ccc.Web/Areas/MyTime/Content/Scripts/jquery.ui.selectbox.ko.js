@@ -15,15 +15,21 @@ jqueryui: {
 */
 
 (function ($) {
-	
-	ko.bindingHandlers['selectbox'] = {
+
+	ko.bindingHandlers.selectbox = {
+		init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+			var observable = valueAccessor();
+			$(element).selectbox({
+				value: ko.utils.unwrapObservable(observable),
+				changed: function (event, ui) {
+					observable(ui.item.value);
+				}
+			});
+		},
 		update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
 			var observable = valueAccessor();
 			$(element).selectbox({
 				value: ko.utils.unwrapObservable(observable),
-				changed: function(event, ui) {
-					observable(ui.item.value);
-				}
 			});
 		}
 	};
@@ -36,6 +42,5 @@ jqueryui: {
 			});
 		}
 	};
-
 
 })(jQuery);

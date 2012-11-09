@@ -2,6 +2,7 @@
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {

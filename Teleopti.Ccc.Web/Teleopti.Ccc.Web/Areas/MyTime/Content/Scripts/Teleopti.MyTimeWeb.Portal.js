@@ -129,6 +129,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			return false;
 		});
 
+//		_loadWarning();
 	}
 
 	// Bind an event to window.onhashchange that, when the history state changes,
@@ -230,6 +231,19 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		});
 	}
 
+	function _loadWarning() {
+		ajax.Ajax({
+			url: '/Start/Authentication/PopWarningMessage',
+			global: true,
+			success: function (result) {
+				if (result.HasMessage) {
+					$('#warning').html(result.Message);
+					$('#warning').click(function () { $(this).hide(); });
+				}
+			}
+		});
+	}
+
 	function _invokeDisposeCallback(viewId) {
 		var partialDispose = _partialViewDisposeCallback[viewId];
 		if ($.isFunction(partialDispose))
@@ -244,11 +258,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _readyForInteraction() {
-		Teleopti.MyTimeWeb.Test.PageLog("Ready for interaction");
+		Teleopti.MyTimeWeb.Test.TestMessage("Ready for interaction");
 	}
 
 	function _completelyLoaded() {
-		Teleopti.MyTimeWeb.Test.PageLog("Completely loaded");
+		Teleopti.MyTimeWeb.Test.TestMessage("Completely loaded");
 	}
 
 	return {

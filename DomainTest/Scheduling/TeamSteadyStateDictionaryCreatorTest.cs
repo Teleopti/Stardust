@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -23,25 +22,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private IPerson _person2;
 		private IPerson _person3;
 		private IPerson _person4;
-		private IList<IGroupPerson> _groupPersons;
-		private ISchedulePeriodTargetTimeCalculator _schedulePeriodTargetTimeCalculator;
 		private IScheduleMatrixPro _scheduleMatrixPro1;
 		private IScheduleMatrixPro _scheduleMatrixPro2;
 		private IScheduleMatrixPro _scheduleMatrixPro3;
 		private IScheduleMatrixPro _scheduleMatrixPro4;
 		private IList<IScheduleMatrixPro> _matrixes;
-		private IRuleSetBag _ruleSetBag;
-		private IWorkShiftRuleSet _workShiftRuleSet;
-		private IWorkShiftTemplateGenerator _workShiftTemplateGenerator;
-		private IShiftCategory _shiftCategory;
 		private DateOnly _dateOnly;
 		private ISchedulingResultStateHolder _stateHolder;
 		private IGroupPersonsBuilder _groupPersonsBuilder;
 		private ISchedulingOptions _schedulingOptions;
-		private IList<IPerson> _persons;
 		private DateOnlyPeriod _dates;
 		private Guid _guid1;
 		private Guid _guid2;
+		private ITeamSteadyStateRunner _teamSteadyStateRunner;
+		private IList<IPerson> _persons;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
@@ -59,20 +53,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_person3 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("person3"), _dateOnly);
 			_person4 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("person4"), _dateOnly);
 
-			_shiftCategory = new ShiftCategory("shiftCategory");
-			_ruleSetBag = new RuleSetBag();
-			_workShiftTemplateGenerator = new WorkShiftTemplateGenerator(new Activity("activity"), new TimePeriodWithSegment(), new TimePeriodWithSegment(), _shiftCategory );
-			_workShiftRuleSet = new WorkShiftRuleSet(_workShiftTemplateGenerator);
-			_ruleSetBag.AddRuleSet(_workShiftRuleSet);
-
-			_person1.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0].RuleSetBag = _ruleSetBag;
-			_person2.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0].RuleSetBag = _ruleSetBag;
-			_person3.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0].RuleSetBag = _ruleSetBag;
-			_person4.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0].RuleSetBag = _ruleSetBag;
-
-			_groupPerson1 = new GroupPerson(new List<IPerson>{_person1, _person2}, _dateOnly, "groupPerson1", _guid1);
+			_groupPerson1 = new GroupPerson(new List<IPerson> { _person1, _person2 }, _dateOnly, "groupPerson1", _guid1);
 			_groupPerson2 = new GroupPerson(new List<IPerson> { _person3, _person4 }, _dateOnly, "groupPerson2", _guid2);
-			_groupPersons = new List<IGroupPerson> { _groupPerson1, _groupPerson2 };
 
 			setupStateHolder();
 
@@ -81,13 +63,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_scheduleMatrixPro3 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person3, _person3.VirtualSchedulePeriod(_dateOnly));
 			_scheduleMatrixPro4 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person4, _person4.VirtualSchedulePeriod(_dateOnly));
 
-			_schedulePeriodTargetTimeCalculator = _mocks.StrictMock<ISchedulePeriodTargetTimeCalculator>();
-			_matrixes = new List<IScheduleMatrixPro>{_scheduleMatrixPro1, _scheduleMatrixPro2, _scheduleMatrixPro3, _scheduleMatrixPro4};
+			_matrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro1, _scheduleMatrixPro2, _scheduleMatrixPro3, _scheduleMatrixPro4 };
 
 			_groupPersonsBuilder = _mocks.StrictMock<IGroupPersonsBuilder>();
 			_schedulingOptions = new SchedulingOptions();
-			_persons = new List<IPerson>();
-			_target = new TeamSteadyStateDictionaryCreator(_persons, _schedulePeriodTargetTimeCalculator, _matrixes, _groupPersonsBuilder, _schedulingOptions);
+			_teamSteadyStateRunner = _mocks.StrictMock<ITeamSteadyStateRunner>();
+			_target = new TeamSteadyStateDictionaryCreator(_teamSteadyStateRunner, _matrixes, _groupPersonsBuilder, _schedulingOptions);
+			_persons = new List<IPerson>{_person1, _person2, _person3, _person4};
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -116,18 +98,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_stateHolder = new SchedulingResultStateHolder { Schedules = scheduleDictionary };
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldCreateDictionary()
 		{
-			var timePeriod = new TimePeriod();
-
 			using(_mocks.Record())
 			{
-				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(_groupPersons);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro1)).Return(timePeriod);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro2)).Return(timePeriod);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro3)).Return(timePeriod);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro4)).Return(timePeriod);
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson2 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson2 });
+				Expect.Call(_teamSteadyStateRunner.Run(_groupPerson1, _dateOnly)).Return(new KeyValuePair<Guid, bool>(_guid1, true));
+				Expect.Call(_teamSteadyStateRunner.Run(_groupPerson2, _dateOnly)).Return(new KeyValuePair<Guid, bool>(_guid2, true));
 			}
 
 			using(_mocks.Playback())
@@ -137,25 +118,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Assert.AreEqual(2, result.Count);
 				Assert.IsTrue(result[_guid1]);
 				Assert.IsTrue(result[_guid2]);
-			}		
+			}			
 		}
 
-		[Test, Ignore]
-		public void ShouldSetTeamSteadyStateToFalseWhenPersonPeriodValueDiffers()
+		[Test]
+		public void ShouldSetSteadyStateToFalseIfRunnerReturnFalse()
 		{
-			var timePeriod = new TimePeriod();
-			var personPeriod = _person1.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0];
-			var partTimePercentage = new PartTimePercentage("partTimePercentage");
-			partTimePercentage.SetId(Guid.NewGuid());
-			personPeriod.PersonContract.PartTimePercentage = partTimePercentage;
-
 			using (_mocks.Record())
 			{
-				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(_groupPersons);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro1)).Return(timePeriod);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro2)).Return(timePeriod);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro3)).Return(timePeriod);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro4)).Return(timePeriod);
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson2 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson2 });
+				Expect.Call(_teamSteadyStateRunner.Run(_groupPerson1, _dateOnly)).Return(new KeyValuePair<Guid, bool>(_guid1, false));
+				Expect.Call(_teamSteadyStateRunner.Run(_groupPerson2, _dateOnly)).Return(new KeyValuePair<Guid, bool>(_guid2, true));
 			}
 
 			using (_mocks.Playback())
@@ -165,61 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Assert.AreEqual(2, result.Count);
 				Assert.IsFalse(result[_guid1]);
 				Assert.IsTrue(result[_guid2]);
-			}	
-		}
-
-		[Test, Ignore]
-		public void ShouldSetTeamSteadyStateToFalseWhenSchedulePeriodValueDiffers()
-		{
-			var timePeriod1 = new TimePeriod();
-			var timePeriod2 = new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(2));
-
-			using (_mocks.Record())
-			{
-				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(_groupPersons);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro1)).Return(timePeriod1);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro2)).Return(timePeriod1);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro3)).Return(timePeriod1);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro4)).Return(timePeriod2);
-			}
-
-			using (_mocks.Playback())
-			{
-				var result = _target.Create(_dates);
-				Assert.IsNotNull(result);
-				Assert.AreEqual(2, result.Count);
-				Assert.IsTrue(result[_guid1]);
-				Assert.IsFalse(result[_guid2]);
-			}		
-		}
-
-		[Test, Ignore]
-		public void ShouldSetTeamSteadyStateToFalseWhenStateIsDifferentOverPeriod()
-		{
-			var timePeriod1 = new TimePeriod();
-			var timePeriod2 = new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(2));
-			_dates = new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1));
-
-			using (_mocks.Record())
-			{
-				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly, _persons, true, _schedulingOptions)).Return(_groupPersons);
-				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly.AddDays(1), _persons, true, _schedulingOptions)).Return(_groupPersons);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro1)).Return(timePeriod1).Repeat.Twice();
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro2)).Return(timePeriod1).Repeat.Twice();
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro3)).Return(timePeriod1).Repeat.Twice();
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro4)).Return(timePeriod1);
-				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro4)).Return(timePeriod2);
-
-			}
-
-			using (_mocks.Playback())
-			{
-				var result = _target.Create(_dates);
-				Assert.IsNotNull(result);
-				Assert.AreEqual(2, result.Count);
-				Assert.IsTrue(result[_guid1]);
-				Assert.IsFalse(result[_guid2]);
-			}
+			}			
 		}
 	}
 }

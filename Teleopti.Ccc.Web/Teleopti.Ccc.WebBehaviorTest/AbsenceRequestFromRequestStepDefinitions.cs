@@ -5,6 +5,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
@@ -73,12 +74,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Is.StringContaining("Vacation"));
 		}
 
-		[Then(@"I should see the absence request's details form")]
-		public void ThenIShouldSeeTheAbsenceRequestSDetailsForm()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSection.DisplayVisible(), Is.True);
-		}
-
 		[Then(@"I should see the absence request's values")]
 		public void ThenIShouldSeeTheAbsenceRequestSValues()
 		{
@@ -103,24 +98,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailEntityId.Value, Is.EqualTo(request.PersonRequest.Id.ToString()));
 		}
 
-		[Then(@"I should not see the text request tab \(invisible\)")]
-		public void ThenIShouldNotSeeTheTextRequestTabInvisible()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.DisplayHidden(), Is.True);
-		}
-
 		[Given(@"I have a denied absence request beacuse of missing workflow control set")]
 		public void GivenIHaveADeniedAbsenceRequestBeacuseOfMissingWorkflowControlSet()
 		{
 			UserFactory.User().Setup(new ExistingDeniedAbsenceRequest("RequestDenyReasonNoWorkflow"));
 		}
 
-		[Then(@"I should see that my request was denied with reason '(.*)'")]
-		public void ThenIShouldSeeThatMyRequestWasDeniedWithGivenReason(string reason)
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSection.DisplayVisible(), Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailDenyReason.Text,
-															Is.EqualTo(reason));
-		}
 	}
 }

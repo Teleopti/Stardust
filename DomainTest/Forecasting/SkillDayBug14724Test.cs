@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             var workloadDay = _skillDay2.WorkloadDayCollection[0];
             workloadDay.ApplyTemplate(
-                (IWorkloadDayTemplate) _workload.TryFindTemplateByName(TemplateTarget.Workload, "Closed"));
+				(IWorkloadDayTemplate)_workload.TryFindTemplateByName(TemplateTarget.Workload, "Closed"), day => day.Lock(), day => day.Release());
         }
 
         private void SetInitialEmails()

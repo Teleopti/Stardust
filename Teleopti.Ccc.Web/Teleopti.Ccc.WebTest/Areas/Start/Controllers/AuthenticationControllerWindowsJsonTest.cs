@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			authenticator.Stub(x => x.AuthenticateWindowsUser("datasource")).Return(
 				new AuthenticateResult { HasMessage = false, Person = person, Successful = true, DataSource = dataSource });
-			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Windows)).Return(viewModel);
+			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Windows, null)).Return(viewModel);
 
 			var target = MakeAuthenticationControllerWithAcceptJsonHeader(viewModelFactory, authenticator, null, null);
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			authenticator.Stub(x => x.AuthenticateWindowsUser("datasource")).Return(
 				new AuthenticateResult { HasMessage = false, Person = person, Successful = true, DataSource = dataSource });
-			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Windows)).Return(viewModel);
+			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Windows, null)).Return(viewModel);
 			routeAreaRedirector.Stub(x => x.SignInRedirect()).Return(new RedirectResult("/"));
 			
 			var target = MakeAuthenticationControllerWithAcceptJsonHeader(viewModelFactory, authenticator, null, routeAreaRedirector);
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			authenticator.Stub(x => x.AuthenticateWindowsUser("datasource")).Return(
 				new AuthenticateResult { HasMessage = false, Person = person, Successful = true, DataSource = dataSource });
-			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Windows)).Return(viewModel);
+			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Windows, null)).Return(viewModel);
 
 			var target = MakeAuthenticationControllerWithAcceptJsonHeader(viewModelFactory, authenticator, null, null);
 
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			authenticator.Stub(x => x.AuthenticateWindowsUser("datasource")).Return(
 				new AuthenticateResult { HasMessage = false, Person = person, Successful = true, DataSource = dataSource });
-			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Windows))
+			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Windows, null))
 				.Return(new SignInBusinessUnitViewModel
 				        	{
 				        		BusinessUnits = new[]

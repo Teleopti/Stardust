@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 using WatiN.Core.Constraints;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Requests-list")]
 		public List RequestsList { get; set; }
 
-		private Constraint RequestConstraint = Find.ByClass("request-item", false) && !Find.ByClass("template", false);
+		private Constraint RequestConstraint = Find.BySelector(".request-item:not(.template)");
 		private ListItemCollection RequestListItems { get { return Document.ListItems.Filter(RequestConstraint); } }
 		public IEnumerable<ListItem> Requests { get { return RequestListItems; } }
 		public ListItem FirstRequest { get { return Document.ListItem(RequestConstraint).EventualGet(); } }
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Button RequestDeleteButtonById(Guid Id)
 		{
 			var request = RequestById(Id);
-			return request.Button(Find.ByClass("request-delete-button", false));
+			return request.Button(QuicklyFind.ByClass("request-delete-button"));
 		}
 
 		[FindBy(Id = "Requests-addTextRequest-button")]

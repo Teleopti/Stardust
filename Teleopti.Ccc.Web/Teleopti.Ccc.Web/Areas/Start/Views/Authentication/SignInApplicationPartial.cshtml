@@ -13,8 +13,10 @@
 	 	<script type="text/javascript">
 	 		$(function () {
 	 			$('#ApplicationOkButton').click(function () {
-	 				Teleopti.Start.Authentication.RequestPermissionForNotification(function() {
-	 					$("#ApplicationPartialTarget form").submit();
+	 				Teleopti.Start.Authentication.RequestPermissionForNotification(function () {
+	 					if (Modernizr.textshadow) {
+	 						$("#ApplicationPartialTarget form").submit();
+	 					}
 	 				});
 	 			});
 	 		});

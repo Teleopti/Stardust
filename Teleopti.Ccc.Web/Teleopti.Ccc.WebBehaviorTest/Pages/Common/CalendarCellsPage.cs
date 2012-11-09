@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using WatiN.Core;
 using WatiN.Core.Constraints;
@@ -19,15 +20,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		public ListItem FirstCalendarCell { get { return Document.ListItem(CalendarCellConstraint).EventualGet(); } }
 		public ListItem LastCalendarCell { get { return CalendarCellsListItems.Last(); } }
 
-		public ListItem CalendarCellForDate(string formattedDate) { return Document.ListItem(Find.By("data-mytime-date", v => v == formattedDate)).EventualGet(); }
-		public ListItem CalendarCellForDate(DateTime date) { return CalendarCellForDate(date.ToString("yyyy-MM-dd")); }
-		public ListItem CalendarCellSelectableForDate(string formattedDate) { return Document.ListItem(Find.By("data-mytime-date", v => v == formattedDate).And(Find.ByClass("ui-selectee", false))).EventualGet(); }
-		public ListItem CalendarCellSelectableForDate(DateTime date) { return CalendarCellSelectableForDate(date.ToString("yyyy-MM-dd")); }
-		
+		public ListItem CalendarCellForDate(string formattedDate)
+		{
+			return Document.ListItem(Find.BySelector(DateSelector(formattedDate))).EventualGet();
+		}
+
+		public ListItem CalendarCellForDate(DateTime date)
+		{
+			return Document.ListItem(Find.BySelector(DateSelector(date))).EventualGet();
+		}
+
+		public static string DateSelector(string formattedDate) { return "[data-mytime-date=" + formattedDate + "]"; }
+		public static string DateSelector(DateTime date) { return DateSelector(date.ToString("yyyy-MM-dd")); }
 
 		public Div CalendarCellDataForDate(DateTime date, string className)
 		{
-			var selector = "[data-mytime-date='" + date.ToString("yyyy-MM-dd") + "'] ." + className;
+			var selector = DateSelector(date) + " ." + className;
 			return Document.Div(Find.BySelector(selector));
 		}
 
@@ -49,16 +57,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 			}
 		}
 
-		public void SelectCalendarCellForDateByClick(DateTime date) { SelectCalendarCellByClick(CalendarCellSelectableForDate(date)); }
+		public void SelectCalendarCellForDateByClick(DateTime date) { SelectCalendarCellByClick(CalendarCellForDate(date)); }
 		public void SelectCalendarCellByClick(ListItem cell) { cell.Click(); }
 
 		public void SelectCalendarCellByClass(DateTime date)
 		{
-			CalendarCellSelectableForDate(date).WaitUntilExists();
 			JQuery.SelectByElementAttribute("li", "data-mytime-date", date.ToString("yyyy-MM-dd"))
 				.AddClass("ui-selected")
 				.Eval();
-			EventualAssert.WhenElementExists(CalendarCellSelectableForDate(date), c => c.ClassName, Is.StringContaining("ui-selected"));
+			EventualAssert.That(() => CalendarCellForDate(date).ClassName, Is.StringContaining("ui-selected"));
 		}
 	}
 

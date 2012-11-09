@@ -5,6 +5,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic

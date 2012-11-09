@@ -11,8 +11,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
         private int? _hashCode;
 		public TimeSpan StartTime { get; set; }
-		public TimeSpan EndTime { get; set; }
-        public IShiftCategory ShiftCategory { get; set; }
+    	private TimeSpan _endTime;
+    	public TimeSpan EndTime
+    	{
+    		get { return _endTime; }
+			set
+			{
+				_endTime = value;
+			}
+    	}
+
+    	public IShiftCategory ShiftCategory { get; set; }
         public IList<DateTimePeriod>  ActivityPeriods { get; set; }
         // holds the best value of this combination
         public double ShiftValue { get; set; }

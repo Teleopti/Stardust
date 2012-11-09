@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IPerson _person;
         private IScheduleMatrixPro _scheduleMatrixPro;
         private IScheduleDay _scheduleDay2;
-		private IDictionary<Guid, bool> _teamSteadyStates;
+    	private ITeamSteadyStateHolder _teamSteadyStateHolder;
 		private IScheduleDictionary _scheduleDictionary;
 		private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
 		private IGroupPerson _groupPerson;
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _allMatrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
 			_teamSteadyStateMainShiftScheduler = _mock.StrictMock<ITeamSteadyStateMainShiftScheduler>();
-			_teamSteadyStates = new Dictionary<Guid, bool>();
+			_teamSteadyStateHolder = _mock.StrictMock<ITeamSteadyStateHolder>();
 			_scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
 			_groupPerson = _mock.StrictMock<IGroupPerson>();
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_optimizationOverLimitByRestrictionDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long).Repeat.Twice();
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly(2012, 1, 1))).Return(_groupPerson);
-				Expect.Call(_groupPerson.Id).Return(null);
+            	Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
 				Expect.Call(_scheduleDay1.Person).Return(_person);
                 
             }
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mock.Playback())
             {
-				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
             }
 
             Assert.IsTrue(result);	
@@ -116,9 +116,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldUseTeamSteadyState()
 		{
-			var guid = Guid.NewGuid();
-			_teamSteadyStates.Add(guid, true);
-
 			using (_mock.Record())
 			{
 				commonMocks();
@@ -136,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_optimizationOverLimitByRestrictionDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
 				Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long).Repeat.Twice();
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly(2012, 1, 1))).Return(_groupPerson).Repeat.Twice();
-				Expect.Call(_groupPerson.Id).Return(guid).Repeat.AtLeastOnce();
+				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true).Repeat.Twice();
 				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(new DateOnly(2012, 1, 1), _groupPerson, _groupSchedulingService,
 																			_schedulePartModifyAndRollbackService,
 																			_schedulingOptions, _groupPersonBuilderForOptimization,
@@ -148,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mock.Playback())
 			{
-				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
 			}
 
 			Assert.IsTrue(result);		
@@ -157,9 +154,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldUseRegularTeamOptimizationIfSteadyStateFails()
 		{
-			var guid = Guid.NewGuid();
-			_teamSteadyStates.Add(guid, true);
-
 			using (_mock.Record())
 			{
 				commonMocks();
@@ -175,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_optimizationOverLimitByRestrictionDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
 				Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long).Repeat.Twice();
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly(2012, 1, 1))).Return(_groupPerson);
-				Expect.Call(_groupPerson.Id).Return(guid).Repeat.AtLeastOnce();
+				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
 				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(new DateOnly(2012, 1, 1), _groupPerson, _groupSchedulingService,
 																			_schedulePartModifyAndRollbackService,
 																			_schedulingOptions, _groupPersonBuilderForOptimization,
@@ -187,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mock.Playback())
 			{
-				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
 			}
 
 			Assert.IsTrue(result);		
@@ -196,9 +190,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldUseRegularTeamOptimizationIfNotInSteadyState()
 		{
-			var guid = Guid.NewGuid();
-			_teamSteadyStates.Add(guid, false);
-
 			using (_mock.Record())
 			{
 				commonMocks();
@@ -214,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_optimizationOverLimitByRestrictionDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
 				Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long).Repeat.Twice();
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly(2012, 1, 1))).Return(_groupPerson);
-				Expect.Call(_groupPerson.Id).Return(guid).Repeat.AtLeastOnce();
+				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
 
 			}
 
@@ -222,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mock.Playback())
 			{
-				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
 			}
 
 			Assert.IsTrue(result);
@@ -231,9 +222,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldRollbackAndUseRegularTeamOptimizationIfSteadyStateFailsOnMoveMaxDaysOverLimit()
 		{
-			var guid = Guid.NewGuid();
-			_teamSteadyStates.Add(guid, true);
-
 			using (_mock.Record())
 			{
 				commonMocks();
@@ -252,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_optimizationOverLimitByRestrictionDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
 				Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long).Repeat.Twice();
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly(2012, 1, 1))).Return(_groupPerson);
-				Expect.Call(_groupPerson.Id).Return(guid).Repeat.AtLeastOnce();
+				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
 				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(new DateOnly(2012, 1, 1), _groupPerson, _groupSchedulingService,
 																			_schedulePartModifyAndRollbackService,
 																			_schedulingOptions, _groupPersonBuilderForOptimization,
@@ -266,7 +254,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mock.Playback())
 			{
-				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
 			}
 
 			Assert.IsTrue(result);	
@@ -275,9 +263,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldRollbackAndUseRegularTeamOptimizationIfSteadyStateFailsOnOverLimit()
 		{
-			var guid = Guid.NewGuid();
-			_teamSteadyStates.Add(guid, true);
-
 			using (_mock.Record())
 			{
 				commonMocks();
@@ -296,7 +281,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_optimizationOverLimitByRestrictionDecider.OverLimit()).Return(new List<DateOnly>());
 				Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long).Repeat.Twice();
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly(2012, 1, 1))).Return(_groupPerson);
-				Expect.Call(_groupPerson.Id).Return(guid).Repeat.AtLeastOnce();
+				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
 				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(new DateOnly(2012, 1, 1), _groupPerson, _groupSchedulingService,
 																			_schedulePartModifyAndRollbackService,
 																			_schedulingOptions, _groupPersonBuilderForOptimization,
@@ -310,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mock.Playback())
 			{
-				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
 			}
 
 			Assert.IsTrue(result);
@@ -348,14 +333,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                                     _groupPersonBuilderForOptimization, _allMatrixes)).Return(false);
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long);
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly(2012, 1, 1))).Return(_groupPerson);
-				Expect.Call(_groupPerson.Id).Return(null);
+            	Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
             }
 
             bool result;
 
             using (_mock.Playback())
             {
-				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
             }
 
             Assert.IsFalse(result);
@@ -402,15 +387,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, true)).Repeat.AtLeastOnce();
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long);
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly(2012, 1, 1))).Return(_groupPerson);
-				Expect.Call(_groupPerson.Id).Return(null);
-            	Expect.Call(_scheduleDay1.Person).Return(_person);
+            	Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
+				Expect.Call(_scheduleDay1.Person).Return(_person);
             }
 
             bool result;
 
             using (_mock.Playback())
             {
-				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
             }
 
             Assert.IsFalse(result);
@@ -463,14 +448,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), true, true)).Repeat.AtLeastOnce();
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long);
             	Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly(2012, 1, 1))).Return(_groupPerson);
-            	Expect.Call(_groupPerson.Id).Return(null);
+            	Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
             }
 
             bool result;
 
             using (_mock.Playback())
             {
-				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary);
+				result = _target.Execute(_daysToDelete, _daysToSave, _allMatrixes, _optimizationOverLimitByRestrictionDecider, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
             }
 
             Assert.IsFalse(result);

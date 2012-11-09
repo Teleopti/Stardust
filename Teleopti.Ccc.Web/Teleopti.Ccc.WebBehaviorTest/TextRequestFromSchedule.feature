@@ -8,21 +8,22 @@ Background:
 	| Field                    | Value                 |
 	| Name                     | Full access to mytime |
 	And there is a role with
-	| Field                   | Value                      |
-	| Name                    | No access to text requests |
-	| Access To Text Requests | False                      |
+	| Field                      | Value                      |
+	| Name                       | No access to text requests |
+	| Access to text requests    | False                      |
+	| Access to absence requests | True                       |
 
 Scenario: Open add text request form
 	Given I have the role 'Full access to mytime'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day symbol area for date '2013-10-03'
-	Then I should see the text request form
+	Then I should see the add text request form
 	
 Scenario: Open add text request form from day summary
 	Given I have the role 'Full access to mytime'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day summary for date '2013-10-03'
-	Then I should see the text request form
+	Then I should see the add text request form
 	
 Scenario: Add text request from week schedule view
 	Given I have the role 'Full access to mytime'
@@ -36,19 +37,19 @@ Scenario: Can not add text request from day symbol area if no permission
 	Given I have the role 'No access to text requests'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day symbol area for date '2013-10-03'
-	Then I should not see the text request form
+	Then I should not see the add text request form
 
 Scenario: Can not add text request from day summary if no permission
 	Given I have the role 'No access to text requests'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day summary for date '2013-10-03'
-	Then I should not see the text request form
+	Then I should not see the add text request form
 
 Scenario: Default text request values from week schedule
 	Given I have the role 'Full access to mytime'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day summary for date '2013-10-03'
-	Then I should see the text request form with '2013-10-03' as default date
+	Then I should see the request form with '2013-10-03' as default date
 	And I should see 8:00 - 17:00 as the default times
 
 Scenario: Default full day text request values from week schedule

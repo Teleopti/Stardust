@@ -76,7 +76,7 @@ namespace Teleopti.Support.Tool.Controls
         private void RefreshDatabaseList()
         {
             ThreadSafeControlDelegation.SetCursor(Cursors.WaitCursor, buttonRefresh);
-            //buttonUpdate.Enabled = false;
+            ThreadSafeControlDelegation.SetEnabled(false, buttonRefresh);
             if (backgroundWorkerConnectionAndVersion.IsBusy)
             {
                 backgroundWorkerConnectionAndVersion.CancelAsync();
@@ -117,6 +117,7 @@ namespace Teleopti.Support.Tool.Controls
             }
 
             ThreadSafeControlDelegation.SetEnabled(true, buttonRefresh);
+            //ThreadSafeControlDelegation.SetEnabled(true, buttonBack);
             ThreadSafeControlDelegation.SetCursor(Cursors.Default, buttonRefresh);
         }
 
@@ -125,13 +126,13 @@ namespace Teleopti.Support.Tool.Controls
             Collection<ListViewItem> items = new Collection<ListViewItem>();
             ListViewItem listViewItem;
             NHibDataSource nHibDataSource = nhib.CccDataSource;
-            if (!listViewDatabases.Items.ContainsKey(nHibDataSource.DatabaseName))
+            if (!listViewDatabases.Items.ContainsKey(nHibDataSource.Id))
             {
                 listViewItem = CreateDatasourceListViewItem(listViewGroup, nHibDataSource);
                 items.Add(listViewItem);
             }
             nHibDataSource = nhib.AnalyticsDataSource;
-            if (!listViewDatabases.Items.ContainsKey(nHibDataSource.DatabaseName))
+            if (!listViewDatabases.Items.ContainsKey(nHibDataSource.Id))
             {
                 listViewItem = CreateDatasourceListViewItem(listViewGroup, nHibDataSource);
                 items.Add(listViewItem);
@@ -150,7 +151,7 @@ namespace Teleopti.Support.Tool.Controls
         private static ListViewItem CreateDatabaseListViewItem(NHibDataSource nHibDataSource)
         {
             ListViewItem listViewItem = new ListViewItem(nHibDataSource.DatabaseName);
-            listViewItem.Name = nHibDataSource.DatabaseName;
+            listViewItem.Name = nHibDataSource.Id;
             listViewItem.Tag = nHibDataSource;
             listViewItem.ImageIndex = ImageIndexDatabaseConnecting;
             ListViewItem.ListViewSubItem listViewSubItem;
@@ -205,18 +206,18 @@ namespace Teleopti.Support.Tool.Controls
                     string databaseTypeString = listViewItem.SubItems[1].Text;
 
                     ProcessStartInfo processStartInfo;
-                    processStartInfo = CreateProcessStartInfoForDBManager(nHibDataSource, listViewItem, databaseTypeString);
+                    processStartInfo = CreateProcessStartInfoForDBManager(nHibDataSource, databaseTypeString);
                     RunProcess(processStartInfo);
 
                     if (databaseTypeString == Nhib.ApplicationDatabaseTextConstant)
                     {
-                        processStartInfo = createProcessStartInfoForApplicationSecurity(nHibDataSource, listViewItem);
+                        processStartInfo = createProcessStartInfoForApplicationSecurity(nHibDataSource);
                         RunProcess(processStartInfo);
                     }
 
                     if (databaseTypeString == Nhib.AnalyticsDatabaseTextConstant)
                     {
-                        processStartInfo = CreateProcessStartInfoForAnalyticsSecurity(nHibDataSource, listViewItem);
+                        processStartInfo = CreateProcessStartInfoForAnalyticsSecurity(nHibDataSource);
                         RunProcess(processStartInfo);
                     }
                 }
@@ -233,7 +234,7 @@ namespace Teleopti.Support.Tool.Controls
 
 //                  3 – If TeleoptiAnalytics DbType
 //                  Teleopti.Support.Security.exe -DS%MyServerInstance% -DD%DATABASE% -CD%TeleoptiCCCAgg% -EE    
-        private ProcessStartInfo CreateProcessStartInfoForAnalyticsSecurity(NHibDataSource nHibDataSource, ListViewItem listViewItem)
+        private ProcessStartInfo CreateProcessStartInfoForAnalyticsSecurity(NHibDataSource nHibDataSource)
         {
             StringBuilder stringBuilder = new StringBuilder();
             SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nHibDataSource.ConnectionString);
@@ -243,10 +244,10 @@ namespace Teleopti.Support.Tool.Controls
             ProcessStartInfo processStartInfo = new ProcessStartInfo(command);
             stringBuilder.Append(SPACE);
             stringBuilder.Append(@"-DS");
-            stringBuilder.Append(sqlConnectionStringBuilder.DataSource + SPACE);
+            stringBuilder.Append(nHibDataSource.ServerName + SPACE);
             stringBuilder.Append(getLogonString(sqlConnectionStringBuilder));
             stringBuilder.Append(@"-DD");
-            stringBuilder.Append(listViewItem.Name + SPACE);
+            stringBuilder.Append(nHibDataSource.DatabaseName + SPACE);
             stringBuilder.Append(@"-CD");
             stringBuilder.Append(nHibDataSource.DatabaseName + SPACE);
             processStartInfo.Arguments = stringBuilder.ToString();
@@ -263,7 +264,7 @@ namespace Teleopti.Support.Tool.Controls
 
         //          2- If TeleoptiCCC7 DbType
         //          Teleopti.Support.Security.exe -DS%MyServerInstance% -DD%DATABASE% -EE
-        private ProcessStartInfo createProcessStartInfoForApplicationSecurity(NHibDataSource nHibDataSource, ListViewItem listViewItem)
+        private ProcessStartInfo createProcessStartInfoForApplicationSecurity(NHibDataSource nHibDataSource)
         {
             StringBuilder stringBuilder = new StringBuilder();
             SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nHibDataSource.ConnectionString);
@@ -273,10 +274,10 @@ namespace Teleopti.Support.Tool.Controls
             ProcessStartInfo processStartInfo = new ProcessStartInfo(command);
             stringBuilder.Append(SPACE);
             stringBuilder.Append(@"-DS");
-            stringBuilder.Append(sqlConnectionStringBuilder.DataSource + SPACE);
+            stringBuilder.Append(nHibDataSource.ServerName + SPACE);
             stringBuilder.Append(getLogonString(sqlConnectionStringBuilder));
             stringBuilder.Append(@"-DD");
-            stringBuilder.Append(listViewItem.Name + SPACE);
+            stringBuilder.Append(nHibDataSource.DatabaseName + SPACE);
             processStartInfo.Arguments = stringBuilder.ToString();
 
             processStartInfo.WorkingDirectory = workingDirectory;
@@ -329,7 +330,7 @@ namespace Teleopti.Support.Tool.Controls
 
         //          1 - alltid
         //          DBManager.exe -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E -T
-        private ProcessStartInfo CreateProcessStartInfoForDBManager(NHibDataSource nHibDataSource, ListViewItem listViewItem, string databaseTypeString)
+        private ProcessStartInfo CreateProcessStartInfoForDBManager(NHibDataSource nHibDataSource, string databaseTypeString)
         {
             StringBuilder stringBuilder = new StringBuilder();
             SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nHibDataSource.ConnectionString);
@@ -342,7 +343,7 @@ namespace Teleopti.Support.Tool.Controls
             stringBuilder.Append(sqlConnectionStringBuilder.DataSource + SPACE);
             stringBuilder.Append(getLogonStringForDBManager(sqlConnectionStringBuilder));
             stringBuilder.Append(@"-D");
-            stringBuilder.Append(listViewItem.Name + SPACE);
+            stringBuilder.Append(nHibDataSource.DatabaseName + SPACE);
             stringBuilder.Append(@"-O");
             stringBuilder.Append(getCccDbType(databaseTypeString) + SPACE);
             processStartInfo.Arguments = stringBuilder.ToString();
@@ -424,7 +425,7 @@ namespace Teleopti.Support.Tool.Controls
 
         private void listViewDatabases_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            buttonBack.Enabled = false;
+            //buttonBack.Enabled = false;
             foreach (ListViewItem listViewItem in listViewDatabases.SelectedItems)
             {
                 if (listViewItem.ImageIndex == ImageIndexDatabaseVersionNotOk)
@@ -462,7 +463,7 @@ namespace Teleopti.Support.Tool.Controls
                         string aggDbName = dbHelper.GetAggDatabaseName();
                         SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(nHibDataSource.ConnectionString);
                         builder.InitialCatalog = aggDbName;
-                        NHibDataSource aggNHibDataSource = new NHibDataSource(builder.ConnectionString, Nhib.AggregationDatabaseTextConstant);
+                        NHibDataSource aggNHibDataSource = new NHibDataSource(nHibDataSource.FactoryName, builder.ConnectionString, Nhib.AggregationDatabaseTextConstant);
                         ListViewItem aggListViewItem = CreateDatasourceListViewItem(listViewItem.Group, aggNHibDataSource);
                         listViewDatabases.Items.Add(aggListViewItem);
                         SetListviewIcon(aggNHibDataSource, aggListViewItem);

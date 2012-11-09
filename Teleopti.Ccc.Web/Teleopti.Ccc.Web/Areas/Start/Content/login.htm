@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title></title>
+	<link rel="stylesheet" href="../../../Content/bootstrap/bootstrap.css" type="text/css"/>
+	<script type="text/javascript" src="../../../Content/Scripts/jquery-1.8.2.min.js"></script>
+	<script type="text/javascript" src="../../../Content/bootstrap/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../../Content/Scripts/knockout-2.1.0.js"></script>
+	<script type="text/javascript" src="signonvm.js" defer="defer"></script>
+</head>
+<body>
+	<div class="container" id="login">
+		<h1>Teleopti CCC</h1>
+		<div data-bind="visible:DataSourceSelectionActive">
+			<div class="row">
+				<div>
+					<div class="span6 well">
+						<div>
+							<select name="datasource" data-bind="options: AvailableDataSources, optionsText: 'DataSourceName', value: SelectedSource">
+							</select>
+						</div>
+						<div>
+							<input type="text" name="username" placeholder="User name" data-bind="visible:SelectedSource().ApplicationAuthentication" />
+						</div>
+						<div>
+							<input type="password" name="password" placeholder="Password" data-bind="visible:SelectedSource().ApplicationAuthentication" />
+						</div>
+						<button class="btn btn-primary" id="logonButton">Log on</button>
+					</div>
+				
+				</div>
+			</div>
+		</div>
+		<div style="display: none;" data-bind="visible:BusinessUnitSelectionActive">
+			<div class="alert">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+				<strong>Warning!</strong> Your password will be expired.
+			</div>
+			<div class="row">
+				<div class="span6 well">
+					<h3>Select business unit:</h3>
+					<div>
+						<select name="bus" data-bind="options: AvailableBusinessUnits">
+						</select>
+					</div>
+					<button class="btn btn-primary" id="buSelect">Select</button>
+					<button class="btn btn-primary" id="buCancel">Cancel</button>
+				</div>
+			</div>
+		</div>
+		<div style="display: none;" data-bind="visible:ApplicationSelectionActive">
+			<div class="row">
+				<div class="span6 well">
+					<h3>Select application:</h3>
+					<div>
+						<div class="btn-group-vertical" data-toggle="buttons-radio">
+							<button type="button" class="btn">Team Leader Tool</button>
+							<button type="button" class="btn">Mytime Web</button>
+							<button type="button" class="btn">Anywhere Report</button>
+						</div>
+					</div>
+					<div>
+						<button class="btn btn-primary" id="Button1">Select</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

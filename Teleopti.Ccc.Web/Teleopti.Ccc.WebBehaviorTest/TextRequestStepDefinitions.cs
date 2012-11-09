@@ -8,6 +8,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Interfaces.Domain;
@@ -44,22 +45,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
             Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
         }
 
-		[Then(@"Subject should not be empty")]
-		public void SubjectShouldNotBeEmpty()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value.Trim(), Is.Not.Empty);
-		}
-
 		[When(@"I input new text request values")]
 		public void WhenIInputNewTextRequestValues()
 		{
 			Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. cinnemon roll!";
-		}
-
-		[Then(@"I should see the text request's details form")]
-		public void ThenIShouldSeeTheTextRequestsDetailsForm()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSection.DisplayVisible(), Is.True);
 		}
 
 		[Then(@"I should see the request's values")]
@@ -82,21 +71,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailEntityId.Value, Is.EqualTo(request.PersonRequest.Id.ToString()));
 		}
 
-		[Then(@"I should not be able to input values")]
-		public void ThenIShouldNotBeAbleToInputValues()
-		{
-			const string disabledAttr = "disabled";
-			const string readonlyAttr = "readonly";
-			var detailForm = Pages.Pages.CurrentEditRequestPage;
-			EventualAssert.That(() => detailForm.RequestDetailFromDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "TextRequestDetailFromDateInput");
-			EventualAssert.That(() => detailForm.RequestDetailFromTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailFromTimeTextField");
-			EventualAssert.That(() => detailForm.RequestDetailSubjectInput.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailSubjectInput");
-			EventualAssert.That(() => detailForm.RequestDetailToDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailToDateTextField");
-			EventualAssert.That(() => detailForm.RequestDetailToTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailToTimeTextField");
-			EventualAssert.That(() => detailForm.RequestDetailMessageTextField.GetAttributeValue(readonlyAttr), Is.EqualTo("True"), "RequestDetailMessageTextField");
-			EventualAssert.That(() => detailForm.FulldayCheck.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "FulldayCheck");
-		}
-
 		[Then(@"I should see the new text request values in the list")]
 		public void ThenIShouldSeeTheNewTextRequestValuesInTheList()
 		{
@@ -104,25 +78,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Contains.Substring("cinnemon roll"));
 		}
 
-		[Then(@"I should see the absence request form with today's date as default")]
-		[Then(@"I should see the text request form with today's date as default")]
+		[Then(@"I should see the request form with today's date as default")]
 		public void ThenIShouldSeeTheTextRequestFormWithTodaySDateAsDefault()
 		{
 			var today = DateTime.Today;
 
 			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value), Is.EqualTo(today));
 			EventualAssert.That(() => DateTime.Parse(Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value), Is.EqualTo(today));
-		}
-
-		[Then(@"I should see (.*) - (.*) as the default times")]
-		public void ThenIShouldSee800_1700AsTheDefaultTimes(string startTime, string endTime)
-		{
-			int[] st = startTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
-			var tstart=new TimeSpan(st[0],st[1],0);
-			int[] end = endTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
-			var tend = new TimeSpan(end[0], end[1], 0);
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value, Is.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(tstart, UserFactory.User().Culture)));
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value, Is.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(tend, UserFactory.User().Culture)));
 		}
 
 		[When(@"I input empty subject")]

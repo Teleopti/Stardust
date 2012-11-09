@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			authenticator.Stub(x => x.AuthenticateApplicationUser("datasource", "username", "password")).Return(
 				new AuthenticateResult {HasMessage = false, Person = person, Successful = true, DataSource = dataSource});
-			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Application)).Return(viewModel);
+			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Application, null)).Return(viewModel);
 			redirector.Stub(x => x.SignInRedirect()).Return(new RedirectResult("/"));
 
 			var target = MakeAuthenticationControllerWithAcceptJsonHeader(viewModelFactory, authenticator, null, redirector);
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			authenticator.Stub(x => x.AuthenticateApplicationUser("datasource", "username", "password")).Return(
 				new AuthenticateResult {HasMessage = false, Person = person, Successful = true, DataSource = dataSource});
-			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Application))
+			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Application,null))
 				.Return(new SignInBusinessUnitViewModel
 				        	{
 				        		BusinessUnits = new[]
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			authenticator.Stub(x => x.AuthenticateApplicationUser("datasource", null, null)).Return(
 				new AuthenticateResult {HasMessage = false, Person = person, Successful = true, DataSource = dataSource});
-			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Application)).Return(viewModel);
+			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Application, null)).Return(viewModel);
 
 			var target = MakeAuthenticationControllerWithAcceptJsonHeader(viewModelFactory, authenticator, null, null);
 
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			authenticator.Stub(x => x.AuthenticateApplicationUser("datasource", "username", "password")).Return(
 				new AuthenticateResult {HasMessage = false, Person = person, Successful = true, DataSource = dataSource});
-			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Application)).Return(viewModel);
+			viewModelFactory.Stub(x => x.CreateBusinessUnitViewModel(dataSource, person, AuthenticationTypeOption.Application,null)).Return(viewModel);
 
 			var target = MakeAuthenticationControllerWithAcceptJsonHeader(viewModelFactory, authenticator, null, null);
 

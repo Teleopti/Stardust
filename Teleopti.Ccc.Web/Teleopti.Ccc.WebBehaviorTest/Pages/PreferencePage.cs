@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 
@@ -88,17 +89,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public Div ExtendedPreferenceIndicationForDate(DateTime date)
 		{
-			return CalendarCellForDate(date).Div(Find.ByClass("extended-indication", false));
+			return CalendarCellForDate(date).Div(QuicklyFind.ByClass("extended-indication"));
 		}
 
 		public Div MeetingAndPersonalShiftIndicationForDate(DateTime date)
 		{
-			return CalendarCellForDate(date).Div(Find.ByClass("meeting-small", false)).EventualGet();
+			return CalendarCellForDate(date).Div(QuicklyFind.ByClass("meeting-small")).EventualGet();
 		}
 
 		public Div MeetingAndPersonalShiftTooltipForDate(DateTime date)
 		{
-			return CalendarCellForDate(date).Div(Find.ByClass("meeting-tooltip", false)).EventualGet();
+			return CalendarCellForDate(date).Div(QuicklyFind.ByClass("meeting-tooltip")).EventualGet();
 		}
 		
 		public Div ExtendedPreferenceForDate(DateTime date)

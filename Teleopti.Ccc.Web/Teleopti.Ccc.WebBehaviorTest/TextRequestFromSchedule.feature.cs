@@ -85,8 +85,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Name",
                         "No access to text requests"});
             table2.AddRow(new string[] {
-                        "Access To Text Requests",
+                        "Access to text requests",
                         "False"});
+            table2.AddRow(new string[] {
+                        "Access to absence requests",
+                        "True"});
 #line 10
  testRunner.And("there is a role with", ((string)(null)), table2);
 #line hidden
@@ -97,18 +100,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void OpenAddTextRequestForm()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Open add text request form", ((string[])(null)));
-#line 15
+#line 16
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 16
- testRunner.Given("I have the role \'Full access to mytime\'");
 #line 17
- testRunner.And("I view my week schedule for date \'2013-10-03\'");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 18
- testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
+ testRunner.And("I view my week schedule for date \'2013-10-03\'");
 #line 19
- testRunner.Then("I should see the text request form");
+ testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
+#line 20
+ testRunner.Then("I should see the add text request form");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -118,18 +121,18 @@ this.FeatureBackground();
         public virtual void OpenAddTextRequestFormFromDaySummary()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Open add text request form from day summary", ((string[])(null)));
-#line 21
+#line 22
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 22
- testRunner.Given("I have the role \'Full access to mytime\'");
 #line 23
- testRunner.And("I view my week schedule for date \'2013-10-03\'");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 24
- testRunner.When("I click on the day summary for date \'2013-10-03\'");
+ testRunner.And("I view my week schedule for date \'2013-10-03\'");
 #line 25
- testRunner.Then("I should see the text request form");
+ testRunner.When("I click on the day summary for date \'2013-10-03\'");
+#line 26
+ testRunner.Then("I should see the add text request form");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -139,21 +142,21 @@ this.FeatureBackground();
         public virtual void AddTextRequestFromWeekScheduleView()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add text request from week schedule view", ((string[])(null)));
-#line 27
+#line 28
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 28
- testRunner.Given("I have the role \'Full access to mytime\'");
 #line 29
- testRunner.And("I view my week schedule for date \'2013-10-03\'");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 30
- testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
+ testRunner.And("I view my week schedule for date \'2013-10-03\'");
 #line 31
- testRunner.And("I input text request values for date \'2013-10-03\'");
+ testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
 #line 32
- testRunner.And("I click the OK button");
+ testRunner.And("I input text request values for date \'2013-10-03\'");
 #line 33
+ testRunner.And("I click the OK button");
+#line 34
  testRunner.Then("I should see a symbol at the top of the schedule for date \'2013-10-03\'");
 #line hidden
             this.ScenarioCleanup();
@@ -164,18 +167,18 @@ this.FeatureBackground();
         public virtual void CanNotAddTextRequestFromDaySymbolAreaIfNoPermission()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can not add text request from day symbol area if no permission", ((string[])(null)));
-#line 35
+#line 36
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 36
- testRunner.Given("I have the role \'No access to text requests\'");
 #line 37
- testRunner.And("I view my week schedule for date \'2013-10-03\'");
+ testRunner.Given("I have the role \'No access to text requests\'");
 #line 38
- testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
+ testRunner.And("I view my week schedule for date \'2013-10-03\'");
 #line 39
- testRunner.Then("I should not see the text request form");
+ testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
+#line 40
+ testRunner.Then("I should not see the add text request form");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -185,18 +188,18 @@ this.FeatureBackground();
         public virtual void CanNotAddTextRequestFromDaySummaryIfNoPermission()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can not add text request from day summary if no permission", ((string[])(null)));
-#line 41
+#line 42
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 42
- testRunner.Given("I have the role \'No access to text requests\'");
 #line 43
- testRunner.And("I view my week schedule for date \'2013-10-03\'");
+ testRunner.Given("I have the role \'No access to text requests\'");
 #line 44
- testRunner.When("I click on the day summary for date \'2013-10-03\'");
+ testRunner.And("I view my week schedule for date \'2013-10-03\'");
 #line 45
- testRunner.Then("I should not see the text request form");
+ testRunner.When("I click on the day summary for date \'2013-10-03\'");
+#line 46
+ testRunner.Then("I should not see the add text request form");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -206,19 +209,19 @@ this.FeatureBackground();
         public virtual void DefaultTextRequestValuesFromWeekSchedule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default text request values from week schedule", ((string[])(null)));
-#line 47
+#line 48
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 48
- testRunner.Given("I have the role \'Full access to mytime\'");
 #line 49
- testRunner.And("I view my week schedule for date \'2013-10-03\'");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 50
- testRunner.When("I click on the day summary for date \'2013-10-03\'");
+ testRunner.And("I view my week schedule for date \'2013-10-03\'");
 #line 51
- testRunner.Then("I should see the text request form with \'2013-10-03\' as default date");
+ testRunner.When("I click on the day summary for date \'2013-10-03\'");
 #line 52
+ testRunner.Then("I should see the request form with \'2013-10-03\' as default date");
+#line 53
  testRunner.And("I should see 8:00 - 17:00 as the default times");
 #line hidden
             this.ScenarioCleanup();
@@ -229,19 +232,19 @@ this.FeatureBackground();
         public virtual void DefaultFullDayTextRequestValuesFromWeekSchedule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default full day text request values from week schedule", ((string[])(null)));
-#line 54
+#line 55
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 55
- testRunner.Given("I have the role \'Full access to mytime\'");
 #line 56
- testRunner.And("I view my week schedule for date \'2013-10-03\'");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 57
- testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
+ testRunner.And("I view my week schedule for date \'2013-10-03\'");
 #line 58
- testRunner.And("I checked the full day checkbox");
+ testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
 #line 59
+ testRunner.And("I checked the full day checkbox");
+#line 60
  testRunner.Then("I should see 00:00 - 23:59 as the default times");
 #line hidden
             this.ScenarioCleanup();
@@ -252,21 +255,21 @@ this.FeatureBackground();
         public virtual void CancelAddingTextRequest()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cancel adding text request", ((string[])(null)));
-#line 61
+#line 62
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 62
- testRunner.Given("I have the role \'Full access to mytime\'");
 #line 63
- testRunner.And("I view my week schedule for date \'2013-10-03\'");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 64
- testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
+ testRunner.And("I view my week schedule for date \'2013-10-03\'");
 #line 65
- testRunner.And("I input text request values for date \'2013-10-03\'");
+ testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
 #line 66
- testRunner.And("I click the Cancel button");
+ testRunner.And("I input text request values for date \'2013-10-03\'");
 #line 67
+ testRunner.And("I click the Cancel button");
+#line 68
  testRunner.Then("I should not see a symbol at the top of the schedule for date \'2013-10-03\'");
 #line hidden
             this.ScenarioCleanup();
@@ -277,25 +280,25 @@ this.FeatureBackground();
         public virtual void AddingInvalidTextRequestValues()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Adding invalid text request values", ((string[])(null)));
-#line 69
+#line 70
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 70
- testRunner.Given("I have the role \'Full access to mytime\'");
 #line 71
- testRunner.And("I view my week schedule for date \'2013-10-03\'");
+ testRunner.Given("I have the role \'Full access to mytime\'");
 #line 72
- testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
+ testRunner.And("I view my week schedule for date \'2013-10-03\'");
 #line 73
- testRunner.And("I input empty subject");
+ testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
 #line 74
- testRunner.And("I input later start time than end time for date \'2013-10-03\'");
+ testRunner.And("I input empty subject");
 #line 75
- testRunner.And("I click the OK button");
+ testRunner.And("I input later start time than end time for date \'2013-10-03\'");
 #line 76
- testRunner.Then("I should see texts describing my errors");
+ testRunner.And("I click the OK button");
 #line 77
+ testRunner.Then("I should see texts describing my errors");
+#line 78
  testRunner.And("I should not see a symbol at the top of the schedule for date \'2013-10-03\'");
 #line hidden
             this.ScenarioCleanup();

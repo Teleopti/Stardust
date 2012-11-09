@@ -55,6 +55,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			contents = contents.Replace("_database_", IniFileInfo.Database);
 			File.WriteAllText(TargetTestDataNHibFile, contents);
 		}
-
 	}
 }

@@ -1,8 +1,11 @@
 ﻿using System;
+using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
+using List = WatiN.Core.List;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
@@ -20,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "SignIn_UserName")] public TextField UserNameTextField { get; set; }
 
-		public Element ValidationSummary { get { return Document.Div(Find.ByClass("validation-summary-errors", false)); } }
+		public Element ValidationSummary { get { return Document.Div(QuicklyFind.ByClass("validation-summary-errors")); } }
 
 		[FindBy(Id = "SignIn_Password")] public TextField PasswordTextField;
 
@@ -34,15 +37,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "signout-button")]
 		public Link SignoutButton { get; set; }
 
+		[FindBy(Id = "warning")]
+		public Div WarningMessage { get; set; }
 
 		public void SelectApplicationTestDataSource()
 		{
 			ApplicationDataSourceList.ListItem(Find.ByText("TestData")).EventualClick();
-		}
-
-		public void ClickApplicationOkButton()
-		{
-			ApplicationOkButton.EventualClick();
 		}
 
 		public void SelectWindowsTestDataSource()
@@ -65,13 +65,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SignInApplication(string username, string password)
 		{
+			TrySignInApplication(username, password);
+			WaitForSigninResult();
+		}
+
+		public void TrySignInApplication(string username, string password)
+		{
 			ApplicationTabLink.EventualClick();
 			SelectApplicationTestDataSource();
 			UserNameTextField.Value = username;
 			PasswordTextField.Value = password;
 			ApplicationOkButton.EventualClick();
-
-			WaitForSigninResult();
 		}
 
 		public void SignInWindows()
@@ -84,14 +88,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		private void WaitForSigninResult()
 		{
 			// move this to the actual navigation, which is the one that actually acts too early?
-			Func<bool> signedInOrBusinessUnitListExists = () => SignoutButton.IESafeExists() ||
-			                                                    SignOutLink.IESafeExists() ||
-			                                                    BusinessUnitList.IESafeExists() ||
-			                                                    GlobalMenuList.IESafeExists() ||
-			                                                    ValidationSummary.IESafeExists();
-			var found = signedInOrBusinessUnitListExists.WaitUntil(EventualTimeouts.Poll, EventualTimeouts.Timeout);
-			if (!found)
-				throw new ApplicationException("Waiting for signin result failed!");
+			EventualAssert.That(() => SignoutButton.SafeExists() ||
+			                          SignOutLink.SafeExists() ||
+			                          BusinessUnitList.SafeExists() ||
+			                          GlobalMenuList.SafeExists() ||
+			                          ValidationSummary.SafeExists(), Is.True);
 		}
 	}
 }

@@ -7,6 +7,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -199,7 +200,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var editableDate = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			_page.SelectCalendarCellForDateByClick(editableDate);
-			_page.CalendarCellSelectableForDate(editableDate).ClassName.Should().Contain("ui-selected");
+			_page.CalendarCellForDate(editableDate).ClassName.Should().Contain("ui-selected");
 		}
 
 		[Then(@"I should not be able to see preferences link")]
