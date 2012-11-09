@@ -101,6 +101,16 @@
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
+    <Compile Include="RoutingNew.feature.cs">
+      <DependentUpon>RoutingNew.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="SignInNew.feature.cs">
+      <DependentUpon>SignInNew.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="PasswordPolicyMobile.feature.cs">
       <DependentUpon>PasswordPolicyMobile.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -510,6 +520,14 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="RoutingNew.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RoutingNew.feature.cs</LastGenOutput>
+    </None>
+    <None Include="SignInNew.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SignInNew.feature.cs</LastGenOutput>
+    </None>
     <None Include="PasswordPolicyMobile.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PasswordPolicyMobile.feature.cs</LastGenOutput>
@@ -549,14 +567,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
     </None>
-   
-
-
- <None Include="AsmMessage.feature">
+    <None Include="AsmMessage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmMessage.feature.cs</LastGenOutput>
     </None>
-
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />
     <None Include="Testing\StepDefinitionReport.bat" />

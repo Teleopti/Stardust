@@ -1,19 +1,31 @@
-﻿Feature: Routing New
+﻿@ignore
+Feature: Routing New
 	In order make it easy to browse to the site
 	As a user
 	I want to be redirected to the correct locations
 
 Background:
 	Given there is a role with
+	| Field                    | Value               |
+	| Name                     | Access to all areas |
+	| Access to mobile reports | true                |
+	| Access to mytime web     | true                |
+	Given there is a role with
 	| Field                    | Value                       |
 	| Name                     | Access to report not mytime |
 	| Access to mobile reports | true                        |
 	| Access to mytime web     | false                       |
+	Given there is a role with
+	| Field                    | Value                       |
+	| Name                     | Access to mytime not report |
+	| Access to mobile reports | false                       |
+	| Access to mytime web     | true                        |
 
 Scenario: Browse to root
 	Given I am not signed in
 	When I navigate to the site's root
-	Then I should see the global sign in page
+	#Then I should see the global sign in page
+	Then I should see sign in page
 
 Scenario: Browse to MyTime
 	Given I am not signed in
@@ -28,21 +40,29 @@ Scenario: Browse to Mobile Reports
 	Then I should see Mobile Report's sign in page
 	
 Scenario: Browse to root and sign in to menu
-	Given I am a user with access to all areas
+	Given I have the role 'Access to mytime and report'
 	When I navigate to the site's root
 	And I sign in
-	Then I should see the global menu
-	#(will it be our new global menu? or should I remove global menu? As we will have the navigation function in team leader tool.)
+	#Then I should see the global menu
+	Then I should see MyTime
+
+# And in future, we will have a scenario:
+Scenario: Browse to root and sign in to menu
+	Given I have the role 'Access to TeamLeaderTool and others'
+	When I navigate to the site's root
+	And I sign in
+	#Then I should see the global menu
+	Then I should see TeamLeader tool
 
 #(This one will be removed)
 Scenario: Browse to root and sign in to mobile menu
-	Given I am a user with access to all areas
+	Given I have the role 'Access to all areas'
 	When I navigate to the site's root mobile signin page
 	And I sign in 
 	Then I should see the mobile global menu
  
 Scenario: Browse to root and sign in to MyTime
-	Given I am a user with access only to MyTime
+	Given I have the role 'Access to mytime not report'
 	When I navigate to the site's root
 	And I sign in
 	Then I should see MyTime
@@ -54,13 +74,13 @@ Scenario: Browse to root and sign in to Mobile Reports
 	Then I should see Mobile Reports
 
 Scenario: Browse to MyTime and sign in
-	Given I am a user with access to all areas
+	Given I have the role 'Access to all areas'
 	When I navigate to MyTime
 	And I sign in
 	Then I should see MyTime
 
 Scenario: Browse to Mobile Reports and sign in
-	Given I am a user with access to all areas
+	Given I have the role 'Access to all areas'
 	When I navigate to Mobile Reports
 	And I sign in
 	Then I should see Mobile Reports
