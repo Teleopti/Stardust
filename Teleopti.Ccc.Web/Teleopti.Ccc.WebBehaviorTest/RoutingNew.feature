@@ -43,16 +43,8 @@ Scenario: Browse to root and sign in to menu
 	Given I have the role 'Access to mytime and report'
 	When I navigate to the site's root
 	And I sign in
-	#Then I should see the global menu
-	Then I should see MyTime
-
-# And in future, we will have a scenario:
-Scenario: Browse to root and sign in to menu
-	Given I have the role 'Access to TeamLeaderTool and others'
-	When I navigate to the site's root
-	And I sign in
-	#Then I should see the global menu
-	Then I should see TeamLeader tool
+	Then I should see the global menu
+	#Then I should see MyTime
 
 #(This one will be removed)
 Scenario: Browse to root and sign in to mobile menu
