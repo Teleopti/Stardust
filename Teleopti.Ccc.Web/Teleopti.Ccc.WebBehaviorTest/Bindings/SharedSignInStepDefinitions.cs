@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	[Binding]
 	public class SharedSignInStepDefinitions
 	{
-		[When(@"I open the sign in page")]
 		[Given(@"I am viewing the sign in page")]
 		public void GivenIAmAtTheSignInPage()
 		{
