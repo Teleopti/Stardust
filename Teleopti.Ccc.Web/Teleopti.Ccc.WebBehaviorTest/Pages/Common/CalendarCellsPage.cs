@@ -69,15 +69,4 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		}
 	}
 
-	public class CalendarCell : Control<ListItem>
-	{
-		public override WatiN.Core.Constraints.Constraint ElementConstraint
-		{
-			get
-			{
-				return Find.By("data-mytime-date", s => s != null);
-			}
-		}
-	}
-
 }
