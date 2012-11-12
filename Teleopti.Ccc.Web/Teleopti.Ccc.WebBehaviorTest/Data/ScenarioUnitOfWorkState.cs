@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_unitOfWork = GlobalUnitOfWorkState.UnitOfWorkFactory.CreateAndOpenUnitOfWork();
 
 			// might be required for some scenarios, but not right now.
-			//_unitOfWork.DisableFilter(QueryFilter.BusinessUnit);
+			_unitOfWork.DisableFilter(QueryFilter.BusinessUnit);
 		}
 
 		public static void DisposeUnitOfWork()
