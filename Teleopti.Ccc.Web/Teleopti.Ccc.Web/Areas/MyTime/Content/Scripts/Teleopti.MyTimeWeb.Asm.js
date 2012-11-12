@@ -18,6 +18,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var vm;
 	var notifyOptions;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var _settings;
 
 	function resize() {
 		var innerWidth = document.documentElement.clientWidth || document.body.clientWidth || window.innerWidth;
@@ -109,6 +110,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			}
 			self.loadViewModel();
 		});
+		self.openMessages = function () {
+			window.open(_settings.baseUrl + 'Message/Index/', 'MessageWindow');
+		};
 	}
 
 	function layerViewModel(layer, canvasPosition) {
@@ -200,7 +204,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	return {
-		ShowAsm: function () {
+		ShowAsm: function (settings) {
+			_settings = settings;
 			_showAsm();
 		},
 		ListenForScheduleChanges: function (options, eventListeners) {

@@ -2,7 +2,10 @@
 <script type="text/javascript">
 	$(function () {
 		Teleopti.MyTimeWeb.AjaxSettings = { baseUrl: '@Url.Content("~/MyTime/")' };
-		Teleopti.MyTimeWeb.Asm.ShowAsm();
+		Teleopti.MyTimeWeb.Asm.ShowAsm(
+				{
+					baseUrl: '@Url.Content("~/MyTime#")'
+				});
 		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges({
 				notifyText: '@Resources.YourScheduleHasChanged',
 				timeout: 4000,
@@ -40,7 +43,7 @@
 			</div>
 			<div class="asm-info-canvas-column asm-info-canvas-column-next" data-bind="text: nextLayerString">
 			</div>	
-			<div class="asm-info-canvas-column asm-info-canvas-column-messages" data-bind="visible: unreadMessages, text: unreadMessageCount"></div>			
+			<div class="asm-info-canvas-column asm-info-canvas-column-messages" data-bind="visible: unreadMessages, text: unreadMessageCount, click : openMessages"></div>			
 		</div>
 	</div>
 </div>
