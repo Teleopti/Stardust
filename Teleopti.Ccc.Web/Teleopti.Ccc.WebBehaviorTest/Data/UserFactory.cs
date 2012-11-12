@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using TechTalk.SpecFlow;
@@ -125,6 +126,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			var userName = NextUserName();
 			return MakeUser(userName.LogOnName, userName.LastName, TestData.CommonPassword);
+		}
+
+		public void UpdateWindowsUser()
+		{
+			_dataFactory.Apply();
+			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
+				{
+					IPerson windowUser;
+					new PersonRepository(uow).TryFindWindowsAuthenticatedPerson(Environment.UserDomainName, Environment.UserName, out windowUser);
+					var culture = windowUser.PermissionInformation.Culture();
+					_userSetups.ForEach(s => s.Apply(uow, windowUser, culture));
+				});
 		}
 
 		public string MakeUser(string logonName, string lastName, string password)

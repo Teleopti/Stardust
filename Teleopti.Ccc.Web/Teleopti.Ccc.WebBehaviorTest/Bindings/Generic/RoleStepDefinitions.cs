@@ -1,5 +1,7 @@
+using System.Linq;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 
@@ -21,6 +23,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var userRole = new RoleForUser { Name = name };
 			UserFactory.User().Setup(userRole);
 		}
+
+		[Given(@"Windows user have the role '(.*)'")]
+		public void GivenWindowsUserHaveTheRole(string name)
+		{
+			var userRole = new RoleForWindowsUser { Name = name };
+			UserFactory.User().Setup(userRole);
+		}
+
 
 		[Given(@"I have a role with")]
 		public void GivenIHaveARoleWith(Table table)

@@ -20,13 +20,15 @@ Background:
 	| Name          | Scenario 2      |
 	| Business Unit | Business Unit 2 |
 	And there is a role with
-	| Field         | Value                    |
-	| Name          | Role for business unit 1 |
-	| Business Unit | Business Unit 1          |
+	| Field               | Value                    |
+	| Name                | Role for business unit 1 |
+	| Business Unit       | Business Unit 1          |
+	| Access To MytimeWeb | true                     |
 	And there is a role with
-	| Field         | Value                    |
-	| Name          | Role for business unit 2 |
-	| Business Unit | Business Unit 2          |
+	| Field               | Value                    |
+	| Name                | Role for business unit 2 |
+	| Business Unit       | Business Unit 2          |
+	| Access To MytimeWeb | true                     |
 
 
 Scenario: Sign in with a user with multiple business units by user name
@@ -46,8 +48,8 @@ Scenario: Sign in with a user with one business unit by user name and I should b
 	Then I should be signed in
 
 Scenario: Sign in with a user with multiple business units by Windows credentials
-	Given I have the role 'Role for business unit 1'
-	And I have the role 'Role for business unit 2'
+	Given Windows user have the role 'Role for business unit 1'
+	And Windows user have the role 'Role for business unit 2'
 	And I am viewing the sign in page
 	#When I select windows logon data source
 	When I sign in by windows credentials
@@ -55,7 +57,7 @@ Scenario: Sign in with a user with multiple business units by Windows credential
 	Then I should be signed in
 	
 Scenario: Sign in with a user with one business unit by Windows credentials and I should be directed into that business unit direct without having to select it
-	Given I have the role 'Role for business unit 1'
+	Given Windows user have the role 'Role for business unit 1'
 	And I am viewing the sign in page
 	#When I select windows logon data source
 	When I sign in by windows credentials

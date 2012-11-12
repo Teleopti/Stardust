@@ -61,11 +61,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I sign in by windows credentials")]
 		public void WhenISignInByWindowsAuthentication()
 		{
-			if (!UserFactory.User().HasSetup<AgentSecondBusinessUnit>())
-			{
-				ScenarioContext.Current.Pending();
-				return;
-			}
+			//if (!UserFactory.User().HasSetup<AgentSecondBusinessUnit>())
+			//{
+			//    ScenarioContext.Current.Pending();
+			//    return;
+			//}
+			UserFactory.User().UpdateWindowsUser();
 			Pages.Pages.CurrentSignInPage.SignInWindows();
 		}
 

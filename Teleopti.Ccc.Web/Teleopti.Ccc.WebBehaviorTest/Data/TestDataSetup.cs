@@ -271,8 +271,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static void CreateAgentPersons(IUnitOfWork uow)
 		{
 			UserTestData.AgentWindowsUser = PersonFactory.CreatePersonWithWindowsPermissionInfo(Environment.UserName, Environment.UserDomainName);
-			UserTestData.AgentWindowsUser.PermissionInformation.AddApplicationRole(TestData.AgentRole);
-			UserTestData.AgentWindowsUser.PermissionInformation.AddApplicationRole(TestData.AgentRoleSecondBusinessUnit);
+			//UserTestData.AgentWindowsUser.PermissionInformation.AddApplicationRole(TestData.AgentRole);
+			//UserTestData.AgentWindowsUser.PermissionInformation.AddApplicationRole(TestData.AgentRoleSecondBusinessUnit);
 			UserTestData.AgentWindowsUser.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
 			UserTestData.AgentWindowsUser.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo("sv-SE"));
 
