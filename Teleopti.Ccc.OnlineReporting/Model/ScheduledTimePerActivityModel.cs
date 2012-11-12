@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.OnlineReporting.Model
                 var personSchedule = scheduleDictionary[person];
                 foreach (var dateOnly in dates)
                 {
-                    var schedulePart = personSchedule.ScheduledDay(dateOnly);
+                    var schedulePart = personSchedule.ScheduledDay(dateOnly, true);
                     list.AddRange(GetReportDataFromSchedulePart(schedulePart, payloads));
                 }
             }
