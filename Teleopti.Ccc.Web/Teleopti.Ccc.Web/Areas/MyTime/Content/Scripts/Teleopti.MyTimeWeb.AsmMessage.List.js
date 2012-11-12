@@ -182,6 +182,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			error: function (jqXHR, textStatus, errorThrown) {
 				_noMoreToLoad();
 				if (jqXHR.status == 400) {
+					alert(jqXHR.responseText);
 					var data = $.parseJSON(jqXHR.responseText);
 					_displayValidationError(data);
 					messageItem.isSending(false);
@@ -320,6 +321,15 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			$.each(vm.asmMessageList(), function (index, value) {
 				value.reply(theReply);
 			});
+		},
+		DeleteMessage: function (messageId) {
+			var result = $.grep(vm.asmMessageList(), function (list) {
+				return list.messageId() == messageId;
+			});
+			if (result.length == 1) {
+				var messageIndex = $.inArray(result[0], vm.asmMessageList());
+				vm.asmMessageList.splice(messageIndex, 1);
+			}
 		}
 	};
 

@@ -5,11 +5,15 @@ using System.Text;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using Teleopti.Interfaces.Domain;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
@@ -252,6 +256,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				return IsDisplayed(element.Parent);
 			}
 			return true;
+		}
+
+		[When(@"the message with title '(.*)' is deleted by the sender")]
+		public void WhenTheMessageWithTitleIsDeletedByTheSender(string title)
+		{
+			Guid id;
+			IPushMessageDialogue pushMessageDialogue;
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var repository = new PushMessageDialogueRepository(uow);
+				pushMessageDialogue = repository.LoadAll().First(m => m.PushMessage.GetTitle(new NoFormatting()).Equals(title));
+				id = (Guid)pushMessageDialogue.Id;
+			}
+
+			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + "1" + ");");
+			var javaScript = new StringBuilder();
+
+			javaScript.AppendFormat(CultureInfo.InvariantCulture, "Teleopti.MyTimeWeb.AsmMessageList.DeleteMessage( '{0}' );", id.ToString());
+
+			Browser.Current.Eval(javaScript.ToString());
 		}
 	}
 }
