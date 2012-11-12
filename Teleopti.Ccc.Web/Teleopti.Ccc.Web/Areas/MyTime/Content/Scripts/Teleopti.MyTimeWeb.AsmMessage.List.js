@@ -223,6 +223,19 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		return totalContentHeight - inViewContentHeight - aboveViewContentHeight <= 0;
 	}
 
+	function _deleteMessage(messageId) {
+		var result = $.grep(vm.asmMessageList(), function (list) {
+			return list.messageId() == messageId;
+		});
+		if (result.length == 1) {
+			if (vm.chosenMessageId() == messageId) {
+				vm.chosenMessage(null);
+			}
+			var messageIndex = $.inArray(result[0], vm.asmMessageList());
+			vm.asmMessageList.splice(messageIndex, 1);
+		}
+	}
+
 	function _loadAPage() {
 		var skip = $('#AsmMessages-list li:not(.template)').length;
 		var take = 20;
@@ -323,13 +336,8 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			});
 		},
 		DeleteMessage: function (messageId) {
-			var result = $.grep(vm.asmMessageList(), function (list) {
-				return list.messageId() == messageId;
-			});
-			if (result.length == 1) {
-				var messageIndex = $.inArray(result[0], vm.asmMessageList());
-				vm.asmMessageList.splice(messageIndex, 1);
-			}
+			_deleteMessage(messageId);
+
 		}
 	};
 
