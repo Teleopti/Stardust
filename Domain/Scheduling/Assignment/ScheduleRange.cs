@@ -105,6 +105,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return ScheduledDay(schedulePart.DateOnlyAsPeriod.DateOnly);
 		}
 
+		public IScheduleDay ScheduledDay(DateOnly day, bool includeUnpublished)
+		{
+			var dayAndPeriod = new DateOnlyAsDateTimePeriod(day, Person.PermissionInformation.DefaultTimeZone());
+			return ScheduleDay(dayAndPeriod, includeUnpublished, AvailableDates);
+		}
 
 		public IScheduleDay ScheduledDay(DateOnly day)
 		{
