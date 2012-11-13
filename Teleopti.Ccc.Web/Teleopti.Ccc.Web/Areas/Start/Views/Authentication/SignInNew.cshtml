@@ -23,7 +23,7 @@
 		<div data-bind="visible:DataSourceSelectionActive" class="login-form well well-large">
 			<ul id="DataSources" data-bind="foreach: AvailableDataSources" class="nav nav-tabs nav-stacked">
 				<li data-bind="css: {'active': Selected}">
-					<a href="#" data-bind="text: DataSourceName, click: $parent.SelectDataSource"></a>
+					<a href="#" data-bind="text: DisplayName, click: $parent.SelectDataSource"></a>
 				</li>
 			</ul>
 			<div>
@@ -50,13 +50,13 @@
 				<button class="btn btn-primary" id="Change-password-button" type="submit">Submit</button>
 			</div>
 		</div>
-		<div data-bind="visible:BusinessUnitSelectionActive" class="displaynone login-form well well-large">
+		<div data-bind="visible:BusinessUnitSelectionActive" class="login-form well well-large">
 			<h3>Select business unit:</h3>
 			<ul data-bind="foreach: AvailableBusinessUnits" class="nav nav-tabs nav-stacked">
 				<li data-bind="css: {'active': Selected}"><a href="#" data-bind="text: BusinessUnitName, click: $parent.SelectBusinessUnit"></a></li>
 			</ul>
 		</div>
-		<div data-bind="visible:ApplicationSelectionActive" class="displaynone login-form well well-large">
+		<div data-bind="visible:ApplicationSelectionActive" class="login-form well well-large">
 			<h3>Select application:</h3>
 			<ul data-bind="foreach: AvailableApplications" class="nav nav-tabs nav-stacked">
 				<li data-bind="css: {'active': Selected}"><a href="#" data-bind="text: ApplicationName, click: $parent.SelectApplication"></a></li>

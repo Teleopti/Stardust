@@ -161,7 +161,7 @@ this.FeatureBackground();
 #line 38
  testRunner.When("I select application logon data source");
 #line 39
- testRunner.And("I sign in by user name");
+ testRunner.And("I try to sign in by application logon");
 #line 40
  testRunner.And("I select a business unit");
 #line 41

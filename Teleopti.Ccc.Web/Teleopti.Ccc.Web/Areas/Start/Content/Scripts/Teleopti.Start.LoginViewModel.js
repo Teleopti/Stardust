@@ -5,6 +5,7 @@
 
 Teleopti.Start.SignInViewModel = function () {
 	var self = this;
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
 
 	this.AvailableDataSources = ko.observableArray();
 	this.AvailableBusinessUnits = ko.observableArray();
@@ -31,6 +32,9 @@ Teleopti.Start.SignInViewModel = function () {
 	this.UserName = ko.observable();
 	this.Password = ko.observable();
 
+	this.PersonId = '';
+	this.AuthenticationType = 0;
+
 	this.SelectDataSource = function () {
 		if (self.SelectedSource())
 			self.SelectedSource().Selected(false);
@@ -39,7 +43,6 @@ Teleopti.Start.SignInViewModel = function () {
 	};
 
 	this.LoadDataSources = function () {
-		var ajax = new Teleopti.MyTimeWeb.Ajax();
 		ajax.Ajax({
 			url: "/Start/Authentication/LoadDataSources",
 			dataType: "json",
@@ -49,6 +52,7 @@ Teleopti.Start.SignInViewModel = function () {
 					var dataSource = new Teleopti.Start.DataSourceViewModel();
 					dataSource.Selected(false);
 					dataSource.DataSourceName = data[i].Name;
+					dataSource.DisplayName = data[i].DisplayName;
 					dataSource.ApplicationAuthentication(data[i].IsApplicationLogon);
 					if (i == 0) {
 						dataSource.Selected(true);
@@ -61,15 +65,47 @@ Teleopti.Start.SignInViewModel = function () {
 		});
 	};
 
+	function _prefixModel(prefix, model) {
+		var prefixedModel = {};
+		$.each(model, function (key, val) {
+			prefixedModel[prefix + key] = val;
+		});
+		return prefixedModel;
+	}
+
 	this.Logon = function () {
-		var ajax = new Teleopti.MyTimeWeb.Ajax();
+		var model;
+		var url;
+		if (self.IsApplicationLogon()) {
+			model = { "DataSourceName": self.SelectedSource().DataSourceName, "UserName": self.UserName(), "Password": self.Password() };
+			url = "/Start/Authentication/Application";
+		} else {
+			model = { "DataSourceName": self.SelectedSource().DataSourceName };
+			url = "/Start/Authentication/Windows";
+		}
 		ajax.Ajax({
-			url: "/Start/Authentication/ApplicationLogon",
+			url: url,
 			dataType: "json",
-			data: { "DataSourceName": self.SelectedSource().DataSourceName, "UserName": self.UserName(), "Password": self.Password() },
+			data: _prefixModel('SignIn.', model),
 			type: 'Post',
 			success: function (data, textStatus, jqXHR) {
-				var foo;
+				if (data.BusinessUnits.length > 1) {
+					self.BusinessUnitSelectionActive(true);
+					self.DataSourceSelectionActive(false);
+					for (var i = 0; i < data.BusinessUnits.length; i++) {
+						var businessUnit = new Teleopti.Start.BusinessUnitViewModel();
+						businessUnit.Selected(false);
+						businessUnit.BusinessUnitName = data.BusinessUnits[i].Name;
+						businessUnit.BusinessUnitId = data.BusinessUnits[i].Id;
+						if (i == 0) {
+							businessUnit.Selected(true);
+							self.SelectedBusinessUnit(businessUnit);
+						}
+						self.AvailableBusinessUnits.push(businessUnit);
+					}
+					self.PersonId = data.SignIn.PersonId;
+					self.AuthenticationType = data.SignIn.AuthenticationType;
+				}
 			}
 		});
 	};
@@ -79,20 +115,29 @@ Teleopti.Start.SignInViewModel = function () {
 			self.SelectedBusinessUnit().Selected(false);
 		this.Selected(true);
 		self.SelectedBusinessUnit(this);
+		var model = { "BusinessUnitId": this.BusinessUnitId, "AuthenticationType": self.AuthenticationType, "PersonId": self.PersonId, "DataSourceName": self.SelectedSource().DataSourceName };
 
+		ajax.Ajax({
+			url: "/Start/Authentication/Logon",
+			dataType: "json",
+			data: _prefixModel('SignIn.', model),
+			type: 'Post',
+			success: function (data, textStatus, jqXHR) {
+			}
+		});
 
-		var app1 = new ApplicationViewModel();
-		app1.ApplicationName = "Team Leader Tool";
-		var app2 = new ApplicationViewModel();
-		app2.ApplicationName = "Mytime Web";
-		var app3 = new ApplicationViewModel();
-		app3.ApplicationName = "Anywhere Report";
-		var apps = [app1, app2, app3];
-		self.AvailableApplications(apps);
-		apps[0].Selected(true);
-		self.SelectedApplication(apps[0]);
-		self.ApplicationSelectionActive(true);
-		self.BusinessUnitSelectionActive(false);
+		//		var app1 = new ApplicationViewModel();
+		//		app1.ApplicationName = "Team Leader Tool";
+		//		var app2 = new ApplicationViewModel();
+		//		app2.ApplicationName = "Mytime Web";
+		//		var app3 = new ApplicationViewModel();
+		//		app3.ApplicationName = "Anywhere Report";
+		//		var apps = [app1, app2, app3];
+		//		self.AvailableApplications(apps);
+		//		apps[0].Selected(true);
+		//		self.SelectedApplication(apps[0]);
+		//		self.ApplicationSelectionActive(true);
+		//		self.BusinessUnitSelectionActive(false);
 	};
 
 	this.SelectApplication = function () {
@@ -109,12 +154,14 @@ Teleopti.Start.SignInViewModel = function () {
 
 Teleopti.Start.DataSourceViewModel = function () {
 	this.DataSourceName = "";
+	this.DisplayName = "";
 	this.Selected = ko.observable(false);
 	this.ApplicationAuthentication = ko.observable(false);
 };
 
 Teleopti.Start.BusinessUnitViewModel = function () {
 	this.BusinessUnitName = "";
+	this.BusinessUnitId = "";
 	this.Selected = ko.observable(false);
 };
 

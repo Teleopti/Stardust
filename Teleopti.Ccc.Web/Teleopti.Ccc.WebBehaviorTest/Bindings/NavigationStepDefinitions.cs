@@ -22,6 +22,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
 		}
 
+		[When(@"I try to sign in by application logon")]
+		public void WhenITryToSignInByApplicationLogon()
+		{
+			var userName = UserFactory.User().MakeUser();
+			Pages.Pages.CurrentSignInNewPage.TrySignInApplication(userName, TestData.CommonPassword);
+		}
+
+
 		[When(@"I sign in again")]
 		public void WhenISignInAgain()
 		{

@@ -67,10 +67,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			var applicatoinDataSources = _dataSourceProvider.RetrieveDatasourcesForApplication()
 				.SelectOrEmpty(
-					x => new DataSourceViewModel {Name = x.DataSourceName, IsApplicationLogon = true});
+					x => new DataSourceViewModel {Name = x.DataSourceName, DisplayName = x.DataSourceName, IsApplicationLogon = true});
 			var windwowsDataSources = _dataSourceProvider.RetrieveDatasourcesForWindows()
 				.SelectOrEmpty(
-					x => new DataSourceViewModel {Name = x.DataSourceName + " " + Resources.WindowsLogonWithBrackets, IsApplicationLogon = false});
+					x => new DataSourceViewModel {Name = x.DataSourceName, DisplayName = x.DataSourceName + " " + Resources.WindowsLogonWithBrackets, IsApplicationLogon = false});
 			return Json(applicatoinDataSources.Union(windwowsDataSources), JsonRequestBehavior.AllowGet);
 		}
 		[HttpPost]
@@ -104,12 +104,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var authenticationResult = _authenticator.AuthenticateApplicationUser(model.DataSourceName, model.UserName,
 			                                                                      model.Password);
 			return tryLogon(appView, signInModel, authenticationResult, AuthenticationTypeOption.Application);
-		}
-
-		[HttpPost]
-		public ActionResult ApplicationLogon(SignInApplicationModel model)
-		{
-			return Application(model);
 		}
 
 		private ActionResult tryLogon(string currentView, Lazy<object> signInModel, AuthenticateResult authenticationResult, AuthenticationTypeOption authenticationType)

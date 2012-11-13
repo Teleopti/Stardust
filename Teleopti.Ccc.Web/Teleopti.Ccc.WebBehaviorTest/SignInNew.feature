@@ -36,7 +36,7 @@ Scenario: Sign in with a user with multiple business units by user name
 	And I have the role 'Role for business unit 2'
 	And I am viewing the new sign in page
 	When I select application logon data source
-	And I sign in by user name
+	And I try to sign in by application logon
 	And I select a business unit
 	Then I should be signed in
 	
