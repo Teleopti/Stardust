@@ -42,7 +42,6 @@ BEGIN TRY
 SET NOCOUNT ON
 	--declare
 	DECLARE @InstanceName			nvarchar(36)
-	DECLARE	@GroupName				nvarchar(55)
 	DECLARE @Login					nvarchar(200)
 	DECLARE @SvcLogin				nvarchar(200)
 	DECLARE @SqlCommand				nvarchar(1000)
@@ -51,9 +50,8 @@ SET NOCOUNT ON
 	--init
 	SET @Login		= '$(LOGIN)'
 	SET @AuthType	= '$(AUTHTYPE)'
-	
+
 	SELECT 'Adding permission for $(AUTHTYPE)-login in database: ' + name FROM master.sys.databases where database_id = db_id()
-	SET @GroupName	= 'TeleoptiCCC_Users'
 	
 	EXEC sp_changedbowner @loginame = N'sa', @map = false
 
@@ -64,6 +62,10 @@ SET NOCOUNT ON
 		IF '$(LOGIN)' <> 'sa'  --If user like to run the application with sa, don't add the user
 		BEGIN
 		PRINT 'Adding permission for $(LOGIN) in database. Working...'
+		
+			--fix users that might be restored from another instance (wrong sid)
+			EXEC sp_change_users_login @Action='Update_One', @UserNamePattern=@Login,@LoginName=@Login
+
 			--Create User for Login: $(LOGIN)
 			IF NOT EXISTS (SELECT * FROM sys.sysusers su INNER JOIN master.sys.syslogins SL ON su.sid = sl.sid WHERE SL.name = @Login)
 			BEGIN
