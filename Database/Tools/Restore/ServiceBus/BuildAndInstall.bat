@@ -11,33 +11,23 @@ set msbuild="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 set OutputDir=C:\temp\servicebus
 Set ImagePath=
 set /a ERRORLEV=0
-SET /A SDKRunning=1
+set /A httpStatus=0
 
 if not exist "%OutputDir%" mkdir "%OutputDir%"
 
-set /a IsInstalled=0
-
-::exist as service?
-reg query HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\TeleoptiServiceBus /v ImagePath
-if %errorlevel% EQU 0 (
-SET /a IsInstalled=1
-)
-
-::Uninsatll?
-ECHO IsInstalled: %IsInstalled%
-if %IsInstalled% EQU 1 CALL "%ROOTDIR%\ServiceBus\UnInstall.bat"
+::uninstall
+CALL "%ROOTDIR%\ServiceBus\UnInstall.bat"
 
 ::Add payroll dummy .dll if not exist, else Post-build event will fail
 IF EXIST "%ROOTDIR%\..\..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\Debug\Teleopti.Ccc.Payroll.dll" (
 ECHO Payroll .dll exist) ELSE (ECHO dummy > "%ROOTDIR%\..\..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\Debug\Teleopti.Ccc.Payroll.dll")
 
-ECHO %msbuild% "%ROOTDIR%\..\..\..\ServiceBus.sln" /t:Clean;Rebuild "Debug"
-%msbuild% "%ROOTDIR%\..\..\..\ServiceBus.sln" /t:Clean;Rebuild > "%OutputDir%\BusBuild.log"
+ECHO %msbuild% "%ROOTDIR%\..\..\..\ServiceBus.sln" /t:Rebuild "Debug"
+%msbuild% "%ROOTDIR%\..\..\..\ServiceBus.sln" /t:Build > "%OutputDir%\BusBuild.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=8 & GOTO :error
 
-
 ::Deploy
-ROBYCOPY "%ROOTDIR%\..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\bin\Debug\*" "%OutputDir%" /E > NUL
+ROBOCOPY "%ROOTDIR%\..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\bin\Debug" "%OutputDir%" /E
 
 ::Install
 ECHO Install ServiceBus Service
@@ -54,7 +44,6 @@ Echo Browsing the SDK url
 cscript "%ROOTDIR%\BrowseUrl.vbs" "http://localhost:1335/TeleoptiCCCSdkService.svc"
 set /a httpStatus=%errorlevel%
 
-
 if %httpStatus% neq 200 (
 COLOR E
 ECHO WARNING: could not send GET request to SDK
@@ -67,7 +56,7 @@ PAUSE
 
 If %httpStatus% equ 200 (
 CHOICE /C yn /M "Would you like to start the Service Bus?"
-IF ERRORLEVEL 1 NET START TeleoptiServiceBus
+IF ERRORLEVEL 2 NET START TeleoptiServiceBus
 )
 
 GOTO :Finish
