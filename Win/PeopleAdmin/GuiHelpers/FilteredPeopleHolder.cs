@@ -968,23 +968,23 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 throw new ArgumentOutOfRangeException("index", "input must be greater than Int32.MinValue");
 
             //remove from person periods
-            if (_personPeriodGridViewCollection.Count > 0) _personPeriodGridViewCollection.RemoveAt(index - 1);
+            if (_personPeriodGridViewCollection.Count >= index) _personPeriodGridViewCollection.RemoveAt(index - 1);
 
             // remove from schedule period
-            if (_schedulePeriodGridViewCollection.Count > 0) _schedulePeriodGridViewCollection.RemoveAt(index - 1);
+            if (_schedulePeriodGridViewCollection.Count >= index) _schedulePeriodGridViewCollection.RemoveAt(index - 1);
 
             //remove from person rotation grid view adapter
-            if (_personRotationParentAdapterCollection.Count > 0) _personRotationParentAdapterCollection.RemoveAt(index - 1);
+            if (_personRotationParentAdapterCollection.Count >= index) _personRotationParentAdapterCollection.RemoveAt(index - 1);
 
             //remove from the person rotation parent collection
-            if (_parentPersonRotationCollection.Count > 0) _parentPersonRotationCollection.RemoveAt(index - 1);
+            if (_parentPersonRotationCollection.Count >= index) _parentPersonRotationCollection.RemoveAt(index - 1);
 
             //remove from the person account parent collection
-            if (_personAccountGridViewAdaptorCollection.Count > 0) _personAccountGridViewAdaptorCollection.RemoveAt(index - 1);
+            if (_personAccountGridViewAdaptorCollection.Count >= index) _personAccountGridViewAdaptorCollection.RemoveAt(index - 1);
 
             //remove from the person availability parent collection
-            if (_parentPersonAvailabilityCollection.Count > 0) _parentPersonAvailabilityCollection.RemoveAt(index - 1);
-            if (_personAvailabilityParentAdapterCollection.Count > 0) _personAvailabilityParentAdapterCollection.RemoveAt(index - 1);
+            if (_parentPersonAvailabilityCollection.Count >= index) _parentPersonAvailabilityCollection.RemoveAt(index - 1);
+            if (_personAvailabilityParentAdapterCollection.Count >= index) _personAvailabilityParentAdapterCollection.RemoveAt(index - 1);
 
         }
 
