@@ -25,10 +25,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 		public void Consume(ProcessDenormalizeQueue message)
 		{
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var messages = _denormalizerQueueRepository.DequeueDenormalizerMessages(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
 				messages.Select(m => SerializationHelper.Deserialize(Type.GetType(m.Type, true, true), m.Message)).ForEach(s => _serviceBus.Send(s));
+				unitOfWork.PersistAll();
 			}
 		}
 	}
