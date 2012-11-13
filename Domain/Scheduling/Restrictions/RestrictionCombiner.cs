@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			                                                             	new List<IActivityRestriction>()
 			                                                             	)
 			                                                             	{
-			                                                             		IsAvailabilityDay = true
-			                                                             	};
-
+			                                                             		IsAvailabilityDay = true,
+			                                                             	    NotAvailable = r.NotAvailable,
+                                                                            };
 			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
 		}
 
