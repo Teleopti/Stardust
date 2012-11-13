@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private IEnumerable<IMessageSender> _activeDenormalizers;
 		private readonly Action<ISession> _unbind;
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
-
+		private readonly ICollection<Action<object>> _runAfterSuccessfulTx;
 
 		protected internal NHibernateUnitOfWork(ISession session, 
 													IMessageBroker messageBroker,
@@ -51,6 +51,7 @@ IEnumerable<IMessageSender> activeDenormalizers,
 			_sendPushMessageWhenRootAlteredService = sendPushMessageWhenRootAlteredService;
 			_unbind = unbind;
 _activeDenormalizers = activeDenormalizers;
+			_runAfterSuccessfulTx = new List<Action<object>>();
 		}
 
 		protected internal AggregateRootInterceptor Interceptor
@@ -126,6 +127,8 @@ _activeDenormalizers = activeDenormalizers;
 
 		public virtual IEnumerable<IRootChangeInfo> PersistAll(IMessageBrokerModule moduleUsedForPersist)
 		{
+			//man borde nog styra upp denna genom att använda ISynchronization istället,
+			//när tran startas, lägg på en sync callback via tran.RegisterSynchronization(callback);
 			ICollection<IRootChangeInfo> modifiedRoots;
 			try
 			{
@@ -160,6 +163,7 @@ _activeDenormalizers = activeDenormalizers;
 				Interceptor.Clear();
 			}
 			notifyBroker(moduleUsedForPersist, modifiedRoots);
+			_runAfterSuccessfulTx.ForEach(act => act(null));
 			return modifiedRoots;
 		}
 
@@ -245,6 +249,11 @@ _activeDenormalizers = activeDenormalizers;
 			{
 				throw new OptimisticLockException("Optimistic lock", ex);
 			}
+		}
+
+		public void AfterSuccessfulTx(Action<object> func)
+		{
+			_runAfterSuccessfulTx.Add(func);
 		}
 
 		private static bool hasOuterTransaction()
