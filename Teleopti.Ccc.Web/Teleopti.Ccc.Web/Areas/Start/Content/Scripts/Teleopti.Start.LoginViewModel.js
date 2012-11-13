@@ -97,10 +97,6 @@ Teleopti.Start.SignInViewModel = function () {
 						businessUnit.Selected(false);
 						businessUnit.BusinessUnitName = data.BusinessUnits[i].Name;
 						businessUnit.BusinessUnitId = data.BusinessUnits[i].Id;
-						if (i == 0) {
-							businessUnit.Selected(true);
-							self.SelectedBusinessUnit(businessUnit);
-						}
 						self.AvailableBusinessUnits.push(businessUnit);
 					}
 					self.PersonId = data.SignIn.PersonId;
@@ -119,7 +115,6 @@ Teleopti.Start.SignInViewModel = function () {
 
 		ajax.Ajax({
 			url: "/Start/Authentication/Logon",
-			dataType: "json",
 			data: _prefixModel('SignIn.', model),
 			type: 'Post',
 			success: function (data, textStatus, jqXHR) {
