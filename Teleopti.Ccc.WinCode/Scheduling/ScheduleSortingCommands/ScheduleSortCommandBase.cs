@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands
             {
                 IScheduleDay scheduleDay = _schedulerState.Schedules[person].ScheduledDay(dateOnly);
                 SchedulePartView significant = scheduleDay.SignificantPart();
-                if (significant == SchedulePartView.MainShift)
+                if (significant == SchedulePartView.MainShift || significant == SchedulePartView.Overtime)
                 {
                     Projections.Add(scheduleDay.ProjectionService().CreateProjection());
                     continue;
