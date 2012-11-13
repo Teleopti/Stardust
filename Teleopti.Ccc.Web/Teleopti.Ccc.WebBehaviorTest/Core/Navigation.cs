@@ -52,6 +52,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
+		public static void GotoGlobalSignInNewPage()
+		{
+			GoTo("Start/Authentication/SignInNew", new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInNewPage>());
+		}
+
 		public static void GotoGlobalMobileSignInPage()
 		{
 			GoTo("Start/Authentication/MobileSignIn", new ApplicationStartupTimeout());

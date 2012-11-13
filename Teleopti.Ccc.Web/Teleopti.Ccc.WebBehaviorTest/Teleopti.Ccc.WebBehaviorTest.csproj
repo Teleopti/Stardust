@@ -114,6 +114,8 @@
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\Robustness\Timeouts.cs" />
     <Compile Include="Core\Robustness\Retrying.cs" />
+    <Compile Include="Pages\Common\ISignInNewPage.cs" />
+    <Compile Include="Pages\SignInNewPage.cs" />
     <Compile Include="RoutingNew.feature.cs">
       <DependentUpon>RoutingNew.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -208,6 +210,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShiftTradeRequests.feature</DependentUpon>
     </Compile>
+    <Compile Include="SignInStepDefinitions.cs" />
     <Compile Include="WeekScheduleTimeIndicator.feature.cs">
       <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
       <AutoGen>True</AutoGen>

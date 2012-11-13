@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Business Unit",
                         "Business Unit 1"});
             table5.AddRow(new string[] {
-                        "Access To MytimeWeb",
+                        "Access to mytime web",
                         "true"});
 #line 22
  testRunner.And("there is a role with", ((string)(null)), table5);
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
                         "Business Unit",
                         "Business Unit 2"});
             table6.AddRow(new string[] {
-                        "Access To MytimeWeb",
+                        "Access to mytime web",
                         "true"});
 #line 27
  testRunner.And("there is a role with", ((string)(null)), table6);
@@ -157,9 +157,11 @@ this.FeatureBackground();
 #line 36
  testRunner.And("I have the role \'Role for business unit 2\'");
 #line 37
- testRunner.And("I am viewing the sign in page");
+ testRunner.And("I am viewing the new sign in page");
+#line 38
+ testRunner.When("I select application logon data source");
 #line 39
- testRunner.When("I sign in by user name");
+ testRunner.And("I sign in by user name");
 #line 40
  testRunner.And("I select a business unit");
 #line 41
@@ -183,8 +185,10 @@ this.FeatureBackground();
  testRunner.Given("I have the role \'Role for business unit 1\'");
 #line 45
  testRunner.And("I am viewing the sign in page");
+#line 46
+ testRunner.When("I select application logon data source");
 #line 47
- testRunner.When("I sign in by user name");
+ testRunner.And("I sign in by user name");
 #line 48
  testRunner.Then("I should be signed in");
 #line hidden
@@ -206,8 +210,10 @@ this.FeatureBackground();
  testRunner.And("Windows user have the role \'Role for business unit 2\'");
 #line 53
  testRunner.And("I am viewing the sign in page");
+#line 54
+ testRunner.When("I select windows logon data source");
 #line 55
- testRunner.When("I sign in by windows credentials");
+ testRunner.And("I sign in by windows credentials");
 #line 56
  testRunner.And("I select a business unit");
 #line 57
@@ -228,11 +234,13 @@ this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line 60
- testRunner.Given("Windows user have the role \'Role for business unit 1\'");
+ testRunner.Given("Windows user have the role \'Role for business unit 2\'");
 #line 61
  testRunner.And("I am viewing the sign in page");
+#line 62
+ testRunner.When("I select windows logon data source");
 #line 63
- testRunner.When("I sign in by windows credentials");
+ testRunner.And("I sign in by windows credentials");
 #line 64
  testRunner.Then("I should be signed in");
 #line hidden
@@ -252,8 +260,10 @@ this.FeatureBackground();
  testRunner.Given("I have the role \'Role for business unit 1\'");
 #line 68
  testRunner.And("I am viewing the sign in page");
+#line 69
+ testRunner.When("I select application logon data source");
 #line 70
- testRunner.When("I sign in by user name and wrong password");
+ testRunner.And("I sign in by user name and wrong password");
 #line 71
  testRunner.Then("I should see an log on error");
 #line hidden
@@ -273,8 +283,10 @@ this.FeatureBackground();
  testRunner.Given("I dont have permission to sign in");
 #line 75
  testRunner.And("I am viewing the sign in page");
+#line 76
+ testRunner.When("I select application logon data source");
 #line 77
- testRunner.When("I sign in by user name");
+ testRunner.And("I sign in by user name");
 #line 78
  testRunner.Then("I should not be signed in");
 #line hidden

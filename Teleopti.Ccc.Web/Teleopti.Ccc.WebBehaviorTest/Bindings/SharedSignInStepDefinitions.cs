@@ -22,6 +22,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoGlobalSignInPage();
 		}
 
+		[Given(@"I am viewing the new sign in page")]
+		public void GivenIAmViewingTheNewSignInPage()
+		{
+			Navigation.GotoGlobalSignInNewPage();
+		}
+
+
 		[Given(@"I am viewing the mobile sign in page")]
 		public void GivenIAmAtTheMobileSignInPage()
 		{
