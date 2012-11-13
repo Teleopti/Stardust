@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Teleopti.Ccc.Sdk.LoadTest
+namespace Teleopti.Ccc.Sdk.LoadTestClient
 {
 	public class FileUserSource : IUserSource
 	{

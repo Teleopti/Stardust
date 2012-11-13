@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Teleopti.Ccc.Sdk.LoadTest
+namespace Teleopti.Ccc.Sdk.LoadTestClient
 {
 	public static class Counters
 	{

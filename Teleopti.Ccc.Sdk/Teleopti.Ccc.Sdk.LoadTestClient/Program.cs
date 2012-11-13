@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Web.Services.Protocols;
 
-namespace Teleopti.Ccc.Sdk.LoadTest
+namespace Teleopti.Ccc.Sdk.LoadTestClient
 {
 	public class Program
 	{

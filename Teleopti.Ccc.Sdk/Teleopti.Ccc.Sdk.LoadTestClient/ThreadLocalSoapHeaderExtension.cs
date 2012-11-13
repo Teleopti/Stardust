@@ -6,7 +6,7 @@ using System.Text;
 using System.Web.Services.Protocols;
 using Teleopti.Ccc.Sdk.Client;
 
-namespace Teleopti.Ccc.Sdk.LoadTest
+namespace Teleopti.Ccc.Sdk.LoadTestClient
 {
     public class ThreadLocalSoapHeaderExtension : SoapExtension
     {

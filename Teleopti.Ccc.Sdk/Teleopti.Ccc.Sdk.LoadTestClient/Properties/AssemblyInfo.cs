@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Teleopti.Ccc.Sdk.LoadTest")]
+[assembly: AssemblyTitle("Teleopti.Ccc.Sdk.LoadTestClient")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Teleopti.Ccc.Sdk.LoadTest")]
+[assembly: AssemblyProduct("Teleopti.Ccc.Sdk.LoadTestClient")]
 [assembly: AssemblyCopyright("Copyright ©  2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

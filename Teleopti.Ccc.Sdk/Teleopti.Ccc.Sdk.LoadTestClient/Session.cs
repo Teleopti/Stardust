@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.Sdk.Client;
 using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
 
-namespace Teleopti.Ccc.Sdk.LoadTest
+namespace Teleopti.Ccc.Sdk.LoadTestClient
 {
 	public class Session : ISessionStateProvider {
 		public bool IsInitialized { get { return true; } }

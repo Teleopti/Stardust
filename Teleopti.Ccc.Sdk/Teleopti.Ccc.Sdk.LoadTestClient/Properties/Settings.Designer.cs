@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Teleopti.Ccc.Sdk.LoadTest.Properties {
+namespace Teleopti.Ccc.Sdk.LoadTestClient.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
