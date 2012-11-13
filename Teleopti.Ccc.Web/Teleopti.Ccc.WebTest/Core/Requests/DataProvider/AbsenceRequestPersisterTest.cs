@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, uowFactory);
 			target.Persist(form);
 
-			currUow.Expect(c => c.AfterSuccessfulTx(dummy => serviceBusSender.NotifyServiceBus(message)));
+			currUow.Expect(c => c.AfterSuccessfulTx(() => serviceBusSender.NotifyServiceBus(message)));
 		}
 
 		[Test]

@@ -156,6 +156,6 @@ namespace Teleopti.Interfaces.Infrastructure
 		 /// (the object param is just a dummy param used for .net 2.0. Will be fixed in later releases
 		 /// </summary>
 		 /// <param name="func"></param>
-    	 void AfterSuccessfulTx(Action<object> func);
+    	 void AfterSuccessfulTx(Action func);
     }
 }

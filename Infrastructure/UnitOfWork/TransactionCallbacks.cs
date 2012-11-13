@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	//tested by NHibernateUnitOfWorkCommitCallbackTest
 	public class TransactionCallbacks : ISynchronization
 	{
-		private readonly Action<object> _callback;
+		private readonly Action _callback;
 
-		public TransactionCallbacks(Action<object> callback)
+		public TransactionCallbacks(Action callback)
 		{
 			_callback = callback;
 		}
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			if (success)
 			{
-				_callback(null);
+				_callback();
 			}
 		}
 	}

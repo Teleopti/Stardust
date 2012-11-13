@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var isCalled = false;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				uow.AfterSuccessfulTx(dummy => isCalled = true);
+				uow.AfterSuccessfulTx(() => isCalled = true);
 				uow.PersistAll();
 				isCalled.Should().Be.True();				
 			}
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var isCalled = false;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				uow.AfterSuccessfulTx(dummy => isCalled = true);
+				uow.AfterSuccessfulTx(() => isCalled = true);
 			}
 			isCalled.Should().Be.False();
 		}
@@ -43,14 +42,14 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var correctEx = false;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				person.PermissionInformation.SetDefaultTimeZone(new CccTimeZoneInfo(TimeZoneInfo.Local));
+				person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
 				new PersonRepository(uow).Add(person);
 				uow.PersistAll();
 			}
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(person);
-				uow.AfterSuccessfulTx(dummy => isCalled = true);
+				uow.AfterSuccessfulTx(() => isCalled = true);
 				//too long email
 				var email = new string('c', 300);
 				person.Email = email;
@@ -80,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var isCalled = false;
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				UnitOfWorkFactory.Current.CurrentUnitOfWork().AfterSuccessfulTx(dummy => isCalled = true);
+				UnitOfWorkFactory.Current.CurrentUnitOfWork().AfterSuccessfulTx(() => isCalled = true);
 				UnitOfWorkFactory.Current.CurrentUnitOfWork().PersistAll();
 				isCalled.Should().Be.True();
 			}

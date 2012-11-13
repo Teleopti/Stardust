@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				              		PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
 				              		Timestamp = _now.UtcDateTime()
 				              	};
-				_uowFactory.CurrentUnitOfWork().AfterSuccessfulTx(dummy => _serviceBusSender.NotifyServiceBus(message));
+				_uowFactory.CurrentUnitOfWork().AfterSuccessfulTx(() => _serviceBusSender.NotifyServiceBus(message));
 			}
 			else
 			{
