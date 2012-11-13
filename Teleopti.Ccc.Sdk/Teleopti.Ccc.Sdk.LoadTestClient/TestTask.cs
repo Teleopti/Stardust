@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 
-namespace Teleopti.Ccc.Sdk.LoadTest
+namespace Teleopti.Ccc.Sdk.LoadTestClient
 {
 	public class TestTask
 	{

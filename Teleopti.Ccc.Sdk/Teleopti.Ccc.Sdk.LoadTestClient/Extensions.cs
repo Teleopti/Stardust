@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Sdk.LoadTest
+namespace Teleopti.Ccc.Sdk.LoadTestClient
 {
 	public static class Extensions
 	{

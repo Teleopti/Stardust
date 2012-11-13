@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Sdk.LoadTest
+namespace Teleopti.Ccc.Sdk.LoadTestClient
 {
 	public interface ITestScenario {
 		void RunOnce();

@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Sdk.LoadTest
+﻿namespace Teleopti.Ccc.Sdk.LoadTestClient
 {
 	public interface IUserSource
 	{

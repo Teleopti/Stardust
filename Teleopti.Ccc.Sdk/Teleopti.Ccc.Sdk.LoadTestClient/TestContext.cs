@@ -1,6 +1,6 @@
 ﻿using Teleopti.Ccc.Sdk.Client;
 
-namespace Teleopti.Ccc.Sdk.LoadTest
+namespace Teleopti.Ccc.Sdk.LoadTestClient
 {
 	public class TestContext
 	{
