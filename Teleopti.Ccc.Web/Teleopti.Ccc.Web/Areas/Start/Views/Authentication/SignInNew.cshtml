@@ -1,4 +1,5 @@
-﻿@section head {
+﻿@using Teleopti.Ccc.UserTexts
+@section head {
 	<link href="@Url.Content("~/Content/bootstrap/bootstrap.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Content/bootstrap/bootstrap-responsive.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/Start/Content/Css/Login.css")" rel="stylesheet" type="text/css" />
@@ -27,12 +28,12 @@
 				</li>
 			</ul>
 			<div>
-				<input type="text" id="Username-input" placeholder="User name" class="input-block-level" data-bind="value: UserName, visible:IsApplicationLogon" />
+				<input type="text" id="Username-input" placeholder=@Resources.UserName class="input-block-level" data-bind="value: UserName, visible:IsApplicationLogon" />
 			</div>
 			<div>
-				<input type="password" id="Password-input" placeholder="Password" class="input-block-level" data-bind="value: Password, visible:IsApplicationLogon" />
+				<input type="password" id="Password-input" placeholder=@Resources.Password class="input-block-level" data-bind="value: Password, visible:IsApplicationLogon" />
 			</div>
-			<button class="btn btn-primary" id="Login-button">Log on</button>
+			<button class="btn btn-primary" id="Login-button">@Resources.LogOn</button>
 		</div>
 		<div data-bind="visible: (MustChangePasswordActive() || WarningActive())">
 			<div class="alert login-warning" data-bind="visible:MustChangePasswordActive">
@@ -47,7 +48,7 @@
 				<input type="password" id="New-password" placeholder="New Password" class="input-block-level" />
 				<input type="password" id="Confirm-new-password" placeholder="Confirm New Password" class="input-block-level" />
 				<input type="password" id="Old-password" placeholder="Old Password" class="input-block-level" />
-				<button class="btn btn-primary" id="Change-password-button" type="submit">Submit</button>
+				<button class="btn btn-primary" id="Change-password-button" type="submit">@Resources.Apply</button>
 			</div>
 		</div>
 		<div data-bind="visible:BusinessUnitSelectionActive" class="login-form well well-large">
