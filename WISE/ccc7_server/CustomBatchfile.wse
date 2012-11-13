@@ -177,25 +177,11 @@ item: Execute Program
   Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0 Web" Web v4.0 %MYSDKSSL% %SDKCREDPROT% %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
-item: Remark
-  Text=----------------------------------------
-end
-item: Remark
-  Text=Restart all service and reset IIS
-end
-item: Remark
-  Text=----------------------------------------
-end
-item: Execute Program
-  Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%StartStopSystem\ResetSystem.bat" 1"
-  Flags=00000010
-end
 item: Else Statement
 end
 item: Display Message
   Title=Folder missing!
-  Text=The batch file to restart the Teleopti services is missing! Please start services manully
+  Text=The batch file to configure IIS appPools is missing!
   Flags=00001000
 end
 item: End Block

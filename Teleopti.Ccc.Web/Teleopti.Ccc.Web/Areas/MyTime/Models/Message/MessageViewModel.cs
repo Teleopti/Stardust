@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Teleopti.Ccc.UserTexts;
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Message
 {
 	public class MessageViewModel

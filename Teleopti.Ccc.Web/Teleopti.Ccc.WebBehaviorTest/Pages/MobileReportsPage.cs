@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
@@ -12,15 +14,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class MobileReportsPage : Page
 	{
-		private readonly Constraint _datePickerContenainerCellConstraint = Find.ByClass("ui-datebox-griddate", false);
-		                            // By("data-date", v => v != null);
+		private readonly Constraint _datePickerContenainerCellConstraint = QuicklyFind.ByClass("ui-datebox-griddate");
 
 		[FindBy(Id = "sel-report-GetAnsweredAndAbandoned")] public RadioButton ReportGetAnsweredAndAbandonedInput;
 		[FindBy(Id = "report-graph-holder")] public Div ReportGraphContainer;
 		[FindBy(Id = "report-graph-canvas")] public Element ReportGraph;
 		[FindBy(Id = "sel-skill-button")] public Link ReportSkillSelectionOpener;
 		[FindBy(Id = "report-table-holder")] public Div ReportTableContainer;
-		[FindBy(Class = "report-table")] public Table ReportTable;
+		public Table ReportTable{get { return Document.Table(QuicklyFind.ByClass("report-table")); }}
 		[FindBy(Id = "report-settings-interval-week")]
 		public RadioButton ReportIntervalWeekInput;
 		[FindBy(Id = "report-settings-type-graph")] public CheckBox ReportTypeGraphInput;
@@ -112,29 +113,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public List ReportSkillSelectionList { get; set; }
 
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public Div ReportSkillSelectionContainer
 		{
 			get
 			{
-				return
-					(ReportSkillSelectionList.Parent.ClassName.Contains("ui-selectmenu")
-					 	? ReportSkillSelectionList.Parent
-					 	: ReportSkillSelectionList.Parent.Parent) as Div;
+				if (ReportSkillSelectionList.Parent.Parent.ClassName.Contains("ui-popup-container"))
+					return ReportSkillSelectionList.Parent.Parent as Div;
+				throw new Exception("Report skill selection container not found. Please rewrite me to use a selector instead!");
 			}
 		}
 
 		public Link ReportSkillSelectionCloseButton
 		{
-			// First A in header
 			get
 			{
-				var headerDiv = ReportSkillSelectionContainer.ChildOfType<Div>(header => header.ClassName.Contains("ui-header"));
-				return headerDiv.ChildOfType<Link>(l => true);
+				// First A in header
+				//var headerDiv = ReportSkillSelectionContainer.ChildOfType<Div>(header => header.ClassName.Contains("ui-header"));
+				//return headerDiv.ChildOfType<Link>(l => true);
+
+				// no, first A in popup container
+				return Document.Link(Find.BySelector(".ui-popup-container a"));
 			}
 		}
 
-		[FindBy(ClassRegex = "^ui-datebox-container .*")]
-		public Div ReportSelectionDatePickerContainer { get; set; }
+		public Div ReportSelectionDatePickerContainer { get { return Document.Div(QuicklyFind.ByClass("ui-datebox-container")); } }
 
 		// Views
 		[FindBy(Id = "home-view")]

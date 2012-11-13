@@ -357,19 +357,19 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         bool ChangePassword(string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail);
 
-        /// <summary>
-        /// Changes the password.
-        /// </summary>
-        /// <param name="oldPassword">The old password.</param>
-        /// <param name="newPassword">The new password.</param>
-        /// <param name="loadPasswordPolicyService">The load password policy service.</param>
-        /// <param name="userDetail">The user detail.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2010-08-23
-        /// </remarks>
-        bool ChangePassword(string oldPassword, string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail);
+		/// <summary>
+		/// Changes the password.
+		/// </summary>
+		/// <param name="oldPassword">The old password.</param>
+		/// <param name="newPassword">The new password.</param>
+		/// <param name="loadPasswordPolicyService">The load password policy service.</param>
+		/// <param name="userDetail">The user detail.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: peterwe
+		/// Created date: 2010-08-23
+		/// </remarks>
+		IChangePasswordResultInfo ChangePassword(string oldPassword, string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail);
 
         /// <summary>
         /// Gets or sets the windows authentication info.

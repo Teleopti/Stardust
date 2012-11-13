@@ -104,7 +104,7 @@
 				WorkingDirectory="$(CCNetWorkingDirectory)"/>
 	</Target>
 	
-    <Target Name="BuildSSASXmla">
+    <Target Name="BuildSSASXmla" Condition="Exists('$(vs2008ide)') And Exists('$(AsDBDeploy)')">
 
 		<Message Text="Building dwproj-file ..." Importance="high" />
 		<Exec Command="&quot;$(vs2008ide)&quot; &quot;$(CCNetWorkingDirectory)\Cube\TeleoptiAnalytics\TeleoptiAnalytics.sln&quot; /rebuild CreateDatabase2005 /Log &quot;c:\Temp\devenv_log.txt&quot;" />
@@ -334,15 +334,6 @@
 		<ProjectsToNCover
 				Include="$(CCNetWorkingDirectory)\**\*Test.csproj"
 				Exclude="
-					$(CCNetWorkingDirectory)\MasterActivityPresenterTest\MasterActivityPresenterTest.csproj;
-					$(CCNetWorkingDirectory)\SdkConsoleTest\SdkConsoleTest.csproj;
-					$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceTest\Teleopti.Analytics.Etl.ServiceTest.csproj;
-					$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHostTest\Teleopti.Analytics.PM.PMServiceHostTest.csproj;
-					$(CCNetWorkingDirectory)\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.PortalTest\Teleopti.Analytics.PortalTest.csproj;
-					$(CCNetWorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.LoadTest\Teleopti.Ccc.Sdk.LoadTest.csproj;
-					$(CCNetWorkingDirectory)\WcfTest\WcfTest.csproj;
-					$(CCNetWorkingDirectory)\Teleopti.Ccc.ObfuscatedTest\Teleopti.Ccc.ObfuscatedTest.csproj;
-					$(CCNetWorkingDirectory)\Teleopti.Messaging\Teleopti.Messaging.Tests\Teleopti.Messaging.Tests.csproj;
 					$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj"/>
 		<ProjectsToNCover Condition="'$(RunWebBehaviorTests)' == 'true'"
 			  Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj"

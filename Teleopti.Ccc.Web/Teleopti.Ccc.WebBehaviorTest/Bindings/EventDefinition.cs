@@ -4,6 +4,7 @@ using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				TestSiteConfigurationSetup.Setup();
 
 				log4net.Config.XmlConfigurator.Configure();
-				EventualTimeouts.Set(TimeSpan.FromSeconds(10));
+				Timeouts.Set(TimeSpan.FromSeconds(10));
 
 				TestDataSetup.CreateDataSource();
 
@@ -55,16 +56,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			}
 		}
 
-		[BeforeFeature]
-		public static void BeforeFeature()
-		{
-			if (_scenarioCount > 0)
-				Browser.Restart();
-		}
-
 		[BeforeScenario]
 		public static void BeforeScenario()
 		{
+			// restart browser every 20th scenario
+			if (_scenarioCount != 0 && _scenarioCount % 15 == 0)
+				Browser.Restart();
+
 			IncrementScenarioCount();
 
 			TestControllerMethods.BeforeScenario();

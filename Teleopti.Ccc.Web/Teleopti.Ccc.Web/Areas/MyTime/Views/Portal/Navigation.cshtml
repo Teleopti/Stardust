@@ -14,7 +14,7 @@
 			</li>
   }
 	</ul>
-	<section id="EmptyTab" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+	<section id="EmptyTab" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
 		<div class="toolbar-inner">
 		</div>
 	</section>
@@ -71,7 +71,7 @@
 		if (toolbarItem is ToolBarSelectBox)
 		{
 			var selectBox = toolbarItem as ToolBarSelectBox;
-						<select title="@Html.AttributeEncode(selectBox.Title)" class="ui-selectbox-init floatleft" id="@string.Format("{0}-{1}-select", navSection.Controller, selectBox.Type)">
+						<select class="ui-selectbox-init floatleft" id="@string.Format("{0}-{1}-select", navSection.Controller, selectBox.Type)">
 							@foreach (var option in selectBox.Options)
 	   {
 								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
@@ -273,5 +273,7 @@
 			</dl>		
 		</div>
 	</section>
-				
+	<div id="warning">
+		
+	</div>
 </nav>

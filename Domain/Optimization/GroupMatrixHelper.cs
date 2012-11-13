@@ -6,6 +6,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IGroupMatrixHelper
     {
+		/// <summary>
+		/// Calculate resources
+		/// </summary>
+		/// <param name="scheduleDays"></param>
+    	void SafeResourceCalculate(IList<IScheduleDay> scheduleDays);
 
         /// <summary>
         /// Executes the day off moves.
@@ -49,11 +54,11 @@ namespace Teleopti.Ccc.Domain.Optimization
     	                          IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
     	                          IList<IScheduleMatrixPro> allMatrixes);
 
-		bool ScheduleSinglePerson(DateOnly dayToReschedule, IPerson person,
-								  IGroupSchedulingService groupSchedulingService,
-								  ISchedulingOptions schedulingOptions,
-								  IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
-								  IList<IScheduleMatrixPro> allMatrixes);
+		//bool ScheduleSinglePerson(DateOnly dayToReschedule, IPerson person,
+		//                          IGroupSchedulingService groupSchedulingService,
+		//                          ISchedulingOptions schedulingOptions,
+		//                          IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+		//                          IList<IScheduleMatrixPro> allMatrixes);
 
         /// <summary>
         /// Creates the group matrix containers.
@@ -218,7 +223,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 if (!dayOffDecisionMakerExecuter.Execute(matrixContainer.WorkingArray, matrixContainer.OriginalArray, matrixContainer.Matrix, null, false, false, false))
                 {
+					IList<IScheduleDay> days = new List<IScheduleDay>(schedulePartModifyAndRollbackService.ModificationCollection);
                     schedulePartModifyAndRollbackService.Rollback();
+					SafeResourceCalculate(days);
                     return false;
                 }
             }
@@ -236,8 +243,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPersonToRun,
 																		   dateOnly, schedulingOptions);
 				if (!groupSchedulingService.ScheduleOneDay(dateOnly, schedulingOptions, groupPersonToRun, allMatrixes))
-                {
+				{
+					IList<IScheduleDay> days = new List<IScheduleDay>(schedulePartModifyAndRollbackService.ModificationCollection);
                     schedulePartModifyAndRollbackService.Rollback();
+					SafeResourceCalculate(days);
                     return false;
                 }
             }
@@ -259,19 +268,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return true;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public bool ScheduleSinglePerson(DateOnly dayToReschedule, IPerson person, IGroupSchedulingService groupSchedulingService, ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, IList<IScheduleMatrixPro> allMatrixes)
-		{
-			IGroupPerson groupPersonToRun = groupPersonBuilderForOptimization.BuildGroupPerson(person,
-																								   dayToReschedule);
-			if (!_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPersonToRun, dayToReschedule, schedulingOptions))
-				return false;
-			if (!groupSchedulingService.ScheduleOneDayOnOnePerson(dayToReschedule, person, schedulingOptions, groupPersonToRun, allMatrixes))
-			{
-				return false;
-			}
-			return true;
-		}
+		//[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		//public bool ScheduleSinglePerson(DateOnly dayToReschedule, IPerson person, IGroupSchedulingService groupSchedulingService, ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, IList<IScheduleMatrixPro> allMatrixes)
+		//{
+		//    IGroupPerson groupPersonToRun = groupPersonBuilderForOptimization.BuildGroupPerson(person,
+		//                                                                                           dayToReschedule);
+		//    if (!_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPersonToRun, dayToReschedule, schedulingOptions))
+		//        return false;
+		//    if (!groupSchedulingService.ScheduleOneDayOnOnePerson(dayToReschedule, person, schedulingOptions, groupPersonToRun, allMatrixes))
+		//    {
+		//        return false;
+		//    }
+		//    return true;
+		//}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IScheduleDay> GoBackToLegalState(IList<DateOnly> daysOffToReschedule, IGroupPerson groupPerson,
@@ -300,8 +309,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 			}
 
+			SafeResourceCalculate(returnList);
+
+			return returnList;
+
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void SafeResourceCalculate(IList<IScheduleDay> scheduleDays)
+		{
 			var uniqeDates = new HashSet<DateOnly>();
-			foreach (var scheduleDay in returnList)
+			foreach (var scheduleDay in scheduleDays)
 			{
 				uniqeDates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
 			}
@@ -312,9 +330,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_resourceOptimizationHelper.ResourceCalculateDate(uniqeDate, true, true);
 				_resourceOptimizationHelper.ResourceCalculateDate(uniqeDate.AddDays(1), true, true);
 			}
-
-			return returnList;
-
 		}
 
 		private IEnumerable<IScheduleDay> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)

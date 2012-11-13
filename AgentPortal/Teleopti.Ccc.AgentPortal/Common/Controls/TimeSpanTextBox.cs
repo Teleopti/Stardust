@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
         private void parse(string text)
         {
             TimeSpan timeValue;
-            if (TimeHelper.TryParseLongHourStringDefaultInterpretation(text, out timeValue, TimeFormatsType.HoursMinutes, _defaultInterpretAsMinutes))
+            if (TimeHelper.TryParseLongHourStringDefaultInterpretation(text,_maximumValue, out timeValue, TimeFormatsType.HoursMinutes, _defaultInterpretAsMinutes))
             {
                 if (_allowNegativValue)
                     _lastCorrectTime = timeValue;

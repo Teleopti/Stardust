@@ -108,9 +108,9 @@ this.FeatureBackground();
 #line 18
  testRunner.When("I click on the day summary for date \'2013-10-03\'");
 #line 19
- testRunner.Then("I should see the text request form");
+ testRunner.Then("I should see the add text request form");
 #line 20
- testRunner.And("I should see the absence request tab");
+ testRunner.And("I should see the add absence request form");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -160,7 +160,7 @@ this.FeatureBackground();
 #line 35
  testRunner.When("I click on the day symbol area for date \'2013-10-03\'");
 #line 36
- testRunner.Then("I should not see the absence request tab");
+ testRunner.Then("I should not see the add absence request form");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -181,7 +181,7 @@ this.FeatureBackground();
 #line 41
  testRunner.When("I click on the day summary for date \'2013-10-03\'");
 #line 42
- testRunner.Then("I should not see the absence request tab");
+ testRunner.Then("I should not see the add absence request form");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -204,7 +204,7 @@ this.FeatureBackground();
 #line 48
  testRunner.And("I click absence request tab");
 #line 49
- testRunner.Then("I should see the text request form with \'2013-10-03\' as default date");
+ testRunner.Then("I should see the request form with \'2013-10-03\' as default date");
 #line 50
  testRunner.And("I should see 00:00 - 23:59 as the default times");
 #line hidden
@@ -231,7 +231,7 @@ this.FeatureBackground();
 #line 57
  testRunner.And("I unchecked the full day checkbox");
 #line 58
- testRunner.Then("I should see the text request form with \'2013-10-03\' as default date");
+ testRunner.Then("I should see the request form with \'2013-10-03\' as default date");
 #line 59
  testRunner.And("I should see 08:00 - 17:00 as the default times");
 #line hidden
@@ -258,7 +258,7 @@ this.FeatureBackground();
 #line 66
  testRunner.And("I checked the full day checkbox");
 #line 67
- testRunner.Then("I should see the text request form with \'2013-10-03\' as default date");
+ testRunner.Then("I should see the request form with \'2013-10-03\' as default date");
 #line 68
  testRunner.And("I should see 00:00 - 23:59 as the default times");
 #line hidden
@@ -287,7 +287,7 @@ this.FeatureBackground();
 #line 76
  testRunner.And("I input absence request values with \'Vacation\' for date \'2013-10-03\'");
 #line 77
- testRunner.And("I click the Cancel button");
+ testRunner.When("I click the Cancel button");
 #line 78
  testRunner.Then("I should not see a symbol at the top of the schedule for date \'2013-10-03\'");
 #line hidden

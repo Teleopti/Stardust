@@ -625,20 +625,23 @@ namespace Teleopti.Interfaces.Domain
 			return nextDay ? timeOfDay.Add(TimeSpan.FromDays(1)) : timeOfDay;
 		}
 
-    	/// <summary>
+        /// <summary>
         /// Tries the parse long hour string default interpretation.
         /// E.g input == 12, result in 0:12 if default
         /// interpret as minutes == true. If false
         /// 12:00.
         /// </summary>
         /// <param name="timeAsText">The time as text.</param>
+        /// <param name="maximumValue">max timespan value</param>
         /// <param name="timeValue">The time value.</param>
         /// <param name="timeFormatsType">Type of the time formats.</param>
         /// <param name="defaultInterpretAsMinutes">if set to <c>true</c> [default interprete as minutes].</param>
         /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#")]
-        public static bool TryParseLongHourStringDefaultInterpretation(string timeAsText, out TimeSpan timeValue, TimeFormatsType timeFormatsType, bool defaultInterpretAsMinutes)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#")]
+        public static bool TryParseLongHourStringDefaultInterpretation(string timeAsText, TimeSpan maximumValue, out TimeSpan timeValue, TimeFormatsType timeFormatsType, bool defaultInterpretAsMinutes)
         {
+            if (timeAsText == null) throw new ArgumentNullException("timeAsText");
+
             CultureInfo ci = CultureInfo.CurrentCulture;
 
             char separator = Char.Parse(ci.DateTimeFormat.TimeSeparator);
@@ -651,6 +654,11 @@ namespace Teleopti.Interfaces.Domain
                     int minutes;
                     if (int.TryParse(ret[0], out minutes))
                     {
+                        if (minutes > Convert.ToInt32(maximumValue.TotalMinutes))
+                        {
+                            timeValue = TimeSpan.FromMinutes(maximumValue.TotalMinutes);
+                            return false;
+                        }
                         //timeAsText = string.Concat("0", separator, minutes, separator, "0");
                         timeValue = TimeSpan.FromMinutes(minutes);
                         return true;
@@ -664,6 +672,11 @@ namespace Teleopti.Interfaces.Domain
                     int hours;
                     if (int.TryParse(ret[0], out hours))
                     {
+                        if (hours > Convert.ToInt32(maximumValue.TotalHours))
+                        {
+                            timeValue = TimeSpan.FromHours(maximumValue.TotalHours);
+                            return false;
+                        }
                         //timeAsText = string.Concat(hours, separator, "0", separator, "0");
                         timeValue = TimeSpan.FromHours(hours);
                         return true;

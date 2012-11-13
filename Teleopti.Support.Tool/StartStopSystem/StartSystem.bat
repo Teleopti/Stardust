@@ -3,6 +3,8 @@ ECHO Starting all local Teleopti CCC 7 services and MsDtc
 ECHO Start mode will be set to "Automatic"
 PING -n 4 127.0.0.1>nul
 
+IF "%ROOTDIR%"=="" SET ROOTDIR=%~dp0
+
 ::Set the list of services to manuipulate
 ::note: Order matters!!
 SET serviceList=MsDtc;TeleoptiServiceBus;TeleoptiEtlService
@@ -26,6 +28,12 @@ CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Tel
 echo Start App Pools. Done
 echo.
 
+::Kick the local SDK url
+Echo Browsing SDK url
+cscript "%ROOTDIR%BrowseUrl.vbs" "http://127.0.0.1/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"
+if %errorlevel% neq 200 Echo WARNING: could not send GET request to SDK!
+Echo.
+
 ::For each service in list
 goto :processServiceList
 
@@ -36,7 +44,7 @@ exit /b 0
 
 :processServiceList
 for /f "tokens=1* delims=;" %%a in ("%serviceList%") do (
-call :SetSvcModeAndAction "%%a" Start Auto
+call :SetSvcModeAndAction "%%a" Start delayed-auto
 set serviceList=%%b
 )
 if not "%serviceList%" == "" goto :processServiceList

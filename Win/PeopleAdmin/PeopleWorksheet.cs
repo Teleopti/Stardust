@@ -502,7 +502,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
             //Set current cell out of focus to make changes reflect to the data.
             SetCurrentCellOutOfFocus();
-
+			if (KillMode) return;
             try
             {
                 // Add Person rotations and Availability to Repository

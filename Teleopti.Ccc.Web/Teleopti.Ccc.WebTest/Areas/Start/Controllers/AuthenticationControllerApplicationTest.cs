@@ -219,5 +219,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				viewModel.SignIn.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Application);
 			}
 		}
+
+		[Test]
+		public void ShouldGetWarningMessageInViewModelViewSignInBusinessUnitPartialViewWhenSuccessfulAuthentication()
+		{
+			var businessUnitList = new[] { _stubs.BusinessUnitStub("businessunit"), _stubs.BusinessUnitStub("businessunit2") };
+			var person = _stubs.PersonStub();
+			var dataSource = _stubs.DataSourceStub("datasource");
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_authenticator.AuthenticateApplicationUser("datasource", "username", "password")).Return(
+					new AuthenticateResult { HasMessage = true, Message = "Password will expire!", Person = person, Successful = true, DataSource = dataSource });
+				Expect.Call(_businessUnitProvider.RetrieveBusinessUnitsForPerson(dataSource, person)).Return(businessUnitList);
+			}
+			using (_mocks.Playback())
+			{
+				var model = new SignInApplicationModel { DataSourceName = "datasource", UserName = "username", Password = "password" };
+				var result = _target.Application(model) as PartialViewResult;
+				var viewModel = result.Model as SignInBusinessUnitViewModel;
+
+				viewModel.WarningMessage.Should().Be.EqualTo("Password will expire!");
+			}
+		}
 	}
 }

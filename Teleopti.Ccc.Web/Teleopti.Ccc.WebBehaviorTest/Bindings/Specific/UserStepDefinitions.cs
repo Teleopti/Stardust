@@ -1,7 +1,10 @@
 using System;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Interfaces.Domain;
 
@@ -26,6 +29,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIAmAUserWithAccessOnlyToMyTime()
 		{
 			UserFactory.User().Setup(new Agent());
+		}
+
+		[Given(@"I am a user with")]
+		public void GivenIAmAUserWith(Table table)
+		{
+			if (!UserFactory.User().HasSetup<IUserRoleSetup>())
+				UserFactory.User().Setup(new Agent());
+
+			var user = table.CreateInstance<UserConfigurable>();
+			UserFactory.User().MakeUser(user.UserName, user.UserName, user.Password);
 		}
 
 		[Given(@"I am an agent")]

@@ -14,7 +14,7 @@ SET Customer=%Demoreg%
 SET AppRar=%Demoreg%App.rar
 SET StatRar=%Demoreg%Stat.rar
 SET LOADSTAT=1
-SET TRUNK=-T
+SET TRUNK=-T -R -Lsa:dummyPwd
 SET UNRAR=7
 SET Relative=Relative
 SET ROOTDIR=%ROOTDIR:~0,-1%
@@ -158,13 +158,6 @@ IF "%IFLOADSTAT%"=="y" SET LOADSTAT=1
 
 ::use support tool?
 SET SUPPORTTOOL=SUPPORTTOOL
-
-::install Message Broker?
-ECHO.
-SET MB=
-SET /P IFMB=Would like to build and install a local Message Broker? [Y/N]
-IF "%IFMB%"=="Y" SET MB=MB
-IF "%IFMB%"=="y" SET MB=MB
 
 ::install BUS?
 ECHO.
@@ -312,14 +305,6 @@ Teleopti.Support.Tool.exe
 ) else (
 SET /A ERRORLEV=7
 GOTO :Error
-)
-
-IF "%MB%"=="MB" (
-::Build and install + start
-ECHO CALL "%ROOTDIR%\MSgBroker\BuildAndInstall.bat"
-CALL "%ROOTDIR%\MSgBroker\BuildAndInstall.bat"
-NET START TeleoptiBrokerService
-IF %ERRORLEVEL% NEQ 0 ECHO Check Windows Application log for errors! & eventvwr
 )
 
 IF "%BUS%"=="BUS" (

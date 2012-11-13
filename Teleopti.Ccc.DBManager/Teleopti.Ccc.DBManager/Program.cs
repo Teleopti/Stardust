@@ -55,11 +55,21 @@ namespace Teleopti.Ccc.DBManager
 					_schemaVersionInformation = new SchemaVersionInformation(_databaseFolder);
                     logWrite("Running from:" + _databaseFolder.Path());
 
+                    //If Permission Mode: check if application user name and password/windowsgroup is submitted
+                    if (_commandLineArgument.PermissionMode)
+                    {
+                        if (!(_commandLineArgument.appUserName.Length > 0 && (_commandLineArgument.appUserPwd.Length > 0 || _commandLineArgument.isWindowsGroupName)))
+                            throw new Exception("No Application user/Windows group name submitted!");
+                    }
+
                     //Connect and open db
                     _sqlConnection = ConnectAndOpen(_commandLineArgument.ConnectionStringToMaster);
 
                     //Check Azure
                     _isAzure = IsAzure();
+
+                    if (_isAzure && _commandLineArgument.isWindowsGroupName)
+                        throw new Exception("Windows Azure don't support Windows Login for the moment!");
 
                     _sqlConnection.InfoMessage += _sqlConnection_InfoMessage;
 
@@ -73,18 +83,13 @@ namespace Teleopti.Ccc.DBManager
                     
                     if (_commandLineArgument.WillCreateNewDatabase)
                     {
-                        //check if application user name and password/windowsgroup is submitted
-                        if (_commandLineArgument.appUserName.Length > 0 && (_commandLineArgument.appUserPwd.Length > 0 || _commandLineArgument.isWindowsGroupName))
-                        {
+                        CreateDB(_commandLineArgument.DatabaseName, _commandLineArgument.TargetDatabaseType);
+                    }
 
-                            CreateDB(_commandLineArgument.DatabaseName, _commandLineArgument.TargetDatabaseType);
-                            CreateLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName);
-                        }
-                        else
-                        {
-                            throw new Exception("No Application user/Windows group name submitted!");
-                        }
-
+                    //Try create or re-create login
+                    if (_commandLineArgument.PermissionMode)
+                    {
+                        CreateLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName);
                     }
 
                     //Does the db exist?
@@ -97,33 +102,41 @@ namespace Teleopti.Ccc.DBManager
 
 						_databaseVersionInformation = new DatabaseVersionInformation(_databaseFolder, _sqlConnection);
 
-						//Set permissions of the newly application user on db.
+                        //if this is the very first create, add VersionControl table
                         if (_commandLineArgument.WillCreateNewDatabase)
                         {
                             CreateDefaultVersionInformation();
+                        }
+
+                        //Set permissions of the newly application user on db.
+                        if (_commandLineArgument.PermissionMode)
+                        {
                             CreatePermissions(_commandLineArgument.appUserName, _commandLineArgument.isWindowsGroupName);
                         }
 
-                        //Does the Version Table exist?
-                        if (VersionTableExists())
+                        //Patch database
+                        if (_commandLineArgument.PatchMode)
                         {
-                            //Shortcut to release 329, Azure specific script
-                            if (_isAzure && GetDatabaseBuildNumber() == 0)
+                            //Does the Version Table exist?
+                            if (VersionTableExists())
                             {
-                                applyAzureStartDDL(_commandLineArgument.TargetDatabaseTypeName);
-                            }
+                                //Shortcut to release 329, Azure specific script
+                                if (_isAzure && GetDatabaseBuildNumber() == 0)
+                                {
+                                    applyAzureStartDDL(_commandLineArgument.TargetDatabaseTypeName);
+                                }
 
-                            //Add Released DDL
-                            applyReleases(_commandLineArgument.TargetDatabaseType);
-                            //Add upcoming DDL (Trunk)
-                            if (_commandLineArgument.WillAddTrunk)
-								applyTrunk(_commandLineArgument.TargetDatabaseType);
-                            //Add Programmabilty
-							applyProgrammability(_commandLineArgument.TargetDatabaseType);
-                        }
-                        else
-                        {
-                            logWrite("Version information is missing, is this a Raptor db?");
+                                //Add Released DDL
+                                applyReleases(_commandLineArgument.TargetDatabaseType);
+                                //Add upcoming DDL (Trunk)
+                                applyTrunk(_commandLineArgument.TargetDatabaseType);
+                                //Add Programmabilty
+                                applyProgrammability(_commandLineArgument.TargetDatabaseType);
+                            }
+                            else
+                            {
+                                logWrite("Version information is missing, is this a Raptor db?");
+                            }
                         }
                     }
                     else
@@ -298,6 +311,17 @@ namespace Teleopti.Ccc.DBManager
             }
         }
 
+        private static bool DBUserExist(string SQLLogin)
+        {
+            const string sql = @"select count(*) from sys.sysusers where name = @SQLLogin";
+
+            using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
+            {
+                sqlCommand.Parameters.AddWithValue("@SQLLogin", SQLLogin);
+                return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+            }
+        }
+
         private static void CreateDB(string databaseName, DatabaseType databaseType)
         {
             logWrite("Creating database " + databaseName + "...");
@@ -316,7 +340,7 @@ namespace Teleopti.Ccc.DBManager
             if (_isAzure)
             {
                 if (iswingroup)
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Win Logins - Create.sql", _databaseFolder.Path());
+                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\Win Logins - Create.sql", _databaseFolder.Path());
                 else
                     fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\SQL Logins - Create.sql", _databaseFolder.Path());
             }
@@ -360,7 +384,12 @@ namespace Teleopti.Ccc.DBManager
                 sql = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
                 using (var cmd = new SqlCommand(sql, _sqlConnection))
                 {
-                    cmd.ExecuteNonQuery();
+                    if (_isAzure && DBUserExist(user) == true)
+                    {
+                        logWrite("DB user already exist, continue ...");
+                    }
+                    else
+                        cmd.ExecuteNonQuery();
                 }
 
                 fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\permissions - add.sql", _databaseFolder.Path());
@@ -372,14 +401,14 @@ namespace Teleopti.Ccc.DBManager
 
             sql = System.IO.File.ReadAllText(fileName);
 
+            sql = sql.Replace("$(LOGIN)", user);
+
             if (iswingroup)
             {
-                sql = sql.Replace("$(SVCLOGIN)", user);
                 sql = sql.Replace("$(AUTHTYPE)", "WIN");
             }
             else
             {
-                sql = sql.Replace("$(SQLLOGIN)", user);
                 sql = sql.Replace("$(AUTHTYPE)", "SQL");
             }
 

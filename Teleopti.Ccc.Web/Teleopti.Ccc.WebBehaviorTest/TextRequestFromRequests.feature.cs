@@ -202,7 +202,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 53
  testRunner.When("I click on the request");
 #line 54
- testRunner.Then("I should see the text request\'s details form");
+ testRunner.Then("I should see the edit text request form");
 #line 55
  testRunner.And("I should see the request\'s values");
 #line hidden
@@ -271,7 +271,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 77
  testRunner.When("I click on the request");
 #line 78
- testRunner.Then("I should see the text request\'s details form");
+ testRunner.Then("I should see the edit text request form");
 #line 79
  testRunner.And("I should not be able to input values");
 #line 80
@@ -296,7 +296,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 86
  testRunner.When("I click on the request");
 #line 87
- testRunner.Then("I should see the text request\'s details form");
+ testRunner.Then("I should see the edit text request form");
 #line 88
  testRunner.And("I should not be able to input values");
 #line 89
@@ -359,11 +359,11 @@ this.ScenarioSetup(scenarioInfo);
 #line 108
  testRunner.When("I click on the request");
 #line 109
- testRunner.Then("I should see the text request\'s details form");
+ testRunner.Then("I should see the edit text request form");
 #line 110
  testRunner.And("I should see the request\'s values");
 #line 111
- testRunner.And("I should not see the absence request tab (invisible)");
+ testRunner.And("I should not see the add absence request tab");
 #line hidden
             this.ScenarioCleanup();
         }

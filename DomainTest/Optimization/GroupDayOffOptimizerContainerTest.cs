@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISchedulingOptionsCreator _schedulingOptionsCreator;
         private ISchedulingOptions _schedulingOptions;
     	private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
-    	private IDictionary<Guid, bool> _teamSteadyStates;
     	private IScheduleDictionary _scheduleDictionary;
+    	private ITeamSteadyStateHolder _teamSteadyStateHolder;
 			
 		[SetUp]
         public void Setup()
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _schedulingOptionsCreator = _mocks.StrictMock<ISchedulingOptionsCreator>();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
         	_teamSteadyStateMainShiftScheduler = _mocks.StrictMock<ITeamSteadyStateMainShiftScheduler>();
-			_teamSteadyStates = new Dictionary<Guid, bool>();
+			_teamSteadyStateHolder = _mocks.StrictMock<ITeamSteadyStateHolder>();
             _target = new GroupDayOffOptimizerContainer(_converter,
                                                 new List<IDayOffDecisionMaker> { _decisionMaker, _decisionMaker, _decisionMaker },
                                                 _optimizationPreferences,
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                 _groupDayOffOptimizerCreator, 
                                                 _schedulingOptionsCreator,
 												_teamSteadyStateMainShiftScheduler,
-												_teamSteadyStates,
+												_teamSteadyStateHolder,
 												_scheduleDictionary
                                                 );
         }
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _dayOffDecisionMakerExecuter, 
                 _optimizationPreferences.DaysOff))
                 .Return(_groupDayOffOptimizer);
-			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary)).IgnoreArguments()
+			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary)).IgnoreArguments()
                 .Return(true);
             Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
 
@@ -118,11 +118,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         	                                                               _dayOffDecisionMakerExecuter,
         	                                                               _optimizationPreferences.DaysOff)).Return(_groupDayOffOptimizer).Repeat.
         		Times(3);
-			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary)).IgnoreArguments()
+			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary)).IgnoreArguments()
                 .Return(false);
-			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary)).IgnoreArguments()
+			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary)).IgnoreArguments()
                 .Return(false);
-			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary)).IgnoreArguments()
+			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary)).IgnoreArguments()
                 .Return(true);
             Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
 
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         	                                                               _dayOffDecisionMakerExecuter,
         	                                                               _optimizationPreferences.DaysOff)).Return(_groupDayOffOptimizer).Repeat.
         		Times(3);
-			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStates, _scheduleDictionary)).IgnoreArguments()
+			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary)).IgnoreArguments()
                 .Return(false).Repeat.Times(3);
 
             _mocks.ReplayAll();

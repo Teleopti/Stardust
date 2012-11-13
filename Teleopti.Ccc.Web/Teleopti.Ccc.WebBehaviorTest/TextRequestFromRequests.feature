@@ -51,7 +51,7 @@ Scenario: View text request details
 	And I have an existing text request
 	And I am viewing requests
 	When I click on the request
-	Then I should see the text request's details form 
+	Then I should see the edit text request form 
 	And I should see the request's values
 	
 Scenario: Edit text request
@@ -75,7 +75,7 @@ Scenario: Can not edit approved text requests
 	And I have an approved text request
 	And I am viewing requests
 	When I click on the request
-	Then I should see the text request's details form
+	Then I should see the edit text request form
 	And I should not be able to input values
 	And I should not see a save button
 
@@ -84,7 +84,7 @@ Scenario: Can not edit denied text requests
 	And I have a denied text request
 	And I am viewing requests
 	When I click on the request
-	Then I should see the text request's details form
+	Then I should see the edit text request form
 	And I should not be able to input values
 	And I should not see a save button
 
@@ -106,6 +106,6 @@ Scenario: Hide absence request tab when view a text request
 	And I have an existing text request
 	And I am viewing requests
 	When I click on the request
-	Then I should see the text request's details form
+	Then I should see the edit text request form
 	And I should see the request's values
-	And I should not see the absence request tab (invisible)
+	And I should not see the add absence request tab

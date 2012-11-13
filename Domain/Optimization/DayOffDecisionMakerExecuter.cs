@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         	schedulingOptions.UseCustomTargetTime = _originalStateContainer.OriginalWorkTime();
             IDaysOffPreferences daysOffPreferences = _optimizerPreferences.DaysOff;
             var changesTracker = new LockableBitArrayChangesTracker();
-
+			IList<DateOnly> movedDays = changesTracker.DayOffChanges(workingBitArray, originalBitArray, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
 			double oldValue;
 			if(!_optimizerPreferences.Advanced.UseTweakedValues)
 			{
@@ -107,6 +107,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 				if (predictedNewValue >= oldValue)
 				{
 					writeToLogValueNotBetter();
+					foreach (var movedDay in movedDays)
+					{
+						currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(movedDay, movedDay));
+					}
 					return true;
 				}	
 			}
@@ -115,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				oldValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
 			}
 
-            IList<DateOnly> movedDays = changesTracker.DayOffChanges(workingBitArray, originalBitArray, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
+            
 
             writeToLogMovedDays(movedDays);
 
@@ -429,7 +433,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (!schedulingResult)
                 {
                     int iterations = 0;
-                    while (_nightRestWhiteSpotSolverService.Resolve(matrix, schedulingOptions) && iterations < 10)
+                    while (_nightRestWhiteSpotSolverService.Resolve(matrix, schedulingOptions, _schedulePartModifyAndRollbackService) && iterations < 10)
                     {
                         iterations++;
                     }

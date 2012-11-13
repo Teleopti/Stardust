@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -14,9 +12,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class ShiftProjectionCacheFilter : IShiftProjectionCacheFilter
     {
         private readonly ILongestPeriodForAssignmentCalculator _rules;
+        private readonly CultureInfo _culture;
 
         public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules)
         {
+            _culture = TeleoptiPrincipal.Current.Regional.Culture;
         	_rules = rules;
         }
 
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
 			finderResult.AddFilterResults(
                 new WorkShiftFilterResult(
-                    string.Format(CultureInfo.CurrentCulture,
+                    string.Format(_culture,
                                   UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
                                   validPeriod.LocalStartDateTime, validPeriod.LocalEndDateTime), cntBefore,
                     workShiftsWithinPeriod.Count));
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     workShiftsWithinMinMax.Add(proj);
             }
 			finderResult.AddFilterResults(
-				new WorkShiftFilterResult(string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.FilterOnContractTimeLimitationsWithParams, validMinMax.Minimum, validMinMax.Maximum),
+                new WorkShiftFilterResult(string.Format(_culture, UserTexts.Resources.FilterOnContractTimeLimitationsWithParams, validMinMax.Minimum, validMinMax.Maximum),
                                           cntBefore, workShiftsWithinMinMax.Count));
 
             return workShiftsWithinMinMax;
@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                         workShiftsWithinMinMax.Add(proj);
                 }
 				finderResult.AddFilterResults(
-				new WorkShiftFilterResult(string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.FilterOnWorkTimeLimitationsWithParams, restriction.WorkTimeLimitation.StartTimeString, restriction.WorkTimeLimitation.EndTimeString),
+                new WorkShiftFilterResult(string.Format(_culture, UserTexts.Resources.FilterOnWorkTimeLimitationsWithParams, restriction.WorkTimeLimitation.StartTimeString, restriction.WorkTimeLimitation.EndTimeString),
                                           shiftList.Count, workShiftsWithinMinMax.Count));
             }
             else
@@ -376,9 +376,47 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             var dayPart = current.ScheduledDay(dateToSchedule);
             
-            return FilterOnNotOverWritableActivities(shiftList, dayPart, finderResult);
+            shiftList = FilterOnNotOverWritableActivities(shiftList, dayPart, finderResult);
+
+            return FilterOnPersonalShifts(shiftList, dayPart, finderResult);
         }
 
+        public IList<IShiftProjectionCache> FilterOnPersonalShifts(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult)
+        {
+            if (shiftList.Count == 0)
+                return shiftList;
+            DateTimePeriod? period = GetMaximumPeriodForPersonalShiftsAndMeetings(schedulePart);
+            if (period.HasValue)
+            {
+                var meetings = schedulePart.PersonMeetingCollection();
+                var personalAssignments = schedulePart.PersonAssignmentCollection();
+                int cntBefore = shiftList.Count;
+                IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
+                foreach (IShiftProjectionCache t in shiftList)
+                {
+                    IShiftProjectionCache proj = t;
+                    if (!proj.MainShiftProjection.Period().HasValue) continue;
+                    DateTimePeriod virtualPeriod = proj.MainShiftProjection.Period().Value;
+
+                    if (virtualPeriod.Contains(period.Value) && t.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignments))
+                    {
+                        workShiftsWithinPeriod.Add(proj);
+                    }
+                }
+                if (workShiftsWithinPeriod.Count == 0)
+                    workShiftsWithinPeriod = shiftList;
+                finderResult.AddFilterResults(
+                    new WorkShiftFilterResult(
+                        string.Format(_culture,
+                                      UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
+                                      period.Value.LocalStartDateTime, period.Value.LocalEndDateTime), cntBefore,
+                        workShiftsWithinPeriod.Count));
+
+                return workShiftsWithinPeriod;
+
+            }
+            return shiftList;
+        }
 
 		public IList<IShiftProjectionCache> FilterOnBusinessRules(IEnumerable<IPerson> groupOfPersons, IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
         {
@@ -408,7 +446,24 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             if (schedulingOptions.UseGroupSchedulingCommonStart && schedulingOptions.UseGroupSchedulingCommonEnd)
             {
-                finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftStartTime && possibleStartEndCategory.EndTime  == shift.WorkShiftEndTime ));   
+            	foreach (var shift in shiftList)
+            	{
+            		if(possibleStartEndCategory.StartTime == shift.WorkShiftStartTime)
+						finalShiftList.Add(shift);
+            	}
+
+            	shiftList = finalShiftList;
+
+				finalShiftList = new List<IShiftProjectionCache>();
+				foreach (var shift in shiftList)
+				{
+					if (possibleStartEndCategory.EndTime == shift.WorkShiftEndTime)
+						finalShiftList.Add(shift);
+					//if (possibleStartEndCategory.EndTime == new TimeSpan(1, 15, 0))
+					//    return new List<IShiftProjectionCache>();
+				}
+
+            	//finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftStartTime && possibleStartEndCategory.EndTime  == shift.WorkShiftEndTime ));   
             }
             else if (schedulingOptions.UseGroupSchedulingCommonStart)
             {

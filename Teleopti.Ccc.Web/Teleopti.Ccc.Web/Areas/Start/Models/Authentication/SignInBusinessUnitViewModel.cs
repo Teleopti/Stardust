@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 	 {
 		  public IEnumerable<BusinessUnitViewModel> BusinessUnits { get; set; }
 		  public SignInBusinessUnitModel SignIn { get; set; }
+		  public string WarningMessage { get; set; }
 
 		  public bool HasBusinessUnits
 		  {

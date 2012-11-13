@@ -5,10 +5,14 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
+using WatiN.Core;
+using WatiN.Core.Constraints;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -62,9 +66,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Pages.Pages.CurrentCancelButton.CancelButton.EventualClick();
 		}
-
-
-
 
 		[Then(@"I should see an error message")]
 		public void ThenIShouldSeeAnErrorMessage()

@@ -195,5 +195,14 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonActivity(IList<IShiftProjectionCache> shiftList, ISchedulingOptions schedulingOptions,
                                                                           IPossibleStartEndCategory possibleStartEndCategory, IWorkShiftFinderResult finderResult);
+        /// <summary>
+        /// Filters the on personal shifts.
+        /// </summary>
+        /// <param name="shiftList">The shift list.</param>
+        /// <param name="schedulePart">The schedule part.</param>
+        /// <param name="finderResult">The finder result.</param>
+        /// <returns></returns>
+        IList<IShiftProjectionCache> FilterOnPersonalShifts(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult);
+
     }
 }

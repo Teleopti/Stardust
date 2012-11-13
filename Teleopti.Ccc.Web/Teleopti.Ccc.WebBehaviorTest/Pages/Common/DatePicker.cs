@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
 
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		}
 
 		public Div Calendar { get { return Element.DomContainer.Div(Find.ById("ui-datepicker-div")); } }
-		public Table CalendarTable { get { return Calendar.Table(Find.ByClass("ui-datepicker-calendar")); } }
+		public Table CalendarTable { get { return Calendar.Table(QuicklyFind.ByClass("ui-datepicker-calendar")); } }
 
 		public void OpenProcedure()
 		{

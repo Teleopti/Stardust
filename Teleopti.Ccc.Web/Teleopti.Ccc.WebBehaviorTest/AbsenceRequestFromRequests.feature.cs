@@ -106,7 +106,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 19
  testRunner.When("I click add request button in the toolbar");
 #line 20
- testRunner.Then("I should not see the absence request tab");
+ testRunner.Then("I should not see the add absence request form");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -129,7 +129,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 27
  testRunner.And("I click absence request tab");
 #line 28
- testRunner.Then("I should see the absence request form with today\'s date as default");
+ testRunner.Then("I should see the request form with today\'s date as default");
 #line 29
  testRunner.And("I should see 00:00 - 23:59 as the default times");
 #line 30
@@ -156,7 +156,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 37
  testRunner.And("I checked the full day checkbox");
 #line 38
- testRunner.Then("I should see the absence request form with today\'s date as default");
+ testRunner.Then("I should see the request form with today\'s date as default");
 #line 39
  testRunner.And("I should see 00:00 - 23:59 as the default times");
 #line hidden
@@ -181,7 +181,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 46
  testRunner.And("I unchecked the full day checkbox");
 #line 47
- testRunner.Then("I should see the absence request form with today\'s date as default");
+ testRunner.Then("I should see the request form with today\'s date as default");
 #line 48
  testRunner.And("I should see 08:00 - 17:00 as the default times");
 #line hidden
@@ -310,7 +310,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 93
  testRunner.When("I click on the request");
 #line 94
- testRunner.Then("I should not see the text request tab (invisible)");
+ testRunner.Then("I should not see the add text request tab");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -331,7 +331,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 100
  testRunner.When("I click on the request");
 #line 101
- testRunner.Then("I should see the absence request\'s details form");
+ testRunner.Then("I should see the edit absence request form");
 #line 102
  testRunner.And("I should see the absence request\'s values");
 #line hidden
@@ -402,7 +402,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 125
  testRunner.When("I click on the request");
 #line 126
- testRunner.Then("I should see the absence request\'s details form");
+ testRunner.Then("I should see the edit absence request form");
 #line 127
  testRunner.And("I should not be able to input values for absence request");
 #line 128
@@ -427,7 +427,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 134
  testRunner.When("I click on the request");
 #line 135
- testRunner.Then("I should see the absence request\'s details form");
+ testRunner.Then("I should see the edit absence request form");
 #line 136
  testRunner.And("I should not be able to input values for absence request");
 #line 137
@@ -482,17 +482,17 @@ this.ScenarioSetup(scenarioInfo);
 #line 151
 this.ScenarioSetup(scenarioInfo);
 #line 152
-            testRunner.Given("I am an agent");
+ testRunner.Given("I am an agent");
 #line 153
-            testRunner.And("I have a denied absence request beacuse of missing workflow control set");
+ testRunner.And("I have a denied absence request beacuse of missing workflow control set");
 #line 154
-            testRunner.And("I am viewing requests");
+ testRunner.And("I am viewing requests");
 #line 155
-            testRunner.When("I click on the request");
+ testRunner.When("I click on the request");
 #line 156
-            testRunner.Then("I should see the absence request\'s details form");
+ testRunner.Then("I should see the edit absence request form");
 #line 157
-            testRunner.And("I should see that my request was denied with reason \'Din förfrågan kunde inte beh" +
+ testRunner.And("I should see that my request was denied with reason \'Din förfrågan kunde inte beh" +
                     "andlas. Du har inget arbetsflöde uppsatt.\'");
 #line hidden
             this.ScenarioCleanup();

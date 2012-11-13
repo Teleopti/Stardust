@@ -65,6 +65,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="TechTalk.SpecFlow, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -99,9 +100,30 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
+    <Compile Include="Bindings\Generic\WeekSchedulePageStepDefinitions.cs" />
+    <Compile Include="Core\Robustness\EventualAssert.cs" />
+    <Compile Include="Core\Robustness\EventualElementActions.cs" />
+    <Compile Include="Core\Robustness\Timeouts.cs" />
+    <Compile Include="Core\Robustness\Retrying.cs" />
+    <Compile Include="Data\Setups\Generic\UserLogonDetailConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
     <Compile Include="Bindings\Transform.cs" />
-    <Compile Include="Core\Robustness.cs" />
+    <Compile Include="BrowserNotifications.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BrowserNotifications.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Robustness\QuicklyFind.cs" />
+    <Compile Include="Data\Setups\Generic\PasswordConfigurable.cs" />
+    <Compile Include="PasswordPolicy.feature.cs">
+      <DependentUpon>PasswordPolicy.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Core\Robustness\ExceptionHandling.cs" />
     <Compile Include="Data\Setups\Generic\AvailabilityRotationConfigurable.cs" />
     <Compile Include="Bindings\Generic\AvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
@@ -121,8 +143,8 @@
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\ScheduledShiftConfigurable.cs" />
     <Compile Include="ConfigSanityCheck.cs" />
+    <Compile Include="Bindings\Generic\PortalPageStepDefinitions.cs" />
     <Compile Include="PreferencesFeedbackRefact.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -164,6 +186,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedbackPreSchedule.feature</DependentUpon>
+    </Compile>
+    <Compile Include="ShiftTradeRequests.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShiftTradeRequests.feature</DependentUpon>
     </Compile>
     <Compile Include="WeekScheduleTimeIndicator.feature.cs">
       <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
@@ -354,7 +381,7 @@
     <Compile Include="Data\Setups\Specific\AgentWithoutRequestsAccess.cs" />
     <Compile Include="Data\Setups\Specific\ExistingTextRequest.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutPreferencesAccess.cs" />
-    <Compile Include="Core\Eventual.cs" />
+    <Compile Include="Core\Robustness\EventualElementWaits.cs" />
     <Compile Include="Core\Extensions\LogExtensions.cs" />
     <Compile Include="Data\Setups\Specific\Agent.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutStudentAvailabilityAccess.cs" />
@@ -388,7 +415,7 @@
     <Compile Include="Data\Setups\Specific\PersonPeriod.cs" />
     <Compile Include="Data\IUserDataSetup.cs" />
     <Compile Include="Data\IUserSetup.cs" />
-    <Compile Include="LicenseStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\LicenseStepDefinitions.cs" />
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Pages.cs" />
@@ -471,7 +498,7 @@
       <DependentUpon>TextRequestFromSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="TextRequestStepDefinitions.cs" />
-    <Compile Include="TextRequestFromScheduleStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\EditRequestPageStepDefinitions.cs" />
     <Compile Include="WeekSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -483,6 +510,10 @@
     <Content Include="BeforeTestRun.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\PasswordPolicy.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="License.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -491,6 +522,14 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="BrowserNotifications.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PasswordPolicyMobile.feature.cs</LastGenOutput>
+    </None>
+    <None Include="PasswordPolicy.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PasswordPolicy.feature.cs</LastGenOutput>
+    </None>
     <None Include="PreferencesFeedbackRefact.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackRefact.feature.cs</LastGenOutput>
@@ -526,14 +565,14 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
     </None>
-   
-
-
- <None Include="AsmMessage.feature">
+    <None Include="AsmMessage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmMessage.feature.cs</LastGenOutput>
     </None>
-
+    <None Include="ShiftTradeRequests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ShiftTradeRequests.feature.cs</LastGenOutput>
+    </None>
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />
     <None Include="Testing\StepDefinitionReport.bat" />

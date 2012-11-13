@@ -14,14 +14,17 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
         private IUserDetail userDetail;
         private IPasswordPolicy passwordPolicy;
         private IPerson person;
+	    private IUtcNow now;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
             passwordPolicy = mocks.StrictMock<IPasswordPolicy>();
             userDetail = mocks.StrictMock<IUserDetail>();
             person = mocks.StrictMock<IPerson>();
+	        now = MockRepository.GenerateMock<IUtcNow>();
+		    now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow);
             target = new CheckPasswordChange(passwordPolicy);
         }
 
@@ -81,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             {
                 AuthenticationResult result = target.Check(userDetail);
                 Assert.IsTrue(result.Successful);
-                Assert.IsTrue(result.HasMessage);
+	            Assert.IsTrue(result.HasMessage);
                 Assert.IsFalse(string.IsNullOrEmpty(result.Message));
             }
         }

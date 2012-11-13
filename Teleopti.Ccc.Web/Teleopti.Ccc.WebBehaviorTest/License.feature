@@ -13,4 +13,4 @@ Scenario: Show licensed to information in portal
 	Given I am an agent
 	And My schedule is published
 	When I view my week schedule
-	Then I Should see licensed to information
+	Then I should see licensed to information

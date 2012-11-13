@@ -5,6 +5,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -24,7 +25,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		    TimeSpan minTimelineTime;
 		    TimeSpan maxTimelineTime;
 			
-			//_page.TimeLineDiv.WaitUntilDisplayed();
 			_page.AnyTimelineLabel.WaitUntilExists();
 
 			if (!TimeSpan.TryParse(_page.TimelineLabels.First().InnerHtml, out minTimelineTime))

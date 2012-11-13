@@ -1,15 +1,14 @@
 Teleopti.MyTimeWeb.Notifier = (function () {
 	var notifyText;
-	var timeout = 5000;
+	var originalDocumentTitle;
 	var baseUrl;
 	var header = '';
-	var webNotification = function () { return true; }; //default also send as web not if possible
+	var blinkTitleTimer;
+	var webNotification = function () { return true; }; //default also send as web notification if possible
 
 	function _setOptions(options) {
 		notifyText = options.notifyText;
-		if (options.timeout) {
-			timeout = options.timeout;
-		}
+		originalDocumentTitle = options.originalDocumentTitle;
 		if (options.baseUrl) {
 			baseUrl = options.baseUrl;
 		} else {
@@ -26,15 +25,13 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 		}
 	}
 	function _notify() {
+		var time = new Date(new Date().getTeleoptiTime()).toString('hh:mm tt');
 		return noty({
-			text: notifyText,
+			text: notifyText + ' (' + time + ')',
 			layout: 'bottom',
-			timeout: timeout,
-			animation: {
-				open: { height: 'toggle' },
-				close: { height: 'toggle' },
-				easing: 'swing',
-				speed: 500 // opening & closing animation speed
+			closeWith: ['button'],
+			callback: {
+				afterClose: _messageClosed
 			}
 		});
 	}
@@ -42,6 +39,7 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 		if (window.webkitNotifications) {
 			if (window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
 				if (webNotification()) {
+					var timeout = 5000;
 					var iconUrl = baseUrl + 'content/favicon.ico';
 					var notification = window.webkitNotifications.createNotification(iconUrl, header, notifyText);
 					notification.show();
@@ -52,12 +50,40 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 			}
 		}
 	}
+	function _messageClosed() {
+		$.pinify.clearOverlay();
+		_stopBlinkDocumentTitle();
+	}
+
+	function _pinnedNotification() {
+		$.pinify.flashTaskbar();
+	}
+
+	function _blinkDocumentTitle() {
+		var blinkTimeout = 750;
+		if (blinkTitleTimer) {
+			clearInterval(blinkTitleTimer);
+		}
+		blinkTitleTimer = window.setInterval(function () {
+			var decodedTitle = $('<div/>').html(notifyText).text();
+			top.document.title == decodedTitle ?
+										top.document.title = originalDocumentTitle :
+										top.document.title = decodedTitle;
+		}, blinkTimeout);
+	}
+
+	function _stopBlinkDocumentTitle() {
+		clearInterval(blinkTitleTimer);
+		top.document.title = originalDocumentTitle;
+	}
 
 	return {
 		Notify: function (options) {
 			_setOptions(options);
 			_notify();
 			_webNotification();
+			_pinnedNotification();
+			_blinkDocumentTitle();
 		}
 	};
 })(jQuery);

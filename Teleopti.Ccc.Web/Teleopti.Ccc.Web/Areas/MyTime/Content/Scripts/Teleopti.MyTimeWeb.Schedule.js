@@ -1,6 +1,6 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.6.4.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.8.2.js" />
 /// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
-/// <reference path="~/Content/Scripts/jquery-1.6.4-vsdoc.js" />
+/// <reference path="~/Content/Scripts/jquery-1.8.2-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/date.js" />
 /// <reference path="~/Content/Scripts/knockout-2.1.0.js"/>
@@ -25,6 +25,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var pixelToDisplayTitle = 16;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
+	var completelyLoaded;
 
 	function _initTooltip() {
 		var addTextRequest = $('.show-request');
@@ -77,6 +78,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
 		_initTodayButton();
 		$('.body-weekview-inner').show();
+		completelyLoaded();
 	}
 
 	function _initPeriodSelection() {
@@ -324,9 +326,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 			Teleopti.MyTimeWeb.Schedule.Request.Init();
 		},
-		PartialInit: function () {
+		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
+			readyForInteractionCallback();
+			completelyLoaded = completelyLoadedCallback;
 		},
 		SetupViewModel: function (userTexts) {
 			vm = new WeekScheduleViewModel(userTexts);
