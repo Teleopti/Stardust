@@ -63,9 +63,27 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 					correctEx = true;
 				}
 			}
+
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				person.Email = "ok";
+				new PersonRepository(uow).Remove(person);
+				uow.PersistAll();
+			}
 			correctEx.Should().Be.True();
 			isCalled.Should().Be.False();
 		}
 
+		[Test]
+		public void ShouldWorkWithCurrentUnitOfWork()
+		{
+			var isCalled = false;
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				UnitOfWorkFactory.Current.CurrentUnitOfWork().AfterSuccessfulTx(dummy => isCalled = true);
+				UnitOfWorkFactory.Current.CurrentUnitOfWork().PersistAll();
+				isCalled.Should().Be.True();
+			}
+		}
 	}
 }

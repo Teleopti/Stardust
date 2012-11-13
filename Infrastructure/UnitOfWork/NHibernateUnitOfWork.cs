@@ -35,11 +35,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private IEnumerable<IMessageSender> _activeDenormalizers;
 		private readonly Action<ISession> _unbind;
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
-		private readonly ICollection<Action<object>> _runAfterSuccessfulTx;
 
 		protected internal NHibernateUnitOfWork(ISession session, 
 													IMessageBroker messageBroker,
-IEnumerable<IMessageSender> activeDenormalizers,
+													IEnumerable<IMessageSender> activeDenormalizers,
 													NHibernateFilterManager filterManager,
 													ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService,
 													Action<ISession> unbind)
@@ -50,8 +49,7 @@ IEnumerable<IMessageSender> activeDenormalizers,
 			_filterManager = filterManager;
 			_sendPushMessageWhenRootAlteredService = sendPushMessageWhenRootAlteredService;
 			_unbind = unbind;
-_activeDenormalizers = activeDenormalizers;
-			_runAfterSuccessfulTx = new List<Action<object>>();
+			_activeDenormalizers = activeDenormalizers;
 		}
 
 		protected internal AggregateRootInterceptor Interceptor
@@ -163,7 +161,6 @@ _activeDenormalizers = activeDenormalizers;
 				Interceptor.Clear();
 			}
 			notifyBroker(moduleUsedForPersist, modifiedRoots);
-			_runAfterSuccessfulTx.ForEach(act => act(null));
 			return modifiedRoots;
 		}
 
@@ -251,9 +248,10 @@ _activeDenormalizers = activeDenormalizers;
 			}
 		}
 
+		//right now only supporting one callback. if you call this twice - the latter will overwrite the first one
 		public void AfterSuccessfulTx(Action<object> func)
 		{
-			_runAfterSuccessfulTx.Add(func);
+			Session.Transaction.RegisterSynchronization(new TransactionCallbacks(func));
 		}
 
 		private static bool hasOuterTransaction()
