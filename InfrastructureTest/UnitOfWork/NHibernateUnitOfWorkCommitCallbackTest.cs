@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	public class NHibernateUnitOfWorkCommitCallbackTest
 	{
 		[Test]
-		public void ShouldCallTxCallbackWhenSuccesfullCommit()
+		public void ShouldCallTxCallbackWhenSuccessfulCommit()
 		{
 			var isCalled = false;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
