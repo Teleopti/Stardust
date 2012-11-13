@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         
         public virtual void FeatureBackground()
         {
-#line 7
+#line 6
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table1.AddRow(new string[] {
                         "Name",
                         "Full access to mytime"});
-#line 8
+#line 7
  testRunner.Given("there is a role with", ((string)(null)), table1);
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
@@ -87,107 +87,169 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table2.AddRow(new string[] {
                         "Access To Shift Trade Requests",
                         "False"});
-#line 11
+#line 10
  testRunner.And("there is a role with", ((string)(null)), table2);
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
+                        "Name"});
             table3.AddRow(new string[] {
-                        "Name",
-                        "Published schedule"});
+                        "Day"});
             table3.AddRow(new string[] {
-                        "Schedule published to date",
-                        "2040-06-24"});
-#line 15
- testRunner.And("I have a workflow control set with", ((string)(null)), table3);
+                        "Late"});
+#line 14
+ testRunner.And("there are shift categories", ((string)(null)), table3);
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table4.AddRow(new string[] {
-                        "Start date",
-                        "2012-06-18"});
-            table4.AddRow(new string[] {
-                        "Type",
-                        "Week"});
-            table4.AddRow(new string[] {
-                        "Length",
-                        "1"});
-#line 19
- testRunner.And("I have a schedule period with", ((string)(null)), table4);
+                        "Name",
+                        "DayOff"});
+#line 18
+ testRunner.And("there is a dayoff with", ((string)(null)), table4);
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table5.AddRow(new string[] {
-                        "Start date",
-                        "2012-06-18"});
-#line 24
- testRunner.And("I have a person period with", ((string)(null)), table5);
+                        "Name",
+                        "Illness"});
+#line 21
+ testRunner.And("there is an absence with", ((string)(null)), table5);
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Name"});
+                        "Field",
+                        "Value"});
             table6.AddRow(new string[] {
-                        "Day"});
-#line 27
- testRunner.And("there are shift categories", ((string)(null)), table6);
+                        "Name",
+                        "Skill 1"});
+#line 24
+ testRunner.And("there is a skill with", ((string)(null)), table6);
 #line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table7.AddRow(new string[] {
                         "Name",
-                        "DayOff"});
-#line 30
- testRunner.And("there is a dayoff with", ((string)(null)), table7);
+                        "Published schedule"});
+            table7.AddRow(new string[] {
+                        "Schedule published to date",
+                        "2040-06-24"});
+#line 27
+ testRunner.And("I have a workflow control set with", ((string)(null)), table7);
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table8.AddRow(new string[] {
-                        "Name",
-                        "Illness"});
-#line 33
- testRunner.And("there is an absence with", ((string)(null)), table8);
+                        "Start date",
+                        "2012-06-18"});
+            table8.AddRow(new string[] {
+                        "Type",
+                        "Week"});
+            table8.AddRow(new string[] {
+                        "Length",
+                        "1"});
+#line 31
+ testRunner.And("I have a schedule period with", ((string)(null)), table8);
 #line hidden
             TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
             table9.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+            table9.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+            table9.AddRow(new string[] {
+                        "Skill",
+                        "Skill 1"});
+#line 36
+ testRunner.And("I have a person period with", ((string)(null)), table9);
+#line hidden
+            TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table10.AddRow(new string[] {
                         "StartTime",
                         "2030-01-01 06:00"});
-            table9.AddRow(new string[] {
+            table10.AddRow(new string[] {
                         "EndTime",
                         "2030-01-01 16:00"});
-            table9.AddRow(new string[] {
+            table10.AddRow(new string[] {
                         "Shift category",
                         "Day"});
-            table9.AddRow(new string[] {
+            table10.AddRow(new string[] {
                         "Lunch3HoursAfterStart",
                         "true"});
-#line 36
- testRunner.And("I have a shift with", ((string)(null)), table9);
+#line 41
+ testRunner.And("I have a shift with", ((string)(null)), table10);
+#line hidden
+            TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table11.AddRow(new string[] {
+                        "Agent name",
+                        "Other agent 1"});
+            table11.AddRow(new string[] {
+                        "Name",
+                        "Published schedule"});
+            table11.AddRow(new string[] {
+                        "Schedule published to date",
+                        "2040-06-24"});
+#line 47
+ testRunner.And("an agent has a workflow control set with", ((string)(null)), table11);
+#line hidden
+            TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table12.AddRow(new string[] {
+                        "Agent name",
+                        "Other agent 1"});
+            table12.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+            table12.AddRow(new string[] {
+                        "Type",
+                        "Week"});
+            table12.AddRow(new string[] {
+                        "Length",
+                        "1"});
+#line 52
+ testRunner.And("an agent has a schedule period with", ((string)(null)), table12);
+#line hidden
+            TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table13.AddRow(new string[] {
+                        "Agent name",
+                        "Other agent 1"});
+            table13.AddRow(new string[] {
+                        "Start date",
+                        "2012-06-18"});
+            table13.AddRow(new string[] {
+                        "Skill",
+                        "Skill 1"});
+#line 58
+ testRunner.And("an agent has a person period with", ((string)(null)), table13);
 #line hidden
         }
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Do not show shift trade request tab if no permission")]
-        [NUnit.Framework.IgnoreAttribute()]
         public virtual void DoNotShowShiftTradeRequestTabIfNoPermission()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Do not show shift trade request tab if no permission", new string[] {
-                        "ignore",
-                        "ignore"});
-#line 44
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Do not show shift trade request tab if no permission", ((string[])(null)));
+#line 65
 this.ScenarioSetup(scenarioInfo);
-#line 7
+#line 6
 this.FeatureBackground();
-#line 45
+#line 66
  testRunner.Given("I have the role \'No access to Shift Trade\'");
-#line 46
+#line 67
  testRunner.When("I sign in");
-#line 47
+#line 68
  testRunner.Then("shift trade tab should not be visible");
 #line hidden
             this.ScenarioCleanup();
@@ -195,66 +257,62 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Show Shift trade reuqest tab")]
-        [NUnit.Framework.IgnoreAttribute()]
         public virtual void ShowShiftTradeReuqestTab()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show Shift trade reuqest tab", new string[] {
-                        "ignore"});
-#line 50
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show Shift trade reuqest tab", ((string[])(null)));
+#line 70
 this.ScenarioSetup(scenarioInfo);
-#line 7
+#line 6
 this.FeatureBackground();
-#line 51
+#line 71
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 52
+#line 72
  testRunner.When("I sign in");
-#line 53
+#line 73
  testRunner.Then("shift trade tab should be visible");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Default to today when viewing shift trade")]
-        [NUnit.Framework.IgnoreAttribute()]
-        public virtual void DefaultToTodayWhenViewingShiftTrade()
+        [NUnit.Framework.DescriptionAttribute("Default to first day of open period when viewing shift trade")]
+        public virtual void DefaultToFirstDayOfOpenPeriodWhenViewingShiftTrade()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default to today when viewing shift trade", new string[] {
-                        "ignore"});
-#line 56
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default to first day of open period when viewing shift trade", ((string[])(null)));
+#line 75
 this.ScenarioSetup(scenarioInfo);
-#line 7
+#line 6
 this.FeatureBackground();
-#line 57
+#line 76
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 58
+#line 77
  testRunner.And("Current time is \'2030-01-01\'");
-#line 59
+#line 78
+ testRunner.And("I can do shift trades between \'2030-01-03\' and \'2030-01-17\'");
+#line 79
  testRunner.When("I navigate to shift trade page");
-#line 60
- testRunner.Then("the selected date should be \'2030-01-01\'");
+#line 80
+ testRunner.Then("the selected date should be \'2030-01-03\'");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Default time line when I am not scheduled")]
-        [NUnit.Framework.IgnoreAttribute()]
         public virtual void DefaultTimeLineWhenIAmNotScheduled()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default time line when I am not scheduled", new string[] {
-                        "ignore"});
-#line 63
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default time line when I am not scheduled", ((string[])(null)));
+#line 82
 this.ScenarioSetup(scenarioInfo);
-#line 7
+#line 6
 this.FeatureBackground();
-#line 64
+#line 83
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 65
+#line 84
  testRunner.And("Current time is \'2020-10-24\'");
-#line 66
+#line 85
  testRunner.When("I navigate to shift trade page");
-#line 67
+#line 86
  testRunner.Then("I should see the time line span from \'7:45\' to \'17:15\'");
 #line hidden
             this.ScenarioCleanup();
@@ -262,22 +320,20 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Time line when I have a scheduled shift")]
-        [NUnit.Framework.IgnoreAttribute()]
         public virtual void TimeLineWhenIHaveAScheduledShift()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Time line when I have a scheduled shift", new string[] {
-                        "ignore"});
-#line 70
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Time line when I have a scheduled shift", ((string[])(null)));
+#line 88
 this.ScenarioSetup(scenarioInfo);
-#line 7
+#line 6
 this.FeatureBackground();
-#line 71
+#line 89
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 72
+#line 90
  testRunner.And("Current time is \'2030-01-01\'");
-#line 73
+#line 91
  testRunner.When("I navigate to shift trade page");
-#line 74
+#line 92
  testRunner.Then("I should see the time line span from \'5:45\' to \'16:15\'");
 #line hidden
             this.ScenarioCleanup();
@@ -285,67 +341,63 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Show my scheduled shift")]
-        [NUnit.Framework.IgnoreAttribute()]
         public virtual void ShowMyScheduledShift()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show my scheduled shift", new string[] {
-                        "ignore"});
-#line 77
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show my scheduled shift", ((string[])(null)));
+#line 94
 this.ScenarioSetup(scenarioInfo);
-#line 7
+#line 6
 this.FeatureBackground();
-#line 78
+#line 95
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 79
+#line 96
  testRunner.And("Current time is \'2030-01-01\'");
-#line 80
+#line 97
  testRunner.When("I navigate to shift trade page");
 #line hidden
-            TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table10.AddRow(new string[] {
+            table14.AddRow(new string[] {
                         "Start time",
                         "06:00"});
-            table10.AddRow(new string[] {
+            table14.AddRow(new string[] {
                         "End time",
                         "16:00"});
-#line 81
- testRunner.Then("I should see my schedule with", ((string)(null)), table10);
+#line 98
+ testRunner.Then("I should see my schedule with", ((string)(null)), table14);
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Show my scheduled day off")]
-        [NUnit.Framework.IgnoreAttribute()]
         public virtual void ShowMyScheduledDayOff()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show my scheduled day off", new string[] {
-                        "ignore"});
-#line 87
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show my scheduled day off", ((string[])(null)));
+#line 103
 this.ScenarioSetup(scenarioInfo);
-#line 7
+#line 6
 this.FeatureBackground();
-#line 88
+#line 104
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
-            TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table11.AddRow(new string[] {
+            table15.AddRow(new string[] {
                         "Date",
                         "2030-01-03"});
-            table11.AddRow(new string[] {
+            table15.AddRow(new string[] {
                         "Name",
                         "DayOff"});
-#line 89
- testRunner.And("I have a day off with", ((string)(null)), table11);
-#line 93
+#line 105
+ testRunner.And("I have a day off with", ((string)(null)), table15);
+#line 109
  testRunner.And("Current time is \'2030-01-03\'");
-#line 94
+#line 110
  testRunner.When("I navigate to shift trade page");
-#line 95
+#line 111
  testRunner.Then("I should see my scheduled day off \'DayOff\'");
 #line hidden
             this.ScenarioCleanup();
@@ -353,37 +405,35 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Show my full-day absence")]
-        [NUnit.Framework.IgnoreAttribute()]
         public virtual void ShowMyFull_DayAbsence()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show my full-day absence", new string[] {
-                        "ignore"});
-#line 98
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show my full-day absence", ((string[])(null)));
+#line 113
 this.ScenarioSetup(scenarioInfo);
-#line 7
+#line 6
 this.FeatureBackground();
-#line 99
+#line 114
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line hidden
-            TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
                         "Value"});
-            table12.AddRow(new string[] {
+            table16.AddRow(new string[] {
                         "Date",
                         "2030-01-05"});
-            table12.AddRow(new string[] {
+            table16.AddRow(new string[] {
                         "Name",
                         "Illness"});
-            table12.AddRow(new string[] {
+            table16.AddRow(new string[] {
                         "Full Day",
                         "True"});
-#line 100
- testRunner.And("I have absence with", ((string)(null)), table12);
-#line 105
+#line 115
+ testRunner.And("I have absence with", ((string)(null)), table16);
+#line 120
  testRunner.And("Current time is \'2030-01-05\'");
-#line 106
+#line 121
  testRunner.When("I navigate to shift trade page");
-#line 107
+#line 122
  testRunner.Then("I should see my scheduled absence \'Illness\'");
 #line hidden
             this.ScenarioCleanup();
@@ -391,23 +441,205 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Show message when no possible shift trades")]
-        [NUnit.Framework.IgnoreAttribute()]
         public virtual void ShowMessageWhenNoPossibleShiftTrades()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show message when no possible shift trades", new string[] {
-                        "ignore"});
-#line 110
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show message when no possible shift trades", ((string[])(null)));
+#line 124
 this.ScenarioSetup(scenarioInfo);
-#line 7
+#line 6
 this.FeatureBackground();
-#line 111
+#line 125
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 112
+#line 126
  testRunner.And("Current time is \'2030-01-05\'");
-#line 113
- testRunner.When("I navigate to shift trade page");
-#line 114
+#line 127
+ testRunner.And("I can do shift trades between \'2030-01-06\' and \'2030-01-17\'");
+#line 128
+ testRunner.When("I navigate to shift trade page for date \'2030-01-05\'");
+#line 129
  testRunner.Then("I should see a user-friendly message explaining that shift trades cannot be made");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("One possible shift to trade with because shift trade periods match")]
+        public virtual void OnePossibleShiftToTradeWithBecauseShiftTradePeriodsMatch()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("One possible shift to trade with because shift trade periods match", ((string[])(null)));
+#line 131
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 132
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 133
+ testRunner.And("Current time is \'2029-12-29\'");
+#line 134
+ testRunner.And("I can do shift trades between \'2030-01-01\' and \'2030-01-17\'");
+#line 135
+ testRunner.And("another agent named \'Other agent 1\' can do shift trades between \'2030-01-01\' and " +
+                    "\'2030-01-17\'");
+#line hidden
+            TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table17.AddRow(new string[] {
+                        "Agent name",
+                        "Other agent 1"});
+            table17.AddRow(new string[] {
+                        "StartTime",
+                        "2030-01-01 10:00"});
+            table17.AddRow(new string[] {
+                        "EndTime",
+                        "2030-01-01 20:00"});
+            table17.AddRow(new string[] {
+                        "Shift category",
+                        "Late"});
+            table17.AddRow(new string[] {
+                        "Lunch3HoursAfterStart",
+                        "true"});
+#line 136
+ testRunner.And("an agent has a shift with", ((string)(null)), table17);
+#line 143
+ testRunner.When("I navigate to shift trade page");
+#line 144
+ testRunner.Then("I should see one possible shift to trade with");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Not possible to trade shift because no matching skills")]
+        public virtual void NotPossibleToTradeShiftBecauseNoMatchingSkills()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Not possible to trade shift because no matching skills", ((string[])(null)));
+#line 146
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 147
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 148
+ testRunner.And("Current time is \'2029-12-29\'");
+#line 149
+ testRunner.And("I can do shift trades between \'2030-01-01\' and \'2030-01-17\'");
+#line 150
+ testRunner.And("another agent named \'Other agent 1\' can do shift trades between \'2030-01-01\' and " +
+                    "\'2030-01-17\'");
+#line hidden
+            TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table18.AddRow(new string[] {
+                        "Agent name",
+                        "Other agent 1"});
+            table18.AddRow(new string[] {
+                        "StartTime",
+                        "2030-01-01 10:00"});
+            table18.AddRow(new string[] {
+                        "EndTime",
+                        "2030-01-01 20:00"});
+            table18.AddRow(new string[] {
+                        "Shift category",
+                        "Late"});
+            table18.AddRow(new string[] {
+                        "Lunch3HoursAfterStart",
+                        "true"});
+#line 151
+ testRunner.And("an agent has a shift with", ((string)(null)), table18);
+#line hidden
+            TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table19.AddRow(new string[] {
+                        "Name",
+                        "Published schedule"});
+            table19.AddRow(new string[] {
+                        "Shift trade matching skill",
+                        "Skill 1"});
+#line 158
+ testRunner.And("I have a updated workflow control set with", ((string)(null)), table19);
+#line 162
+ testRunner.When("I navigate to shift trade page");
+#line 163
+ testRunner.Then("I should see a user-friendly message explaining that shift trades cannot be made");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("One possible shift to trade with because shift trade periods and skills are match" +
+            "ing")]
+        public virtual void OnePossibleShiftToTradeWithBecauseShiftTradePeriodsAndSkillsAreMatching()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("One possible shift to trade with because shift trade periods and skills are match" +
+                    "ing", ((string[])(null)));
+#line 165
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line 166
+ testRunner.Given("I have the role \'Full access to mytime\'");
+#line 167
+ testRunner.And("Current time is \'2029-12-29\'");
+#line 168
+ testRunner.And("I can do shift trades between \'2030-01-01\' and \'2030-01-17\'");
+#line 169
+ testRunner.And("another agent named \'Other agent 1\' can do shift trades between \'2030-01-01\' and " +
+                    "\'2030-01-17\'");
+#line hidden
+            TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table20.AddRow(new string[] {
+                        "Agent name",
+                        "Other agent 1"});
+            table20.AddRow(new string[] {
+                        "StartTime",
+                        "2030-01-01 10:00"});
+            table20.AddRow(new string[] {
+                        "EndTime",
+                        "2030-01-01 20:00"});
+            table20.AddRow(new string[] {
+                        "Shift category",
+                        "Late"});
+            table20.AddRow(new string[] {
+                        "Lunch3HoursAfterStart",
+                        "true"});
+#line 170
+ testRunner.And("an agent has a shift with", ((string)(null)), table20);
+#line hidden
+            TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table21.AddRow(new string[] {
+                        "Name",
+                        "Published schedule"});
+            table21.AddRow(new string[] {
+                        "Shift trade matching skill",
+                        "Skill 1"});
+#line 177
+ testRunner.And("I have a updated workflow control set with", ((string)(null)), table21);
+#line hidden
+            TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table22.AddRow(new string[] {
+                        "Agent name",
+                        "Other agent 1"});
+            table22.AddRow(new string[] {
+                        "Name",
+                        "Published schedule"});
+            table22.AddRow(new string[] {
+                        "Shift trade matching skill",
+                        "Skill 1"});
+#line 181
+ testRunner.And("an agent has a updated workflow control set with", ((string)(null)), table22);
+#line 186
+ testRunner.When("I navigate to shift trade page");
+#line 187
+ testRunner.Then("I should see one possible shift to trade with");
 #line hidden
             this.ScenarioCleanup();
         }
