@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var changesTracker = new LockableBitArrayChangesTracker();
 			IList<DateOnly> movedDays = changesTracker.DayOffChanges(workingBitArray, originalBitArray, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
 			double oldValue;
-			if(!_optimizerPreferences.Advanced.UseTweakedValues)
+			if(!_optimizerPreferences.Advanced.UseTweakedValues && doReschedule)
 			{
 				oldValue = _dayOffOptimizerPreMoveResultPredictor.CurrentValue(currentScheduleMatrix);
 				double predictedNewValue = _dayOffOptimizerPreMoveResultPredictor.PredictedValue(currentScheduleMatrix, workingBitArray,
@@ -125,11 +125,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             var workingBitArrayBeforeBackToLegalState = (ILockableBitArray)workingBitArray.Clone();
 
-            if (!removeIllegalDayOffs(workingBitArray))
-            {
-                writeToLogBackToLegalStateFailed();
-                return false;
-            }
+			if(goBackToLegalState)
+			{
+				if (!removeIllegalDayOffs(workingBitArray))
+				{
+					writeToLogBackToLegalStateFailed();
+					return false;
+				}
+			}
+           
 
             movedDays = changesTracker.DayOffChanges(workingBitArray, workingBitArrayBeforeBackToLegalState, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
             if (movedDays.Count > 0)
