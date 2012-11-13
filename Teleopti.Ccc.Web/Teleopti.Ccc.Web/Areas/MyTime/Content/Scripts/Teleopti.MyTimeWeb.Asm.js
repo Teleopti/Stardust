@@ -42,7 +42,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					self.hours(data.Hours);
 					self._createLayers(data.Layers);
 					self.unreadMessageCount(data.UnreadMessageCount);
-
 					$('.asm-outer-canvas').show();
 
 					self.intervalPointer = setInterval(function () {
@@ -102,7 +101,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			}
 		});
 		self.unreadMessages = ko.computed(function () {
-			return true;
+			return self.unreadMessageCount() > 0;
 		});
 		self.yesterday.subscribe(function () {
 			if (self.intervalPointer != null) {
