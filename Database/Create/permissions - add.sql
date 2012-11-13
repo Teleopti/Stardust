@@ -66,11 +66,16 @@ SET NOCOUNT ON
 		PRINT 'Adding permission for $(LOGIN) in database. Working...'
 			--Create User for Login: $(LOGIN)
 			IF NOT EXISTS (SELECT * FROM sys.sysusers su INNER JOIN master.sys.syslogins SL ON su.sid = sl.sid WHERE SL.name = @Login)
-			SELECT @SqlCommand = 'CREATE USER [' + @Login + '] FOR LOGIN ['+@Login+']'
-			PRINT @SqlCommand
-			EXEC sp_executesql @SqlCommand
-			
-		PRINT 'Adding permission for $(LOGIN) in database. Finished!'
+			BEGIN
+				SELECT @SqlCommand = 'CREATE USER [' + @Login + '] FOR LOGIN ['+@Login+']'
+				PRINT @SqlCommand
+				EXEC sp_executesql @SqlCommand
+				PRINT 'Adding permission for $(LOGIN) in database. Finished!'
+			END
+			ELSE
+			BEGIN
+				PRINT 'User $(LOGIN) already existed in database. Finished!'
+			END
 		END
 		
 	END
