@@ -1,11 +1,11 @@
 using System;
-using System.Threading;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
@@ -18,8 +18,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ICurrentBusinessUnitProvider _businessUnitProvider;
 		private readonly IDataSourceProvider _dataSourceProvider;
 		private readonly INow _now;
+		private readonly IUnitOfWorkFactory _uowFactory;
 
-		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository, IMappingEngine mapper, IServiceBusSender serviceBusSender, ICurrentBusinessUnitProvider businessUnitProvider, IDataSourceProvider dataSourceProvider, INow now)
+		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository, 
+											IMappingEngine mapper, 
+											IServiceBusSender serviceBusSender, 
+											ICurrentBusinessUnitProvider businessUnitProvider, 
+											IDataSourceProvider dataSourceProvider, 
+											INow now,
+											IUnitOfWorkFactory uowFactory)
 		{
 			_personRequestRepository = personRequestRepository;
 			_mapper = mapper;
@@ -27,6 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_businessUnitProvider = businessUnitProvider;
 			_dataSourceProvider = dataSourceProvider;
 			_now = now;
+			_uowFactory = uowFactory;
 		}
 
 		public RequestViewModel Persist(AbsenceRequestForm form)
@@ -67,8 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				              		PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
 				              		Timestamp = _now.UtcDateTime()
 				              	};
-				var state = new TimerState {Message = message};
-				state.Timer = new Timer(notifyServiceBusAfterASmallDelay,state,TimeSpan.FromMilliseconds(50),TimeSpan.FromMilliseconds(-1));
+				_uowFactory.CurrentUnitOfWork().AfterSuccessfulTx(() => _serviceBusSender.NotifyServiceBus(message));
 			}
 			else
 			{
@@ -76,28 +83,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
-		}
-
-		private void notifyServiceBusAfterASmallDelay(object state)
-		{
-			var timerState = (TimerState)state;
-			_serviceBusSender.NotifyServiceBus(timerState.Message);
-			timerState.DisposeTimer();
-		}
-
-		private class TimerState
-		{
-			public Timer Timer { get; set; }
-			public NewAbsenceRequestCreated Message { get; set; }
-			
-			public void DisposeTimer()
-			{
-				if (Timer!=null)
-				{
-					Timer.Dispose();
-					Timer = null;
-				}
-			}
 		}
 	}
 }
