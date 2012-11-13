@@ -36,10 +36,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly Action<ISession> _unbind;
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
 
-
 		protected internal NHibernateUnitOfWork(ISession session, 
 													IMessageBroker messageBroker,
-IEnumerable<IMessageSender> activeDenormalizers,
+													IEnumerable<IMessageSender> activeDenormalizers,
 													NHibernateFilterManager filterManager,
 													ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService,
 													Action<ISession> unbind)
@@ -50,7 +49,7 @@ IEnumerable<IMessageSender> activeDenormalizers,
 			_filterManager = filterManager;
 			_sendPushMessageWhenRootAlteredService = sendPushMessageWhenRootAlteredService;
 			_unbind = unbind;
-_activeDenormalizers = activeDenormalizers;
+			_activeDenormalizers = activeDenormalizers;
 		}
 
 		protected internal AggregateRootInterceptor Interceptor
@@ -126,6 +125,8 @@ _activeDenormalizers = activeDenormalizers;
 
 		public virtual IEnumerable<IRootChangeInfo> PersistAll(IMessageBrokerModule moduleUsedForPersist)
 		{
+			//man borde nog styra upp denna genom att använda ISynchronization istället,
+			//när tran startas, lägg på en sync callback via tran.RegisterSynchronization(callback);
 			ICollection<IRootChangeInfo> modifiedRoots;
 			try
 			{
@@ -245,6 +246,12 @@ _activeDenormalizers = activeDenormalizers;
 			{
 				throw new OptimisticLockException("Optimistic lock", ex);
 			}
+		}
+
+		//right now only supporting one callback. if you call this twice - the latter will overwrite the first one
+		public void AfterSuccessfulTx(Action<object> func)
+		{
+			Session.Transaction.RegisterSynchronization(new TransactionCallbacks(func));
 		}
 
 		private static bool hasOuterTransaction()

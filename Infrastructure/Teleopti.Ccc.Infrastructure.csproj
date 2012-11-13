@@ -378,6 +378,7 @@
     <Compile Include="UnitOfWork\SaveToDenormalizationQueue.cs" />
     <Compile Include="UnitOfWork\ScheduleMessageSender.cs" />
     <Compile Include="UnitOfWork\SqlQuery.cs" />
+    <Compile Include="UnitOfWork\TransactionCallbacks.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
   </ItemGroup>
   <ItemGroup>
