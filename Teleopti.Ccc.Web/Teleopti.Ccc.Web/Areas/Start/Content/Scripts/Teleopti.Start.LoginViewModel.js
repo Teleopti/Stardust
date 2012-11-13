@@ -61,6 +61,19 @@ Teleopti.Start.SignInViewModel = function () {
 		});
 	};
 
+	this.Logon = function () {
+		var ajax = new Teleopti.MyTimeWeb.Ajax();
+		ajax.Ajax({
+			url: "/Start/Authentication/ApplicationLogon",
+			dataType: "json",
+			data: { "DataSourceName": self.SelectedSource().DataSourceName, "UserName": self.UserName(), "Password": self.Password() },
+			type: 'Post',
+			success: function (data, textStatus, jqXHR) {
+				var foo;
+			}
+		});
+	};
+
 	this.SelectBusinessUnit = function () {
 		if (self.SelectedBusinessUnit())
 			self.SelectedBusinessUnit().Selected(false);

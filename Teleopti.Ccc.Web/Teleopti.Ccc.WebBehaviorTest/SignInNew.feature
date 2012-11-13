@@ -42,7 +42,7 @@ Scenario: Sign in with a user with multiple business units by user name
 	
 Scenario: Sign in with a user with one business unit by user name and I should be directed into that business unit direct without having to select it
 	Given I have the role 'Role for business unit 1'
-	And I am viewing the sign in page
+	And I am viewing the new sign in page
 	When I select application logon data source
 	And I sign in by user name
 	Then I should be signed in

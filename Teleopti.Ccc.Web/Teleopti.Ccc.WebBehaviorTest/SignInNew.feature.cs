@@ -184,7 +184,7 @@ this.FeatureBackground();
 #line 44
  testRunner.Given("I have the role \'Role for business unit 1\'");
 #line 45
- testRunner.And("I am viewing the sign in page");
+ testRunner.And("I am viewing the new sign in page");
 #line 46
  testRunner.When("I select application logon data source");
 #line 47

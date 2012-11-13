@@ -27,10 +27,10 @@
 				</li>
 			</ul>
 			<div>
-				<input type="text" id="Username-input" placeholder="User name" class="input-block-level" data-bind="visible:IsApplicationLogon" />
+				<input type="text" id="Username-input" placeholder="User name" class="input-block-level" data-bind="value: UserName, visible:IsApplicationLogon" />
 			</div>
 			<div>
-				<input type="password" id="Password-input" placeholder="Password" class="input-block-level" data-bind="visible:IsApplicationLogon" />
+				<input type="password" id="Password-input" placeholder="Password" class="input-block-level" data-bind="value: Password, visible:IsApplicationLogon" />
 			</div>
 			<button class="btn btn-primary" id="Login-button">Log on</button>
 		</div>

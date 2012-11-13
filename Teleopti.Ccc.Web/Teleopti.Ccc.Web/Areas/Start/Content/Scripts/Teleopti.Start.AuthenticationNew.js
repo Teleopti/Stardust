@@ -25,20 +25,29 @@ Teleopti.Start.AuthenticationNew = (function ($) {
 		ko.applyBindings(signinViewModel, $('#Login-container')[0]);
 	}
 
+	function _initSubmit() {
+		$('#Login-button').click(function () {
+			Teleopti.Start.Authentication.RequestPermissionForNotification(function () {
+				signinViewModel.Logon();
+			});
+		});
+	}
+
 	return {
 		Init: function () {
 			_initViewModels();
+			_initSubmit();
 		},
 
 		SignInPartialInit: function (ajaxContext) {
-			
+
 		},
 		RequestPermissionForNotification: function (callback) {
-//			if (window.webkitNotifications) {
-//				window.webkitNotifications.requestPermission(callback);
-//			} else {
-//				callback();
-//			}
+			//			if (window.webkitNotifications) {
+			//				window.webkitNotifications.requestPermission(callback);
+			//			} else {
+			//				callback();
+			//			}
 		}
 	};
 })(jQuery);

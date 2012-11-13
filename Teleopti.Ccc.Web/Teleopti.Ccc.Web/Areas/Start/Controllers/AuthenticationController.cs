@@ -106,6 +106,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			return tryLogon(appView, signInModel, authenticationResult, AuthenticationTypeOption.Application);
 		}
 
+		[HttpPost]
+		public ActionResult ApplicationLogon(SignInApplicationModel model)
+		{
+			return Application(model);
+		}
+
 		private ActionResult tryLogon(string currentView, Lazy<object> signInModel, AuthenticateResult authenticationResult, AuthenticationTypeOption authenticationType)
 		{
 			if (!authenticationResult.Successful)
