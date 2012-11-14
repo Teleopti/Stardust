@@ -67,11 +67,6 @@ Scenario: Do not show shift trade request tab if no permission
 	When I sign in
 	Then shift trade tab should not be visible
 
-Scenario: Show Shift trade reuqest tab
-	Given I have the role 'Full access to mytime'
-	When I sign in
-	Then shift trade tab should be visible
-
 Scenario: Default to first day of open period when viewing shift trade
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01'
@@ -141,7 +136,7 @@ Scenario: One possible shift to trade with because shift trade periods match
 	| Shift category		| Late	           |
 	| Lunch3HoursAfterStart | true             |
 	When I navigate to shift trade page
-	Then I should see one possible shift to trade with
+	Then I should have one possible shift to trade with
 
 Scenario: Not possible to trade shift because no matching skills
 	Given I have the role 'Full access to mytime'
@@ -184,4 +179,4 @@ Scenario: One possible shift to trade with because shift trade periods and skill
 	| Name                       | Published schedule |
 	| Shift trade matching skill | Skill 1            |
 	When I navigate to shift trade page
-	Then I should see one possible shift to trade with
+	Then I should have one possible shift to trade with
