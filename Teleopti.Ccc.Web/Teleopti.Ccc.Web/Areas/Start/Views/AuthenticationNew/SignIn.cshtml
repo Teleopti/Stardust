@@ -18,9 +18,11 @@
 }
 <section id="page-signin">
 	<div class="container" id="Login-container">
+		
 		<div class="login-logo">
 			<img src="@Url.Content("~/Areas/Start/Content/Images/mobile_logo.png")"/>
 		</div>
+
 		<div data-bind="visible:DataSourceSelectionActive" class="login-form well well-large">
 			<ul id="DataSources" data-bind="foreach: AvailableDataSources" class="nav nav-tabs nav-stacked">
 				<li data-bind="css: {'active': Selected}">
@@ -36,6 +38,22 @@
 			<button class="btn btn-primary" id="Login-button">@Resources.LogOn</button>
 			<span class="error" data-bind="text: ErrorMessage"></span>
 		</div>
+		
+		<div data-bind="visible:BusinessUnitSelectionActive" class="login-form well well-large">
+			<h3>Select business unit:</h3>
+			<ul data-bind="foreach: AvailableBusinessUnits" class="nav nav-tabs nav-stacked">
+				<li data-bind="css: {'active': Selected}"><a href="#" data-bind="text: BusinessUnitName, click: $parent.SelectBusinessUnit"></a></li>
+			</ul>
+		</div>
+
+		<div data-bind="visible:ApplicationSelectionActive" class="login-form well well-large">
+			<h3>Select application:</h3>
+			<ul data-bind="foreach: AvailableApplications" class="nav nav-tabs nav-stacked">
+				<li data-bind="css: {'active': Selected}"><a href="#" data-bind="text: ApplicationName, click: $parent.SelectApplication"></a></li>
+			</ul>
+		</div>
+
+		@*
 		<div data-bind="visible: (MustChangePasswordActive() || WarningActive())">
 			<div class="alert login-warning" data-bind="visible:MustChangePasswordActive">
 				<button type="button" class="close" data-dismiss="alert">×</button>
@@ -52,18 +70,8 @@
 				<button class="btn btn-primary" id="Change-password-button" type="submit">@Resources.Apply</button>
 			</div>
 		</div>
-		<div data-bind="visible:BusinessUnitSelectionActive" class="login-form well well-large">
-			<h3>Select business unit:</h3>
-			<ul data-bind="foreach: AvailableBusinessUnits" class="nav nav-tabs nav-stacked">
-				<li data-bind="css: {'active': Selected}"><a href="#" data-bind="text: BusinessUnitName, click: $parent.SelectBusinessUnit"></a></li>
-			</ul>
-		</div>
-		<div data-bind="visible:ApplicationSelectionActive" class="login-form well well-large">
-			<h3>Select application:</h3>
-			<ul data-bind="foreach: AvailableApplications" class="nav nav-tabs nav-stacked">
-				<li data-bind="css: {'active': Selected}"><a href="#" data-bind="text: ApplicationName, click: $parent.SelectApplication"></a></li>
-			</ul>
-		</div>
+		*@
+
 	</div>
 </section>
 

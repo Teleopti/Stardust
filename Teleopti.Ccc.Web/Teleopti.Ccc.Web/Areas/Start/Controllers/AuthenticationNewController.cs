@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_dataSourceProvider = dataSourceProvider;
 		}
 
-		public ActionResult SignInNew()
+		public ActionResult SignIn()
 		{
 			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
 			return View();

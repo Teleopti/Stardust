@@ -45,7 +45,7 @@ Teleopti.Start.SignInViewModel = function () {
 
 	this.LoadDataSources = function () {
 		ajax.Ajax({
-			url: "/Start/Authentication/LoadDataSources",
+			url: "/Start/AuthenticationNew/LoadDataSources",
 			dataType: "json",
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {

@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
 	[TestFixture]
-	public class AuthenticationNewControllerSignInTest
+	public class AuthenticationNewControllerTest
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldLoadDataSources()

@@ -38,16 +38,12 @@ Teleopti.Start.AuthenticationNew = (function ($) {
 			_initViewModels();
 			_initSubmit();
 		},
-
-		SignInPartialInit: function (ajaxContext) {
-
-		},
 		RequestPermissionForNotification: function (callback) {
-			//			if (window.webkitNotifications) {
-			//				window.webkitNotifications.requestPermission(callback);
-			//			} else {
-			//				callback();
-			//			}
+			if (window.webkitNotifications) {
+				window.webkitNotifications.requestPermission(callback);
+			} else {
+				callback();
+			}
 		}
 	};
 })(jQuery);
