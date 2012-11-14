@@ -16,7 +16,7 @@
 			}
 			var locUrls = {
 				orig: '@HttpUtility.JavaScriptStringEncode((string)origin)',
-				desktop: '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "Authentication", Action = "SignIn", area = origin ?? "Start" }))',
+				desktop: '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new { Controller = "AuthenticationNew", Action = "SignInNew", area = origin ?? "Start" }))',
 				mobile: '@HttpUtility.JavaScriptStringEncode(Url.RouteUrl(new{ Controller = "Authentication", Action="MobileSignIn", area = origin ?? "Start" }))',
 				target: ''
 			};

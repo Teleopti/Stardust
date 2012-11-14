@@ -158,11 +158,11 @@ this.FeatureBackground();
  testRunner.And("I have the role \'Role for business unit 2\'");
 #line 37
  testRunner.And("I am viewing the sign in page");
-#line 39
+#line 38
  testRunner.When("I sign in by user name");
-#line 40
+#line 39
  testRunner.And("I select a business unit");
-#line 41
+#line 40
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
@@ -175,17 +175,17 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with a user with one business unit by user name and I should be directed " +
                     "into that business unit direct without having to select it", ((string[])(null)));
-#line 43
+#line 42
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 44
+#line 43
  testRunner.Given("I have the role \'Role for business unit 1\'");
-#line 45
+#line 44
  testRunner.And("I am viewing the sign in page");
-#line 47
+#line 45
  testRunner.When("I sign in by user name");
-#line 48
+#line 46
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
@@ -196,21 +196,21 @@ this.FeatureBackground();
         public virtual void SignInWithAUserWithMultipleBusinessUnitsByWindowsCredentials()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with a user with multiple business units by Windows credentials", ((string[])(null)));
-#line 50
+#line 48
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 51
+#line 49
  testRunner.Given("Windows user have the role \'Role for business unit 1\'");
-#line 52
+#line 50
  testRunner.And("Windows user have the role \'Role for business unit 2\'");
-#line 53
+#line 51
  testRunner.And("I am viewing the sign in page");
-#line 55
+#line 52
  testRunner.When("I sign in by windows credentials");
-#line 56
+#line 53
  testRunner.And("I select a business unit");
-#line 57
+#line 54
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
@@ -223,17 +223,17 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with a user with one business unit by Windows credentials and I should be" +
                     " directed into that business unit direct without having to select it", ((string[])(null)));
-#line 59
+#line 56
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 60
+#line 57
  testRunner.Given("Windows user have the role \'Role for business unit 2\'");
-#line 61
+#line 58
  testRunner.And("I am viewing the sign in page");
-#line 63
+#line 59
  testRunner.When("I sign in by windows credentials");
-#line 64
+#line 60
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
@@ -244,17 +244,17 @@ this.FeatureBackground();
         public virtual void SignInWithWrongPasswordShouldGiveMeAnInformativeError()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with wrong password should give me an informative error", ((string[])(null)));
-#line 66
+#line 62
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 67
+#line 63
  testRunner.Given("I have the role \'Role for business unit 1\'");
-#line 68
+#line 64
  testRunner.And("I am viewing the sign in page");
-#line 70
+#line 65
  testRunner.When("I sign in by user name and wrong password");
-#line 71
+#line 66
  testRunner.Then("I should see an log on error");
 #line hidden
             this.ScenarioCleanup();
@@ -265,17 +265,17 @@ this.FeatureBackground();
         public virtual void SignInWithoutPermission()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in without permission", ((string[])(null)));
-#line 73
+#line 68
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 74
+#line 69
  testRunner.Given("I dont have permission to sign in");
-#line 75
+#line 70
  testRunner.And("I am viewing the sign in page");
-#line 77
+#line 71
  testRunner.When("I sign in by user name");
-#line 78
+#line 72
  testRunner.Then("I should not be signed in");
 #line hidden
             this.ScenarioCleanup();

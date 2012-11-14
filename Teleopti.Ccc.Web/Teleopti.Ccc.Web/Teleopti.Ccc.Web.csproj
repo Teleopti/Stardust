@@ -234,6 +234,7 @@
     <Compile Include="Areas\MyTime\Models\Requests\AbsenceRequestForm.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\AbsenceRequestPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IAbsenceRequestPersister.cs" />
+    <Compile Include="Areas\Start\Controllers\AuthenticationNewController.cs" />
     <Compile Include="Areas\Start\Models\Test\TestMessageViewModel.cs" />
     <Compile Include="Core\DateTimeExtensions.cs" />
     <Compile Include="Core\RequestContext\CurrentBusinessUnitProvider.cs" />
@@ -597,7 +598,7 @@
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
     <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
-    <Content Include="Areas\Start\Views\Authentication\SignInNew.cshtml" />
+    <Content Include="Areas\Start\Views\AuthenticationNew\SignInNew.cshtml" />
     <None Include="Areas\Start\Views\Test\Message.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -620,7 +621,6 @@
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.9.1.custom.css" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.9.1.custom.min.css" />
-    <Content Include="Areas\Start\Content\login.html" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.css" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.js" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.css" />

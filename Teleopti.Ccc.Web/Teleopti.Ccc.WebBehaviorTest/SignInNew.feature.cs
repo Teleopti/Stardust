@@ -164,7 +164,7 @@ this.FeatureBackground();
  testRunner.And("I try to sign in by application logon");
 #line 40
  testRunner.And("I select a business unit");
-#line 41
+#line 42
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
@@ -177,19 +177,19 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with a user with one business unit by user name and I should be directed " +
                     "into that business unit direct without having to select it", ((string[])(null)));
-#line 43
+#line 44
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 44
- testRunner.Given("I have the role \'Role for business unit 1\'");
 #line 45
- testRunner.And("I am viewing the new sign in page");
+ testRunner.Given("I have the role \'Role for business unit 1\'");
 #line 46
- testRunner.When("I select application logon data source");
+ testRunner.And("I am viewing the new sign in page");
 #line 47
- testRunner.And("I try to sign in by application logon");
+ testRunner.When("I select application logon data source");
 #line 48
+ testRunner.And("I try to sign in by application logon");
+#line 49
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
@@ -200,23 +200,23 @@ this.FeatureBackground();
         public virtual void SignInWithAUserWithMultipleBusinessUnitsByWindowsCredentials()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with a user with multiple business units by Windows credentials", ((string[])(null)));
-#line 50
+#line 51
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 51
- testRunner.Given("Windows user have the role \'Role for business unit 1\'");
 #line 52
- testRunner.And("Windows user have the role \'Role for business unit 2\'");
+ testRunner.Given("Windows user have the role \'Role for business unit 1\'");
 #line 53
- testRunner.And("I am viewing the sign in page");
+ testRunner.And("Windows user have the role \'Role for business unit 2\'");
 #line 54
- testRunner.When("I select windows logon data source");
+ testRunner.And("I am viewing the sign in page");
 #line 55
- testRunner.And("I sign in by windows credentials");
+ testRunner.When("I select windows logon data source");
 #line 56
- testRunner.And("I select a business unit");
+ testRunner.And("I sign in by windows credentials");
 #line 57
+ testRunner.And("I select a business unit");
+#line 58
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
@@ -229,19 +229,19 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with a user with one business unit by Windows credentials and I should be" +
                     " directed into that business unit direct without having to select it", ((string[])(null)));
-#line 59
+#line 60
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 60
- testRunner.Given("Windows user have the role \'Role for business unit 2\'");
 #line 61
- testRunner.And("I am viewing the sign in page");
+ testRunner.Given("Windows user have the role \'Role for business unit 2\'");
 #line 62
- testRunner.When("I select windows logon data source");
+ testRunner.And("I am viewing the sign in page");
 #line 63
- testRunner.And("I sign in by windows credentials");
+ testRunner.When("I select windows logon data source");
 #line 64
+ testRunner.And("I sign in by windows credentials");
+#line 65
  testRunner.Then("I should be signed in");
 #line hidden
             this.ScenarioCleanup();
@@ -252,19 +252,19 @@ this.FeatureBackground();
         public virtual void SignInWithWrongPasswordShouldGiveMeAnInformativeError()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with wrong password should give me an informative error", ((string[])(null)));
-#line 66
+#line 67
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 67
- testRunner.Given("I have the role \'Role for business unit 1\'");
 #line 68
- testRunner.And("I am viewing the sign in page");
+ testRunner.Given("I have the role \'Role for business unit 1\'");
 #line 69
- testRunner.When("I select application logon data source");
+ testRunner.And("I am viewing the sign in page");
 #line 70
- testRunner.And("I sign in by user name and wrong password");
+ testRunner.When("I select application logon data source");
 #line 71
+ testRunner.And("I sign in by user name and wrong password");
+#line 72
  testRunner.Then("I should see an log on error");
 #line hidden
             this.ScenarioCleanup();
@@ -275,19 +275,19 @@ this.FeatureBackground();
         public virtual void SignInWithoutPermission()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in without permission", ((string[])(null)));
-#line 73
+#line 74
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 74
- testRunner.Given("I dont have permission to sign in");
 #line 75
- testRunner.And("I am viewing the sign in page");
+ testRunner.Given("I dont have permission to sign in");
 #line 76
- testRunner.When("I select application logon data source");
+ testRunner.And("I am viewing the sign in page");
 #line 77
- testRunner.And("I sign in by user name");
+ testRunner.When("I select application logon data source");
 #line 78
+ testRunner.And("I sign in by user name");
+#line 79
  testRunner.Then("I should not be signed in");
 #line hidden
             this.ScenarioCleanup();

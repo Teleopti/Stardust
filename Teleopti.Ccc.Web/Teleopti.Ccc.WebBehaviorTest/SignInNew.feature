@@ -38,6 +38,7 @@ Scenario: Sign in with a user with multiple business units by user name
 	When I select application logon data source
 	And I try to sign in by application logon
 	And I select a business unit
+	#And I select business unit 'Business Unit 1'
 	Then I should be signed in
 	
 Scenario: Sign in with a user with one business unit by user name and I should be directed into that business unit direct without having to select it

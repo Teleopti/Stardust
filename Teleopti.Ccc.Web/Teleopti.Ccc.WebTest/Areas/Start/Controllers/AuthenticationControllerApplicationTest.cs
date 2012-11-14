@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			_redirector = MockRepository.GenerateMock<IRedirector>();
 			_logOn = _mocks.DynamicMock<IWebLogOn>();
 			_viewModelFactory = new AuthenticationViewModelFactory(_dataSourcesProvider, _businessUnitProvider);
-			_target = new AuthenticationController(_viewModelFactory, _authenticator, _logOn, null, null, _redirector, null);
+			_target = new AuthenticationController(_viewModelFactory, _authenticator, _logOn, null, null, _redirector);
 		}
 
 		[TearDown]

@@ -124,6 +124,8 @@
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Models\MessageBroker\UserDataFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInputTest.cs" />
+    <Compile Include="Areas\Start\Controllers\AuthenticationNewControllerSignInTest.cs" />
+    <Compile Include="Areas\Start\Controllers\FakeDataSource.cs" />
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\Mapping\AsmViewModelMapperTest.cs" />
     <Compile Include="Core\Common\DataProvider\PreferenceProviderTest.cs" />
