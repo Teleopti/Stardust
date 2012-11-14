@@ -180,7 +180,27 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new ReadOnlyCollection<IScheduleDay>(clipObjectListFilter());
         }
 
-        public static IList<IScheduleMatrixPro> CreateMatrixList(ClipHandler clipHandler, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
+		public static IList<IScheduleMatrixPro> CreateMatrixListAll(ISchedulerStateHolder schedulerState, IComponentContext container)
+		{
+			if(schedulerState == null) throw new ArgumentNullException("schedulerState");
+
+			var allSchedules = new List<IScheduleDay>();
+			var period = schedulerState.RequestedPeriod;
+			var persons = schedulerState.FilteredPersonDictionary;
+
+			foreach (var day in period.DateOnlyPeriod.DayCollection())
+			{
+				foreach (var person in persons)
+				{
+					var theDay = schedulerState.Schedules[person.Value].ScheduledDay(day);
+					allSchedules.Add(theDay);
+				}
+			}
+
+			return CreateMatrixList(allSchedules, schedulerState.SchedulingResultState, container);
+		}
+
+		public static IList<IScheduleMatrixPro> CreateMatrixList(ClipHandler clipHandler, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
         {
             if (clipHandler == null) throw new ArgumentNullException("clipHandler");
             IList<IScheduleDay> scheduleDays = ContainedSchedulePartList(clipHandler.ClipList);
