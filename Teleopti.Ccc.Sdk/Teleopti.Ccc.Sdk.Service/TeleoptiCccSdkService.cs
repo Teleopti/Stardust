@@ -475,14 +475,14 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			}
 			if (scheduleLoadOptionDto.LoadPerson != null)
 			{
-				GetSchedulesByQuery(new GetSchedulesByPersonQueryDto
-				{
-					StartDate = startDate,
-					EndDate = endDate,
-					TimeZoneId = timeZoneId,
-					PersonId = scheduleLoadOptionDto.LoadPerson.Id.GetValueOrDefault(),
-					SpecialProjection = scheduleLoadOptionDto.SpecialProjection
-				});
+				query = new GetSchedulesByPersonQueryDto
+				        	{
+				        		StartDate = startDate,
+				        		EndDate = endDate,
+				        		TimeZoneId = timeZoneId,
+				        		PersonId = scheduleLoadOptionDto.LoadPerson.Id.GetValueOrDefault(),
+				        		SpecialProjection = scheduleLoadOptionDto.SpecialProjection
+				        	};
 			}
 			
 			if (query==null)
