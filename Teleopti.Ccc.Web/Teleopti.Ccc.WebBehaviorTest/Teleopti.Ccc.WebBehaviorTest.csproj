@@ -565,10 +565,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="AsmMessage.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AsmMessage.feature.cs</LastGenOutput>
-    </None>
     <None Include="ShiftTradeRequests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ShiftTradeRequests.feature.cs</LastGenOutput>
