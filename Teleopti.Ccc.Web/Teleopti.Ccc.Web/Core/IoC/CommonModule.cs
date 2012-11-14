@@ -94,13 +94,14 @@ namespace Teleopti.Ccc.Web.Core.IoC
 	{
 		private readonly IComponentContext _resolver;
 
-		public ResolveUsingDependencyResolver(IComponentContext resolver) {
+		public ResolveUsingDependencyResolver(IComponentContext resolver) 
+		{
 			_resolver = resolver;
 		}
 
 		public T Invoke()
 		{
-			T result = HttpContext.Current == null ? 
+			var result = HttpContext.Current == null ? 
 				_resolver.Resolve<T>() : 
 				DependencyResolver.Current.GetService<T>();
 			if (result == null)

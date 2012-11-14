@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			return bindFromModelName(bindingContext) ?? bindFromParts(bindingContext);
 		}
 
-		private object bindFromModelName(ModelBindingContext bindingContext)
+		private static object bindFromModelName(ModelBindingContext bindingContext)
 		{
 			var result = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
 			DateTime date;

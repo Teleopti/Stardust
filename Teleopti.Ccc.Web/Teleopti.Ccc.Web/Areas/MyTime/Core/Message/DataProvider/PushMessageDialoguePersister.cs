@@ -1,7 +1,4 @@
-using System;
-using System.Linq;
 using AutoMapper;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
 using Teleopti.Ccc.Web.Core.RequestContext;

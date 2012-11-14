@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 	{
 		public static string TojQueryPattern(string dotNetPattern)
 		{
-			string jQueryPatter = dotNetPattern;
+			var jQueryPatter = dotNetPattern;
 
 			jQueryPatter = jQueryPatter.Replace("dddd", "DD");
 			jQueryPatter = jQueryPatter.Replace("ddd", "D");
