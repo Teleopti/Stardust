@@ -77,20 +77,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IList<DateOnly> daysOffToAdd = _changesTracker.DaysOffAdded(workingBitArray, originalArray, matrix,
 			                                                            _daysOffPreferences.ConsiderWeekBefore);
 
-			
 
-			IList<GroupMatrixContainer> containers;
-			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(matrix.Person, daysOffToRemove[0]);
+			IPerson person = matrix.Person;
+			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, daysOffToRemove[0]);
 			if (groupPerson == null)
 				return false;
 
 			ValidatorResult result = new ValidatorResult();
 			result.Success = true;
 
+			IList<GroupMatrixContainer> containers;
+			
 			if(schedulingOptions.UseSameDayOffs)
 			{
 				//Will always return true IFairnessValueCalculator not using GroupOptimizerValidateProposedDatesInSameMatrix daysoff
-				result = _groupOptimizationValidatorRunner.Run(matrix.Person, daysOffToRemove, daysOffToAdd, schedulingOptions.UseSameDayOffs);
+				result = _groupOptimizationValidatorRunner.Run(person, daysOffToRemove, daysOffToAdd, schedulingOptions.UseSameDayOffs);
 				if (!result.Success)
 				{
 					return false;
@@ -100,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			else
 			{
-				containers = _groupMatrixHelper.CreateGroupMatrixContainers(allMatrixes, daysOffToRemove, daysOffToAdd, matrix.Person, _daysOffPreferences);
+				containers = _groupMatrixHelper.CreateGroupMatrixContainers(allMatrixes, daysOffToRemove, daysOffToAdd, person, _daysOffPreferences);
 			}
 			
 			if (containers == null || containers.Count() == 0)
@@ -109,13 +110,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if(result.MatrixList.Count == 0)
 			{
 				//kan flytta hur mycket som helst, behöver få veta vad som ska schemaläggas
-				//int x = daysOffToRemove.Count;
 				if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
 					return false;
 				daysOffToRemove = _changesTracker.DaysOffRemoved(workingBitArray, originalArray, matrix,
 																			 _daysOffPreferences.ConsiderWeekBefore);
-				//if (daysOffToRemove.Count != x)
-				//    return false;
 
 				IList<IScheduleDay> removedDays = _groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, schedulingOptions, allMatrixes, _schedulePartModifyAndRollbackService);
 				if (removedDays == null)
