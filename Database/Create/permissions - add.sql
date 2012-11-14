@@ -64,7 +64,8 @@ SET NOCOUNT ON
 		PRINT 'Adding permission for $(LOGIN) in database. Working...'
 		
 			--fix users that might be restored from another instance (wrong sid)
-			EXEC sp_change_users_login @Action='Update_One', @UserNamePattern=@Login,@LoginName=@Login
+			IF EXISTS (SELECT * FROM sys.database_principals WHERE name = N'$(LOGIN)')
+			DROP USER [$(LOGIN)]
 
 			--Create User for Login: $(LOGIN)
 			IF NOT EXISTS (SELECT * FROM sys.sysusers su INNER JOIN master.sys.syslogins SL ON su.sid = sl.sid WHERE SL.name = @Login)
