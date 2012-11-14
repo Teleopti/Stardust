@@ -31,6 +31,7 @@ Teleopti.Start.SignInViewModel = function () {
 
 	this.UserName = ko.observable();
 	this.Password = ko.observable();
+	this.ErrorMessage = ko.observable('');
 
 	this.PersonId = '';
 	this.AuthenticationType = 0;
@@ -85,11 +86,11 @@ Teleopti.Start.SignInViewModel = function () {
 		}
 		ajax.Ajax({
 			url: url,
-			dataType: "json",
+			dataType: 'json',
 			data: _prefixModel('SignIn.', model),
 			type: 'Post',
 			success: function (data, textStatus, jqXHR) {
-				if (data.BusinessUnits.length > 1) {
+				if (data.BusinessUnits && data.BusinessUnits.length > 1) {
 					self.BusinessUnitSelectionActive(true);
 					self.DataSourceSelectionActive(false);
 					for (var i = 0; i < data.BusinessUnits.length; i++) {
@@ -101,6 +102,12 @@ Teleopti.Start.SignInViewModel = function () {
 					}
 					self.PersonId = data.SignIn.PersonId;
 					self.AuthenticationType = data.SignIn.AuthenticationType;
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status == 400) {
+					var data = $.parseJSON(jqXHR.responseText);
+					self.ErrorMessage(data.Errors);
 				}
 			}
 		});

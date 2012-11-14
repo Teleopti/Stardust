@@ -44,7 +44,7 @@ Scenario: Sign in with a user with one business unit by user name and I should b
 	Given I have the role 'Role for business unit 1'
 	And I am viewing the new sign in page
 	When I select application logon data source
-	And I sign in by user name
+	And I try to sign in by application logon
 	Then I should be signed in
 
 Scenario: Sign in with a user with multiple business units by Windows credentials
