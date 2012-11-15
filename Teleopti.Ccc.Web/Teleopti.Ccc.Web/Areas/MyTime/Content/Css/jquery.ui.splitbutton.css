@@ -1,32 +1,50 @@
-﻿.ui-splitbutton button.ui-button-icon-only {
+﻿.ui-splitbutton
+{
+	height: 22px;
 }
-.ui-splitbutton-button {
-}
-.ie7 .ui-splitbutton-button .ui-button-text {
-	 padding-top: 0;
-}
-.ui-splitbutton-menu {
-	clear: both;
-}
-.ui-splitbutton button.ui-button-icon-only {
-	background-image: url(../Images/button_sprite.png); 
-    background-repeat: no-repeat; 
-    background-color: transparent; 
-    background-repeat: no-repeat; 
-	background-position: -12px -90px;
-	border: 0;
-}
-.ie9 .ui-splitbutton button.ui-button-icon-only {
-	 height: 19px;
-}
-.ui-splitbutton .ui-button {
+.ui-splitbutton .ui-button 
+{
 	margin-right: 0px;
 	overflow: hidden;
 	white-space: nowrap;
 }
 
-.ui-splitbutton-button .ui-button-text
+.ui-splitbutton .ui-splitbutton-button
 {
+	vertical-align: top;
+	height: 20px;
+	width: 100px;
+}
+.ui-splitbutton-button .ui-button-text {
+    line-height: 1.0;
+}
+.ie7 .ui-splitbutton-button .ui-button-text {
+	 padding-top: 0;
+}
+
+.ui-splitbutton .ui-splitbutton-list-button
+{
+	top: 0px;
+	width: 20px;
+	height: 21px !important;
+	background-image: url(../Images/button_sprite.png); 
+    background-repeat: no-repeat; 
+    background-color: transparent; 
+	background-position: -16px -90px;
+	border: 0;
+}
+
+
+
+
+
+.ui-splitbutton-menu {
+	clear: both;
+}
+.ui-splitbutton-menu ul
+{
+	z-index: 15003;
+	position: absolute;
 }
 .ui-splitbutton-menu li
 {
@@ -37,12 +55,10 @@
 {
 	padding-right: 23px;
 }
-
 .rtl .ui-splitbutton-menu-text
 {
 	padding-left: 23px;
 }
-
 .ui-splitbutton-menu-icon-secondary
 {
 	position: absolute;
@@ -51,18 +67,5 @@
 	height: 18px;
 }
 
-.ui-splitbutton-menu .ui-splitbutton-menu-splitter 
-{
-	padding: 5px;
-	clear: left;
-}
-.ui-splitbutton-menu .ui-splitbutton-menu-splitter div
-{
-	 height:1px; 
-	 border-top:1px solid #ccc;
-}
 
-.ui-button .ui-button-text 
-{
-    line-height: 1.0;
-}
+

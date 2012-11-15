@@ -18,7 +18,7 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 			listeners.push({ Route: route, Notification: notification });
 		};
 
-		conn = $.connection.hub.start({ jsonp: true });
+		conn = $.connection.hub.start();
 	}
 	
 	function _addSubscription(options) {

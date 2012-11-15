@@ -43,12 +43,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		
 
-		private NoteViewModel createEmptyNote()
+		private static NoteViewModel createEmptyNote()
 		{
 			return new NoteViewModel();
 		}
 
-		private NoteViewModel createLongNote()
+		private static NoteViewModel createLongNote()
 		{
 			return new NoteViewModel
 						{
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 						};
 		}
 
-		private NoteViewModel createShortNote()
+		private static NoteViewModel createShortNote()
 		{
 			return new NoteViewModel
 						{
@@ -66,12 +66,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 						};
 		}
 
-		private PeriodViewModel createPhone()
+		private static PeriodViewModel createPhone()
 		{
 			return new PeriodViewModel {Summary = "01:30", TimeSpan = "08:00 - 09:30", Title = "Phone", StyleClassName = "phone_id"};
 		}
 
-		private PeriodViewModel createActivityWithLongName()
+		private static PeriodViewModel createActivityWithLongName()
 		{
 			return new PeriodViewModel
 						{
@@ -83,18 +83,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		}
 
 
-		private PeriodViewModel createBreak()
+		private static PeriodViewModel createBreak()
 		{
 			return new PeriodViewModel {Summary = "00:15", TimeSpan = "09:30 - 09:45", Title = "Break", StyleClassName = "break_id"};
 		}
 
-		private PeriodViewModel createMeeting()
+		private static PeriodViewModel createMeeting()
 		{
 			return new PeriodViewModel { Summary = "00:15", TimeSpan = "10:30 - 10:45", Title = "Meeting", StyleClassName = "meeting_id", Meeting = new MeetingViewModel { Location = "Room 12249382.3", Title = "augue a eleifend tincidunt" } };
 
 		}
 
-		private PeriodViewModel createLunch()
+		private static PeriodViewModel createLunch()
 		{
 			return new PeriodViewModel {Summary = "00:15", TimeSpan = "10:30 - 10:45", Title = "Lunch", StyleClassName = "meeting_id"};
 		}

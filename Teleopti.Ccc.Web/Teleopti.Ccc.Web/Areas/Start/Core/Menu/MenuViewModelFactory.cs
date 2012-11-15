@@ -4,8 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 {
 	using System.Collections.Generic;
 	using System.Linq;
-
-	using MyTime.Core.Portal;
 	using Models.Menu;
 
 	public class MenuViewModelFactory : IMenuViewModelFactory

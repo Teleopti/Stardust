@@ -144,5 +144,13 @@ namespace Teleopti.Interfaces.Domain
     	/// </summary>
     	/// <returns></returns>
     	DateTimePeriod VisiblePeriodMinusFourWeeksPeriod();
+
+    	/// <summary>
+    	/// Added to be able to view unpublished data in reports
+    	/// </summary>
+    	/// <param name="day"></param>
+    	/// <param name="includeUnpublished"></param>
+    	/// <returns></returns>
+    	IScheduleDay ScheduledDay(DateOnly day, bool includeUnpublished);
     }
 }

@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         
 
-        public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays, ISchedulingOptions schedulingOptions)
+        public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allMatrixes )
         {
             _backgroundWorker = backgroundWorker;
             var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
@@ -189,7 +189,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
             var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedDays, currentPersonTimeZone));
-			IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedDays));
 
             OptimizerHelperHelper.SetConsiderShortBreaks(
                 ScheduleViewBase.AllSelectedPersons(selectedDays), 
@@ -233,7 +232,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (optimizerPreferences.General.UseShiftCategoryLimitations)
             {
-                removeShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker, schedulingOptions, optimizerPreferences, selectedPersons, selectedPeriod);
+                removeShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker, schedulingOptions, optimizerPreferences, selectedPeriod, allMatrixes);
             }
             //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = originalOnlyShiftsWhenUnderstaffed;
@@ -348,7 +347,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void removeShiftCategoryBackToLegalState(
             IList<IScheduleMatrixPro> matrixList,
-			BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod)
+			BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes)
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -385,11 +384,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 					var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(groupMatrixHelper, coherentChecker, scheduleMatrixProFinder);
 					var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
 					var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
-					var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(selectedPersons, targetTimeCalculator, matrixList, groupPersonsBuilder, schedulingOptions);
+                	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
+					var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, matrixList, groupPersonsBuilder, schedulingOptions);
 					var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
+                	var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
 					IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
 
-					backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences, groupOptimizerFindMatrixesForGroup, teamSteadyStateDictionary, teamSteadyStateMainShiftScheduler, groupPersonBuilderForOptimization);
+					backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences, groupOptimizerFindMatrixesForGroup, teamSteadyStateHolder, teamSteadyStateMainShiftScheduler, groupPersonBuilderForOptimization);
                 }
                 else
                 {

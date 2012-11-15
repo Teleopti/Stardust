@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_principalAuthorization = principalAuthorization;
 		}
 
-		public void LogOn(Guid businessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType)
+		public void LogOn(Guid businessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType, string warningMessage = null)
 		{
 			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
@@ -57,8 +57,19 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 					throw new PermissionException("You (" + person.Name + ") don't have permission to access the web portal.");
 			}
 
-			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId, authenticationType);
+			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId, authenticationType, warningMessage);
 			_sessionSpecificDataProvider.StoreInCookie(sessionSpecificData);
+		}
+
+		public string PopWarningMessage()
+		{
+			var item = _sessionSpecificDataProvider.GrabFromCookie();
+			var warning = item.WarningMessage;
+
+			item = new SessionSpecificData(item.BusinessUnitId,item.DataSourceName,item.PersonId,item.AuthenticationType);
+			_sessionSpecificDataProvider.StoreInCookie(item);
+
+			return warning;
 		}
 	}
 }

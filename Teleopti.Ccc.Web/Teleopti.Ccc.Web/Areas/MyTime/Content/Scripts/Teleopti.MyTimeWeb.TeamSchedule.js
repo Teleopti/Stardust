@@ -1,4 +1,4 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.6.4.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.8.2.js" />
 /// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
 /// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
@@ -31,10 +31,30 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 		$('select.ui-selectbox-init')
 			.removeClass('ui-selectbox-init')
 			.selectbox({
-				source: "MyTime/TeamSchedule/Teams",
 				changed: function (event, item) {
 					var teamId = item.item.value;
 					_navigateTo(_currentFixedDate(), teamId);
+				},
+				rendered: function () {
+					var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
+					if (!teamId)
+						return;
+
+					var self = $(this);
+
+					if (self.selectbox('selectableOptions').length < 2)
+						self.selectbox({ visible: false });
+					else
+						self.selectbox({ visible: true });
+					if (self.selectbox('contains', teamId))
+						self.selectbox('select', teamId);
+					else {
+						var date = _currentFixedDate();
+						if (date)
+							_navigateTo(date);
+					}
+					readyForInteraction();
+					completelyLoaded();
 				}
 			})
 			.parent()
@@ -43,25 +63,9 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	}
 
 	function _initTeamPickerSelection() {
-		var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
 		var selectbox = $('#TeamSchedule-TeamPicker-select');
 		selectbox.selectbox({
 			source: "MyTime/TeamSchedule/Teams/" + _currentUrlDate()
-		});
-		selectbox.selectbox('refresh', function () {
-			if (selectbox.selectbox('selectableOptions').length < 2)
-				selectbox.selectbox('hide');
-			else
-				selectbox.selectbox('show');
-			if (selectbox.selectbox('contains', teamId))
-				selectbox.selectbox('select', teamId);
-			else {
-				var date = _currentFixedDate();
-				if (date)
-					_navigateTo(date);
-			}
-			readyForInteraction();
-			completelyLoaded();
 		});
 	}
 

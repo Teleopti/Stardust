@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory
 		SignInViewModel CreateSignInViewModel();
 		SignInWindowsViewModel CreateSignInWindowsViewModel(SignInWindowsModel model);
 		SignInApplicationViewModel CreateSignInApplicationViewModel(SignInApplicationModel model);
-		SignInBusinessUnitViewModel CreateBusinessUnitViewModel(IDataSource dataSource, IPerson person, AuthenticationTypeOption authenticationType);
+		SignInBusinessUnitViewModel CreateBusinessUnitViewModel(IDataSource dataSource, IPerson person, AuthenticationTypeOption authenticationType, string warningMessage);
 	}
 }

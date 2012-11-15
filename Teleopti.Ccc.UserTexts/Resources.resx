@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Masked Edit Text Box</value>
@@ -11159,6 +11159,14 @@ These options are activated:
     <value>Sent</value>
     <comment>Date and time when an asm message has been sent</comment>
   </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Sender</value>
+    <comment>Name of person who has sent an asm message</comment>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Sent</value>
+    <comment>Date and time when an asm message has been sent</comment>
+  </data>
   <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
     <value>Selected file destination does not exist, please enter valid file path</value>
     <comment>Selected file destination does not exist, please enter valid filepath</comment>
@@ -11177,5 +11185,9 @@ These options are activated:
   </data>
   <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
     <value>After checking against keep activity</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Password policy requires a safer password.</value>
+    <comment>Password policy requires a safer password.</comment>
   </data>
 </root>

@@ -5,6 +5,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
@@ -37,9 +38,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public JsonResult Reply(Guid messageId)
+		public JsonResult Reply(ConfirmMessageViewModel messageViewModel)
 		{
-			return Json(_pushMessageDialoguePersister.Persist(messageId));
+			if (!ModelState.IsValid)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return ModelState.ToJson();
+			}
+			return Json(_pushMessageDialoguePersister.PersistMessage(messageViewModel));
 		}
 
 		[UnitOfWorkAction]

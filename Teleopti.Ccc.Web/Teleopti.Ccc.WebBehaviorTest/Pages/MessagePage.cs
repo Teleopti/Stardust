@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 
@@ -8,18 +10,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 	{
 		public Div FriendlyMessage
 		{
-			get { return Document.Div(Find.ByClass("friendly-message", false)); }
+			get { return Document.Div(QuicklyFind.ByClass("friendly-message")); }
 		}
 
-		[FindBy(Id = "AsmMessages-list")]
-		public List MessageList { get; set; }
-
-		public ListItemCollection MessageListItems { get { return Document.ListItems.Filter(Find.ByClass("asmMessage-item", false)); } }
-		public IEnumerable<ListItem> Messages { get { return MessageListItems; } }
+		public ListItemCollection MessageListItems
+		{
+			get { return Document.ListItems.Filter(QuicklyFind.ByClass("asmMessage-item")); }
+		}
 
 		public Div MessageDetailSection
 		{
-			get { return Document.Div(Find.ByClass("asmMessage-edit-section", false)); }
+			get { return Document.Div(QuicklyFind.ByClass("asmMessage-edit-section")); }
 		}
 
 		[FindBy(Id = "AsmMessage-detail-title")]
@@ -28,7 +29,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "AsmMessage-detail-message")]
 		public Label Message { get; set; }
 
+		[FindBy(Id = "AsmMessage-detail-reply")]
+		public TextField Reply { get; set; }
+
+		[FindBy(Id = "AsmMessage-detail-dialogueMessages")]
+		public Div DialogueMessages { get; set; }
+
 		[FindBy(Id = "AsmMessage-detail-ok-button")]
 		public Button OkButton { get; set; }
+
+		[FindBy(Id = "AsmMessage-detail-replyOption")]
+		public Div ReplyOptions { get; set; }
 	}
 }

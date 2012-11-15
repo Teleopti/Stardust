@@ -539,7 +539,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                     if (!workloadDayTemplate.OpenForWork.IsOpen && realWorkloadDay.OpenForWork.IsOpen)
                         TaskOwnerDayGridHelper.ResetClosedDay(realWorkloadDay);
                     if (!_turnOffUpdate) realWorkloadDay.Lock();
-                    realWorkloadDay.ApplyTemplate(workloadDayTemplate);
+					realWorkloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
                     if (!_turnOffUpdate) realWorkloadDay.Release();
                     RefreshAppliedTemplate(e.Style);
                 }

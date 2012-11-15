@@ -8,7 +8,7 @@
 				});
 		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges({
 				notifyText: '@Resources.YourScheduleHasChanged',
-				timeout: 4000,
+				originalDocumentTitle: document.title,
 				baseUrl: '@Url.Content("~/")', 
 				webNotification: function () {
 					return window.opener == null; //to avoid double messages to web notification if both portal and asm is open

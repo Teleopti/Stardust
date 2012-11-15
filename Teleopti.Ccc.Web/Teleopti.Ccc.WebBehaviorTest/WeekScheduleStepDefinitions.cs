@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading;
 using System.Xml;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -7,6 +8,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -22,23 +24,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	{
 
 		private WeekSchedulePage _page { get { return Pages.Pages.WeekSchedulePage; } }
-		
-		[When(@"I hover over the meeting on date '(.*)'")]
-		public void WhenIHoverOverTheMeetingOnDate(DateTime date)
-		{
-			Div meetingLayer=null;
-			EventualAssert.That(()=>
-			                    	{
-			                    		var meetingLayers =_page.DayLayers(date).Filter(Find.BySelector(@"[tooltip-text*=<div>]"));
-											if (meetingLayers.Count == 0)
-											{
-												return false;												
-											}
-			                    		meetingLayer = meetingLayers.First();
-			                    		return true;
-			                    	}, Is.True);
-			meetingLayer.FireEvent("onmouseover");
-		}
 
 		[When(@"I click on any day of a week")]
 		public void WhenIClickOnAnyDayOfAWeek()
@@ -50,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIClickTheRequestSymbolForDate(DateTime date)
 		{
             Pages.Pages.WeekSchedulePage.DayElementForDate(date).ListItems.First(Find.ById("day-symbol")).Div(
-				Find.ByClass("text-request", false)).EventualClick();
+				QuicklyFind.ByClass("text-request")).EventualClick();
 		}
 
 		[Then(@"I should not see any shifts on date '(.*)'")]
@@ -87,12 +72,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.DayLayers(date).Count.Should().Be.EqualTo(2);
 		}
 
-
-		[Then(@"I should see the meeting details on date '(.*)'")]
-		public void ThenIShouldSeeTheMeetingDetailsOnDate(DateTime date)
+		[Then(@"I should see the meeting details with subject '(.*)' on date '(.*)'")]
+		public void ThenIShouldSeeTheMeetingDetailsOnDate(string subject, DateTime date)
 		{
-			Div meetingLayer = _page.DayLayers(date).Filter(Find.BySelector("[tooltip-text*=Meeting subject]")).First();
-			meetingLayer.Should().Not.Be.Null();
+			EventualAssert.That(() => _page.DayLayerTooltipElement(date, subject).Exists, Is.True);
 		}
 
 		[Then(@"I should see the public note on date '(.*)'")]
@@ -130,6 +113,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see start timeline and end timeline according to schedule with:")]
 		public void ThenIShouldSeeStartTimelineAndEndTimelineAccordingToScheduleWith(Table table)
 		{
+			_page.AnyTimelineLabel.WaitUntilExists();			
 			var divs = _page.TimelineLabels;
 			EventualAssert.That(() => divs[0].InnerHtml, Is.StringContaining(table.Rows[0][1]));
 			EventualAssert.That(() => divs[divs.Count - 1].InnerHtml, Is.StringContaining(table.Rows[1][1]));
@@ -140,7 +124,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeActivitiesOnDateWith(DateTime date, Table table)
 		{
 			DivCollection layers = _page.DayLayers(date);
-
+			
 			EventualAssert.That(() => layers[0].GetAttributeValue("tooltip-text"), Is.EqualTo(table.Rows[0][1]));
 			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("0px"));
 			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("199px"));
@@ -157,7 +141,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see activities on date '(.*)'")]
 		public void ThenIShouldSeeActivitiesOnDate(DateTime date)
 		{
-			EventualAssert.That(()=>_page.DayLayers(date),Is.Not.Empty);
+			EventualAssert.That(() => _page.DayLayers(date), Is.Not.Empty);
 		}
 
 		[Then(@"I should see request page")]

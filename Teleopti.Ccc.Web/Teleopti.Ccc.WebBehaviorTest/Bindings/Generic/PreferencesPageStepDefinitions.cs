@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using WatiN.Core;
 using Table = TechTalk.SpecFlow.Table;
@@ -48,15 +49,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var indication = Pages.Pages.PreferencePage.ExtendedPreferenceIndicationForDate(date);
 			indication.EventualClick();
-		}
-
-		[When(@"I hover over the meeting indication on date '(.*)'")]
-		public void WhenIHoverOverTheMeetingIndicationOnDate(DateTime date)
-		{
-			var indication = Pages.Pages.PreferencePage.MeetingAndPersonalShiftIndicationForDate(date);
-			Pages.Pages.PreferencePage.MeetingAndPersonalShiftTooltipForDate(date).WaitUntilExists();
-			indication.FireEvent("onmouseover");
-			Pages.Pages.PreferencePage.MeetingAndPersonalShiftTooltipForDate(date).WaitUntilRemoved();
 		}
 
 		[Then(@"I should see that I have an extended preference on '(.*)'")]

@@ -2,6 +2,7 @@
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -223,7 +224,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenICloseTheSkillPicker()
 		{
 			_page.ReportSkillSelectionCloseButton.EventualClick();
-			EventualAssert.That(() => _page.ReportSkillSelectionContainer.PositionedOnScreen(), Is.False);
 		}
 
 		[Given(@"I view MobileReports")]
@@ -246,8 +246,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIOpenTheSkillPicker()
 		{
 			_page.ReportSkillSelectionOpener.EventualClick();
-			EventualAssert.That(() => _page.ReportSkillSelectionContainer.PositionedOnScreen(), Is.True);
-			EventualAssert.That(() => _page.ReportSkillSelectionContainer.DisplayVisible(), Is.True);
 		}
 
 		[When(@"I select a report")]
@@ -306,7 +304,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.ReportSkillSelectionOpener.Text.Trim(), Is.StringContaining(Resources.All));
 		}
 
-
+		private static bool IsDisplayed(Element element)
+		{
+			if (string.Equals(element.Style.Display, "none"))
+			{
+				return false;
+			}
+			if (element.Parent != null)
+			{
+				return IsDisplayed(element.Parent);
+			}
+			return true;
+		}
 
 	}
 }

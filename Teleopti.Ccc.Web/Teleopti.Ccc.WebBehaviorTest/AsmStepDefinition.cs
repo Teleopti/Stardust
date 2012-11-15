@@ -6,6 +6,7 @@ using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
@@ -27,22 +28,22 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a schedule in popup")]
 		public void ThenIShouldSeeAScheduleInPopup()
 		{
-			EventualAssert.That(() => Browser.Current.Spans.Filter(Find.ByClass("asm-layer", false)).Count, Is.GreaterThan(0));
+			EventualAssert.That(() => Browser.Current.Spans.Filter(QuicklyFind.ByClass("asm-layer")).Count, Is.GreaterThan(0));
 		}
 
 		[Then(@"I should see Phone as current activity")]
 		public void ThenIShouldSeePhoneAsCurrentActivity()
 		{
 			EventualAssert.That(() =>
-				Browser.Current.Div(Find.ByClass("asm-info-canvas-column-current", false)).Text,
+				Browser.Current.Div(QuicklyFind.ByClass("asm-info-canvas-column-current")).Text,
 				Is.StringContaining(TestData.ActivityPhone.Description.Name));
 		}
 
 		[Then(@"I should not see a current activity")]
 		public void ThenIShouldNotSeeAsCurrentActivity()
 		{
-			Browser.Current.Element(Find.ByClass("asm-outer-canvas", false)).WaitUntilDisplayed();
-			Browser.Current.Div(Find.ByClass("asm-info-canvas-column-current", false)).Text.Should().Be.Null();
+			Browser.Current.Element(QuicklyFind.ByClass("asm-outer-canvas")).WaitUntilDisplayed();
+			Browser.Current.Div(QuicklyFind.ByClass("asm-info-canvas-column-current")).Text.Should().Be.Null();
 		}
 
 		[Then(@"ASM link should not be visible")]
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() =>
 										{
-											var allLayers = Browser.Current.Elements.Filter(Find.ByClass("asm-layer", false));
+											var allLayers = Browser.Current.Elements.Filter(QuicklyFind.ByClass("asm-layer"));
 											var pxPerHour = pixelsPerHour();
 											var theLayerToCheck = allLayers.Last();
 											return pixelLength(theLayerToCheck) / pxPerHour;
@@ -66,9 +67,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see next activity time as '(.*)'")]
 		public void ThenIShouldSeeLastActivityStarttimeAs(string startTime)
 		{
-			Browser.Current.Element(Find.ByClass("asm-outer-canvas", false)).WaitUntilDisplayed();
+			Browser.Current.Element(QuicklyFind.ByClass("asm-outer-canvas")).WaitUntilDisplayed();
 			EventualAssert.That(() =>
-									  Browser.Current.Div(Find.ByClass("asm-info-canvas-column-next", false)).Text,
+									  Browser.Current.Div(QuicklyFind.ByClass("asm-info-canvas-column-next")).Text,
 										Is.StringContaining(startTime));
 		}
 
@@ -98,68 +99,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() =>
 			{
-				var slidingSchedules = Browser.Current.Div(Find.ByClass("asm-sliding-schedules"));
+				var slidingSchedules = Browser.Current.Div(QuicklyFind.ByClass("asm-sliding-schedules"));
 				var pixelPos = -Convert.ToDouble(slidingSchedules.Style.GetAttributeValue("left").TrimEnd('p', 'x'));
 				var holeHours = Math.Floor(pixelPos / pixelsPerHour());
 				return holeHours;
 			}, Is.EqualTo(hour));
-		}
-
-		[When(@"I recieve a new message")]
-		public void WhenIRecieveANewMessage()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
-		[Then(@"I shoud see an indication that I have '(.*)' unread messages")]
-		public void ThenIShoudSeeAnIndicationThatIHaveUnreadMessages(int unreadMessagesCount)
-		{
-			EventualAssert.That(() =>
-				IsDisplayed(Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false))),
-				Is.True);
-			EventualAssert.That(() => Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false)).InnerHtml.Contains(unreadMessagesCount.ToString()), Is.True);		
-		}
-
-		[When(@"I click the unread message")]
-		public void WhenIClickTheUnreadMessage()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
-		[Then(@"I should see a window showing messages")]
-		public void ThenIShouldSeeAWindowShowingMessages()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
-		[Then(@"I shoud see an indication that I have an unread message")]
-		public void ThenIShoudSeeAnIndicationThatIHaveAnUnreadMessage()
-		{
-			EventualAssert.That(() =>
-				IsDisplayed(Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false))),
-				Is.True);
-		}
-
-		[Then(@"I shoud not see an indication that I have an unread message")]
-		public void ThenIShoudNotSeeAnIndicationThatIHaveAnUnreadMessage()
-		{
-			EventualAssert.That(() =>
-				IsDisplayed(Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false))),
-				Is.False);
-		}
-
-
-		private static bool IsDisplayed(Element element)
-		{
-			if (string.Equals(element.Style.Display, "none"))
-			{
-				return false;
-			}
-			if (element.Parent != null)
-			{
-				return IsDisplayed(element.Parent);
-			}
-			return true;
 		}
 
 		private static int pixelLength(Element oneHourLengthLayer)
@@ -170,7 +114,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		private static int pixelsPerHour()
 		{
 			const int hackExtra = 1; //due to borde width of hours
-			var allHours = Browser.Current.Elements.Filter(Find.ByClass("asm-timeline-line", false));
+			var allHours = Browser.Current.Elements.Filter(QuicklyFind.ByClass("asm-timeline-line"));
 			var firstHour = allHours.First();
 			if (!firstHour.Exists)
 				throw new NotSupportedException("Missing hour to read from");

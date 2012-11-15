@@ -19,10 +19,9 @@ DECLARE @securityadmin			int
 
 	IF @securityadmin = 1
 	BEGIN
-		PRINT 'Creating login: $(SQLLOGIN). Working ...'
-		
 		IF '$(SQLLOGIN)' <> 'sa'  --If user like to run the application with sa, don't add the login.
 		BEGIN
+		PRINT 'Creating login: $(SQLLOGIN). Working ...'
 			--Create login if it doesn't exists
 			IF NOT EXISTS (SELECT * FROM syslogins WHERE name = '$(SQLLOGIN)')
 			BEGIN	
@@ -33,15 +32,15 @@ DECLARE @securityadmin			int
 				CHECK_EXPIRATION=OFF,
 				CHECK_POLICY=OFF
 			END
-			
-			--Bulk insert is needed in the ETL-tool so login needs to be part of the server fixed role [ADMINISTER BULK OPERATIONS]
-			PRINT 'Add $(SQLLOGIN) to the fixed server role: [ADMINISTER BULK OPERATIONS]. Working ...'
-				GRANT ADMINISTER BULK OPERATIONS TO [$(SQLLOGIN)]
-			PRINT 'Add $(SQLLOGIN) to the fixed server role: [ADMINISTER BULK OPERATIONS]. Finished!'
+			ELSE
+			BEGIN
+				ALTER LOGIN [$(SQLLOGIN)] WITH PASSWORD=N'$(SQLPWD)'
+			END
+		PRINT 'Creating login: $(SQLLOGIN). Finished!'
 		END
 	END
 	ELSE
-		PRINT 'WARNING: Cannot create server login under the currect credetials!'
+		PRINT 'WARNING: Cannot create or alter server login under the current credetials!'
 	
 END TRY
 
@@ -64,7 +63,5 @@ BEGIN CATCH
 		RAISERROR (@ErrorMessage, 16, 127, @ErrorNumber, @ErrorSeverity, @ErrorState, @ErrorLine)
 	END
 END CATCH
-
-PRINT 'Creating login: $(SQLLOGIN). Finished!'
 
 PRINT '---'

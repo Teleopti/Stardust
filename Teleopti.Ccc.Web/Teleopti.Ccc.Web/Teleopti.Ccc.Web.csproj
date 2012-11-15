@@ -73,8 +73,8 @@
     <Reference Include="Elmah">
       <HintPath>..\..\packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
     </Reference>
-    <Reference Include="Esent.Interop">
-      <HintPath>..\..\packages\Rhino.ServiceBus.References.2.3.2.6\lib\Esent.Interop.dll</HintPath>
+    <Reference Include="Esent.Interop, Version=1.6.0.0, Culture=neutral, PublicKeyToken=8dd49bbdae3f61af, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="LinFu.DynamicProxy">
       <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
@@ -82,13 +82,13 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache, Version=1.7.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.1.6\lib\Net35\MbCache.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.1.7\lib\Net35\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.7.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.1.6\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.1.7\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -107,11 +107,13 @@
     <Reference Include="Rhino.Queues">
       <HintPath>..\..\packages\Rhino.Queues.1.4.2.0\lib\4.0\Rhino.Queues.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus">
-      <HintPath>..\..\packages\Rhino.ServiceBus.2.3.2.6\lib\4.0\Rhino.ServiceBus.dll</HintPath>
+    <Reference Include="Rhino.ServiceBus, Version=2.3.2.8, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Rhino.ServiceBus.2.3.2.8\lib\4.0\Rhino.ServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.Autofac">
-      <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.2.3.2.6\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
+    <Reference Include="Rhino.ServiceBus.Autofac, Version=2.3.2.8, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.2.3.2.8\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Extensions" />
@@ -519,6 +521,7 @@
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Images\header_bg_2x.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AsmMessageDetail.js" />
@@ -599,6 +602,40 @@
     <None Include="Areas\Start\Views\Test\Message.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Areas\Start\Content\signonvm.js" />
+    <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.js" />
+    <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.min.js" />
+    <Content Include="Content\jqueryui\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\jqueryui\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\jqueryui\smoothness\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\jqueryui\smoothness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\jqueryui\smoothness\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\jqueryui\smoothness\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\jqueryui\smoothness\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\jqueryui\smoothness\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\jqueryui\smoothness\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\jqueryui\smoothness\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\jqueryui\smoothness\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\jqueryui\smoothness\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\jqueryui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\jqueryui\smoothness\jquery-ui-1.9.1.custom.css" />
+    <Content Include="Content\jqueryui\smoothness\jquery-ui-1.9.1.custom.min.css" />
+    <Content Include="Areas\Start\Content\login.htm" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.css" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.js" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.css" />
+    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.js" />
+    <Content Include="Content\Mobile\images\ajax-loader.gif" />
+    <Content Include="Content\Mobile\jquery.mobile-1.2.0.css" />
+    <Content Include="Content\Mobile\jquery.mobile-1.2.0.min.css" />
+    <Content Include="Content\Mobile\jquery.mobile.structure-1.2.0.css" />
+    <Content Include="Content\Mobile\jquery.mobile.structure-1.2.0.min.css" />
+    <Content Include="Content\Mobile\jquery.mobile.theme-1.2.0.css" />
+    <Content Include="Content\Mobile\jquery.mobile.theme-1.2.0.min.css" />
+    <Content Include="Content\bootstrap\bootstrap-responsive.css" />
+    <Content Include="Content\bootstrap\bootstrap-responsive.min.css" />
+    <Content Include="Content\bootstrap\bootstrap.css" />
+    <Content Include="Content\bootstrap\bootstrap.min.css" />
     <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader.gif" />
@@ -631,21 +668,12 @@
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.labeledinput.js" />
     <Content Include="Content\favicon.ico" />
-    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.js" />
-    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.css" />
-    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.css" />
-    <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.js" />
-    <Content Include="Content\Mobile\images\ajax-loader.png" />
+    <Content Include="Content\bootstrap\images\glyphicons-halflings-white.png" />
+    <Content Include="Content\bootstrap\images\glyphicons-halflings.png" />
     <Content Include="Content\Mobile\images\icons-18-black.png" />
     <Content Include="Content\Mobile\images\icons-18-white.png" />
     <Content Include="Content\Mobile\images\icons-36-black.png" />
     <Content Include="Content\Mobile\images\icons-36-white.png" />
-    <Content Include="Content\Mobile\jquery.mobile-1.0.1.css" />
-    <Content Include="Content\Mobile\jquery.mobile-1.0.1.js" />
-    <Content Include="Content\Mobile\jquery.mobile-1.0.1.min.css" />
-    <Content Include="Content\Mobile\jquery.mobile-1.0.1.min.js" />
-    <Content Include="Content\Mobile\jquery.mobile.structure-1.0.1.css" />
-    <Content Include="Content\Mobile\jquery.mobile.structure-1.0.1.min.css" />
     <Content Include="Content\Scripts\indexOf.js" />
     <Content Include="Content\Scripts\date.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.js" />
@@ -663,6 +691,16 @@
     <Content Include="Content\Scripts\excanvas.original.js" />
     <Content Include="Content\Scripts\jquery.hoverIntent.js" />
     <Content Include="Content\Scripts\knockout-jquery-ui-widget.js" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\bg_left.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\bg_repeat_left.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\bg_right.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\branding_bar_custom_bg.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\close.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\left_image.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\right_image.png" />
+    <Content Include="Content\Scripts\Pinify\Content\Images\toolbar-bg.png" />
+    <Content Include="Content\Scripts\Pinify\Content\jquery.pinify.min.css" />
+    <Content Include="Content\Scripts\Pinify\Scripts\jquery.pinify.min.js" />
     <Content Include="Content\Scripts\qunit.css" />
     <Content Include="Content\Scripts\qunit.js" />
     <Content Include="Content\Scripts\RGraph.bar.js" />
@@ -671,51 +709,12 @@
     <Content Include="Content\Scripts\RGraph.common.core.js" />
     <Content Include="Content\Scripts\RGraph.common.key.js" />
     <Content Include="Content\Scripts\RGraph.line.js" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\Scripts\jquery.qtip.css" />
-    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
-    <Content Include="Content\themes\base\jquery.ui.all.css" />
-    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
-    <Content Include="Content\themes\base\jquery.ui.base.css" />
-    <Content Include="Content\themes\base\jquery.ui.button.css" />
-    <Content Include="Content\themes\base\jquery.ui.core.css" />
-    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
-    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
-    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
-    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
-    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
-    <Content Include="Content\themes\base\jquery.ui.slider.css" />
-    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
-    <Content Include="Content\themes\base\jquery.ui.theme.css" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_55_bdd9e3_1x400.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_75_6ab9d3_1x400.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_75_e3f1f4_1x400.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_highlight-soft_75_61abc5_.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-icons_ffffff_256x240.png" />
-    <Content Include="Content\themes\mobile\images\ajax-loader.png" />
-    <Content Include="Content\themes\mobile\images\icons-18-black.png" />
-    <Content Include="Content\themes\mobile\images\icons-18-white.png" />
-    <Content Include="Content\themes\mobile\images\icons-36-black.png" />
-    <Content Include="Content\themes\mobile\images\icons-36-white.png" />
-    <Content Include="Content\themes\mobile\mobile.css" />
-    <Content Include="Content\themes\mobile\mobile.min.css" />
-    <Content Include="Content\Scripts\jquery-1.6.4-vsdoc.js" />
-    <Content Include="Content\Scripts\jquery-1.6.4.js" />
-    <Content Include="Content\Scripts\jquery-1.6.4.min.js" />
-    <Content Include="Content\Scripts\jquery-ui-1.8.16.js" />
-    <Content Include="Content\Scripts\jquery-ui-1.8.16.min.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.custominput.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.combobox.js" />
     <Content Include="Content\Scripts\json2.js" />
@@ -736,6 +735,13 @@
     <Content Include="Content\Scripts\jquery.signalR.min.js" />
     <Content Include="Content\Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Content\Scripts\knockout-2.1.0.js" />
+    <Content Include="Content\Scripts\jquery-1.8.2-vsdoc.js" />
+    <Content Include="Content\Scripts\jquery-1.8.2.js" />
+    <Content Include="Content\Scripts\jquery-1.8.2.min.js" />
+    <Content Include="Content\bootstrap\bootstrap.js" />
+    <Content Include="Content\bootstrap\bootstrap.min.js" />
+    <Content Include="Content\Mobile\jquery.mobile-1.2.0.js" />
+    <Content Include="Content\Mobile\jquery.mobile-1.2.0.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -849,7 +855,9 @@
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Scripts\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MobileReports\Views\Report\Index.cshtml" />
   </ItemGroup>
@@ -892,7 +900,7 @@
           <UseIIS>False</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>52858</DevelopmentServerPort>
-          <DevelopmentServerVPath>/MyTimeWeb</DevelopmentServerVPath>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

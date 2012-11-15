@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			return identity.TeleoptiAuthenticationType == AuthenticationTypeOption.Application;
 		}
 
-		private SectionNavigationItem createTeamScheduleNavigationItem()
+		private static SectionNavigationItem createTeamScheduleNavigationItem()
 		{
 			return new SectionNavigationItem
 			       	{
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			       	};
 		}
 
-		private SectionNavigationItem createRequestsNavigationItem()
+		private static SectionNavigationItem createRequestsNavigationItem()
 		{
 			return new SectionNavigationItem
 					{
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 					};
 		}
 
-        private SectionNavigationItem createMessageNavigationItem(int unreadMessageCount)
+        private static SectionNavigationItem createMessageNavigationItem(int unreadMessageCount)
         {
             return new SectionNavigationItem	
             {
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 					};
 		}
 
-		private SectionNavigationItem createWeekScheduleNavigationItem()
+		private static SectionNavigationItem createWeekScheduleNavigationItem()
 		{
 			var toolBarItems = new List<ToolBarItemBase>
 			                   	{

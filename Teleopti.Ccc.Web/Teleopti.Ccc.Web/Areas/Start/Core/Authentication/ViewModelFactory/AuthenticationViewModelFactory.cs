@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory
 			return new SignInApplicationViewModel {SignIn = model, DataSources = applicationDataSourceViewModels};
 		}
 
-		public SignInBusinessUnitViewModel CreateBusinessUnitViewModel(IDataSource dataSource, IPerson person, AuthenticationTypeOption authenticationType)
+		public SignInBusinessUnitViewModel CreateBusinessUnitViewModel(IDataSource dataSource, IPerson person, AuthenticationTypeOption authenticationType, string warningMessage)
 		{
 			var businessUnitViewModels = this.businessUnitViewModels(dataSource, person);
 			
@@ -77,7 +77,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory
 			return new SignInBusinessUnitViewModel
 			       	{
 			       		BusinessUnits = businessUnitViewModels,
-			       		SignIn = signInBusinessUnitModel
+			       		SignIn = signInBusinessUnitModel,
+						WarningMessage = warningMessage
 			       	};
 		}
 

@@ -26,21 +26,31 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 		private IPerson _person;
 		private PushMessageDialogue _pushMessageDialogue;
 		private TimeZoneInfo _cccTimeZone;
+		private IPerson _replier;
 
 		[SetUp]
 		public void Setup()
 		{
 			var timeZone = MockRepository.GenerateMock<IUserTimeZone>();
 
+			_replier = new Person();
+			_replier.SetId(new Guid());
+			_replier.Name = new Name("Ashley","Andeen");
 			_person = new Person { Name = new Name("ashley", "andeen") };
 			_pushMessage = new PushMessage(new[] { "OK" })
 										 {
 											 Title = "my title",
 											 Message = "message text",
-											 Sender = _person,
+											 AllowDialogueReply = true,
+											 Sender = _person
 										 };
+			_pushMessage.ReplyOptions.Add("Yes");
+			_pushMessage.ReplyOptions.Add("No");
+			_pushMessage.ReplyOptions.Add("Maybe");
 			_pushMessageDialogue = new PushMessageDialogue(_pushMessage, _person);
 			_pushMessageDialogue.SetId(Guid.NewGuid());
+			_pushMessageDialogue.DialogueMessages.Add(new DialogueMessage("A reply", _replier));
+			_pushMessageDialogue.DialogueMessages.Add(new DialogueMessage("Another reply", _replier));
 			SetDate(_pushMessageDialogue, DateTime.UtcNow, "_updatedOn");
 
 			_domainMessages = new[] { _pushMessageDialogue };
@@ -70,6 +80,12 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 		}
 
 		[Test]
+		public void ShouldMapSenderOfDialogueMessage()
+		{
+			_result.First().DialogueMessages.First().SenderId.Should().Be.EqualTo(_replier.Id);
+		}
+
+		[Test]
 		public void ShouldMapTitle()
 		{
 			_result.First().Title.Should().Be.EqualTo(_pushMessage.GetTitle(new NoFormatting()));
@@ -90,6 +106,27 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 		public void ShouldMapMessageToShowShortMessage()
 		{
 			_result.First().Message.Should().Be.EqualTo(_pushMessage.GetMessage(new NoFormatting()));
+		}
+
+		[Test]
+		public void ShouldMapAllowDialogueReply()
+		{
+			_result.First().AllowDialogueReply.Should().Be.EqualTo(_pushMessage.AllowDialogueReply);
+		}
+
+		[Test]
+		public void ShouldMapDialogueMessages()
+		{
+			_result.First().DialogueMessages.First().Text.Should().Be.EqualTo(_pushMessageDialogue.DialogueMessages.First().Text);
+			_result.First().DialogueMessages.First().Sender.Should().Be.EqualTo(_pushMessageDialogue.DialogueMessages.First().Sender.Name.ToString());
+			var localDateTimeString = TimeZoneInfo.ConvertTimeFromUtc(_pushMessageDialogue.DialogueMessages.First().Created,_cccTimeZone).ToShortDateTimeString();
+			_result.First().DialogueMessages.First().Created.Should().Be.EqualTo(localDateTimeString);
+		}
+
+		[Test]
+		public void ShouldMapReplyOptions()
+		{
+			_result.First().ReplyOptions.Count.Should().Be.EqualTo(_pushMessageDialogue.PushMessage.ReplyOptions.Count);
 		}
 
 		[Test]

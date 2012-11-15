@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -612,21 +613,29 @@ namespace Teleopti.Ccc.Domain.Common
             return false;
         }
 
-        public virtual bool ChangePassword(string oldPassword, string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail)
+        public virtual IChangePasswordResultInfo ChangePassword(string oldPassword, string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail)
         {
             if (_applicationAuthenticationInfo == null)
                 _applicationAuthenticationInfo = new ApplicationAuthenticationInfo();
 
-            if (!checkOldPassword(oldPassword, newPassword, _applicationAuthenticationInfo)) return false;
+            if (!checkOldPassword(oldPassword, newPassword, _applicationAuthenticationInfo))
+            {
+	            return new ChangePasswordResultInfo {IsAuthenticationSuccessful = false, IsSuccessful = false};
+            }
+
+	        var result = new ChangePasswordResultInfo {IsAuthenticationSuccessful = true};
 
             IPasswordPolicy policy = new PasswordPolicy(loadPasswordPolicyService);
+
             if (policy.CheckPasswordStrength(newPassword))
             {
                 _applicationAuthenticationInfo.Password = newPassword;
                 userDetail.RegisterPasswordChange();
-                return true;
+	            result.IsSuccessful = true;
+	            return result;
             }
-            return false;
+	        result.IsSuccessful = false;
+            return result;
         }
 
         public virtual IWindowsAuthenticationInfo WindowsAuthenticationInfo

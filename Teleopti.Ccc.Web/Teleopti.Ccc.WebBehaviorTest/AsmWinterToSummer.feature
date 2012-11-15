@@ -20,10 +20,14 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
-	And there is a shift with
+	And there are shift categories
+	| Name  |
+	| Night  |
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2020-03-28 23:00 |
 	| EndTime               | 2020-03-29 05:00 |
+	| Shift category		| Night	           |
 
 Scenario: Shift crossing winter to summer daylight should have correct length
 	Given I have the role 'Full access to mytime'

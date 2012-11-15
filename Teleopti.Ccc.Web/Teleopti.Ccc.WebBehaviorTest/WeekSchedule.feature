@@ -2,7 +2,7 @@
 	In order to know how to work this week
 	As an agent
 	I want to see my schedule details
-
+	
 Background:
 	Given there is a role with
 	| Field                    | Value                 |
@@ -25,6 +25,11 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
+	And there are shift categories
+	| Name  |
+	| Night |
+	| Day   |
+	| Late  |
 
 Scenario: View current week
 	Given I have the role 'Full access to mytime'
@@ -35,12 +40,12 @@ Scenario: View current week
 Scenario: View night shift
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
-	And there is a shift with
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-27 20:00 |
 	| EndTime               | 2012-08-28 04:00 |
-	| ShiftCategoryName     | ForTest          |
 	| Lunch3HoursAfterStart | true             |
+	| Shift category		| Night	           |
 	When I view my week schedule for date '2012-08-27'
 	Then I should not see the end of the shift on date '2012-08-27'
 	And I should see the end of the shift on date '2012-08-28'
@@ -49,12 +54,12 @@ Scenario: View start of night shift on last day of week for swedish culture
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
 	And I am swedish
-	And there is a shift with
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-26 20:00 |
 	| EndTime               | 2012-08-27 04:00 |
-	| ShiftCategoryName     | ForTest          |
 	| Lunch3HoursAfterStart | true             |
+	| Shift category		| Night	           |
 	When I view my week schedule for date '2012-08-26'
 	Then I should see the start of the shift on date '2012-08-26'
 
@@ -62,38 +67,38 @@ Scenario: View end of night shift from previuos week for swedish culture
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
 	And I am swedish
-	And there is a shift with
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-26 20:00 |
 	| EndTime               | 2012-08-27 04:00 |
-	| ShiftCategoryName     | ForTest          |
 	| Lunch3HoursAfterStart | true             |
+	| Shift category		| Night	           |
 	When I view my week schedule for date '2012-08-27'
 	Then I should see the end of the shift on date '2012-08-27'
 
 Scenario: Do not show unpublished schedule
 	Given I have the role 'Full access to mytime'
-	And there is a shift with
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-28 8:00  |
 	| EndTime               | 2012-08-28 17:00 |
-	| ShiftCategoryName     | ForTest          |
+	| Shift category		| Day	           |
 	When I view my week schedule for date '2012-08-28'
 	Then I should not see any shifts on date '2012-08-28'
 	
 Scenario: Do not show unpublished schedule for part of week
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule to 2012-08-28'
-	And there is a shift with
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-28 8:00  |
 	| EndTime               | 2012-08-28 17:00 |
-	| ShiftCategoryName     | ForTest          |
-	And there is a shift with
+	| Shift category		| Day	           |
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-29 8:00  |
 	| EndTime               | 2012-08-29 17:00 |
-	| ShiftCategoryName     | ForTest          |
+	| Shift category		| Day	           |
 	When I view my week schedule for date '2012-08-28'
 	Then I should see a shift on date '2012-08-28'
 	And I should not see a shift on date '2012-08-29'
@@ -101,11 +106,11 @@ Scenario: Do not show unpublished schedule for part of week
 Scenario: View meeting
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
-	And there is a shift with
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-28 8:00  |
 	| EndTime               | 2012-08-28 17:00 |
-	| ShiftCategoryName     | ForTest          |
+	| Shift category		| Day	           |
 	And I have a meeting scheduled
 	| Field                 | Value            |
 	| StartTime             | 2012-08-28 9:00  |
@@ -113,8 +118,7 @@ Scenario: View meeting
 	| Subject               | Meeting subject  |
 	| Location              | Meeting location |
 	When I view my week schedule for date '2012-08-28'
-	And I hover over the meeting on date '2012-08-28'
-	Then I should see the meeting details on date '2012-08-28'
+	Then I should see the meeting details with subject 'Meeting subject' on date '2012-08-28'
 	
 Scenario: View public note
 	Given I have the role 'Full access to mytime'
@@ -210,18 +214,18 @@ Scenario: Show timeline with no schedule
 Scenario: Show timeline with schedule 
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
-	And there is a shift with
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-27 10:00 |
 	| EndTime               | 2012-08-27 20:00 |
-	| ShiftCategoryName     | ForTest          |
 	| Lunch3HoursAfterStart | true             |
-	And there is a shift with
+	| Shift category		| Late	           |
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-28 08:00 |
 	| EndTime               | 2012-08-28 17:00 |
-	| ShiftCategoryName     | ForTest          |
 	| Lunch3HoursAfterStart | true             |
+	| Shift category		| Day	           |
 	When I view my week schedule for date '2012-08-27'
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field						| Value |
@@ -232,12 +236,12 @@ Scenario: Show timeline with schedule
 Scenario: Show timeline with night shift
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
-	And there is a shift with
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-27 20:00 |
 	| EndTime               | 2012-08-28 04:00 |
-	| ShiftCategoryName     | ForTest          |
 	| Lunch3HoursAfterStart | true             |
+	| Shift category		| Night	           |
 	When I view my week schedule for date '2012-08-27'
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field						| Value |
@@ -248,12 +252,12 @@ Scenario: Show timeline with night shift
 Scenario: Show timeline with night shift from the last day of the previous week
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
-	And there is a shift with
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-26 20:00 |
 	| EndTime               | 2012-08-27 04:00 |
-	| ShiftCategoryName     | ForTest          |
 	| Lunch3HoursAfterStart | true             |
+	| Shift category		| Night	           |
 	When I view my week schedule for date '2012-08-27'
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field						| Value |
@@ -264,12 +268,12 @@ Scenario: Show timeline with night shift from the last day of the previous week
 Scenario: Show timeline with night shift starting on the last day of current week
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
-	And there is a shift with
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-26 20:00 |
 	| EndTime               | 2012-08-27 04:00 |
-	| ShiftCategoryName     | ForTest          |
 	| Lunch3HoursAfterStart | true             |
+	| Shift category		| Night	           |
 	When I view my week schedule for date '2012-08-26'
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field						| Value	|
@@ -281,12 +285,12 @@ Scenario: Show activity at correct times
 	Given I have the role 'Full access to mytime'
 	And I am swedish
 	And I have the workflow control set 'Published schedule'
-	And there is a shift with
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-27 08:00 |
 	| EndTime               | 2012-08-27 18:00 |
-	| ShiftCategoryName     | ForTest          |
 	| Lunch3HoursAfterStart | true             |
+	| Shift category		| Day	           |
 	When I view my week schedule for date '2012-08-27'
 	Then I should see activities on date '2012-08-27' with:
 	| Field                 | Value         |
@@ -298,11 +302,11 @@ Scenario: Update schedule when schedule has changed
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
 	When I view my week schedule for date '2012-08-28'
-	And there is a shift with 
+	And I am assigned this shift with
 	| Field                 | Value            |
 	| StartTime             | 2012-08-28 12:00 |
 	| EndTime               | 2012-08-28 15:00 |
-	| ShiftCategoryName     | ForTest          |
+	| Shift category		| Day	           |
 	And My schedule between '2012-08-28 08:00' to '2012-08-28 18:00' reloads
 	Then I should see activities on date '2012-08-28'
 
@@ -313,5 +317,5 @@ Scenario: Keep user request input when schedules are refreshed
 	When I click on the day symbol area for date '2013-10-03'
 	And I input text request values for date '2013-10-03'
 	And My schedule between '2013-10-03 08:00' to '2013-10-03 18:00' reloads
-	Then I should see the text request form
+	Then I should see the add text request form
 	And Subject should not be empty

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Security
 			_userDetailRepository = userDetailRepository;
 		}
 
-		public bool Change(IPerson person, string oldPassword, string newPassword)
+		public IChangePasswordResultInfo Change(IPerson person, string oldPassword, string newPassword)
 		{
 			return person.ChangePassword(oldPassword, 
 			                             newPassword, 

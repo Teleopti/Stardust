@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			TimeSpan converterFromClient;
 
 			userValue = userValue.Trim();
-			if (TimeHelper.TryParseLongHourStringDefaultInterpretation(userValue, out converterFromClient, TimeFormatsType.HoursMinutes, false))
+			if (TimeHelper.TryParseLongHourStringDefaultInterpretation(userValue, TimeSpan.FromDays(365), out converterFromClient, TimeFormatsType.HoursMinutes, false))
 				return converterFromClient;
 
 			bindingContext.ModelState.AddModelError("timeError", string.Format(CultureInfo.CurrentUICulture, Resources.InvalidTimeValue, userValue));

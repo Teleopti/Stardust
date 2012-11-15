@@ -16,8 +16,8 @@ Scenario: Open add absence request form from day summary
 	Given I have the role 'Full access to mytime'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day summary for date '2013-10-03'
-	Then I should see the text request form
-	And I should see the absence request tab
+	Then I should see the add text request form
+	And I should see the add absence request form
 
 Scenario: Add absence request from week schedule view
 	Given I have the role 'Full access to mytime'
@@ -33,20 +33,20 @@ Scenario: Can not add absence request from day symbol area if no permission
 	Given I have the role 'No access to absence requests'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day symbol area for date '2013-10-03'
-	Then I should not see the absence request tab
+	Then I should not see the add absence request form
 
 Scenario: Can not add absence request from day summary if no permission
 	Given I have the role 'No access to absence requests'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day summary for date '2013-10-03'
-	Then I should not see the absence request tab
+	Then I should not see the add absence request form
 	
 Scenario: Default absence request values from week schedule
 	Given I have the role 'Full access to mytime'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day summary for date '2013-10-03'
 	And I click absence request tab
-	Then I should see the text request form with '2013-10-03' as default date
+	Then I should see the request form with '2013-10-03' as default date
 	And I should see 00:00 - 23:59 as the default times
 	
 Scenario: Default absence request values from week schedule when unchecked Fullday
@@ -55,7 +55,7 @@ Scenario: Default absence request values from week schedule when unchecked Fulld
 	When I click on the day summary for date '2013-10-03'
 	And I click absence request tab
 	And I unchecked the full day checkbox
-	Then I should see the text request form with '2013-10-03' as default date
+	Then I should see the request form with '2013-10-03' as default date
 	And I should see 08:00 - 17:00 as the default times
 	
 Scenario: Default absence request values from week schedule when checked Fullday
@@ -64,7 +64,7 @@ Scenario: Default absence request values from week schedule when checked Fullday
 	When I click on the day summary for date '2013-10-03'
 	And I click absence request tab
 	And I checked the full day checkbox
-	Then I should see the text request form with '2013-10-03' as default date
+	Then I should see the request form with '2013-10-03' as default date
 	And I should see 00:00 - 23:59 as the default times
 	
 Scenario: Cancel adding absence request
@@ -74,7 +74,7 @@ Scenario: Cancel adding absence request
 	When I click on the day summary for date '2013-10-03'
 	And I click absence request tab
 	And I input absence request values with 'Vacation' for date '2013-10-03'
-	And I click the Cancel button
+	When I click the Cancel button
 	Then I should not see a symbol at the top of the schedule for date '2013-10-03'
 	
 Scenario: Adding invalid absence request values

@@ -151,5 +151,11 @@ namespace Teleopti.Interfaces.Infrastructure
         /// </remarks>
         void Flush();
 
+		 /// <summary>
+		 /// Adds an action to run after transaction has been successfully committed.
+		 /// (the object param is just a dummy param used for .net 2.0. Will be fixed in later releases
+		 /// </summary>
+		 /// <param name="func"></param>
+    	 void AfterSuccessfulTx(Action func);
     }
 }

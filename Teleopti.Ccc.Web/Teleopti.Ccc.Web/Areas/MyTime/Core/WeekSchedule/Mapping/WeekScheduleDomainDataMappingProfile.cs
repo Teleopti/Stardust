@@ -5,7 +5,6 @@ using AutoMapper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Core.IoC;
@@ -86,7 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
                                                     }
                                                     return lateEnd;
 												});
-									TimePeriod minMaxTime = earliest > latest
+									var minMaxTime = earliest > latest
 									                        	? new TimePeriod(latest, earliest)
 									                        	: new TimePeriod(earliest, latest);
 
@@ -113,8 +112,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															Projections = (from d in days where d.Projection != null select d.Projection).ToArray()
 									                  	};
 
-									bool asmPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
-									bool isCurrentWeek = week.Contains(_now.Invoke().DateOnly());
+									var asmPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
+									var isCurrentWeek = week.Contains(_now.Invoke().DateOnly());
 
 									return new WeekScheduleDomainData
 											{

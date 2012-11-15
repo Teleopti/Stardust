@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void BeforeTestRun()
 		{
-			Browser.Current.GoTo("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"));
+			Navigation.GotoRaw("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"));
 		}
 
 		public static void BeforeScenario()
@@ -62,46 +63,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			// doing this twice because IE fails to grab the cookie after the first one sometimes..
 			// probably depending on how quickly the next request takes place.
 			// making a second request seems to enforce the cookie somehow..
-			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
-			EventualAssert.That(() =>
-			                    	{
-										Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();");
-										return Browser.Current.Text;
-			                    	}, Is.StringContaining("Cookie is expired!"));
+			Retrying.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
+			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Cookie is expired!"));
 
-			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
-			EventualAssert.That(() =>
-			                    	{
-										Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();");
-										var text = Browser.Current.Text;
-			                    		var regex = new Regex("Cookie is expired!");
-			                    		return regex.Matches(text).Count;
-			                    	}, Is.EqualTo(2));
+			Retrying.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
+			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Cookie is expired!"));
 		}
 
-		public static void PageLog(string message)
+		public static void TestMessage(string message)
 		{
-			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PageLog('" + message + "');");
-			Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();");
-			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining(message));
+			Retrying.Javascript("Teleopti.MyTimeWeb.Test.TestMessage('" + message + "');");
+			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining(message));
 		}
 
 		public static void WaitUntilReadyForInteraction()
 		{
-			EventualAssert.That(() =>
-			                    	{
-			                    		Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();");
-			                    		return Browser.Current.Text;
-			                    	}, Is.StringContaining("Ready for interaction"));
+			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Ready for interaction"));
 		}
 
 		public static void WaitUntilCompletelyLoaded()
 		{
-			EventualAssert.That(() =>
-			                    	{
-			                    		Browser.Current.Eval("Teleopti.MyTimeWeb.Test.FlushPageLog();");
-			                    		return Browser.Current.Text;
-			                    	}, Is.StringContaining("Completely loaded"));
+			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Completely loaded"));
 		}
 
 	}

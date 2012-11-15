@@ -90,87 +90,87 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.IsTrue(result);
 		}
 
-		[Test]
-		public void ScheduleSinglePersonWithoutRollbackShouldWork()
-		{
-			DateOnly date = new DateOnly();
-			IPerson person = PersonFactory.CreatePerson();
-			IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
-			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
+		//[Test]
+		//public void ScheduleSinglePersonWithoutRollbackShouldWork()
+		//{
+		//    DateOnly date = new DateOnly();
+		//    IPerson person = PersonFactory.CreatePerson();
+		//    IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
+		//    IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, date)).Return(groupPerson);
-				Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPerson, date, _schedulingOptions)).
-					Return(true);
-				Expect.Call(groupSchedulingService.ScheduleOneDayOnOnePerson(date, person, _schedulingOptions, groupPerson,
-																			 _allScheduleMatrixes)).Return(true);
-			}
+		//    using (_mocks.Record())
+		//    {
+		//        Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, date)).Return(groupPerson);
+		//        Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPerson, date, _schedulingOptions)).
+		//            Return(true);
+		//        Expect.Call(groupSchedulingService.ScheduleOneDayOnOnePerson(date, person, _schedulingOptions, groupPerson,
+		//                                                                     _allScheduleMatrixes)).Return(true);
+		//    }
 
-			bool result;
+		//    bool result;
 
-			using (_mocks.Playback())
-			{
-				result = _target.ScheduleSinglePerson(date, person, groupSchedulingService, _schedulingOptions,
-													  _groupPersonBuilderForOptimization, _allScheduleMatrixes);
-			}
+		//    using (_mocks.Playback())
+		//    {
+		//        result = _target.ScheduleSinglePerson(date, person, groupSchedulingService, _schedulingOptions,
+		//                                              _groupPersonBuilderForOptimization, _allScheduleMatrixes);
+		//    }
 
-			Assert.IsTrue(result);
-		}
+		//    Assert.IsTrue(result);
+		//}
 
-		[Test]
-		public void ScheduleSinglePersonWithoutRollbackShouldReturnFalseOnConsistentCheckerFailure()
-		{
-			DateOnly date = new DateOnly();
-			IPerson person = PersonFactory.CreatePerson();
-			IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
-			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
+		//[Test]
+		//public void ScheduleSinglePersonWithoutRollbackShouldReturnFalseOnConsistentCheckerFailure()
+		//{
+		//    DateOnly date = new DateOnly();
+		//    IPerson person = PersonFactory.CreatePerson();
+		//    IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
+		//    IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, date)).Return(groupPerson);
-				Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPerson, date, _schedulingOptions)).Return(false);
+		//    using (_mocks.Record())
+		//    {
+		//        Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, date)).Return(groupPerson);
+		//        Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPerson, date, _schedulingOptions)).Return(false);
 				
-			}
+		//    }
 
-			bool result;
+		//    bool result;
 
-			using (_mocks.Playback())
-			{
-				result = _target.ScheduleSinglePerson(date, person, groupSchedulingService, _schedulingOptions,
-													  _groupPersonBuilderForOptimization, _allScheduleMatrixes);
-			}
+		//    using (_mocks.Playback())
+		//    {
+		//        result = _target.ScheduleSinglePerson(date, person, groupSchedulingService, _schedulingOptions,
+		//                                              _groupPersonBuilderForOptimization, _allScheduleMatrixes);
+		//    }
 
-			Assert.IsFalse(result);
-		}
+		//    Assert.IsFalse(result);
+		//}
 
-		[Test]
-		public void ScheduleSinglePersonWithoutRollbackShouldReturnFalseOnScheduleOneDayFailure()
-		{
-			DateOnly date = new DateOnly();
-			IPerson person = PersonFactory.CreatePerson();
-			IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
-			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
+		//[Test]
+		//public void ScheduleSinglePersonWithoutRollbackShouldReturnFalseOnScheduleOneDayFailure()
+		//{
+		//    DateOnly date = new DateOnly();
+		//    IPerson person = PersonFactory.CreatePerson();
+		//    IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
+		//    IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, date)).Return(groupPerson);
-				Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPerson, date, _schedulingOptions)).
-					Return(true);
-				Expect.Call(groupSchedulingService.ScheduleOneDayOnOnePerson(date, person, _schedulingOptions, groupPerson,
-																			 _allScheduleMatrixes)).Return(false);
-			}
+		//    using (_mocks.Record())
+		//    {
+		//        Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, date)).Return(groupPerson);
+		//        Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPerson, date, _schedulingOptions)).
+		//            Return(true);
+		//        Expect.Call(groupSchedulingService.ScheduleOneDayOnOnePerson(date, person, _schedulingOptions, groupPerson,
+		//                                                                     _allScheduleMatrixes)).Return(false);
+		//    }
 
-			bool result;
+		//    bool result;
 
-			using (_mocks.Playback())
-			{
-				result = _target.ScheduleSinglePerson(date, person, groupSchedulingService, _schedulingOptions,
-													  _groupPersonBuilderForOptimization, _allScheduleMatrixes);
-			}
+		//    using (_mocks.Playback())
+		//    {
+		//        result = _target.ScheduleSinglePerson(date, person, groupSchedulingService, _schedulingOptions,
+		//                                              _groupPersonBuilderForOptimization, _allScheduleMatrixes);
+		//    }
 
-			Assert.IsFalse(result);
-		}
+		//    Assert.IsFalse(result);
+		//}
 
 		[Test]
 		public void GoBackToLegalStateShouldReturnListOfSchedulesRemoved()

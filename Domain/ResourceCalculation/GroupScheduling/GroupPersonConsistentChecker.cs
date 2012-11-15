@@ -53,7 +53,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 						if (schedulingOptions.UseGroupSchedulingCommonStart)
 							poss.StartTime = period.LocalStartDateTime.TimeOfDay;
 						if (schedulingOptions.UseGroupSchedulingCommonEnd)
-							poss.EndTime = period.LocalEndDateTime.TimeOfDay;
+                        {
+                            poss.EndTime = period.LocalEndDateTime.TimeOfDay;
+                            if (poss.EndTime < poss.StartTime)
+                                poss.EndTime = poss.EndTime.Add(TimeSpan.FromDays(1));
+                        }
 					}
                     ExtractCommonActivity(schedulingOptions, poss, shift);
 					if (schedulingOptions.UseGroupSchedulingCommonCategory)

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Win
                 {
                     var significantPart = scheduleDay.SignificantPartForDisplay();
 
-                    if (significantPart == SchedulePartView.MainShift || significantPart == SchedulePartView.FullDayAbsence)
+                    if (significantPart == SchedulePartView.MainShift || significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.Overtime)
                     {
 						drawAssignmentFromSchedule(e, scheduleDay);	
                     }

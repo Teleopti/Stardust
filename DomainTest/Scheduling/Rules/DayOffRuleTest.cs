@@ -138,6 +138,44 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var result = _target.LongestDateTimePeriodForAssignment(_scheduleRange, new DateOnly(2007, 8, 3));
             Assert.AreEqual(expected, result);
         }
+        
+        [Test]
+        public void VerifyAfterDayOffWithAssignmentBeforeOnTheSameDayAsDayOff()
+        {
+            createDayOffRule();
+            DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
+            dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
+            dayOff.Anchor = TimeSpan.FromHours(12);
+            _personDayOff = new PersonDayOff(_person, _scenario, dayOff, new DateOnly(2007, 8, 2));
+            ((Schedule)_scheduleRange).Add(_personDayOff);
+
+            ((Schedule)_scheduleRange).Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
+                                                                                  new DateTimePeriod(new DateTime(2007, 8, 2, 10, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 2, 11, 0, 0, DateTimeKind.Utc))));
+
+            var expected = new DateTimePeriod(new DateTime(2007, 8, 2, 16, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 6, 22, 0, 0, DateTimeKind.Utc));
+
+            var result = _target.LongestDateTimePeriodForAssignment(_scheduleRange, new DateOnly(2007, 8, 3));
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void VerifyBeforeDayOffWithAssignmentAfterOnTheSameDayAsDayOff()
+        {
+            createDayOffRule();
+            DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
+            dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
+            dayOff.Anchor = TimeSpan.FromHours(12);
+            _personDayOff = new PersonDayOff(_person, _scenario, dayOff, new DateOnly(2007, 8, 2));
+            ((Schedule)_scheduleRange).Add(_personDayOff);
+
+            ((Schedule)_scheduleRange).Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
+                                                                                  new DateTimePeriod(new DateTime(2007, 8, 2, 13, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 2, 14, 0, 0, DateTimeKind.Utc))));
+
+            var expected = new DateTimePeriod(new DateTime(2007, 8, 2, 16, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 6, 22, 0, 0, DateTimeKind.Utc));
+
+            var result = _target.LongestDateTimePeriodForAssignment(_scheduleRange, new DateOnly(2007, 8, 3));
+            Assert.AreEqual(expected, result);
+        }
 
         [Test]
         public void VerifyAfterDayOffWithNoAssignmentBefore()

@@ -12,6 +12,6 @@
 		/// <param name="oldPassword">Old password</param>
 		/// <param name="newPassword">New password</param>
 		/// <returns><code>true</code> if changed</returns>
-		bool Change(IPerson person, string oldPassword, string newPassword);
+		IChangePasswordResultInfo Change(IPerson person, string oldPassword, string newPassword);
 	}
 }

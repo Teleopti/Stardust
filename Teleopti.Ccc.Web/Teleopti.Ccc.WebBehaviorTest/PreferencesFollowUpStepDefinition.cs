@@ -3,8 +3,7 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -29,15 +28,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 					                    : Is.StringContaining("preference-not-fulfilled"));
 			}
 		}
-
-
-		[Given(@"I have a shift with")]
-		public void GivenIHaveAShiftWith(Table table)
-		{
-			var schedule = table.CreateInstance<ScheduledShiftConfigurable>();
-			UserFactory.User().Setup(schedule);
-		}
-
 
 		private class DayCellFields
 		{

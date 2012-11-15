@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
@@ -14,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class WeekSchedulePage : PortalPage, IOkButton, ICancelButton, IEditRequestPage, IDateRangeSelector
 	{
-		private Constraint DayConstraint = Find.By("data-mytime-date", v => v != null);
+		private readonly Constraint DayConstraint = Find.By("data-mytime-date", v => v != null);
 		private ListCollection DayLists { get { return Document.Lists.Filter(DayConstraint); } }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
@@ -38,12 +40,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public string FirstDate { get { return FirstDay.GetAttributeValue("data-mytime-date"); } }
 
-		public List DayElementForDate(string formattedDate) { return Document.List(Find.By("data-mytime-date", v => v == formattedDate)).EventualGet(); }
-		public List DayElementForDate(DateTime date) { return DayElementForDate(date.ToString("yyyy-MM-dd")); }
+		private string DateSelector(DateTime date) { return CalendarCellsPage.DateSelector(date); }
+
+		public List DayElementForDate(DateTime date)
+		{
+			return Document.List(Find.BySelector(DateSelector(date))).EventualGet();
+		}
 
 		public Div DayComment(DateTime date) 
 		{
-			return DayElementForDate(date).Div(Find.ByClass("icon comment-day", false));
+			return Document.Div(Find.BySelector(DateSelector(date) + " .icon.comment-day")).EventualGet();
 		}
 
 		public void ClickThirdDayOfOtherWeekInWeekPicker(CultureInfo culture)
@@ -53,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public Div RequestForDate(DateTime date)
 		{
-			return DayElementForDate(date).Div(Find.ByClass("text-request", false));
+			return Document.Div(Find.BySelector(DateSelector(date) + " .text-request")).EventualGet();
 		}
 
 		[FindBy(Id = "Schedule-addRequest-button")]
@@ -62,15 +68,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Schedule-addRequest-section")]
 		public Div RequestDetailSection { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-		public Span TextRequestTab
-		{
-			get { throw new NotImplementedException(); }
-		}
+		[FindBy(Id = "Text-request-tab")]
+		public Span TextRequestTab { get; set; }
 
 		[FindBy(Id = "Absence-request-tab")]
 		public Span AbsenceRequestTab { get; set; }
-
 		[FindBy(Id = "Absence-type-element")]
 		public Div AbsenceTypesElement { get; set; }
 
@@ -101,14 +103,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public Div TimeLineDiv
 		{
-			get { return Document.Div(Find.ByClass("weekview-timeline", false)); }
+			get { return Document.Div(QuicklyFind.ByClass("weekview-timeline")); }
 		}
 		
 		public DivCollection TimelineLabels
 		{
 			get
 			{
-				return TimeLineDiv.Divs.Filter(Find.ByClass("weekview-timeline-label", false)); 
+				return TimeLineDiv.Divs.Filter(QuicklyFind.ByClass("weekview-timeline-label")); 
 			}
 		}
 
@@ -116,25 +118,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get
 			{
-				return Document.Div(Find.ByClass("weekview-timeline-label", false));
+				return Document.Div(QuicklyFind.ByClass("weekview-timeline-label"));
 			}
 		}
 
 		public Element CancelButton
 		{
-			get { return Document.Element(Find.ByClass("ui-tooltip-close", false)); }
+			get { return Document.Element(QuicklyFind.ByClass("ui-tooltip-close")); }
 		}
 
 		public Div TimeIndicatorForDate(DateTime date)
 		{
-			return DayElementForDate(date).ListItems[4].Div(Find.ByClass("week-schedule-time-indicator", false));
+			return Document.Div(Find.BySelector(DateSelector(date) + " .week-schedule-time-indicator")).EventualGet();
 		}
 
 		public Div TimeIndicatorInTimeLine
 		{
 			get
 			{
-				return TimeLineDiv.Div(Find.ByClass("week-schedule-time-indicator-small", false)); 
+				return TimeLineDiv.Div(QuicklyFind.ByClass("week-schedule-time-indicator-small")); 
 			}
 		}
 
@@ -155,7 +157,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public DivCollection DayLayers(DateTime date)
         {
-            return DayElementForDate(date).ListItems[4].Divs.Filter(Find.ByClass("week-schedule-layer", false));
+			return Document.Divs.Filter(Find.BySelector(DateSelector(date) + " .week-schedule-layer"));
         }
+
+		public Div DayLayerTooltipElement(DateTime date, string tooltipContent)
+		{
+			return Document.Div(Find.BySelector(DateSelector(date) + " .week-schedule-layer[tooltip-text*='" + tooltipContent + "']"));
+		}
 	}
 }

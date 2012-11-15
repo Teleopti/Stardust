@@ -158,6 +158,7 @@
     <Compile Include="Common\JobResultTest.cs" />
     <Compile Include="Common\PersonComparerTest.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptionsTest.cs" />
+    <Compile Include="Common\UtcNowTest.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinderTest.cs" />
     <Compile Include="Common\PersonProviderTest.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriodTest.cs" />
@@ -689,6 +690,7 @@
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplateTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStateCoherentCheckerTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStateDictionaryCreatorTest.cs" />
+    <Compile Include="Scheduling\TeamSteadyStateHolderTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStateMainShiftSchedulerTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStatePersonPeriodTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStateRunnerTest.cs" />

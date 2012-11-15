@@ -1,6 +1,6 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.6.4.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.8.2.js" />
 /// <reference path="~/Content/Scripts/jquery-ui-1.8.16.min.js" />
-/// <reference path="~/Content/Scripts/jquery-1.6.4-vsdoc.js" />
+/// <reference path="~/Content/Scripts/jquery-1.8.2-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/jquery.qtip.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
@@ -19,17 +19,19 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 	var _settings = {};
 	var _messages = [];
 
-	function _pageLog(message) {
+	function _testMessage(message) {
 		_messages.push(message);
 	}
 
-	function _flushPageLog() {
+	function _popTestMessages() {
+		var messages = _messages;
+		_messages = [];
 		var page = $('#page');
-		for (var i = 0; i < _messages.length; i++) {
-			var message = _messages[i];
+		for (var i = 0; i < messages.length; i++) {
+			var message = messages[i];
 			page.append(message + "</ br>");
 		}
-		_messages = [];
+		return messages;
 	}
 
 	function _expireMyCookie(message) {
@@ -39,11 +41,11 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 			cache: false,
 			async: false,
 			success: function () {
-				_pageLog(message);
+				_testMessage(message);
 			},
 			error: function (r) {
 				if (r.status == 401 || r.status == 403) {
-					_pageLog(message);
+					_testMessage(message);
 				}
 			}
 		});
@@ -53,11 +55,11 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 		Init: function (settings) {
 			_settings = settings;
 		},
-		PageLog: function (message) {
-			_pageLog(message);
+		TestMessage: function (message) {
+			_testMessage(message);
 		},
-		FlushPageLog: function () {
-			_flushPageLog();
+		PopTestMessages: function () {
+			return _popTestMessages();
 		},
 		ExpireMyCookie: function (message) {
 			_expireMyCookie(message);

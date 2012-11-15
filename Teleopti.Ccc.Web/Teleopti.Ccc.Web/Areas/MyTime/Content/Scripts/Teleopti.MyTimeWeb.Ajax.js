@@ -1,6 +1,6 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.6.4.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.8.2.js" />
 /// <reference path="~/Content/Scripts/jquery-ui-1.8.16.min.js" />
-/// <reference path="~/Content/Scripts/jquery-1.6.4-vsdoc.js" />
+/// <reference path="~/Content/Scripts/jquery-1.8.2-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/jquery.qtip.js" />
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using log4net;
@@ -19,14 +20,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GoTo(string pageUrl, params IGoToInterceptor[] interceptors)
 		{
-			interceptors.ToList().ForEach(i => i.Before(pageUrl));
+			InnerGoto(new Uri(TestSiteConfigurationSetup.Url, pageUrl), interceptors);
+		}
 
-			var uri = new Uri(TestSiteConfigurationSetup.Url, pageUrl);
-			Log.Write("Browsing to: " + uri);
-			Robustness.RetryIEOperation(() => Browser.Current.GoTo(uri));
+		public static void GotoRaw(string url, params IGoToInterceptor[] interceptors)
+		{
+			InnerGoto(new Uri(url), interceptors);
+		}
+
+		private static void InnerGoto(Uri uri, params IGoToInterceptor[] interceptors)
+		{
+			var args = new GotoArgs {Uri = uri};
+
+			interceptors.ToList().ForEach(i => i.Before(args));
+
+			Log.Write("Browsing to: " + args.Uri);
+			Retrying.Action(() => Browser.Current.GoTo(args.Uri));
 			Log.Write("Ended up in: " + Browser.Current.Url);
 
-			interceptors.Reverse().ToList().ForEach(i => i.After(pageUrl));
+			interceptors.Reverse().ToList().ForEach(i => i.After(args));
 		}
 
 		public static void GotoAsm()
@@ -108,8 +120,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoWeekSchedulePage(DateTime date)
 		{
 			GoTo(string.Format("MyTime#Schedule/Week/{0}/{1}/{2}", 
-				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")), 
-				new ApplicationStartupTimeout(), new LoadingOverlay());
+				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+				new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilCompletelyLoaded());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
@@ -155,7 +167,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoRequests()
 		{
-			GoTo("MyTime#Requests/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
+			GoTo("MyTime#Requests/Index", new ForceRefresh(), new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
 		}
 
@@ -167,7 +179,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoTeamSchedule(DateTime date)
 		{
-			GoTo(String.Format("MyTime#TeamSchedule/Index/{0}/{1}/{2}", 
+			GoTo(string.Format("MyTime#TeamSchedule/Index/{0}/{1}/{2}", 
 				date.Year.ToString("0000"), date.Month.ToString("00"),date.Day.ToString("00"))
 				, new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
@@ -192,10 +204,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 
 
+	public class GotoArgs
+	{
+		public Uri Uri { get; set; }
+	}
+
 	public interface IGoToInterceptor
 	{
-		void Before(string pageUrl);
-		void After(string pageUrl);
+		void Before(GotoArgs args);
+		void After(GotoArgs args);
+	}
+
+	public class ForceRefresh : IGoToInterceptor
+	{
+		public void Before(GotoArgs args)
+		{
+			var url = args.Uri.ToString();
+			url = url.Replace("#", string.Format("?{0}#", Guid.NewGuid()));
+			args.Uri = new Uri(url);
+		}
+
+		public void After(GotoArgs args)
+		{
+		}
 	}
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
@@ -203,12 +234,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	{
 		private WatiNWaitForCompleteTimeout _timeout;
 
-		public void Before(string pageUrl)
+		public void Before(GotoArgs args)
 		{
 			_timeout = new WatiNWaitForCompleteTimeout(60);
 		}
 
-		public void After(string pageUrl)
+		public void After(GotoArgs args)
 		{
 			_timeout.Dispose();
 			_timeout = null;
@@ -217,12 +248,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	public class LoadingOverlay : IGoToInterceptor
 	{
-		public void Before(string pageUrl)
+		public void Before(GotoArgs args)
 		{
 			WaitUntilLoadingOverlayIsHidden();
 		}
 
-		public void After(string pageUrl)
+		public void After(GotoArgs args)
 		{
 			WaitUntilLoadingOverlayIsHidden();
 		}
@@ -238,11 +269,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	public class OverrideNotifyBehavior : IGoToInterceptor
 	{
-		public void Before(string pageUrl)
+		public void Before(GotoArgs args)
 		{
 		}
 
-		public void After(string pageUrl)
+		public void After(GotoArgs args)
 		{
 			mockNotifyCall();
 		}
@@ -256,13 +287,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	public class WaitUntilReadyForInteraction : IGoToInterceptor
 	{
-		public void Before(string pageUrl)
+		public void Before(GotoArgs args)
 		{
 		}
 
-		public void After(string pageUrl)
+		public void After(GotoArgs args)
 		{
 			TestControllerMethods.WaitUntilReadyForInteraction();
+		}
+	}
+
+	public class WaitUntilCompletelyLoaded : IGoToInterceptor
+	{
+		public void Before(GotoArgs args)
+		{
+		}
+
+		public void After(GotoArgs args)
+		{
+			TestControllerMethods.WaitUntilCompletelyLoaded();
 		}
 	}
 }
