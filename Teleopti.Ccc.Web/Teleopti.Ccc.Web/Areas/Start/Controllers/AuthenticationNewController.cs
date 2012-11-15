@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
+using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Core;
@@ -12,30 +14,27 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	public class AuthenticationNewController : Controller
 	{
 		private readonly ILayoutBaseViewModelFactory _layoutBaseViewModelFactory;
-		private readonly IDataSourcesProvider _dataSourceProvider;
+		private readonly IEnumerable<IDataSourcesViewModelFactory> _dataSourcesViewModelFactories;
 
-		public AuthenticationNewController(ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IDataSourcesProvider dataSourceProvider)
+		public AuthenticationNewController(ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IEnumerable<IDataSourcesViewModelFactory> dataSourcesViewModelFactories)
 		{
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
-			_dataSourceProvider = dataSourceProvider;
+			_dataSourcesViewModelFactories = dataSourcesViewModelFactories;
 		}
 
-		public ActionResult SignIn()
+		public ViewResult SignIn()
 		{
 			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
 			return View();
 		}
 
 		[HttpGet]
-		public JsonResult LoadDataSources()
+		public JsonResult DataSources()
 		{
-			var applicatoinDataSources = _dataSourceProvider.RetrieveDatasourcesForApplication()
-				.SelectOrEmpty(
-					x => new DataSourceViewModel { Name = x.DataSourceName, DisplayName = x.DataSourceName, IsApplicationLogon = true });
-			var windwowsDataSources = _dataSourceProvider.RetrieveDatasourcesForWindows()
-				.SelectOrEmpty(
-					x => new DataSourceViewModel { Name = x.DataSourceName, DisplayName = x.DataSourceName + " " + Resources.WindowsLogonWithBrackets, IsApplicationLogon = false });
-			return Json(applicatoinDataSources.Union(windwowsDataSources), JsonRequestBehavior.AllowGet);
+			var sources = from f in _dataSourcesViewModelFactories
+			              from s in f.DataSources()
+			              select s;
+			return Json(sources, JsonRequestBehavior.AllowGet);
 		}
 
 	}

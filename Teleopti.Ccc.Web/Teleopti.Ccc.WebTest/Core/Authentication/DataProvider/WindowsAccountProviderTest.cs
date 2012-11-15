@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
+using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 {
@@ -31,7 +32,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			httpContext = MockRepository.GenerateStub<HttpContextBase>();
 			httpContext.Stub(x => x.Request).Return(httpRequest);
 
-			target = new WindowsAccountProvider(httpContext); 
+			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
+			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
+
+			target = new WindowsAccountProvider(currentHttpContext); 
 		}
 
 		[Test]

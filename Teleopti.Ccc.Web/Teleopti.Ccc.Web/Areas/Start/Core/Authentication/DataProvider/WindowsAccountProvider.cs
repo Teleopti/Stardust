@@ -1,20 +1,21 @@
 ﻿using System.Web;
+using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 {
 	public class WindowsAccountProvider : IWindowsAccountProvider
 	{
-		private readonly HttpContextBase _httpContextBase;
+		private readonly ICurrentHttpContext _httpContext;
 		
-		public WindowsAccountProvider(HttpContextBase httpContextBase)
+		public WindowsAccountProvider(ICurrentHttpContext httpContext)
 		{
-			_httpContextBase = httpContextBase;
+			_httpContext = httpContext;
 		}
 
 		public WindowsAccount RetrieveWindowsAccount()
 		{
 			// err-hantering + test för detta senare... + browserstöd.
-			var splitBySeparator = _httpContextBase.Request.ServerVariables["LOGON_USER"].Split('\\');
+			var splitBySeparator = _httpContext.Current().Request.ServerVariables["LOGON_USER"].Split('\\');
 			if(splitBySeparator.Length != 2)
 			{
 				return null;

@@ -6,28 +6,32 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
+using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 {
-	using Menu;
-
 	public class StartAreaModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<WebLogOn>().As<IWebLogOn>();
-			builder.RegisterType<DataSourcesProvider>().As<IDataSourcesProvider>();
+			builder.RegisterType<DataSourcesProvider>().As<IDataSourcesProvider>().SingleInstance();
 			builder.RegisterType<Authenticator>().As<IAuthenticator>();
 			builder.RegisterType<BusinessUnitProvider>().As<IBusinessUnitProvider>();
-			builder.RegisterType<WindowsAccountProvider>().As<IWindowsAccountProvider>();
+			builder.RegisterType<WindowsAccountProvider>().As<IWindowsAccountProvider>().SingleInstance();
 			builder.RegisterType<LayoutBaseViewModelFactory>().As<ILayoutBaseViewModelFactory>();
 			builder.RegisterType<CultureSpecificViewModelFactory>().As<ICultureSpecificViewModelFactory>();
 			builder.RegisterType<AuthenticationViewModelFactory>().As<IAuthenticationViewModelFactory>();
 			builder.RegisterType<FormsAuthenticationWrapper>().As<IFormsAuthentication>();
-			builder.RegisterType<AvailableWindowsDataSources>().As<IAvailableWindowsDataSources>();
+			builder.RegisterType<AvailableWindowsDataSources>().As<IAvailableWindowsDataSources>().SingleInstance();
 			builder.RegisterType<Redirector>().As<IRedirector>();
 			builder.RegisterType<MenuViewModelFactory>().As<IMenuViewModelFactory>();
 			builder.RegisterType<SessionSpecificDataStringSerializer>().As<ISessionSpecificDataStringSerializer>().SingleInstance();
+
+			builder.RegisterAssemblyTypes(GetType().Assembly)
+				.AssignableTo<IDataSourcesViewModelFactory>()
+				.As<IDataSourcesViewModelFactory>()
+				.SingleInstance();
 		}
 	}
 }
