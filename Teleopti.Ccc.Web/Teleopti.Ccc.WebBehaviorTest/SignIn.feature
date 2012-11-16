@@ -53,6 +53,7 @@ Scenario: Sign in with a user with multiple business units by Windows credential
 	And I select a business unit
 	Then I should be signed in
 	
+@ignore
 Scenario: Sign in with a user with one business unit by Windows credentials and I should be directed into that business unit direct without having to select it
 	Given Windows user have the role 'Role for business unit 2'
 	And I am viewing the sign in page

@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Sign in New")]
+    [NUnit.Framework.IgnoreAttribute()]
     public partial class SignInNewFeature
     {
         
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Sign in New", "In order to access the site\r\nAs a user that is not signed in\r\nI want to be able t" +
-                    "o sign in", ProgrammingLanguage.CSharp, ((string[])(null)));
+                    "o sign in", ProgrammingLanguage.CSharp, new string[] {
+                        "ignore"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -67,7 +69,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         
         public virtual void FeatureBackground()
         {
-#line 6
+#line 7
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -75,7 +77,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table1.AddRow(new string[] {
                         "Name",
                         "Business Unit 1"});
-#line 8
+#line 9
  testRunner.Given("there is a business unit with", ((string)(null)), table1);
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
@@ -84,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table2.AddRow(new string[] {
                         "Name",
                         "Business Unit 2"});
-#line 11
+#line 12
  testRunner.And("there is a business unit with", ((string)(null)), table2);
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
@@ -96,7 +98,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table3.AddRow(new string[] {
                         "Business Unit",
                         "Business Unit 1"});
-#line 14
+#line 15
  testRunner.And("there is a scenario", ((string)(null)), table3);
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
@@ -108,7 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table4.AddRow(new string[] {
                         "Business Unit",
                         "Business Unit 2"});
-#line 18
+#line 19
  testRunner.And("there is a scenario", ((string)(null)), table4);
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
@@ -123,7 +125,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table5.AddRow(new string[] {
                         "Access to mytime web",
                         "true"});
-#line 22
+#line 23
  testRunner.And("there is a role with", ((string)(null)), table5);
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
@@ -138,7 +140,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table6.AddRow(new string[] {
                         "Access to mytime web",
                         "true"});
-#line 27
+#line 28
  testRunner.And("there is a role with", ((string)(null)), table6);
 #line hidden
         }
@@ -150,7 +152,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with a user with multiple business units by user name", ((string[])(null)));
 #line 34
 this.ScenarioSetup(scenarioInfo);
-#line 6
+#line 7
 this.FeatureBackground();
 #line 35
  testRunner.Given("I have the role \'Role for business unit 1\'");
@@ -179,7 +181,7 @@ this.FeatureBackground();
                     "into that business unit direct without having to select it", ((string[])(null)));
 #line 44
 this.ScenarioSetup(scenarioInfo);
-#line 6
+#line 7
 this.FeatureBackground();
 #line 45
  testRunner.Given("I have the role \'Role for business unit 1\'");
@@ -202,7 +204,7 @@ this.FeatureBackground();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with a user with multiple business units by Windows credentials", ((string[])(null)));
 #line 51
 this.ScenarioSetup(scenarioInfo);
-#line 6
+#line 7
 this.FeatureBackground();
 #line 52
  testRunner.Given("Windows user have the role \'Role for business unit 1\'");
@@ -231,7 +233,7 @@ this.FeatureBackground();
                     " directed into that business unit direct without having to select it", ((string[])(null)));
 #line 60
 this.ScenarioSetup(scenarioInfo);
-#line 6
+#line 7
 this.FeatureBackground();
 #line 61
  testRunner.Given("Windows user have the role \'Role for business unit 2\'");
@@ -254,7 +256,7 @@ this.FeatureBackground();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with wrong password should give me an informative error", ((string[])(null)));
 #line 67
 this.ScenarioSetup(scenarioInfo);
-#line 6
+#line 7
 this.FeatureBackground();
 #line 68
  testRunner.Given("I have the role \'Role for business unit 1\'");
@@ -277,7 +279,7 @@ this.FeatureBackground();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in without permission", ((string[])(null)));
 #line 74
 this.ScenarioSetup(scenarioInfo);
-#line 6
+#line 7
 this.FeatureBackground();
 #line 75
  testRunner.Given("I dont have permission to sign in");
