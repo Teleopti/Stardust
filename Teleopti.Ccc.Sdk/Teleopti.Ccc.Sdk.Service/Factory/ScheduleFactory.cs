@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -140,8 +141,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                                                                           schedulePart,
                                                                           NewBusinessRuleCollection.Minimum(),new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 
-                    if (invalidList.Count() > 0)
-                        throw new NotImplementedException("FIX THIS LATER" + invalidList.First().Message);
+                    if (invalidList.Any())
+                    {
+                    	throw new FaultException(
+                    		string.Format("At least one business rule was broken. Messages are: {0}{1}", Environment.NewLine,
+                    		              string.Join(Environment.NewLine,
+                    		                          invalidList.Select(i => i.Message).Distinct().ToArray())));
+                    }
 
                     _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, dic.DifferenceSinceSnapshot());
                     uow.PersistAll();

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		{
 			var accounts = _mocks.Stub<IDictionary<IPerson, IPersonAccountCollection>>();
 
-			Expect.Call(_personAbsenceAccountRepository.LoadAllAccounts()).Return(accounts);
+			Expect.Call(_personAbsenceAccountRepository.FindByUsers(null)).Return(accounts).IgnoreArguments();
 			_schedulingResultStateHolder.AllPersonAccounts = accounts;
 
 			_mocks.ReplayAll();
