@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void ShouldReturnSignInView()
 		{
 			var layoutBaseViewModelFactory = MockRepository.GenerateMock<ILayoutBaseViewModelFactory>();
-			var target = new AuthenticationNewController(layoutBaseViewModelFactory, null, null);
+			var target = new AuthenticationNewController(layoutBaseViewModelFactory, null, null, null);
 			var layoutBaseViewModel = new LayoutBaseViewModel();
 
 			layoutBaseViewModelFactory.Stub(x => x.CreateLayoutBaseViewModel()).Return(layoutBaseViewModel);
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void ShouldRetrieveDataSources()
 		{
 			var dataSourcesViewModelFactory = MockRepository.GenerateMock<IDataSourcesViewModelFactory>();
-			var target = new AuthenticationNewController(null, new[] { dataSourcesViewModelFactory }, null);
+			var target = new AuthenticationNewController(null, new[] { dataSourcesViewModelFactory }, null, null);
 			var dataSourcees = new[] { new DataSourceViewModelNew() };
 			dataSourcesViewModelFactory.Stub(x => x.DataSources()).Return(dataSourcees);
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldAuthenticateUserRetrievingBusinessUnits()
 		{
-			var target = new AuthenticationNewController(null, null, MockRepository.GenerateMock<IBusinessUnitsViewModelFactory>());
+			var target = new AuthenticationNewController(null, null, MockRepository.GenerateMock<IBusinessUnitsViewModelFactory>(), null);
 			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
 			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult {Successful = true});
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var businessUnitViewModels = new[] {new BusinessUnitViewModel()};
 			var businessUnitViewModelFactory = MockRepository.GenerateMock<IBusinessUnitsViewModelFactory>();
 			businessUnitViewModelFactory.Stub(x => x.BusinessUnits(authenticationResult.DataSource, authenticationResult.Person)).Return(businessUnitViewModels);
-			var target = new AuthenticationNewController(null, null, businessUnitViewModelFactory);
+			var target = new AuthenticationNewController(null, null, businessUnitViewModelFactory, null);
 
 			var result = target.BusinessUnits(authenticationModel);
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnErrorIfAuthenticationUnsuccessfulRetrievingBusinessUnits()
 		{
-			var target = new StubbingControllerBuilder().CreateController<AuthenticationNewController>(null, null, null);
+			var target = new StubbingControllerBuilder().CreateController<AuthenticationNewController>(null, null, null, null);
 			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
 			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult {Successful = false});
 
@@ -100,6 +100,46 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			target.Response.TrySkipIisCustomErrors.Should().Be.True();
 			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
 			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.LogOnFailedInvalidUserNameOrPassword);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldAuthenticateUserOnLogon()
+		{
+			var person = new Person();
+			person.SetId(Guid.NewGuid());
+			var target = new AuthenticationNewController(null, null, MockRepository.GenerateMock<IBusinessUnitsViewModelFactory>(), MockRepository.GenerateMock<IWebLogOn>());
+			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
+			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult
+				{
+					Successful = true,
+					DataSource = new FakeDataSource(),
+					Person = person
+				});
+
+			target.Logon(authenticationModel, Guid.NewGuid());
+
+			authenticationModel.AssertWasCalled(x => x.AuthenticateUser());
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldLogon()
+		{
+			var person = new Person();
+			person.SetId(Guid.NewGuid());
+			var businessUnitId = Guid.NewGuid();
+			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
+			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult
+				{
+					Successful = true,
+					DataSource = new FakeDataSource {DataSourceName = "datasource"},
+					Person = person
+				});
+			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
+			var target = new AuthenticationNewController(null, null, null, webLogon);
+
+			target.Logon(authenticationModel, businessUnitId);
+
+			webLogon.AssertWasCalled(x => x.LogOn("datasource", businessUnitId, person.Id.Value));
 		}
 
 	}

@@ -19,12 +19,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ILayoutBaseViewModelFactory _layoutBaseViewModelFactory;
 		private readonly IEnumerable<IDataSourcesViewModelFactory> _dataSourcesViewModelFactories;
 		private readonly IBusinessUnitsViewModelFactory _businessUnitViewModelFactory;
+		private readonly IWebLogOn _webLogon;
 
-		public AuthenticationNewController(ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IEnumerable<IDataSourcesViewModelFactory> dataSourcesViewModelFactories, IBusinessUnitsViewModelFactory businessUnitViewModelFactory)
+		public AuthenticationNewController(ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IEnumerable<IDataSourcesViewModelFactory> dataSourcesViewModelFactories, IBusinessUnitsViewModelFactory businessUnitViewModelFactory, IWebLogOn webLogon)
 		{
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 			_dataSourcesViewModelFactories = dataSourcesViewModelFactories;
 			_businessUnitViewModelFactory = businessUnitViewModelFactory;
+			_webLogon = webLogon;
 		}
 
 		public ViewResult SignIn()
@@ -63,20 +65,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public JsonResult Logon(IAuthenticationModel model, Guid businessUnitId)
 		{
 			var result = model.AuthenticateUser();
-
-			//if (!result.Successful)
-			//{
-			//    Response.StatusCode = 400;
-			//    Response.TrySkipIisCustomErrors = true;
-			//    ModelState.AddModelError("Error", Resources.LogOnFailedInvalidUserNameOrPassword);
-			//    return ModelState.ToJson();
-			//}
-
-
-			// .. do even more stuff and setup session etc
-			
-
-			return Json(new object());
+			_webLogon.LogOn(result.DataSource.DataSourceName, businessUnitId, result.Person.Id.Value);
+			return Json(null);
 		}
 	}
 

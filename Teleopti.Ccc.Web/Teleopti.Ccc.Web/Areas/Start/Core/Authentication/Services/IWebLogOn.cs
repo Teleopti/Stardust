@@ -7,5 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 	{
 		void LogOn(Guid businessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType, string warningMessage = null);
 		string PopWarningMessage();
+
+		void LogOn(string dataSourceName, Guid businessUnitId, Guid personId);
 	}
 }

@@ -38,6 +38,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_principalAuthorization = principalAuthorization;
 		}
 
+		public void LogOn(string dataSourceName, Guid businessUnitId, Guid personId)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void LogOn(Guid businessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType, string warningMessage = null)
 		{
 			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
@@ -71,5 +76,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 			return warning;
 		}
+
 	}
 }
