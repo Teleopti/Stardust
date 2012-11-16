@@ -48,15 +48,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public JsonResult BusinessUnits(IAuthenticationModel model)
 		{
 			var result = model.AuthenticateUser();
-
 			if (!result.Successful)
-			{
-				Response.StatusCode = 400;
-				Response.TrySkipIisCustomErrors = true;
-				ModelState.AddModelError("Error", Resources.LogOnFailedInvalidUserNameOrPassword);
-				return ModelState.ToJson();
-			}
-
+				return HandleUnsuccessfulAuthentication();
 			var businessUnits = _businessUnitViewModelFactory.BusinessUnits(result.DataSource, result.Person);
 			return Json(businessUnits, JsonRequestBehavior.AllowGet);
 		}
@@ -65,8 +58,18 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public JsonResult Logon(IAuthenticationModel model, Guid businessUnitId)
 		{
 			var result = model.AuthenticateUser();
+			if (!result.Successful)
+				return HandleUnsuccessfulAuthentication();
 			_webLogon.LogOn(result.DataSource.DataSourceName, businessUnitId, result.Person.Id.Value);
 			return Json(null);
+		}
+
+		private JsonResult HandleUnsuccessfulAuthentication()
+		{
+			Response.StatusCode = 400;
+			Response.TrySkipIisCustomErrors = true;
+			ModelState.AddModelError("Error", Resources.LogOnFailedInvalidUserNameOrPassword);
+			return ModelState.ToJson();
 		}
 	}
 

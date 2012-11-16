@@ -44,6 +44,13 @@ Teleopti.Start.SignInViewModel = function () {
 		self.MustChangePasswordActive(false);
 	};
 
+	this.DisplayApplicationSelection = function () {
+		self.BusinessUnitSelectionActive(false);
+		self.DataSourceSelectionActive(false);
+		self.ApplicationSelectionActive(true);
+		self.MustChangePasswordActive(false);
+	};
+	
 	this.SelectDataSource = function () {
 		if (self.SelectedSource())
 			self.SelectedSource().Selected(false);
@@ -161,12 +168,12 @@ Teleopti.Start.SignInViewModel = function () {
 		this.Selected(true);
 		self.SelectedBusinessUnit(this);
 
-//		var model = {
-//			BusinessUnitId: this.Id,
-//			AuthenticationType: self.AuthenticationType,
-//			PersonId: self.PersonId,
-//			DataSourceName: self.SelectedSource().Name
-//		};
+		//		var model = {
+		//			BusinessUnitId: this.Id,
+		//			AuthenticationType: self.AuthenticationType,
+		//			PersonId: self.PersonId,
+		//			DataSourceName: self.SelectedSource().Name
+		//		};
 
 		var model = _buildAuthenticationModel();
 		model.businessUnitId = self.SelectedBusinessUnit().Id;
@@ -177,7 +184,13 @@ Teleopti.Start.SignInViewModel = function () {
 			data: model,
 			type: 'POST',
 			success: function (data, textStatus, jqXHR) {
-				alert("signed in!");
+				self.DisplayApplicationSelection();
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status == 400) {
+					var data = $.parseJSON(jqXHR.responseText);
+					self.ErrorMessage(data.Errors);
+				}
 			}
 		});
 

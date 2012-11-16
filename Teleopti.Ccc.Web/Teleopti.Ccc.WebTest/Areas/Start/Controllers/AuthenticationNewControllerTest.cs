@@ -142,6 +142,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			webLogon.AssertWasCalled(x => x.LogOn("datasource", businessUnitId, person.Id.Value));
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldReturnErrorIfAuthenticationUnsuccessfulLoggingOn()
+		{
+			var target = new StubbingControllerBuilder().CreateController<AuthenticationNewController>(null, null, null, null);
+			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
+			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult { Successful = false });
+
+			var result = target.Logon(authenticationModel, Guid.NewGuid());
+
+			target.Response.StatusCode.Should().Be(400);
+			target.Response.TrySkipIisCustomErrors.Should().Be.True();
+			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
+			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.LogOnFailedInvalidUserNameOrPassword);
+		}
+
 	}
 
 	[TestFixture]
