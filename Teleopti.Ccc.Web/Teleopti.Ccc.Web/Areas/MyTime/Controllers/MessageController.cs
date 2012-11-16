@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		public void SendNewPushMessageToLoggedOnUser(string title, string message)
+		public void Send(string title, string message)
 		{
 			_pushMessageDialoguePersister.SendNewPushMessageToLoggedOnUser(title,message);
 		}

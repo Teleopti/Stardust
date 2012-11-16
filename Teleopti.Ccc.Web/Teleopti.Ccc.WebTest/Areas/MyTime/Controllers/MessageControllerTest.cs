@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			
 			pushMessageDialoguePersister.Expect(p => p.SendNewPushMessageToLoggedOnUser(title, message)).Repeat.Once();
 
-			target.SendNewPushMessageToLoggedOnUser(title, message);
+			target.Send(title, message);
 			pushMessageDialoguePersister.VerifyAllExpectations();
 		}
 	}
