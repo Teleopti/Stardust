@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var mainShift = new MainShift(shiftCategory);
                 addLayersToMainShift(mainShift, command.LayerCollection);
                 scheduleDay.AddMainShift(mainShift);
-                _saveSchedulePartService.Save(uow, scheduleDay);
+				_saveSchedulePartService.Save(scheduleDay, NewBusinessRuleCollection.Minimum());
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();

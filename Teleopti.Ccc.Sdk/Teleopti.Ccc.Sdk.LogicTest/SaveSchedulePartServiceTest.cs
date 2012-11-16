@@ -3,6 +3,7 @@ using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Interfaces.Domain;
@@ -17,6 +18,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 		private IScheduleDictionarySaver scheduleDictionarySaver;
 		private IScheduleRepository scheduleRepository;
 		private ISaveSchedulePartService target;
+		private IPersonAbsenceAccountRepository personAbsenceAccountRepository;
+		private IUnitOfWorkFactory unitOfWorkFactory;
 
 		[SetUp]
 		public void Setup()
@@ -24,7 +27,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 			mocks = new MockRepository();
 			scheduleDictionarySaver = mocks.DynamicMock<IScheduleDictionarySaver>();
 			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
-			target = new SaveSchedulePartService(scheduleDictionarySaver, scheduleRepository);
+			personAbsenceAccountRepository = mocks.DynamicMock<IPersonAbsenceAccountRepository>();
+			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			target = new SaveSchedulePartService(scheduleDictionarySaver, scheduleRepository, personAbsenceAccountRepository, unitOfWorkFactory);
 		}
 
 		[Test]
@@ -34,10 +39,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 			var scheduleDay = mocks.DynamicMock<IScheduleDay>();
 			var differenceCollectionItems = mocks.DynamicMock<IDifferenceCollection<IPersistableScheduleData>>();
 			var response = new List<IBusinessRuleResponse>();
-			var dictionary = mocks.StrictMock<IReadOnlyScheduleDictionary>();
+			var dictionary = mocks.DynamicMock<IReadOnlyScheduleDictionary>();
 
 			using (mocks.Record())
 			{
+				Expect.Call(unitOfWorkFactory.CurrentUnitOfWork()).Return(unitOfWork);
 				Expect.Call(dictionary.DifferenceSinceSnapshot()).Return(differenceCollectionItems);
 				Expect.Call(scheduleDay.Owner).Return(dictionary);
 				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, null, null, null)).IgnoreArguments().Return(response);
@@ -46,14 +52,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 			}
 			using (mocks.Playback())
 			{
-				target.Save(unitOfWork, scheduleDay);
+				target.Save(scheduleDay,null);
 			}
 		}
 
 		[Test]
 		public void ShouldThrowFaultExceptionOnBrokenBusinessRules()
 		{
-			var unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 			var scheduleDay = mocks.DynamicMock<IScheduleDay>();
 			var response = new List<IBusinessRuleResponse>{mocks.DynamicMock<IBusinessRuleResponse>()};
 			var dictionary = mocks.StrictMock<IReadOnlyScheduleDictionary>();
@@ -66,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 			}
 			using (mocks.Playback())
 			{
-				Assert.Throws<FaultException>(()=>target.Save(unitOfWork, scheduleDay));
+				Assert.Throws<FaultException>(()=>target.Save(scheduleDay,null));
 			}
 		}
 	}

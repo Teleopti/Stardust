@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 scheduleDay.DeletePersonalStuff();
                 
                 scheduleDay.CreateAndAddDayOff(dayOff);
-                _saveSchedulePartService.Save(uow, scheduleDay);
+				_saveSchedulePartService.Save(scheduleDay, NewBusinessRuleCollection.Minimum());
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();
