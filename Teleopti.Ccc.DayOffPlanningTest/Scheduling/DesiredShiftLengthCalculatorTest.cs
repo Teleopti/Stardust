@@ -21,12 +21,14 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 		private IScheduleDay _scheduleDay1;
 		private IScheduleDay _scheduleDay2;
 		private ISchedulingOptions _schedulingOptions;
+		private ISchedulePeriodTargetTimeCalculator _targetTimeCalculator;
 
 		[SetUp]
 		public void Setup()
 		{
-			_target = new DesiredShiftLengthCalculator();
 			_mocks = new MockRepository();
+			_targetTimeCalculator = _mocks.StrictMock<ISchedulePeriodTargetTimeCalculator>();
+			_target = new DesiredShiftLengthCalculator(_targetTimeCalculator);
 			_workShiftMinMaxCalculator = _mocks.StrictMock<IWorkShiftMinMaxCalculator>();
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
@@ -58,7 +60,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
 				Expect.Call(_scheduleDay1.IsScheduled()).Return(false);
 				Expect.Call(_scheduleDay2.IsScheduled()).Return(false);
-				Expect.Call(_schedulePeriod.PeriodTarget()).Return(TimeSpan.FromHours(16));
+				Expect.Call(_targetTimeCalculator.TargetTime(_matrix)).Return(TimeSpan.FromHours(16));
 			}
 
 			TimeSpan result;
@@ -91,7 +93,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay1.IsScheduled()).Return(false).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay2.IsScheduled()).Return(false).Repeat.AtLeastOnce();
-				Expect.Call(_schedulePeriod.PeriodTarget()).Return(TimeSpan.FromHours(16));
+				Expect.Call(_targetTimeCalculator.TargetTime(_matrix)).Return(TimeSpan.FromHours(16));
 			}
 
 			TimeSpan result;
@@ -124,7 +126,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay1.IsScheduled()).Return(false).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay2.IsScheduled()).Return(false).Repeat.AtLeastOnce();
-				Expect.Call(_schedulePeriod.PeriodTarget()).Return(TimeSpan.FromHours(16));
+				Expect.Call(_targetTimeCalculator.TargetTime(_matrix)).Return(TimeSpan.FromHours(16));
 			}
 
 			TimeSpan result;
@@ -163,7 +165,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 				Expect.Call(projectionService.CreateProjection()).Return(layers).Repeat.AtLeastOnce();
 				Expect.Call(layers.ContractTime()).Return(TimeSpan.FromHours(7)).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay2.IsScheduled()).Return(false).Repeat.AtLeastOnce();
-				Expect.Call(_schedulePeriod.PeriodTarget()).Return(TimeSpan.FromHours(16));
+				Expect.Call(_targetTimeCalculator.TargetTime(_matrix)).Return(TimeSpan.FromHours(16));
 			}
 
 			TimeSpan result;

@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Win.Grouping
 
 		private void updateOptionalColumnId()
 		{
-		    _optionalColumnId = comboBoxAdvOptionalColumns.SelectedItem != null ? ((OptionalColumn)comboBoxAdvOptionalColumns.SelectedValue).Id : null;
+			_optionalColumnId = comboBoxAdvOptionalColumns.SelectedItem != null ? ((OptionalColumn)comboBoxAdvOptionalColumns.SelectedItem).Id : null;
 		}
 
 	    private void radioButtonOptionalColumnCheckedChanged(object sender, EventArgs e)

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             _person = PersonFactory.CreatePerson();
             _person.PermissionInformation.SetDefaultTimeZone(_timeZone);
             System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
-                new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), _person);
+                new TeleoptiIdentity("test", null, null, null), _person);
         }
 
         [Test]

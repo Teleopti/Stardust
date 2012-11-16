@@ -92,8 +92,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_schedulePeriod.PeriodType).Return(SchedulePeriodType.Day);
 				Expect.Call(_schedulePeriodTarget.DaysOff()).Return(8);
 				Expect.Call(_schedulePeriod.DaysOff()).Return(8);
-				Expect.Call(_schedulePeriodTarget.PeriodTarget()).Return(TimeSpan.FromHours(160));
-				Expect.Call(_schedulePeriod.PeriodTarget()).Return(TimeSpan.FromHours(140));
+				Expect.Call(_targetTimeCalculator.TargetTime(_scheduleMatrix)).Return(TimeSpan.FromHours(160));
+				Expect.Call(_targetTimeCalculator.TargetTime(_scheduleMatrixTarget)).Return(TimeSpan.FromHours(140));
 			}
 
 			using (_mocks.Playback())
@@ -113,10 +113,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_schedulePeriod.PeriodType).Return(SchedulePeriodType.Day);
 				Expect.Call(_schedulePeriodTarget.DaysOff()).Return(8);
 				Expect.Call(_schedulePeriod.DaysOff()).Return(8);
-				Expect.Call(_schedulePeriodTarget.PeriodTarget()).Return(TimeSpan.FromHours(160));
-				Expect.Call(_schedulePeriod.PeriodTarget()).Return(TimeSpan.FromHours(160));
 				Expect.Call(_schedulePeriodTarget.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(6));
+				Expect.Call(_targetTimeCalculator.TargetTime(_scheduleMatrix)).Return(TimeSpan.FromHours(160));
+				Expect.Call(_targetTimeCalculator.TargetTime(_scheduleMatrixTarget)).Return(TimeSpan.FromHours(160));
 			}
 
 			using (_mocks.Playback())
@@ -136,12 +136,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_schedulePeriod.PeriodType).Return(SchedulePeriodType.Day);
 				Expect.Call(_schedulePeriodTarget.DaysOff()).Return(8);
 				Expect.Call(_schedulePeriod.DaysOff()).Return(8);
-				Expect.Call(_schedulePeriodTarget.PeriodTarget()).Return(TimeSpan.FromHours(160));
-				Expect.Call(_schedulePeriod.PeriodTarget()).Return(TimeSpan.FromHours(160));
 				Expect.Call(_schedulePeriodTarget.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_targetTimeCalculator.TargetWithTolerance(_scheduleMatrixTarget)).Return(new TimePeriod(TimeSpan.FromHours(140), TimeSpan.FromHours(170)));
 				Expect.Call(_targetTimeCalculator.TargetWithTolerance(_scheduleMatrix)).Return(new TimePeriod(TimeSpan.FromHours(160), TimeSpan.FromHours(160)));
+				Expect.Call(_targetTimeCalculator.TargetTime(_scheduleMatrix)).Return(TimeSpan.FromHours(160));
+				Expect.Call(_targetTimeCalculator.TargetTime(_scheduleMatrixTarget)).Return(TimeSpan.FromHours(160));
 			}
 
 			using (_mocks.Playback())
@@ -161,12 +161,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_schedulePeriod.PeriodType).Return(SchedulePeriodType.Day);
 				Expect.Call(_schedulePeriodTarget.DaysOff()).Return(8);
 				Expect.Call(_schedulePeriod.DaysOff()).Return(8);
-				Expect.Call(_schedulePeriodTarget.PeriodTarget()).Return(TimeSpan.FromHours(160));
-				Expect.Call(_schedulePeriod.PeriodTarget()).Return(TimeSpan.FromHours(160));
 				Expect.Call(_schedulePeriodTarget.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 				Expect.Call(_targetTimeCalculator.TargetWithTolerance(_scheduleMatrixTarget)).Return(new TimePeriod(TimeSpan.FromHours(140), TimeSpan.FromHours(170)));
 				Expect.Call(_targetTimeCalculator.TargetWithTolerance(_scheduleMatrix)).Return(new TimePeriod(TimeSpan.FromHours(140), TimeSpan.FromHours(170)));
+				Expect.Call(_targetTimeCalculator.TargetTime(_scheduleMatrix)).Return(TimeSpan.FromHours(160));
+				Expect.Call(_targetTimeCalculator.TargetTime(_scheduleMatrixTarget)).Return(TimeSpan.FromHours(160));
 			}
 
 			using (_mocks.Playback())

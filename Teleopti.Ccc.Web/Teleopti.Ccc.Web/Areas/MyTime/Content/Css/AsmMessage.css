@@ -41,12 +41,18 @@
 }
 .asmMessage-body-inner .asmMessage-subject 
 {
-	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+	border-bottom: 1px solid rgb(228, 228, 228);
 }
 .asmMessage-body-inner .asmMessage-details 
 {
 	font-size: smaller;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+	border-bottom: 1px solid rgb(228, 228, 228);
+}
+.asmMessage-reply-details
+{
+	font-size: smaller;
+	border-bottom: 1px solid rgb(228, 228, 228);
+	padding-bottom: 10px;
 }
 .asmMessage-body-inner .asmMessage-caption 
 {
@@ -132,7 +138,7 @@
 }
 .asmMessage-body-inner .asmMessage-selected
 {
-     background: rgb(240, 240, 240);
+    background: rgb(240, 240, 240);
 }
 .asmMessage-arrow-right
 {
@@ -150,11 +156,13 @@
 	margin-top: 0.1em;
 	margin-bottom: 0.1em;
 	margin-left: 4px;
-   border: 1px solid rgb(204, 204, 204);
-   background: rgb(240, 240, 240);
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(240, 240, 240);
 	width: 450px;
 	top: 0px;
 	right: 0px;
 	float: right;
 	position: absolute;
 }
+
+

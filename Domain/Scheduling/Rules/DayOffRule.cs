@@ -105,6 +105,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             {
                 foreach (var assignment in scheduleDay.PersonAssignmentCollection())
                 {
+                    if(assignment.Period.StartDateTime.Date == dayOff.DayOff.Anchor.Date)
+                        continue;
                     if (assignment.Period.StartDateTime < dayOff.DayOff.Anchor)
                     {
                         returnVal = assignment;
@@ -125,6 +127,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             {
                 foreach (var assignment in scheduleDay.PersonAssignmentCollection())
                 {
+                    if (assignment.Period.StartDateTime.Date == dayOff.DayOff.Anchor.Date)
+                        continue;
                     if (assignment.Period.StartDateTime > dayOff.DayOff.Anchor)
                         return assignment;
                 }

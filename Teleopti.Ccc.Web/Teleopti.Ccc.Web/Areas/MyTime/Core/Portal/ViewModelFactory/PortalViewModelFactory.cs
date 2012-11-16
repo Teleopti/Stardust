@@ -8,7 +8,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 {
@@ -17,16 +16,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPreferenceOptionsProvider _preferenceOptionsProvider;
 		private readonly ILicenseActivator _licenseActivator;
-		private readonly IIdentityProvider _identityProvider;
-	    private readonly IPushMessageProvider _pushMessageProvider;
+		private readonly IPushMessageProvider _pushMessageProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-	    public PortalViewModelFactory(IPermissionProvider permissionProvider, IPreferenceOptionsProvider preferenceOptionsProvider, ILicenseActivator licenseActivator, IIdentityProvider identityProvider, IPushMessageProvider pushMessageProvider)
+		public PortalViewModelFactory(IPermissionProvider permissionProvider,
+												  IPreferenceOptionsProvider preferenceOptionsProvider,
+												  ILicenseActivator licenseActivator,
+												  IPushMessageProvider pushMessageProvider,
+												  ILoggedOnUser loggedOnUser)
 		{
 			_permissionProvider = permissionProvider;
 			_preferenceOptionsProvider = preferenceOptionsProvider;
 			_licenseActivator = licenseActivator;
-			_identityProvider = identityProvider;
-		    _pushMessageProvider = pushMessageProvider;
+			_pushMessageProvider = pushMessageProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -34,13 +37,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var navigationItems = new List<SectionNavigationItem> { createWeekScheduleNavigationItem() };
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule))
 			{
-				navigationItems.Add(createTeamScheduleNavigationItem());	
+				navigationItems.Add(createTeamScheduleNavigationItem());
 			}
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability))
 			{
 				navigationItems.Add(createStudentAvailabilityNavigationItem());
 			}
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) || 
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
 			{
 				navigationItems.Add(createPreferenceNavigationItem());
@@ -48,37 +51,35 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests))
 			{
 				navigationItems.Add(createRequestsNavigationItem());
-            }
-            if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
-            {
+			}
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
+			{
 				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
-            }
+			}
 			return new PortalViewModel
-			       	{
-			       		NavigationItems = navigationItems,
-			       		CustomerName = _licenseActivator.CustomerName,
-			       		ShowChangePassword = showChangePassword(),
-						HasAsmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)
-			       	};
+						{
+							NavigationItems = navigationItems,
+							CustomerName = _licenseActivator.CustomerName,
+							ShowChangePassword = showChangePassword(),
+							HasAsmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)
+						};
 		}
 
 		private bool showChangePassword()
 		{
-			var identity = _identityProvider.Current();
-			if (identity == null)
-				return false;
-			return identity.TeleoptiAuthenticationType == AuthenticationTypeOption.Application;
+			var agent = _loggedOnUser.CurrentUser();
+			return agent != null && agent.ApplicationAuthenticationInfo!=null && !string.IsNullOrEmpty(agent.ApplicationAuthenticationInfo.ApplicationLogOnName);
 		}
 
-		private SectionNavigationItem createTeamScheduleNavigationItem()
+		private static SectionNavigationItem createTeamScheduleNavigationItem()
 		{
 			return new SectionNavigationItem
-			       	{
-			       		Action = "Index",
-			       		Controller = "TeamSchedule",
-			       		Title = Resources.TeamSchedule,
-			       		NavigationItems = new NavigationItem[0],
-			       		ToolBarItems = new ToolBarItemBase[]
+						{
+							Action = "Index",
+							Controller = "TeamSchedule",
+							Title = Resources.TeamSchedule,
+							NavigationItems = new NavigationItem[0],
+							ToolBarItems = new ToolBarItemBase[]
 			       		               	{
 			       		               		new ToolBarDatePicker
 			       		               			{
@@ -92,10 +93,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			       		               				Options = new Option[] {}
 			       		               			}
 			       		               	}
-			       	};
+						};
 		}
 
-		private SectionNavigationItem createRequestsNavigationItem()
+		private static SectionNavigationItem createRequestsNavigationItem()
 		{
 			return new SectionNavigationItem
 					{
@@ -114,19 +115,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 					};
 		}
 
-        private SectionNavigationItem createMessageNavigationItem(int unreadMessageCount)
-        {
-            return new SectionNavigationItem	
-            {
-                Action = "Index",
-                Controller = "Message",
-                Title = Resources.Messages,
-                NavigationItems = new NavigationItem[0],
-                ToolBarItems = new List<ToolBarItemBase>(),
+		private static SectionNavigationItem createMessageNavigationItem(int unreadMessageCount)
+		{
+			return new SectionNavigationItem
+			{
+				Action = "Index",
+				Controller = "Message",
+				Title = Resources.Messages,
+				NavigationItems = new NavigationItem[0],
+				ToolBarItems = new List<ToolBarItemBase>(),
 				PayAttention = unreadMessageCount != 0,
 				UnreadMessageCount = unreadMessageCount
-            };
-        }
+			};
+		}
 
 		private PreferenceNavigationItem createPreferenceNavigationItem()
 		{
@@ -159,7 +160,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				toolbarItems.Add(new ToolBarButtonItem { Title = Resources.Preference, ButtonType = "add-extended" });
 			}
 			toolbarItems.Add(new ToolBarButtonItem { Title = Resources.Delete, ButtonType = "delete" });
-			
+
 
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences))
 			{
@@ -168,28 +169,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				toolbarItems.Add(new ToolBarButtonItem { Title = Resources.Delete, ButtonType = "must-have-delete", Icon = "heart-delete" });
 				toolbarItems.Add(new ToolBarTextItem { Id = "must-have-numbers", Text = "0(0)" });
 			}
-			
+
 			return new PreferenceNavigationItem
-			       	{
-			       		Action = "Index",
-			       		Controller = "Preference",
-			       		Title = Resources.Preference,
-			       		NavigationItems = new NavigationItem[0],
-						ToolBarItems = toolbarItems,
-						PreferenceOptions = preferenceOptions,
-						ActivityOptions = ActivityOptions()
-			       	};
+						{
+							Action = "Index",
+							Controller = "Preference",
+							Title = Resources.Preference,
+							NavigationItems = new NavigationItem[0],
+							ToolBarItems = toolbarItems,
+							PreferenceOptions = preferenceOptions,
+							ActivityOptions = ActivityOptions()
+						};
 		}
 
 		private IEnumerable<IOption> ActivityOptions()
 		{
 			return from a in _preferenceOptionsProvider.RetrieveActivityOptions().MakeSureNotNull()
-			       select new Option
-			              	{
-			              		Value = a.Id.ToString(),
-			              		Text = a.Description.Name,
-			              		Color = a.DisplayColor.ToHtml()
-			              	};
+					 select new Option
+								{
+									Value = a.Id.ToString(),
+									Text = a.Description.Name,
+									Color = a.DisplayColor.ToHtml()
+								};
 		}
 
 		private IEnumerable<IPreferenceOption> PreferenceOptions()
@@ -199,36 +200,36 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 					.RetrieveShiftCategoryOptions()
 					.MakeSureNotNull()
 					.Select(s => new PreferenceOption
-					             	{
-					             		Value = s.Id.ToString(),
-					             		Text = s.Description.Name,
-					             		Color = s.DisplayColor.ToHtml(),
-					             		Extended = true
-					             	})
+										{
+											Value = s.Id.ToString(),
+											Text = s.Description.Name,
+											Color = s.DisplayColor.ToHtml(),
+											Extended = true
+										})
 					.ToArray();
 
 			var dayOffs = _preferenceOptionsProvider
 				.RetrieveDayOffOptions()
 				.MakeSureNotNull()
 				.Select(s => new PreferenceOption
-				             	{
-				             		Value = s.Id.ToString(),
-				             		Text = s.Description.Name,
-				             		Color = s.DisplayColor.ToHtml(),
-				             		Extended = false
-				             	})
+									{
+										Value = s.Id.ToString(),
+										Text = s.Description.Name,
+										Color = s.DisplayColor.ToHtml(),
+										Extended = false
+									})
 				.ToArray();
 
 			var absences = _preferenceOptionsProvider
 				.RetrieveAbsenceOptions()
 				.MakeSureNotNull()
 				.Select(s => new PreferenceOption
-				             	{
-				             		Value = s.Id.ToString(),
-				             		Text = s.Description.Name,
-				             		Color = s.DisplayColor.ToHtml(),
-				             		Extended = false
-				             	})
+									{
+										Value = s.Id.ToString(),
+										Text = s.Description.Name,
+										Color = s.DisplayColor.ToHtml(),
+										Extended = false
+									})
 				.ToArray();
 
 			var options = new List<IPreferenceOption>();
@@ -267,7 +268,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 					};
 		}
 
-		private SectionNavigationItem createWeekScheduleNavigationItem()
+		private static SectionNavigationItem createWeekScheduleNavigationItem()
 		{
 			var toolBarItems = new List<ToolBarItemBase>
 			                   	{

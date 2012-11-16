@@ -3629,8 +3629,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         {
 							if (schedulingOptions.UseGroupScheduling)
 							{
-								var allSchedules = GridHelper.CopyAllSchedules(_scheduleView.TheGrid);
-								var allMatrixes = OptimizerHelperHelper.CreateMatrixList(allSchedules, _schedulerState.SchedulingResultState, _container);
+								var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
 								_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixList, matrixListAll, schedulingOptions, _container.Resolve<IGroupPageHelper>(), allMatrixes);
 							}
 							else
@@ -3669,8 +3668,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					if(schedulingOptions.UseGroupScheduling)
 					{
-						var allSchedules = GridHelper.CopyAllSchedules(_scheduleView.TheGrid);
-						allMatrixes = OptimizerHelperHelper.CreateMatrixList(allSchedules, _schedulerState.SchedulingResultState, _container);
+						allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
 					}
 
                 	_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixList, _backgroundWorkerScheduling,
@@ -3881,8 +3879,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					if (optimizerPreferences.Extra.UseTeams)
 					{
-						var allSchedules = GridHelper.CopyAllSchedules(_scheduleView.TheGrid);
-						allMatrixes = OptimizerHelperHelper.CreateMatrixList(allSchedules, _schedulerState.SchedulingResultState, _container);
+						allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
 					}
 					
 					_scheduleOptimizerHelper.GetBackToLegalState(matrixList, _schedulerState, _backgroundWorkerOptimization, _optimizerOriginalPreferences.SchedulingOptions, selectedPeriod, allMatrixes);
@@ -3890,9 +3887,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 case OptimizationMethod.ReOptimize:	
 					if (optimizerPreferences.Extra.UseTeams)
                     {
-						var allSchedules = GridHelper.CopyAllSchedules(_scheduleView.TheGrid);
-						allMatrixes = OptimizerHelperHelper.CreateMatrixList(allSchedules, _schedulerState.SchedulingResultState, _container);
-
+						allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
                         _groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, allMatrixes);
 						break;
                     }
@@ -3909,8 +3904,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 						if (optimizerPreferences.Extra.UseTeams)
 						{
-							var allSchedules = GridHelper.CopyAllSchedules(_scheduleView.TheGrid);
-							allMatrixes = OptimizerHelperHelper.CreateMatrixList(allSchedules, _schedulerState.SchedulingResultState, _container);	
+							allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
 						}
 
                         _scheduleOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, allMatrixes);

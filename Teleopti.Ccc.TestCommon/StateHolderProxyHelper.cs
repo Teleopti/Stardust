@@ -196,24 +196,9 @@ namespace Teleopti.Ccc.TestCommon
             if (applicationData != null)
                 dataSource = applicationData.RegisteredDataSourceCollection.First();
 
-			principalContext.SetCurrentPrincipal(loggedOnPerson, dataSource, businessUnit, AuthenticationTypeOption.Application);
+			principalContext.SetCurrentPrincipal(loggedOnPerson, dataSource, businessUnit);
 		
-			//var principal = new TeleoptiPrincipal(new TeleoptiIdentity("test user", dataSource,
-			//                                                                      businessUnit,
-			//                                                                      WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Application),
-			//                                                 loggedOnPerson);
 			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
-
-			//var currentPrincipal = Thread.CurrentPrincipal as TeleoptiPrincipal;
-			//if (currentPrincipal==null)
-			//{
-			//    AppDomain.CurrentDomain.SetThreadPrincipal(principal);
-			//    Thread.CurrentPrincipal = principal;
-			//}
-			//else
-			//{
-			//    currentPrincipal.ChangePrincipal(principal);
-			//}
             ISessionData sessData = new SessionData();
             sessData.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
             return sessData;

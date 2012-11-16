@@ -21,12 +21,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			_retrievePersonNameForPerson = retrievePersonNameForPerson;
 		}
 
-		public ITeleoptiPrincipal MakePrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit, AuthenticationTypeOption teleoptiAuthenticationType)
+		public ITeleoptiPrincipal MakePrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit)
 		{
 			var identity = new TeleoptiIdentity(_retrievePersonNameForPerson.NameForPerson(loggedOnUser), 
 			                                    dataSource, businessUnit,
-			                                    WindowsIdentity.GetCurrent(), 
-			                                    teleoptiAuthenticationType
+			                                    WindowsIdentity.GetCurrent()
 				);
 			var principal = TeleoptiPrincipalCacheable.Make(identity, loggedOnUser);
 			principal.Regional = _makeRegionalFromPerson.MakeRegionalFromPerson(loggedOnUser);

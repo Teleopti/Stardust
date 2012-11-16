@@ -42,7 +42,6 @@ BEGIN TRY
 SET NOCOUNT ON
 	--declare
 	DECLARE @InstanceName			nvarchar(36)
-	DECLARE	@GroupName				nvarchar(55)
 	DECLARE @Login					nvarchar(200)
 	DECLARE @SvcLogin				nvarchar(200)
 	DECLARE @SqlCommand				nvarchar(1000)
@@ -51,9 +50,8 @@ SET NOCOUNT ON
 	--init
 	SET @Login		= '$(LOGIN)'
 	SET @AuthType	= '$(AUTHTYPE)'
-	
+
 	SELECT 'Adding permission for $(AUTHTYPE)-login in database: ' + name FROM master.sys.databases where database_id = db_id()
-	SET @GroupName	= 'TeleoptiCCC_Users'
 	
 	EXEC sp_changedbowner @loginame = N'sa', @map = false
 
@@ -64,13 +62,23 @@ SET NOCOUNT ON
 		IF '$(LOGIN)' <> 'sa'  --If user like to run the application with sa, don't add the user
 		BEGIN
 		PRINT 'Adding permission for $(LOGIN) in database. Working...'
+		
+			--fix users that might be restored from another instance (wrong sid)
+			IF EXISTS (SELECT * FROM sys.database_principals WHERE name = N'$(LOGIN)')
+			DROP USER [$(LOGIN)]
+
 			--Create User for Login: $(LOGIN)
 			IF NOT EXISTS (SELECT * FROM sys.sysusers su INNER JOIN master.sys.syslogins SL ON su.sid = sl.sid WHERE SL.name = @Login)
-			SELECT @SqlCommand = 'CREATE USER [' + @Login + '] FOR LOGIN ['+@Login+']'
-			PRINT @SqlCommand
-			EXEC sp_executesql @SqlCommand
-			
-		PRINT 'Adding permission for $(LOGIN) in database. Finished!'
+			BEGIN
+				SELECT @SqlCommand = 'CREATE USER [' + @Login + '] FOR LOGIN ['+@Login+']'
+				PRINT @SqlCommand
+				EXEC sp_executesql @SqlCommand
+				PRINT 'Adding permission for $(LOGIN) in database. Finished!'
+			END
+			ELSE
+			BEGIN
+				PRINT 'User $(LOGIN) already existed in database. Finished!'
+			END
 		END
 		
 	END

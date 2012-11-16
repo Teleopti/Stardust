@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			LogOn(businessUnitId, dataSourceName, personId, 0, null);
 		}
 
-		public void LogOn(Guid businessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType, string warningMessage = null)
+		public void LogOn(Guid businessUnitId, string dataSourceName, Guid personId, string warningMessage = null)
 		{
 			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				var personRep = _repositoryFactory.CreatePersonRepository(uow);
 				var person = personRep.Get(personId);
 				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(uow).Get(businessUnitId);
-				_logOnOff.LogOn(dataSource, person, businessUnit, authenticationType);
+				_logOnOff.LogOn(dataSource, person, businessUnit);
 				var principal = _currentTeleoptiPrincipal.Current();
 				_roleToPrincipalCommand.Execute(principal, uow, personRep);
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 					throw new PermissionException("You (" + person.Name + ") don't have permission to access the web portal.");
 			}
 
-			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId, authenticationType, warningMessage);
+			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId, warningMessage);
 			_sessionSpecificDataProvider.StoreInCookie(sessionSpecificData);
 		}
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			var item = _sessionSpecificDataProvider.GrabFromCookie();
 			var warning = item.WarningMessage;
 
-			item = new SessionSpecificData(item.BusinessUnitId,item.DataSourceName,item.PersonId,item.AuthenticationType);
+			item = new SessionSpecificData(item.BusinessUnitId,item.DataSourceName,item.PersonId);
 			_sessionSpecificDataProvider.StoreInCookie(item);
 
 			return warning;

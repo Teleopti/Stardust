@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             //var provider = sourceContainer.AvailableBusinessUnitProvider;
             var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
             //var bUnit = provider.AvailableBusinessUnits().FirstOrDefault(b => b.Id.ToString().Equals(businessUnit));
-            logOnOff.LogOn(ds, sourceContainer.User, null, sourceContainer.AuthenticationTypeOption);// bUnit);
+            logOnOff.LogOn(ds, sourceContainer.User, null);// bUnit);
 
             using(ds.Application.CreateAndOpenUnitOfWork())
             {

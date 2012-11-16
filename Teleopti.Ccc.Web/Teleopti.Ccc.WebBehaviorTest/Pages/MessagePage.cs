@@ -29,7 +29,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "AsmMessage-detail-message")]
 		public Label Message { get; set; }
 
+		[FindBy(Id = "AsmMessage-detail-reply")]
+		public TextField Reply { get; set; }
+
+		[FindBy(Id = "AsmMessage-detail-dialogueMessages")]
+		public Div DialogueMessages { get; set; }
+
 		[FindBy(Id = "AsmMessage-detail-ok-button")]
 		public Button OkButton { get; set; }
+
+		[FindBy(Id = "AsmMessage-detail-replyOption")]
+		public Div ReplyOptions { get; set; }
 	}
 }

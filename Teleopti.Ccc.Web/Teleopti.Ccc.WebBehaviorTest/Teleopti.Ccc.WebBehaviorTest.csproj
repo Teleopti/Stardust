@@ -126,11 +126,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="PasswordPolicyMobile.feature.cs">
-      <DependentUpon>PasswordPolicyMobile.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Data\Setups\Generic\UserLogonDetailConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
@@ -163,6 +158,7 @@
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
     <Compile Include="ConfigSanityCheck.cs" />
+    <Compile Include="Bindings\Generic\PortalPageStepDefinitions.cs" />
     <Compile Include="PreferencesFeedbackRefact.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -434,7 +430,7 @@
     <Compile Include="Data\Setups\Specific\PersonPeriod.cs" />
     <Compile Include="Data\IUserDataSetup.cs" />
     <Compile Include="Data\IUserSetup.cs" />
-    <Compile Include="LicenseStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\LicenseStepDefinitions.cs" />
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Pages.cs" />
@@ -588,13 +584,13 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackBlacklisting.feature.cs</LastGenOutput>
     </None>
-    <None Include="PreferencesFeedbackPreSchedule.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
-    </None>
     <None Include="AsmMessage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmMessage.feature.cs</LastGenOutput>
+    </None>
+    <None Include="PreferencesFeedbackPreSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="ShiftTradeRequests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

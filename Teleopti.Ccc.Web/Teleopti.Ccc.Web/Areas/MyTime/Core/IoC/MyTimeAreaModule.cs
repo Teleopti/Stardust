@@ -70,12 +70,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PushMessageDialoguePersister>().As<IPushMessageDialoguePersister>();
 		}
 
-		private void registerSettingsTypes(ContainerBuilder builder)
+		private static void registerSettingsTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<PersonPersister>().As<IPersonPersister>().SingleInstance();
 		}
 
-		private void registerRequestsType(ContainerBuilder builder)
+		private static void registerRequestsType(ContainerBuilder builder)
 		{
 			builder.RegisterType<RequestsViewModelFactory>().As<IRequestsViewModelFactory>();
 			builder.RegisterType<PersonRequestProvider>().As<IPersonRequestProvider>();
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest>().As<ITypeConverter<AbsenceRequestForm, IPersonRequest>>().SingleInstance();
 		}
 
-		private void registerPreferenceTypes(ContainerBuilder builder)
+		private static void registerPreferenceTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<PreferenceController>().EnableClassInterceptors();
 			builder.RegisterType<PreferenceFeedbackController>().EnableClassInterceptors();

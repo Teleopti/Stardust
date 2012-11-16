@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 	{
 		private ICurrentTeleoptiPrincipal FakeCurrentTeleoptiPrincipal(IPerson person)
 		{
-			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, AuthenticationTypeOption.Unknown), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null), person);
 			return new FakeCurrentTeleoptiPrincipal(principal);
 		}
 

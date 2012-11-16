@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             var loggedOnPerson = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatClenUpDataSource", string.Empty);
             var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			var identity = new TeleoptiIdentity("test user", dataSource, businessUnit, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Unknown);
+			var identity = new TeleoptiIdentity("test user", dataSource, businessUnit, WindowsIdentity.GetCurrent());
             var principalForTest = new TeleoptiPrincipal(identity, loggedOnPerson);
 
         	dataSource.Stub(x => x.DataSourceName).Return("DataSource");

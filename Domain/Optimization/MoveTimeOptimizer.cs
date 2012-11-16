@@ -106,7 +106,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 				lockDay(secondDayDate);
 				return true;
 			}
-				
+
+            lockDays(firstDayDate, secondDayDate);
+
             //delete schedule on the two days
             IList<IScheduleDay> listToDelete = new List<IScheduleDay> { firstDay.DaySchedulePart(), secondDay.DaySchedulePart() };
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService);
@@ -151,16 +153,13 @@ namespace Teleopti.Ccc.Domain.Optimization
                 rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
                 return true;
             }
-
-            //lockDays(firstDayDate, secondDayDate);
-
+            
             return true;
         }
 
 		private void rollbackLockAndCalculate(DateOnly firstDayDate, DateOnly secondDayDate, IScheduleDay originalFirstScheduleDay, IScheduleDay originalSecondScheduleDay,IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			_rollbackService.Rollback();
-			lockDays(firstDayDate, secondDayDate);
             calculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer);
             calculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer);
 		}
@@ -230,7 +229,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (!success)
 			{
                 _rollbackService.Rollback();
-                lockDay(day);
                 return false;
             }
 

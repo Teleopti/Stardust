@@ -134,6 +134,7 @@ namespace Teleopti.Messaging.SignalR
 				_isRunning = true;
 				_hubConnection.Closed += () => { _isRunning = false; };
 				_hubConnection.Reconnected += () => { _isRunning = true; };
+				_hubConnection.Error += e => { _isRunning = false; };
 			}
 			catch (AggregateException aggregateException)
 			{

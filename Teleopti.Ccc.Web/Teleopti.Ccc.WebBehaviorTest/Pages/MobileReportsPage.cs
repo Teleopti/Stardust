@@ -112,18 +112,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "sel-skill-menu")]
 		public List ReportSkillSelectionList { get; set; }
 
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-		public Div ReportSkillSelectionContainer
-		{
-			get
-			{
-				if (ReportSkillSelectionList.Parent.Parent.ClassName.Contains("ui-popup-container"))
-					return ReportSkillSelectionList.Parent.Parent as Div;
-				throw new Exception("Report skill selection container not found. Please rewrite me to use a selector instead!");
-			}
-		}
-
 		public Link ReportSkillSelectionCloseButton
 		{
 			get
@@ -166,5 +154,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			ReportSkillSelectionList.ListItem(Find.ByText(s => s.Contains(name))).EventualClick();
 		}
+
 	}
 }

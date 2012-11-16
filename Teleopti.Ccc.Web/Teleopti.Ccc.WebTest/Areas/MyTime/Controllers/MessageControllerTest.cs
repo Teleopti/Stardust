@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
+using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -38,24 +40,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
-		public void ShouldReplyToSimpleMessage()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldReplyToSimpleMessageWithResultFromPersister()
 		{
 			var pushMessageDialoguePersister = MockRepository.GenerateMock<IPushMessageDialoguePersister>();
-
 			var target = new MessageController(null, pushMessageDialoguePersister, null);
+			var messageId = Guid.NewGuid();
+			var messageViewModel = new MessageViewModel { MessageId = messageId.ToString() };
+			var confirmMessageViewModel = new ConfirmMessageViewModel() {Id = messageId};
+			pushMessageDialoguePersister.Stub(x => x.PersistMessage(confirmMessageViewModel)).Return(messageViewModel);
 
-		    var messageId = Guid.NewGuid();
-            var messageViewModel = new MessageViewModel { MessageId = messageId.ToString() };
-
-			pushMessageDialoguePersister.Stub(x => x.Persist(messageId)).Return(messageViewModel);
-
-			var result = target.Reply(messageId);
-
+			var result = target.Reply(confirmMessageViewModel);
 			result.Data.Should().Be.SameInstanceAs(messageViewModel);
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnMessageCount()
 		{
 			var pushMessageProvider = MockRepository.GenerateMock<IPushMessageProvider>();
@@ -70,10 +69,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			((MessagesInformationViewModel)result.Data).UnreadMessagesCount.Should().Be.EqualTo(messageInfo.UnreadMessagesCount);
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnMessageCountAndMessageAskedFor()
 		{
-		    var messageId = Guid.NewGuid();
+			var messageId = Guid.NewGuid();
 			var viewModelFactory = MockRepository.GenerateMock<IMessageViewModelFactory>();
 			var messageViewModel = new MessageViewModel { MessageId = messageId.ToString() };
 			var messageInfo = new MessagesInformationViewModel
@@ -88,6 +87,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = target.Message(messageId);
 
 			result.Data.Should().Be.SameInstanceAs(messageInfo);
+		}
+
+
+		[Test]
+		public void ShouldReturnErrorMessageOnInvalidModel()
+		{
+			var target = new StubbingControllerBuilder().CreateController<MessageController>(null, null, null);
+			const string message = "Test model validation error";
+			target.ModelState.AddModelError("Test", message);
+
+			var result = target.Reply(new ConfirmMessageViewModel());
+			var data = result.Data as ModelStateResult;
+
+			target.Response.StatusCode.Should().Be(400);
+			target.Response.TrySkipIisCustomErrors.Should().Be.True();
+			data.Errors.Single().Should().Be(message);
 		}
 	}
 }

@@ -69,35 +69,4 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		}
 	}
 
-	public class CalendarCell : Control<ListItem>
-	{
-		public override WatiN.Core.Constraints.Constraint ElementConstraint
-		{
-			get
-			{
-				return Find.By("data-mytime-date", s => s != null);
-			}
-		}
-	}
-
-	public class SelectableCalendarCell :  Control<ListItem>
-	{
-		public override WatiN.Core.Constraints.Constraint ElementConstraint
-		{
-			get
-			{
-				return Find.By("data-mytime-date", s => s != null)
-					.And(Find.ByClass(s => s.Contains("ui-selectee")));
-			}
-		}
-
-		public string Date { get { return GetAttributeValue("data-mytime-date"); } }
-
-		public void Select()
-		{
-			JQuery.SelectByElementAttribute("li", "data-mytime-date", Date)
-				.AddClass("ui-selected")
-				.EvalIn(Element.DomContainer);
-		}
-	}
 }

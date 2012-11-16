@@ -29,14 +29,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
     	/// <param name="dataSource">The uow factory.</param>
     	/// <param name="loggedOnUser">The logged on user.</param>
     	/// <param name="businessUnit">The business unit.</param>
-    	/// <param name="teleoptiAuthenticationType">Win or form authentication?</param>
 		public void LogOn(
 			IDataSource dataSource,
 			IPerson loggedOnUser,
-			IBusinessUnit businessUnit,
-			AuthenticationTypeOption teleoptiAuthenticationType)
+			IBusinessUnit businessUnit)
     	{
-    		_currentPrincipalContext.SetCurrentPrincipal(loggedOnUser, dataSource, businessUnit, teleoptiAuthenticationType);
+    		_currentPrincipalContext.SetCurrentPrincipal(loggedOnUser, dataSource, businessUnit);
 
     		var sessionData = new SessionData();
     		StateHolder.Instance.State.SetSessionData(sessionData);
