@@ -84,9 +84,27 @@ Teleopti.Start.SignInViewModel = function () {
 		return prefixedModel;
 	}
 
+	function _buildAuthenticationModel() {
+		if (self.SelectedSource().Type === "windows") {
+			return {
+				type: "windows",
+				datasource: self.SelectedSource().Name
+			};
+		}
+		if (self.SelectedSource().Type === "application") {
+			return {
+				type: "application",
+				datasource: self.SelectedSource().Name,
+				username: self.UserName,
+				password: self.Password
+			};
+		}
+		return null;
+	}
+
 	this.Logon = function () {
-		var model;
-		var url;
+		//var model;
+		//var url;
 		//		if (self.IsApplicationLogon()) {
 		//			model = { "DataSourceName": self.SelectedSource().Name, "UserName": self.UserName(), "Password": self.Password() };
 		//			url = "/Start/Authentication/Application";
@@ -94,27 +112,13 @@ Teleopti.Start.SignInViewModel = function () {
 		//			model = { "DataSourceName": self.SelectedSource().Name };
 		//			url = "/Start/Authentication/Windows";
 		//		}
-		url = "/Start/AuthenticationNew/BusinessUnits";
-		if (self.SelectedSource().Type === "windows") {
-			model = {
-				type: "windows",
-				datasource: self.SelectedSource().Name
-			};
-		}
-		if (self.SelectedSource().Type === "application") {
-			model = {
-				type: "application",
-				datasource: self.SelectedSource().Name,
-				username: self.UserName,
-				password: self.Password
-			};
-		}
+		var url = "/Start/AuthenticationNew/BusinessUnits";
 		ajax.Ajax({
 			url: url,
 			dataType: 'json',
 			//type: 'POST',
 			//data: _prefixModel('SignIn.', model),
-			data: model,
+			data: _buildAuthenticationModel(),
 			success: function (data, textStatus, jqXHR) {
 
 				self.DisplayBusinessUnitSelection();
@@ -157,18 +161,23 @@ Teleopti.Start.SignInViewModel = function () {
 		this.Selected(true);
 		self.SelectedBusinessUnit(this);
 
-		var model = {
-			BusinessUnitId: this.Id,
-			AuthenticationType: self.AuthenticationType,
-			PersonId: self.PersonId,
-			DataSourceName: self.SelectedSource().Name
-		};
+//		var model = {
+//			BusinessUnitId: this.Id,
+//			AuthenticationType: self.AuthenticationType,
+//			PersonId: self.PersonId,
+//			DataSourceName: self.SelectedSource().Name
+//		};
+
+		var model = _buildAuthenticationModel();
+		model.businessUnitId = self.SelectedBusinessUnit().Id;
 
 		ajax.Ajax({
-			url: "/Start/Authentication/Logon",
-			data: _prefixModel('SignIn.', model),
+			url: "/Start/AuthenticationNew/Logon",
+			//data: _prefixModel('SignIn.', model),
+			data: model,
 			type: 'POST',
 			success: function (data, textStatus, jqXHR) {
+				alert("signed in!");
 			}
 		});
 
