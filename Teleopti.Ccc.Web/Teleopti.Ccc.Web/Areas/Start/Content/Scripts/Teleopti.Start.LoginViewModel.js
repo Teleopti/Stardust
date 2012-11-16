@@ -61,7 +61,7 @@ Teleopti.Start.SignInViewModel = function () {
 	this.LoadDataSources = function () {
 		var a = this.alskdjaskd;
 		ajax.Ajax({
-			url: "/Start/AuthenticationNew/DataSources",
+			url: "/Start/AuthenticationApi/DataSources",
 			dataType: "json",
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
@@ -119,7 +119,7 @@ Teleopti.Start.SignInViewModel = function () {
 		//			model = { "DataSourceName": self.SelectedSource().Name };
 		//			url = "/Start/Authentication/Windows";
 		//		}
-		var url = "/Start/AuthenticationNew/BusinessUnits";
+		var url = "/Start/AuthenticationApi/BusinessUnits";
 		ajax.Ajax({
 			url: url,
 			dataType: 'json',
@@ -179,7 +179,7 @@ Teleopti.Start.SignInViewModel = function () {
 		model.businessUnitId = self.SelectedBusinessUnit().Id;
 
 		ajax.Ajax({
-			url: "/Start/AuthenticationNew/Logon",
+			url: "/Start/AuthenticationApi/Logon",
 			//data: _prefixModel('SignIn.', model),
 			data: model,
 			type: 'POST',
