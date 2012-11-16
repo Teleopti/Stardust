@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.LayoutBase
 	[TestFixture]
 	public class WindowsDataSourcesViewModelFactoryTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldRetrieveDataSources()
 		{
 			var dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();

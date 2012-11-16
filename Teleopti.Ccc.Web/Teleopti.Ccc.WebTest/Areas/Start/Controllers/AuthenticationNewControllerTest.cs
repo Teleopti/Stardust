@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 	[TestFixture]
 	public class AuthenticationNewControllerTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnSignInView()
 		{
 			var layoutBaseViewModelFactory = MockRepository.GenerateMock<ILayoutBaseViewModelFactory>();
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			Assert.That(result.ViewBag.LayoutBase, Is.SameAs(layoutBaseViewModel));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldRetrieveDataSources()
 		{
 			var dataSourcesViewModelFactory = MockRepository.GenerateMock<IDataSourcesViewModelFactory>();
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			data.Should().Have.SameSequenceAs(dataSourcees);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldAuthenticateUserRetrievingBusinessUnits()
 		{
 			var target = new AuthenticationNewController(null, null, MockRepository.GenerateMock<IBusinessUnitsViewModelFactory>());
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			authenticationModel.AssertWasCalled(x => x.AuthenticateUser());
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldRetrieveBusinessUnits()
 		{
 			var authenticationResult = new AuthenticateResult
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			result.Data.Should().Be.SameInstanceAs(businessUnitViewModels);
 		}
 
-		[Test, Ignore]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test, Ignore]
 		public void ShouldReturnErrorIfAuthenticationUnsuccessfulRetrievingBusinessUnits()
 		{
 			var target = new AuthenticationNewController(null, null, null);
