@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 		public void LogOn(string dataSourceName, Guid businessUnitId, Guid personId)
 		{
-			LogOn(businessUnitId, dataSourceName, personId, 0, null);
+			LogOn(businessUnitId, dataSourceName, personId, null);
 		}
 
 		public void LogOn(Guid businessUnitId, string dataSourceName, Guid personId, string warningMessage = null)
