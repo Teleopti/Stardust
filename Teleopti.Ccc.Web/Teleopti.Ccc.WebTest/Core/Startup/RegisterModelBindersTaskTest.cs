@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			modelBinderDictionary = new ModelBinderDictionary();
 			// Must be called in Task.Execute 
-			new RegisterModelBindersTask().RegisterModelBinders(modelBinderDictionary);
+			new RegisterModelBindersTask(null).RegisterModelBinders(modelBinderDictionary);
 		}
 
 		[Test]
