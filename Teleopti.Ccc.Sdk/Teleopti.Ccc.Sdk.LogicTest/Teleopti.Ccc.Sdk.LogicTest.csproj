@@ -160,6 +160,7 @@
     <Compile Include="OldTests\AbsenceLayerDtoTest.cs" />
     <Compile Include="OldTests\AdherenceDataDtoTest.cs" />
     <Compile Include="OldTests\AdherenceDtoTest.cs" />
+    <Compile Include="CommandHandler\BusinessRulesForPersonalAccountUpdateTest.cs" />
     <Compile Include="OldTests\AdherenceInfoDtoTest.cs" />
     <Compile Include="OldTests\AgentQueueStatDetailsDtoTest.cs" />
     <Compile Include="OldTests\ApplicationFunctionDtoTest.cs" />
