@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 		{
 			builder.RegisterType<WebLogOn>().As<IWebLogOn>();
 			builder.RegisterType<DataSourcesProvider>().As<IDataSourcesProvider>().SingleInstance();
-			builder.RegisterType<Authenticator>().As<IAuthenticator>();
+			builder.RegisterType<Authenticator>().As<IAuthenticator>().SingleInstance();
 			builder.RegisterType<BusinessUnitProvider>().As<IBusinessUnitProvider>();
 			builder.RegisterType<WindowsAccountProvider>().As<IWindowsAccountProvider>().SingleInstance();
 			builder.RegisterType<LayoutBaseViewModelFactory>().As<ILayoutBaseViewModelFactory>();
@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 			builder.RegisterType<MenuViewModelFactory>().As<IMenuViewModelFactory>();
 			builder.RegisterType<SessionSpecificDataStringSerializer>().As<ISessionSpecificDataStringSerializer>().SingleInstance();
 
+			builder.RegisterType<BusinessUnitsViewModelFactory>().As<IBusinessUnitsViewModelFactory>();
 			builder.RegisterAssemblyTypes(GetType().Assembly)
 				.AssignableTo<IDataSourcesViewModelFactory>()
 				.As<IDataSourcesViewModelFactory>()

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			modelBinderDictionary = new ModelBinderDictionary();
 			// Must be called in Task.Execute 
-			RegisterModelBindersTask.RegisterModelBinders(modelBinderDictionary);
+			new RegisterModelBindersTask().RegisterModelBinders(modelBinderDictionary);
 		}
 
 		[Test]
@@ -40,5 +40,12 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			modelBinderDictionary.ContainsKey(typeof(TimeSpan)).Should().Be.True();
 			modelBinderDictionary.ContainsKey(typeof(TimeSpan?)).Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldRegisterAuthenticationModelBinder()
+		{
+			modelBinderDictionary.ContainsKey(typeof(IAuthenticationModel)).Should().Be.True();
+		}
+
 	}
 }

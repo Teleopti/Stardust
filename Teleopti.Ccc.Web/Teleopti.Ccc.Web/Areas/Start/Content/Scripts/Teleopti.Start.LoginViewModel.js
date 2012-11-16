@@ -18,8 +18,9 @@ Teleopti.Start.SignInViewModel = function () {
 	this.DataSourceSelectionActive = ko.observable(true);
 	this.BusinessUnitSelectionActive = ko.observable(false);
 	this.ApplicationSelectionActive = ko.observable(false);
-	this.WarningActive = ko.observable(false);
 	this.MustChangePasswordActive = ko.observable(false);
+
+	this.WarningActive = ko.observable(false);
 	this.ChangingPasswordActive = ko.observable(false);
 	this.IsApplicationLogon = ko.computed(function () {
 		if (self.SelectedSource()) {
@@ -36,6 +37,13 @@ Teleopti.Start.SignInViewModel = function () {
 	this.PersonId = '';
 	this.AuthenticationType = 0;
 
+	this.DisplayBusinessUnitSelection = function () {
+		self.BusinessUnitSelectionActive(true);
+		self.DataSourceSelectionActive(false);
+		self.ApplicationSelectionActive(false);
+		self.MustChangePasswordActive(false);
+	};
+
 	this.SelectDataSource = function () {
 		if (self.SelectedSource())
 			self.SelectedSource().Selected(false);
@@ -44,11 +52,13 @@ Teleopti.Start.SignInViewModel = function () {
 	};
 
 	this.LoadDataSources = function () {
+		var a = this.alskdjaskd;
 		ajax.Ajax({
 			url: "/Start/AuthenticationNew/DataSources",
 			dataType: "json",
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
+				//var a = self.alskdjaskd;
 				for (var i = 0; i < data.length; i++) {
 					var dataSource = new Teleopti.Start.DataSourceViewModel();
 					dataSource.Selected(false);
@@ -77,32 +87,59 @@ Teleopti.Start.SignInViewModel = function () {
 	this.Logon = function () {
 		var model;
 		var url;
-		if (self.IsApplicationLogon()) {
-			model = { "DataSourceName": self.SelectedSource().Name, "UserName": self.UserName(), "Password": self.Password() };
-			url = "/Start/Authentication/Application";
-		} else {
-			model = { "DataSourceName": self.SelectedSource().Name };
-			url = "/Start/Authentication/Windows";
+		//		if (self.IsApplicationLogon()) {
+		//			model = { "DataSourceName": self.SelectedSource().Name, "UserName": self.UserName(), "Password": self.Password() };
+		//			url = "/Start/Authentication/Application";
+		//		} else {
+		//			model = { "DataSourceName": self.SelectedSource().Name };
+		//			url = "/Start/Authentication/Windows";
+		//		}
+		url = "/Start/AuthenticationNew/BusinessUnits";
+		if (self.SelectedSource().Type === "windows") {
+			model = {
+				type: "windows",
+				datasource: self.SelectedSource().Name
+			};
+		}
+		if (self.SelectedSource().Type === "application") {
+			model = {
+				type: "application",
+				datasource: self.SelectedSource().Name,
+				username: self.UserName,
+				password: self.Password
+			};
 		}
 		ajax.Ajax({
 			url: url,
 			dataType: 'json',
-			data: _prefixModel('SignIn.', model),
-			type: 'Post',
+			//type: 'POST',
+			//data: _prefixModel('SignIn.', model),
+			data: model,
 			success: function (data, textStatus, jqXHR) {
-				if (data.BusinessUnits && data.BusinessUnits.length > 1) {
-					self.BusinessUnitSelectionActive(true);
-					self.DataSourceSelectionActive(false);
-					for (var i = 0; i < data.BusinessUnits.length; i++) {
-						var businessUnit = new Teleopti.Start.BusinessUnitViewModel();
-						businessUnit.Selected(false);
-						businessUnit.BusinessUnitName = data.BusinessUnits[i].Name;
-						businessUnit.BusinessUnitId = data.BusinessUnits[i].Id;
-						self.AvailableBusinessUnits.push(businessUnit);
-					}
-					self.PersonId = data.SignIn.PersonId;
-					self.AuthenticationType = data.SignIn.AuthenticationType;
+
+				self.DisplayBusinessUnitSelection();
+				for (var i = 0; i < data.length; i++) {
+					var businessUnit = new Teleopti.Start.BusinessUnitViewModel();
+					businessUnit.Selected(false);
+					businessUnit.Name = data[i].Name;
+					businessUnit.Id = data[i].Id;
+					self.AvailableBusinessUnits.push(businessUnit);
 				}
+
+				//				
+				//				if (data.BusinessUnits && data.BusinessUnits.length > 1) {
+				//					self.BusinessUnitSelectionActive(true);
+				//					self.DataSourceSelectionActive(false);
+				//					for (var i = 0; i < data.BusinessUnits.length; i++) {
+				//						var businessUnit = new Teleopti.Start.BusinessUnitViewModel();
+				//						businessUnit.Selected(false);
+				//						businessUnit.BusinessUnitName = data.BusinessUnits[i].Name;
+				//						businessUnit.BusinessUnitId = data.BusinessUnits[i].Id;
+				//						self.AvailableBusinessUnits.push(businessUnit);
+				//					}
+				//					self.PersonId = data.SignIn.PersonId;
+				//					self.AuthenticationType = data.SignIn.AuthenticationType;
+				//				}
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {
@@ -116,14 +153,21 @@ Teleopti.Start.SignInViewModel = function () {
 	this.SelectBusinessUnit = function () {
 		if (self.SelectedBusinessUnit())
 			self.SelectedBusinessUnit().Selected(false);
+
 		this.Selected(true);
 		self.SelectedBusinessUnit(this);
-		var model = { "BusinessUnitId": this.BusinessUnitId, "AuthenticationType": self.AuthenticationType, "PersonId": self.PersonId, "DataSourceName": self.SelectedSource().Name };
+
+		var model = {
+			BusinessUnitId: this.Id,
+			AuthenticationType: self.AuthenticationType,
+			PersonId: self.PersonId,
+			DataSourceName: self.SelectedSource().Name
+		};
 
 		ajax.Ajax({
 			url: "/Start/Authentication/Logon",
 			data: _prefixModel('SignIn.', model),
-			type: 'Post',
+			type: 'POST',
 			success: function (data, textStatus, jqXHR) {
 			}
 		});
@@ -150,8 +194,8 @@ Teleopti.Start.DataSourceViewModel = function () {
 };
 
 Teleopti.Start.BusinessUnitViewModel = function () {
-	this.BusinessUnitName = "";
-	this.BusinessUnitId = "";
+	this.Id = "";
+	this.Name = "";
 	this.Selected = ko.observable(false);
 };
 

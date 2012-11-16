@@ -1,34 +1,26 @@
-﻿namespace Teleopti.Ccc.Web.Core.Startup
+﻿using System;
+using System.Web.Mvc;
+using System.Web.Routing;
+using Teleopti.Ccc.Web.Core.Startup.Booter;
+
+namespace Teleopti.Ccc.Web.Core.Startup
 {
-	using System;
-	using System.Web.Mvc;
-	using System.Web.Routing;
-
-	using Booter;
-
 	[TaskPriority(2)]
 	public class RegisterRoutesTask : IBootstrapperTask
 	{
 		private readonly Action _registerAllAreas;
 
-		public RegisterRoutesTask()
-			: this(AreaRegistration.RegisterAllAreas)
-		{
-		}
+		public RegisterRoutesTask() : this(AreaRegistration.RegisterAllAreas) { }
 
 		public RegisterRoutesTask(Action registerAllAreas)
 		{
 			_registerAllAreas = registerAllAreas;
 		}
 
-		#region IBootstrapperTask Members
-
 		public void Execute()
 		{
 			registerRoutes(RouteTable.Routes);
 		}
-
-		#endregion
 
 		public void registerRoutes(RouteCollection routes)
 		{
