@@ -641,7 +641,7 @@
 		<Message Text="Copying files to $(DeployPath). Done"/>
 	</Target>
 
-	<Target Name="TagAndPush" DependsOnTargets="GetVersion" Condition="'doTagging'=='true'">
+	<Target Name="TagAndPush" DependsOnTargets="GetVersion" Condition="'$(doTagging)'=='true'">
 		<exec command="hg update -C -r default" />
 		<exec command="hg revert -a"/>
 		<exec command="hg tag &quot;$(CCCVersion)&quot; -r &quot;$(branch)&quot;"/>
