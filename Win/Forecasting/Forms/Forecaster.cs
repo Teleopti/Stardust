@@ -2166,6 +2166,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 IForecastDayTemplate template =
                     templateOwnerOriginal.TryFindTemplateByName(templateTag.Target,
                                                                 templateTag.OriginalTemplateName);
+				if (template== null) return;
                 template.Name = newName;
 
                 changedRoots = uow.PersistAll();
