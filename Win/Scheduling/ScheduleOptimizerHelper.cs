@@ -875,7 +875,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
 					var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
                 	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
-					var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, matrixList, groupPersonsBuilder, schedulingOptions);
+					var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, allMatrixes, groupPersonsBuilder, schedulingOptions);
 					var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
                 	var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
 					IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
@@ -1074,7 +1074,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
 			var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
 			var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
-			var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, matrixList, groupPersonsBuilder, schedulingOptions);
+			var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, allMatrixes, groupPersonsBuilder, schedulingOptions);
 			var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
 
 
