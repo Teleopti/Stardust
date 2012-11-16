@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                 if (matrix.EffectivePeriodDays[i - 1].DaySchedulePart().SignificantPart() == SchedulePartView.DayOff)
                     continue;
-
-                result.DaysToDelete.Add(matrix.EffectivePeriodDays[i].Day.AddDays(-1));
+                if (matrix.GetScheduleDayByKey(matrix.EffectivePeriodDays[i].Day.AddDays(-1)).DaySchedulePart().IsScheduled())
+                    result.DaysToDelete.Add(matrix.EffectivePeriodDays[i].Day.AddDays(-1));
                 result.AddDayToReschedule(matrix.EffectivePeriodDays[i].Day.AddDays(-1));
                 result.AddDayToReschedule(matrix.EffectivePeriodDays[i].Day);
             }

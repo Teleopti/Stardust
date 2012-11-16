@@ -111,9 +111,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				tryScheduleFirstDate(true, false);
 				tryScheduleSecondDate(true);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(1);
-				// lock day
-				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
-				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
+                // lock days
+                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
+                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
             }
 
             using (_mockRepository.Playback())
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService);
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Twice();
                 Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.Twice();
-                // lock day
+                // lock days
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
             }
@@ -191,9 +191,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				tryScheduleFirstDate(true, false);
 				tryScheduleSecondDate(true);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(2);
-                // lock both
-				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
-				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
+                // lock days
+                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
+                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
             }
 
             using (_mockRepository.Playback())
@@ -213,6 +213,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				tryScheduleFirstDate(true, false);
 				tryScheduleSecondDate(false);
                 resourceCalculation();
+                // lock days
+                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
+                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
             }
 
             using (_mockRepository.Playback())
@@ -230,6 +233,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				setupForScheduling();
 				tryScheduleFirstDate(false, false);
                 resourceCalculation();
+
+                // lock days
+                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
+                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
 			}
 
 			using (_mockRepository.Playback())
@@ -247,9 +254,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				setupForScheduling();
 				tryScheduleFirstDate(true, true);
                 resourceCalculation();
-				// lock days
-				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
-				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
+                // lock days
+                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
+                _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
 			}
 
 			using (_mockRepository.Playback())
@@ -337,8 +344,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.AtLeastOnce();
                 Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.AtLeastOnce();
-				// lock day
-				_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
 				// rollback
 				_rollbackService.Rollback();
 			}
@@ -365,8 +370,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
                     Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.AtLeastOnce();
                     Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.AtLeastOnce();
-                    // lock day
-                    _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
                     // rollback
                     _rollbackService.Rollback();
 				}
@@ -382,8 +385,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.AtLeastOnce();
 			    Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.AtLeastOnce();
-                // lock day
-				_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
 				// rollback
 				_rollbackService.Rollback();
 			}
