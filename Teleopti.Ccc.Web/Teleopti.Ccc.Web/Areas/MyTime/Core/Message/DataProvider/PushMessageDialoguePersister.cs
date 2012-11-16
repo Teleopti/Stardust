@@ -31,5 +31,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 
 			return _mapper.Map<IPushMessageDialogue, MessageViewModel>(pushMessageDialogue);
 		}
+
+		public void SendNewPushMessageToLoggedOnUser(string title, string message)
+		{
+			
+		}
 	}
 }

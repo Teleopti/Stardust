@@ -104,5 +104,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			target.Response.TrySkipIisCustomErrors.Should().Be.True();
 			data.Errors.Single().Should().Be(message);
 		}
+
+		[Test]
+		public void SendNewPushMessageToLoggedOnUser()
+		{
+			var title = "Title of message...";
+			var message = "Body of message...";
+			IPushMessageDialoguePersister pushMessageDialoguePersister = MockRepository.GenerateMock<IPushMessageDialoguePersister>();
+			var target = new MessageController(null, pushMessageDialoguePersister, null);
+			
+			pushMessageDialoguePersister.Expect(p => p.SendNewPushMessageToLoggedOnUser(title, message)).Repeat.Once();
+
+			target.SendNewPushMessageToLoggedOnUser(title, message);
+			pushMessageDialoguePersister.VerifyAllExpectations();
+		}
 	}
 }
