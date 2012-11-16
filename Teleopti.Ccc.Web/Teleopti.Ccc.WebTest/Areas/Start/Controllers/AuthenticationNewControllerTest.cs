@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var target = new AuthenticationNewController(null, null, MockRepository.GenerateMock<IBusinessUnitsViewModelFactory>());
 			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
-			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult());
+			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult {Successful = true});
 
 			target.BusinessUnits(authenticationModel);
 
@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var authenticationResult = new AuthenticateResult
 				{
+					Successful = true,
 					DataSource = new FakeDataSource(),
 					Person = new Person()
 				};
@@ -86,10 +87,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			result.Data.Should().Be.SameInstanceAs(businessUnitViewModels);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test, Ignore]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnErrorIfAuthenticationUnsuccessfulRetrievingBusinessUnits()
 		{
-			var target = new AuthenticationNewController(null, null, null);
+			var target = new StubbingControllerBuilder().CreateController<AuthenticationNewController>(null, null, null);
 			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
 			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult {Successful = false});
 

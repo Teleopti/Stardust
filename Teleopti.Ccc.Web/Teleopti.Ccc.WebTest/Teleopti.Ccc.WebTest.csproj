@@ -126,7 +126,7 @@
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInputTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationNewControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\FakeDataSource.cs" />
-    <Compile Include="Areas\Start\Core\LayoutBase\DataSourceViewModelFactoryTest.cs" />
+    <Compile Include="Areas\Start\Core\LayoutBase\ApplicationDataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Core\LayoutBase\WindowsDataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\Mapping\AsmViewModelMapperTest.cs" />
