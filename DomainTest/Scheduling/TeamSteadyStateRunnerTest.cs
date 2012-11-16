@@ -91,6 +91,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using(_mocks.Record())
 			{
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetTime(_scheduleMatrixPro1)).Return(TimeSpan.FromHours(160));
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetTime(_scheduleMatrixPro2)).Return(TimeSpan.FromHours(160));
 				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro1)).Return(timePeriod);
 				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro2)).Return(timePeriod);	
 			}
@@ -114,6 +116,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using (_mocks.Record())
 			{
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetTime(_scheduleMatrixPro1)).Return(TimeSpan.FromHours(160));
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetTime(_scheduleMatrixPro2)).Return(TimeSpan.FromHours(160));
 				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro1)).Return(timePeriod);
 				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro2)).Return(timePeriod);
 			}
@@ -134,6 +138,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using (_mocks.Record())
 			{
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetTime(_scheduleMatrixPro1)).Return(TimeSpan.FromHours(160));
+				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetTime(_scheduleMatrixPro2)).Return(TimeSpan.FromHours(160));
 				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro1)).Return(timePeriod1);
 				Expect.Call(_schedulePeriodTargetTimeCalculator.TargetWithTolerance(_scheduleMatrixPro2)).Return(timePeriod2);
 			}

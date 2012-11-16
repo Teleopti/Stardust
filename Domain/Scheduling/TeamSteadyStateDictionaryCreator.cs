@@ -44,11 +44,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			foreach (var scheduleMatrixPro in _matrixList)
 			{
 				var day = scheduleMatrixPro.EffectivePeriodDays[0].Day;
-				var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(day, persons, true, _schedulingOptions);
-				foreach (var groupPerson in groupPersons)
+				if (dateOnlyPeriod.Contains(day))
 				{
-					if (!groupPersonDic.ContainsKey(groupPerson))
-						groupPersonDic.Add(groupPerson, day);
+					var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(day, persons, true, _schedulingOptions);
+					foreach (var groupPerson in groupPersons)
+					{
+						if (!groupPersonDic.ContainsKey(groupPerson))
+							groupPersonDic.Add(groupPerson, day);
+					}
 				}
 			}
 
