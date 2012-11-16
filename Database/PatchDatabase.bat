@@ -41,7 +41,7 @@ GOTO Cont
 SET /P SQLLogin=SQL Login: 
 SET /P SQLPwd=SQL password: 
 SET Conn1=-U%SQLLogin% -P%SQLPwd%
-SET Conn2=-SU%SQLLogin% -SP%SQLPwd%
+SET Conn2=-DU%SQLLogin% -DP%SQLPwd%
 GOTO Cont
 
 :Cont
