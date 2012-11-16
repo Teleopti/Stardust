@@ -193,6 +193,24 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
+        public void ShouldSkipNotBeDeletedIsNotScheduled()
+        {
+            using (_mocks.Record())
+            {
+                mockExpectations(allUnlocked());
+                firstTwoDaysAreEmpty();
+            }
+            NightRestWhiteSpotSolverResult result;
+
+            using (_mocks.Playback())
+            {
+                result = _target.Resolve(_matrix);
+            }
+
+            Assert.AreEqual(0, result.DaysToDelete.Count);
+        }
+
+        [Test]
         public void ShouldSkipIfDayBeforeWhiteSpotIsDayOff()
         {
             using (_mocks.Record())
@@ -321,6 +339,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_scheduleDayPro6.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
             Expect.Call(_scheduleDayPro7.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
             Expect.Call(_scheduleDayPro8.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+        }
+
+        private void firstTwoDaysAreEmpty()
+        {
+            Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_schedulePartEmpty).Repeat.Any();
+            Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro4.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro5.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro6.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro7.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
+            Expect.Call(_scheduleDayPro8.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
         }
 
         private IList<IScheduleDayPro> allUnlocked()
