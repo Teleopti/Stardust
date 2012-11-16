@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var result = _authenticator.AuthenticateApplicationUser(dataSourceName, userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
 			var businessUnit = (from b in businessUnits where b.Name == businessUnitName select b).Single();
-			_logon.LogOn(businessUnit.Id.Value, dataSourceName, result.Person.Id.Value, AuthenticationTypeOption.Application);
+			_logon.LogOn(businessUnit.Id.Value, dataSourceName, result.Person.Id.Value);
 			var viewModel = new TestMessageViewModel
 			                	{
 			                		Title = "Quick logon",
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		public ViewResult NonExistingDatasourceCookie()
 		{
-			var data = new SessionSpecificData(Guid.NewGuid(), "datasource", Guid.NewGuid(), AuthenticationTypeOption.Windows);
+			var data = new SessionSpecificData(Guid.NewGuid(), "datasource", Guid.NewGuid());
 			_sessionSpecificDataProvider.StoreInCookie(data);
 			var viewModel = new TestMessageViewModel
 			                	{

@@ -63,11 +63,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 		private void setPrincipal()
 		{
-			principalBefore = System.Threading.Thread.CurrentPrincipal;
+			principalBefore = Thread.CurrentPrincipal;
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(timeZone);
-			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
-					 new TeleoptiIdentity("test", null, null, null, AuthenticationTypeOption.Unknown), person);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(
+					 new TeleoptiIdentity("test", null, null, null), person);
 		}
 
 		[Test]

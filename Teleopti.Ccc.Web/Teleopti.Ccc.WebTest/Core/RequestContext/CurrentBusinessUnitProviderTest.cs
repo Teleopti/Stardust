@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void ShouldReturnCurrentBusinessUnit()
 		{
 			var businessUnit = MockRepository.GenerateMock<IBusinessUnit>();
-			var teleoptiPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("hej", null, businessUnit, null, AuthenticationTypeOption.Unknown), new Person());
+			var teleoptiPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("hej", null, businessUnit, null), new Person());
 
 			currentTeleoptiPrincipal.Expect(x => x.Current()).Return(teleoptiPrincipal);
 
