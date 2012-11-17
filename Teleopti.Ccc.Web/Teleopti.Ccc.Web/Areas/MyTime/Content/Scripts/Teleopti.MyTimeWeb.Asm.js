@@ -220,6 +220,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			if (_validSchedulePeriod(notification)) {
 				vm.loadViewModel();
 			}
+		},
+		NewMessage: function (data) {
+			vm.unreadMessages(data.UnreadMessageCount);
 		}
 	};
 })(jQuery);

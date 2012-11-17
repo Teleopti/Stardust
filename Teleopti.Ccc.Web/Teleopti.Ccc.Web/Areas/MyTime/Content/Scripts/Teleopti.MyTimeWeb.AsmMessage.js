@@ -16,7 +16,7 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 	var userId;
 
 	function _onMessageBrokerEvent(notification) {
-		if (notification.DomainUpdateType == 2) 
+		if (notification.DomainUpdateType == 2)
 			Teleopti.MyTimeWeb.AsmMessageList.DeleteMessage(notification.DomainId);
 		_getMessageInformation(notification.DomainId);
 	};
@@ -44,7 +44,7 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 	function test() {
 	}
 
-	function _listenForEvents(callbackForMessasges) {
+	function _listenForEvents(callbackForMessages) {
 		ajax.Ajax({
 			url: 'MessageBroker/FetchUserData',
 			dataType: "json",
@@ -52,7 +52,7 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 			success: function (data) {
 				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
 					url: data.Url,
-					callback: callbackForMessasges,
+					callback: callbackForMessages,
 					errCallback: test,
 					domainType: 'IPushMessageDialogue',
 					businessUnitId: data.BusinessUnitId,
@@ -94,6 +94,9 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 		},
 		MessagePartialInit: function () {
 			Teleopti.MyTimeWeb.AsmMessageList.Init();
+		},
+		ListenForMessages: function (callbackForMessages) {
+			_listenForEvents(callbackForMessages);
 		}
 	};
 })(jQuery);

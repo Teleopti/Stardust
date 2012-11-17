@@ -109,7 +109,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I recieve a new message")]
 		public void WhenIRecieveANewMessage()
 		{
-			ScenarioContext.Current.Pending();
+			var unreadMessageCount = 0;
+			if(Browser.Current.Span(Find.ById("unreadMessageCount")).Exists)
+			{
+				unreadMessageCount  = int.Parse(Browser.Current.Span(Find.ById("unreadMessageCount")).Text);
+			}
+
+			const string js = @"var data = {{UnreadMessageCount : '{0}'}};Teleopti.MyTimeWeb.Asm.NewMessage(data);";
+			var formattedJs = string.Format(js, unreadMessageCount);
+			Browser.Current.Eval(formattedJs);
 		}
 
 		[Then(@"I shoud see an indication that I have '(.*)' unread messages")]
@@ -161,7 +169,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			}
 			return true;
 		}
-
 
 		private static int pixelLength(Element oneHourLengthLayer)
 		{
