@@ -1,20 +1,28 @@
 ﻿@using Teleopti.Ccc.UserTexts
 <script type="text/javascript">
+	function doStuff(data) {
+		console.log(data);
+	}
+
 	$(function () {
 		Teleopti.MyTimeWeb.AjaxSettings = { baseUrl: '@Url.Content("~/MyTime/")' };
 		Teleopti.MyTimeWeb.Asm.ShowAsm(
-				{
-					baseUrl: '@Url.Content("~/MyTime#")'
-				});
+			{
+				baseUrl: '@Url.Content("~/MyTime#")'
+			});
+		Teleopti.MyTimeWeb.AsmMessage.ListenForMessages(function (data) {
+			console.log('tode, update messagecount');
+			console.log(data);
+		});
 		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges({
-				notifyText: '@Resources.YourScheduleHasChanged',
-				originalDocumentTitle: document.title,
-				baseUrl: '@Url.Content("~/")', 
-				webNotification: function () {
-					return window.opener == null; //to avoid double messages to web notification if both portal and asm is open
-				},
-				header: '@Resources.Teleopti'
+			notifyText: '@Resources.YourScheduleHasChanged',
+			originalDocumentTitle: document.title,
+			baseUrl: '@Url.Content("~/")',
+			webNotification: function () {
+				return window.opener == null; //to avoid double messages to web notification if both portal and asm is open
 			},
+			header: '@Resources.Teleopti'
+		},
 			function (notification) {
 				Teleopti.MyTimeWeb.Asm.ReloadAsmViewModelListener(notification);
 				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
