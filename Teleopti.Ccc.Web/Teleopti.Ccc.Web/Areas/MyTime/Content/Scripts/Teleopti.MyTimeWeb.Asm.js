@@ -222,7 +222,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			}
 		},
 		NewMessage: function (data) {
-			vm.unreadMessages(data.UnreadMessageCount);
+			vm.unreadMessageCount(data.UnreadMessagesCount);
 		}
 	};
 })(jQuery);

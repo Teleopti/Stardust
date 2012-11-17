@@ -18,7 +18,12 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 	function _onMessageBrokerEvent(notification) {
 		if (notification.DomainUpdateType == 2)
 			Teleopti.MyTimeWeb.AsmMessageList.DeleteMessage(notification.DomainId);
-		_getMessageInformation(notification.DomainId);
+		_getMessageInformation(notification.DomainId, _organizeMessages);
+	};
+
+	function _organizeMessages(data) {
+		_setMessageNotificationOnTab(data.UnreadMessagesCount);
+		_setAddNewMessageAtTopOfList(data.MessageItem);
 	};
 
 	function _setMessageNotificationOnTab(messageCount) {
@@ -64,7 +69,7 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 		});
 	}
 
-	function _getMessageInformation(messageId) {
+	function _getMessageInformation(messageId, callbackForMessageInformation) {
 		ajax.Ajax({
 			url: 'Message/Message',
 			dataType: "json",
@@ -72,10 +77,7 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 			data: {
 				messageId: messageId
 			},
-			success: function (data) {
-				_setMessageNotificationOnTab(data.UnreadMessagesCount);
-				_setAddNewMessageAtTopOfList(data.MessageItem);
-			},
+			success: callbackForMessageInformation,
 			error: function (error) {
 			}
 		});
@@ -96,7 +98,12 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 			Teleopti.MyTimeWeb.AsmMessageList.Init();
 		},
 		ListenForMessages: function (callbackForMessages) {
+			console.log('im listening and will call:');
+			console.log(callbackForMessages);
 			_listenForEvents(callbackForMessages);
+		},
+		FetchMessageInfo: function (messageId, callbackForMessageInfo) {
+			_getMessageInformation(messageId, callbackForMessageInfo);
 		}
 	};
 })(jQuery);
