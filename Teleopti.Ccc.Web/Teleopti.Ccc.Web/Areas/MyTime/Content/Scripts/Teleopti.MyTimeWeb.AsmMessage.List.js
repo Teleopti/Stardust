@@ -129,8 +129,8 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	};
 
 	function _addNewMessageAtTop(messageItem) {
-		if (vm != 'undefined') {
-			var result = $.grep(vm.asmMessageList(), function(list) {
+		if (typeof vm !== 'undefined') {
+			var result = $.grep(vm.asmMessageList(), function (list) {
 				return list.messageId() == messageItem.MessageId;
 			});
 			if (result.length == 1) {
@@ -143,16 +143,16 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			}
 			$('.asmMessage-list li')
 				.first()
-				.click(function() {
+				.click(function () {
 					vm.chosenMessageId($(this).find('span[data-bind$="messageId"]').text());
 					_showAsmMessage($(this));
 				})
-				.hover(function() {
+				.hover(function () {
 					$(this).find('.asmMessage-arrow-right').animate({
 						opacity: 1.0
 					}, 300);
 				},
-					function() {
+					function () {
 						$(this).find('.asmMessage-arrow-right').animate({
 							opacity: 0.1
 						}, 600);

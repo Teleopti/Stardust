@@ -46,9 +46,6 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 			Teleopti.MyTimeWeb.AsmMessageList.AddNewMessageAtTop(messageItem);
 	}
 
-	function test() {
-	}
-
 	function _listenForEvents(callbackForMessages) {
 		ajax.Ajax({
 			url: 'MessageBroker/FetchUserData',
@@ -58,7 +55,7 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
 					url: data.Url,
 					callback: callbackForMessages,
-					errCallback: test,
+					errCallback: function(){},
 					domainType: 'IPushMessageDialogue',
 					businessUnitId: data.BusinessUnitId,
 					datasource: data.DataSourceName,

@@ -115,8 +115,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				unreadMessageCount  = int.Parse(Browser.Current.Span(Find.ById("unreadMessageCount")).Text);
 			}
 
-			const string js = @"var data = {{UnreadMessageCount : '{0}'}};Teleopti.MyTimeWeb.Asm.NewMessage(data);";
-			var formattedJs = string.Format(js, unreadMessageCount);
+			const string js = @"var data = {{UnreadMessagesCount : '{0}'}};Teleopti.MyTimeWeb.Asm.NewMessage(data);";
+			var formattedJs = string.Format(js, unreadMessageCount+1);
 			Browser.Current.Eval(formattedJs);
 		}
 
