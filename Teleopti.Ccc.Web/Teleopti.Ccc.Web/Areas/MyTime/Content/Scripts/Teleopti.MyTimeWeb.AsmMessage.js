@@ -44,7 +44,7 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 	function test() {
 	}
 
-	function _listenForEvents() {
+	function _listenForEvents(callbackForMessasges) {
 		ajax.Ajax({
 			url: 'MessageBroker/FetchUserData',
 			dataType: "json",
@@ -52,7 +52,7 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 			success: function (data) {
 				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
 					url: data.Url,
-					callback: _onMessageBrokerEvent,
+					callback: callbackForMessasges,
 					errCallback: test,
 					domainType: 'IPushMessageDialogue',
 					businessUnitId: data.BusinessUnitId,
@@ -83,7 +83,7 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 
 	return {
 		Init: function () {
-			_listenForEvents();
+			_listenForEvents(_onMessageBrokerEvent);
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Message/Index', Teleopti.MyTimeWeb.AsmMessage.MessagePartialInit);
 		},
 		OnMessageBrokerEvent: function () {
