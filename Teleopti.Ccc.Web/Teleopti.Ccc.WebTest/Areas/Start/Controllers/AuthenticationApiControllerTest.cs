@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void ShouldRetrieveDataSources()
 		{
 			var dataSourcesViewModelFactory = MockRepository.GenerateMock<IDataSourcesViewModelFactory>();
-			var target = new AuthenticationApiController(new[] { dataSourcesViewModelFactory }, null, null);
+			var target = new AuthenticationApiController(dataSourcesViewModelFactory, null, null);
 			var dataSourcees = new[] { new DataSourceViewModelNew() };
 			dataSourcesViewModelFactory.Stub(x => x.DataSources()).Return(dataSourcees);
 
@@ -170,6 +170,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 	public class AuthenticationModelBinderTest
 	{
 
+		private static AuthenticationModelBinder Target()
+		{
+			return new AuthenticationModelBinder(
+				new IAuthenticationType[]
+					{
+						new ApplicationAuthenticationType(new Lazy<IAuthenticator>(() => null), null),
+						new WindowsAuthenticationType(new Lazy<IAuthenticator>(() => null), null)
+					}
+				);
+		}
+
 		private static ModelBindingContext BindingContext(NameValueCollection values)
 		{
 			return new ModelBindingContext
@@ -183,7 +194,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void ShouldBindApplicationAuthenticationModel()
 		{
-			var target = new AuthenticationModelBinder(new Lazy<IAuthenticator>(() => null));
+			var target = Target();
 			var bindingContext = BindingContext(new NameValueCollection
 				{
 					{"type", "application"},
@@ -202,7 +213,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void ShouldBindWindowsAuthenticationModel()
 		{
-			var target = new AuthenticationModelBinder(new Lazy<IAuthenticator>(() => null));
+			var target = Target();
 			var bindingContext = BindingContext(new NameValueCollection
 				{
 					{"type", "windows"},
@@ -218,7 +229,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void ShouldThrowOnUnknownType()
 		{
-			var target = new AuthenticationModelBinder(null);
+			var target = Target();
 			var bindingContext = BindingContext(new NameValueCollection
 				{
 					{"type", "non existing"}

@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	[OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
 	public class AuthenticationApiController : Controller
 	{
-		private readonly IEnumerable<IDataSourcesViewModelFactory> _dataSourcesViewModelFactories;
+		private readonly IDataSourcesViewModelFactory _dataSourcesViewModelFactory;
 		private readonly IBusinessUnitsViewModelFactory _businessUnitViewModelFactory;
 		private readonly IWebLogOn _webLogon;
 
-		public AuthenticationApiController(IEnumerable<IDataSourcesViewModelFactory> dataSourcesViewModelFactories, IBusinessUnitsViewModelFactory businessUnitViewModelFactory, IWebLogOn webLogon)
+		public AuthenticationApiController(IDataSourcesViewModelFactory dataSourcesViewModelFactory, IBusinessUnitsViewModelFactory businessUnitViewModelFactory, IWebLogOn webLogon)
 		{
-			_dataSourcesViewModelFactories = dataSourcesViewModelFactories;
+			_dataSourcesViewModelFactory = dataSourcesViewModelFactory;
 			_businessUnitViewModelFactory = businessUnitViewModelFactory;
 			_webLogon = webLogon;
 		}
@@ -27,10 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpGet]
 		public JsonResult DataSources()
 		{
-			var sources = from f in _dataSourcesViewModelFactories
-			              from s in f.DataSources()
-			              select s;
-			return Json(sources, JsonRequestBehavior.AllowGet);
+			return Json(_dataSourcesViewModelFactory.DataSources(), JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpGet]

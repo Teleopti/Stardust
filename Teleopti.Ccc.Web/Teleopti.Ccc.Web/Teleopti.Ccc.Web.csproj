@@ -238,11 +238,10 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IAbsenceRequestPersister.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationApiController.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationNewController.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\ApplicationDataSourcesViewModelFactory.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\DataSourcesViewModelFactory.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactory.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\IBusinessUnitsViewModelFactory.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\IDataSourcesViewModelFactory.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\WindowsDataSourcesViewModelFactory.cs" />
     <Compile Include="Areas\Start\Models\Test\TestMessageViewModel.cs" />
     <Compile Include="Core\DateTimeExtensions.cs" />
     <Compile Include="Core\RequestContext\CurrentBusinessUnitProvider.cs" />
