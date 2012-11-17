@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
                 convertPerson.ApplicationAuthenticationInfo.ApplicationLogOnName,
                 convertPerson.ApplicationAuthenticationInfo.Password);
 
-            logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit, AuthenticationTypeOption.Application);
+            logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);
 
             var unitOfWorkFactory = dataSourceContainer.DataSource.Application;
         	var roleToPrincipalCommand =

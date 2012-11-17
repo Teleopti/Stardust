@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 					var businessUnitId = businessUnitViewModel.BusinessUnits.First().Id;
 					var persionId = authenticationResult.Person.Id.Value;
 					var dataSourceName = authenticationResult.DataSource.DataSourceName;
-					return tryLogOnAndReturnResult(businessUnitId, dataSourceName, persionId, authenticationType, authenticationResult.Message);
+					return tryLogOnAndReturnResult(businessUnitId, dataSourceName, persionId, authenticationResult.Message);
 				default:
 					if (IsJsonRequest())
 					{
@@ -133,14 +133,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpPost]
 		public ActionResult Logon([Bind(Prefix = "SignIn")] SignInBusinessUnitModel model)
 		{
-			return tryLogOnAndReturnResult(model.BusinessUnitId, model.DataSourceName, model.PersonId, (AuthenticationTypeOption)model.AuthenticationType, model.WarningMessage);
+			return tryLogOnAndReturnResult(model.BusinessUnitId, model.DataSourceName, model.PersonId, model.WarningMessage);
 		}
 
-		private ActionResult tryLogOnAndReturnResult(Guid businessUnitId, string dataSourceName, Guid personId, AuthenticationTypeOption authenticationType, string warningMessage)
+		private ActionResult tryLogOnAndReturnResult(Guid businessUnitId, string dataSourceName, Guid personId, string warningMessage)
 		{
 			try
 			{
-				_logon.LogOn(businessUnitId, dataSourceName, personId, authenticationType, warningMessage);
+				_logon.LogOn(businessUnitId, dataSourceName, personId, warningMessage);
 
 				return _redirector.SignInRedirect();
 			}

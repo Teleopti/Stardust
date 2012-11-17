@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
 			var target = new WebRequestPrincipalContext(new FakeCurrentHttpContext(new FakeHttpContext("")), principalFactory);
 
-			target.SetCurrentPrincipal(person, dataSource, businessUnit, AuthenticationTypeOption.Windows);
+			target.SetCurrentPrincipal(person, dataSource, businessUnit);
 
-			principalFactory.AssertWasCalled(x => x.MakePrincipal(person, dataSource, businessUnit, AuthenticationTypeOption.Windows));
+			principalFactory.AssertWasCalled(x => x.MakePrincipal(person, dataSource, businessUnit));
 		}
 
 		[Test]
@@ -36,11 +36,11 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var person = PersonFactory.CreatePerson();
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
-			var principal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("", dataSource, businessUnit, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Windows), person);
-			principalFactory.Stub(x => x.MakePrincipal(person, dataSource, businessUnit, AuthenticationTypeOption.Windows)).Return(principal);
+			var principal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("", dataSource, businessUnit, WindowsIdentity.GetCurrent()), person);
+			principalFactory.Stub(x => x.MakePrincipal(person, dataSource, businessUnit)).Return(principal);
 			var target = new WebRequestPrincipalContext(new FakeCurrentHttpContext(new FakeHttpContext("")), principalFactory);
 
-			target.SetCurrentPrincipal(person, dataSource, businessUnit, AuthenticationTypeOption.Windows);
+			target.SetCurrentPrincipal(person, dataSource, businessUnit);
 
 			Thread.CurrentPrincipal.Should().Be(principal);
 		}
@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var person = PersonFactory.CreatePerson();
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
-			var principal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("", dataSource, businessUnit, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Windows), person);
+			var principal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("", dataSource, businessUnit, WindowsIdentity.GetCurrent()), person);
 			var httpContext = new FakeHttpContext("");
-			principalFactory.Stub(x => x.MakePrincipal(person, dataSource, businessUnit, AuthenticationTypeOption.Windows)).Return(principal);
+			principalFactory.Stub(x => x.MakePrincipal(person, dataSource, businessUnit)).Return(principal);
 			var target = new WebRequestPrincipalContext(new FakeCurrentHttpContext(httpContext), principalFactory);
 
-			target.SetCurrentPrincipal(person, dataSource, businessUnit, AuthenticationTypeOption.Windows);
+			target.SetCurrentPrincipal(person, dataSource, businessUnit);
 
 			httpContext.User.Should().Be(principal);
 		}
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var person = PersonFactory.CreatePerson();
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
-			var principal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("", dataSource, businessUnit, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Windows), person);
+			var principal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("", dataSource, businessUnit, WindowsIdentity.GetCurrent()), person);
 			var target = new WebRequestPrincipalContext(new FakeCurrentHttpContext(new FakeHttpContext("")), null);
 
 			target.SetCurrentPrincipal(principal);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var person = PersonFactory.CreatePerson();
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
-			var principal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("", dataSource, businessUnit, WindowsIdentity.GetCurrent(), AuthenticationTypeOption.Windows), person);
+			var principal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("", dataSource, businessUnit, WindowsIdentity.GetCurrent()), person);
 			var httpContext = new FakeHttpContext("");
 			var target = new WebRequestPrincipalContext(new FakeCurrentHttpContext(httpContext), null);
 

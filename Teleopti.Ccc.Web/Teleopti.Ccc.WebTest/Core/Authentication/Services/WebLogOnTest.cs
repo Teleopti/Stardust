@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			logOnOff = mocks.DynamicMock<ILogOnOff>();
 			var ruleToPrincipalCommand = mocks.DynamicMock<IRoleToPrincipalCommand>();
 			principalAuthorization = mocks.DynamicMock<IPrincipalAuthorization>();
-			ITeleoptiPrincipal principal = new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, AuthenticationTypeOption.Unknown), new Person());
+			ITeleoptiPrincipal principal = new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null), new Person());
 
 			target = new WebLogOn(logOnOff,
 			                      dataSourcesProvider,
@@ -76,14 +76,14 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				Expect.Call(repositoryFactory.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
 				Expect.Call(personRepository.Get(personId)).Return(logonPerson);
 				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
-				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit, AuthenticationTypeOption.Unknown));
+				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
 				Expect.Call(() => sessionSpecificDataProvider.StoreInCookie(null)).IgnoreArguments();
 			}
 			using (mocks.Playback())
 			{
-				target.LogOn(buId, dataSourceName, personId, AuthenticationTypeOption.Unknown);
+				target.LogOn(buId, dataSourceName, personId);
 			}
 		}
 
@@ -109,13 +109,13 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				Expect.Call(repositoryFactory.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
 				Expect.Call(personRepository.Get(personId)).Return(logonPerson);
 				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
-				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit, AuthenticationTypeOption.Unknown));
+				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(true);
 				Expect.Call(() => sessionSpecificDataProvider.StoreInCookie(null)).IgnoreArguments();
 			}
 			using (mocks.Playback())
 			{
-				target.LogOn(buId, dataSourceName, personId, AuthenticationTypeOption.Unknown);
+				target.LogOn(buId, dataSourceName, personId);
 			}
 		}
 
@@ -141,14 +141,14 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				Expect.Call(repositoryFactory.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
 				Expect.Call(personRepository.Get(personId)).Return(logonPerson);
 				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
-				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit, AuthenticationTypeOption.Application));
+				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(false);
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
 			}
 			using (mocks.Playback())
 			{
 				Assert.Throws<PermissionException>(() =>
-				                                   target.LogOn(buId, dataSourceName, personId, AuthenticationTypeOption.Application));
+				                                   target.LogOn(buId, dataSourceName, personId));
 			}
 		}
 

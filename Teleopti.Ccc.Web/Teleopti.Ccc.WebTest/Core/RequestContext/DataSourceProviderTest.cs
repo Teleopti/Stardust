@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var identityProvider = MockRepository.GenerateMock<IIdentityProvider>();
 			var target = new DataSourceProvider(identityProvider);
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			var identity = new TeleoptiIdentity("hej", dataSource, null, null, AuthenticationTypeOption.Unknown);
+			var identity = new TeleoptiIdentity("hej", dataSource, null, null);
 
 			identityProvider.Stub(x => x.Current()).Return(identity);
 

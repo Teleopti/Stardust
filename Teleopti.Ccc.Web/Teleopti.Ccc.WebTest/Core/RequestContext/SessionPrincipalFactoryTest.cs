@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 				identity.DataSource.Should().Be.SameInstanceAs(dataSource);
 				identity.BusinessUnit.Should().Be.SameInstanceAs(businessUnit);
 				identity.WindowsIdentity.Name.Should().Be.EqualTo(WindowsIdentity.GetCurrent().Name);
-				identity.TeleoptiAuthenticationType.Should().Be.EqualTo(sessData.AuthenticationType);
 			}
 		}
 
@@ -91,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[Test]
 		public void ShouldReturnNullIfSessionDataPointsToNonExistingDatabase()
 		{
-			var sessionData = new SessionSpecificData(Guid.NewGuid(), "sdf", Guid.NewGuid(), AuthenticationTypeOption.Windows);
+			var sessionData = new SessionSpecificData(Guid.NewGuid(), "sdf", Guid.NewGuid());
 			using (mocks.Record())
 			{
 				Expect.Call(sessionSpecificDataProvider.GrabFromCookie()).Return(sessionData);
@@ -104,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 		private static SessionSpecificData createSessionData()
 		{
-			return new SessionSpecificData(Guid.NewGuid(), Guid.NewGuid().ToString(), Guid.NewGuid(), AuthenticationTypeOption.Windows);
+			return new SessionSpecificData(Guid.NewGuid(), Guid.NewGuid().ToString(), Guid.NewGuid());
 		}
 	}
 }

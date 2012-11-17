@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public interface ICurrentPrincipalContext
 	{
-		void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit, AuthenticationTypeOption teleoptiAuthenticationType);
+		void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit);
 		void SetCurrentPrincipal(ITeleoptiPrincipal principal);
 	}
 }

@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 }
                 
                 AuthenticationMessageHeader.UseWindowsIdentity = false;
-                _logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit, AuthenticationTypeOption.Application);
+                _logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);
 
 				_roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, unitOfWork, _repositoryFactory.CreatePersonRepository(unitOfWork));
             }

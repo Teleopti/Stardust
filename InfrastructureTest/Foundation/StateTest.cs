@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
             currentPrincipal.ChangePrincipal(
                 new TeleoptiPrincipal(new TeleoptiIdentity("", identity.DataSource, identity.BusinessUnit,
-																			  identity.WindowsIdentity, AuthenticationTypeOption.Unknown), ((IUnsafePerson)currentPrincipal).Person));
+																			  identity.WindowsIdentity), ((IUnsafePerson)currentPrincipal).Person));
             Assert.IsFalse(target.IsLoggedIn);
             
             currentPrincipal.ChangePrincipal(new TeleoptiPrincipal(identity,((IUnsafePerson)currentPrincipal).Person));

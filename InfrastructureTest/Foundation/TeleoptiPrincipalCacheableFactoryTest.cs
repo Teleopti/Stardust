@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var internalsFactory = new TeleoptiPrincipalInternalsFactory();
 			var target = new TeleoptiPrincipalCacheableFactory(internalsFactory, internalsFactory, internalsFactory);
 
-			var result = target.MakePrincipal(person, dataSource, businessUnit, AuthenticationTypeOption.Application);
+			var result = target.MakePrincipal(person, dataSource, businessUnit);
 
 			result.Should().Be.OfType<TeleoptiPrincipalCacheable>();
 		}
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var target = new TeleoptiPrincipalCacheableFactory(makeRegionalFromPerson, makeOrganizationFromPerson, retrievePersonNameForPerson);
 			retrievePersonNameForPerson.Stub(x => x.NameForPerson(person)).Return(person.Name.ToString());
 
-			target.MakePrincipal(person, null, null, AuthenticationTypeOption.Windows);
+			target.MakePrincipal(person, null, null);
 
 			makeRegionalFromPerson.AssertWasCalled(x => x.MakeRegionalFromPerson(person));
 			makeOrganizationFromPerson.AssertWasCalled(x => x.MakeOrganisationMembership(person));

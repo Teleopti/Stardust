@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			dataArray[businessUnitPosition+1] = data.BusinessUnitId;
 			dataArray[dataSourcePosition+1] = data.DataSourceName;
 			dataArray[personPosition+1] = data.PersonId;
-			dataArray[authenticateTypePosition+1] = (int)data.AuthenticationType;
 			dataArray[messagePosition+1] = data.WarningMessage ?? string.Empty;
 
 			return string.Format(stringFormat, dataArray);
@@ -44,7 +43,6 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 				return new SessionSpecificData(new Guid(split[businessUnitPosition]),
 															split[dataSourcePosition],
 															new Guid(split[personPosition]),
-															(AuthenticationTypeOption)Convert.ToInt32(split[authenticateTypePosition]),
 															message);
 
 			}

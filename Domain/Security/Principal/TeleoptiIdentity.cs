@@ -1,5 +1,3 @@
-using System;
-using System.Runtime.Serialization;
 using System.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -11,21 +9,17 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public TeleoptiIdentity(string name,
 		                        IDataSource dataSource,
 		                        IBusinessUnit businessUnit,
-		                        WindowsIdentity windowsIdentity,
-		                        AuthenticationTypeOption teleoptiAuthenticationType)
+		                        WindowsIdentity windowsIdentity)
 			: base(name)
 		{
 			DataSource = dataSource;
 			BusinessUnit = businessUnit;
 			WindowsIdentity = windowsIdentity;
-			TeleoptiAuthenticationType = teleoptiAuthenticationType;
 		}
 
 		public IDataSource DataSource { get; set; }
 		public IBusinessUnit BusinessUnit { get; set; }
-		public AuthenticationTypeOption TeleoptiAuthenticationType { get; private set; }
 		public string Ticket { get; set; }
 		public WindowsIdentity WindowsIdentity { get; set; }
-
 	}
 }

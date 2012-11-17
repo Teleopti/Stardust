@@ -37,10 +37,16 @@ namespace Teleopti.Analytics.Portal.Utils
 		{
 			get
 			{
-				if (HttpContext.Current.User == null)
+				if(HttpContext.Current.Items["FROMCOOKIE"] != null)
+				{
+					if (HttpContext.Current.User == null)
+						return null;
+					return HttpContext.Current.User.Identity.Name;
+				}
+				if (HttpContext.Current.Session["USERNAME"] == null)
 					return null;
 
-				return HttpContext.Current.User.Identity.Name;
+				return (string)HttpContext.Current.Session["USERNAME"];
 			}
 			set { HttpContext.Current.Session["USERNAME"] = value; }
 		}

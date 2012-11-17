@@ -52,17 +52,17 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 				var businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
 				var businessUnit = businessUnitRepository.Load(sessionData.BusinessUnitId);
 
-				principal = MakePrincipalAndHandleThatPersonMightNotExist(uow, personRepository, sessionData, dataSource, businessUnit, person);
+				principal = makePrincipalAndHandleThatPersonMightNotExist(uow, personRepository, dataSource, businessUnit, person);
 			}
 
 			return principal;
 		}
 
-		private ITeleoptiPrincipal MakePrincipalAndHandleThatPersonMightNotExist(IUnitOfWork uow, IPersonRepository personRepository, SessionSpecificData sessionData, IDataSource dataSource, IBusinessUnit businessUnit, IPerson person)
+		private ITeleoptiPrincipal makePrincipalAndHandleThatPersonMightNotExist(IUnitOfWork uow, IPersonRepository personRepository, IDataSource dataSource, IBusinessUnit businessUnit, IPerson person)
 		{
 			try
 			{
-				var principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, sessionData.AuthenticationType);
+				var principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit);
 				_roleToPrincipalCommand.Execute(principal, uow, personRepository);
 				return principal;
 			}

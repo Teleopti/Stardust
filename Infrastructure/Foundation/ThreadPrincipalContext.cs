@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			_factory = factory;
 		}
 
-		public void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit, AuthenticationTypeOption teleoptiAuthenticationType)
+		public void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit)
 		{
-			var principal = _factory.MakePrincipal(loggedOnUser, dataSource, businessUnit, teleoptiAuthenticationType);
+			var principal = _factory.MakePrincipal(loggedOnUser, dataSource, businessUnit);
 			Thread.CurrentPrincipal = principal;
 		}
 
