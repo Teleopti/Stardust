@@ -1,36 +1,42 @@
-
-/****** Object:  StoredProcedure [ReadModel].[UpdateFindPerson]    Script Date: 12/19/2011 14:51:19 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[UpdateFindPerson]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [ReadModel].[UpdateFindPerson]
 GO
 
-/****** Object:  StoredProcedure [ReadModel].[UpdateFindPerson]    Script Date: 12/19/2011 14:51:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
 CREATE PROCEDURE [ReadModel].[UpdateFindPerson]
 @persons nvarchar(max)
+WITH EXECUTE AS OWNER
 
 -- =============================================
 -- Author:		Ola
 -- Create date: 2011-12-19
 -- Description:	Updates the read model for finding persons
--- Change:		Added a parameter which persons we should update
-
+-- =============================================
+-- Date			Who	Description
+-- 2012-0x-xx	DJ	Added a parameter which persons we should update
+-- 2012-11-18	DJ	#21539 - Speed up initial load 400 sec => 6 sec
 -- =============================================
 AS
 -- exec [ReadModel].[UpdateFindPerson] 'B0C67CB1-1C4F-4047-8DC1-9EF500DC79A6, 2AE730A0-5AF7-49B7-9498-9EF500DC79A6'
- SET NOCOUNT ON
-CREATE TABLE #ids(person uniqueidentifier)
+SET NOCOUNT ON
+CREATE TABLE #ids (
+	person uniqueidentifier NOT NULL
+)
 
-IF @persons = '00000000-0000-0000-0000-000000000000'
+CREATE TABLE #CurrentPeriod (
+	Parent  uniqueidentifier NOT NULL,
+	Team	uniqueidentifier NOT NULL
+)
+
+CREATE TABLE #last (
+	Parent  uniqueidentifier NOT NULL,
+	Team    uniqueidentifier NOT NULL,
+	EndDate DateTime NOT NULL
+)
+
+IF @persons = '00000000-0000-0000-0000-000000000000'  --"EveryBody"
 --Flush and re-load everybody
 BEGIN
-	DELETE FROM [ReadModel].[FindPerson]
+	TRUNCATE TABLE [ReadModel].[FindPerson]
 	INSERT INTO #ids SELECT Id FROM Person WHERE IsDeleted = 0
 END
 ELSE
@@ -131,23 +137,21 @@ AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType =
 DECLARE @date DATETIME
 SELECT @date = CONVERT(DATETIME, CONVERT(varchar(10), GETDATE(), 101))
 
+INSERT INTO #CurrentPeriod (Parent, Team)
+SELECT Parent,Team
+FROM [PersonPeriodWithEndDate] pp
+WHERE pp.StartDate < @date AND pp.EndDate >= @date
+
 UPDATE [ReadModel].[FindPerson] SET [TeamId] = t.Id,
 	[SiteId] = s.Id,[BusinessUnitId] = s.BusinessUnit 
 FROM [ReadModel].[FindPerson] p
-LEFT JOIN [PersonPeriodWithEndDate] pp ON p.PersonId = pp.Parent and pp.Parent in (SELECT * FROM #ids)
+LEFT JOIN #CurrentPeriod pp ON p.PersonId = pp.Parent AND pp.Parent in (SELECT * FROM #ids)
 INNER JOIN Team t ON pp.Team = t.Id
 INNER JOIN Site s ON s.Id = t.Site
 -- the 
-WHERE pp.StartDate < @date AND pp.EndDate >= @date
-AND t.IsDeleted = 0 AND s.IsDeleted = 0
+WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
 
 /*last if terminal*/
-CREATE TABLE #last
-(
-[Parent] [uniqueidentifier] NOT NULL,
-[Team] [uniqueidentifier] NULL,
-[EndDate] [DateTime] NOT NULL
-)
 INSERT INTO #last
 SELECT Parent, Team, MAX(enddate) from PersonPeriodWithEndDate
 group by Parent, Team
