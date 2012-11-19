@@ -92,6 +92,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			                                     	r.DayOffTemplate,
 			                                     	null,
 			                                     	new List<IActivityRestriction>())
+			                                     	{
+			                                     		IsRotationDay = true
+			                                     	}
 			                                     as IEffectiveRestriction
 				;
 
