@@ -8,14 +8,24 @@
     xmlns:Converters="clr-namespace:Teleopti.Ccc.WpfControls.Converters"
     xmlns:Controls="clr-namespace:Teleopti.Ccc.WpfControls.Controls"
     Height="64" Width="Auto">
-<UserControl.Resources>
+    <UserControl.Resources>
         <Converters:VisibilityConverter x:Key="visibilityConverter"/>
+        <Style TargetType="ContextMenu" x:Key="BasicContextMenu">
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
         <StackPanel TextBox.LostFocus="TextBox_LostFocus" >
 
     <Grid Commands:CreateCommandBinding.Target="{Binding}">
             <Grid.ContextMenu>
-                <ContextMenu>
+                <ContextMenu Style="{StaticResource BasicContextMenu}">
                     <MenuItem Command="{x:Static Commands:CommonRoutedCommands.ToggleAutoUpdate}"/>
                     <MenuItem Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalLater}"/>
                     <MenuItem Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalEarlier}"/>

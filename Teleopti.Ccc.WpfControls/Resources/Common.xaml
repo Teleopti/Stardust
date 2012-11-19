@@ -288,4 +288,15 @@
         </Setter>
     </Style>
     
+    <Style TargetType="ContextMenu" x:Key="BasicContextMenu">
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="MenuItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
 </ResourceDictionary>

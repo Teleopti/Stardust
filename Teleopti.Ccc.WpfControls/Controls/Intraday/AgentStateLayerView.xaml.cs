@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday
             InitializeComponent();
             _listViewPresenter = new ListViewPresenter(mainGrid);
 
-            ICollectionView view = CollectionViewSource.GetDefaultView(mainGrid.ItemsSource);
+            var view = CollectionViewSource.GetDefaultView(mainGrid.ItemsSource);
             view.GroupDescriptions.Add(new PropertyGroupDescription("StateGroup.Available"));
         }
 

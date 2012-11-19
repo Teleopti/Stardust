@@ -11,7 +11,7 @@
         <ResourceDictionary>
 
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\..\..\Resources\Common.xaml"/>
+                <ResourceDictionary Source="..\..\Resources\Common.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <DateTimeConverter:DateTimeToLocalStringConverter x:Key="startDateTimeToLocalStringConverter"/>
             <DateTimeConverter:DateTimeParseMode x:Key="TimeMode">Time</DateTimeConverter:DateTimeParseMode>

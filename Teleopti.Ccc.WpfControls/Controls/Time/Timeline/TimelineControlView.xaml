@@ -17,8 +17,12 @@
                 <ResourceDictionary Source="..\..\..\Resources\CommonBrushes.xaml"/>
 				<ResourceDictionary Source="..\..\..\Resources\DateTimeConverters.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-    
-        <Views:TickMarkTemplateSelector x:Key="selectorForTickMarks"/>
+
+            <Style TargetType="MenuItem" x:Key="MenuItemStyle">
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+            <Views:TickMarkTemplateSelector x:Key="selectorForTickMarks"/>
 
       
         <DataTemplate x:Key="TickMarkTemplate" 
@@ -102,12 +106,11 @@
 
     <Grid Background="{StaticResource RaptorStandardGradientBrush}" >
         <Grid.ContextMenu>
-
             <ContextMenu x:Name="TimeLineContextMenu"  IsVisibleChanged="ContextMenu_IsVisibleChanged" MouseLeftButtonUp="TimelineControlView_PreviewMouseUp" MouseLeftButtonDown="TimelineControlView_PreviewMouseUp">
-                <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddActivityWithPeriod}"/>
-                <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddAbsenceWithPeriod}"/>
-                <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddOvertimeWithPeriod}"/>
-                <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddPersonalShiftWithPeriod}"/>
+                <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddActivityWithPeriod}" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddAbsenceWithPeriod}" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddOvertimeWithPeriod}" Style="{StaticResource MenuItemStyle}"/>
+                <MenuItem Command="{x:Static Editor:ShiftEditorRoutedCommands.AddPersonalShiftWithPeriod}" Style="{StaticResource MenuItemStyle}"/>
             </ContextMenu>
               
         </Grid.ContextMenu>
@@ -299,9 +302,8 @@
 					<Setter Property="Control.Padding" Value="0"/>
 					<Setter Property="HorizontalAlignment" Value="Stretch"/>
 					<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
 					<Setter Property="Opacity" Value="0.7"/>
-					
-					
 				</Style>
 			</ListBox.ItemContainerStyle>
 

@@ -12,8 +12,18 @@
             </ResourceDictionary.MergedDictionaries>
 
             <cvt:ColorConverter x:Key="ColorConverter"/>
-        
-        <DataTemplate x:Key="DescriptiveTemplate">
+
+            <Style TargetType="ContextMenu" x:Key="BasicContextMenu">
+                <Setter Property="ItemContainerStyle">
+                    <Setter.Value>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <DataTemplate x:Key="DescriptiveTemplate">
             <WpfControls:LayerDescriptiveView DataContext="{Binding}" Background="{DynamicResource RaptorStandardMeetingGradientBrush}"/>
         </DataTemplate>
         </ResourceDictionary>
@@ -33,7 +43,7 @@
                             CanExecute="EditMeeting_CanExecute"/>
         </Border.CommandBindings>
         <Border.ContextMenu>
-            <ContextMenu>
+            <ContextMenu Style="{StaticResource BasicContextMenu}">
                 <MenuItem Command="c:RoutedCommands.EditMeeting"/>
             </ContextMenu>
         </Border.ContextMenu>
