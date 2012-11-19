@@ -7,6 +7,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
+using Teleopti.Ccc.Web.Core.Startup;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 {
@@ -30,9 +31,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 
 			builder.RegisterType<BusinessUnitsViewModelFactory>().As<IBusinessUnitsViewModelFactory>();
 			builder.RegisterAssemblyTypes(GetType().Assembly)
-				.AssignableTo<IDataSourcesViewModelFactory>()
-				.As<IDataSourcesViewModelFactory>()
+				.AssignableTo<IAuthenticationType>()
+				.As<IAuthenticationType>()
 				.SingleInstance();
+			builder.RegisterType<DataSourcesViewModelFactory>().As<IDataSourcesViewModelFactory>().SingleInstance();
 		}
 	}
 }
