@@ -3,7 +3,6 @@
 	As an agent
 	I want to see my current activities
 
-
 Background:
 	Given there is a role with
 	| Field                    | Value                 |
@@ -33,7 +32,6 @@ Background:
 	| EndTime               | 2030-01-01 17:00 |
 	| Shift category		| Day	           |
 	| Lunch3HoursAfterStart | true             |
-
 
 Scenario: No permission to ASM module
 	Given I have the role 'No access to ASM'
