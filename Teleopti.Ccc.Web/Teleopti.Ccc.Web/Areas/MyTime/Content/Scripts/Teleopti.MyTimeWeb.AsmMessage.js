@@ -95,8 +95,6 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 			Teleopti.MyTimeWeb.AsmMessageList.Init();
 		},
 		ListenForMessages: function (callbackForMessages) {
-			console.log('im listening and will call:');
-			console.log(callbackForMessages);
 			_listenForEvents(callbackForMessages);
 		},
 		FetchMessageInfo: function (messageId, callbackForMessageInfo) {
