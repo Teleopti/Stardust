@@ -6,52 +6,67 @@
 	
 	<script src="@Url.Content("~/Content/bootstrap/bootstrap.min.js")"></script>
 	<script src="@Url.Content("~/Content/Scripts/knockout-2.1.0.js")"></script>
+	<script src="@Url.Content("~/Content/signals/signals.js")"></script>
+	<script src="@Url.Content("~/Content/hasher/hasher.js")"></script>
+	<script src="@Url.Content("~/Content/crossroads/crossroads.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/knockout-2.1.0.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/knockout.bindings.js")"></script>
 
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.LoginViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.AuthenticationNew.js")"></script>
 
 	<script type="text/javascript">
+		var authentication;
 		jQuery(function () {
-			Teleopti.Start.AuthenticationNew.Init({ baseUrl: '@Url.Content("~/")' });
+			Teleopti.Start.Authentication.Settings = {
+				baseUrl: '@Url.Content("~/")'
+			};
+			authentication = new Teleopti.Start.Authentication();
 		});
 	</script>
 }
+<script>
+	
+</script>
 <section id="page-signin">
 	<div class="container" id="Login-container">
 		
 		<div class="login-logo">
 			<img src="@Url.Content("~/Areas/Start/Content/Images/mobile_logo.png")"/>
 		</div>
+		
+		<div id="view" class="login-form well well-large"></div>
 
-		<div data-bind="visible: DataSourceSelectionActive" class="login-form well well-large">
-			<ul id="DataSources" data-bind="foreach: AvailableDataSources" class="nav nav-tabs nav-stacked">
+		<div id="signin" class="login-form well well-large">
+			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked">
 				<li data-bind="css: {'active': Selected}, class: Type">
-					<a href="#" data-bind="click: $parent.SelectDataSource">
+					<a href="#" data-bind="click: Select">
 						<span data-bind="text: Name"></span>
 						<span data-bind="if: Type == 'windows'">@Resources.WindowsLogonWithBrackets</span>
 					</a>
 				</li>
 			</ul>
+			<!-- ko if: DisplayUserNameAndPasswordBoxes -->
 			<div>
-				<input type="text" id="Username-input" placeholder=@Resources.UserName class="input-block-level" data-bind="value: UserName, visible:IsApplicationLogon" />
+				<input type="text" id="Username-input" placeholder=@Resources.UserName class="input-block-level" data-bind="value: UserName" />
 			</div>
 			<div>
-				<input type="password" id="Password-input" placeholder=@Resources.Password class="input-block-level" data-bind="value: Password, visible:IsApplicationLogon" />
+				<input type="password" id="Password-input" placeholder=@Resources.Password class="input-block-level" data-bind="value: Password" />
 			</div>
-			<button class="btn btn-primary" id="Login-button">@Resources.LogOn</button>
+			<!-- /ko -->
+
+			<button class="btn btn-primary" id="Login-button" data-bind="click: SignIn">@Resources.LogOn</button>
 			<span class="error" data-bind="text: ErrorMessage"></span>
 		</div>
 		
-		<div data-bind="visible: BusinessUnitSelectionActive" class="login-form well well-large">
+		<div id="businessunit" class="login-form well well-large">
 			<h3>Select business unit:</h3>
 			<ul data-bind="foreach: AvailableBusinessUnits" class="nav nav-tabs nav-stacked">
 				<li data-bind="css: {'active': Selected}"><a href="#" data-bind="text: Name, click: $parent.SelectBusinessUnit"></a></li>
 			</ul>
 		</div>
 
-		<div data-bind="visible: ApplicationSelectionActive" class="login-form well well-large">
+		<div id="menu" class="login-form well well-large">
 			<h3>Select application:</h3>
 			<ul data-bind="foreach: AvailableApplications" class="nav nav-tabs nav-stacked">
 				<li>
