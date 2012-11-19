@@ -506,55 +506,25 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Open messages when I click on unread messages")]
-        public virtual void OpenMessagesWhenIClickOnUnreadMessages()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Open messages when I click on unread messages", ((string[])(null)));
-#line 138
-this.ScenarioSetup(scenarioInfo);
-#line 6
-this.FeatureBackground();
-#line 139
- testRunner.Given("I have the role \'Full access to mytime\'");
-#line hidden
-            TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table12.AddRow(new string[] {
-                        "Title",
-                        "New message"});
-#line 140
- testRunner.And("I have an unread message with", ((string)(null)), table12);
-#line 143
- testRunner.When("I click ASM link");
-#line 144
- testRunner.And("I click the unread message");
-#line 145
- testRunner.Then("I should see a window showing messages");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Agent should be notified when activity changes")]
         [NUnit.Framework.IgnoreAttribute()]
         public virtual void AgentShouldBeNotifiedWhenActivityChanges()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should be notified when activity changes", new string[] {
                         "ignore"});
-#line 149
+#line 140
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 150
+#line 141
  testRunner.Given("I have the role \'Full access to mytime\'");
-#line 151
+#line 142
  testRunner.And("Current time is \'2030-01-01 11:59\'");
-#line 152
+#line 143
  testRunner.When("I click ASM link");
-#line 153
+#line 144
  testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'");
-#line 154
+#line 145
  testRunner.Then("I should see only one alert containing \'Phone\'");
 #line hidden
             this.ScenarioCleanup();

@@ -129,18 +129,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false)).InnerHtml.Contains(unreadMessagesCount.ToString()), Is.True);
 		}
 
-		[When(@"I click the unread message")]
-		public void WhenIClickTheUnreadMessage()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
-		[Then(@"I should see a window showing messages")]
-		public void ThenIShouldSeeAWindowShowingMessages()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
 		[Then(@"I shoud see an indication that I have an unread message")]
 		public void ThenIShoudSeeAnIndicationThatIHaveAnUnreadMessage()
 		{
