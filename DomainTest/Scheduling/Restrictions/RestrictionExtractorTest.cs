@@ -165,6 +165,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             Extract(new List<IRestrictionBase> { sr }, new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>()));
             IEffectiveRestriction combined = _target.CombinedRestriction(new SchedulingOptions{UseRotations = true, UsePreferences = true, UseAvailability = true,UseStudentAvailability = true, UsePreferencesMustHaveOnly = false});
             Assert.IsNotNull(combined);
+			Assert.IsTrue(combined.IsRotationDay);
         }
 
         [Test]
