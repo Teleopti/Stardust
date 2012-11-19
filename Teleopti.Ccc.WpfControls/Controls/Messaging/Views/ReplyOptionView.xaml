@@ -37,11 +37,11 @@
 					Width="12"
 					Background="{StaticResource Raptor_HelpIcon}"
 					Margin="2"
-					Visibility="{Binding Path=IsNotRepliedOption,Converter={StaticResource visibilityConverter}}"/>
-				<TextBlock Text="{Binding Path=Reply}" Visibility="{Binding Path=FilterIsActive,Converter={StaticResource visibilityConverter}}"  FontWeight="Bold"  />
+					Visibility="{Binding Path=IsNotRepliedOption,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}"/>
+                <TextBlock Text="{Binding Path=Reply}" Visibility="{Binding Path=FilterIsActive,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}"  FontWeight="Bold"  />
 				<TextBlock Text="{Binding Path=Reply}"
 						  
-						   Visibility="{Binding Path=FilterIsActive,Converter={StaticResource reversedVisibilityConverter}}" />
+						   Visibility="{Binding Path=FilterIsActive,Converter={StaticResource reversedVisibilityConverter}, FallbackValue=Hidden}" />
 			</StackPanel>
 		</GroupBox.Header>
 		<Grid MinWidth="100" HorizontalAlignment="Stretch" Margin="10,2,2,10">

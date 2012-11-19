@@ -18,6 +18,12 @@
                 <StackPanel Orientation="Horizontal">
                     <Label>xxAbsenceType</Label>
                     <ComboBox ItemsSource="{Binding Path=Payloads}"/>
+                        <ComboBoxItem>
+                            <Style TargetType="ComboBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            </Style>
+                        </ComboBoxItem>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                 <DateTimePeriodControl:EditableDateTimePeriodPreview DataContext="{Binding Path=PeriodViewModel}" />

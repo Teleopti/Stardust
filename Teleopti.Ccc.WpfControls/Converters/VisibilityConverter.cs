@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WpfControls.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value is Visibility) return value;
             return ((bool) value) ? Visibility.Visible : Visibility.Collapsed;
         }
 
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.WpfControls.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value is Visibility) return value;
             return ((bool)value) ? Visibility.Collapsed : Visibility.Visible;
         }
 

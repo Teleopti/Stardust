@@ -20,7 +20,7 @@
         </DataTemplate>
         
     </UserControl.Resources>
-    <Grid Visibility="{Binding Path=Layers.IsEmpty, Converter={StaticResource visibilityConverter}}">
+    <Grid Visibility="{Binding Path=Layers.IsEmpty, Converter={StaticResource visibilityConverter}, FallbackValue=Visible}">
         <!--The background-->
         <ContentControl Content="{Binding}" ContentTemplate="{StaticResource groupBackground}"/>
 

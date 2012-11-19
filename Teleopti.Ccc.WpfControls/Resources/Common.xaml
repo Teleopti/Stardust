@@ -25,6 +25,7 @@
         <Setter Property="Padding" Value="5"/>
         <Setter Property="VerticalContentAlignment" Value="Bottom"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Visibility" Value="Visible"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Trigger.Setters>

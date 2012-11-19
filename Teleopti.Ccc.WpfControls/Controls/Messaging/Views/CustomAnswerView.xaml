@@ -101,7 +101,8 @@
 											Background="{StaticResource RaptorStandardGradientBrush}"
 											HorizontalAlignment="Stretch"
 											Visibility="{Binding Path=AddReplyOptionCommand.EditMode, 
-											Converter={StaticResource reversedVisibilityConverter}}">
+											Converter={StaticResource reversedVisibilityConverter},
+                                            FallbackValue=Visible}">
 
 				</Button>
 
@@ -109,7 +110,8 @@
 							Grid.Row="1" 
 							Grid.Column="0" Grid.ColumnSpan="3"
 							Visibility="{Binding Path=AddReplyOptionCommand.EditMode, 
-					        Converter={StaticResource visibilityConverter}}">
+					        Converter={StaticResource visibilityConverter},
+                            FallbackValue=Visible}">
 					<TextBox   
 							Text="{Binding Path=ReplyOptionToAdd,UpdateSourceTrigger=PropertyChanged}" 
 							MinWidth="100"

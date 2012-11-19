@@ -16,17 +16,17 @@
                    
                     <Views:ScheduleViewerScheduleDayView DataContext="{Binding}" 
                                                          Grid.Row="0"
-                                                         Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ShowOverview}"/>
+                                                         Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ShowOverview, FallbackValue=Visible}"/>
                       
                 
                     <Views:ScheduleViewerScheduleDayViewDetailed DataContext="{Binding}"  
                                                                  Grid.Row="1" 
-                                                                 Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ShowSchedule}"/>
+                                                                 Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ShowSchedule, FallbackValue=Visible}"/>
                     
                         
                     <Views:ScheduleViewerScheduleDayViewSchedule DataContext="{Binding}"  
                                                                  Grid.Row="2"
-                                                                 Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ShowDetails}"/>
+                                                                 Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ShowDetails, FallbackValue=Visible}"/>
                        
                        
                 </Grid>

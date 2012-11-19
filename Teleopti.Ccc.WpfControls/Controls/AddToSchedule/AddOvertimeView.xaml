@@ -56,7 +56,7 @@
                             Opacity="0.6"
                             Grid.ColumnSpan="2" 
                             HorizontalAlignment="Stretch"
-                            Visibility="{Binding Path=CanOk,Converter={StaticResource reversedVisibilityConverter}}"
+                            Visibility="{Binding Path=CanOk,Converter={StaticResource reversedVisibilityConverter},  FallbackValue=Visible}"
                             Background="AliceBlue"
                             >
             <TextBlock 

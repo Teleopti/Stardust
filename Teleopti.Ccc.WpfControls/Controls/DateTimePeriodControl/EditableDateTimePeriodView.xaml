@@ -39,8 +39,8 @@
         </Grid.RowDefinitions>
 
         <!--Bygg ihop dessa?-->
-        <Border Visibility="{Binding Path=AutoUpdate,Converter={StaticResource visibilityConverter}}" BorderThickness="0,1,1,1" BorderBrush="Green" Grid.Column="2" Grid.RowSpan="2" CornerRadius="2" Width="8" Margin="0,12,0,12" HorizontalAlignment="Left"/>
-        <Label Visibility="{Binding Path=AutoUpdate,Converter={StaticResource visibilityConverter}}" Grid.Column="2" Grid.RowSpan="2" Content="+" Foreground="Green" FontWeight="Bold"  ToolTip="{x:Static UserTexts:Resources.AutomaticUpdate}" Grid.ColumnSpan="2" Margin="2,19.02,-2,19.02" />
+            <Border Visibility="{Binding Path=AutoUpdate,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}" BorderThickness="0,1,1,1" BorderBrush="Green" Grid.Column="2" Grid.RowSpan="2" CornerRadius="2" Width="8" Margin="0,12,0,12" HorizontalAlignment="Left"/>
+            <Label Visibility="{Binding Path=AutoUpdate,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}" Grid.Column="2" Grid.RowSpan="2" Content="+" Foreground="Green" FontWeight="Bold"  ToolTip="{x:Static UserTexts:Resources.AutomaticUpdate}" Grid.ColumnSpan="2" Margin="2,19.02,-2,19.02" />
                
 
             <DateTimePeriodControl:EditableStartDateView Grid.Column="0" Height="23" Margin="0,5,0,5" />

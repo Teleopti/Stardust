@@ -41,7 +41,7 @@
                                 Offset="1"
                                 Grid.Row="1"
 								VerticalAlignment="Stretch"
-								Visibility="{Binding Path=EditMode,Converter={StaticResource visibilityConverter}}"/>
+								Visibility="{Binding Path=EditMode,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}"/>
                 
                 
                 <Button Content="{x:Static UserTexts:Resources.Show}"

@@ -9,7 +9,6 @@
     xmlns:Common="clr-namespace:Teleopti.Ccc.WpfControls.Common"
     >
     <UserControl.Resources>
-        <Converters:ReversedVisibilityConverter  x:Key="errorConverter"/>
         <DataTemplate DataType="{x:Type Scheduling:Activity}">
             <Views:ActivityShortView />
         </DataTemplate>

@@ -8,7 +8,7 @@
 	<!-- Set the container to be able to place the items in the correct in time-->
 	<ItemsControl.ItemContainerStyle>
 		<Style  TargetType="ContentPresenter">
-			<!--<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <!--<Setter Property="HorizontalContentAlignment" Value="Stretch" />
 			<Setter Property="VerticalContentAlignment" Value="Stretch" />-->
 			<!-- Data binding for DateTimePeriodPanel -->
 			<Setter Property="Common:DateTimePeriodPanel.DateTimePeriod">
