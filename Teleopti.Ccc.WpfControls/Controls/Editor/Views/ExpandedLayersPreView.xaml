@@ -26,7 +26,6 @@
         <!--Normal view Shows the VisualLayers (created from projection by the LayerViewModelCollection-->
         <Layers:LayerListBox Period="{Binding Path=Period}" 
 						 ItemsSource="{Binding Path=Layers.VisualLayers}"
-						 
                          Offset="0"
 						 VerticalAlignment="Stretch"
 					     Height="{Binding Path=LayerHeight}"/>

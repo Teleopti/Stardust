@@ -34,7 +34,7 @@
                         <Setter Property="ContentControl.VerticalContentAlignment" Value="Stretch" />
                         <Setter Property="Common:DateTimePeriodPanel.DateTimePeriod" >
                             <Setter.Value>
-                                <Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period" />
+                                <Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period"/>
                             </Setter.Value>
                         </Setter>
                     </Style.Setters>

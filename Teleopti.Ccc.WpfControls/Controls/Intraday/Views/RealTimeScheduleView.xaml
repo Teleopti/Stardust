@@ -33,7 +33,8 @@
             <Style TargetType="Control" x:Key="HeaderWithHand" BasedOn="{StaticResource HeaderStyle}">
                 <Setter Property="Cursor" Value="Hand"/>
             </Style>
-        </ResourceDictionary>
+
+		</ResourceDictionary>
 
 	</UserControl.Resources>
 
@@ -184,8 +185,9 @@
                 </Controls:DataGridTemplateColumn.Header>
                 <Controls:DataGridTemplateColumn.CellTemplate>
 				    <DataTemplate>
-					    <Layers:LayerListBox DataContext="{Binding Path=Layers}" Loaded="LayerListBox_Loaded"
+                            <Layers:LayerListBox DataContext="{Binding Path=Layers}" Loaded="LayerListBox_Loaded"
 											    Background="{StaticResource RaptorStandardLightGradientBrush}"/>
+                        
 				    </DataTemplate>
 				</Controls:DataGridTemplateColumn.CellTemplate>
 			</Controls:DataGridTemplateColumn>

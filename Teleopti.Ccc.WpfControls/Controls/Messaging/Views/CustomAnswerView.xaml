@@ -65,7 +65,7 @@
 							Margin="5"
 							Background="{StaticResource RaptorStandardGradientBrush}"/>
 
-				<ListBox	Grid.Row="0" Grid.ColumnSpan="3"
+				<ListBox Grid.Row="0" Grid.ColumnSpan="3"
 								Grid.Column="1"
 								Background="Transparent"
 								MinWidth="150"

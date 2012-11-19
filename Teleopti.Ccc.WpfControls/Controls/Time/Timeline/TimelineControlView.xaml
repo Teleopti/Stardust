@@ -151,7 +151,9 @@
                     <Setter Property="Control.Margin" Value="0"/>
                     <Setter Property="Control.Padding" Value="0"/>
                     <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalAlignment" Value="Stretch"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
                 </Style>
             </ListBox.ItemContainerStyle>
 
@@ -193,6 +195,8 @@
                     <Setter Property="Common:DateTimePeriodPanel.DateTimePeriod" Value="{Binding Path=Period}"/>
                     <Setter Property="Control.Margin" Value="0"/>
                     <Setter Property="Control.Padding" Value="0"/>
+                    <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Control.VerticalContentAlignment" Value="Stretch"/>
                 </Style>
             </ItemsControl.ItemContainerStyle>
 
@@ -282,7 +286,7 @@
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<Border HorizontalAlignment="Stretch" Background="Transparent" >
-						<TextBlock Text="{Binding Path=StartDateTime, StringFormat=d}" HorizontalAlignment="Center"/>
+						<TextBlock Text="{Binding Path=StartDateTime, StringFormat=d}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 					</Border> 
 				</DataTemplate>
 			</ListBox.ItemTemplate>
@@ -302,6 +306,7 @@
 					<Setter Property="Control.Padding" Value="0"/>
 					<Setter Property="HorizontalAlignment" Value="Stretch"/>
 					<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalAlignment" Value="Stretch"/>
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
 					<Setter Property="Opacity" Value="0.7"/>
 				</Style>
