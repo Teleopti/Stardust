@@ -265,4 +265,27 @@
             </Setter>
         </Style.Setters>
     </Style>
+    
+    <Style TargetType="ListBox" x:Key="BasicListBox">
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                </Style>
+            </Setter.Value>
+        </Setter>        
+    </Style>
+    
+    <Style TargetType="ComboBox" x:Key="BasicComboBox">
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
 </ResourceDictionary>

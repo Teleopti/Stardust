@@ -11,11 +11,11 @@
                  VerticalContentAlignment="Stretch" >
     <UserControl.Resources>
         <Converters:ReversedVisibilityConverter x:Key="visibilityConverter"/>
-        <DataTemplate x:Key="groupBackground" DataType="LayerGroupViewModel">
+        <DataTemplate x:Key="groupBackground" DataType="Common:LayerGroupViewModel">
             <Layers:LayerGroupBackgroundView/>
         </DataTemplate>
 
-        <DataTemplate x:Key="groupForground" DataType="LayerGroupViewModel">
+        <DataTemplate x:Key="groupForground" DataType="Common:LayerGroupViewModel">
             <Layers:LayerGroupForegroundView/>
         </DataTemplate>
         

@@ -14,7 +14,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\..\..\Resources\Common.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <cvt:ColorConverterSoft x:Key="colorConverter"/>
+            <cvt:ColorConverterSoft x:Key="ColorConverter"/>
             <DateTimeConverter:DateTimeToLocalStringConverter x:Key="startDateTimeToLocalStringConverter"/>
             <DateTimeConverter:DateTimeToLocalStringConverter x:Key="endDateTimeToLocalStringConverter"/>
             <DateTimeConverter:DateTimeParseMode x:Key="TimeMode">Time</DateTimeConverter:DateTimeParseMode>
@@ -137,7 +137,7 @@
                 <ComboBox ItemsSource="{Binding Path=SelectablePayloads}"  
                           IsSynchronizedWithCurrentItem="True"  
                           Grid.Column="3" 
-                          
+                          Style="{StaticResource BasicComboBox}"
                           ItemTemplate="{StaticResource PayloadTemplate}"/>
                 
                 
