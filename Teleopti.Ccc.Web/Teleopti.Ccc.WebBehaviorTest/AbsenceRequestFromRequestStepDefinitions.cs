@@ -103,12 +103,5 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			UserFactory.User().Setup(new ExistingDeniedAbsenceRequest("RequestDenyReasonNoWorkflow"));
 		}
-		
-		[Then(@"I should not see the deny reason")]
-		public void ThenIShouldNotSeeTheDenyReason()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailDenyReason.Text, Is.Null);
-		}
-
 	}
 }
