@@ -66,7 +66,7 @@ namespace Teleopti.Support.Tool
             _productVersion = new Version(Application.ProductVersion);
 #if (DEBUG)
             {
-                _productVersion = new Version(7, 9, 999);
+                _productVersion = new Version(7, 3, 374, 8297);
             }
 #endif
             smoothLabelVersion.Text = _productVersion.ToString();
