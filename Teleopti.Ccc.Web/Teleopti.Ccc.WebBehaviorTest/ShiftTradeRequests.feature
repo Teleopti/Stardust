@@ -66,8 +66,14 @@ Scenario: Do not show shift trade request tab if no permission
 	Given I have the role 'No access to Shift Trade'
 	When I sign in
 	Then shift trade tab should not be visible
+
+Scenario: Default to today if no open shift trade period
+	Given I have the role 'Full access to mytime'
+	And Current time is '2030-01-01'
+	When I navigate to shift trade page
+	Then the selected date should be '2030-01-01'
 @ignore
-Scenario: Default to first day of open period when viewing shift trade
+Scenario: Default to first day of open shift trade period
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01'
 	And I can do shift trades between '2030-01-03' and '2030-01-17'
