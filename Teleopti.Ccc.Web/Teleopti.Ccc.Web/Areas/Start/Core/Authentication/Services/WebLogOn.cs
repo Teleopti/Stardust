@@ -62,19 +62,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 					throw new PermissionException("You (" + person.Name + ") don't have permission to access the web portal.");
 			}
 
-			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId, warningMessage);
+			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId);
 			_sessionSpecificDataProvider.StoreInCookie(sessionSpecificData);
-		}
-
-		public string PopWarningMessage()
-		{
-			var item = _sessionSpecificDataProvider.GrabFromCookie();
-			var warning = item.WarningMessage;
-
-			item = new SessionSpecificData(item.BusinessUnitId,item.DataSourceName,item.PersonId);
-			_sessionSpecificDataProvider.StoreInCookie(item);
-
-			return warning;
 		}
 
 	}

@@ -152,13 +152,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			}
 		}
 
-		[HttpGet]
-		public JsonResult PopWarningMessage()
-		{
-			var message = _logon.PopWarningMessage();
-			return Json(new {Message = message, HasMessage = !string.IsNullOrEmpty(message)},JsonRequestBehavior.AllowGet);
-		}
-
 		private JsonResult PrepareAndReturnJsonError(JsonResult result)
 		{
 			Response.TrySkipIisCustomErrors = true;

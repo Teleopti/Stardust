@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			//just to make sure we don't make serialization bigger in the future
 			//however - if we need to add stuff to the cookie for some reason, this limit needs to be increased.
 			const int bytesLimit = 224;
-			var testData = new SessionSpecificData(Guid.NewGuid(), "data sourceasdfasdfa", Guid.NewGuid(), "warning message");
+			var testData = new SessionSpecificData(Guid.NewGuid(), "data sourceasdfasdfa", Guid.NewGuid());
 			(target.Serialize(testData).ToCharArray().Length * 2)
 				.Should().Be.LessThanOrEqualTo(bytesLimit);
 		}
