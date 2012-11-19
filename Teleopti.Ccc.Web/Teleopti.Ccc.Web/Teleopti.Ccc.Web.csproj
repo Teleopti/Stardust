@@ -755,6 +755,8 @@
     <Content Include="Content\bootstrap\bootstrap.min.js" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.js" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.min.js" />
+    <Content Include="Content\signals\signals.js" />
+    <Content Include="Content\signals\signals.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
