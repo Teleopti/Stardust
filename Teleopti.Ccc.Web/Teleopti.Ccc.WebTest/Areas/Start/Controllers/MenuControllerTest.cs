@@ -83,14 +83,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void ShouldReturnAvailableApplications()
 		{
 			var menuViewModelFactory = MockRepository.GenerateMock<IMenuViewModelFactory>();
-			var target = new MenuController(menuViewModelFactory);
-			var applicationViewModel = new ApplicationViewModel();
-			menuViewModelFactory.Stub(x => x.CreateMenyViewModel()).Return(new[] {applicationViewModel});
+			using (var target = new MenuController(menuViewModelFactory))
+			{
+				var applicationViewModel = new ApplicationViewModel();
+				menuViewModelFactory.Stub(x => x.CreateMenyViewModel()).Return(new[] { applicationViewModel });
 
-			var result = target.Applications();
+				var result = target.Applications();
 
-			var resultApplications = result.Data as IEnumerable<ApplicationViewModel>;
-			resultApplications.Single().Should().Be(applicationViewModel);
+				var resultApplications = result.Data as IEnumerable<ApplicationViewModel>;
+				resultApplications.Single().Should().Be(applicationViewModel);
+			}
 		}
 		
 	}
