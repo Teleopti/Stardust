@@ -574,6 +574,15 @@
     <Content Include="Areas\MyTime\Content\Scripts\AllTests.html" />
     <Content Include="Areas\Start\Content\Css\mobile.custom.css" />
     <Content Include="Areas\Start\Content\Images\mobile_logo.png" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordView.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.MenuView.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitSelectionView.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitSelectionViewModel.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.SignInView.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.SignInViewModel.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.DataSourceViewModel.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Settings.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Navigation.js" />
     <Content Include="Areas\Start\Content\Scripts\knockout.bindings.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.AuthenticationNew.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
