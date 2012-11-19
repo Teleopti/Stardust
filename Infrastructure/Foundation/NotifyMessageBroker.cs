@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             }
             if (eventMessages.Count > 0)
             {
-            	var businessUnitId = Guid.Empty;
+				var businessUnitId = Guid.Empty;
+				var dataSourceName = string.Empty;
 				if (TeleoptiPrincipal.Current!=null)
 				{
 					var businessUnit = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit;
@@ -53,11 +54,10 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 					{
 						businessUnitId = businessUnit.Id.GetValueOrDefault();
 					}
-				}
-            	var dataSourceName = string.Empty;
-				if (UnitOfWorkFactory.Current!=null)
-				{
-					dataSourceName = UnitOfWorkFactory.Current.Name;
+					if (UnitOfWorkFactory.Current != null)
+					{
+						dataSourceName = UnitOfWorkFactory.Current.Name;
+					}
 				}
             	_messageBroker.SendEventMessages(dataSourceName, businessUnitId, eventMessages.ToArray());
             }

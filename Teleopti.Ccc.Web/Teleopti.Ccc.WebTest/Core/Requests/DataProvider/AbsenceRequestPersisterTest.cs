@@ -10,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages;
 using Teleopti.Interfaces.Messages.Requests;
 
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			mapper.Stub(x => x.Map<AbsenceRequestForm, IPersonRequest>(form)).Return(personRequest);
 
-			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now);
+			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, null);
 			target.Persist(form);
 
 			personRequestRepository.AssertWasCalled(x => x.Add(personRequest));
@@ -67,6 +68,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var now = MockRepository.GenerateMock<INow>();
 			var time = new DateTime(2012, 05, 08, 12, 01, 01);
 			now.Stub(x => x.UtcDateTime()).Return(time);
+			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var currUow = MockRepository.GenerateMock<IUnitOfWork>();
+			uowFactory.Expect(c => c.CurrentUnitOfWork()).Return(currUow);
 
 			var form = new AbsenceRequestForm();
 
@@ -92,16 +96,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			              		Timestamp = time
 			              	};
 
-			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now);
+			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, uowFactory);
 			target.Persist(form);
-			
-			Thread.Sleep(80);
 
-			var usedMessage = (NewAbsenceRequestCreated) serviceBusSender.GetArgumentsForCallsMadeOn(x => x.NotifyServiceBus(message))[0][0];
-			usedMessage.BusinessUnitId.Should().Be.EqualTo(buId);
-			usedMessage.Datasource.Should().Be.EqualTo(datasource.DataSourceName);
-			usedMessage.PersonRequestId.Should().Be.EqualTo(personRequestId);
-			usedMessage.Timestamp.Should().Be.EqualTo(time);
+			currUow.Expect(c => c.AfterSuccessfulTx(dummy => serviceBusSender.NotifyServiceBus(message)));
 		}
 
 		[Test]
@@ -134,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			mapper.Stub(x => x.Map<AbsenceRequestForm, IPersonRequest>(form)).Return(personRequest);
 
-			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now);
+			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, null);
 			target.Persist(form);
 
 			serviceBusSender.AssertWasNotCalled(x => x.NotifyServiceBus(Arg<RaptorDomainMessage>.Is.Anything));
@@ -159,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			mapper.Stub(x => x.Map<AbsenceRequestForm, IPersonRequest>(form)).Return(personRequest);
 
-			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now);
+			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, null);
 			target.Persist(form);
 
 			personRequestRepository.AssertWasNotCalled(x => x.Add(personRequest));
