@@ -282,9 +282,6 @@ namespace Teleopti.Ccc.Win.Meetings
                     toolStripStatusLabelMessage.Text = string.Format(CultureInfo.CurrentUICulture, _statusText, count, UserTexts.Resources.People);
                     break;
             }
-
-            // Invalidates grid for updates.
-            gridControlPeople.Invalidate();
         }
 
         private void InvokeParticipantSelectedEvent()
