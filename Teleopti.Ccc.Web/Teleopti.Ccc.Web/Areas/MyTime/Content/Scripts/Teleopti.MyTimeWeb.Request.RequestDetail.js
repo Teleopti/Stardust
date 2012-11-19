@@ -33,6 +33,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _clearValidationError() {
+		$('#Request-detail-deny-reason').text('');
 		$('#Request-detail-error').html('');
 	}
 
