@@ -17,24 +17,28 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.Start.AuthenticationNew = (function ($) {
 
+	var _options = {};
 	var signinViewModel = null;
 
-	function _initViewModels(loader) {
-		signinViewModel = new Teleopti.Start.SignInViewModel();
+	function _initViewModels() {
+		signinViewModel = new Teleopti.Start.SignInViewModel({
+			baseUrl: _options.baseUrl
+		});
 		signinViewModel.LoadDataSources();
 		ko.applyBindings(signinViewModel, $('#Login-container')[0]);
 	}
 
 	function _initSubmit() {
 		$('#Login-button').click(function () {
-			Teleopti.Start.Authentication.RequestPermissionForNotification(function () {
+Teleopti.Start.Authentication.RequestPermissionForNotification(function () {
 				signinViewModel.Logon();
 			});
 		});
 	}
 
 	return {
-		Init: function () {
+		Init: function (options) {
+			_options  = options;
 			_initViewModels();
 			_initSubmit();
 		},

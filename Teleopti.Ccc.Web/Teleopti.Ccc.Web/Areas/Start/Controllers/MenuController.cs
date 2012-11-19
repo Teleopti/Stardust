@@ -1,12 +1,10 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
+using System.Linq;
+using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
-	using System.Linq;
-
-	using Core.Menu;
-
 	public class MenuController : Controller
     {
 		private readonly IMenuViewModelFactory _menuViewModelFactory;
@@ -39,5 +37,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			//return RedirectToRoute(new RouteValueDictionary(new { area = "MyTime", controller = "", action = "" }));
 			return View(_menuViewModelFactory.CreateMenyViewModel());
     	}
+
+		[HttpGet]
+		public JsonResult Applications()
+		{
+			return Json(_menuViewModelFactory.CreateMenyViewModel(), JsonRequestBehavior.AllowGet);
+		}
     }
 }

@@ -1,17 +1,15 @@
-﻿namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using NUnit.Framework;
+using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Web.Areas.Start.Controllers;
+using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
+using Teleopti.Ccc.Web.Areas.Start.Models.Menu;
+
+namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
-	using System.Web.Mvc;
-
-	using NUnit.Framework;
-
-	using Rhino.Mocks;
-
-	using SharpTestsEx;
-
-	using Web.Areas.Start.Controllers;
-	using Web.Areas.Start.Core.Menu;
-	using Web.Areas.Start.Models.Menu;
-
 	[TestFixture]
 	public class MenuControllerTest
 	{
@@ -44,7 +42,7 @@
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_menuViewModelFactory.CreateMenyViewModel()).Return(new[] { new MenuViewModel { Area = "MyTime" } });
+				Expect.Call(_menuViewModelFactory.CreateMenyViewModel()).Return(new[] { new ApplicationViewModel { Area = "MyTime" } });
 			}
 			using (_mocks.Playback())
 			{
@@ -58,7 +56,7 @@
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_menuViewModelFactory.CreateMenyViewModel()).Return(new[] { new MenuViewModel(), new MenuViewModel() });
+				Expect.Call(_menuViewModelFactory.CreateMenyViewModel()).Return(new[] { new ApplicationViewModel(), new ApplicationViewModel() });
 			}
 			using (_mocks.Playback())
 			{
@@ -80,5 +78,20 @@
 			var result = _target.MobileMenu();
 			result.ViewName.Should().Be.EqualTo(string.Empty);
 		}
+
+		[Test]
+		public void ShouldReturnAvailableApplications()
+		{
+			var menuViewModelFactory = MockRepository.GenerateMock<IMenuViewModelFactory>();
+			var target = new MenuController(menuViewModelFactory);
+			var applicationViewModel = new ApplicationViewModel();
+			menuViewModelFactory.Stub(x => x.CreateMenyViewModel()).Return(new[] {applicationViewModel});
+
+			var result = target.Applications();
+
+			var resultApplications = result.Data as IEnumerable<ApplicationViewModel>;
+			resultApplications.Single().Should().Be(applicationViewModel);
+		}
+		
 	}
 }

@@ -314,7 +314,7 @@
     <Compile Include="Areas\Start\Core\Menu\IMenuViewModelFactory.cs" />
     <Compile Include="Areas\Start\Core\Menu\MenuViewModelFactory.cs" />
     <Compile Include="Areas\Start\Models\Menu\ApplicationArea.cs" />
-    <Compile Include="Areas\Start\Models\Menu\MenuViewModel.cs" />
+    <Compile Include="Areas\Start\Models\Menu\ApplicationViewModel.cs" />
     <Compile Include="Core\RequestContext\DataSourceProvider.cs" />
     <Compile Include="Core\RequestContext\IDataSourceProvider.cs" />
     <Compile Include="Core\RequestContext\Cookie\ISessionSpecificDataStringSerializer.cs" />

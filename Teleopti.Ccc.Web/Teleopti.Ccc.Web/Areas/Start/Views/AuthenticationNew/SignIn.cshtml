@@ -14,7 +14,7 @@
 
 	<script type="text/javascript">
 		jQuery(function () {
-			Teleopti.Start.AuthenticationNew.Init();
+			Teleopti.Start.AuthenticationNew.Init({ baseUrl: '@Url.Content("~/")' });
 		});
 	</script>
 }
@@ -54,7 +54,9 @@
 		<div data-bind="visible: ApplicationSelectionActive" class="login-form well well-large">
 			<h3>Select application:</h3>
 			<ul data-bind="foreach: AvailableApplications" class="nav nav-tabs nav-stacked">
-				<li data-bind="css: {'active': Selected}"><a href="#" data-bind="text: ApplicationName, click: $parent.SelectApplication"></a></li>
+				<li>
+					<a href="#" data-bind="attr: {href: Url}, text: Name"></a>
+				</li>
 			</ul>
 		</div>
 
