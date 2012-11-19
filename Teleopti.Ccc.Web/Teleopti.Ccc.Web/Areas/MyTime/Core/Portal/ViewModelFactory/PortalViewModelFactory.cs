@@ -53,10 +53,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
             {
 				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
             }
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
-			{
-				navigationItems.Add(createShiftTradeRequestsNavigationItem());
-			}
 
 			return new PortalViewModel
 			       	{
@@ -117,18 +113,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 							}
 						}
 					};
-		}
-
-		private SectionNavigationItem createShiftTradeRequestsNavigationItem()
-		{
-			return new SectionNavigationItem
-			{
-				Action = "Index",
-				Controller = "ShiftTradeRequests",
-				Title = Resources.ShiftTradeRequests,
-				NavigationItems = new NavigationItem[0],
-				ToolBarItems = new List<ToolBarItemBase>()
-			};
 		}
 
         private static SectionNavigationItem createMessageNavigationItem(int unreadMessageCount)

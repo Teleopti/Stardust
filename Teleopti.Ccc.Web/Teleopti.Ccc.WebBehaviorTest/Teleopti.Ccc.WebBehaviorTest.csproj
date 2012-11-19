@@ -102,7 +102,6 @@
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
-    <Compile Include="Bindings\Generic\ShiftTradeRequestsStepDefintions.cs" />
     <Compile Include="Bindings\Generic\WeekSchedulePageStepDefinitions.cs" />
     <Compile Include="Core\Robustness\EventualAssert.cs" />
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
@@ -119,7 +118,6 @@
     </Compile>
     <Compile Include="Core\Robustness\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Generic\PasswordConfigurable.cs" />
-    <Compile Include="Pages\ShiftTradeRequestsPage.cs" />
     <Compile Include="PasswordPolicy.feature.cs">
       <DependentUpon>PasswordPolicy.feature</DependentUpon>
       <AutoGen>True</AutoGen>

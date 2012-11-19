@@ -47,10 +47,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
             new ScenarioContextLazy<MessagePage>(() => Browser.Current.Page<MessagePage>());
         public static MessagePage MessagePage { get { return _messagePage.Value; } }
 
-		private static readonly ScenarioContextLazy<ShiftTradeRequestsPage> _shiftTradeRequestsPage =
-			new ScenarioContextLazy<ShiftTradeRequestsPage>(() => Browser.Current.Page<ShiftTradeRequestsPage>());
-		public static ShiftTradeRequestsPage ShiftTradeRequestsPage { get { return _shiftTradeRequestsPage.Value; } }
-
 		public static WatiN.Core.Page Current { get { return ScenarioContext.Current.Value<WatiN.Core.Page>(); } }
 
 		public static void NavigatingTo(WatiN.Core.Page page)
