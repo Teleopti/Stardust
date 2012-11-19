@@ -524,7 +524,7 @@
     </Content>
     <None Include="BrowserNotifications.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>PasswordPolicyMobile.feature.cs</LastGenOutput>
+      <LastGenOutput>BrowserNotifications.feature.cs</LastGenOutput>
     </None>
     <None Include="PasswordPolicy.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
