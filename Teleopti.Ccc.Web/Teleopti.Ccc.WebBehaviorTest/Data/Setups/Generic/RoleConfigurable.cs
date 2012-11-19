@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public bool AccessToAsm { get; set; }
         public bool AccessToTextRequests { get; set; }
         public bool AccessToAbsenceRequests { get; set; }
+        public bool AccessToShiftTradeRequests { get; set; }
 
 		public RoleConfigurable()
 		{
@@ -61,6 +62,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
                 applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.TextRequests select f;
             if (!AccessToAbsenceRequests)
                 applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb select f;
+			if (!AccessToShiftTradeRequests)
+				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb select f;
 
 
 			var role = ApplicationRoleFactory.CreateRole(Name, null);

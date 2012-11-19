@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			{
 				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
 			}
+
 			return new PortalViewModel
 						{
 							NavigationItems = navigationItems,
