@@ -93,10 +93,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Do not show shift trade request tab if no permission")]
-        public virtual void DoNotShowShiftTradeRequestTabIfNoPermission()
+        [NUnit.Framework.DescriptionAttribute("Do not show shift trade reuquests button if no permission")]
+        public virtual void DoNotShowShiftTradeReuquestsButtonIfNoPermission()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Do not show shift trade request tab if no permission", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Do not show shift trade reuquests button if no permission", ((string[])(null)));
 #line 65
 this.ScenarioSetup(scenarioInfo);
 #line 6
@@ -104,9 +104,9 @@ this.FeatureBackground();
 #line 66
  testRunner.Given("I have the role \'No access to Shift Trade\'");
 #line 67
- testRunner.When("I sign in");
+ testRunner.When("I view requests");
 #line 68
- testRunner.Then("shift trade tab should not be visible");
+ testRunner.Then("shift trade requests button should not be visible");
 #line hidden
             this.ScenarioCleanup();
         }

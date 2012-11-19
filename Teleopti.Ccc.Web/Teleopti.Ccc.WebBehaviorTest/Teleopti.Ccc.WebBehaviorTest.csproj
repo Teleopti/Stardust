@@ -102,6 +102,7 @@
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
+    <Compile Include="Bindings\Generic\ShiftTradeRequestsPageStepDefinition.cs" />
     <Compile Include="Bindings\Generic\WeekSchedulePageStepDefinitions.cs" />
     <Compile Include="Core\Robustness\EventualAssert.cs" />
     <Compile Include="Core\Robustness\EventualElementActions.cs" />

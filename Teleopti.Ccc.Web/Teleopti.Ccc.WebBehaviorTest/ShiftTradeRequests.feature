@@ -62,10 +62,10 @@ Background:
 	#| Skill      | Skill 1       |
 
 
-Scenario: Do not show shift trade request tab if no permission
+Scenario: Do not show shift trade reuquests button if no permission
 	Given I have the role 'No access to Shift Trade'
-	When I sign in
-	Then shift trade tab should not be visible
+	When I view requests
+	Then shift trade requests button should not be visible
 
 Scenario: Default to today if no open shift trade period
 	Given I have the role 'Full access to mytime'
