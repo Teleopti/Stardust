@@ -103,6 +103,5 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			UserFactory.User().Setup(new ExistingDeniedAbsenceRequest("RequestDenyReasonNoWorkflow"));
 		}
-
 	}
 }

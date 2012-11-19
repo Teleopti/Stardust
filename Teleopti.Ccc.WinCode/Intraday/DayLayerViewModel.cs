@@ -137,6 +137,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         private void rebuildSchedule(DayLayerModel model)
         {
+			if (_rtaStateHolder == null ||
+				model.Layers == null)
+			{
+				return;
+			}
             IScheduleRange scheduleRange =
                 _rtaStateHolder.SchedulingResultStateHolder.
                     Schedules[model.Person];

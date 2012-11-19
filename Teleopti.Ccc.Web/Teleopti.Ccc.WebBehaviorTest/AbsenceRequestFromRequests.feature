@@ -155,3 +155,11 @@ Scenario: Can see why absence request was denied
 	When I click on the request
 	Then I should see the edit absence request form
 	And I should see that my request was denied with reason 'Din förfrågan kunde inte behandlas. Du har inget arbetsflöde uppsatt.'
+
+Scenario: Clear deny reason when adding new absence request
+	Given I am an agent
+	And I have a denied absence request beacuse of missing workflow control set
+	And I am viewing requests
+	When I click on the request 
+	And I click add request button in the toolbar
+	Then I should not see the deny reason
