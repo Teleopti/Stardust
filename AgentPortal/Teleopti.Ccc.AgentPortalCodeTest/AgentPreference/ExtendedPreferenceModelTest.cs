@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             preference.DayOff = null;
             preference.Absence = null;
             preference.ShiftCategory = new ShiftCategory("shiftC", "sc", "id", Color.Black);
-            //preference.Templates = new Templates("templateC", "tp", "idtp", Color.Blue);
             preference.StartTimeLimitation = new TimeLimitation(null)
                                                  {MaxTime = TimeSpan.FromHours(5), MinTime = TimeSpan.FromHours(10)};
             preference.EndTimeLimitation = new TimeLimitation(null)
@@ -65,7 +64,6 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             Assert.That(_target.DayOff, Is.Null);
             Assert.That(_target.Absence, Is.Null);
             Assert.That(_target.ShiftCategory, Is.EqualTo(preference.ShiftCategory));
-            //Assert.That(_target.Templates, Is.Null);
             Assert.That(_target.StartTimeLimitationMin, Is.EqualTo(preference.StartTimeLimitation.MinTime));
             Assert.That(_target.StartTimeLimitationMax, Is.EqualTo(preference.StartTimeLimitation.MaxTime));
             Assert.That(_target.EndTimeLimitationMin, Is.EqualTo(preference.EndTimeLimitation.MinTime));
@@ -99,8 +97,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             _target.EndTimeLimitationMinNextDay = false;
             _target.EndTimeLimitationMax = TimeSpan.FromHours(20);
             _target.EndTimeLimitationMaxNextDay = false;
-            _target.ShiftCategory = new ShiftCategory("shiftC", "sc", "id", Color.Black);
-            //_target.Templates = new Templates("tmpC", "tmp", "idtmp", Color.Blue);
+        	_target.ShiftCategory = new ShiftCategory("shiftC", "sc", "id", Color.Black);
             _target.WorkTimeLimitationMax = TimeSpan.FromHours(1);
             _target.WorkTimeLimitationMin = TimeSpan.FromHours(10);
             _target.Activity = new Activity(Guid.NewGuid().ToString(), "act");
@@ -117,7 +114,6 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             Assert.That(preference.DayOff, Is.EqualTo(_target.DayOff));
             Assert.That(preference.Absence, Is.EqualTo(_target.Absence));
             Assert.That(preference.ShiftCategory, Is.EqualTo(_target.ShiftCategory));
-            //Assert.That(preference.Templates, Is.Null);
             Assert.That(preference.StartTimeLimitation.MinTime, Is.EqualTo(_target.StartTimeLimitationMin));
             Assert.That(preference.StartTimeLimitation.MaxTime, Is.EqualTo(_target.StartTimeLimitationMax));
             Assert.That(preference.EndTimeLimitation.MinTime, Is.EqualTo(_target.EndTimeLimitationMin));
@@ -254,6 +250,59 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
 
             Assert.IsNull(_target.ShiftCategory);
         }
+
+		[Test]
+		public void ShouldClonePreferenceCorrectly()
+		{
+            var preference = new Preference
+                                 {
+                                     StartTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(5), MinTime = TimeSpan.FromHours(10)},
+                                     EndTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(6), MinTime = TimeSpan.FromHours(11)},
+                                     WorkTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(7), MinTime = TimeSpan.FromHours(12)},
+                                     Activity = new Activity("id", "act"),
+                                     ActivityStartTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(8), MinTime = TimeSpan.FromHours(13)},
+                                     ActivityEndTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(9), MinTime = TimeSpan.FromHours(14)},
+                                     ActivityTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(10), MinTime = TimeSpan.FromHours(15)}
+                                 };
+			_target.SetPreference(preference);
+
+			var clone = (Preference)preference.Clone();
+			Assert.AreEqual(clone.StartTimeLimitation,preference.StartTimeLimitation);
+			Assert.AreNotSame(clone.StartTimeLimitation, preference.StartTimeLimitation);
+			Assert.AreEqual(clone.EndTimeLimitation,preference.EndTimeLimitation);
+			Assert.AreNotSame(clone.EndTimeLimitation, preference.EndTimeLimitation);
+			Assert.AreEqual(clone.WorkTimeLimitation, preference.WorkTimeLimitation);
+			Assert.AreNotSame(clone.WorkTimeLimitation, preference.WorkTimeLimitation);
+
+			Assert.AreNotSame(clone.ActivityStartTimeLimitation, preference.ActivityStartTimeLimitation);
+			Assert.AreEqual(clone.ActivityStartTimeLimitation,preference.ActivityStartTimeLimitation);
+			Assert.AreNotSame(clone.ActivityEndTimeLimitation, preference.ActivityEndTimeLimitation);
+			Assert.AreEqual(clone.ActivityEndTimeLimitation, preference.ActivityEndTimeLimitation);
+			Assert.AreNotSame(clone.ActivityTimeLimitation,preference.ActivityTimeLimitation);
+			Assert.AreEqual(clone.ActivityTimeLimitation,preference.ActivityTimeLimitation);
+		}
+
+		[Test]
+		public void ShouldImplementEqualityIncludingActivityFields()
+		{
+
+			var preference = new Preference
+			{
+				StartTimeLimitation = new TimeLimitation(null) { MaxTime = TimeSpan.FromHours(5), MinTime = TimeSpan.FromHours(10) },
+				EndTimeLimitation = new TimeLimitation(null) { MaxTime = TimeSpan.FromHours(6), MinTime = TimeSpan.FromHours(11) },
+				WorkTimeLimitation = new TimeLimitation(null) { MaxTime = TimeSpan.FromHours(7), MinTime = TimeSpan.FromHours(12) },
+				Activity = new Activity("id", "act"),
+				ActivityStartTimeLimitation = new TimeLimitation(null) { MaxTime = TimeSpan.FromHours(8), MinTime = TimeSpan.FromHours(13) },
+				ActivityEndTimeLimitation = new TimeLimitation(null) { MaxTime = TimeSpan.FromHours(9), MinTime = TimeSpan.FromHours(14) },
+				ActivityTimeLimitation = new TimeLimitation(null) { MaxTime = TimeSpan.FromHours(10), MinTime = TimeSpan.FromHours(15) }
+			};
+			_target.SetPreference(preference);
+
+			var clone = (Preference)preference.Clone();
+			clone.ActivityTimeLimitation = null;
+
+			Assert.AreNotEqual(clone,preference);
+		}
 
         [Test]
         public void ShouldClearAllWhenSettingAbsence()
