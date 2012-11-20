@@ -913,9 +913,9 @@
 			this.tableLayoutPanel6.SetColumnSpan(this.checkBoxUseAverageShiftLengths, 2);
 			this.checkBoxUseAverageShiftLengths.Location = new System.Drawing.Point(3, 103);
 			this.checkBoxUseAverageShiftLengths.Name = "checkBoxUseAverageShiftLengths";
-			this.checkBoxUseAverageShiftLengths.Size = new System.Drawing.Size(148, 17);
+			this.checkBoxUseAverageShiftLengths.Size = new System.Drawing.Size(154, 17);
 			this.checkBoxUseAverageShiftLengths.TabIndex = 55;
-			this.checkBoxUseAverageShiftLengths.Text = "xxUseAverageShiftLengts";
+			this.checkBoxUseAverageShiftLengths.Text = "xxUseAverageShiftLengths";
 			this.checkBoxUseAverageShiftLengths.UseVisualStyleBackColor = true;
 			// 
 			// SchedulingSessionPreferencesTabPanel
