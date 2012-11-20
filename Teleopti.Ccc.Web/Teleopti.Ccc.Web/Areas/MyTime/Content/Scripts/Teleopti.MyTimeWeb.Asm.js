@@ -221,8 +221,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				vm.loadViewModel();
 			}
 		},
-		NewMessage: function (data) {
-			vm.unreadMessageCount(data.UnreadMessagesCount);
+		SetMessageCount: function (data) {
+			if (vm) {
+				vm.unreadMessageCount(data.UnreadMessagesCount);				
+			}
 		}
 	};
 })(jQuery);

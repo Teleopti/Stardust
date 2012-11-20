@@ -7,7 +7,7 @@
 				baseUrl: '@Url.Content("~/MyTime#")'
 			});
 		Teleopti.MyTimeWeb.AsmMessage.ListenForMessages(function (data) {
-			Teleopti.MyTimeWeb.AsmMessage.FetchMessageInfo(data.DomainId, Teleopti.MyTimeWeb.Asm.NewMessage);
+			Teleopti.MyTimeWeb.AsmMessage.FetchMessageInfo(data.DomainId, Teleopti.MyTimeWeb.Asm.SetMessageCount);
 		});
 		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges({
 			notifyText: '@Resources.YourScheduleHasChanged',

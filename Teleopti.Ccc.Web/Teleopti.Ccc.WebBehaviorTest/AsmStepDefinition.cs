@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIRecieveANewMessage()
 		{
 			var unreadMessageCount = int.Parse(Browser.Current.Span(Find.ById("unreadMessageCount")).EventualGet().Text);
-			const string js = @"var data = {{UnreadMessagesCount : '{0}'}};Teleopti.MyTimeWeb.Asm.NewMessage(data);";
+			const string js = @"var data = {{UnreadMessagesCount : '{0}'}};Teleopti.MyTimeWeb.Asm.SetMessageCount(data);";
 			var formattedJs = string.Format(js, unreadMessageCount + 1);
 			Browser.Current.Eval(formattedJs);
 		}
