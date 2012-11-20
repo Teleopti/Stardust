@@ -35,7 +35,7 @@
                 BorderThickness="0.5" 
                 Opacity="1"
                 CornerRadius="2"
-                Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}}"
+                Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}, FallbackValue=White}"
                 MouseDown="Border_MouseDown">
         <Border.CommandBindings>
             <CommandBinding Command="c:RoutedCommands.EditMeeting"

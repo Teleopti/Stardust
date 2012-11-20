@@ -65,7 +65,7 @@
             CornerRadius="2" 
             BorderBrush="Black" 
             BorderThickness="1" 
-            Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}}"
+            Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}, FallbackValue=White}"
             ToolTip="{Binding Path=Description}">
         <Grid>
             <Grid.RowDefinitions>

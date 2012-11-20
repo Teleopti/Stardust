@@ -9,7 +9,7 @@
 	<Rectangle HorizontalAlignment="Stretch" 
             VerticalAlignment="Stretch" 
             Opacity="1"
-            Fill="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}}"
+            Fill="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}, FallbackValue=White}"
             Cursor="Hand"
 			
             />

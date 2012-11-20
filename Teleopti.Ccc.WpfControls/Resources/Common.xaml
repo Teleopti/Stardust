@@ -70,7 +70,7 @@
     <Style TargetType="{x:Type Controls:DataGridRow}" BasedOn="{StaticResource RowStyle}" x:Key="RtaScheduleRowStyle">
         <Style.Triggers>
             <DataTrigger Binding="{Binding Path=AlarmLayer, Converter={StaticResource isNullConverter}}" Value="False">
-                <Setter Property="Background" Value="{Binding Path=AlarmLayer.Payload.DisplayColor, Converter={StaticResource colorConverter}}"/>
+                <Setter Property="Background" Value="{Binding Path=AlarmLayer.Payload.DisplayColor, Converter={StaticResource colorConverter}, FallbackValue=White}"/>
             </DataTrigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource RaptorStandardHoverGradientBrush}" />

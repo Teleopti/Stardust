@@ -293,8 +293,6 @@
     <!-- Aero style -->
     <Style TargetType="ListViewItem">
         <Setter Property="Template" Value="{StaticResource ListViewItem}"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
     <Style TargetType="ListViewItem" x:Key="listViewItemStyle">
         <Setter Property="Template" Value="{StaticResource ListViewItem}"/>

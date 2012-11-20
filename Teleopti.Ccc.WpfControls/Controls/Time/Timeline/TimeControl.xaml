@@ -137,7 +137,7 @@
                     <Border Name="layerBorder" 
                             
                             BorderBrush="{StaticResource CommonLightBrush}" 
-                            Background="{Binding Path=Payload.DisplayColor, Converter={StaticResource ColorConverter}}"
+                            Background="{Binding Path=Payload.DisplayColor, Converter={StaticResource ColorConverter}, FallbackValue=White}"
                             CornerRadius="2" 
                             Padding="0"
                             BorderThickness="0"

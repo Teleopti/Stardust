@@ -34,7 +34,7 @@
     
 	
 	<Grid Commands:CreateCommandBinding.CommandModel="{Binding Path=UpdateLayerCommand}"
-		  Background="{Binding Path=Layer.DisplayColor, Converter={StaticResource colorConverter}}">
+		  Background="{Binding Path=Layer.DisplayColor, Converter={StaticResource colorConverter}, TargetNullValue=White, FallbackValue=White}">
 		<Grid.RowDefinitions>
 			<RowDefinition />
 			<RowDefinition />
