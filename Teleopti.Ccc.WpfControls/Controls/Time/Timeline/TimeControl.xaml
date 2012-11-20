@@ -174,9 +174,7 @@
         
         <!-- Display of Layers -->
         <ListView HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Stretch"
-                  VerticalContentAlignment="Stretch"
-                  VerticalAlignment="Stretch"
+                  
                   ItemTemplate="{StaticResource ILayerTemplate}"
                   Style="{StaticResource StandardListBox}"
                   ItemsSource="{Binding Path=Layers}"

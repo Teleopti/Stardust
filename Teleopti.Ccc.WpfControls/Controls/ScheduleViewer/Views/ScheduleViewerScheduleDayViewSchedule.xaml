@@ -11,8 +11,8 @@
     <UserControl.Resources>
         <Converters:ColorConverter x:Key="ColorConverter"/>
         <Style TargetType="ListBoxItem" x:Key="ListBoxTimeItem" >
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <!--<Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>-->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem" >
