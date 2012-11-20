@@ -68,5 +68,10 @@ namespace Teleopti.Interfaces.Domain
         /// 	<c>true</c> if ignore non number values; otherwise, <c>false</c>.
         /// </value>
         bool IgnoreNonNumberValues { get; }
+
+		/// <summary>
+		/// Gets the teleopti.
+		/// </summary>
+		double Teleopti { get; }
     }
 }

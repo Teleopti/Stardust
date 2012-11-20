@@ -52,10 +52,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Expect.Call(_dataHolderDictionary.Count).Return(0);
             Expect.Call(_nonBlendSkillStaffs.Count).Return(1);
             Expect.Call(_cashe.MainShiftProjection).Return(_layers);
-            Expect.Call(_nonBlendCalculator.CalculateShiftValue(_person, _layers, _nonBlendSkillStaffs, 1, true, true)).Return(5);
+			Expect.Call(_nonBlendCalculator.CalculateShiftValue(_person, _layers, _nonBlendSkillStaffs, WorkShiftLengthHintOption.Free, true, true)).Return(5);
 
             _mocks.ReplayAll();
-            var result = _target.FindBestMainShift(_person, _cashes, _dataHolderDictionary, _nonBlendSkillStaffs, 1, true, true);
+			var result = _target.FindBestMainShift(_person, _cashes, _dataHolderDictionary, _nonBlendSkillStaffs, WorkShiftLengthHintOption.Free, true, true);
             Assert.That(result.Value, Is.EqualTo(5));
             _mocks.VerifyAll();
         }
@@ -65,10 +65,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             Expect.Call(_dataHolderDictionary.Count).Return(1);
             Expect.Call(_cashe.MainShiftProjection).Return(_layers);
-            Expect.Call(_workShiftCalculator.CalculateShiftValue(_layers, _dataHolderDictionary, 1,true, true)).Return(5);
+			Expect.Call(_workShiftCalculator.CalculateShiftValue(_layers, _dataHolderDictionary, WorkShiftLengthHintOption.Free, true, true)).Return(5);
             Expect.Call(_nonBlendSkillStaffs.Count).Return(0);
             _mocks.ReplayAll();
-            var result = _target.FindBestMainShift(_person, _cashes, _dataHolderDictionary, _nonBlendSkillStaffs, 1, true, true);
+			var result = _target.FindBestMainShift(_person, _cashes, _dataHolderDictionary, _nonBlendSkillStaffs, WorkShiftLengthHintOption.Free, true, true);
             Assert.That(result.Value, Is.EqualTo(5));
             _mocks.VerifyAll();
         }
@@ -78,10 +78,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             Expect.Call(_dataHolderDictionary.Count).Return(1);
             Expect.Call(_cashe.MainShiftProjection).Return(_layers);
-            Expect.Call(_workShiftCalculator.CalculateShiftValue(_layers, _dataHolderDictionary, 1, true, true)).Return(double.MinValue);
+			Expect.Call(_workShiftCalculator.CalculateShiftValue(_layers, _dataHolderDictionary, WorkShiftLengthHintOption.Free, true, true)).Return(double.MinValue);
             Expect.Call(_nonBlendSkillStaffs.Count).Return(0);
             _mocks.ReplayAll();
-            var result = _target.FindBestMainShift(_person, _cashes, _dataHolderDictionary, _nonBlendSkillStaffs ,1, true, true);
+			var result = _target.FindBestMainShift(_person, _cashes, _dataHolderDictionary, _nonBlendSkillStaffs, WorkShiftLengthHintOption.Free, true, true);
             Assert.That(result, Is.Null);
             _mocks.VerifyAll();
         }
@@ -91,11 +91,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             Expect.Call(_dataHolderDictionary.Count).Return(1);
             Expect.Call(_cashe.MainShiftProjection).Return(_layers).Repeat.Twice();
-            Expect.Call(_workShiftCalculator.CalculateShiftValue(_layers, _dataHolderDictionary, 1, true, true)).Return(5);
+			Expect.Call(_workShiftCalculator.CalculateShiftValue(_layers, _dataHolderDictionary, WorkShiftLengthHintOption.Free, true, true)).Return(5);
             Expect.Call(_nonBlendSkillStaffs.Count).Return(1);
-            Expect.Call(_nonBlendCalculator.CalculateShiftValue(_person, _layers, _nonBlendSkillStaffs, 4, true, true)).Return(5);
+			Expect.Call(_nonBlendCalculator.CalculateShiftValue(_person, _layers, _nonBlendSkillStaffs, WorkShiftLengthHintOption.Free, true, true)).Return(5);
             _mocks.ReplayAll();
-            var result = _target.FindBestMainShift(_person, _cashes, _dataHolderDictionary, _nonBlendSkillStaffs,4, true, true);
+			var result = _target.FindBestMainShift(_person, _cashes, _dataHolderDictionary, _nonBlendSkillStaffs, WorkShiftLengthHintOption.Free, true, true);
             Assert.That(result.Value, Is.EqualTo(10));
             _mocks.VerifyAll();
         }
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                                                                        dataHolderDictionary,
                                                                    IDictionary<ISkill, ISkillStaffPeriodDictionary>
                                                                        nonBlendSkillStaffs,
-            double lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
+            WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
         {
             IList<IWorkShiftCalculationResultHolder> allValues =
                 new List<IWorkShiftCalculationResultHolder>(shiftProjectionCaches.Count);
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
                 if (dataHolderDictionary.Count > 0)
                     projValue = _workShiftCalculator.CalculateShiftValue(shiftProjection.MainShiftProjection,
-                                                                         dataHolderDictionary, 1, true, true);
+																		 dataHolderDictionary, WorkShiftLengthHintOption.Free, true, true);
 
                 // temp until we change the calculator to return nullable double
                 if (projValue > double.MinValue)
