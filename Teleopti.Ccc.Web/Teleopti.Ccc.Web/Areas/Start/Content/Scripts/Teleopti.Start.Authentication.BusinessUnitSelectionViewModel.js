@@ -14,7 +14,8 @@ Teleopti.Start.Authentication.BusinessUnitSelectionViewModel = function (data) {
 				for (var i = 0; i < responseData.length; i++) {
 					var businessUnit = new Teleopti.Start.Authentication.BusinessUnitViewModel({
 						Id: responseData[i].Id,
-						Name: responseData[i].Name
+						Name: responseData[i].Name,
+						authenticationState: state
 					});
 					self.BusinessUnits.push(businessUnit);
 				}

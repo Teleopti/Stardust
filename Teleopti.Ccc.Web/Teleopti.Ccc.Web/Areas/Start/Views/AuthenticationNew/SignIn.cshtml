@@ -24,6 +24,8 @@
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.BusinessUnitSelectionViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.BusinessUnitViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.MenuView.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.MenuViewModel.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ApplicationViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordView.js")"></script>
 
 	<script type="text/javascript">
@@ -79,7 +81,7 @@
 
 		<div id="menu">
 			<h3>Select application:</h3>
-			<ul data-bind="foreach: AvailableApplications" class="nav nav-tabs nav-stacked">
+			<ul data-bind="foreach: Applications" class="nav nav-tabs nav-stacked">
 				<li>
 					<a href="#" data-bind="attr: {href: Url}, text: Name"></a>
 				</li>
