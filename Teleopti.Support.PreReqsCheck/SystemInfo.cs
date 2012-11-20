@@ -184,6 +184,15 @@ namespace SystemInfoApp
 
                                        }
                                        break;
+
+                                    case 2:
+                                       {
+                                           version = osVersionInfo.wProductType == Win32Api.VER_NT_WORKSTATION ?
+                                              WindowsVersion.Windows8 :
+                                              WindowsVersion.WindowsServer2012;
+
+                                       }
+                                       break;
                                  }
                               }
                               break;
