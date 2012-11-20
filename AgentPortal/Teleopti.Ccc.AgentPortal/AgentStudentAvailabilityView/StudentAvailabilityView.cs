@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentStudentAvailabilityView
         {
             GridRangeInfoList rangeList = gridControl1.Selections.Ranges;
             SetSelection(rangeList);
-            foreach (GridRangeInfo range in gridControl1.Selections)
+			foreach (GridRangeInfo range in rangeList)
             {
                 _presenter.OnPasteCellDataClip(range.Top, range.Bottom, range.Left, range.Right);
             }
@@ -230,9 +230,10 @@ namespace Teleopti.Ccc.AgentPortal.AgentStudentAvailabilityView
 
         void IStudentAvailabilityView.CellDataLoaded()
         {
-            gridControl1.RowCount = _presenter.CellDataCollection.Count / 7;
+			var rowCount = _presenter.CellDataCollection.Count / 7;
             if (_presenter.CellDataCollection.Count % 7 > 0)
-                gridControl1.RowCount = gridControl1.RowCount + 1;
+				rowCount = rowCount + 1;
+        	gridControl1.RowCount = rowCount;
 
             gridControl1.RowHeights.SetRange(1, gridControl1.RowCount, RowHeight);
             gridControl1.RowHeightEntries[0].Height = ColHeaderHeight;

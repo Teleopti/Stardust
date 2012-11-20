@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static void CreateApplicationRoles(IUnitOfWork uow)
 		{
 			var applicationFunctionRepository = new ApplicationFunctionRepository(uow);
-			var allApplicationFunctions = applicationFunctionRepository.GetAllApplicationFunctionSortedByCode().AsEnumerable();
+			var allApplicationFunctions = applicationFunctionRepository.LoadAll().AsEnumerable();
 
 			var agentRoleApplicationFunctions =
 				from r in allApplicationFunctions
