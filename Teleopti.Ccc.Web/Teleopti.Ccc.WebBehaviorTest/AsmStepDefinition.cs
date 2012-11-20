@@ -109,24 +109,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I recieve a new message")]
 		public void WhenIRecieveANewMessage()
 		{
-			var unreadMessageCount = 0;
-			if(Browser.Current.Span(Find.ById("unreadMessageCount")).Exists)
-			{
-				unreadMessageCount  = int.Parse(Browser.Current.Span(Find.ById("unreadMessageCount")).Text);
-			}
-
+			var unreadMessageCount = int.Parse(Browser.Current.Span(Find.ById("unreadMessageCount")).EventualGet().Text);
 			const string js = @"var data = {{UnreadMessagesCount : '{0}'}};Teleopti.MyTimeWeb.Asm.NewMessage(data);";
-			var formattedJs = string.Format(js, unreadMessageCount+1);
+			var formattedJs = string.Format(js, unreadMessageCount + 1);
 			Browser.Current.Eval(formattedJs);
 		}
 
 		[Then(@"I shoud see an indication that I have '(.*)' unread messages")]
 		public void ThenIShoudSeeAnIndicationThatIHaveUnreadMessages(int unreadMessagesCount)
 		{
-			EventualAssert.That(() =>
-				IsDisplayed(Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false))),
-				Is.True);
-			EventualAssert.That(() => Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false)).InnerHtml.Contains(unreadMessagesCount.ToString()), Is.True);
+			EventualAssert.That(() =>Browser.Current.Span(Find.ById("unreadMessageCount")).Exists,Is.True);
+			EventualAssert.That(() => (int.Parse(Browser.Current.Span(Find.ById("unreadMessageCount")).Text)), Is.EqualTo(unreadMessagesCount));
 		}
 
 		[Then(@"I shoud see an indication that I have an unread message")]
