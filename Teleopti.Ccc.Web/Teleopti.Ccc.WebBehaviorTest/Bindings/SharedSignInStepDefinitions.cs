@@ -90,6 +90,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Pages.Pages.CurrentSignInPage.ClickBusinessUnitOkButton();
 		}
 
+		[When(@"I select business unit '(.*)'")]
+		public void WhenISelectBusinessUnit(string businessUnit)
+		{
+			Pages.Pages.CurrentSignInNewPage.SelectBusinessUnitByName(businessUnit);
+		}
+
+
 		[Then(@"I should be signed in")]
 		public void ThenIShouldBeSignedIn()
 		{

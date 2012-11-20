@@ -114,7 +114,6 @@
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\Robustness\Timeouts.cs" />
     <Compile Include="Core\Robustness\Retrying.cs" />
-    <Compile Include="Pages\Common\ISignInNewPage.cs" />
     <Compile Include="Pages\SignInNewPage.cs" />
     <Compile Include="RoutingNew.feature.cs">
       <DependentUpon>RoutingNew.feature</DependentUpon>

@@ -5,7 +5,7 @@ using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class SignInNewPage : Page, ISignInNewPage
+	public class SignInNewPage : Page
 	{
 
 		[FindBy(Id = "Username-input")]
@@ -19,10 +19,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "DataSources")]
 		public List DataSourcesList;
 
+		[FindBy(Id = "BusinessUnits")]
+		public List BusinessUnitsList;
+
 		public void SelectTestDataApplicationLogon()
 		{
-			DataSourcesList.WaitUntilExists();
+			DataSourcesList.WaitUntilDisplayed();
 			DataSourcesList.Link(Find.ByText("TestData")).EventualClick();
+		}
+
+		public void SelectBusinessUnitByName(string businessUnit)
+		{
+			BusinessUnitsList.WaitUntilDisplayed();
+			BusinessUnitsList.Link(Find.ByText(businessUnit)).EventualClick();
 		}
 
 		public void SignInApplication(string userName, string password)
@@ -36,5 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			PasswordTextField.ChangeValue(password);
 			LoginButton.EventualClick();
 		}
+
+		
 	}
 }

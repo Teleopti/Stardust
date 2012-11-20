@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			if (page is ISignInPage)
 				CurrentSignInPage = page as ISignInPage;
-			if (page is ISignInNewPage)
-				CurrentSignInNewPage = page as ISignInNewPage;
+			if (page is SignInNewPage)
+				CurrentSignInNewPage = page as SignInNewPage;
 			ScenarioContext.Current.Value(page);
 		}
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public static ISignInPage CurrentSignInPage { get { return ScenarioContext.Current.Value<ISignInPage>(); } set { ScenarioContext.Current.Value(value); } }
 
-		public static ISignInNewPage CurrentSignInNewPage { get { return ScenarioContext.Current.Value<ISignInNewPage>(); } set { ScenarioContext.Current.Value(value); } }
+		public static SignInNewPage CurrentSignInNewPage { get { return ScenarioContext.Current.Value<SignInNewPage>(); } set { ScenarioContext.Current.Value(value); } }
 
 	    public static IMessageReplyPage CurrentMessageReplyPage {get { return Current as IMessageReplyPage; }}
 	}
