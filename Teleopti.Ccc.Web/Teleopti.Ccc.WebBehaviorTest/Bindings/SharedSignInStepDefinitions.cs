@@ -83,6 +83,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, "wrong password");
 		}
 
+		[When(@"I select application logon data source")]
+		public void WhenISelectApplicationLogonDataSource()
+		{
+			Pages.Pages.CurrentSignInNewPage.SelectTestDataApplicationLogon();
+		}
+
 		[When(@"I select a business unit")]
 		public void WhenISelectABusinessUnit()
 		{
@@ -113,6 +119,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void ThenIShouldSeeAnLogOnError()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new StringContainsAnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
+		}
+
+		[Then(@"I should see log on failed with information")]
+		public void ThenIShouldSeeLogOnFailedWithInformation()
+		{
+			EventualAssert.That(() => Pages.Pages.CurrentSignInNewPage.ErrorText.Text, new StringContainsAnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
 		}
 
 		[Then(@"I should see an error message ""(.*)""")]

@@ -253,11 +253,9 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Sign in with wrong password should give me an informative error")]
-        [NUnit.Framework.IgnoreAttribute()]
         public virtual void SignInWithWrongPasswordShouldGiveMeAnInformativeError()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with wrong password should give me an informative error", new string[] {
-                        "ignore"});
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with wrong password should give me an informative error", ((string[])(null)));
 #line 65
 this.ScenarioSetup(scenarioInfo);
 #line 6
@@ -265,13 +263,13 @@ this.FeatureBackground();
 #line 66
  testRunner.Given("I have the role \'Role for business unit 1\'");
 #line 67
- testRunner.And("I am viewing the sign in page");
+ testRunner.And("I am viewing the new sign in page");
 #line 68
  testRunner.When("I select application logon data source");
 #line 69
- testRunner.And("I sign in by user name and wrong password");
+ testRunner.And("I try to sign in by application logon with wrong password");
 #line 70
- testRunner.Then("I should see an log on error");
+ testRunner.Then("I should see log on failed with information");
 #line hidden
             this.ScenarioCleanup();
         }

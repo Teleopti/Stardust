@@ -29,6 +29,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Pages.Pages.CurrentSignInNewPage.TrySignInApplication(userName, TestData.CommonPassword);
 		}
 
+		[When(@"I try to sign in by application logon with wrong password")]
+		public void WhenITryToSignInByApplicationLogonWithWrongPassword()
+		{
+			var userName = UserFactory.User().MakeUser();
+			Pages.Pages.CurrentSignInNewPage.TrySignInApplication(userName, "wrong password");
+		}
 
 		[When(@"I sign in again")]
 		public void WhenISignInAgain()

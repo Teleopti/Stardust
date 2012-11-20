@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public TextField UserNameTextField { get; set; }
 		[FindBy(Id = "Password-input")]
 		public TextField PasswordTextField { get; set; }
+		[FindBy(Id = "Signin-error")]
+		public Span ErrorText { get; set; }
 
 		[FindBy(Id = "Login-button")]
 		public Button LoginButton;

@@ -61,13 +61,13 @@ Scenario: Sign in with a user with one business unit by Windows credentials and 
 	When I select windows logon data source
 	And I sign in by windows credentials
 	Then I should be signed in
-@ignore	
+
 Scenario: Sign in with wrong password should give me an informative error
 	Given I have the role 'Role for business unit 1'
-	And I am viewing the sign in page
+	And I am viewing the new sign in page
 	When I select application logon data source
-	And I sign in by user name and wrong password
-	Then I should see an log on error
+	And I try to sign in by application logon with wrong password
+	Then I should see log on failed with information
 @ignore
 Scenario: Sign in without permission
 	Given I dont have permission to sign in
