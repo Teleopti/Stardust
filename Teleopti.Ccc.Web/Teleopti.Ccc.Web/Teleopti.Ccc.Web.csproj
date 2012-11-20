@@ -574,6 +574,8 @@
     <Content Include="Areas\MyTime\Content\Scripts\AllTests.html" />
     <Content Include="Areas\Start\Content\Css\mobile.custom.css" />
     <Content Include="Areas\Start\Content\Images\mobile_logo.png" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.AuthenticationState.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordView.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.MenuView.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitSelectionView.js" />
