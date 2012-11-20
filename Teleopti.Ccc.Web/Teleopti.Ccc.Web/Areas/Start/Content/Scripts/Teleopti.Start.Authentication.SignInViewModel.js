@@ -26,24 +26,6 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 		});
 	}, null, "dataSourceSelected");
 
-	//	function _buildAuthenticationModel() {
-	//		if (self.SelectedDataSource().Type === "windows") {
-	//			return {
-	//				type: "windows",
-	//				datasource: self.SelectedDataSource().Name
-	//			};
-	//		}
-	//		if (self.SelectedDataSource().Type === "application") {
-	//			return {
-	//				type: "application",
-	//				datasource: self.SelectedDataSource().Name,
-	//				username: self.UserName,
-	//				password: self.Password
-	//			};
-	//		}
-	//		return null;
-	//	}
-
 	this.LoadDataSources = function () {
 		var events = data.events;
 		$.ajax({
@@ -85,24 +67,6 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 			}
 		});
 
-		//		
-		//		var shared = data.authenticationState;
-		//		$.ajax({
-		//			url: data.baseUrl + "Start/AuthenticationApi/BusinessUnits",
-		//			dataType: "json",
-		//			type: 'GET',
-		//			data: _buildAuthenticationModel(),
-		//			error: function (jqXHR, textStatus, errorThrown) {
-		//				if (jqXHR.status == 400) {
-		//					var data = $.parseJSON(jqXHR.responseText);
-		//					self.ErrorMessage(data.Errors);
-		//				}
-		//			},
-		//			success: function (data, textStatus, jqXHR) {
-		//				shared.BusinessUnits = data;
-		//				Teleopti.Start.Authentication.Navigation.GotoBusinessUnits(self.SelectedDataSource().Type, self.SelectedDataSource().Name);
-		//			}
-		//		});
 	};
 
 };

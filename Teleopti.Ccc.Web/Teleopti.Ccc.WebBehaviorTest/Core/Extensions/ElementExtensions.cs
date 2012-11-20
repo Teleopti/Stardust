@@ -19,14 +19,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 		public static bool DisplayVisible(this Element element) { return element.Style.Display != "none"; }
 		public static bool DisplayHidden(this Element element) { return element.Style.Display == "none"; }
 
+		public static void ChangeValue(this TextField element, string value)
+		{
+			element.Value = value;
+			element.Change();
+			element.JQueryChange();
+		}
+
 		public static bool JQueryVisible(this Element element)
+		{
+			var result = JQuery.SelectById(GetIdForJQuerySelection(element))
+				.Is(":visible")
+				.Eval();
+			return bool.Parse(result);
+		}
+
+		private static string GetIdForJQuerySelection(Element element)
 		{
 			var id = element.Id;
 			if (id == null)
 				throw new ArgumentException("Element has to have an Id to be able to use jQuery's is(':visible') method");
-			var result = JQuery.SelectById(id).Is(":visible").Eval();
-			return bool.Parse(result);
+			return id;
 		}
+
 		public static bool JQueryHidden(this Element element) { return !element.JQueryVisible(); }
 
 		public static bool DisplayVisible<T>(this Control<T> control) where T : Element { return control.Element.DisplayVisible(); }
@@ -34,6 +49,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 
 		public static bool JQueryVisible<T>(this Control<T> control) where T : Element { return control.Element.JQueryVisible(); }
 		public static bool JQueryHidden<T>(this Control<T> control) where T : Element { return control.Element.JQueryHidden(); }
+
+		public static void JQueryChange(this Element element)
+		{
+			JQuery.SelectById(GetIdForJQuerySelection(element))
+				.Change()
+				.Eval();
+		}
 
 		public static void ScrollIntoView(this Element element)
 		{

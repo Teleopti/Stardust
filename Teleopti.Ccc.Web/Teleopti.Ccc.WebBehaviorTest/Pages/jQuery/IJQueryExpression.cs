@@ -12,5 +12,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.jQuery
 		IJQueryExpression WidgetCall(string widget, string method);
 		IJQueryExpression WidgetOptions(string widget, dynamic options);
 		IJQueryExpression Is(string selector);
+		IJQueryExpression Change();
 	}
 }

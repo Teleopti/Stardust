@@ -1,3 +1,4 @@
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public void SelectTestDataApplicationLogon()
 		{
 			DataSourcesList.WaitUntilExists();
-			DataSourcesList.ListItem(Find.ByText("TestData")).EventualClick();
+			DataSourcesList.Link(Find.ByText("TestData")).EventualClick();
 		}
 
 		public void SignInApplication(string userName, string password)
@@ -31,8 +32,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void TrySignInApplication(string username, string password)
 		{
-			UserNameTextField.Value = username;
-			PasswordTextField.Value = password;
+			UserNameTextField.ChangeValue(username);
+			PasswordTextField.ChangeValue(password);
 			LoginButton.EventualClick();
 		}
 	}

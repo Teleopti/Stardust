@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoGlobalSignInNewPage()
 		{
-			GoTo("Start/Authentication/SignInNew", new ApplicationStartupTimeout());
+			GoTo("Start/AuthenticationNew/SignIn", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInNewPage>());
 		}
 

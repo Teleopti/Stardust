@@ -43,7 +43,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		loadBusinessUnits(options);
 	};
 
-	this.SignIn = function(options) {
+	this.SignIn = function (options) {
 		$.extend(authenticationModel, options.data);
 
 		$.ajax({
