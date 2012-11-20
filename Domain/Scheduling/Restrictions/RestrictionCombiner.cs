@@ -74,7 +74,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			                                     	null,
 			                                     	null,
 			                                     	new List<IActivityRestriction>()
-			                                     	) as IEffectiveRestriction;
+			                                     	)
+			                                     	{
+			                                     		IsStudentAvailabilityDay = true
+			                                     	} as IEffectiveRestriction;
 
 			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
 		}
