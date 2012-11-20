@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// Calculates the daily intraday relative standard deviations filtered by the
     /// persons active skills on the given day.
     /// </summary>
-    public class RelativeDailyStandardDeviationsByPersonalSkillsExtractor : IScheduleResultDailyValueCalculator
+    public class RelativeDailyValueByPersonalSkillsExtractor : IScheduleResultDailyValueCalculator
     {
         private readonly IAdvancedPreferences _advancedPreferences;
         private readonly IScheduleMatrixPro _scheduleMatrix;
 
-        public RelativeDailyStandardDeviationsByPersonalSkillsExtractor(IScheduleMatrixPro scheduleMatrix, IAdvancedPreferences advancedPreferences)
+        public RelativeDailyValueByPersonalSkillsExtractor(IScheduleMatrixPro scheduleMatrix, IAdvancedPreferences advancedPreferences)
         {
             _scheduleMatrix = scheduleMatrix;
             _advancedPreferences = advancedPreferences;
@@ -50,7 +50,22 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (calculator.Count > 0)
             {
                 calculator.Analyze();
-                result = calculator.StandardDeviation;
+				switch (_advancedPreferences.TargetValueCalculation)
+				{
+					case TargetValueOptions.StandardDeviation:
+						result = calculator.StandardDeviation;
+						break;
+
+					case TargetValueOptions.RootMeanSquare:
+						result = calculator.RootMeanSquare;
+						break;
+
+					case TargetValueOptions.Teleopti:
+						result = calculator.Teleopti;
+						break;
+
+				}
+
             }
             return result;
         }

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             {
                 double? nonBlendValue = null;
                 double thisValue = _workShiftCalculator.CalculateShiftValue(shiftProjection.MainShiftProjection,
-																			dataHolders, (double)schedulingOptions.WorkShiftLengthHintOption,
+																			dataHolders, schedulingOptions.WorkShiftLengthHintOption,
 																			schedulingOptions.UseMinimumPersons, schedulingOptions.UseMaximumPersons);
 
                 if (nonBlendSkillPeriods.Count > 0)
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                                                                                      shiftProjection.
                                                                                          MainShiftProjection,
                                                                                      nonBlendSkillPeriods,
-																					 (double)schedulingOptions.WorkShiftLengthHintOption,
+																					 schedulingOptions.WorkShiftLengthHintOption,
 																					 schedulingOptions.UseMinimumPersons,
 																					 schedulingOptions.UseMaximumPersons);
                 if (nonBlendValue.HasValue)

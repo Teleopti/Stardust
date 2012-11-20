@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private bool _useMaximumStaffing;
 		private bool _useMaximumSeats;
 		private bool _doNotBreakMaximumSeats;
+		private bool _useAverageShiftLengths;
 		private int _refreshScreenInterval;
 
 		public AdvancedPreferencesPersonalSettings()
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			target.UseMaximumStaffing = _useMaximumStaffing;
 			target.UseMaximumSeats = _useMaximumSeats;
 			target.DoNotBreakMaximumSeats = _doNotBreakMaximumSeats;
+			target.UseAverageShiftLengths = _useAverageShiftLengths;
 
 			target.RefreshScreenInterval = _refreshScreenInterval;
 		}
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_useMaximumStaffing = source.UseMaximumStaffing;
 			_useMaximumSeats = source.UseMaximumSeats;
 			_doNotBreakMaximumSeats = source.DoNotBreakMaximumSeats;
+			_useAverageShiftLengths = source.UseAverageShiftLengths;
 
 			_refreshScreenInterval = source.RefreshScreenInterval;
 		}
@@ -55,6 +58,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_useMinimumStaffing = true;
 			_useMaximumStaffing = true;
 			_useMaximumSeats = true;
+			_useAverageShiftLengths = true;
 			_refreshScreenInterval = 10;
 		}
 	}

@@ -269,6 +269,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions.UseGroupSchedulingCommonStart = _localSchedulingOptions.UseGroupSchedulingCommonStart;
             _schedulingOptions.UseCommonActivity = _localSchedulingOptions.UseCommonActivity;
             _schedulingOptions.CommonActivity = _localSchedulingOptions.CommonActivity;
+        	_schedulingOptions.UseAverageShiftLengths = _localSchedulingOptions.UseAverageShiftLengths;
         }
 
         private void getDataFromControls()
@@ -319,6 +320,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _localSchedulingOptions.UseCommonActivity = checkBoxCommonActivity.Checked;
             if (checkBoxCommonActivity.Checked)
                 _localSchedulingOptions.CommonActivity = (IActivity) comboBoxActivity.SelectedItem;
+        	_localSchedulingOptions.UseAverageShiftLengths = checkBoxUseAverageShiftLengths.Checked;
         }
 
         private void setDataInControls()
@@ -407,6 +409,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 checkBoxCommonActivity.Checked = _localSchedulingOptions.UseCommonActivity;
                 comboBoxActivity.Enabled = _localSchedulingOptions.UseCommonActivity;
             }
+        	checkBoxUseAverageShiftLengths.Checked = _localSchedulingOptions.UseAverageShiftLengths;
         }
 
         private bool mustHaveSetAndOnlyPreferenceDaysVisible()
@@ -559,10 +562,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			if (checkBoxUseGroupScheduling.Checked && checkBoxUseBlockScheduling.Checked)
 				checkBoxUseBlockScheduling.Checked = false;
 
-		    ChangeGrpSchedulingCommonOptionState(checkBoxUseGroupScheduling.Checked);
+		    changeGrpSchedulingCommonOptionState(checkBoxUseGroupScheduling.Checked);
 		}
 
-        private void ChangeGrpSchedulingCommonOptionState(bool value)
+        private void changeGrpSchedulingCommonOptionState(bool value)
         {
 
             if (value)
