@@ -14,6 +14,9 @@ Teleopti.Start.Authentication.MenuViewModel = function (data) {
 					var vm = new Teleopti.Start.Authentication.ApplicationViewModel(responseData[i]);
 					self.Applications.push(vm);
 				}
+				if (self.Applications().length === 1) {
+					window.location.href = self.Applications()[0].Url();
+				}
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				Teleopti.Start.Authentication.Navigation.GotoSignIn();

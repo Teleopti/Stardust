@@ -10,7 +10,7 @@ Teleopti.Start.Authentication.BusinessUnitSelectionViewModel = function (data) {
 				type: data.authenticationType,
 				datasource: data.dataSourceName
 			},
-			success: function(responseData, textStatus, jqXHR) {
+			success: function (responseData, textStatus, jqXHR) {
 				for (var i = 0; i < responseData.length; i++) {
 					var businessUnit = new Teleopti.Start.Authentication.BusinessUnitViewModel({
 						Id: responseData[i].Id,
@@ -19,8 +19,11 @@ Teleopti.Start.Authentication.BusinessUnitSelectionViewModel = function (data) {
 					});
 					self.BusinessUnits.push(businessUnit);
 				}
+				if (self.BusinessUnits().length === 1) {
+					self.BusinessUnits()[0].Select();
+				}
 			},
-			error: function(jqXHR, textStatus, errorThrown) {
+			error: function (jqXHR, textStatus, errorThrown) {
 				Teleopti.Start.Authentication.Navigation.GotoSignIn();
 			}
 		});
