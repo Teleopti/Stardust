@@ -3,25 +3,24 @@ Teleopti.Start.Authentication.BusinessUnitSelectionViewModel = function (data) {
 	var self = this;
 	this.BusinessUnits = ko.observableArray();
 
-	this.LoadBusinessUnits = function() {
-		$.ajax({
-			url: baseUrl + "Start/AuthenticationApi/BusinessUnits",
-			dataType: 'json',
-			data: _buildAuthenticationModel(),
-			success: function(data, textStatus, jqXHR) {
-				for (var i = 0; i < data.length; i++) {
-					var businessUnit = new Teleopti.Start.BusinessUnitViewModel();
-					businessUnit.Selected(false);
-					businessUnit.Name = data[i].Name;
-					businessUnit.Id = data[i].Id;
-					self.AvailableBusinessUnits.push(businessUnit);
+	this.LoadBusinessUnits = function () {
+		var state = data.authenticationState;
+		state.MightLoadBusinessUnits({
+			data: {
+				type: data.authenticationType,
+				datasource: data.dataSourceName
+			},
+			success: function(responseData, textStatus, jqXHR) {
+				for (var i = 0; i < responseData.length; i++) {
+					var businessUnit = new Teleopti.Start.Authentication.BusinessUnitViewModel({
+						Id: responseData[i].Id,
+						Name: responseData[i].Name
+					});
+					self.BusinessUnits.push(businessUnit);
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status == 400) {
-					var data = $.parseJSON(jqXHR.responseText);
-					self.ErrorMessage(data.Errors);
-				}
+				Teleopti.Start.Authentication.Navigation.GotoSignIn();
 			}
 		});
 	};

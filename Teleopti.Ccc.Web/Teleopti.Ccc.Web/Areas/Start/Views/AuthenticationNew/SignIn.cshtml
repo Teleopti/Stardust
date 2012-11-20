@@ -21,6 +21,7 @@
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.DataSourceViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.BusinessUnitSelectionView.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.BusinessUnitSelectionViewModel.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.BusinessUnitViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.MenuView.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordView.js")"></script>
 
@@ -46,7 +47,7 @@
 		
 		<div id="view" class="login-form well well-large"></div>
 
-		<div id="signin" class="login-form well well-large">
+		<div id="signin">
 			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked">
 				<li data-bind="css: {'active': Selected}, class: Type">
 					<a href="#" data-bind="click: Select">
@@ -68,14 +69,14 @@
 			<span class="error" data-bind="text: ErrorMessage"></span>
 		</div>
 		
-		<div id="businessunit" class="login-form well well-large">
+		<div id="businessunit">
 			<h3>Select business unit:</h3>
-			<ul data-bind="foreach: AvailableBusinessUnits" class="nav nav-tabs nav-stacked">
-				<li data-bind="css: {'active': Selected}"><a href="#" data-bind="text: Name, click: $parent.SelectBusinessUnit"></a></li>
+			<ul data-bind="foreach: BusinessUnits" class="nav nav-tabs nav-stacked">
+				<li><a href="#" data-bind="text: Name, click: Select"></a></li>
 			</ul>
 		</div>
 
-		<div id="menu" class="login-form well well-large">
+		<div id="menu">
 			<h3>Select application:</h3>
 			<ul data-bind="foreach: AvailableApplications" class="nav nav-tabs nav-stacked">
 				<li>

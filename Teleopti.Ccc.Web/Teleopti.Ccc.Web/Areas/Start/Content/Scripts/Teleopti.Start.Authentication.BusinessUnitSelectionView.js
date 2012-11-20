@@ -1,12 +1,14 @@
 ﻿
-Teleopti.Start.Authentication.BusinessUnitSelectionView = function (html) {
-	this.Display = function (data) {
-		data.render(html);
-		var viewModel = new Teleopti.Start.Authentication.BusinessUnitSelectionView({
-			baseUrl: Teleopti.Start.Authentication.Settings.baseUrl
+Teleopti.Start.Authentication.BusinessUnitSelectionView = function (args) {
+	this.Display = function (viewInfo) {
+		var viewModel = new Teleopti.Start.Authentication.BusinessUnitSelectionViewModel({
+			baseUrl: Teleopti.Start.Authentication.Settings.baseUrl,
+			authenticationType: viewInfo.authenticationType,
+			dataSourceName: viewInfo.dataSourceName,
+			authenticationState: args.authenticationState
 		});
-		data.render(html);
-		ko.applyBindings(viewModel, data.element[0]);
+		viewInfo.render(args.html);
+		ko.applyBindings(viewModel, viewInfo.element[0]);
 		viewModel.LoadBusinessUnits();
 	};
 };

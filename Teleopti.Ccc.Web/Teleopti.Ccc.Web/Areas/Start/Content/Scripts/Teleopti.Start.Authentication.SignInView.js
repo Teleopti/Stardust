@@ -1,14 +1,15 @@
 ﻿
-Teleopti.Start.Authentication.SignInView = function (html) {
-	
+Teleopti.Start.Authentication.SignInView = function (args) {
+
 	var events = new ko.subscribable();
 	
 	this.Display = function (data) {
 		var viewModel = new Teleopti.Start.Authentication.SignInViewModel({
-			baseUrl: Teleopti.Start.Authentication.Settings.baseUrl,
-			events: events
+			baseUrl: args.baseUrl,
+			events: events,
+			authenticationState: args.authenticationState
 		});
-		data.render(html);
+		data.render(args.html);
 		ko.applyBindings(viewModel, data.element[0]);
 		viewModel.LoadDataSources();
 	};
