@@ -6,9 +6,8 @@
     xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode"
     xmlns:Layers="clr-namespace:Teleopti.Ccc.WpfControls.Controls.Layers"
     xmlns:Editor="clr-namespace:Teleopti.Ccc.WinCode.Scheduling.Editor;assembly=Teleopti.Ccc.WinCode"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-    Commands:CreateCommandBinding.Target="{Binding}" d:DataContext="{d:DesignInstance Editor:ShiftEditorViewModel}">
+             xmlns:scheduling="clr-namespace:Teleopti.Ccc.WinCode.Scheduling;assembly=Teleopti.Ccc.WinCode"
+             Commands:CreateCommandBinding.Target="{Binding}" >
     <UserControl.Resources>
           
             <DataTemplate x:Key="CurrentlayerTemplate">

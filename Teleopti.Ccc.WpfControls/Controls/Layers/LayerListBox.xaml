@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:common="clr-namespace:Teleopti.Ccc.WinCode.Common;assembly=Teleopti.Ccc.WinCode"
     xmlns:intraday="clr-namespace:Teleopti.Ccc.WpfControls.Controls.Intraday"
-    ItemsSource="{Binding}"
+         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+         ItemsSource="{Binding}"
 	ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 	ScrollViewer.VerticalScrollBarVisibility="Disabled"
 	BorderThickness="0"
@@ -34,8 +35,6 @@
                             VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
                             SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
 							ContentTemplate="{StaticResource LayerTemplate}" />
-								
-
 						</Border>
 					</ControlTemplate>
 				</Setter.Value>
@@ -45,7 +44,7 @@
 			<!-- Data binding for DateTimePeriodPanel -->
 			<Setter Property="common:DateTimePeriodPanel.DateTimePeriod">
 				<Setter.Value>
-					<Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period" />
+                    <Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period" />
 				</Setter.Value>
 			</Setter>
 		</Style>

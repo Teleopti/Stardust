@@ -287,6 +287,7 @@
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template" Value="{StaticResource ListView}"/>
     </Style>
@@ -294,9 +295,13 @@
     <!-- Aero style -->
     <Style TargetType="ListViewItem">
         <Setter Property="Template" Value="{StaticResource ListViewItem}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
     <Style TargetType="ListViewItem" x:Key="listViewItemStyle">
         <Setter Property="Template" Value="{StaticResource ListViewItem}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
     
     <!-- Cell styles -->
