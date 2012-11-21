@@ -16,46 +16,46 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 			_target = CreateCommand(ExecuteCommand);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores"), Test]
 		public void VerifyCanDelegateCommand()
 		{
 			_target.Execute(null);
 			Assert.IsTrue(CommandHasBeenExecuted);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores"), Test]
 		public void CanExecute_WhenFuncReturnsFalse_ShouldReturnFalse()
 		{
 			_target = CreateCommand(ExecuteCommand, delegate { return false; });
 			Assert.IsFalse(_target.CanExecute(null));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores"), Test]
 		public void CanExecute_WhenFuncReturnsTrue_ShouldReturnTrue()
 		{
 			_target = CreateCommand(ExecuteCommand, delegate { return true; });
 			Assert.IsTrue(_target.CanExecute(null));
 		}
 
-		[Test]
-		public void CanExecute_WhenNoParameterForCanExceuteIsSet_ShouldReturnTrue()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores"), Test]
+		public void CanExecute_WhenNoParameterForCanEexcuteIsSet_ShouldReturnTrue()
 		{
 			Assert.IsTrue(CreateCommand(ExecuteCommand).CanExecute(null));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores"), Test, ExpectedException(typeof(ArgumentNullException))]
 		public void CanExecuteFunc_WhenNull_ShouldThrowAException()
 		{
 			Assert.IsNotNull(CreateCommand(ExecuteCommand, null));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores"), Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ExecuteAction_WhenNull_ShouldThrowException()
 		{
 			Assert.IsNotNull(new DelegateCommand(null));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores"), Test]
 		public void CanExecute_WhenCreatingADelegateCommandWithoutParameter_ShouldResponseToSuppliedFuncAsWithAnyOtherCommand()
 		{
 			var command = new DelegateCommand(ExecuteCommand, () => true);
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 		}
 
 		#region syntax
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores"), Test]
 		public void VerifySyntax_ExecutingCommand_UsingGenericParameter()
 		{
 			string execParam = string.Empty;
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 			Assert.AreEqual(parameter, execParam);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores"), Test]
 		public void VerifySyntax_ExecuteCommand_WithoutParameter()
 		{
 			var command = new DelegateCommand(ExecuteCommand);

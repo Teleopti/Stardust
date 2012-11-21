@@ -187,7 +187,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 42
  testRunner.Given("I am an agent without access to preferences", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 43
- testRunner.When("I sign in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I am viewing week schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 44
  testRunner.Then("I should not be able to see preferences link", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
@@ -204,7 +204,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 47
  testRunner.Given("I am an agent without access to preferences", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 48
- testRunner.When("I sign in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I am viewing week schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 49
  testRunner.And("I navigate to the preferences page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 50

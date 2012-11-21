@@ -44,11 +44,11 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
 
         public WpfShiftEditor(IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService)
         {
-            InitializeComponent();
             _model = new ShiftEditorViewModel(eventAggregator, createLayerViewModelService);
             _model.AddObserver(this); //Because we are using events for now. We could add schedscreen (if implementing IShiftEditorObserver)here instead of events..
             DataContext = _model;
             setupforEventAggregator(eventAggregator);
+            InitializeComponent();
         }
 
         private void setupforEventAggregator(IEventAggregator eventAggregator)

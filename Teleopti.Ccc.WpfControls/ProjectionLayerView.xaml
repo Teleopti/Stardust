@@ -25,7 +25,7 @@
                 BorderThickness="0.5" 
                 Opacity="1"
                 CornerRadius="2"
-                Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}}"
+                Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}, FallbackValue=White}"
                 >
       
     </Border>

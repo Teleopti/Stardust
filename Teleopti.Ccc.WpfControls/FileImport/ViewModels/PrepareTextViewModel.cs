@@ -2,16 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.WinCode.FileImport;
-using Teleopti.Ccc.WpfControls.FileImport.ViewModels;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WpfControls.FileImport.ViewModels
 {
@@ -19,9 +14,9 @@ namespace Teleopti.Ccc.WpfControls.FileImport.ViewModels
     {
 
         private StringBuilder _stringBuilder;
-        private string _streamPath;
-        private Encoding _encoding;
-        Collection<string> _separatorList = new Collection<string> { ";", "," };
+        private readonly string _streamPath;
+        private readonly Encoding _encoding;
+        readonly Collection<string> _separatorList = new Collection<string> { ";", "," };
        
         public ICollectionView TimeZoneCollection { private set; get; }
         public ICollectionView EncodingCollection { private set; get; }
@@ -79,7 +74,7 @@ namespace Teleopti.Ccc.WpfControls.FileImport.ViewModels
 
         public void UpdateEncoding(object selectedItem)
         {
-            Encoding info = (Encoding) selectedItem;
+            var info = (Encoding) selectedItem;
             preViewFile(info, out _stringBuilder);
             FirePropertyChanged("PreviewText");
         }
@@ -151,7 +146,7 @@ namespace Teleopti.Ccc.WpfControls.FileImport.ViewModels
             if (!selectableTimeZones.Contains(defaultTimeZone)) 
                 selectableTimeZones.Add(defaultTimeZone);
             
-            CollectionViewSource viewSource = new CollectionViewSource() { Source = selectableTimeZones };
+            var viewSource = new CollectionViewSource() { Source = selectableTimeZones };
             return viewSource.View;
             
         }
@@ -166,7 +161,7 @@ namespace Teleopti.Ccc.WpfControls.FileImport.ViewModels
             if (!selectableEncodings.Contains(defaultEncoding))
                 selectableEncodings.Add(defaultEncoding);
 
-            CollectionViewSource viewSource = new CollectionViewSource() { Source = selectableEncodings };
+            var viewSource = new CollectionViewSource() { Source = selectableEncodings };
             return viewSource.View;
         }
     }

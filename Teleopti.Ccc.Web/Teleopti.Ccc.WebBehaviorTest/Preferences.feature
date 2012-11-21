@@ -40,12 +40,12 @@ Scenario: No person period
 
 Scenario: No access to preferences menu item
 	Given I am an agent without access to preferences
-	When I sign in
+	When I am viewing week schedule
 	Then I should not be able to see preferences link
 
 Scenario: No access to preferences page
 	Given I am an agent without access to preferences
-	When I sign in
+	When I am viewing week schedule
 	And I navigate to the preferences page
 	Then I should see an error message
 

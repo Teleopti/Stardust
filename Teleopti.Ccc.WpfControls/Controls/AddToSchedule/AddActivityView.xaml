@@ -10,6 +10,16 @@
     xmlns:Common="clr-namespace:Teleopti.Ccc.WpfControls.Common"
     >
     <UserControl.Resources>
+        <Style TargetType="ComboBox" x:Key="BasicComboBox">
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Converters:ReversedVisibilityConverter  x:Key="errorConverter"/>
         <DataTemplate DataType="{x:Type Scheduling:ShiftCategory}">
             <Views:ShiftCategoryShortView />
@@ -35,7 +45,7 @@
         <Label Content="{x:Static UserTexts:Resources.ShiftCategoryColon}" Margin="1,2,0,4" HorizontalAlignment="Left" Grid.Row="1" />
         <Label Grid.Row="2" Content="{x:Static UserTexts:Resources.FromColon}" Margin="1,2,1,4" />
         <Label Grid.Row="3" Content="{x:Static UserTexts:Resources.ToColon}" Margin="1,2,1,4" />
-        <ComboBox Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=Payloads}" Grid.Column="1" IsSynchronizedWithCurrentItem="True"/>
+        <ComboBox Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=Payloads}" Grid.Column="1" IsSynchronizedWithCurrentItem="True" Style="{StaticResource BasicComboBox}"/>
         
         <!-- Its decided that the user should not be able to set the shiftcategory, it will default be set to the first shiftcat (alphabetic)
         

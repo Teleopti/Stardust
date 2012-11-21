@@ -32,7 +32,7 @@
                     <StackPanel Orientation="Horizontal" Grid.Column="0">
 
 					<ContentControl Content="{Binding}" 
-									Visibility="{Binding IsReplied, Converter={StaticResource visibilityConverter}}">
+									Visibility="{Binding IsReplied, Converter={StaticResource visibilityConverter}, FallbackValue=Visible}">
 						<ContentControl.ContentTemplate>
 							<DataTemplate>
 								<Border Height="18"
@@ -56,7 +56,8 @@
 						<Border Height="18"
 								Width="18"
 								Background="{StaticResource Raptor_HelpIcon}" 
-								Visibility="{Binding IsReplied, Converter={StaticResource reversedVisibilityConverter}}"/>
+								Visibility="{Binding IsReplied, Converter={StaticResource reversedVisibilityConverter},
+                                FallbackValue=Visible}"/>
 						
 					<TextBlock Text="{Binding Path=Receiver.Name.FirstName}" FontWeight="Bold"/>
                         <TextBlock Text=" , " />

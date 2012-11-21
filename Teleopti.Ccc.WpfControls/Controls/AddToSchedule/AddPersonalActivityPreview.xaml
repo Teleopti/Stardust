@@ -4,7 +4,15 @@
     xmlns:DateTimePeriodControl="clr-namespace:Teleopti.Ccc.WpfControls.Controls.DateTimePeriodControl"
     xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode"
    Commands:CreateCommandBinding.Target="{Binding}">
-    <Grid>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\Resources\Common.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+         </ResourceDictionary>
+        
+    </UserControl.Resources>
+            <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
@@ -16,7 +24,7 @@
         <StackPanel Grid.Row="0">
             <StackPanel Orientation="Horizontal">
                 <Label>xxActivity</Label>
-                <ComboBox ItemsSource="{Binding Path=Payloads}"/>
+                <ComboBox ItemsSource="{Binding Path=Payloads}" Style="{StaticResource BasicComboBox}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <DateTimePeriodControl:EditableDateTimePeriodPreview DataContext="{Binding Path=PeriodViewModel}" />
