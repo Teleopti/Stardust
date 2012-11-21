@@ -64,7 +64,7 @@ SELECT
 	[datasource_update_date]= GETDATE()
 
 FROM stage.stg_schedule_day_off_count sdo
-GROUP BY sdo.day_off_name,sdo.business_unit_code
+GROUP BY sdo.day_off_name,sdo.day_off_shortname,sdo.business_unit_code
 
 --Load mart dimension
 EXEC [mart].[etl_dim_day_off_load] @business_unit_code
