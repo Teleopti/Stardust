@@ -114,6 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IEffectiveRestriction combined = _target.CombinedRestriction(new SchedulingOptions { UseRotations = true, UsePreferences = true, UseAvailability = true, UseStudentAvailability = true, UsePreferencesMustHaveOnly = false });
             Assert.IsNotNull(combined);
             Assert.IsFalse(combined.NotAvailable);
+			Assert.IsTrue(combined.IsStudentAvailabilityDay);
         }
 
 		[Test]
@@ -136,12 +137,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             Assert.IsNotNull(combined);
         }
         [Test]
+        public void VerifyCombinedRestrictionStudentAvailabilityNotAvailable()
+        {
+            IAvailabilityRestriction availabilityRestriction = new AvailabilityRestriction();
+            availabilityRestriction.NotAvailable = true;
+            Extract(new List<IRestrictionBase> { availabilityRestriction }, new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>()));
+            IEffectiveRestriction combined = _target.CombinedRestriction(new SchedulingOptions { UseRotations = true, UsePreferences = true, UseAvailability = false, UseStudentAvailability = true, UsePreferencesMustHaveOnly = false });
+            Assert.IsNotNull(combined);
+            Assert.IsTrue(combined.NotAvailable);
+        }
+
+        [Test]
         public void VerifyCombinedRestrictionAvailabilityNotAvailable()
         {
             IAvailabilityRestriction availabilityRestriction = new AvailabilityRestriction();
             availabilityRestriction.NotAvailable = true;
             Extract(new List<IRestrictionBase> { availabilityRestriction }, new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>()));
-            IEffectiveRestriction combined = _target.CombinedRestriction(new SchedulingOptions { UseRotations = true, UsePreferences = true, UseAvailability = true, UseStudentAvailability = true, UsePreferencesMustHaveOnly = false });
+            IEffectiveRestriction combined = _target.CombinedRestriction(new SchedulingOptions { UseRotations = true, UsePreferences = true, UseAvailability = true, UseStudentAvailability = false, UsePreferencesMustHaveOnly = false });
             Assert.IsNotNull(combined);
             Assert.IsTrue(combined.NotAvailable);
         }
@@ -154,6 +166,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             Extract(new List<IRestrictionBase> { sr }, new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>()));
             IEffectiveRestriction combined = _target.CombinedRestriction(new SchedulingOptions{UseRotations = true, UsePreferences = true, UseAvailability = true,UseStudentAvailability = true, UsePreferencesMustHaveOnly = false});
             Assert.IsNotNull(combined);
+			Assert.IsTrue(combined.IsRotationDay);
         }
 
         [Test]

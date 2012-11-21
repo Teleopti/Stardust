@@ -9,6 +9,7 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using Teleopti.Support.Tool.DataLayer;
@@ -77,17 +78,12 @@ namespace Teleopti.Support.Tool.Controls
         {
             ThreadSafeControlDelegation.SetCursor(Cursors.WaitCursor, buttonRefresh);
             ThreadSafeControlDelegation.SetEnabled(false, buttonRefresh);
-            if (backgroundWorkerConnectionAndVersion.IsBusy)
-            {
-                backgroundWorkerConnectionAndVersion.CancelAsync();
-            }
 
             listViewDatabases.BeginUpdate();
             listViewDatabases.Items.Clear();
             IList<Nhib> nhibs = XmlHandler.GetNhibSettings(textBoxNHibFolder.Text).ToList();
             foreach (Nhib nhib in nhibs)
             {
-                
                 string groupCaption = nhib.FactoryName + " ("+ nhib.CccDataSource.ServerName + ")";
                 ListViewGroup listViewGroup = listViewDatabases.Groups.Add(nhib.FactoryName, groupCaption);
                 listViewGroup.Tag = nhib;
@@ -104,6 +100,14 @@ namespace Teleopti.Support.Tool.Controls
                     preselectedListViewItem.Selected = true;
                 }
             }
+            while (backgroundWorkerConnectionAndVersion.IsBusy)
+            {
+                if (!backgroundWorkerConnectionAndVersion.CancellationPending)
+                {
+                    backgroundWorkerConnectionAndVersion.CancelAsync();
+                }
+                Application.DoEvents();
+            }
             backgroundWorkerConnectionAndVersion.RunWorkerAsync();
         }
 
@@ -112,6 +116,10 @@ namespace Teleopti.Support.Tool.Controls
         {
             foreach (ListViewItem listViewItem in GetListViewItems(listViewDatabases))
             {
+                if (backgroundWorkerConnectionAndVersion.CancellationPending)
+                {
+                    return;
+                }
                 NHibDataSource nHibDataSource = (NHibDataSource)listViewItem.Tag;
                 SetListviewIcon(nHibDataSource, listViewItem);
             }
@@ -119,6 +127,7 @@ namespace Teleopti.Support.Tool.Controls
             ThreadSafeControlDelegation.SetEnabled(true, buttonRefresh);
             //ThreadSafeControlDelegation.SetEnabled(true, buttonBack);
             ThreadSafeControlDelegation.SetCursor(Cursors.Default, buttonRefresh);
+            Application.DoEvents();
         }
 
         private ListViewItem[] CreateDatabaseListViewItems(Nhib nhib, ListViewGroup listViewGroup)
@@ -346,6 +355,7 @@ namespace Teleopti.Support.Tool.Controls
             stringBuilder.Append(nHibDataSource.DatabaseName + SPACE);
             stringBuilder.Append(@"-O");
             stringBuilder.Append(getCccDbType(databaseTypeString) + SPACE);
+            stringBuilder.Append(@"-T" + SPACE);
             processStartInfo.Arguments = stringBuilder.ToString();
 
             processStartInfo.WorkingDirectory = workingDirectory;
@@ -520,6 +530,10 @@ namespace Teleopti.Support.Tool.Controls
         {
             if (listViewDatabases.InvokeRequired)
             {
+                if (backgroundWorkerConnectionAndVersion.CancellationPending)
+                {
+                    return;
+                }
                 listViewDatabases.Invoke(
                     new ChangeListViewIconDelegate((ChangeListViewIcon)),
                     new object[] { imageIndex, listviewItemIndex });

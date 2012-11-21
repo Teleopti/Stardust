@@ -15,8 +15,6 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Messaging.Client;
-using Teleopti.Messaging.Composites;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
@@ -85,9 +83,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			// Code that runs on application startup
 			if (string.IsNullOrEmpty(_nhibConfPath))
-                _nhibConfPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-			var application = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForEtl()),
-				MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
+                _nhibConfPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			var application =
+				new InitializeApplication(
+					new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
+					                       DataSourceConfigurationSetter.ForEtl()), null);
 			application.MessageBrokerDisabled = true;
 			application.Start(new StateManager(), _nhibConfPath, null);
 

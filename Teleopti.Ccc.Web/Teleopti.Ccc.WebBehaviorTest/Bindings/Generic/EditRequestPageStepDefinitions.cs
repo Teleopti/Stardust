@@ -140,11 +140,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.DisplayHidden(), Is.True);
 		}
 
-
-
-
-
-
+		[Then(@"I should not see the deny reason")]
+		public void ThenIShouldNotSeeTheDenyReason()
+		{
+			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailDenyReason.Text, Is.Null);
+		}
 
 		[Then(@"I should see that my request was denied with reason '(.*)'")]
 		public void ThenIShouldSeeThatMyRequestWasDeniedWithGivenReason(string reason)

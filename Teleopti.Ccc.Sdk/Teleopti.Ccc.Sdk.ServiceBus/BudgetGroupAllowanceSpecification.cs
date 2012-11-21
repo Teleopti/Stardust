@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -33,21 +32,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         {
             var timeZone = obj.Person.PermissionInformation.DefaultTimeZone();
             var requestedPeriod = obj.Period.ToDateOnlyPeriod(timeZone);
-            var personPeriod = obj.Person.PersonPeriodCollection.Where(
-                p => p.Period.Contains(requestedPeriod)).FirstOrDefault();
-            IBudgetGroup budgetGroup = null;
-            if (personPeriod != null && personPeriod.BudgetGroup != null)
-                budgetGroup = personPeriod.BudgetGroup;
-            if (budgetGroup == null)
-            {
+            var personPeriod = obj.Person.PersonPeriods(requestedPeriod).FirstOrDefault();
+
+            if (personPeriod == null || personPeriod.BudgetGroup == null)
+			{
                 Logger.DebugFormat("There is no budget group for person: {0}.", obj.Person.Id);
                 return false;
             }
 
+			var budgetGroup = personPeriod.BudgetGroup;
             var defaultScenario = _scenarioProvider.DefaultScenario();
-            var absencesInBudgetGroup = new HashSet<IAbsence>();
-            foreach (var budgetAbsence in budgetGroup.CustomShrinkages.SelectMany(customShrinkage => customShrinkage.BudgetAbsenceCollection))
-                absencesInBudgetGroup.Add(budgetAbsence);
             var budgetDays = _budgetDayRepository.Find(defaultScenario, budgetGroup, requestedPeriod);
             if (budgetDays == null)
             {
@@ -59,6 +53,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 Logger.DebugFormat("One or more days during this requested period {0} has no budget.", requestedPeriod);
                 return false;
             }
+
+        	var scheduleRange = _schedulingResultStateHolder.Schedules[obj.Person];
             foreach (var budgetDay in budgetDays)
             {
                 var currentDay = budgetDay.Day;
@@ -67,30 +63,31 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(currentDay, currentDay),
                         budgetGroup, defaultScenario).Sum(p => p.TotalContractTime)).TotalMinutes;
                 var remainingAllowanceMinutes = allowanceMinutes - usedAbsenceMinutes;
-                var requestedAbsenceMiniutes = calculateRequestedMinutes(currentDay, obj.Period, obj.Person, personPeriod).TotalMinutes;
-                if (remainingAllowanceMinutes < requestedAbsenceMiniutes)
+                var requestedAbsenceMinutes = calculateRequestedMinutes(currentDay, obj.Period, scheduleRange, personPeriod).TotalMinutes;
+                if (remainingAllowanceMinutes < requestedAbsenceMinutes)
                 {
                     Logger.DebugFormat(
                         "There is not enough allowance for day {0}. The remaining allowance is {1} hours, but you request for {2} hours",
                         budgetDay.Day, remainingAllowanceMinutes / TimeDefinition.MinutesPerHour,
-                        requestedAbsenceMiniutes / TimeDefinition.MinutesPerHour);
+                        requestedAbsenceMinutes / TimeDefinition.MinutesPerHour);
                     return false;
                 }
             }
             return true;
         }
 
-        private TimeSpan calculateRequestedMinutes(DateOnly currentDay, DateTimePeriod requestedPeriod, IPerson person, IPersonPeriod personPeriod)
+        private static TimeSpan calculateRequestedMinutes(DateOnly currentDay, DateTimePeriod requestedPeriod, IScheduleRange scheduleRange, IPersonPeriod personPeriod)
         {
             var requestedTime = TimeSpan.Zero;
-            var scheduleDay = _schedulingResultStateHolder.Schedules[person].ScheduledDay(currentDay);
-            var res = scheduleDay.ProjectionService().CreateProjection();
+            var scheduleDay = scheduleRange.ScheduledDay(currentDay);
+            var visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
+        	var visualLayerCollectionPeriod = visualLayerCollection.Period();
 
-            if (scheduleDay.IsScheduled() && res.Period().HasValue)
+            if (scheduleDay.IsScheduled() && visualLayerCollectionPeriod.HasValue)
             {
-                var absenceTimeWithinSchedule = requestedPeriod.Intersection(res.Period().GetValueOrDefault());
+                var absenceTimeWithinSchedule = requestedPeriod.Intersection(visualLayerCollectionPeriod.Value);
                 if (absenceTimeWithinSchedule.HasValue)
-                    requestedTime += absenceTimeWithinSchedule.GetValueOrDefault().ElapsedTime();
+                    requestedTime += absenceTimeWithinSchedule.Value.ElapsedTime();
             }
             else
             {

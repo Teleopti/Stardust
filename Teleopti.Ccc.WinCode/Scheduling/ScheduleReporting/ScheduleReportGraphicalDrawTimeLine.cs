@@ -53,6 +53,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 				_left = (int)(pageWidth - _left - rectWidth);
 			}
 
+			var lastLeftText = -1000;
+
 			for (var i = 0; i <= totalHours; i++)
 			{
 				var position = (int)Math.Round(i * hourWidth, 0) + 0;
@@ -73,7 +75,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 				var stringWidth = font.MeasureString(timeString);
 				var hourText = new Point((int)(_left + position - (stringWidth.Width / 2)), lineTop - 6 - (int)font.Height);
 
-				_page.Graphics.DrawString(timeString, font, _brush, hourText, format);
+				if (hourText.X > lastLeftText + 5)
+				{
+					_page.Graphics.DrawString(timeString, font, _brush, hourText, format);
+					lastLeftText = hourText.X + (int)stringWidth.Width;
+				}
 			}
 
 			

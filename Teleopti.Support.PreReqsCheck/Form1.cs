@@ -752,11 +752,6 @@ namespace CheckPreRequisites
         #region Web Checks methods
         private void CheckNetFx()
         {
-            printNewFeature(".NET framework",".NET Framework", "version 3.5 SP1 required",FrameworkVersionDetection.GetExactVersion(FrameworkVersion.Fx35).ToString());
-            if (FrameworkVersionDetection.IsInstalled(FrameworkVersion.Fx35))
-                printFeatureStatus(true);
-            else
-                printFeatureStatus(false);
 
             printNewFeature(".NET framework", ".NET Framework", "version 4.0 required", FrameworkVersionDetection.GetExactVersion(FrameworkVersion.Fx40).ToString());
             if (FrameworkVersionDetection.IsInstalled(FrameworkVersion.Fx40))
@@ -780,7 +775,7 @@ namespace CheckPreRequisites
                         printNewFeature("IIS installed","IIS version", "IIS 5.1 or later",majorVersion + "." + minorVersion);
                         printFeatureStatus(true);
                     }
-                    if (majorVersion == 7)
+                    if (majorVersion == 7 || majorVersion == 8)
                     {
                         CheckIIS7SubComponents();
                     }
@@ -840,21 +835,6 @@ namespace CheckPreRequisites
                     else
                         printFeatureStatus(false);
 
-                    try
-                    {
-
-                        printNewFeature("IIS Subcomp", ".NET 3.5 registered", "", "");
-                        if (InternetInformationServicesDetection.IsAspNetRegistered(FrameworkVersion.Fx35))
-                            printFeatureStatus(true);
-                        else
-                            printFeatureStatus(false);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        printNewFeature("IIS Subcomp", ".NET 3.5 registered", "", "Error when checking" + ex.Message.ToString());
-                        printFeatureStatus(false);
-                    }
 
                     try
                     {
@@ -888,6 +868,7 @@ namespace CheckPreRequisites
                     }
                 }
             }
+
             try
             {
                 using (DirectoryEntry de = new DirectoryEntry("IIS://localhost/W3SVC"))
@@ -932,12 +913,6 @@ namespace CheckPreRequisites
                     //    printFeatureStatus(true);
                     //else
                     //    printFeatureStatus(false);
-
-                    printNewFeature("IIS", ".NET 3.5 registered", "","");
-                    if (InternetInformationServicesDetection.IsAspNetRegistered(FrameworkVersion.Fx35))
-                        printFeatureStatus(true);
-                    else
-                        printFeatureStatus(false);
 
                 }
             }
@@ -1005,7 +980,7 @@ namespace CheckPreRequisites
             listView1.Items[listView1.Items.Count - 1].SubItems[2].Text = CheckServiceRunning(Target.ToString(), ServiceName.ToString()).ToString();
             if (CheckServiceRunning(Target.ToString(), ServiceName.ToString()).ToString() == "Running")
                 {
-                         
+   
                     
                 printFeatureStatus(true);
                 }

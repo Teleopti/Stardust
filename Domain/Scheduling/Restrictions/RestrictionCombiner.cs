@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			                                                             	new List<IActivityRestriction>()
 			                                                             	)
 			                                                             	{
-			                                                             		IsAvailabilityDay = true
-			                                                             	};
-
+			                                                             		IsAvailabilityDay = true,
+			                                                             	    NotAvailable = r.NotAvailable,
+                                                                            };
 			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
 		}
 
@@ -74,7 +74,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			                                     	null,
 			                                     	null,
 			                                     	new List<IActivityRestriction>()
-			                                     	) as IEffectiveRestriction;
+			                                     	)
+			                                     	{
+			                                     		IsStudentAvailabilityDay = true
+			                                     	} as IEffectiveRestriction;
 
 			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
 		}
@@ -92,6 +95,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			                                     	r.DayOffTemplate,
 			                                     	null,
 			                                     	new List<IActivityRestriction>())
+			                                     	{
+			                                     		IsRotationDay = true
+			                                     	}
 			                                     as IEffectiveRestriction
 				;
 

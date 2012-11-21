@@ -50,7 +50,7 @@ namespace Teleopti.Analytics.Portal
             {
                 BusinessUnitCode = new Guid(Request.QueryString["BUID"]);
             }
-
+        	
         	if (StateHolder.DoForceFormsLogOn)
         	{
 				if (StateHolder.UserName == null)
@@ -97,6 +97,9 @@ namespace Teleopti.Analytics.Portal
                 {
 					if (HttpContext.Current.User == null && StateHolder.UserName == null)
                 		Response.Redirect(LoginUrl());
+					
+					if (StateHolder.DoForceFormsLogOn && StateHolder.UserName == null)
+						Response.Redirect(LoginUrl());
 
 					if (HttpContext.Current.User != null && StateHolder.UserName == null)
                 		StateHolder.UserName = HttpContext.Current.User.Identity.Name;

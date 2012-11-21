@@ -68,6 +68,7 @@ namespace Teleopti.Analytics.Portal
 					var formsId = new FormsIdentity(winAuthTicket);
 					var princ = new GenericPrincipal(formsId, roles);
 					HttpContext.Current.User = princ;
+					HttpContext.Current.Items.Add("FROMCOOKIE", true); 
 				}
 				catch (Exception)
 				{

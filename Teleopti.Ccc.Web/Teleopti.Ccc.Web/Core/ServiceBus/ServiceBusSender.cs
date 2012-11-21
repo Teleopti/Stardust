@@ -30,15 +30,15 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 						var builder = new ContainerBuilder();
 						_customHost = builder.Build();
 
-						new OnewayRhinoServiceBusConfiguration()
-							.UseAutofac(_customHost)
-							.UseStandaloneConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Teleopti.Ccc.Web.ServiceBus.Client.config"))
-							.Configure();
-
 						using (var defaultHost = new DefaultHost())
 						{
 							defaultHost.SetQueueConnectionString(ConfigurationManager.ConnectionStrings["Queue"].ConnectionString);
 						}
+
+						new OnewayRhinoServiceBusConfiguration()
+							.UseAutofac(_customHost)
+							.UseStandaloneConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Teleopti.Ccc.Web.ServiceBus.Client.config"))
+							.Configure();
 
 						_isRunning = true;
 						if (Logger.IsInfoEnabled)
