@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private readonly IStaffingCalculatorService _staffingCalculatorService;
 
         private bool _isAvailable;
-        private bool _isAggregate;
+        private volatile bool _isAggregate;
         private double _aggregatedFStaff;
         private double _aggregatedCalculatedResources;
         private Percent _aggregatedEstimatedServiceLevel;
