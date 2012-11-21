@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
                Expect.Call(_workShiftFinderService.BestShiftValue(_dateOnly, _shiftProjectionList, null, null, null, 5,
-                                                                   TimeSpan.FromHours(8), false, null, 4, true, true,
+                                                                   TimeSpan.FromHours(8), false, null,
                                                                    _schedulingOptions)).IgnoreArguments().Return(
                                                                        new ShiftProjectionShiftValue
                                                                            {

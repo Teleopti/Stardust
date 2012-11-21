@@ -58,7 +58,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulingOptions.UseMaximumPersons).Return(true);
             Expect.Call(_schedulingOptions.UseMaxSeats).Return(true);
             Expect.Call(_schedulingOptions.DoNotBreakMaxSeats).Return(true);
-           
+        	Expect.Call(_schedulingOptions.UseAverageShiftLengths).Return(true);
+
         }
 
 
@@ -68,6 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulingOptions.UseMaximumPersons = true);
             Expect.Call(_schedulingOptions.UseMaxSeats = true );
             Expect.Call(_schedulingOptions.DoNotBreakMaxSeats = true );
+        	Expect.Call(_schedulingOptions.UseAverageShiftLengths = true);
         }
     }
 }

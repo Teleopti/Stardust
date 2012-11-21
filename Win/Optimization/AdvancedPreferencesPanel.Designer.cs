@@ -45,6 +45,7 @@
 			this.checkBoxMinimumStaffing = new System.Windows.Forms.CheckBox();
 			this.labelShiftSelection = new System.Windows.Forms.Label();
 			this.checkBoxDoNotBreakMaximumSeats = new System.Windows.Forms.CheckBox();
+			this.checkBoxUseAverageShiftLengths = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
 			this.radioButtonStandardDeviation = new System.Windows.Forms.RadioButton();
 			this.checkBoxUseTweakedValues = new System.Windows.Forms.CheckBox();
@@ -179,7 +180,7 @@
 			// labelShift
 			// 
 			this.labelShift.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.labelShift.Location = new System.Drawing.Point(3, 3);
+			this.labelShift.Location = new System.Drawing.Point(313, 3);
 			this.labelShift.Name = "labelShift";
 			this.labelShift.Size = new System.Drawing.Size(98, 20);
 			this.labelShift.TabIndex = 19;
@@ -213,7 +214,7 @@
 			// labelRefreshScreenEveryColon
 			// 
 			this.labelRefreshScreenEveryColon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.labelRefreshScreenEveryColon.Location = new System.Drawing.Point(313, 3);
+			this.labelRefreshScreenEveryColon.Location = new System.Drawing.Point(3, 3);
 			this.labelRefreshScreenEveryColon.Name = "labelRefreshScreenEveryColon";
 			this.labelRefreshScreenEveryColon.Size = new System.Drawing.Size(98, 20);
 			this.labelRefreshScreenEveryColon.TabIndex = 17;
@@ -230,6 +231,7 @@
 			this.tableLayoutPanel8.Controls.Add(this.checkBoxMinimumStaffing, 0, 1);
 			this.tableLayoutPanel8.Controls.Add(this.labelShiftSelection, 0, 0);
 			this.tableLayoutPanel8.Controls.Add(this.checkBoxDoNotBreakMaximumSeats, 1, 4);
+			this.tableLayoutPanel8.Controls.Add(this.checkBoxUseAverageShiftLengths, 0, 5);
 			this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 183);
 			this.tableLayoutPanel8.Name = "tableLayoutPanel8";
@@ -299,6 +301,17 @@
 			this.checkBoxDoNotBreakMaximumSeats.TabIndex = 10;
 			this.checkBoxDoNotBreakMaximumSeats.Text = "xxDoNotBreakMaximumSeats";
 			this.checkBoxDoNotBreakMaximumSeats.UseVisualStyleBackColor = true;
+			// 
+			// checkBoxUseAverageShiftLengths
+			// 
+			this.checkBoxUseAverageShiftLengths.AutoSize = true;
+			this.tableLayoutPanel8.SetColumnSpan(this.checkBoxUseAverageShiftLengths, 2);
+			this.checkBoxUseAverageShiftLengths.Location = new System.Drawing.Point(3, 118);
+			this.checkBoxUseAverageShiftLengths.Name = "checkBoxUseAverageShiftLengths";
+			this.checkBoxUseAverageShiftLengths.Size = new System.Drawing.Size(154, 17);
+			this.checkBoxUseAverageShiftLengths.TabIndex = 11;
+			this.checkBoxUseAverageShiftLengths.Text = "xxUseAverageShiftLengths";
+			this.checkBoxUseAverageShiftLengths.UseVisualStyleBackColor = true;
 			// 
 			// tableLayoutPanel6
 			// 
@@ -454,5 +467,6 @@
         private System.Windows.Forms.Label labelShift;
         private System.Windows.Forms.NumericUpDown numericUpDownRefreshRate;
         private System.Windows.Forms.Label labelRefreshScreenEveryColon;
+		private System.Windows.Forms.CheckBox checkBoxUseAverageShiftLengths;
     }
 }

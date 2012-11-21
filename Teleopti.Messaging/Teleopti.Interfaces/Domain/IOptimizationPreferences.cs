@@ -468,6 +468,14 @@ namespace Teleopti.Interfaces.Domain
         /// </value>
         bool DoNotBreakMaximumSeats { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether [use average shift lengths].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [use average shift lengths]; otherwise, <c>false</c>.
+		/// </value>
+		bool UseAverageShiftLengths { get; set; }
+
         /// <summary>
         /// Gets or sets the refresh screen interval.
         /// </summary>

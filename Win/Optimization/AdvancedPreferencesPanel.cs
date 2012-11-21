@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Win.Optimization
             Preferences.UseMaximumStaffing = checkBoxMaximumStaffing.Checked;
             Preferences.UseMaximumSeats = checkBoxMaximumSeats.Checked;
             Preferences.DoNotBreakMaximumSeats = checkBoxDoNotBreakMaximumSeats.Checked;
-
+        	Preferences.UseAverageShiftLengths = checkBoxUseAverageShiftLengths.Checked;
             Preferences.RefreshScreenInterval = (int)numericUpDownRefreshRate.Value;
         }
 
@@ -84,6 +84,7 @@ namespace Teleopti.Ccc.Win.Optimization
             checkBoxMaximumStaffing.Checked = Preferences.UseMaximumStaffing;
             checkBoxMaximumSeats.Checked = Preferences.UseMaximumSeats;
             checkBoxDoNotBreakMaximumSeats.Checked = Preferences.DoNotBreakMaximumSeats;
+        	checkBoxUseAverageShiftLengths.Checked = Preferences.UseAverageShiftLengths;
 
             numericUpDownRefreshRate.Value = Preferences.RefreshScreenInterval;
         }

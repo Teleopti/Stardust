@@ -520,15 +520,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             IScheduleMatrixLockableBitArrayConverter scheduleMatrixArrayConverter =
                 new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);
-            ILockableBitArray scheduleMatrixArray =
-                scheduleMatrixArrayConverter.Convert(dayOffPreferences.ConsiderWeekBefore, dayOffPreferences.ConsiderWeekAfter);
+			ILockableBitArray scheduleMatrixArray =
+				scheduleMatrixArrayConverter.Convert(dayOffPreferences.ConsiderWeekBefore, dayOffPreferences.ConsiderWeekAfter);
             
             // create decisionmakers
 
             IEnumerable<IDayOffDecisionMaker> decisionMakers =
                 OptimizerHelperHelper.CreateDecisionMakers(scheduleMatrixArray, dayOffPreferences, optimizerPreferences);
 
-            IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions(scheduleMatrixArray);
+            IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions();
             ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
                 = new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, dayOffPreferences, 25);
 
