@@ -126,8 +126,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			                                }
 			                        });
 			}
-
-			toolbarItems.AddRange(new ToolBarItemBase[]
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests) ||
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb))
+			{
+				toolbarItems.AddRange(new ToolBarItemBase[]
 									{
 										new ToolBarButtonItem
 											{
@@ -135,6 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 												ButtonType = "addRequest"
 											}
 									});
+			}
 
 			return new SectionNavigationItem
 					{

@@ -47,50 +47,80 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldHaveDatePicker()
+		public void ShouldHaveHiddenDatePickerIfPermission()
 		{
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(true);
+
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
 
 			var result = ToolBarItemOfType<ToolBarDatePicker>(target.CreatePortalViewModel());
 
 			result.Should().Not.Be.Null();
+			result.IsHhidden.Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldHaveCreateShiftTradeRequestsButtonIfPermission()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(true);
 
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
-
 			var result = ToolBarItemsOfType<ToolBarButtonItem>(target.CreatePortalViewModel());
 
-			result.Should().Not.Be.Null();
-			/* Istf denna kodrad borde man kolla att buttontypen finns i listan, inte på en speciell position eftersom det kommer inte alltid stämma! */
-			result[1].ButtonType.Should().Be.EqualTo("addShiftTradeRequest");
-
-			//result.Should().Contain()
-
-			//foreach (var toolBarButtonItem in result)
-			//{
-			//    if (toolBarButtonItem.ButtonType == "addShiftTradeRequest")
-			//    {
-					
-			//    }
-			//}
+			result.Any(x => x.ButtonType == "addShiftTradeRequest").Should().Be.True();
 		}
 
 		[Test]
-		public void ShouldHaveAddRequestButtonIfPermission()
+		public void ShouldHaveAddRequestButtonIfPermissionToTextRequest()
 		{
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).Return(true);
 
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
 			var result = ToolBarItemsOfType<ToolBarButtonItem>(target.CreatePortalViewModel());
 
-			result.Should().Not.Be.Null();
-			result[2].ButtonType.Should().Be.EqualTo("addRequest");
+			result.Any(x => x.ButtonType == "addRequest").Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldHaveAddRequestButtonIfPermissionToAbsenceRequest()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).Return(true);
+
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var result = ToolBarItemsOfType<ToolBarButtonItem>(target.CreatePortalViewModel());
+
+			result.Any(x => x.ButtonType == "addRequest").Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotHaveCreateShiftTradeRequestsButtonIfNoPermission()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).Return(true);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(false);
+
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var result = ToolBarItemsOfType<ToolBarButtonItem>(target.CreatePortalViewModel());
+
+			result.Any(x => x.ButtonType == "addShiftTradeRequest").Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotHaveAddRequestButtonIfNoPermission()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).Return(false);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).Return(false);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(true);
+
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var result = ToolBarItemsOfType<ToolBarButtonItem>(target.CreatePortalViewModel());
+
+			result.Any(x => x.ButtonType == "addRequest").Should().Be.False();
 		}
 
 		private static SectionNavigationItem RelevantTab(PortalViewModel result)

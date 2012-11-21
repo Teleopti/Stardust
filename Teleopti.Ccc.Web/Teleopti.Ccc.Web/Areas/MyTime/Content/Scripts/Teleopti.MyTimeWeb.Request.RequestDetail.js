@@ -13,7 +13,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	var requestViewModel = null;
 
 	function _initToolbarButtons() {
-		$('#Requests-addTextRequest-button')
+		$('#Requests-addRequest-button')
 			.click(function () {
 				Teleopti.MyTimeWeb.Request.List.DisconnectAll();
 				_clearFormData();
