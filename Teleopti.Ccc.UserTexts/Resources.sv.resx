@@ -10770,4 +10770,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Använd genomsnittlig skiftlängd</value>
     <comment>Use Average Shift Lengths</comment>
   </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Lösenordspolicyn kräver ett säkrare lösenord.</value>
+  </data>
 </root>
