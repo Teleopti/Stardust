@@ -107,6 +107,7 @@ Scenario: Asm should not indicate unread messages if no messages
 	When I click ASM link
 	Then I shoud not see an indication that I have an unread message
 
+@ignore
 Scenario: Asm should indicate unread messages
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -115,6 +116,7 @@ Scenario: Asm should indicate unread messages
 	When I click ASM link
 	Then I shoud see an indication that I have '1' unread messages
 
+@ignore
 Scenario: Asm should indicate number of unread messages
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
