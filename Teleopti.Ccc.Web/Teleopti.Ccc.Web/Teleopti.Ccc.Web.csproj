@@ -624,7 +624,6 @@
     <None Include="Areas\Start\Views\Test\Message.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.LoginViewModel.js" />
     <Content Include="Areas\Start\Content\Css\login.css" />
     <Content Include="Content\crossroads\crossroads.js" />
     <Content Include="Content\crossroads\crossroads.min.js" />
