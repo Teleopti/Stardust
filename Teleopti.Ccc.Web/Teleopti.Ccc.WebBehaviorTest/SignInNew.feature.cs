@@ -294,7 +294,7 @@ this.FeatureBackground();
 #line 79
  testRunner.When("I select application logon data source");
 #line 80
- testRunner.And("I sign in by application logon");
+ testRunner.And("I sign in by user name");
 #line 81
  testRunner.Then("I should not be signed in");
 #line hidden
