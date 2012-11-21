@@ -31,7 +31,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			return request.Button(QuicklyFind.ByClass("request-delete-button"));
 		}
 
-		[FindBy(Id = "Requests-addTextRequest-button")]
+		[FindBy(Id = "Requests-showRequests-button")]
+		public Button ShowRequestsButton { get; set; }
+
+		[FindBy(Id = "Requests-addShiftTradeRequest-button")]
+		public Button AddShiftTradeRequestButton { get; set; }
+
+		[FindBy(Id = "Requests-addRequest-button")]
 		public Button AddRequestButton { get; set; }
 
 		[FindBy(Id = "Request-detail-section")]
