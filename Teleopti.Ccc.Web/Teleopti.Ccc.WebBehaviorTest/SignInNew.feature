@@ -79,6 +79,7 @@ Scenario: Sign in with wrong password should give me an informative error
 @ignore
 Scenario: Sign in without permission
 	Given I dont have permission to sign in
+	And I have the role 'Role for business unit 1'
 	And I am viewing the sign in page
 	When I select application logon data source
 	And I sign in by user name

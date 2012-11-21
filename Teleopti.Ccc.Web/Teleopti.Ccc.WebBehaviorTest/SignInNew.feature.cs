@@ -304,12 +304,14 @@ this.FeatureBackground();
 #line 81
  testRunner.Given("I dont have permission to sign in");
 #line 82
- testRunner.And("I am viewing the sign in page");
+ testRunner.And("I have the role \'Role for business unit 1\'");
 #line 83
- testRunner.When("I select application logon data source");
+ testRunner.And("I am viewing the sign in page");
 #line 84
- testRunner.And("I sign in by user name");
+ testRunner.When("I select application logon data source");
 #line 85
+ testRunner.And("I sign in by user name");
+#line 86
  testRunner.Then("I should not be signed in");
 #line hidden
             this.ScenarioCleanup();

@@ -5,7 +5,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	this.DataSources = ko.observableArray();
 	this.UserName = ko.observable();
 	this.Password = ko.observable();
-	this.ErrorMessage = ko.observable();
+	this.ErrorMessage = ko.observable('');
 
 	this.SelectedDataSource = ko.computed(function () {
 		return ko.utils.arrayFirst(self.DataSources(), function (d) {
@@ -56,14 +56,17 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 				username: self.UserName(),
 				password: self.Password()
 			},
-			error: function(jqXHR, textStatus, errorThrown) {
+			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {
 					var response = $.parseJSON(jqXHR.responseText);
 					self.ErrorMessage(response.Errors);
 				}
 			},
-			success: function(responseData, textStatus, jqXHR) {
-				Teleopti.Start.Authentication.Navigation.GotoBusinessUnits(self.SelectedDataSource().Type, self.SelectedDataSource().Name);
+			success: function (responseData, textStatus, jqXHR) {
+				if (responseData.length == 0)
+					self.ErrorMessage($('#Signin-error').data('nobusinessunitext'));
+				else
+					Teleopti.Start.Authentication.Navigation.GotoBusinessUnits(self.SelectedDataSource().Type, self.SelectedDataSource().Name);
 			}
 		});
 
