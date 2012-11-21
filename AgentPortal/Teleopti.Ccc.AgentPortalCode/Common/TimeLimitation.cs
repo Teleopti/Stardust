@@ -152,9 +152,16 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             return MemberwiseClone();
         }
 
+		public override bool Equals(object obj)
+		{
+			var casted = obj as TimeLimitation;
+			if (casted == null) return false;
+			return casted.GetHashCode() == GetHashCode();
+		}
+
         public override int GetHashCode()
         {
-            return MinTime.GetHashCode() ^ MaxTime.GetHashCode();
+            return MinTime.GetHashCode() ^ MaxTime.GetHashCode() ^ ((_timeLimitationValidator!=null) ? _timeLimitationValidator.GetType().GetHashCode() : 1);
         }
     }
 }

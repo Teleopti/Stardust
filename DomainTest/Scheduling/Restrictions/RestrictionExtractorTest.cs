@@ -114,6 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IEffectiveRestriction combined = _target.CombinedRestriction(new SchedulingOptions { UseRotations = true, UsePreferences = true, UseAvailability = true, UseStudentAvailability = true, UsePreferencesMustHaveOnly = false });
             Assert.IsNotNull(combined);
             Assert.IsFalse(combined.NotAvailable);
+			Assert.IsTrue(combined.IsStudentAvailabilityDay);
         }
 
 		[Test]

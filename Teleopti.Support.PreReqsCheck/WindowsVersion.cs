@@ -28,5 +28,7 @@ namespace SystemInfoApp
       WindowsServer2008,
       WindowsServer2008R2,
       Windows7,
+      WindowsServer2012,
+      Windows8,
    }
 }

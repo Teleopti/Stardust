@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IGroupMatrixHelper _groupMatrixHelper;
     	private readonly IGroupOptimizationValidatorRunner _groupOptimizationValidatorRunner;
     	private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+    	private readonly ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
 
     	public GroupDayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter,
             IDayOffDecisionMaker decisionMaker,
@@ -37,7 +38,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IGroupSchedulingService groupSchedulingService,
             IGroupMatrixHelper groupMatrixHelper,
 			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner,
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+			ISmartDayOffBackToLegalStateService smartDayOffBackToLegalStateService)
         {
             _converter = converter;
             _scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupMatrixHelper = groupMatrixHelper;
     		_groupOptimizationValidatorRunner = groupOptimizationValidatorRunner;
     		_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
+    		_smartDayOffBackToLegalStateService = smartDayOffBackToLegalStateService;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -65,26 +68,30 @@ namespace Teleopti.Ccc.Domain.Optimization
 			bool decisionMakerFoundDays = _decisionMaker.Execute(workingBitArray, scheduleResultDataExtractor.Values());
 			if (!decisionMakerFoundDays)
 				return false;
+			bool success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray), 100);
+			if (!success)
+				return false;
 
 			IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(workingBitArray, originalArray, matrix,
 			                                                                 _daysOffPreferences.ConsiderWeekBefore);
 			IList<DateOnly> daysOffToAdd = _changesTracker.DaysOffAdded(workingBitArray, originalArray, matrix,
 			                                                            _daysOffPreferences.ConsiderWeekBefore);
 
-			
 
-			IList<GroupMatrixContainer> containers;
-			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(matrix.Person, daysOffToRemove[0]);
+			IPerson person = matrix.Person;
+			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, daysOffToRemove[0]);
 			if (groupPerson == null)
 				return false;
 
 			ValidatorResult result = new ValidatorResult();
 			result.Success = true;
 
+			IList<GroupMatrixContainer> containers;
+			
 			if(schedulingOptions.UseSameDayOffs)
 			{
 				//Will always return true IFairnessValueCalculator not using GroupOptimizerValidateProposedDatesInSameMatrix daysoff
-				result = _groupOptimizationValidatorRunner.Run(matrix.Person, daysOffToRemove, daysOffToAdd, schedulingOptions.UseSameDayOffs);
+				result = _groupOptimizationValidatorRunner.Run(person, daysOffToRemove, daysOffToAdd, schedulingOptions.UseSameDayOffs);
 				if (!result.Success)
 				{
 					return false;
@@ -94,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			else
 			{
-				containers = _groupMatrixHelper.CreateGroupMatrixContainers(allMatrixes, daysOffToRemove, daysOffToAdd, matrix.Person, _daysOffPreferences);
+				containers = _groupMatrixHelper.CreateGroupMatrixContainers(allMatrixes, daysOffToRemove, daysOffToAdd, person, _daysOffPreferences);
 			}
 			
 			if (containers == null || containers.Count() == 0)
@@ -102,8 +109,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if(result.MatrixList.Count == 0)
 			{
+				//kan flytta hur mycket som helst, behöver få veta vad som ska schemaläggas
 				if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
 					return false;
+				daysOffToRemove = _changesTracker.DaysOffRemoved(workingBitArray, originalArray, matrix,
+																			 _daysOffPreferences.ConsiderWeekBefore);
+
 				IList<IScheduleDay> removedDays = _groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, schedulingOptions, allMatrixes, _schedulePartModifyAndRollbackService);
 				if (removedDays == null)
 					return false;

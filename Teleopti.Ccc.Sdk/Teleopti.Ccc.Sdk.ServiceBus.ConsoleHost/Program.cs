@@ -1,0 +1,19 @@
+﻿using System;
+using Teleopti.Ccc.Sdk.ServiceBus;
+
+namespace Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost
+{
+	class Program
+	{
+		static void Main(string[] args)
+		{
+			var host = new ServiceBusRunner(null,null,null);
+			host.Start();
+
+			Console.WriteLine("Service bus is now running, press Enter to stop...");
+			Console.ReadLine();
+
+			host.Stop();
+		}
+	}
+}

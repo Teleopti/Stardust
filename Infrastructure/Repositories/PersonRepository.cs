@@ -446,9 +446,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
                 DetachedCriteria person = DetachedCriteria.For<Person>("person")
                     .Add(Restrictions.InG("Id", currentBatchIds))
-                    //.SetFetchMode("PermissionInformation", FetchMode.Join)
-                    .SetFetchMode("PermissionInformation.personInApplicationRole", FetchMode.Join)
-					.SetFetchMode("OptionalColumnValueCollection",FetchMode.Join);
+                   .SetFetchMode("OptionalColumnValueCollection",FetchMode.Join);
+
+				DetachedCriteria roles = DetachedCriteria.For<Person>("roles")
+					.Add(Restrictions.InG("Id", currentBatchIds))
+					.SetFetchMode("PermissionInformation.personInApplicationRole", FetchMode.Join);
 
                 DetachedCriteria personPeriod = DetachedCriteria.For<Person>("personPeriod")
                     .Add(Restrictions.InG("Id", currentBatchIds))
@@ -465,6 +467,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					
                 IList queryResult = Session.CreateMultiCriteria()
                     .Add(person)
+					.Add(roles)
                     .Add(personPeriod)
                     .Add(schedulePeriod)
                     .List();

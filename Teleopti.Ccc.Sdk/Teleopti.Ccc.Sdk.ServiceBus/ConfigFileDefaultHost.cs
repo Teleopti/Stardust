@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using log4net;
-using log4net.Config;
 using Rhino.ServiceBus.Config;
 using Rhino.ServiceBus.Hosting;
 using Rhino.ServiceBus.Internal;
+using log4net;
+using log4net.Config;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Host
+namespace Teleopti.Ccc.Sdk.ServiceBus
 {
 	public class ConfigFileDefaultHost : MarshalByRefObject, IApplicationHost
 	{
