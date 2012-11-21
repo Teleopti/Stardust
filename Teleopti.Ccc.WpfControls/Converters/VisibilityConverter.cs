@@ -27,6 +27,20 @@ namespace Teleopti.Ccc.WpfControls.Converters
         }
     }
 
+    public class DebugConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
+    }
+    
+
     /// <summary>
     /// Converts a bool to Visibility so you can show items dependning on a bool
     /// </summary>
@@ -45,7 +59,7 @@ namespace Teleopti.Ccc.WpfControls.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return !(((Visibility)value == Visibility.Visible));
+            return (Visibility)value != Visibility.Visible;
         }
     }
 }

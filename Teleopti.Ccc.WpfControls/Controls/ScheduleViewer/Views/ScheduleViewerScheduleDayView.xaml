@@ -20,7 +20,7 @@
             BorderBrush="Black" 
             BorderThickness="1" 
             Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}, FallbackValue=White}"
-            ToolTip="{Binding Path=Description}">
+            ToolTip="{Binding Path=Description, FallbackValue=''}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -30,7 +30,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding Description.ShortName}" 
+            <TextBlock Text="{Binding Description.ShortName, FallbackValue=''}" 
                        Grid.Row="0" 
                        Grid.ColumnSpan="2" 
                        FontSize="15" 
