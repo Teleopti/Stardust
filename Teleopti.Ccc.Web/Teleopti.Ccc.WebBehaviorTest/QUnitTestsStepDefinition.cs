@@ -21,17 +21,27 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the tests run")]
 		public void ThenIShouldSeeTheTestsRun()
 		{
-			var testResults = Browser.Current.Para("qunit-testresult");
-			EventualAssert.That(() => testResults.Exists, Is.True);
-			EventualAssert.That(() => int.Parse(testResults.Span(QuicklyFind.ByClass("total")).InnerHtml), Is.GreaterThan(0));
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector("#qunit-tests")).Exists, Is.True);
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".running")).Exists, Is.False);
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector("#qunit-testresult")).Exists, Is.True);
+			EventualAssert.That(() =>
+			                    	{
+			                    		int total;
+			                    		var text = Browser.Current.Element(Find.BySelector("#qunit-testresult .total")).Text;
+										return int.TryParse(text, out total) ? total : 0;
+			                    	}, Is.GreaterThan(0));
 		}
 
 		[Then(@"I should see all tests pass")]
 		public void ThenIShouldSeeAllTestsPass()
 		{
-			var testResults = Browser.Current.Para("qunit-testresult");
-			EventualAssert.That(() => testResults.Exists, Is.True);
-			EventualAssert.That(() => int.Parse(testResults.Span(QuicklyFind.ByClass("failed")).InnerHtml), Is.EqualTo(0));
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector("#qunit-testresult")).Exists, Is.True);
+			EventualAssert.That(() =>
+			                    	{
+			                    		int failed;
+										var text = Browser.Current.Element(Find.BySelector("#qunit-testresult .failed")).Text;
+			                    		return int.TryParse(text, out failed) ? failed : -1;
+			                    	}, Is.EqualTo(0));
 		}
 
 	}
