@@ -132,7 +132,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 25
  testRunner.Given("I am an agent");
 #line 26
- testRunner.When("I sign in");
+ testRunner.When("I am viewing an application page");
 #line 27
  testRunner.Then("I should be able to see requests link");
 #line hidden
@@ -149,7 +149,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 30
  testRunner.Given("I am an agent without access to any requests");
 #line 31
- testRunner.When("I sign in");
+ testRunner.When("I am viewing an application page");
 #line 32
  testRunner.Then("I should not be able to see requests link");
 #line hidden

@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	{
 
 		[Given(@"I am viewing an application page")]
+		[When(@"I am viewing an application page")]
 		public void WhenIAmViewingAnApplicationPage()
 		{
 			if (!UserFactory.User().HasSetup<IUserRoleSetup>())

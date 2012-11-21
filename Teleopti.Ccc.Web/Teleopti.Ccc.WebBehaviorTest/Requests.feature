@@ -23,12 +23,12 @@ Scenario: See absence request
 
 Scenario: Requests tab
 	Given I am an agent
-	When I sign in
+	When I am viewing an application page
 	Then I should be able to see requests link
 
 Scenario: No access to requests tab
 	Given I am an agent without access to any requests
-	When I sign in
+	When I am viewing an application page
 	Then I should not be able to see requests link
 
 Scenario: No access to requests page
