@@ -49,7 +49,7 @@ GO
 --SET DEFAULT VALUE  AND NOT NULL ON NEW COLUMNS
 
 UPDATE mart.dim_absence
-SET absence_shortname ='-1'
+SET absence_shortname ='Not Defined'
 WHERE absence_shortname IS NULL
 
 GO
@@ -159,7 +159,7 @@ ALTER TABLE mart.dim_day_off ADD day_off_shortname nvarchar(25)
 GO
 --SET DEFAULT VALUE  AND NOT NULL ON NEW COLUMNS
 
-UPDATE mart.dim_day_off SET day_off_shortname ='-1' WHERE day_off_shortname IS NULL
+UPDATE mart.dim_day_off SET day_off_shortname ='Not Defined' WHERE day_off_shortname IS NULL
 GO
 
 UPDATE mart.dim_day_off SET display_color_html='#FFFFFF' --DEFAULT WHITE
