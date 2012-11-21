@@ -412,16 +412,14 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Asm should indicate unread messages")]
-        [NUnit.Framework.IgnoreAttribute()]
         public virtual void AsmShouldIndicateUnreadMessages()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Asm should indicate unread messages", new string[] {
-                        "ignore"});
-#line 111
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Asm should indicate unread messages", ((string[])(null)));
+#line 110
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 112
+#line 111
  testRunner.Given("I have the role \'Full access to mytime\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
@@ -430,11 +428,11 @@ this.FeatureBackground();
             table8.AddRow(new string[] {
                         "Title",
                         "New message"});
-#line 113
+#line 112
  testRunner.And("I have an unread message with", ((string)(null)), table8, "And ");
-#line 116
+#line 115
  testRunner.When("I click ASM link", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 117
+#line 116
  testRunner.Then("I shoud see an indication that I have \'1\' unread messages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -442,16 +440,14 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Asm should indicate number of unread messages")]
-        [NUnit.Framework.IgnoreAttribute()]
         public virtual void AsmShouldIndicateNumberOfUnreadMessages()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Asm should indicate number of unread messages", new string[] {
-                        "ignore"});
-#line 120
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Asm should indicate number of unread messages", ((string[])(null)));
+#line 118
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 121
+#line 119
  testRunner.Given("I have the role \'Full access to mytime\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
@@ -460,7 +456,7 @@ this.FeatureBackground();
             table9.AddRow(new string[] {
                         "Title",
                         "New message"});
-#line 122
+#line 120
  testRunner.And("I have an unread message with", ((string)(null)), table9, "And ");
 #line hidden
             TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
@@ -469,11 +465,11 @@ this.FeatureBackground();
             table10.AddRow(new string[] {
                         "Title",
                         "Another Message"});
-#line 125
+#line 123
  testRunner.And("I have an unread message with", ((string)(null)), table10, "And ");
-#line 128
+#line 126
  testRunner.When("I click ASM link", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 129
+#line 127
  testRunner.Then("I shoud see an indication that I have \'2\' unread messages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -486,19 +482,19 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should be notified when activity changes", new string[] {
                         "ignore"});
-#line 133
+#line 131
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 134
+#line 132
  testRunner.Given("I have the role \'Full access to mytime\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 135
+#line 133
  testRunner.And("Current time is \'2030-01-01 11:59\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 136
+#line 134
  testRunner.When("I click ASM link", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 137
+#line 135
  testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 138
+#line 136
  testRunner.Then("I should see only one alert containing \'Phone\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

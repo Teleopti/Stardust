@@ -109,8 +109,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I shoud see an indication that I have '(.*)' unread messages")]
 		public void ThenIShoudSeeAnIndicationThatIHaveUnreadMessages(int unreadMessagesCount)
 		{
-			var numberofUnreadMessages = int.Parse(Browser.Current.Span(Find.BySelector(".icon.mail-small:first-child")).Text);
-			EventualAssert.That(() => numberofUnreadMessages, Is.EqualTo(unreadMessagesCount));
+			EventualAssert.That(() => (Browser.Current.Span(Find.ById("message-count")).Text), Is.EqualTo(unreadMessagesCount.ToString()));
 		}
 
 		[Then(@"I shoud see an indication that I have an unread message")]
