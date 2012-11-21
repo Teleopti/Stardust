@@ -131,5 +131,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new StringContainsAnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
 		}
 
+		[Then(@"I should see a log on error '(.*)'")]
+		public void ThenIShouldSeeALogOnError(string resourceText)
+		{
+			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new StringContainsAnyLanguageResourceContraint(resourceText));
+		}
+
 	}
 }

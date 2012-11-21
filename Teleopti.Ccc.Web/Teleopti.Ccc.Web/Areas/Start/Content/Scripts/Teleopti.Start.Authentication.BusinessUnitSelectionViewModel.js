@@ -19,9 +19,7 @@ Teleopti.Start.Authentication.BusinessUnitSelectionViewModel = function (data) {
 					});
 					self.BusinessUnits.push(businessUnit);
 				}
-				if (self.BusinessUnits().length === 1) {
-					self.BusinessUnits()[0].Select();
-				}
+				
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				Teleopti.Start.Authentication.Navigation.GotoSignIn();

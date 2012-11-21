@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
@@ -138,6 +139,31 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			target.Response.TrySkipIisCustomErrors.Should().Be.True();
 			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
 			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.LogOnFailedInvalidUserNameOrPassword);
+		}
+
+		[Test]
+		public void ShouldReturnErrorIfNoPermission()
+		{
+			var person = new Person();
+			person.SetId(Guid.NewGuid());
+			var businessUnitId = Guid.NewGuid();
+			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
+			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult
+			{
+				Successful = true,
+				DataSource = new FakeDataSource { DataSourceName = "datasource" },
+				Person = person
+			});
+			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
+			webLogon.Stub(x => x.LogOn("datasource", businessUnitId, person.Id.Value)).Throw(new PermissionException());
+			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, null, webLogon);
+
+			var result = target.Logon(authenticationModel, businessUnitId);
+
+			target.Response.StatusCode.Should().Be(400);
+			target.Response.TrySkipIisCustomErrors.Should().Be.True();
+			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.InsufficientPermissionForWeb);
+			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.InsufficientPermissionForWeb);
 		}
 
 	}

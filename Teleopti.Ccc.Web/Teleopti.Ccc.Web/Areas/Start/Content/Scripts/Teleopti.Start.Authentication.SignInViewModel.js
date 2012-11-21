@@ -49,6 +49,14 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 
 	this.SignIn = function () {
 		var state = data.authenticationState;
+		
+		var error = function(jqXHR, textStatus, errorThrown) {
+			if (jqXHR.status == 400) {
+				var response = $.parseJSON(jqXHR.responseText);
+				self.ErrorMessage(response.Errors);
+			}
+		};
+		
 		state.ForceLoadBusinessUnits({
 			data: {
 				type: self.SelectedDataSource().Type,
@@ -56,15 +64,21 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 				username: self.UserName(),
 				password: self.Password()
 			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status == 400) {
-					var response = $.parseJSON(jqXHR.responseText);
-					self.ErrorMessage(response.Errors);
-				}
-			},
+			error: error,
 			success: function (responseData, textStatus, jqXHR) {
 				if (responseData.length == 0)
 					self.ErrorMessage($('#Signin-error').data('nobusinessunitext'));
+				if (responseData.length == 1) {
+					state.SignIn({
+						data: {
+							businessUnitId: responseData[0].Id
+						},
+						success: function () {
+							Teleopti.Start.Authentication.Navigation.GotoMenu();
+						},
+						error: error
+					});
+				}
 				else
 					Teleopti.Start.Authentication.Navigation.GotoBusinessUnits(self.SelectedDataSource().Type, self.SelectedDataSource().Name);
 			}

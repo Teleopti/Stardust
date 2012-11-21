@@ -1,5 +1,6 @@
 using System;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			var result = model.AuthenticateUser();
 			if (!result.Successful)
-				return HandleUnsuccessfulAuthentication();
+				return ReturnErrorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
 			var businessUnits = _businessUnitViewModelFactory.BusinessUnits(result.DataSource, result.Person);
 			return Json(businessUnits, JsonRequestBehavior.AllowGet);
 		}
@@ -41,18 +42,25 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpPost]
 		public JsonResult Logon(IAuthenticationModel model, Guid businessUnitId)
 		{
-			var result = model.AuthenticateUser();
-			if (!result.Successful)
-				return HandleUnsuccessfulAuthentication();
-			_webLogon.LogOn(result.DataSource.DataSourceName, businessUnitId, result.Person.Id.Value);
+			try
+			{
+				var result = model.AuthenticateUser();
+				if (!result.Successful)
+					return ReturnErrorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
+				_webLogon.LogOn(result.DataSource.DataSourceName, businessUnitId, result.Person.Id.Value);
+			}
+			catch (PermissionException)
+			{
+				return ReturnErrorMessage(Resources.InsufficientPermissionForWeb);
+			}
 			return Json(null);
 		}
 
-		private JsonResult HandleUnsuccessfulAuthentication()
+		private JsonResult ReturnErrorMessage(string message)
 		{
 			Response.StatusCode = 400;
 			Response.TrySkipIisCustomErrors = true;
-			ModelState.AddModelError("Error", Resources.LogOnFailedInvalidUserNameOrPassword);
+			ModelState.AddModelError("Error", message);
 			return ModelState.ToJson();
 		}
 	}
