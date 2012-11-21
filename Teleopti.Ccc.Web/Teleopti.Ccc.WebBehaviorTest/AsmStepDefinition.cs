@@ -109,6 +109,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I recieve a new message")]
 		public void WhenIRecieveANewMessage()
 		{
+			//hämta istället med selector.....
+			var messageCountSpan = Browser.Current.Span(Find.BySelector(".icon.mail-small"));
+			var something = Browser.Current.Element(QuicklyFind.ByClass("icon mail-small"));
+
+
 			var unreadMessageCount = int.Parse(Browser.Current.Span(Find.ById("unreadMessageCount")).EventualGet().Text);
 			const string js = @"var data = {{UnreadMessagesCount : '{0}'}};Teleopti.MyTimeWeb.Asm.SetMessageCount(data);";
 			var formattedJs = string.Format(js, unreadMessageCount + 1);
