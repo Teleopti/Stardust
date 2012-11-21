@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.Collection;
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday
             InitializeComponent();
             _listViewPresenter = new ListViewPresenter(mainGrid);
 
-            var view = CollectionViewSource.GetDefaultView(mainGrid.ItemsSource);
+            var view = (ListCollectionView)CollectionViewSource.GetDefaultView(mainGrid.ItemsSource);
             view.GroupDescriptions.Add(new PropertyGroupDescription("StateGroup.Available"));
         }
 

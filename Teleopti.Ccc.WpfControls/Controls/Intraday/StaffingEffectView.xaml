@@ -64,12 +64,12 @@
         <Label  Grid.Row="5"  Content="{x:Static Member=UserTexts:Resources.NegativeEffectColon}"/>
         <Label   Grid.Row="6"  Content="{x:Static Member=UserTexts:Resources.TotalOutOfAdherenceColon}"/>
 
-        <TextBlock   Grid.Row="0" Grid.Column="1" Text="{Binding PositiveEffect}"/>
-        <TextBlock  Grid.Row="1" Grid.Column="1" Text="{Binding NegativeEffect}"/>
-        <TextBlock  Grid.Row="2" Grid.Column="1" Text="{Binding Total}"/>
-        <TextBlock Grid.Row="4"  Grid.Column="1" Text="{Binding Path=PositiveEffectPercent,StringFormat=P1}"/>
-        <TextBlock   Grid.Row="5" Grid.Column="1" Text="{Binding Path=NegativeEffectPercent,StringFormat=P1}"/>
-        <TextBlock   Grid.Row="6" Grid.Column="1" Text="{Binding Path=TotalPercent,StringFormat=P1}"/>
+            <TextBlock   Grid.Row="0" Grid.Column="1" Text="{Binding PositiveEffect, FallbackValue=0}"/>
+            <TextBlock  Grid.Row="1" Grid.Column="1" Text="{Binding NegativeEffect, FallbackValue=0}"/>
+            <TextBlock  Grid.Row="2" Grid.Column="1" Text="{Binding Total, FallbackValue=0}"/>
+            <TextBlock Grid.Row="4"  Grid.Column="1" Text="{Binding Path=PositiveEffectPercent,StringFormat=P1, FallbackValue=0}"/>
+            <TextBlock   Grid.Row="5" Grid.Column="1" Text="{Binding Path=NegativeEffectPercent,StringFormat=P1, FallbackValue=0}"/>
+            <TextBlock   Grid.Row="6" Grid.Column="1" Text="{Binding Path=TotalPercent,StringFormat=P1, FallbackValue=0}"/>
     </Grid>
         </StackPanel>
 </UserControl>

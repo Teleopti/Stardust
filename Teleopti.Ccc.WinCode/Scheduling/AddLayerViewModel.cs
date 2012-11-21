@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public ICollectionView Payloads
         {
-            get { return CollectionViewSource.GetDefaultView(_payloads); }
+            get { return CollectionViewSource.GetDefaultView(_payloads) as ListCollectionView; }
         }
 
         public T SelectedItem
