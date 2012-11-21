@@ -149,6 +149,47 @@ ALTER TABLE stage.stg_day_off ADD CONSTRAINT
            business_unit_code
            )
 GO
+--------------------STG_
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[stage].[stg_schedule_day_off_count]') AND type in (N'U'))
+DROP TABLE [stage].[stg_schedule_day_off_count]
+GO
+
+CREATE TABLE [stage].[stg_schedule_day_off_count](
+           [date] [smalldatetime] NOT NULL,
+           [start_interval_id] [smallint] NOT NULL,
+           [person_code] [uniqueidentifier] NOT NULL,
+           [scenario_code] [uniqueidentifier] NOT NULL,
+           [starttime] [smalldatetime] NULL,
+           [day_off_code] [uniqueidentifier] NULL,
+           [day_off_name] [nvarchar](50) NOT NULL,
+           [day_off_shortname] [nvarchar](25) NOT NULL,          
+           [day_count] [int] NULL,
+           [business_unit_code] [uniqueidentifier] NOT NULL,
+           [datasource_id] [smallint] NULL,
+           [insert_date] [smalldatetime] NULL,
+           [update_date] [smalldatetime] NULL,
+           [datasource_update_date] [smalldatetime] NULL
+)
+
+ALTER TABLE stage.stg_schedule_day_off_count ADD CONSTRAINT
+           PK_stg_schedule_day_off_count PRIMARY KEY CLUSTERED 
+           (
+           date,
+           start_interval_id,
+           person_code,
+           scenario_code
+           )
+GO
+
+ALTER TABLE [stage].[stg_schedule_day_off_count] ADD  CONSTRAINT [DF_stg_schedule_day_off_count_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+GO
+
+ALTER TABLE [stage].[stg_schedule_day_off_count] ADD  CONSTRAINT [DF_stg_schedule_day_off_count_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+GO
+
+ALTER TABLE [stage].[stg_schedule_day_off_count] ADD  CONSTRAINT [DF_stg_schedule_day_off_count_update_date]  DEFAULT (getdate()) FOR [update_date]
+GO
+
 --------------------DIM_DAY_OFF-------------------------
 
 --ADD A NEW COLUMN IN MART.DIM_ABSENCE FOR DISPLAY_COLOR_HTML
