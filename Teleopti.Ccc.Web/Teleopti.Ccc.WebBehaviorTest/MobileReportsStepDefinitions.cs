@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a table")]
 		public void ThenIShouldSeeATable()
 		{
-			var table = _page.ReportTableContainer.Table(t => true);
+			var table = _page.ReportTableContainer.Table(Find.First());
 			EventualAssert.That(() => table.TableCells.Count, Is.GreaterThan(0));
 		}
 
