@@ -126,15 +126,6 @@ Scenario: Asm should indicate number of unread messages
 	When I click ASM link
 	Then I shoud see an indication that I have '2' unread messages
 	
-Scenario: Asm should update when I get new messages
-	Given I have the role 'Full access to mytime'
-	And I have an unread message with
-	| Field         | Value        |
-	| Title         | New message	 |
-	When I click ASM link
-	And I recieve a new message
-	Then I shoud see an indication that I have '2' unread messages
-
 #Not in use until version 8
 @ignore
 Scenario: Agent should be notified when activity changes

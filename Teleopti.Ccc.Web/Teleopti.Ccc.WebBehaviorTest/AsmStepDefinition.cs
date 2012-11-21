@@ -106,25 +106,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			}, Is.EqualTo(hour));
 		}
 
-		[When(@"I recieve a new message")]
-		public void WhenIRecieveANewMessage()
-		{
-			//hämta istället med selector.....
-			var messageCountSpan = Browser.Current.Span(Find.BySelector(".icon.mail-small"));
-			var something = Browser.Current.Element(QuicklyFind.ByClass("icon mail-small"));
-
-
-			var unreadMessageCount = int.Parse(Browser.Current.Span(Find.ById("unreadMessageCount")).EventualGet().Text);
-			const string js = @"var data = {{UnreadMessagesCount : '{0}'}};Teleopti.MyTimeWeb.Asm.SetMessageCount(data);";
-			var formattedJs = string.Format(js, unreadMessageCount + 1);
-			Browser.Current.Eval(formattedJs);
-		}
-
 		[Then(@"I shoud see an indication that I have '(.*)' unread messages")]
 		public void ThenIShoudSeeAnIndicationThatIHaveUnreadMessages(int unreadMessagesCount)
 		{
-			EventualAssert.That(() =>Browser.Current.Span(Find.ById("unreadMessageCount")).Exists,Is.True);
-			EventualAssert.That(() => (int.Parse(Browser.Current.Span(Find.ById("unreadMessageCount")).Text)), Is.EqualTo(unreadMessagesCount));
+			var numberofUnreadMessages = int.Parse(Browser.Current.Span(Find.BySelector(".icon.mail-small:first-child")).Text);
+			EventualAssert.That(() => numberofUnreadMessages, Is.EqualTo(unreadMessagesCount));
 		}
 
 		[Then(@"I shoud see an indication that I have an unread message")]

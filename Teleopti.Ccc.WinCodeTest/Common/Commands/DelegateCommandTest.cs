@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores"), Test]
-		public void CanExecute_WhenNoParameterForCanEexcuteIsSet_ShouldReturnTrue()
+		public void CanExecute_WhenNoParameterForCanExecuteIsSet_ShouldReturnTrue()
 		{
 			Assert.IsTrue(CreateCommand(ExecuteCommand).CanExecute(null));
 		}

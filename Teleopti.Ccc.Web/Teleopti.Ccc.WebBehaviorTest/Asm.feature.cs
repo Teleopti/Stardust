@@ -476,55 +476,25 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Asm should update when I get new messages")]
-        public virtual void AsmShouldUpdateWhenIGetNewMessages()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Asm should update when I get new messages", ((string[])(null)));
-#line 129
-this.ScenarioSetup(scenarioInfo);
-#line 6
-this.FeatureBackground();
-#line 130
- testRunner.Given("I have the role \'Full access to mytime\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-            TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Field",
-                        "Value"});
-            table11.AddRow(new string[] {
-                        "Title",
-                        "New message"});
-#line 131
- testRunner.And("I have an unread message with", ((string)(null)), table11, "And ");
-#line 134
- testRunner.When("I click ASM link", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 135
- testRunner.And("I recieve a new message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 136
- testRunner.Then("I shoud see an indication that I have \'2\' unread messages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Agent should be notified when activity changes")]
         [NUnit.Framework.IgnoreAttribute()]
         public virtual void AgentShouldBeNotifiedWhenActivityChanges()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Agent should be notified when activity changes", new string[] {
                         "ignore"});
-#line 140
+#line 131
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 141
+#line 132
  testRunner.Given("I have the role \'Full access to mytime\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 142
+#line 133
  testRunner.And("Current time is \'2030-01-01 11:59\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 143
+#line 134
  testRunner.When("I click ASM link", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 144
+#line 135
  testRunner.And("Current browser time has changed to \'2030-01-01 12:00\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 145
+#line 136
  testRunner.Then("I should see only one alert containing \'Phone\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
