@@ -64,7 +64,7 @@ Scenario: Sign in with wrong password should give me an informative error
 	Given I have the role 'Role for business unit 1'
 	And I am viewing the sign in page
 	When I sign in by user name and wrong password
-	Then I should see an log on error
+	Then I should see a log on error
 
 Scenario: Sign in without permission
 	Given I dont have permission to sign in

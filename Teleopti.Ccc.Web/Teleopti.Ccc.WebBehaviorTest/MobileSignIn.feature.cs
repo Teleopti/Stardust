@@ -121,7 +121,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 22
  testRunner.When("I sign in by user name and wrong password");
 #line 23
- testRunner.Then("I should see an log on error");
+ testRunner.Then("I should see a log on error");
 #line hidden
             this.ScenarioCleanup();
         }

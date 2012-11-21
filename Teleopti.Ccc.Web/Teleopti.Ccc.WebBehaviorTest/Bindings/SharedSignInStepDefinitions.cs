@@ -15,18 +15,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	[Binding]
 	public class SharedSignInStepDefinitions
 	{
+		private bool _newSignIn;
+
+		[BeforeScenario("signinnew")]
+		public void FlagForNewSignInPage()
+		{
+			_newSignIn = true;
+		}
+
 		[Given(@"I am viewing the sign in page")]
 		public void GivenIAmAtTheSignInPage()
 		{
-			Navigation.GotoGlobalSignInPage();
+			Navigation.GotoGlobalSignInPage(_newSignIn);
 		}
-
-		[Given(@"I am viewing the new sign in page")]
-		public void GivenIAmViewingTheNewSignInPage()
-		{
-			Navigation.GotoGlobalSignInNewPage();
-		}
-
 
 		[Given(@"I am viewing the mobile sign in page")]
 		public void GivenIAmAtTheMobileSignInPage()
@@ -64,68 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				UserFactory.User().Setup(new Agent());
 		}
 
-		[When(@"I sign in by windows credentials")]
-		public void WhenISignInByWindowsAuthentication()
-		{
-			//if (!UserFactory.User().HasSetup<AgentSecondBusinessUnit>())
-			//{
-			//    ScenarioContext.Current.Pending();
-			//    return;
-			//}
-			UserFactory.User().UpdateWindowsUser();
-			Pages.Pages.CurrentSignInPage.SignInWindows();
-		}
 
-		[When(@"I sign in by user name and wrong password")]
-		public void WhenISignInByUserNameAndWrongPassword()
-		{
-			var userName = UserFactory.User().MakeUser();
-			Pages.Pages.CurrentSignInPage.SignInApplication(userName, "wrong password");
-		}
-
-		[When(@"I select application logon data source")]
-		public void WhenISelectApplicationLogonDataSource()
-		{
-			Pages.Pages.CurrentSignInNewPage.SelectTestDataApplicationLogon();
-		}
-
-		[When(@"I select a business unit")]
-		public void WhenISelectABusinessUnit()
-		{
-			Pages.Pages.CurrentSignInPage.SelectFirstBusinessUnit();
-			Pages.Pages.CurrentSignInPage.ClickBusinessUnitOkButton();
-		}
-
-		[When(@"I select business unit '(.*)'")]
-		public void WhenISelectBusinessUnit(string businessUnit)
-		{
-			Pages.Pages.CurrentSignInNewPage.SelectBusinessUnitByName(businessUnit);
-		}
-
-
-		[Then(@"I should be signed in")]
-		public void ThenIShouldBeSignedIn()
-		{
-			EventualAssert.That(() => Browser.Current.Link("signout").Exists || Browser.Current.Link("signout-button").Exists, Is.True);
-		}
-
-		[Then(@"I should see a warning message that password will be expired")]
-		public void ThenIShouldSeeAWarningMessageThatPasswordWillBeExpired()
-		{                                                                                              
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.WarningMessage.InnerHtml.Contains("Du måste ändra ditt lösenord. Det går ut om 1 dagar."), Is.True);
-		}
-
-		[Then(@"I should see an log on error")]
-		public void ThenIShouldSeeAnLogOnError()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new StringContainsAnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
-		}
-
-		[Then(@"I should see log on failed with information")]
-		public void ThenIShouldSeeLogOnFailedWithInformation()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInNewPage.ErrorText.Text, new StringContainsAnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
-		}
 
 		[Then(@"I should see an error message ""(.*)""")]
 		public void ThenIShouldSeeAnErrorMessage(string msg)

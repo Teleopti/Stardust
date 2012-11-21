@@ -197,7 +197,7 @@ this.FeatureBackground();
 #line 46
  testRunner.Then("I should not be signed in");
 #line 47
- testRunner.And("I should see an log on error");
+ testRunner.And("I should see a log on error");
 #line hidden
             this.ScenarioCleanup();
         }

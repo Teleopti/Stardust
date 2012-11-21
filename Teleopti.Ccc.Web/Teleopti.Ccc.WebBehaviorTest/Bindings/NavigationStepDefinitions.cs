@@ -1,10 +1,8 @@
 using System;
 using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
@@ -12,64 +10,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	[Binding]
 	public class NavigationStepDefinitions
 	{
-		[When(@"I sign in")]
-		[When(@"I sign in by user name")]
-		public void WhenISignIn()
-		{
-			var userName = UserFactory.User().MakeUser();
-			if (!(Browser.Current.Url.Contains("/SignIn") || Browser.Current.Url.Contains("/MobileSignIn")))
-				Navigation.GotoGlobalSignInPage();
-			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
-		}
-
-		[When(@"I try to sign in by application logon")]
-		public void WhenITryToSignInByApplicationLogon()
-		{
-			var userName = UserFactory.User().MakeUser();
-			Pages.Pages.CurrentSignInNewPage.TrySignInApplication(userName, TestData.CommonPassword);
-		}
-
-		[When(@"I try to sign in by application logon with wrong password")]
-		public void WhenITryToSignInByApplicationLogonWithWrongPassword()
-		{
-			var userName = UserFactory.User().MakeUser();
-			Pages.Pages.CurrentSignInNewPage.TrySignInApplication(userName, "wrong password");
-		}
-
-		[When(@"I sign in again")]
-		public void WhenISignInAgain()
-		{
-			Navigation.GotoGlobalSignInPage();
-			Pages.Pages.CurrentSignInPage.SignInApplication(UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName, TestData.CommonPassword);
-		}
-
-		[Given(@"I am signed in")]
-		public void IAmSignedIn()
-		{
-			if (!UserFactory.User().HasSetup<IUserRoleSetup>())
-				UserFactory.User().Setup(new Agent());
-			TestControllerMethods.Logon();
-		}
-
-		[Given(@"I am signed in with")]
-		public void GivenIAmSignedInWith(Table table)
-		{
-			var user = table.CreateInstance<UserConfigurable>();
-			var userName = user.UserName;
-			var password = user.Password;
-			Navigation.GotoGlobalSignInPage();
-			Pages.Pages.CurrentSignInPage.SignInApplication(userName, password);
-		}
-
-		[When(@"I try to sign in with")]
-		public void WhenITryToSignInWith(Table table)
-		{
-			var user = table.CreateInstance<UserConfigurable>();
-			var userName = user.UserName;
-			var password = user.Password;
-			Navigation.GotoGlobalSignInPage();
-			Pages.Pages.CurrentSignInPage.TrySignInApplication(userName, password);
-		}
 
 		[Given(@"I am viewing an application page")]
 		public void WhenIAmViewingAnApplicationPage()

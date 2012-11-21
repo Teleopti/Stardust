@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "ApplicationSignIn_SignIn_UserName")] public TextField UserNameTextField { get; set; }
 
 		public Element ValidationSummary { get { return Document.Span(QuicklyFind.ByClass("error")); } }
-		public Div WarningMessage { get; private set; }
 
 		[FindBy(Id = "businessunit-ok-button")]public Button SignInBusinessInitsOkButton;
 
@@ -39,7 +38,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			SigninDataSources.Filter(Find.ByValue("TestData")).First().Click();
 		}
-		
+
+		public void SelectWindowsTestDataSource()
+		{
+			throw new NotImplementedException();
+		}
+
 		public void SignInWindows()
 		{
 			throw new NotImplementedException();
@@ -87,6 +91,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public void SelectFirstBusinessUnit()
 		{
 			SignInBusinessUnits.First().Click();
+		}
+
+		public void SelectBusinessUnitByName(string name)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void ClickBusinessUnitOkButton()

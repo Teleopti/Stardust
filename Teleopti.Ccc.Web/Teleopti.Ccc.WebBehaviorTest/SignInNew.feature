@@ -1,4 +1,5 @@
-﻿Feature: Sign in New
+﻿@signinnew
+Feature: Sign in New
 	In order to access the site
 	As a user that is not signed in
 	I want to be able to sign in
@@ -33,18 +34,19 @@ Background:
 Scenario: Sign in with a user with multiple business units by user name
 	Given I have the role 'Role for business unit 1'
 	And I have the role 'Role for business unit 2'
-	And I am viewing the new sign in page
+	And I am viewing the sign in page
 	When I select application logon data source
-	And I try to sign in by application logon
+	And I sign in by user name
 	And I select business unit 'Business Unit 1'
 	Then I should be signed in
 
 Scenario: Sign in with a user with one business unit by user name and I should be directed into that business unit direct without having to select it
 	Given I have the role 'Role for business unit 1'
-	And I am viewing the new sign in page
+	And I am viewing the sign in page
 	When I select application logon data source
-	And I try to sign in by application logon
+	And I sign in by user name
 	Then I should be signed in
+
 @ignore
 Scenario: Sign in with a user with multiple business units by Windows credentials
 	Given Windows user have the role 'Role for business unit 1'
@@ -52,9 +54,10 @@ Scenario: Sign in with a user with multiple business units by Windows credential
 	And I am viewing the sign in page
 	When I select windows logon data source
 	And I sign in by windows credentials
-	And I select a business unit
+	And I select business unit 'Business Unit 1'
 	Then I should be signed in
-@ignore	
+	
+@ignore
 Scenario: Sign in with a user with one business unit by Windows credentials and I should be directed into that business unit direct without having to select it
 	Given Windows user have the role 'Role for business unit 2'
 	And I am viewing the sign in page
@@ -64,14 +67,15 @@ Scenario: Sign in with a user with one business unit by Windows credentials and 
 
 Scenario: Sign in with wrong password should give me an informative error
 	Given I have the role 'Role for business unit 1'
-	And I am viewing the new sign in page
+	And I am viewing the sign in page
 	When I select application logon data source
-	And I try to sign in by application logon with wrong password
-	Then I should see log on failed with information
+	And I sign in by user name and wrong password
+	Then I should see a log on error
+
 @ignore
 Scenario: Sign in without permission
 	Given I dont have permission to sign in
-	And I am viewing the new sign in page
+	And I am viewing the sign in page
 	When I select application logon data source
-	And I try to sign in by application logon
+	And I sign in by application logon
 	Then I should not be signed in

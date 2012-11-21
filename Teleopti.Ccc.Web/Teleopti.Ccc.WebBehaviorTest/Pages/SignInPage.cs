@@ -36,9 +36,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "signout-button")]
 		public Link SignoutButton { get; set; }
 
-		[FindBy(Id = "warning")]
-		public Div WarningMessage { get; set; }
-
 		public void SelectApplicationTestDataSource()
 		{
 			ApplicationDataSourceList.ListItem(Find.ByText("TestData")).EventualClick();
@@ -53,6 +50,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			BusinessUnitList.WaitUntilExists();
 			BusinessUnitList.ListItem(Find.First()).EventualClick();
+		}
+
+		public void SelectBusinessUnitByName(string name)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void ClickBusinessUnitOkButton()
