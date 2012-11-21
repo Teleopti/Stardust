@@ -15,25 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	[Binding]
 	public class SharedSignInStepDefinitions
 	{
-		private bool _newSignIn;
 
-		[BeforeScenario("signinnew")]
-		public void FlagForNewSignInPage()
-		{
-			_newSignIn = true;
-		}
-
-		[Given(@"I am viewing the sign in page")]
-		public void GivenIAmAtTheSignInPage()
-		{
-			Navigation.GotoGlobalSignInPage(_newSignIn);
-		}
-
-		[Given(@"I am viewing the mobile sign in page")]
-		public void GivenIAmAtTheMobileSignInPage()
-		{
-			Navigation.GotoMobileReportsSignInPage(string.Empty);
-		}
 
 		[Given(@"I dont have permission to sign in")]
 		public void GivenIDontHavePermissionToSignIn()

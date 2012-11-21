@@ -10,29 +10,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class RoutingStepDefinition
 	{
-		[When(@"I navigate to the site's root")]
-		public void WhenINavigateToTheSiteSRoot()
-		{
-			Navigation.GotoSiteHomePage();
-		}
-
-		[When(@"I navigate to MyTime")]
-		public void WhenINavigateToMyTime()
-		{
-			Navigation.GotoMyTime();
-		}
-
-		[When(@"I navigate to Mobile Reports")]
-		public void WhenINavigateToMobileReposrts()
-		{
-			Navigation.GotoMobileReportsSignInPage(string.Empty);
-		}
-
-		[When(@"I navigate to the site's root mobile signin page")]
-		public void WhenINavigateToTheSiteSRootMobileSigninPage()
-		{
-			Navigation.GotoGlobalMobileSignInPage();
-		}
 
 		[Then(@"I should see the mobile global menu")]
 		public void ThenIShouldSeeTheMobileGlobalMenu()

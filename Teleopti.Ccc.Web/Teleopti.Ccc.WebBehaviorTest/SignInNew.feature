@@ -49,17 +49,19 @@ Scenario: Sign in with a user with one business unit by user name and I should b
 
 @ignore
 Scenario: Sign in with a user with multiple business units by Windows credentials
-	Given Windows user have the role 'Role for business unit 1'
-	And Windows user have the role 'Role for business unit 2'
+	Given I have the role 'Role for business unit 1'
+	And I have the role 'Role for business unit 2'
 	And I am viewing the sign in page
 	When I select windows logon data source
 	And I sign in by windows credentials
 	And I select business unit 'Business Unit 1'
 	Then I should be signed in
 	
-@ignore
 Scenario: Sign in with a user with one business unit by Windows credentials and I should be directed into that business unit direct without having to select it
-	Given Windows user have the role 'Role for business unit 2'
+	Given I have the role 'Role for business unit 2'
+	And I am a user with
+	| Field                  | Value |
+	| Windows authentication | true  |
 	And I am viewing the sign in page
 	When I select windows logon data source
 	And I sign in by windows credentials

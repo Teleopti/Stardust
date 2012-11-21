@@ -18,10 +18,10 @@ Scenario: Change password failed against the policy
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	And I am signed in with
-	| Field    | Value     |
-	| UserName | aa        |
-	| Password | P@ssword1 |
+#	And I am signed in with
+#	| Field    | Value     |
+#	| UserName | aa        |
+#	| Password | P@ssword1 |
 	When I view password setting page
 	And I change my password with
 	| Field              | Value     |

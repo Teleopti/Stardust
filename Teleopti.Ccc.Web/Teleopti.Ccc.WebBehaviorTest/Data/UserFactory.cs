@@ -128,27 +128,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			return MakeUser(userName.LogOnName, userName.LastName, TestData.CommonPassword);
 		}
 
-		public void UpdateWindowsUser()
-		{
-			_dataFactory.Apply();
-			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
-				{
-					IPerson windowUser;
-					new PersonRepository(uow).TryFindWindowsAuthenticatedPerson(Environment.UserDomainName, Environment.UserName, out windowUser);
-					var culture = windowUser.PermissionInformation.Culture();
-					_userSetups.ForEach(s => s.Apply(uow, windowUser, culture));
-				});
-
-			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
-				{
-					IPerson windowUser;
-					new PersonRepository(uow).TryFindWindowsAuthenticatedPerson(Environment.UserDomainName, Environment.UserName, out windowUser);
-					var culture = windowUser.PermissionInformation.Culture();
-					_userDataSetups.ForEach(s => s.Apply(uow, windowUser, culture));
-				});
-		}
-
-		public string MakeUser(string logonName, string lastName, string password)
+		private string MakeUser(string logonName, string lastName, string password)
 		{
 			Person = PersonFactory.CreatePersonWithBasicPermissionInfo(logonName, password);
 			Person.Name = new Name("Agent", lastName);

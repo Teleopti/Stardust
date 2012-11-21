@@ -24,14 +24,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(userRole);
 		}
 
-		[Given(@"Windows user have the role '(.*)'")]
-		public void GivenWindowsUserHaveTheRole(string name)
-		{
-			var userRole = new RoleForWindowsUser { Name = name };
-			UserFactory.User().Setup(userRole);
-		}
-
-
 		[Given(@"I have a role with")]
 		public void GivenIHaveARoleWith(Table table)
 		{

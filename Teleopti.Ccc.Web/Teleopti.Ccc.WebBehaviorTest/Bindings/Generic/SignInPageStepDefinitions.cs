@@ -24,16 +24,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I sign in by user name")]
 		public void WhenISignIn()
 		{
-			var userName = UserFactory.User().MakeUser();
+			//var userName = UserFactory.User().MakeUser();
 			if (!(Browser.Current.Url.Contains("/SignIn") || Browser.Current.Url.Contains("/MobileSignIn")))
 				Navigation.GotoGlobalSignInPage(_newSignIn);
+			//Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
+			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
 		}
 
 		[When(@"I sign in by windows credentials")]
 		public void WhenISignInByWindowsAuthentication()
 		{
-			UserFactory.User().UpdateWindowsUser();
+			//UserFactory.User().MakeUser();
 			Pages.Pages.CurrentSignInPage.SignInWindows();
 		}
 
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I sign in by user name and wrong password")]
 		public void WhenISignInByUserNameAndWrongPassword()
 		{
-			var userName = UserFactory.User().MakeUser();
+			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, "wrong password");
 		}
 
@@ -116,17 +118,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				UserFactory.User().Setup(new Agent());
 			TestControllerMethods.Logon();
 		}
-
-		[Given(@"I am signed in with")]
-		public void GivenIAmSignedInWith(Table table)
-		{
-			var user = table.CreateInstance<UserConfigurable>();
-			var userName = user.UserName;
-			var password = user.Password;
-			Navigation.GotoGlobalSignInPage();
-			Pages.Pages.CurrentSignInPage.SignInApplication(userName, password);
-		}
-
 
 		[Then(@"I should be signed in")]
 		public void ThenIShouldBeSignedIn()
