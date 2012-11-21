@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// Created by: henrika
         /// Created date: 2010-07-14
         /// </remarks>
-        public CollectionView SelectableStartTimes { get; private set; }
+        public ListCollectionView SelectableStartTimes { get; private set; }
 
         /// <summary>
         /// Gets a collection of predifined TimeSpans  for the EndTime
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// Created by: henrika
         /// Created date: 2010-07-14
         /// </remarks>
-        public CollectionView SelectableEndTimes { get; private set; }
+        public ListCollectionView SelectableEndTimes { get; private set; }
 
         public bool AutoUpdate
         {
@@ -371,8 +371,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         private void SetupForSelectables()
         {
-            SelectableEndTimes = new CollectionView(_selectableTimeSpans);
-            SelectableStartTimes = new CollectionView(_selectableTimeSpans);
+            SelectableEndTimes = new ListCollectionView(_selectableTimeSpans);
+            SelectableStartTimes = new ListCollectionView(_selectableTimeSpans);
             SelectableStartTimes.CurrentChanged += SelectableStartTimes_CurrentChanged;
             SelectableEndTimes.CurrentChanged += SelectableEndTimes_CurrentChanged;
         }

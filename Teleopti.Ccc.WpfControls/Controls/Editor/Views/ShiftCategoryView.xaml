@@ -44,7 +44,8 @@
                       Height="20" 
                       Width="20" 
                       Grid.Column="2"
-                      ItemTemplate="{StaticResource ShiftCategoryTemplate}"/>
+                      ItemTemplate="{StaticResource ShiftCategoryTemplate}"
+                      Style="{StaticResource BasicComboBox}"/>
         </Grid>
     </Border>
 </UserControl>

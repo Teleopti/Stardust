@@ -18,13 +18,23 @@
 		<DateTimeConverter:DateTimeToLocalStringConverter x:Key="endDateTimeToLocalStringConverter"/>
 		<DateTimeConverter:DateTimeParseMode x:Key="TimeMode">Time</DateTimeConverter:DateTimeParseMode>
 		<DateTimeConverter:DateTimeParseMode x:Key="DateMode">Date</DateTimeConverter:DateTimeParseMode>
-			
-	</ResourceDictionary>
+
+            <Style TargetType="ComboBox" x:Key="BasicComboBox">
+                <Setter Property="ItemContainerStyle">
+                    <Setter.Value>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
 	</UserControl.Resources>
     
 	
 	<Grid Commands:CreateCommandBinding.CommandModel="{Binding Path=UpdateLayerCommand}"
-		  Background="{Binding Path=Layer.DisplayColor, Converter={StaticResource colorConverter}}">
+		  Background="{Binding Path=Layer.DisplayColor, Converter={StaticResource colorConverter}, TargetNullValue=White, FallbackValue=White}">
 		<Grid.RowDefinitions>
 			<RowDefinition />
 			<RowDefinition />
@@ -43,7 +53,8 @@
 			  Grid.Row="0" 
 			  Grid.ColumnSpan="2"
 			  Background="Transparent"
-			  IsSynchronizedWithCurrentItem="True">
+			  IsSynchronizedWithCurrentItem="True"
+              Style="{StaticResource BasicComboBox}">
 		<ComboBox.ItemTemplate>
 			<DataTemplate>
 				<StackPanel Orientation="Horizontal">

@@ -22,9 +22,9 @@
 				<UniformGrid Rows="1" HorizontalAlignment="Stretch">
 					<TextBox Name="startTime" HorizontalContentAlignment="Right" 
                          Text="{Binding Path=StartTime, Mode=Twoway, Converter={StaticResource SimpleConverter}}"  
-                         Visibility="{Binding Path=EditableStartTime,Converter={StaticResource visibilityConverter}}"/>
+                         Visibility="{Binding Path=EditableStartTime,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}"/>
 					<TextBox Name="endTime" HorizontalContentAlignment="Right" Text="{Binding Path=EndTime, Mode=Twoway, Converter={StaticResource SimpleConverter}}" 
-                        Visibility="{Binding Path=EditableEndTime,Converter={StaticResource visibilityConverter}}"/>
+                        Visibility="{Binding Path=EditableEndTime,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}"/>
 				</UniformGrid>
 				<DataTemplate.Triggers>
 					<DataTrigger Binding="{Binding Path=Invalid}" Value="True">

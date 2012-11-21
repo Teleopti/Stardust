@@ -157,12 +157,12 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday
             if (converter != null)
             {
                 // Sort with converter
-                ListCollectionView view = CollectionViewSource.GetDefaultView(_listView.ItemsSource) as ListCollectionView;
+                var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource) as ListCollectionView;
                 view.CustomSort = new ConverterComparer(direction, sortBy, converter);
             }
             else
             {
-                SortDescription sd = new SortDescription(sortBy, direction);
+                var sd = new SortDescription(sortBy, direction);
                 _listView.Items.SortDescriptions.Add(sd);
             }
         }

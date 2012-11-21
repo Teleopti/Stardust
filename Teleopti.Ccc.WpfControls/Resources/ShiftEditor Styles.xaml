@@ -259,7 +259,7 @@
                         <Rectangle x:Name="HourHand" Canvas.Top="21" Canvas.Left="48" 
                             Width="5" Height="30" Stroke="#FF000000" RadiusX="1.75" RadiusY="1.75" StrokeThickness="0.5" StrokeEndLineCap="Round" StrokeLineJoin="Round" StrokeDashCap="Round">
                             <Rectangle.RenderTransform>
-                                <RotateTransform CenterX="2.5" CenterY="30" Angle="{Binding Converter={StaticResource TimeToAngleConverter}, ConverterParameter=HourHand}" />
+                                <RotateTransform CenterX="2.5" CenterY="30" Angle="{Binding Converter={StaticResource TimeToAngleConverter}, FallbackValue=0, ConverterParameter=HourHand}" />
 
                             </Rectangle.RenderTransform>
                             <Rectangle.Fill>
@@ -287,7 +287,7 @@
                         <Rectangle x:Name="MinuteHand" Canvas.Top="6" Canvas.Left="49" 
                         Width="4" Height="45" Stroke="#FF000000" RadiusX="0.375" RadiusY="0.375" StrokeThickness="0.5">
                             <Rectangle.RenderTransform>
-                                <RotateTransform CenterX="2" CenterY="45" Angle="{Binding Converter={StaticResource TimeToAngleConverter}, ConverterParameter=MinuteHand}" />
+                                <RotateTransform CenterX="2" CenterY="45" Angle="{Binding Converter={StaticResource TimeToAngleConverter}, FallbackValue=0, ConverterParameter=MinuteHand}" />
                             </Rectangle.RenderTransform>
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">

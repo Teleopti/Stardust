@@ -9,6 +9,16 @@
     xmlns:Scheduling="clr-namespace:Teleopti.Ccc.Domain.Scheduling;assembly=Teleopti.Ccc.Domain"
     >
     <UserControl.Resources>
+        <Style TargetType="ComboBox" x:Key="BasicComboBox">
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <DataTemplate DataType="{x:Type Scheduling:DayOffTemplate}">
             <Views:DayOffShortView/>
         </DataTemplate>
@@ -29,6 +39,6 @@
             <Label Content="{Binding Path=SelectedPeriod.LocalDateString}" Margin="1,2,1,4" />
          </StackPanel>
         <Label Grid.Row="2" Content="{x:Static UserTexts:Resources.PeriodColon}" Margin="1,2,1,4" />
-        <ComboBox Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=Payloads}" Grid.Column="1" IsSynchronizedWithCurrentItem="True"/>
+        <ComboBox Style="{StaticResource BasicComboBox}" Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=Payloads}" Grid.Column="1" IsSynchronizedWithCurrentItem="True"/>
     </Grid>
 </UserControl>
