@@ -10,7 +10,9 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
         {
             table.Columns.Add("day_off_code", typeof(Guid));
             table.Columns.Add("day_off_name", typeof(String));
+            table.Columns.Add("day_off_shortname", typeof(String));
             table.Columns.Add("display_color", typeof(int));
+            table.Columns.Add("display_color_html", typeof(string));
             table.Columns.Add("business_unit_code", typeof(Guid));
             table.Columns.Add("business_unit_name", typeof(String));
             table.Columns.Add("datasource_id", typeof(int));
