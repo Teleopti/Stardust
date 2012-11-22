@@ -48,6 +48,29 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Assert.AreEqual(owner, _target.Owner);
             }
         }
+        
+        [Test]
+        public void ShouldGetWorkingBitArray()
+        {
+            ILockableBitArray bitArrayAfterMove = new LockableBitArray(2, false, false, null) { PeriodArea = new MinMax<int>(0, 1) };
+            bitArrayAfterMove.Set(1, true);
+            using(_mocks.Record())
+            {
+                Expect.Call(_blockDayOffOptimizer.WorkingBitArray).Return(bitArrayAfterMove);
+            }
+            using (_mocks.Playback())
+            {
+                _target = createTarget();
+                Assert.That(_target.WorkingBitArray, Is.EqualTo(bitArrayAfterMove));
+            }
+        }
+
+        [Test]
+        public void ShouldGetMatrix()
+        {
+            _target = createTarget();
+            Assert.That(_target.Matrix, Is.EqualTo(_matrix));
+        }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         [Test]
