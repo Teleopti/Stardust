@@ -619,6 +619,7 @@
     <Content Include="Areas\MyTime\Views\Schedule\WeekRequestPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
+    <Content Include="Areas\Start\Views\AuthenticationNew\Index.cshtml" />
     <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
     <Content Include="Areas\Start\Views\AuthenticationNew\SignIn.cshtml" />
     <None Include="Areas\Start\Views\Test\Message.cshtml">

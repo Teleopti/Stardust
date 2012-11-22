@@ -13,6 +13,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 		}
 
+		public ViewResult Index()
+		{
+			return View();
+		}
+
 		public ViewResult SignIn()
 		{
 			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
