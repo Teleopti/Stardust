@@ -46,6 +46,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoTo("MyTime/Asm", new OverrideNotifyBehavior());
 		}
 
+
+		public static void GotoSiteHomePage(bool newSignIn = false)
+		{
+			GoTo("", new ApplicationStartupTimeout());
+			if (newSignIn)
+			{
+				Pages.Pages.NavigatingTo(Browser.Current.Page<SignInNewPage>());
+			}
+			else
+			{
+				Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
+			}
+		}
+
 		public static void GotoGlobalSignInPage(bool newSignIn = false)
 		{
 			if (newSignIn)
@@ -100,12 +114,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoTo("MobileReports", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
-		}
-
-		public static void GotoSiteHomePage()
-		{
-			GoTo("", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoAnApplicationPageOutsidePortal()

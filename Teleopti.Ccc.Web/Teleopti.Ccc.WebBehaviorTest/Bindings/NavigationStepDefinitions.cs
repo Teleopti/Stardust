@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenINavigateToTheSiteSRoot()
 		{
 			UserFactory.User().MakeUser();
-			Navigation.GotoSiteHomePage();
+			Navigation.GotoSiteHomePage(_newSignIn);
 		}
 
 		[When(@"I navigate to MyTime")]
