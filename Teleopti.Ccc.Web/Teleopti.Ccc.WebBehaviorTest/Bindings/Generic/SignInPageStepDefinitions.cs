@@ -71,39 +71,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Pages.Pages.CurrentSignInPage.SelectBusinessUnitByName(businessUnit);
 		}
 
-
-		//[When(@"I try to sign in by application logon")]
-		//public void WhenITryToSignInByApplicationLogon()
-		//{
-		//    var userName = UserFactory.User().MakeUser();
-		//    Pages.Pages.CurrentSignInNewPage.TrySignInApplication(userName, TestData.CommonPassword);
-		//}
-
-		//[When(@"I try to sign in by application logon with wrong password")]
-		//public void WhenITryToSignInByApplicationLogonWithWrongPassword()
-		//{
-		//    var userName = UserFactory.User().MakeUser();
-		//    Pages.Pages.CurrentSignInNewPage.TrySignInApplication(userName, "wrong password");
-		//}
-
-		//[When(@"I try to sign in by windows credentials")]
-		//public void WhenITryToSignInByWindowsCredentials()
-		//{
-		//    UserFactory.User().UpdateWindowsUser();
-		//    Pages.Pages.CurrentSignInNewPage.TrySignInWindows();
-		//}
-
-		//[When(@"I try to sign in with")]
-		//public void WhenITryToSignInWith(Table table)
-		//{
-		//    var user = table.CreateInstance<UserConfigurable>();
-		//    var userName = user.UserName;
-		//    var password = user.Password;
-		//    Navigation.GotoGlobalSignInPage();
-		//    Pages.Pages.CurrentSignInPage.TrySignInApplication(userName, password);
-		//}
-
-
 		[When(@"I sign in again")]
 		public void WhenISignInAgain()
 		{
