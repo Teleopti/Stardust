@@ -21,13 +21,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.MobileGlobalMenuPage.GlobalMenuList.ListItems.Count.Equals(2), Is.True);
 		}
 
-		[Then(@"I should see the global menu")]
-		public void ThenIShouldSeeTheGlobalMenu()
-		{
-			EventualAssert.That(() => Pages.Pages.GlobalMenuPage.GlobalMenuList.ListItems.Count.Equals(2), Is.True);
-			Browser.Current.Url.Should().EndWith("/Start/Menu/Menu");
-		}
-
 		[Then(@"I should see MyTime")]
 		public void ThenIShouldSeeMyTime()
 		{

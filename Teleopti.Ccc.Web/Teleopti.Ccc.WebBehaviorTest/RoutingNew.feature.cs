@@ -187,7 +187,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 8
 this.FeatureBackground();
 #line 41
- testRunner.Given("I have the role \'Access to mytime and report\'");
+ testRunner.Given("I have the role \'Access to all areas\'");
 #line 42
  testRunner.When("I navigate to the site\'s root");
 #line 43

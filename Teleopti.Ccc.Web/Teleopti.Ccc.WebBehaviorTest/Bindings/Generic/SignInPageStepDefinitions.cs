@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -137,6 +138,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			else
 				EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MobileReports/Authentication/SignIn"));
 		}
+
+		[Then(@"I should see the global menu")]
+		public void ThenIShouldSeeTheGlobalMenu()
+		{
+			if (ScenarioContext.Current.Value<bool>("signinnew"))
+			{
+				Browser.Current.Url.Should().EndWith("/SignIn#menu");
+			}
+			else
+			{
+				EventualAssert.That(() => Pages.Pages.GlobalMenuPage.GlobalMenuList.ListItems.Count.Equals(2), Is.True);
+				Browser.Current.Url.Should().EndWith("/Start/Menu/Menu");
+			}
+		}
+
 
 	}
 }

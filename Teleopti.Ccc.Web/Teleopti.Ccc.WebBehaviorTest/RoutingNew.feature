@@ -38,7 +38,7 @@ Scenario: Browse to Mobile Reports
 	Then I should see Mobile Report's sign in page
 	
 Scenario: Browse to root and sign in to menu
-	Given I have the role 'Access to mytime and report'
+	Given I have the role 'Access to all areas'
 	When I navigate to the site's root
 	And I sign in
 	Then I should see the global menu
