@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see the global sign in page")]
 		public void ThenIShouldSeeTheGlobalSignInPage()
 		{
-			EventualAssert.That(() => Pages.Pages.SignInPage.UserNameTextField.Exists, Is.True);
+			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
 			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/Authentication/SignIn"));
 			EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MyTime/Authentication/SignIn"));
 			EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MobileReports/Authentication/SignIn"));
@@ -149,14 +149,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see MyTime's sign in page")]
 		public void ThenIShouldSeeMyTimesSignInPage()
 		{
-			EventualAssert.That(() => Pages.Pages.SignInPage.UserNameTextField.Exists, Is.True);
+			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
 			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MyTime/Authentication/SignIn"));
 		}
 
 		[Then(@"I should see Mobile Report's sign in page")]
 		public void ThenIShouldSeeMobileReportsSignInPage()
 		{
-			EventualAssert.That(() => Pages.Pages.MobileSignInPage.UserNameTextField.Exists, Is.True);
+			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
 			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MobileReports/Authentication/SignIn"));
 		}
 
