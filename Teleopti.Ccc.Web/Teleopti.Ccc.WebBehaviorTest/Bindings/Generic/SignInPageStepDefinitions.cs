@@ -144,12 +144,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			if (ScenarioContext.Current.Value<bool>("signinnew"))
 			{
-				Browser.Current.Url.Should().EndWith("/SignIn#menu");
+				EventualAssert.That(() => Browser.Current.Url, Is.StringEnding("/SignIn#menu"));
 			}
 			else
 			{
 				EventualAssert.That(() => Pages.Pages.GlobalMenuPage.GlobalMenuList.ListItems.Count.Equals(2), Is.True);
-				Browser.Current.Url.Should().EndWith("/Start/Menu/Menu");
+				EventualAssert.That(() => Browser.Current.Url, Is.StringEnding("/Start/Menu/Menu"));
 			}
 		}
 

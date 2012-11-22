@@ -22,6 +22,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			url: data.baseUrl + "Start/AuthenticationApi/BusinessUnits",
 			dataType: "json",
 			type: 'GET',
+			cache: false,
 			data: authenticationModel,
 			success: function (responseData, textStatus, jqXHR) {
 				businessUnits = responseData;
@@ -38,6 +39,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			url: data.baseUrl + "Start/AuthenticationApi/Logon",
 			dataType: "json",
 			type: 'POST',
+			cache: false,
 			data: authenticationModel
 		});
 
@@ -52,6 +54,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			url: data.baseUrl + "Start/Menu/Applications",
 			dataType: "json",
 			type: 'GET',
+			cache: false,
 			data: null,
 			success: function (responseData, textStatus, jqXHR) {
 				applications = responseData;
@@ -120,14 +123,26 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 
 				$.extend(options, {
 					success: function (applicationsData, textState, jqXHR) {
+
+						var area;
+
+						var inApplication = ko.utils.arrayFirst(applicationsData, function (a) {
+							var url = "/" + a.Area + "/";
+							return window.location.href.indexOf(url) !== -1;
+						});
+
+						if (inApplication)
+							area = inApplication.Area;
+						else if (applicationsData.length == 1)
+							area = applicationsData[0].Area;
 						
-						if (applicationsData.length > 1) {
-							gotoMenuView();
+						if (area) {
+							window.location.href = data.baseUrl + area;
 							return;
 						}
 
-						if (applicationsData.length == 1) {
-							window.location.href = data.baseUrl + applicationsData[0].Area;
+						if (applicationsData.length > 1) {
+							gotoMenuView();
 							return;
 						}
 

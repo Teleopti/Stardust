@@ -32,6 +32,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 			url: data.baseUrl + "Start/AuthenticationApi/DataSources",
 			dataType: "json",
 			type: 'GET',
+			cache: false,
 			success: function (data, textStatus, jqXHR) {
 				self.DataSources.removeAll();
 				for (var i = 0; i < data.length; i++) {
