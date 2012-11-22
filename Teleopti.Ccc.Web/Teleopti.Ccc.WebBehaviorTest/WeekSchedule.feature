@@ -119,6 +119,7 @@ Scenario: View meeting
 	| Location              | Meeting location |
 	When I view my week schedule for date '2012-08-28'
 	Then I should see the meeting details with subject 'Meeting subject' on date '2012-08-28'
+	And I should see the meeting details with agenda 'Meeting agenda' on date '2012-08-28'
 	
 Scenario: View public note
 	Given I have the role 'Full access to mytime'
