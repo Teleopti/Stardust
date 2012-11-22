@@ -127,19 +127,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		// navigation to signin and root
 		// does not logon, but creates user
 
-		private bool _newSignIn;
-
-		[BeforeScenario("signinnew")]
-		public void FlagForNewSignInPage()
-		{
-			_newSignIn = true;
-		}
-
 		[Given(@"I am viewing the sign in page")]
 		public void GivenIAmAtTheSignInPage()
 		{
 			UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage(_newSignIn);
+			Navigation.GotoGlobalSignInPage();
 		}
 
 		[Given(@"I am viewing the mobile sign in page")]
@@ -153,7 +145,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenINavigateToTheSiteSRoot()
 		{
 			UserFactory.User().MakeUser();
-			Navigation.GotoSiteHomePage(_newSignIn);
+			Navigation.GotoSiteHomePage();
 		}
 
 		[When(@"I navigate to MyTime")]
@@ -167,7 +159,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenINavigateToMobileReposrts()
 		{
 			UserFactory.User().MakeUser();
-			Navigation.GotoMobileReportsSignInPage(string.Empty);
+			Navigation.GotoMobileReports();
 		}
 
 		[When(@"I navigate to the site's root mobile signin page")]

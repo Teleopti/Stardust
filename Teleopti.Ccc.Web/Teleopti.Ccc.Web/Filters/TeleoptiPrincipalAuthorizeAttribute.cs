@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Web.Core.Startup;
 
 namespace Teleopti.Ccc.Web.Filters
 {
@@ -45,7 +46,17 @@ namespace Teleopti.Ccc.Web.Filters
 				return;
 			}
 			var targetArea = filterContext.RouteData.DataTokens["area"] ?? "Start";
-			filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { area = targetArea, controller = "Authentication", action = "Index" }));
+
+			filterContext.Result = new RedirectToRouteResult(
+				new RouteValueDictionary(
+					new
+						{
+							controller = RegisterRoutesTask.AuthenticationController,
+							action = RegisterRoutesTask.AuthenticationAction,
+							area = targetArea
+						}
+					)
+				);
 		}
 	}
 }

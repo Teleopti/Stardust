@@ -300,7 +300,6 @@
     <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\BaseShiftCategory.cs" />
     <Compile Include="Data\Setups\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
-    <Compile Include="MobileSignInStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AbsenceToday.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutTeamDataAccess.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithSiteAccess.cs" />

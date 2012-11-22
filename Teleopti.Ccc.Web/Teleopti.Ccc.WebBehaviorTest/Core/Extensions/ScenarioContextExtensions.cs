@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 			return Value<T>(context, typeof (T).FullName);
 		}
 
-		public static T Value<T>(this ScenarioContext context, T value) where T : class
+		public static T Value<T>(this ScenarioContext context, T value)
 		{
 			return Value(context, typeof (T).FullName, value);
 		}
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 			return default(T);
 		}
 
-		public static T Value<T>(this ScenarioContext context, string key, T value) where T :class
+		public static T Value<T>(this ScenarioContext context, string key, T value)
 		{
 			if (value == null)
 			{

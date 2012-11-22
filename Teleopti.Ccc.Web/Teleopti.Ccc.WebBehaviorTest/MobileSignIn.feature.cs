@@ -144,21 +144,6 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Enter signin page with page preference")]
-        public virtual void EnterSigninPageWithPagePreference()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Enter signin page with page preference", ((string[])(null)));
-#line 31
-this.ScenarioSetup(scenarioInfo);
-#line 32
- testRunner.Given("I navigate to the mobile signin page with subpage preference");
-#line 33
- testRunner.Then("I should see the login page");
-#line hidden
-            this.ScenarioCleanup();
-        }
     }
 }
 #pragma warning restore

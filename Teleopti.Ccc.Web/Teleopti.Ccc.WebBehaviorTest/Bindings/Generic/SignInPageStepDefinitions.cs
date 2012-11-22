@@ -2,6 +2,7 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
@@ -12,22 +13,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class SignInPageStepDefinitions
 	{
-		private bool _newSignIn;
-
 		[BeforeScenario("signinnew")]
 		public void FlagForNewSignInPage()
 		{
-			_newSignIn = true;
+			ScenarioContext.Current.Value("signinnew", true);
 		}
 
 		[When(@"I sign in")]
 		[When(@"I sign in by user name")]
 		public void WhenISignIn()
 		{
-			//var userName = UserFactory.User().MakeUser();
 			if (!(Browser.Current.Url.Contains("/SignIn") || Browser.Current.Url.Contains("/MobileSignIn")))
-				Navigation.GotoGlobalSignInPage(_newSignIn);
-			//Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
+				Navigation.GotoGlobalSignInPage();
 			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
 		}
@@ -35,7 +32,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I sign in by windows credentials")]
 		public void WhenISignInByWindowsAuthentication()
 		{
-			//UserFactory.User().MakeUser();
 			Pages.Pages.CurrentSignInPage.SignInWindows();
 		}
 
@@ -108,23 +104,38 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldSeeTheGlobalSignInPage()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/Authentication/SignIn"));
-			EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MyTime/Authentication/SignIn"));
-			EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MobileReports/Authentication/SignIn"));
+			if (ScenarioContext.Current.Value<bool>("signinnew"))
+			{
+				EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/AuthenticationNew/SignIn"));
+				EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MyTime/AuthenticationNew/SignIn"));
+				EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MobileReports/AuthenticationNew/SignIn"));
+			}
+			else
+			{
+				EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/Authentication/SignIn"));
+				EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MyTime/Authentication/SignIn"));
+				EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MobileReports/Authentication/SignIn"));
+			}
 		}
 
 		[Then(@"I should see MyTime's sign in page")]
 		public void ThenIShouldSeeMyTimesSignInPage()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MyTime/Authentication/SignIn"));
+			if (ScenarioContext.Current.Value<bool>("signinnew"))
+				EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MyTime/AuthenticationNew/SignIn"));
+			else
+				EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MyTime/Authentication/SignIn"));
 		}
 
 		[Then(@"I should see Mobile Report's sign in page")]
 		public void ThenIShouldSeeMobileReportsSignInPage()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MobileReports/Authentication/SignIn"));
+			if (ScenarioContext.Current.Value<bool>("signinnew"))
+				EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MobileReports/AuthenticationNew/SignIn"));
+			else
+				EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MobileReports/Authentication/SignIn"));
 		}
 
 	}

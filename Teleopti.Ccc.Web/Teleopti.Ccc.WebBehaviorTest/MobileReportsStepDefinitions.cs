@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIEnterMobileReports()
 		{
 			TestControllerMethods.LogonMobile();
-			Navigation.GotoMobileReports();
+			Navigation.GotoMobileReportsPage();
 			_page = Browser.Current.Page<MobileReportsPage>();
 		}
 

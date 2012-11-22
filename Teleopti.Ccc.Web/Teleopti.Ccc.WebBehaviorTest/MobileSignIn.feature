@@ -27,7 +27,3 @@ Scenario: Sign in without permission
 	And I am viewing the mobile sign in page
 	When I sign in by user name
 	Then I should not be signed in
-
-Scenario: Enter signin page with page preference 
-	Given I navigate to the mobile signin page with subpage preference
-	Then I should see the login page
