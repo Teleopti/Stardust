@@ -8,6 +8,8 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
 		bool Execute(ISchedulingOptions schedulingOptions);
         IPerson Owner { get; }
+        IScheduleMatrixPro Matrix { get; }
+        ILockableBitArray WorkingBitArray { get; }
     }
 
     public class BlockDayOffOptimizerContainer : IBlockDayOffOptimizerContainer
@@ -57,5 +59,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             get { return _matrix.Person; }
         }
 
+        public IScheduleMatrixPro Matrix
+        {
+            get { return _matrix; }
+        }
+
+        public ILockableBitArray WorkingBitArray
+        {
+            get { return _blockDayOffOptimizer.WorkingBitArray;}
+        }
     }
 }
