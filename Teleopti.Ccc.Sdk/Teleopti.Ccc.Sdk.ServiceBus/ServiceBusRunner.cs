@@ -8,6 +8,7 @@ using log4net.Config;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
 	public class ServiceBusRunner
 	{
 		private readonly Action<Exception> _unhandledExceptionHandler;
@@ -100,6 +101,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			DisposeBusHosts();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void DisposeBusHosts()
 		{
 			if (_requestBus != null)

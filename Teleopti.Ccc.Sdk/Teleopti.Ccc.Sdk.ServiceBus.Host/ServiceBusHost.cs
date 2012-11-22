@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Host
 			serviceBusRunner = new ServiceBusRunner(logUnhandledException, logStartupException, RequestAdditionalTime);
         }
 
-    	private void logUnhandledException(Exception exception)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.EventLog.WriteEntry(System.String,System.Diagnostics.EventLogEntryType)")]
+		private void logUnhandledException(Exception exception)
     	{
     		EventLog.WriteEntry(
     			string.Format(CultureInfo.InvariantCulture,
@@ -29,7 +30,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Host
             serviceBusRunner.Start();
         }
 
-    	private void logStartupException(Exception exception)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.EventLog.WriteEntry(System.String,System.Diagnostics.EventLogEntryType)")]
+		private void logStartupException(Exception exception)
     	{
     		EventLog.WriteEntry(
     			string.Format(CultureInfo.CurrentCulture,

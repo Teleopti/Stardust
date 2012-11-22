@@ -12,6 +12,7 @@ using log4net.Config;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 	public class ConfigFileDefaultHost : MarshalByRefObject, IApplicationHost
 	{
 		private readonly ILog logger = LogManager.GetLogger(typeof(DefaultHost));
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			get { return startable; }
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "0#")]
 		public void SetBootStrapperTypeName(string typeName)
 		{
 			bootStrapperName = typeName;
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Strapper"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "BootStrapper")]
 		public void Start<TBootStrapper>()
 			where TBootStrapper : AbstractBootStrapper
 		{
@@ -46,6 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			Start(typeof(TBootStrapper).Assembly.FullName);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "0#")]
 		public void Start(string asmName)
 		{
 			InitializeBus(asmName);
@@ -116,6 +120,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "strapper")]
 		private static Type GetAutoBootStrapperType(Assembly assembly)
 		{
 			var bootStrappers = assembly.GetTypes()
@@ -135,6 +140,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			return bootStrappers[0];
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly")]
 		public void Dispose()
 		{
 			if (bootStrapper != null)
@@ -148,6 +154,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			return null; //singleton
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "0#")]
 		public void InitialDeployment(string asmName, string user)
 		{
 			InitializeBus(asmName);
