@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             OptimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
         	ISchedulingOptions schedulingOptions =
         		new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
-            var service = new BlockDayOffOptimizationService(periodValueCalculator, rollbackService);
+            var service = new BlockDayOffOptimizationService(periodValueCalculator, rollbackService, optimizerPreferences.DaysOff);
             service.ReportProgress += resourceOptimizer_PersonOptimized;
             service.Execute(optimizerContainers, schedulingOptions);
             service.ReportProgress -= resourceOptimizer_PersonOptimized;
