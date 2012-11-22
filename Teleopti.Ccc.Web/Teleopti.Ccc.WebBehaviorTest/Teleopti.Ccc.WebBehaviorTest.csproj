@@ -548,10 +548,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SignInNew.feature.cs</LastGenOutput>
     </None>
-    <None Include="PasswordPolicyMobile.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>PasswordPolicyMobile.feature.cs</LastGenOutput>
-    </None>
     <None Include="PasswordPolicy.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PasswordPolicy.feature.cs</LastGenOutput>
