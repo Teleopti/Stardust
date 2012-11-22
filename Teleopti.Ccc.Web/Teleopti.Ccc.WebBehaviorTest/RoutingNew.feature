@@ -1,4 +1,5 @@
 ﻿@ignore
+@signinnew
 Feature: Routing New
 	In order make it easy to browse to the site
 	As a user
@@ -24,17 +25,17 @@ Background:
 Scenario: Browse to root
 	Given I am not signed in
 	When I navigate to the site's root
-	Then I should see sign in page
+	Then I should see the global sign in page
 
 Scenario: Browse to MyTime
 	Given I am not signed in
 	When I navigate to MyTime
-	Then I should see sign in page
+	Then I should see MyTime's sign in page
 
 Scenario: Browse to Mobile Reports
 	Given I am not signed in
 	When I navigate to Mobile Reports
-	Then I should see sign in page
+	Then I should see Mobile Report's sign in page
 	
 Scenario: Browse to root and sign in to menu
 	Given I have the role 'Access to mytime and report'
