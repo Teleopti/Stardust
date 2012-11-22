@@ -70,8 +70,10 @@ Scenario: No access to make shift trade reuquests
 
 Scenario: Default to today if no open shift trade period
 	Given I have the role 'Full access to mytime'
+	And I have no workflow control set
 	And Current time is '2030-01-01'
 	When I navigate to shift trade page
+	And I navigate to messages
 	Then the selected date should be '2030-01-01'
 @ignore
 Scenario: Default to first day of open shift trade period
