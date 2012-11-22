@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.LogOnFailedInvalidUserNameOrPassword);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnErrorIfNoPermission()
 		{
 			var person = new Person();
@@ -164,6 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			target.Response.TrySkipIisCustomErrors.Should().Be.True();
 			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.InsufficientPermissionForWeb);
 			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.InsufficientPermissionForWeb);
+			
 		}
 
 	}
