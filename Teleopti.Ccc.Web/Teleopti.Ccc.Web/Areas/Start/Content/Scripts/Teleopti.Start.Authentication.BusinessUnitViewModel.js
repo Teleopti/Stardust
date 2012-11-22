@@ -6,15 +6,10 @@ Teleopti.Start.Authentication.BusinessUnitViewModel = function (data) {
 	this.Name = data.Name;
 
 	this.Select = function () {
-		data.authenticationState.SignIn({
+		data.authenticationState.AttemptGotoApplicationBySelectingBusinessUnit({
+			baseUrl: data.baseUrl,
 			data: {
 				businessUnitId: self.Id
-			},
-			success: function() {
-				Teleopti.Start.Authentication.Navigation.GotoMenu();
-			},
-			error: function () {
-				Teleopti.Start.Authentication.Navigation.GotoSignIn();
 			}
 		});
 
