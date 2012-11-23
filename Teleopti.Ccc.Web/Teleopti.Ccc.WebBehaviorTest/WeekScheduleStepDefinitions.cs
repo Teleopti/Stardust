@@ -79,9 +79,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Then(@"I should see the meeting details with description '(.*)' on date '(.*)'")]
-		public void ThenIShouldSeeTheMeetingDetailsWithDescriptionOnDate(string description, string date)
+		public void ThenIShouldSeeTheMeetingDetailsWithDescriptionOnDate(string description, DateTime date)
 		{
-			ScenarioContext.Current.Pending();
+			EventualAssert.That(() => _page.DayLayerTooltipElement(date, description).Exists, Is.True);
 		}
 
 		[Then(@"I should see the public note on date '(.*)'")]

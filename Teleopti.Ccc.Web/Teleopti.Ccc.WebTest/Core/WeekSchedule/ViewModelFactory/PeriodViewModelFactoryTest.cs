@@ -203,6 +203,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.TimeSpan.Should().Be.EqualTo("08:00 - 17:00");
                 layerDetails.Meeting.Title.Should().Be.EqualTo("subj");
                 layerDetails.Meeting.Location.Should().Be.EqualTo("loc");
+					 layerDetails.Meeting.Description.Should().Be.EqualTo("desc");
                 layerDetails.Color.Should().Be.EqualTo("0,128,0");
                 layerDetails.StartPositionPercentage.Should().Be.EqualTo(0);
                 layerDetails.EndPositionPercentage.Should().Be.EqualTo((17.0 - 8.0) / (19.0 - 8.0));

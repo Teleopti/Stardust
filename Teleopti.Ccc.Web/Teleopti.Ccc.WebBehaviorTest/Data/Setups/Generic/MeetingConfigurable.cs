@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public string Subject { get; set; }
 		public string Location { get; set; }
+		public string Description { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 
@@ -20,8 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 			var meeting = new Meeting(user,
 									  new[] { new MeetingPerson(user, false) },
-									  Subject, Location,
-									  "A nice description of the meeting.",
+									  Subject, Location, Description,
 									  TestData.ActivityTraining, scenario)
 			{
 				StartDate = new DateOnly(StartTime),
@@ -29,10 +29,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				StartTime = StartTime.TimeOfDay,
 				EndTime = EndTime.TimeOfDay
 			};
-
-			//var recurrent = new RecurrentWeeklyMeeting { IncrementCount = 1 };
-			//recurrent[DayOfWeek.Thursday] = true;
-			//meeting.SetRecurrentOption(recurrent);
 
 			var repository = new MeetingRepository(uow);
 			repository.Add(meeting);
