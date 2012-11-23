@@ -12,3 +12,17 @@ IF EXISTS (select 1 from mart.report_control where control_id = 12 and control_n
 	UPDATE mart.report_control SET control_name = REPLACE(control_name, 'cbo', 'time') WHERE control_id = 12
 IF EXISTS (select 1 from mart.report_control where control_id = 13 and control_name like 'cbo%')
 	UPDATE mart.report_control SET control_name = REPLACE(control_name, 'cbo', 'time') WHERE control_id = 13
+
+----------------  
+--Name: David and Erik
+--Date: 2012-11-23  
+--Desc: Bug #21451 Speed up intraday
+----------------  	
+IF EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') AND name = N'IX_person_dateFrom_dateTo')
+DROP INDEX [IX_person_dateFrom_dateTo] ON [mart].[dim_person] WITH ( ONLINE = OFF )
+GO
+
+CREATE NONCLUSTERED INDEX [IX_person_dateFrom_dateTo]
+ON [mart].[dim_person] ([valid_from_date],[valid_to_date])
+INCLUDE ([person_id],[skillset_id])
+GO
