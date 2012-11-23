@@ -676,6 +676,8 @@
     <Content Include="Content\Mobile\images\icons-18-white.png" />
     <Content Include="Content\Mobile\images\icons-36-black.png" />
     <Content Include="Content\Mobile\images\icons-36-white.png" />
+    <Content Include="Content\require\require.js" />
+    <Content Include="Content\require\text.js" />
     <Content Include="Content\Scripts\indexOf.js" />
     <Content Include="Content\Scripts\date.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.js" />
