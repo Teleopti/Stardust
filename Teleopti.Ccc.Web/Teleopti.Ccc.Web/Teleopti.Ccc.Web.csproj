@@ -861,6 +861,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Anywhere\Content\" />
+    <Folder Include="Areas\Anywhere\Controllers\" />
+    <Folder Include="Areas\Anywhere\Core\" />
+    <Folder Include="Areas\Anywhere\Models\" />
+    <Folder Include="Areas\Anywhere\Views\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
