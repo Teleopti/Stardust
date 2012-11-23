@@ -928,13 +928,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             if (!_turnOffInternalRecalc)
             {
-                double sumTasks = _taskOwnerDayCollection.Sum(t => t.TotalStatisticAnsweredTasks);
+                // TotalStatisticCalculatedTasks
+                double sumTasks = _taskOwnerDayCollection.Sum(t => t.TotalStatisticCalculatedTasks);
                 if (sumTasks > 0d)
                 {
                     _totalStatisticAverageTaskTime = TimeSpan.FromTicks((long)
-                            (_taskOwnerDayCollection.Sum(t => t.TotalStatisticAverageTaskTime.Ticks * t.TotalStatisticAnsweredTasks) / sumTasks));
+                            (_taskOwnerDayCollection.Sum(t => t.TotalStatisticAverageTaskTime.Ticks * t.TotalStatisticCalculatedTasks) / sumTasks));
                     _totalStatisticAverageAfterTaskTime = TimeSpan.FromTicks((long)
-                        (_taskOwnerDayCollection.Sum(t => t.TotalStatisticAverageAfterTaskTime.Ticks * t.TotalStatisticAnsweredTasks) / sumTasks));
+                        (_taskOwnerDayCollection.Sum(t => t.TotalStatisticAverageAfterTaskTime.Ticks * t.TotalStatisticCalculatedTasks) / sumTasks));
                 }
                 else
                 {
