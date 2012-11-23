@@ -1,4 +1,5 @@
-﻿@signinnew
+﻿@ignore
+@signinnew
 Feature: Routing New
 	In order make it easy to browse to the site
 	As a user
