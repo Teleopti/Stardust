@@ -8,13 +8,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		Element ValidationSummary { get; }
 
-		Div WarningMessage { get; }
-
 		void SelectApplicationTestDataSource();
+		void SelectWindowsTestDataSource();
+
 		void SignInApplication(string username, string password);
-		void TrySignInApplication(string username, string password);
 		void SignInWindows();
+		
 		void SelectFirstBusinessUnit();
+		void SelectBusinessUnitByName(string name);
 		void ClickBusinessUnitOkButton();
 	}
 }

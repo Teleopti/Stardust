@@ -24,8 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			dataSourceProvider.Stub(x => x.RetrieveDatasourcesForApplication()).Return(new List<IDataSource>
 			                                                                           	{
-			                                                                           		new AuthenticationControllerSignInTest.
-			                                                                           			FakeDataSource {DataSourceName = "ds1"}
+			                                                                           		new FakeDataSource {DataSourceName = "ds1"}
 			                                                                           	});
 
 			var result = target.MobileSignIn();

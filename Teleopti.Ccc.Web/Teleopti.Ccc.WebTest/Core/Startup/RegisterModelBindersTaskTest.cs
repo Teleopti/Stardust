@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Interfaces.Domain;
 
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			modelBinderDictionary = new ModelBinderDictionary();
 			// Must be called in Task.Execute 
-			RegisterModelBindersTask.RegisterModelBinders(modelBinderDictionary);
+			new RegisterModelBindersTask(null).RegisterModelBinders(modelBinderDictionary);
 		}
 
 		[Test]
@@ -40,5 +41,12 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			modelBinderDictionary.ContainsKey(typeof(TimeSpan)).Should().Be.True();
 			modelBinderDictionary.ContainsKey(typeof(TimeSpan?)).Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldRegisterAuthenticationModelBinder()
+		{
+			modelBinderDictionary.ContainsKey(typeof(IAuthenticationModel)).Should().Be.True();
+		}
+
 	}
 }

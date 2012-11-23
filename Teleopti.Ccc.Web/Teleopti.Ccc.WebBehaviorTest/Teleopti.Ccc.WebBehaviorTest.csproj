@@ -100,22 +100,36 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\SignInPageStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\ScenarioConfigurable.cs" />
+    <Compile Include="Bindings\Generic\ScenarioStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
     <Compile Include="Bindings\Generic\WeekSchedulePageStepDefinitions.cs" />
-    <Compile Include="Core\Robustness\EventualAssert.cs" />
-    <Compile Include="Core\Robustness\EventualElementActions.cs" />
-    <Compile Include="Core\Robustness\Timeouts.cs" />
-    <Compile Include="Core\Robustness\Retrying.cs" />
-    <Compile Include="Data\Setups\Generic\UserLogonDetailConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
-    <Compile Include="Bindings\Transform.cs" />
     <Compile Include="BrowserNotifications.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BrowserNotifications.feature</DependentUpon>
     </Compile>
+    <Compile Include="Core\Robustness\EventualAssert.cs" />
+    <Compile Include="Core\Robustness\EventualElementActions.cs" />
+    <Compile Include="Core\Robustness\Timeouts.cs" />
+    <Compile Include="Core\Robustness\Retrying.cs" />
+    <Compile Include="Pages\SignInNewPage.cs" />
+    <Compile Include="RoutingNew.feature.cs">
+      <DependentUpon>RoutingNew.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="SignInNew.feature.cs">
+      <DependentUpon>SignInNew.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Data\Setups\Generic\UserLogonDetailConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
+    <Compile Include="Bindings\Transform.cs" />
     <Compile Include="Core\Robustness\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Generic\PasswordConfigurable.cs" />
     <Compile Include="PasswordPolicy.feature.cs">
@@ -286,7 +300,6 @@
     <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\BaseShiftCategory.cs" />
     <Compile Include="Data\Setups\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
-    <Compile Include="MobileSignInStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AbsenceToday.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutTeamDataAccess.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithSiteAccess.cs" />
@@ -525,6 +538,14 @@
     <None Include="BrowserNotifications.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>BrowserNotifications.feature.cs</LastGenOutput>
+    </None>
+    <None Include="RoutingNew.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RoutingNew.feature.cs</LastGenOutput>
+    </None>
+    <None Include="SignInNew.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SignInNew.feature.cs</LastGenOutput>
     </None>
     <None Include="PasswordPolicy.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -78,6 +78,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 			controller
 				.Should().Not.Be.SameInstanceAs(controller2);
+
+			var controllerNew = requestContainer.Resolve<AuthenticationNewController>();
+			var controllerNew2 = requestContainer.Resolve<AuthenticationNewController>();
+
+			controllerNew
+				.Should().Not.Be.SameInstanceAs(controllerNew2);
 		}
 
 		[Test]
@@ -493,6 +499,21 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			var result = requestContainer.Resolve<IExtendedPreferencePredicate>();
 			result.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveDataSourceViewModelFactories()
+		{
+			var result = requestContainer.Resolve<IEnumerable<IDataSourcesViewModelFactory>>();
+
+			var dataSourceViewModelFactoryTypes =
+				from t in typeof (ContainerConfiguration).Assembly.GetTypes()
+				let isDataSourceViewModelFactory = typeof (IDataSourcesViewModelFactory).IsAssignableFrom(t)
+				let isSelf = typeof (IDataSourcesViewModelFactory) == t
+				where isDataSourceViewModelFactory
+				where !isSelf
+				select t;
+			result.Select(p => p.GetType()).Should().Have.SameValuesAs(dataSourceViewModelFactoryTypes);
 		}
 
 	}

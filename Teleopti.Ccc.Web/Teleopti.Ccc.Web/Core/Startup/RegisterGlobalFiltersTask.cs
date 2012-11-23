@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(new List<Type>
 			                                                    	{
 			                                                    		typeof(AuthenticationController),
+																		typeof(AuthenticationNewController),
+																		typeof(AuthenticationApiController),
 																		typeof(TestController)
 			                                                    	}));
 			filters.Add(new CheckStartupExceptionAttribute());

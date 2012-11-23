@@ -238,6 +238,12 @@
     <Compile Include="Areas\MyTime\Models\Requests\AbsenceRequestForm.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\AbsenceRequestPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IAbsenceRequestPersister.cs" />
+    <Compile Include="Areas\Start\Controllers\AuthenticationApiController.cs" />
+    <Compile Include="Areas\Start\Controllers\AuthenticationNewController.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\DataSourcesViewModelFactory.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactory.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\IBusinessUnitsViewModelFactory.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\IDataSourcesViewModelFactory.cs" />
     <Compile Include="Areas\Start\Models\Test\TestMessageViewModel.cs" />
     <Compile Include="Core\DateTimeExtensions.cs" />
     <Compile Include="Core\RequestContext\CurrentBusinessUnitProvider.cs" />
@@ -262,6 +268,13 @@
     <Compile Include="Core\RequestContext\IIdentityProvider.cs" />
     <Compile Include="Core\RequestContext\Initialize\WebRequestPrincipalContext.cs" />
     <Compile Include="Areas\MyTime\Core\TimeSpanModelBinder.cs" />
+    <Compile Include="Areas\Start\Core\AuthenticationModelBinder.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\ApplicationAuthenticationModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\ApplicationAuthenticationType.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\IAuthenticationModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\IAuthenticationType.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationType.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
@@ -310,7 +323,7 @@
     <Compile Include="Areas\Start\Core\Menu\IMenuViewModelFactory.cs" />
     <Compile Include="Areas\Start\Core\Menu\MenuViewModelFactory.cs" />
     <Compile Include="Areas\Start\Models\Menu\ApplicationArea.cs" />
-    <Compile Include="Areas\Start\Models\Menu\MenuViewModel.cs" />
+    <Compile Include="Areas\Start\Models\Menu\ApplicationViewModel.cs" />
     <Compile Include="Core\RequestContext\DataSourceProvider.cs" />
     <Compile Include="Core\RequestContext\IDataSourceProvider.cs" />
     <Compile Include="Core\RequestContext\Cookie\ISessionSpecificDataStringSerializer.cs" />
@@ -572,7 +585,24 @@
     <Content Include="Areas\MyTime\Content\Css\WeekView.css" />
     <Content Include="Areas\MyTime\Content\Scripts\AllTests.html" />
     <Content Include="Areas\Start\Content\Css\mobile.custom.css" />
+    <Content Include="Areas\Start\Content\Images\ajax-loader-small.gif" />
     <Content Include="Areas\Start\Content\Images\mobile_logo.png" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.JQueryAjaxViewModel.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.MenuViewModel.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ApplicationViewModel.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.AuthenticationState.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitViewModel.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordView.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.MenuView.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitSelectionView.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitSelectionViewModel.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.SignInView.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.SignInViewModel.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.DataSourceViewModel.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Settings.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Navigation.js" />
+    <Content Include="Areas\Start\Content\Scripts\knockout.bindings.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.AuthenticationNew.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.selectbox.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.connector.css" />
@@ -604,10 +634,15 @@
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
     <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
+    <Content Include="Areas\Start\Views\AuthenticationNew\SignIn.cshtml" />
     <None Include="Areas\Start\Views\Test\Message.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="Areas\Start\Content\signonvm.js" />
+    <Content Include="Areas\Start\Content\Css\login.css" />
+    <Content Include="Content\crossroads\crossroads.js" />
+    <Content Include="Content\crossroads\crossroads.min.js" />
+    <Content Include="Content\hasher\hasher.js" />
+    <Content Include="Content\hasher\hasher.min.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.min.js" />
     <Content Include="Content\jqueryui\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -625,7 +660,6 @@
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.9.1.custom.css" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.9.1.custom.min.css" />
-    <Content Include="Areas\Start\Content\login.htm" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.css" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.js" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.css" />
@@ -749,6 +783,8 @@
     <Content Include="Content\bootstrap\bootstrap.min.js" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.js" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.min.js" />
+    <Content Include="Content\signals\signals.js" />
+    <Content Include="Content\signals\signals.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

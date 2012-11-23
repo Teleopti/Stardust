@@ -138,28 +138,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     day.AverageAfterTaskTime = new TimeSpan((long) (afterTalkTimeIndex*_afterTalkTime.Ticks));
                     day.Tasks = totalTaskIndex*_averageTasks;
             }
-
-
-
-            /**if (_wl != null)
-            {
-                if (!day.IsClosed || _wl.Workload.Skill.SkillType.ForecastSource == ForecastSource.Email)
-                {
-                    day.AverageTaskTime = new TimeSpan((long) (talkTimeIndex*_talkTime.Ticks));
-                    day.AverageAfterTaskTime = new TimeSpan((long) (afterTalkTimeIndex*_afterTalkTime.Ticks));
-                    day.Tasks = totalTaskIndex*_averageTasks;
-                }
-            }
-            else
-            {
-                if (!day.IsClosed)
-                {
-                    day.AverageTaskTime = new TimeSpan((long)(talkTimeIndex * _talkTime.Ticks));
-                    day.AverageAfterTaskTime = new TimeSpan((long)(afterTalkTimeIndex * _afterTalkTime.Ticks));
-                    day.Tasks = totalTaskIndex * _averageTasks;
-                }
-            }*/
-
+            
             totalDayItem.SetComparisonValues(day, totalTaskIndex, talkTimeIndex, afterTalkTimeIndex, trendFactor);
             totalDayItem.TaskIndex = currentTotalTaskIndex;
             totalDayItem.TalkTimeIndex = currentTalkTimeIndex;
@@ -173,7 +152,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
             double talkTimeIndex = totalDayItem.TalkTimeIndex == 0 ? 1 : totalDayItem.TalkTimeIndex;
             double afterTalkTimeIndex = totalDayItem.AfterTalkTimeIndex == 0 ? 1 : totalDayItem.AfterTalkTimeIndex;
 
-            //if (!day.IsClosed || _wl.Workload.Skill.SkillType.ForecastSource == ForecastSource.Email)
             if (day.OpenForWork.IsOpenForIncomingWork)
             {
                 day.AverageTaskTime = statisticsForOutlier.TotalStatisticAverageTaskTime;

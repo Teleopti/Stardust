@@ -15,17 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	[Binding]
 	public class SharedSignInStepDefinitions
 	{
-		[Given(@"I am viewing the sign in page")]
-		public void GivenIAmAtTheSignInPage()
-		{
-			Navigation.GotoGlobalSignInPage();
-		}
 
-		[Given(@"I am viewing the mobile sign in page")]
-		public void GivenIAmAtTheMobileSignInPage()
-		{
-			Navigation.GotoMobileReportsSignInPage(string.Empty);
-		}
 
 		[Given(@"I dont have permission to sign in")]
 		public void GivenIDontHavePermissionToSignIn()
@@ -57,48 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				UserFactory.User().Setup(new Agent());
 		}
 
-		[When(@"I sign in by windows credentials")]
-		public void WhenISignInByWindowsAuthentication()
-		{
-			if (!UserFactory.User().HasSetup<AgentSecondBusinessUnit>())
-			{
-				ScenarioContext.Current.Pending();
-				return;
-			}
-			Pages.Pages.CurrentSignInPage.SignInWindows();
-		}
 
-		[When(@"I sign in by user name and wrong password")]
-		public void WhenISignInByUserNameAndWrongPassword()
-		{
-			var userName = UserFactory.User().MakeUser();
-			Pages.Pages.CurrentSignInPage.SignInApplication(userName, "wrong password");
-		}
-
-		[When(@"I select a business unit")]
-		public void WhenISelectABusinessUnit()
-		{
-			Pages.Pages.CurrentSignInPage.SelectFirstBusinessUnit();
-			Pages.Pages.CurrentSignInPage.ClickBusinessUnitOkButton();
-		}
-
-		[Then(@"I should be signed in")]
-		public void ThenIShouldBeSignedIn()
-		{
-			EventualAssert.That(() => Browser.Current.Link("signout").Exists || Browser.Current.Link("signout-button").Exists, Is.True);
-		}
-
-		[Then(@"I should see a warning message that password will be expired")]
-		public void ThenIShouldSeeAWarningMessageThatPasswordWillBeExpired()
-		{                                                                                              
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.WarningMessage.InnerHtml.Contains("Du måste ändra ditt lösenord. Det går ut om 1 dagar."), Is.True);
-		}
-
-		[Then(@"I should see an log on error")]
-		public void ThenIShouldSeeAnLogOnError()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new StringContainsAnyLanguageResourceContraint("LogOnFailedInvalidUserNameOrPassword"));
-		}
 
 		[Then(@"I should see an error message ""(.*)""")]
 		public void ThenIShouldSeeAnErrorMessage(string msg)

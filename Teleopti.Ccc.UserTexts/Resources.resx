@@ -11182,8 +11182,16 @@ These options are activated:
     <value>Password policy requires a safer password.</value>
     <comment>Password policy requires a safer password.</comment>
   </data>
+  <data name="WindowsLogonWithBrackets" xml:space="preserve">
+    <value>(Windows log on)</value>
+    <comment>(Windows log on)</comment>
+  </data>
   <data name="UseAverageShiftLengths" xml:space="preserve">
     <value>Use Average Shift Lengths</value>
     <comment>Use Average Shift Lengths</comment>
+  </data>
+  <data name="PleaseChooseAnApplication" xml:space="preserve">
+    <value>Please choose an application</value>
+    <comment>Please choose an application</comment>
   </data>
 </root>

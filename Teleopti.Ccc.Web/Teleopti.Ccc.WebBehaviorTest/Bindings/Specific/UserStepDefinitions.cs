@@ -31,16 +31,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new Agent());
 		}
 
-		[Given(@"I am a user with")]
-		public void GivenIAmAUserWith(Table table)
-		{
-			if (!UserFactory.User().HasSetup<IUserRoleSetup>())
-				UserFactory.User().Setup(new Agent());
-
-			var user = table.CreateInstance<UserConfigurable>();
-			UserFactory.User().MakeUser(user.UserName, user.UserName, user.Password);
-		}
-
 		[Given(@"I am an agent")]
 		public void GivenIAmAnAgent()
 		{

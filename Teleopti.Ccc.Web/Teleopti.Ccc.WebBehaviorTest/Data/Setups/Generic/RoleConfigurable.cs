@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
             if (!AccessToAbsenceRequests)
                 applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb select f;
 
-
 			var role = ApplicationRoleFactory.CreateRole(Name, null);
 
 			var availableData = new AvailableData

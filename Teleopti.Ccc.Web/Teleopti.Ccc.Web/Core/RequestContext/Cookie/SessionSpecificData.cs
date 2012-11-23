@@ -5,9 +5,8 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 	[Serializable]
 	public class SessionSpecificData
 	{
-		public SessionSpecificData(Guid businessUnitId, string dataSourceName, Guid personId, string warningMessage = null)
+		public SessionSpecificData(Guid businessUnitId, string dataSourceName, Guid personId)
 		{
-			WarningMessage = warningMessage;
 			BusinessUnitId = businessUnitId;
 			DataSourceName = dataSourceName;
 			PersonId = personId;
@@ -16,6 +15,5 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		public Guid BusinessUnitId { get; private set; }
 		public string DataSourceName { get; private set; }
 		public Guid PersonId { get; private set; }
-		public string WarningMessage { get; private set; }
 	}
 }

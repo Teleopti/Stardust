@@ -5,7 +5,7 @@ I want to see my team mates' schedules
  
 Scenario: Team schedule tab
 	Given I am an agent
-	When I sign in
+	When I am viewing an application page
 	Then I should see the team schedule tab
 
 Scenario: View team schedule
@@ -69,12 +69,12 @@ Scenario: Can't see confidential absence
  
 Scenario: Can't see the team schedule tab without permission 
 	Given I am an agent with no access to team schedule
-	When I sign in
+	When I am viewing an application page
 	Then I should not see the team schedule tab
 
 Scenario: Can't navigate to team schedule without permission 
 	Given I am an agent with no access to team schedule
-	When I sign in
+	When I am viewing an application page
 	And I navigate to the team schedule
 	Then I should see an error message
 
