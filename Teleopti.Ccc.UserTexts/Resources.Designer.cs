@@ -16548,6 +16548,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose an application.
+        /// </summary>
+        public static string PleaseChooseAnApplication {
+            get {
+                return ResourceManager.GetString("PleaseChooseAnApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please choose a report type..
         /// </summary>
         public static string PleaseChooseAReportType {

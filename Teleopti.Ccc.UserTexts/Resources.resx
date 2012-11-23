@@ -11159,14 +11159,6 @@ These options are activated:
     <value>Sent</value>
     <comment>Date and time when an asm message has been sent</comment>
   </data>
-  <data name="Sender" xml:space="preserve">
-    <value>Sender</value>
-    <comment>Name of person who has sent an asm message</comment>
-  </data>
-  <data name="Sent" xml:space="preserve">
-    <value>Sent</value>
-    <comment>Date and time when an asm message has been sent</comment>
-  </data>
   <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
     <value>Selected file destination does not exist, please enter valid file path</value>
     <comment>Selected file destination does not exist, please enter valid filepath</comment>
@@ -11193,5 +11185,9 @@ These options are activated:
   <data name="WindowsLogonWithBrackets" xml:space="preserve">
     <value>(Windows log on)</value>
     <comment>(Windows log on)</comment>
+  </data>
+  <data name="PleaseChooseAnApplication" xml:space="preserve">
+    <value>Please choose an application</value>
+    <comment>Please choose an application</comment>
   </data>
 </root>

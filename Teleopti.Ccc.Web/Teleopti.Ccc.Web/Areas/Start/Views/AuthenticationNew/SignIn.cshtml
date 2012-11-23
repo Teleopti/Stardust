@@ -77,14 +77,14 @@
 		</div>
 		
 		<div id="businessunit">
-			<h3>Select business unit:</h3>
+			<h3>@Resources.PleaseChooseABusinessUnit</h3>
 			<ul id="BusinessUnits" data-bind="foreach: BusinessUnits" class="nav nav-tabs nav-stacked">
 				<li><a href="#" data-bind="text: Name, click: Select"></a></li>
 			</ul>
 		</div>
 
 		<div id="menu">
-			<h3>Select application:</h3>
+			<h3>@Resources.PleaseChooseAnApplication</h3>
 			<ul data-bind="foreach: Applications" class="nav nav-tabs nav-stacked">
 				<li>
 					<a href="#" data-bind="attr: {href: Url}, text: Name"></a>
