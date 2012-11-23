@@ -100,7 +100,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             {
                 return _talkTimeIndex;
             }
-            set {
+            set 
+            {
                 _talkTimeIndex = value;
                 if (_comparisonAverageTalkTime.TotalSeconds > 1)
                     _averageTalkTime = new TimeSpan((long)(_comparisonAverageTalkTime.Ticks * _talkTimeIndex));
