@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/Anywhere/Controller/Action");
 			var routeData = routes.GetRouteData(httpContext);
 
-			var expectedValues = new Dictionary<string, string> { { "controller", "Controller" }, { "action", "Action" } };
-			expectedValues.ForEach(x => routeData.Values[x.Key].Should().Be.EqualTo(x.Value));
+			routeData.Values["controller"].Should().Be("Controller");
+			routeData.Values["action"].Should().Be("Action");
 		}
 
 		[Test]
@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 
 			var namespaces = routeData.DataTokens["namespaces"] as IEnumerable<string>;
 			namespaces.Should().Have.SameValuesAs("Teleopti.Ccc.Web.Areas.Start.*");
+			routeData.Values["origin"].Should().Be("Anywhere");
 			routeData.DataTokens["area"].Should().Be("Start");
 		}
 	}
