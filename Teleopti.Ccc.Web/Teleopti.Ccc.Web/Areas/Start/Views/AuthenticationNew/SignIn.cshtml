@@ -74,7 +74,7 @@
 			</div>
 			
 			<button class="btn btn-primary" id="Login-button" data-bind="click: SignIn, enable: Ajax.Inactive()">@Resources.LogOn</button>
-			<div data-bind="visible: Ajax.Active()">Loading...</div>
+			<img data-bind="visible: Ajax.Active()" src="@Url.Content("~/Areas/Start/Content/Images/ajax-loader-small.gif")" alt="..." />
 		</div>
 		
 		<div id="businessunit">
