@@ -339,7 +339,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			completelyLoaded = completelyLoadedCallback;
 		},
 		SetupViewModel: function (userTexts) {
-			console.log(userTexts);
 			vm = new WeekScheduleViewModel(userTexts);
 			ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
 		},

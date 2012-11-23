@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 			var meeting = new Meeting(user,
 									  new[] { new MeetingPerson(user, false) },
-									  Subject, Location, Description,
+									  Subject, Location, Description ?? String.Empty,
 									  TestData.ActivityTraining, scenario)
 			{
 				StartDate = new DateOnly(StartTime),
