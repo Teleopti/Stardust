@@ -20,7 +20,7 @@
     <Border HorizontalAlignment="Stretch" 
             VerticalAlignment="Stretch" 
             Opacity="1"
-            Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}}"
+            Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}, FallbackValue=White}"
             Cursor="Hand"
             MouseDown="Border_MouseDown"/>
 

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
             using (_mocks.Playback())
             {
-                result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, 4, false, false);
+				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
             }
             
             Assert.That(result, Is.Not.Null);
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
 			using (_mocks.Playback())
 			{
-				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic,4,false,false);
+				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
 			}
             Assert.That(result, Is.Not.Null);
             if(result.HasValue)
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
             using (_mocks.Playback())
             {
-                result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, 4, false, false);
+				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
             }
             Assert.That(result, Is.Not.Null);
             if (result.HasValue)
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
             using (_mocks.Playback())
             {
-                result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, 4, false, false);
+				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
             }
             Assert.That(result, Is.Not.Null);
             if (result.HasValue)
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
             using (_mocks.Playback())
             {
-                result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, 4, false, false);
+				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
             }
             Assert.That(result, Is.Not.Null);
             if (result.HasValue)
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
 			using (_mocks.Playback())
 			{
-                result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, 4, false, false);
+				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
 			}
             Assert.That(result,Is.Not.Null);
             if (result.HasValue)
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 
 			using (_mocks.Playback())
 			{
-                result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, 4, false, false);
+				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
 			}
             Assert.That(result, Is.Not.Null);
             if (result.HasValue)

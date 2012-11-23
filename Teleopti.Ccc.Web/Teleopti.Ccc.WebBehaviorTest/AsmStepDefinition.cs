@@ -106,6 +106,41 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			}, Is.EqualTo(hour));
 		}
 
+		[Then(@"I shoud see an indication that I have '(.*)' unread messages")]
+		public void ThenIShoudSeeAnIndicationThatIHaveUnreadMessages(int unreadMessagesCount)
+		{
+			EventualAssert.That(() => (Browser.Current.Span(Find.ById("message-count")).Text), Is.EqualTo(unreadMessagesCount.ToString()));
+		}
+
+		[Then(@"I shoud see an indication that I have an unread message")]
+		public void ThenIShoudSeeAnIndicationThatIHaveAnUnreadMessage()
+		{
+			EventualAssert.That(() =>
+				IsDisplayed(Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false))),
+				Is.True);
+		}
+
+		[Then(@"I shoud not see an indication that I have an unread message")]
+		public void ThenIShoudNotSeeAnIndicationThatIHaveAnUnreadMessage()
+		{
+			EventualAssert.That(() =>
+				IsDisplayed(Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false))),
+				Is.False);
+		}
+
+		private static bool IsDisplayed(Element element)
+		{
+			if (string.Equals(element.Style.Display, "none"))
+			{
+				return false;
+			}
+			if (element.Parent != null)
+			{
+				return IsDisplayed(element.Parent);
+			}
+			return true;
+		}
+
 		private static int pixelLength(Element oneHourLengthLayer)
 		{
 			return Convert.ToInt32(oneHourLengthLayer.Style.GetAttributeValue(attributeUsedForWidth).TrimEnd('p', 'x'));

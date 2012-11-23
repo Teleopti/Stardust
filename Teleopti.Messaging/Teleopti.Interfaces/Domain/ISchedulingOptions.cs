@@ -332,5 +332,13 @@ namespace Teleopti.Interfaces.Domain
         /// Common Activity
         /// </summary>
         IActivity CommonActivity { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether [use average shift lengths].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [use average shift lengths]; otherwise, <c>false</c>.
+		/// </value>
+		bool UseAverageShiftLengths { get; set; }
     }
 }

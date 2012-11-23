@@ -8,14 +8,24 @@
     xmlns:Converters="clr-namespace:Teleopti.Ccc.WpfControls.Converters"
     xmlns:Controls="clr-namespace:Teleopti.Ccc.WpfControls.Controls"
     Height="64" Width="Auto">
-<UserControl.Resources>
+    <UserControl.Resources>
         <Converters:VisibilityConverter x:Key="visibilityConverter"/>
+        <Style TargetType="ContextMenu" x:Key="BasicContextMenu">
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
         <StackPanel TextBox.LostFocus="TextBox_LostFocus" >
 
     <Grid Commands:CreateCommandBinding.Target="{Binding}">
             <Grid.ContextMenu>
-                <ContextMenu>
+                <ContextMenu Style="{StaticResource BasicContextMenu}">
                     <MenuItem Command="{x:Static Commands:CommonRoutedCommands.ToggleAutoUpdate}"/>
                     <MenuItem Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalLater}"/>
                     <MenuItem Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalEarlier}"/>
@@ -39,8 +49,8 @@
         </Grid.RowDefinitions>
 
         <!--Bygg ihop dessa?-->
-        <Border Visibility="{Binding Path=AutoUpdate,Converter={StaticResource visibilityConverter}}" BorderThickness="0,1,1,1" BorderBrush="Green" Grid.Column="2" Grid.RowSpan="2" CornerRadius="2" Width="8" Margin="0,12,0,12" HorizontalAlignment="Left"/>
-        <Label Visibility="{Binding Path=AutoUpdate,Converter={StaticResource visibilityConverter}}" Grid.Column="2" Grid.RowSpan="2" Content="+" Foreground="Green" FontWeight="Bold"  ToolTip="{x:Static UserTexts:Resources.AutomaticUpdate}" Grid.ColumnSpan="2" Margin="2,19.02,-2,19.02" />
+            <Border Visibility="{Binding Path=AutoUpdate,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}" BorderThickness="0,1,1,1" BorderBrush="Green" Grid.Column="2" Grid.RowSpan="2" CornerRadius="2" Width="8" Margin="0,12,0,12" HorizontalAlignment="Left"/>
+            <Label Visibility="{Binding Path=AutoUpdate,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}" Grid.Column="2" Grid.RowSpan="2" Content="+" Foreground="Green" FontWeight="Bold"  ToolTip="{x:Static UserTexts:Resources.AutomaticUpdate}" Grid.ColumnSpan="2" Margin="2,19.02,-2,19.02" />
                
 
             <DateTimePeriodControl:EditableStartDateView Grid.Column="0" Height="23" Margin="0,5,0,5" />

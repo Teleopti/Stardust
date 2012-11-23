@@ -3,7 +3,6 @@
 	As an agent
 	I want to see my current activities
 
-
 Background:
 	Given there is a role with
 	| Field                    | Value                 |
@@ -33,7 +32,6 @@ Background:
 	| EndTime               | 2030-01-01 17:00 |
 	| Shift category		| Day	           |
 	| Lunch3HoursAfterStart | true             |
-
 
 Scenario: No permission to ASM module
 	Given I have the role 'No access to ASM'
@@ -103,8 +101,31 @@ Scenario: Asm should be automatically reloaded when time passes
 	Then Now indicator should be at hour '47'
 	When Current browser time has changed to '2030-01-02 00:01'
 	Then Now indicator should be at hour '24'
-	
 
+Scenario: Asm should not indicate unread messages if no messages
+	Given I have the role 'Full access to mytime'
+	When I click ASM link
+	Then I shoud not see an indication that I have an unread message
+
+Scenario: Asm should indicate unread messages
+	Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field         | Value        |
+	| Title         | New message	 |
+	When I click ASM link
+	Then I shoud see an indication that I have '1' unread messages
+
+Scenario: Asm should indicate number of unread messages
+	Given I have the role 'Full access to mytime'
+	And I have an unread message with
+	| Field         | Value        |
+	| Title         | New message	 |
+	And I have an unread message with
+	| Field         | Value					|
+	| Title         | Another Message	|
+	When I click ASM link
+	Then I shoud see an indication that I have '2' unread messages
+	
 #Not in use until version 8
 @ignore
 Scenario: Agent should be notified when activity changes

@@ -7,8 +7,19 @@
 	<UserControl.Resources>
 		<DateTimeConverter:DateTimeToLocalStringConverter x:Key="dateTimeToLocalStringConverter"/>
 		<DateTimeConverter:DateTimeParseMode x:Key="TimeMode">Time</DateTimeConverter:DateTimeParseMode>
-		<DateTimeConverter:DateTimeParseMode x:Key="DateMode">Date</DateTimeConverter:DateTimeParseMode>
-	</UserControl.Resources>
+        <DateTimeConverter:DateTimeParseMode x:Key="DateMode">Date</DateTimeConverter:DateTimeParseMode>
+
+        <Style TargetType="ComboBox" x:Key="BasicComboBox">
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
 	<Grid Commands:CreateCommandBinding.CommandModel="{Binding Path=UpdateLayerCommand}">
 		<Grid.RowDefinitions>
 			<RowDefinition />
@@ -22,7 +33,7 @@
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
 
-		<ComboBox ItemsSource="{Binding Path=SelectablePayloads}" Grid.Row="0" Grid.ColumnSpan="2">
+        <ComboBox Style="{StaticResource BasicComboBox}" ItemsSource="{Binding Path=SelectablePayloads}" Grid.Row="0" Grid.ColumnSpan="2">
 			<ComboBox.ItemTemplate>
 				<DataTemplate>
 					<StackPanel Orientation="Horizontal">

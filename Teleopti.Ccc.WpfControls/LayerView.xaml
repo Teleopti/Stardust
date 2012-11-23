@@ -61,7 +61,7 @@
 				Thumb.DragStarted="Thumb_Drag_Started"
                 Opacity="1"
                 CornerRadius="2"
-                Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}}"
+                Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}, FallbackValue=White}"
                 x:Name="theBorder">
         <Border.Resources>
             <Style TargetType="Thumb" x:Key="mainThumbStyle">

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
@@ -7,6 +6,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -32,16 +32,25 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IGroupOptimizationValidatorRunner _groupOptimizationValidatorRunner;
 		private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
     	private IGroupPerson _groupPerson;
+    	private IPerson _person;
     	private ValidatorResult _validatorResult;
     	private IOptimizationPreferences _optimizationPreferences;
     	private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
     	private ITeamSteadyStateHolder _teamSteadyStateHolder;
     	private IScheduleDictionary _scheduleDictionary;
+    	private ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
+    	private ILockableBitArray _originalArray;
+		private ILockableBitArray _workingBitArray;
+    	private IScheduleResultDataExtractor _scheduleResultDataExtractor;
+    	private IList<double?> _dataExtractorValues;
+    	private IList<DateOnly> _daysOffToRemove;
+		private IList<DateOnly> _daysOffToAdd;
 
-        [SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
+        	_smartDayOffBackToLegalStateService = _mocks.StrictMock<ISmartDayOffBackToLegalStateService>();
         	_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             _converter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
             _decisionMaker = _mocks.StrictMock<IDayOffDecisionMaker>();
@@ -58,15 +67,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         	_schedulingOptions.UseSameDayOffs = true;
 			_groupOptimizationValidatorRunner = _mocks.StrictMock<IGroupOptimizationValidatorRunner>();
 			_groupPersonBuilderForOptimization = _mocks.StrictMock<IGroupPersonBuilderForOptimization>();
-        	_groupPerson = _mocks.StrictMock<IGroupPerson>();
-        	//_workShiftBackToLegalStateServicePro = _mocks.StrictMock<IWorkShiftBackToLegalStateServicePro>();
-
             _allScheduleMatrixes.Add(_activeScheduleMatrix);
             _allScheduleMatrixes.Add(_scheduleMatrix2);
         	_validatorResult = new ValidatorResult();
 			_optimizationPreferences = new OptimizationPreferences();
         	_teamSteadyStateMainShiftScheduler = _mocks.StrictMock<ITeamSteadyStateMainShiftScheduler>();
         	_teamSteadyStateHolder = _mocks.StrictMock<ITeamSteadyStateHolder>();
+			_originalArray = new LockableBitArray(7, false, false, null);
+			_workingBitArray = new LockableBitArray(7, false, false, null);
+			_scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
+			_dataExtractorValues = new List<double?>();
+			var dayOffToRemove = new DateOnly(2001, 02, 01);
+			_daysOffToRemove = new List<DateOnly> { dayOffToRemove };
+			var dayOffToAdd = new DateOnly(2001, 02, 05);
+			_daysOffToAdd = new List<DateOnly> { dayOffToAdd };
+        	_person = PersonFactory.CreatePerson();
+			_groupPerson = new GroupPerson(new List<IPerson>{_person}, DateOnly.MinValue, "Hej", null);
         }
 
         [Test]
@@ -76,60 +92,23 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsNotNull(_target);
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldContinueWithScheduleRemovedDaysOffIfTeamSteadyStateFails()
 		{
-			var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
-			var originalArray = new LockableBitArray(7, false, false, null);
-			var workingBitArray = new LockableBitArray(7, false, false, null);
-			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-			var activePerson = _mocks.StrictMock<IPerson>();
-
-			var dayOffToRemove = new DateOnly(2001, 02, 01);
-			var daysOffToRemove = new List<DateOnly> { dayOffToRemove };
-
-			var dayOffToAdd = new DateOnly(2001, 02, 05);
-			var daysOffToAdd = new List<DateOnly> { dayOffToAdd };
-
-			var groupMatrixContainer = new GroupMatrixContainer();
-			var groupMatrixContainers = new List<GroupMatrixContainer> { groupMatrixContainer };
-
 			_daysOffPreferences.ConsiderWeekBefore = false;
 			_daysOffPreferences.ConsiderWeekAfter = false;
-
-			IList<double?> dataExtractorValues = new List<double?>();
-
 			_target = createTarget();
-			_validatorResult.Success = true;
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
-					.Return(scheduleResultDataExtractor);
-				Expect.Call(_converter.Convert(false, false))
-					.Return(originalArray);
-				Expect.Call(_converter.Convert(false, false))
-					.Return(workingBitArray);
-				Expect.Call(scheduleResultDataExtractor.Values())
-					.Return(dataExtractorValues);
-				Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
-					.Return(true);
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray, _activeScheduleMatrix, false))
-					.Return(daysOffToRemove);
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
-					.Return(daysOffToAdd);
-				Expect.Call(_activeScheduleMatrix.Person)
-					.Return(activePerson).Repeat.Twice();
-				Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, _groupPerson, _daysOffPreferences))
-					.Return(groupMatrixContainers);
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(activePerson, dayOffToRemove)).Return(
-					_groupPerson);
-				Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, true)).IgnoreArguments().Return(_validatorResult);
-				Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).IgnoreArguments()
-					.Return(true);
-				Expect.Call(_groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, _schedulingOptions, _allScheduleMatrixes, _schedulePartModifyAndRollbackService)).IgnoreArguments().Return
-					(new List<IScheduleDay>());
-				Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson,
+				commonMocks(true, true, _groupPerson);
+				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
+				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(_daysOffToRemove[0], _groupPerson, _groupSchedulingService,
+																			_schedulePartModifyAndRollbackService,
+																			_schedulingOptions, _groupPersonBuilderForOptimization,
+																			_allScheduleMatrixes, _scheduleDictionary)).Return(false);
+
+				Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(_daysOffToRemove, _groupPerson,
 																		 _groupSchedulingService,
 																		 _schedulePartModifyAndRollbackService,
 																		 _schedulingOptions,
@@ -144,151 +123,55 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 																			_groupPersonBuilderForOptimization,
 																			_allScheduleMatrixes)).Return(true);
 
-				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
-				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(dayOffToRemove, _groupPerson, _groupSchedulingService,
-																			_schedulePartModifyAndRollbackService,
-																			_schedulingOptions, _groupPersonBuilderForOptimization,
-																			_allScheduleMatrixes, _scheduleDictionary)).Return(false);
-
 			}
 			using (_mocks.Playback())
 			{
-
 				bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
 				Assert.IsTrue(result);
 			}	
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldUseTeamSteadyState()
 		{
-			var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
-			var originalArray = new LockableBitArray(7, false, false, null);
-			var workingBitArray = new LockableBitArray(7, false, false, null);
-			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-			var activePerson = _mocks.StrictMock<IPerson>();
-
-			var dayOffToRemove = new DateOnly(2001, 02, 01);
-			var daysOffToRemove = new List<DateOnly> { dayOffToRemove };
-
-			var dayOffToAdd = new DateOnly(2001, 02, 05);
-			var daysOffToAdd = new List<DateOnly> { dayOffToAdd };
-
-			var groupMatrixContainer = new GroupMatrixContainer();
-			var groupMatrixContainers = new List<GroupMatrixContainer> { groupMatrixContainer };
-
 			_daysOffPreferences.ConsiderWeekBefore = false;
 			_daysOffPreferences.ConsiderWeekAfter = false;
-
-			IList<double?> dataExtractorValues = new List<double?>();
-
 			_target = createTarget();
-			_validatorResult.Success = true;
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
-					.Return(scheduleResultDataExtractor);
-				Expect.Call(_converter.Convert(false, false))
-					.Return(originalArray);
-				Expect.Call(_converter.Convert(false, false))
-					.Return(workingBitArray);
-				Expect.Call(scheduleResultDataExtractor.Values())
-					.Return(dataExtractorValues);
-				Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
-					.Return(true);
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray, _activeScheduleMatrix, false))
-					.Return(daysOffToRemove);
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
-					.Return(daysOffToAdd);
-				Expect.Call(_activeScheduleMatrix.Person)
-					.Return(activePerson).Repeat.Twice();
-				Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, _groupPerson, _daysOffPreferences))
-					.Return(groupMatrixContainers);
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(activePerson, dayOffToRemove)).Return(
-					_groupPerson);
-				Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, true)).IgnoreArguments().Return(_validatorResult);
-				Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).IgnoreArguments()
-					.Return(true);
-				Expect.Call(_groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, _schedulingOptions, _allScheduleMatrixes, _schedulePartModifyAndRollbackService)).IgnoreArguments().Return
-					(new List<IScheduleDay>());
-				
+				commonMocks(true, true, _groupPerson);
+				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
+				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(_daysOffToRemove[0], _groupPerson, _groupSchedulingService,
+				                                                            _schedulePartModifyAndRollbackService,
+				                                                            _schedulingOptions, _groupPersonBuilderForOptimization,
+				                                                            _allScheduleMatrixes, _scheduleDictionary)).Return(true);
 				Expect.Call(_groupMatrixHelper.ScheduleBackToLegalStateDays(new List<IScheduleDay>(),
 																			_groupSchedulingService,
 																			_schedulePartModifyAndRollbackService,
 																			_schedulingOptions, _optimizationPreferences,
 																			_groupPersonBuilderForOptimization,
 																			_allScheduleMatrixes)).Return(true);
-
-				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
-				Expect.Call(_teamSteadyStateMainShiftScheduler.ScheduleTeam(dayOffToRemove, _groupPerson, _groupSchedulingService,
-				                                                            _schedulePartModifyAndRollbackService,
-				                                                            _schedulingOptions, _groupPersonBuilderForOptimization,
-				                                                            _allScheduleMatrixes, _scheduleDictionary)).Return(true);
-
 			}
 			using (_mocks.Playback())
 			{
-
 				bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
 				Assert.IsTrue(result);
 			}		
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
         public void VerifySuccessfulExecuteWithOnePerson()
         {
-            var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
-            var originalArray = new LockableBitArray(7, false, false, null);
-            var workingBitArray = new LockableBitArray(7, false, false, null);
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            var activePerson = _mocks.StrictMock<IPerson>();
-
-            var dayOffToRemove = new DateOnly(2001, 02, 01);
-            var daysOffToRemove = new List<DateOnly> { dayOffToRemove };
-            
-            var dayOffToAdd = new DateOnly(2001, 02, 05);
-            var daysOffToAdd = new List<DateOnly> { dayOffToAdd };
-
-            var groupMatrixContainer = new GroupMatrixContainer();
-            var groupMatrixContainers = new List<GroupMatrixContainer> { groupMatrixContainer };
-
             _daysOffPreferences.ConsiderWeekBefore = false;
             _daysOffPreferences.ConsiderWeekAfter = false;
-
-            IList<double?> dataExtractorValues = new List<double?>();
-
             _target = createTarget();
-			_validatorResult.Success = true;
 
             using (_mocks.Record())
             {
-                Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
-                    .Return(scheduleResultDataExtractor);
-                Expect.Call(_converter.Convert(false, false))
-                    .Return(originalArray);
-                Expect.Call(_converter.Convert(false, false))
-                    .Return(workingBitArray);
-                Expect.Call(scheduleResultDataExtractor.Values())
-                    .Return(dataExtractorValues);
-                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
-                    .Return(true);
-                Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray,_activeScheduleMatrix, false))
-                    .Return(daysOffToRemove);
-                Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
-                    .Return(daysOffToAdd);
-                Expect.Call(_activeScheduleMatrix.Person)
-                    .Return(activePerson).Repeat.Twice();
-                Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, _groupPerson, _daysOffPreferences))
-                    .Return(groupMatrixContainers);
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(activePerson, dayOffToRemove)).Return(
-					_groupPerson);
-				Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, true)).IgnoreArguments().Return(	_validatorResult);
-                Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter,_schedulePartModifyAndRollbackService)).IgnoreArguments()
-                    .Return(true);
-				Expect.Call(_groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, _schedulingOptions, _allScheduleMatrixes, _schedulePartModifyAndRollbackService)).IgnoreArguments().Return
-					(new List<IScheduleDay>());
-            	Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson,
+				commonMocks(true, true,_groupPerson);
+				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
+            	Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(_daysOffToRemove, _groupPerson,
             	                                                         _groupSchedulingService,
             	                                                         _schedulePartModifyAndRollbackService,
             	                                                         _schedulingOptions,
@@ -302,43 +185,32 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             	                                                            _groupPersonBuilderForOptimization,
             	                                                            _allScheduleMatrixes)).Return(true);
 
-            	Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
-
             }
             using (_mocks.Playback())
             {
-
 				bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
                 Assert.IsTrue(result);
             }	
-
         }
 
         [Test]
         public void VerifyUnsuccessfulExecuteDecisionMakerNotFindDay()
         {
-            var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
-            var originalArray = new LockableBitArray(7, false, false, null);
-            var workingBitArray = new LockableBitArray(7, false, false, null);
-
             _daysOffPreferences.ConsiderWeekBefore = false;
             _daysOffPreferences.ConsiderWeekAfter = false;
-
-            var dataExtractorValues = new List<double?>();
-
             _target = createTarget();
 
             using (_mocks.Record())
             {
                 Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
-                    .Return(scheduleResultDataExtractor);
+                    .Return(_scheduleResultDataExtractor);
                 Expect.Call(_converter.Convert(false, false))
-                    .Return(originalArray);
+                    .Return(_originalArray);
                 Expect.Call(_converter.Convert(false, false))
-                    .Return(workingBitArray);
-                Expect.Call(scheduleResultDataExtractor.Values())
-                    .Return(dataExtractorValues);
-                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
+                    .Return(_workingBitArray);
+                Expect.Call(_scheduleResultDataExtractor.Values())
+                    .Return(_dataExtractorValues);
+                Expect.Call(_decisionMaker.Execute(_workingBitArray, _dataExtractorValues))
                     .Return(false);
 
             }
@@ -354,238 +226,136 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyUnsuccessfulExecuteGroupPersonNull()
         {
-            var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
-            var originalArray = new LockableBitArray(7, false, false, null);
-            var workingBitArray = new LockableBitArray(7, false, false, null);
-            var activePerson = _mocks.StrictMock<IPerson>();
-
-            var dayOffToRemove = new DateOnly(2001, 02, 01);
-            var daysOffToRemove = new List<DateOnly> { dayOffToRemove };
-
-            var dayOffToAdd = new DateOnly(2001, 02, 05);
-            var daysOffToAdd = new List<DateOnly> { dayOffToAdd };
-
             _daysOffPreferences.ConsiderWeekBefore = false;
             _daysOffPreferences.ConsiderWeekAfter = false;
-
-            var dataExtractorValues = new List<double?>();
-
             _target = createTarget();
 
             using (_mocks.Record())
             {
-                Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
-                    .Return(scheduleResultDataExtractor);
-                Expect.Call(_converter.Convert(false, false))
-                    .Return(originalArray);
-                Expect.Call(_converter.Convert(false, false))
-                    .Return(workingBitArray);
-                Expect.Call(scheduleResultDataExtractor.Values())
-                    .Return(dataExtractorValues);
-                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
-                    .Return(true);
-                Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray, _activeScheduleMatrix, false))
-                    .Return(daysOffToRemove);
-                Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
-                    .Return(daysOffToAdd);
-                Expect.Call(_activeScheduleMatrix.Person)
-                    .Return(activePerson);
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(activePerson, dayOffToRemove)).Return(
-					null);
-
+                commonMocks(true, true, null);
             }
             using (_mocks.Playback())
             {
-
 				bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
                 Assert.IsFalse(result);
             }
-
         }
 
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
         public void VerifyUnsuccessfulExecuteValidationFail()
         {
-            var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
-            var originalArray = new LockableBitArray(7, false, false, null);
-            var workingBitArray = new LockableBitArray(7, false, false, null);
-            var activePerson = _mocks.StrictMock<IPerson>();
-
-            var dayOffToRemove = new DateOnly(2001, 02, 01);
-            var daysOffToRemove = new List<DateOnly> { dayOffToRemove };
-
-            var dayOffToAdd = new DateOnly(2001, 02, 05);
-            var daysOffToAdd = new List<DateOnly> { dayOffToAdd };
-
             _daysOffPreferences.ConsiderWeekBefore = false;
             _daysOffPreferences.ConsiderWeekAfter = false;
-
-            IList<double?> dataExtractorValues = new List<double?>();
-
-            _target = createTarget();
+			_target = createTarget();
 
             using (_mocks.Record())
             {
-                Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
-                    .Return(scheduleResultDataExtractor);
-                Expect.Call(_converter.Convert(false, false))
-                    .Return(originalArray);
-                Expect.Call(_converter.Convert(false, false))
-                    .Return(workingBitArray);
-                Expect.Call(scheduleResultDataExtractor.Values())
-                    .Return(dataExtractorValues);
-                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
-                    .Return(true);
-                Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray, _activeScheduleMatrix, false))
-                    .Return(daysOffToRemove);
-                Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
-                    .Return(daysOffToAdd);
-                Expect.Call(_activeScheduleMatrix.Person)
-                    .Return(activePerson).Repeat.AtLeastOnce();
-            	Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(activePerson, dayOffToRemove));
-            	Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, false)).IgnoreArguments().Return
-            		(_validatorResult);
+                commonMocks(false, false, _groupPerson);
             }
             using (_mocks.Playback())
             {
-
 				bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
                 Assert.IsFalse(result);
             }
-
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
         public void VerifyUnsuccessfulExecuteDayOffsFail()
         {
-            var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
-            var originalArray = new LockableBitArray(7, false, false, null);
-            var workingBitArray = new LockableBitArray(7, false, false, null);
-            var activePerson = _mocks.StrictMock<IPerson>();
-
-            var dayOffToRemove = new DateOnly(2001, 02, 01);
-            var daysOffToRemove = new List<DateOnly> { dayOffToRemove };
-
-            var dayOffToAdd = new DateOnly(2001, 02, 05);
-            var daysOffToAdd = new List<DateOnly> { dayOffToAdd };
-
-            var groupMatrixContainer = new GroupMatrixContainer();
-            var groupMatrixContainers = new List<GroupMatrixContainer> { groupMatrixContainer };
-
             _daysOffPreferences.ConsiderWeekBefore = false;
             _daysOffPreferences.ConsiderWeekAfter = false;
-
-            IList<double?> dataExtractorValues = new List<double?>();
-
             _target = createTarget();
-        	_validatorResult.Success = true;
 
             using (_mocks.Record())
             {
-                Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
-                    .Return(scheduleResultDataExtractor);
-                Expect.Call(_converter.Convert(false, false))
-                    .Return(originalArray);
-                Expect.Call(_converter.Convert(false, false))
-                    .Return(workingBitArray);
-                Expect.Call(scheduleResultDataExtractor.Values())
-                    .Return(dataExtractorValues);
-                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
-                    .Return(true);
-                Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray, _activeScheduleMatrix, false))
-                    .Return(daysOffToRemove);
-                Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
-                    .Return(daysOffToAdd);
-                Expect.Call(_activeScheduleMatrix.Person)
-                    .Return(activePerson).Repeat.Twice();
-				Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, _groupPerson, _daysOffPreferences))
-					.Return(groupMatrixContainers);
-				Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, false)).IgnoreArguments().Return
-					(_validatorResult);
-            	Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(activePerson, dayOffToRemove)).Return(
-            		_groupPerson);
-                Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).IgnoreArguments()
-                    .Return(false);
-
+                commonMocks(false, true, _groupPerson);
             }
             using (_mocks.Playback())
             {
-
 				bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
                 Assert.IsFalse(result);
             }
 
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
         public void VerifyUnsuccessfulExecuteReschedulingFail()
         {
-            var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
-            var originalArray = new LockableBitArray(7, false, false, null);
-            var workingBitArray = new LockableBitArray(7, false, false, null);
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            var activePerson = _mocks.StrictMock<IPerson>();
-
-            var dayOffToRemove = new DateOnly(2001, 02, 01);
-            var daysOffToRemove = new List<DateOnly> { dayOffToRemove };
-
-            var dayOffToAdd = new DateOnly(2001, 02, 05);
-            var daysOffToAdd = new List<DateOnly> { dayOffToAdd };
-
-            var groupMatrixContainer = new GroupMatrixContainer();
-            var groupMatrixContainers = new List<GroupMatrixContainer> { groupMatrixContainer };
-
             _daysOffPreferences.ConsiderWeekBefore = false;
             _daysOffPreferences.ConsiderWeekAfter = false;
-
-            IList<double?> dataExtractorValues = new List<double?>();
-
             _target = createTarget();
-			_validatorResult.Success = true;
 
             using (_mocks.Record())
             {
-                Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
-                    .Return(scheduleResultDataExtractor);
-                Expect.Call(_converter.Convert(false, false))
-                    .Return(originalArray);
-                Expect.Call(_converter.Convert(false, false))
-                    .Return(workingBitArray);
-                Expect.Call(scheduleResultDataExtractor.Values())
-                    .Return(dataExtractorValues);
-                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
-                    .Return(true);
-                Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray, _activeScheduleMatrix, false))
-                    .Return(daysOffToRemove);
-                Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
-                    .Return(daysOffToAdd);
-                Expect.Call(_activeScheduleMatrix.Person)
-                    .Return(activePerson).Repeat.Twice();
-            	Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(activePerson, dayOffToRemove)).Return(
-            		groupPerson);
-				Expect.Call(_groupOptimizationValidatorRunner.Run(activePerson, daysOffToAdd, daysOffToRemove, false)).IgnoreArguments().Return
-					(_validatorResult);
-				Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, daysOffToRemove, daysOffToAdd, _groupPerson, _daysOffPreferences)).IgnoreArguments()
-					.Return(groupMatrixContainers);
-                Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).IgnoreArguments()
-                    .Return(true);
-				Expect.Call(_groupMatrixHelper.GoBackToLegalState(new List<DateOnly> { dayOffToRemove }, groupPerson, _schedulingOptions, _allScheduleMatrixes, _schedulePartModifyAndRollbackService)).Return(
-					new List<IScheduleDay>());
-                Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(daysOffToRemove, groupPerson, _groupSchedulingService, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization, _allScheduleMatrixes)).IgnoreArguments()
-                    .Return(false);
-            	Expect.Call(_teamSteadyStateHolder.IsSteadyState(groupPerson)).Return(false);
-
-
+                commonMocks(true, true, _groupPerson);
+				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
+            	Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(_daysOffToRemove, _groupPerson,
+            	                                                         _groupSchedulingService,
+            	                                                         _schedulePartModifyAndRollbackService,
+            	                                                         _schedulingOptions,
+            	                                                         _groupPersonBuilderForOptimization,
+            	                                                         _allScheduleMatrixes)).IgnoreArguments().Return(
+            	                                                         	false);
             }
             using (_mocks.Playback())
             {
-
 				bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
                 Assert.IsFalse(result);
             }
 
         }
+
+		private void commonMocks(bool executeDaysOffMoveSuccess, bool validatorSuccess, IGroupPerson groupPersonToReturn)
+		{
+			var solvers = new List<IDayOffBackToLegalStateSolver>();
+			var groupMatrixContainer = new GroupMatrixContainer();
+			var groupMatrixContainers = new List<GroupMatrixContainer> { groupMatrixContainer };
+			_validatorResult.Success = validatorSuccess;
+
+			Expect.Call(_converter.Convert(false, false))
+					.Return(_originalArray);
+			Expect.Call(_converter.Convert(false, false))
+				.Return(_workingBitArray);
+			Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
+					.Return(_scheduleResultDataExtractor);
+			Expect.Call(_scheduleResultDataExtractor.Values())
+					.Return(_dataExtractorValues);
+			Expect.Call(_decisionMaker.Execute(_workingBitArray, _dataExtractorValues))
+					.Return(true);
+			Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(_workingBitArray)).Return(solvers);
+			Expect.Call(_smartDayOffBackToLegalStateService.Execute(solvers, 100)).Return(true);
+			Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_workingBitArray, _originalArray, _activeScheduleMatrix, false))
+					.Return(_daysOffToRemove);
+			Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_workingBitArray, _originalArray, _activeScheduleMatrix, false))
+				.Return(_daysOffToAdd);
+			Expect.Call(_activeScheduleMatrix.Person).Return(_person);
+			Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly(2001, 02, 01))).Return(
+					groupPersonToReturn);
+
+			if (groupPersonToReturn == null)
+				return;
+
+			Expect.Call(_groupOptimizationValidatorRunner.Run(_person, _daysOffToAdd, _daysOffToRemove, false)).IgnoreArguments().Return
+					(_validatorResult);
+
+			if(!validatorSuccess)
+				return;
+
+			Expect.Call(_groupMatrixHelper.CreateGroupMatrixContainers(_allScheduleMatrixes, _daysOffToRemove, _daysOffToAdd, groupPersonToReturn, _daysOffPreferences)).IgnoreArguments()
+				.Return(groupMatrixContainers);
+			Expect.Call(_groupMatrixHelper.ExecuteDayOffMoves(groupMatrixContainers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService)).IgnoreArguments()
+				.Return(executeDaysOffMoveSuccess);
+
+			if (!executeDaysOffMoveSuccess)
+				return;
+
+			Expect.Call(_groupMatrixHelper.GoBackToLegalState(new List<DateOnly> { DateOnly.MinValue }, groupPersonToReturn,
+			                                                  _schedulingOptions, _allScheduleMatrixes,
+			                                                  _schedulePartModifyAndRollbackService)).IgnoreArguments().Return(
+			                                                  	new List<IScheduleDay>());
+			Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_workingBitArray, _originalArray, _activeScheduleMatrix, false))
+					.Return(_daysOffToRemove);
+		}
 
         private GroupDayOffOptimizer createTarget()
         {
@@ -599,7 +369,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                       _groupSchedulingService, 
                                       _groupMatrixHelper,
 									  _groupOptimizationValidatorRunner,
-									  _groupPersonBuilderForOptimization);
+									  _groupPersonBuilderForOptimization,
+									  _smartDayOffBackToLegalStateService);
         }
     }
 }

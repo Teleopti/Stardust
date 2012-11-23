@@ -10,6 +10,16 @@
     Height="Auto" Width="Auto">
 
     <UserControl.Resources>
+        <Style TargetType="ComboBox" x:Key="BasicComboBox">
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <DataTemplate DataType="{x:Type Scheduling:Absence}">
             <Views:AbsenceShortView />
         </DataTemplate>
@@ -36,7 +46,7 @@
                   ItemsSource="{Binding Path=Payloads}"
                   IsSynchronizedWithCurrentItem="True"
                   IsTextSearchEnabled="True" 
-                  TextSearch.TextPath="Description">
+                  TextSearch.TextPath="Description" Style="{StaticResource BasicComboBox}">
 
         </ComboBox>
         <DateTimePeriodControl:EditableDateTimePeriodView Grid.RowSpan="2" DataContext="{Binding Path=PeriodViewModel}" Grid.Row="1" Grid.Column="1">

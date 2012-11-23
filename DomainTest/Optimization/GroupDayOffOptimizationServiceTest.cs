@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IScheduleMatrixPro _matrix2;
     	private IVirtualSchedulePeriod _virtualSchedulePeriod1;
 		private IVirtualSchedulePeriod _virtualSchedulePeriod2;
+    	private IScheduleDayPro _scheduleDayPro;
 
         [SetUp]
         public void Setup()
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         	_virtualSchedulePeriod1 = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_virtualSchedulePeriod2 = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_target = new GroupDayOffOptimizationService(_periodValueCalculator, _schedulePartModifyAndRollbackService, _resourceOptimizationHelper, _groupOptimizerFindMatrixesForGroup);
+        	_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
         }
 
 		//[Test]
@@ -128,6 +130,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(10).Repeat.AtLeastOnce();
                 Expect.Call(_container1.Owner)
                     .Return(owner).Repeat.AtLeastOnce();
+            	Expect.Call(_container1.Matrix).Return(_matrix1).Repeat.Twice();
+            	Expect.Call(_matrix1.EffectivePeriodDays).Return(
+					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+            	Expect.Call(_scheduleDayPro.Day).Return(DateOnly.MinValue);
+            	Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(owner, DateOnly.MinValue)).Return(new List<IScheduleMatrixPro>{_matrix1});
+            	Expect.Call(_matrix1.SchedulePeriod).Return(_virtualSchedulePeriod1).Repeat.Twice();
             	Expect.Call(_schedulePartModifyAndRollbackService.ModificationCollection).Return(new List<IScheduleDay>());
                 Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection());
             }

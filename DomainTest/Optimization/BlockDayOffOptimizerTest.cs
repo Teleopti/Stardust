@@ -97,6 +97,30 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
+        public void ShouldGetWorkingBitArray()
+        {
+            using (_mocks.Record())
+            {
+                Expect.Call(_matrix.Person).Return(PersonFactory.CreatePerson());
+                Expect.Call(_converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter)).Return(
+                    _originalArray);
+                Expect.Call(_converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter)).Return(
+                    _workingArray);
+                Expect.Call(_scheduleResultDataExtractor.Values()).Return(_values);
+                Expect.Call(_decisionMaker.Execute(_workingArray, _values)).Return(true);
+                Expect.Call(_dayOffDecisionMakerExecuter.Execute(_workingArray, _originalArray, _matrix,
+                                                                 _originalStateContainer, false, false, true)).Return(true);
+                Expect.Call(_blockSchedulingService.Execute(new List<IScheduleMatrixPro> { _matrix }, _schedulingOptions)).Return(true);
+            }
+
+            using (_mocks.Playback())
+            {
+                Assert.IsTrue(_target.Execute(_matrix, _originalStateContainer, _decisionMaker, _schedulingOptions));
+                Assert.AreEqual(_workingArray, _target.WorkingBitArray);
+            }
+        }
+
+        [Test]
         public void ShouldReturnFalseIfBlockSchedulingAfterCleaningBlockFails()
         {
             IList<DateOnly> dates = new List<DateOnly>{new DateOnly(2000, 1, 1)};

@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private double _squareSumma;
         private double _rootMeanSquare;
         private bool _ignoreNonNumberValues = true;
+    	private double _teleopti;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PopulationStatisticsCalculator"/> class.
@@ -113,6 +114,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             CalculateStandardDeviation();
             CalculateSquareSumma();
             CalculateRootMeanSquare();
+			calculateTeleopti();
         }
 
         public bool IgnoreNonNumberValues 
@@ -121,7 +123,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             set { _ignoreNonNumberValues = value; }
         }
 
-        /// <summary>
+    	public double Teleopti
+    	{
+    		get { return _teleopti; }
+    	}
+
+		private void calculateTeleopti()
+		{
+			double absSumm = 0;
+			foreach (PopulationStatisticsData statisticData in _values)
+			{
+				absSumm += Math.Abs(statisticData.Value);
+			}
+
+			_teleopti = absSumm + _standardDeviation;
+		}
+
+    	/// <summary>
         /// Calculates the mean.
         /// </summary>
         protected void CalculateAverage()

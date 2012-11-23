@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(true, _advancedPreferencesTarget.UseMinimumStaffing);
 			Assert.AreEqual(true, _advancedPreferencesTarget.UseMaximumStaffing);
 			Assert.AreEqual(true, _advancedPreferencesTarget.UseMaximumSeats);
+			Assert.IsTrue(_advancedPreferencesTarget.UseAverageShiftLengths);
 			Assert.AreEqual(10, _advancedPreferencesTarget.RefreshScreenInterval);
 		}
 
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_advancedPreferencesSource.UseMaximumStaffing = !_advancedPreferencesSource.UseMaximumStaffing;
 			_advancedPreferencesSource.UseMaximumSeats = !_advancedPreferencesSource.UseMaximumSeats;
 			_advancedPreferencesSource.DoNotBreakMaximumSeats = !_advancedPreferencesSource.DoNotBreakMaximumSeats;
+			_advancedPreferencesSource.UseAverageShiftLengths = !_advancedPreferencesSource.UseAverageShiftLengths;
 
 			_advancedPreferencesSource.RefreshScreenInterval = 101;
 
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(_advancedPreferencesSource.UseMaximumStaffing, _advancedPreferencesTarget.UseMaximumStaffing);
 			Assert.AreEqual(_advancedPreferencesSource.UseMaximumSeats, _advancedPreferencesTarget.UseMaximumSeats);
 			Assert.AreEqual(_advancedPreferencesSource.DoNotBreakMaximumSeats, _advancedPreferencesTarget.DoNotBreakMaximumSeats);
+			Assert.AreEqual(_advancedPreferencesSource.UseAverageShiftLengths, _advancedPreferencesTarget.UseAverageShiftLengths);
 
 			Assert.AreEqual(_advancedPreferencesSource.RefreshScreenInterval, _advancedPreferencesTarget.RefreshScreenInterval);
 		}

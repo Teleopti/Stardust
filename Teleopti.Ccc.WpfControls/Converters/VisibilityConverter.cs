@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WpfControls.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value is Visibility) return value;
             return ((bool) value) ? Visibility.Visible : Visibility.Collapsed;
         }
 
@@ -25,6 +26,20 @@ namespace Teleopti.Ccc.WpfControls.Converters
             return (((Visibility) value == Visibility.Visible));
         }
     }
+
+    public class DebugConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
+    }
+    
 
     /// <summary>
     /// Converts a bool to Visibility so you can show items dependning on a bool
@@ -38,12 +53,13 @@ namespace Teleopti.Ccc.WpfControls.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value is Visibility) return value;
             return ((bool)value) ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return !(((Visibility)value == Visibility.Visible));
+            return (Visibility)value != Visibility.Visible;
         }
     }
 }

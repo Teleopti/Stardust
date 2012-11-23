@@ -18,6 +18,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var vm;
 	var notifyOptions;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var _settings;
 
 	function resize() {
 		var innerWidth = document.documentElement.clientWidth || document.body.clientWidth || window.innerWidth;
@@ -40,7 +41,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				success: function (data) {
 					self.hours(data.Hours);
 					self._createLayers(data.Layers);
-
+					self.unreadMessageCount(data.UnreadMessageCount);
 					$('.asm-outer-canvas').show();
 
 					self.intervalPointer = setInterval(function () {
@@ -86,6 +87,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 		self.now = ko.observable(new Date().getTeleoptiTime());
 		self.yesterday = ko.observable(yesterday);
+		self.unreadMessageCount = ko.observable(0);
 		self.canvasPosition = ko.computed(function () {
 			var msSinceStart = self.now() - self.yesterday().getTime();
 			var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
@@ -98,12 +100,18 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				self.yesterday(todayMinus1);
 			}
 		});
+		self.unreadMessages = ko.computed(function () {
+			return self.unreadMessageCount() > 0;
+		});
 		self.yesterday.subscribe(function () {
 			if (self.intervalPointer != null) {
 				clearInterval(self.intervalPointer);
 			}
 			self.loadViewModel();
 		});
+		self.openMessages = function () {
+			window.open(_settings.baseUrl + 'Message/Index/', 'MessageWindow');
+		};
 	}
 
 	function layerViewModel(layer, canvasPosition) {
@@ -195,7 +203,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	return {
-		ShowAsm: function () {
+		ShowAsm: function (settings) {
+			_settings = settings;
 			_showAsm();
 		},
 		ListenForScheduleChanges: function (options, eventListeners) {
@@ -210,6 +219,11 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		ReloadAsmViewModelListener: function (notification) {
 			if (_validSchedulePeriod(notification)) {
 				vm.loadViewModel();
+			}
+		},
+		SetMessageCount: function (data) {
+			if (vm) {
+				vm.unreadMessageCount(data.UnreadMessagesCount);				
 			}
 		}
 	};

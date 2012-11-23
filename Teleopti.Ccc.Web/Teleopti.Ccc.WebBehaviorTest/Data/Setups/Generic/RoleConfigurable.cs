@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public void Apply(IUnitOfWork uow)
 		{
 			var applicationFunctionRepository = new ApplicationFunctionRepository(uow);
-			var allApplicationFunctions = applicationFunctionRepository.GetAllApplicationFunctionSortedByCode().AsEnumerable();
+			var allApplicationFunctions = applicationFunctionRepository.LoadAll();
 
 			var applicationFunctions = from f in allApplicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.All select f;
 

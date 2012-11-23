@@ -62,5 +62,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			return Json(_messageViewModelFactory.CreateMessagesInformationViewModel(messageId), JsonRequestBehavior.AllowGet);
 		}
+
+		[UnitOfWorkAction]
+		public void Send(string title, string message)
+		{
+			_pushMessageDialoguePersister.SendNewPushMessageToLoggedOnUser(title,message);
+		}
 	}
 }

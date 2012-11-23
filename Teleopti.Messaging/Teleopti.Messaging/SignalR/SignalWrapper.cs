@@ -21,7 +21,7 @@ namespace Teleopti.Messaging.SignalR
 		private int _retryCount;
 		private static readonly object LockObject = new object();
 		private bool _isRunning;
-		private static ILog Logger = LogManager.GetLogger(typeof (SignalWrapper));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalWrapper));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
@@ -38,15 +38,22 @@ namespace Teleopti.Messaging.SignalR
 		{
 			if (verifyStillConnected())
 			{
-				var startTask = _hubProxy.Invoke("NotifyClients", notification);
-				startTask.ContinueWith(t =>
+				try
 				{
-					if (t.IsFaulted && t.Exception != null)
+					var startTask = _hubProxy.Invoke("NotifyClients", notification);
+					startTask.ContinueWith(t =>
 					{
-						Logger.Error("An error happened when notifying.",t.Exception.GetBaseException());
-					}
-				}, TaskContinuationOptions.OnlyOnFaulted);
-				return startTask;
+						if (t.IsFaulted && t.Exception != null)
+						{
+							Logger.Error("An error happened when notifying.", t.Exception.GetBaseException());
+						}
+					}, TaskContinuationOptions.OnlyOnFaulted);
+					return startTask;
+				}
+				catch (InvalidOperationException exception)
+				{
+					Logger.Error("An error happened when notifying.", exception);
+				}
 			}
 			return emptyTask();
 		}
@@ -55,15 +62,22 @@ namespace Teleopti.Messaging.SignalR
 		{
 			if (verifyStillConnected())
 			{
-				var startTask = _hubProxy.Invoke("NotifyClientsMultiple", notifications);
-				startTask.ContinueWith(t =>
+				try
 				{
-					if (t.IsFaulted && t.Exception != null)
+					var startTask = _hubProxy.Invoke("NotifyClientsMultiple", notifications);
+					startTask.ContinueWith(t =>
 					{
-						Logger.Error("An error happened when notifying multiple.", t.Exception.GetBaseException());
-					}
-				}, TaskContinuationOptions.OnlyOnFaulted);
-				return startTask;
+						if (t.IsFaulted && t.Exception != null)
+						{
+							Logger.Error("An error happened when notifying multiple.", t.Exception.GetBaseException());
+						}
+					}, TaskContinuationOptions.OnlyOnFaulted);
+					return startTask;
+				}
+				catch (InvalidOperationException exception)
+				{
+					Logger.Error("An error happened when notifying multiple.", exception);
+				}
 			}
 			return emptyTask();
 		}
@@ -172,15 +186,22 @@ namespace Teleopti.Messaging.SignalR
 		{
 			if (verifyStillConnected())
 			{
-				var startTask = _hubProxy.Invoke("AddSubscription", subscription);
-				startTask.ContinueWith(t =>
+				try
 				{
-					if (t.IsFaulted && t.Exception != null)
+					var startTask = _hubProxy.Invoke("AddSubscription", subscription);
+					startTask.ContinueWith(t =>
 					{
-						Logger.Error("An error happened when adding subscription.", t.Exception.GetBaseException());
-					}
-				}, TaskContinuationOptions.OnlyOnFaulted);
-				return startTask;
+						if (t.IsFaulted && t.Exception != null)
+						{
+							Logger.Error("An error happened when adding subscription.", t.Exception.GetBaseException());
+						}
+					}, TaskContinuationOptions.OnlyOnFaulted);
+					return startTask;
+				}
+				catch (InvalidOperationException exception)
+				{
+					Logger.Error("An error happened when adding subscriptions.", exception);
+				}
 			}
 			return emptyTask();
 		}

@@ -10,6 +10,16 @@
     xmlns:Common="clr-namespace:Teleopti.Ccc.WpfControls.Common"
     >
     <UserControl.Resources>
+        <Style TargetType="ComboBox" x:Key="BasicComboBox">
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <DataTemplate DataType="{x:Type Scheduling:Activity}">
             <Views:ActivityShortView />
         </DataTemplate>
@@ -36,10 +46,10 @@
         <Label Content="{x:Static UserTexts:Resources.MultiplicatorDefinitionSetColon}" Margin="1,2,0,4" HorizontalAlignment="Left" Grid.Row="1" />
         <Label Grid.Row="2" Content="{x:Static UserTexts:Resources.FromColon}" Margin="1,2,1,4" />
         <Label Grid.Row="3" Content="{x:Static UserTexts:Resources.ToColon}" Margin="1,2,1,4" />
-        <ComboBox Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=Payloads}" Grid.Column="1" IsSynchronizedWithCurrentItem="True"/>
-        
+        <ComboBox Style="{StaticResource BasicComboBox}" Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=Payloads}" Grid.Column="1" IsSynchronizedWithCurrentItem="True"/>
 
-        <ComboBox Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=MultiplicatorDefinitionSet}" Grid.Column="1" Grid.Row="1" IsSynchronizedWithCurrentItem="True"/>
+
+        <ComboBox Style="{StaticResource BasicComboBox}" Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=MultiplicatorDefinitionSet}" Grid.Column="1" Grid.Row="1" IsSynchronizedWithCurrentItem="True"/>
        
         
         <DateTimePeriodControl:EditableDateTimePeriodView Grid.RowSpan="2" DataContext="{Binding Path=PeriodViewModel}" Grid.Row="2" Grid.Column="1">
@@ -56,7 +66,7 @@
                             Opacity="0.6"
                             Grid.ColumnSpan="2" 
                             HorizontalAlignment="Stretch"
-                            Visibility="{Binding Path=CanOk,Converter={StaticResource reversedVisibilityConverter}}"
+                            Visibility="{Binding Path=CanOk,Converter={StaticResource reversedVisibilityConverter},  FallbackValue=Visible}"
                             Background="AliceBlue"
                             >
             <TextBlock 

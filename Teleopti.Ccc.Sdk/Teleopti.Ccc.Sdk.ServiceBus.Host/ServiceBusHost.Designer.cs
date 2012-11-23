@@ -18,7 +18,11 @@
                 if (components != null)
                     components.Dispose();
 
-                DisposeBusHosts();
+                if (serviceBusRunner!=null)
+                {
+                	serviceBusRunner.DisposeBusHosts();
+                	serviceBusRunner = null;
+                }
             }
             base.Dispose(disposing);
         }

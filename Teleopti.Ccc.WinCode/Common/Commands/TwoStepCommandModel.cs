@@ -99,8 +99,5 @@ namespace Teleopti.Ccc.WinCode.Common.Commands
             EditMode = true;
         }
         #endregion
-
     }
-
-   
 }

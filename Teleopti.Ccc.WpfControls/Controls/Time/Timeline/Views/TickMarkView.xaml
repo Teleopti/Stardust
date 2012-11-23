@@ -3,13 +3,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Converters="clr-namespace:Teleopti.Ccc.WpfControls.Converters"
     xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
-    HorizontalAlignment="Stretch" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:timeline="clr-namespace:Teleopti.Ccc.WinCode.Common.Time.Timeline;assembly=Teleopti.Ccc.WinCode"
+             mc:Ignorable="d"
+             HorizontalAlignment="Stretch" 
     VerticalAlignment="Stretch"
     HorizontalContentAlignment="Stretch" 
     VerticalContentAlignment="Stretch"
     Margin="0" 
     Padding="0"
-    MinHeight="{Binding MinimumTimeHeight}">
+    MinHeight="{Binding MinimumTimeHeight, FallbackValue=20}" d:DataContext="{d:DesignInstance timeline:TickMarkViewModel }">
 
     <UserControl.Resources>
      
@@ -53,7 +57,7 @@
                                             <Setter Property="Height" Value="{Binding Path=MinorTickMarkHeight}"/>
                                             <Setter Property="BorderThickness" Value="0,0,0.5,0"/>
                                             <Setter Property="BorderBrush" Value="{StaticResource RaptorStandardBorderBrush}"/>
-                                            <Setter Property="Visibility" Value="{Binding Path=Visibility, ElementName=timePanel}"/>
+                                            <Setter Property="Visibility" Value="{Binding Path=Visibility, ElementName=timePanel, FallbackValue=Visible}"/>
                                         </Style>
 
                                         <Style BasedOn="{StaticResource MinorTickMarkStyle}" x:Key="MajorTickMarkStyle" TargetType="Border">
@@ -71,17 +75,17 @@
                                             </Style.Triggers>
                                         </Style>
                                     </UniformGrid.Style>
-                                    <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel}"/>
-                                    <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel}"/>
+                                        <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel, FallbackValue=Visible}"/>
+                                        <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel, FallbackValue=Visible}"/>
                                     <Border Style="{StaticResource MajorTickMarkStyle}"/>
-                                    <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel}"/>
-                                    <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel}"/>
+                                        <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel, FallbackValue=Visible}"/>
+                                        <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel, FallbackValue=Visible}"/>
                                     <Border Style="{StaticResource MajorTickMarkStyle}"/>
-                                    <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel}"/>
-                                    <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel}"/>
+                                        <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel, FallbackValue=Visible}"/>
+                                        <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel, FallbackValue=Visible}"/>
                                     <Border Style="{StaticResource MajorTickMarkStyle}"/>
-                                    <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel}"/>
-                                    <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel}"/>
+                                        <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel, FallbackValue=Visible}"/>
+                                        <Border Style="{StaticResource MinorTickMarkStyle}" Visibility="{Binding Path=Visibility, ElementName=timePanel, FallbackValue=Visible}"/>
                                     <Border Style="{StaticResource MinorTickMarkStyle}" 
                                             BorderThickness="0,0,0,0" Visibility="Visible"/>
 

@@ -38,6 +38,8 @@
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.contextMenuStripDatabases = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.imageListIconsForListview = new System.Windows.Forms.ImageList(this.components);
             this.labelNHibFolder = new System.Windows.Forms.Label();
             this.textBoxNHibFolder = new System.Windows.Forms.TextBox();
@@ -48,8 +50,6 @@
             this.folderBrowserDialogNHib = new System.Windows.Forms.FolderBrowserDialog();
             this.textBoxOutput = new System.Windows.Forms.TextBox();
             this.backgroundWorkerConnectionAndVersion = new System.ComponentModel.BackgroundWorker();
-            this.contextMenuStripDatabases = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.smoothLabelCurrentVersionIs = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.smoothLabelCurrentVersion = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.labelManageDatabaseVersions = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
@@ -97,6 +97,20 @@
             // 
             this.columnHeaderVersion.Text = "Version";
             this.columnHeaderVersion.Width = 110;
+            // 
+            // contextMenuStripDatabases
+            // 
+            this.contextMenuStripDatabases.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemEdit});
+            this.contextMenuStripDatabases.Name = "contextMenuStrip1";
+            this.contextMenuStripDatabases.Size = new System.Drawing.Size(133, 26);
+            // 
+            // toolStripMenuItemEdit
+            // 
+            this.toolStripMenuItemEdit.Name = "toolStripMenuItemEdit";
+            this.toolStripMenuItemEdit.Size = new System.Drawing.Size(132, 22);
+            this.toolStripMenuItemEdit.Text = "Edit Nhib...";
+            this.toolStripMenuItemEdit.Click += new System.EventHandler(this.toolStripMenuItemEdit_Click);
             // 
             // imageListIconsForListview
             // 
@@ -196,21 +210,8 @@
             // 
             // backgroundWorkerConnectionAndVersion
             // 
+            this.backgroundWorkerConnectionAndVersion.WorkerSupportsCancellation = true;
             this.backgroundWorkerConnectionAndVersion.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerConnectionAndVersion_DoWork);
-            // 
-            // contextMenuStripDatabases
-            // 
-            this.contextMenuStripDatabases.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemEdit});
-            this.contextMenuStripDatabases.Name = "contextMenuStrip1";
-            this.contextMenuStripDatabases.Size = new System.Drawing.Size(133, 26);
-            // 
-            // toolStripMenuItemEdit
-            // 
-            this.toolStripMenuItemEdit.Name = "toolStripMenuItemEdit";
-            this.toolStripMenuItemEdit.Size = new System.Drawing.Size(132, 22);
-            this.toolStripMenuItemEdit.Text = "Edit Nhib...";
-            this.toolStripMenuItemEdit.Click += new System.EventHandler(this.toolStripMenuItemEdit_Click);
             // 
             // smoothLabelCurrentVersionIs
             // 

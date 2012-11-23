@@ -42,13 +42,32 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference.Limitation
                 hashCode = hashCode ^ EndTimeLimitation.GetHashCode();
             if (WorkTimeLimitation != null)
                 hashCode = hashCode ^ WorkTimeLimitation.GetHashCode();
+			if (ActivityStartTimeLimitation!= null)
+				hashCode = hashCode ^ ActivityStartTimeLimitation.GetHashCode();
+			if (ActivityEndTimeLimitation != null)
+				hashCode = hashCode ^ ActivityEndTimeLimitation.GetHashCode();
+			if (ActivityTimeLimitation != null)
+				hashCode = hashCode ^ ActivityTimeLimitation.GetHashCode();
 
             return hashCode;
         }
 
         public object Clone()
         {
-            return MemberwiseClone();
+            var clone = (Preference)MemberwiseClone();
+			if (StartTimeLimitation!=null)
+        		clone.StartTimeLimitation = (TimeLimitation) StartTimeLimitation.Clone();
+			if (EndTimeLimitation != null)
+        		clone.EndTimeLimitation = (TimeLimitation) EndTimeLimitation.Clone();
+			if (WorkTimeLimitation != null)
+        		clone.WorkTimeLimitation = (TimeLimitation) WorkTimeLimitation.Clone();
+			if (ActivityStartTimeLimitation != null)
+        		clone.ActivityStartTimeLimitation = (TimeLimitation) ActivityStartTimeLimitation.Clone();
+			if (ActivityEndTimeLimitation != null)
+        		clone.ActivityEndTimeLimitation = (TimeLimitation) ActivityEndTimeLimitation.Clone();
+			if (ActivityTimeLimitation != null)
+        		clone.ActivityTimeLimitation = (TimeLimitation) ActivityTimeLimitation.Clone();
+        	return clone;
         }
 
     }
