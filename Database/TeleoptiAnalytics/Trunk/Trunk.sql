@@ -25,7 +25,7 @@ IF EXISTS (select 1 from mart.report_control where control_id = 13 and control_n
 --Desc: Bug #21451 Speed up intraday
 ----------------  	
 IF EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') AND name = N'IX_person_dateFrom_dateTo')
-DROP INDEX [IX_person_dateFrom_dateTo] ON [mart].[dim_person] WITH ( ONLINE = OFF )
+DROP INDEX [IX_person_dateFrom_dateTo] ON [mart].[dim_person]
 GO
 
 CREATE NONCLUSTERED INDEX [IX_person_dateFrom_dateTo]
