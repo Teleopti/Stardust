@@ -53,10 +53,10 @@
 		<div id="signin">
 
 			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked">
-				<li data-bind="css: {'active': Selected}, class: Type">
+				<li data-bind="css: {'active': Selected}">
 					<a href="#" data-bind="click: Select">
+						<span data-bind="class: Type"></span>
 						<span data-bind="text: Name"></span>
-						<span data-bind="if: Type == 'windows'">@Resources.WindowsLogonWithBrackets</span>
 					</a>
 				</li>
 			</ul>
