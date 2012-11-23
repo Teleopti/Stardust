@@ -15,18 +15,18 @@
 	margin-left: auto;
 }
 .windows {
-	background-image:url(../Images/windows-small-icon.png);
+	background-image:url(../Images/Windows-icon.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
 	display: inline-block;
-	min-width: 12px;
-	min-height: 12px;
+	min-width: 20px;
+	min-height: 20px;
 }
 .application {
-	background-image:url(../Images/ccc_menu_Icon.png);
+	background-image:url(../Images/ccc_icon.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
 	display: inline-block;
-	min-width: 12px;
-	min-height: 12px;
+	min-width: 20px;
+	min-height: 20px;
 }
