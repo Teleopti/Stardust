@@ -50,6 +50,67 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         }
 
         #region Availability
+
+		[Test]
+		public void FullDayAbsenceShouldAlwaysReturnSatisfied()
+		{
+			IAvailabilityRestriction availabilityDayRestriction617 = new AvailabilityRestriction
+			{
+				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(10, 0, 0), null),
+				EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(17, 0, 0)),
+			};
+
+			var baseRestrictions = new List<IRestrictionBase> { availabilityDayRestriction617 };
+			var dayRestrictions = new List<IPersistableScheduleData>();
+			availibilityMock(baseRestrictions, dayRestrictions, SchedulePartView.FullDayAbsence);
+
+			using (_mockRepository.Playback())
+			{
+				_target = new RestrictionChecker(_schedulePartMock);
+				Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability());
+			}
+		}
+
+		[Test]
+		public void DayOffShouldAlwaysReturnSatisfied()
+		{
+			IAvailabilityRestriction availabilityDayRestriction617 = new AvailabilityRestriction
+			{
+				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(10, 0, 0), null),
+				EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(17, 0, 0)),
+			};
+
+			var baseRestrictions = new List<IRestrictionBase> { availabilityDayRestriction617 };
+			var dayRestrictions = new List<IPersistableScheduleData>();
+			availibilityMock(baseRestrictions, dayRestrictions, SchedulePartView.DayOff);
+
+			using (_mockRepository.Playback())
+			{
+				_target = new RestrictionChecker(_schedulePartMock);
+				Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability());
+			}
+		}
+
+		[Test]
+		public void ContractDayOffShouldAlwaysReturnSatisfied()
+		{
+			IAvailabilityRestriction availabilityDayRestriction617 = new AvailabilityRestriction
+			{
+				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(10, 0, 0), null),
+				EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(17, 0, 0)),
+			};
+
+			var baseRestrictions = new List<IRestrictionBase> { availabilityDayRestriction617 };
+			var dayRestrictions = new List<IPersistableScheduleData>();
+			availibilityMock(baseRestrictions, dayRestrictions, SchedulePartView.ContractDayOff);
+
+			using (_mockRepository.Playback())
+			{
+				_target = new RestrictionChecker(_schedulePartMock);
+				Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability());
+			}
+		}
+
         [Test]
         public void VerifyCanCalculateIllegalStartPermissionState()
         {
@@ -61,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             var baseRestrictions = new List<IRestrictionBase> { availabilityDayRestriction617 };
             var dayRestrictions = new List<IPersistableScheduleData>();
-            RecordMock(baseRestrictions, dayRestrictions);
+			availibilityMock(baseRestrictions, dayRestrictions, SchedulePartView.MainShift);
 
             using (_mockRepository.Playback())
             {
@@ -82,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             
             var baseRestrictions = new List<IRestrictionBase> { availabilityDayRestriction617 };
             var dayRestrictions = new List<IPersistableScheduleData>();
-            RecordMock(baseRestrictions, dayRestrictions);
+            availibilityMock(baseRestrictions, dayRestrictions, SchedulePartView.MainShift);
             
             using (_mockRepository.Playback())
             {
@@ -109,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             var baseRestrictions = new List<IRestrictionBase> { availabilityDayRestriction617 };
             var dayRestrictions = new List<IPersistableScheduleData>();
-            RecordMock(baseRestrictions, dayRestrictions);
+			availibilityMock(baseRestrictions, dayRestrictions, SchedulePartView.MainShift);
             
             using (_mockRepository.Playback())
             {
@@ -137,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             
             var baseRestrictions = new List<IRestrictionBase> { availabilityDayRestriction620 };
             var dayRestrictions = new List<IPersistableScheduleData>();
-            RecordMock(baseRestrictions, dayRestrictions);
+			availibilityMock(baseRestrictions, dayRestrictions, SchedulePartView.MainShift);
             
             using (_mockRepository.Playback())
             {
@@ -161,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             
             var baseRestrictions = new List<IRestrictionBase> { availabilityDayRestriction620 };
             var dayRestrictions = new List<IPersistableScheduleData>();
-            RecordMock(baseRestrictions, dayRestrictions);
+			availibilityMock(baseRestrictions, dayRestrictions, SchedulePartView.MainShift);
 
             using (_mockRepository.Playback())
             {
@@ -192,6 +253,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Record())
             {
+            	Expect.Call(_schedulePartMock.SignificantPart()).Return(SchedulePartView.None);
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Any();
                 Expect.Call(_schedulePartMock.Period).Return(_dateTimePeriod).Repeat.Any();
                 Expect.Call(_parameters.Person).Return(_person).Repeat.Any();
@@ -201,8 +263,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(false).Repeat.Any();
-                Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
-                   new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
             }
 
             using (_mockRepository.Playback())
@@ -212,46 +272,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void VerifyCanCalculateIfDayOff()
-        {
-            //If the projection doesnt have any layers
-            IAvailabilityRestriction availabilityDayRestriction620 = new AvailabilityRestriction
-            {
-                StartTimeLimitation =
-                    new StartTimeLimitation(
-                    new TimeSpan(6, 0, 0),
-                    new TimeSpan(20, 0, 0)),
-                EndTimeLimitation =
-                new EndTimeLimitation(
-                    new TimeSpan(6, 0, 0),
-                    new TimeSpan(20, 0, 0)),
-               NotAvailable = false
-
-            };
-
-            var dayRestrictions = new List<IRestrictionBase> { availabilityDayRestriction620 };
-            ICccTimeZoneInfo timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            using (_mockRepository.Record())
-            {
-                Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Any();
-                Expect.Call(_schedulePartMock.Period).Return(_dateTimePeriod).Repeat.Any();
-                Expect.Call(_parameters.Person).Return(_person).Repeat.Any();
-                Expect.Call(_schedulePartMock.RestrictionCollection())
-                    .Return(dayRestrictions).Repeat.Any();
-                Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-                Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
-                Expect.Call(_visualLayerCollection.HasLayers).Return(false).Repeat.Any();
-                Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
-                   new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { new PersonDayOff(_person, new Scenario("Def"), new DayOff(), new DateOnly(_dateTime), timeZoneInfo) }));
-            }
-
-            using (_mockRepository.Playback())
-            {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Unspecified, _target.CheckAvailability());
-            }
-        }
+        
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyShowSatisfiedWhenDayOffAndAvailabilityFalse()
         {
@@ -260,17 +281,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             availabilityDayRestriction620.NotAvailable = true;
 
             var dayRestrictions = new List<IRestrictionBase> { availabilityDayRestriction620 };
-            ICccTimeZoneInfo _timeZoneInfo = new CccTimeZoneInfo(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             using (_mockRepository.Record())
             {
+            	Expect.Call(_schedulePartMock.SignificantPart()).Return(SchedulePartView.DayOff);
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Any();
                 Expect.Call(_schedulePartMock.Period).Return(_dateTimePeriod).Repeat.Any();
                 Expect.Call(_parameters.Person).Return(_person).Repeat.Any();
                 Expect.Call(_schedulePartMock.RestrictionCollection())
                     .Return(dayRestrictions).Repeat.Any();
                 Expect.Call(_visualLayerCollection.HasLayers).Return(false).Repeat.Any();
-                Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
-                   new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { new PersonDayOff(_person, new Scenario("Def"), new DayOff(), new DateOnly(_dateTime), _timeZoneInfo) }));
             }
 
             using (_mockRepository.Playback())
@@ -320,14 +339,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
            
             using (_mockRepository.Record())
             {
+            	Expect.Call(_schedulePartMock.SignificantPart()).Return(SchedulePartView.MainShift);
                 Expect.Call(_schedulePartMock.RestrictionCollection()).Return(dayRestrictions);
                 Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
-                    new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>())).Repeat.AtLeastOnce();
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
             }
@@ -359,14 +377,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Record())
             {
+            	Expect.Call(_schedulePartMock.SignificantPart()).Return(SchedulePartView.MainShift);
                 Expect.Call(_schedulePartMock.RestrictionCollection()).Return(dayRestrictions);
                 Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
-                    new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>())).Repeat.AtLeastOnce();
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
             }
@@ -2208,5 +2225,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime)).Repeat.Any();
             }
         }
+
+		private void availibilityMock(IEnumerable<IRestrictionBase> baseRestrictions, IEnumerable<IPersistableScheduleData> dayRestrictions, SchedulePartView significantPart)
+		{
+			using (_mockRepository.Record())
+			{
+				Expect.Call(_schedulePartMock.SignificantPart()).Return(significantPart);
+				Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Any();
+				Expect.Call(_schedulePartMock.Period).Return(_dateTimePeriod).Repeat.Any();
+				Expect.Call(_schedulePartMock.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>())).Repeat.Any();
+				Expect.Call(_parameters.Person).Return(_person).Repeat.Any();
+				if (dayRestrictions != null)
+					Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.Any();
+				Expect.Call(_schedulePartMock.RestrictionCollection()).Return(baseRestrictions).Repeat.Any();
+
+				Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService).Repeat.Any();
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Any();
+				Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod).Repeat.Any();
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(
+					_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime)).Repeat.Any();
+			}
+		}
     }
 }

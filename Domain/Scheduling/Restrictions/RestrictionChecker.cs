@@ -35,9 +35,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             if (restriction == null)
                 return PermissionState.None;
+        	SchedulePartView significant = _schedulePart.SignificantPart();
 
             //If there is a day off and availability is set to false the restriction is considered Satisfied
-            if (_schedulePart.PersonDayOffCollection().Count != 0 && restriction.NotAvailable)
+            if (significant == SchedulePartView.DayOff || significant == SchedulePartView.FullDayAbsence || significant == SchedulePartView.ContractDayOff)
             {
                 return PermissionState.Satisfied;
             }
