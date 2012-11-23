@@ -157,6 +157,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Anywhere\AnywhereAreaRegistration.cs" />
     <Compile Include="Areas\MobileReports\Controllers\ReportController.cs" />
     <Compile Include="Areas\MobileReports\Core\DateBoxGlobalizationViewModelFactory.cs" />
     <Compile Include="Areas\MobileReports\Core\DefinedReports.cs" />
@@ -857,6 +858,7 @@
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Anywhere\Content\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
