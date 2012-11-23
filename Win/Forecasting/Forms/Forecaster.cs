@@ -591,7 +591,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
             Text = string.Concat(UserTexts.Resources.TeleoptiRaptorColonForecaster, " ",
                                  _dateTimePeriod.StartDate.ToShortDateString(CultureInfo.CurrentUICulture), " - ",
-                                 _dateTimePeriod.EndDate.ToShortDateString(CultureInfo.CurrentUICulture), " ",
+								 _dateTimePeriod.EndDate.ToShortDateString(CultureInfo.CurrentUICulture), " ",
+								 _skill.Name, " | ",
                                  UserTexts.Resources.ScenarioColon, " ",
                                  _scenario.Description.Name);
             SetGridOpeningGridViews();
