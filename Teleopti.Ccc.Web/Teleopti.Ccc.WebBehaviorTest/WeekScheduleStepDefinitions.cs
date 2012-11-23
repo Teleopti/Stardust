@@ -78,8 +78,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.DayLayerTooltipElement(date, subject).Exists, Is.True);
 		}
 
-		[Then(@"I should see the meeting details with agenda '(.*)' on date '(.*)'")]
-		public void ThenIShouldSeeTheMeetingDetailsWithAgendaOnDate(string agenda, string date)
+		[Then(@"I should see the meeting details with description '(.*)' on date '(.*)'")]
+		public void ThenIShouldSeeTheMeetingDetailsWithDescriptionOnDate(string description, string date)
 		{
 			ScenarioContext.Current.Pending();
 		}
