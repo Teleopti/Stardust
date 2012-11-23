@@ -794,7 +794,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             IList<TimePeriod> openHours = new List<TimePeriod>();
             openHours.Add(new TimePeriod(new TimeSpan(0), new TimeSpan(1, 0, 0, 0)));
 
-            WorkloadDay workloadDay = new WorkloadDay();
+            var workloadDay = new WorkloadDay();
             workloadDay.Create(new DateOnly(2007, 8, 1), _workload,  openHours);
             workloadDay.Tasks = 100;
             workloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(140);
@@ -809,6 +809,41 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target.RecalculateDailyAverageStatisticTimes();
             Assert.AreEqual(TimeSpan.FromSeconds(120), target.TotalStatisticAverageTaskTime);
             Assert.AreEqual(TimeSpan.FromSeconds(60), target.TotalStatisticAverageAfterTaskTime);
+        }
+
+        [Test]
+        public void VerifyRecalculateDailyAverageStatisticTimesUsesWeightedMean()
+        {
+            IList<TimePeriod> openHours = new List<TimePeriod>();
+            openHours.Add(new TimePeriod(new TimeSpan(0), new TimeSpan(1, 0, 0, 0)));
+
+            var workloadDay = new WorkloadDay();
+            workloadDay.Create(new DateOnly(2012,11,23), _workload, openHours);
+            workloadDay.TotalStatisticAverageTaskTime = TimeSpan.FromSeconds(60000);
+            workloadDay.TotalStatisticAverageAfterTaskTime = TimeSpan.FromSeconds(60000);
+            workloadDay.TotalStatisticCalculatedTasks = 1;
+
+            var workloadDay2 = new WorkloadDay();
+            workloadDay2.Create(new DateOnly(2012, 11, 24), _workload, openHours);
+            workloadDay2.TotalStatisticAverageTaskTime = TimeSpan.FromSeconds(6000);
+            workloadDay2.TotalStatisticAverageAfterTaskTime = TimeSpan.FromSeconds(6000);
+            workloadDay2.TotalStatisticCalculatedTasks = 10;
+
+            target.Add(workloadDay);
+            target.Add(workloadDay2);
+
+            workloadDay.TaskPeriodList[0].StatisticTask.StatAverageTaskTimeSeconds = 60000 * 96;
+            workloadDay.TaskPeriodList[0].StatisticTask.StatAverageAfterTaskTimeSeconds = 60000 * 96;
+            workloadDay.RecalculateDailyAverageStatisticTimes();        
+            workloadDay2.TaskPeriodList[0].StatisticTask.StatAverageTaskTimeSeconds = 6000 * 96;
+            workloadDay2.TaskPeriodList[0].StatisticTask.StatAverageAfterTaskTimeSeconds = 6000 * 96;
+            workloadDay2.TaskPeriodList[0].StatisticTask.StatAverageAfterTaskTimeSeconds = 6000 * 96;
+            workloadDay2.RecalculateDailyAverageStatisticTimes();
+
+            target.RecalculateDailyStatisticTasks();
+            Assert.That(Math.Round(target.TotalStatisticAverageTaskTime.TotalMinutes), Is.EqualTo(182));
+            Assert.That(Math.Round(target.TotalStatisticAverageAfterTaskTime.TotalMinutes), Is.EqualTo(182));
+
         }
 
         /// <summary>
