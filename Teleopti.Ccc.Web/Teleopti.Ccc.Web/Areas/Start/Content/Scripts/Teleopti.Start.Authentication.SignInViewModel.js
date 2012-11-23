@@ -7,6 +7,8 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	this.Password = ko.observable();
 	this.ErrorMessage = ko.observable('');
 
+	this.Ajax = new Teleopti.Start.Authentication.JQueryAjaxViewModel();
+
 	this.SelectedDataSource = ko.computed(function () {
 		return ko.utils.arrayFirst(self.DataSources(), function (d) {
 			return d.Selected();
