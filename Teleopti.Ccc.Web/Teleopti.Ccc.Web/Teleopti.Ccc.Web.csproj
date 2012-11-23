@@ -266,6 +266,13 @@
     <Compile Include="Core\RequestContext\IIdentityProvider.cs" />
     <Compile Include="Core\RequestContext\Initialize\WebRequestPrincipalContext.cs" />
     <Compile Include="Areas\MyTime\Core\TimeSpanModelBinder.cs" />
+    <Compile Include="Areas\Start\Core\AuthenticationModelBinder.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\ApplicationAuthenticationModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\ApplicationAuthenticationType.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\IAuthenticationModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\IAuthenticationType.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationType.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />

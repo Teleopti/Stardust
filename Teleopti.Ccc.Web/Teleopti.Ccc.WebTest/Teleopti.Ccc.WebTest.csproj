@@ -124,9 +124,11 @@
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Models\MessageBroker\UserDataFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInputTest.cs" />
+    <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationModelTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationApiControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationNewControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\FakeDataSource.cs" />
+    <Compile Include="Areas\Start\Controllers\WindowsAuthenticationModelTest.cs" />
     <Compile Include="Areas\Start\Core\LayoutBase\DataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\Mapping\AsmViewModelMapperTest.cs" />

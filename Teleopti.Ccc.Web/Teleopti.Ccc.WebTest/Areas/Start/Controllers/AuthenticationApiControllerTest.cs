@@ -11,12 +11,12 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
+using Teleopti.Ccc.Web.Areas.Start.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Core.Startup;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
@@ -263,45 +263,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				});
 
 			Assert.Throws<NotImplementedException>(() => target.BindModel(null, bindingContext));
-		}
-	}
-
-	[TestFixture]
-	public class WindowsAuthenticationModelTest
-	{
-		[Test]
-		public void ShouldAuthenticateUser()
-		{
-			var authenticator = MockRepository.GenerateMock<IAuthenticator>();
-			var expectedResult = new AuthenticateResult();
-			authenticator.Stub(x => x.AuthenticateWindowsUser("mydata")).Return(expectedResult);
-			var target = new WindowsAuthenticationModel(authenticator) { DataSourceName = "mydata" };
-
-			var result = target.AuthenticateUser();
-
-			result.Should().Be.SameInstanceAs(expectedResult);
-		}
-	}
-
-	[TestFixture]
-	public class ApplicationAuthenticationModelTest
-	{
-		[Test]
-		public void ShouldAuthenticateUser()
-		{
-			var authenticator = MockRepository.GenerateMock<IAuthenticator>();
-			var expectedResult = new AuthenticateResult();
-			authenticator.Stub(x => x.AuthenticateApplicationUser("mydata", "username", "password")).Return(expectedResult);
-			var target = new ApplicationAuthenticationModel(authenticator)
-			{
-				DataSourceName = "mydata",
-				Password = "password",
-				UserName = "username"
-			};
-
-			var result = target.AuthenticateUser();
-
-			result.Should().Be.SameInstanceAs(expectedResult);
 		}
 	}
 }
