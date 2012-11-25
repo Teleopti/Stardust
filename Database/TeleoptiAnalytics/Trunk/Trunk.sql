@@ -265,3 +265,68 @@ ALTER TABLE mart.dim_day_off ALTER COLUMN day_off_shortname nvarchar(25) NOT NUL
 GO
 ALTER TABLE mart.dim_day_off ALTER COLUMN display_color_html char(7) NOT NULL
 GO
+
+--some missing staget tables
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[stage].[stg_absence]') AND type in (N'U'))
+DROP TABLE [stage].[stg_absence]
+GO
+
+CREATE TABLE [stage].[stg_absence](
+	[absence_code] [uniqueidentifier] NOT NULL,
+	[absence_name] [nvarchar](100) NOT NULL,
+	[absence_shortname] [nvarchar](25) NOT NULL,
+	[display_color] [int] NOT NULL,
+	[display_color_html] char(7) NOT NULL,
+	[in_contract_time] [bit] NULL,
+	[in_paid_time] [bit] NULL,
+	[in_work_time] [bit] NULL,
+	[business_unit_code] [uniqueidentifier] NOT NULL,
+	[business_unit_name] [nvarchar](50) NOT NULL,
+	[datasource_id] [smallint] NOT NULL,
+	[insert_date] [smalldatetime] NOT NULL,
+	[update_date] [smalldatetime] NOT NULL,
+	[datasource_update_date] [smalldatetime] NULL,
+	[is_deleted] [bit] NOT NULL
+)
+ALTER TABLE [stage].[stg_absence] ADD  CONSTRAINT [PK_stg_absence] PRIMARY KEY CLUSTERED
+(
+	[absence_code] ASC
+)
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[stage].[stg_activity]') AND type in (N'U'))
+DROP TABLE [stage].[stg_activity]
+GO
+
+CREATE TABLE [stage].[stg_activity](
+	[activity_code] [uniqueidentifier] NOT NULL,
+	[activity_name] [nvarchar](50) NOT NULL,
+	[display_color] [int] NOT NULL,
+	[display_color_html] [char](7) NOT NULL,
+	[in_ready_time] [bit] NOT NULL,
+	[in_contract_time] [bit] NULL,
+	[in_paid_time] [bit] NULL,
+	[in_work_time] [bit] NULL,
+	[business_unit_code] [uniqueidentifier] NOT NULL,
+	[business_unit_name] [nvarchar](50) NOT NULL,
+	[datasource_id] [smallint] NOT NULL,
+	[insert_date] [smalldatetime] NOT NULL,
+	[update_date] [smalldatetime] NOT NULL,
+	[datasource_update_date] [smalldatetime] NOT NULL,
+	[is_deleted] [bit] NOT NULL
+)	
+
+ALTER TABLE [stage].[stg_activity] ADD  CONSTRAINT [PK_stg_activity] PRIMARY KEY CLUSTERED
+(
+	[activity_code] ASC
+)
+GO
+
+ALTER TABLE [stage].[stg_activity] ADD  CONSTRAINT [DF_stg_activity_in_ready_time]  DEFAULT ((0)) FOR [in_ready_time]
+GO
+
+ALTER TABLE [stage].[stg_activity] ADD  CONSTRAINT [DF_stg_activity_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+GO
+
+ALTER TABLE [stage].[stg_activity] ADD  CONSTRAINT [DF_stg_activity_update_date]  DEFAULT (getdate()) FOR [update_date]
+GO
