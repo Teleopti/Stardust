@@ -37,7 +37,7 @@ GO
 ----------------  
 --Name: David and Karin
 --Date: 2012-11-23  
---Desc: PBI #19854 Add ShortName And Html color
+--Desc: PBI #19854 Add ShortName And Html color for Absence and Activity
 ----------------  	
 ----------------------MART.DIM_ABSENCE-----------------------------------
 --ADD A NEW COLUMN IN MART.DIM_ABSENCE FOR DISPLAY_COLOR_HTML
