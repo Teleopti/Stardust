@@ -4,6 +4,7 @@ using System.Data;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
+using System.Drawing;
 
 namespace Teleopti.Analytics.Etl.Transformer
 {
@@ -31,6 +32,7 @@ namespace Teleopti.Analytics.Etl.Transformer
                 row["activity_code"] = activity.Id;
                 row["activity_name"] = activity.Description.Name;
                 row["display_color"] = activity.DisplayColor.ToArgb();
+                row["display_color_html"] = ColorTranslator.ToHtml(activity.DisplayColor);
                 row["in_ready_time"] = activity.InReadyTime;
                 row["in_contract_time"] = activity.InContractTime;
                 row["in_paid_time"] = activity.InPaidTime;
