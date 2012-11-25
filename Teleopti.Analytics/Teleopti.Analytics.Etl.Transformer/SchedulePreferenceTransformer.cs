@@ -203,6 +203,7 @@ namespace Teleopti.Analytics.Etl.Transformer
                 dataRow["day_off_code"] = preferenceRestriction.DayOffTemplate.Id;
                 //dataRow["day_off_name"] = "PrefsDayOff"; //Get from domain
                 dataRow["day_off_name"] = preferenceRestriction.DayOffTemplate.Description.Name;
+                dataRow["day_off_shortname"] = preferenceRestriction.DayOffTemplate.Description.ShortName;
             }
 
             if (isStartTimeEarlySet(preferenceRestriction))

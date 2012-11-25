@@ -190,6 +190,56 @@ GO
 ALTER TABLE [stage].[stg_schedule_day_off_count] ADD  CONSTRAINT [DF_stg_schedule_day_off_count_update_date]  DEFAULT (getdate()) FOR [update_date]
 GO
 
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[stage].[stg_schedule_preference]') AND type in (N'U'))
+DROP TABLE [stage].[stg_schedule_preference]
+GO
+
+CREATE TABLE [stage].[stg_schedule_preference](
+	[person_restriction_code] [uniqueidentifier] NOT NULL,
+	[restriction_date] [datetime] NOT NULL,
+	[person_code] [uniqueidentifier] NOT NULL,
+	[interval_id] [int] NOT NULL,
+	[scenario_code] [uniqueidentifier] NOT NULL,
+	[shift_category_code] [uniqueidentifier] NULL,
+	[day_off_code] [uniqueidentifier] NULL,
+	[day_off_name] [nvarchar](50) NULL,
+	[day_off_shortname] [nvarchar](25) NOT NULL,          
+	[StartTimeMinimum] [bigint] NULL,
+	[StartTimeMaximum] [bigint] NULL,
+	[endTimeMinimum] [bigint] NULL,
+	[endTimeMaximum] [bigint] NULL,
+	[WorkTimeMinimum] [bigint] NULL,
+	[WorkTimeMaximum] [bigint] NULL,
+	[preference_accepted] [int] NULL,
+	[preference_declined] [int] NULL,
+	[business_unit_code] [uniqueidentifier] NOT NULL,
+	[datasource_id] [smallint] NULL,
+	[insert_date] [smalldatetime] NULL,
+	[update_date] [smalldatetime] NULL,
+	[datasource_update_date] [smalldatetime] NULL
+	)
+	
+ALTER TABLE stage.stg_schedule_preference ADD CONSTRAINT
+           PK_stg_schedule_preference PRIMARY KEY CLUSTERED 
+           (
+           [person_restriction_code] ASC,
+           [scenario_code] ASC
+           )
+GO
+	
+ALTER TABLE [stage].[stg_schedule_preference] ADD  CONSTRAINT [DF_stg_schedule_preference_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+GO
+
+ALTER TABLE [stage].[stg_schedule_preference] ADD  CONSTRAINT [DF_stg_schedule_preference_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+GO
+
+ALTER TABLE [stage].[stg_schedule_preference] ADD  CONSTRAINT [DF_stg_schedule_preference_update_date]  DEFAULT (getdate()) FOR [update_date]
+GO
+
+ALTER TABLE [stage].[stg_schedule_preference] ADD  CONSTRAINT [DF_stg_schedule_preference_datasource_update_date]  DEFAULT (getdate()) FOR [datasource_update_date]
+GO
+
 --------------------DIM_DAY_OFF-------------------------
 
 --ADD A NEW COLUMN IN MART.DIM_ABSENCE FOR DISPLAY_COLOR_HTML
