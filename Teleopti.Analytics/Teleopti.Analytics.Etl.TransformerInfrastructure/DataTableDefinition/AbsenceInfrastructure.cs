@@ -10,7 +10,9 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
         {
             table.Columns.Add("absence_code", typeof(Guid));
             table.Columns.Add("absence_name", typeof(string));
+            table.Columns.Add("absence_shortname", typeof(string));
             table.Columns.Add("display_color", typeof(int));
+            table.Columns.Add("display_color_html", typeof(string));
             table.Columns.Add("in_contract_time", typeof(bool));
             table.Columns.Add("in_paid_time", typeof(bool));
             table.Columns.Add("in_work_time", typeof(bool));

@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.WinCode.Meetings
         private readonly IAddressBookView _view;
         private readonly AddressBookViewModel _model;
         private DateOnly _startDate;
-        private string _functionPath;
+		private string _functionPath;
+		private IList<ContactPersonViewModel> _originalPersonModels;
         
         public AddressBookPresenter(IAddressBookView view, AddressBookViewModel model, DateOnly startDate)
         {
@@ -22,7 +23,12 @@ namespace Teleopti.Ccc.WinCode.Meetings
         }
 
         public void Initialize()
-        {
+		{
+			_originalPersonModels = new List<ContactPersonViewModel>();
+			foreach (var personModel in _model.PersonModels)
+			{
+				_originalPersonModels.Add(personModel);
+			}
             _functionPath = DefinedRaptorApplicationFunctionPaths.ModifyMeetings;
 
             _view.SetCurrentDate(_startDate);
@@ -95,7 +101,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                                                  StringSplitOptions.RemoveEmptyEntries);
 
             _model.RequiredParticipantList.Clear();
-            foreach (var foundName in participantsFromText.Select(s => _model.PersonModels.FirstOrDefault(conP => conP.FullName == s)).Where(foundName => foundName != null))
+			foreach (var foundName in participantsFromText.Select(s => _originalPersonModels.FirstOrDefault(conP => conP.FullName == s)).Where(foundName => foundName != null))
                 _model.RequiredParticipantList.Add(foundName);
 
             _view.SetRequiredParticipants(_model.RequiredParticipants);
@@ -107,7 +113,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                                                  StringSplitOptions.RemoveEmptyEntries);
 
             _model.OptionalParticipantList.Clear();
-            foreach (var foundName in participantsFromText.Select(s => _model.PersonModels.FirstOrDefault(conP => conP.FullName == s)).Where(foundName => foundName != null))
+			foreach (var foundName in participantsFromText.Select(s => _originalPersonModels.FirstOrDefault(conP => conP.FullName == s)).Where(foundName => foundName != null))
                 _model.OptionalParticipantList.Add(foundName);
 
             _view.SetOptionalParticipants(_model.OptionalParticipants);

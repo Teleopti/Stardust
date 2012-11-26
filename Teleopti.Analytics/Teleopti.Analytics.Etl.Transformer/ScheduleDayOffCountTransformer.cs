@@ -64,6 +64,7 @@ namespace Teleopti.Analytics.Etl.Transformer
             dataRow["day_off_code"] = DBNull.Value;
             //dataRow["day_off_name"] = "CountDayOff"; //Get from domain
             dataRow["day_off_name"] = personDayOff.DayOff.Description.Name; //Get from domain
+            dataRow["day_off_shortname"] = personDayOff.DayOff.Description.ShortName; //Get from domain
             dataRow["day_count"] = 1;
             dataRow["business_unit_code"] = personDayOff.BusinessUnit.Id;
             //dataRow["datasource_id"] = 1;

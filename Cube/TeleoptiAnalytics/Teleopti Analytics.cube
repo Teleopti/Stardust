@@ -3699,6 +3699,9 @@
         <Attribute dwd:design-time-name="b4686815-42d3-42c7-9a22-9d1f6604f6b0">
           <AttributeID>Status</AttributeID>
         </Attribute>
+        <Attribute dwd:design-time-name="cdd99403-a5a4-4ba2-8051-5084a676cd32">
+          <AttributeID>Absence Shortname</AttributeID>
+        </Attribute>
       </Attributes>
       <Hierarchies>
         <Hierarchy dwd:design-time-name="628e8657-f90a-4b24-9a73-c8d8f9861c95">
@@ -3879,6 +3882,9 @@
       <Attributes>
         <Attribute dwd:design-time-name="3c955d46-f2b9-4618-8aad-7e0d9c46e123">
           <AttributeID>Dim Day Off</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="d81fdb44-71c9-4a40-8c21-13ed5bd427c0">
+          <AttributeID>Day Off Shortname</AttributeID>
         </Attribute>
       </Attributes>
     </Dimension>
