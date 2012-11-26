@@ -533,6 +533,9 @@
     <Content Include="Areas\Team\Content\Scripts\views\teamschedule\timeline.js" />
     <Content Include="Areas\Team\Content\Scripts\views\teamschedule\view.js" />
     <Content Include="Areas\Team\Content\Scripts\views\teamschedule\vm.js" />
+    <Content Include="Areas\Team\Content\Styles\helpers.css" />
+    <Content Include="Areas\Team\Content\Styles\main.css" />
+    <Content Include="Areas\Team\Content\Styles\team-schedule.css" />
     <Content Include="Areas\Team\Content\Templates\dummy.html" />
     <Content Include="Areas\Team\Content\Templates\index.html" />
     <Content Include="Areas\MobileReports\Content\Css\mobile.custom.css" />
