@@ -15,14 +15,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start
 		[Test]
 		public void ShouldCreateModelForUserWithAccessToAllDefinedAreas()
 		{
-			//var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			//permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(true);
-			//permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
 			var target = new MenuViewModelFactory(new FakePermissionProvider());
 
 			var result = target.CreateMenyViewModel();
 
-			result.Count().Should().Be.EqualTo(2);
+			result.Count().Should().Be.EqualTo(DefinedApplicationAreas.ApplicationAreas.Count());
 		}
 
 		[Test]
@@ -34,8 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start
 
 			var result = target.CreateMenyViewModel();
 
-			result.Count().Should().Be.EqualTo(1);
-			result.First().Area.Should().Be.EqualTo("MyTime");
+			result.Single().Area.Should().Be.EqualTo("MyTime");
 		}
 
 		[Test]
@@ -47,8 +43,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Start
 
 			var result = target.CreateMenyViewModel();
 
-			result.Count().Should().Be.EqualTo(1);
-			result.First().Area.Should().Be.EqualTo("MobileReports");
+			result.Single().Area.Should().Be.EqualTo("MobileReports");
 		}
+
+		[Test]
+		public void ShouldCreateModelForUserWithAccessOnlyToTeam()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TeamWeb)).Return(true);
+			var target = new MenuViewModelFactory(permissionProvider);
+
+			var result = target.CreateMenyViewModel();
+
+			result.Single().Area.Should().Be.EqualTo("Team");
+		}
+
 	}
 }

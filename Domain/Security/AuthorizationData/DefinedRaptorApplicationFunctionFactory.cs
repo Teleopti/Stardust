@@ -159,6 +159,10 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb, "xxExtendedPreferencesWeb", DefinedRaptorApplicationFunctionForeignIds.ExtendedPreferencesWeb, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger, "xxAgentScheduleMessengerPermission", DefinedRaptorApplicationFunctionForeignIds.AgentScheduleMessenger, null);
 
+			// Team Web
+			var teamWeb = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.TeamWeb, "xxTeamWeb", DefinedRaptorApplicationFunctionForeignIds.TeamWeb, null);
+			teamWeb.IsPreliminary = true;
+
 			return new ReadOnlyCollection<IApplicationFunction>(applicationFunctionList);
 		}
 
