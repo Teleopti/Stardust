@@ -210,6 +210,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 		self.meetingDescription = ko.computed(function () {
 			if (self.hasMeeting()) {
+				if (layer.Meeting.Description.length > 300) {
+					return layer.Meeting.Description.substring(0, 300) + '...';
+				}
 				return layer.Meeting.Description;
 			}
 			return null;
