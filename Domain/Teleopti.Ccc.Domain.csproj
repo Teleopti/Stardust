@@ -391,6 +391,7 @@
     <Compile Include="ResourceCalculation\PossibleStartEndCategory.cs" />
     <Compile Include="ResourceCalculation\ShiftCategoryPeriodValueExtractorThread.cs" />
     <Compile Include="ResourceCalculation\SingleSkillCalculator.cs" />
+    <Compile Include="ResourceCalculation\SingleSkillDictionary.cs" />
     <Compile Include="ResourceCalculation\SingleSkillLoadedDecider.cs" />
     <Compile Include="ResourceCalculation\SwapRawService.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedActivityChecker.cs" />

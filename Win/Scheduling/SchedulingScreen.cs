@@ -147,7 +147,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _showGraph = true;
         private bool _showRibbonTexts = true;
         #endregion
-
         private ControlType _controlType;
         private SchedulerMessageBrokerHandler _schedulerMessageBrokerHandler;
 		private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
@@ -183,6 +182,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     	private ISchedulerGroupPagesProvider _groupPagesProvider;
         public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet { get; private set; }
     	private SkillResultViewSetting _skillResultViewSetting;
+    	private ISingleSkillDictionary _singleSkillDictionary;
 
         #region enums
         private enum ZoomLevel
@@ -595,7 +595,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         #endregion
-
         #region editcontrol
 
         private void instantiateEditControl()
@@ -4025,6 +4024,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 initMessageBroker(period.LoadedPeriod());
             }
 
+			_singleSkillDictionary = new SingleSkillDictionary(SchedulerState.SchedulingResultState.PersonsInOrganization.ToList(), SchedulerState.RequestedPeriod.DateOnlyPeriod);
+			_singleSkillDictionary.Create();
+
             _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState);
             _scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
 
@@ -4059,7 +4061,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _defaultScheduleTag = tag;
                 break;
             }
-
         }
 
         private void createMaxSeatSkills(ISkillDayRepository skillDayRepository)
@@ -4310,7 +4311,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     if (_scheduleView != null && _scheduleView.SelectedSchedules().Count == 1)
                         updateShiftEditor();
                 }
-
             }
         }
 
