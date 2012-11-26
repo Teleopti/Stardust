@@ -23,6 +23,7 @@ namespace Teleopti.Analytics.Portal.Utils
         // TODO Get real data
         public DataTable GetUserInfo(string userName)
         {
+			if(userName == "") return new DataTable();
             bool windowsAuthentication = false;
             IList<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("@user_name", userName));
