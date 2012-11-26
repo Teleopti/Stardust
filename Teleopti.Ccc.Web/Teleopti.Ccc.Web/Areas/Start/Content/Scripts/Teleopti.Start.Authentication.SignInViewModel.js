@@ -46,6 +46,14 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 					dataSource.Type = data[i].Type;
 					self.DataSources.push(dataSource);
 				}
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status == 500) {
+					var response = $.parseJSON(jqXHR.responseText);
+					$('#Exception-message').text(response.Message);
+					$('#Exception-div').show();
+					return;
+				}
 			}
 		});
 	};
@@ -62,6 +70,9 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 			},
 			errormessage: function (message) {
 				self.ErrorMessage(message);
+			},
+			exceptionmessage: function (message) {
+				self.ExceptionMessage(message);
 			},
 			nobusinessunit: function () {
 				self.ErrorMessage($('#Signin-error').data('nobusinessunitext'));

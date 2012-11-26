@@ -11183,8 +11183,8 @@ These options are activated:
     <comment>Password policy requires a safer password.</comment>
   </data>
   <data name="WindowsLogonWithBrackets" xml:space="preserve">
-    <value>(Windows log on)</value>
-    <comment>(Windows log on)</comment>
+    <value>(Windows)</value>
+    <comment>(Windows)</comment>
   </data>
   <data name="UseAverageShiftLengths" xml:space="preserve">
     <value>Use Average Shift Lengths</value>
