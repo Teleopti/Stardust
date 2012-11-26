@@ -2,22 +2,24 @@
 require.config({
 
 	paths: {
-		jquery: 'vendor/jquery-1.8.1.min',
-		jqueryui: 'vendor/jquery-ui-1.9.0/jquery-ui-1.9.0.custom',
-		knockout: 'vendor/knockout-2.1.0',
-		moment: 'vendor/moment',
-		bootstrap: 'vendor/bootstrap.min',
-		signals: 'vendor/signals',
-		crossroads: 'vendor/crossroads',
-		hasher: 'vendor/hasher',
-		flotr2: 'vendor/flotr2.amd',
-		bean: 'vendor/bean-min',
-		underscore: 'vendor/underscore-min',
-		touchPunch: 'vendor/jquery.ui.touch-punch',
+		jquery: '/Content/Scripts/jquery-1.8.2',
+		jqueryui: '/Content/jqueryui/jquery-ui-1.9.1.custom',
+		knockout: '/Content/Scripts/knockout-2.1.0',
+		modernizr: '/Content/modernizr/modernizr-2.6.2.min',
+		respond: '/Content/respondjs/respond.min',
+		moment: '/Content/moment/moment',
+		bootstrap: '/Content/bootstrap/bootstrap.min',
+		signals: '/Content/signals/signals',
+		crossroads: '/Content/crossroads/crossroads',
+		hasher: '/Content/hasher/hasher',
+		//flotr2: '/Content/flotr2/flotr2.amd',
+		//bean: '/Content/bean/bean-min',
+		//underscore: '/Content/underscore/underscore-min',
+		touchPunch: '/Content/jqueryui.touch-punch/jquery.ui.touch-punch',
 
 		templates: '../templates',
 
-		text: 'vendor/require/text'
+		text: '/Content/require/text'
 
 	},
 
@@ -31,26 +33,27 @@ require.config({
 		'underscore': {
 			exports: '_'
 		},
-		'touchPunch': ['jquery'],
-		'vendor/bootstrap-datepicker': ['jquery'],
-		'widgets/editlayer/jquery.ui.editlayer': ['jqueryui'],
-		'widgets/editlayer/jquery.ui.editlayer.ko': ['knockout', 'widgets/editlayer/jquery.ui.editlayer'],
-		'flotr2': ['bean', 'underscore']
+		'touchPunch': ['jqueryui'],
+		//'vendor/bootstrap-datepicker': ['jquery'],
+		//'widgets/editlayer/jquery.ui.editlayer': ['jqueryui'],
+		//'widgets/editlayer/jquery.ui.editlayer.ko': ['knockout', 'widgets/editlayer/jquery.ui.editlayer'],
+		//'flotr2': ['bean', 'underscore']
 	}
 });
 
 require([
 	'jquery',
 	'jqueryui',
-	'vendor/modernizr-2.6.1-respond-1.1.0.min',
+	'modernizr',
+	'respond',
 	'bootstrap',
 	'touchPunch',
-	'vendor/bootstrap-datepicker',
-	'widgets/editlayer/jquery.ui.editlayer',
-	'widgets/editlayer/jquery.ui.editlayer.ko',
-	'layout'
+	//'vendor/bootstrap-datepicker',
+	//'widgets/editlayer/jquery.ui.editlayer',
+	//'widgets/editlayer/jquery.ui.editlayer.ko',
+	//'layout'
 ], function () {
 
-	alert("hello world");
+	$('body').text("hello world");
 	
 });

@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere
 {
@@ -22,8 +24,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere
 			context.MapRoute(
 				"Anywhere-default",
 				"Anywhere/{controller}/{action}",
-				new {controller = "Application", action = "Index"}
+				new { controller = "Application", action = "Index" }
 				);
 		}
 	}
+
 }

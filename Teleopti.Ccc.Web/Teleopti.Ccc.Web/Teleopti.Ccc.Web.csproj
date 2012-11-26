@@ -713,8 +713,12 @@
     <Content Include="Content\Mobile\images\icons-18-white.png" />
     <Content Include="Content\Mobile\images\icons-36-black.png" />
     <Content Include="Content\Mobile\images\icons-36-white.png" />
+    <Content Include="Content\modernizr\modernizr-2.6.2.js" />
+    <Content Include="Content\modernizr\modernizr-2.6.2.min.js" />
     <Content Include="Content\require\require.js" />
     <Content Include="Content\require\text.js" />
+    <Content Include="Content\respondjs\respond.src.js" />
+    <Content Include="Content\respondjs\respond.min.js" />
     <Content Include="Content\Scripts\indexOf.js" />
     <Content Include="Content\Scripts\date.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.js" />
@@ -785,6 +789,7 @@
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.min.js" />
     <Content Include="Content\signals\signals.js" />
     <Content Include="Content\signals\signals.min.js" />
+    <Content Include="Content\jqueryui.touch-punch\jquery.ui.touch-punch.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
