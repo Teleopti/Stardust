@@ -3,6 +3,8 @@
 {
 	border-color: rgb(200, 200, 200);
 	background-color: rgb(255,255,255);
+	max-height: 250px;
+	overflow: hidden;
 }
 
 .ui-tooltip-custom .ui-tooltip-content
@@ -11,7 +13,7 @@
 	padding: 5px;
 	font-size: 12px;
 	line-height: 18px;
-    overflow: visible;
+   overflow: visible;
 }
 
 .rtl .ui-tooltip-custom .ui-tooltip-content {
