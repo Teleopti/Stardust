@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Team.Controllers
 	[TestFixture]
 	public class ApplicationControllerTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnDefaultViewInDefaultAction()
 		{
 			var target = new ApplicationController();
