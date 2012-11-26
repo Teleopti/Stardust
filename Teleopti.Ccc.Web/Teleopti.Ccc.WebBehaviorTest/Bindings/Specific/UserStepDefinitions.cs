@@ -503,6 +503,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new ExistingAbsenceRequest());
 		}
 
+		[Given(@"I have an existing shift trade request")]
+		public void GivenIHaveAnExistingShiftTradeRequest()
+		{
+			ScenarioContext.Current.Pending();
+		}
 
 		[Given(@"the site has another team")]
 		public void GivenTheSiteHasAnotherTeam()

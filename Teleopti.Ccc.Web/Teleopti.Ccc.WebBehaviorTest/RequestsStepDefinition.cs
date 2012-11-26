@@ -61,6 +61,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingAbsenceRequest>().PersonRequest.GetSubject(new NoFormatting())));
 		}
 
+		[Then(@"I should see my existing shift trade request")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequest()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
 		[Then(@"I should be able to see requests link")]
 		public void ThenIShouldBeAbleToSeeRequestsLink()
 		{

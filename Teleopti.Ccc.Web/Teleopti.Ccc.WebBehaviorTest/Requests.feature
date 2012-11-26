@@ -21,6 +21,12 @@ Scenario: See absence request
 	When I view requests
 	Then I should see my existing absence request
 
+Scenario: See shift trade request
+Given I am an agent
+And I have an existing shift trade request
+When I view requests
+Then I should see my existing shift trade request
+
 Scenario: Requests tab
 	Given I am an agent
 	When I sign in
