@@ -64,7 +64,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my existing shift trade request")]
 		public void ThenIShouldSeeMyExistingShiftTradeRequest()
 		{
-			ScenarioContext.Current.Pending();
+			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
+			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.GetSubject(new NoFormatting())));
 		}
 
 		[Then(@"I should be able to see requests link")]

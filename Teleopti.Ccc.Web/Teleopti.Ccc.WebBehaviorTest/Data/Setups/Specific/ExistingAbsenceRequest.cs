@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -74,5 +75,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 			requestRepository.Add(PersonRequest);
 		}
+	}
+
+	public class ExistingShiftTradeRequest : IUserDataSetup
+	{
+		public PersonRequest PersonRequest { get; set; }
+		public ShiftTradeRequest ShiftTradeRequest { get; set; }
+
+		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		{
+			var today = DateTime.UtcNow.Date;
+			var tomorrow = today.AddDays(1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(user, user, new DateOnly(today), new DateOnly(tomorrow));
+			ShiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			PersonRequest = new PersonRequest(user);
+			PersonRequest.Request = ShiftTradeRequest;
+			PersonRequest.TrySetMessage("This is just a short text that doesn't say anything, except explaining that it doesn't say anything");
+
+			var requestRepository = new PersonRequestRepository(uow);
+			requestRepository.Add(PersonRequest);
+		}
+
 	}
 }
