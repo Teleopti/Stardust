@@ -48,15 +48,15 @@
 			<img src="@Url.Content("~/Areas/Start/Content/Images/mobile_logo.png")"/>
 		</div>
 		
-		<div id="view" class="login-form well well-large"></div>
+		<div id="view" class="login-form"></div>
 
 		<div id="signin">
 
 			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked">
-				<li data-bind="css: {'active': Selected}">
+				<li data-bind="css: {'active': Selected}, class: Type">
 					<a href="#" data-bind="click: Select">
-						<span data-bind="class: Type"></span>
 						<span data-bind="text: Name"></span>
+						<span data-bind="if: Type == 'windows'">@Resources.WindowsLogonWithBrackets</span>
 					</a>
 				</li>
 			</ul>
@@ -78,14 +78,12 @@
 		</div>
 		
 		<div id="businessunit">
-			<h3>@Resources.PleaseChooseABusinessUnit</h3>
 			<ul id="BusinessUnits" data-bind="foreach: BusinessUnits" class="nav nav-tabs nav-stacked">
 				<li><a href="#" data-bind="text: Name, click: Select"></a></li>
 			</ul>
 		</div>
 
 		<div id="menu">
-			<h3>@Resources.PleaseChooseAnApplication</h3>
 			<ul data-bind="foreach: Applications" class="nav nav-tabs nav-stacked">
 				<li>
 					<a href="#" data-bind="attr: {href: Url}, text: Name"></a>

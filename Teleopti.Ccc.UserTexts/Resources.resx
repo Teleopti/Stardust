@@ -11190,8 +11190,4 @@ These options are activated:
     <value>Use Average Shift Lengths</value>
     <comment>Use Average Shift Lengths</comment>
   </data>
-  <data name="PleaseChooseAnApplication" xml:space="preserve">
-    <value>Please choose an application</value>
-    <comment>Please choose an application</comment>
-  </data>
 </root>

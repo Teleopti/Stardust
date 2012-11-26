@@ -582,9 +582,10 @@
     <Content Include="Areas\MyTime\Content\Scripts\AllTests.html" />
     <Content Include="Areas\Start\Content\Css\mobile.custom.css" />
     <Content Include="Areas\Start\Content\Images\ajax-loader-small.gif" />
-    <Content Include="Areas\Start\Content\Images\ccc_menu_Icon.png" />
+    <Content Include="Areas\Start\Content\Images\ccc_icon.png" />
     <Content Include="Areas\Start\Content\Images\mobile_logo.png" />
     <Content Include="Areas\Start\Content\Images\windows-small-icon.png" />
+    <Content Include="Areas\Start\Content\Images\Windows8-icon.png" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.JQueryAjaxViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.MenuViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ApplicationViewModel.js" />
