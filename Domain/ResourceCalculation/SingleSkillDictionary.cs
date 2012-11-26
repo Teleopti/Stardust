@@ -3,13 +3,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
 	public interface ISingleSkillDictionary
 	{
 		void Create();
 		bool IsSingleSkill(IPerson person, DateOnly dateOnly);
 	}
 
-	public class SingleSkillDictionary :ISingleSkillDictionary
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
+	public class SingleSkillDictionary : ISingleSkillDictionary
 	{
 		private readonly IList<IPerson> _persons;
 		private DateOnlyPeriod _period;
