@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using NUnit.Framework;
@@ -11,7 +10,6 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
@@ -46,29 +44,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			model.WindowsSignIn.DataSources.Select(x => x.Name)
 				.Should().Have.SameValuesAs(new[] { "ds2" });
-		}
-
-		public sealed class FakeDataSource : IDataSource
-		{
-			public IUnitOfWorkFactory Statistic { get; set; }
-			public IUnitOfWorkFactory Application { get; set; }
-			public IAuthenticationSettings AuthenticationSettings { get; set; }
-			public string DataSourceName { get; set; }
-
-			public void ResetStatistic()
-			{
-				throw new NotImplementedException();
-			}
-
-			public string Server { get; set; }
-
-			public string InitialCatalog { get; set; }
-			public string OriginalFileName { get; set; }
-			public AuthenticationTypeOption AuthenticationTypeOption { get; set; }
-
-			public void Dispose()
-			{
-			}
 		}
 	}
 }

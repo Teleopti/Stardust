@@ -16548,6 +16548,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose an application.
+        /// </summary>
+        public static string PleaseChooseAnApplication {
+            get {
+                return ResourceManager.GetString("PleaseChooseAnApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please choose a report type..
         /// </summary>
         public static string PleaseChooseAReportType {
@@ -24552,6 +24561,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WindowsLogon {
             get {
                 return ResourceManager.GetString("WindowsLogon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Windows log on).
+        /// </summary>
+        public static string WindowsLogonWithBrackets {
+            get {
+                return ResourceManager.GetString("WindowsLogonWithBrackets", resourceCulture);
             }
         }
         

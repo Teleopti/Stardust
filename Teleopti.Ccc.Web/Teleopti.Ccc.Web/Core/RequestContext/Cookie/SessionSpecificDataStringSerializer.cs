@@ -11,8 +11,6 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		private const int businessUnitPosition = 0;
 		private const int dataSourcePosition = 1;
 		private const int personPosition = 2;
-		private const int authenticateTypePosition = 3;
-		private const int messagePosition = 4;
 		private const string stringFormat = "{1}{0}{2}{0}{3}{0}{4}{0}{5}";
 
 		public SessionSpecificDataStringSerializer(ILog logger)
@@ -27,7 +25,6 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			dataArray[businessUnitPosition+1] = data.BusinessUnitId;
 			dataArray[dataSourcePosition+1] = data.DataSourceName;
 			dataArray[personPosition+1] = data.PersonId;
-			dataArray[messagePosition+1] = data.WarningMessage ?? string.Empty;
 
 			return string.Format(stringFormat, dataArray);
 		}
@@ -39,11 +36,9 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			var split = stringData.Split(delimiter);
 			try
 			{
-				var message = (split.Length > messagePosition) ? split[messagePosition] : null;
 				return new SessionSpecificData(new Guid(split[businessUnitPosition]),
 															split[dataSourcePosition],
-															new Guid(split[personPosition]),
-															message);
+															new Guid(split[personPosition]));
 
 			}
 			catch (FormatException)

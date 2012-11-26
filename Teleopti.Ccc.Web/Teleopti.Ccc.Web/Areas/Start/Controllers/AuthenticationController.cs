@@ -25,10 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IRedirector _redirector;
 		private readonly IAuthenticationViewModelFactory _viewModelFactory;
 
-		public AuthenticationController(IAuthenticationViewModelFactory viewModelFactory, IAuthenticator authenticator,
-		                                IWebLogOn logon, IFormsAuthentication formsAuthentication,
-		                                ILayoutBaseViewModelFactory layoutBaseViewModelFactory,
-		                                IRedirector redirector)
+		public AuthenticationController(IAuthenticationViewModelFactory viewModelFactory, IAuthenticator authenticator, IWebLogOn logon, IFormsAuthentication formsAuthentication, ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IRedirector redirector)
 		{
 			_viewModelFactory = viewModelFactory;
 			_logon = logon;
@@ -153,13 +150,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				}
 				return PartialView("ErrorPartial", errorViewModel);
 			}
-		}
-
-		[HttpGet]
-		public JsonResult PopWarningMessage()
-		{
-			var message = _logon.PopWarningMessage();
-			return Json(new {Message = message, HasMessage = !string.IsNullOrEmpty(message)},JsonRequestBehavior.AllowGet);
 		}
 
 		private JsonResult PrepareAndReturnJsonError(JsonResult result)

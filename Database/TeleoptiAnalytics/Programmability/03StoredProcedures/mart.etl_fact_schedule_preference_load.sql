@@ -14,6 +14,7 @@ GO
 --				2009-12-09 Some intermediate hardcoded stuff on day_off_id, Henry Greijer and Jonas Nordh.
 --				2010-10-12 #12055 - ETL - cant load preferences
 --				2011-09-27 Fix start/end times = 0
+--				2012-11-25 #19854 - PBI to add Shortname for DayOff.
 -- Interface:	smalldatetime, with only datepart! No time allowed
 -- =============================================
 --exec mart.etl_fact_schedule_preference_load '2009-02-01','2009-02-17'
@@ -40,9 +41,11 @@ TRUNCATE TABLE [stage].[stg_day_off]
 INSERT INTO [stage].[stg_day_off]
 	(
 	[day_off_name]
+	,[day_off_shortname]
 	,[business_unit_code]
 	,[day_off_code]
 	,[display_color]
+	,[display_color_html]
 	,[datasource_id]
 	,[insert_date]
 	,[update_date]
@@ -51,16 +54,18 @@ INSERT INTO [stage].[stg_day_off]
 
 SELECT
 	[day_off_name]			= s.day_off_name,
+	[day_off_shortname]		= s.day_off_shortname,
 	[business_unit_code]	= s.business_unit_code,
 	[day_off_code]			= NULL,
-	[display_color]			= '-12582784',
+	[display_color]			= -8355712,
+	[display_color_html]	= '#808080',
     [datasource_id]			= min(s.datasource_id),
 	[insert_date]			= GETDATE(),
 	[update_date]			= GETDATE(),
 	[datasource_update_date]= GETDATE()
 FROM stage.stg_schedule_preference s
 WHERE day_off_name IS NOT NULL
-GROUP BY s.day_off_name,s.business_unit_code
+GROUP BY s.day_off_name,s.day_off_shortname,s.business_unit_code
 
 --Load mart dimension
 EXEC [mart].[etl_dim_day_off_load] @business_unit_code

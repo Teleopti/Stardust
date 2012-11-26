@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -46,10 +47,46 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoTo("MyTime/Asm", new OverrideNotifyBehavior());
 		}
 
+
+		public static void GotoSiteHomePage()
+		{
+			GoTo("", new ApplicationStartupTimeout());
+			if (ScenarioContext.Current.Value<bool>("signinnew"))
+				Pages.Pages.NavigatingTo(Browser.Current.Page<SignInNewPage>());
+			else
+				Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
+		}
+
+		public static void GotoMyTime()
+		{
+			GoTo("MyTime", new ApplicationStartupTimeout());
+			if (ScenarioContext.Current.Value<bool>("signinnew"))
+				Pages.Pages.NavigatingTo(Browser.Current.Page<SignInNewPage>());
+			else
+				Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
+		}
+
+		public static void GotoMobileReports()
+		{
+			GoTo("MobileReports", new ApplicationStartupTimeout());
+			if (ScenarioContext.Current.Value<bool>("signinnew"))
+				Pages.Pages.NavigatingTo(Browser.Current.Page<SignInNewPage>());
+			else
+				Pages.Pages.NavigatingTo(Browser.Current.Page<MobileSignInPage>());
+		}
+
 		public static void GotoGlobalSignInPage()
 		{
-			GoTo("Start/Authentication/SignIn", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
+			if (ScenarioContext.Current.Value<bool>("signinnew"))
+			{
+				GoTo("Start/AuthenticationNew/SignIn", new ApplicationStartupTimeout());
+				Pages.Pages.NavigatingTo(Browser.Current.Page<SignInNewPage>());
+			}
+			else
+			{
+				GoTo("Start/Authentication/SignIn", new ApplicationStartupTimeout());
+				Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
+			}
 		}
 
 		public static void GotoGlobalMobileSignInPage()
@@ -76,28 +113,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileSignInPage>());
 		}
 
+		public static void GotoMobileReportsPage()
+		{
+			GoTo("MobileReports#", new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
+		}
+
 		public static void GotoMobileReportsSettings()
 		{
 			GoTo("MobileReports#report-settings-view");
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
-		}
-
-		public static void GotoMyTime()
-		{
-			GoTo("MyTime", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
-		}
-
-		public static void GotoMobileReports()
-		{
-			GoTo("MobileReports", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
-		}
-
-		public static void GotoSiteHomePage()
-		{
-			GoTo("", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoAnApplicationPageOutsidePortal()

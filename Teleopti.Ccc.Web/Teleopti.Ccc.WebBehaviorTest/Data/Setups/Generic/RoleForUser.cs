@@ -19,4 +19,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			user.PermissionInformation.AddApplicationRole(role);
 		}
 	}
+
 }

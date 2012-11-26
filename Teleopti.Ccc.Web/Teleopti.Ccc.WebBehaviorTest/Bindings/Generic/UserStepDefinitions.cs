@@ -38,6 +38,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(personPeriod);
 		}
 
+		[Given(@"I am a user with")]
+		public void GivenIAmAUserWith(Table table)
+		{
+			var user = table.CreateInstance<UserConfigurable>();
+			UserFactory.User().Setup(user);
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+		// the ones below here does not belong here!
+
+		[Given(@"I have user logon details with")]
+		public void GivenIHaveUserLogonDetailsWith(Table table)
+		{
+			var userLogonDetai = table.CreateInstance<UserLogonDetailConfigurable>();
+			UserFactory.User().Setup(userLogonDetai);
+		}
+
 		[Given(@"I have a pre-scheduled meeting with")]
 		[Given(@"I have a meeting scheduled")]
 		public void GivenIHaveAMeetingScheduled(Table table)
@@ -73,14 +101,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var absenceRequest = table.CreateInstance<AbsenceRequestConfigurable>();
 			UserFactory.User().Setup(absenceRequest);
 		}
-
-		[Given(@"I have user logon details with")]
-		public void GivenIHaveUserLogonDetailsWith(Table table)
-		{
-			var userLogonDetai = table.CreateInstance<UserLogonDetailConfigurable>();
-			UserFactory.User().Setup(userLogonDetai);
-		}
-
 
 		[Given(@"There is a password policy with")]
 		public void GivenThereIsAPasswordPolicyWith(Table table)

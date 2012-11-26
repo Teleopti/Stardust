@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -24,4 +26,6 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		Windows = 4
 	}
+
+	
 }

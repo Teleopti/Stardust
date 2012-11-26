@@ -1,0 +1,117 @@
+﻿@using Teleopti.Ccc.UserTexts
+@section head {
+	<link href="@Url.Content("~/Content/bootstrap/bootstrap.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/bootstrap/bootstrap-responsive.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Areas/Start/Content/Css/Login.css")" rel="stylesheet" type="text/css" />
+	
+	<script src="@Url.Content("~/Content/bootstrap/bootstrap.min.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/knockout-2.1.0.js")"></script>
+	<script src="@Url.Content("~/Content/signals/signals.js")"></script>
+	<script src="@Url.Content("~/Content/hasher/hasher.js")"></script>
+	<script src="@Url.Content("~/Content/crossroads/crossroads.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/knockout-2.1.0.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/knockout.bindings.js")"></script>
+
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.AuthenticationNew.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.JQueryAjaxViewModel.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.AuthenticationState.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.Navigation.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.Settings.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.SignInView.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.SignInViewModel.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.DataSourceViewModel.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.BusinessUnitSelectionView.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.BusinessUnitSelectionViewModel.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.BusinessUnitViewModel.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.MenuView.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.MenuViewModel.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ApplicationViewModel.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordView.js")"></script>
+
+	<script type="text/javascript">
+		var authentication;
+		jQuery(function () {
+			Teleopti.Start.Authentication.Settings = {
+				baseUrl: '@Url.Content("~/")'
+			};
+			authentication = new Teleopti.Start.Authentication();
+		});
+	</script>
+}
+<script>
+	
+</script>
+<section id="page-signin">
+	<div class="container" id="Login-container">
+		
+		<div class="login-logo">
+			<img src="@Url.Content("~/Areas/Start/Content/Images/mobile_logo.png")"/>
+		</div>
+		
+		<div id="view" class="login-form well well-large"></div>
+
+		<div id="signin">
+
+			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked">
+				<li data-bind="css: {'active': Selected}, class: Type">
+					<a href="#" data-bind="click: Select">
+						<span data-bind="text: Name"></span>
+						<span data-bind="if: Type == 'windows'">@Resources.WindowsLogonWithBrackets</span>
+					</a>
+				</li>
+			</ul>
+			<div data-bind="visible: DisplayUserNameAndPasswordBoxes">
+				<input type="text" id="Username-input" placeholder=@Resources.UserName class="input-block-level" data-bind="value: UserName" />
+			</div>
+			<div data-bind="visible: DisplayUserNameAndPasswordBoxes">
+				<input type="password" id="Password-input" placeholder=@Resources.Password class="input-block-level" data-bind="value: Password" />
+			</div>
+			
+			<div id="Signin-error" 
+				 class="alert alert-error" 
+				 data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
+				 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase">
+			</div>
+			
+			<button class="btn btn-primary" id="Login-button" data-bind="click: SignIn, enable: Ajax.Inactive()">@Resources.LogOn</button>
+			<img data-bind="visible: Ajax.Active()" src="@Url.Content("~/Areas/Start/Content/Images/ajax-loader-small.gif")" alt="..." />
+		</div>
+		
+		<div id="businessunit">
+			<h3>@Resources.PleaseChooseABusinessUnit</h3>
+			<ul id="BusinessUnits" data-bind="foreach: BusinessUnits" class="nav nav-tabs nav-stacked">
+				<li><a href="#" data-bind="text: Name, click: Select"></a></li>
+			</ul>
+		</div>
+
+		<div id="menu">
+			<h3>@Resources.PleaseChooseAnApplication</h3>
+			<ul data-bind="foreach: Applications" class="nav nav-tabs nav-stacked">
+				<li>
+					<a href="#" data-bind="attr: {href: Url}, text: Name"></a>
+				</li>
+			</ul>
+		</div>
+
+		@*
+		<div data-bind="visible: (MustChangePasswordActive() || WarningActive())">
+			<div class="alert login-warning" data-bind="visible:MustChangePasswordActive">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+				<strong>Warning!</strong> Your password has already expired. 
+			</div>
+			<div class="alert login-warning" data-bind="visible:WarningActive">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+				<strong>Warning!</strong> Your password will expire soon. Click <a data-bind="click: ToggleChangingPassword">here</a> to change your password.
+			</div>
+			<div class="login-form well well-large" data-bind="visible:ChangingPasswordActive">
+				<input type="password" id="New-password" placeholder="New Password" class="input-block-level" />
+				<input type="password" id="Confirm-new-password" placeholder="Confirm New Password" class="input-block-level" />
+				<input type="password" id="Old-password" placeholder="Old Password" class="input-block-level" />
+				<button class="btn btn-primary" id="Change-password-button" type="submit">@Resources.Apply</button>
+			</div>
+		</div>
+		*@
+
+	</div>
+</section>
+

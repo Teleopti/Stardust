@@ -1,34 +1,47 @@
-﻿namespace Teleopti.Ccc.Web.Core.Startup
+﻿using System;
+using System.Web.Mvc;
+using System.Web.Routing;
+using Teleopti.Ccc.Web.Core.Startup.Booter;
+
+namespace Teleopti.Ccc.Web.Core.Startup
 {
-	using System;
-	using System.Web.Mvc;
-	using System.Web.Routing;
-
-	using Booter;
-
 	[TaskPriority(2)]
 	public class RegisterRoutesTask : IBootstrapperTask
 	{
+
+		public static string AuthenticationController
+		{
+			get
+			{
+				//if (true)
+				//    return "AuthenticationNew";
+				return "Authentication";
+			}
+		}
+
+		public static string AuthenticationAction
+		{
+			get
+			{
+				//if (true)
+				//    return "SignIn";
+				return "Index";
+			}
+		}
+
 		private readonly Action _registerAllAreas;
 
-		public RegisterRoutesTask()
-			: this(AreaRegistration.RegisterAllAreas)
-		{
-		}
+		public RegisterRoutesTask() : this(AreaRegistration.RegisterAllAreas) { }
 
 		public RegisterRoutesTask(Action registerAllAreas)
 		{
 			_registerAllAreas = registerAllAreas;
 		}
 
-		#region IBootstrapperTask Members
-
 		public void Execute()
 		{
 			registerRoutes(RouteTable.Routes);
 		}
-
-		#endregion
 
 		public void registerRoutes(RouteCollection routes)
 		{
@@ -46,8 +59,17 @@
 				new[] { "Teleopti.Ccc.Web.Areas.Start.*" });
 			mapRoute.DataTokens["area"] = "Start";
 
+			mapRoute = routes.MapRoute(
+				"Root-authentication-new",
+				"AuthenticationNew/{action}",
+				new {controller = "AuthenticationNew", action = "Index", area = "Start"},
+				null,
+				new[] {"Teleopti.Ccc.Web.Areas.Start.*"});
+			mapRoute.DataTokens["area"] = "Start";
+
 			_registerAllAreas();
 
+			// menu is the default route? really?
 			mapRoute = routes.MapRoute(
 				"Default",
 				// Route name
