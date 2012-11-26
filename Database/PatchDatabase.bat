@@ -12,8 +12,9 @@ SET MyServerInstance=%1
 SET DATABASE=%2
 SET DATABASETYPE=%3
 SET TeleoptiCCCAgg=%4
-SET Conn1=-EE
-SET Conn2=-E
+SET Conn1=
+SET Conn2=
+SET Conn3=
 
 IF NOT "%MyServerInstance%"=="" SET /A Silent=1
 IF %Silent% equ 1 GOTO Execute
@@ -28,23 +29,9 @@ IF ERRORLEVEL 1 SET /a WinAuth=1
 IF ERRORLEVEL 2 SET /a WinAuth=0
 
 ::Check input
-IF %WinAuth% equ 1 GOTO WinAuth
-IF %WinAuth% equ 0 GOTO SQLAuth
+IF %WinAuth% equ 1 Call :WinAuth
+IF %WinAuth% equ 0 Call :SQLAuth
 
-::Set Auth string
-:WinAuth
-SET Conn1=-EE
-SET Conn2=-E
-GOTO Cont
-
-:SQLAuth
-SET /P SQLLogin=SQL Login: 
-SET /P SQLPwd=SQL password: 
-SET Conn1=-U%SQLLogin% -P%SQLPwd%
-SET Conn2=-DU%SQLLogin% -DP%SQLPwd%
-GOTO Cont
-
-:Cont
 IF "%DATABASE%"=="" SET /P DATABASE=Database name to patch: 
 IF "%DATABASETYPE%"=="" SET /P DATABASETYPE=Database type [TeleoptiCCC7,TeleoptiCCCAgg,TeleoptiAnalytics]: 
 
@@ -53,17 +40,31 @@ IF "%TeleoptiCCCAgg%"=="" SET /P TeleoptiCCCAgg=Analytics is linked to which Agg
 SET CROSSDB=1
 )
 
-:Execute
+ECHO.
+CHOICE /C yn /M "Would you like to re-add SQL permission for application account?"
+IF ERRORLEVEL 1 SET /a AddSecurity=1
+IF ERRORLEVEL 2 SET /a AddSecurity=0
+
+if %AddSecurity% equ 1 (
+CHOICE /C yn /M "Will end users use SQL Login?"
+IF ERRORLEVEL 1 SET /a EndUserSQL=1
+IF ERRORLEVEL 2 SET /a EndUserSQL=0
+IF %AddSecurity% equ 1 Call :AddSecurity
+)
+
 ::Patch DB
-"%ROOTDIR%\DBManager.exe" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% %Conn1% -T
+ECHO "%ROOTDIR%\DBManager.exe" -S%MyServerInstance% -D%DATABASE% -O%DATABASETYPE% %Conn1% -T %Conn3%
+"%ROOTDIR%\DBManager.exe" -S%MyServerInstance% -D%DATABASE% -O%DATABASETYPE% %Conn1% -T %Conn3%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR_Schema
 
 IF "%DATABASETYPE%"=="TeleoptiCCC7" (
+ECHO "%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% %Conn2%
 "%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% %Conn2%
 if %errorlevel% NEQ 0 goto Security_exe
 )
 
 IF %CROSSDB% EQU 1 (
+ECHO "%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% -CD"%TeleoptiCCCAgg%" %Conn2%
 "%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% -CD"%TeleoptiCCCAgg%" %Conn2%
 if %errorlevel% NEQ 0 goto CROSSVIEW_LOAD
 )
@@ -72,6 +73,31 @@ if %errorlevel% NEQ 0 goto CROSSVIEW_LOAD
 ECHO.
 ECHO upgrade successfull!
 GOTO Finish
+
+::Set Auth string
+:WinAuth
+SET Conn1=-E
+SET Conn2=-EE
+goto :eof
+
+:SQLAuth
+SET /P SQLLogin=SQL Login: 
+SET /P SQLPwd=SQL password: 
+SET Conn1=-U%SQLLogin% -P%SQLPwd%
+SET Conn2=-DU%SQLLogin% -DP%SQLPwd%
+goto :eof
+
+:AddSecurity
+if %EndUserSQL% equ 1 (
+SET /P SQLAppLogin=SQL Login: 
+SET /P SQLAppPwd=SQL password: 
+SET Conn3=-R -L%SQLAppLogin%:%SQLAppPwd%
+) else (
+SET /P WinAppLogin=Supply an existing Windows group in SQL Server: 
+SET Conn3=-R -W"%WinAppLogin%"
+)
+goto :eof
+
 
 :ERROR_Schema
 ECHO Error deploying Schema objects for database: %DATABASE%!!
