@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void Create()
 		{
+			_dictionary.Clear();
+
 			foreach (var date in _period.DayCollection())
 			{
 				IList<IPerson> singleSkilledPersons = new List<IPerson>(_persons);
