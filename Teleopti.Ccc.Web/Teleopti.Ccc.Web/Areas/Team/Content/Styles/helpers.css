@@ -10,3 +10,7 @@
 .nowrap { white-space: nowrap; }
 
 .overflow-hidden { overflow: hidden; }
+
+.vertical-top-align {
+    vertical-align: top;
+}
