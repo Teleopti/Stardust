@@ -157,8 +157,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\Anywhere\AnywhereAreaRegistration.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\ApplicationController.cs" />
+    <Compile Include="Areas\Team\TeamAreaRegistration.cs" />
+    <Compile Include="Areas\Team\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MobileReports\Controllers\ReportController.cs" />
     <Compile Include="Areas\MobileReports\Core\DateBoxGlobalizationViewModelFactory.cs" />
     <Compile Include="Areas\MobileReports\Core\DefinedReports.cs" />
@@ -520,8 +520,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Anywhere\Content\Scripts\main.js" />
-    <Content Include="Areas\Anywhere\Content\Templates\index.html" />
+    <Content Include="Areas\Team\Content\Scripts\main.js" />
+    <Content Include="Areas\Team\Content\Templates\index.html" />
     <Content Include="Areas\MobileReports\Content\Css\mobile.custom.css" />
     <Content Include="Areas\MobileReports\Content\Images\ajax-loader.gif" />
     <Content Include="Areas\MobileReports\Content\Images\logo.png" />
@@ -904,9 +904,9 @@
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Anywhere\Core\" />
-    <Folder Include="Areas\Anywhere\Models\" />
-    <Folder Include="Areas\Anywhere\Views\" />
+    <Folder Include="Areas\Team\Core\" />
+    <Folder Include="Areas\Team\Models\" />
+    <Folder Include="Areas\Team\Views\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>

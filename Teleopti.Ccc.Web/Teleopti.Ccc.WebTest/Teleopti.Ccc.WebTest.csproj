@@ -104,8 +104,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\Anywhere\AnywhereAreaRegistrationTest.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\ApplicationControllerTest.cs" />
+    <Compile Include="Areas\Team\TeamAreaRegistrationTest.cs" />
+    <Compile Include="Areas\Team\Controllers\ApplicationControllerTest.cs" />
     <Compile Include="Areas\MobileReports\Core\DefinedReportsTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Mappings\ReportGenerationViewModelMappingTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Providers\DefinedReportProviderTest.cs" />

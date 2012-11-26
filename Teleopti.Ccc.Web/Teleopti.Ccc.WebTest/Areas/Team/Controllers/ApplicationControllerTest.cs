@@ -1,8 +1,8 @@
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
+using Teleopti.Ccc.Web.Areas.Team.Controllers;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
+namespace Teleopti.Ccc.WebTest.Areas.Team.Controllers
 {
 	[TestFixture]
 	public class ApplicationControllerTest
@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			var target = new ApplicationController();
 			var result = target.Index();
-			result.FileName.Should().Be("~/Areas/Anywhere/Content/Templates/index.html");
+			result.FileName.Should().Be("~/Areas/Team/Content/Templates/index.html");
 			result.ContentType.Should().Be("text/html");
 		}
 
