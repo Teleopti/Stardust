@@ -15,10 +15,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Start
 		[Test]
 		public void ShouldCreateModelForUserWithAccessToAllDefinedAreas()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(true);
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
-			var target = new MenuViewModelFactory(permissionProvider);
+			//var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			//permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(true);
+			//permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
+			var target = new MenuViewModelFactory(new FakePermissionProvider());
 
 			var result = target.CreateMenyViewModel();
 

@@ -9,6 +9,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
+using Team = Teleopti.Ccc.Domain.AgentInfo.Team;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 {
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		[Test]
 		public void ShouldDefaultToMyTeam()
 		{
-			var myTeam = new Team();
+			var myTeam = new Domain.AgentInfo.Team();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Stub(x => x.MyTeam(DateOnly.Today)).Return(myTeam);
 			var target = new DefaultTeamCalculator(loggedOnUser, new FakePermissionProvider(), null);
@@ -31,8 +32,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		[Test]
 		public void ShouldDefaultToFirstAvailableTeamIfMyTeamNotPermitted()
 		{
-			var myTeam = new Team();
-			var otherTeams = new[] {new Team(), new Team()};
+			var myTeam = new Domain.AgentInfo.Team();
+			var otherTeams = new[] { new Domain.AgentInfo.Team(), new Domain.AgentInfo.Team() };
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		[Test]
 		public void ShouldDefaultToMyTeamIfNoAvailableTeamEvenThoughMyTeamNotPermitted()
 		{
-			var myTeam = new Team();
+			var myTeam = new Domain.AgentInfo.Team();
 			var otherTeams = new ITeam[] {};
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		[Test]
 		public void ShouldDefaultToFirstPermittedTeamWhenNoOwnTeam()
 		{
-			var otherTeams = new[] { new Team(), new Team() };
+			var otherTeams = new[] { new Domain.AgentInfo.Team(), new Domain.AgentInfo.Team() };
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
