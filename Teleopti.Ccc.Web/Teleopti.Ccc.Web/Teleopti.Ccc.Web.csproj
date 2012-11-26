@@ -520,7 +520,20 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Team\Content\Scripts\helpers.js" />
+    <Content Include="Areas\Team\Content\Scripts\layout.js" />
     <Content Include="Areas\Team\Content\Scripts\main.js" />
+    <Content Include="Areas\Team\Content\Scripts\navigation.js" />
+    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\agent.js" />
+    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\fakeData.js" />
+    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\layer.js" />
+    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\resourceLayer.js" />
+    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\resources.js" />
+    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\timeline-time.js" />
+    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\timeline.js" />
+    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\view.js" />
+    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\vm.js" />
+    <Content Include="Areas\Team\Content\Templates\dummy.html" />
     <Content Include="Areas\Team\Content\Templates\index.html" />
     <Content Include="Areas\MobileReports\Content\Css\mobile.custom.css" />
     <Content Include="Areas\MobileReports\Content\Images\ajax-loader.gif" />
@@ -639,6 +652,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Areas\Start\Content\Css\login.css" />
+    <Content Include="Areas\Team\Content\Templates\layout.html" />
+    <Content Include="Areas\Team\Content\Templates\menu.html" />
+    <Content Include="Areas\Team\Content\Templates\teamschedule\view.html" />
     <Content Include="Content\crossroads\crossroads.js" />
     <Content Include="Content\crossroads\crossroads.min.js" />
     <Content Include="Content\hasher\hasher.js" />
@@ -715,6 +731,7 @@
     <Content Include="Content\Mobile\images\icons-36-white.png" />
     <Content Include="Content\modernizr\modernizr-2.6.2.js" />
     <Content Include="Content\modernizr\modernizr-2.6.2.min.js" />
+    <Content Include="Content\moment\moment.js" />
     <Content Include="Content\require\require.js" />
     <Content Include="Content\require\text.js" />
     <Content Include="Content\respondjs\respond.src.js" />

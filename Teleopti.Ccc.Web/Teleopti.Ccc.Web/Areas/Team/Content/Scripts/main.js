@@ -12,15 +12,12 @@ require.config({
 		signals: '/Content/signals/signals',
 		crossroads: '/Content/crossroads/crossroads',
 		hasher: '/Content/hasher/hasher',
-		//flotr2: '/Content/flotr2/flotr2.amd',
-		//bean: '/Content/bean/bean-min',
-		//underscore: '/Content/underscore/underscore-min',
 		touchPunch: '/Content/jqueryui.touch-punch/jquery.ui.touch-punch',
 
 		templates: '../templates',
 
 		text: '/Content/require/text'
-
+		
 	},
 
 	// dependencies that requires loading order
@@ -37,7 +34,6 @@ require.config({
 		//'vendor/bootstrap-datepicker': ['jquery'],
 		//'widgets/editlayer/jquery.ui.editlayer': ['jqueryui'],
 		//'widgets/editlayer/jquery.ui.editlayer.ko': ['knockout', 'widgets/editlayer/jquery.ui.editlayer'],
-		//'flotr2': ['bean', 'underscore']
 	}
 });
 
@@ -51,9 +47,7 @@ require([
 	//'vendor/bootstrap-datepicker',
 	//'widgets/editlayer/jquery.ui.editlayer',
 	//'widgets/editlayer/jquery.ui.editlayer.ko',
-	//'layout'
+	'layout'
 ], function () {
-
-	$('body').text("hello world");
 	
 });
