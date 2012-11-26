@@ -3,10 +3,10 @@ USE [master]
 IF NOT EXISTS (SELECT * FROM sys.syslogins WHERE name = 'TeleoptiDemoUser')
 BEGIN
 	CREATE LOGIN [TeleoptiDemoUser] WITH PASSWORD=N'TeleoptiDemoPwd2',
-	DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+	DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF, DEFAULT_LANGUAGE=[us_english]
 END
 ELSE
-	ALTER LOGIN [TeleoptiDemoUser] WITH PASSWORD=N'TeleoptiDemoPwd2'
+	ALTER LOGIN [TeleoptiDemoUser] WITH PASSWORD=N'TeleoptiDemoPwd2', DEFAULT_LANGUAGE=[us_english]
 
 --Switch context
 USE [TeleoptiAnalytics_Demo]
