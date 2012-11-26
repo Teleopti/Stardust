@@ -20,10 +20,10 @@ namespace Teleopti.Analytics.Portal.Utils
             _connection.ConnectionString = connectionString;
         }
 
-        // TODO Get real data
-        public DataTable GetUserInfo(string userName)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		public DataTable GetUserInfo(string userName)
         {
-			if(userName == "") return new DataTable();
+			if(string.IsNullOrEmpty(userName)) return new DataTable{Locale = CultureInfo.InvariantCulture};
             bool windowsAuthentication = false;
             IList<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("@user_name", userName));
