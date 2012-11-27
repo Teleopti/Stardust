@@ -507,7 +507,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         public DateTime GetLocalCurrentDate(int column)
         {
             int count = _rowManagerTaskOwner.DataSource.Count;
-
+            if (count == 0)
+                return DateTime.MaxValue;
             DateTime returnDate;
             if (column > count)
                 returnDate = ((TaskOwnerPeriod)_rowManagerTaskOwner.DataSource[count - 1]).EndDate;
