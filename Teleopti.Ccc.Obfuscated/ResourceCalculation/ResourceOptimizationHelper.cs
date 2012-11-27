@@ -16,14 +16,17 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         private readonly ISchedulingResultStateHolder _stateHolder;
     	private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
     	private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
+    	private readonly ISingleSkillDictionary _singleSkillDictionary;
 
     	public ResourceOptimizationHelper(ISchedulingResultStateHolder stateHolder, 
             IOccupiedSeatCalculator occupiedSeatCalculator, 
-            INonBlendSkillCalculator nonBlendSkillCalculator)
+            INonBlendSkillCalculator nonBlendSkillCalculator,
+			ISingleSkillDictionary singleSkillDictionary)
 		{
 			_stateHolder = stateHolder;
 			_occupiedSeatCalculator = occupiedSeatCalculator;
     		_nonBlendSkillCalculator = nonBlendSkillCalculator;
+    		_singleSkillDictionary = singleSkillDictionary;
 		}
 
         public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
@@ -51,10 +54,15 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 var extractor = new ScheduleProjectionExtractor();
                 IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
 
-            	var singleSkillDecider = new SingleSkillLoadedDecider();
-				if(!singleSkillDecider.IsSingleSkill(_stateHolder.Skills) || (toRemove.Count == 0 && toAdd.Count == 0))
+            	var isAllSingleSkill = UseSingleSkillCalculations(toRemove, toAdd);
+
+				if (!isAllSingleSkill)
 					relevantProjections = extractor.CreateRelevantProjectionWithScheduleList(_stateHolder.Schedules,
-                                                                                         TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
+																						 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
+				//var singleSkillDecider = new SingleSkillLoadedDecider();
+				//if(!singleSkillDecider.IsSingleSkill(_stateHolder.Skills) || (toRemove.Count == 0 && toAdd.Count == 0))
+				//    relevantProjections = extractor.CreateRelevantProjectionWithScheduleList(_stateHolder.Schedules,
+				//                                                                         TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
 
 				IList<IVisualLayerCollection> addedVisualLayerCollections = new List<IVisualLayerCollection>();
 				foreach (IScheduleDay addedSchedule in toAdd)
@@ -96,7 +104,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         	var relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, ordinarySkills, timePeriod);
 
-			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, _stateHolder.Skills, relevantProjections, new SingleSkillLoadedDecider(), new SingleSkillCalculator(), useOccupancyAdjustment);
+			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, _stateHolder.Skills, relevantProjections, new SingleSkillCalculator(), useOccupancyAdjustment, _singleSkillDictionary);
 
             schedulingResultService.SchedulingResult(timePeriod, toRemove, toAdd);
 
@@ -205,5 +213,34 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                     _stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, skills, timePeriod.Value);
             _occupiedSeatCalculator.Calculate(dateOnly,new List<IVisualLayerCollection>{layerCollection}, relevantSkillStaffPeriods);
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool UseSingleSkillCalculations(IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
+		{
+			var isAllSingleSkill = toRemove.Count > 0 || toAdd.Count > 0;
+
+			if (isAllSingleSkill)
+				isAllSingleSkill = AllIsSingleSkilled(toRemove);
+
+			if (isAllSingleSkill)
+				isAllSingleSkill = AllIsSingleSkilled(toAdd);
+
+			return isAllSingleSkill;
+		}
+
+		private bool AllIsSingleSkilled(IEnumerable<IScheduleDay> scheduleDays)
+		{
+			foreach (var scheduleDay in scheduleDays)
+			{
+				var person = scheduleDay.Person;
+				var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
+				if (!_singleSkillDictionary.IsSingleSkill(person, dateOnly))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
     }
 }
