@@ -940,6 +940,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             if (column > int.MaxValue) throw new ArgumentOutOfRangeException("column");
 
             int count = _rowManagerTaskOwner.DataSource.Count;
+            if (count == 0)
+                return DateTime.MaxValue;
             column = Math.Min(column, count); //Get count if column is larger than actual number of items
             column = Math.Max(column, ColHeaderCount); //Get 1 if column is less than 1
 
