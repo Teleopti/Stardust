@@ -21,7 +21,7 @@ Scenario: See absence request
 	When I view requests
 	Then I should see my existing absence request
 
-#@ignore
+@ignore
 Scenario: See created shift trade request
 	Given I am an agent
 	And I have created a shift trade request

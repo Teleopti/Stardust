@@ -124,9 +124,11 @@ this.ScenarioSetup(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("See created shift trade request")]
+        [NUnit.Framework.IgnoreAttribute()]
         public virtual void SeeCreatedShiftTradeRequest()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See created shift trade request", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See created shift trade request", new string[] {
+                        "ignore"});
 #line 25
 this.ScenarioSetup(scenarioInfo);
 #line 26
