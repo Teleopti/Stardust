@@ -19,20 +19,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "1.9.0.77")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Routing New")]
-    public partial class RoutingNewFeature
+    [NUnit.Framework.DescriptionAttribute("Routing")]
+    public partial class RoutingFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "RoutingNew.feature"
+#line 1 "Routing.feature"
 #line hidden
         
         [NUnit.Framework.TestFixtureSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Routing New", "In order make it easy to browse to the site\r\nAs a user\r\nI want to be redirected t" +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Routing", "In order make it easy to browse to the site\r\nAs a user\r\nI want to be redirected t" +
                     "o the correct locations", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
