@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
 		private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
+		private static readonly Type[] ExcludedTypes = new[] { typeof(INote), typeof(IPublicNote) };
 
 		public ScheduleMessageSender(ISendDenormalizeNotification sendDenormalizeNotification, ISaveToDenormalizationQueue saveToDenormalizationQueue)
 		{
@@ -19,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void Execute(IRunSql runSql, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			var scheduleData = modifiedRoots.Select(r => r.Root).OfType<IPersistableScheduleData>();
+			var scheduleData = extractScheduleChangesOnly(modifiedRoots);
 			if (!scheduleData.Any()) return;
 
 			var people = scheduleData.Select(s => s.Person).Distinct();
@@ -54,6 +56,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				_sendDenormalizeNotification.Notify();
 			}
+		}
+
+		private static IEnumerable<IPersistableScheduleData> extractScheduleChangesOnly(IEnumerable<IRootChangeInfo> modifiedRoots)
+		{
+			var scheduleData = modifiedRoots.Select(r => r.Root).OfType<IPersistableScheduleData>();
+			scheduleData = scheduleData.Where(s => !ExcludedTypes.Any(t => s.GetType().GetInterfaces().Contains(t)));
+			return scheduleData;
 		}
 	}
 }
