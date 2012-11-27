@@ -627,7 +627,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         public DateTime GetLocalCurrentDate(int column)
         {
             int count = _intervals.Count;
-
+            if (count == 0)
+                return DateTime.MaxValue;
             DateTime returnDate;
             if (count == 0 && _intervals.Count == 0) return TaskOwnerDay.CurrentDate;//the f**cked up stuff downstairs is fixed by this 
             if (column > count)
