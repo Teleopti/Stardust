@@ -506,7 +506,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I have created a shift trade request")]
 		public void GivenIHaveCreatedAShiftTradeRequest()
 		{
-			ScenarioContext.Current.Pending();
 			UserFactory.User().Setup(new ExistingShiftTradeRequest());
 		}
 

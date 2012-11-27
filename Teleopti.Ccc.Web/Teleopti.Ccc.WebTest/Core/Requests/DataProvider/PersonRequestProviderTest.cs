@@ -82,5 +82,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			Assert.Throws<DataSourceException>(() =>
 			                                   target.RetrieveRequest(id));
 		}
+
+		[Test]
+		public void ShouldFindAllRequestsForCurrentUserWithPaging()
+		{
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var repository = MockRepository.GenerateMock<IPersonRequestRepository>();
+			var target = new PersonRequestProvider(repository, loggedOnUser, null);
+			var person = new Person();
+			var paging = new Paging();
+			var personRequests = new IPersonRequest[] { };
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			repository.Stub(x => x.FindAllRequestsForAgent(person, paging)).Return(personRequests);
+
+			target.RetrieveRequests(paging);
+
+			repository.AssertWasCalled(x => x.FindAllRequestsForAgent(person, paging));
+		}
 	}
 }
