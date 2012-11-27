@@ -16,6 +16,7 @@ GO
 -- 2008-10-24	KJ	Load one Day Off per BU.
 -- 2010-01-14	DJ	Adding DayOff but with Day_Off_Name as PK (Not Day_Off_code as original DW designed)
 -- 2011-02-08	DJ	#13471 Days off with same name on two BU does not work in analytics
+-- 2012-11-21	KJ	Add display_color_html and day_off_shortname
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_day_off_load]
 @business_unit_code uniqueidentifier	
@@ -31,14 +32,18 @@ INSERT INTO mart.dim_day_off
 	day_off_name, 
 	display_color,
 	business_unit_id,
-	datasource_id
+	datasource_id,
+	display_color_html, 
+	day_off_shortname
 	)
 SELECT 
 	day_off_id			=-1, 
 	day_off_name		='Not Defined', 
 	display_color		= -1,
 	business_unit_id	=-1,
-	datasource_id		= -1
+	datasource_id		= -1, 
+	display_color_html	= '#FFFFFF',
+	day_off_shortname	= 'Not Defined'
 WHERE NOT EXISTS (SELECT * FROM mart.dim_day_off where day_off_id = -1)
 
 SET IDENTITY_INSERT mart.dim_day_off OFF
@@ -47,7 +52,9 @@ SET IDENTITY_INSERT mart.dim_day_off OFF
 UPDATE mart.dim_day_off
 SET 
 	day_off_code	= s.day_off_code,
-	display_color	= s.display_color
+	display_color	= s.display_color, 
+	display_color_html = s.display_color_html,
+	day_off_shortname  = s.day_off_shortname
 FROM
 	[stage].[stg_day_off] s
 INNER JOIN [mart].[dim_business_unit] bu
@@ -64,14 +71,18 @@ INSERT INTO mart.dim_day_off
 	day_off_name, 
 	display_color,
 	business_unit_id,
-	datasource_id
+	datasource_id,
+	display_color_html,
+	day_off_shortname
 	)
 SELECT 
 	day_off_code		= s.day_off_code,
 	day_off_name		= s.day_off_name, --This is part of the PK 
 	display_color		= s.display_color,
 	business_unit_id	= bu.business_unit_id, --This is part of the PK
-	datasource_id		= 1
+	datasource_id		= 1, 
+	display_color_html	= s.display_color_html,
+	day_off_shortname	= s.day_off_shortname
 FROM
 	[stage].[stg_day_off] s	
 INNER JOIN

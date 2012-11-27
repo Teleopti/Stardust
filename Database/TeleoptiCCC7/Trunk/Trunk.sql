@@ -14,3 +14,4 @@ GO
   DELETE FROM dbo.PersonalSettingData
   WHERE [Key]= 'SchedulingOptionsAdvancedSettings'
 GO
+

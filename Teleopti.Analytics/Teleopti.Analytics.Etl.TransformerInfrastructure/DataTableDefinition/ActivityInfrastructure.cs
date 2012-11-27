@@ -11,6 +11,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
             table.Columns.Add("activity_code", typeof(Guid));
             table.Columns.Add("activity_name", typeof(String));
             table.Columns.Add("display_color", typeof(int));
+            table.Columns.Add("display_color_html", typeof(String));
             table.Columns.Add("in_ready_time", typeof(bool));
             table.Columns.Add("in_contract_time", typeof(bool));
             table.Columns.Add("in_paid_time", typeof(bool));

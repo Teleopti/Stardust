@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var defaultTeamCalculator = MockRepository.GenerateMock<IDefaultTeamCalculator>();
 			var personPeriodProvider = MockRepository.GenerateMock<IPersonPeriodProvider>();
 			personPeriodProvider.Stub(x => x.HasPersonPeriod(DateOnly.Today)).Return(true);
-			var team = new Team();
+			var team = new Domain.AgentInfo.Team();
 			team.SetId(Guid.NewGuid());
 			defaultTeamCalculator.Stub(x => x.Calculate(DateOnly.Today)).Return(team);
 

@@ -15,6 +15,7 @@ GO
 --				2009-02-09 Stage moved to mart db, removed view KJ
 --              2009-02-11 New mart schema KJ
 --				2010-01-19 Adding Day Off Name as PK
+--				2012-11-21 Adding new columns for display_color_html and day_off_shortname
 -- =============================================
 --exec etl_fact_schedule_day_count_load '2005-12-01','2006-01-05'
 
@@ -39,9 +40,11 @@ TRUNCATE TABLE [stage].[stg_day_off]
 INSERT INTO [stage].[stg_day_off]
 	(
 	[day_off_name]
+	,[day_off_shortname]
 	,[business_unit_code]
 	,[day_off_code]
 	,[display_color]
+	,[display_color_html]
 	,[datasource_id]
 	,[insert_date]
 	,[update_date]
@@ -50,16 +53,18 @@ INSERT INTO [stage].[stg_day_off]
 
 SELECT 
 	[day_off_name]			= sdo.day_off_name,
+	[day_off_shortname]		= sdo.day_off_shortname,
 	[business_unit_code]	= sdo.business_unit_code,
 	[day_off_code]			= NULL,
-	[display_color]			= '1',
+	[display_color]			= -8355712,
+	[display_color_html]	= '#808080',
     [datasource_id]			= min(sdo.datasource_id),
 	[insert_date]			= GETDATE(),
 	[update_date]			= GETDATE(),
 	[datasource_update_date]= GETDATE()
 
 FROM stage.stg_schedule_day_off_count sdo
-GROUP BY sdo.day_off_name,sdo.business_unit_code
+GROUP BY sdo.day_off_name,sdo.day_off_shortname,sdo.business_unit_code
 
 --Load mart dimension
 EXEC [mart].[etl_dim_day_off_load] @business_unit_code

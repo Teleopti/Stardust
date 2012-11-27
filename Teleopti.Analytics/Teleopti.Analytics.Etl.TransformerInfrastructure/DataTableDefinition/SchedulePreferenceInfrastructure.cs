@@ -16,6 +16,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
             table.Columns.Add("shift_category_code", typeof(Guid));
             table.Columns.Add("day_off_code", typeof(Guid));
             table.Columns.Add("day_off_name", typeof(String));
+            table.Columns.Add("day_off_shortname", typeof(String));
             table.Columns.Add("StartTimeMinimum", typeof(long));
             table.Columns.Add("StartTimeMaximum", typeof(long));
             table.Columns.Add("endTimeMinimum", typeof(long));

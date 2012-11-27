@@ -11,7 +11,8 @@ GO
 -- =============================================
 -- Author:		ChLu
 -- Create date: 2008-01-30
--- Update date: 2009-02-11
+-- Update date: 2012-11-21
+-- 2012-11-21 New column display_color KJ
 -- 2009-02-11 New mart schema KJ
 -- 2009-02-09 Stage moved to mart db, removed view KJ
 -- 2008-12-01 Added new fields in_ready_time_name, in_contract_time,in_contract_time_name,in_paid_time,in_pad_time_name,in_work_time,in_work_time_name KJ
@@ -40,7 +41,8 @@ INSERT INTO mart.dim_activity
 	in_paid_time_name,
 	in_work_time,
 	in_work_time_name,
-	is_deleted
+	is_deleted, 
+	display_color_html
 	)
 SELECT 
 	activity_id				= -1, 
@@ -54,7 +56,8 @@ SELECT
 	in_paid_time_name		= 'Not In Paid Time',
 	in_work_time			= 0,
 	in_work_time_name		= 'Not In Work Time',
-	is_deleted				= 0
+	is_deleted				= 0,
+	display_color_html		= '#FFFFFF'
 WHERE NOT EXISTS (SELECT * FROM mart.dim_activity where activity_id = -1)
 
 SET IDENTITY_INSERT mart.dim_activity OFF
@@ -77,7 +80,8 @@ SET
 	in_paid_time_name		= t3.paid_description ,
 	in_work_time			= s.in_work_time,
 	in_work_time_name		= t4.work_description,
-	is_deleted				= s.is_deleted
+	is_deleted				= s.is_deleted, 
+	display_color_html		= s.display_color_html
 FROM
 	Stage.stg_activity s
 LEFT JOIN 
@@ -106,7 +110,8 @@ INSERT INTO mart.dim_activity
 	in_work_time,
 	in_work_time_name,
 	business_unit_id,
-	is_deleted
+	is_deleted, 
+	display_color_html
 	)
 SELECT 
 	activity_code			= s.activity_code, 
@@ -121,7 +126,8 @@ SELECT
 	in_work_time			= s.in_work_time,
 	in_work_time_name		= t4.work_description,
 	business_unit_id		= bu.business_unit_id,
-	is_deleted				= s.is_deleted
+	is_deleted				= s.is_deleted, 
+	display_color_html		= s.display_color_html
 FROM
 	Stage.stg_activity s
 JOIN
