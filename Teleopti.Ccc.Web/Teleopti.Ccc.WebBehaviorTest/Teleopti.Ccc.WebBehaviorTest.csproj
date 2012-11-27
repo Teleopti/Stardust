@@ -116,13 +116,13 @@
     <Compile Include="Core\Robustness\Timeouts.cs" />
     <Compile Include="Core\Robustness\Retrying.cs" />
     <Compile Include="Pages\SignInPage.cs" />
-    <Compile Include="RoutingNew.feature.cs">
-      <DependentUpon>RoutingNew.feature</DependentUpon>
+    <Compile Include="Routing.feature.cs">
+      <DependentUpon>Routing.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="SignInNew.feature.cs">
-      <DependentUpon>SignInNew.feature</DependentUpon>
+    <Compile Include="SignIn.feature.cs">
+      <DependentUpon>SignIn.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -316,11 +316,6 @@
     <Compile Include="Data\Setups\Specific\ShiftWithConfidentialAbsence.cs" />
     <Compile Include="Data\Setups\Specific\Team.cs" />
     <Compile Include="Data\Setups\Specific\TwoWeeksAbsence.cs" />
-    <Compile Include="MobileSignIn.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MobileSignIn.feature</DependentUpon>
-    </Compile>
     <Compile Include="MyProfile.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -527,13 +522,13 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>BrowserNotifications.feature.cs</LastGenOutput>
     </None>
-    <None Include="RoutingNew.feature">
+    <None Include="Routing.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RoutingNew.feature.cs</LastGenOutput>
+      <LastGenOutput>Routing.feature.cs</LastGenOutput>
     </None>
-    <None Include="SignInNew.feature">
+    <None Include="SignIn.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SignInNew.feature.cs</LastGenOutput>
+      <LastGenOutput>SignIn.feature.cs</LastGenOutput>
     </None>
     <None Include="PasswordPolicy.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -600,10 +595,6 @@
     <None Include="MobileReports.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MobileReports.feature.cs</LastGenOutput>
-    </None>
-    <None Include="MobileSignIn.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MobileSignIn.feature.cs</LastGenOutput>
     </None>
     <None Include="MyProfile.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
