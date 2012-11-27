@@ -1,6 +1,4 @@
-﻿@ignore
-@signinnew
-Feature: Routing New
+﻿Feature: Routing New
 	In order make it easy to browse to the site
 	As a user
 	I want to be redirected to the correct locations

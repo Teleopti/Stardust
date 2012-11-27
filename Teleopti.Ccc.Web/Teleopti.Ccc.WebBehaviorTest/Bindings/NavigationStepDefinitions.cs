@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenINavigateToTheSiteSRootMobileSigninPage()
 		{
 			UserFactory.User().MakeUser();
-			Navigation.GotoGlobalMobileSignInPage();
+			Navigation.GotoGlobalSignInPage();
 		}
 
 

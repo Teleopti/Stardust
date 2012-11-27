@@ -1,12 +1,9 @@
 using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -14,17 +11,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class SignInPageStepDefinitions
 	{
-		[BeforeScenario("signinnew")]
-		public void FlagForNewSignInPage()
-		{
-			ScenarioContext.Current.Value("signinnew", true);
-		}
-
 		[When(@"I sign in")]
 		[When(@"I sign in by user name")]
 		public void WhenISignIn()
 		{
-			if (!(Browser.Current.Url.Contains("/SignIn") || Browser.Current.Url.Contains("/MobileSignIn")))
+			if (!(Browser.Current.Url.Contains("/Authentication")))
 				Navigation.GotoGlobalSignInPage();
 			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
@@ -105,52 +96,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldSeeTheGlobalSignInPage()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
-			if (ScenarioContext.Current.Value<bool>("signinnew"))
-			{
-				EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/AuthenticationNew/SignIn"));
-				EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MyTime/AuthenticationNew/SignIn"));
-				EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MobileReports/AuthenticationNew/SignIn"));
-			}
-			else
-			{
-				EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/Authentication/SignIn"));
-				EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MyTime/Authentication/SignIn"));
-				EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MobileReports/Authentication/SignIn"));
-			}
+			
+			EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MyTime/Authentication"));
+			EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MobileReports/Authentication"));
+			
 		}
 
 		[Then(@"I should see MyTime's sign in page")]
 		public void ThenIShouldSeeMyTimesSignInPage()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
-			if (ScenarioContext.Current.Value<bool>("signinnew"))
-				EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MyTime/AuthenticationNew/SignIn"));
-			else
-				EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MyTime/Authentication/SignIn"));
+			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MyTime/Authentication"));
 		}
 
 		[Then(@"I should see Mobile Report's sign in page")]
 		public void ThenIShouldSeeMobileReportsSignInPage()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
-			if (ScenarioContext.Current.Value<bool>("signinnew"))
-				EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MobileReports/AuthenticationNew/SignIn"));
-			else
-				EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MobileReports/Authentication/SignIn"));
+			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MobileReports/Authentication"));
 		}
 
 		[Then(@"I should see the global menu")]
 		public void ThenIShouldSeeTheGlobalMenu()
 		{
-			if (ScenarioContext.Current.Value<bool>("signinnew"))
-			{
-				EventualAssert.That(() => Browser.Current.Url, Is.StringEnding("/SignIn#menu"));
-			}
-			else
-			{
-				EventualAssert.That(() => Pages.Pages.GlobalMenuPage.GlobalMenuList.ListItems.Count.Equals(2), Is.True);
-				EventualAssert.That(() => Browser.Current.Url, Is.StringEnding("/Start/Menu/Menu"));
-			}
+			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/Authentication#menu"));
 		}
 
 

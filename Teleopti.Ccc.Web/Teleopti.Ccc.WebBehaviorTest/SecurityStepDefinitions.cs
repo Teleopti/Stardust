@@ -2,6 +2,7 @@
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Pages;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -23,7 +24,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should be redirected to the sign in page")]
 		public void ThenIShouldBeRedirectedToTheSignInPage()
 		{
-			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("Authentication/SignIn"));
+			var page = Browser.Current.Page<SignInPage>();
+			EventualAssert.That(() => page.UserNameTextField.Exists, Is.True);
 		}
 
 	}

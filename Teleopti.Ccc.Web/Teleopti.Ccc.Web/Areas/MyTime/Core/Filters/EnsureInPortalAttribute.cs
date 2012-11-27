@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace Teleopti.Ccc.Web.Filters
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Filters
 {
 	public class EnsureInPortalAttribute : ActionFilterAttribute
 	{
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Filters
 			var controllerName = filterContext.RouteData.Values["controller"];
 			var actionName = filterContext.RouteData.Values["Action"];
 
-			filterContext.Result = new RedirectResult(string.Format("~/#{0}/{1}", controllerName, actionName));
+			filterContext.Result = new RedirectResult(string.Format("~/MyTime#{0}/{1}", controllerName, actionName));
 
 			base.OnActionExecuting(filterContext);
 		}

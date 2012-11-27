@@ -20,8 +20,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Routing New")]
-    [NUnit.Framework.IgnoreAttribute()]
-    [NUnit.Framework.CategoryAttribute("signinnew")]
     public partial class RoutingNewFeature
     {
         
@@ -35,9 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Routing New", "In order make it easy to browse to the site\r\nAs a user\r\nI want to be redirected t" +
-                    "o the correct locations", ProgrammingLanguage.CSharp, new string[] {
-                        "ignore",
-                        "signinnew"});
+                    "o the correct locations", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -71,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         
         public virtual void FeatureBackground()
         {
-#line 8
+#line 6
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -85,7 +81,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table1.AddRow(new string[] {
                         "Access to mytime web",
                         "true"});
-#line 9
+#line 7
  testRunner.Given("there is a role with", ((string)(null)), table1, "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
@@ -100,7 +96,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table2.AddRow(new string[] {
                         "Access to mytime web",
                         "false"});
-#line 14
+#line 12
  testRunner.Given("there is a role with", ((string)(null)), table2, "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
@@ -115,7 +111,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
             table3.AddRow(new string[] {
                         "Access to mytime web",
                         "true"});
-#line 19
+#line 17
  testRunner.Given("there is a role with", ((string)(null)), table3, "Given ");
 #line hidden
         }
@@ -125,15 +121,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
         public virtual void BrowseToRoot()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse to root", ((string[])(null)));
-#line 25
+#line 23
 this.ScenarioSetup(scenarioInfo);
-#line 8
+#line 6
 this.FeatureBackground();
-#line 26
+#line 24
  testRunner.Given("I am not signed in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 27
+#line 25
  testRunner.When("I navigate to the site\'s root", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 28
+#line 26
  testRunner.Then("I should see the global sign in page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -144,15 +140,15 @@ this.FeatureBackground();
         public virtual void BrowseToMyTime()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse to MyTime", ((string[])(null)));
-#line 30
+#line 28
 this.ScenarioSetup(scenarioInfo);
-#line 8
+#line 6
 this.FeatureBackground();
-#line 31
+#line 29
  testRunner.Given("I am not signed in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 32
+#line 30
  testRunner.When("I navigate to MyTime", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 33
+#line 31
  testRunner.Then("I should see MyTime\'s sign in page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -163,15 +159,15 @@ this.FeatureBackground();
         public virtual void BrowseToMobileReports()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse to Mobile Reports", ((string[])(null)));
-#line 35
+#line 33
 this.ScenarioSetup(scenarioInfo);
-#line 8
+#line 6
 this.FeatureBackground();
-#line 36
+#line 34
  testRunner.Given("I am not signed in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 37
+#line 35
  testRunner.When("I navigate to Mobile Reports", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 38
+#line 36
  testRunner.Then("I should see Mobile Report\'s sign in page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -182,19 +178,19 @@ this.FeatureBackground();
         public virtual void BrowseToRootAndSignInToMenu()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse to root and sign in to menu", ((string[])(null)));
-#line 40
+#line 38
 this.ScenarioSetup(scenarioInfo);
-#line 8
+#line 6
 this.FeatureBackground();
-#line 41
+#line 39
  testRunner.Given("I have the role \'Access to all areas\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 42
+#line 40
  testRunner.When("I navigate to the site\'s root", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 43
+#line 41
  testRunner.And("I select application logon data source", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 44
+#line 42
  testRunner.And("I sign in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 45
+#line 43
  testRunner.Then("I should see the global menu", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -205,19 +201,19 @@ this.FeatureBackground();
         public virtual void BrowseToRootAndSignInToMyTime()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse to root and sign in to MyTime", ((string[])(null)));
-#line 47
+#line 45
 this.ScenarioSetup(scenarioInfo);
-#line 8
+#line 6
 this.FeatureBackground();
-#line 48
+#line 46
  testRunner.Given("I have the role \'Access to mytime not report\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 49
+#line 47
  testRunner.When("I navigate to the site\'s root", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 50
+#line 48
  testRunner.And("I select application logon data source", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 51
+#line 49
  testRunner.And("I sign in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 52
+#line 50
  testRunner.Then("I should see MyTime", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -228,19 +224,19 @@ this.FeatureBackground();
         public virtual void BrowseToRootAndSignInToMobileReports()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse to root and sign in to Mobile Reports", ((string[])(null)));
-#line 54
+#line 52
 this.ScenarioSetup(scenarioInfo);
-#line 8
+#line 6
 this.FeatureBackground();
-#line 55
+#line 53
  testRunner.Given("I have the role \'Access to report not mytime\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 56
+#line 54
  testRunner.When("I navigate to the site\'s root", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 57
+#line 55
  testRunner.And("I select application logon data source", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 58
+#line 56
  testRunner.And("I sign in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 59
+#line 57
  testRunner.Then("I should see Mobile Reports", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -251,19 +247,19 @@ this.FeatureBackground();
         public virtual void BrowseToMyTimeAndSignIn()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse to MyTime and sign in", ((string[])(null)));
-#line 61
+#line 59
 this.ScenarioSetup(scenarioInfo);
-#line 8
+#line 6
 this.FeatureBackground();
-#line 62
+#line 60
  testRunner.Given("I have the role \'Access to all areas\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 63
+#line 61
  testRunner.When("I navigate to MyTime", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 64
+#line 62
  testRunner.And("I select application logon data source", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 65
+#line 63
  testRunner.And("I sign in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 66
+#line 64
  testRunner.Then("I should see MyTime", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -274,19 +270,19 @@ this.FeatureBackground();
         public virtual void BrowseToMobileReportsAndSignIn()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse to Mobile Reports and sign in", ((string[])(null)));
-#line 68
+#line 66
 this.ScenarioSetup(scenarioInfo);
-#line 8
+#line 6
 this.FeatureBackground();
-#line 69
+#line 67
  testRunner.Given("I have the role \'Access to all areas\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 70
+#line 68
  testRunner.When("I navigate to Mobile Reports", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 71
+#line 69
  testRunner.And("I select application logon data source", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 72
+#line 70
  testRunner.And("I sign in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 73
+#line 71
  testRunner.Then("I should see Mobile Reports", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

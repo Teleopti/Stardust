@@ -73,14 +73,8 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ControllersShouldBeRegisteredPerInstance()
 		{
-			var controller = requestContainer.Resolve<AuthenticationController>();
-			var controller2 = requestContainer.Resolve<AuthenticationController>();
-
-			controller
-				.Should().Not.Be.SameInstanceAs(controller2);
-
-			var controllerNew = requestContainer.Resolve<AuthenticationNewController>();
-			var controllerNew2 = requestContainer.Resolve<AuthenticationNewController>();
+			var controllerNew = requestContainer.Resolve<AuthenticationController>();
+			var controllerNew2 = requestContainer.Resolve<AuthenticationController>();
 
 			controllerNew
 				.Should().Not.Be.SameInstanceAs(controllerNew2);
@@ -295,14 +289,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			requestContainer.Resolve<RequestsController>()
 				.Should().Not.Be.Null();
 		}
-
-		[Test]
-		public void ShouldResolveRouteAreaRedirector()
-		{
-			var result = requestContainer.Resolve<IRedirector>();
-			result.Should().Not.Be.Null();
-		}
-
 
 		[Test]
 		public void ShouldResolveScheduleController()

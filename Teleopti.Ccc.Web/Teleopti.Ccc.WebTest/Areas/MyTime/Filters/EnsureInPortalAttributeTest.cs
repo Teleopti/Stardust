@@ -1,9 +1,11 @@
 ﻿using System.Web.Mvc;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Ccc.WebTest.Filters;
 
-namespace Teleopti.Ccc.WebTest.Filters
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Filters
 {
 	[TestFixture]
 	class EnsureInPortalAttributeTest

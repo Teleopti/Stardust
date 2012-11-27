@@ -1,5 +1,4 @@
-﻿@signinnew
-Feature: Sign in New
+﻿Feature: Sign in New
 	In order to access the site
 	As a user that is not signed in
 	I want to be able to sign in

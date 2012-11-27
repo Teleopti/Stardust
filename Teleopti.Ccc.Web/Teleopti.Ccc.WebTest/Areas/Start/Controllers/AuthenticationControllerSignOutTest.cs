@@ -13,15 +13,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		private AuthenticationController _target;
 		private MockRepository mocks;
 		private IFormsAuthentication _formsAuthentication;
-		private IRedirector _redirector;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			_formsAuthentication = mocks.DynamicMock<IFormsAuthentication>();
-			_redirector = mocks.DynamicMock<IRedirector>();
-			_target = new AuthenticationController(null, null, null, _formsAuthentication, null, _redirector);
+			_target = new AuthenticationController(null, _formsAuthentication);
 			new MvcContrib.TestHelper.TestControllerBuilder().InitializeController(_target);
 		}
 
@@ -34,37 +32,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void ShouldRedirectToRootWhenNoReturnUrl()
 		{
-			_redirector.Stub(x => x.SignOutRedirect(string.Empty)).Return(new RedirectResult("/"));
 			using (mocks.Record())
 			{
 				Expect.Call(_formsAuthentication.SignOut);
 			}
 			using (mocks.Playback())
 			{
-				var result = _target.SignOut(string.Empty) as RedirectResult;
+				var result = _target.SignOut() as RedirectToRouteResult;
 
-				result.Url.Should().Be.EqualTo("/");
-				/*
-				result.RouteValues["controller"].Should().Equals("home");
-				result.RouteValues["action"].Should().Equals("index");
-				 * */
-			}
-		}
-
-		[Test]
-		public void ShouldRedirectToUrl()
-		{
-			_redirector.Stub(x => x.SignOutRedirect(string.Empty)).Return(new RedirectResult("/"));
-			using (mocks.Record())
-			{
-				Expect.Call(_formsAuthentication.SignOut);
-				Expect.Call(_redirector.SignOutRedirect("/a/url")).Return(new RedirectResult("/a/url"));
-			}
-			using (mocks.Playback())
-			{
-				var result = _target.SignOut("/a/url") as RedirectResult;
-
-				result.Url.Should().Be.EqualTo("/a/url");
+				result.RouteValues["action"].Should().Be.EqualTo("");
+				result.RouteValues["controller"].Should().Be.EqualTo("Authentication");
 			}
 		}
 
