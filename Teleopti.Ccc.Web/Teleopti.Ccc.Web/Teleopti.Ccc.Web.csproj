@@ -598,6 +598,7 @@
     <Content Include="Areas\MyTime\Views\Schedule\WeekRequestPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Requests\NewShiftTradeRequest.cshtml" />
     <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
     <None Include="Areas\Start\Views\Test\Message.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
