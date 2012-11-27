@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 				allSupportedPages.Add(new MultiplicatorControlView());
 			
-			if (DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains("TeleoptiCcc/SMSLink"))
+			if (DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
 				allSupportedPages.Add(new SmsSettingsControl());
 
 			return allSupportedPages;
