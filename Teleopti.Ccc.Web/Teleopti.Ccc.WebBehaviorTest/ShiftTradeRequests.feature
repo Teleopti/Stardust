@@ -210,7 +210,7 @@ Scenario: Approve shift trade request
 @ignore
 Scenario: Deny shift trade request
 	Given I have the role 'Full access to mytime'
-	And I have recieved a shift trade request
+	And I have received a shift trade request
 	And I am viewing requests
 	When I click on the request
 	And I click the Deny button on the shift request
@@ -227,7 +227,7 @@ Scenario: Delete created shift trade request
 @ignore
 Scenario: Should not be able to delete shift trade requests from others
 	Given I am an agent
-	And I have recieved a shift trade request
+	And I have received a shift trade request
 	And I am viewing requests
 	Then I should not see a deletebutton on the request
 

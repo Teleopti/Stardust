@@ -594,7 +594,7 @@ this.FeatureBackground();
 #line 212
  testRunner.Given("I have the role \'Full access to mytime\'");
 #line 213
- testRunner.And("I have recieved a shift trade request");
+ testRunner.And("I have received a shift trade request");
 #line 214
  testRunner.And("I am viewing requests");
 #line 215
@@ -646,7 +646,7 @@ this.FeatureBackground();
 #line 229
  testRunner.Given("I am an agent");
 #line 230
- testRunner.And("I have recieved a shift trade request");
+ testRunner.And("I have received a shift trade request");
 #line 231
  testRunner.And("I am viewing requests");
 #line 232
