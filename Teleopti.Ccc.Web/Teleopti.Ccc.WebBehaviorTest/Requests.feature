@@ -21,12 +21,14 @@ Scenario: See absence request
 	When I view requests
 	Then I should see my existing absence request
 
+@ignore
 Scenario: See created shift trade request
 	Given I am an agent
 	And I have created a shift trade request
 	When I view requests
 	Then I should see my existing shift trade request
 
+@ignore
 Scenario: See received shift trade request
 	Given I am an agent
 	And I have received a shift trade request
