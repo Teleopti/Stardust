@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see request page")]
 		public void ThenIShouldSeeRequestPage()
 		{
-			EventualAssert.That(() => Pages.Pages.Current.Document.Uri.AbsoluteUri, Is.StringContaining("Request"));
+			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("Request"));
 		}
 
 		[When(@"I click the current week button")]
