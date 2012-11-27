@@ -22,7 +22,8 @@ BEGIN TRY
 			WITH PASSWORD=N'$(SQLPWD)',
 			DEFAULT_DATABASE=[master],
 			CHECK_EXPIRATION=OFF,
-			CHECK_POLICY=OFF
+			CHECK_POLICY=OFF,
+			DEFAULT_LANGUAGE=[us_english]
 		END
 		
 		--Bulk insert is needed in the ETL-tool so login needs to be part of the server fixed role [ADMINISTER BULK OPERATIONS]
