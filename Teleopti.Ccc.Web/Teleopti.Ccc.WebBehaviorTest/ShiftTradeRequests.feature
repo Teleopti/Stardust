@@ -189,3 +189,50 @@ Scenario: One possible shift to trade with because shift trade periods and skill
 	| Shift trade matching skill | Skill 1            |
 	When I navigate to shift trade page
 	Then I should have one possible shift to trade with
+
+Scenario: View shift trade request details
+	Given I have the role 'Full access to mytime'
+	And I have an existing shift trade request
+	And I am viewing requests
+	When I click on the request
+	Then I should see the shift trade request form 
+	
+Scenario: Approve shift trade request
+	Given I have the role 'Full access to mytime'
+	And I have an existing shift trade request
+	And I am viewing requests
+	When I click on the request
+	And I click the Approve button on the shift request
+	Then I should not see the shift trade request in the list
+
+Scenario: Deny shift trade request
+	Given I have the role 'Full access to mytime'
+	And I have an existing shift trade request
+	And I am viewing requests
+	When I click on the request
+	And I click the Deny button on the shift request
+	Then I should not see the shift trade request in the list
+
+Scenario: Approve shift trade on same day request should update shift in schedule
+	Given I have the role 'Full access to mytime'
+	And Current time is '2012-01-14'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2012-01-15 10:00 |
+	| EndTime               | 2012-01-15 15:00 |
+	| Shift category			| Night	          |
+	And an agent has a shift with
+	| Field                 | Value            |
+	| Agent name            | Other agent 1    |
+	| StartTime             | 2012-01-15 11:00 |
+	| EndTime               | 2012-01-15 16:00 |
+	| Shift category        | Late             |
+	And I have an existing shift trade request for '2012-01-15' with 'Other agent 1'
+	And I am viewing requests
+	When I click on the request
+	And I click the Approve button on the shift request
+	And I navigate to week schedule page for date '2012-01-15'
+	When I view my week schedule for date '2012-01-15'
+	Then I should see activities on date '2012-01-15' with:
+	| Field                 | Value         |
+	| First activity times  | 11:00 - 16:00 |
