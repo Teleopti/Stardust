@@ -93,7 +93,28 @@ Teleopti.Start.Authentication = function () {
 		hasher.init();
 	}
 
+	function _initPlaceHolderText() {
+		if(!$.support.placeholder) {
+			var active = document.activeElement;
+			$(':text, :password').focus(function() {
+				if ($(this).attr('placeholdertext') != '' && $(this).val() == $(this).attr('placeholdertext')) {
+					$(this).val('').removeClass('hasPlaceholder');
+				}
+			}).blur(function() {
+				if ($(this).attr('placeholdertext') != '' && ($(this).val() == '' || $(this).val() == $(this).attr('placeholdertext'))) {
+					$(this).val($(this).attr('placeholdertext')).addClass('hasPlaceholder');
+				}
+			});
+			$(':text, :password').blur();
+			$(active).focus();
+			$('form').submit(function() {
+				$(this).find('.hasPlaceholder').each(function() { $(this).val(''); });
+			});
+		}
+	}
+	
 	_initRoutes();
 	_initHasher();
+	_initPlaceHolderText();
 
 };
