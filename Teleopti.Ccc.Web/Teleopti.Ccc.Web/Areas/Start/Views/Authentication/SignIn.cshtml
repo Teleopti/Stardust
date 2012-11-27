@@ -65,10 +65,10 @@
 				</li>
 			</ul>
 			<div data-bind="visible: DisplayUserNameAndPasswordBoxes">
-				<input type="text" id="Username-input" placeholdertext=@Resources.UserName class="input-block-level" data-bind="value: UserName" />
+				<input type="text" id="Username-input" placeholdertext=@Resources.UserName class="input-block-level" data-bind="value: UserName, returnKey: SignIn" />
 			</div>
 			<div data-bind="visible: DisplayUserNameAndPasswordBoxes">
-				<input type="password" id="Password-input" placeholdertext=@Resources.Password class="input-block-level" data-bind="value: Password" />
+				<input type="password" id="Password-input" placeholdertext=@Resources.Password class="input-block-level" data-bind="value: Password, returnKey: SignIn" />
 			</div>
 			
 			<div id="Signin-error" 
