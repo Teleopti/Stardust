@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         	var relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, ordinarySkills, timePeriod);
 
-			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, _stateHolder.Skills, relevantProjections, new SingleSkillLoadedDecider(), new SingleSkillCalculator(), useOccupancyAdjustment, _singleSkillDictionary);
+			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, _stateHolder.Skills, relevantProjections, new SingleSkillCalculator(), useOccupancyAdjustment, _singleSkillDictionary);
 
             schedulingResultService.SchedulingResult(timePeriod, toRemove, toAdd);
 

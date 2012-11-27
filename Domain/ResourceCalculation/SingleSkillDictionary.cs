@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -53,11 +54,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					var isSingleSkill = true;
 					foreach (var personSkill in personPeriod.PersonSkillCollection)
 					{
-						if(notSingleSkills.Contains(personSkill.Skill))
+						var skill = personSkill.Skill;
+						var skillType = skill.SkillType as SkillTypePhone;
+
+						if (skillType == null || notSingleSkills.Contains(skill))
 						{
 							isSingleSkill = false;
 							break;
-
 						}
 					}
 	

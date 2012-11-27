@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
 
@@ -23,8 +25,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IPersonSkill _personSkill1;
 		private IPersonSkill _personSkill2;
 		private IPersonSkill _personSkill3;
-		private ISkill _skill1;
-		private ISkill _skill2;
+		private ISkill _phoneSkill1;
+		private ISkill _phoneSkill2;
+		private ISkill _mailSkill;
 
 		[SetUp]
 		public void Setup()
@@ -41,8 +44,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_personSkill1 = _mock.StrictMock<IPersonSkill>();
 			_personSkill2 = _mock.StrictMock<IPersonSkill>();
 			_personSkill3 = _mock.StrictMock<IPersonSkill>();
-			_skill1 = _mock.StrictMock<ISkill>();
-			_skill2 = _mock.StrictMock<ISkill>();
+			
+			var skillTypePhone = new SkillTypePhone(new Description(), new ForecastSource());
+			_phoneSkill1 = SkillFactory.CreateSkill("PhoneSkill1", skillTypePhone, 15);
+			_phoneSkill2 = SkillFactory.CreateSkill("PhoneSkill2", skillTypePhone, 15);
+
+			var skillTypeEmail = new SkillTypeEmail(new Description(), new ForecastSource());
+			_mailSkill = SkillFactory.CreateSkill("MailSkill", skillTypeEmail, 15);
 		}
 
 		[Test]
@@ -65,8 +73,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			{
 				Expect.Call(_person1.Period(_period.StartDate)).Return(_personPeriod1);
 				Expect.Call(_personPeriod1.PersonSkillCollection).Return(_personSkills1).Repeat.Twice();
-				Expect.Call(_personSkill1.Skill).Return(_skill1).Repeat.Twice();
-				Expect.Call(_personSkill2.Skill).Return(_skill2).Repeat.Twice();
+				Expect.Call(_personSkill1.Skill).Return(_phoneSkill1).Repeat.Twice();
+				Expect.Call(_personSkill2.Skill).Return(_phoneSkill2).Repeat.Twice();
 			}
 
 			using (_mock.Playback())
@@ -95,8 +103,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_personPeriod1.PersonSkillCollection).Return(_personSkills1).Repeat.AtLeastOnce();
 				Expect.Call(_personPeriod2.PersonSkillCollection).Return(_personSkills2).Repeat.AtLeastOnce();
 
-				Expect.Call(_personSkill1.Skill).Return(_skill1).Repeat.AtLeastOnce();
-				Expect.Call(_personSkill2.Skill).Return(_skill1).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill1.Skill).Return(_phoneSkill1).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill2.Skill).Return(_phoneSkill1).Repeat.AtLeastOnce();
 			}
 
 			using (_mock.Playback())
@@ -133,9 +141,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_personPeriod2.PersonSkillCollection).Return(_personSkills2).Repeat.AtLeastOnce();
 				Expect.Call(_personPeriod3.PersonSkillCollection).Return(_personSkills3).Repeat.AtLeastOnce();
 
-				Expect.Call(_personSkill1.Skill).Return(_skill1).Repeat.AtLeastOnce();
-				Expect.Call(_personSkill2.Skill).Return(_skill1).Repeat.AtLeastOnce();
-				Expect.Call(_personSkill3.Skill).Return(_skill2).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill1.Skill).Return(_phoneSkill1).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill2.Skill).Return(_phoneSkill1).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill3.Skill).Return(_phoneSkill2).Repeat.AtLeastOnce();
 			}
 
 			using (_mock.Playback())
@@ -148,6 +156,42 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Assert.IsTrue(person1Day1);
 				Assert.IsFalse(person1Day2);
 				Assert.IsTrue(person2Day1);
+				Assert.IsFalse(person2Day2);
+			}
+		}
+
+		[Test]
+		public void ShouldReturnFalseWhenSkillTypeIsNotPhone()
+		{
+			_persons = new List<IPerson> { _person1, _person2 };
+			_period = new DateOnlyPeriod(new DateOnly(2012, 1, 1), new DateOnly(2012, 1, 2));
+			_personSkills1 = new List<IPersonSkill> { _personSkill1 };
+			_personSkills2 = new List<IPersonSkill> { _personSkill2 };
+
+			using (_mock.Record())
+			{
+				Expect.Call(_person1.Period(_period.DayCollection()[0])).Return(_personPeriod1).Repeat.Twice();
+				Expect.Call(_person2.Period(_period.DayCollection()[0])).Return(_personPeriod2).Repeat.Twice();
+				Expect.Call(_person1.Period(_period.DayCollection()[1])).Return(_personPeriod1).Repeat.Twice();
+				Expect.Call(_person2.Period(_period.DayCollection()[1])).Return(_personPeriod2).Repeat.Twice();
+
+				Expect.Call(_personPeriod1.PersonSkillCollection).Return(_personSkills1).Repeat.AtLeastOnce();
+				Expect.Call(_personPeriod2.PersonSkillCollection).Return(_personSkills2).Repeat.AtLeastOnce();
+
+				Expect.Call(_personSkill1.Skill).Return(_phoneSkill1).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill2.Skill).Return(_mailSkill).Repeat.AtLeastOnce();
+			}
+
+			using (_mock.Playback())
+			{
+				_singleSkillDictionary.Create(_persons, _period);
+				var person1Day1 = _singleSkillDictionary.IsSingleSkill(_person1, _period.DayCollection()[0]);
+				var person1Day2 = _singleSkillDictionary.IsSingleSkill(_person1, _period.DayCollection()[1]);
+				var person2Day1 = _singleSkillDictionary.IsSingleSkill(_person2, _period.DayCollection()[0]);
+				var person2Day2 = _singleSkillDictionary.IsSingleSkill(_person2, _period.DayCollection()[1]);
+				Assert.IsTrue(person1Day1);
+				Assert.IsTrue(person1Day2);
+				Assert.IsFalse(person2Day1);
 				Assert.IsFalse(person2Day2);
 			}
 		}

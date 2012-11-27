@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         private readonly ISkillSkillStaffPeriodExtendedDictionary _relevantSkillStaffPeriods;
         private readonly IList<ISkill> _allSkills;
         private readonly IList<IVisualLayerCollection> _relevantProjections;
-    	private readonly ISingleSkillLoadedDecider _singleSkillLoadedDecider;
     	private readonly ISingleSkillCalculator _singleSkillCalculator;
     	private readonly bool _useOccupancyAdjustment;
     	private readonly ISingleSkillDictionary _singleSkillDictionary;
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public SchedulingResultService(ISchedulingResultStateHolder stateHolder, 
 			IList<ISkill> allSkills,
-			ISingleSkillLoadedDecider singleSkillLoadedDecider,
 			ISingleSkillCalculator singleSkillCalculator,
 			bool useOccupancyAdjustment,
 			ISingleSkillDictionary singleSkillDictionary)
@@ -27,7 +25,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             _relevantSkillStaffPeriods = stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
             _relevantProjections = createRelevantProjectionList(stateHolder.Schedules);
             _allSkills = allSkills;
-			_singleSkillLoadedDecider = singleSkillLoadedDecider;
 			_singleSkillCalculator = singleSkillCalculator;
 			_singleSkillDictionary = singleSkillDictionary;
         }
@@ -36,7 +33,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         public SchedulingResultService(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, 
 			IList<ISkill> allSkills, 
 			IList<IVisualLayerCollection> relevantProjections,
-			ISingleSkillLoadedDecider singleSkillLoadedDecider,
 			ISingleSkillCalculator singleSkillCalculator,
 			bool useOccupancyAdjustment,
 			ISingleSkillDictionary singleSkillDictionary)
@@ -44,7 +40,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             _relevantSkillStaffPeriods = relevantSkillStaffPeriods;
             _allSkills = allSkills;
             _relevantProjections = relevantProjections;
-        	_singleSkillLoadedDecider = singleSkillLoadedDecider;
         	_singleSkillCalculator = singleSkillCalculator;
         	_useOccupancyAdjustment = useOccupancyAdjustment;
         	_singleSkillDictionary = singleSkillDictionary;

@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _skillStaffPeriods = SkillDayFactory.CreateSkillDaysForActivityDividerTest(_personAssignmentListContainer.ContainedSkills);
 			_target = new SchedulingResultService(_skillStaffPeriods, 
 				_personAssignmentListContainer.AllSkills, 
-				_personAssignmentListContainer.TestVisualLayerCollection(), 
-				new SingleSkillLoadedDecider(), 
+				_personAssignmentListContainer.TestVisualLayerCollection(),  
 				new SingleSkillCalculator(), 
 				false,
 				new SingleSkillDictionary());
@@ -93,7 +92,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         	_target = new SchedulingResultService(_skillStaffPeriods,
         	                                      _personAssignmentListContainer.AllSkills,
         	                                      new List<IVisualLayerCollection>(),
-        	                                      new SingleSkillLoadedDecider(),
         	                                      new SingleSkillCalculator(),
         	                                      false,
 												  new SingleSkillDictionary());
@@ -115,7 +113,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target = new SchedulingResultService(_skillStaffPeriods,
 				_personAssignmentListContainer.AllSkills,
 				_personAssignmentListContainer.TestVisualLayerCollection(),
-				new SingleSkillLoadedDecider(),
 				new SingleSkillCalculator(),
 				false,
 				new SingleSkillDictionary());
