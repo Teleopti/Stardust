@@ -190,6 +190,7 @@ Scenario: One possible shift to trade with because shift trade periods and skill
 	When I navigate to shift trade page
 	Then I should have one possible shift to trade with
 
+@ignore
 Scenario: View shift trade request details
 	Given I have the role 'Full access to mytime'
 	And I have an existing shift trade request
@@ -197,22 +198,40 @@ Scenario: View shift trade request details
 	When I click on the request
 	Then I should see the shift trade request form 
 	
+@ignore
 Scenario: Approve shift trade request
 	Given I have the role 'Full access to mytime'
-	And I have an existing shift trade request
+	And I have created a shift trade request
 	And I am viewing requests
 	When I click on the request
 	And I click the Approve button on the shift request
 	Then I should not see the shift trade request in the list
 
+@ignore
 Scenario: Deny shift trade request
 	Given I have the role 'Full access to mytime'
-	And I have an existing shift trade request
+	And I have recieved a shift trade request
 	And I am viewing requests
 	When I click on the request
 	And I click the Deny button on the shift request
 	Then I should not see the shift trade request in the list
 
+@ignore
+Scenario: Delete created shift trade request
+	Given I have the role 'Full access to mytime'
+	And I have created a shift trade request
+	And I am viewing requests
+	And I click the shift trade request's delete button
+	Then I should not see the shift trade request in the list
+
+@ignore
+Scenario: Should not be able to delete shift trade requests from others
+	Given I am an agent
+	And I have recieved a shift trade request
+	And I am viewing requests
+	Then I should not see a deletebutton on the request
+
+@ignore
 Scenario: Approve shift trade on same day request should update shift in schedule
 	Given I have the role 'Full access to mytime'
 	And Current time is '2012-01-14'
