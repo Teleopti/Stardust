@@ -6,26 +6,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
 	public interface ISingleSkillDictionary
 	{
-		void Create();
+		void Create(IList<IPerson> persons, DateOnlyPeriod period);
 		bool IsSingleSkill(IPerson person, DateOnly dateOnly);
 	}
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
 	public class SingleSkillDictionary : ISingleSkillDictionary
 	{
-		private readonly IList<IPerson> _persons;
+		private  IList<IPerson> _persons;
 		private DateOnlyPeriod _period;
-		private readonly IDictionary<KeyValuePair<IPerson, DateOnly>, bool> _dictionary; 
+		private readonly IDictionary<KeyValuePair<IPerson, DateOnly>, bool> _dictionary = new Dictionary<KeyValuePair<IPerson, DateOnly>, bool>(); 
  
-		public SingleSkillDictionary(IList<IPerson> persons, DateOnlyPeriod period)
+		public void Create(IList<IPerson> persons, DateOnlyPeriod period)
 		{
-			_dictionary = new Dictionary<KeyValuePair<IPerson, DateOnly>, bool>();
 			_persons = persons;
 			_period = period;
-		}
-
-		public void Create()
-		{
 			_dictionary.Clear();
 
 			foreach (var date in _period.DayCollection())

@@ -13,13 +13,15 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
     	private readonly ISingleSkillLoadedDecider _singleSkillLoadedDecider;
     	private readonly ISingleSkillCalculator _singleSkillCalculator;
     	private readonly bool _useOccupancyAdjustment;
+    	private readonly ISingleSkillDictionary _singleSkillDictionary;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public SchedulingResultService(ISchedulingResultStateHolder stateHolder, 
 			IList<ISkill> allSkills,
 			ISingleSkillLoadedDecider singleSkillLoadedDecider,
 			ISingleSkillCalculator singleSkillCalculator,
-			bool useOccupancyAdjustment)
+			bool useOccupancyAdjustment,
+			ISingleSkillDictionary singleSkillDictionary)
         {
             _useOccupancyAdjustment = useOccupancyAdjustment;
             _relevantSkillStaffPeriods = stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
@@ -27,6 +29,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             _allSkills = allSkills;
 			_singleSkillLoadedDecider = singleSkillLoadedDecider;
 			_singleSkillCalculator = singleSkillCalculator;
+			_singleSkillDictionary = singleSkillDictionary;
         }
 
        
@@ -35,7 +38,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			IList<IVisualLayerCollection> relevantProjections,
 			ISingleSkillLoadedDecider singleSkillLoadedDecider,
 			ISingleSkillCalculator singleSkillCalculator,
-			bool useOccupancyAdjustment)
+			bool useOccupancyAdjustment,
+			ISingleSkillDictionary singleSkillDictionary)
         {
             _relevantSkillStaffPeriods = relevantSkillStaffPeriods;
             _allSkills = allSkills;
@@ -43,6 +47,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         	_singleSkillLoadedDecider = singleSkillLoadedDecider;
         	_singleSkillCalculator = singleSkillCalculator;
         	_useOccupancyAdjustment = useOccupancyAdjustment;
+        	_singleSkillDictionary = singleSkillDictionary;
         }
 
 
@@ -93,16 +98,63 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             var datePeriod = new DateOnlyPeriod(period.StartDate.AddDays(-1),period.EndDate.AddDays(1));
             IAffectedPersonSkillService personSkillService = new AffectedPersonSkillService(datePeriod, _allSkills);
 
-			if(_singleSkillLoadedDecider.IsSingleSkill(_allSkills))
+        	var isAllSingleSkill = toRemove.Count > 0 || toAdd.Count > 0;
+
+			if (isAllSingleSkill)
 			{
-				_singleSkillCalculator.Calculate(_relevantProjections, _relevantSkillStaffPeriods, toRemove, toAdd);
+				foreach (var visualLayerCollection in toRemove)
+				{
+					var dateTimePeriod = visualLayerCollection.Period();
+					if (dateTimePeriod != null)
+					{
+						var person = visualLayerCollection.Person;
+						var dateOnly = dateTimePeriod.Value.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()).StartDate;
+						if (!_singleSkillDictionary.IsSingleSkill(person, dateOnly))
+						{
+							isAllSingleSkill = false;
+							break;
+						}
+					}
+				}
 			}
+
+        	if(isAllSingleSkill)
+        	{
+				foreach (var visualLayerCollection in toAdd)
+				{
+					var dateTimePeriod = visualLayerCollection.Period();
+					if (dateTimePeriod != null)
+					{
+						var person = visualLayerCollection.Person;
+						var dateOnly = dateTimePeriod.Value.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()).StartDate;
+						if (!_singleSkillDictionary.IsSingleSkill(person, dateOnly))
+						{
+							isAllSingleSkill = false;
+							break;
+						}
+					}
+				}	
+        	}
+
+
+			if (isAllSingleSkill)
+				_singleSkillCalculator.Calculate(_relevantProjections, _relevantSkillStaffPeriods, toRemove, toAdd);
 			else
 			{
-				var rc = new ScheduleResourceOptimizer(_relevantProjections, _relevantSkillStaffPeriods,
-																		 personSkillService, emptyCache, new ActivityDivider());
-				rc.Optimize(periodToRecalculate, _useOccupancyAdjustment);
+				var rc = new ScheduleResourceOptimizer(_relevantProjections, _relevantSkillStaffPeriods, personSkillService, emptyCache, new ActivityDivider());
+				rc.Optimize(periodToRecalculate, _useOccupancyAdjustment);	
 			}
+
+			//if(_singleSkillLoadedDecider.IsSingleSkill(_allSkills))
+			//{
+			//    _singleSkillCalculator.Calculate(_relevantProjections, _relevantSkillStaffPeriods, toRemove, toAdd);	
+			//}
+			//else
+			//{
+			//    var rc = new ScheduleResourceOptimizer(_relevantProjections, _relevantSkillStaffPeriods,
+			//                                                             personSkillService, emptyCache, new ActivityDivider());
+			//    rc.Optimize(periodToRecalculate, _useOccupancyAdjustment);	
+			//}
             
 
             return _relevantSkillStaffPeriods;

@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _occupiedSeatCalculator = _mocks.StrictMock<IOccupiedSeatCalculator>();
             _target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,
                                                      new NonBlendSkillCalculator(
-                                                         new NonBlendSkillImpactOnPeriodForProjection()));
+                                                         new NonBlendSkillImpactOnPeriodForProjection()),
+														 new SingleSkillDictionary());
         }
 
         private void expectsForVerifyCalculateDay(ISkill skill1, ISkillStaffPeriodHolder skillStaffPeriodHolder,

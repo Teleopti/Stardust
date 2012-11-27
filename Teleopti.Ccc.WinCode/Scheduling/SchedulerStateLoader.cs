@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             using (PerformanceOutput.ForOperation("Loading schedule data"))
             {
                 var service = 
-                    new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, new SingleSkillLoadedDecider(), new SingleSkillCalculator(), false);
+                    new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, new SingleSkillLoadedDecider(), new SingleSkillCalculator(), false, new SingleSkillDictionary());
                 service.SchedulingResult(_schedulerState.RequestedPeriod.Period(), new List<IVisualLayerCollection>(), new List<IVisualLayerCollection>());
             }
         }

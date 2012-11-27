@@ -4024,10 +4024,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                 initMessageBroker(period.LoadedPeriod());
             }
 
-			_singleSkillDictionary = new SingleSkillDictionary(SchedulerState.SchedulingResultState.PersonsInOrganization.ToList(), SchedulerState.RequestedPeriod.DateOnlyPeriod);
-			_singleSkillDictionary.Create();
+        	_singleSkillDictionary = _container.Resolve<ISingleSkillDictionary>();
+			_singleSkillDictionary.Create(SchedulerState.SchedulingResultState.PersonsInOrganization.ToList(), SchedulerState.RequestedPeriod.DateOnlyPeriod);
 
-            _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState);
+            _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _singleSkillDictionary);
             _scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
 
             _groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container);

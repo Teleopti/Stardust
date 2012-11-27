@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mock = new MockRepository();
 			_person1 = _mock.StrictMock<IPerson>();
 			_person2 = _mock.StrictMock<IPerson>();
-			_persons = new List<IPerson>{_person1, _person2};
-			_period = new DateOnlyPeriod(new DateOnly(2012,1,1), new DateOnly(2012,1,2));
-			_singleSkillDictionary = new SingleSkillDictionary(_persons, _period);
+			_persons = new List<IPerson> { _person1, _person2 };
+			_period = new DateOnlyPeriod(new DateOnly(2012, 1, 1), new DateOnly(2012, 1, 2));
+			_singleSkillDictionary = new SingleSkillDictionary();
 			_personPeriod1 = _mock.StrictMock<IPersonPeriod>();
 			_personPeriod2 = _mock.StrictMock<IPersonPeriod>();
 			_personPeriod3 = _mock.StrictMock<IPersonPeriod>();
@@ -57,12 +57,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldReturnFalseIfPersonIsNotSingleSkilled()
 		{
-			_persons = new List<IPerson>{_person1};
+			_persons = new List<IPerson> { _person1 };
 			_period = new DateOnlyPeriod(new DateOnly(2012, 1, 1), new DateOnly(2012, 1, 1));
-			_singleSkillDictionary = new SingleSkillDictionary(_persons, _period);
-			_personSkills1 = new List<IPersonSkill>{_personSkill1, _personSkill2};
+			_personSkills1 = new List<IPersonSkill> { _personSkill1, _personSkill2 };
 
-			using(_mock.Record())
+			using (_mock.Record())
 			{
 				Expect.Call(_person1.Period(_period.StartDate)).Return(_personPeriod1);
 				Expect.Call(_personPeriod1.PersonSkillCollection).Return(_personSkills1).Repeat.Twice();
@@ -70,9 +69,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_personSkill2.Skill).Return(_skill2).Repeat.Twice();
 			}
 
-			using(_mock.Playback())
+			using (_mock.Playback())
 			{
-				_singleSkillDictionary.Create();
+				_singleSkillDictionary.Create(_persons, _period);
 				var state = _singleSkillDictionary.IsSingleSkill(_person1, _period.StartDate);
 				Assert.IsFalse(state);
 			}
@@ -83,7 +82,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_persons = new List<IPerson> { _person1, _person2 };
 			_period = new DateOnlyPeriod(new DateOnly(2012, 1, 1), new DateOnly(2012, 1, 2));
-			_singleSkillDictionary = new SingleSkillDictionary(_persons, _period);
 			_personSkills1 = new List<IPersonSkill> { _personSkill1 };
 			_personSkills2 = new List<IPersonSkill> { _personSkill2 };
 
@@ -103,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mock.Playback())
 			{
-				_singleSkillDictionary.Create();
+				_singleSkillDictionary.Create(_persons, _period);
 				var person1Day1 = _singleSkillDictionary.IsSingleSkill(_person1, _period.DayCollection()[0]);
 				var person1Day2 = _singleSkillDictionary.IsSingleSkill(_person1, _period.DayCollection()[1]);
 				var person2Day1 = _singleSkillDictionary.IsSingleSkill(_person2, _period.DayCollection()[0]);
@@ -120,14 +118,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_persons = new List<IPerson> { _person1, _person2 };
 			_period = new DateOnlyPeriod(new DateOnly(2012, 1, 1), new DateOnly(2012, 1, 2));
-			_singleSkillDictionary = new SingleSkillDictionary(_persons, _period);
 			_personSkills1 = new List<IPersonSkill> { _personSkill1 };
 			_personSkills2 = new List<IPersonSkill> { _personSkill2 };
 			_personSkills3 = new List<IPersonSkill> { _personSkill2, _personSkill3 };
 
 			using (_mock.Record())
 			{
-				Expect.Call(_person1.Period(_period.DayCollection()[0])).Return(_personPeriod1).Repeat.Twice(); 
+				Expect.Call(_person1.Period(_period.DayCollection()[0])).Return(_personPeriod1).Repeat.Twice();
 				Expect.Call(_person2.Period(_period.DayCollection()[0])).Return(_personPeriod2).Repeat.Twice();
 				Expect.Call(_person1.Period(_period.DayCollection()[1])).Return(_personPeriod1).Repeat.Twice();
 				Expect.Call(_person2.Period(_period.DayCollection()[1])).Return(_personPeriod3);
@@ -143,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mock.Playback())
 			{
-				_singleSkillDictionary.Create();
+				_singleSkillDictionary.Create(_persons, _period);
 				var person1Day1 = _singleSkillDictionary.IsSingleSkill(_person1, _period.DayCollection()[0]);
 				var person1Day2 = _singleSkillDictionary.IsSingleSkill(_person1, _period.DayCollection()[1]);
 				var person2Day1 = _singleSkillDictionary.IsSingleSkill(_person2, _period.DayCollection()[0]);

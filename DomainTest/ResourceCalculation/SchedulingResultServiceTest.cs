@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_personAssignmentListContainer.TestVisualLayerCollection(), 
 				new SingleSkillLoadedDecider(), 
 				new SingleSkillCalculator(), 
-				false);
+				false,
+				new SingleSkillDictionary());
         }
 
         #endregion
@@ -94,7 +95,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         	                                      new List<IVisualLayerCollection>(),
         	                                      new SingleSkillLoadedDecider(),
         	                                      new SingleSkillCalculator(),
-        	                                      false);
+        	                                      false,
+												  new SingleSkillDictionary());
             Assert.IsNotNull(_target);
 
             ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult();
@@ -115,7 +117,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_personAssignmentListContainer.TestVisualLayerCollection(),
 				new SingleSkillLoadedDecider(),
 				new SingleSkillCalculator(),
-				false);
+				false,
+				new SingleSkillDictionary());
 
             ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult();
             Assert.AreEqual(outDic, _skillStaffPeriods);

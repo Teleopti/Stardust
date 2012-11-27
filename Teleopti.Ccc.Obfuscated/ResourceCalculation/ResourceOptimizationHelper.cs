@@ -16,14 +16,17 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         private readonly ISchedulingResultStateHolder _stateHolder;
     	private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
     	private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
+    	private readonly ISingleSkillDictionary _singleSkillDictionary;
 
     	public ResourceOptimizationHelper(ISchedulingResultStateHolder stateHolder, 
             IOccupiedSeatCalculator occupiedSeatCalculator, 
-            INonBlendSkillCalculator nonBlendSkillCalculator)
+            INonBlendSkillCalculator nonBlendSkillCalculator,
+			ISingleSkillDictionary singleSkillDictionary)
 		{
 			_stateHolder = stateHolder;
 			_occupiedSeatCalculator = occupiedSeatCalculator;
     		_nonBlendSkillCalculator = nonBlendSkillCalculator;
+    		_singleSkillDictionary = singleSkillDictionary;
 		}
 
         public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
@@ -51,10 +54,43 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 var extractor = new ScheduleProjectionExtractor();
                 IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
 
-            	var singleSkillDecider = new SingleSkillLoadedDecider();
-				if(!singleSkillDecider.IsSingleSkill(_stateHolder.Skills) || (toRemove.Count == 0 && toAdd.Count == 0))
+				var isAllSingleSkill = toRemove.Count > 0 || toAdd.Count > 0;
+
+				if (isAllSingleSkill)
+				{
+					foreach (var scheduleDay in toRemove)
+					{
+						var person = scheduleDay.Person;
+						var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
+						if (!_singleSkillDictionary.IsSingleSkill(person, dateOnly))
+						{
+							isAllSingleSkill = false;
+							break;
+						}
+					}
+				}
+
+				if (isAllSingleSkill)
+				{
+					foreach (var scheduleDay in toAdd)
+					{
+						var person = scheduleDay.Person;
+						var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
+						if (!_singleSkillDictionary.IsSingleSkill(person, dateOnly))
+						{
+							isAllSingleSkill = false;
+							break;
+						}
+					}
+				}
+
+				if (!isAllSingleSkill)
 					relevantProjections = extractor.CreateRelevantProjectionWithScheduleList(_stateHolder.Schedules,
-                                                                                         TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
+																						 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
+				//var singleSkillDecider = new SingleSkillLoadedDecider();
+				//if(!singleSkillDecider.IsSingleSkill(_stateHolder.Skills) || (toRemove.Count == 0 && toAdd.Count == 0))
+				//    relevantProjections = extractor.CreateRelevantProjectionWithScheduleList(_stateHolder.Schedules,
+				//                                                                         TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
 
 				IList<IVisualLayerCollection> addedVisualLayerCollections = new List<IVisualLayerCollection>();
 				foreach (IScheduleDay addedSchedule in toAdd)
@@ -96,7 +132,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         	var relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, ordinarySkills, timePeriod);
 
-			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, _stateHolder.Skills, relevantProjections, new SingleSkillLoadedDecider(), new SingleSkillCalculator(), useOccupancyAdjustment);
+			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, _stateHolder.Skills, relevantProjections, new SingleSkillLoadedDecider(), new SingleSkillCalculator(), useOccupancyAdjustment, _singleSkillDictionary);
 
             schedulingResultService.SchedulingResult(timePeriod, toRemove, toAdd);
 
