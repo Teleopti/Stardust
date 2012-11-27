@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShoudSeeAnIndicationThatIHaveAnUnreadMessage()
 		{
 			EventualAssert.That(() =>
-				IsDisplayed(Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false))),
+				IsDisplayed(Browser.Current.Div(QuicklyFind.ByClass("asm-info-canvas-column-messages"))),
 				Is.True);
 		}
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShoudNotSeeAnIndicationThatIHaveAnUnreadMessage()
 		{
 			EventualAssert.That(() =>
-				IsDisplayed(Browser.Current.Div(Find.ByClass("asm-info-canvas-column-messages", false))),
+				IsDisplayed(Browser.Current.Div(QuicklyFind.ByClass("asm-info-canvas-column-messages"))),
 				Is.False);
 		}
 
