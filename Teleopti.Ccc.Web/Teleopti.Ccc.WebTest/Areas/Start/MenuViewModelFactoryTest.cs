@@ -46,17 +46,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Start
 			result.Single().Area.Should().Be.EqualTo("MobileReports");
 		}
 
-		[Test]
-		public void ShouldCreateModelForUserWithAccessOnlyToTeam()
-		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TeamWeb)).Return(true);
-			var target = new MenuViewModelFactory(permissionProvider);
-
-			var result = target.CreateMenyViewModel();
-
-			result.Single().Area.Should().Be.EqualTo("Team");
-		}
-
 	}
 }

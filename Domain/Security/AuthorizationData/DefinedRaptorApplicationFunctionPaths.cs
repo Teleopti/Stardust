@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
         public const string OpenAgentPortal = "Raptor/AgentPortal";
 		public const string MyTimeWeb = "Raptor/MyTimeWeb";
 		public const string Anywhere = "Raptor/Anywhere";
-		public const string TeamWeb = "Raptor/TeamWeb";
 		
 
         // Global
