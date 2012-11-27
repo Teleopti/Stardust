@@ -598,7 +598,7 @@
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Settings.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Navigation.js" />
     <Content Include="Areas\Start\Content\Scripts\knockout.bindings.js" />
-    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.AuthenticationNew.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.selectbox.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.connector.css" />
@@ -714,7 +714,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.splitbutton.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.calendarselectable.js" />
-    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Common.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Portal.js" />

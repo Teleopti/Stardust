@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Web.Mvc;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
@@ -28,8 +29,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void DefaultActionShouldRenderDefaultView()
 		{
 			var target = new AuthenticationController(null, null);
-			var result = target.SignIn();
-			result.ViewName.Should().Be.EqualTo(string.Empty);
+			var result = target.Index() as RedirectToRouteResult;
+			result.RouteName.Should().Be.EqualTo(string.Empty);
 		}
 
 	}
