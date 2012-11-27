@@ -93,44 +93,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             var datePeriod = new DateOnlyPeriod(period.StartDate.AddDays(-1),period.EndDate.AddDays(1));
             IAffectedPersonSkillService personSkillService = new AffectedPersonSkillService(datePeriod, _allSkills);
 
-        	var isAllSingleSkill = toRemove.Count > 0 || toAdd.Count > 0;
-
-			if (isAllSingleSkill)
-			{
-				foreach (var visualLayerCollection in toRemove)
-				{
-					var dateTimePeriod = visualLayerCollection.Period();
-					if (dateTimePeriod != null)
-					{
-						var person = visualLayerCollection.Person;
-						var dateOnly = dateTimePeriod.Value.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()).StartDate;
-						if (!_singleSkillDictionary.IsSingleSkill(person, dateOnly))
-						{
-							isAllSingleSkill = false;
-							break;
-						}
-					}
-				}
-			}
-
-        	if(isAllSingleSkill)
-        	{
-				foreach (var visualLayerCollection in toAdd)
-				{
-					var dateTimePeriod = visualLayerCollection.Period();
-					if (dateTimePeriod != null)
-					{
-						var person = visualLayerCollection.Person;
-						var dateOnly = dateTimePeriod.Value.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()).StartDate;
-						if (!_singleSkillDictionary.IsSingleSkill(person, dateOnly))
-						{
-							isAllSingleSkill = false;
-							break;
-						}
-					}
-				}	
-        	}
-
+        	var isAllSingleSkill = UseSingleSkillCalculations(toRemove, toAdd);
 
 			if (isAllSingleSkill)
 				_singleSkillCalculator.Calculate(_relevantProjections, _relevantSkillStaffPeriods, toRemove, toAdd);
@@ -160,5 +123,38 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             var extractor = new ScheduleProjectionExtractor();
             return extractor.CreateRelevantProjectionList(scheduleDictionary);
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool UseSingleSkillCalculations(IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
+		{
+			var isAllSingleSkill = toRemove.Count > 0 || toAdd.Count > 0;
+
+			if (isAllSingleSkill)
+				isAllSingleSkill = AllIsSingleSkill(toRemove);
+
+			if (isAllSingleSkill)
+				isAllSingleSkill = AllIsSingleSkill(toAdd);
+
+			return isAllSingleSkill;
+		}
+
+		private bool AllIsSingleSkill(IEnumerable<IVisualLayerCollection> visualLayerCollections)
+		{
+			foreach (var visualLayerCollection in visualLayerCollections)
+			{
+				var dateTimePeriod = visualLayerCollection.Period();
+				if (dateTimePeriod != null)
+				{
+					var person = visualLayerCollection.Person;
+					var dateOnly = dateTimePeriod.Value.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()).StartDate;
+					if (!_singleSkillDictionary.IsSingleSkill(person, dateOnly))
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
     }
 }
