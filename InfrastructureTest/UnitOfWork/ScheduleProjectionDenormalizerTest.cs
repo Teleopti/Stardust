@@ -1,9 +1,10 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -71,6 +72,46 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			var person = PersonFactory.CreatePerson();
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(person, DomainUpdateType.Insert);
+
+			var runSql = mocks.DynamicMock<IRunSql>();
+
+			using (mocks.Record())
+			{
+				Expect.Call(sendDenormalizeNotification.Notify).Repeat.Never();
+			}
+			using (mocks.Playback())
+			{
+				target.Execute(runSql, new[] { rootChangeInfo });
+			}
+		}
+
+		[Test]
+		public void ShouldNotSendNotificationForInternalNote()
+		{
+			var person = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var note = new Note(person,DateOnly.Today,scenario,"my note");
+			IRootChangeInfo rootChangeInfo = new RootChangeInfo(note, DomainUpdateType.Insert);
+
+			var runSql = mocks.DynamicMock<IRunSql>();
+
+			using (mocks.Record())
+			{
+				Expect.Call(sendDenormalizeNotification.Notify).Repeat.Never();
+			}
+			using (mocks.Playback())
+			{
+				target.Execute(runSql, new[] { rootChangeInfo });
+			}
+		}
+
+		[Test]
+		public void ShouldNotSendNotificationForPublicNote()
+		{
+			var person = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var note = new PublicNote(person, DateOnly.Today, scenario, "my note");
+			IRootChangeInfo rootChangeInfo = new RootChangeInfo(note, DomainUpdateType.Insert);
 
 			var runSql = mocks.DynamicMock<IRunSql>();
 
