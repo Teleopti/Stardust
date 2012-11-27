@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheStudentAvailabilityInTheCalendar()
 		{
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			_page.CalendarCellForDate(date).WaitUntil(p => p.ClassName.Contains("unvalidated"), 500);
+			EventualAssert.That(() => _page.CalendarCellForDate(date).ClassName, Is.StringContaining("unvalidated"));
 			cellShouldContainInputValues(date);
 			Navigation.GotoStudentAvailability(date);
 			cellShouldContainInputValues(date);
