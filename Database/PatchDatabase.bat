@@ -91,7 +91,7 @@ goto :eof
 if %EndUserSQL% equ 1 (
 SET /P SQLAppLogin=SQL Login: 
 SET /P SQLAppPwd=SQL password: 
-SET Conn3=-R -L%SQLAppLogin%:%SQLAppPwd%
+SET Conn3=-R -L"%SQLAppLogin%:%SQLAppPwd%"
 ) else (
 SET /P WinAppLogin=Supply an existing Windows group in SQL Server: 
 SET Conn3=-R -W"%WinAppLogin%"
