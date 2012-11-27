@@ -46,13 +46,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, "wrong password");
 		}
 
-		[When(@"I select a business unit")]
-		public void WhenISelectABusinessUnit()
-		{
-			Pages.Pages.CurrentSignInPage.SelectFirstBusinessUnit();
-			Pages.Pages.CurrentSignInPage.ClickBusinessUnitOkButton();
-		}
-
 		[When(@"I select business unit '(.*)'")]
 		public void WhenISelectBusinessUnit(string businessUnit)
 		{

@@ -5,7 +5,6 @@ using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -15,38 +14,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	[Binding]
 	public class SharedSignInStepDefinitions
 	{
-
-
-		[Given(@"I dont have permission to sign in")]
-		public void GivenIDontHavePermissionToSignIn()
+		[Given(@"I am a user with multiple business units")]
+		public void GivenIAmAUserWithMultipleBusinessUnits()
 		{
-			UserFactory.User().Setup(new UserNoPermission());
+			UserFactory.User().Setup(new Agent());
+			UserFactory.User().Setup(new AgentSecondBusinessUnit());
 		}
-
-		[Given(@"I am a (.*)user with multiple business units")]
-		public void GivenIAmAUserWithMultipleBusinessUnits(string mobile)
-		{
-			if (mobile.Contains("mobile"))
-			{
-				UserFactory.User().Setup(new Supervisor());
-				UserFactory.User().Setup(new SupervisorSecondBusinessUnit());
-			}
-			else
-			{
-				UserFactory.User().Setup(new Agent());
-				UserFactory.User().Setup(new AgentSecondBusinessUnit());
-			}
-		}
-
-		[Given(@"I am a (.*)user with a single business unit")]
-		public void GivenIAmAUserWithASingleBusinessUnit(string mobile)
-		{
-			if (mobile.Contains("mobile"))
-				UserFactory.User().Setup(new Supervisor());
-			else
-				UserFactory.User().Setup(new Agent());
-		}
-
 
 
 		[Then(@"I should see an error message ""(.*)""")]
@@ -57,7 +30,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		[Then(@"I should not be signed in")]
 		[Then(@"I should be signed out")]
-		[Then(@"I should see the login page")]
 		public void ThenIAmNotSignedIn()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);

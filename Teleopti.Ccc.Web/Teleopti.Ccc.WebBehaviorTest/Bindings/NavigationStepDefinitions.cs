@@ -134,13 +134,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoGlobalSignInPage();
 		}
 
-		[Given(@"I am viewing the mobile sign in page")]
-		public void GivenIAmAtTheMobileSignInPage()
-		{
-			UserFactory.User().MakeUser();
-			Navigation.GotoMobileReportsSignInPage(string.Empty);
-		}
-
 		[When(@"I navigate to the site's root")]
 		public void WhenINavigateToTheSiteSRoot()
 		{
@@ -161,14 +154,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().MakeUser();
 			Navigation.GotoMobileReports();
 		}
-
-		[When(@"I navigate to the site's root mobile signin page")]
-		public void WhenINavigateToTheSiteSRootMobileSigninPage()
-		{
-			UserFactory.User().MakeUser();
-			Navigation.GotoGlobalSignInPage();
-		}
-
-
 	}
 }
