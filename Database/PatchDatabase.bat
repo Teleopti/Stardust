@@ -47,10 +47,12 @@ IF ERRORLEVEL 2 SET /a AddSecurity=0
 
 if %AddSecurity% equ 1 (
 CHOICE /C yn /M "Will end users use SQL Login?"
-IF ERRORLEVEL 1 SET /a EndUserSQL=1
-IF ERRORLEVEL 2 SET /a EndUserSQL=0
-IF %AddSecurity% equ 1 Call :AddSecurity
+IF ERRORLEVEL 1 Call :AddSQLSecurity
+IF ERRORLEVEL 2 Call :AddWinSecurity
 )
+
+ECHO outside
+ECHO %Conn3%
 
 ::Patch DB
 ECHO "%ROOTDIR%\DBManager.exe" -S%MyServerInstance% -D%DATABASE% -O%DATABASETYPE% %Conn1% -T %Conn3%
@@ -87,17 +89,16 @@ SET Conn1=-U%SQLLogin% -P%SQLPwd%
 SET Conn2=-DU%SQLLogin% -DP%SQLPwd%
 goto :eof
 
-:AddSecurity
-if %EndUserSQL% equ 1 (
+:AddSQLSecurity
 SET /P SQLAppLogin=SQL Login: 
 SET /P SQLAppPwd=SQL password: 
 SET Conn3=-R -L"%SQLAppLogin%:%SQLAppPwd%"
-) else (
-SET /P WinAppLogin=Supply an existing Windows group in SQL Server: 
-SET Conn3=-R -W"%WinAppLogin%"
-)
 goto :eof
 
+:AddWinSecurity
+SET /P WinAppLogin=Supply an existing Windows group in SQL Server: 
+SET Conn3=-R -W"%WinAppLogin%"
+goto :eof
 
 :ERROR_Schema
 ECHO Error deploying Schema objects for database: %DATABASE%!!
