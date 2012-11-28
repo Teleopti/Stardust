@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public bool AccessToAsm { get; set; }
         public bool AccessToTextRequests { get; set; }
         public bool AccessToAbsenceRequests { get; set; }
+		public bool AccessToTeamLeaderTool { get; set; }
 
 		public RoleConfigurable()
 		{
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			AccessToAsm = true;
             AccessToTextRequests = true;
             AccessToAbsenceRequests = true;
+			AccessToTeamLeaderTool = false;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -61,6 +63,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
                 applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.TextRequests select f;
             if (!AccessToAbsenceRequests)
                 applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb select f;
+			if (!AccessToTeamLeaderTool)
+				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AdminWeb select f;
 
 			var role = ApplicationRoleFactory.CreateRole(Name, null);
 
