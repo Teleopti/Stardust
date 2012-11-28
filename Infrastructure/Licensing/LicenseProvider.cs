@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
         /// Created by: Klas
         /// Created date: 2008-12-03
         /// </remarks>
-        public static ILicenseActivator GetLicenseActivator(ILicenseService licenseService)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		public static ILicenseActivator GetLicenseActivator(ILicenseService licenseService)
         {
             if (licenseService == null) throw new ArgumentNullException("licenseService");
 
