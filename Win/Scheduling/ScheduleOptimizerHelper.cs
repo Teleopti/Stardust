@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+    	private readonly ISingleSkillDictionary _singleSkillDictionary;
 
         public ScheduleOptimizerHelper(ILifetimeScope container)
         {
@@ -53,6 +54,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
             _scheduleMatrixListCreator = _container.Resolve<IScheduleMatrixListCreator>();
             _groupPersonBuilderForOptimization = _container.Resolve<IGroupPersonBuilderForOptimization>();
+        	_singleSkillDictionary = _container.Resolve<ISingleSkillDictionary>();
         }
 
         #region Interface
@@ -84,7 +86,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                      scheduleService,
                                                                      optimizerPreferences,
                                                                      rollbackService,
-                                                                     SchedulingStateHolder);
+                                                                     SchedulingStateHolder,
+																	 _singleSkillDictionary);
 
             IList<IIntradayOptimizer2> optimizers = creator.Create();
             IScheduleOptimizationService service = new IntradayOptimizerContainer(optimizers);
@@ -120,7 +123,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                              scheduleService,
                                              optimizerPreferences,
                                              rollbackService,
-                                             SchedulingStateHolder);
+                                             SchedulingStateHolder,
+											 _singleSkillDictionary);
 
             IList<IMoveTimeOptimizer> optimizers = creator.Create();
             IScheduleOptimizationService service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);

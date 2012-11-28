@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly ISchedulePartModifyAndRollbackService _rollbackService;
     	private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+    	private ISingleSkillDictionary _singleSkillDictionary;
 
     	public IntradayOptimizer2Creator(
             IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -27,7 +29,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IScheduleService scheduleService,
             IOptimizationPreferences optimizerPreferences,
             ISchedulePartModifyAndRollbackService rollbackService,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			ISingleSkillDictionary singleSkillDictionary)
         {
             _scheduleMatrixContainerList = scheduleMatrixContainerList;
             _workShiftStateContainerList = workShiftContainerList;
@@ -36,6 +39,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         	_optimizerPreferences = optimizerPreferences;
             _rollbackService = rollbackService;
         	_schedulingResultStateHolder = schedulingResultStateHolder;
+    		_singleSkillDictionary = singleSkillDictionary;
         }
 
         /// <summary>
@@ -72,7 +76,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					new DeleteSchedulePartService(_schedulingResultStateHolder);
                 IResourceOptimizationHelper resourceOptimizationHelper =
 					new ResourceOptimizationHelper(_schedulingResultStateHolder,
-                                                   new OccupiedSeatCalculator(new SkillVisualLayerCollectionDictionaryCreator(), new SeatImpactOnPeriodForProjection()), nonBlendSkillCalculator);
+                                                   new OccupiedSeatCalculator(new SkillVisualLayerCollectionDictionaryCreator(), new SeatImpactOnPeriodForProjection()), nonBlendSkillCalculator, _singleSkillDictionary);
                 IRestrictionExtractor restrictionExtractor =
 					new RestrictionExtractor(_schedulingResultStateHolder);
                 IEffectiveRestrictionCreator effectiveRestrictionCreator =
