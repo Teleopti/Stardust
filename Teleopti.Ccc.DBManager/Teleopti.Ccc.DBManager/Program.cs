@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.DBManager
                 // hhmmss
                 Version version = Assembly.GetExecutingAssembly().GetName().Version;
                 string versionNumber = version.ToString();
+                bool SafeMode = true;
                 
                 logWrite("Teleopti Database Manager version " + versionNumber);
 
@@ -68,6 +69,14 @@ namespace Teleopti.Ccc.DBManager
                     //Check Azure
                     _isAzure = IsAzure();
 
+                    //Trying to run application with patch account?
+                    if ((_commandLineArgument.appUserName.Length > 0) && (_commandLineArgument.UserName.ToLower() == _commandLineArgument.appUserName.ToLower()))
+                    {
+                        SafeMode = false;
+                        logWrite("Warning: The application will have db_owner permissions. Consider using a different login for the end users!");
+                        System.Threading.Thread.Sleep(1200);
+                    }
+
                     if (_isAzure && _commandLineArgument.isWindowsGroupName)
                         throw new Exception("Windows Azure don't support Windows Login for the moment!");
 
@@ -87,7 +96,7 @@ namespace Teleopti.Ccc.DBManager
                     }
 
                     //Try create or re-create login
-                    if (_commandLineArgument.PermissionMode)
+                    if (_commandLineArgument.PermissionMode && SafeMode)
                     {
                         CreateLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName);
                     }
@@ -109,7 +118,7 @@ namespace Teleopti.Ccc.DBManager
                         }
 
                         //Set permissions of the newly application user on db.
-                        if (_commandLineArgument.PermissionMode)
+                        if (_commandLineArgument.PermissionMode && SafeMode)
                         {
                             CreatePermissions(_commandLineArgument.appUserName, _commandLineArgument.isWindowsGroupName);
                         }
@@ -167,10 +176,9 @@ namespace Teleopti.Ccc.DBManager
                     string databaseTypeList = string.Join("|", Enum.GetNames(typeof(DatabaseType)));
                     Console.Out.WriteLine(string.Format(CultureInfo.CurrentCulture, "-O[{0}]", databaseTypeList));
                     Console.Out.WriteLine("-C Creates a database with name from -D switch.");
-                    Console.Out.WriteLine("-L[sqlUserName:sqlUserPassword] Will create a sql user that the application will use when running. Mandatory while using -C if -W is not used");
-                    Console.Out.WriteLine("-W[Local windows Group] Will create a Windows Group that the application will use when running. . Mandatory while using -C if -L is not used");
+                    Console.Out.WriteLine("-L[sqlUserName:sqlUserPassword] Will create a sql user that the application will use when running. Mandatory while using -C or -R");
+                    Console.Out.WriteLine("-W[Local windows Group] Will create a Windows Group that the application will use when running. . Mandatory while using -C or -R");
                     Console.Out.WriteLine("-B[Business Unit]");
-                    Console.Out.WriteLine("-T Add the trunk (leave this out if you don't want the trunk.)");
                     Console.Out.WriteLine("-F Path to where dbmanager runs from");
                 }
                 return 0;
@@ -378,42 +386,51 @@ namespace Teleopti.Ccc.DBManager
         {
             string fileName;
             string sql;
-            sql = "";
-            if (_isAzure && !iswingroup)
-            {
-                sql = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
-                using (var cmd = new SqlCommand(sql, _sqlConnection))
-                {
-                    if (_isAzure && DBUserExist(user) == true)
-                    {
-                        logWrite("DB user already exist, continue ...");
-                    }
-                    else
-                        cmd.ExecuteNonQuery();
-                }
+            string relinkSQLUser;
+            string createDBUser;
+            bool sysAdmin = false;
+            string sysAdminAsOwner;
 
-                fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\permissions - add.sql", _databaseFolder.Path());
-            }
-            else
+            if (user.ToLower() == "sa")
+                sysAdmin = true;
+
+            sql = "";
+            createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
+            relinkSQLUser = string.Format(CultureInfo.CurrentCulture, @"ALTER USER [{0}] WITH LOGIN = [{0}]", user);
+            sysAdminAsOwner = string.Format(CultureInfo.CurrentCulture, @"sp_changedbowner @loginame = N'sa', @map = false");
+
+            if (!sysAdmin)
             {
-                fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\permissions - add.sql", _databaseFolder.Path());
-            }              
+                if (!iswingroup && (DBUserExist(user) == true))
+                {
+                    logWrite("DB user already exist, re-link ...");
+                    using (var cmd = new SqlCommand(relinkSQLUser, _sqlConnection))
+                    cmd.ExecuteNonQuery();
+                }
+                else
+
+                {
+                   logWrite("DB user is missing. Create DB user ...");
+                    using (var cmd = new SqlCommand(createDBUser, _sqlConnection))
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            if (!_isAzure)
+            {
+                using (var cmd = new SqlCommand(sysAdminAsOwner, _sqlConnection))
+                cmd.ExecuteNonQuery();
+            }
+
+            fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\permissions - add.sql", _databaseFolder.Path());
 
             sql = System.IO.File.ReadAllText(fileName);
 
             sql = sql.Replace("$(LOGIN)", user);
 
-            if (iswingroup)
+            if (!sysAdmin)
             {
-                sql = sql.Replace("$(AUTHTYPE)", "WIN");
-            }
-            else
-            {
-                sql = sql.Replace("$(AUTHTYPE)", "SQL");
-            }
-
-            using (var cmd = new SqlCommand(sql, _sqlConnection))
-            {
+                using (var cmd = new SqlCommand(sql, _sqlConnection))
                 cmd.ExecuteNonQuery();
             }
 
