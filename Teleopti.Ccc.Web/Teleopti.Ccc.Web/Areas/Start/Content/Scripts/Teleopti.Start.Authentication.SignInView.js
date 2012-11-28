@@ -19,7 +19,7 @@ Teleopti.Start.Authentication.SignInView = function (args) {
 
 
 	function _initPlaceHolderText() {
-		if (!$.support.placeholder) {
+		if (!Modernizr.input.placeholder) {
 			var active = document.activeElement;
 			$(':text, :password').focus(function () {
 				if ($(this).attr('placeholder') != '' && $(this).val() == $(this).attr('placeholder')) {
