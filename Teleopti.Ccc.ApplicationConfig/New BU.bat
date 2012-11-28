@@ -19,6 +19,6 @@
 ::-------------------------------------------------------
 
 rem Create new Business Unit?
-"C:\Data\PBI17968\Teleopti.Ccc.ApplicationConfig\bin\Debug\CccAppConfig.exe" -DSteleopti699 -DDPBI17968_demoreg_TeleoptiCCC7 -DUsa -DPcadadi -TZ"W. Europe Standard Time" -BUTest -CUen-GB
+"C:\Program Files (x86)\Teleopti\ApplicationConfiguration\CccAppConfig.exe" -DSlocalhost -DDTeleoptiCCC -DUteleopticcc -DPteleopticcc -TZ"W. Europe Standard Time" -BUACME -CUen-GB
 rem Finished
 pause
