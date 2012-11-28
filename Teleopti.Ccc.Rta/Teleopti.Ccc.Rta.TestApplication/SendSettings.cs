@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using log4net;
 using Teleopti.Ccc.Rta.LogClient;
 
@@ -25,6 +26,10 @@ namespace Teleopti.Ccc.Rta.TestApplication
             _stateCodeCollection = new List<string>(ConfigurationManager.AppSettings["StateCode"].Split(','));
             _endSequenceCode = ConfigurationManager.AppSettings["LogOffCode"];
 
+            string _strPlatformTypeId = (ConfigurationManager.AppSettings["PlatformTypeId"]);
+            if (!IsValidGuid(_strPlatformTypeId))
+                _loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property SendCount was not read from configuration");
+           
             string setting = ConfigurationManager.AppSettings["SendCount"];
             if (!int.TryParse(setting, out _sendCount))
                 _loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property SendCount was not read from configuration");
@@ -92,6 +97,18 @@ namespace Teleopti.Ccc.Rta.TestApplication
                     new AgentStateForTest(_logOnCollection[logOnIndex], _stateCodeCollection[stateCodeIndex],
                                           TimeSpan.FromMilliseconds(waitTime), _sourceId, false, DateTime.UtcNow);
             }
+        }
+
+        static bool IsValidGuid(string guid)
+        {
+            if (!(string.IsNullOrEmpty(guid)))
+            {
+                Regex reg = new Regex(@"^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$");
+
+                return reg.IsMatch(guid);
+            }
+
+            return false;
         }
 
         public IList<AgentStateForTest> EndSequence()
