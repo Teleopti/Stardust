@@ -18,6 +18,7 @@ using System.Transactions;
 using System.Collections;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace CheckPreRequisites
 {
@@ -160,6 +161,9 @@ namespace CheckPreRequisites
 
                 //Collation
                 DBCollationCheck(connString);
+
+                //WriteTestTempDB
+                WriteTestTempDB(connString);
             }
 
        }
@@ -304,6 +308,91 @@ namespace CheckPreRequisites
 
 
 
+        }
+
+        private static void ReadSingleRow(IDataRecord record)
+        {
+            Console.WriteLine(String.Format("{0}, {1}", record[0], record[1]));
+        }
+
+        private void WriteTestTempDB(string connString)
+        {
+            string procedureCommand = string.Empty;
+
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("^\\s*GO\\s*$", System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Multiline);          
+            // create a writer and open the file
+            string filePath = @"WriteTestTempDB.sql";
+            using (var conn = new SqlConnection(connString))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    conn.Open();
+                    cmd.Connection = conn;
+                    if (File.Exists(filePath))
+                    {
+                        StreamReader file = null;
+                        try
+                        {
+                            file = new StreamReader(filePath);
+                            string[] lines = regex.Split(file.ReadToEnd());
+                           
+                            foreach (string line in lines)
+                            {
+                              if (line.Length > 0)
+                                {
+                                    cmd.CommandText = line;
+                                    cmd.CommandType = CommandType.Text;
+                                    SqlDataReader reader = cmd.ExecuteReader();
+
+                                    //bytes to be transfered
+                                    reader.Read();
+                                    var MBytesRead = reader.GetInt32(0)/1024/1024;
+
+                                    //actual data
+                                    var stopwatch = new Stopwatch();
+                                    stopwatch.Start();
+
+                                      reader.NextResult();
+                                    while (reader.Read()) {}
+                                    stopwatch.Stop();
+                                    var BandWidth = Math.Round(8 * MBytesRead * 1000 / stopwatch.Elapsed.TotalMilliseconds, 2);
+
+                                    printNewFeature("Database", "Client read [mbps]", "10", BandWidth.ToString());
+                                  printFeatureStatus(true);
+
+
+                                  //IOLatency figures
+                                  reader.NextResult();
+                                  reader.Read();
+
+                                  var IoWriteLatency = reader.GetInt64(0);
+                                  var displayIoWriteLatency = "<1";
+                                      
+                                  if (IoWriteLatency > 0)
+                                          displayIoWriteLatency = IoWriteLatency.ToString();
+
+                                  printNewFeature("Database", "IoWriteLatency [ms]", "5", displayIoWriteLatency);
+                                  if (IoWriteLatency > 5)
+                                      printFeatureStatus(false);
+                                  else
+                                      printFeatureStatus(true);
+                                  
+                                  reader.Close();
+
+                                }
+                            }
+                            
+                        }
+                        finally
+                        {
+                            if (file != null)
+
+                                file.Close();
+                        }
+                    }
+                    conn.Close();
+                }
+            }
         }
 
 
