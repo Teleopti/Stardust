@@ -127,37 +127,35 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void SeeCreatedShiftTradeRequest()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See created shift trade request", ((string[])(null)));
-#line 25
+#line 24
 this.ScenarioSetup(scenarioInfo);
+#line 25
+ testRunner.Given("I am an agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 26
- testRunner.Given("I am an agent");
+ testRunner.And("I have created a shift trade request", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 27
- testRunner.And("I have created a shift trade request");
+ testRunner.When("I view requests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 28
- testRunner.When("I view requests");
-#line 29
- testRunner.Then("I should see my existing shift trade request");
+ testRunner.Then("I should see my existing shift trade request", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("See received shift trade request")]
-        [NUnit.Framework.IgnoreAttribute()]
         public virtual void SeeReceivedShiftTradeRequest()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See received shift trade request", new string[] {
-                        "ignore"});
-#line 32
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("See received shift trade request", ((string[])(null)));
+#line 30
 this.ScenarioSetup(scenarioInfo);
+#line 31
+ testRunner.Given("I am an agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 32
+ testRunner.And("I have received a shift trade request from \'Ashley\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 33
- testRunner.Given("I am an agent");
+ testRunner.When("I view requests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 34
- testRunner.And("I have received a shift trade request");
-#line 35
- testRunner.When("I view requests");
-#line 36
- testRunner.Then("I should see my existing shift trade request");
+ testRunner.Then("I should see my existing shift trade request", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -167,13 +165,13 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void RequestsTab()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Requests tab", ((string[])(null)));
-#line 38
+#line 36
 this.ScenarioSetup(scenarioInfo);
-#line 39
+#line 37
  testRunner.Given("I am an agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 40
+#line 38
  testRunner.When("I am viewing an application page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 41
+#line 39
  testRunner.Then("I should be able to see requests link", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -184,13 +182,13 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NoAccessToRequestsTab()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No access to requests tab", ((string[])(null)));
-#line 43
+#line 41
 this.ScenarioSetup(scenarioInfo);
-#line 44
+#line 42
  testRunner.Given("I am an agent without access to any requests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 45
+#line 43
  testRunner.When("I am viewing an application page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 46
+#line 44
  testRunner.Then("I should not be able to see requests link", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -201,15 +199,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NoAccessToRequestsPage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No access to requests page", ((string[])(null)));
-#line 48
+#line 46
 this.ScenarioSetup(scenarioInfo);
-#line 49
+#line 47
  testRunner.Given("I am an agent without access to any requests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 50
+#line 48
  testRunner.And("I am signed in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 51
+#line 49
  testRunner.When("I navigate to the requests page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 52
+#line 50
  testRunner.Then("I should see an error message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -220,15 +218,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void NoRequests()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No requests", ((string[])(null)));
-#line 54
+#line 52
 this.ScenarioSetup(scenarioInfo);
-#line 55
+#line 53
  testRunner.Given("I am an agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 56
+#line 54
  testRunner.And("I have no existing requests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 57
+#line 55
  testRunner.When("I view requests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 58
+#line 56
  testRunner.Then("I should see a user-friendly message explaining I dont have anything to view", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -239,15 +237,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void DefaultSorting()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default sorting", ((string[])(null)));
-#line 60
+#line 58
 this.ScenarioSetup(scenarioInfo);
-#line 61
+#line 59
  testRunner.Given("I am an agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 62
+#line 60
  testRunner.And("I have 2 existing request changed on different times", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 63
+#line 61
  testRunner.When("I view requests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 64
+#line 62
  testRunner.Then("I should see that the list is sorted on changed date and time", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -258,15 +256,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void ShowSinglePage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Show single page", ((string[])(null)));
-#line 66
+#line 64
 this.ScenarioSetup(scenarioInfo);
-#line 67
+#line 65
  testRunner.Given("I am an agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 68
+#line 66
  testRunner.And("I have more than one page of requests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 69
+#line 67
  testRunner.When("I view requests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 70
+#line 68
  testRunner.Then("I should only see one page of requests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -277,17 +275,17 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void Paging()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Paging", ((string[])(null)));
-#line 72
+#line 70
 this.ScenarioSetup(scenarioInfo);
-#line 73
+#line 71
  testRunner.Given("I am an agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 74
+#line 72
  testRunner.And("I have more than one page of requests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 75
+#line 73
  testRunner.When("I view requests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 76
+#line 74
  testRunner.And("I scroll down to the bottom of the page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 77
+#line 75
  testRunner.Then("I should see the page fill with the next page of requests", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

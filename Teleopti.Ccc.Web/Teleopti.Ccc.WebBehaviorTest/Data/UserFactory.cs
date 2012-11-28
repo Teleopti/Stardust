@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			return logonName;
 		}
 
-		private void MakePerson(IPerson person)
+		public void MakePerson(IPerson person)
 		{
 			CultureInfo culture = null;
 
