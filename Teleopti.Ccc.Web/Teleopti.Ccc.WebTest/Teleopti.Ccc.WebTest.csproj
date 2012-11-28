@@ -104,6 +104,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Team\TeamAreaRegistrationTest.cs" />
+    <Compile Include="Areas\Team\Controllers\ApplicationControllerTest.cs" />
     <Compile Include="Areas\MobileReports\Core\DefinedReportsTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Mappings\ReportGenerationViewModelMappingTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Providers\DefinedReportProviderTest.cs" />
@@ -126,7 +128,7 @@
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInputTest.cs" />
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationModelTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationApiControllerTest.cs" />
-    <Compile Include="Areas\Start\Controllers\AuthenticationNewControllerTest.cs" />
+    <Compile Include="Areas\Start\Controllers\AuthenticationControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\FakeDataSource.cs" />
     <Compile Include="Areas\Start\Controllers\WindowsAuthenticationModelTest.cs" />
     <Compile Include="Areas\Start\Core\LayoutBase\DataSourcesViewModelFactoryTest.cs" />
@@ -151,7 +153,6 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculatorTest.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\OptionSplitTest.cs" />
     <Compile Include="Areas\MyTime\Models\Portal\CultureSpecificViewModelFactoryTest.cs" />
-    <Compile Include="Areas\Start\Controllers\AuthenticationControllerMobileSignInTest.cs" />
     <Compile Include="Areas\Start\Controllers\MenuControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\TestControllerTest.cs" />
@@ -159,7 +160,6 @@
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleControllerTest.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAspectTest.cs" />
     <Compile Include="Core\Aop\Core\AspectsTest.cs" />
-    <Compile Include="Core\Authentication\Services\RouteAreaRedirectorTest.cs" />
     <Compile Include="Core\Common\DataProvider\PersonPeriodProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
     <Compile Include="Core\Mapping\FakeMappingDependency.cs" />
@@ -193,9 +193,7 @@
     <Compile Include="ResolveExtensions.cs" />
     <Compile Include="Areas\MobileReports\MobileReportsAreaRegistrationTest.cs" />
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtensionTest.cs" />
-    <Compile Include="Areas\Start\Controllers\AuthenticationControllerWindowsJsonTest.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtensionTest.cs" />
-    <Compile Include="Areas\Start\Controllers\AuthenticationControllerApplicationJsonTest.cs" />
     <Compile Include="TestRouteBuilder.cs" />
     <Compile Include="TestUrlHelperBuilder.cs" />
     <Compile Include="TestHttpContextBuilder.cs" />
@@ -212,12 +210,7 @@
     <Compile Include="Areas\MyTime\Controllers\StudentAvailabilityControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\PortalControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleControllerTest.cs" />
-    <Compile Include="Areas\Start\Controllers\AuthenticationControllerApplicationTest.cs" />
-    <Compile Include="Areas\Start\Controllers\AuthenticationControllerSelectBusinessUnitTest.cs" />
-    <Compile Include="Areas\Start\Controllers\AuthenticationControllerSignInTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationControllerSignOutTest.cs" />
-    <Compile Include="Areas\Start\Controllers\AuthenticationControllerTest.cs" />
-    <Compile Include="Areas\Start\Controllers\AuthenticationControllerWindowsTest.cs" />
     <Compile Include="Core\Authentication\Services\AuthenticatorTest.cs" />
     <Compile Include="Core\Authentication\DataProvider\BusinessUnitProviderTest.cs" />
     <Compile Include="Core\DateTimePeriodFormValidatorTest.cs" />
@@ -298,7 +291,7 @@
     <Compile Include="Filters\AjaxJavaScriptRedirectAttributeTest.cs" />
     <Compile Include="Filters\ApplicationFunctionAttributeTest.cs" />
     <Compile Include="Filters\CheckStartupExceptionAttributeTest.cs" />
-    <Compile Include="Filters\EnsureInPortalAttributeTest.cs" />
+    <Compile Include="Areas\MyTime\Filters\EnsureInPortalAttributeTest.cs" />
     <Compile Include="Filters\FilterTester.cs" />
     <Compile Include="RhinoMocksStubFactory.cs" />
     <Compile Include="RhinoMocksStubProxy.cs" />

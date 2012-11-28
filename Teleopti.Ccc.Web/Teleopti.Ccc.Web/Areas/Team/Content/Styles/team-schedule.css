@@ -1,0 +1,116 @@
+
+.team-schedule 
+{
+}
+
+.team-schedule .time-line 
+{
+	left: 121px; /* 105 + 8 + 8    first column with paddings */
+	width: 100%;
+}
+
+.team-schedule .time-line,
+.team-schedule .time-line div
+{
+	height: 100%;
+    z-index: -10;
+}
+
+.team-schedule .time-line .ruler {
+	height: 100%;
+	width: 1px;
+	background-color: rgba(0,0,0,0.2);
+	z-index: 100;
+}
+.team-schedule .time-line .label {
+	font-size: xx-small;
+	height: 12px;
+	z-index: 111;
+ }
+ 
+.team-schedule .agent
+{
+}
+.team-schedule .agent:last-child
+{
+}
+.team-schedule .agent-name 
+{
+	max-width: 105px !important;
+	min-width: 105px !important;
+	width: 105px !important;
+	overflow: hidden;
+}
+.team-schedule tbody tr
+{
+	cursor: pointer;
+}
+.team-schedule .shift 
+{
+	padding-left: 0;
+	padding-right: 0;
+	width: auto;
+}
+.team-schedule .shift .layer
+{
+	height: 20px;
+}
+.team-schedule .shift .layer:first-of-type
+{
+	-webkit-border-radius: 4px 0px 0px 4px;
+	   -moz-border-radius: 4px 0px 0px 4px;
+			border-radius: 4px 0px 0px 4px;
+}
+.team-schedule .shift .layer:last-of-type
+{
+	-webkit-border-radius: 0px 4px 4px 0px;
+	   -moz-border-radius: 0px 4px 4px 0px;
+			border-radius: 0px 4px 4px 0px;
+}
+.team-schedule .resource-layer 
+{
+	height: 14px;
+}
+.team-schedule .resource-layer:last-of-type
+{
+	-webkit-border-radius: 0px 4px 4px 0px;
+	   -moz-border-radius: 0px 4px 4px 0px;
+			border-radius: 0px 4px 4px 0px;
+}
+.team-schedule .resource-layer:first-of-type
+{
+	-webkit-border-radius: 4px 0px 0px 4px;
+	   -moz-border-radius: 4px 0px 0px 4px;
+			border-radius: 4px 0px 0px 4px;
+}
+.team-schedule .resources td {
+    padding-top: 3px;
+}
+.team-schedule .contract-time 
+{
+	text-align: right;
+	max-width: 100px !important;
+	min-width: 100px !important;
+	width: 100px !important;
+	overflow: hidden;
+}
+.team-schedule .work-time {
+	text-align: right;
+	max-width: 100px !important;
+	min-width: 100px !important;
+	width: 100px !important;
+	overflow: hidden;
+}
+
+
+@media (max-width: 1199px) {
+
+	.team-schedule .contract-time {
+		display: none;
+	}
+	.team-schedule .work-time {
+		display: none;
+	}
+
+}
+

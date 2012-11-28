@@ -11,31 +11,12 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports
 
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
-
 			var mapRoute = context.MapRoute(
-				"MobileReports-authentication-new",
-				"MobileReports/AuthenticationNew/{action}",
-				new {controller = "AuthenticationNew", action = "SignIn", area = "Start", origin = "MobileReports"},
-				null,
-				new[] {"Teleopti.Ccc.Web.Areas.Start.*"});
-			mapRoute.DataTokens["area"] = "Start";
-
-
-
-			mapRoute = context.MapRoute(
-				"MobileReports-authentication-signin",
-				"MobileReports/Authentication/SignIn",
-				new { controller = "Authentication", action = "MobileSignIn", area = "Start", origin= "MobileReports" },
-				null,
-				new[] { "Teleopti.Ccc.Web.Areas.Start.*" });
-			mapRoute.DataTokens["area"] = "Start";
-
-			mapRoute = context.MapRoute(
 				"MobileReports-authentication",
 				"MobileReports/Authentication/{action}",
-				new { controller = "Authentication", action = "Index", area = "Start", origin = "MobileReports" },
+				new { controller = "Authentication", action = "SignIn", area = "Start", origin= "MobileReports" },
 				null,
-				new[] {"Teleopti.Ccc.Web.Areas.Start.*"});
+				new[] { "Teleopti.Ccc.Web.Areas.Start.*" });
 			mapRoute.DataTokens["area"] = "Start";
 
 			context.MapRoute(

@@ -1,32 +1,39 @@
 ﻿using System.Web.Mvc;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
+using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
+using Teleopti.Ccc.Web.Areas.Start.Models.LayoutBase;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
 	[TestFixture]
 	public class AuthenticationControllerTest
 	{
-		private AuthenticationController _target;
-
-		[SetUp]
-		public void Setup()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldReturnSignInView()
 		{
-			_target = new AuthenticationController(null, null, null, null, null, null);
+			var layoutBaseViewModelFactory = MockRepository.GenerateMock<ILayoutBaseViewModelFactory>();
+			var target = new AuthenticationController(layoutBaseViewModelFactory, null);
+			var layoutBaseViewModel = new LayoutBaseViewModel();
+
+			layoutBaseViewModelFactory.Stub(x => x.CreateLayoutBaseViewModel()).Return(layoutBaseViewModel);
+
+			var result = target.SignIn();
+			result.ViewName.Should().Be.EqualTo(string.Empty);
+			Assert.That(result.ViewBag.LayoutBase, Is.SameAs(layoutBaseViewModel));
 		}
 
-		[TearDown]
-		public void Teardown()
-		{
-			_target.Dispose();
-		}
-
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void DefaultActionShouldRenderDefaultView()
 		{
-			var result = _target.Index() as ViewResult;
-			result.ViewName.Should().Be.EqualTo(string.Empty);
+			var target = new AuthenticationController(null, null);
+			var result = target.Index() as RedirectToRouteResult;
+			result.RouteName.Should().Be.EqualTo(string.Empty);
 		}
+
 	}
+
+
 }

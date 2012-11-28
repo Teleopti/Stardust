@@ -78,7 +78,12 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 				options.errormessage(response.Errors[0]);
 				return;
 			}
-			options.errormessage("exception from server");
+			if (jqXHR.status == 500) {
+				var response = $.parseJSON(jqXHR.responseText);
+				$('#Exception-message').text(response.Message);
+				$('#Exception-div').show();
+				return;
+			}
 		};
 
 		$.extend(options, {
@@ -135,7 +140,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 							area = inApplication.Area;
 						else if (applicationsData.length == 1)
 							area = applicationsData[0].Area;
-						
+
 						if (area) {
 							window.location.href = data.baseUrl + area;
 							return;

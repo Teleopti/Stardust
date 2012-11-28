@@ -36,12 +36,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Navigation.GoTo("Test/BeforeScenario", new ApplicationStartupTimeout());
 		}
 
-		public static void LogonMobile()
-		{
-			Pages.Pages.CurrentSignInPage = Browser.Current.Page<MobileSignInPage>();
-			InnerLogon();
-		}
-
 		public static void Logon()
 		{
 			Pages.Pages.CurrentSignInPage = Browser.Current.Page<SignInPage>();

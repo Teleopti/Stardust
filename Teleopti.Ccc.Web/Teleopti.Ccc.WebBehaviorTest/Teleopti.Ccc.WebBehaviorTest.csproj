@@ -115,14 +115,14 @@
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\Robustness\Timeouts.cs" />
     <Compile Include="Core\Robustness\Retrying.cs" />
-    <Compile Include="Pages\SignInNewPage.cs" />
-    <Compile Include="RoutingNew.feature.cs">
-      <DependentUpon>RoutingNew.feature</DependentUpon>
+    <Compile Include="Pages\SignInPage.cs" />
+    <Compile Include="Routing.feature.cs">
+      <DependentUpon>Routing.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="SignInNew.feature.cs">
-      <DependentUpon>SignInNew.feature</DependentUpon>
+    <Compile Include="SignIn.feature.cs">
+      <DependentUpon>SignIn.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -316,11 +316,6 @@
     <Compile Include="Data\Setups\Specific\ShiftWithConfidentialAbsence.cs" />
     <Compile Include="Data\Setups\Specific\Team.cs" />
     <Compile Include="Data\Setups\Specific\TwoWeeksAbsence.cs" />
-    <Compile Include="MobileSignIn.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MobileSignIn.feature</DependentUpon>
-    </Compile>
     <Compile Include="MyProfile.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -330,7 +325,6 @@
     <Compile Include="Pages\Common\SelectBox.cs" />
     <Compile Include="Pages\Common\ISignInPage.cs" />
     <Compile Include="Pages\MobileGlobalMenuPage.cs" />
-    <Compile Include="Pages\MobileSignInPage.cs" />
     <Compile Include="Pages\PasswordPage.cs" />
     <Compile Include="Pages\RegionalSettingsPage.cs" />
     <Compile Include="Pages\TeamSchedulePage.cs" />
@@ -367,11 +361,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QUnitTests.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Routing.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Routing.feature</DependentUpon>
     </Compile>
     <Compile Include="RoutingStepDefinition.cs" />
     <Compile Include="Session.feature.cs">
@@ -481,11 +470,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="SecurityStepDefinitions.cs" />
-    <Compile Include="SignIn.feature.cs">
-      <DependentUpon>SignIn.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="SignOut.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -501,7 +485,6 @@
     <Compile Include="Pages\WeekSchedulePage.cs" />
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
     <Compile Include="Core\Navigation.cs" />
-    <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Core\WatiNWaitForCompleteTimeout.cs" />
     <Compile Include="Data\UserFactory.cs" />
     <Compile Include="Bindings\Specific\UserStepDefinitions.cs" />
@@ -539,13 +522,13 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>BrowserNotifications.feature.cs</LastGenOutput>
     </None>
-    <None Include="RoutingNew.feature">
+    <None Include="Routing.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RoutingNew.feature.cs</LastGenOutput>
+      <LastGenOutput>Routing.feature.cs</LastGenOutput>
     </None>
-    <None Include="SignInNew.feature">
+    <None Include="SignIn.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SignInNew.feature.cs</LastGenOutput>
+      <LastGenOutput>SignIn.feature.cs</LastGenOutput>
     </None>
     <None Include="PasswordPolicy.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -613,10 +596,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MobileReports.feature.cs</LastGenOutput>
     </None>
-    <None Include="MobileSignIn.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MobileSignIn.feature.cs</LastGenOutput>
-    </None>
     <None Include="MyProfile.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MyProfile.feature.cs</LastGenOutput>
@@ -641,10 +620,6 @@
     <None Include="QUnitTests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>QUnitTests.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Routing.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Routing.feature.cs</LastGenOutput>
     </None>
     <None Include="Session.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -680,10 +655,6 @@
     <None Include="Security.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Security.feature.cs</LastGenOutput>
-    </None>
-    <None Include="SignIn.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SignIn.feature.cs</LastGenOutput>
     </None>
     <None Include="SignOut.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -143,7 +143,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
             ITaskOwnerGrid grid = _currentGrid;
             if(grid!=null)
             {
-                returnDate = grid.GetLocalCurrentDate(column);
+                var locatedDate = grid.GetLocalCurrentDate(column);
+                if (locatedDate != DateTime.MaxValue)
+                    returnDate = locatedDate;
             }
             return returnDate;
         }

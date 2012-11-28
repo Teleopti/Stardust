@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/");
 			var routeData = routes.GetRouteData(httpContext);
 
-			var expectedValues = new Dictionary<string, string> { { "controller", "Menu" }, { "action", "Index" } };
+			var expectedValues = new Dictionary<string, string> { { "controller", "Authentication" }, { "action", "Index" } };
 			ExpectedValuesShouldExist(expectedValues, routeData);
 		}
 
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			new RegisterRoutesTask(() => { }).registerRoutes(routes);
 
 			var httpContext = MockRepository.GenerateMock<HttpContextBase>();
-			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/Authentication/SignIn");
+			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/Authentication");
 			var routeData = routes.GetRouteData(httpContext);
 
 			var expectedValues = new Dictionary<string, string> { { "controller", "Authentication" }, { "action", "SignIn" }, { "area", "Start" }};

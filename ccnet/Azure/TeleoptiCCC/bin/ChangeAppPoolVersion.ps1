@@ -1,10 +1,14 @@
-param ([string] $applicationName = $(throw "applicationName is required"))
+param (
+	[string] $applicationName = $(throw "applicationName is required"),
+	[string] $managedRuntimeVersion = $(throw "ManagedRuntimeVersion is required")
+	)
 [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.Web.Administration")
 
 #----------
 # functions
 #----------
-function fnLoopSiteApplication {
+function fnLoopSiteApplication ([string]$applicationName, [string]$netVersion)
+{
     foreach ($site_name in $iis.sites)
     { 
         foreach ($siteApplication in $site_name.applications)
@@ -12,7 +16,7 @@ function fnLoopSiteApplication {
             write-host "$siteApplication `r"
             if ($siteApplication.Path.EndsWith("/" + $applicationName))
             {
-                fnChangeAppPoolVersion($siteApplication);
+                fnChangeAppPoolVersion $siteApplication $netVersion
                 Return $True
             }
         }
@@ -20,11 +24,11 @@ function fnLoopSiteApplication {
     Return $False
 }
 
-function fnChangeAppPoolVersion {
-param ([System.Object]$arg0)
-	$appPoolName = $arg0.ApplicationPoolName;
+function fnChangeAppPoolVersion ([System.Object]$site, [string]$ManagedRuntimeVersion)
+{
+	$appPoolName = $site.ApplicationPoolName;
 	$apppoolobject = $iis.ApplicationPools[$appPoolName]
-	$apppoolobject.ManagedRuntimeVersion = "v4.0";
+	$apppoolobject.ManagedRuntimeVersion = $ManagedRuntimeVersion;
 	$iis.CommitChanges();
 }
 
@@ -39,7 +43,7 @@ do {
     try {
         Write-host "$(get-date -format 'yyyy-MM-dd HH:mm:ss.ms')`r"
         $iis = New-Object Microsoft.Web.Administration.ServerManager 
-        If (fnLoopSiteApplication) {
+        If (fnLoopSiteApplication $applicationName $managedRuntimeVersion) {
             Write-host "Success!"
             break
         }

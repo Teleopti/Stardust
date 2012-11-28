@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.Web.Filters
 				new RouteValueDictionary(
 					new
 						{
-							controller = RegisterRoutesTask.AuthenticationController,
-							action = RegisterRoutesTask.AuthenticationAction,
+							controller = "Authentication",
+							action = "",
 							area = targetArea
 						}
 					)

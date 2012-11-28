@@ -12,6 +12,30 @@ Teleopti.Start.Authentication.SignInView = function (args) {
 		data.render(args.html);
 		ko.applyBindings(viewModel, data.element[0]);
 		viewModel.LoadDataSources();
+
+		_initPlaceHolderText();
+
 	};
+
+
+	function _initPlaceHolderText() {
+		if (!Modernizr.input.placeholder) {
+			var active = document.activeElement;
+			$(':text, :password').focus(function () {
+				if ($(this).attr('placeholder') != '' && $(this).val() == $(this).attr('placeholder')) {
+					$(this).val('').removeClass('hasPlaceholder');
+				}
+			}).blur(function () {
+				if ($(this).attr('placeholder') != '' && ($(this).val() == '' || $(this).val() == $(this).attr('placeholder'))) {
+					$(this).val($(this).attr('placeholder')).addClass('hasPlaceholder');
+				}
+			});
+			$(':text, :password').blur();
+			$(active).focus();
+			$('form').submit(function () {
+				$(this).find('.hasPlaceholder').each(function () { $(this).val(''); });
+			});
+		}
+	}
 
 };

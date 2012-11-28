@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 			builder.RegisterType<AuthenticationViewModelFactory>().As<IAuthenticationViewModelFactory>();
 			builder.RegisterType<FormsAuthenticationWrapper>().As<IFormsAuthentication>();
 			builder.RegisterType<AvailableWindowsDataSources>().As<IAvailableWindowsDataSources>().SingleInstance();
-			builder.RegisterType<Redirector>().As<IRedirector>();
 			builder.RegisterType<MenuViewModelFactory>().As<IMenuViewModelFactory>();
 			builder.RegisterType<SessionSpecificDataStringSerializer>().As<ISessionSpecificDataStringSerializer>().SingleInstance();
 
