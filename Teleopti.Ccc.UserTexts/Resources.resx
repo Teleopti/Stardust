@@ -11190,4 +11190,8 @@ These options are activated:
     <value>Use Average Shift Lengths</value>
     <comment>Use Average Shift Lengths</comment>
   </data>
+  <data name="LogOnFailedAccountIsLocked" xml:space="preserve">
+    <value>Log on failed! Account is locked.</value>
+    <comment>Log on failed! Account is locked.</comment>
+  </data>
 </root>

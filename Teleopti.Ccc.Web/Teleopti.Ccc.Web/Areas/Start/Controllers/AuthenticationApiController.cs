@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			var result = model.AuthenticateUser();
 			if (!result.Successful)
-				return ReturnErrorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
+				return ReturnErrorMessage(result.Message);
 			var businessUnits = _businessUnitViewModelFactory.BusinessUnits(result.DataSource, result.Person);
 			return Json(businessUnits, JsonRequestBehavior.AllowGet);
 		}

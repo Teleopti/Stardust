@@ -11202,6 +11202,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log on failed! Account is locked..
+        /// </summary>
+        public static string LogOnFailedAccountIsLocked {
+            get {
+                return ResourceManager.GetString("LogOnFailedAccountIsLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log on failed! Invalid user name or password..
         /// </summary>
         public static string LogOnFailedInvalidUserNameOrPassword {

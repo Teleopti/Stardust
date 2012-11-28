@@ -12,9 +12,8 @@ Background:
 	| Password Expire Warning Day Count | 3                  |
 	| Rule1                             | PasswordLengthMin8 |
 	And I have a role with
-	| Field                          | Value                 |
-	| Name                           | Full access to mytime |
-	| Access to extended preferences | false                 |
+	| Field | Value |
+	| Name  | Agent |
 
 Scenario: Change password failed against the policy
 	Given I am a user with
@@ -43,7 +42,7 @@ Scenario: Sign in failed after account is locked
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	Then I should not be signed in
-	And I should see a log on error
+	And I should see a log on error 'LogOnFailedAccountIsLocked'
 @ignore
 Scenario: Sign in with password will expire soon
 	Given Current time is '2012-01-30'
@@ -55,12 +54,12 @@ Scenario: Sign in with password will expire soon
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	And I am viewing the sign in page
-	When I try to sign in with
+	When I sign in with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	Then I should be signed in
-	And I should see a warning message that password will be expired
+	#And I should see a warning message that password will be expired
 @ignore
 Scenario: Sign in with password already expired
 	Given Current time is '2012-01-31'

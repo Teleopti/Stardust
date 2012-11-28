@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Web.Core.Startup;
 
 namespace Teleopti.Ccc.Web.Filters
 {
