@@ -159,6 +159,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccMyTimeWebEnabled = true;
                 TeleoptiCccAnywhereEnabled = true;
 				TeleoptiCccSmsLinkEnabled = true;
+				TeleoptiCccVersion8Enabled = true;
             }
 
             #region Implementation of IDisposable
@@ -210,6 +211,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
 			public bool TeleoptiCccAnywhereEnabled { get; private set; }
 			public bool TeleoptiCccSmsLinkEnabled { get; private set; }
+			public bool TeleoptiCccVersion8Enabled { get; private set; }
 
         	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -265,6 +267,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccMyTimeWebEnabled = false;
                 TeleoptiCccAnywhereEnabled = false;
 				TeleoptiCccSmsLinkEnabled = false;
+				TeleoptiCccVersion8Enabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = true;
             }
@@ -317,6 +320,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
 			public bool TeleoptiCccAnywhereEnabled { get; private set; }
 			public bool TeleoptiCccSmsLinkEnabled { get; private set; }
+			public bool TeleoptiCccVersion8Enabled { get; private set; }
 
         	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -374,6 +378,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccMyTimeWebEnabled = false;
                 TeleoptiCccAnywhereEnabled = false;
             	TeleoptiCccSmsLinkEnabled = false;
+            	TeleoptiCccVersion8Enabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = false;
             }
@@ -426,6 +431,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
 			public bool TeleoptiCccAnywhereEnabled { get; private set; }
 			public bool TeleoptiCccSmsLinkEnabled { get; private set; }
+			public bool TeleoptiCccVersion8Enabled { get; private set; }
 
         	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
