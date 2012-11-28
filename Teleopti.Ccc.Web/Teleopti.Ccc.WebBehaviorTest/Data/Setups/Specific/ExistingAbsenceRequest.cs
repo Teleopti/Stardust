@@ -88,9 +88,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			var tomorrow = today.AddDays(1);
 			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(user, user, new DateOnly(today), new DateOnly(tomorrow));
 			ShiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-			PersonRequest = new PersonRequest(user);
+			PersonRequest = new PersonRequest(user) {Subject = "I want to swap shift with myself"};
 			PersonRequest.Request = ShiftTradeRequest;
-			PersonRequest.TrySetMessage("This is just a short text that doesn't say anything, except explaining that it doesn't say anything");
+			PersonRequest.TrySetMessage("This is a short text for the description of a shift trade request");
 
 			var requestRepository = new PersonRequestRepository(uow);
 			requestRepository.Add(PersonRequest);

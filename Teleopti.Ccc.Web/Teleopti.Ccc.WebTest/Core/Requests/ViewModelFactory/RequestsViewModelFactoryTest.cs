@@ -74,13 +74,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			result.RequestPermission.AbsenceRequestPermission.Should().Be.True();
 		}
 
-		[Test,Ignore]
+		[Test]
 		public void ShouldRetrievePersonRequestsForPagingViewModel()
 		{
 			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
 			var target = new RequestsViewModelFactory(personRequestProvider, MockRepository.GenerateMock<IMappingEngine>(), null, null);
 			var paging = new Paging();
-
 			personRequestProvider.Stub(x => x.RetrieveRequests(paging)).Return(new IPersonRequest[] { });
 
 			target.CreatePagingViewModel(paging);
