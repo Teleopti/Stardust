@@ -1,4 +1,4 @@
-﻿@ignore
+﻿
 Feature: Shift Trade Requests
 	In order to avoid unwanted scheduled shifts
 	As an agent
@@ -61,17 +61,6 @@ Background:
 	#| Agent name | Other agent 1 |
 	#| Start date | 2012-06-18    |
 	#| Skill      | Skill 1       |
-
-Scenario: Do not show shift trade request tab if no permission
-	Given I have the role 'No access to Shift Trade'
-	When I sign in
-	Then shift trade tab should not be visible
-
-Scenario: Show Shift trade reuqest tab
-	Given I have the role 'Full access to mytime'
-	When I sign in
-	Then shift trade tab should be visible
-
 	
 Scenario: No access to make shift trade reuquests
 	Given I have the role 'No access to Shift Trade'
@@ -86,22 +75,26 @@ Scenario: Default to today if no open shift trade period
 	When I navigate to shift trade page
 	And I navigate to messages
 	Then the selected date should be '2030-01-01'
+
 Scenario: Default to first day of open shift trade period
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01'
 	And I can do shift trades between '2030-01-03' and '2030-01-17'
 	When I navigate to shift trade page
 	Then the selected date should be '2030-01-03'
+
 Scenario: Default time line when I am not scheduled
 	Given I have the role 'Full access to mytime'
 	And Current time is '2020-10-24'
 	When I navigate to shift trade page
 	Then I should see the time line span from '7:45' to '17:15'
+
 Scenario: Time line when I have a scheduled shift
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01'
 	When I navigate to shift trade page
 	Then I should see the time line span from '5:45' to '16:15'
+
 Scenario: Show my scheduled shift
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01'
@@ -110,6 +103,7 @@ Scenario: Show my scheduled shift
 	| Field			| Value |
 	| Start time	| 06:00 |
 	| End time		| 16:00 |
+
 Scenario: Show my scheduled day off
 	Given I have the role 'Full access to mytime'
 	And I have a day off with
@@ -119,6 +113,7 @@ Scenario: Show my scheduled day off
 	And Current time is '2030-01-03'
 	When I navigate to shift trade page
 	Then I should see my scheduled day off 'DayOff'
+
 @ignore
 Scenario: Show my full-day absence
 	Given I have the role 'Full access to mytime'
@@ -130,6 +125,7 @@ Scenario: Show my full-day absence
 	And Current time is '2030-01-05'
 	When I navigate to shift trade page
 	Then I should see my scheduled absence 'Illness'
+
 @ignore
 Scenario: Show message when no possible shift trades
 	Given I have the role 'Full access to mytime'
@@ -137,6 +133,7 @@ Scenario: Show message when no possible shift trades
 	And I can do shift trades between '2030-01-06' and '2030-01-17'
 	When I navigate to shift trade page for date '2030-01-05'
 	Then I should see a user-friendly message explaining that shift trades cannot be made
+
 @ignore
 Scenario: One possible shift to trade with because shift trade periods match
 	Given I have the role 'Full access to mytime'
@@ -152,6 +149,7 @@ Scenario: One possible shift to trade with because shift trade periods match
 	| Lunch3HoursAfterStart | true             |
 	When I navigate to shift trade page
 	Then I should have one possible shift to trade with
+
 @ignore
 Scenario: Not possible to trade shift because no matching skills
 	Given I have the role 'Full access to mytime'
@@ -171,6 +169,7 @@ Scenario: Not possible to trade shift because no matching skills
 	| Shift trade matching skill | Skill 1            |
 	When I navigate to shift trade page
 	Then I should see a user-friendly message explaining that shift trades cannot be made
+
 @ignore
 Scenario: One possible shift to trade with because shift trade periods and skills are matching
 	Given I have the role 'Full access to mytime'
