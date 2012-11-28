@@ -135,7 +135,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.All &&
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules &&
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewConfidential &&
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere &&
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.AdminWeb
 				select r;
 			var agentRoleWithoutStudentAvailabilityApplicationFunctions =
 				from r in agentRoleApplicationFunctions
