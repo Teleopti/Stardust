@@ -1,9 +1,11 @@
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -19,6 +21,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				Navigation.GotoGlobalSignInPage();
 			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
+		}
+
+		[When(@"I sign in with")]
+		public void WhenISignInWith(Table table)
+		{
+			WhenISelectApplicationLogonDataSource();
+			var user = table.CreateInstance<UserConfigurable>();
+			var userName = user.UserName;
+			var password = user.Password;
+			Pages.Pages.CurrentSignInPage.SignInApplication(userName, password);
 		}
 
 		[When(@"I sign in by windows credentials")]

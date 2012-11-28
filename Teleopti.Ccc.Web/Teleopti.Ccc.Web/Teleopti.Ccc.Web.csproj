@@ -619,7 +619,6 @@
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Navigation.js" />
     <Content Include="Areas\Start\Content\Scripts\knockout.bindings.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.js" />
-    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.selectbox.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.connector.css" />
     <Content Include="Areas\MyTime\Content\Css\TeamSchedule.css" />
