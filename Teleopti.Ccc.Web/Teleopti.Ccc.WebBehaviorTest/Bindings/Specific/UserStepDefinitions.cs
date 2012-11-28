@@ -484,7 +484,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		}
 
 		[Given(@"I have created a shift trade request")]
-		public void GivenIHaveCreatedAShiftTradeRequest(string person)
+		public void GivenIHaveCreatedAShiftTradeRequest()
 		{
 			UserFactory.User().Setup(new ExistingShiftTradeRequest());
 		}

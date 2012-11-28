@@ -221,13 +221,19 @@ Scenario: Deny shift trade request
 	And I click the Deny button on the shift request
 	Then I should not see the shift trade request in the list
 
-@ignore
 Scenario: Delete created shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have created a shift trade request
 	And I am viewing requests
 	And I click the shift trade request's delete button
 	Then I should not see the shift trade request in the list
+
+@ignore
+Scenario: Should not be able to delete received shift trade request
+	Given I have the role 'Full access to mytime'
+	And I have received a shift trade request from 'Ashley'
+	And I am viewing requests
+	Then I should not see any delete button on my existing shift trade request
 
 @ignore
 Scenario: Should not be able to delete shift trade requests from others
