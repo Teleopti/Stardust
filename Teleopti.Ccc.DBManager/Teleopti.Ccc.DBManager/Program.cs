@@ -69,8 +69,12 @@ namespace Teleopti.Ccc.DBManager
                     //Check Azure
                     _isAzure = IsAzure();
 
-                    //Trying to run application with patch account?
-                    if ((_commandLineArgument.appUserName.Length > 0) && (_commandLineArgument.UserName.ToLower() == _commandLineArgument.appUserName.ToLower()))
+                    //Same sql login for admin and end user?
+                    if ((_commandLineArgument.PermissionMode) &&
+                        (!_commandLineArgument.UseIntegratedSecurity) &&
+                        (_commandLineArgument.appUserName.Length > 0 && _commandLineArgument.UserName.Length > 0) &&
+                        (_commandLineArgument.appUserName.ToLower() ==  _commandLineArgument.UserName.ToLower())
+                        )
                     {
                         SafeMode = false;
                         logWrite("Warning: The application will have db_owner permissions. Consider using a different login for the end users!");

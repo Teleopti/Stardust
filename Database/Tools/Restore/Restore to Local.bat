@@ -259,7 +259,7 @@ ECHO Upgrade databases ...
 ::check if we need to create Analytics (no stat)
 SQLCMD -S. -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%Branch%_%Customer%_TeleoptiAnalytics'" -h-1 > "%temp%\FindDB.txt"
 findstr /I /C:"%Branch%_%Customer%_TeleoptiAnalytics" "%temp%\FindDB.txt"
-if %errorlevel% NEQ 0 SET CreateAnalytics=-C -L%SQLLogin%:%SQLPwd%
+if %errorlevel% NEQ 0 SET CreateAnalytics=-C
 
 ::create or patch Analytics
 ECHO %DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiAnalytics" -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics%
@@ -269,7 +269,7 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
 ::check if we need to create Agg (no stat)
 SQLCMD -S. -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%Branch%_%Customer%_TeleoptiCCCAgg'" -h-1 > "%temp%\FindDB.txt"
 findstr /I /C:"%Branch%_%Customer%_TeleoptiCCCAgg" "%temp%\FindDB.txt"
-if %errorlevel% NEQ 0 SET CreateAgg=-C -L%SQLLogin%:%SQLPwd%
+if %errorlevel% NEQ 0 SET CreateAgg=-C
 
 ::Create or Patch Agg
 ECHO %DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiCCCAgg" -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg%
