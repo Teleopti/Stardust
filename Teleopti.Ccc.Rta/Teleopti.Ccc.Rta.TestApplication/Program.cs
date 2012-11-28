@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
             {
                 var sendSettings = new SendSettings();
                 int sendCount = sendSettings.RemainingCount;
+                Guid PlatformTypeId = new Guid (ConfigurationManager.AppSettings["PlatformTypeId"].ToString());
 
                 var clientHandler = new ClientHandler(connectionProperties);
                 clientHandler.StartLogClient();
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
                         try
                         {
                             clientHandler.SendRtaDataToServer(stateForTest.LogOn, stateForTest.StateCode, TimeSpan.Zero,
-                                                              DateTime.UtcNow, Guid.Empty, stateForTest.DataSourceId, stateForTest.BatchIdentifier,
+                                                              DateTime.UtcNow, PlatformTypeId, stateForTest.DataSourceId, stateForTest.BatchIdentifier,
                                                               stateForTest.IsSnapshot);
                         }
                         catch (Exception exception)
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
                     try
                     {
                         clientHandler.SendRtaDataToServer(stateForTest.LogOn, stateForTest.StateCode, TimeSpan.Zero,
-                                                          DateTime.UtcNow, Guid.Empty, 1, SqlDateTime.MinValue.Value,
+                                                          DateTime.UtcNow, PlatformTypeId, stateForTest.DataSourceId, SqlDateTime.MinValue.Value,
                                                           false);
                     }
                     catch (Exception exception)
