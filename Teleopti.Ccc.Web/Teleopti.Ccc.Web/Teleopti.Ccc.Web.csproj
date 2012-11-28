@@ -648,6 +648,7 @@
     <Content Include="Content\Scripts\excanvas.original.js" />
     <Content Include="Content\Scripts\jquery.hoverIntent.js" />
     <Content Include="Content\Scripts\knockout-jquery-ui-widget.js" />
+    <Content Include="Content\Scripts\modernizr-2.6.2.js" />
     <Content Include="Content\Scripts\qunit.css" />
     <Content Include="Content\Scripts\qunit.js" />
     <Content Include="Content\Scripts\RGraph.bar.js" />
@@ -704,8 +705,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.custominput.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.combobox.js" />
     <Content Include="Content\Scripts\json2.js" />
-    <Content Include="Content\Scripts\modernizr-1.7.js" />
-    <Content Include="Content\Scripts\modernizr-1.7.min.js" />
     <Content Include="Content\Scripts\jquery.ba-hashchange.js" />
     <Content Include="Content\Scripts\jquery.ba-hashchange.min.js" />
     <Content Include="Content\Scripts\jquery.unobtrusive-ajax.js" />
