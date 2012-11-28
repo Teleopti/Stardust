@@ -16,7 +16,6 @@
         <ResourceDictionary Source="MVVMPreview.xaml"/>
     </ResourceDictionary.MergedDictionaries>
        
-    
     <DataTemplate DataType="{x:Type Models:DataModel}">
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding}"/>

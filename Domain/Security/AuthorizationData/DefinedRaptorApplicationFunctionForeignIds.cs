@@ -111,5 +111,6 @@
 
 		// MobileReports Anywhere
 		public const string Anywhere = "0074";
+
     }
 }

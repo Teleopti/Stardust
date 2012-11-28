@@ -17,7 +17,7 @@
                 BorderThickness="0.8"
                 Padding="1"
                 CornerRadius="3" 
-                Background="{Binding Path=DisplayColor, Converter={StaticResource colorConverter}}"
+                Background="{Binding Path=DisplayColor, Converter={StaticResource colorConverter}, FallbackValue=White}"
                 MinWidth="28">
 
             <TextBlock Text="{Binding Path=Description.ShortName}"
@@ -26,6 +26,6 @@
                      />
 
         </Border>
-        <TextBlock Text="{Binding Path=Description.Name}" Padding="4,1,1,1" />
+        <TextBlock Text="{Binding Path=Description.Name, FallbackValue=''}" Padding="4,1,1,1" />
     </StackPanel>
 </UserControl>

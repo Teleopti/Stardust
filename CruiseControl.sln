@@ -4,7 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E63604E-871F-4E51-B27A-3501614F25F9}"
 	ProjectSection(SolutionItems) = preProject
 		CodeAnalysisDictionary.xml = CodeAnalysisDictionary.xml
-		ccnet\raptor2.proj = ccnet\raptor2.proj
 	EndProjectSection
 	ProjectSection(FolderStartupServices) = postProject
 		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
@@ -187,6 +186,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.Notification", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Notification\Teleopti.Ccc.Sdk.Notification.csproj", "{87ADCA35-6114-4499-8233-6011611BF8AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Startpage", "Teleopti.Ccc.Startpage\Teleopti.Ccc.Startpage.csproj", "{BF7E4697-98E5-47B1-8C2E-DA24E308453F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.csproj", "{3266BFDE-8B39-458E-B0B7-063434806C96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1250,6 +1251,18 @@ Global
 		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Release|x86.ActiveCfg = Release|Any CPU
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|.NET.ActiveCfg = Debug|x86
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|x86.ActiveCfg = Debug|x86
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|x86.Build.0 = Debug|x86
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|.NET.ActiveCfg = Release|x86
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|Any CPU.ActiveCfg = Release|x86
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|Mixed Platforms.Build.0 = Release|x86
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|x86.ActiveCfg = Release|x86
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,6 +2,7 @@ using System;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
@@ -61,6 +62,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public JsonResult Message(Guid messageId)
 		{
 			return Json(_messageViewModelFactory.CreateMessagesInformationViewModel(messageId), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
+		public void Send(string title, string message)
+		{
+			_pushMessageDialoguePersister.SendNewPushMessageToLoggedOnUser(title,message);
 		}
 	}
 }

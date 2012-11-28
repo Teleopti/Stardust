@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -33,7 +34,9 @@ namespace Teleopti.Analytics.Etl.Transformer
 
                 row["absence_code"] = absence.Id;
                 row["absence_name"] = absence.Description.Name;
+                row["absence_shortname"] = absence.Description.ShortName;
                 row["display_color"] = absence.DisplayColor.ToArgb();
+                row["display_color_html"] = ColorTranslator.ToHtml(absence.DisplayColor);
                 row["business_unit_code"] = absence.BusinessUnit.Id;
                 row["business_unit_name"] = absence.BusinessUnit.Name;
 

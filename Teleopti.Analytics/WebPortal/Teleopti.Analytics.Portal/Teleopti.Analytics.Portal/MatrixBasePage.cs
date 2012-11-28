@@ -186,6 +186,7 @@ namespace Teleopti.Analytics.Portal
 		{
 			FormsAuthentication.SignOut();
 			StateHolder.UserObject = null;
+			StateHolder.UserName = "";
 			HttpContext.Current.Session["FORCEFORMSLOGIN"] = true;
 			Response.Redirect(LoginUrl());
 		}

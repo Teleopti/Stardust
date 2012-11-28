@@ -2,10 +2,8 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		{
 			var repository = MockRepository.GenerateMock<ITeamRepository>();
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			var teams = new ITeam[] {new Team(), new Team()};
+			var teams = new ITeam[] { new Domain.AgentInfo.Team(), new Domain.AgentInfo.Team() };
 
 			repository.Stub(x => x.FindAllTeamByDescription()).Return(teams);
 			permissionProvider.Stub(x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, DateOnly.Today, teams.ElementAt(0))).Return(false);

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
             _selectorView.ShowCheckBoxes = true;
             _selectorView.ShowDateSelection = false;
             _selectorView.HideMenu = true;
-            
+			_selectorView.KeepInteractiveOnDuringLoad = true;
         }
 
         public void Populate(IAggregateRoot aggregateRoot)

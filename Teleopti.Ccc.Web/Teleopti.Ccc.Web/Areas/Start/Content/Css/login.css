@@ -1,0 +1,18 @@
+﻿.login-logo 
+{
+	text-align: center;
+	margin-top: 40px;
+}
+.login-form {
+	max-width: 300px;
+	margin-right: auto;
+	margin-left: auto;
+}
+.login-warning {
+	max-width: 300px;
+	margin-right: auto;
+	margin-left: auto;
+}
+.hasPlaceholder {
+	color: #AAA !important;
+}

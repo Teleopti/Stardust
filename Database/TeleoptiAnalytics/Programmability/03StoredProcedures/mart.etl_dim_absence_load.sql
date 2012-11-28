@@ -13,7 +13,8 @@ GO
 -- Author:		KJ
 -- Create date: 2008-04-16
 -- Description:	Loads absence from stg_absence to dim_absence.
--- Update date: 2009-02-11
+-- Update date: 2012-11-21
+-- 2012-11-21 Added new column display_color_html KJ
 -- 2009-02-11 New Mart schema KJ
 -- 2009-02-09 Stage moved to mart db, removed view KJ
 -- 2008-12-01 Added new fields in_contract_time,in_contract_time_name,in_paid_time,in_pad_time_name,in_work_time,in_work_time_name KJ
@@ -39,7 +40,9 @@ INSERT INTO mart.dim_absence
 	in_paid_time_name,
 	in_work_time,
 	in_work_time_name,
-	is_deleted
+	is_deleted,
+	display_color_html,
+	absence_shortname
 	)
 SELECT 
 	absence_id				= -1, 
@@ -51,7 +54,9 @@ SELECT
 	in_paid_time_name		= 'Not In Paid Time',
 	in_work_time			= 0,
 	in_work_time_name		= 'Not In Work Time',
-	is_deleted				= 0
+	is_deleted				= 0,
+	display_color_html		= '#FFFFFF',
+	absence_shortname		= 'Not Defined'
 WHERE NOT EXISTS (SELECT * FROM mart.dim_absence where absence_id = -1)
 
 SET IDENTITY_INSERT mart.dim_absence OFF
@@ -72,7 +77,9 @@ SET
 	in_paid_time_name	= t2.paid_description ,
 	in_work_time		= s.in_work_time,
 	in_work_time_name	= t3.work_description,
-	is_deleted			= s.is_deleted
+	is_deleted			= s.is_deleted,
+	display_color_html	= s.display_color_html, 
+	absence_shortname	= s.absence_shortname
 FROM
 	Stage.stg_absence s
 LEFT JOIN 
@@ -97,7 +104,9 @@ INSERT INTO mart.dim_absence
 	in_work_time,
 	in_work_time_name,	
 	business_unit_id,
-	is_deleted
+	is_deleted,
+	display_color_html,
+	absence_shortname
 	)
 SELECT 
 	absence_code		= s.absence_code, 
@@ -110,7 +119,9 @@ SELECT
 	in_work_time		= s.in_work_time,
 	in_work_time_name	= t3.work_description,
 	business_unit_id	= bu.business_unit_id,
-	is_deleted			= s.is_deleted
+	is_deleted			= s.is_deleted,
+	display_color_html	= s.display_color_html,
+	absence_shortname	= s.absence_shortname
 FROM
 	Stage.stg_absence s	
 JOIN
@@ -144,7 +155,9 @@ INSERT INTO mart.dim_absence
 	datasource_id,
 	datasource_update_date,
 	business_unit_id,
-	is_deleted
+	is_deleted,
+	display_color_html,
+	absence_shortname
 	)
 SELECT 
 	absence_code			= s.absence_code,
@@ -159,7 +172,9 @@ SELECT
 	datasource_id			= 1,
 	datasource_update_date	= s.datasource_update_date,
 	business_unit_id		= -1,
-	is_deleted				= 1
+	is_deleted				= 1,
+	display_color_html		= '#FFFFFF',
+	absence_shortname		= 'Not Defined'
 FROM
 	(SELECT absence_code,datasource_update_date=max(datasource_update_date) FROM Stage.stg_schedule WHERE NOT absence_code IS NULL GROUP BY absence_code) s
 WHERE 

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Layers
     /// </remarks>
     public partial class LayerListBox : ListBox
     {
-        private static DateTimePeriod _defaultperiod = new DateTimePeriod(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)), DateTime.UtcNow.AddDays(1));
+        private static readonly DateTimePeriod Defaultperiod = new DateTimePeriod(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)), DateTime.UtcNow.AddDays(1));
 
         public DateTimePeriod Period
         {
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Layers
         }
 
         public static readonly DependencyProperty PeriodProperty =
-            DependencyProperty.Register("Period", typeof (DateTimePeriod), typeof (LayerListBox), new UIPropertyMetadata(_defaultperiod));
+            DependencyProperty.Register("Period", typeof (DateTimePeriod), typeof (LayerListBox), new UIPropertyMetadata(Defaultperiod));
 
         public double Offset
         {

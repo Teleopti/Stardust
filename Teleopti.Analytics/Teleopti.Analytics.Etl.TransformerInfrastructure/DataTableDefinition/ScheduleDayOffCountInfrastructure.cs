@@ -15,6 +15,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
             table.Columns.Add("starttime", typeof(DateTime));
             table.Columns.Add("day_off_code", typeof(Guid));
             table.Columns.Add("day_off_name", typeof(String));
+            table.Columns.Add("day_off_shortname", typeof(String));
             table.Columns.Add("day_count", typeof(int));
             table.Columns.Add("business_unit_code", typeof(Guid));
             table.Columns.Add("datasource_id", typeof(int));

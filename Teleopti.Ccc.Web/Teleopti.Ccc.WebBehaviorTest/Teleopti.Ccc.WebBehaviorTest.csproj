@@ -67,9 +67,9 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
-    <Reference Include="TechTalk.SpecFlow, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
+    <Reference Include="TechTalk.SpecFlow, Version=1.9.0.77, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\SpecFlow.1.8.1\lib\net35\TechTalk.SpecFlow.dll</HintPath>
+      <HintPath>..\..\packages\SpecFlow.1.9.0\lib\net35\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
     <Reference Include="WatiN.Core, Version=2.1.0.1196, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\WatiN.2.1.0\lib\net40\WatiN.Core.dll</HintPath>
@@ -100,23 +100,37 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\SignInPageStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\ScenarioConfigurable.cs" />
+    <Compile Include="Bindings\Generic\ScenarioStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ShiftTradeRequestsPageStepDefinition.cs" />
     <Compile Include="Bindings\Generic\WeekSchedulePageStepDefinitions.cs" />
-    <Compile Include="Core\Robustness\EventualAssert.cs" />
-    <Compile Include="Core\Robustness\EventualElementActions.cs" />
-    <Compile Include="Core\Robustness\Timeouts.cs" />
-    <Compile Include="Core\Robustness\Retrying.cs" />
-    <Compile Include="Data\Setups\Generic\UserLogonDetailConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
-    <Compile Include="Bindings\Transform.cs" />
     <Compile Include="BrowserNotifications.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BrowserNotifications.feature</DependentUpon>
     </Compile>
+    <Compile Include="Core\Robustness\EventualAssert.cs" />
+    <Compile Include="Core\Robustness\EventualElementActions.cs" />
+    <Compile Include="Core\Robustness\Timeouts.cs" />
+    <Compile Include="Core\Robustness\Retrying.cs" />
+    <Compile Include="Pages\SignInPage.cs" />
+    <Compile Include="Routing.feature.cs">
+      <DependentUpon>Routing.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="SignIn.feature.cs">
+      <DependentUpon>SignIn.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Data\Setups\Generic\UserLogonDetailConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
+    <Compile Include="Bindings\Transform.cs" />
     <Compile Include="Core\Robustness\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Generic\PasswordConfigurable.cs" />
     <Compile Include="Data\Setups\Specific\ExistingShiftTradeRequest.cs" />
@@ -288,7 +302,6 @@
     <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\BaseShiftCategory.cs" />
     <Compile Include="Data\Setups\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
-    <Compile Include="MobileSignInStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AbsenceToday.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutTeamDataAccess.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithSiteAccess.cs" />
@@ -305,11 +318,6 @@
     <Compile Include="Data\Setups\Specific\ShiftWithConfidentialAbsence.cs" />
     <Compile Include="Data\Setups\Specific\Team.cs" />
     <Compile Include="Data\Setups\Specific\TwoWeeksAbsence.cs" />
-    <Compile Include="MobileSignIn.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MobileSignIn.feature</DependentUpon>
-    </Compile>
     <Compile Include="MyProfile.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -319,7 +327,6 @@
     <Compile Include="Pages\Common\SelectBox.cs" />
     <Compile Include="Pages\Common\ISignInPage.cs" />
     <Compile Include="Pages\MobileGlobalMenuPage.cs" />
-    <Compile Include="Pages\MobileSignInPage.cs" />
     <Compile Include="Pages\PasswordPage.cs" />
     <Compile Include="Pages\RegionalSettingsPage.cs" />
     <Compile Include="Pages\TeamSchedulePage.cs" />
@@ -356,11 +363,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QUnitTests.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Routing.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Routing.feature</DependentUpon>
     </Compile>
     <Compile Include="RoutingStepDefinition.cs" />
     <Compile Include="Session.feature.cs">
@@ -470,11 +472,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="SecurityStepDefinitions.cs" />
-    <Compile Include="SignIn.feature.cs">
-      <DependentUpon>SignIn.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="SignOut.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -490,7 +487,6 @@
     <Compile Include="Pages\WeekSchedulePage.cs" />
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
     <Compile Include="Core\Navigation.cs" />
-    <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Core\WatiNWaitForCompleteTimeout.cs" />
     <Compile Include="Data\UserFactory.cs" />
     <Compile Include="Bindings\Specific\UserStepDefinitions.cs" />
@@ -526,7 +522,15 @@
     </Content>
     <None Include="BrowserNotifications.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>PasswordPolicyMobile.feature.cs</LastGenOutput>
+      <LastGenOutput>BrowserNotifications.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Routing.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Routing.feature.cs</LastGenOutput>
+    </None>
+    <None Include="SignIn.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SignIn.feature.cs</LastGenOutput>
     </None>
     <None Include="PasswordPolicy.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -594,10 +598,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MobileReports.feature.cs</LastGenOutput>
     </None>
-    <None Include="MobileSignIn.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MobileSignIn.feature.cs</LastGenOutput>
-    </None>
     <None Include="MyProfile.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MyProfile.feature.cs</LastGenOutput>
@@ -622,10 +622,6 @@
     <None Include="QUnitTests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>QUnitTests.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Routing.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Routing.feature.cs</LastGenOutput>
     </None>
     <None Include="Session.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -661,10 +657,6 @@
     <None Include="Security.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Security.feature.cs</LastGenOutput>
-    </None>
-    <None Include="SignIn.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SignIn.feature.cs</LastGenOutput>
     </None>
     <None Include="SignOut.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

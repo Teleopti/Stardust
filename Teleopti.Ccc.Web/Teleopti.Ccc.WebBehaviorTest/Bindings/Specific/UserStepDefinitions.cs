@@ -13,32 +13,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 	[Binding]
 	public class UserStepDefinitions
 	{
-		[Given(@"I am a user with access to all areas")]
-		public void GivenIAmAUserWithAccessToAllAreas()
-		{
-			UserFactory.User().Setup(new Administrator());
-		}
-
 		[Given(@"I am a user with everyone access")]
 		public void GivenIAmAUserWithEveryoneAccess()
 		{
 			UserFactory.User().Setup(new AdministratorRoleWithEveryoneData());
-		}
-
-		[Given(@"I am a user with access only to MyTime")]
-		public void GivenIAmAUserWithAccessOnlyToMyTime()
-		{
-			UserFactory.User().Setup(new Agent());
-		}
-
-		[Given(@"I am a user with")]
-		public void GivenIAmAUserWith(Table table)
-		{
-			if (!UserFactory.User().HasSetup<IUserRoleSetup>())
-				UserFactory.User().Setup(new Agent());
-
-			var user = table.CreateInstance<UserConfigurable>();
-			UserFactory.User().MakeUser(user.UserName, user.UserName, user.Password);
 		}
 
 		[Given(@"I am an agent")]

@@ -18,10 +18,10 @@ Scenario: Change password failed against the policy
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	And I am signed in with
-	| Field    | Value     |
-	| UserName | aa        |
-	| Password | P@ssword1 |
+#	And I am signed in with
+#	| Field    | Value     |
+#	| UserName | aa        |
+#	| Password | P@ssword1 |
 	When I view password setting page
 	And I change my password with
 	| Field              | Value     |
@@ -44,7 +44,7 @@ Scenario: Sign in failed after account is locked
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	Then I should not be signed in
-	And I should see an log on error
+	And I should see a log on error
 
 Scenario: Sign in with password will expire soon
 	Given Current time is '2012-01-30'

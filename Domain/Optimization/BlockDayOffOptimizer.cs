@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     public interface IBlockDayOffOptimizer
     {
 		bool Execute(IScheduleMatrixPro matrix, IScheduleMatrixOriginalStateContainer originalStateContainer, IDayOffDecisionMaker decisionMaker, ISchedulingOptions schedulingOptions);
+        ILockableBitArray WorkingBitArray { get; }
     }
 
     public class BlockDayOffOptimizer : IBlockDayOffOptimizer
@@ -20,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IBlockOptimizerBlockCleaner _blockOptimizerBlockCleaner;
         private readonly ILockableBitArrayChangesTracker _changesTracker;
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-        private ILockableBitArray _workingBitArray;
 
 
         public BlockDayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter,
@@ -49,12 +49,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             ILockableBitArray originalArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
 
-            _workingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
+            WorkingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
 
-            if (!decisionMaker.Execute(_workingBitArray, _scheduleResultDataExtractor.Values()))
+            if (!decisionMaker.Execute(WorkingBitArray, _scheduleResultDataExtractor.Values()))
                 return false;
 
-            if (!_dayOffDecisionMakerExecuter.Execute(_workingBitArray, originalArray, matrix, originalStateContainer,
+            if (!_dayOffDecisionMakerExecuter.Execute(WorkingBitArray, originalArray, matrix, originalStateContainer,
                                                       false, false, true))
                 return false;
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (!_blockSchedulingService.Execute(new List<IScheduleMatrixPro> {matrix}, schedulingOptions))
             {
                 //rensa block med hål i
-                IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(_workingBitArray, originalArray, matrix,
+                IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(WorkingBitArray, originalArray, matrix,
                                                                              _daysOffPreferences.ConsiderWeekBefore);
                 var datesRemoved = _blockOptimizerBlockCleaner.ClearSchedules(matrix, daysOffToRemove, schedulingOptions);
                 foreach (var dateOnly in datesRemoved)
@@ -84,5 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             string agent = matrix.Person.Name.ToString(NameOrderOption.FirstNameLastName);
             logWriter.LogInfo("Day off optimization for " + agent);
         }
+
+        public ILockableBitArray WorkingBitArray { get; private set; }
     }
 }

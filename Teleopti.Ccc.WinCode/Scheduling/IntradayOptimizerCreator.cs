@@ -57,10 +57,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 IScheduleMatrixLockableBitArrayConverter matrixConverter =
                     new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);
 
-                IScheduleResultDailyValueCalculator dailyValueCalculator =
-                    new RelativeDailyStandardDeviationsByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
-                IScheduleResultDataExtractor personalSkillsDataExtractor =
-                    new RelativeDailyStandardDeviationsByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
+				IScheduleResultDailyValueCalculator dailyValueCalculator;
+            	IScheduleResultDataExtractor personalSkillsDataExtractor;
+				//if(_optimizerPreferences.Advanced.TargetValueCalculation == TargetValueOptions.StandardDeviation)
+				//{
+					dailyValueCalculator = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
+					personalSkillsDataExtractor = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
+				//}
+                
 				INonBlendSkillCalculator nonBlendSkillCalculator =
 					new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection());
 

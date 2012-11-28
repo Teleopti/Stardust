@@ -56,6 +56,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.jQuery
 			return this;
 		}
 
+		public IJQueryExpression Change()
+		{
+			_expression.Append(".change()");
+			return this;
+		}
+
 		public IJQueryExpression Trigger(string eventName)
 		{
 			_expression.Append(string.Format(".trigger('{0}')", eventName));

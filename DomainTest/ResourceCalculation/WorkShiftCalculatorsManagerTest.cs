@@ -44,12 +44,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             Expect.Call(cache1.MainShiftProjection).Return(proj1).Repeat.Twice();
             Expect.Call(cache2.MainShiftProjection).Return(proj2).Repeat.Twice();
-            Expect.Call(_workShiftCalculator.CalculateShiftValue(proj1, dataHolders, 4, true, true)).Return(double.MinValue);
-            Expect.Call(_workShiftCalculator.CalculateShiftValue(proj2, dataHolders, 4, true, true)).Return(5);
+            Expect.Call(_workShiftCalculator.CalculateShiftValue(proj1, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(double.MinValue);
+			Expect.Call(_workShiftCalculator.CalculateShiftValue(proj2, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(5);
 
             Expect.Call(nonBlendSkillPeriods.Count).Return(5).Repeat.Twice();
-            Expect.Call(_nonBlendWorkShiftCalculator.CalculateShiftValue(person, proj1, nonBlendSkillPeriods, 4, true, true)).Return(5);
-            Expect.Call(_nonBlendWorkShiftCalculator.CalculateShiftValue(person, proj2, nonBlendSkillPeriods, 4, true, true)).Return(5);
+			Expect.Call(_nonBlendWorkShiftCalculator.CalculateShiftValue(person, proj1, nonBlendSkillPeriods, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(5);
+			Expect.Call(_nonBlendWorkShiftCalculator.CalculateShiftValue(person, proj2, nonBlendSkillPeriods, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(5);
             _mocks.ReplayAll();
             _target.RunCalculators(person, caches, dataHolders, nonBlendSkillPeriods, _options);
             _mocks.VerifyAll();

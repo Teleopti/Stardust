@@ -23503,6 +23503,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Average Shift Lengths.
+        /// </summary>
+        public static string UseAverageShiftLengths {
+            get {
+                return ResourceManager.GetString("UseAverageShiftLengths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use Block Scheduling.
         /// </summary>
         public static string UseBlockScheduling {
@@ -24543,6 +24552,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WindowsLogon {
             get {
                 return ResourceManager.GetString("WindowsLogon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Windows).
+        /// </summary>
+        public static string WindowsLogonWithBrackets {
+            get {
+                return ResourceManager.GetString("WindowsLogonWithBrackets", resourceCulture);
             }
         }
         

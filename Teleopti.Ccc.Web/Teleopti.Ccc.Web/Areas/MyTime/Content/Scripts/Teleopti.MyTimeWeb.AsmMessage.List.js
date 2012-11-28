@@ -129,36 +129,36 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	};
 
 	function _addNewMessageAtTop(messageItem) {
-		var result = $.grep(vm.asmMessageList(), function (list) {
-			return list.messageId() == messageItem.MessageId;
-		});
-		if (result.length == 1) {
-			var messageIndex = $.inArray(result[0], vm.asmMessageList());
-			vm.asmMessageList.splice(messageIndex, 1);
-			vm.asmMessageList.unshift(result[0]);
-			result[0].updateItem(messageItem);
+		if (typeof vm !== 'undefined') {
+			var result = $.grep(vm.asmMessageList(), function (list) {
+				return list.messageId() == messageItem.MessageId;
+			});
+			if (result.length == 1) {
+				var messageIndex = $.inArray(result[0], vm.asmMessageList());
+				vm.asmMessageList.splice(messageIndex, 1);
+				vm.asmMessageList.unshift(result[0]);
+				result[0].updateItem(messageItem);
+			} else {
+				vm.asmMessageList.unshift(new asmMessageItemViewModel(messageItem));
+			}
+			$('.asmMessage-list li')
+				.first()
+				.click(function () {
+					vm.chosenMessageId($(this).find('span[data-bind$="messageId"]').text());
+					_showAsmMessage($(this));
+				})
+				.hover(function () {
+					$(this).find('.asmMessage-arrow-right').animate({
+						opacity: 1.0
+					}, 300);
+				},
+					function () {
+						$(this).find('.asmMessage-arrow-right').animate({
+							opacity: 0.1
+						}, 600);
+					})
+				.find('.asmMessage-arrow-right').css({ opacity: 0.1 });
 		}
-		else {
-			vm.asmMessageList.unshift(new asmMessageItemViewModel(messageItem));
-		}
-		$('.asmMessage-list li')
-            .first()
-            .click(function () {
-            	vm.chosenMessageId($(this).find('span[data-bind$="messageId"]').text());
-            	_showAsmMessage($(this));
-            })
-            .hover(function () {
-            	$(this).find('.asmMessage-arrow-right').animate({
-            		opacity: 1.0
-            	}, 300);
-            },
-            function () {
-            	$(this).find('.asmMessage-arrow-right').animate({
-            		opacity: 0.1
-            	}, 600);
-            })
-			.find('.asmMessage-arrow-right').css({ opacity: 0.1 })
-            ;
 	};
 
 	function _replyToMessage(messageItem) {

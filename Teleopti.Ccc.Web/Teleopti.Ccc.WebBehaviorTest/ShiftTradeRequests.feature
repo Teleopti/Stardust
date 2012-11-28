@@ -1,4 +1,5 @@
-﻿Feature: Shift Trade Requests
+﻿@ignore
+Feature: Shift Trade Requests
 	In order to avoid unwanted scheduled shifts
 	As an agent
 	I want to be able to trade shifts with other agents
@@ -61,7 +62,17 @@ Background:
 	#| Start date | 2012-06-18    |
 	#| Skill      | Skill 1       |
 
+Scenario: Do not show shift trade request tab if no permission
+	Given I have the role 'No access to Shift Trade'
+	When I sign in
+	Then shift trade tab should not be visible
 
+Scenario: Show Shift trade reuqest tab
+	Given I have the role 'Full access to mytime'
+	When I sign in
+	Then shift trade tab should be visible
+
+	
 Scenario: No access to make shift trade reuquests
 	Given I have the role 'No access to Shift Trade'
 	When I view requests
@@ -75,26 +86,22 @@ Scenario: Default to today if no open shift trade period
 	When I navigate to shift trade page
 	And I navigate to messages
 	Then the selected date should be '2030-01-01'
-@ignore
 Scenario: Default to first day of open shift trade period
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01'
 	And I can do shift trades between '2030-01-03' and '2030-01-17'
 	When I navigate to shift trade page
 	Then the selected date should be '2030-01-03'
-@ignore
 Scenario: Default time line when I am not scheduled
 	Given I have the role 'Full access to mytime'
 	And Current time is '2020-10-24'
 	When I navigate to shift trade page
 	Then I should see the time line span from '7:45' to '17:15'
-@ignore
 Scenario: Time line when I have a scheduled shift
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01'
 	When I navigate to shift trade page
 	Then I should see the time line span from '5:45' to '16:15'
-@ignore
 Scenario: Show my scheduled shift
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01'
@@ -103,7 +110,6 @@ Scenario: Show my scheduled shift
 	| Field			| Value |
 	| Start time	| 06:00 |
 	| End time		| 16:00 |
-@ignore
 Scenario: Show my scheduled day off
 	Given I have the role 'Full access to mytime'
 	And I have a day off with

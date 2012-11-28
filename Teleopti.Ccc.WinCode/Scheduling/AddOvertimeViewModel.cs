@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
      
         public ICollectionView MultiplicatorDefinitionSet
         {
-            get { return CollectionViewSource.GetDefaultView(_definitionSets); }
+            get { return CollectionViewSource.GetDefaultView(_definitionSets) as ListCollectionView; }
         }
 
      

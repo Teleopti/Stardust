@@ -78,6 +78,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.DayLayerTooltipElement(date, subject).Exists, Is.True);
 		}
 
+		[Then(@"I should see the meeting details with description '(.*)' on date '(.*)'")]
+		public void ThenIShouldSeeTheMeetingDetailsWithDescriptionOnDate(string description, DateTime date)
+		{
+			EventualAssert.That(() => _page.DayLayerTooltipElement(date, description).Exists, Is.True);
+		}
+
 		[Then(@"I should see the public note on date '(.*)'")]
 		public void ThenIShouldSeeThePublicNoteOnDate(DateTime date)
 		{
@@ -147,7 +153,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see request page")]
 		public void ThenIShouldSeeRequestPage()
 		{
-			EventualAssert.That(() => Pages.Pages.Current.Document.Uri.AbsoluteUri, Is.StringContaining("Request"));
+			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("Request"));
 		}
 
 		[When(@"I click the current week button")]

@@ -73,14 +73,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             skillStaffPeriods.Add(activity2, dataHolders2);
 
             WorkShiftCalculator calculator = new WorkShiftCalculator();
-            calculator.CalculateShiftValue(layerCollection, skillStaffPeriods,4, true, true);
+			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
         }
 
         [Test]
         public void VerifyThatFindLongerShiftForUnderstaffingSituation()
         {
             int resolution = 15;
-            double lengthFactor = 8;
+            WorkShiftLengthHintOption lengthFactor = WorkShiftLengthHintOption.Long;
 
             double oldPeriodValue1 = -70d;
             int resourceInMinutes1 = 420;
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             double oldPeriodValue = 600d;
             int resourceInMinutes = 300;
             int resolution = 30;
-            double lengthFactor = (int)WorkShiftLengthHintOption.AverageWorkTime;
+            WorkShiftLengthHintOption lengthFactor = WorkShiftLengthHintOption.AverageWorkTime;
             double result;
             double expected;
 
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(expected, result);
 
             // Long
-            lengthFactor = (int)WorkShiftLengthHintOption.Long;
+            lengthFactor = WorkShiftLengthHintOption.Long;
 
             oldPeriodValue = 600d;
             expected = 2394;
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(expected, result);
 
             // Long
-            lengthFactor = (int)WorkShiftLengthHintOption.Short;
+            lengthFactor = WorkShiftLengthHintOption.Short;
 
             oldPeriodValue = 600d;
             expected = -1194;
@@ -199,9 +199,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             double resultNone;
             double resultShort;
 
-			resultLong = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Long, resolution);
-			resultNone = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.AverageWorkTime, resolution);
-			resultShort = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Short, resolution);
+			resultLong = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Long, resolution);
+			resultNone = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.AverageWorkTime, resolution);
+			resultShort = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Short, resolution);
 
             Assert.IsTrue(resultLong > resultNone);
             Assert.IsTrue(resultNone > resultShort);
@@ -209,9 +209,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             // case 2: x = 1
             oldPeriodValue = 1d;
             resourceInMinutes = 100;
-            resultLong = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Long, resolution);
-            resultNone = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.AverageWorkTime, resolution);
-            resultShort = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Short, resolution);
+            resultLong = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Long, resolution);
+            resultNone = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.AverageWorkTime, resolution);
+            resultShort = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Short, resolution);
 
             Assert.IsTrue(resultLong > resultNone);
             Assert.IsTrue(resultNone > resultShort);
@@ -220,9 +220,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             // case 3: 0 < x < 1
             oldPeriodValue = 0.6d;
             resourceInMinutes = 100;
-			resultLong = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Long, resolution);
-			resultNone = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.AverageWorkTime, resolution);
-			resultShort = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Short, resolution);
+			resultLong = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Long, resolution);
+			resultNone = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.AverageWorkTime, resolution);
+			resultShort = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Short, resolution);
 
             Assert.IsTrue(resultLong > resultNone);
             Assert.IsTrue(resultNone > resultShort);
@@ -230,9 +230,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             // case 4: x < -1
             oldPeriodValue = -600d;
             resourceInMinutes = 300;
-            resultLong = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Long, resolution);
-            resultNone = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.AverageWorkTime, resolution);
-            resultShort = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Short, resolution);
+            resultLong = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Long, resolution);
+            resultNone = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.AverageWorkTime, resolution);
+            resultShort = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Short, resolution);
 
             Assert.IsTrue(resultLong > resultNone);
             Assert.IsTrue(resultNone > resultShort);
@@ -240,9 +240,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             // case 5: x = -1
             oldPeriodValue = -1d;
             resourceInMinutes = 10;
-			resultLong = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Long, resolution);
-			resultNone = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.AverageWorkTime, resolution);
-			resultShort = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Short, resolution);
+			resultLong = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Long, resolution);
+			resultNone = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.AverageWorkTime, resolution);
+			resultShort = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Short, resolution);
 
             Assert.IsTrue(resultLong > resultNone);
             Assert.IsTrue(resultNone > resultShort);
@@ -250,9 +250,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             // case 6: 0 > x > -1
             oldPeriodValue = -0.6d;
             resourceInMinutes = 10;
-			resultLong = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Long, resolution);
-			resultNone = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.AverageWorkTime, resolution);
-			resultShort = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Short, resolution);
+			resultLong = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Long, resolution);
+			resultNone = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.AverageWorkTime, resolution);
+			resultShort = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Short, resolution);
 
             Assert.IsTrue(resultLong > resultNone);
             Assert.IsTrue(resultNone > resultShort);
@@ -292,15 +292,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             double resultNoneLower;
             double resultShortLower;
 
-			resultLongHigher = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Long, resolution);
-			resultNoneHigher = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.AverageWorkTime, resolution);
-			resultShortHigher = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Short, resolution);
+			resultLongHigher = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Long, resolution);
+			resultNoneHigher = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.AverageWorkTime, resolution);
+			resultShortHigher = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Short, resolution);
 
             oldPeriodValue = 0.9;
             resourceInMinutes = 1;
-			resultLongLower = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Long, resolution);
-			resultNoneLower = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.AverageWorkTime, resolution);
-			resultShortLower = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Short, resolution);
+			resultLongLower = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Long, resolution);
+			resultNoneLower = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.AverageWorkTime, resolution);
+			resultShortLower = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Short, resolution);
 
             Assert.IsTrue(resultLongHigher > resultLongLower);
             Assert.IsTrue(resultNoneHigher > resultNoneLower);
@@ -315,11 +315,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             int resolution = 30;
             double result;
 
-			result = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Long, resolution);
+			result = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Long, resolution);
             Assert.IsTrue(result > 0);
 
             oldPeriodValue = -0.1;
-			result = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, (int)WorkShiftLengthHintOption.Long, resolution);
+			result = _target.CalculateShiftValueForPeriod(oldPeriodValue, resourceInMinutes, WorkShiftLengthHintOption.Long, resolution);
             Assert.IsTrue(result < 0);
         }
 
@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             skillStaffPeriods.Add(activity1, dataHolders);
 
             WorkShiftCalculator calculator = new WorkShiftCalculator();
-            calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, 4, true, true);
+			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
 
         }
 
@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             skillStaffPeriods.Add(activity2, dataHolders);
 
             WorkShiftCalculator calculator = new WorkShiftCalculator( );
-            calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, 4, true, true);
+			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
         }
 
         [Test]
@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             skillStaffPeriods.Add(activity1, dataHolders);
 
             WorkShiftCalculator calculator = new WorkShiftCalculator();
-            calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, 4, true, true);
+			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
         }
 
         [Test]
@@ -444,7 +444,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             skillStaffPeriods.Add(activity1, dataHolders);
 
             WorkShiftCalculator calculator = new WorkShiftCalculator();
-            calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, 4, true, true);
+			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
 
             
         }
@@ -487,14 +487,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             skillStaffPeriods.Add(activityPhone, dataHolders);
 
             WorkShiftCalculator calculator = new WorkShiftCalculator();
-            var result = calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, 4, true, true);
+			var result = calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
 
             Assert.Greater(result, double.MinValue);
 
             layers = new List<IVisualLayer> { layerPhone, layerBreak2 };
             layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            var result2 = calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, 4, true, true);
+			var result2 = calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
 
             Assert.AreEqual(-1890, result);
             Assert.AreEqual(result, result2);
@@ -660,12 +660,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void ShouldBeSameEffectIfShiftValueIsNegativeOrPositive()
         {
-            double value1 = _target.CalculateShiftValueForPeriod(130, 480, (int)WorkShiftLengthHintOption.Short, 15);
-            double value2 = _target.CalculateShiftValueForPeriod(130, 480, (int)WorkShiftLengthHintOption.Long, 15);
+            double value1 = _target.CalculateShiftValueForPeriod(130, 480, WorkShiftLengthHintOption.Short, 15);
+            double value2 = _target.CalculateShiftValueForPeriod(130, 480, WorkShiftLengthHintOption.Long, 15);
             Assert.IsTrue(value1 < value2);
 
-            double value3 = _target.CalculateShiftValueForPeriod(-130, 480, (int)WorkShiftLengthHintOption.Short, 15);
-            double value4 = _target.CalculateShiftValueForPeriod(-130, 480, (int)WorkShiftLengthHintOption.Long, 15);
+            double value3 = _target.CalculateShiftValueForPeriod(-130, 480, WorkShiftLengthHintOption.Short, 15);
+            double value4 = _target.CalculateShiftValueForPeriod(-130, 480, WorkShiftLengthHintOption.Long, 15);
             Assert.IsTrue(value3 < value4);
 
             Assert.AreEqual(Math.Abs(value1), Math.Abs(value4));
@@ -675,24 +675,24 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void LongShiftShouldHaveHigherValueThanShortIfHintIsLong()
         {
-            double value1 = _target.CalculateShiftValueForPeriod(130, 360, (int)WorkShiftLengthHintOption.Long, 15);
-            double value2 = _target.CalculateShiftValueForPeriod(130, 480, (int)WorkShiftLengthHintOption.Long, 15);
+            double value1 = _target.CalculateShiftValueForPeriod(130, 360, WorkShiftLengthHintOption.Long, 15);
+            double value2 = _target.CalculateShiftValueForPeriod(130, 480, WorkShiftLengthHintOption.Long, 15);
             Assert.IsTrue(value1 < value2);
 
-            value1 = _target.CalculateShiftValueForPeriod(-130, 360, (int)WorkShiftLengthHintOption.Long, 15);
-            value2 = _target.CalculateShiftValueForPeriod(-130, 480, (int)WorkShiftLengthHintOption.Long, 15);
+            value1 = _target.CalculateShiftValueForPeriod(-130, 360, WorkShiftLengthHintOption.Long, 15);
+            value2 = _target.CalculateShiftValueForPeriod(-130, 480, WorkShiftLengthHintOption.Long, 15);
             Assert.IsTrue(value1 < value2);
         }
 
         [Test]
         public void ShortShiftShouldHaveHigherValueThanLongIfHintIsShort()
         {
-            double value1 = _target.CalculateShiftValueForPeriod(130, 480, (int)WorkShiftLengthHintOption.Short, 15);
-            double value2 = _target.CalculateShiftValueForPeriod(130, 360, (int)WorkShiftLengthHintOption.Short, 15);
+            double value1 = _target.CalculateShiftValueForPeriod(130, 480, WorkShiftLengthHintOption.Short, 15);
+            double value2 = _target.CalculateShiftValueForPeriod(130, 360, WorkShiftLengthHintOption.Short, 15);
             Assert.IsTrue(value1 < value2);
 
-            value1 = _target.CalculateShiftValueForPeriod(-130, 480, (int)WorkShiftLengthHintOption.Short, 15);
-            value2 = _target.CalculateShiftValueForPeriod(-130, 360, (int)WorkShiftLengthHintOption.Short, 15);
+            value1 = _target.CalculateShiftValueForPeriod(-130, 480, WorkShiftLengthHintOption.Short, 15);
+            value2 = _target.CalculateShiftValueForPeriod(-130, 360, WorkShiftLengthHintOption.Short, 15);
             Assert.IsTrue(value1 < value2);
         }
     }

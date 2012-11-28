@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static void CreateApplicationRoles(IUnitOfWork uow)
 		{
 			var applicationFunctionRepository = new ApplicationFunctionRepository(uow);
-			var allApplicationFunctions = applicationFunctionRepository.GetAllApplicationFunctionSortedByCode().AsEnumerable();
+			var allApplicationFunctions = applicationFunctionRepository.LoadAll().AsEnumerable();
 
 			var agentRoleApplicationFunctions =
 				from r in allApplicationFunctions
@@ -271,12 +271,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void CreateAgentPersons(IUnitOfWork uow)
 		{
-			UserTestData.AgentWindowsUser = PersonFactory.CreatePersonWithWindowsPermissionInfo(Environment.UserName, Environment.UserDomainName);
-			UserTestData.AgentWindowsUser.PermissionInformation.AddApplicationRole(TestData.AgentRole);
-			UserTestData.AgentWindowsUser.PermissionInformation.AddApplicationRole(TestData.AgentRoleSecondBusinessUnit);
-			UserTestData.AgentWindowsUser.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			UserTestData.AgentWindowsUser.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo("sv-SE"));
-
 			UserTestData.UserWithNoPermission = new Person();
 		    UserTestData.UserWithNoPermission.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
 		                                                                            {
@@ -287,7 +281,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		                                                                            };
             var personRepository = new PersonRepository(uow);
 			personRepository.Add(TestData.PersonThatCreatesTestData);
-			personRepository.Add(UserTestData.AgentWindowsUser);
 		}
 
 		private static void CreateActivities(IUnitOfWork unitOfWork)

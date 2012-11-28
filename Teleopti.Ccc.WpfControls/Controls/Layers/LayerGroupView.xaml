@@ -4,24 +4,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Common="clr-namespace:Teleopti.Ccc.WinCode.Common;assembly=Teleopti.Ccc.WinCode"
     xmlns:Layers="clr-namespace:Teleopti.Ccc.WpfControls.Controls.Layers"
-    xmlns:Converters="clr-namespace:Teleopti.Ccc.WpfControls.Converters" 
+    xmlns:Converters="clr-namespace:Teleopti.Ccc.WpfControls.Converters"
+                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
                  HorizontalAlignment="Stretch" 
                  VerticalAlignment="Stretch"
                  HorizontalContentAlignment="Stretch" 
                  VerticalContentAlignment="Stretch" >
     <UserControl.Resources>
         <Converters:ReversedVisibilityConverter x:Key="visibilityConverter"/>
-        <DataTemplate x:Key="groupBackground" DataType="LayerGroupViewModel">
+        <DataTemplate x:Key="groupBackground" DataType="Common:LayerGroupViewModel">
             <Layers:LayerGroupBackgroundView/>
         </DataTemplate>
 
-        <DataTemplate x:Key="groupForground" DataType="LayerGroupViewModel">
+        <DataTemplate x:Key="groupForground" DataType="Common:LayerGroupViewModel">
             <Layers:LayerGroupForegroundView/>
         </DataTemplate>
         
     </UserControl.Resources>
 
-    <Grid Visibility="{Binding Path=Layers.IsEmpty, Converter={StaticResource visibilityConverter}}">
+    <Grid Visibility="{Binding Path=Layers.IsEmpty, Converter={StaticResource visibilityConverter}, FallbackValue=Visible}">
         <!--The background-->
         <ContentControl Content="{Binding}" ContentTemplate="{StaticResource groupBackground}"/>
         
@@ -34,7 +35,7 @@
                         <Setter Property="ContentControl.VerticalContentAlignment" Value="Stretch" />
                         <Setter Property="Common:DateTimePeriodPanel.DateTimePeriod" >
                             <Setter.Value>
-                                <Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period" />
+                                <Binding RelativeSource="{x:Static RelativeSource.Self}" Path="Content.Period"/>
                             </Setter.Value>
                         </Setter>
                     </Style.Setters>

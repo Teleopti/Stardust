@@ -5,10 +5,20 @@
 
 Background:
 	Given there is a role with
+	| Field                    | Value               |
+	| Name                     | Access to all areas |
+	| Access to mobile reports | true                |
+	| Access to mytime web     | true                |
+	Given there is a role with
 	| Field                    | Value                       |
 	| Name                     | Access to report not mytime |
 	| Access to mobile reports | true                        |
 	| Access to mytime web     | false                       |
+	Given there is a role with
+	| Field                    | Value                       |
+	| Name                     | Access to mytime not report |
+	| Access to mobile reports | false                       |
+	| Access to mytime web     | true                        |
 
 Scenario: Browse to root
 	Given I am not signed in
@@ -26,37 +36,36 @@ Scenario: Browse to Mobile Reports
 	Then I should see Mobile Report's sign in page
 	
 Scenario: Browse to root and sign in to menu
-	Given I am a user with access to all areas
+	Given I have the role 'Access to all areas'
 	When I navigate to the site's root
+	And I select application logon data source
 	And I sign in
 	Then I should see the global menu
-
-Scenario: Browse to root and sign in to mobile menu
-	Given I am a user with access to all areas
-	When I navigate to the site's root mobile signin page
-	And I sign in 
-	Then I should see the mobile global menu
  
 Scenario: Browse to root and sign in to MyTime
-	Given I am a user with access only to MyTime
+	Given I have the role 'Access to mytime not report'
 	When I navigate to the site's root
+	And I select application logon data source
 	And I sign in
 	Then I should see MyTime
 
 Scenario: Browse to root and sign in to Mobile Reports
 	Given I have the role 'Access to report not mytime'
 	When I navigate to the site's root
+	And I select application logon data source
 	And I sign in
 	Then I should see Mobile Reports
 
 Scenario: Browse to MyTime and sign in
-	Given I am a user with access to all areas
+	Given I have the role 'Access to all areas'
 	When I navigate to MyTime
+	And I select application logon data source
 	And I sign in
 	Then I should see MyTime
 
 Scenario: Browse to Mobile Reports and sign in
-	Given I am a user with access to all areas
+	Given I have the role 'Access to all areas'
 	When I navigate to Mobile Reports
+	And I select application logon data source
 	And I sign in
 	Then I should see Mobile Reports

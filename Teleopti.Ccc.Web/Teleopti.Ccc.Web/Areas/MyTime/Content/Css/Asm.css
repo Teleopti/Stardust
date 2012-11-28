@@ -81,29 +81,39 @@
 	margin-top: 3px;
 }
 
-.asm-info-canvas-column {
-	width: 200px;
+.asm-info-canvas-column {	
 	font-family: verdana;
 	font-size: 9px;
 	white-space: nowrap;
 }
 
-.asm-info-canvas-column-current
-{
-	position:relative;
+.asm-info-canvas-column-current {
+	width: 200px;
+	position:absolute;
 	text-align: left;
 	opacity: 0.8;
 	filter: alpha(opacity=80);
 }
 
-.asm-info-canvas-column-next
-{
+.asm-info-canvas-column-next {
 	top: 0px;
 	left: 200px;
+	width: 150px;
 	position: absolute;
 	text-align: right;
 	opacity: 0.5;
 	filter: alpha(opacity=50);
+}
+
+.asm-info-canvas-column-messages 
+{
+	background: #F8F8F8;
+	left: 365px;
+	width: 35px;
+	position: absolute;
+	text-align: right;
+	opacity: 0.8;
+	filter: alpha(opacity=80);	
 }
 .ui-state-default a.asm-new-message-indicator
 {

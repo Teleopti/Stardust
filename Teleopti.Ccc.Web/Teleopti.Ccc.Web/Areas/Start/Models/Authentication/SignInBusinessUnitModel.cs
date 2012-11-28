@@ -14,4 +14,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 		public int AuthenticationType { get; set; }
 		public string WarningMessage { get; set; }
 	}
+
+	public class BusinessUnitModelNew
+	{
+		[Required(ErrorMessageResourceName = "BusinessUnitRequired", ErrorMessageResourceType = typeof(Resources))]
+		[Display(Name = "PleaseChooseABusinessUnit", ResourceType = typeof(Resources))]
+		public Guid BusinessUnitId { get; set; }
+		public Guid PersonId { get; set; }
+		public string WarningMessage { get; set; }
+		public DataSourceViewModelNew DataSourceViewModel { get; set; }
+	}
 }

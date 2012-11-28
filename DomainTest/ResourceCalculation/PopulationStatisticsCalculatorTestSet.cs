@@ -133,5 +133,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             Assert.AreEqual("11.4;17.3;21.3;25.9;40.1;", _target.ToString());
         }
+
+		[Test]
+		public void TeleoptiShouldCalculateCorrect()
+		{
+			_target.Clear();
+			_target.AddItem(10);
+			_target.AddItem(-10);
+			_target.Analyze();
+			Assert.AreEqual(30d, _target.Teleopti);
+		}
     }
 }

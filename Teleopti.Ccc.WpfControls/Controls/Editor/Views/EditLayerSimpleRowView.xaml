@@ -14,7 +14,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\..\..\Resources\Common.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <cvt:ColorConverterSoft x:Key="colorConverter"/>
+            <cvt:ColorConverterSoft x:Key="ColorConverter"/>
             <DateTimeConverter:DateTimeToLocalStringConverter x:Key="startDateTimeToLocalStringConverter"/>
             <DateTimeConverter:DateTimeToLocalStringConverter x:Key="endDateTimeToLocalStringConverter"/>
             <DateTimeConverter:DateTimeParseMode x:Key="TimeMode">Time</DateTimeConverter:DateTimeParseMode>
@@ -26,7 +26,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Border BorderBrush="#FF8B8787" BorderThickness="0.3" CornerRadius="3" Padding="3" Margin="1" Background="{Binding Path=Layer.DisplayColor, Converter={StaticResource colorConverter}}">
+    <Border BorderBrush="#FF8B8787" BorderThickness="0.3" CornerRadius="3" Padding="3" Margin="1" Background="{Binding Path=Layer.DisplayColor, Converter={StaticResource colorConverter}, TargetNullValue=White, FallbackValue=White}">
         <Grid Commands:CreateCommandBinding.CommandModel="{Binding Path=UpdateLayerCommand}">
             <Grid.RowDefinitions>
                 <RowDefinition />
@@ -137,7 +137,7 @@
                 <ComboBox ItemsSource="{Binding Path=SelectablePayloads}"  
                           IsSynchronizedWithCurrentItem="True"  
                           Grid.Column="3" 
-                          
+                          Style="{StaticResource BasicComboBox}"
                           ItemTemplate="{StaticResource PayloadTemplate}"/>
                 
                 

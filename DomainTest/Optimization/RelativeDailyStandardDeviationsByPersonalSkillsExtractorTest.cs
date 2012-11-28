@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     [TestFixture]
     public class RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest
     {
-        private RelativeDailyStandardDeviationsByPersonalSkillsExtractor _target;
+        private RelativeDailyValueByPersonalSkillsExtractor _target;
         private MockRepository _mocks;
         private IScheduleMatrixPro _matrix;
         private IPerson _person;
@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _skillStaffPeriodHolder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
-            _advancedPreferences = _mocks.StrictMock<IAdvancedPreferences>();
-            _target = new RelativeDailyStandardDeviationsByPersonalSkillsExtractor(_matrix, _advancedPreferences);
+            _advancedPreferences = new AdvancedPreferences();
+            _target = new RelativeDailyValueByPersonalSkillsExtractor(_matrix, _advancedPreferences);
         }
 
         [Test]
@@ -73,10 +73,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
 
-                Expect.Call(_advancedPreferences.UseMinimumStaffing)
-                    .Return(false).Repeat.AtLeastOnce();
-                Expect.Call(_advancedPreferences.UseMaximumStaffing)
-                    .Return(false).Repeat.AtLeastOnce();
+				//Expect.Call(_advancedPreferences.UseMinimumStaffing)
+				//    .Return(false).Repeat.AtLeastOnce();
+				//Expect.Call(_advancedPreferences.UseMaximumStaffing)
+				//    .Return(false).Repeat.AtLeastOnce();
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
 
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             scheduleDay.Date, scheduleDay.Date.AddDays(1),
             TeleoptiPrincipal.Current.Regional.TimeZone);
             */
-
+        	_advancedPreferences.UseMaximumStaffing = false;
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
@@ -125,10 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
 
-                Expect.Call(_advancedPreferences.UseMinimumStaffing)
-                    .Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_advancedPreferences.UseMaximumStaffing)
-                    .Return(false).Repeat.AtLeastOnce();
+                
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
 
@@ -159,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             scheduleDay.Date, scheduleDay.Date.AddDays(1),
             TeleoptiPrincipal.Current.Regional.TimeZone);
             */
-
+        	_advancedPreferences.UseMinimumStaffing = false;
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
@@ -177,10 +174,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
 
-                Expect.Call(_advancedPreferences.UseMinimumStaffing)
-                    .Return(false).Repeat.AtLeastOnce();
-                Expect.Call(_advancedPreferences.UseMaximumStaffing)
-                    .Return(true).Repeat.AtLeastOnce();
+               
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
 
@@ -229,10 +223,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
 
-                Expect.Call(_advancedPreferences.UseMinimumStaffing)
-                    .Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_advancedPreferences.UseMaximumStaffing)
-                    .Return(true).Repeat.AtLeastOnce();
+                
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
 
@@ -263,7 +254,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             scheduleDay.Date, scheduleDay.Date.AddDays(1),
             TeleoptiPrincipal.Current.Regional.TimeZone);
             */
-
+        	_advancedPreferences.UseMinimumStaffing = false;
+        	_advancedPreferences.UseMaximumStaffing = false;
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
@@ -281,10 +273,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
 
-                Expect.Call(_advancedPreferences.UseMinimumStaffing)
-                    .Return(false).Repeat.AtLeastOnce();
-                Expect.Call(_advancedPreferences.UseMaximumStaffing)
-                    .Return(false).Repeat.AtLeastOnce();
+              
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
                 SetSkillStaffPeriodExpectations(skillStaffPeriod2, 2);

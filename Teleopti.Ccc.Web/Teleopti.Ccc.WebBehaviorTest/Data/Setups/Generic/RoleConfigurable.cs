@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public void Apply(IUnitOfWork uow)
 		{
 			var applicationFunctionRepository = new ApplicationFunctionRepository(uow);
-			var allApplicationFunctions = applicationFunctionRepository.GetAllApplicationFunctionSortedByCode().AsEnumerable();
+			var allApplicationFunctions = applicationFunctionRepository.LoadAll();
 
 			var applicationFunctions = from f in allApplicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.All select f;
 
@@ -64,7 +64,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
                 applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb select f;
 			if (!AccessToShiftTradeRequests)
 				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb select f;
-
 
 			var role = ApplicationRoleFactory.CreateRole(Name, null);
 

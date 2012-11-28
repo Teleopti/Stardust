@@ -1,11 +1,10 @@
 ﻿using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Web.Areas.Start.Models.Menu;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 {
-	using System.Collections.Generic;
-	using System.Linq;
-	using Models.Menu;
-
 	public class MenuViewModelFactory : IMenuViewModelFactory
 	{
 		private readonly IPermissionProvider _permissionProvider;
@@ -15,16 +14,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 			_permissionProvider = permissionProvider;
 		}
 
-		#region IMenuViewModelFactory Members
-
-		public IEnumerable<MenuViewModel> CreateMenyViewModel()
+		public IEnumerable<ApplicationViewModel> CreateMenyViewModel()
 		{
 			return
 				DefinedApplicationAreas.ApplicationAreas.Where(
 					d => _permissionProvider.HasApplicationFunctionPermission(d.ApplicationFunctionPath)).Select(
-						d => new MenuViewModel { Name = d.Name, Area = d.Area });
+						d => new ApplicationViewModel { Name = d.Name, Area = d.Area });
 		}
-
-		#endregion
 	}
 }

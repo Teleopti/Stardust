@@ -73,11 +73,11 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ControllersShouldBeRegisteredPerInstance()
 		{
-			var controller = requestContainer.Resolve<AuthenticationController>();
-			var controller2 = requestContainer.Resolve<AuthenticationController>();
+			var controllerNew = requestContainer.Resolve<AuthenticationController>();
+			var controllerNew2 = requestContainer.Resolve<AuthenticationController>();
 
-			controller
-				.Should().Not.Be.SameInstanceAs(controller2);
+			controllerNew
+				.Should().Not.Be.SameInstanceAs(controllerNew2);
 		}
 
 		[Test]
@@ -291,14 +291,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
-		public void ShouldResolveRouteAreaRedirector()
-		{
-			var result = requestContainer.Resolve<IRedirector>();
-			result.Should().Not.Be.Null();
-		}
-
-
-		[Test]
 		public void ShouldResolveScheduleController()
 		{
 			requestContainer.Resolve<ScheduleController>()
@@ -493,6 +485,21 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			var result = requestContainer.Resolve<IExtendedPreferencePredicate>();
 			result.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveDataSourceViewModelFactories()
+		{
+			var result = requestContainer.Resolve<IEnumerable<IDataSourcesViewModelFactory>>();
+
+			var dataSourceViewModelFactoryTypes =
+				from t in typeof (ContainerConfiguration).Assembly.GetTypes()
+				let isDataSourceViewModelFactory = typeof (IDataSourcesViewModelFactory).IsAssignableFrom(t)
+				let isSelf = typeof (IDataSourcesViewModelFactory) == t
+				where isDataSourceViewModelFactory
+				where !isSelf
+				select t;
+			result.Select(p => p.GetType()).Should().Have.SameValuesAs(dataSourceViewModelFactoryTypes);
 		}
 
 	}

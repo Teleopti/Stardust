@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Start
 			context.MapRoute(
 				"Start-default",
 				"Start/{controller}/{action}/{id}",
-				new { controller = "Menu", action = "Index", id = UrlParameter.Optional }
+				new { controller = "Authentication", action = "SignIn", id = UrlParameter.Optional }
 				);
 		}
 	}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
@@ -19,15 +20,18 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
         private readonly ISchedulePartModifyAndRollbackService _rollbackService;
+        private readonly IDaysOffPreferences _daysOffPreferences;
         private bool _cancelMe;
 
         public BlockDayOffOptimizationService(
             IPeriodValueCalculator periodValueCalculator,
-            ISchedulePartModifyAndRollbackService rollbackService
+            ISchedulePartModifyAndRollbackService rollbackService,
+            IDaysOffPreferences daysOffPreferences
             )
         {
             _periodValueCalculatorForAllSkills = periodValueCalculator;
             _rollbackService = rollbackService;
+            _daysOffPreferences = daysOffPreferences;
         }
 
         public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -87,9 +91,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             int executes = 0;
             double lastPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
             double newPeriodValue = lastPeriodValue;
+            var changesTracker = new LockableBitArrayChangesTracker();
+            
             foreach (IBlockDayOffOptimizerContainer optimizer in activeOptimizers.GetRandom(activeOptimizers.Count, true))
             {
                 _rollbackService.ClearModificationCollection();
+                var converter = new ScheduleMatrixLockableBitArrayConverter(optimizer.Matrix);
+                var originalArray = converter.Convert(_daysOffPreferences.ConsiderWeekBefore, _daysOffPreferences.ConsiderWeekAfter);
                 bool result = optimizer.Execute(schedulingOptions);
                 executes++;
                 if (!result)
@@ -117,6 +125,11 @@ namespace Teleopti.Ccc.Domain.Optimization
                 }
                 else
                 {
+                    var daysOffRemoved = changesTracker.DaysOffRemoved(optimizer.WorkingBitArray, originalArray,
+                                                                       optimizer.Matrix,
+                                                                       _daysOffPreferences.ConsiderWeekBefore);
+                    var optimizerCapture = optimizer;
+                    daysOffRemoved.ForEach(d => optimizerCapture.Matrix.LockPeriod(new DateOnlyPeriod(d, d)));
                     success = " " + Resources.wasSuccessful;
                 }
                 string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ")";

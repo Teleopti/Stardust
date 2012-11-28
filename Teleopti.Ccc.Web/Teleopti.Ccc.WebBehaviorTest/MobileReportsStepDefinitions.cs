@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a table")]
 		public void ThenIShouldSeeATable()
 		{
-			var table = _page.ReportTableContainer.Table(t => true);
+			var table = _page.ReportTableContainer.Table(Find.First());
 			EventualAssert.That(() => table.TableCells.Count, Is.GreaterThan(0));
 		}
 
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I am viewing a report")]
 		public void WhenIAmViewAReport()
 		{
-			TestControllerMethods.LogonMobile();
+			TestControllerMethods.Logon();
 			Navigation.GotoMobileReportsSettings();
 			_page = Browser.Current.Page<MobileReportsPage>();
 			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I view a report with week data")]
 		public void WhenIViewAReportWithWeekData()
 		{
-			TestControllerMethods.LogonMobile();
+			TestControllerMethods.Logon();
 			Navigation.GotoMobileReportsSettings();
 			_page = Browser.Current.Page<MobileReportsPage>();
 			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
@@ -230,8 +230,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I view MobileReports")]
 		public void WhenIEnterMobileReports()
 		{
-			TestControllerMethods.LogonMobile();
-			Navigation.GotoMobileReports();
+			TestControllerMethods.Logon();
+			Navigation.GotoMobileReportsPage();
 			_page = Browser.Current.Page<MobileReportsPage>();
 		}
 
@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I view ReportSettings")]
 		public void WhenIViewReportSettings()
 		{
-			TestControllerMethods.LogonMobile();
+			TestControllerMethods.Logon();
 			Navigation.GotoMobileReportsSettings();
 			_page = Browser.Current.Page<MobileReportsPage>();
 		}

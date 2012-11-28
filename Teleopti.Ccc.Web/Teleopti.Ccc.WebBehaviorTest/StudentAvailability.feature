@@ -23,12 +23,12 @@ Scenario: No virtual schedule period
 
 Scenario: No access to student availability menu item
 	Given I am an agent without access to student availability
-	When I sign in
+	When I am viewing an application page
 	Then I should not be able to see student availability link
 
 Scenario: No access to student availability page
 	Given I am an agent without access to student availability
-	When I sign in
+	When I am viewing an application page
 	And I navigate to the student availability page
 	Then I should see an error message
 

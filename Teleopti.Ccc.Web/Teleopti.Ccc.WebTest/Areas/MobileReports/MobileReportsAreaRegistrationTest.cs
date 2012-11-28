@@ -38,18 +38,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 		}
 
 		[Test]
-		public void ShouldRegisterMobileReportsAuthetcationSignInRoute()
-		{
-			const string routeName = "MobileReports-authentication-signin";
-			var routes = new RouteCollection();
-			var areaRegistrationContext = new AreaRegistrationContext(_target.AreaName, routes);
-
-			_target.RegisterArea(areaRegistrationContext);
-
-			routes[routeName].Should().Not.Be.Null();
-		}
-
-		[Test]
 		public void ShouldRegisterMobileReportsWithDefaultName()
 		{
 			const string defaultRouteName = "MobileReports-default";
@@ -90,8 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/MobileReports/Authentication/SignIn");
 			var routeData = routes.GetRouteData(httpContext);
 
-			var expectedValues = new Dictionary<string, string>
-			                     	{{"area", "Start"}, {"controller", "Authentication"}, {"action", "MobileSignIn"}};
+			var expectedValues = new Dictionary<string, string> {{"area", "Start"}, {"controller", "Authentication"}, {"action", "SignIn"}};
 			expectedValues.ForEach(x => routeData.Values[x.Key].Should().Be.EqualTo(x.Value));
 		}
 

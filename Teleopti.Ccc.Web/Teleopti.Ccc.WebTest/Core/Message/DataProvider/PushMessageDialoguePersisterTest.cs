@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
@@ -6,6 +7,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping;
@@ -83,20 +85,45 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 			Assert.That(result.DialogueMessages.First(m => m.Text.Equals("the reply")).SenderId, Is.EqualTo(_loggedOnUser.CurrentUser().Id));
 		}
 
+		[Test]
+		public void CanSendNewPushMessageToLoggedOnUser()
+		{
+			var title = "title of the message";
+			var body = "body of the message";
+			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();
+			var target = CreateTarget(pushMessageDialogueRepository);
+			pushMessageDialogueRepository.Expect(pm => pm.Add(null)).IgnoreArguments().WhenCalled(p =>
+				                                                                   {
+					                                                                   var theDialogueThatHasBeenCreated = (IPushMessageDialogue) p.Arguments[0];
+																											 Assert.That(theDialogueThatHasBeenCreated.Receiver,Is.EqualTo(_loggedOnUser.CurrentUser()));
+																											 Assert.That(theDialogueThatHasBeenCreated.PushMessage.GetMessage(new NoFormatting()),Is.EqualTo(body));
+																											 Assert.That(theDialogueThatHasBeenCreated.PushMessage.GetTitle(new NoFormatting()),Is.EqualTo(title));
+																											 Assert.That(theDialogueThatHasBeenCreated.PushMessage.ReplyOptions,Is.Not.Empty);
+																										 }).Repeat.Once();
+
+			target.SendNewPushMessageToLoggedOnUser(title,body);
+			pushMessageDialogueRepository.VerifyAllExpectations();
+		}
+
 		private PushMessageDialoguePersister CreateTargetWithDialogueInRepository(IPushMessageDialogue dialogue)
 		{
 			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();
 			pushMessageDialogueRepository.Stub(x => x.Get((Guid)dialogue.Id)).Return(dialogue);
-			return CreateTarget(pushMessageDialogueRepository);
+			return CreateTarget(pushMessageDialogueRepository,null);
 		}
 
-		private PushMessageDialoguePersister CreateTarget(IPushMessageDialogueRepository repository)
+		private PushMessageDialoguePersister CreateTarget(IPushMessageDialogueRepository pushMessageDialogueRepository)
+		{
+			return CreateTarget(pushMessageDialogueRepository, MockRepository.GenerateStub<IPushMessageRepository>());
+		}
+
+		private PushMessageDialoguePersister CreateTarget(IPushMessageDialogueRepository pushMessageDialogueRepository,IPushMessageRepository pushMessageRepository)
 		{
 			var user = new Person();
 			user.SetId(Guid.NewGuid());
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			_loggedOnUser.Stub(l => l.CurrentUser()).Return(user);
-			return new PushMessageDialoguePersister(repository, SetupMapper(), _loggedOnUser); 
+			return new PushMessageDialoguePersister(pushMessageDialogueRepository, SetupMapper(), _loggedOnUser, pushMessageRepository); 
 		}
 
 		private static IMappingEngine SetupMapper()

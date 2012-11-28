@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -49,9 +48,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IFairnessValueResult fairnessValueResult = new FairnessValueResult();
             using (_mocks.Record())
             {
-                Expect.Call(_calculator.CalculateShiftValue(shifts[0].MainShiftProjection, null, 1,true, true)).Return(10);
-                Expect.Call(_calculator.CalculateShiftValue(shifts[1].MainShiftProjection, null, 1, true, true)).Return(5);
-                Expect.Call(_calculator.CalculateShiftValue(shifts[2].MainShiftProjection, null, 1, true, true)).Return(15);
+                Expect.Call(_calculator.CalculateShiftValue(shifts[0].MainShiftProjection, null, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(10);
+				Expect.Call(_calculator.CalculateShiftValue(shifts[1].MainShiftProjection, null, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(5);
+				Expect.Call(_calculator.CalculateShiftValue(shifts[2].MainShiftProjection, null, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(15);
                 
                 Expect.Call(_fairnessValueCalculator.CalculateFairnessValue(10, 0, 5, fairnessValueResult.FairnessPoints,
 																			fairnessValueResult, 15, _schedulingOptions)).Return(10);
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
            
             using (_mocks.Playback())
             {
-				var ret = _target.BestShiftValue(dateOnly, shifts, null, fairnessValueResult, fairnessValueResult, 5, TimeSpan.FromHours(48), false, null, 1, true, true, _schedulingOptions);
+				var ret = _target.BestShiftValue(dateOnly, shifts, null, fairnessValueResult, fairnessValueResult, 5, TimeSpan.FromHours(48), false, null, _schedulingOptions);
                 Assert.AreEqual(15,ret.Value );
             }
             
@@ -85,9 +84,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var shiftCategoryFairnessFactors = _mocks.DynamicMock<IShiftCategoryFairnessFactors>();
 			using (_mocks.Record())
 			{
-				Expect.Call(_calculator.CalculateShiftValue(shifts[0].MainShiftProjection, null, 1, true, true)).Return(10);
-				Expect.Call(_calculator.CalculateShiftValue(shifts[1].MainShiftProjection, null, 1, true, true)).Return(5);
-				Expect.Call(_calculator.CalculateShiftValue(shifts[2].MainShiftProjection, null, 1, true, true)).Return(15);
+				Expect.Call(_calculator.CalculateShiftValue(shifts[0].MainShiftProjection, null, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(10);
+				Expect.Call(_calculator.CalculateShiftValue(shifts[1].MainShiftProjection, null, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(5);
+				Expect.Call(_calculator.CalculateShiftValue(shifts[2].MainShiftProjection, null, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(15);
 				
 				Expect.Call(_shiftCategoryFairnessShiftValueCalculator.ModifiedShiftValue(10, 0, 15, _schedulingOptions)).Return(10);
 				Expect.Call(_shiftCategoryFairnessShiftValueCalculator.ModifiedShiftValue(5, 0, 15, _schedulingOptions)).Return(5);
@@ -96,7 +95,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Playback())
 			{
-				var ret = _target.BestShiftValue(dateOnly, shifts, null, fairnessValueResult, fairnessValueResult, 5, TimeSpan.FromHours(48), true, shiftCategoryFairnessFactors, 1, true, true, _schedulingOptions);
+				var ret = _target.BestShiftValue(dateOnly, shifts, null, fairnessValueResult, fairnessValueResult,
+				                                 5, TimeSpan.FromHours(48), true,
+				                                 shiftCategoryFairnessFactors, _schedulingOptions);
 				Assert.AreEqual(15, ret.Value);
 			}
 

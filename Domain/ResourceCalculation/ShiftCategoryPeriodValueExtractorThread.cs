@@ -99,9 +99,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                                                         averageWorkTime,
                                                         _useShiftCategoryFairness,
                                                         _shiftCategoryFairnessFactors,
-                                                        (double)_schedulingOptions.WorkShiftLengthHintOption,
-                                                        _schedulingOptions.UseMinimumPersons,
-                                                        _schedulingOptions.UseMaximumPersons,
                                                         _schedulingOptions);
             if (_schedulingOptions.UseCommonActivity)
                 possible.ActivityPeriods = shiftValue.ActivityPeriods ;

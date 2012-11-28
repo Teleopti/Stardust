@@ -94,6 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 	{
 		public string Title { get; set; }
 		public string Location { get; set; }
+		public string Description { get; set; }
 	}
 
 	public class HeaderViewModel

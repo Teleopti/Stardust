@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Models.Shared;
@@ -77,16 +76,6 @@ namespace Teleopti.Ccc.Web.Filters
 			       		Message = _errorMessageProvider.ResolveMessage(handleErrorInfo),
 			       		ShortMessage = _errorMessageProvider.ResolveShortMessage(handleErrorInfo)
 			       	};
-		}
-	}
-
-	public static class HttpRequestBaseExtensions
-	{
-		public static bool AcceptsJson(this HttpRequestBase request)
-		{
-			if (request.Headers.AllKeys.Contains("Accept"))
-				return request.Headers["Accept"].Contains("application/json");
-			return false;
 		}
 	}
 }

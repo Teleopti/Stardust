@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public ICollectionView ShiftCategories
         {
-            get { return CollectionViewSource.GetDefaultView(_categories); }
+            get { return CollectionViewSource.GetDefaultView(_categories) as ListCollectionView; }
         }
 
         public AddActivityViewModel(IList<IActivity> activities, IList<IShiftCategory> categories, DateTimePeriod period,TimeSpan interval)

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Web.Areas.Start.Models.LayoutBase;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Core.LayoutBase
 {
+	[TestFixture]
 	public class LayoutBaseViewModelFactoryTest
 	{
 		private ILayoutBaseViewModelFactory _target;

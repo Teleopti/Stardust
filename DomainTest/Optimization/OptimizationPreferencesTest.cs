@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void VerifyLocalSchedulingOptionsDefaultValues()
 		{
 			Assert.IsTrue(_target.Rescheduling.ConsiderShortBreaks);
+			Assert.IsTrue(_target.Advanced.UseAverageShiftLengths);
 		}
 
 		[Test]
