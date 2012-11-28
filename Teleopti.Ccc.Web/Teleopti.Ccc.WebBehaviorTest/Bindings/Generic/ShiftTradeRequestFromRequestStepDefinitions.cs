@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -33,5 +34,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.RequestsPage.Requests.Count(), Is.EqualTo(0));
 		}
 
+		[Then(@"I should not see any delete button on my existing shift trade request")]
+		public void ThenIShouldNotSeeAnyDeleteButtonOnMyExistingShiftTradeRequest()
+		{
+			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
+			EventualAssert.That(()=>Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId).IsDisplayed(),Is.False);
+		}
 	}
 }
