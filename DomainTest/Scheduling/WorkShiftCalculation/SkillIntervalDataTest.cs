@@ -11,7 +11,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		[SetUp]
 		public void Setup()
 		{
-			
+			_target = new SkillIntervalData(1.5, 3, 2, null);
+		}
+
+		[Test]
+		public void ShouldContainCurrentDemand()
+		{
+			Assert.AreEqual(1.5, _target.CurrentDemand);
+		}
+
+		[Test]
+		public void CouldContainMinMaxHeads()
+		{
+			Assert.IsNull(_target.MaximumHeads);
+			Assert.AreEqual(2, _target.MinimumHeads.Value);
+		}
+
+		[Test]
+		public void ShouldContainCurrentHeads()
+		{
+			Assert.AreEqual(3, _target.CurrentHeads);
 		}
 	}
 }
