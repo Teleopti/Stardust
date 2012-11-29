@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 {
@@ -7,11 +8,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 	public class SkillIntervalDataTest
 	{
 		private ISkillIntervalData _target;
+		private DateTimePeriod _dtp;
 
 		[SetUp]
 		public void Setup()
 		{
-			_target = new SkillIntervalData(1.5, 3, 2, null);
+			_dtp = new DateTimePeriod(2012, 11, 28, 2012, 11, 28);
+			_target = new SkillIntervalData(_dtp, 3.5, 1.5, 3, 2, null);
 		}
 
 		[Test]
@@ -31,6 +34,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		public void ShouldContainCurrentHeads()
 		{
 			Assert.AreEqual(3, _target.CurrentHeads);
+		}
+
+		[Test]
+		public void ShouldContainPeriod()
+		{
+			Assert.AreEqual(_dtp, _target.Period);
+		}
+
+		[Test]
+		public void ShouldContainForecastedDemand()
+		{
+			
 		}
 	}
 }
