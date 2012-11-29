@@ -13,6 +13,7 @@ require.config({
 		crossroads: '/Content/crossroads/crossroads',
 		hasher: '/Content/hasher/hasher',
 		touchPunch: '/Content/jqueryui.touch-punch/jquery.ui.touch-punch',
+		swipeListener: '/Content/jquery-plugin/jquery.swipeListener',
 
 		templates: '../templates',
 
@@ -31,6 +32,7 @@ require.config({
 			exports: '_'
 		},
 		'touchPunch': ['jqueryui'],
+		'swipeListener': ['jquery']
 		//'vendor/bootstrap-datepicker': ['jquery'],
 		//'widgets/editlayer/jquery.ui.editlayer': ['jqueryui'],
 		//'widgets/editlayer/jquery.ui.editlayer.ko': ['knockout', 'widgets/editlayer/jquery.ui.editlayer'],
