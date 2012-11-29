@@ -15,7 +15,7 @@ Background:
 	| Field | Value |
 	| Name  | Agent |
 
-Scenario: Change password failed against the policy
+Scenario: Change password fails against the policy
 	Given I am a user signed in with
 	| Field    | Value     |
 	| UserName | aa        |
@@ -26,9 +26,9 @@ Scenario: Change password failed against the policy
 	| Password           | aa        |
 	| Confirmed Password | aa        |
 	| Old Password       | P@ssword1 |
-	Then I should see password changed failed with message
+	Then I should see password change failed with message
 
-Scenario: Sign in failed after account is locked
+Scenario: Sign in fails after account is locked
 	Given I have user logon details with
 	| Field    | Value |
 	| IsLocked | true  |
@@ -43,6 +43,7 @@ Scenario: Sign in failed after account is locked
 	Then I should not be signed in
 	And I should see a log on error 'LogOnFailedAccountIsLocked'
 
+@ignore
 Scenario: Sign in with password will expire soon
 	Given I have user logon details with
 	| Field                           | Value |
@@ -57,8 +58,8 @@ Scenario: Sign in with password will expire soon
 	| Password | P@ssword1 |
 	Then I should see a warning 'LogOnWarningPasswordWillSoonExpire'
 	And I should be signed in
-
-Scenario: Sign in with password already expired
+@ignore
+Scenario: Sign in passes with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
@@ -72,9 +73,9 @@ Scenario: Sign in with password already expired
 	| Password | P@ssword1 |
 	Then I should not be signed in
 	And I should see an error 'LogOnFailedPasswordExpired'
-	And I should be see the must change password page
-
-Scenario: Navigate to other page when sign in with password already expired
+	And I should see the must change password page
+@ignore
+Scenario: Manually Navigate to other page when sign in with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
@@ -86,9 +87,9 @@ Scenario: Navigate to other page when sign in with password already expired
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	And I navigate to week schedule page
+	And I manually navigate to week schedule page
 	Then I should see the sign in page
-
+@ignore
 Scenario: Change password successfully when password already expired
 	Given I have user logon details with
 	| Field                           | Value |
@@ -107,8 +108,8 @@ Scenario: Change password successfully when password already expired
 	| Confirmed Password | NewP@ssword1 |
 	| Old Password       | P@ssword1    |
 	Then I should be signed in
-
-Scenario: Change password failed when password already expired
+@ignore
+Scenario: Change password fails when password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
@@ -125,5 +126,5 @@ Scenario: Change password failed when password already expired
 	| Password           | aa        |
 	| Confirmed Password | aa        |
 	| Old Password       | P@ssword1 |
-	Then I should see an error 'PasswordChangedFailed'
+	Then I should see an error 'PasswordChangeFailed'
 	And I should not be signed in
