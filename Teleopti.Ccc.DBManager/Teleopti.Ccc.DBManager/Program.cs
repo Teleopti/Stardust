@@ -13,9 +13,17 @@ namespace Teleopti.Ccc.DBManager
     class Program
     {
         private static SqlConnection _sqlConnection;
+		private static SqlConnection _sqlConnectionAppLogin;
         private static DatabaseFolder _databaseFolder;
         private static CommandLineArgument _commandLineArgument;
+
+        //move to security object or something
         private static bool _isAzure;
+        private static bool _isSrvDbCreator;
+        private static bool _isSrvSecurityAdmin;
+        private static bool _isSrvSysAdmin;
+		private static bool _loginExist;
+
         private const string AzureEdition = "SQL Azure";
     	private static MyLogger _logger;
 		private static DatabaseVersionInformation _databaseVersionInformation;
@@ -66,8 +74,62 @@ namespace Teleopti.Ccc.DBManager
                     //Connect and open db
                     _sqlConnection = ConnectAndOpen(_commandLineArgument.ConnectionStringToMaster);
 
-                    //Check Azure
-                    _isAzure = IsAzure();
+					//Check Azure
+					_isAzure = IsAzure();
+
+					if (_isAzure && _commandLineArgument.isWindowsGroupName)
+						throw new Exception("Windows Azure don't support Windows Login for the moment!");
+
+					//Check Server Permissions
+					_isSrvSysAdmin = IsSrvSysAdmin();
+					_isSrvDbCreator = IsSrvDbCreator();
+					_isSrvSecurityAdmin = IsSrvSecurityAdmin();
+
+					//try connect to DB using given AppLogin
+					if (!_commandLineArgument.isWindowsGroupName) //SQL
+					{
+						try
+						{
+							if (_isAzure)
+								_sqlConnectionAppLogin = ConnectAndOpen(_commandLineArgument.ConnectionStringAppLogin(_commandLineArgument.DatabaseName));
+							else
+								_sqlConnectionAppLogin = ConnectAndOpen(_commandLineArgument.ConnectionStringAppLogin("master"));
+
+							_loginExist = true;
+						}
+						catch
+						{
+							_loginExist = false;
+						}
+						finally
+						{
+							if (_sqlConnectionAppLogin != null)
+							{
+								if (_sqlConnectionAppLogin.State != ConnectionState.Closed)
+								{
+									_sqlConnectionAppLogin.Close();
+								}
+							}
+						}
+					}
+					else //Win
+						_loginExist = VerifyWinGroup(_commandLineArgument.appUserName); //We will need to check on sys.syslogins
+
+					//special for Azure
+					if (_isAzure)
+						_isSrvSysAdmin = true;
+
+                    //New installation
+					if (_commandLineArgument.WillCreateNewDatabase && !(_isSrvSysAdmin || (_isSrvDbCreator && _isSrvSecurityAdmin)))
+                    {
+                        throw new Exception("Either sysAdmin or dbCreator + SecurityAdmin permissions are needed to install CCC databases!");
+                    }
+
+					//patch
+					if (!_loginExist && !(_isSrvSecurityAdmin || _isSrvSysAdmin))
+					{
+						throw new Exception("The login does not exist or wrong password supplied. You don't have the permission to create/alter login (securityadmin)!");
+					}
 
                     //Same sql login for admin and end user?
                     if ((_commandLineArgument.PermissionMode) &&
@@ -80,9 +142,6 @@ namespace Teleopti.Ccc.DBManager
                         logWrite("Warning: The application will have db_owner permissions. Consider using a different login for the end users!");
                         System.Threading.Thread.Sleep(1200);
                     }
-
-                    if (_isAzure && _commandLineArgument.isWindowsGroupName)
-                        throw new Exception("Windows Azure don't support Windows Login for the moment!");
 
                     _sqlConnection.InfoMessage += _sqlConnection_InfoMessage;
 
@@ -100,7 +159,7 @@ namespace Teleopti.Ccc.DBManager
                     }
 
                     //Try create or re-create login
-                    if (_commandLineArgument.PermissionMode && SafeMode)
+					if (_commandLineArgument.PermissionMode && SafeMode)
                     {
                         CreateLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName);
                     }
@@ -115,6 +174,12 @@ namespace Teleopti.Ccc.DBManager
 
 						_databaseVersionInformation = new DatabaseVersionInformation(_databaseFolder, _sqlConnection);
 
+                        //if we are not db_owner, bail out
+                        if (!IsDbOwner())
+                        {
+                            throw new Exception("db_owner or sysAdmin permissions needed to patch the database!");
+                        }
+
                         //if this is the very first create, add VersionControl table
                         if (_commandLineArgument.WillCreateNewDatabase)
                         {
@@ -124,7 +189,7 @@ namespace Teleopti.Ccc.DBManager
                         //Set permissions of the newly application user on db.
                         if (_commandLineArgument.PermissionMode && SafeMode)
                         {
-                            CreatePermissions(_commandLineArgument.appUserName, _commandLineArgument.isWindowsGroupName);
+                            CreatePermissions(_commandLineArgument.UserName, _commandLineArgument.appUserName, _commandLineArgument.isWindowsGroupName);
                         }
 
                         //Patch database
@@ -312,21 +377,73 @@ namespace Teleopti.Ccc.DBManager
             }
         }
 
-        private static bool SQLLoginExist(string SQLLogin)
+        private static bool IsDbOwner()
         {
-            const string sql = @"select count(*) from sys.sql_logins where name = @SQLLogin";
+            const string sql = "select IS_MEMBER ('db_owner')";
 
             using(SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
             {
-                sqlCommand.Parameters.AddWithValue("@SQLLogin", SQLLogin);
-                return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+                return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.InvariantCulture);
             }
         }
+
+        private static bool IsSrvSecurityAdmin()
+        {
+            const string sql = "select IS_SRVROLEMEMBER ('securityadmin')";
+
+            using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
+            {
+                return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.InvariantCulture);
+            }
+        }
+
+        private static bool IsSrvDbCreator()
+        {
+            const string sql = "select IS_SRVROLEMEMBER ('dbcreator')";
+
+            using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
+            {
+                return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.InvariantCulture);
+            }
+        }
+
+        private static bool IsSrvSysAdmin()
+        {
+            const string sql = "select IS_SRVROLEMEMBER ('sysadmin')";
+            using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
+                return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.InvariantCulture);
+        }
+
+        private static bool IsDbSecurityAdmin()
+        {
+            const string sql = "select IS_MEMBER ('db_securityadmin')";
+            using(SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
+                return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.InvariantCulture);
+        }
+
+        private static bool IsDbOwnerOtherUser(string user)
+        {
+            const string sql = @"select IS_ROLEMEMBER ('db_owner','@user')";
+            using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
+            {
+                sqlCommand.Parameters.AddWithValue("@user", user); 
+                return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.InvariantCulture);
+            }
+        }
+
+		private static bool VerifyWinGroup(string WinNTGroup)
+		{
+			const string sql = @"SELECT count(name) from sys.syslogins where isntgroup = 1 and name = '@WinNTGroup'";
+			using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
+			{
+				sqlCommand.Parameters.AddWithValue("@WinNTGroup", WinNTGroup);
+				return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.InvariantCulture);
+			}
+		}
 
         private static bool DBUserExist(string SQLLogin)
         {
             const string sql = @"select count(*) from sys.sysusers where name = @SQLLogin";
-
             using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
             {
                 sqlCommand.Parameters.AddWithValue("@SQLLogin", SQLLogin);
@@ -373,10 +490,9 @@ namespace Teleopti.Ccc.DBManager
 
             using (var cmd = new SqlCommand(sql, _sqlConnection))
             {
-                if (_isAzure && SQLLoginExist(user) == true)
+				if (_isAzure && _loginExist == true)
                 {
                     logWrite("Azure Login already exist, continue ...");
-                    
                 }
                 else
                     cmd.ExecuteNonQuery();
@@ -386,43 +502,33 @@ namespace Teleopti.Ccc.DBManager
 
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-        private static void CreatePermissions(string user, bool iswingroup)
+        private static void CreatePermissions(string adminUser, string user, bool iswingroup)
         {
             string fileName;
             string sql;
             string relinkSQLUser;
             string createDBUser;
             bool sysAdmin = false;
-            string sysAdminAsOwner;
 
+            //if appication login = sa then don't bother to do anything
             if (user.ToLower() == "sa")
-                sysAdmin = true;
+                return;
 
             sql = "";
             createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
             relinkSQLUser = string.Format(CultureInfo.CurrentCulture, @"ALTER USER [{0}] WITH LOGIN = [{0}]", user);
-            sysAdminAsOwner = string.Format(CultureInfo.CurrentCulture, @"sp_changedbowner @loginame = N'sa', @map = false");
 
-            if (!sysAdmin)
+            if (!iswingroup && (DBUserExist(user) == true))
             {
-                if (!iswingroup && (DBUserExist(user) == true))
-                {
-                    logWrite("DB user already exist, re-link ...");
-                    using (var cmd = new SqlCommand(relinkSQLUser, _sqlConnection))
-                    cmd.ExecuteNonQuery();
-                }
-                else
-
-                {
-                   logWrite("DB user is missing. Create DB user ...");
-                    using (var cmd = new SqlCommand(createDBUser, _sqlConnection))
-                    cmd.ExecuteNonQuery();
-                }
+                logWrite("DB user already exist, re-link ...");
+                using (var cmd = new SqlCommand(relinkSQLUser, _sqlConnection))
+                cmd.ExecuteNonQuery();
             }
+            else
 
-            if (!_isAzure)
             {
-                using (var cmd = new SqlCommand(sysAdminAsOwner, _sqlConnection))
+                logWrite("DB user is missing. Create DB user ...");
+                using (var cmd = new SqlCommand(createDBUser, _sqlConnection))
                 cmd.ExecuteNonQuery();
             }
 
@@ -437,11 +543,8 @@ namespace Teleopti.Ccc.DBManager
                 using (var cmd = new SqlCommand(sql, _sqlConnection))
                 cmd.ExecuteNonQuery();
             }
-
             logWrite("Created Permissions!");
-
         }
-
 
         private static void CreateDefaultVersionInformation()
         {
