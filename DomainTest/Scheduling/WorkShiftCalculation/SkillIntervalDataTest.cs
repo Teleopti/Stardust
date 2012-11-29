@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		[Test]
 		public void ShouldContainForecastedDemand()
 		{
-			
+			Assert.AreEqual(3.5, _target.ForecastedDemand);
 		}
 	}
 }

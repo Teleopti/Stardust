@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		public void ShouldCalculateAsBeforeWhenUnderStaffed()
 		{
 			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 10.80, -10.80, 0, null, null);
-			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
+			double result = _target.PeriodValue(skillIntervalData, 15, false, false, 0.49, 1);
 			Assert.AreEqual(4, result);
 		}
 	}

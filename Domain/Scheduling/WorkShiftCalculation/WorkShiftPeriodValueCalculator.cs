@@ -4,14 +4,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
 	public interface IWorkShiftPeriodValueCalculator
 	{
-		double PeriodValue(ISkillIntervalData skillIntervalData, int addedResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons);
+		double PeriodValue(ISkillIntervalData skillIntervalData, int addedResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons, double overStaffingFactor, double priorityFactor);
 	}
 
 	public class WorkShiftPeriodValueCalculator : IWorkShiftPeriodValueCalculator
 	{
 		const int theBigNumber = 100000;
 
-		public double PeriodValue(ISkillIntervalData skillIntervalData, int addedResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons)
+		public double PeriodValue(ISkillIntervalData skillIntervalData, int addedResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons, double overStaffingFactor, double priorityFactor)
 		{
 			if (addedResourceInMinutes == 0)
 				return 0;
@@ -20,10 +20,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 			double intervalLengthInMinutes = skillIntervalData.Period.ElapsedTime().TotalMinutes;
 			double forecastedDemand = skillIntervalData.ForecastedDemand;
-			double currentDemand = skillIntervalData.CurrentDemand;
+			double tweakedCurrentDamand = getTweakedCurrentDemand(skillIntervalData.CurrentDemand, overStaffingFactor,
+			                                                      priorityFactor);
 			double calculatedValue =
 				calculateWorkShiftPeriodValue(forecastedDemand * intervalLengthInMinutes * partOfResolution,
-											  currentDemand * intervalLengthInMinutes * partOfResolution,
+											  tweakedCurrentDamand * intervalLengthInMinutes * partOfResolution,
 				                              addedResourceInMinutes);
 
 			//double assignedResourceInMinutes = (forecastedDemand - currentDemand) * intervalLengthInMinutes;
@@ -39,15 +40,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		}
 
 
-		private static double calculateWorkShiftPeriodValue(double forecastedDemandInMinutes, double currentDemandInMinutes, int currentResourceInMinutes)
+		private static double calculateWorkShiftPeriodValue(double forecastedDemandInMinutes, double tweakedCurrentDemandInMinutes, int currentResourceInMinutes)
 		{
 			if (forecastedDemandInMinutes == 0)
 				return 0;
-			int logicalSign = Math.Sign(currentDemandInMinutes);
-			double weightedCurrentDemand = currentDemandInMinutes * currentDemandInMinutes;
+			int logicalSign = Math.Sign(tweakedCurrentDemandInMinutes);
+			double weightedCurrentDemand = tweakedCurrentDemandInMinutes * tweakedCurrentDemandInMinutes;
 
 			double oldValue = (weightedCurrentDemand / forecastedDemandInMinutes) * logicalSign;
-			double afterAddingCurrent = currentDemandInMinutes + currentResourceInMinutes;
+			double afterAddingCurrent = tweakedCurrentDemandInMinutes + currentResourceInMinutes;
 
 			int nextLogicalSign = Math.Sign(afterAddingCurrent);
 			weightedCurrentDemand = afterAddingCurrent * afterAddingCurrent;
@@ -79,6 +80,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			}
 
 			return 0;
+		}
+
+		private double getTweakedCurrentDemand(double currentDemandInMinutes, double overStaffingFactor, double priorityFactor)
+		{
+			double overUnderStaffFaktor = overStaffingFactor;
+			if (currentDemandInMinutes < 0)
+				overUnderStaffFaktor = 1 - overStaffingFactor;
+			return priorityFactor * overUnderStaffFaktor * currentDemandInMinutes;
 		}
 	}
 }
