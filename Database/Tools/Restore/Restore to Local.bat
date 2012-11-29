@@ -28,6 +28,7 @@ SET SQLPwd=cadadi
 SET SUPPORTTOOL=
 SET CreateAgg=
 SET CreateAnalytics=
+SET Tfiles=\\a380\T-files\Develop\Test\Baselines
 
 ::Get current Branch
 CD "%ROOTDIR%\..\..\.."
@@ -111,8 +112,8 @@ ECHO un-rar Exe-file is: %UNRAR%
 
 ::Get 7-zip exe
 ECHO Refreshing 7-zip ...
-ECHO ROBOCOPY "\\a380\T-files\Develop\Test\Baselines\7zip" "%Zip7Folder%" /MIR
-ROBOCOPY "\\a380\T-files\Develop\Test\Baselines\7zip" "%Zip7Folder%" /MIR
+ECHO ROBOCOPY "%Tfiles%\7zip" "%Zip7Folder%" /MIR
+ROBOCOPY "%Tfiles%\7zip" "%Zip7Folder%" /MIR
 
 CLS
 ECHO --- Note! ---
@@ -133,19 +134,29 @@ GOTO UserInput
 SET SUPPORTTOOL=SUPPORTTOOL
 SET MB=
 SET BUS=
-
+SET DBPath=%Tfiles%
 GOTO Start
 
 :UserInput
 ::Get user input
 CLS
 ECHO Available Baselines:
-TYPE "\\a380\T-files\Develop\Test\Baselines\Databases.txt"
+ECHO -------------------------------------------
+ECHO Database                           @@Version     Comment         Path
+ECHO -------------------------------------------
+for /f "tokens=1,2 delims=;" %%g in (%Tfiles%\Databases.txt) do echo %%g
 ECHO.
-ECHO ---
+ECHO -------------------------------------------
 
 ::Customer?
+:PickDb
 SET /P Customer=Restore which fileset (e.g. Demo):
+
+findstr /B /C:"%Customer%" /I "%Tfiles%\Databases.txt" > %temp%\string.txt
+if %errorlevel% neq 0 GOTO PickDb
+for /f "tokens=1,2 delims=;" %%g in (%temp%\string.txt) do set DBPath=%%h
+if "%DBPath%"=="" set DBPath=%Tfiles%
+
 SET AppRar=%Customer%App.rar
 SET StatRar=%Customer%Stat.rar
 
@@ -159,26 +170,6 @@ IF "%IFLOADSTAT%"=="y" SET LOADSTAT=1
 ::use support tool?
 SET SUPPORTTOOL=SUPPORTTOOL
 
-::install BUS?
-ECHO.
-SET BUS=
-SET /P IFBUS=Would like to build and install a local Service Bus? [Y/N]
-IF "%IFBUS%"=="Y" SET BUS=BUS
-IF "%IFBUS%"=="y" SET BUS=BUS
-
-ECHO.
-ECHO OBSERVE!: This script will now destroy the current databases namned:
-ECHO "%Branch%_%Customer%_TeleoptiCCC7"
-IF %LOADSTAT% EQU 1 ECHO "%Branch%_%Customer%_TeleoptiAnalytics"
-IF %LOADSTAT% EQU 1 ECHO "%Branch%_%Customer%_TeleoptiCCCAgg"
-ECHO.
-ECHO on instance: %INSTANCE%
-ECHO.
-ECHO Please double check that databases and instance data is as intended!
-ECHO Press any key to continue or any other key to exit...
-PAUSE
-GOTO Start
-
 :Start
 ECHO.
 ECHO ------
@@ -187,7 +178,9 @@ ECHO. > "%temp%\NumberOfFiles.txt"
 
 ::Check if app databases changed
 ECHO Refreshing %AppRar% ...
-XCOPY "\\a380\T-files\Develop\Test\Baselines\%AppRar%" "%RarFolder%\" /D /Y > "%temp%\NumberOfFiles.txt"
+
+if not exist "%DBPath%\%AppRar%" SET /A ERRORLEV=18 & GOTO :error
+XCOPY "%DBPath%\%AppRar%" "%RarFolder%\" /D /Y > "%temp%\NumberOfFiles.txt"
 
 ::unRar only if new
 findstr /C:"0 File(s) copied" "%temp%\NumberOfFiles.txt"
@@ -203,7 +196,7 @@ ECHO. > "%temp%\NumberOfFiles.txt"
 
 IF %LOADSTAT% EQU 1 (
 ECHO Refreshing %StatRar% ...
-XCOPY "\\a380\T-files\Develop\Test\Baselines\%StatRar%" "%RarFolder%\" /D /Y > "%temp%\NumberOfFiles.txt"
+XCOPY "%DBPath%\%StatRar%" "%RarFolder%\" /D /Y > "%temp%\NumberOfFiles.txt"
 ) ELSE (
 GOTO SkipStat
 )
@@ -248,7 +241,7 @@ ECHO Upgrade databases ...
 ::check if we need to create Analytics (no stat)
 SQLCMD -S. -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%Branch%_%Customer%_TeleoptiAnalytics'" -h-1 > "%temp%\FindDB.txt"
 findstr /I /C:"%Branch%_%Customer%_TeleoptiAnalytics" "%temp%\FindDB.txt"
-if %errorlevel% NEQ 0 SET CreateAnalytics=-C -L%SQLLogin%:%SQLPwd%
+if %errorlevel% NEQ 0 SET CreateAnalytics=-C
 
 ::create or patch Analytics
 ECHO %DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiAnalytics" -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics%
@@ -258,7 +251,7 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
 ::check if we need to create Agg (no stat)
 SQLCMD -S. -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%Branch%_%Customer%_TeleoptiCCCAgg'" -h-1 > "%temp%\FindDB.txt"
 findstr /I /C:"%Branch%_%Customer%_TeleoptiCCCAgg" "%temp%\FindDB.txt"
-if %errorlevel% NEQ 0 SET CreateAgg=-C -L%SQLLogin%:%SQLPwd%
+if %errorlevel% NEQ 0 SET CreateAgg=-C
 
 ::Create or Patch Agg
 ECHO %DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiCCCAgg" -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg%
@@ -337,6 +330,7 @@ IF %ERRORLEV% EQU 11 ECHO Could not restore databases
 IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & notepad "%temp%\build.log"
 IF %ERRORLEV% EQU 13 ECHO Could not apply license on demoreg database
 IF %ERRORLEV% EQU 17 ECHO Failed to update msgBroker setings in Analytics
+IF %ERRORLEV% EQU 18 ECHO You dont have permisson or file missing: "%DBPath%"
 ECHO.
 ECHO --------
 PAUSE
