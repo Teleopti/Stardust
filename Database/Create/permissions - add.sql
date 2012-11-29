@@ -15,6 +15,7 @@ Date		Who				What
 ---------------------------------
 2010-10-25	David Jonsson	Adding Svc-Account for Windows Auth
 2012-11-06	David Jonsson	use only one login
+2012-11-28	David Jonsson	Create DBUser from DBManager, merge Azure permission into this script
 ********************************************************************************/
 --This script is executed by DBManager when installing CCC 7 for the very first time
 --You can execute this script manually later on to create the needed SQL user.
@@ -41,59 +42,12 @@ Date		Who				What
 BEGIN TRY
 SET NOCOUNT ON
 	--declare
-	DECLARE @InstanceName			nvarchar(36)
 	DECLARE @Login					nvarchar(200)
-	DECLARE @SvcLogin				nvarchar(200)
 	DECLARE @SqlCommand				nvarchar(1000)
-	DECLARE @AuthType				char(3)
 
 	--init
 	SET @Login		= '$(LOGIN)'
-	SET @AuthType	= '$(AUTHTYPE)'
 
-	SELECT 'Adding permission for $(AUTHTYPE)-login in database: ' + name FROM master.sys.databases where database_id = db_id()
-	
-	EXEC sp_changedbowner @loginame = N'sa', @map = false
-
-	IF @AuthType = 'SQL'
-	BEGIN
-	--init
-	
-		IF '$(LOGIN)' <> 'sa'  --If user like to run the application with sa, don't add the user
-		BEGIN
-		PRINT 'Adding permission for $(LOGIN) in database. Working...'
-		
-			--fix users that might be restored from another instance (wrong sid)
-			IF EXISTS (SELECT * FROM sys.database_principals WHERE name = N'$(LOGIN)')
-			DROP USER [$(LOGIN)]
-
-			--Create User for Login: $(LOGIN)
-			IF NOT EXISTS (SELECT * FROM sys.sysusers su INNER JOIN master.sys.syslogins SL ON su.sid = sl.sid WHERE SL.name = @Login)
-			BEGIN
-				SELECT @SqlCommand = 'CREATE USER [' + @Login + '] FOR LOGIN ['+@Login+']'
-				PRINT @SqlCommand
-				EXEC sp_executesql @SqlCommand
-				PRINT 'Adding permission for $(LOGIN) in database. Finished!'
-			END
-			ELSE
-			BEGIN
-				PRINT 'User $(LOGIN) already existed in database. Finished!'
-			END
-		END
-		
-	END
-	
-	IF @AuthType = 'WIN'--Windows Login
-	BEGIN
-		IF NOT EXISTS (SELECT * FROM sys.sysusers su INNER JOIN master.sys.syslogins SL ON su.sid = sl.sid WHERE SL.name = @Login)
-		BEGIN
-			PRINT 'Adding permission for '+@Login+' in database. Working...'		
-			SELECT @SqlCommand = 'CREATE USER [' + @Login + '] FOR LOGIN ['+@Login+']'
-			EXEC sp_executesql @SqlCommand
-			PRINT 'Adding permission for '+@Login+' in database. Finished!'		
-		END
-	END
-	
 	-------------
 	--Permissions
 	-------------
@@ -138,15 +92,12 @@ SET NOCOUNT ON
 	CREATE ROLE [db_executor] AUTHORIZATION [dbo]
 
 	--Add login to DBrole
-	IF '$(LOGIN)' <> 'sa'  --If user like to run the application with sa, don't try to add it
-	BEGIN
-		EXEC sp_addrolemember @rolename=N'db_executor', @membername=@Login
-		EXEC sp_addrolemember @rolename='db_datawriter', @membername=@Login
-		EXEC sp_addrolemember @rolename='db_datareader', @membername=@Login
-		
-		--Grant Exec to DBrole
-		GRANT EXECUTE TO db_executor
-	END
+	EXEC sp_addrolemember @rolename=N'db_executor', @membername=@Login
+	EXEC sp_addrolemember @rolename='db_datawriter', @membername=@Login
+	EXEC sp_addrolemember @rolename='db_datareader', @membername=@Login
+	
+	--Grant Exec to DBrole
+	GRANT EXECUTE TO db_executor
 	
 	PRINT 'DONE!'
 
