@@ -154,5 +154,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			UserFactory.User().MakeUser();
 			Navigation.GotoMobileReports();
 		}
+
+		[When(@"I navigate to Admin Web")]
+		public void WhenINavigateToAdminWeb()
+		{
+			UserFactory.User().MakeUser();
+			Navigation.GotoMobileReports();
+		}
 	}
 }

@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenISignInByUserNameAndWrongPassword()
 		{
 			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
+			Pages.Pages.CurrentSignInPage.SelectApplicationTestDataSource();
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, "wrong password");
 		}
 
@@ -56,6 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenISignInAgain()
 		{
 			Navigation.GotoGlobalSignInPage();
+			Pages.Pages.CurrentSignInPage.SelectApplicationTestDataSource();
 			Pages.Pages.CurrentSignInPage.SignInApplication(UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName, TestData.CommonPassword);
 		}
 
