@@ -451,6 +451,16 @@ namespace Teleopti.Ccc.DBManager
             }
         }
 
+		private static bool AzureLoginExist(string SQLLogin)
+		{
+			const string sql = @"select count(*) from sys.sql_logins where name = @SQLLogin";
+			using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
+			{
+				sqlCommand.Parameters.AddWithValue("@SQLLogin", SQLLogin);
+				return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+			}
+		}
+
         private static void CreateDB(string databaseName, DatabaseType databaseType)
         {
             logWrite("Creating database " + databaseName + "...");
@@ -466,36 +476,37 @@ namespace Teleopti.Ccc.DBManager
         {
             //TODO: check if windows group and run win logon script instead of "SQL Logins - Create.sql"
             string fileName = "";
-            if (_isAzure)
-            {
-                if (iswingroup)
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\Win Logins - Create.sql", _databaseFolder.Path());
-                else
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\SQL Logins - Create.sql", _databaseFolder.Path());
-            }
-            else
-            {
-                if (iswingroup)
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Win Logins - Create.sql", _databaseFolder.Path());
-                else
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\SQL Logins - Create.sql", _databaseFolder.Path());
-            }
-    
-            TextReader tr = new StreamReader(fileName);
-            string sql = tr.ReadToEnd();
-            tr.Close();
-            sql = sql.Replace("$(SQLLOGIN)", user);
-            sql = sql.Replace("$(SQLPWD)", pwd);
-            sql = sql.Replace("$(WINLOGIN)", user);
+			string sql = "";
+			if (!_isAzure)
+			{
+				if (iswingroup)
+					fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Win Logins - Create.sql", _databaseFolder.Path());
+				else
+					fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\SQL Logins - Create.sql", _databaseFolder.Path());
+
+				TextReader tr = new StreamReader(fileName);
+				sql = tr.ReadToEnd();
+				tr.Close();
+				sql = sql.Replace("$(SQLLOGIN)", user);
+				sql = sql.Replace("$(SQLPWD)", pwd);
+				sql = sql.Replace("$(WINLOGIN)", user);
+			}
+			else
+			{
+				if (iswingroup)
+					sql = "PRINT 'Windows Logins cannot be added to Windows Azure for the momement'";
+				else
+				{
+					if (AzureLoginExist(user) == true)
+						sql = "ALTER  LOGIN [" + user + "] WITH PASSWORD=N'" + pwd + "'";
+					else
+						sql = "CREATE LOGIN [" + user + "] WITH PASSWORD=N'" + pwd + "'";
+				}
+			}
 
             using (var cmd = new SqlCommand(sql, _sqlConnection))
             {
-				if (_isAzure && _loginExist == true)
-                {
-                    logWrite("Azure Login already exist, continue ...");
-                }
-                else
-                    cmd.ExecuteNonQuery();
+				cmd.ExecuteNonQuery();
             }
 
             logWrite("Created login!");
