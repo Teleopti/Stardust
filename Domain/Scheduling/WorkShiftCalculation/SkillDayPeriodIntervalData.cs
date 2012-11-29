@@ -18,6 +18,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
         public Dictionary<TimeSpan , ISkillIntervalData> GetIntervalDistribution()
         {
+            //break the intervals into a span of 1.5 day
+            //foreach(var day in _skillDays )
+            //{
+            //    foreach (var nextDay in _skillDays )
+            //    {
+            //        if(day. )
+            //    }
+            //}
+
+
             var intervalBasedData = new Dictionary<TimeSpan, List<double>>();
             foreach (var period in _skillDays.SelectMany(skill => skill.SkillStaffPeriodCollection))
             {
@@ -30,6 +40,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             return intervalBasedData.ToDictionary<KeyValuePair<TimeSpan, List<double>>, TimeSpan, ISkillIntervalData>
                 (interval => interval.Key, interval => new SkillIntervalData(_intervalDataMedianCalculator.Calculate(interval.Value), 0, 0, 0));
         }
+
+        
     }
 
     public interface ISkillDayPeriodIntervalData
