@@ -13,9 +13,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 		public double PeriodValue(ISkillIntervalData skillIntervalData, int addedResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons, double overStaffingFactor, double priorityFactor)
 		{
-			if (addedResourceInMinutes == 0)
-				return 0;
-
 			double partOfResolution = addedResourceInMinutes / skillIntervalData.Period.ElapsedTime().TotalMinutes;
 
 			double intervalLengthInMinutes = skillIntervalData.Period.ElapsedTime().TotalMinutes;
@@ -62,8 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 			if (!useMinimumPersons && !useMaximumPersons)
 				return 0;
-			if (!skillIntervalData.MinimumHeads.HasValue && !skillIntervalData.MaximumHeads.HasValue)
-				return 0;
 
 			if(useMinimumPersons && skillIntervalData.MinimumHeads.HasValue)
 			{
@@ -76,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			{
 				if (skillIntervalData.CurrentHeads + 1 <= skillIntervalData.MaximumHeads.Value)
 					return 0;
-				return (skillIntervalData.CurrentHeads + 1 - skillIntervalData.MaximumHeads.Value)*theBigNumber;
+				return -(skillIntervalData.CurrentHeads + 1 - skillIntervalData.MaximumHeads.Value)*theBigNumber;
 			}
 
 			return 0;

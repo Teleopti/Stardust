@@ -12,9 +12,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 	{
 		public double CalculateShiftValueForPeriod(double oldPeriodValue, double resourceInMinutes, WorkShiftLengthHintOption workShiftLengthHint)
 		{
-			if (oldPeriodValue == 0 || resourceInMinutes == 0)
-				return 0;
-
 			double factor = (resourceInMinutes - 1)/100;
 			if (workShiftLengthHint == WorkShiftLengthHintOption.Long)
 			{

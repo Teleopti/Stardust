@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                     intervalBasedData.Add(periodTimeSpan, new List<double>());
                 intervalBasedData[periodTimeSpan].Add(period.AbsoluteDifference);
             }
-			////TODO: need to fix the value of 0s
-			//return intervalBasedData.ToDictionary<KeyValuePair<TimeSpan, List<double>>, TimeSpan, ISkillIntervalData>
-			//    (interval => interval.Key, interval => new SkillIntervalData(_intervalDataMedianCalculator.Calculate(interval.Value), 0, 0, 0));
+			//TODO: need to fix the value of 0s
+			return intervalBasedData.ToDictionary<KeyValuePair<TimeSpan, List<double>>, TimeSpan, ISkillIntervalData>
+				(interval => interval.Key, interval => new SkillIntervalData(new DateTimePeriod(),77,_intervalDataMedianCalculator.Calculate(interval.Value), 0, 0, 0));
         }
 
         
