@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var dataSourcesViewModelFactory = MockRepository.GenerateMock<IDataSourcesViewModelFactory>();
 			var target = new AuthenticationApiController(dataSourcesViewModelFactory, null, null);
-			var dataSourcees = new[] { new DataSourceViewModelNew() };
+			var dataSourcees = new[] { new DataSourceViewModel() };
 			dataSourcesViewModelFactory.Stub(x => x.DataSources()).Return(dataSourcees);
 
 			var result = target.DataSources();
 
-			var data = result.Data as IEnumerable<DataSourceViewModelNew>;
+			var data = result.Data as IEnumerable<DataSourceViewModel>;
 			data.Should().Have.SameSequenceAs(dataSourcees);
 		}
 

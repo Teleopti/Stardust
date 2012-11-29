@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory
 			_authenticationTypes = authenticationTypes;
 		}
 
-		public IEnumerable<DataSourceViewModelNew> DataSources()
+		public IEnumerable<DataSourceViewModel> DataSources()
 		{
 			return (from t in _authenticationTypes
 					let dataSources = t.DataSources()
 					where dataSources != null
 			        from s in dataSources
-			        select new DataSourceViewModelNew
+			        select new DataSourceViewModel
 			                {
 			                    Name = s.DataSourceName,
 			                    Type = t.TypeString
