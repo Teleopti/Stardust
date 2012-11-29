@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
+using Teleopti.Analytics.Etl.TransformerInfrastructure;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 {
@@ -8,10 +9,14 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 	{
 		public static IJobParameters SimpleParameters(bool isPMInstalled)
 		{
-			return new JobParameters(JobMultipleDateFactory.CreateJobMultipleDate(), 1, "W. Europe Standard Time", 5,
+			var jobParameters = new JobParameters(JobMultipleDateFactory.CreateJobMultipleDate(), 1, "W. Europe Standard Time", 5,
 									 "Data Source=SSAS_Server;Initial Catalog=SSAS_DB",
 									 isPMInstalled.ToString(CultureInfo.InvariantCulture),
 									 CultureInfo.CurrentCulture);
+
+			jobParameters.Helper = new JobHelper(new RaptorRepositoryStub(), null, null);
+
+			return jobParameters;
 		}
 	}
 }

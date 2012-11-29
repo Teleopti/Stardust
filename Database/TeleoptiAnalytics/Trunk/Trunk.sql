@@ -330,3 +330,25 @@ GO
 
 ALTER TABLE [stage].[stg_activity] ADD  CONSTRAINT [DF_stg_activity_update_date]  DEFAULT (getdate()) FOR [update_date]
 GO
+
+
+----------------  
+--Name: Jonas
+--Date: 2012-11-29  
+--Desc: Bug #21584 ETL dayoff refactor, plus cleanup
+----------------  	
+delete from mart.etl_jobstep_execution where jobstep_id = 41
+delete from mart.etl_jobstep_execution where jobstep_id = 72
+delete from mart.etl_jobstep where jobstep_id = 41
+delete from mart.etl_jobstep where jobstep_id = 72
+
+update mart.etl_jobstep set jobstep_name = 'stg_schedule_day_off_count, stg_day_off, dim_day_off' where jobstep_id = 21
+update mart.etl_jobstep set jobstep_name = 'stg_schedule_preference, stg_day_off, dim_day_off' where jobstep_id = 66
+
+insert into mart.etl_jobstep (jobstep_id, jobstep_name) select 75, 'dim_quality_quest'
+insert into mart.etl_jobstep (jobstep_id, jobstep_name) select 76, 'fact_request'
+insert into mart.etl_jobstep (jobstep_id, jobstep_name) select 77, 'fact_requested_days'
+insert into mart.etl_jobstep (jobstep_id, jobstep_name) select 78, 'Purge Old Application Data'
+insert into mart.etl_jobstep (jobstep_id, jobstep_name) select 79, 'Statistics Update Notification'
+insert into mart.etl_jobstep (jobstep_id, jobstep_name) select 80, 'stg_request'
+insert into mart.etl_jobstep (jobstep_id, jobstep_name) select 81, 'PrimaryCheck'
