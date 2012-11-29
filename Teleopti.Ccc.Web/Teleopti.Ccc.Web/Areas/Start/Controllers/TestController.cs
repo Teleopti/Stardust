@@ -6,23 +6,20 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Test;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
 	public class TestController : Controller
 	{
 		private readonly IModifyNow _modifyNow;
-		private readonly IModifyUtcNow _modifyUtcNow;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IAuthenticator _authenticator;
 		private readonly IWebLogOn _logon;
 		private readonly IBusinessUnitProvider _businessUnitProvider;
 
-		public TestController(IModifyNow modifyNow, IModifyUtcNow modifyUtcNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider)
+		public TestController(IModifyNow modifyNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider)
 		{
 			_modifyNow = modifyNow;
-			_modifyUtcNow = modifyUtcNow;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_authenticator = authenticator;
 			_logon = logon;
@@ -114,7 +111,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private void updateIocNow(DateTime? dateTimeSet)
 		{
 			_modifyNow.SetNow(dateTimeSet);
-			//_modifyUtcNow.SetUtcNow(dateTimeSet);
 		}
 	}
 }
