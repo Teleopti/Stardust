@@ -1,38 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <License>
-	<CustomerName>Teleopti RD NOT for production use!</CustomerName>
-	<ExpirationDate>2013-12-31T11:17:02</ExpirationDate>
-	<ExpirationGracePeriod>P0D</ExpirationGracePeriod>
-	<MaxActiveAgents>0</MaxActiveAgents>
-	<MaxActiveAgentsGrace>100</MaxActiveAgentsGrace>
-	<AgentsOrSeats>0</AgentsOrSeats>
-	<MaxSeats>0</MaxSeats>
-	<SeatRatio>1.5</SeatRatio>
-	<TeleoptiCCC>
-		<Base>true</Base>
-		<AgentScheduleMessenger>true</AgentScheduleMessenger>
-		<AgentSelfService>true</AgentSelfService>
-		<HolidayPlanner>true</HolidayPlanner>
-		<PayrollIntegration>true</PayrollIntegration>
-		<PerformanceManager>true</PerformanceManager>
-		<RealtimeAdherence>true</RealtimeAdherence>
-		<ShiftTrades>true</ShiftTrades>
-		<MyTimeWeb>true</MyTimeWeb>
-		<Anywhere>true</Anywhere>
-	</TeleoptiCCC>
-	<Agreement>Teleopti.Ccc.Infrastructure.Licensing.Agreements.TeleoptiLic_En_Sw_St.txt</Agreement>
-	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
-		<SignedInfo>
-			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
-			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
-			<Reference URI="">
-				<Transforms>
-					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
-				</Transforms>
-				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-				<DigestValue>EDRKXu1IIHOzAhIL3+BdmXznBhU=</DigestValue>
-			</Reference>
-		</SignedInfo>
-		<SignatureValue>5/V/Tv8Vp5988naAzXI/ISIf4qb3pgA9LqumTGqVYmnMs//IDKHa0Cpf2GzkczD45CN5Mj9CAkxKIEOd5pgxDxyqeC98bB+AXuWBm1A1xh3uv9YPNJEgpCd5Hn5fxA6w9Yaz4XH8o7OCjdNJuEWK540D+XZIs5pGbsLQWqaqFbk=</SignatureValue>
-	</Signature>
+  <CustomerName>Teleopti RD NOT for production use!</CustomerName>
+  <ExpirationDate>2013-12-31T16:24:15</ExpirationDate>
+  <ExpirationGracePeriod>P0D</ExpirationGracePeriod>
+  <MaxActiveAgents>0</MaxActiveAgents>
+  <MaxActiveAgentsGrace>100</MaxActiveAgentsGrace>
+  <AgentsOrSeats>0</AgentsOrSeats>
+  <MaxSeats>0</MaxSeats>
+  <SeatRatio>1.5</SeatRatio>
+  <TeleoptiCCC>
+    <Base>true</Base>
+    <AgentScheduleMessenger>true</AgentScheduleMessenger>
+    <AgentSelfService>true</AgentSelfService>
+    <HolidayPlanner>true</HolidayPlanner>
+    <PayrollIntegration>true</PayrollIntegration>
+    <PerformanceManager>true</PerformanceManager>
+    <RealtimeAdherence>true</RealtimeAdherence>
+    <ShiftTrades>true</ShiftTrades>
+    <MyTimeWeb>true</MyTimeWeb>
+    <Anywhere>true</Anywhere>
+    <Version8>true</Version8>
+  </TeleoptiCCC>
+  <Agreement>Teleopti.Ccc.Infrastructure.Licensing.Agreements.TeleoptiLic_En_Sw_St.txt</Agreement>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+      <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+      <Reference URI="">
+        <Transforms>
+          <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+        </Transforms>
+        <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <DigestValue>NeVh37eEQSoBSz/x08BJdn+eLps=</DigestValue>
+      </Reference>
+    </SignedInfo>
+    <SignatureValue>oqkRjarfp/n8OvvbEXq/Bhl/g5UXHK3MAswhCbCpALyz//GpCbOWBfnt/i9Llc2K9/l+thR73ov/+8jEp7hZGb43xR5h90JOhjKhZORVP6JR65UohAAJHBVPQMPbtk7wN9wGVBcnzmqWlvzjbhveamoF5kn5nfUbMH3a/YqmJno=</SignatureValue>
+  </Signature>
 </License>

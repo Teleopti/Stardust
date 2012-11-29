@@ -49,7 +49,7 @@ Teleopti.Start.Authentication = function () {
 			html: getTemplate("changepassword"),
 			baseUrl: Teleopti.Start.Authentication.Settings.baseUrl,
 			authenticationState: authenticationState
-		}),
+		})
 	};
 	
 	function _displayView(viewData) {
