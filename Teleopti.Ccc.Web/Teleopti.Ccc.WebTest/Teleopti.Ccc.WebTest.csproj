@@ -104,6 +104,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactoryTest.cs" />
+    <Compile Include="Areas\Start\Core\AuthenticationModelBinderTest.cs" />
     <Compile Include="Areas\Team\TeamAreaRegistrationTest.cs" />
     <Compile Include="Areas\Team\Controllers\ApplicationControllerTest.cs" />
     <Compile Include="Areas\MobileReports\Core\DefinedReportsTest.cs" />
@@ -131,7 +133,7 @@
     <Compile Include="Areas\Start\Controllers\AuthenticationControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\FakeDataSource.cs" />
     <Compile Include="Areas\Start\Controllers\WindowsAuthenticationModelTest.cs" />
-    <Compile Include="Areas\Start\Core\LayoutBase\DataSourcesViewModelFactoryTest.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\DataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\Mapping\AsmViewModelMapperTest.cs" />
     <Compile Include="Core\Common\DataProvider\PreferenceProviderTest.cs" />
