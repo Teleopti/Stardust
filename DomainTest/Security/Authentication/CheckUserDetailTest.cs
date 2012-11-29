@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
                 AuthenticationResult result = target.CheckLogOn(userDetail, password);
                 Assert.IsFalse(result.Successful);
                 Assert.IsTrue(result.HasMessage);
-                Assert.AreEqual(UserTexts.Resources.LogOnFailedInvalidUserNameOrPassword, result.Message);
+                Assert.AreEqual(UserTexts.Resources.LogOnFailedAccountIsLocked, result.Message);
             }
         }
 
