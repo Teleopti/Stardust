@@ -7,11 +7,13 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
     public class CheckPasswordChange : ICheckPasswordChange
     {
         private readonly IPasswordPolicy _passwordPolicy;
+	    private readonly INow _now;
 
-	    public CheckPasswordChange(IPasswordPolicy passwordPolicy)
-        {
-	        _passwordPolicy = passwordPolicy;
-        }
+	    public CheckPasswordChange(IPasswordPolicy passwordPolicy, INow now)
+	    {
+		    _passwordPolicy = passwordPolicy;
+		    _now = now;
+	    }
 
 	    public AuthenticationResult Check(IUserDetail userDetail)
         {
@@ -19,14 +21,15 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
         	var passwordValidForDayCount = _passwordPolicy.PasswordValidForDayCount;
         	var maxDays = DateTime.MaxValue.Subtract(lastPasswordChange);
             var result = new AuthenticationResult{Successful = true, Person = userDetail.Person};
+		    var utcNow = _now.UtcDateTime();
 
-			DateTime expirationDate = DateTime.MaxValue;
+			var expirationDate = DateTime.MaxValue;
 			if (passwordValidForDayCount<maxDays.TotalDays)
 			{
 				expirationDate = lastPasswordChange.AddDays(passwordValidForDayCount);
 			}
 
-			if (expirationDate <= DateTime.UtcNow)
+			if (expirationDate <= utcNow)
             {
                 userDetail.Lock();
                 result.Successful = false;
@@ -34,12 +37,12 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
                 result.Message = UserTexts.Resources.LogOnFailedInvalidUserNameOrPassword;
                 return result;
             }
-            DateTime warningDate = expirationDate.AddDays(-_passwordPolicy.PasswordExpireWarningDayCount);
-			if (warningDate <= DateTime.UtcNow)
+            var warningDate = expirationDate.AddDays(-_passwordPolicy.PasswordExpireWarningDayCount);
+			if (warningDate <= utcNow)
             {
                 result.HasMessage = true;
                 result.Message = string.Format(CultureInfo.CurrentUICulture, UserTexts.Resources.LogOnWarningPasswordWillSoonExpire,
-											   (int)expirationDate.Subtract(DateTime.UtcNow).TotalDays);
+											   (int)expirationDate.Subtract(utcNow).TotalDays);
             }
             return result;
         }

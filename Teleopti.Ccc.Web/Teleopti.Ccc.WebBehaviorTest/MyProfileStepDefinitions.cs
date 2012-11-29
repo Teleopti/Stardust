@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I view password setting page")]
 		public void WhenIViewPasswordSettingPage()
 		{
-			TestControllerMethods.LogonForSpecificUser(); 
 			Navigation.GotoPasswordPage();
 		}
 

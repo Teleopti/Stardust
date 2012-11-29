@@ -34,6 +34,21 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		}
 
 		[Test]
+		public void ShouldReturnNullIfNoPricipal()
+		{
+			var principal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
+			principal.Stub(x => x.Current()).Return(null);
+			var person = PersonFactory.CreatePerson();
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			personRepository.Stub(x => x.Get(Arg<Guid>.Is.NotNull)).Return(person);
+			var target = new LoggedOnUser(personRepository, principal);
+
+			var result = target.CurrentUser();
+
+			result.Should().Be.Null();
+		}
+
+		[Test]
 		public void ShouldGetMyTeam()
 		{
 			var person = PersonFactory.CreatePerson();

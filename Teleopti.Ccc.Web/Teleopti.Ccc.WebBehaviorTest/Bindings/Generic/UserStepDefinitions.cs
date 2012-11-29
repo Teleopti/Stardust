@@ -1,6 +1,7 @@
 using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 
@@ -40,6 +41,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var user = table.CreateInstance<UserConfigurable>();
 			UserFactory.User().Setup(user);
 		}
+
+		[Given(@"I have user credential with")]
+		public void GivenIHaveUserCredentialWith(Table table)
+		{
+			var user = table.CreateInstance<UserConfigurable>();
+			UserFactory.User().MakeUser(user.UserName, user.UserName, user.Password);
+		}
+
+
+		[Given(@"I am a user signed in with")]
+		public void GivenIAmAUserSignedInWith(Table table)
+		{
+			var user = table.CreateInstance<UserConfigurable>();
+			TestControllerMethods.LogonForSpecificUser(user.UserName, user.Password); 
+		}
+
 
 
 

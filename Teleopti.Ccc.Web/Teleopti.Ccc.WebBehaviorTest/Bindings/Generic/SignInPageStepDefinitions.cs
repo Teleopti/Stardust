@@ -26,11 +26,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I sign in with")]
 		public void WhenISignInWith(Table table)
 		{
-			WhenISelectApplicationLogonDataSource();
 			var user = table.CreateInstance<UserConfigurable>();
 			var userName = user.UserName;
 			var password = user.Password;
+			WhenISelectApplicationLogonDataSource();
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, password);
+		}
+
+		[When(@"I try to sign in with")]
+		public void WhenITryToSignInWith(Table table)
+		{
+			Navigation.GotoGlobalSignInPage();
+			WhenISignInWith(table);
 		}
 
 		[When(@"I sign in by windows credentials")]

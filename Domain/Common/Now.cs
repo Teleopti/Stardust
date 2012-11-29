@@ -22,9 +22,13 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public DateTime UtcDateTime()
 		{
-			return _fixedLocalDateTime.HasValue ? 
-				TimeZoneHelper.ConvertToUtc(_fixedLocalDateTime.Value, _userTimeZone().TimeZone()) : 
-				DateTime.UtcNow;
+			if (_fixedLocalDateTime.HasValue)
+			{
+				return _userTimeZone().TimeZone() == null ? 
+					_fixedLocalDateTime.Value : 
+					TimeZoneHelper.ConvertToUtc(_fixedLocalDateTime.Value, _userTimeZone().TimeZone());
+			}
+			return DateTime.UtcNow;
 		}
 
 		public DateOnly DateOnly()

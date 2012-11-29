@@ -43,11 +43,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			InnerLogon(userName, password);
 		}
 
-		public static void LogonForSpecificUser()
+		public static void LogonForSpecificUser(string userName, string password)
 		{
-			UserFactory.User().MakeUser();
-			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
-			var password = UserFactory.User().Person.ApplicationAuthenticationInfo.Password;
+			UserFactory.User().MakeUser(userName, userName, password);
 			InnerLogon(userName, password);
 		}
 

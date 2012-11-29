@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
 
@@ -24,6 +23,15 @@ namespace Teleopti.Ccc.WebTest.Core
 			var result = target.TimeZone();
 
 			result.Should().Be.EqualTo(user.PermissionInformation.DefaultTimeZone());
+		}
+
+		[Test]
+		public void ShouldReturnNullIfNotLoggedOn()
+		{
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(null);
+			var target = new UserTimeZone(loggedOnUser);
+			target.TimeZone().Should().Be.Null();
 		}
 	}
 }

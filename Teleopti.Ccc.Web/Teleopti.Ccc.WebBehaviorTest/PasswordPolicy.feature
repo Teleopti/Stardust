@@ -16,7 +16,7 @@ Background:
 	| Name  | Agent |
 
 Scenario: Change password failed against the policy
-	Given I am a user with
+	Given I am a user signed in with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
@@ -32,29 +32,28 @@ Scenario: Sign in failed after account is locked
 	Given I have user logon details with
 	| Field    | Value |
 	| IsLocked | true  |
-	And I am a user with
+	And I have user credential with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	And I am viewing the sign in page
-	When I sign in with
+	When I try to sign in with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	Then I should not be signed in
 	And I should see a log on error 'LogOnFailedAccountIsLocked'
+
 @ignore
 Scenario: Sign in with password will expire soon
 	Given Current time is '2012-01-30'
 	And I have user logon details with
 	| Field                | Value      |
 	| Last Password Change | 2012-01-01 |
-	And I am a user with
+	And I have user credential with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	And I am viewing the sign in page
-	When I sign in with
+	When I try to sign in with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
