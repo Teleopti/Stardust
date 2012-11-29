@@ -45,10 +45,9 @@ Scenario: Sign in failed after account is locked
 
 @ignore
 Scenario: Sign in with password will expire soon
-	Given Current time is '2012-01-30'
-	And I have user logon details with
-	| Field                | Value      |
-	| Last Password Change | 2012-01-01 |
+	Given I have user logon details with
+	| Field                           | Value |
+	| Last Password Change X Days Ago | 29    |
 	And I have user credential with
 	| Field    | Value     |
 	| UserName | aa        |
@@ -61,10 +60,9 @@ Scenario: Sign in with password will expire soon
 	#And I should see a warning message that password will be expired
 @ignore
 Scenario: Sign in with password already expired
-	Given Current time is '2012-01-31'
-	And I have user logon details with
-	| Field                | Value      |
-	| Last Password Change | 2012-01-01 |
+	Given I have user logon details with
+	| Field                           | Value |
+	| Last Password Change X Days Ago | 30    |
 	And I am a user with
 	| Field    | Value     |
 	| UserName | aa        |
@@ -79,10 +77,9 @@ Scenario: Sign in with password already expired
 	And I should see an error message password has already expired
 @ignore
 Scenario: Navigate to other page when sign in with password already expired
-	Given Current time is '2012-01-31'
-	And I have user logon details with
-	| Field                | Value      |
-	| Last Password Change | 2012-01-01 |
+	Given I have user logon details with
+	| Field                           | Value |
+	| Last Password Change X Days Ago | 30    |
 	And I am a user with
 	| Field    | Value     |
 	| UserName | aa        |
@@ -96,10 +93,9 @@ Scenario: Navigate to other page when sign in with password already expired
 	Then I should see the sign in page
 @ignore
 Scenario: Change password successfully when password already expired
-	Given Current time is '2012-01-31'
-	And I have user logon details with
-	| Field                | Value      |
-	| Last Password Change | 2012-01-01 |
+	Given I have user logon details with
+	| Field                           | Value |
+	| Last Password Change X Days Ago | 30    |
 	And I am a user with
 	| Field    | Value     |
 	| UserName | aa        |
@@ -117,10 +113,9 @@ Scenario: Change password successfully when password already expired
 	Then I should be signed in
 @ignore
 Scenario: Change password failed when password already expired
-	Given Current time is '2012-01-31'
-	And I have user logon details with
-	| Field                | Value      |
-	| Last Password Change | 2012-01-01 |
+	Given I have user logon details with
+	| Field                           | Value |
+	| Last Password Change X Days Ago | 30    |
 	And I am a user with
 	| Field    | Value     |
 	| UserName | aa        |

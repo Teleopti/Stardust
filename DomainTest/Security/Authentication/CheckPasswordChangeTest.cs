@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             passwordPolicy = mocks.StrictMock<IPasswordPolicy>();
             userDetail = mocks.StrictMock<IUserDetail>();
             person = mocks.StrictMock<IPerson>();
-		    target = new CheckPasswordChange(passwordPolicy, new Now(null));
+		    target = new CheckPasswordChange(passwordPolicy);
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
                 AuthenticationResult result = target.Check(userDetail);
                 Assert.IsFalse(result.Successful);
                 Assert.IsTrue(result.HasMessage);
-                Assert.AreEqual(UserTexts.Resources.LogOnFailedInvalidUserNameOrPassword, result.Message);
+                Assert.AreEqual(UserTexts.Resources.LogOnFailedPasswordExpired, result.Message);
             }
         }
 

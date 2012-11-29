@@ -11194,4 +11194,8 @@ These options are activated:
     <value>Log on failed! Account is locked.</value>
     <comment>Log on failed! Account is locked.</comment>
   </data>
+  <data name="LogOnFailedPasswordExpired" xml:space="preserve">
+    <value>Log on failed! Password has expired, and your account is locked.</value>
+    <comment>Log on failed! Password has expired, and your account is locked.</comment>
+  </data>
 </root>
