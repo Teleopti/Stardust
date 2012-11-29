@@ -1,7 +1,11 @@
-﻿namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
+﻿using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
 	public interface ISkillIntervalData
 	{
+		double ForecastedDemand { get; }
+		DateTimePeriod Period { get; }
 		double CurrentHeads { get; }
 		int? MaximumHeads { get; }
 		int? MinimumHeads { get; }
@@ -13,14 +17,28 @@
 		private readonly double _currentHeads;
 		private readonly int? _minimumHeads;
 		private readonly int? _maximumHeads;
+		private readonly DateTimePeriod _period;
+		private readonly double _forecastedDemand;
 		private readonly double _currentDemand;
 
-		public SkillIntervalData(double currentDemand, double currentHeads, int? minimumHeads, int? maximumHeads)
+		public SkillIntervalData(DateTimePeriod period, double forecastedDemand, double currentDemand, double currentHeads, int? minimumHeads, int? maximumHeads)
 		{
+			_period = period;
+			_forecastedDemand = forecastedDemand;
 			_currentDemand = currentDemand;
 			_currentHeads = currentHeads;
 			_minimumHeads = minimumHeads;
 			_maximumHeads = maximumHeads;
+		}
+
+		public double ForecastedDemand
+		{
+			get { return _forecastedDemand; }
+		}
+
+		public DateTimePeriod Period
+		{
+			get { return _period; }
 		}
 
 		public double CurrentHeads
