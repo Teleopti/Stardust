@@ -55,7 +55,7 @@ Scenario: Sign in with password will expire soon
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	Then I should see a warning 'PasswordWillBeExpired'
+	Then I should see a warning 'LogOnWarningPasswordWillSoonExpire'
 	And I should be signed in
 
 Scenario: Sign in with password already expired
@@ -71,7 +71,7 @@ Scenario: Sign in with password already expired
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	Then I should not be signed in
-	And I should see an error 'LogOnFailedAccountIsLocked'
+	And I should see an error 'LogOnFailedPasswordExpired'
 	And I should be see the must change password page
 
 Scenario: Navigate to other page when sign in with password already expired

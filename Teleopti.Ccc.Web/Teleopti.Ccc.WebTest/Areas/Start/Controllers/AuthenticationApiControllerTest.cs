@@ -76,14 +76,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, null, null);
 			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
-			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult {Successful = false});
+			const string message = "test";
+			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult { Successful = false, Message = message });
 
 			var result = target.BusinessUnits(authenticationModel);
 
 			target.Response.StatusCode.Should().Be(400);
 			target.Response.TrySkipIisCustomErrors.Should().Be.True();
-			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
-			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.LogOnFailedInvalidUserNameOrPassword);
+			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(message);
+			(result.Data as ModelStateResult).Errors.Single().Should().Be(message);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]

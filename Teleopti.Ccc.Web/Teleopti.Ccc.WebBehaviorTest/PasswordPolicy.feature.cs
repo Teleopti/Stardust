@@ -238,7 +238,7 @@ this.FeatureBackground();
 #line 54
  testRunner.When("I try to sign in with", ((string)(null)), table10, "When ");
 #line 58
- testRunner.Then("I should see a warning \'PasswordWillBeExpired\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("I should see a warning \'LogOnWarningPasswordWillSoonExpire\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 59
  testRunner.And("I should be signed in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
@@ -290,7 +290,7 @@ this.FeatureBackground();
 #line 73
  testRunner.Then("I should not be signed in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 74
- testRunner.And("I should see an error \'LogOnFailedAccountIsLocked\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I should see an error \'LogOnFailedPasswordExpired\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 75
  testRunner.And("I should be see the must change password page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
