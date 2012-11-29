@@ -43,7 +43,6 @@ Scenario: Sign in failed after account is locked
 	Then I should not be signed in
 	And I should see a log on error 'LogOnFailedAccountIsLocked'
 
-@ignore
 Scenario: Sign in with password will expire soon
 	Given I have user logon details with
 	| Field                           | Value |
@@ -56,51 +55,48 @@ Scenario: Sign in with password will expire soon
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	Then I should be signed in
-	#And I should see a warning message that password will be expired
-@ignore
+	Then I should see a warning 'PasswordWillBeExpired'
+	And I should be signed in
+
 Scenario: Sign in with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
-	And I am a user with
+	And I have user credential with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	And I am viewing the sign in page
 	When I try to sign in with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	Then I should not be signed in
+	And I should see an error 'LogOnFailedAccountIsLocked'
 	And I should be see the must change password page
-	And I should see an error message password has already expired
-@ignore
+
 Scenario: Navigate to other page when sign in with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
-	And I am a user with
+	And I have user credential with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	And I am viewing the sign in page
 	When I try to sign in with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	And I navigate to week schedule page
 	Then I should see the sign in page
-@ignore
+
 Scenario: Change password successfully when password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
-	And I am a user with
+	And I have user credential with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	And I am viewing the sign in page
 	When I try to sign in with
 	| Field    | Value     |
 	| UserName | aa        |
@@ -111,16 +107,15 @@ Scenario: Change password successfully when password already expired
 	| Confirmed Password | NewP@ssword1 |
 	| Old Password       | P@ssword1    |
 	Then I should be signed in
-@ignore
+
 Scenario: Change password failed when password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
-	And I am a user with
+	And I have user credential with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	And I am viewing the sign in page
 	When I try to sign in with
 	| Field    | Value     |
 	| UserName | aa        |
@@ -130,5 +125,5 @@ Scenario: Change password failed when password already expired
 	| Password           | aa        |
 	| Confirmed Password | aa        |
 	| Old Password       | P@ssword1 |
-	Then I should see an error message password changed failed
+	Then I should see an error 'PasswordChangedFailed'
 	And I should not be signed in
