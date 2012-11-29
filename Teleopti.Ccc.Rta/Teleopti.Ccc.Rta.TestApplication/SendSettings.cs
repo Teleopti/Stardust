@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
         private readonly IList<string> _logOnCollection = new List<string>();
         private readonly IList<string> _stateCodeCollection = new List<string>();
         private int _sendCount = 1;
+        private readonly Guid _platformId;
         private readonly int _sourceId;
         private readonly int _minDistributionMilliseconds;
         private readonly int _maxDistributionMilliseconds;
@@ -26,11 +27,11 @@ namespace Teleopti.Ccc.Rta.TestApplication
             _stateCodeCollection = new List<string>(ConfigurationManager.AppSettings["StateCode"].Split(','));
             _endSequenceCode = ConfigurationManager.AppSettings["LogOffCode"];
 
-            string _strPlatformTypeId = (ConfigurationManager.AppSettings["PlatformTypeId"]);
-            if (!IsValidGuid(_strPlatformTypeId))
-                _loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property SendCount was not read from configuration");
+            var strPlatformTypeId = (ConfigurationManager.AppSettings["PlatformTypeId"]);
+            if (!IsValidGuid(strPlatformTypeId, out _platformId))
+                _loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property PlatformTypeId was not read from configuration");
            
-            string setting = ConfigurationManager.AppSettings["SendCount"];
+            var setting = ConfigurationManager.AppSettings["SendCount"];
             if (!int.TryParse(setting, out _sendCount))
                 _loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property SendCount was not read from configuration");
 
@@ -60,10 +61,15 @@ namespace Teleopti.Ccc.Rta.TestApplication
             get { return _sendCount; }
         }
 
+        public Guid PlatformId
+        {
+            get { return _platformId; }
+        }
+
         public IEnumerable<AgentStateForTest> Read()
         {
             if (_sendCount<=0) throw new InvalidOperationException("The sequence is now finished. Start a new sequence to run test again.");
-            Random random = new Random();
+            var random = new Random();
             if (_snapshotMode)
             {
                 var numberOfAgentsToInclude = Math.Max(1, _logOnCollection.Count - 2);
@@ -73,9 +79,9 @@ namespace Teleopti.Ccc.Rta.TestApplication
                     selectedLogOns.Add(random.Next(0, _logOnCollection.Count));
                 }
                 var batchIdentifier = DateTime.UtcNow;
-                foreach (int selectedLogOn in selectedLogOns)
+                foreach (var selectedLogOn in selectedLogOns)
                 {
-                    int stateCodeIndex = random.Next(0, _stateCodeCollection.Count);
+                    var stateCodeIndex = random.Next(0, _stateCodeCollection.Count);
                     _sendCount--;
 
                     yield return
@@ -83,14 +89,14 @@ namespace Teleopti.Ccc.Rta.TestApplication
                                               TimeSpan.Zero, _sourceId, true, batchIdentifier);
                 }
 
-                int waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
+                var waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
                 yield return new AgentStateForTest("", "", TimeSpan.FromMilliseconds(waitTime), _sourceId, true, batchIdentifier); //Snapshot end signal - with delay to add delay between snapshots
             }
             else
             {
-                int logOnIndex = random.Next(0, _logOnCollection.Count);
-                int stateCodeIndex = random.Next(0, _stateCodeCollection.Count);
-                int waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
+                var logOnIndex = random.Next(0, _logOnCollection.Count);
+                var stateCodeIndex = random.Next(0, _stateCodeCollection.Count);
+                var waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
                 _sendCount--;
 
                 yield return
@@ -99,23 +105,38 @@ namespace Teleopti.Ccc.Rta.TestApplication
             }
         }
 
-        static bool IsValidGuid(string guid)
+        private static bool IsValidGuid(string guid, out Guid platformId)
         {
-            if (!(string.IsNullOrEmpty(guid)))
+            var reg =
+                new Regex(
+                    @"^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$");
+            if (string.IsNullOrEmpty(guid) || !reg.IsMatch(guid))
             {
-                Regex reg = new Regex(@"^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$");
-
-                return reg.IsMatch(guid);
+                platformId = Guid.Empty;
+                return false;
             }
-
-            return false;
+            try
+            {
+                platformId = new Guid(guid);
+                return true;
+            }
+            catch (FormatException)
+            {
+                platformId = Guid.Empty;
+                return false;
+            }
+            catch (OverflowException)
+            {
+                platformId = Guid.Empty;
+                return false;
+            }
         }
 
         public IList<AgentStateForTest> EndSequence()
         {
             IList<AgentStateForTest> result = new List<AgentStateForTest>();
             if (string.IsNullOrEmpty(_endSequenceCode)) return result;
-            foreach (string logOn in _logOnCollection)
+            foreach (var logOn in _logOnCollection)
             {
                 result.Add(new AgentStateForTest(logOn, _endSequenceCode, TimeSpan.Zero, _sourceId, false,
                                                  DateTime.UtcNow));
