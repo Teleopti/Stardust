@@ -20,7 +20,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StageScheduleForecastSkillJobStep(jobParameters));
 			Add(new StageScheduleDayOffCountJobStep(jobParameters));
 			Add(new StageSchedulePreferenceJobStep(jobParameters));
-			//Add(new StageDayOffJobStep(jobParameters)); // Redesign of day offs in Raptor needed before we can fetch day offs.
 			Add(new StageSkillJobStep(jobParameters));
 			Add(new StageWorkloadJobStep(jobParameters));
 			Add(new StageScorecardJobStep(jobParameters));
@@ -40,7 +39,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new DimScenarioJobStep(jobParameters));
 			Add(new DimShiftCategoryJobStep(jobParameters));
 			Add(new DimShiftLengthJobStep(jobParameters));
-			Add(new DimDayOffJobStep(jobParameters));
 			Add(new DimGroupPageJobStep(jobParameters));
 			Add(new DimOvertimeJobStep(jobParameters));
 			Add(new BridgeGroupPagePersonJobStep(jobParameters));

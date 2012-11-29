@@ -26,51 +26,6 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_preference_load]
 WITH EXECUTE AS OWNER	
 AS
 
------------------------------------------------------
--- <Temporary>
------------------------------------------------------
---1) Load stage.stg_day_off from this procedure
---2) then load mart.dim_day_off from this procedure
--- We expect table: stage.stg_schedule_preference
--- to be filled by the ETL process
------------------------------------------------------
---truncate stage dim
-TRUNCATE TABLE [stage].[stg_day_off]
-
--- Get stage fact into stage dimension
-INSERT INTO [stage].[stg_day_off]
-	(
-	[day_off_name]
-	,[day_off_shortname]
-	,[business_unit_code]
-	,[day_off_code]
-	,[display_color]
-	,[display_color_html]
-	,[datasource_id]
-	,[insert_date]
-	,[update_date]
-	,[datasource_update_date]
-	)
-
-SELECT
-	[day_off_name]			= s.day_off_name,
-	[day_off_shortname]		= s.day_off_shortname,
-	[business_unit_code]	= s.business_unit_code,
-	[day_off_code]			= NULL,
-	[display_color]			= -8355712,
-	[display_color_html]	= '#808080',
-    [datasource_id]			= min(s.datasource_id),
-	[insert_date]			= GETDATE(),
-	[update_date]			= GETDATE(),
-	[datasource_update_date]= GETDATE()
-FROM stage.stg_schedule_preference s
-WHERE day_off_name IS NOT NULL
-GROUP BY s.day_off_name,s.day_off_shortname,s.business_unit_code
-
---Load mart dimension
-EXEC [mart].[etl_dim_day_off_load] @business_unit_code
--- </Temporary>
-----------------------------------------------------------------------------------
 DECLARE @start_date_id	INT
 DECLARE @end_date_id	INT
 

@@ -514,7 +514,17 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return new List<IDayOffTemplate>();
         }
 
-        public int PersistDayOff(DataTable dataTable)
+    	public int PersistDayOffFromSchedulePreference()
+    	{
+    		return 0;
+    	}
+
+    	public int PersistDayOffFromScheduleDayOffCount()
+    	{
+    		return 0;
+    	}
+
+    	public int PersistDayOff(DataTable dataTable)
         {
             return 0;
         }

@@ -6,19 +6,16 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Xml.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -683,10 +680,16 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 		}
 
-		public int PersistDayOff(DataTable dataTable)
+		public int PersistDayOffFromSchedulePreference()
 		{
 			HelperFunctions.TruncateTable("stage.etl_stg_day_off_delete", _dataMartConnectionString);
-			return HelperFunctions.BulkInsert(dataTable, "stage.stg_day_off", _dataMartConnectionString);
+			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "stage.etl_stg_day_off_load_from_schedule_preference", null, _dataMartConnectionString);
+		}
+
+		public int PersistDayOffFromScheduleDayOffCount()
+		{
+			HelperFunctions.TruncateTable("stage.etl_stg_day_off_delete", _dataMartConnectionString);
+			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "stage.etl_stg_day_off_load_from_schedule_day_off", null, _dataMartConnectionString);
 		}
 
 
