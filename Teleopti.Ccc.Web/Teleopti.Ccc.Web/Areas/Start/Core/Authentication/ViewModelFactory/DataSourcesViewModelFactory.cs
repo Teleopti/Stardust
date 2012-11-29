@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
-using Teleopti.Ccc.Web.Core.Startup;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory
 {

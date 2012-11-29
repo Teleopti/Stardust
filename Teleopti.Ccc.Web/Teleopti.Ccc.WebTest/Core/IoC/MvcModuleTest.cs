@@ -235,13 +235,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
-		public void ShouldRegisterSignInViewModelFactory()
-		{
-			requestContainer.Resolve<IAuthenticationViewModelFactory>()
-				.Should().Not.Be.Null();
-		}
-
-		[Test]
 		public void ShouldResolveMappingProfiles()
 		{
 			var result = requestContainer.Resolve<IEnumerable<Profile>>();

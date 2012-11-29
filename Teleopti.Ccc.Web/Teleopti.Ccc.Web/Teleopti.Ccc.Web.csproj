@@ -352,8 +352,6 @@
     <Compile Include="Areas\Start\Core\Authentication\Services\IFormsAuthentication.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\IWebLogOn.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\WebLogOn.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\AuthenticationViewModelFactory.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\IAuthenticationViewModelFactory.cs" />
     <Compile Include="Areas\Start\Core\IoC\StartAreaModule.cs" />
     <Compile Include="Areas\MyTime\Core\DatePatternConverter.cs" />
     <Compile Include="Core\IoC\AutofacWebTypesModuleFromRepository20111123.cs" />
@@ -365,14 +363,6 @@
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificData.cs" />
     <Compile Include="Areas\Start\Models\Authentication\BusinessUnitViewModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\DataSourceViewModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInApplicationModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInApplicationViewModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInBusinessUnitModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInBusinessUnitViewModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInTypeViewModelBase.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInViewModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInWindowsModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInWindowsViewModel.cs" />
     <Compile Include="Areas\MyTime\MyTimeAreaRegistration.cs" />
     <Compile Include="Core\CoreExtensions.cs" />
     <Compile Include="Core\Logging\Log4NetModule.cs" />
