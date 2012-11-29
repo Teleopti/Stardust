@@ -21,9 +21,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 		public void TruncateAndMoveScheduleFromCurrentToAuditTables()
 		{
+			const int fiveMinutes = 5 * 60;
 			const string sql = "exec Auditing.InitAuditTables";
 			Session.CreateSQLQuery(sql)
-					.ExecuteUpdate();
+				.SetTimeout(fiveMinutes)
+				.ExecuteUpdate();
 		}
 
 		public IAuditSetting Read()
