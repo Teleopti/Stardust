@@ -91,9 +91,9 @@ namespace Teleopti.Ccc.DBManager
 						try
 						{
 							if (_isAzure)
-								_sqlConnectionAppLogin = ConnectAndOpen(_commandLineArgument.ConnectionStringAppLogin(_commandLineArgument.DatabaseName));
+								_sqlConnectionAppLogin = ConnectAndOpen(_commandLineArgument.ConnectionStringAppLogOn(_commandLineArgument.DatabaseName));
 							else
-								_sqlConnectionAppLogin = ConnectAndOpen(_commandLineArgument.ConnectionStringAppLogin("master"));
+								_sqlConnectionAppLogin = ConnectAndOpen(_commandLineArgument.ConnectionStringAppLogOn("master"));
 
 							_loginExist = true;
 						}
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DBManager
                     if ((_commandLineArgument.PermissionMode) &&
                         (!_commandLineArgument.UseIntegratedSecurity) &&
                         (_commandLineArgument.appUserName.Length > 0 && _commandLineArgument.UserName.Length > 0) &&
-                        (_commandLineArgument.appUserName.ToLower() ==  _commandLineArgument.UserName.ToLower())
+						(CompareStringLowerCase(_commandLineArgument.appUserName, _commandLineArgument.UserName))
                         )
                     {
                         SafeMode = false;
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.DBManager
                         //Set permissions of the newly application user on db.
                         if (_commandLineArgument.PermissionMode && SafeMode)
                         {
-                            CreatePermissions(_commandLineArgument.UserName, _commandLineArgument.appUserName, _commandLineArgument.isWindowsGroupName);
+                            CreatePermissions(_commandLineArgument.appUserName, _commandLineArgument.isWindowsGroupName);
                         }
 
                         //Patch database
@@ -414,23 +414,6 @@ namespace Teleopti.Ccc.DBManager
                 return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.InvariantCulture);
         }
 
-        private static bool IsDbSecurityAdmin()
-        {
-            const string sql = "select IS_MEMBER ('db_securityadmin')";
-            using(SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
-                return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.InvariantCulture);
-        }
-
-        private static bool IsDbOwnerOtherUser(string user)
-        {
-            const string sql = @"select IS_ROLEMEMBER ('db_owner','@user')";
-            using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
-            {
-                sqlCommand.Parameters.AddWithValue("@user", user); 
-                return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.InvariantCulture);
-            }
-        }
-
 		private static bool VerifyWinGroup(string WinNTGroup)
 		{
 			const string sql = @"SELECT count(name) from sys.syslogins where isntgroup = 1 and name = '@WinNTGroup'";
@@ -451,6 +434,16 @@ namespace Teleopti.Ccc.DBManager
             }
         }
 
+		private static bool AzureLoginExist(string SQLLogin)
+		{
+			const string sql = @"select count(*) from sys.sql_logins where name = @SQLLogin";
+			using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
+			{
+				sqlCommand.Parameters.AddWithValue("@SQLLogin", SQLLogin);
+				return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+			}
+		}
+
         private static void CreateDB(string databaseName, DatabaseType databaseType)
         {
             logWrite("Creating database " + databaseName + "...");
@@ -466,52 +459,52 @@ namespace Teleopti.Ccc.DBManager
         {
             //TODO: check if windows group and run win logon script instead of "SQL Logins - Create.sql"
             string fileName = "";
-            if (_isAzure)
-            {
-                if (iswingroup)
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\Win Logins - Create.sql", _databaseFolder.Path());
-                else
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Azure\SQL Logins - Create.sql", _databaseFolder.Path());
-            }
-            else
-            {
-                if (iswingroup)
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Win Logins - Create.sql", _databaseFolder.Path());
-                else
-                    fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\SQL Logins - Create.sql", _databaseFolder.Path());
-            }
-    
-            TextReader tr = new StreamReader(fileName);
-            string sql = tr.ReadToEnd();
-            tr.Close();
-            sql = sql.Replace("$(SQLLOGIN)", user);
-            sql = sql.Replace("$(SQLPWD)", pwd);
-            sql = sql.Replace("$(WINLOGIN)", user);
+			string sql = "";
+			if (!_isAzure)
+			{
+				if (iswingroup)
+					fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\Win Logins - Create.sql", _databaseFolder.Path());
+				else
+					fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\SQL Logins - Create.sql", _databaseFolder.Path());
+
+				TextReader tr = new StreamReader(fileName);
+				sql = tr.ReadToEnd();
+				tr.Close();
+				sql = sql.Replace("$(SQLLOGIN)", user);
+				sql = sql.Replace("$(SQLPWD)", pwd);
+				sql = sql.Replace("$(WINLOGIN)", user);
+			}
+			else
+			{
+				if (iswingroup)
+					sql = "PRINT 'Windows Logins cannot be added to Windows Azure for the momement'";
+				else
+				{
+					if (AzureLoginExist(user) == true)
+						sql = "ALTER  LOGIN [" + user + "] WITH PASSWORD=N'" + pwd + "'";
+					else
+						sql = "CREATE LOGIN [" + user + "] WITH PASSWORD=N'" + pwd + "'";
+				}
+			}
 
             using (var cmd = new SqlCommand(sql, _sqlConnection))
             {
-				if (_isAzure && _loginExist == true)
-                {
-                    logWrite("Azure Login already exist, continue ...");
-                }
-                else
-                    cmd.ExecuteNonQuery();
+				cmd.ExecuteNonQuery();
             }
 
             logWrite("Created login!");
 
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-        private static void CreatePermissions(string adminUser, string user, bool iswingroup)
+        private static void CreatePermissions(string user, bool iswingroup)
         {
             string fileName;
             string sql;
             string relinkSQLUser;
             string createDBUser;
-            bool sysAdmin = false;
 
             //if appication login = sa then don't bother to do anything
-            if (user.ToLower() == "sa")
+            if (CompareStringLowerCase(user,string.Format(CultureInfo.CurrentCulture, @"sa")))
                 return;
 
             sql = "";
@@ -522,7 +515,7 @@ namespace Teleopti.Ccc.DBManager
             {
                 logWrite("DB user already exist, re-link ...");
                 using (var cmd = new SqlCommand(relinkSQLUser, _sqlConnection))
-                cmd.ExecuteNonQuery();
+					cmd.ExecuteNonQuery();
             }
             else
 
@@ -538,11 +531,9 @@ namespace Teleopti.Ccc.DBManager
 
             sql = sql.Replace("$(LOGIN)", user);
 
-            if (!sysAdmin)
-            {
-                using (var cmd = new SqlCommand(sql, _sqlConnection))
-                cmd.ExecuteNonQuery();
-            }
+			using (var cmd = new SqlCommand(sql, _sqlConnection))
+				cmd.ExecuteNonQuery();
+
             logWrite("Created Permissions!");
         }
 
@@ -558,5 +549,11 @@ namespace Teleopti.Ccc.DBManager
             sqlConnection.Open();
             return sqlConnection;
         }
+
+		static bool CompareStringLowerCase(string stringA, string stringB)
+		{
+			return (string.Compare(stringA.ToLower(CultureInfo.CurrentCulture), stringB.ToLower(CultureInfo.CurrentCulture), true,
+				 System.Globalization.CultureInfo.CurrentCulture) == 0);
+		}
     }
 }
