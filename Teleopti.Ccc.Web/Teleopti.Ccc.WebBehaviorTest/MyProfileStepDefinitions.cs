@@ -85,6 +85,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
 			var signInpage = Browser.Current.Page<SignInPage>();
+			signInpage.SelectApplicationTestDataSource();
 			signInpage.SignInApplication(userName, newPassword);
 		}
 

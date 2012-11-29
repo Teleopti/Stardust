@@ -104,7 +104,7 @@ namespace Teleopti.Support.LicTool
 
 		private void Initialize_form()
 		{
-	   //     InstallLocalKeypair();
+			//     InstallLocalKeypair();
 
 			txtbxCustomerName.Text = null;
 			dtpkrExpirationDate.Value = DateTime.Now;
@@ -115,9 +115,6 @@ namespace Teleopti.Support.LicTool
 			numericUpDownCountRatio.Value = 1.5M;
 			numMaxActiveAgentsGrace.Value = 0;
 
-		  
-			
-		   
 			chkAgentScheduleMessenger.Checked = false;
 			//chkAgentScheduleMessenger.Enabled = true;
 			chkAgentSelfService.Checked = false;
@@ -133,10 +130,7 @@ namespace Teleopti.Support.LicTool
 			chkAnywhere.Checked = false;
 
 			chkDeveloper.Checked = false;
-		   
-	 
-		
-
+			checkBoxVersion8.Checked = false;
 		}
 
 		private void EnterDemoSettings()
@@ -254,6 +248,7 @@ namespace Teleopti.Support.LicTool
 						if (options.Contains("MyTimeWeb")) chkMyTimeWeb.Checked = true;
 						if (options.Contains("Anywhere")) chkAnywhere.Checked = true;
 						if (options.Contains("SMSLink")) checkBoxSMS.Checked = true;
+						if (options.Contains("Version8")) checkBoxVersion8.Checked = true;
 
 						//Freemium
 						if (options.Contains("Forecasts")) chkFreemium.Checked = true;
@@ -321,6 +316,7 @@ namespace Teleopti.Support.LicTool
 				if (chkMyTimeWeb.Checked) elmOptions.AppendChild(xdoc.CreateElement("MyTimeWeb")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkAnywhere.Checked) elmOptions.AppendChild(xdoc.CreateElement("Anywhere")).AppendChild(xdoc.CreateTextNode("true"));
 				if (checkBoxSMS.Checked) elmOptions.AppendChild(xdoc.CreateElement("SMSLink")).AppendChild(xdoc.CreateTextNode("true"));
+				if (checkBoxVersion8.Checked) elmOptions.AppendChild(xdoc.CreateElement("Version8")).AppendChild(xdoc.CreateTextNode("true"));
 
 				rootNode.AppendChild(elmOptions);
 			}

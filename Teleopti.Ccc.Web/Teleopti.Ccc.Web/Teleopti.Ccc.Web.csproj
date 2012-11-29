@@ -650,6 +650,7 @@
     <Content Include="Content\crossroads\crossroads.min.js" />
     <Content Include="Content\hasher\hasher.js" />
     <Content Include="Content\hasher\hasher.min.js" />
+    <Content Include="Content\jquery-plugin\jquery.swipeListener.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.min.js" />
     <Content Include="Content\jqueryui\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -743,6 +744,7 @@
     <Content Include="Content\Scripts\excanvas.original.js" />
     <Content Include="Content\Scripts\jquery.hoverIntent.js" />
     <Content Include="Content\Scripts\knockout-jquery-ui-widget.js" />
+    <Content Include="Content\Scripts\modernizr-2.6.2.js" />
     <Content Include="Content\Scripts\Pinify\Content\Images\bg_left.png" />
     <Content Include="Content\Scripts\Pinify\Content\Images\bg_repeat_left.png" />
     <Content Include="Content\Scripts\Pinify\Content\Images\bg_right.png" />
@@ -770,8 +772,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.custominput.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.combobox.js" />
     <Content Include="Content\Scripts\json2.js" />
-    <Content Include="Content\Scripts\modernizr-1.7.js" />
-    <Content Include="Content\Scripts\modernizr-1.7.min.js" />
     <Content Include="Content\Scripts\jquery.ba-hashchange.js" />
     <Content Include="Content\Scripts\jquery.ba-hashchange.min.js" />
     <Content Include="Content\Scripts\jquery.unobtrusive-ajax.js" />

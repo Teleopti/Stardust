@@ -34,6 +34,7 @@ Background:
 	| Name                     | No access |
 	| Access to mytime web     | false     |
 	| Access to mobile reports | false     |
+	| Access to admin web	   | false     |
 
 Scenario: Sign in with a user with multiple business units by user name
 	Given I have the role 'Role for business unit 1'

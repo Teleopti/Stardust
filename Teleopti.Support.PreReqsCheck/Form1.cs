@@ -18,6 +18,7 @@ using System.Transactions;
 using System.Collections;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace CheckPreRequisites
 {
@@ -28,13 +29,13 @@ namespace CheckPreRequisites
             InitializeComponent();
         }
 
-       #region Main Checks
+        #region Main Checks
         private void button1_Click(object sender, EventArgs e)
         {
             //Clear list
             ClearListView();
 
-            
+
             //Check web and/or DB server
             if (comboBoxServerSetup.SelectedItem.ToString().Contains("Web"))
             {
@@ -58,7 +59,7 @@ namespace CheckPreRequisites
         {
             CheckDBInternals();
         }
-       #endregion
+        #endregion
 
         #region V6 Checks
 
@@ -77,7 +78,7 @@ namespace CheckPreRequisites
             DBConnectionCheck(ref DbConn, connString);
 
 
-            
+
             //if we have a Db-connection, go for the DB-checks
             if (DbConn)
             {
@@ -160,9 +161,12 @@ namespace CheckPreRequisites
 
                 //Collation
                 DBCollationCheck(connString);
+
+                //WriteTestTempDB
+                WriteTestTempDB(connString);
             }
 
-       }
+        }
 
 
 
@@ -245,9 +249,9 @@ namespace CheckPreRequisites
                     printFeatureStatus(false);
                 }
             }
-     
-        
-        
+
+
+
         }
 
         private void DBPreMigrationActivitiesTable(string connString)
@@ -306,13 +310,98 @@ namespace CheckPreRequisites
 
         }
 
+        private static void ReadSingleRow(IDataRecord record)
+        {
+            Console.WriteLine(String.Format("{0}, {1}", record[0], record[1]));
+        }
+
+        private void WriteTestTempDB(string connString)
+        {
+            string procedureCommand = string.Empty;
+
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("^\\s*GO\\s*$", System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Multiline);
+            // create a writer and open the file
+            string filePath = @"WriteTestTempDB.sql";
+            using (var conn = new SqlConnection(connString))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    conn.Open();
+                    cmd.Connection = conn;
+                    if (File.Exists(filePath))
+                    {
+                        StreamReader file = null;
+                        try
+                        {
+                            file = new StreamReader(filePath);
+                            string[] lines = regex.Split(file.ReadToEnd());
+
+                            foreach (string line in lines)
+                            {
+                                if (line.Length > 0)
+                                {
+                                    cmd.CommandText = line;
+                                    cmd.CommandType = CommandType.Text;
+                                    SqlDataReader reader = cmd.ExecuteReader();
+
+                                    //bytes to be transfered
+                                    reader.Read();
+                                    var MBytesRead = reader.GetInt32(0) / 1024 / 1024;
+
+                                    //actual data
+                                    var stopwatch = new Stopwatch();
+                                    stopwatch.Start();
+
+                                    reader.NextResult();
+                                    while (reader.Read()) { }
+                                    stopwatch.Stop();
+                                    var BandWidth = Math.Round(8 * MBytesRead * 1000 / stopwatch.Elapsed.TotalMilliseconds, 2);
+
+                                    printNewFeature("Database", "Server Lan speed [mbps]", "200", BandWidth.ToString());
+                                    printFeatureStatus(true);
+
+
+                                    //IOLatency figures
+                                    reader.NextResult();
+                                    reader.Read();
+
+                                    var IoWriteLatency = reader.GetInt64(0);
+                                    var displayIoWriteLatency = "<1";
+
+                                    if (IoWriteLatency > 0)
+                                        displayIoWriteLatency = IoWriteLatency.ToString();
+
+                                    printNewFeature("Database", "IoWriteLatency [ms]", "5", displayIoWriteLatency);
+                                    if (IoWriteLatency > 5)
+                                        printFeatureStatus(false);
+                                    else
+                                        printFeatureStatus(true);
+
+                                    reader.Close();
+
+                                }
+                            }
+
+                        }
+                        finally
+                        {
+                            if (file != null)
+
+                                file.Close();
+                        }
+                    }
+                    conn.Close();
+                }
+            }
+        }
+
 
 
 
         private void InsertProcedure(string connString)
         {
             string procedureCommand = string.Empty;
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("^\\s*GO\\s*$", System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Multiline);          
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("^\\s*GO\\s*$", System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Multiline);
             // create a writer and open the file
             string filePath = @"p_raptor_run_before_conversion.sql";
             using (var conn = new SqlConnection(connString))
@@ -328,10 +417,10 @@ namespace CheckPreRequisites
                         {
                             file = new StreamReader(filePath);
                             string[] lines = regex.Split(file.ReadToEnd());
-                           
+
                             foreach (string line in lines)
                             {
-                              if (line.Length > 0)
+                                if (line.Length > 0)
                                 {
                                     cmd.CommandText = line;
                                     cmd.CommandType = CommandType.Text;
@@ -339,7 +428,7 @@ namespace CheckPreRequisites
                                     cmd.ExecuteNonQuery();
                                 }
                             }
-                            
+
                             //while ((line = file.ReadLine()) != null)
                             //{
                             //    if (line.ToString() == "GO")
@@ -392,7 +481,7 @@ namespace CheckPreRequisites
 
         private void DBConnectionCheck(ref bool DbConn, string connString)
         {
-            printNewFeature("Database", "DB Connection", "","Connecting: " + textBoxSQLServerName.Text.ToString());
+            printNewFeature("Database", "DB Connection", "", "Connecting: " + textBoxSQLServerName.Text.ToString());
 
             using (var conn = new SqlConnection(connString))
             {
@@ -574,7 +663,7 @@ namespace CheckPreRequisites
         {
             int dbMajorVersion = SQLServerMajorVersion(connString);
             string dbFullVersion = SQLServerFullVersion(connString);
-            printNewFeature("Database", "Full Version","MS SQL Server 2005 or later", dbFullVersion.ToString());
+            printNewFeature("Database", "Full Version", "MS SQL Server 2005 or later", dbFullVersion.ToString());
 
             if (dbMajorVersion >= 9)
                 printFeatureStatus(true);
@@ -585,7 +674,7 @@ namespace CheckPreRequisites
         private void DBSysAdminCheck(string connString)
         {
             const string sysAdminCommand = "SELECT IS_SRVROLEMEMBER('sysadmin')";
-            printNewFeature("Database", "Permission","SysAdmin role required", "Sys Admin role");
+            printNewFeature("Database", "Permission", "SysAdmin role required", "Sys Admin role");
 
             using (var conn = new SqlConnection(connString))
             {
@@ -654,7 +743,7 @@ namespace CheckPreRequisites
                 if (componentsKey != null)
                 {
                     string architecture = (string)componentsKey.GetValue("PROCESSOR_ARCHITECTURE", "N/A");
-                    printNewFeature("Operating System", "Architecture", "x64 required",architecture);
+                    printNewFeature("Operating System", "Architecture", "x64 required", architecture);
                     if (architecture.Contains("64") == true)
                         printFeatureStatus(true);
                     else
@@ -672,7 +761,7 @@ namespace CheckPreRequisites
                 if (componentsKey != null)
                 {
                     int processors = componentsKey.SubKeyCount;
-                    printNewFeature("Hardware", "Processor CPU's ", "",processors.ToString());
+                    printNewFeature("Hardware", "Processor CPU's ", "", processors.ToString());
                     if (numberOfAgent < 500 && processors >= 2)
                         printFeatureStatus(true);
                     else if (numberOfAgent <= 1500 && processors >= 4)
@@ -692,7 +781,7 @@ namespace CheckPreRequisites
             //See: http://www.sharparena.com/index.php?option=com_content&view=article&id=43:article-csharp-windows-version-edition&catid=15:category-csharp-general&Itemid=12
             //Get OS info
 
-            printNewFeature("Operating System","OS Version", "Windows Server 2003 R2 or later",SystemInfoApp.SystemInfo.Version.ToString());
+            printNewFeature("Operating System", "OS Version", "Windows Server 2003 R2 or later", SystemInfoApp.SystemInfo.Version.ToString());
 
             switch (SystemInfoApp.SystemInfo.MajorVersion)
             {
@@ -729,13 +818,12 @@ namespace CheckPreRequisites
         private void CheckComputerName()
         {
             //Get computer name
-            string ComputerName=SystemInformation.ComputerName;
+            string ComputerName = SystemInformation.ComputerName;
 
 
             printNewFeature("Operating system", "Computer name", "Allowed characters for computer is [A-Z,a-z,0-9]", ComputerName);
 
             if (ComputerName == Regex.Replace(ComputerName, "[^a-zA-Z0-9_]", ""))
-
             {
                 printFeatureStatus(true);
             }
@@ -772,7 +860,7 @@ namespace CheckPreRequisites
                     int minorVersion = (int)componentsKey.GetValue("MinorVersion", -1);
                     if (majorVersion != -1 && minorVersion != -1)
                     {
-                        printNewFeature("IIS installed","IIS version", "IIS 5.1 or later",majorVersion + "." + minorVersion);
+                        printNewFeature("IIS installed", "IIS version", "IIS 5.1 or later", majorVersion + "." + minorVersion);
                         printFeatureStatus(true);
                     }
                     if (majorVersion == 7 || majorVersion == 8)
@@ -786,7 +874,7 @@ namespace CheckPreRequisites
                 }
                 else
                 {
-                    printNewFeature("IIS installed","IIS web server is not installed","IIS 5.1 or later", "");
+                    printNewFeature("IIS installed", "IIS web server is not installed", "IIS 5.1 or later", "");
                     printFeatureStatus(false);
                 }
             }
@@ -799,7 +887,7 @@ namespace CheckPreRequisites
             {
                 if (componentsKey != null)
                 {
-                    printNewFeature("IIS Subcomp","IIS Management Console","","");
+                    printNewFeature("IIS Subcomp", "IIS Management Console", "", "");
                     if (InternetInformationServicesDetection.IsInstalled(InternetInformationServices7Component.ManagementConsole))
                         printFeatureStatus(true);
                     else
@@ -854,8 +942,8 @@ namespace CheckPreRequisites
 
                     try
                     {
-                            
-                        printNewFeature("IIS .WCF", "WCF registered", "","");
+
+                        printNewFeature("IIS .WCF", "WCF registered", "", "");
                         if (FrameworkVersionDetection.IsInstalled(WindowsFoundationLibrary.WCF))
                             printFeatureStatus("Check Manually");
                         //else
@@ -863,7 +951,7 @@ namespace CheckPreRequisites
                     }
                     catch (Exception ex)
                     {
-                        printNewFeature("IIS .WCF", "WCF registered","","Error when checking" + ex.Message.ToString());
+                        printNewFeature("IIS .WCF", "WCF registered", "", "Error when checking" + ex.Message.ToString());
                         printFeatureStatus(false);
                     }
                 }
@@ -901,7 +989,7 @@ namespace CheckPreRequisites
             {
                 if (componentsKey != null)
                 {
-                    printNewFeature("IIS","IIS Management Console","","");
+                    printNewFeature("IIS", "IIS Management Console", "", "");
                     if (InternetInformationServicesDetection.IsInstalled(InternetInformationServicesComponent.InetMgr))
                         printFeatureStatus(true);
                     else
@@ -924,15 +1012,15 @@ namespace CheckPreRequisites
             foreach (DirectoryEntry Site in W3SVC.Children)
             {
                 if (Site.SchemaClassName == WebServerSchema)
-                {                 
-                //printNewFeature("IIS", "WindowsAuthentication", Site.Properties["AuthFlags"].Value.ToString());
-                //    //if (Site.Properties["NTAuthenticationProviders"].Value.ToString().Contains("NTLM") == true)
-                //    if (Site.Properties["AuthFlags"].Value.ToString().Contains("NTLM") == true)
-                //        printFeatureStatus(true);
-                //    else
-                //        printFeatureStatus(false);
+                {
+                    //printNewFeature("IIS", "WindowsAuthentication", Site.Properties["AuthFlags"].Value.ToString());
+                    //    //if (Site.Properties["NTAuthenticationProviders"].Value.ToString().Contains("NTLM") == true)
+                    //    if (Site.Properties["AuthFlags"].Value.ToString().Contains("NTLM") == true)
+                    //        printFeatureStatus(true);
+                    //    else
+                    //        printFeatureStatus(false);
 
-                    printNewFeature("IIS","ASP.NET Registered", "","");
+                    printNewFeature("IIS", "ASP.NET Registered", "", "");
                     try
                     {
                         if (Site.Properties["HttpCustomHeaders"].Value.ToString() == "X-Powered-By: ASP.NET")
@@ -952,7 +1040,7 @@ namespace CheckPreRequisites
 
             using (DirectoryEntry de = new DirectoryEntry("IIS://localhost/W3SVC"))
             {
-                printNewFeature("IIS", "ASP.NET Enabled","", "");
+                printNewFeature("IIS", "ASP.NET Enabled", "", "");
                 foreach (string ext in de.Properties["WebSvcExtRestrictionList"])
                 {
                     if (ext.IndexOf("ASP.NET v2.0") != -1)
@@ -963,7 +1051,7 @@ namespace CheckPreRequisites
                             printFeatureStatus(false);
                     }
                 }
-            } 
+            }
 
         }
 
@@ -979,16 +1067,16 @@ namespace CheckPreRequisites
 
             listView1.Items[listView1.Items.Count - 1].SubItems[2].Text = CheckServiceRunning(Target.ToString(), ServiceName.ToString()).ToString();
             if (CheckServiceRunning(Target.ToString(), ServiceName.ToString()).ToString() == "Running")
-                {
-   
-                    
-                printFeatureStatus(true);
-                }
-                else
-                {
-                    printFeatureStatus(false);
+            {
 
-                }
+
+                printFeatureStatus(true);
+            }
+            else
+            {
+                printFeatureStatus(false);
+
+            }
         }
 
         private void CheckDatabaseServices()
@@ -1004,20 +1092,20 @@ namespace CheckPreRequisites
             string SSIS = "MSDTSSERVER";
             double SQLVersion = double.Parse(SQLServerFullVersion(connStringGet("master")).Substring(0, 4), CultureInfo.InvariantCulture);
 
-            if (SQLVersion>10)
+            if (SQLVersion > 10)
                 SSIS = "MSDTSSERVER100";
 
             //Next, find out if this is a named instance
             //int index = comboBoxSQLInstance.SelectedItem.ToString().IndexOf(@"\");
-            int index   = DBServer.ToString().IndexOf(@"\");
-            int len     = DBServer.ToString().Length;
+            int index = DBServer.ToString().IndexOf(@"\");
+            int len = DBServer.ToString().Length;
 
             //If namned instance
             if (index != -1)
             {
- 
-                DBInstance  = DBServer.ToString().Substring(index + 1, len - index - 1);
-                DBServer    = DBServer.ToString().Substring(0, index);
+
+                DBInstance = DBServer.ToString().Substring(index + 1, len - index - 1);
+                DBServer = DBServer.ToString().Substring(0, index);
 
                 SQLEngineService = "MSSQL$" + DBInstance;
                 SQLAgentService = "SQLAGENT$" + DBInstance;
@@ -1045,33 +1133,33 @@ namespace CheckPreRequisites
             string ServiceStatus = "";
             try
             {
-            ConnectionOptions connection = new ConnectionOptions();
-            ManagementScope scope = new ManagementScope("\\\\" + Server + "\\root\\CIMV2");
+                ConnectionOptions connection = new ConnectionOptions();
+                ManagementScope scope = new ManagementScope("\\\\" + Server + "\\root\\CIMV2");
                 scope.Connect();
-                ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_Service WHERE Name = '"+ServiceName+"'");
+                ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_Service WHERE Name = '" + ServiceName + "'");
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
                 if (searcher.Get().Count == 0)
                 {
-                    ServiceStatus="Does not exist";
+                    ServiceStatus = "Does not exist";
                 }
 
-            foreach (ManagementObject queryObj in searcher.Get())
-            {
-                if (queryObj["State"].ToString() == "Running")
+                foreach (ManagementObject queryObj in searcher.Get())
                 {
-                    ServiceStatus="Running".ToString();
+                    if (queryObj["State"].ToString() == "Running")
+                    {
+                        ServiceStatus = "Running".ToString();
+                    }
+                    else
+                        ServiceStatus = queryObj["State"].ToString();
                 }
-                else
-                    ServiceStatus=queryObj["State"].ToString();
             }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("Wmi could not get service: " + ServiceName.ToString() +", With exception: " + ex);
-            ServiceStatus="WMI failed to get: " + ServiceName.ToString();
-        }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Wmi could not get service: " + ServiceName.ToString() + ", With exception: " + ex);
+                ServiceStatus = "WMI failed to get: " + ServiceName.ToString();
+            }
             return ServiceStatus;
-    }
+        }
 
         #region PrintStuff
 

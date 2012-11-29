@@ -208,12 +208,21 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 			return null;
 		});
+		self.meetingDescription = ko.computed(function () {
+			if (self.hasMeeting()) {
+				if (layer.Meeting.Description.length > 300) {
+					return layer.Meeting.Description.substring(0, 300) + '...';
+				}
+				return layer.Meeting.Description;
+			}
+			return null;
+		});
 		self.timeSpan = ko.observable(layer.TimeSpan);
 		self.color = ko.observable('rgb(' + layer.Color + ')');
 		self.tooltipText = ko.computed(function () {
 			if (self.hasMeeting()) {
-				return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt></dl></div>'
-					.format(self.timeSpan(), parent.userTexts.subjectColon, self.meetingTitle(), parent.userTexts.locationColon, self.meetingLocation());
+				return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt><dt>{5} {6}</dt></dl></div>'
+					.format(self.timeSpan(), parent.userTexts.subjectColon, self.meetingTitle(), parent.userTexts.locationColon, self.meetingLocation(), parent.userTexts.descriptionColon, self.meetingDescription());
 			} else {
 				return self.timeSpan();
 			}

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Iesi.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;

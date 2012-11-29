@@ -23,5 +23,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			// Settings is Now preferred "home"
 			EventualAssert.That(() => Pages.Pages.MobileReportsPage.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
 		}
+
+		[Then(@"I should see Admin Web")]
+		public void ThenIShouldSeeAdminWeb()
+		{
+			EventualAssert.That(() => Pages.Pages.AdminWebPage.Placeholder.DisplayVisible(), Is.True);
+		}
 	}
 }

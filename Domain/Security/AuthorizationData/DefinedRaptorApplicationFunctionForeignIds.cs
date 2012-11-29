@@ -111,5 +111,9 @@
 		// MobileReports Anywhere
 		public const string Anywhere = "0074";
 
+		// Team Web
+		public const string AdminWeb = "0080";
+		public const string SchedulesAdminWeb = "0081";
+
     }
 }

@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
                     meetingModel = new MeetingViewModel
                                         {
                                             Location = meetingPayload.Meeting.GetLocation(new NoFormatting()),
-                                            Title = meetingPayload.Meeting.GetSubject(new NoFormatting())
+                                            Title = meetingPayload.Meeting.GetSubject(new NoFormatting()),
+														  Description = meetingPayload.Meeting.GetDescription(new NoFormatting())
                                         };
                 }
 

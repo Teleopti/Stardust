@@ -86,6 +86,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="AdminWeb\AdminWebLogOn.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AdminWebLogOn.feature</DependentUpon>
+    </Compile>
     <Compile Include="AsmSummerToWinter.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -116,6 +121,7 @@
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\Robustness\Timeouts.cs" />
     <Compile Include="Core\Robustness\Retrying.cs" />
+    <Compile Include="Pages\AdminWebPage.cs" />
     <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Routing.feature.cs">
       <DependentUpon>Routing.feature</DependentUpon>
@@ -519,6 +525,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="AdminWeb\AdminWebLogOn.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AdminWebLogOn.feature.cs</LastGenOutput>
+    </None>
     <None Include="BrowserNotifications.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>BrowserNotifications.feature.cs</LastGenOutput>
