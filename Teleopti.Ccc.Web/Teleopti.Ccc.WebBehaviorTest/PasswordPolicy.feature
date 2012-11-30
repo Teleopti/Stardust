@@ -15,6 +15,7 @@ Background:
 	| Field | Value |
 	| Name  | Agent |
 
+@ignore
 Scenario: Change password fails against the policy
 	Given I am a user signed in with
 	| Field    | Value     |
@@ -28,6 +29,7 @@ Scenario: Change password fails against the policy
 	| Old Password       | P@ssword1 |
 	Then I should see password change failed with message
 
+@ignore
 Scenario: Sign in fails after account is locked
 	Given I have user logon details with
 	| Field    | Value |
