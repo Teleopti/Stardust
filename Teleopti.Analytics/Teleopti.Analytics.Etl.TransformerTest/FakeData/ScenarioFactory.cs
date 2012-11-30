@@ -24,22 +24,22 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
         {
             IList<IScenario> retList = new List<IScenario>();
 
-            IScenario scenario = Ccc.TestCommon.FakeData.ScenarioFactory.CreateScenarioAggregate("Default", true, false);
+            IScenario scenario = Ccc.TestCommon.FakeData.ScenarioFactory.CreateScenarioAggregate("Default", true);
             scenario.SetId(Guid.NewGuid());
             RaptorTransformerHelper.SetCreatedOn(scenario, DateTime.Now);
             retList.Add(scenario);
 
-            scenario = Ccc.TestCommon.FakeData.ScenarioFactory.CreateScenarioAggregate("Worst case", false, false);
+            scenario = Ccc.TestCommon.FakeData.ScenarioFactory.CreateScenarioAggregate("Worst case", false);
             scenario.SetId(Guid.NewGuid());
             RaptorTransformerHelper.SetCreatedOn(scenario, DateTime.Now);
             retList.Add(scenario);
 
-            scenario = Ccc.TestCommon.FakeData.ScenarioFactory.CreateScenarioAggregate("Best case", false, false);
+            scenario = Ccc.TestCommon.FakeData.ScenarioFactory.CreateScenarioAggregate("Best case", false);
             scenario.SetId(Guid.NewGuid());
             RaptorTransformerHelper.SetCreatedOn(scenario, DateTime.Now);
             retList.Add(scenario);
 
-            scenario = Ccc.TestCommon.FakeData.ScenarioFactory.CreateScenarioAggregate("Deleted Scenario", false, false);
+            scenario = Ccc.TestCommon.FakeData.ScenarioFactory.CreateScenarioAggregate("Deleted Scenario", false);
             scenario.SetId(Guid.NewGuid());
             RaptorTransformerHelper.SetCreatedOn(scenario, DateTime.Now);
             ((Scenario)scenario).SetDeleted();

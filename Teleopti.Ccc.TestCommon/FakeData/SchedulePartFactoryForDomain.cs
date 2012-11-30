@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         }
 
         public SchedulePartFactoryForDomain()
-            : this(PersonFactory.CreatePerson(), ScenarioFactory.CreateScenarioAggregate("For test",true,false), new DateTimePeriod(2001, 1, 1, 2001, 1, 3), SkillFactory.CreateSkill("Skill")) {}
+            : this(PersonFactory.CreatePerson(), ScenarioFactory.CreateScenarioAggregate("For test",true), new DateTimePeriod(2001, 1, 1, 2001, 1, 3), SkillFactory.CreateSkill("Skill")) {}
 
 
         private IScheduleDay createPart(DateOnly dateOnly)

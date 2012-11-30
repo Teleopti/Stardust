@@ -73,17 +73,6 @@ namespace Teleopti.Ccc.Domain.Common
             set { _defaultScenario = value; }
         }
 
-
-        /// <summary>
-        /// Gets if audit_trail is on.
-        /// </summary>
-        /// <value>Audit trail is on.</value>
-        public virtual bool AuditTrail
-        {
-            get { return _auditTrail; }
-            set { _auditTrail = value; }
-        }
-
         public virtual bool IsDeleted
         {
             get { return _isDeleted; }

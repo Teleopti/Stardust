@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ScheduleTagging
         {
             _person = PersonFactory.CreatePerson("Kalle");
             _tagDate = new DateOnly(2010, 4, 1);
-            _scenario = ScenarioFactory.CreateScenarioAggregate("Default", true, true);
+            _scenario = ScenarioFactory.CreateScenarioAggregate("Default", true);
             _scheduleTag = new ScheduleTag();
             _scheduleTag.Description = "Tag";
             _target = new AgentDayScheduleTag(_person, _tagDate, _scenario, _scheduleTag);

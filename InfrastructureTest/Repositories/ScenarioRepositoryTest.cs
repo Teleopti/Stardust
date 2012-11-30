@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IScenario CreateAggregateWithCorrectBusinessUnit()
         {
-            IScenario scenario = ScenarioFactory.CreateScenarioAggregate("Dummy", false, true);
+            IScenario scenario = ScenarioFactory.CreateScenarioAggregate("Dummy", false);
             return scenario;
         }
 
@@ -73,8 +73,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanOnlyHaveOneDefault()
         {
-            IScenario myScenario1 = ScenarioFactory.CreateScenarioAggregate("Dummy", false, true);
-            IScenario myScenario2 = ScenarioFactory.CreateScenarioAggregate("Dummy", false, true);
+            IScenario myScenario1 = ScenarioFactory.CreateScenarioAggregate("Dummy", false);
+            IScenario myScenario2 = ScenarioFactory.CreateScenarioAggregate("Dummy", false);
             _rep.Add(myScenario1);
             _rep.Add(myScenario2);
             Session.Flush();
@@ -138,8 +138,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyCanLoadDefaultScenario()
         {
-            IScenario myScenario1 = ScenarioFactory.CreateScenarioAggregate("myScenario1", false, true);
-            IScenario myScenario2 = ScenarioFactory.CreateScenarioAggregate("myScenario2", false, true);
+            IScenario myScenario1 = ScenarioFactory.CreateScenarioAggregate("myScenario1", false);
+            IScenario myScenario2 = ScenarioFactory.CreateScenarioAggregate("myScenario2", false);
             _rep.Add(myScenario1);
             _rep.Add(myScenario2);
             Session.Flush();

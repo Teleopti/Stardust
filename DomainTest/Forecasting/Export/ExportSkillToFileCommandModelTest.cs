@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
             var skill = SkillFactory.CreateSkill("TestSkill");
             var period = new DateOnlyPeriod(2012, 08, 06,
                                             2012, 08, 10);
-            var scenario = ScenarioFactory.CreateScenarioAggregate("TestScenario", true, false);
+            var scenario = ScenarioFactory.CreateScenarioAggregate("TestScenario", true);
 
             model = new ExportSkillToFileCommandModel
                         {
