@@ -39,6 +39,16 @@ Else
 	admConnectString="Provider=sqloledb;Data Source=" & server & ";User Id=" & admSqlLogin & ";Password=" & admPassword & ";Initial Catalog=master"
 End If
 
+'empty ServerName
+If server="" Then
+	DisplayCustomError("I can't connect to blank SQL Server name, please specify a valid SQL Server")
+End If
+
+'empty Username
+If (admAuthModel = "SQL" and admSqlLogin="") Then
+	DisplayCustomError("I can't connect blank SQL User Name, please specify a valid login or use Windows NT Authentication")
+End If
+
 'Loop Windows groups on SQL Server
 AvailableGroupsGet admConnectString, displayGroups
 
