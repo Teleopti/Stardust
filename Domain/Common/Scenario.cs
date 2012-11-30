@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.Common
 
         private Description _description;
         private bool _defaultScenario;
-        private bool _auditTrail;
         private bool _enableReporting;
         private bool _isDeleted;
     	private bool _restricted;
