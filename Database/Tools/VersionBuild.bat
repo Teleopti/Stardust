@@ -15,7 +15,7 @@ ECHO Rootdir is: "%ROOTDIR%"
 SET /P ActiveMajorVersion= < "%ROOTDIR%\..\ActiveMajorVersion.txt"
 SET /P ActiveBranchVersion= < "%ROOTDIR%\..\ActiveBranchVersion.txt"
 ECHO Previous build number is: %ActiveBranchVersion%
-SET /a Build=%ActiveBranchVersion%
+SET /a Build=%ActiveBranchVersion% + 1
 ECHO New version will be: %Build%
 
 SET SYSTEMVERSION=%ActiveMajorVersion%.%Build%
