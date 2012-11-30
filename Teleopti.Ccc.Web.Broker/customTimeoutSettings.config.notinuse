@@ -1,0 +1,7 @@
+﻿<?xml version="1.0"?>
+<appSettings>
+  <add key="ConnectionTimeout" value="20"/>
+  <add key="KeepAlive" value="30"/>
+  <add key="HeartbeatInterval" value="10"/>
+  <add key="DisconnectTimeout" value="110"/>
+</appSettings>
