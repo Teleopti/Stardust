@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.Team
 			var mapRoute = context.MapRoute(
 				"Team-authentication",
 				"Team/Authentication/{action}",
-				new { controller = "Authentication", action = "Index", area = "Start", origin = "Team" },
+				new { controller = "Authentication", action = "SignIn", area = "Start", origin = "Team" },
 				null,
 				new[] {"Teleopti.Ccc.Web.Areas.Start.*"});
 			mapRoute.DataTokens["area"] = "Start";

@@ -648,7 +648,6 @@
 			this.checkBoxVersion8.TabIndex = 7;
 			this.checkBoxVersion8.Text = "Version 8";
 			this.checkBoxVersion8.UseVisualStyleBackColor = true;
-			this.checkBoxVersion8.CheckedChanged += new System.EventHandler(this.chkFreemium_CheckedChanged);
 			// 
 			// MainForm
 			// 

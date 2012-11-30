@@ -66,6 +66,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
+		public static void GotoAdminWeb()
+		{
+			GoTo("Team", new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
+		}
+
 		public static void GotoGlobalSignInPage()
 		{
 			GoTo("Authentication", new ApplicationStartupTimeout());

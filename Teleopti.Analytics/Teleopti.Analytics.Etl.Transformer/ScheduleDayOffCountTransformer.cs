@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -8,24 +7,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Transformer
 {
-    public class ScheduleDayOffCountTransformer : IEtlTransformer<IScheduleDay>
+	public class ScheduleDayOffCountTransformer : IScheduleDayOffCountTransformer
     {
-        private readonly int _intervalsPerDay;
         private DataTable _table;
 
-        private ScheduleDayOffCountTransformer() { }
-
-        public ScheduleDayOffCountTransformer(int intervalsPerDay)
-            : this()
-        {
-            _intervalsPerDay = intervalsPerDay;
-        }
-
-        public void Transform(IEnumerable<IScheduleDay> rootList, DataTable table)
+		public void Transform(IEnumerable<IScheduleDay> rootList, DataTable table, int intervalsPerDay)
         {
             _table = table;
 
-            foreach (DataRow dataRow in CreateDataRows(rootList, _table, _intervalsPerDay))
+            foreach (DataRow dataRow in CreateDataRows(rootList, _table, intervalsPerDay))
             {
                 _table.Rows.Add(dataRow);
             }

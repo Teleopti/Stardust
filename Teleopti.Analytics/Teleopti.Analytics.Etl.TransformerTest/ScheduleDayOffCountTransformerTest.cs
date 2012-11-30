@@ -70,7 +70,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
             _schedules2.Add(_schedulePart3);
             _cultureInfo = Thread.CurrentThread.CurrentCulture;
-            _target = new ScheduleDayOffCountTransformer(IntervalsPerDay);
+            _target = new ScheduleDayOffCountTransformer();
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             {
                 dataTable.Locale = Thread.CurrentThread.CurrentCulture;
                 ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
-                _target.Transform(_schedules, dataTable);
+				_target.Transform(_schedules, dataTable, IntervalsPerDay);
                 Assert.AreEqual(_schedules.Count, dataTable.Rows.Count);
             }
         }
@@ -116,8 +116,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             {
                 dataTable.Locale = Thread.CurrentThread.CurrentCulture;
                 ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
-                ScheduleDayOffCountTransformer target = new ScheduleDayOffCountTransformer(IntervalsPerDay);
-                target.Transform(_schedules2, dataTable);
+                var target = new ScheduleDayOffCountTransformer();
+				target.Transform(_schedules2, dataTable, IntervalsPerDay);
                 Assert.AreEqual(0, dataTable.Rows.Count);    
             }
         }

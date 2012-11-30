@@ -9,7 +9,7 @@ Background:
 	| Name                     | Access to all areas |
 	| Access to mobile reports | true                |
 	| Access to mytime web     | true                |
-	| Access to web admin      | true                |
+	| Access to admin web      | true                |
 	Given there is a role with
 	| Field                    | Value                       |
 	| Name                     | Access to report only       |
@@ -65,7 +65,6 @@ Scenario: Browse to root and sign in to Mobile Reports
 	And I sign in
 	Then I should see Mobile Reports
 	
-	@ignore
 Scenario: Browse to root and sign in to Web Admin
 	Given I have the role 'Access to admin web only'
 	When I navigate to the site's root
@@ -87,7 +86,6 @@ Scenario: Browse to Mobile Reports and sign in
 	And I sign in
 	Then I should see Mobile Reports
 	
-	@ignore
 Scenario: Browse to Web Admin and sign in
 	Given I have the role 'Access to all areas'
 	When I navigate to Admin Web

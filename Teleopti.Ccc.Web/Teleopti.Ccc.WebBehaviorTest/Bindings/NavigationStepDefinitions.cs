@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenINavigateToAdminWeb()
 		{
 			UserFactory.User().MakeUser();
-			Navigation.GotoMobileReports();
+			Navigation.GotoAdminWeb();
 		}
 	}
 }

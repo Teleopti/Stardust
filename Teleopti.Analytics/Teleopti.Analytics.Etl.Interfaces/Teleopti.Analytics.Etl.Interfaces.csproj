@@ -94,6 +94,9 @@
     <Compile Include="Common\IRunController.cs" />
     <Compile Include="Common\IRunControllerRepository.cs" />
     <Compile Include="Common\PmPermissionType.cs" />
+    <Compile Include="Transformer\DayOffEtlLoadSource.cs" />
+    <Compile Include="Transformer\IEtlDayOffSubStep.cs" />
+    <Compile Include="Transformer\IScheduleDayOffCountTransformer.cs" />
     <Compile Include="Transformer\IScheduleProjection.cs" />
     <Compile Include="PerformanceManager\IPmPermissionExtractor.cs" />
     <Compile Include="PerformanceManager\IPMService.cs" />

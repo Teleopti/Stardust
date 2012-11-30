@@ -95,6 +95,7 @@
     <Compile Include="ActivityTransformer.cs" />
     <Compile Include="ConfigurationHandler.cs" />
     <Compile Include="Job\Steps\DimQualityQuestLoadJobStep.cs" />
+    <Compile Include="Job\Steps\EtlDayOffSubStep.cs" />
     <Compile Include="Job\Steps\FactQualityLoadJobStep.cs" />
     <Compile Include="Job\Steps\LicenseCheckJobStep.cs" />
     <Compile Include="Job\Steps\PurgeJobStep.cs" />
@@ -112,7 +113,6 @@
     <Compile Include="PmPermissionExtractor.cs" />
     <Compile Include="ScheduleThreading\IScheduleDataRowFactory.cs" />
     <Compile Include="SkillTransformer.cs" />
-    <Compile Include="DayOffTransformer.cs" />
     <Compile Include="GroupPagePersonTransformer.cs" />
     <Compile Include="Job\Jobs\CleanupJobCollection.cs" />
     <Compile Include="Job\Jobs\NightlyJobCollection.cs" />
@@ -120,7 +120,6 @@
     <Compile Include="Job\Steps\DimGroupPageJobStep.cs" />
     <Compile Include="Job\Steps\StageGroupPagePersonJobStep.cs" />
     <Compile Include="Job\Steps\MaintenanceJobStep.cs" />
-    <Compile Include="Job\Steps\StageDayOffJobStep.cs" />
     <Compile Include="Job\Steps\DimScenarioDeleteJobStep.cs" />
     <Compile Include="Job\Steps\DimPersonTrimJobStep.cs" />
     <Compile Include="Job\Steps\DimPersonDeleteJobStep.cs" />
@@ -147,7 +146,6 @@
     <Compile Include="Job\Steps\AspNetUsersJobStep.cs" />
     <Compile Include="Job\Steps\StageUserJobStep.cs" />
     <Compile Include="Job\Steps\StageScheduleDayOffCountJobStep.cs" />
-    <Compile Include="Job\Steps\DimDayOffJobStep.cs" />
     <Compile Include="Job\Steps\FactScheduleDayCountJobStep.cs" />
     <Compile Include="Job\Steps\StageBusinessUnitJobStep.cs" />
     <Compile Include="Job\Steps\FactScheduleDeviationJobStep.cs" />
