@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	public class SingleSkillMaxSeatCalculator : ISingleSkillMaxSeatCalculator
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Calculate(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
 		{
 			if (toRemove.Count == 0 && toAdd.Count == 0)

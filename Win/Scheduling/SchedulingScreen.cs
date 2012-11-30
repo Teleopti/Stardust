@@ -705,7 +705,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripMenuItemFindMatching.Visible = StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
 				toolStripMenuItemFindMatching2.Visible = StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
                 Refresh();
-				drawSkillGrid();
+				drawSkillGrid();	
             }
             if (e.KeyCode == Keys.Z && e.Modifiers == Keys.Control)
             {
@@ -723,6 +723,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (e.KeyValue == 107 && e.Alt && e.Shift && e.Control)
                 nonBlendSkills();
 
+			if(e.KeyCode == Keys.Q && e.Control && e.Shift)
+			{
+				if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+				{
+					
+				}
+			}
+		
             base.OnKeyDown(e);
         }
 
@@ -4647,7 +4655,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             skillGridMenuItem = new ToolStripMenuItem(Resources.CreateSkillSummery);
             skillGridMenuItem.Click += skillGridMenuItem_Click;
             _contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-            skillGridMenuItem = new ToolStripMenuItem(Resources.EditSkillSummery) {Name = "Edit", Enabled = false};
+            skillGridMenuItem = new ToolStripMenuItem(Resources.EditSkillSummery) {Name = "Edit", Enabled = false};	
             _contextMenuSkillGrid.Items.Add(skillGridMenuItem);
             skillGridMenuItem = new ToolStripMenuItem(Resources.DeleteSkillSummery) {Name = "Delete", Enabled = false};
             _contextMenuSkillGrid.Items.Add(skillGridMenuItem);
