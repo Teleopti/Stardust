@@ -30,7 +30,22 @@ echo.
 
 ::Kick the local SDK url
 Echo Browsing SDK url
-cscript "%ROOTDIR%BrowseUrl.vbs" "http://127.0.0.1/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"
+::32-bit
+reg query HKEY_LOCAL_MACHINE\SOFTWARE\Teleopti\TeleoptiCCC\InstallationSettings /v AGENT_SERVICE > nul
+if %errorlevel% EQU 0 set confirmedPath=HKEY_LOCAL_MACHINE\SOFTWARE\Teleopti\TeleoptiCCC\InstallationSettings
+::64-bit
+reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings /v AGENT_SERVICE > nul
+if %errorlevel% EQU 0 set confirmedPath=HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings
+
+::get install path
+set SDKUrl=
+for /f "tokens=2*" %%A in ('REG QUERY "%confirmedPath%" /v AGENT_SERVICE') DO (
+  for %%F in (%%B) do (
+    set SDKUrl=%%F
+  )
+)
+
+cscript "%ROOTDIR%BrowseUrl.vbs" "%SDKUrl%"
 if %errorlevel% neq 200 Echo WARNING: could not send GET request to SDK!
 Echo.
 
@@ -69,3 +84,4 @@ IF %errorlevel% NEQ 0 (
 ECHO Will %2: %1
 NET %2 %1
 )
+
