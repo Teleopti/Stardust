@@ -93,9 +93,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             var datePeriod = new DateOnlyPeriod(period.StartDate.AddDays(-1),period.EndDate.AddDays(1));
             IAffectedPersonSkillService personSkillService = new AffectedPersonSkillService(datePeriod, _allSkills);
 
-        	var isAllSingleSkill = UseSingleSkillCalculations(toRemove, toAdd);
+        	var useSingleSkillCalculations = UseSingleSkillCalculations(toRemove, toAdd);
 
-			if (isAllSingleSkill)
+			if (useSingleSkillCalculations)
 			{
 				_singleSkillCalculator.Calculate(_relevantProjections, _relevantSkillStaffPeriods, toRemove, toAdd);
 			}
@@ -117,15 +117,15 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool UseSingleSkillCalculations(IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
 		{
-			var isAllSingleSkill = toRemove.Count > 0 || toAdd.Count > 0;
+			var useSingleSkillCalculations = toRemove.Count > 0 || toAdd.Count > 0;
 
-			if (isAllSingleSkill)
-				isAllSingleSkill = AllIsSingleSkill(toRemove);
+			if (useSingleSkillCalculations)
+				useSingleSkillCalculations = AllIsSingleSkill(toRemove);
 
-			if (isAllSingleSkill)
-				isAllSingleSkill = AllIsSingleSkill(toAdd);
+			if (useSingleSkillCalculations)
+				useSingleSkillCalculations = AllIsSingleSkill(toAdd);
 
-			return isAllSingleSkill;
+			return useSingleSkillCalculations;
 		}
 
 		private bool AllIsSingleSkill(IEnumerable<IVisualLayerCollection> visualLayerCollections)

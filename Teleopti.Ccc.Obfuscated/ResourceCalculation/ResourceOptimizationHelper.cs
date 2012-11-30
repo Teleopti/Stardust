@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 var extractor = new ScheduleProjectionExtractor();
                 IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
 
-            	var isAllSingleSkill = UseSingleSkillCalculations(toRemove, toAdd);
+            	var useSingleSkillCalculations = UseSingleSkillCalculations(toRemove, toAdd);
 
-				if (!isAllSingleSkill)
+				if (!useSingleSkillCalculations)
 					relevantProjections = extractor.CreateRelevantProjectionWithScheduleList(_stateHolder.Schedules,
 																						 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
 			
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					removedVisualLayerCollections.Add(collection);
 				}
 
-				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, removedVisualLayerCollections, addedVisualLayerCollections, isAllSingleSkill);
+				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, removedVisualLayerCollections, addedVisualLayerCollections, useSingleSkillCalculations);
             }
             
         }
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				if (isAllSingleSkill)
 				{
 					var singleMaxSeatCalculator = new SingleSkillMaxSeatCalculator();
-					singleMaxSeatCalculator.Calculate(relevantProjections, relevantSkillStaffPeriods, toRemove, toAdd);
+					singleMaxSeatCalculator.Calculate(relevantSkillStaffPeriods, toRemove, toAdd);
 				}
 				else
 					_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);	
@@ -222,15 +222,15 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool UseSingleSkillCalculations(IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
 		{
-			var isAllSingleSkill = toRemove.Count > 0 || toAdd.Count > 0;
+			var useSingleSkillCalculations = toRemove.Count > 0 || toAdd.Count > 0;
 
-			if (isAllSingleSkill)
-				isAllSingleSkill = AllIsSingleSkilled(toRemove);
+			if (useSingleSkillCalculations)
+				useSingleSkillCalculations = AllIsSingleSkilled(toRemove);
 
-			if (isAllSingleSkill)
-				isAllSingleSkill = AllIsSingleSkilled(toAdd);
+			if (useSingleSkillCalculations)
+				useSingleSkillCalculations = AllIsSingleSkilled(toAdd);
 
-			return isAllSingleSkill;
+			return useSingleSkillCalculations;
 		}
 
 		private bool AllIsSingleSkilled(IEnumerable<IScheduleDay> scheduleDays)

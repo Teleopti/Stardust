@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private SingleSkillMaxSeatCalculator _singleSkillMaxSeatCalculator;
 		private IList<IVisualLayerCollection> _toRemove;
 		private IList<IVisualLayerCollection> _toAdd;
-		private IList<IVisualLayerCollection> _list;
 		private ISkillSkillStaffPeriodExtendedDictionary _relevantSkillStaffPeriods;
 		private ISkillStaffPeriod _skillStaffPeriod;
 		private IVisualLayerCollection _visualLayerCollection;
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_skill.Activity = _activity;
 			_person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { _skill, _skillMaxSeat });
 			_visualLayerCollection = VisualLayerCollectionFactory.CreateForWorkShift(_person, TimeSpan.FromHours(8), TimeSpan.FromHours(9), _skill.Activity);
-			_list = new List<IVisualLayerCollection> { _visualLayerCollection };	
 			_skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skillMaxSeat, _dateTime, 60, 0, 0);
 			_relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skillMaxSeat);
@@ -52,12 +50,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldCalculateAddAndRemove()
 		{
 			_toAdd.Add(_visualLayerCollection);
-			_singleSkillMaxSeatCalculator.Calculate(_list, _relevantSkillStaffPeriods, _toRemove, _toAdd);
+			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, _toAdd);
 			Assert.AreEqual(1, _skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(1, _skillStaffPeriod.Payload.CalculatedUsedSeats);
 
 			_toRemove.Add(_visualLayerCollection);
-			_singleSkillMaxSeatCalculator.Calculate(_list, _relevantSkillStaffPeriods, _toRemove, new List<IVisualLayerCollection>());
+			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, new List<IVisualLayerCollection>());
 			Assert.AreEqual(0, _skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0, _skillStaffPeriod.Payload.CalculatedUsedSeats);
 		}
@@ -66,10 +64,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldCalculateFractions()
 		{
 			_visualLayerCollection = VisualLayerCollectionFactory.CreateForWorkShift(_person, TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(15)), TimeSpan.FromHours(9).Add(TimeSpan.FromMinutes(-15)), _skill.Activity);
-			_list = new List<IVisualLayerCollection> { _visualLayerCollection };
-
 			_toAdd.Add(_visualLayerCollection);
-			_singleSkillMaxSeatCalculator.Calculate(_list, _relevantSkillStaffPeriods, _toRemove, _toAdd);
+			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, _toAdd);
 			Assert.AreEqual(0.5, _skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0.5, _skillStaffPeriod.Payload.CalculatedUsedSeats);	
 		}
@@ -78,8 +74,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldCalculateFractionsOn30MinIntervals1()
 		{
 			_visualLayerCollection = VisualLayerCollectionFactory.CreateForWorkShift(_person, TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(15)), TimeSpan.FromHours(9).Add(TimeSpan.FromMinutes(15)), _skill.Activity);
-			_list = new List<IVisualLayerCollection> { _visualLayerCollection };
-
 			_skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, _dateTime, 30, 0, 0);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skillMaxSeat);
 			skillStaffPeriodDictionary.Add(_skillStaffPeriod.Period, _skillStaffPeriod);
@@ -87,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_relevantSkillStaffPeriods.Add(_skillMaxSeat, skillStaffPeriodDictionary);
 
 			_toAdd.Add(_visualLayerCollection);
-			_singleSkillMaxSeatCalculator.Calculate(_list, _relevantSkillStaffPeriods, _toRemove, _toAdd);
+			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, _toAdd);
 			Assert.AreEqual(0.5, _skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0.5, _skillStaffPeriod.Payload.CalculatedUsedSeats);
 		}
@@ -96,8 +90,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldCalculateFractionsOn30MinIntervals2()
 		{
 			_visualLayerCollection = VisualLayerCollectionFactory.CreateForWorkShift(_person, TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(15)), TimeSpan.FromHours(9), _skill.Activity);
-			_list = new List<IVisualLayerCollection> { _visualLayerCollection };
-
 			_skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, _dateTime, 30, 0, 0);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skillMaxSeat);
 			skillStaffPeriodDictionary.Add(_skillStaffPeriod.Period, _skillStaffPeriod);
@@ -105,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_relevantSkillStaffPeriods.Add(_skillMaxSeat, skillStaffPeriodDictionary);
 
 			_toAdd.Add(_visualLayerCollection);
-			_singleSkillMaxSeatCalculator.Calculate(_list, _relevantSkillStaffPeriods, _toRemove, _toAdd);
+			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, _toAdd);
 			Assert.AreEqual(0.5, _skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0.5, _skillStaffPeriod.Payload.CalculatedUsedSeats);
 		}
@@ -113,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldNotCalculateOnEmptyInput()
 		{
-			_singleSkillMaxSeatCalculator.Calculate(_list, _relevantSkillStaffPeriods, _toRemove, _toAdd);
+			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, _toAdd);
 			Assert.AreEqual(0, _skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0, _skillStaffPeriod.Payload.CalculatedUsedSeats);		
 		}
@@ -123,10 +115,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { _skill });
 			_visualLayerCollection = VisualLayerCollectionFactory.CreateForWorkShift(_person, TimeSpan.FromHours(8), TimeSpan.FromHours(9), _skill.Activity);
-			_list = new List<IVisualLayerCollection> { _visualLayerCollection };
 		
 			_toAdd.Add(_visualLayerCollection);
-			_singleSkillMaxSeatCalculator.Calculate(_list, _relevantSkillStaffPeriods, _toRemove, _toAdd);
+			_singleSkillMaxSeatCalculator.Calculate(_relevantSkillStaffPeriods, _toRemove, _toAdd);
 			Assert.AreEqual(0, _skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0, _skillStaffPeriod.Payload.CalculatedUsedSeats);		
 		}	
