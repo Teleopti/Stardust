@@ -147,7 +147,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _showGraph = true;
         private bool _showRibbonTexts = true;
         #endregion
-
         private ControlType _controlType;
         private SchedulerMessageBrokerHandler _schedulerMessageBrokerHandler;
 		private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
@@ -183,6 +182,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     	private ISchedulerGroupPagesProvider _groupPagesProvider;
         public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet { get; private set; }
     	private SkillResultViewSetting _skillResultViewSetting;
+    	private ISingleSkillDictionary _singleSkillDictionary;
 
         #region enums
         private enum ZoomLevel
@@ -595,7 +595,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         #endregion
-
         #region editcontrol
 
         private void instantiateEditControl()
@@ -706,7 +705,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripMenuItemFindMatching.Visible = StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
 				toolStripMenuItemFindMatching2.Visible = StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
                 Refresh();
-				drawSkillGrid();
+				drawSkillGrid();	
             }
             if (e.KeyCode == Keys.Z && e.Modifiers == Keys.Control)
             {
@@ -724,6 +723,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (e.KeyValue == 107 && e.Alt && e.Shift && e.Control)
                 nonBlendSkills();
 
+			if(e.KeyCode == Keys.Q && e.Control && e.Shift)
+			{
+				if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+				{
+					
+				}
+			}
+		
             base.OnKeyDown(e);
         }
 
@@ -4025,7 +4032,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                 initMessageBroker(period.LoadedPeriod());
             }
 
-            _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState);
+        	_singleSkillDictionary = _container.Resolve<ISingleSkillDictionary>();
+			_singleSkillDictionary.Create(SchedulerState.SchedulingResultState.PersonsInOrganization.ToList(), SchedulerState.RequestedPeriod.DateOnlyPeriod);
+
+            _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _singleSkillDictionary);
             _scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
 
             _groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container);
@@ -4059,7 +4069,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _defaultScheduleTag = tag;
                 break;
             }
-
         }
 
         private void createMaxSeatSkills(ISkillDayRepository skillDayRepository)
@@ -4310,7 +4319,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     if (_scheduleView != null && _scheduleView.SelectedSchedules().Count == 1)
                         updateShiftEditor();
                 }
-
             }
         }
 
@@ -4647,7 +4655,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             skillGridMenuItem = new ToolStripMenuItem(Resources.CreateSkillSummery);
             skillGridMenuItem.Click += skillGridMenuItem_Click;
             _contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-            skillGridMenuItem = new ToolStripMenuItem(Resources.EditSkillSummery) {Name = "Edit", Enabled = false};
+            skillGridMenuItem = new ToolStripMenuItem(Resources.EditSkillSummery) {Name = "Edit", Enabled = false};	
             _contextMenuSkillGrid.Items.Add(skillGridMenuItem);
             skillGridMenuItem = new ToolStripMenuItem(Resources.DeleteSkillSummery) {Name = "Delete", Enabled = false};
             _contextMenuSkillGrid.Items.Add(skillGridMenuItem);

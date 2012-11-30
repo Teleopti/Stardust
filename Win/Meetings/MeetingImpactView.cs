@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
@@ -60,7 +61,8 @@ namespace Teleopti.Ccc.Win.Meetings
                                                                         new SkillVisualLayerCollectionDictionaryCreator(),
                                                                         new SeatImpactOnPeriodForProjection()),
                                                                     new NonBlendSkillCalculator(
-                                                                        new NonBlendSkillImpactOnPeriodForProjection()));
+                                                                        new NonBlendSkillImpactOnPeriodForProjection()),
+																		new SingleSkillDictionary());
 		    var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(UnitOfWorkFactory.Current));
 		    var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,
 		                                                        UnitOfWorkFactory.Current, decider);
