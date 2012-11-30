@@ -123,4 +123,211 @@
   <data name="Encoding" xml:space="preserve">
     <value> </value>
   </data>
+  <data name="Absence" xml:space="preserve">
+    <value>ขาด</value>
+  </data>
+  <data name="Activity" xml:space="preserve">
+    <value>กิจกรรม</value>
+  </data>
+  <data name="ActivityColon" xml:space="preserve">
+    <value>กิจกรรม</value>
+  </data>
+  <data name="ActivityLength" xml:space="preserve">
+    <value>ความยาวกิจกรรม</value>
+  </data>
+  <data name="AmpersandPeriodColon" xml:space="preserve">
+    <value>&amp;ระยะเวลา</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>คัดลอก</value>
+  </data>
+  <data name="Cut" xml:space="preserve">
+    <value>ตัด</value>
+  </data>
+  <data name="DayOff" xml:space="preserve">
+    <value>วันหยุดงาน</value>
+  </data>
+  <data name="DayView" xml:space="preserve">
+    <value>มุมมองรายวัน</value>
+  </data>
+  <data name="EndTime" xml:space="preserve">
+    <value>เวลาสิ้นสุด</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>ชั่วโมง</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>หน้าจอหลัก</value>
+  </data>
+  <data name="Legends" xml:space="preserve">
+    <value>ตำนาน</value>
+  </data>
+  <data name="MaxTime" xml:space="preserve">
+    <value>แม็กซ์</value>
+  </data>
+  <data name="MinTime" xml:space="preserve">
+    <value>นาที</value>
+  </data>
+  <data name="MonthView" xml:space="preserve">
+    <value>มุมมองรายเดือน</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>แปะ</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>ระยะเวลา</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>รายงาน</value>
+  </data>
+  <data name="Schedule" xml:space="preserve">
+    <value>กำหนด</value>
+  </data>
+  <data name="ScoreCard" xml:space="preserve">
+    <value>บัตรคะแนน</value>
+  </data>
+  <data name="ShiftCategoryColon" xml:space="preserve">
+    <value>เปลี่ยนหมวดหมู่</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>เริ่มเวลา</value>
+  </data>
+  <data name="TeamView" xml:space="preserve">
+    <value>ดูทีม</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>ดู</value>
+  </data>
+  <data name="RequestStatus" xml:space="preserve">
+    <value>สถานะคำขอ</value>
+  </data>
+  <data name="Requests" xml:space="preserve">
+    <value>ร้องขอ</value>
+  </data>
+  <data name="ASM" xml:space="preserve">
+    <value>OPEN ASM</value>
+  </data>
+  <data name="WeekView" xml:space="preserve">
+    <value>รายสัปดาห์</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>วันศุกร์</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>วันจันทร์</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>วันเสาร์</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>วันอาทิตย์</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>วันพฤหัสบดี</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>วันอังคาร</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>วันพุธ</value>
+  </data>
+  <data name="PeriodColon" xml:space="preserve">
+    <value>ระยะเวลา</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>แม็กซ์</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>นาที</value>
+  </data>
+  <data name="ShiftCategory" xml:space="preserve">
+    <value>เปลี่ยนหมวดหมู่</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>แสดง</value>
+  </data>
+  <data name="EndTimeColon" xml:space="preserve">
+    <value>เวลาสิ้นสุด</value>
+  </data>
+  <data name="StartTimeColon" xml:space="preserve">
+    <value>เริ่มเวลา</value>
+  </data>
+  <data name="OpenReports" xml:space="preserve">
+    <value>รายงาน</value>
+  </data>
+  <data name="PersonAccounts" xml:space="preserve">
+    <value>บัญชีส่วนบุคคล</value>
+  </data>
+  <data name="RequestTypeAbsence" xml:space="preserve">
+    <value>ขาด</value>
+  </data>
+  <data name="RequestStatusColon" xml:space="preserve">
+    <value>สถานะคำขอ:</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>การตั้งค่า</value>
+  </data>
+  <data name="WorkTime" xml:space="preserve">
+    <value>เวลาทำงาน</value>
+  </data>
+  <data name="TimeTypeHours" xml:space="preserve">
+    <value>ชั่วโมง</value>
+  </data>
+  <data name="StudentAvailability" xml:space="preserve">
+    <value>มีนักเรียน</value>
+  </data>
+  <data name="CreateStudentAvailability" xml:space="preserve">
+    <value>มีนักเรียน</value>
+  </data>
+  <data name="DayOffColon" xml:space="preserve">
+    <value>วันหยุดงาน</value>
+  </data>
+  <data name="UndoRedoPaste" xml:space="preserve">
+    <value>แปะ</value>
+  </data>
+  <data name="Messages" xml:space="preserve">
+    <value>ข้อความ</value>
+  </data>
+  <data name="MaxColon" xml:space="preserve">
+    <value>แม็กซ์</value>
+  </data>
+  <data name="MinColon" xml:space="preserve">
+    <value>นาที</value>
+  </data>
+  <data name="WeeklyWorkTime" xml:space="preserve">
+    <value>เวลาการทำงานสัปดาห์</value>
+  </data>
+  <data name="Validate" xml:space="preserve">
+    <value>ตรวจสอบ</value>
+  </data>
+  <data name="NextPeriod" xml:space="preserve">
+    <value>ระยะเวลาถัดไป</value>
+  </data>
+  <data name="PreviousPeriod" xml:space="preserve">
+    <value>ช่วงก่อนหน้า</value>
+  </data>
+  <data name="YouShouldWorkParameterHDotYourPreferencesCanNowResultInParameterHToParameterHDot" xml:space="preserve">
+    <value>คุณควรจะทำงาน {0}h. การตั้งค่าของคุณตอนนี้จะส่งผลให้ใน {1} - {2}h.</value>
+  </data>
+  <data name="SchedulePut" xml:space="preserve">
+    <value>กำหนด</value>
+  </data>
+  <data name="MustHave" xml:space="preserve">
+    <value>Must Have</value>
+  </data>
+  <data name="MustHaveCapitalized" xml:space="preserve">
+    <value>Must Have</value>
+  </data>
+  <data name="MessageForm" xml:space="preserve">
+    <value>ข้อความ</value>
+  </data>
+  <data name="YouShouldHaveDaysOffParameterDotYouHaveParameterDot" xml:space="preserve">
+    <value>ที่คุณควรมี {0} วันปิด. ขณะนี้คุณได้ {1}.</value>
+  </data>
+  <data name="ActivityGrid" xml:space="preserve">
+    <value>กิจกรรม</value>
+  </data>
+  <data name="AuditingReportAbsence" xml:space="preserve">
+    <value>ขาด</value>
+  </data>
 </root>
