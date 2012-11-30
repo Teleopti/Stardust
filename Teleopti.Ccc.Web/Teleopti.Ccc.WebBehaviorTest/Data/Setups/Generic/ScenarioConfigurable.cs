@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var businessUnitRepository = new BusinessUnitRepository(uow);
 			var businessUnit = businessUnitRepository.LoadAll().Single(b => b.Name == BusinessUnit);
 
-			var scenario = ScenarioFactory.CreateScenarioAggregate(Name, true, false);
+			var scenario = ScenarioFactory.CreateScenarioAggregate(Name, true);
 			scenario.SetBusinessUnit(businessUnit);
 			new ScenarioRepository(uow).Add(scenario);
 		}

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             _person = PersonFactory.CreatePerson("Kalle");
             _noteDate = new DateOnly(2010, 4, 1);
-            _scenario = ScenarioFactory.CreateScenarioAggregate("Default", true, true);
+            _scenario = ScenarioFactory.CreateScenarioAggregate("Default", true);
             _scheduleNote = "Kalle got sick";
             _target = new Note(_person, _noteDate, _scenario, _scheduleNote);
         }

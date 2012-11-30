@@ -25,12 +25,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// </summary>
         /// <returns></returns>
         public static Scenario CreateScenarioAggregate(string name,
-                                                       bool defaultWorkspace,
-                                                       bool auditTrail)
+                                                       bool defaultWorkspace)
         {
             Scenario ret = new Scenario(name);
             ret.DefaultScenario = defaultWorkspace;
-            ret.AuditTrail = auditTrail;
             return ret;
         }
 
@@ -41,9 +39,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static IList<IScenario> CreateScenarioAggregateList()
         {
             IList<IScenario> scenarioList = new List<IScenario>();
-            scenarioList.Add(CreateScenarioAggregate("Default", true, true));
-            scenarioList.Add(CreateScenarioAggregate("Scenario 1", true, true));
-            scenarioList.Add(CreateScenarioAggregate("Scenario 2", true, true));
+            scenarioList.Add(CreateScenarioAggregate("Default", true));
+            scenarioList.Add(CreateScenarioAggregate("Scenario 1", true));
+            scenarioList.Add(CreateScenarioAggregate("Scenario 2", true));
             return scenarioList;
         }
     }

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// </summary>
         protected override void ConcreteSetup()
         {
-            _defaultScenario = ScenarioFactory.CreateScenarioAggregate("Default", true, false);
+            _defaultScenario = ScenarioFactory.CreateScenarioAggregate("Default", true);
             _person = PersonFactory.CreatePerson("sdfoj");
             _absence = AbsenceFactory.CreateAbsence("Sick leave");
 

@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             IScenario newScenarioDefault = _target.Map(oldScenarioDefault);
             IScenario newScenario = _target.Map(oldScenario);
             Assert.AreEqual(oldScenario.Name, newScenario.Description.Name);
-            Assert.AreEqual(oldScenario.AuditTrail, newScenario.AuditTrail);
             Assert.AreEqual(oldScenario.DefaultScenario, newScenario.DefaultScenario);
             Assert.AreEqual(oldScenario.DefaultScenario, newScenario.EnableReporting);
             Assert.AreEqual(oldScenarioDefault.DefaultScenario, newScenarioDefault.EnableReporting);

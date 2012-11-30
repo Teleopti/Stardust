@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(_dummyActivity);
             _dummyAgent = PersonFactory.CreatePerson("m");
             _dummyAgent2 = PersonFactory.CreatePerson("n");
-            _dummyScenario = ScenarioFactory.CreateScenarioAggregate("Default", false, false);
+            _dummyScenario = ScenarioFactory.CreateScenarioAggregate("Default", false);
             _dummyCategory = ShiftCategoryFactory.CreateShiftCategory("Morning");
             _definitionSet = new MultiplicatorDefinitionSet("sdf", MultiplicatorType.Overtime);
 

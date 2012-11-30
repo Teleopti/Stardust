@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _part = _mockRep.StrictMock<IScheduleDay>();
             IPerson person = PersonFactory.CreatePerson("Kalle");
             var noteDate = new DateOnly(2010, 4, 1);
-            IScenario scenario = ScenarioFactory.CreateScenarioAggregate("Default", true, true);
+            IScenario scenario = ScenarioFactory.CreateScenarioAggregate("Default", true);
             _note = new Note(person, noteDate, scenario, "note");
             _publicNote = new PublicNote(person, noteDate, scenario, "public note");
             _model1 = null;

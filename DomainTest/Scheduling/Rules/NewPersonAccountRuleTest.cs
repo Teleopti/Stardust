@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             {
                 _allAccounts.Add(person, new PersonAccountCollection(person));
 
-                var otherScenario = ScenarioFactory.CreateScenarioAggregate("what if?", false, false);
+                var otherScenario = ScenarioFactory.CreateScenarioAggregate("what if?", false);
                 _stateHolder.Schedules = new ScheduleDictionary(otherScenario,
                                                                 new ScheduleDateTimePeriod(new DateTimePeriod()));
 

@@ -29,7 +29,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         {
             _startDateTime = new DateTime(2010, 10, 1, 8, 0, 0, DateTimeKind.Utc);
             _target = new ScheduleForecastSkillTransformer(96, _startDateTime);
-            _scenario = ScenarioFactory.CreateScenarioAggregate("Default Scenario", true, false);
+            _scenario = ScenarioFactory.CreateScenarioAggregate("Default Scenario", true);
             _scenario.SetId(Guid.NewGuid());
             _intervalId = 32;
             _skillCode = Guid.NewGuid();
