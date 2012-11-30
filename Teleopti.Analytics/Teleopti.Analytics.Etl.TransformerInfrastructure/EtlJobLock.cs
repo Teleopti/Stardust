@@ -2,11 +2,13 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading;
+using log4net;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
 	public class EtlJobLock: IEtlJobLock
 	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (EtlJobLock));
 		private readonly string _connectionString;
 		private Timer timer;
 		const string insertStatement = "INSERT INTO mart.sys_etl_running_lock (computer_name,start_time,job_name,is_started_by_service,lock_until) VALUES (@computer_name,@start_time,@job_name,@is_started_by_service,DATEADD(mi,1,GETUTCDATE()))";
@@ -44,21 +46,30 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			timer = new Timer(lockForAnotherMinute,null,TimeSpan.FromSeconds(45),TimeSpan.FromMinutes(1));
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void lockForAnotherMinute(object state)
 		{
-			using (var sqlConnection = new SqlConnection(_connectionString))
+			try
 			{
-				sqlConnection.Open();
-				SqlTransaction sqlTransaction = sqlConnection.BeginTransaction();
+				using (var sqlConnection = new SqlConnection(_connectionString))
+				{
+					sqlConnection.Open();
+					SqlTransaction sqlTransaction = sqlConnection.BeginTransaction();
 
-				SqlCommand sqlCommand = sqlConnection.CreateCommand();
-				sqlCommand.Transaction = sqlTransaction;
+					SqlCommand sqlCommand = sqlConnection.CreateCommand();
+					sqlCommand.Transaction = sqlTransaction;
 
-				sqlCommand.CommandType = CommandType.Text;
-				sqlCommand.CommandText = updateStatement;
-				sqlCommand.ExecuteNonQuery();
+					sqlCommand.CommandType = CommandType.Text;
+					sqlCommand.CommandText = updateStatement;
+					sqlCommand.ExecuteNonQuery();
 
-				sqlTransaction.Commit();
+					sqlTransaction.Commit();
+				}
+			}
+			catch (Exception exception)
+			{
+				Logger.Error("Got an error when trying to extend the lock. Will try again in 10 seconds.",exception);
+				timer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMinutes(1));
 			}
 		}
 
