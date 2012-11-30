@@ -204,7 +204,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		},
 		NotifyWhenScheduleChangedListener: function (notification) {
 			if (_validSchedulePeriod(notification)) {
-				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions);
+				var startDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate).toString('d');
+				var notifyText = notifyOptions.notifyText.format(startDate);
+				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, notifyText);
 			}
 		},
 		ReloadAsmViewModelListener: function (notification) {

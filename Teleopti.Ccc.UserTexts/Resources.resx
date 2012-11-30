@@ -11128,9 +11128,6 @@ These options are activated:
     <value>Totals</value>
     <comment>Totals</comment>
   </data>
-  <data name="YourScheduleHasChanged" xml:space="preserve">
-    <value>Your schedule has changed!</value>
-  </data>
   <data name="NoMessagesFound" xml:space="preserve">
     <value>No messages could be found</value>
     <comment>Shown in MyTime Web Messages when no messages found for user</comment>
@@ -11181,5 +11178,9 @@ These options are activated:
   <data name="InvalidPassword" xml:space="preserve">
     <value>Password policy requires a safer password.</value>
     <comment>Password policy requires a safer password.</comment>
+  </data>
+  <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
+    <value>Your schedule the {0} has changed!</value>
+    <comment>Your schedule the 2/16/2012 has changed!</comment>
   </data>
 </root>
