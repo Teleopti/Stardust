@@ -306,7 +306,7 @@ item: End Block
 end
 item: Execute Program
   Pathname=.\DBManager.exe
-  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %C% %U2% -R -T
+  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %C% %U2% -R -T -F"%DIR%"
   Default Directory=%DIR%
   Flags=00000010
 end
@@ -326,7 +326,7 @@ item: End Block
 end
 item: Execute Program
   Pathname=.\DBManager.exe
-  Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %C% %U2% -R -T
+  Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %C% %U2% -R -T -F"%DIR%"
   Default Directory=%DIR%
   Flags=00000010
 end
@@ -346,7 +346,7 @@ item: End Block
 end
 item: Execute Program
   Pathname=DBManager.exe
-  Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %C% %U2% -R -T
+  Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %C% %U2% -R -T -F"%DIR%"
   Default Directory=%DIR%
   Flags=00000010
 end
@@ -370,19 +370,19 @@ item: If/While Statement
 end
 item: Execute Program
   Pathname=.\DBManager.exe
-  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %U% -R "-F%DIR%
+  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %U% -R -F"%DIR%"
   Default Directory=%DIR%
   Flags=00000010
 end
 item: Execute Program
   Pathname=.\DBManager.exe
-  Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %U% -R "-F%DIR%
+  Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %U% -R -F"%DIR%"
   Default Directory=%DIR%
   Flags=00000010
 end
 item: Execute Program
   Pathname=DBManager.exe
-  Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %U% -R "-F%DIR%
+  Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %U% -R -F"%DIR%"
   Default Directory=%DIR%
   Flags=00000010
 end
