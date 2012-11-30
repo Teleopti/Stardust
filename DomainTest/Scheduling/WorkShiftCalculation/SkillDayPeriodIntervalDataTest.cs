@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _skillDay1 = _mock.StrictMock<ISkillDay>();
             _skillDay2 = _mock.StrictMock<ISkillDay>();
             var skillDayList = new List<ISkillDay>() {_skillDay1, _skillDay2};
-            _target = new SkillDayPeriodPeriodIntervalData(skillDayList);
+            _target = new SkillDayPeriodIntervalData(skillDayList);
         }
 
 

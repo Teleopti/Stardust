@@ -6,12 +6,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
-    public class SkillDayPeriodPeriodIntervalData : ISkillDayPeriodIntervalData
+    public class SkillDayPeriodIntervalData : ISkillDayPeriodIntervalData
     {
         private readonly List<ISkillDay> _skillDays;
         private readonly IIntervalDataCalculator _intervalDataMedianCalculator;
 
-        public SkillDayPeriodPeriodIntervalData(List<ISkillDay> skillDays)
+        public SkillDayPeriodIntervalData(List<ISkillDay> skillDays)
         {
             _skillDays = skillDays;
             _intervalDataMedianCalculator= new IntervalDataMedianCalculator();
