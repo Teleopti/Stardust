@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 	[TestFixture]
 	public class AuthenticationApiControllerTest
 	{
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldRetrieveDataSources()
 		{

@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.WebTest
 		private static void StubStuff(Controller controller)
 		{
 			controller.ControllerContext.HttpContext.Response.Stub(x => x.StatusCode).PropertyBehavior();
+			controller.ControllerContext.HttpContext.Response.Stub(x => x.SubStatusCode).PropertyBehavior();
 			controller.ControllerContext.HttpContext.Response.Stub(x => x.TrySkipIisCustomErrors).PropertyBehavior();
 		}
 	}

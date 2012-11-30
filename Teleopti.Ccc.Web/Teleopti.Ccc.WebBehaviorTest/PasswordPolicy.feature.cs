@@ -243,10 +243,8 @@ this.FeatureBackground();
                         "P@ssword1"});
 #line 57
  testRunner.When("I try to sign in with", ((string)(null)), table10, "When ");
-#line 61
- testRunner.Then("I should see a warning \'LogOnWarningPasswordWillSoonExpire\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 62
- testRunner.And("I should be signed in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("I should be signed in", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
