@@ -393,6 +393,7 @@
     <Compile Include="ResourceCalculation\SingleSkillCalculator.cs" />
     <Compile Include="ResourceCalculation\SingleSkillDictionary.cs" />
     <Compile Include="ResourceCalculation\SingleSkillLoadedDecider.cs" />
+    <Compile Include="ResourceCalculation\SingleSkillMaxSeatCalculator.cs" />
     <Compile Include="ResourceCalculation\SwapRawService.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedActivityChecker.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />

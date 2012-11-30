@@ -96,24 +96,14 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         	var isAllSingleSkill = UseSingleSkillCalculations(toRemove, toAdd);
 
 			if (isAllSingleSkill)
+			{
 				_singleSkillCalculator.Calculate(_relevantProjections, _relevantSkillStaffPeriods, toRemove, toAdd);
+			}
 			else
 			{
 				var rc = new ScheduleResourceOptimizer(_relevantProjections, _relevantSkillStaffPeriods, personSkillService, emptyCache, new ActivityDivider());
-				rc.Optimize(periodToRecalculate, _useOccupancyAdjustment);	
+				rc.Optimize(periodToRecalculate, _useOccupancyAdjustment);
 			}
-
-			//if(_singleSkillLoadedDecider.IsSingleSkill(_allSkills))
-			//{
-			//    _singleSkillCalculator.Calculate(_relevantProjections, _relevantSkillStaffPeriods, toRemove, toAdd);	
-			//}
-			//else
-			//{
-			//    var rc = new ScheduleResourceOptimizer(_relevantProjections, _relevantSkillStaffPeriods,
-			//                                                             personSkillService, emptyCache, new ActivityDivider());
-			//    rc.Optimize(periodToRecalculate, _useOccupancyAdjustment);	
-			//}
-            
 
             return _relevantSkillStaffPeriods;
         }

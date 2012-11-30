@@ -59,11 +59,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				if (!isAllSingleSkill)
 					relevantProjections = extractor.CreateRelevantProjectionWithScheduleList(_stateHolder.Schedules,
 																						 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
-				//var singleSkillDecider = new SingleSkillLoadedDecider();
-				//if(!singleSkillDecider.IsSingleSkill(_stateHolder.Skills) || (toRemove.Count == 0 && toAdd.Count == 0))
-				//    relevantProjections = extractor.CreateRelevantProjectionWithScheduleList(_stateHolder.Schedules,
-				//                                                                         TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
-
+			
 				IList<IVisualLayerCollection> addedVisualLayerCollections = new List<IVisualLayerCollection>();
 				foreach (IScheduleDay addedSchedule in toAdd)
 				{
@@ -78,7 +74,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					removedVisualLayerCollections.Add(collection);
 				}
 
-				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, removedVisualLayerCollections, addedVisualLayerCollections);
+				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, removedVisualLayerCollections, addedVisualLayerCollections, isAllSingleSkill);
             }
             
         }
@@ -92,7 +88,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         private void resourceCalculateDate(IList<IVisualLayerCollection> relevantProjections, 
 			DateOnly localDate, bool useOccupancyAdjustment, bool calculateMaxSeatsAndNonBlend, bool considerShortBreaks
-			, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
+			, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd,
+			bool isAllSingleSkill)
         {
             var timePeriod = getPeriod(localDate);
             var ordinarySkills = new List<ISkill>();
@@ -123,8 +120,16 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 						ordinarySkills.Add(skill);
 				}
 				relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, ordinarySkills, timePeriod);
-                _occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);
 
+				if (isAllSingleSkill)
+				{
+					var singleMaxSeatCalculator = new SingleSkillMaxSeatCalculator();
+					singleMaxSeatCalculator.Calculate(relevantProjections, relevantSkillStaffPeriods, toRemove, toAdd);
+				}
+				else
+					_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);	
+				
+            	
 				ordinarySkills = new List<ISkill>();
 				foreach (var skill in _stateHolder.Skills)
 				{
