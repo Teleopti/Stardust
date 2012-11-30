@@ -24,7 +24,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             intervalValue = new List<double>() { 14, 3, 12, 13, 1,15 };
             Assert.AreEqual(12.5, _target.Calculate(intervalValue));
         }
-    }
 
-    
+        [Test]
+        public void ShouldHandleEmptyList()
+        {
+            var intervalValue = new List<double>();
+            Assert.AreEqual(0f, _target.Calculate(intervalValue));
+        }
+    }
 }

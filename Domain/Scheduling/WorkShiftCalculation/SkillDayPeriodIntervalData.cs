@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
@@ -16,32 +17,38 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             _intervalDataMedianCalculator= new IntervalDataMedianCalculator();
         }
 
-        public Dictionary<TimeSpan , ISkillIntervalData> GetIntervalDistribution()
+        public Dictionary<TimeSpan, ISkillIntervalData> GetIntervalDistribution()
         {
-            //break the intervals into a span of 1.5 day
-            //foreach(var day in _skillDays )
-            //{
-            //    foreach (var nextDay in _skillDays )
-            //    {
-            //        if(day. )
-            //    }
-            //}
-
-
             var intervalBasedData = new Dictionary<TimeSpan, List<double>>();
+            var firstDay = _skillDays.FirstOrDefault();
+            if (firstDay == null) throw new ArgumentException("skillDays are empty");
+            var resolution = firstDay.Skill.DefaultResolution;
+            for (var i = 0; i < TimeSpan.FromDays(2).TotalMinutes/resolution; i++)
+            {
+                intervalBasedData.Add(TimeSpan.FromMinutes(i*resolution), new List<double>());
+            }
+            
             foreach (var period in _skillDays.SelectMany(skill => skill.SkillStaffPeriodCollection))
             {
                 var periodTimeSpan = period.Period.StartDateTime.TimeOfDay;
-                if (!intervalBasedData.ContainsKey(periodTimeSpan))
-                    intervalBasedData.Add(periodTimeSpan, new List<double>());
-                intervalBasedData[periodTimeSpan].Add(period.AbsoluteDifference);
+                if (intervalBasedData.ContainsKey(periodTimeSpan))
+                {
+                    var invervalData = intervalBasedData[periodTimeSpan];
+                    invervalData.Add(period.AbsoluteDifference);
+                }
             }
-			//TODO: need to fix the value of 0s
-			return intervalBasedData.ToDictionary<KeyValuePair<TimeSpan, List<double>>, TimeSpan, ISkillIntervalData>
-				(interval => interval.Key, interval => new SkillIntervalData(new DateTimePeriod(),77,_intervalDataMedianCalculator.Calculate(interval.Value), 0, 0, 0));
+            var baseDate = DateTime.SpecifyKind(SkillDayTemplate.BaseDate, DateTimeKind.Utc);
+            var result = new Dictionary<TimeSpan, ISkillIntervalData>();
+            foreach (var intervalPair in intervalBasedData)
+            {
+                var startTime = baseDate.Date.AddMinutes(intervalPair.Key.TotalMinutes);
+                var endTime = startTime.AddMinutes(resolution);
+                var calculatedDemand = _intervalDataMedianCalculator.Calculate(intervalPair.Value);
+                var skillIntervalData = new SkillIntervalData(new DateTimePeriod(startTime, endTime), calculatedDemand,0, 0, 0, 0);
+                result.Add(intervalPair.Key, skillIntervalData);
+            }
+            return result;
         }
-
-        
     }
 
     public interface ISkillDayPeriodIntervalData
