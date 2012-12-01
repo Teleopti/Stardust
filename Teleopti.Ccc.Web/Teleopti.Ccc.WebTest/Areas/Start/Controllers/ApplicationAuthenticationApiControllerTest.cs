@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 	[TestFixture]
 	public class ApplicationAuthenticationApiControllerTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldAuthenticateUser()
 		{
 			var target = new ApplicationAuthenticationApiController();
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			(result.Data as ModelStateResult).Errors.Single().Should().Be(message);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnWarningIfPasswordWillExpire()
 		{
 			var target = new ApplicationAuthenticationApiController();
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			warning.Warning.Should().Be.EqualTo(message);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldNotReturnWarningIfPasswordWillNotExpire()
 		{
 			var target = new ApplicationAuthenticationApiController();
