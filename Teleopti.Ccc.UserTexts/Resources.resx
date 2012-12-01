@@ -11198,4 +11198,8 @@ These options are activated:
     <value>Log on failed! Password has expired, and your account is locked.</value>
     <comment>Log on failed! Password has expired, and your account is locked.</comment>
   </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Skip</value>
+    <comment>Skip</comment>
+  </data>
 </root>

@@ -27,6 +27,7 @@
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.MenuViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ApplicationViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordView.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordViewModel.js")"></script>
 
 	<script type="text/javascript">
 		var authentication;
@@ -95,24 +96,25 @@
 			</ul>
 		</div>
 
-		@*
-		<div data-bind="visible: (MustChangePasswordActive() || WarningActive())">
-			<div class="alert login-warning" data-bind="visible:MustChangePasswordActive">
+		
+		<div id="changepassword">
+			<div class="alert login-warning" data-bind="visible: MustChangePassword()">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<strong>Warning!</strong> Your password has already expired. 
 			</div>
-			<div class="alert login-warning" data-bind="visible:WarningActive">
+			<div class="alert login-warning" data-bind="visible: !MustChangePassword()">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<strong>Warning!</strong> Your password will expire soon. Click <a data-bind="click: ToggleChangingPassword">here</a> to change your password.
+				<strong>Warning!</strong> Your password will expire soon.
 			</div>
-			<div class="login-form well well-large" data-bind="visible:ChangingPasswordActive">
+			<div class="login-form well well-large">
 				<input type="password" id="New-password" placeholder="New Password" class="input-block-level" />
 				<input type="password" id="Confirm-new-password" placeholder="Confirm New Password" class="input-block-level" />
 				<input type="password" id="Old-password" placeholder="Old Password" class="input-block-level" />
-				<button class="btn btn-primary" id="Change-password-button" type="submit">@Resources.Apply</button>
+				<button class="btn btn-primary" id="Change-password-button">@Resources.Apply</button>
+				<button class="btn btn-primary" id="Skip-button" data-bind="visible: !MustChangePassword(), click: SkipChangePassword">@Resources.Skip</button>
 			</div>
 		</div>
-		*@
+		
 
 	</div>
 </section>

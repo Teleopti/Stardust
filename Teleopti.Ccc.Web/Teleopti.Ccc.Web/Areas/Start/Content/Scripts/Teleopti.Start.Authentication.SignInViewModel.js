@@ -65,7 +65,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	this.SignIn = function () {
 		var state = data.authenticationState;
 
-		state.AttemptGotoApplicationBySignIn({
+		state.TryToSignIn({
 			data: {
 				type: self.SelectedDataSource().Type,
 				datasource: self.SelectedDataSource().Name,

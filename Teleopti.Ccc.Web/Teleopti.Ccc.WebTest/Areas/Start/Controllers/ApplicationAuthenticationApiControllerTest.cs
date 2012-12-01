@@ -56,5 +56,34 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(message);
 			(result.Data as ModelStateResult).Errors.Single().Should().Be(message);
 		}
+
+		[Test]
+		public void ShouldReturnWarningIfPasswordWillExpire()
+		{
+			var target = new ApplicationAuthenticationApiController();
+			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
+			const string message = "test";
+			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult { Successful = true, HasMessage = true, Message = message });
+
+			var result = target.CheckPassword(authenticationModel);
+
+			var warning = result.Data as PasswordWarningViewModel;
+			warning.WillExpireSoon.Should().Be.True();
+			warning.Warning.Should().Be.EqualTo(message);
+		}
+
+		[Test]
+		public void ShouldNotReturnWarningIfPasswordWillNotExpire()
+		{
+			var target = new ApplicationAuthenticationApiController();
+			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
+			const string message = "test";
+			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult { Successful = true, HasMessage = false});
+
+			var result = target.CheckPassword(authenticationModel);
+
+			var warning = result.Data as PasswordWarningViewModel;
+			warning.WillExpireSoon.Should().Be.False();
+		}
 	}
 }

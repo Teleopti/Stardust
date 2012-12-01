@@ -20,7 +20,22 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 					Response.SubStatusCode = 1;
 				return ModelState.ToJson();
 			}
-			return Json(null);
+			var passwordWarningViewModel = new PasswordWarningViewModel();
+			if (result.Successful && result.HasMessage)
+			{
+				passwordWarningViewModel.Warning = result.Message;
+				passwordWarningViewModel.WillExpireSoon = true;
+			}else
+			{
+				passwordWarningViewModel.WillExpireSoon = false;
+			}
+			return Json(passwordWarningViewModel, JsonRequestBehavior.AllowGet);
 		}
+	}
+
+	public class PasswordWarningViewModel
+	{
+		public bool WillExpireSoon { get; set; }
+		public string Warning { get; set; }
 	}
 }
