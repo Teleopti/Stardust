@@ -77,7 +77,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var target = new ApplicationAuthenticationApiController();
 			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
-			const string message = "test";
 			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult { Successful = true, HasMessage = false});
 
 			var result = target.CheckPassword(authenticationModel);
