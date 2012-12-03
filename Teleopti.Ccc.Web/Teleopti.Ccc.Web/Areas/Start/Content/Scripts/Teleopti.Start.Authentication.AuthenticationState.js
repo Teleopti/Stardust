@@ -80,6 +80,13 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			dataType: "json",
 			type: 'POST',
 			cache: false,
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status == 400) {
+					var response = $.parseJSON(jqXHR.responseText);
+					options.errormessage(response.Errors[0]);
+					return;
+				}
+			},
 			success: function (responseData, textStatus, jqXHR) {
 				authenticationModel.password = options.data.newPassword;
 				self.AttemptGotoApplicationBySignIn(options);

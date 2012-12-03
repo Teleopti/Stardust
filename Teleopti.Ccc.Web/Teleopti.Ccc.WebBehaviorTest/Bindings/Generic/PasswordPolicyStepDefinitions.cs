@@ -42,6 +42,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(userLogonDetai);
 		}
 
+		[When(@"I click skip button")]
+		public void WhenIClickSkipButton()
+		{
+			Pages.Pages.CurrentSignInPage.SkipButton.EventualClick();
+		}
+
+		[When(@"I change my password with")]
+		public void WhenIChangeMyPasswordWith(Table table)
+		{
+			var password = table.CreateInstance<PasswordConfigurable>();
+			Pages.Pages.CurrentSignInPage.ChangePassword(password.Password, password.ConfirmedPassword, password.OldPassword);
+		}
+
 		[Then(@"I should see change password page with warning '(.*)'")]
 		public void ThenIShouldSeeChangePasswordPageWithWarning(string resourceText)
 		{
@@ -61,18 +74,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.SkipButton.DisplayVisible(), Is.False);
 		}
-
-		[When(@"I click skip button")]
-		public void WhenIClickSkipButton()
+		
+		[Then(@"I should see an error '(.*)'")]
+		public void ThenIShouldSeeAnError(string resourceText)
 		{
-			Pages.Pages.CurrentSignInPage.SkipButton.EventualClick(); 
+			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ChangePasswordErrorMessage.Text, new StringContainsAnyLanguageResourceContraint(resourceText));
 		}
 
-		[When(@"I change my password with")]
-		public void WhenIChangeMyPasswordWith(Table table)
-		{
-			var password = table.CreateInstance<PasswordConfigurable>();
-			Pages.Pages.CurrentSignInPage.ChangePassword(password.Password, password.ConfirmedPassword, password.OldPassword);
-		}
 	}
 }

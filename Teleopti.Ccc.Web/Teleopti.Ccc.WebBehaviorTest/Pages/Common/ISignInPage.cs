@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		Div PasswordExpireSoonError { get; }
 		Div PasswordAlreadyExpiredError { get; }
 		Button SkipButton { get; }
+		Div ChangePasswordErrorMessage { get; }
 
 		void SelectApplicationTestDataSource();
 		void SelectWindowsTestDataSource();

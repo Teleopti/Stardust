@@ -6,6 +6,8 @@ Teleopti.Start.Authentication.ChangePasswordViewModel = function (data) {
 	this.ConfirmNewPassword = ko.observable('');
 	this.OldPassword = ko.observable('');
 
+	this.ErrorMessage = ko.observable('');
+
 	this.ApplyChangePassword = function () {
 		data.authenticationState.ApplyChangePassword({
 			baseUrl: data.baseUrl,
@@ -13,6 +15,9 @@ Teleopti.Start.Authentication.ChangePasswordViewModel = function (data) {
 				dataSourceName: data.dataSourceName,
 				newPassword: self.NewPassword(),
 				oldPassword: self.OldPassword()
+			},
+			errormessage: function (message) {
+				self.ErrorMessage(message);
 			}
 		});
 	};

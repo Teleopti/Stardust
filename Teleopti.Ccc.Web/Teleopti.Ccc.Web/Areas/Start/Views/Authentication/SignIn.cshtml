@@ -95,7 +95,6 @@
 				</li>
 			</ul>
 		</div>
-
 		
 		<div id="changepassword">
 			<div id="PasswordAlreadyExpired" class="alert login-warning" data-bind="visible: MustChangePassword()">
@@ -110,12 +109,12 @@
 				<input type="password" id="New-password" placeholder="New Password" data-bind="value: NewPassword" class="input-block-level" />
 				<input type="password" id="Confirm-new-password" placeholder="Confirm New Password" data-bind="value: ConfirmNewPassword" class="input-block-level" />
 				<input type="password" id="Old-password" placeholder="Old Password" data-bind="value: OldPassword" class="input-block-level" />
+				<div id="Password-change-error" class="alert" data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage">
+				</div>
 				<button class="btn btn-primary" id="Change-password-button" data-bind="click: ApplyChangePassword">@Resources.Apply</button>
 				<button class="btn btn-primary" id="Skip-button" data-bind="visible: !MustChangePassword(), click: SkipChangePassword">@Resources.Skip</button>
 			</div>
 		</div>
-		
-
 	</div>
 </section>
 

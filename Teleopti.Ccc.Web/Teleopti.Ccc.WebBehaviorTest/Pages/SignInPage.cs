@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public TextField PasswordTextField { get; set; }
 
 		[FindBy(Id = "Signin-error")]
-		public Element ValidationSummary { get; private set; }
+		public Element ValidationSummary { get; set; }
 
 		[FindBy(Id = "PasswordExpireSoon")]
 		public Div PasswordExpireSoonError { get; set; }
@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public TextField OldPassword { get; set; }
 		[FindBy(Id = "Change-password-button")]
 		public Button ChangePasswordButton { get; set; }
+		[FindBy(Id = "Password-change-error")]
+		public Div ChangePasswordErrorMessage { get; set; }
 
 		public void SelectApplicationTestDataSource()
 		{

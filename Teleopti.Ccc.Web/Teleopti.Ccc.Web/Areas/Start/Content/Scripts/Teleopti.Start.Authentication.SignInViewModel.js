@@ -75,9 +75,6 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 			errormessage: function (message) {
 				self.ErrorMessage(message);
 			},
-			exceptionmessage: function (message) {
-				self.ExceptionMessage(message);
-			},
 			nobusinessunit: function () {
 				self.ErrorMessage($('#Signin-error').data('nobusinessunitext'));
 			}

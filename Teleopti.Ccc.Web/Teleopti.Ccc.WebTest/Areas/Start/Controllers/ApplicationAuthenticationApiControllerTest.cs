@@ -84,20 +84,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		}
 
 		[Test]
-		public void ShouldReturnErrorIfPasswordExpired()
+		public void ShouldReturnWarningIfPasswordExpired()
 		{
-			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(null, null, null, null);
+			var target = new ApplicationAuthenticationApiController(null, null, null, null);
 			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
 			const string message = "test";
-			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult { Successful = false, Message = message , PasswordExpired = true});
+			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult { Successful = false, Message = message, PasswordExpired = true });
 
 			var result = target.CheckPassword(authenticationModel);
 
-			target.Response.StatusCode.Should().Be(400);
-			target.Response.SubStatusCode.Should().Be(1);
-			target.Response.TrySkipIisCustomErrors.Should().Be.True();
-			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(message);
-			(result.Data as ModelStateResult).Errors.Single().Should().Be(message);
+			var warning = result.Data as PasswordWarningViewModel;
+			warning.AlreadyExpired.Should().Be.True();
+			warning.WillExpireSoon.Should().Be.False();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
@@ -112,6 +110,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			var warning = result.Data as PasswordWarningViewModel;
 			warning.WillExpireSoon.Should().Be.True();
+			warning.AlreadyExpired.Should().Be.False();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
