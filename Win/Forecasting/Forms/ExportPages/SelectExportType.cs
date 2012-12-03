@@ -32,7 +32,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public void Populate(ExportSkillModel stateObj)
         {
-            rbtExportToFile.Checked = stateObj.ExportToFile;
+        	rbtExportToBU.Visible = stateObj.DirectExportPermitted;
+        	rbtExportToFile.Visible = stateObj.FileExportPermitted;
+			if (stateObj.ExportToFile)
+			{
+				rbtExportToFile.Checked = true;
+			}
+			else
+			{
+				rbtExportToBU.Checked = true;
+			}
         }
 
         public bool Depopulate(ExportSkillModel stateObj)

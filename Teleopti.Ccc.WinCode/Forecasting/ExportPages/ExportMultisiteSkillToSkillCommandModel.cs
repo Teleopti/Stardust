@@ -10,14 +10,20 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 {
     public class ExportSkillModel : IDisposable
     {
-        public ExportSkillModel()
-        {
-            ExportMultisiteSkillToSkillCommandModel = new ExportMultisiteSkillToSkillCommandModel();
-            ExportSkillToFileCommandModel = new ExportSkillToFileCommandModel();
-            ExportToFile = true;
-        }
+    	public ExportSkillModel(bool directExportPermitted, bool fileExportPermitted)
+    	{
+    		DirectExportPermitted = directExportPermitted;
+    		FileExportPermitted = fileExportPermitted;
+    		ExportMultisiteSkillToSkillCommandModel = new ExportMultisiteSkillToSkillCommandModel();
+			ExportSkillToFileCommandModel = new ExportSkillToFileCommandModel();
 
-        public ExportMultisiteSkillToSkillCommandModel ExportMultisiteSkillToSkillCommandModel { get; set; }
+			ExportToFile = fileExportPermitted;
+    	}
+
+		public bool DirectExportPermitted { get; set; }
+		public bool FileExportPermitted { get; set; }
+
+    	public ExportMultisiteSkillToSkillCommandModel ExportMultisiteSkillToSkillCommandModel { get; set; }
         public ExportSkillToFileCommandModel ExportSkillToFileCommandModel { get; set; }
 
         public void ChangeExportType(bool exportToFile)
