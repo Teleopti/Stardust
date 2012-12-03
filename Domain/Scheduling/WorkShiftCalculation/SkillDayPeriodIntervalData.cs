@@ -11,6 +11,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
         private readonly List<ISkillDay> _skillDays;
         private readonly IIntervalDataCalculator _intervalDataMedianCalculator;
 
+        public SkillDayPeriodIntervalData()
+        {
+            
+        }
+
         public SkillDayPeriodIntervalData(List<ISkillDay> skillDays)
         {
             _skillDays = skillDays;
