@@ -518,6 +518,52 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         }
 
+        [Test]
+        public void VerifyUnsuccessfulExecute()
+        {
+            _daysOffPreferences.ConsiderWeekBefore = false;
+            _daysOffPreferences.ConsiderWeekAfter = false;
+            _target = createTarget();
+            var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
+            var originalArray = new LockableBitArray(7, false, false, null);
+            var workingBitArray = new LockableBitArray(7, false, false, null);
+            var daysOffToRemove = new List<DateOnly>();
+            var daysOffToAdd = new List<DateOnly>();
+
+            _daysOffPreferences.ConsiderWeekBefore = false;
+            _daysOffPreferences.ConsiderWeekAfter = false;
+
+            IList<double?> dataExtractorValues = new List<double?>();
+
+            using (_mocks.Record())
+            {
+                Expect.Call(_converter.Convert(false, false))
+                    .Return(originalArray);
+                Expect.Call(_converter.Convert(false, false))
+                    .Return(workingBitArray);
+                Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
+                    .Return(scheduleResultDataExtractor);
+                Expect.Call(scheduleResultDataExtractor.Values())
+                    .Return(dataExtractorValues);
+
+                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
+                    .Return(true);
+                Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray,
+                                                                           _activeScheduleMatrix, false))
+                    .Return(daysOffToRemove);
+                Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray,
+                                                                         _activeScheduleMatrix, false))
+                    .Return(daysOffToAdd);
+            }
+            using (_mocks.Playback())
+            {
+                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions,
+                                              _optimizationPreferences, _teamSteadyStateMainShiftScheduler,
+                                              _teamSteadyStateHolder, _scheduleDictionary);
+                Assert.IsFalse(result);
+            }
+        }
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyUnsuccessfulExecuteReschedulingFail()
         {
