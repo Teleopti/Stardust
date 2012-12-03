@@ -727,7 +727,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
 				{
-					
+					using(var agentSkillExplorer = new AgentSkillExplorer())
+					{
+						agentSkillExplorer.Setup(_schedulerState, _singleSkillDictionary);
+						agentSkillExplorer.ShowDialog(this);
+					}
 				}
 			}
 		
