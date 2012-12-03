@@ -10,6 +10,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
+using Find = WatiN.Core.Find;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -134,12 +135,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenTheStudentAvailabilityValuesInTheCalendarShouldDisappear()
 		{
 			var data = UserFactory.User().UserData<StudentAvailability>();
-			var startTime = TimeHelper.TimeOfDayFromTimeSpan(data.StartTime, UserFactory.User().Culture);
-			var endTime = TimeHelper.TimeOfDayFromTimeSpan(data.EndTime, UserFactory.User().Culture);
 
 			var cell = _page.CalendarCellForDate(data.Date);
-			Assert.That(() => cell.InnerHtml, Is.Not.ContainsSubstring(startTime).After(5000, 10));
-			Assert.That(() => cell.InnerHtml, Is.Not.ContainsSubstring(endTime).After(5000, 10));
+			Assert.That(() => cell.Child(QuicklyFind.ByClass("day-content")).Text, Is.Null.After(5000, 10));
 		}
 
 		[Then(@"the student availabilty calendar should be editable")]
