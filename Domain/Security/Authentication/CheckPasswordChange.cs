@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 
 			if (expirationDate <= utcNow)
             {
-                userDetail.Lock();
                 result.Successful = false;
                 result.HasMessage = true;
 				result.Message = UserTexts.Resources.LogOnFailedPasswordExpired;

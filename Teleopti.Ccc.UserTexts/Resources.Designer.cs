@@ -11229,7 +11229,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log on failed! Password has expired, and your account is locked..
+        ///   Looks up a localized string similar to Log on failed! Password has expired..
         /// </summary>
         public static string LogOnFailedPasswordExpired {
             get {

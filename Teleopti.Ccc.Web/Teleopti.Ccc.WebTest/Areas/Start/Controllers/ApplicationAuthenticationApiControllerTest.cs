@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			warning.WillExpireSoon.Should().Be.False();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldChangePassword()
 		{
 			var input = new ChangePasswordInput
