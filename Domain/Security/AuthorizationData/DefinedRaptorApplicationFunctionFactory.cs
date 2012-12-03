@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 											DefinedRaptorApplicationFunctionForeignIds.ImportForecastFromFile, null);
 			CreateAndAddApplicationFunction(applicationFunctionList,
 											DefinedRaptorApplicationFunctionPaths.ExportForecastFile,
-											"xxFileExport",
+											"xxExportToFile",
 											DefinedRaptorApplicationFunctionForeignIds.ExportForecastFile, null);
 			// Budget
 			CreateAndAddApplicationFunction(applicationFunctionList,
