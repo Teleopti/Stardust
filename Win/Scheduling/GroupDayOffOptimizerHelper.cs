@@ -469,7 +469,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
         		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
 			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
-			var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, _resourceOptimizationHelper, groupOptimizerFindMatrixesForGroup);
+			var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, _resourceOptimizationHelper, groupOptimizerFindMatrixesForGroup, optimizerPreferences.DaysOff);
 
 			service.ReportProgress += resourceOptimizerPersonOptimized;
             service.Execute(optimizerContainers, optimizerPreferences.Extra.KeepSameDaysOffInTeam);
