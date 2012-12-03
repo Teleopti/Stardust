@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NHibernate.Collection.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
@@ -278,7 +279,46 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         }
 
-		[Test]
+        [Test]
+        public void VerifyUnsuccessfulExecute()
+        {
+            _daysOffPreferences.ConsiderWeekBefore = false;
+            _daysOffPreferences.ConsiderWeekAfter = false;
+            _target = createTarget();
+            _daysOffToRemove = new List<DateOnly>();
+            using (_mocks.Record())
+            {
+                var solvers = new List<IDayOffBackToLegalStateSolver>();
+                Expect.Call(_converter.Convert(false, false))
+                    .Return(_originalArray);
+                Expect.Call(_converter.Convert(false, false))
+                    .Return(_workingBitArray);
+                Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
+                    .Return(_scheduleResultDataExtractor);
+                Expect.Call(_scheduleResultDataExtractor.Values())
+                    .Return(_dataExtractorValues);
+
+                Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(_workingBitArray)).Return(solvers);
+                Expect.Call(_smartDayOffBackToLegalStateService.Execute(solvers, 100)).Return(true);
+                Expect.Call(_decisionMaker.Execute(_workingBitArray, _dataExtractorValues))
+                    .Return(true);
+                Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_workingBitArray, _originalArray,
+                                                                           _activeScheduleMatrix, false))
+                    .Return(_daysOffToRemove);
+                Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_workingBitArray, _originalArray,
+                                                                         _activeScheduleMatrix, false))
+                    .Return(_daysOffToAdd);
+            }
+            using (_mocks.Playback())
+            {
+                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions,
+                                              _optimizationPreferences, _teamSteadyStateMainShiftScheduler,
+                                              _teamSteadyStateHolder, _scheduleDictionary);
+                Assert.IsFalse(result);
+            }
+        }
+
+        [Test]
         public void VerifyUnsuccessfulExecuteReschedulingFail()
         {
             _daysOffPreferences.ConsiderWeekBefore = false;

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
         public void Setup()
         {
             _mocks = new MockRepository();
-            _exportSkillModel = new ExportSkillModel();
+            _exportSkillModel = new ExportSkillModel(true,true);
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
             _exportAcrossBusinessUnitsSettingsProvider = new ExportAcrossBusinessUnitsSettingsProvider(_unitOfWorkFactory, _repositoryFactory);

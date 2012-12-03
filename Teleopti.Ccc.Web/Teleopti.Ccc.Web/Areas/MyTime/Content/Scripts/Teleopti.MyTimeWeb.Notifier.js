@@ -1,5 +1,4 @@
 Teleopti.MyTimeWeb.Notifier = (function () {
-	var notifyText;
 	var originalDocumentTitle;
 	var baseUrl;
 	var header = '';
@@ -7,7 +6,6 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 	var webNotification = function () { return true; }; //default also send as web notification if possible
 
 	function _setOptions(options) {
-		notifyText = options.notifyText;
 		originalDocumentTitle = options.originalDocumentTitle;
 		if (options.baseUrl) {
 			baseUrl = options.baseUrl;
@@ -24,7 +22,7 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 			header = options.header;
 		}
 	}
-	function _notify() {
+	function _notify(notifyText) {
 		var time = new Date(new Date().getTeleoptiTime()).toString('hh:mm tt');
 		return noty({
 			text: notifyText + ' (' + time + ')',
@@ -35,7 +33,7 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 			}
 		});
 	}
-	function _webNotification() {
+	function _webNotification(notifyText) {
 		if (window.webkitNotifications) {
 			if (window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
 				if (webNotification()) {
@@ -59,7 +57,7 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 		$.pinify.flashTaskbar();
 	}
 
-	function _blinkDocumentTitle() {
+	function _blinkDocumentTitle(notifyText) {
 		var blinkTimeout = 750;
 		if (blinkTitleTimer) {
 			clearInterval(blinkTitleTimer);
@@ -78,12 +76,12 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 	}
 
 	return {
-		Notify: function (options) {
+		Notify: function (options, notifyText) {
 			_setOptions(options);
-			_notify();
-			_webNotification();
+			_notify(notifyText);
+			_webNotification(notifyText);
 			_pinnedNotification();
-			_blinkDocumentTitle();
+			_blinkDocumentTitle(notifyText);
 		}
 	};
 })(jQuery);

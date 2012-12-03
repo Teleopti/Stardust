@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DBManager
                 
                 logWrite("Teleopti Database Manager version " + versionNumber);
 
-                if (args.Length > 0 && args.Length < 10)
+                if (args.Length > 0 && args.Length < 20)
                 {
                     _commandLineArgument = new CommandLineArgument(args);
 #if DEBUG

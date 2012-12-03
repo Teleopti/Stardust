@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IMultisiteDay day1 = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(day1);
 
-            IScenario scenario2 = ScenarioFactory.CreateScenarioAggregate("Scenario nr 2", false, false);
+            IScenario scenario2 = ScenarioFactory.CreateScenarioAggregate("Scenario nr 2", false);
             PersistAndRemoveFromUnitOfWork(scenario2);
 
             IMultisiteDay day2 = day1.NoneEntityClone(scenario2);

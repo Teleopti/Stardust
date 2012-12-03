@@ -6,7 +6,7 @@
     /// <remarks>
     /// Structure of a key: Unique Id
     /// Must be unique. Do NOT USE the Unique Id even of a deleted function to avoid conflict. 
-    /// Use a higher number than the current maximum Unique Id which is 0079 currently.  
+    /// Use a higher number than the current maximum Unique Id which is 0082 currently.  
     /// </remarks>
     public static class DefinedRaptorApplicationFunctionForeignIds
     {
@@ -68,6 +68,8 @@
 		// Forecaster
     	public const string ExportForecastToOtherBusinessUnit = "0073";
         public const string ImportForecastFromFile = "0076";
+        public const string ExportForecastFile = "0082";
+
 		// Budget
         public const string RequestAllowances = "0075";
 

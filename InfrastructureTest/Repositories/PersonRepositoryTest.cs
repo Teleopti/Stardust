@@ -1512,7 +1512,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(ctr);
 			PersistAndRemoveFromUnitOfWork(p);
-			IScenario scenarioNew = ScenarioFactory.CreateScenarioAggregate("sdf",true,false);
+			IScenario scenarioNew = ScenarioFactory.CreateScenarioAggregate("sdf",true);
 			PersistAndRemoveFromUnitOfWork(scenarioNew);
 			IPersonAssignment assNew = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(act,
 																	p,

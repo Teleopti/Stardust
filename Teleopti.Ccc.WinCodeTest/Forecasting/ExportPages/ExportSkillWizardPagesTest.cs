@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
         public void Setup()
         {
             _mocks = new MockRepository();
-            exportSkillModel = new ExportSkillModel();
+            exportSkillModel = new ExportSkillModel(true,true);
             _unitOfWorkFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
             _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
             exportAcrossBusinessUnitsSettingsProvider = new ExportAcrossBusinessUnitsSettingsProvider(_unitOfWorkFactory,_repositoryFactory);
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
         [Test]
         public void ShouldReturnObject()
         {
-            Assert.That(_target.CreateNewSateObj(), Is.Not.Null);
+            Assert.That(_target.CreateNewStateObj(), Is.Not.Null);
         }
     }
 }

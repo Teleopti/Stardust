@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static IPersonAssignment CreatePersonAssignmentEmpty()
         {
             IPerson agent = PersonFactory.CreatePerson("grisisi");
-            IScenario scenario = ScenarioFactory.CreateScenarioAggregate("Heja Gnaget!", false, false);
+            IScenario scenario = ScenarioFactory.CreateScenarioAggregate("Heja Gnaget!", false);
             IPersonAssignment ass = new PersonAssignment(agent, scenario);
             return ass;
         }
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static IList<IPersonAssignment> CreateCompletePersonAssignmentListForGuiTest()
         {
             IShiftCategory caMorning = ShiftCategoryFactory.CreateShiftCategory("Morning");
-            IScenario scDefault = ScenarioFactory.CreateScenarioAggregate("Heja Gnaget!", false, false);
+            IScenario scDefault = ScenarioFactory.CreateScenarioAggregate("Heja Gnaget!", false);
 
             DateTimePeriod period1 =
                 new DateTimePeriod(new DateTime(2000, 1, 2, 10, 30, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 11, 30, 0, DateTimeKind.Utc));
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
             // general
             IShiftCategory caMorning = ShiftCategoryFactory.CreateShiftCategory("Morning");
-            IScenario scDefault = ScenarioFactory.CreateScenarioAggregate("Default", false, false);
+            IScenario scDefault = ScenarioFactory.CreateScenarioAggregate("Default", false);
             container.Scenario = scDefault;
             ITeam team = TeamFactory.CreateSimpleTeam();
             IPersonContract personContract = PersonContractFactory.CreatePersonContract();

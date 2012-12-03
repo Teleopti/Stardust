@@ -27,12 +27,6 @@ namespace Teleopti.Interfaces.Domain
         }
 
         /// <summary>
-        /// Gets if audit_trail is on.
-        /// </summary>
-        /// <value>Audit trail is on.</value>
-        bool AuditTrail { get; set; }
-
-        /// <summary>
         /// Gets if scenario is enabled for reporting.
         /// </summary>
         /// <value>Scenario is enabled for reporting</value>

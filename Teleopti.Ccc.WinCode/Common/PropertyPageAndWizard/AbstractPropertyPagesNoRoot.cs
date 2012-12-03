@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 			}
 		}
 
-		public abstract T CreateNewSateObj();
+		public abstract T CreateNewStateObj();
 
 		public abstract string Name { get; }
 	    
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 			{
 				if (_stateObj == null)
 				{
-					_stateObj = CreateNewSateObj();
+					_stateObj = CreateNewStateObj();
 				}
 				return _stateObj;
 			}

@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			dummyActivity.GroupingActivity = groupAct;
 			PersistAndRemoveFromUnitOfWork(dummyActivity);
 			var dummyAgent = PersonFactory.CreatePerson("m");
-			var dummyScenario = ScenarioFactory.CreateScenarioAggregate("Default", false, false);
+			var dummyScenario = ScenarioFactory.CreateScenarioAggregate("Default", false);
 			var dummyCategory = ShiftCategoryFactory.CreateShiftCategory("Morning");
 			var definitionSet = new MultiplicatorDefinitionSet("sdf", MultiplicatorType.Overtime);
 

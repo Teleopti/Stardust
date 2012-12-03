@@ -774,8 +774,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _gridConstructor.GridViewChanging += gridConstructor_GridViewChanging;
             _gridConstructor.GridViewChanged += gridConstructor_GridViewChanged;
 
-            _dateNavigatePeriods.SetSelectedDate(_filteredPeopleHolder.SelectedDate);
-
             switch (viewType)
             {
                 case ViewType.PersonRotationView:

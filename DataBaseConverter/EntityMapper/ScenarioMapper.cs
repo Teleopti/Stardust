@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         {
             IScenario scenario = new Scenario(oldEntity.Name);
             scenario.DefaultScenario = oldEntity.DefaultScenario;
-            scenario.AuditTrail = oldEntity.AuditTrail;
             scenario.EnableReporting = oldEntity.DefaultScenario;
 
             return scenario;

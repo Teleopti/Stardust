@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(null, _scenario.Id);
             Assert.AreEqual("Zefault", _scenario.Description.Name);
             Assert.AreEqual(_scenario.DefaultScenario,true);
-            Assert.AreEqual(_scenario.AuditTrail, false);
             Assert.AreEqual(_scenario.EnableReporting, false);
             Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, _scenario.BusinessUnit);
             Assert.IsNull(_scenario.CreatedBy);
@@ -74,16 +73,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
             _scenario.EnableReporting = true;
             Assert.AreEqual(_scenario.EnableReporting, true);
-        }
-
-        /// <summary>
-        /// Can set audittrail
-        /// </summary>
-        [Test]
-        public void CanSetAuditTrail()
-        {
-            _scenario.AuditTrail = true;
-            Assert.AreEqual(_scenario.AuditTrail, true);
         }
 
         /// <summary>

@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(dummyAbsence);
             dummyAgent = PersonFactory.CreatePerson("h");
             dummyAgent2 = PersonFactory.CreatePerson("i"); 
-            dummyScenario = ScenarioFactory.CreateScenarioAggregate("Default", false, false);
-            dummyScenario2 = ScenarioFactory.CreateScenarioAggregate("Scenario2", false, false);
+            dummyScenario = ScenarioFactory.CreateScenarioAggregate("Default", false);
+            dummyScenario2 = ScenarioFactory.CreateScenarioAggregate("Scenario2", false);
             PersistAndRemoveFromUnitOfWork(dummyAgent);
             PersistAndRemoveFromUnitOfWork(dummyAgent2);
             PersistAndRemoveFromUnitOfWork(dummyScenario);

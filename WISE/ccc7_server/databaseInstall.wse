@@ -35,7 +35,7 @@ item: Global
   Variable Default3=C:\Windows
   Variable Flags3=00001000
   Variable Name4=_WISE_
-  Variable Default4=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor
+  Variable Default4=C:\PROGRA~2\Altiris\Wise\WISESC~1
   Variable Flags4=00001000
   Requested Execution Level=asInvoker
 end
@@ -275,10 +275,6 @@ end
 item: Else Statement
 end
 item: Set Variable
-  Variable=U
-  Value=-L"%USER%:%PASS%"
-end
-item: Set Variable
   Variable=U2
   Value=-L"%USER%:%PASS%"
 end
@@ -310,7 +306,7 @@ item: End Block
 end
 item: Execute Program
   Pathname=.\DBManager.exe
-  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %C% %U% -R -T "-F%DIR%
+  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %C% %U2% -R -T "-F%DIR%
   Default Directory=%DIR%
   Flags=00000010
 end
@@ -330,13 +326,7 @@ item: End Block
 end
 item: Execute Program
   Pathname=.\DBManager.exe
-  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %U2% -R "-F%DIR%
-  Default Directory=%DIR%
-  Flags=00000010
-end
-item: Execute Program
-  Pathname=.\DBManager.exe
-  Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %C% %U% -R -T "-F%DIR%
+  Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %C% %U2% -R -T "-F%DIR%
   Default Directory=%DIR%
   Flags=00000010
 end
@@ -355,14 +345,8 @@ end
 item: End Block
 end
 item: Execute Program
-  Pathname=.\DBManager.exe
-  Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %U2% -R "-F%DIR%
-  Default Directory=%DIR%
-  Flags=00000010
-end
-item: Execute Program
   Pathname=DBManager.exe
-  Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %C% %U% -R -T "-F%DIR%
+  Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %C% %U2% -R -T "-F%DIR%
   Default Directory=%DIR%
   Flags=00000010
 end
@@ -380,14 +364,32 @@ remarked item: Exit Installation
 end
 item: End Block
 end
+item: If/While Statement
+  Variable=AUTH
+  Value=NT
+end
+item: Execute Program
+  Pathname=.\DBManager.exe
+  Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %U% -R "-F%DIR%
+  Default Directory=%DIR%
+  Flags=00000010
+end
+item: Execute Program
+  Pathname=.\DBManager.exe
+  Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %U% -R "-F%DIR%
+  Default Directory=%DIR%
+  Flags=00000010
+end
 item: Execute Program
   Pathname=DBManager.exe
-  Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %U2% -R "-F%DIR%
+  Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %U% -R "-F%DIR%
   Default Directory=%DIR%
   Flags=00000010
 end
 item: Remark
   Text=This step initiate default data via ApplicationConfig.exe
+end
+item: End Block
 end
 item: If/While Statement
   Variable=UPGRADE
