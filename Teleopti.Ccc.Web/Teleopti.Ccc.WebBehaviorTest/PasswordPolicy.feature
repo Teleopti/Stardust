@@ -58,8 +58,9 @@ Scenario: Sign in passes with password will expire soon
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	#Then I should see a warning 'LogOnWarningPasswordWillSoonExpire'
-	Then I should be signed in
+	Then I should see change password page with warning 'YourPasswordWillExpireSoon'
+	And I click skip button
+	And I should be signed in
 @ignore
 Scenario: Sign in fails with password already expired
 	Given I have user logon details with
@@ -74,8 +75,8 @@ Scenario: Sign in fails with password already expired
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	Then I should not be signed in
-	And I should see an error 'LogOnFailedPasswordExpired'
-	And I should see the must change password page
+	And I should see must change password page with warning 'YourPasswordHasAlreadyExpired'
+	And I should not see skip button
 @ignore
 Scenario: Manually Navigate to other page when sign in with password already expired
 	Given I have user logon details with

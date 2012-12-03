@@ -25252,6 +25252,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your password has already expired..
+        /// </summary>
+        public static string YourPasswordHasAlreadyExpired {
+            get {
+                return ResourceManager.GetString("YourPasswordHasAlreadyExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your password will expire soon..
+        /// </summary>
+        public static string YourPasswordWillExpireSoon {
+            get {
+                return ResourceManager.GetString("YourPasswordWillExpireSoon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your preference is out of range..
         /// </summary>
         public static string YourPreferenceIsOutOfRange {

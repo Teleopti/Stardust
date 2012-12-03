@@ -16,8 +16,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Signin-error")]
 		public Element ValidationSummary { get; private set; }
 
+		[FindBy(Id = "PasswordExpireSoon")]
+		public Div PasswordExpireSoonError { get; set; }
+
+		[FindBy(Id = "PasswordAlreadyExpired")]
+		public Div PasswordAlreadyExpiredError { get; set; }
+
 		[FindBy(Id = "Login-button")]
 		public Button LoginButton;
+
+		[FindBy(Id = "Skip-button")]
+		public Button SkipButton { get; set; }
 
 		public void SelectApplicationTestDataSource()
 		{

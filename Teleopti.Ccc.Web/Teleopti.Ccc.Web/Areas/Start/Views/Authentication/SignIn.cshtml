@@ -98,13 +98,13 @@
 
 		
 		<div id="changepassword">
-			<div class="alert login-warning" data-bind="visible: MustChangePassword()">
+			<div id="PasswordAlreadyExpired" class="alert login-warning" data-bind="visible: MustChangePassword()">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<strong>Warning!</strong> Your password has already expired. 
+				<strong>@Resources.Warning</strong> @Resources.YourPasswordHasAlreadyExpired 
 			</div>
-			<div class="alert login-warning" data-bind="visible: !MustChangePassword()">
+			<div id="PasswordExpireSoon" class="alert login-warning" data-bind="visible: !MustChangePassword()">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<strong>Warning!</strong> Your password will expire soon.
+				<strong>@Resources.Warning</strong> @Resources.YourPasswordWillExpireSoon
 			</div>
 			<div class="login-form well well-large">
 				<input type="password" id="New-password" placeholder="New Password" data-bind="value: NewPassword" class="input-block-level" />

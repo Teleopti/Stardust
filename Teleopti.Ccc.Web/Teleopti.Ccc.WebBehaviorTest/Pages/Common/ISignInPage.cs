@@ -7,6 +7,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		TextField UserNameTextField { get; }
 
 		Element ValidationSummary { get; }
+		Div PasswordExpireSoonError { get; }
+		Div PasswordAlreadyExpiredError { get; }
+		Button SkipButton { get; }
 
 		void SelectApplicationTestDataSource();
 		void SelectWindowsTestDataSource();

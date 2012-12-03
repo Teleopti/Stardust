@@ -11206,4 +11206,12 @@ These options are activated:
     <value>Invalid user name or password.</value>
     <comment>Invalid user name or password.</comment>
   </data>
+  <data name="YourPasswordHasAlreadyExpired" xml:space="preserve">
+    <value>Your password has already expired.</value>
+    <comment>Your password has already expired.</comment>
+  </data>
+  <data name="YourPasswordWillExpireSoon" xml:space="preserve">
+    <value>Your password will expire soon.</value>
+    <comment>Your password will expire soon.</comment>
+  </data>
 </root>
