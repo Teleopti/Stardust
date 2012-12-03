@@ -27,8 +27,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     	private IVirtualSchedulePeriod _virtualSchedulePeriod1;
 		private IVirtualSchedulePeriod _virtualSchedulePeriod2;
     	private IScheduleDayPro _scheduleDayPro;
-
-        [SetUp]
+		private IDaysOffPreferences _daysOffPreferences;
+        
+		[SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -44,7 +45,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
         	_virtualSchedulePeriod1 = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_virtualSchedulePeriod2 = _mocks.StrictMock<IVirtualSchedulePeriod>();
-			_target = new GroupDayOffOptimizationService(_periodValueCalculator, _schedulePartModifyAndRollbackService, _resourceOptimizationHelper, _groupOptimizerFindMatrixesForGroup);
+ 			_daysOffPreferences = _mocks.StrictMock<IDaysOffPreferences>();
+			_target = new GroupDayOffOptimizationService(_periodValueCalculator, _schedulePartModifyAndRollbackService, _resourceOptimizationHelper, _groupOptimizerFindMatrixesForGroup,_daysOffPreferences);
         	_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
         }
 
@@ -116,8 +118,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyCancel()
         {
             _target.ReportProgress += _target_ReportProgress;
-            _optimizers = new List<IGroupDayOffOptimizerContainer> { _container1 };
+  			_optimizers = new List<IGroupDayOffOptimizerContainer> { _container1 };
             IPerson owner = PersonFactory.CreatePerson();
+            var scheduleDay1 = _mocks.StrictMock<IScheduleDayPro>();
+            var scheduleDay2 = _mocks.StrictMock<IScheduleDayPro>();
+            IList<IScheduleDayPro> scheduleDayProList = new List<IScheduleDayPro>
+                                                       {
+                                                           scheduleDay1,
+                                                           scheduleDay2
+                                                       };
+            var dateOnly = new DateOnly(new DateTime(2012, 11, 22));
+            var part = _mocks.StrictMock<IScheduleDay>();
+            ILockableBitArray bitArrayBeforeMove = new LockableBitArray(2, false, false, null) { PeriodArea = new MinMax<int>(0, 1) };
+            bitArrayBeforeMove.Set(0, true);
+            ILockableBitArray bitArrayAfterMove = new LockableBitArray(2, false, false, null) { PeriodArea = new MinMax<int>(0, 1) };
+            bitArrayAfterMove.Set(1, true);
 
             using (_mocks.Record())
             {
@@ -130,14 +145,28 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(10).Repeat.AtLeastOnce();
                 Expect.Call(_container1.Owner)
                     .Return(owner).Repeat.AtLeastOnce();
-            	Expect.Call(_container1.Matrix).Return(_matrix1).Repeat.Twice();
+            	Expect.Call(_container1.Matrix).Return(_matrix1).Repeat.AtLeastOnce();
             	Expect.Call(_matrix1.EffectivePeriodDays).Return(
-					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
-            	Expect.Call(_scheduleDayPro.Day).Return(DateOnly.MinValue);
+					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro })).Repeat.AtLeastOnce();
+            	Expect.Call(_scheduleDayPro.Day).Return(DateOnly.MinValue).Repeat.AtLeastOnce();
             	Expect.Call(_groupOptimizerFindMatrixesForGroup.Find(owner, DateOnly.MinValue)).Return(new List<IScheduleMatrixPro>{_matrix1});
             	Expect.Call(_matrix1.SchedulePeriod).Return(_virtualSchedulePeriod1).Repeat.Twice();
             	Expect.Call(_schedulePartModifyAndRollbackService.ModificationCollection).Return(new List<IScheduleDay>());
                 Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection());
+ 				
+				Expect.Call(scheduleDay1.DaySchedulePart())
+                    .Return(part).Repeat.AtLeastOnce();
+                Expect.Call(scheduleDay2.DaySchedulePart())
+                    .Return(part).Repeat.AtLeastOnce();
+                Expect.Call(_matrix1.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayProList)).Repeat.AtLeastOnce();
+                Expect.Call(_matrix1.EffectivePeriodDays).Return(
+                    new ReadOnlyCollection<IScheduleDayPro>(scheduleDayProList)).Repeat.AtLeastOnce();
+                Expect.Call(part.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.AtLeastOnce();
+                Expect.Call(_matrix1.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>())).Repeat.AtLeastOnce();
+                Expect.Call(_container1.WorkingBitArray).Return(bitArrayAfterMove);
+                Expect.Call(() => _matrix1.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly))).Repeat.AtLeastOnce();
+                Expect.Call(_daysOffPreferences.ConsiderWeekBefore).Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_daysOffPreferences.ConsiderWeekAfter).Return(true).Repeat.AtLeastOnce();
             }
 
             using (_mocks.Playback())
@@ -152,6 +181,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _optimizers = new List<IGroupDayOffOptimizerContainer> { _container1 };
             IPerson owner = PersonFactory.CreatePerson();
+          	var scheduleDay1 = _mocks.StrictMock<IScheduleDayPro>();
+            var scheduleDay2 = _mocks.StrictMock<IScheduleDayPro>();
+            IList<IScheduleDayPro> scheduleDayProList = new List<IScheduleDayPro>
+                                                       {
+                                                           scheduleDay1,
+                                                           scheduleDay2
+                                                       };
+            var part = _mocks.StrictMock<IScheduleDay>();
+            ILockableBitArray bitArrayBeforeMove = new LockableBitArray(2, false, false, null) { PeriodArea = new MinMax<int>(0, 1) };
+            bitArrayBeforeMove.Set(0, true);
+            ILockableBitArray bitArrayAfterMove = new LockableBitArray(2, false, false, null) { PeriodArea = new MinMax<int>(0, 1) };
+            bitArrayAfterMove.Set(1, true);
             Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection()).Repeat.Times(2);
             Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10);
             Expect.Call(_container1.Execute()).Return(true);
@@ -164,16 +205,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
             Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2011, 1, 1), false, false));
 
-            //Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10);
-            //Expect.Call(_container1.Execute()).Return(true);
-            //worse
-            //Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(11);
-			//Expect.Call(_schedulePartModifyAndRollbackService.ModificationCollection).Return(
-			//    new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay> { _scheduleDay }));
-			//Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
-			//Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2011, 1, 1));
-			//Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
-			//Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2011, 1, 1), false, false));
+            Expect.Call(scheduleDay1.DaySchedulePart())
+                .Return(part).Repeat.AtLeastOnce();
+            Expect.Call(scheduleDay2.DaySchedulePart())
+                .Return(part).Repeat.AtLeastOnce();
+            Expect.Call(_matrix1.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayProList)).Repeat.AtLeastOnce();
+            Expect.Call(_matrix1.EffectivePeriodDays).Return(
+                new ReadOnlyCollection<IScheduleDayPro>(scheduleDayProList)).Repeat.AtLeastOnce();
+            Expect.Call(part.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.AtLeastOnce();
+            Expect.Call(_matrix1.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>())).Repeat.AtLeastOnce();
+            Expect.Call(_daysOffPreferences.ConsiderWeekBefore).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_daysOffPreferences.ConsiderWeekAfter).Return(true).Repeat.AtLeastOnce();
 
 			Expect.Call(_container1.Owner).Return(owner).Repeat.AtLeastOnce();
 			//Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection()).Repeat.Times(2);

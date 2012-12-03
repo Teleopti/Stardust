@@ -164,8 +164,26 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
         public void VerifySuccessfulExecuteWithOnePerson()
         {
+            var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
+            var originalArray = new LockableBitArray(7, false, false, null);
+            var workingBitArray = new LockableBitArray(7, false, false, null);
+            var groupPerson = _mocks.StrictMock<IGroupPerson>();
+            var activePerson = _mocks.StrictMock<IPerson>();
+
+            var dayOffToRemove = new DateOnly(2001, 02, 01);
+            var daysOffToRemove = new List<DateOnly> { dayOffToRemove };
+            
+            var dayOffToAdd = new DateOnly(2001, 02, 05);
+            var daysOffToAdd = new List<DateOnly> { dayOffToAdd };
+
+            var groupMatrixContainer = new GroupMatrixContainer();
+            var groupMatrixContainers = new List<GroupMatrixContainer> { groupMatrixContainer };
+
             _daysOffPreferences.ConsiderWeekBefore = false;
             _daysOffPreferences.ConsiderWeekAfter = false;
+
+            IList<double?> dataExtractorValues = new List<double?>();
+
             _target = createTarget();
 
             using (_mocks.Record())
@@ -186,11 +204,27 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             	                                                            _groupPersonBuilderForOptimization,
             	                                                            _allScheduleMatrixes)).Return(true);
 
+Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
+                    .Return(scheduleResultDataExtractor);
+                Expect.Call(_converter.Convert(false, false))
+                    .Return(originalArray);
+                Expect.Call(_converter.Convert(false, false))
+                    .Return(workingBitArray);
+                Expect.Call(scheduleResultDataExtractor.Values())
+                    .Return(dataExtractorValues);
+                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
+                    .Return(true);
+                Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray,_activeScheduleMatrix, false))
+                    .Return(daysOffToRemove);
+                Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
+                    .Return(daysOffToAdd);
             }
             using (_mocks.Playback())
             {
 				bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
                 Assert.IsTrue(result);
+
+                Assert.That(_target.WorkingBitArray, Is.EqualTo(workingBitArray));
             }	
         }
 
