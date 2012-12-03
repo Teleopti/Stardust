@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
+	[TestFixture]
 	public class SingleSkillDictionaryTest
 	{
 		private SingleSkillDictionary _singleSkillDictionary;
@@ -195,5 +198,54 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Assert.IsFalse(person2Day2);
 			}
 		}
+
+		[Test]
+		public void ShouldReturnTrueIfSecondSkillNotActive()
+		{
+			_persons = new List<IPerson> { _person1 };
+			_period = new DateOnlyPeriod(new DateOnly(2012, 1, 1), new DateOnly(2012, 1, 1));
+			_personSkill1 = new PersonSkill(_phoneSkill1, new Percent(1));
+			_personSkill2 = new PersonSkill(_mailSkill, new Percent(1));
+			_personSkill2.Active = false;
+			_personSkills1 = new List<IPersonSkill> { _personSkill1, _personSkill2 };
+
+			using (_mock.Record())
+			{
+				Expect.Call(_person1.Period(_period.DayCollection()[0])).Return(_personPeriod1).Repeat.Twice();
+				Expect.Call(_personPeriod1.PersonSkillCollection).Return(_personSkills1).Repeat.AtLeastOnce();
+			}
+
+			using (_mock.Playback())
+			{
+				_singleSkillDictionary.Create(_persons, _period);
+				var person1Day1 = _singleSkillDictionary.IsSingleSkill(_person1, _period.DayCollection()[0]);
+				Assert.IsTrue(person1Day1);
+			}
+		}
+
+		[Test]
+		public void ShouldReturnTrueIfSecondSkillDeleted()
+		{
+			_persons = new List<IPerson> { _person1 };
+			_period = new DateOnlyPeriod(new DateOnly(2012, 1, 1), new DateOnly(2012, 1, 1));
+			_personSkill1 = new PersonSkill(_phoneSkill1, new Percent(1));
+			((IDeleteTag)_mailSkill).SetDeleted();
+			_personSkill2 = new PersonSkill(_mailSkill, new Percent(1));
+			_personSkills1 = new List<IPersonSkill> { _personSkill1, _personSkill2 };
+
+			using (_mock.Record())
+			{
+				Expect.Call(_person1.Period(_period.DayCollection()[0])).Return(_personPeriod1).Repeat.Twice();
+				Expect.Call(_personPeriod1.PersonSkillCollection).Return(_personSkills1).Repeat.AtLeastOnce();
+			}
+
+			using (_mock.Playback())
+			{
+				_singleSkillDictionary.Create(_persons, _period);
+				var person1Day1 = _singleSkillDictionary.IsSingleSkill(_person1, _period.DayCollection()[0]);
+				Assert.IsTrue(person1Day1);
+			}
+		}
+
 	}
 }
