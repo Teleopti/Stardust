@@ -11202,4 +11202,8 @@ These options are activated:
     <value>Skip</value>
     <comment>Skip</comment>
   </data>
+  <data name="InvalidUserNameOrPassword" xml:space="preserve">
+    <value>Invalid user name or password.</value>
+    <comment>Invalid user name or password.</comment>
+  </data>
 </root>

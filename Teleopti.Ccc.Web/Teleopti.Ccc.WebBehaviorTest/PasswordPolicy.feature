@@ -46,7 +46,7 @@ Scenario: Sign in fails after account is locked
 	And I should see a log on error 'LogOnFailedAccountIsLocked'
 
 @ignore
-Scenario: Sign in with password will expire soon
+Scenario: Sign in passes with password will expire soon
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 29    |
@@ -61,7 +61,7 @@ Scenario: Sign in with password will expire soon
 	#Then I should see a warning 'LogOnWarningPasswordWillSoonExpire'
 	Then I should be signed in
 @ignore
-Scenario: Sign in passes with password already expired
+Scenario: Sign in fails with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |

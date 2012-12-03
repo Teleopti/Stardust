@@ -1,10 +1,10 @@
 ﻿
 Teleopti.Start.Authentication.NavigationConstructor = function () {
-	this.GotoChangePassword = function () {
-		window.location.hash = 'changepassword';
+	this.GotoChangePassword = function (dataSourceName) {
+		window.location.hash = 'changepassword/' + dataSourceName;
 	};
 	this.GotoMustChangePassword = function () {
-		window.location.hash = 'mustchangepassword';
+		window.location.hash = 'mustchangepassword/' + dataSourceName;
 	};
 	this.GotoBusinessUnits = function (authenticationType, dataSourceName) {
 		window.location.hash = 'businessunit/' + authenticationType + '/' + dataSourceName;

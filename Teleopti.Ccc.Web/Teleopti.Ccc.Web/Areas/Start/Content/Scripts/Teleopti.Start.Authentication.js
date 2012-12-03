@@ -75,19 +75,21 @@ Teleopti.Start.Authentication = function () {
 				});
 			});
 		crossroads.addRoute(
-			new RegExp('^(changepassword)$', "i"),
-			function (view) {
+			new RegExp('^(changepassword)/(' + dataSourceNameRegex + ')$', "i"),
+			function (view, dataSourceName) {
 				_displayView({
 					view: view,
-					mustChangePassword: false
+					mustChangePassword: false,
+					dataSourceName: dataSourceName
 				});
 			});
 		crossroads.addRoute(
-			new RegExp('^(mustchangepassword)$', "i"),
+			new RegExp('^(mustchangepassword)/(' + dataSourceNameRegex + ')$', "i"),
 			function (view) {
 				_displayView({
 					view: view,
-					mustChangePassword: true
+					mustChangePassword: true,
+					dataSourceName: dataSourceName
 				});
 			});
 		crossroads.addRoute(

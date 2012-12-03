@@ -200,11 +200,11 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Sign in with password will expire soon")]
+        [NUnit.Framework.DescriptionAttribute("Sign in passes with password will expire soon")]
         [NUnit.Framework.IgnoreAttribute()]
-        public virtual void SignInWithPasswordWillExpireSoon()
+        public virtual void SignInPassesWithPasswordWillExpireSoon()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in with password will expire soon", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in passes with password will expire soon", new string[] {
                         "ignore"});
 #line 49
 this.ScenarioSetup(scenarioInfo);
@@ -250,11 +250,11 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Sign in passes with password already expired")]
+        [NUnit.Framework.DescriptionAttribute("Sign in fails with password already expired")]
         [NUnit.Framework.IgnoreAttribute()]
-        public virtual void SignInPassesWithPasswordAlreadyExpired()
+        public virtual void SignInFailsWithPasswordAlreadyExpired()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in passes with password already expired", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign in fails with password already expired", new string[] {
                         "ignore"});
 #line 64
 this.ScenarioSetup(scenarioInfo);

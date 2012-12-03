@@ -5,9 +5,9 @@ Teleopti.Start.Authentication.ChangePasswordView = function (data) {
 		var viewModel = new Teleopti.Start.Authentication.ChangePasswordViewModel({
 			baseUrl: Teleopti.Start.Authentication.Settings.baseUrl,
 			mustChangePassword: viewInfo.mustChangePassword,
-			authenticationState: data.authenticationState
+			authenticationState: data.authenticationState,
 //			authenticationType: viewInfo.authenticationType,
-//			dataSourceName: viewInfo.dataSourceName
+			dataSourceName: viewInfo.dataSourceName
 		});
 		viewInfo.render(data.html);
 		ko.applyBindings(viewModel, viewInfo.element[0]);

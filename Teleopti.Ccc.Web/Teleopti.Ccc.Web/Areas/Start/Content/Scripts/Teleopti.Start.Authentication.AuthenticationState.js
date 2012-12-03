@@ -24,7 +24,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			data: authenticationModel,
 			success: function (responseData, textStatus, jqXHR) {
 				if (responseData.WillExpireSoon) {
-					gotoChangePassword();
+					gotoChangePassword(authenticationModel.datasource);
 				} else {
 					self.AttemptGotoApplicationBySignIn(options);
 				}
@@ -63,6 +63,26 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		});
 
 		businessUnitsAjax(options);
+	};
+
+	this.ApplyChangePassword = function (options) {
+		options.data.UserName = authenticationModel.username;
+		changePasswordAjax(options);
+	};
+
+	var changePasswordAjax = function (options) {
+
+		$.extend(options, {
+			url: data.baseUrl + "Start/ApplicationAuthenticationApi/ChangePassword",
+			dataType: "json",
+			type: 'POST',
+			cache: false,
+			success: function (responseData, textStatus, jqXHR) {
+				//TODO
+			}
+		});
+
+		$.ajax(options);
 	};
 
 	var businessUnitsAjax = function (options) {

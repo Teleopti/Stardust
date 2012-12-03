@@ -107,10 +107,10 @@
 				<strong>Warning!</strong> Your password will expire soon.
 			</div>
 			<div class="login-form well well-large">
-				<input type="password" id="New-password" placeholder="New Password" class="input-block-level" />
-				<input type="password" id="Confirm-new-password" placeholder="Confirm New Password" class="input-block-level" />
-				<input type="password" id="Old-password" placeholder="Old Password" class="input-block-level" />
-				<button class="btn btn-primary" id="Change-password-button">@Resources.Apply</button>
+				<input type="password" id="New-password" placeholder="New Password" data-bind="value: NewPassword" class="input-block-level" />
+				<input type="password" id="Confirm-new-password" placeholder="Confirm New Password" data-bind="value: ConfirmNewPassword" class="input-block-level" />
+				<input type="password" id="Old-password" placeholder="Old Password" data-bind="value: OldPassword" class="input-block-level" />
+				<button class="btn btn-primary" id="Change-password-button" data-bind="click: ApplyChangePassword">@Resources.Apply</button>
 				<button class="btn btn-primary" id="Skip-button" data-bind="visible: !MustChangePassword(), click: SkipChangePassword">@Resources.Skip</button>
 			</div>
 		</div>
