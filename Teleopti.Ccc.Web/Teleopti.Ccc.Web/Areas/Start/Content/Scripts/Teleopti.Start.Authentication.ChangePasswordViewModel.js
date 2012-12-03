@@ -11,8 +11,8 @@ Teleopti.Start.Authentication.ChangePasswordViewModel = function (data) {
 			baseUrl: data.baseUrl,
 			data: {
 				dataSourceName: data.dataSourceName,
-				NewPassword: self.NewPassword(),
-				OldPassword: self.OldPassword()
+				newPassword: self.NewPassword(),
+				oldPassword: self.OldPassword()
 			}
 		});
 	};

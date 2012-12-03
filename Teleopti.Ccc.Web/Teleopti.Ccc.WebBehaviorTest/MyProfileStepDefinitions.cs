@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			page.ConfirmButton.EventualClick();
 		}
 
-		[When(@"I change my password with")]
-		public void WhenIChangeMyPasswordWith(Table table)
+		[When(@"I change my password in my profile with")]
+		public void WhenIChangeMyPasswordInMyProfileWith(Table table)
 		{
 			var password = table.CreateInstance<PasswordConfigurable>();
 			var page = Browser.Current.Page<PasswordPage>();
@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Current.Eval("$('input#password').keyup();");
 			page.ConfirmButton.EventualClick();
 		}
+
 
 		[When(@"I change my password using incorrect current password")]
 		public void WhenIChangeMyPasswordUsingIncorrectCurrentPassword()

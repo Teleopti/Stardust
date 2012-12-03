@@ -20,5 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		void SelectFirstBusinessUnit();
 		void SelectBusinessUnitByName(string name);
 		void ClickBusinessUnitOkButton();
+
+		void ChangePassword(string newPassword, string confirmedNewPassword, string oldPassword);
 	}
 }

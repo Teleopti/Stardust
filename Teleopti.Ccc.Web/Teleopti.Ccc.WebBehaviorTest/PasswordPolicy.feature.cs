@@ -140,7 +140,7 @@ this.FeatureBackground();
                         "Old Password",
                         "P@ssword1"});
 #line 25
- testRunner.And("I change my password with", ((string)(null)), table4, "And ");
+ testRunner.And("I change my password in my profile with", ((string)(null)), table4, "And ");
 #line 30
  testRunner.Then("I should see password change failed with message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden

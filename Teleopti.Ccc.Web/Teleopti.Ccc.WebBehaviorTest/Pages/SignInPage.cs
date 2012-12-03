@@ -28,6 +28,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Skip-button")]
 		public Button SkipButton { get; set; }
 
+		[FindBy(Id = "New-password")]
+		public TextField NewPassword { get; set; }
+		[FindBy(Id = "Confirm-new-password")]
+		public TextField ConfirmNewPassword { get; set; }
+		[FindBy(Id = "Old-password")]
+		public TextField OldPassword { get; set; }
+		[FindBy(Id = "Change-password-button")]
+		public Button ChangePasswordButton { get; set; }
+
 		public void SelectApplicationTestDataSource()
 		{
 		    Document.Element(Find.BySelector("li.application a:contains(TestData)")).EventualClick();
@@ -43,6 +52,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		    UserNameTextField.ChangeValue(username);
 		    PasswordTextField.ChangeValue(password);
 		    LoginButton.EventualClick();
+		}
+
+		public void ChangePassword(string newPassword, string confirmedNewPassword, string oldPassword)
+		{
+			NewPassword.ChangeValue(newPassword);
+			ConfirmNewPassword.ChangeValue(newPassword);
+			OldPassword.ChangeValue(oldPassword);
+			ChangePasswordButton.EventualClick();
 		}
 
 		public void SignInWindows()

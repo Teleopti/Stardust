@@ -22,7 +22,7 @@ Scenario: Change password fails against the policy
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	When I view password setting page
-	And I change my password with
+	And I change my password in my profile with
 	| Field              | Value     |
 	| Password           | aa        |
 	| Confirmed Password | aa        |

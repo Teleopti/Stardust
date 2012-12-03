@@ -81,7 +81,8 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			type: 'POST',
 			cache: false,
 			success: function (responseData, textStatus, jqXHR) {
-				//TODO
+				authenticationModel.password = options.data.newPassword;
+				self.AttemptGotoApplicationBySignIn(options);
 			}
 		});
 

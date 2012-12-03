@@ -7,6 +7,9 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Pages;
+using WatiN.Core;
+using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -65,5 +68,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Pages.Pages.CurrentSignInPage.SkipButton.EventualClick(); 
 		}
 
+		[When(@"I change my password with")]
+		public void WhenIChangeMyPasswordWith(Table table)
+		{
+			var password = table.CreateInstance<PasswordConfigurable>();
+			Pages.Pages.CurrentSignInPage.ChangePassword(password.Password, password.ConfirmedPassword, password.OldPassword);
+		}
 	}
 }
