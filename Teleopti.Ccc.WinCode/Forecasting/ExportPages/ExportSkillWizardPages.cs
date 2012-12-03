@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
             _exportForecastToFileSettingsProvider = exportForecastToFileSettingsProvider;
         }
 
-        public override ExportSkillModel CreateNewSateObj()
+        public override ExportSkillModel CreateNewStateObj()
         {
             return _stateObj;
         }

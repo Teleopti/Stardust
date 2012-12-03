@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
         [Test]
         public void ShouldReturnObject()
         {
-            Assert.That(_target.CreateNewSateObj(), Is.Not.Null);
+            Assert.That(_target.CreateNewStateObj(), Is.Not.Null);
         }
     }
 }

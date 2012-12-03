@@ -10,16 +10,12 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
     /// </summary>
     public class TeleoptiCccBaseLicenseOption : LicenseOption
     {
-
-        #region Interface
-
-        /// <summary>
+    	/// <summary>
         /// Initializes a new instance of the <see cref="TeleoptiCccBaseLicenseOption"/> class.
         /// </summary>
         public TeleoptiCccBaseLicenseOption()
             : base(DefinedLicenseOptionPaths.TeleoptiCccBase, DefinedLicenseOptionNames.TeleoptiCccBase)
         {
-            //
         }
 
         /// <summary>
@@ -78,10 +74,9 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewCustomTeamSchedule));
 			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.AllowPersonModifications));
 			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit));
+			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ExportForecastFile));
 			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile));
 			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb));
         }
-
-        #endregion
     }
 }
