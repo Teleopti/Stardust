@@ -78,16 +78,16 @@ Teleopti.Start.Authentication = function () {
 			new RegExp('^(changepassword)/(' + dataSourceNameRegex + ')$', "i"),
 			function (view, dataSourceName) {
 				_displayView({
-					view: view,
+					view: "changepassword",
 					mustChangePassword: false,
 					dataSourceName: dataSourceName
 				});
 			});
 		crossroads.addRoute(
 			new RegExp('^(mustchangepassword)/(' + dataSourceNameRegex + ')$', "i"),
-			function (view) {
+			function (view, dataSourceName) {
 				_displayView({
-					view: view,
+					view: "changepassword",
 					mustChangePassword: true,
 					dataSourceName: dataSourceName
 				});

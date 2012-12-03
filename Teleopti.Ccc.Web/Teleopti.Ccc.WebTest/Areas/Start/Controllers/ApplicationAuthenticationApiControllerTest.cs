@@ -106,13 +106,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var target = new ApplicationAuthenticationApiController(null, null, null, null);
 			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
 			const string message = "test";
-			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult { Successful = true, HasMessage = true, Message = message });
+			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult { Successful = true, HasMessage = true, Message = message});
 
 			var result = target.CheckPassword(authenticationModel);
 
 			var warning = result.Data as PasswordWarningViewModel;
 			warning.WillExpireSoon.Should().Be.True();
-			warning.Warning.Should().Be.EqualTo(message);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldReturnWarningIfPasswordAlreadyExpire()
+		{
+			var target = new ApplicationAuthenticationApiController(null, null, null, null);
+			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
+			const string message = "test";
+			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult { Successful = false, HasMessage = true, Message = message, PasswordExpired = true});
+
+			var result = target.CheckPassword(authenticationModel);
+
+			var warning = result.Data as PasswordWarningViewModel;
+			warning.AlreadyExpired.Should().Be.True();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]

@@ -15,7 +15,6 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 
 
 	var checkPasswordAjax = function (options) {
-
 		$.extend(options, {
 			url: data.baseUrl + "Start/ApplicationAuthenticationApi/CheckPassword",
 			dataType: "json",
@@ -25,9 +24,13 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			success: function (responseData, textStatus, jqXHR) {
 				if (responseData.WillExpireSoon) {
 					gotoChangePassword(authenticationModel.datasource);
-				} else {
-					self.AttemptGotoApplicationBySignIn(options);
+					return;
 				}
+				if (responseData.AlreadyExpired) {
+					gotoMustChangePassword(authenticationModel.datasource);
+					return;
+				}
+				self.AttemptGotoApplicationBySignIn(options);
 			}
 		});
 

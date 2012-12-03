@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
             {
                 result.Successful = false;
                 result.HasMessage = true;
+	            result.PasswordExpired = true;
 				result.Message = UserTexts.Resources.LogOnFailedPasswordExpired;
                 return result;
             }

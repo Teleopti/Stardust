@@ -59,12 +59,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.SkipButton.DisplayVisible(), Is.False);
 		}
 
-		[Then(@"I click skip button")]
-		public void ThenIClickSkipButton()
+		[When(@"I click skip button")]
+		public void WhenIClickSkipButton()
 		{
-			Pages.Pages.CurrentSignInPage.SkipButton.EventualClick();
+			Pages.Pages.CurrentSignInPage.SkipButton.EventualClick(); 
 		}
-
 
 	}
 }

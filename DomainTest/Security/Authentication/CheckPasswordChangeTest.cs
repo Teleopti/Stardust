@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
                 AuthenticationResult result = target.Check(userDetail);
                 Assert.IsFalse(result.Successful);
                 Assert.IsTrue(result.HasMessage);
+				Assert.IsTrue(result.PasswordExpired);
                 Assert.AreEqual(UserTexts.Resources.LogOnFailedPasswordExpired, result.Message);
             }
         }

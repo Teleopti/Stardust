@@ -46,7 +46,7 @@ Scenario: Sign in fails after account is locked
 	And I should see a log on error 'LogOnFailedAccountIsLocked'
 
 @ignore
-Scenario: Sign in passes with password will expire soon
+Scenario: See change password when password will expire soon
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 29    |
@@ -59,10 +59,25 @@ Scenario: Sign in passes with password will expire soon
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	Then I should see change password page with warning 'YourPasswordWillExpireSoon'
-	And I click skip button
-	And I should be signed in
+
 @ignore
-Scenario: Sign in fails with password already expired
+Scenario: Skip change password when password will expire soon
+	Given I have user logon details with
+	| Field                           | Value |
+	| Last Password Change X Days Ago | 29    |
+	And I have user credential with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	When I try to sign in with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	And I click skip button
+	Then I should be signed in
+
+@ignore
+Scenario: See change password when password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
@@ -74,11 +89,10 @@ Scenario: Sign in fails with password already expired
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	Then I should not be signed in
-	And I should see must change password page with warning 'YourPasswordHasAlreadyExpired'
+	Then I should see must change password page with warning 'YourPasswordHasAlreadyExpired'
 	And I should not see skip button
 @ignore
-Scenario: Manually Navigate to other page when sign in with password already expired
+Scenario: Manually navigate to other page when sign in with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |

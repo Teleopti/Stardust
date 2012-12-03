@@ -31,23 +31,21 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public JsonResult CheckPassword(IAuthenticationModel model)
 		{
 			var result = model.AuthenticateUser();
+			var passwordWarningViewModel = new PasswordWarningViewModel();
 			if (!result.Successful)
 			{
-				Response.StatusCode = 400;
-				Response.TrySkipIisCustomErrors = true;
-				ModelState.AddModelError("Error", result.Message);
-				if (result.PasswordExpired)
-					Response.SubStatusCode = 1;
-				return ModelState.ToJson();
+				passwordWarningViewModel.AlreadyExpired = result.PasswordExpired;
+				if (!result.PasswordExpired)
+				{
+					Response.StatusCode = 400;
+					Response.TrySkipIisCustomErrors = true;
+					ModelState.AddModelError("Error", result.Message);
+					return ModelState.ToJson();
+				}
 			}
-			var passwordWarningViewModel = new PasswordWarningViewModel();
-			if (result.Successful && result.HasMessage)
+			else
 			{
-				passwordWarningViewModel.Warning = result.Message;
-				passwordWarningViewModel.WillExpireSoon = true;
-			}else
-			{
-				passwordWarningViewModel.WillExpireSoon = false;
+				passwordWarningViewModel.WillExpireSoon = result.HasMessage;
 			}
 			return Json(passwordWarningViewModel, JsonRequestBehavior.AllowGet);
 		}
@@ -83,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	public class PasswordWarningViewModel
 	{
 		public bool WillExpireSoon { get; set; }
-		public string Warning { get; set; }
+		public bool AlreadyExpired { get; set; }
 	}
 
 	public class ChangePasswordInput
