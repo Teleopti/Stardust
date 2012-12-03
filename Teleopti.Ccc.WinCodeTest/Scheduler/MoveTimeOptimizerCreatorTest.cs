@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IScheduleMatrixOriginalStateContainer _workShiftContainer2;
         private IScheduleMatrixPro _matrix1;
         private IScheduleMatrixPro _matrix2;
+    	private ISingleSkillDictionary _singleSkillDictionary;
 
 
         [SetUp]
@@ -47,13 +48,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IOptimizationPreferences optimizerPreferences = new OptimizationPreferences();
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+			_singleSkillDictionary = new SingleSkillDictionary();
             _target = new MoveTimeOptimizerCreator(_scheduleMatrixOriginalStateContainerList,
                                                    _workShiftOriginalStateContainerList,
                                                    _decisionMaker,
                                                    _scheduleService,
                                                    optimizerPreferences,
                                                    _rollbackService,
-												   _schedulingResultStateHolder);
+												   _schedulingResultStateHolder,
+												   _singleSkillDictionary);
         }
 
         [Test]
