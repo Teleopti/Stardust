@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	{
 		private readonly Func<IUserTimeZone> _userTimeZone;
 		private readonly Func<ILinkProvider> _linkProvider;
-		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly Func<ILoggedOnUser> _loggedOnUser;
 
-		public RequestsViewModelMappingProfile(Func<IUserTimeZone> userTimeZone, Func<ILinkProvider> linkProvider, ILoggedOnUser loggedOnUser)
+		public RequestsViewModelMappingProfile(Func<IUserTimeZone> userTimeZone, Func<ILinkProvider> linkProvider, Func<ILoggedOnUser> loggedOnUser)
 		{
 			_userTimeZone = userTimeZone;
 			_linkProvider = linkProvider;
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				                                            		return start.TimeOfDay == TimeSpan.Zero &&
 				                                            		       end.TimeOfDay == allDayEndDateTime.TimeOfDay;
 				                                            	}))
-				.ForMember(d => d.IsCreatedByUser, o => o.MapFrom(s => s.Request.PersonFrom==_loggedOnUser.CurrentUser()))
+				.ForMember(d => d.IsCreatedByUser, o => o.MapFrom(s => s.Request.PersonFrom==_loggedOnUser.Invoke().CurrentUser()))
 				.ForMember(d => d.DenyReason, o => o.MapFrom(s =>
 				                                             	{
 				                                             		UserTexts.Resources.ResourceManager.IgnoreCase = true;
