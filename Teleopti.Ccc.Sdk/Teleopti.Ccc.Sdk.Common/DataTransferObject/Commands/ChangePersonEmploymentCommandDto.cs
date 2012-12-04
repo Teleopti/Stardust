@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     /// <summary>
     /// This command updates an existing person period or adds a new person period and copy values from previous person period if it exists.
     /// </summary>
+	/// <remarks>This command requires the user to have permissions to open the People module for the given Person.</remarks>
     [DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2011/07/")]
     public class ChangePersonEmploymentCommandDto : CommandDto
     {  

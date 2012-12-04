@@ -15,12 +15,21 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
             ChildSkillMapping = new Collection<ChildSkillMappingDto>();
         }
 
+		/// <summary>
+		/// Gets or sets the source multisite skill.
+		/// </summary>
 		[DataMember]
         public SkillDto MultisiteSkill { get; set; }
 
+		/// <summary>
+		/// Gets or sets the mapping of source child skills and export target skills.
+		/// </summary>
 		[DataMember]
         public ICollection<ChildSkillMappingDto> ChildSkillMapping { get;  set; }
 
+		/// <summary>
+		/// Internal data for version compatibility.
+		/// </summary>
         public ExtensionDataObject ExtensionData { get; set; }
     }
 }

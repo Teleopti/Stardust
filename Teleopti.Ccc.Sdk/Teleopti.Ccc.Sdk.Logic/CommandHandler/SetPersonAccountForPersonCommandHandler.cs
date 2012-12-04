@@ -75,11 +75,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private void setPersonAccount(IAccount account, SetPersonAccountForPersonCommandDto command)
         {
             if (command.Accrued.HasValue)
-                account.Accrued = TimeSpan.FromTicks(command.Accrued.GetValueOrDefault());
+                account.Accrued = TimeSpan.FromTicks(command.Accrued.Value);
             if (command.BalanceIn.HasValue)
-                account.BalanceIn = TimeSpan.FromTicks(command.BalanceIn.GetValueOrDefault());
+                account.BalanceIn = TimeSpan.FromTicks(command.BalanceIn.Value);
             if (command.Extra.HasValue)
-                account.Extra = TimeSpan.FromTicks(command.Extra.GetValueOrDefault());
+                account.Extra = TimeSpan.FromTicks(command.Extra.Value);
             if (command.Accrued.HasValue || command.BalanceIn.HasValue || command.Extra.HasValue)
                     refreshAccount(account);
         }

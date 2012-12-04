@@ -16,6 +16,11 @@
         The query objects to supply as argument to some of the SDK queries.
       </summary>
     </member>
+    <member name="N:Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands">
+      <summary>
+        The commands used to perform changes using the SDK. All commands are issued using the method <see cref="Teleopti.Ccc.Sdk.Common.Contracts.ITeleoptiCccSdkInternal.ExecuteCommand"/>.
+      </summary>
+    </member>
   </members>
 </doc>
 

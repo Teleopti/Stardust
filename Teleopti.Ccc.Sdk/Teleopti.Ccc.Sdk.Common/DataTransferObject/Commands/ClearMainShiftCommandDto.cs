@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     public class ClearMainShiftCommandDto : CommandDto
     {
         /// <summary>
-        /// Gets or sets the person Id.
+        /// Gets or sets the mandatory person Id.
         /// </summary>
         /// <value>The person Id.</value>
         [DataMember]
         public Guid PersonId { get; set; }
 
         /// <summary>
-        /// Gets or sets the target date.
+        /// Gets or sets the mandatory target shift start date.
         /// </summary>
         /// <value>The target date.</value>
         [DataMember]
