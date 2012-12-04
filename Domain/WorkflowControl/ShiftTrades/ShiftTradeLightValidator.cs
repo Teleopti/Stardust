@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
 	public class ShiftTradeLightValidator : IShiftTradeLightValidator
 	{
-		private readonly IEnumerable<ISpecification<ShiftTradeAvailableCheckItem>> _specifications;
+		private readonly IEnumerable<IShiftTradeLightSpecification> _specifications;
 
-		public ShiftTradeLightValidator(IEnumerable<ISpecification<ShiftTradeAvailableCheckItem>> specifications)
+		public ShiftTradeLightValidator(IEnumerable<IShiftTradeLightSpecification> specifications)
 		{
 			_specifications = specifications;
 		}

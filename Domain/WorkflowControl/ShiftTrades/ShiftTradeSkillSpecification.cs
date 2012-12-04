@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
-	public class ShiftTradeSkillSpecification : Specification<ShiftTradeAvailableCheckItem>
+	public class ShiftTradeSkillSpecification : Specification<ShiftTradeAvailableCheckItem>, IShiftTradeLightSpecification
 	{
 		public override bool IsSatisfiedBy(ShiftTradeAvailableCheckItem obj)
 		{
@@ -52,6 +52,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 				listOfSkills.Add(skill);
 			}
 			return listOfSkills;
+		}
+
+		public string DenyReason
+		{
+			get { return "ShiftTradeSkillDenyReason"; }
 		}
 	}
 }

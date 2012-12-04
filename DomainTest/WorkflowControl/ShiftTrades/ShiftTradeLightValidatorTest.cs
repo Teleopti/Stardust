@@ -2,7 +2,6 @@
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 {
@@ -13,8 +12,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		public void ShouldReturnTrueIfAllIsSatisfied()
 		{
 			var checkItem = new ShiftTradeAvailableCheckItem();
-			var spec1 = MockRepository.GenerateMock<ISpecification<ShiftTradeAvailableCheckItem>>();
-			var spec2 = MockRepository.GenerateMock<ISpecification<ShiftTradeAvailableCheckItem>>();
+			var spec1 = MockRepository.GenerateMock<IShiftTradeLightSpecification>();
+			var spec2 = MockRepository.GenerateMock<IShiftTradeLightSpecification>();
 			spec1.Expect(m => m.IsSatisfiedBy(checkItem)).Return(true);
 			spec2.Expect(m => m.IsSatisfiedBy(checkItem)).Return(true);
 			var validator = new ShiftTradeLightValidator(new []{spec1, spec2});
@@ -25,8 +24,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		public void ShouldReturnFalseIfAnyIsNonSatisfied()
 		{
 			var checkItem = new ShiftTradeAvailableCheckItem();
-			var spec1 = MockRepository.GenerateMock<ISpecification<ShiftTradeAvailableCheckItem>>();
-			var spec2 = MockRepository.GenerateMock<ISpecification<ShiftTradeAvailableCheckItem>>();
+			var spec1 = MockRepository.GenerateMock<IShiftTradeLightSpecification>();
+			var spec2 = MockRepository.GenerateMock<IShiftTradeLightSpecification>();
 			spec1.Expect(m => m.IsSatisfiedBy(checkItem)).Return(true);
 			spec2.Expect(m => m.IsSatisfiedBy(checkItem)).Return(false);
 			var validator = new ShiftTradeLightValidator(new[] { spec1, spec2 });

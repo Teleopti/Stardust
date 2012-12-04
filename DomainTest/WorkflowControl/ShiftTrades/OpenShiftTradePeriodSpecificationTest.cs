@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -29,6 +30,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		{
 			var checkItem = new ShiftTradeAvailableCheckItem { DateOnly = DateOnly.Today, PersonFrom = _personFrom, PersonTo = _personTo };
 			Assert.That(_target.IsSatisfiedBy(checkItem), Is.False);
+		}
+
+		[Test]
+		public void ShouldHaveCorrectDenyReasonSet()
+		{
+			_target.DenyReason.Should().Be.EqualTo("OpenShiftTradePeriodDenyReason");
 		}
 
 		[Test]

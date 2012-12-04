@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
-	public class OpenShiftTradePeriodSpecification : Specification<ShiftTradeAvailableCheckItem>
+	public class OpenShiftTradePeriodSpecification : Specification<ShiftTradeAvailableCheckItem>, IShiftTradeLightSpecification
 	{
 		public override bool IsSatisfiedBy(ShiftTradeAvailableCheckItem obj)
 		{
@@ -19,6 +19,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 					  currentDate.AddDays(obj.PersonTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum),
 					  currentDate.AddDays(obj.PersonTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum));
 			return openPeriodFrom.Contains(obj.DateOnly) && openPeriodTo.Contains(obj.DateOnly);
+		}
+
+		public string DenyReason
+		{
+			get { return "OpenShiftTradePeriodDenyReason"; }
 		}
 	}
 }

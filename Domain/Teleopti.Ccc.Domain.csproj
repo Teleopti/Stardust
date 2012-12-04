@@ -1206,6 +1206,7 @@
     <Compile Include="WorkflowControl\PersonAccountBalanceValidator.cs" />
     <Compile Include="WorkflowControl\ProcessAbsenceRequest.cs" />
     <Compile Include="WorkflowControl\SchedulePublishedSpecification.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeLightSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeLightValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeValidator.cs" />

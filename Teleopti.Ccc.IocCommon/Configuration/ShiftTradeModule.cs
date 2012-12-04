@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>();
 
-			builder.RegisterType<ShiftTradeSkillSpecification>().As<ISpecification<ShiftTradeAvailableCheckItem>>();
-			builder.RegisterType<OpenShiftTradePeriodSpecification>().As<ISpecification<ShiftTradeAvailableCheckItem>>();
+			builder.RegisterType<ShiftTradeSkillSpecification>().As<IShiftTradeLightSpecification>();
+			builder.RegisterType<OpenShiftTradePeriodSpecification>().As<IShiftTradeLightSpecification>();
 
 			builder.RegisterType<ShiftTradeTargetTimeSpecification>().As<IShiftTradeSpecification>();
 			builder.RegisterType<ShiftTradeAbsenceSpecification>().As<IShiftTradeSpecification>();

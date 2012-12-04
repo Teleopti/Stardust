@@ -2,8 +2,10 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
@@ -47,6 +49,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			_personSkill1 = new PersonSkill(_skill1, new Percent(1));
 			_personSkill2 = new PersonSkill(_skill2, new Percent(1));
 			_personSkill3 = new PersonSkill(_skill3, new Percent(1));
+		}
+
+		[Test]
+		public void ShouldHaveCorrectDenyReasonSet()
+		{
+			_target.DenyReason.Should().Be.EqualTo("ShiftTradeSkillDenyReason");
 		}
 
 		[Test]
