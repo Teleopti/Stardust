@@ -1,7 +1,7 @@
 ﻿using System;
 using Autofac;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
-using Teleopti.Ccc.Sdk.Logic.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService

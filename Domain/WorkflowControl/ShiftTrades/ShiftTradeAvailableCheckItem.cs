@@ -1,6 +1,6 @@
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.Logic.Restrictions
+namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
     public class ShiftTradeAvailableCheckItem
     {
