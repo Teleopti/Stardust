@@ -14,7 +14,6 @@ Teleopti.Start.Authentication.SignInView = function (args) {
 		viewModel.LoadDataSources();
 
 		_initPlaceHolderText();
-
 	};
 
 

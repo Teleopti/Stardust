@@ -8,7 +8,16 @@ Teleopti.Start.Authentication.ChangePasswordViewModel = function (data) {
 
 	this.ErrorMessage = ko.observable('');
 
+	this.IsMatched = ko.computed(function () {
+		if (!self.NewPassword().length) return false;
+		return self.NewPassword() == self.ConfirmNewPassword();
+	});
+
 	this.ApplyChangePassword = function () {
+		if (!self.IsMatched()) {
+			self.ErrorMessage($('#Password-change-error').data('notmatch'));
+			return;
+		}
 		data.authenticationState.ApplyChangePassword({
 			baseUrl: data.baseUrl,
 			data: {
