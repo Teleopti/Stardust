@@ -618,14 +618,14 @@ namespace Teleopti.Ccc.Domain.Common
             if (_applicationAuthenticationInfo == null)
                 _applicationAuthenticationInfo = new ApplicationAuthenticationInfo();
 
-            if (!checkOldPassword(oldPassword, newPassword, _applicationAuthenticationInfo))
+			IPasswordPolicy policy = new PasswordPolicy(loadPasswordPolicyService);
+			var checkBruteForce= new CheckBruteForce(policy);
+			if (!checkOldPassword(oldPassword, newPassword, _applicationAuthenticationInfo, userDetail, checkBruteForce))
             {
 	            return new ChangePasswordResultInfo {IsAuthenticationSuccessful = false, IsSuccessful = false};
             }
 
 	        var result = new ChangePasswordResultInfo {IsAuthenticationSuccessful = true};
-
-            IPasswordPolicy policy = new PasswordPolicy(loadPasswordPolicyService);
 
             if (policy.CheckPasswordStrength(newPassword))
             {
@@ -659,10 +659,17 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-        private bool checkOldPassword(string oldPassword, string newPassword, IApplicationAuthenticationInfo authenticationInfo)
+		private bool checkOldPassword(string oldPassword, string newPassword, IApplicationAuthenticationInfo authenticationInfo, IUserDetail userDetail, ICheckBruteForce checkBruteForce)
         {
             var encryption = new OneWayEncryption();
-            if (encryption.EncryptString(oldPassword) != authenticationInfo.Password || encryption.EncryptString(newPassword) == authenticationInfo.Password) return false;
+			if(encryption.EncryptString(newPassword) == authenticationInfo.Password) 
+				return false;
+			if (encryption.EncryptString(oldPassword) != authenticationInfo.Password)
+			{
+				if(checkBruteForce!=null)
+					checkBruteForce.Check(userDetail);
+				return false;
+			}
             return true;
         }
 

@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				_currentPrincipalContext.SetCurrentPrincipal(person, dataSource, null);
 				var userDetailRepository = _repositoryFactory.CreateUserDetailRepository(uow);
 				var result = person.ChangePassword(model.OldPassword, model.NewPassword, _loadPasswordPolicyService, userDetailRepository.FindByUser(person));
+				uow.PersistAll();
 				if (!result.IsSuccessful)
 				{
 					Response.StatusCode = 400;
@@ -72,7 +73,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 					ModelState.AddModelError("Error", Resources.InvalidUserNameOrPassword);
 					return ModelState.ToJson();
 				}
-				uow.PersistAll();
 				return Json(result);
 			}
 		}
