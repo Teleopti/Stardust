@@ -93,13 +93,43 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary)).IgnoreArguments()
                 .Return(true);
             Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
-
+            Expect.Call(_groupDayOffOptimizer.WorkingBitArray).Return(bitArrayAfterMove);
+            
             _mocks.ReplayAll();
 
             Assert.That(_target.Execute(),Is.True);
             
             _mocks.VerifyAll();
            
+        }
+
+        [Test]
+        public void ShouldGetWorkingBitArray()
+        {
+            ILockableBitArray bitArrayBeforeMove = new LockableBitArray(2, false, false, null) { PeriodArea = new MinMax<int>(0, 1) };
+            bitArrayBeforeMove.Set(0, true);
+            ILockableBitArray bitArrayAfterMove = new LockableBitArray(2, false, false, null) { PeriodArea = new MinMax<int>(0, 1) };
+            bitArrayAfterMove.Set(1, true);
+            using (_mocks.Record())
+            {
+                Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences))
+                  .Return(_schedulingOptions);
+                Expect.Call(_groupDayOffOptimizerCreator.CreateDayOffOptimizer(
+                    _converter,
+                    _decisionMaker,
+                    _dayOffDecisionMakerExecuter,
+                    _optimizationPreferences.DaysOff))
+                    .Return(_groupDayOffOptimizer);
+                Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary)).IgnoreArguments()
+                    .Return(true);
+                Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
+                Expect.Call(_groupDayOffOptimizer.WorkingBitArray).Return(bitArrayAfterMove);
+            }
+            using (_mocks.Playback())
+            {
+                Assert.That(_target.Execute(), Is.True);
+                Assert.That(_target.WorkingBitArray, Is.EqualTo(bitArrayAfterMove));
+            }
         }
 
         [Test]
@@ -125,7 +155,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_groupDayOffOptimizer.Execute(_matrix, _allMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary)).IgnoreArguments()
                 .Return(true);
             Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
-
+            Expect.Call(_groupDayOffOptimizer.WorkingBitArray).Return(bitArrayAfterMove);
+            
             _mocks.ReplayAll();
              Assert.That(_target.Execute(), Is.True);
             _mocks.VerifyAll();

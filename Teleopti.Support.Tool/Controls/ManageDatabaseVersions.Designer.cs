@@ -53,6 +53,7 @@
             this.smoothLabelCurrentVersionIs = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.smoothLabelCurrentVersion = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.labelManageDatabaseVersions = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
+            this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStripDatabases.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,6 +76,7 @@
             this.listViewDatabases.Location = new System.Drawing.Point(14, 83);
             this.listViewDatabases.Margin = new System.Windows.Forms.Padding(5);
             this.listViewDatabases.Name = "listViewDatabases";
+            this.listViewDatabases.ShowItemToolTips = true;
             this.listViewDatabases.Size = new System.Drawing.Size(651, 199);
             this.listViewDatabases.SmallImageList = this.imageListIconsForListview;
             this.listViewDatabases.TabIndex = 0;
@@ -298,5 +300,6 @@
         private System.ComponentModel.BackgroundWorker backgroundWorkerConnectionAndVersion;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripDatabases;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEdit;
+        private System.Windows.Forms.ToolTip toolTipInfo;
     }
 }

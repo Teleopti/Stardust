@@ -18,7 +18,7 @@ namespace  Teleopti.Support.Tool.DataLayer
     public class DBHelper
     {
         private readonly string _connString;
-
+        private readonly string _serverName;
 
         /// <summary>
         /// Creates a new connection to the server
@@ -28,6 +28,7 @@ namespace  Teleopti.Support.Tool.DataLayer
         /// <param name="password">user password</param>
         public DBHelper(string server, string user, string password)
         {
+            _serverName = server;
             _connString = "Server=" + server + ";Database=Master;User=" + user + ";Password=" + password + ";";
         }
 
@@ -37,18 +38,26 @@ namespace  Teleopti.Support.Tool.DataLayer
         /// <param name="server">Name of the server</param>
         public DBHelper(string server,string database)
         {
+            _serverName = server;
             _connString = "Server=" + server + ";Database=" + database +";Trusted_Connection=True;";
         }
 
         public DBHelper(string connectionString)
         {
             _connString = connectionString;
+            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_connString);
+            _serverName = sqlConnectionStringBuilder.DataSource;
 
+        }
+
+        public string ServerName
+        {
+            get { return _serverName; }
         }
 
         public string GetDatabaseVersion()
         {
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(_connString);
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(ConnectionString);
             return GetDatabaseVersion(builder.InitialCatalog);
         }
 
@@ -70,7 +79,7 @@ namespace  Teleopti.Support.Tool.DataLayer
 
         public string GetAggDatabaseName()
         {
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(_connString);
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(ConnectionString);
             return GetAggDatabaseName(builder.InitialCatalog);
         }
 
@@ -121,7 +130,7 @@ namespace  Teleopti.Support.Tool.DataLayer
             bool connectionIsOk = true;
             try
             {
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(_connString);
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(ConnectionString);
                 builder.ConnectTimeout = 10;
                 SqlConnection sqlConnection = new SqlConnection(builder.ConnectionString);
                 sqlConnection.Open();
@@ -240,7 +249,7 @@ namespace  Teleopti.Support.Tool.DataLayer
         /// <returns>The connection to the database</returns>
         private SqlConnection GrabConnection(string database)
         {
-            SqlConnection conn = new SqlConnection(_connString);
+            SqlConnection conn = new SqlConnection(ConnectionString);
             conn.Open();
             conn.ChangeDatabase(database);
 
@@ -369,5 +378,9 @@ namespace  Teleopti.Support.Tool.DataLayer
             }
         }
 
+        public string ConnectionString
+        {
+            get { return _connString; }
+        }
     }
 }

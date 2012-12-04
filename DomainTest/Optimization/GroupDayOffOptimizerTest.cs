@@ -310,6 +310,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 				bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
                 Assert.IsTrue(result);
+
+                Assert.That(_target.WorkingBitArray, Is.EqualTo(workingBitArray));
             }	
 
         }
@@ -403,8 +405,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         }
 
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyUnsuccessfulExecuteValidationFail()
         {
             var scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
