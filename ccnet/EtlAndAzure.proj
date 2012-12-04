@@ -21,9 +21,9 @@
 		<AggDB>$(DBNamePrefix)_agg</AggDB>
 		<AppSqlLogin>EtlNightlyUser</AppSqlLogin>
 		<AppSqlPwd>EtlNightlyPwd2</AppSqlPwd>
-		<DBManagerTeleoptiCCC7Args>-S$(COMPUTERNAME) -D$(CCC7DB) -OTeleoptiCCC7 -T -E -R -L($AppSqlLogin):$(AppSqlPwd)</DBManagerTeleoptiCCC7Args>
-		<DBManagerTeleoptiCCCAggArgs>-S$(COMPUTERNAME) -D$(AggDB) -OTeleoptiCCCAgg -T -E -R -L($AppSqlLogin):$(AppSqlPwd)</DBManagerTeleoptiCCCAggArgs>
-		<DBManagerTeleoptiAnalyticsArgs>-S$(COMPUTERNAME) -D$(AnalyticsDB) -OTeleoptiAnalytics -T -E -R -L($AppSqlLogin):$(AppSqlPwd)</DBManagerTeleoptiAnalyticsArgs>
+		<DBManagerTeleoptiCCC7Args>-S$(COMPUTERNAME) -D$(CCC7DB) -OTeleoptiCCC7 -T -E -R -L$(AppSqlLogin):$(AppSqlPwd)</DBManagerTeleoptiCCC7Args>
+		<DBManagerTeleoptiCCCAggArgs>-S$(COMPUTERNAME) -D$(AggDB) -OTeleoptiCCCAgg -T -E -R -L$(AppSqlLogin):$(AppSqlPwd)</DBManagerTeleoptiCCCAggArgs>
+		<DBManagerTeleoptiAnalyticsArgs>-S$(COMPUTERNAME) -D$(AnalyticsDB) -OTeleoptiAnalytics -T -E -R -L$(AppSqlLogin):$(AppSqlPwd)</DBManagerTeleoptiAnalyticsArgs>
 		<LoadDimensionSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\LoadDimension.sql"</LoadDimensionSQL>
 		<moveDataSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\MoveData.sql"</moveDataSQL>
 		<BakDir>\\hebe\Installation\Dependencies\ccc7_server\DemoDatabase</BakDir>
@@ -33,7 +33,8 @@
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
-	<Target Name="Run" DependsOnTargets="AzureDeploy;Compile;PrepareDB;RunETL">
+<!--	<Target Name="Run" DependsOnTargets="AzureDeploy;Compile;PrepareDB;RunETL">  -->
+		<Target Name="Run" DependsOnTargets="PrepareDB;RunETL">
 		<Message Text="All target executed!" Importance="high" />
 	</Target>
 	<Target Name="RunETL">
