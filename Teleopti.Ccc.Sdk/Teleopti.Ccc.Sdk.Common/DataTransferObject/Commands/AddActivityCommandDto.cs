@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 {
@@ -10,28 +11,28 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     public class AddActivityCommandDto : CommandDto
     {
         /// <summary>
-        /// Gets or sets the person Id.
+        /// Gets or sets the mandatory person Id.
         /// </summary>
         /// <value>The person Id.</value>
         [DataMember]
         public Guid PersonId { get; set; }
 
         /// <summary>
-        /// Gets or sets the date of schedule.
+        /// Gets or sets the mandatory date of schedule (the day that the target shift starts).
         /// </summary>
         /// <value>The date of schedule.</value>
         [DataMember]
         public DateOnlyDto Date { get; set; }
 
         /// <summary>
-        /// Gets or sets the period of the activity.
+        /// Gets or sets the mandatory period of the activity.
         /// </summary>
         /// <value>The period.</value>
         [DataMember]
         public DateTimePeriodDto Period { get; set; }
 
         /// <summary>
-        /// Gets or sets the activity Id.
+        /// Gets or sets the mandatory activity id. Usually comes from an <see cref="ActivityDto"/> loaded using the <see cref="ITeleoptiSchedulingService.GetActivities"/> method.
         /// </summary>
         /// <value>The activity Id.</value>
         [DataMember]
