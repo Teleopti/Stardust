@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 {
@@ -10,28 +11,28 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     public class AddAbsenceCommandDto : CommandDto
     {
         /// <summary>
-        /// Gets or sets the person Id.
+        /// Gets or sets the mandatory person Id.
         /// </summary>
         /// <value>The person Id.</value>
         [DataMember]
         public Guid PersonId { get; set; }
 
         /// <summary>
-        /// Gets or sets the date of schedule.
+        /// Gets or sets the mandatory date of schedule.
         /// </summary>
         /// <value>The date of schedule.</value>
         [DataMember]
         public DateOnlyDto Date { get; set; }
 
         /// <summary>
-        /// Gets or sets the period of absence layer.
+        /// Gets or sets the mandatory period of the absence layer.
         /// </summary>
         /// <value>The period.</value>
         [DataMember]
         public DateTimePeriodDto Period { get; set; }
 
         /// <summary>
-        /// Gets or sets the absence Id.
+        /// Gets or sets the mandatory absence id. The id usually comes from <see cref="AbsenceDto"/> loaded using the method <see cref="ITeleoptiSchedulingService.GetAbsences"/>.
         /// </summary>
         /// <value>The absence Id.</value>
         [DataMember]

@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         /// <param name="timeZoneId">The time zone.</param>
         /// <returns></returns>
         /// <remarks>All local time and date information on periods inside the SchedulePartDto will reflect the supplied time zone.</remarks>
-        [Obsolete("This method is obsolete, use GetSchedules instead.")]
+        [Obsolete("This method is obsolete, use GetSchedulesByQuery instead.")]
         [OperationContract]
         ICollection<SchedulePartDto> GetSchedulePartsForPersons(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId);
 

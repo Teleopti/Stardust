@@ -10,21 +10,21 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     public class CancelOvertimeCommandDto : CommandDto
     {
         /// <summary>
-        /// Gets or sets the person Id.
+        /// Gets or sets the mandatory person Id.
         /// </summary>
         /// <value>The person Id.</value>
         [DataMember]
         public Guid PersonId { get; set; }
         
         /// <summary>
-        /// Gets or sets the target date which overtime activity belongs to.
+        /// Gets or sets the mandatory target date which the overtime activity belongs to.
         /// </summary>
         /// <value>The target date.</value>
         [DataMember]
         public DateOnlyDto Date { get; set; }
 
         /// <summary>
-        /// Gets or sets the period.
+        /// Gets or sets the mandatory period.
         /// </summary>
         /// <value>The period.</value>
         [DataMember]
