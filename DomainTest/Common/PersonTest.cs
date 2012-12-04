@@ -674,7 +674,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             //Send in same
             Assert.IsFalse(_target.ChangePassword(oldNotEncrypted, oldNotEncrypted, service, details).IsSuccessful);
-			Assert.IsFalse(_target.ChangePassword(oldNotEncrypted, oldNotEncrypted, service, details).IsAuthenticationSuccessful);
+			Assert.IsTrue(_target.ChangePassword(oldNotEncrypted, oldNotEncrypted, service, details).IsAuthenticationSuccessful);
 
          }
 

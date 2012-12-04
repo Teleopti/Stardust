@@ -620,12 +620,9 @@ namespace Teleopti.Ccc.Domain.Common
 
 			IPasswordPolicy policy = new PasswordPolicy(loadPasswordPolicyService);
 			var checkBruteForce= new CheckBruteForce(policy);
-			if (!checkOldPassword(oldPassword, newPassword, _applicationAuthenticationInfo, userDetail, checkBruteForce))
-            {
-	            return new ChangePasswordResultInfo {IsAuthenticationSuccessful = false, IsSuccessful = false};
-            }
-
-	        var result = new ChangePasswordResultInfo {IsAuthenticationSuccessful = true};
+	        var result = checkOldPassword(oldPassword, newPassword, _applicationAuthenticationInfo, userDetail, checkBruteForce);
+			if (result.IsAuthenticationSuccessful) 
+				return result;
 
             if (policy.CheckPasswordStrength(newPassword))
             {
@@ -659,18 +656,29 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-		private bool checkOldPassword(string oldPassword, string newPassword, IApplicationAuthenticationInfo authenticationInfo, IUserDetail userDetail, ICheckBruteForce checkBruteForce)
+		private IChangePasswordResultInfo checkOldPassword(string oldPassword, string newPassword, IApplicationAuthenticationInfo authenticationInfo, IUserDetail userDetail, ICheckBruteForce checkBruteForce)
         {
             var encryption = new OneWayEncryption();
-			if(encryption.EncryptString(newPassword) == authenticationInfo.Password) 
-				return false;
+			if (encryption.EncryptString(newPassword) == authenticationInfo.Password)
+				return new ChangePasswordResultInfo
+					{
+						IsAuthenticationSuccessful = true,
+						IsSuccessful = false
+					};
 			if (encryption.EncryptString(oldPassword) != authenticationInfo.Password)
 			{
 				if(checkBruteForce!=null)
 					checkBruteForce.Check(userDetail);
-				return false;
+				return new ChangePasswordResultInfo
+					{
+						IsAuthenticationSuccessful = false,
+						IsSuccessful = false
+					};
 			}
-            return true;
+			return new ChangePasswordResultInfo
+			{
+				IsAuthenticationSuccessful = true
+			};
         }
 
         public virtual IVirtualSchedulePeriod VirtualSchedulePeriod(DateOnly dateOnly)
