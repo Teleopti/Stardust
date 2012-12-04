@@ -49,23 +49,7 @@ Teleopti.Start.Common.Layout = (function ($) {
 			$('.edit-module input[type="checkbox"], .edit-module input[type="radio"]').customInput();
 		},
 		ActivatePlaceHolderText: function () {
-			if (!Modernizr.input.placeholder) {
-				var active = document.activeElement;
-				$(':text, :password').focus(function() {
-					if ($(this).attr('placeholder') != '' && $(this).val() == $(this).attr('placeholder')) {
-						$(this).val('').removeClass('hasPlaceholder');
-					}
-				}).blur(function() {
-					if ($(this).attr('placeholder') != '' && ($(this).val() == '' || $(this).val() == $(this).attr('placeholder'))) {
-						$(this).val($(this).attr('placeholder')).addClass('hasPlaceholder');
-					}
-				});
-				$(':text, :password').blur();
-				$(active).focus();
-				$('form').submit(function() {
-					$(this).find('.hasPlaceholder').each(function() { $(this).val(''); });
-				});
-			}
+			$(':text, :password').placeholder();
 		}
 	};
 })(jQuery);
