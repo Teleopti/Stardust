@@ -23,5 +23,4 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
         /// </remarks>
         ShiftTradeRequestValidationResult Validate(IShiftTradeRequest shiftTradeRequest);
     }
-
 }
