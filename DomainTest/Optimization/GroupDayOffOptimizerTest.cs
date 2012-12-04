@@ -170,27 +170,28 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-				commonMocks(true, true,_groupPerson);
-				Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
-            	Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(_daysOffToRemove, _groupPerson,
-            	                                                         _groupSchedulingService,
-            	                                                         _schedulePartModifyAndRollbackService,
-            	                                                         _schedulingOptions,
-            	                                                         _groupPersonBuilderForOptimization,
-            	                                                         _allScheduleMatrixes)).IgnoreArguments().Return(
-            	                                                         	true);
-            	Expect.Call(_groupMatrixHelper.ScheduleBackToLegalStateDays(new List<IScheduleDay>(),
-            	                                                            _groupSchedulingService,
-            	                                                            _schedulePartModifyAndRollbackService,
-            	                                                            _schedulingOptions, _optimizationPreferences,
-            	                                                            _groupPersonBuilderForOptimization,
-            	                                                            _allScheduleMatrixes)).Return(true);
+                commonMocks(true, true, _groupPerson);
+                Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
+                Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(_daysOffToRemove, _groupPerson,
+                                                                         _groupSchedulingService,
+                                                                         _schedulePartModifyAndRollbackService,
+                                                                         _schedulingOptions,
+                                                                         _groupPersonBuilderForOptimization,
+                                                                         _allScheduleMatrixes)).IgnoreArguments().Return(
+                                                                            true);
+                Expect.Call(_groupMatrixHelper.ScheduleBackToLegalStateDays(new List<IScheduleDay>(),
+                                                                            _groupSchedulingService,
+                                                                            _schedulePartModifyAndRollbackService,
+                                                                            _schedulingOptions, _optimizationPreferences,
+                                                                            _groupPersonBuilderForOptimization,
+                                                                            _allScheduleMatrixes)).Return(true);
 
             }
             using (_mocks.Playback())
             {
-				bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
+                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
                 Assert.IsTrue(result);
+                Assert.AreEqual(_workingBitArray, _target.WorkingBitArray);
             }	
         }
 
