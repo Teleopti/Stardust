@@ -14,6 +14,8 @@ Teleopti.Start.Authentication.ChangePasswordView = function (data) {
 		});
 		viewInfo.render(data.html);
 		ko.applyBindings(viewModel, viewInfo.element[0]);
+
+		Teleopti.Start.Common.Layout.ActivatePlaceHolderText();
 	};
 };
 
