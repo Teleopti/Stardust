@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
                 _denyReason = denyReason;
             }
 
-            public override bool IsSatisfiedBy(IList<IShiftTradeSwapDetail> obj)
+            public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
             {
                 return _retValue;
             }

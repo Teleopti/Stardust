@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			get { return "ShiftTradePersonalActivityDenyReason"; }
 		}
 
-		public override bool IsSatisfiedBy(IList<IShiftTradeSwapDetail> obj)
+		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
 		{
 			if(obj == null)
 				throw new ArgumentNullException("obj");

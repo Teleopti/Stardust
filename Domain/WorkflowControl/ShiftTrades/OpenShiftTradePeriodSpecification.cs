@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
-
-
     public class OpenShiftTradePeriodSpecification : ShiftTradeSpecification, IOpenShiftTradePeriodSpecification
     {
         public override string DenyReason
@@ -13,8 +10,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
             get { return "OpenShiftTradePeriodDenyReason"; }
         }
 
-
-        public override bool IsSatisfiedBy(IList<IShiftTradeSwapDetail> obj)
+		  public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
         {
             foreach (var shiftTradeDetail in obj)
             {

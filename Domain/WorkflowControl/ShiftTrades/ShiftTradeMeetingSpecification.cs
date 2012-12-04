@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
@@ -13,7 +11,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			get { return "ShiftTradeMeetingSpecificationDenyReason"; }
 		}
 
-		public override bool IsSatisfiedBy(IList<IShiftTradeSwapDetail> obj)
+		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
 		{
 			if(obj == null)
 				throw new ArgumentNullException("obj");

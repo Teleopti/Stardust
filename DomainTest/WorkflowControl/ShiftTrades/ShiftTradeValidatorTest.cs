@@ -129,9 +129,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
         {
             private readonly bool _isSatisfiedBy;
             private readonly string _denyReason;
-           
 
-            public IList<IShiftTradeSwapDetail> HasBeenCalledWith { get; private set; }
+
+				public IEnumerable<IShiftTradeSwapDetail> HasBeenCalledWith { get; private set; }
 
             public ValidatorSpecificationForTest(bool isSatisfiedBy,string denyReason)
             {
@@ -139,8 +139,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
                 _isSatisfiedBy = isSatisfiedBy;
                 _denyReason = denyReason;
             }
-           
-            public override bool IsSatisfiedBy(IList<IShiftTradeSwapDetail> obj)
+
+				public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
             {
                 HasBeenCalledWith = obj;
                 

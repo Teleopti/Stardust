@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Resources;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
-
-
     public class ShiftTradeSkillSpecification : ShiftTradeSpecification, IShiftTradeSkillSpecification
     {
         public override string DenyReason
@@ -16,7 +13,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
             }
         }
       
-        public override bool IsSatisfiedBy(IList<IShiftTradeSwapDetail> obj)
+        public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
         {
             foreach (var shiftTradeDetail in obj)
             {

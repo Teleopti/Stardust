@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
     /// Created by: henrika
     /// Created date: 2010-05-27
     /// </remarks>
-    public interface IShiftTradeSpecification :ISpecification<IList<IShiftTradeSwapDetail>>
+    public interface IShiftTradeSpecification :ISpecification<IEnumerable<IShiftTradeSwapDetail>>
     {
       
         /// <summary>
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
         /// Created by: henrika
         /// Created date: 2010-05-27
         /// </remarks>
-        ShiftTradeRequestValidationResult Validate(IList<IShiftTradeSwapDetail> obj);
+        ShiftTradeRequestValidationResult Validate(IEnumerable<IShiftTradeSwapDetail> obj);
 
         /// <summary>
         /// Gets the DenyReason (the explanation why/if the shifttrade wasnt alowed).
