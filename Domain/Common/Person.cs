@@ -686,17 +686,7 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-		private IChangePasswordResultInfo checkOldPassword(string oldPassword, string newPassword, IApplicationAuthenticationInfo authenticationInfo, IUserDetail userDetail, ICheckBruteForce checkBruteForce)
-        {
-            
-			
-			return new ChangePasswordResultInfo
-			{
-				IsAuthenticationSuccessful = true
-			};
-        }
-
-        public virtual IVirtualSchedulePeriod VirtualSchedulePeriod(DateOnly dateOnly)
+	    public virtual IVirtualSchedulePeriod VirtualSchedulePeriod(DateOnly dateOnly)
         {
             var splitChecker = new VirtualSchedulePeriodSplitChecker(this);
             return new VirtualSchedulePeriod(this, dateOnly, splitChecker);
