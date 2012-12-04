@@ -12,9 +12,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			_specifications = specifications;
 		}
 
-		public bool Validate(ShiftTradeAvailableCheckItem checkItem)
+		public ShiftTradeRequestValidationResult Validate(ShiftTradeAvailableCheckItem checkItem)
 		{
-			return _specifications.All(specification => specification.IsSatisfiedBy(checkItem));
+			foreach (var specification in _specifications.Where(specification => !specification.IsSatisfiedBy(checkItem)))
+			{
+				return new ShiftTradeRequestValidationResult(false, specification.DenyReason);
+			}
+			return new ShiftTradeRequestValidationResult(true);
 		}
 	}
 }

@@ -2,6 +2,6 @@
 {
 	public interface IShiftTradeLightValidator
 	{
-		bool Validate(ShiftTradeAvailableCheckItem checkItem);
+		ShiftTradeRequestValidationResult Validate(ShiftTradeAvailableCheckItem checkItem);
 	}
 }

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			spec1.Expect(m => m.IsSatisfiedBy(checkItem)).Return(true);
 			spec2.Expect(m => m.IsSatisfiedBy(checkItem)).Return(true);
 			var validator = new ShiftTradeLightValidator(new []{spec1, spec2});
-			validator.Validate(checkItem).Should().Be.True();
+			validator.Validate(checkItem).Value.Should().Be.True();
 		}
 
 		[Test]
@@ -29,7 +29,20 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			spec1.Expect(m => m.IsSatisfiedBy(checkItem)).Return(true);
 			spec2.Expect(m => m.IsSatisfiedBy(checkItem)).Return(false);
 			var validator = new ShiftTradeLightValidator(new[] { spec1, spec2 });
-			validator.Validate(checkItem).Should().Be.False();
+			validator.Validate(checkItem).Value.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldSetDenyReason()
+		{
+			const string denyReason = "Deny reason";
+			var checkItem = new ShiftTradeAvailableCheckItem();
+			var spec = MockRepository.GenerateMock<IShiftTradeLightSpecification>();
+			spec.Expect(m => m.IsSatisfiedBy(checkItem)).Return(false);
+			spec.Expect(m => m.DenyReason).Return(denyReason);
+
+			var validator = new ShiftTradeLightValidator(new[] {spec});
+			validator.Validate(checkItem).DenyReason.Should().Be.EqualTo(denyReason);
 		}
 	}
 }
