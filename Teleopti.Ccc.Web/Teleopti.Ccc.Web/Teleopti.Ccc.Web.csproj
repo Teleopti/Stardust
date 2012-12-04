@@ -654,6 +654,7 @@
     <Content Include="Content\crossroads\crossroads.min.js" />
     <Content Include="Content\hasher\hasher.js" />
     <Content Include="Content\hasher\hasher.min.js" />
+    <Content Include="Content\jquery-plugin\jquery.placeholder.min.js" />
     <Content Include="Content\jquery-plugin\jquery.swipeListener.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.min.js" />

@@ -620,22 +620,52 @@ namespace Teleopti.Ccc.Domain.Common
 
 			IPasswordPolicy policy = new PasswordPolicy(loadPasswordPolicyService);
 			var checkBruteForce= new CheckBruteForce(policy);
-	        var result = checkOldPassword(oldPassword, newPassword, _applicationAuthenticationInfo, userDetail, checkBruteForce);
-			if (result.IsAuthenticationSuccessful) 
-				return result;
+			var encryption = new OneWayEncryption();
+			if (CheckNewPassword(newPassword, encryption))
+				return new ChangePasswordResultInfo
+					{
+						IsAuthenticationSuccessful = true,
+						IsSuccessful = false
+					};
+			if (!CheckOldPassword(oldPassword, userDetail, encryption, checkBruteForce))
+				return new ChangePasswordResultInfo
+					{
+						IsAuthenticationSuccessful = false,
+						IsSuccessful = false
+					};
+
+			var changePassword = new ChangePasswordResultInfo
+		        {
+			        IsAuthenticationSuccessful = true
+		        };
 
             if (policy.CheckPasswordStrength(newPassword))
             {
                 _applicationAuthenticationInfo.Password = newPassword;
                 userDetail.RegisterPasswordChange();
-	            result.IsSuccessful = true;
-	            return result;
+				changePassword.IsSuccessful = true;
+				return changePassword;
             }
-	        result.IsSuccessful = false;
-            return result;
+			changePassword.IsSuccessful = false;
+			return changePassword;
         }
 
-        public virtual IWindowsAuthenticationInfo WindowsAuthenticationInfo
+		private bool CheckOldPassword(string oldPassword, IUserDetail userDetail, OneWayEncryption encryption, CheckBruteForce checkBruteForce)
+	    {
+		    if (encryption.EncryptString(oldPassword) == _applicationAuthenticationInfo.Password)
+		    {
+				return true;
+		    }
+			checkBruteForce.Check(userDetail);
+		    return false;
+	    }
+
+	    private bool CheckNewPassword(string newPassword, OneWayEncryption encryption)
+	    {
+		    return encryption.EncryptString(newPassword) == _applicationAuthenticationInfo.Password;
+	    }
+
+	    public virtual IWindowsAuthenticationInfo WindowsAuthenticationInfo
         {
             get
             {
@@ -658,23 +688,8 @@ namespace Teleopti.Ccc.Domain.Common
 
 		private IChangePasswordResultInfo checkOldPassword(string oldPassword, string newPassword, IApplicationAuthenticationInfo authenticationInfo, IUserDetail userDetail, ICheckBruteForce checkBruteForce)
         {
-            var encryption = new OneWayEncryption();
-			if (encryption.EncryptString(newPassword) == authenticationInfo.Password)
-				return new ChangePasswordResultInfo
-					{
-						IsAuthenticationSuccessful = true,
-						IsSuccessful = false
-					};
-			if (encryption.EncryptString(oldPassword) != authenticationInfo.Password)
-			{
-				if(checkBruteForce!=null)
-					checkBruteForce.Check(userDetail);
-				return new ChangePasswordResultInfo
-					{
-						IsAuthenticationSuccessful = false,
-						IsSuccessful = false
-					};
-			}
+            
+			
 			return new ChangePasswordResultInfo
 			{
 				IsAuthenticationSuccessful = true
