@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     public interface IGroupDayOffOptimizer
     {
 		bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, ITeamSteadyStateHolder teamSteadyStateHolder, IScheduleDictionary scheduleDictionary);
+        ILockableBitArray WorkingBitArray { get; }
     }
 
     public class GroupDayOffOptimizer : IGroupDayOffOptimizer
@@ -57,18 +58,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			ILockableBitArray originalArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore,
 			                                                     _daysOffPreferences.ConsiderWeekAfter);
-			ILockableBitArray workingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore,
+            WorkingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore,
 			                                                       _daysOffPreferences.ConsiderWeekAfter);
 
 			IScheduleResultDataExtractor scheduleResultDataExtractor =
 				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix);
-			bool decisionMakerFoundDays = _decisionMaker.Execute(workingBitArray, scheduleResultDataExtractor.Values());
+            bool decisionMakerFoundDays = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
 			if (!decisionMakerFoundDays)
 				return false;
 
-			IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(workingBitArray, originalArray, matrix,
+            IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(WorkingBitArray, originalArray, matrix,
 			                                                                 _daysOffPreferences.ConsiderWeekBefore);
-			IList<DateOnly> daysOffToAdd = _changesTracker.DaysOffAdded(workingBitArray, originalArray, matrix,
+            IList<DateOnly> daysOffToAdd = _changesTracker.DaysOffAdded(WorkingBitArray, originalArray, matrix,
 			                                                            _daysOffPreferences.ConsiderWeekBefore);
 
             if (daysOffToRemove.Count == 0)
@@ -135,7 +136,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return true;
 		}
 
-
+        public ILockableBitArray WorkingBitArray { get; private set; }
     }
 
     public class GroupMatrixContainer
