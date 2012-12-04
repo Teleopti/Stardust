@@ -6,7 +6,6 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	this.UserName = ko.observable('');
 	this.Password = ko.observable('');
 	this.ErrorMessage = ko.observable('');
-	this.UserNameHasFocus = ko.observable(false);
 
 	this.Ajax = new Teleopti.Start.Authentication.JQueryAjaxViewModel();
 
@@ -20,7 +19,6 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 		var selected = self.SelectedDataSource();
 		if (selected)
 			if (selected.Type == "application") {
-				self.UserNameHasFocus(true);
 				return true;
 			}
 		return false;
