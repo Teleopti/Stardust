@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     public class ChangePersonEmploymentCommandDto : CommandDto
     {  
         /// <summary>
-        /// Gets or sets the mandatory person. Only <see cref="PersonDto.Id"/> is required on the given <see cref="PersonDto"/>.
+        /// Gets or sets the mandatory person. Only the id is required on the given <see cref="PersonDto"/>.
         /// </summary>
         /// <value>The PersonDto.</value>
         [DataMember(IsRequired = true)]
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
         public DateOnlyPeriodDto Period { get; set; }
 
         /// <summary>
-		/// Gets or sets the person contract. If this is set, all the properties of the object must be populated. Only <see cref="ContractDto.Id"/>, <see cref="ContractScheduleDto.Id"/> and <see cref="PartTimePercentageDto.Id"/> are required. These can be loaded using the <see cref="ITeleoptiOrganizationService.GetContracts"/>, <see cref="ITeleoptiOrganizationService.GetContractSchedules"/> and <see cref="ITeleoptiOrganizationService.GetPartTimePercentages"/>.
+		/// Gets or sets the person contract. If this is set, all the properties of the object must be populated. Only id for <see cref="ContractDto"/>, <see cref="ContractScheduleDto"/> and <see cref="PartTimePercentageDto"/> is required. These can be loaded using the <see cref="ITeleoptiOrganizationService.GetContracts"/>, <see cref="ITeleoptiOrganizationService.GetContractSchedules"/> and <see cref="ITeleoptiOrganizationService.GetPartTimePercentages"/>.
         /// </summary>
         /// <value>The person contract.</value>
         /// <remarks>If a new period should be created without any existing previous period for the persion, this is mandatory.</remarks>
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
         public PersonContractDto PersonContract { get; set; }
 
         /// <summary>
-        /// The team for the person period. Only the <see cref="TeamDto.Id"/> property is mandatory if this is set.
+        /// The team for the person period. Only the property id of <see cref="TeamDto"/> is mandatory if this is set.
         /// </summary>
 		/// <remarks>If a new period should be created without any existing previous period for the persion, this is mandatory.</remarks>
         [DataMember]
