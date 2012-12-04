@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 {
@@ -17,6 +18,16 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// </summary>
         public DateOnlyDto()
         {}
+		
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DateOnlyDto"/> class.
+        /// </summary>
+        /// <param name="dateOnly">The date only.</param>
+		[Obsolete("This constructor should not be used. Use empty constructor and set date using individual parts or properties available if you need a new instance.")]
+        public DateOnlyDto(DateOnly dateOnly)
+        {
+            DateTime = dateOnly.Date;
+        }
 
         public DateOnlyDto(int year, int month, int day)
         {
