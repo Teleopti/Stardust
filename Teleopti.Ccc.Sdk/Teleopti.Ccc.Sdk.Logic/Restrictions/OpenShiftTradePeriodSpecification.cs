@@ -3,9 +3,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 {
-    public class OpenShiftTradePeriodSpecification : Specification<IShiftTradeAvailableCheckItem>
+    public class OpenShiftTradePeriodSpecification : Specification<ShiftTradeAvailableCheckItem>
     {
-        public override bool IsSatisfiedBy(IShiftTradeAvailableCheckItem obj)
+        public override bool IsSatisfiedBy(ShiftTradeAvailableCheckItem obj)
         {
             if (obj.PersonFrom.WorkflowControlSet == null || obj.PersonTo.WorkflowControlSet == null)
                 return false;

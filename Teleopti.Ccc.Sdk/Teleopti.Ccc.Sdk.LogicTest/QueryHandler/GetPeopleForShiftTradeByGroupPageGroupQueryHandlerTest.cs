@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private IAssembler<IPerson, PersonDto> assembler;
 		private IPersonRepository personRepository;
 		private IUnitOfWorkFactory unitOfWorkFactory;
-		private IList<ISpecification<IShiftTradeAvailableCheckItem>> shiftTradeValidationList;
+		private IList<ISpecification<ShiftTradeAvailableCheckItem>> shiftTradeValidationList;
 
 		[SetUp]
 		public void Setup()
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			assembler = mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
 			personRepository = mocks.StrictMock<IPersonRepository>();
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			shiftTradeValidationList = new List<ISpecification<IShiftTradeAvailableCheckItem>>();
+			shiftTradeValidationList = new List<ISpecification<ShiftTradeAvailableCheckItem>>();
 			target = new GetPeopleForShiftTradeByGroupPageGroupQueryHandler(assembler, groupingReadOnlyRepository, personRepository, unitOfWorkFactory, shiftTradeValidationList);
 		}
 

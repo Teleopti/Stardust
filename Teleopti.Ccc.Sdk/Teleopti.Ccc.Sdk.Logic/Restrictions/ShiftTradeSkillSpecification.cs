@@ -5,9 +5,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 {
-    public class ShiftTradeSkillSpecification : Specification<IShiftTradeAvailableCheckItem>
+    public class ShiftTradeSkillSpecification : Specification<ShiftTradeAvailableCheckItem>
     {
-        public override bool IsSatisfiedBy(IShiftTradeAvailableCheckItem obj)
+        public override bool IsSatisfiedBy(ShiftTradeAvailableCheckItem obj)
         {
             var controlSetFrom = obj.PersonFrom.WorkflowControlSet;
             var controlSetTo = obj.PersonTo.WorkflowControlSet ;

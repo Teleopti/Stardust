@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
         private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    	private readonly IEnumerable<ISpecification<IShiftTradeAvailableCheckItem>> _availableForShiftTradeSpecifications;
+    	private readonly IEnumerable<ISpecification<ShiftTradeAvailableCheckItem>> _availableForShiftTradeSpecifications;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public GetPeopleForShiftTradeByGroupPageGroupQueryHandler(
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
             IGroupingReadOnlyRepository groupingReadOnlyRepository,
             IPersonRepository personRepository,
             IUnitOfWorkFactory unitOfWorkFactory,
-			IEnumerable<ISpecification<IShiftTradeAvailableCheckItem>> availableForShiftTradeSpecifications)
+			IEnumerable<ISpecification<ShiftTradeAvailableCheckItem>> availableForShiftTradeSpecifications)
         {
             _personAssembler = personAssembler;
             _groupingReadOnlyRepository = groupingReadOnlyRepository;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
             }
         }
 
-        private bool isAvailableForShiftTrade(IShiftTradeAvailableCheckItem checkItem)
+        private bool isAvailableForShiftTrade(ShiftTradeAvailableCheckItem checkItem)
         {
             return _availableForShiftTradeSpecifications.All(s => s.IsSatisfiedBy(checkItem));
         }

@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
             builder.RegisterGeneric(typeof(InvokeQuery<>)).AsImplementedInterfaces();
-			builder.RegisterType<ShiftTradeSkillSpecification>().As<ISpecification<IShiftTradeAvailableCheckItem>>();
-			builder.RegisterType<OpenShiftTradePeriodSpecification>().As<ISpecification<IShiftTradeAvailableCheckItem>>();
+			builder.RegisterType<ShiftTradeSkillSpecification>().As<ISpecification<ShiftTradeAvailableCheckItem>>();
+			builder.RegisterType<OpenShiftTradePeriodSpecification>().As<ISpecification<ShiftTradeAvailableCheckItem>>();
 		}
 
         private static bool isHandler(Type infrastructureType)

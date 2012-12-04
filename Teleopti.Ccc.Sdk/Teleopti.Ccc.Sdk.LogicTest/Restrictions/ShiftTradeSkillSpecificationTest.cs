@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
     {
         private ShiftTradeSkillSpecification _target;
         private MockRepository _mocks;
-        private IShiftTradeAvailableCheckItem _checkItem;
+        private ShiftTradeAvailableCheckItem _checkItem;
         private IPerson _personFrom;
         private IPerson _personTo;
         private IWorkflowControlSet _workflowControlSetFrom;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         {
             _mocks = new MockRepository();
             _target = new ShiftTradeSkillSpecification();
-            _checkItem = _mocks.StrictMock<IShiftTradeAvailableCheckItem>();
+            _checkItem = _mocks.StrictMock<ShiftTradeAvailableCheckItem>();
             _personFrom = _mocks.StrictMock<IPerson>();
             _personTo = _mocks.StrictMock<IPerson>();
             _workflowControlSetFrom = _mocks.StrictMock<IWorkflowControlSet>();

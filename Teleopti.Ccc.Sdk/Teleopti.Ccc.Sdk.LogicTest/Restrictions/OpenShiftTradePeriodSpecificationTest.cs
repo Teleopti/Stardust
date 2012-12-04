@@ -1,6 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using Rhino.Mocks;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Sdk.Logic.Restrictions;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -12,17 +10,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
     public class OpenShiftTradePeriodSpecificationTest
     {
         private OpenShiftTradePeriodSpecification _target;
-        private MockRepository _mocks;
-        private IShiftTradeAvailableCheckItem _checkItem;
         private IPerson _personFrom;
         private IPerson _personTo;
 
         [SetUp]
         public void Setup()
         {
-            _mocks = new MockRepository();
             _target = new OpenShiftTradePeriodSpecification();
-            _checkItem = _mocks.StrictMock<IShiftTradeAvailableCheckItem>();
             var wcs = new WorkflowControlSet("wcs") {ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 99)};
             _personFrom = PersonFactory.CreatePerson("test person from");
             _personFrom.WorkflowControlSet = wcs;
@@ -33,31 +27,15 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         [Test]
         public void ShouldBeWrongIfOutsideOfOpenPeriod()
         {
-            using (_mocks.Record())
-            {
-                Expect.Call(_checkItem.PersonFrom).Return(_personFrom).Repeat.Any();
-                Expect.Call(_checkItem.PersonTo).Return(_personTo).Repeat.Any();
-                Expect.Call(_checkItem.DateOnly).Return(DateOnly.Today);
-            }
-            using (_mocks.Playback())
-            {
-                Assert.That(_target.IsSatisfiedBy(_checkItem), Is.False);
-            }
+        	var checkItem = new ShiftTradeAvailableCheckItem {DateOnly = DateOnly.Today, PersonFrom = _personFrom, PersonTo = _personTo};
+                Assert.That(_target.IsSatisfiedBy(checkItem), Is.False);
         }
 
         [Test]
         public void ShouldBeRightIfInsideOfOpenPeriod()
         {
-            using (_mocks.Record())
-            {
-                Expect.Call(_checkItem.PersonFrom).Return(_personFrom).Repeat.Any();
-                Expect.Call(_checkItem.PersonTo).Return(_personTo).Repeat.Any();
-                Expect.Call(_checkItem.DateOnly).Return(DateOnly.Today.AddDays(1)).Repeat.Any();
-            }
-            using (_mocks.Playback())
-            {
-                Assert.That(_target.IsSatisfiedBy(_checkItem), Is.True);
-            }
+			  var checkItem = new ShiftTradeAvailableCheckItem { DateOnly = DateOnly.Today.AddDays(1), PersonFrom = _personFrom, PersonTo = _personTo };
+                Assert.That(_target.IsSatisfiedBy(checkItem), Is.True);
         }
 
         [Test]
@@ -65,15 +43,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         {
             _personFrom.WorkflowControlSet = null;
             _personTo.WorkflowControlSet = new WorkflowControlSet();
-            using (_mocks.Record())
-            {
-                Expect.Call(_checkItem.PersonFrom).Return(_personFrom).Repeat.Any();
-                Expect.Call(_checkItem.PersonTo).Return(_personTo).Repeat.Any();
-            }
-            using (_mocks.Playback())
-            {
-                Assert.That(_target.IsSatisfiedBy(_checkItem), Is.False);
-            }
+				var checkItem = new ShiftTradeAvailableCheckItem { DateOnly = DateOnly.Today, PersonFrom = _personFrom, PersonTo = _personTo };
+            Assert.That(_target.IsSatisfiedBy(checkItem), Is.False);
         }
     }
 }
