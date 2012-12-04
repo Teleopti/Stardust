@@ -100,13 +100,13 @@
 		<div id="changepassword">
 			<div id="PasswordAlreadyExpired" class="alert login-warning" data-bind="visible: MustChangePassword()">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<strong>@Resources.Warning</strong> @Resources.YourPasswordHasAlreadyExpired 
+				<strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordHasAlreadyExpired 
 			</div>
 			<div id="PasswordExpireSoon" class="alert login-warning" data-bind="visible: !MustChangePassword()">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<strong>@Resources.Warning</strong> @Resources.YourPasswordWillExpireSoon
+				<strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordWillExpireSoon
 			</div>
-			<div class="login-form well well-large">
+			<div class="login-form">
 				<input type="password" id="New-password" placeholder="New Password" data-bind="value: NewPassword" class="input-block-level" />
 				<input type="password" id="Confirm-new-password" placeholder="Confirm New Password" data-bind="value: ConfirmNewPassword" class="input-block-level" />
 				<input type="password" id="Old-password" placeholder="Old Password" data-bind="value: OldPassword" class="input-block-level" />

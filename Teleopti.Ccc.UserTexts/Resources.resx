@@ -11215,4 +11215,8 @@ These options are activated:
     <value>Your password will expire soon.</value>
     <comment>Your password will expire soon.</comment>
   </data>
+  <data name="WarningWithExclamatory" xml:space="preserve">
+    <value>Warning!</value>
+    <comment>Warning!</comment>
+  </data>
 </root>
