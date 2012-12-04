@@ -340,5 +340,9 @@ namespace Teleopti.Interfaces.Domain
 		/// 	<c>true</c> if [use average shift lengths]; otherwise, <c>false</c>.
 		/// </value>
 		bool UseAverageShiftLengths { get; set; }
+
+        bool UsePeriodAsBlock { get; set; }
+        bool UseTwoDaysOffAsBlock { get; set; }
+        bool UseCalenderWeekAsBlock { get; set; }
     }
 }
