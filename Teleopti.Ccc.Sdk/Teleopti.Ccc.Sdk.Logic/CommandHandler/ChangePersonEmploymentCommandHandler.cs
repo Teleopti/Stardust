@@ -5,6 +5,8 @@ using System.ServiceModel;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -46,6 +48,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
             	var startDate = new DateOnly(command.Period.StartDate.DateTime);
                 var person = _personRepository.Get(command.Person.Id.GetValueOrDefault());
+				checkIfAuthorized(person);
+
                 var existPersonPeriod =
 					person.PersonPeriodCollection.FirstOrDefault(pp => pp.StartDate == startDate);
 
@@ -157,5 +161,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
             filteredExternalLogOns.ForEach(personPeriod.AddExternalLogOn);
         }
+
+		private static void checkIfAuthorized(IPerson person)
+		{
+			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage,DateOnly.Today,person))
+			{
+				throw new FaultException("You're not allowed to modify person details.");
+			}
+		}
     }
 }

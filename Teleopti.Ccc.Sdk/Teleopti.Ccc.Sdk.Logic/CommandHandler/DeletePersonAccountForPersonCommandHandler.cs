@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public CommandResultDto Handle(DeletePersonAccountForPersonCommandDto command)
-        {
+		{
+			var result = new CommandResultDto {AffectedId = command.PersonId, AffectedItems = 0};
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var foundPerson = _personRepository.Get(command.PersonId);
@@ -39,11 +40,14 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var accounts = _personAbsenceAccountRepository.Find(foundPerson);
                 var personAccount = accounts.Find(foundAbsence, dateFrom);
                 if (personAccount != null)
-                    accounts.Remove(personAccount);
+                {
+                	accounts.Remove(personAccount);
+					result.AffectedItems = 1;
+                }
 
                 unitOfWork.PersistAll();
             }
-            return new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
+            return result;
         }
 
         private static void checkIfAuthorized(IPerson person, DateOnly dateOnly)

@@ -32,6 +32,9 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         {
         }
 
+		/// <summary>
+		/// Internal data for version compatibility.
+		/// </summary>
         public ExtensionDataObject ExtensionData
         {
             get; set;

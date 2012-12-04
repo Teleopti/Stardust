@@ -136,7 +136,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             movedDays = changesTracker.DayOffChanges(workingBitArray, workingBitArrayBeforeBackToLegalState, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
             if (movedDays.Count > 0)
+            {
                 writeToLogDayOffBackToLegalStateRemovedDays(movedDays);
+                foreach (var day in movedDays)
+                {
+                    currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(day, day));
+                }
+            }
 
             if (doReschedule)
                 _schedulePartModifyAndRollbackService.ClearModificationCollection();

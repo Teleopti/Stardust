@@ -4,25 +4,25 @@ using System.Runtime.Serialization;
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 {
 	/// <summary>
-	/// Query to get schedules for a team.
+	/// Query to get a collection of <see cref="SchedulePartDto"/> for a <see cref="TeamDto"/>.
 	/// </summary>
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/04/")]
 	public class GetSchedulesByTeamQueryDto : QueryDto
 	{
 		/// <summary>
-		/// Gets or sets the time zone id.
+		/// Gets or sets the mandatory time zone id.
 		/// </summary>
 		[DataMember]
 		public string TimeZoneId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the start date.
+		/// Gets or sets the mandatory start date.
 		/// </summary>
 		[DataMember]
 		public DateOnlyDto StartDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the end date.
+		/// Gets or sets the mandatory end date.
 		/// </summary>
 		[DataMember]
 		public DateOnlyDto EndDate { get; set; }
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 		public Guid? ScenarioId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the team id.
+		/// Gets or sets the mandatory team id.
 		/// </summary>
 		[DataMember]
 		public Guid TeamId { get; set; }

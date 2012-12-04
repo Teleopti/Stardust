@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			              	};
 
 			_busSender.NotifyServiceBus(message);
+			
 			return new CommandResultDto {AffectedId = Guid.Empty, AffectedItems = 1};
 		}
     }

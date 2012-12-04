@@ -43,6 +43,9 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         [DataMember(IsRequired = false,Order = 1)]
         public DateTime ActualDate { get; set; }
 
+		/// <summary>
+		/// Internal data for version compatibility.
+		/// </summary>
         public ExtensionDataObject ExtensionData { get; set; }
     }
 }

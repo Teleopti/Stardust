@@ -26,16 +26,18 @@ namespace Teleopti.Support.Tool.Controls
         private const String SPACE = " ";
         private readonly MainForm _mainForm;
         private readonly Version _currentVersion;
+        private readonly DBHelper _dbHelper;
         private string _teleoptiCccBaseInstallFolder;
         private string _lastSelectedItemText;
         private IList<NotepadStarter> _notepadStarters;
 
 
-        public ManageDatabaseVersions(MainForm mainForm, Version currentVersion)
+        public ManageDatabaseVersions(MainForm mainForm, Version currentVersion, DBHelper dbHelper)
         {
             _notepadStarters = new List<NotepadStarter>();
             _mainForm = mainForm;
             _currentVersion = currentVersion;
+            _dbHelper = dbHelper;
             InitializeComponent();
         }
 
@@ -149,7 +151,7 @@ namespace Teleopti.Support.Tool.Controls
             return items.ToArray();
         }
 
-        private static ListViewItem CreateDatasourceListViewItem(ListViewGroup listViewGroup, NHibDataSource nHibDataSource)
+        private ListViewItem CreateDatasourceListViewItem(ListViewGroup listViewGroup, NHibDataSource nHibDataSource)
         {
             ListViewItem listViewItem;
             listViewItem = CreateDatabaseListViewItem(nHibDataSource);
@@ -157,18 +159,30 @@ namespace Teleopti.Support.Tool.Controls
             return listViewItem;
         }
 
-        private static ListViewItem CreateDatabaseListViewItem(NHibDataSource nHibDataSource)
+        private ListViewItem CreateDatabaseListViewItem(NHibDataSource nHibDataSource)
         {
             ListViewItem listViewItem = new ListViewItem(nHibDataSource.DatabaseName);
-            listViewItem.Name = nHibDataSource.Id;
             listViewItem.Tag = nHibDataSource;
+            listViewItem.Name = nHibDataSource.Id;
             listViewItem.ImageIndex = ImageIndexDatabaseConnecting;
+            if (!IsOnSameServer(nHibDataSource))
+            {
+                listViewItem.ForeColor = Color.FromKnownColor(KnownColor.InactiveCaptionText);
+                listViewItem.ToolTipText = "Not on " + _dbHelper.ServerName;
+            }
+
             ListViewItem.ListViewSubItem listViewSubItem;
             listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, nHibDataSource.CccDatabaseType);
             listViewItem.SubItems.Add(listViewSubItem);
             listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, nHibDataSource.Version);
+            
             listViewItem.SubItems.Add(listViewSubItem);
             return listViewItem;
+        }
+
+        private bool IsOnSameServer(NHibDataSource nHibDataSource)
+        {
+            return _dbHelper.ServerName == nHibDataSource.ServerName;
         }
 
         private void buttonRefresh_Click(object sender, EventArgs e)
@@ -342,6 +356,7 @@ namespace Teleopti.Support.Tool.Controls
         private ProcessStartInfo CreateProcessStartInfoForDBManager(NHibDataSource nHibDataSource, string databaseTypeString)
         {
             StringBuilder stringBuilder = new StringBuilder();
+            SqlConnectionStringBuilder sqlConnectionStringBuilderAdmin = new SqlConnectionStringBuilder(_dbHelper.ConnectionString);
             SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nHibDataSource.ConnectionString);
             string workingDirectory = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\";
 
@@ -350,12 +365,17 @@ namespace Teleopti.Support.Tool.Controls
             stringBuilder.Append(SPACE);
             stringBuilder.Append(@"-S");
             stringBuilder.Append(sqlConnectionStringBuilder.DataSource + SPACE);
-            stringBuilder.Append(getLogonStringForDBManager(sqlConnectionStringBuilder));
+            stringBuilder.Append(getLogonStringForDBManager(sqlConnectionStringBuilderAdmin));
             stringBuilder.Append(@"-D");
             stringBuilder.Append(nHibDataSource.DatabaseName + SPACE);
             stringBuilder.Append(@"-O");
             stringBuilder.Append(getCccDbType(databaseTypeString) + SPACE);
             stringBuilder.Append(@"-T" + SPACE);
+
+            stringBuilder.Append(getLogonStringForXXX(sqlConnectionStringBuilder));
+            //-R -L%SQLAppLogin%:%SQLAppPwd%
+            // nHibDataSource.ConnectionString
+
             processStartInfo.Arguments = stringBuilder.ToString();
 
             processStartInfo.WorkingDirectory = workingDirectory;
@@ -371,6 +391,25 @@ namespace Teleopti.Support.Tool.Controls
             processStartInfo.CreateNoWindow = true;
 
             return processStartInfo;
+        }
+
+        //-R -L%SQLAppLogin%:%SQLAppPwd%
+        private static string getLogonStringForXXX(SqlConnectionStringBuilder sqlConnectionStringBuilder)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("-R" + SPACE);
+            if (sqlConnectionStringBuilder.IntegratedSecurity)
+            {
+                stringBuilder.Append(@"-W");
+            }
+            else
+            {
+                stringBuilder.Append(@"-L");
+                stringBuilder.Append(sqlConnectionStringBuilder.UserID);
+                stringBuilder.Append(@":");
+                stringBuilder.Append(sqlConnectionStringBuilder.Password);
+            }
+            return stringBuilder.ToString();
         }
 
         private static string getLogonStringForDBManager(SqlConnectionStringBuilder sqlConnectionStringBuilder)
@@ -435,16 +474,60 @@ namespace Teleopti.Support.Tool.Controls
 
         private void listViewDatabases_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            //buttonBack.Enabled = false;
+            buttonUpdate.Enabled = false;
+
+            NHibDataSource clickedNHibDataSource;
+
+            if (e.Item.Selected)
+            {
+                clickedNHibDataSource = (NHibDataSource) e.Item.Tag;
+                if (!IsOnSameServer(clickedNHibDataSource))
+                {
+                    e.Item.Selected = false;
+                }
+            }
+
             foreach (ListViewItem listViewItem in listViewDatabases.SelectedItems)
             {
-                if (listViewItem.ImageIndex == ImageIndexDatabaseVersionNotOk)
+                clickedNHibDataSource = (NHibDataSource) listViewItem.Tag;
+                if (IsOnSameServer(clickedNHibDataSource))
                 {
-                    buttonUpdate.Enabled = true;
-                    break;
+                    string clickedVersion = listViewItem.SubItems[2].Text;
+                    if (!string.IsNullOrEmpty(clickedVersion))
+                    {
+                        Version dbVersion;
+                        if (Version.TryParse(clickedVersion, out dbVersion))
+                        {
+                            if (IsSameOrLowerThanCurrentVersion(dbVersion))
+                            {
+                                buttonUpdate.Enabled = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    listViewItem.Selected = false;
                 }
             }
             _lastSelectedItemText = e.Item.Text;
+        }
+
+        private bool IsSameOrLowerThanCurrentVersion(Version clickedVersion)
+        {
+            if (clickedVersion.Major <= _currentVersion.Major)
+            {
+                if (clickedVersion.Minor <= _currentVersion.Minor)
+                {
+                    if (clickedVersion.Build <= _currentVersion.Build)
+                    {
+                        return true;
+                    }
+                }
+                
+            }
+            return false;
         }
 
         private void listViewDatabases_SelectedIndexChanged(object sender, EventArgs e)

@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 {  
     /// <summary>
-    /// Represents a QueryDto object.
+    /// Base class for a query objects.
     /// </summary>
     [Serializable]
     [DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2011/07/")]
@@ -25,6 +25,9 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
             return KnownTypesHelper.GetKnownTypes<QueryDto>();
         }
 
+		/// <summary>
+		/// Internal data for version compatibility.
+		/// </summary>
     	public ExtensionDataObject ExtensionData
     	{
     		get { return _extensionData; }

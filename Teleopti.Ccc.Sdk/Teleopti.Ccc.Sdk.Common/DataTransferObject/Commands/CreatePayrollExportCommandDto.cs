@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     public class CreatePayrollExportCommandDto : CommandDto
     {
         /// <summary>
-        /// PayrollExportDto
+        /// The mandatory payroll export settings object.
         /// </summary>
         [DataMember]
         public PayrollExportDto PayrollExportDto { get; set; }

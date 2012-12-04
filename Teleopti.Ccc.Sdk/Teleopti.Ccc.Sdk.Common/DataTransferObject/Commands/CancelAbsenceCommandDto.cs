@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     public class CancelAbsenceCommandDto : CommandDto
     {
         /// <summary>
-        /// Gets or sets the person Id.
+        /// Gets or sets the mandatory person Id.
         /// </summary>
         /// <value>The person Id.</value>
         [DataMember]
         public Guid PersonId { get; set; }
 
         /// <summary>
-        /// Gets or sets the period.
+        /// Gets or sets the mandatory period.
         /// </summary>
         /// <value>The period.</value>
         [DataMember]

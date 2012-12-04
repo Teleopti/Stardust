@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     public class ApproveRequestCommandDto : CommandDto
     {
         /// <summary>
-        /// Gets and sets the request id.
+        /// Gets and sets the mandatory request id.
         /// </summary>
         /// <value>PersonRequestId</value>
         [DataMember]

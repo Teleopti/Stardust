@@ -17,6 +17,9 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
             BusinessUnitCollection = new List<BusinessUnitDto>();
         }
 
+		/// <summary>
+		/// Internal data for version compatibility.
+		/// </summary>
         public ExtensionDataObject ExtensionData
         {
             get;
