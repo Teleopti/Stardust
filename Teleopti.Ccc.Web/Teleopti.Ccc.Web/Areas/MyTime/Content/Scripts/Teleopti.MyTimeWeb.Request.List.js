@@ -149,6 +149,11 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		var connector = listItem.find('.request-connector');
 		var deleteButton = listItem.find('.request-delete-button');
 
+		if (!request.IsCreatedByUser) {
+			var buttonContainer = listItem.find('.request-delete-button-container');
+			buttonContainer.hide();
+		}
+
 		if (request.Payload != '') {
 			listItem.find('.request-data-type').text(request.Type + ' \u2013 ' + request.Payload);
 		} else {
