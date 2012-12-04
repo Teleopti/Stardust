@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			(result.Data as ModelStateResult).Errors.Single().Should().Be(message);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnWarningIfPasswordExpired()
 		{
 			var target = new ApplicationAuthenticationApiController(null, null, null, null);
