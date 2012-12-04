@@ -1209,7 +1209,6 @@
     <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IsShiftTradeRequestNotNullSpecification.cs" />
-    <Compile Include="WorkflowControl\ShiftTrades\IsWorkflowControlSetNullSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\OpenShiftTradePeriodSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAbsenceSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMeetingSpecification.cs" />
