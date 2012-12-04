@@ -395,10 +395,10 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Change password successfully when password already expired")]
-        public virtual void ChangePasswordSuccessfullyWhenPasswordAlreadyExpired()
+        [NUnit.Framework.DescriptionAttribute("Change password successfully")]
+        public virtual void ChangePasswordSuccessfully()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Change password successfully when password already expired", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Change password successfully", ((string[])(null)));
 #line 105
 this.ScenarioSetup(scenarioInfo);
 #line 6
@@ -458,10 +458,10 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Change password fails when password already expired")]
-        public virtual void ChangePasswordFailsWhenPasswordAlreadyExpired()
+        [NUnit.Framework.DescriptionAttribute("Change password fails if new password is weak")]
+        public virtual void ChangePasswordFailsIfNewPasswordIsWeak()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Change password fails when password already expired", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Change password fails if new password is weak", ((string[])(null)));
 #line 124
 this.ScenarioSetup(scenarioInfo);
 #line 6
@@ -515,6 +515,69 @@ this.FeatureBackground();
 #line 136
  testRunner.And("I change my password with", ((string)(null)), table27, "And ");
 #line 141
+ testRunner.Then("I should see an error \'PasswordPolicyWarning\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Change password fails if old password is wrong")]
+        public virtual void ChangePasswordFailsIfOldPasswordIsWrong()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Change password fails if old password is wrong", ((string[])(null)));
+#line 143
+this.ScenarioSetup(scenarioInfo);
+#line 6
+this.FeatureBackground();
+#line hidden
+            TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table28.AddRow(new string[] {
+                        "Last Password Change X Days Ago",
+                        "30"});
+#line 144
+ testRunner.Given("I have user logon details with", ((string)(null)), table28, "Given ");
+#line hidden
+            TechTalk.SpecFlow.Table table29 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table29.AddRow(new string[] {
+                        "UserName",
+                        "aa"});
+            table29.AddRow(new string[] {
+                        "Password",
+                        "P@ssword1"});
+#line 147
+ testRunner.And("I have user credential with", ((string)(null)), table29, "And ");
+#line hidden
+            TechTalk.SpecFlow.Table table30 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table30.AddRow(new string[] {
+                        "UserName",
+                        "aa"});
+            table30.AddRow(new string[] {
+                        "Password",
+                        "P@ssword1"});
+#line 151
+ testRunner.When("I try to sign in with", ((string)(null)), table30, "When ");
+#line hidden
+            TechTalk.SpecFlow.Table table31 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Field",
+                        "Value"});
+            table31.AddRow(new string[] {
+                        "Password",
+                        "P@ssword2"});
+            table31.AddRow(new string[] {
+                        "Confirmed Password",
+                        "P@ssword2"});
+            table31.AddRow(new string[] {
+                        "Old Password",
+                        "wrongPassword"});
+#line 155
+ testRunner.And("I change my password with", ((string)(null)), table31, "And ");
+#line 160
  testRunner.Then("I should see an error \'InvalidUserNameOrPassword\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

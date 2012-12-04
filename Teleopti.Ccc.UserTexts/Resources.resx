@@ -11175,10 +11175,6 @@ These options are activated:
   <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
     <value>After checking against keep activity</value>
   </data>
-  <data name="InvalidPassword" xml:space="preserve">
-    <value>Password policy requires a safer password.</value>
-    <comment>Password policy requires a safer password.</comment>
-  </data>
   <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
     <value>Your schedule the {0} has changed!</value>
     <comment>Your schedule the 2/16/2012 has changed!</comment>

@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				{
 					Response.StatusCode = 400;
 					Response.TrySkipIisCustomErrors = true;
-					ModelState.AddModelError("Error", Resources.InvalidUserNameOrPassword);
+					ModelState.AddModelError("Error", result.IsAuthenticationSuccessful ? Resources.PasswordPolicyWarning : Resources.InvalidUserNameOrPassword);
 					return ModelState.ToJson();
 				}
 				return Json(result);

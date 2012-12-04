@@ -102,7 +102,7 @@ Scenario: Manually navigate to other page when sign in with password already exp
 	And I manually navigate to week schedule page
 	Then I should see the sign in page
 
-Scenario: Change password successfully when password already expired
+Scenario: Change password successfully
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
@@ -121,7 +121,7 @@ Scenario: Change password successfully when password already expired
 	| Old Password       | P@ssword1    |
 	Then I should be signed in
 
-Scenario: Change password fails when password already expired
+Scenario: Change password fails if new password is weak
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
@@ -138,4 +138,23 @@ Scenario: Change password fails when password already expired
 	| Password           | aa        |
 	| Confirmed Password | aa        |
 	| Old Password       | P@ssword1 |
+	Then I should see an error 'PasswordPolicyWarning'
+
+Scenario: Change password fails if old password is wrong
+	Given I have user logon details with
+	| Field                           | Value |
+	| Last Password Change X Days Ago | 30    |
+	And I have user credential with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	When I try to sign in with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	And I change my password with
+	| Field              | Value         |
+	| Password           | P@ssword2     |
+	| Confirmed Password | P@ssword2     |
+	| Old Password       | wrongPassword |
 	Then I should see an error 'InvalidUserNameOrPassword'
