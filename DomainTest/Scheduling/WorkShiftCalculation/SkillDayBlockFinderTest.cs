@@ -51,15 +51,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
             using (_mock.Record())
             {
-                Expect.Call(_schedulingResultStateHolder.SkillDays).Return(skillDictionary);
+                Expect.Call(scheduleDateTimePeriod.LoadedPeriod()).Return(dateTimePeriod);
                 Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
                 Expect.Call(scheduleDictionary.Period).Return(scheduleDateTimePeriod);
-                Expect.Call(scheduleDateTimePeriod.LoadedPeriod()).Return(dateTimePeriod);
-                Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).Return(new List<ISkillDay> {skillDay4, skillDay5 }).IgnoreArguments();
+                Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).Return(new List<ISkillDay> { skillDay4, skillDay5 }).IgnoreArguments();
+
             }
+            
             using (_mock.Playback())
             {
-                Assert.AreEqual(_target.ExtractSkillDays(date), new List<ISkillDay>());    
+                var result = _target.ExtractSkillDays(date);
+                Assert.AreEqual(result[0], skillDay4);
+                Assert.AreEqual(result[1], skillDay5);
             }
         }
         
@@ -89,9 +92,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             {
                 dateOnlyTempList.Add(new DateOnly(dateTime.AddDays(i)));
             }
-            var retList = SchedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyTempList).ToList() ;
+            var retList = SchedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyTempList);
            
-            return retList;
+            return retList.ToList() ;
         }
     }
 }
