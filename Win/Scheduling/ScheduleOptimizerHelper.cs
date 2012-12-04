@@ -735,6 +735,18 @@ namespace Teleopti.Ccc.Win.Scheduling
             DaysOffBackToLegalState(matrixContainerList, _backgroundWorker,
                                     displayList[0], false, schedulingOptions, optimizerPreferences.DaysOff);
 
+
+			ISchedulePartModifyAndRollbackService rollbackService =
+			   new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+			foreach (var matrixOriginalStateContainer in matrixContainerList)
+			{
+				var workShiftBackToLegalStateService =
+					OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(matrixOriginalStateContainer.ScheduleMatrix,
+					                                                                rollbackService, _container);
+				rollbackService.ClearModificationCollection();
+				workShiftBackToLegalStateService.Execute(matrixOriginalStateContainer.ScheduleMatrix, schedulingOptions);
+			}
+
             e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.Rescheduling + Resources.ThreeDots);
             resourceOptimizerPersonOptimized(this, e);
 
@@ -743,8 +755,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             // schedule those are the white spots after back to legal state
             OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container);
-            ISchedulePartModifyAndRollbackService rollbackService =
-				new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 
             bool notFullyScheduledMatrixFound = false;
             IList<IScheduleMatrixOriginalStateContainer> validMatrixContainerList = new List<IScheduleMatrixOriginalStateContainer>();
