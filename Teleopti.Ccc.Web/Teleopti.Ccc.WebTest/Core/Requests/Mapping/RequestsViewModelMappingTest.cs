@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Mapper.Initialize(c => c.AddProfile(new RequestsViewModelMappingProfile(
 				() => _userTimeZone, 
 				() => _linkProvider,
-				_loggedOnUser
+				() => _loggedOnUser
 				)));
 		}
 
