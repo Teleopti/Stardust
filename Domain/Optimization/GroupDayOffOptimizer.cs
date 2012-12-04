@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             bool decisionMakerFoundDays = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
 			if (!decisionMakerFoundDays)
 				return false;
-			bool success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray), 100);
+            bool success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(WorkingBitArray), 100);
 			if (!success)
 				return false;
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				//kan flytta hur mycket som helst, behöver få veta vad som ska schemaläggas
 				if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
 					return false;
-				daysOffToRemove = _changesTracker.DaysOffRemoved(workingBitArray, originalArray, matrix,
+                daysOffToRemove = _changesTracker.DaysOffRemoved(WorkingBitArray, originalArray, matrix,
 																			 _daysOffPreferences.ConsiderWeekBefore);
 
 				IList<IScheduleDay> removedDays = _groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, schedulingOptions, allMatrixes, _schedulePartModifyAndRollbackService);

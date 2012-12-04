@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -156,11 +158,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
  				
 				Expect.Call(scheduleDay1.DaySchedulePart())
                     .Return(part).Repeat.AtLeastOnce();
+                Expect.Call(scheduleDay1.Day).Return(dateOnly);
                 Expect.Call(scheduleDay2.DaySchedulePart())
                     .Return(part).Repeat.AtLeastOnce();
                 Expect.Call(_matrix1.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayProList)).Repeat.AtLeastOnce();
-                Expect.Call(_matrix1.EffectivePeriodDays).Return(
-                    new ReadOnlyCollection<IScheduleDayPro>(scheduleDayProList)).Repeat.AtLeastOnce();
                 Expect.Call(part.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.AtLeastOnce();
                 Expect.Call(_matrix1.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>())).Repeat.AtLeastOnce();
                 Expect.Call(_container1.WorkingBitArray).Return(bitArrayAfterMove);
