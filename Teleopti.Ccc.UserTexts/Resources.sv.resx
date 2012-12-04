@@ -10773,4 +10773,16 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="InvalidPassword" xml:space="preserve">
     <value>Lösenordspolicyn kräver ett säkrare lösenord.</value>
   </data>
+  <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
+    <value>Ditt schema {0} har ändrats!</value>
+  </data>
+  <data name="WindowsLogonWithBrackets" xml:space="preserve">
+    <value>(Windows)</value>
+  </data>
+  <data name="LogOnFailedAccountIsLocked" xml:space="preserve">
+    <value>Inloggning misslyckades! Kontot är spärrat.</value>
+  </data>
+  <data name="LogOnFailedPasswordExpired" xml:space="preserve">
+    <value>Inloggning misslyckades! Lösenordet har gått ut och ditt konto är spärrat.</value>
+  </data>
 </root>
