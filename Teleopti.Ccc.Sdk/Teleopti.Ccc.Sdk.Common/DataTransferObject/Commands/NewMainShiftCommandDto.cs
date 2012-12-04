@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 {
@@ -13,27 +14,27 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
         private ICollection<ActivityLayerDto> _layerCollection = new List<ActivityLayerDto>();
 
         /// <summary>
-        /// Gets or sets the person Id.
+        /// Gets or sets the mandatory person Id.
         /// </summary>
         /// <value>The person Id.</value>
         [DataMember]
         public Guid PersonId { get; set; }
 
         /// <summary>
-        /// Gets or sets the target date.
+        /// Gets or sets the mandatory target start date.
         /// </summary>
         /// <value>The target date.</value>
         [DataMember]
         public DateOnlyDto Date { get; set; }
 
         /// <summary>
-        /// Gets or sets the id of the shift category.
+        /// Gets or sets the id of the mandatory shift category. Usually comes from <see cref="ShiftCategoryDto"/> loaded using the <see cref="ITeleoptiSchedulingService.GetShiftCategories"/> method.
         /// </summary>
         [DataMember]
         public Guid ShiftCategoryId { get; set; }
 
         /// <summary>
-        /// Gets the collection of layers with details about this shift.
+        /// Gets the mandatory collection of layers with details about this shift.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode"), DataMember]
         public ICollection<ActivityLayerDto> LayerCollection

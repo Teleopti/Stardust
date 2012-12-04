@@ -9,9 +9,10 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     public class SavePersonAbsenceRequestCommandDto : CommandDto
     {
         /// <summary>
-        /// Gets and sets the person request
+        /// Gets and sets the mandatory person request to save.
         /// </summary>
-        /// <value>PersonRequestDto</value>
+        /// <value>The person request dto.</value>
+        /// <remarks>The person request must be of type absence request to perform this command.</remarks>
         [DataMember]
         public PersonRequestDto PersonRequestDto
         {

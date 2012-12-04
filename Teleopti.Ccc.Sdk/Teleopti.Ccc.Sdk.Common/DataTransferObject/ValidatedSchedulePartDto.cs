@@ -231,12 +231,13 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         [DataMember(IsRequired = false, Order = 5)]
         public bool IsWorkday { get; set; }
 
+		/// <summary>
+		/// Internal data for version compatibility.
+		/// </summary>
         public ExtensionDataObject ExtensionData
         {
             get;
             set;
         }
-
-        
     }
 }

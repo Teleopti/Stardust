@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
+﻿using System.Runtime.Serialization;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 {
 	/// <summary>
-	/// Query for Multiplicator overtime.
+	/// Query for <see cref="MultiplicatorDto"/> for overtime.
 	/// </summary>
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/09/")]
     public class GetMultiplicatorOvertimeQueryDto : QueryDto
@@ -15,12 +11,12 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 		/// <summary>
 		/// Gets or sets include deleted.
 		/// </summary>
+		/// <remarks>Default is false, deleted items will not be included in the result.</remarks>
 		[DataMember]
 		public bool LoadDeleted
 		{
 			get;
 			set;
 		}
-
 	}
 }

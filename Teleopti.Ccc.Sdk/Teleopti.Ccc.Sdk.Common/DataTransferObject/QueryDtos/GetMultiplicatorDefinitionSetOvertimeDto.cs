@@ -3,13 +3,13 @@
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 {
 	/// <summary>
-	/// Query for Multiplicator definition set for shift allowance.
+	/// Query for <see cref="DefinitionSetDto"/> for overtime.
 	/// </summary>
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/09/")]
     public class GetMultiplicatorDefinitionSetOvertimeDto : QueryDto
 	{
 		/// <summary>
-		/// Gets or sets date time period.
+		/// Gets or sets the mandatory period to get the projected definition set for.
 		/// </summary>
 		[DataMember]
 		public DateOnlyPeriodDto Period
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 		}
 
 		/// <summary>
-		/// Gets or sets time zone.
+		/// Gets or sets the mandatory time zone id.
 		/// </summary>
 		[DataMember]
 		public string TimeZoneId
