@@ -46,6 +46,13 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		$("input#oldPassword").keyup(function () {
 			$("#incorrectOldPassword").hide();
 		});
+
+		$("input#password").keyup(function () {
+			$("#invalidNewPassword").hide();
+		});
+		$("input#passwordValidation").keyup(function () {
+			$("#invalidNewPassword").hide();
+		});
 	}
 
 	function _updatePassword(oldPassword, newPassword) {
