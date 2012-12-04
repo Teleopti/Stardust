@@ -154,6 +154,26 @@ namespace Teleopti.Ccc.DBManager
             }
         }
 
+		public string ConnectionStringAppLogOn (string databaseName)
+		{
+			{
+				SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder();
+				sqlConnectionStringBuilder.DataSource = _serverName;
+				sqlConnectionStringBuilder.InitialCatalog = databaseName;
+				sqlConnectionStringBuilder.CurrentLanguage = _currentLanguage;
+				sqlConnectionStringBuilder.ApplicationName = _applicationName;
+				if (_useIntegratedSecurity)
+				{
+					sqlConnectionStringBuilder.IntegratedSecurity = _useIntegratedSecurity;
+				}
+				else
+				{
+					sqlConnectionStringBuilder.UserID = _appUserName;
+					sqlConnectionStringBuilder.Password = _appPwd;
+				}
+				return sqlConnectionStringBuilder.ConnectionString;
+			}
+		}
         /// <summary>
         /// Gets or sets the name of the server.
         /// </summary>

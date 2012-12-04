@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 {
@@ -10,21 +11,21 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     public class AddDayOffCommandDto : CommandDto
     {
         /// <summary>
-        /// Gets or sets the person Id.
+        /// Gets or sets the mandatory person Id.
         /// </summary>
         /// <value>The person Id.</value>
         [DataMember]
         public Guid PersonId { get; set; }
 
         /// <summary>
-        /// Gets or sets the date of schedule.
+        /// Gets or sets the mandatory schedule day this day off should be applied to.
         /// </summary>
         /// <value>The date of schedule.</value>
         [DataMember]
         public DateOnlyDto Date { get; set; }
 
         /// <summary>
-        /// Gets or sets the dayoff Id.
+        /// Gets or sets the mandatory dayoff Id. Usually comes from a <see cref="DayOffInfoDto"/> loaded using the <see cref="ITeleoptiSchedulingService.GetDaysOffs"/> method.
         /// </summary>
         /// <value>The dayoff Id.</value>
         [DataMember]

@@ -80,6 +80,8 @@
 			this.labelRatio = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.chkFreemium = new System.Windows.Forms.CheckBox();
+			this.groupBoxVersion8 = new System.Windows.Forms.GroupBox();
+			this.checkBoxVersion8 = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgents)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgentsGrace)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numExpirationGracePeriodDays)).BeginInit();
@@ -89,6 +91,7 @@
 			this.menuTopmenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownCountRatio)).BeginInit();
 			this.groupBox1.SuspendLayout();
+			this.groupBoxVersion8.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// txtbxCustomerName
@@ -96,14 +99,14 @@
 			this.txtbxCustomerName.Location = new System.Drawing.Point(118, 81);
 			this.txtbxCustomerName.Name = "txtbxCustomerName";
 			this.txtbxCustomerName.Size = new System.Drawing.Size(370, 20);
-			this.txtbxCustomerName.TabIndex = 1;
+			this.txtbxCustomerName.TabIndex = 4;
 			// 
 			// dtpkrExpirationDate
 			// 
 			this.dtpkrExpirationDate.Location = new System.Drawing.Point(118, 162);
 			this.dtpkrExpirationDate.Name = "dtpkrExpirationDate";
 			this.dtpkrExpirationDate.Size = new System.Drawing.Size(147, 20);
-			this.dtpkrExpirationDate.TabIndex = 2;
+			this.dtpkrExpirationDate.TabIndex = 6;
 			// 
 			// numMaxActiveAgents
 			// 
@@ -120,7 +123,7 @@
             0});
 			this.numMaxActiveAgents.Name = "numMaxActiveAgents";
 			this.numMaxActiveAgents.Size = new System.Drawing.Size(51, 20);
-			this.numMaxActiveAgents.TabIndex = 4;
+			this.numMaxActiveAgents.TabIndex = 10;
 			// 
 			// numMaxActiveAgentsGrace
 			// 
@@ -132,7 +135,7 @@
 			this.numMaxActiveAgentsGrace.Location = new System.Drawing.Point(119, 294);
 			this.numMaxActiveAgentsGrace.Name = "numMaxActiveAgentsGrace";
 			this.numMaxActiveAgentsGrace.Size = new System.Drawing.Size(51, 20);
-			this.numMaxActiveAgentsGrace.TabIndex = 5;
+			this.numMaxActiveAgentsGrace.TabIndex = 13;
 			// 
 			// label1
 			// 
@@ -140,7 +143,7 @@
 			this.label1.Location = new System.Drawing.Point(15, 85);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(80, 13);
-			this.label1.TabIndex = 6;
+			this.label1.TabIndex = 22;
 			this.label1.Text = "Customer name";
 			// 
 			// label2
@@ -194,7 +197,7 @@
             0});
 			this.numExpirationGracePeriodDays.Name = "numExpirationGracePeriodDays";
 			this.numExpirationGracePeriodDays.Size = new System.Drawing.Size(51, 20);
-			this.numExpirationGracePeriodDays.TabIndex = 3;
+			this.numExpirationGracePeriodDays.TabIndex = 8;
 			// 
 			// label6
 			// 
@@ -210,7 +213,7 @@
 			this.btnLoadLicenseFile.Location = new System.Drawing.Point(19, 39);
 			this.btnLoadLicenseFile.Name = "btnLoadLicenseFile";
 			this.btnLoadLicenseFile.Size = new System.Drawing.Size(97, 26);
-			this.btnLoadLicenseFile.TabIndex = 0;
+			this.btnLoadLicenseFile.TabIndex = 1;
 			this.btnLoadLicenseFile.Text = "Load license";
 			this.btnLoadLicenseFile.UseVisualStyleBackColor = true;
 			this.btnLoadLicenseFile.Click += new System.EventHandler(this.LoadLicenseFile_Click);
@@ -220,7 +223,7 @@
 			this.btnClearSettings.Location = new System.Drawing.Point(299, 40);
 			this.btnClearSettings.Name = "btnClearSettings";
 			this.btnClearSettings.Size = new System.Drawing.Size(87, 25);
-			this.btnClearSettings.TabIndex = 15;
+			this.btnClearSettings.TabIndex = 3;
 			this.btnClearSettings.Text = "Clear";
 			this.btnClearSettings.UseVisualStyleBackColor = true;
 			this.btnClearSettings.Click += new System.EventHandler(this.ClearSettings_Click);
@@ -230,7 +233,7 @@
 			this.btnDemoSettings.Location = new System.Drawing.Point(159, 39);
 			this.btnDemoSettings.Name = "btnDemoSettings";
 			this.btnDemoSettings.Size = new System.Drawing.Size(93, 26);
-			this.btnDemoSettings.TabIndex = 16;
+			this.btnDemoSettings.TabIndex = 2;
 			this.btnDemoSettings.Text = "Demo settings";
 			this.btnDemoSettings.UseVisualStyleBackColor = true;
 			this.btnDemoSettings.Click += new System.EventHandler(this.DemoSettings_Click);
@@ -240,7 +243,7 @@
 			this.btnCreateAndSave.Location = new System.Drawing.Point(453, 627);
 			this.btnCreateAndSave.Name = "btnCreateAndSave";
 			this.btnCreateAndSave.Size = new System.Drawing.Size(99, 27);
-			this.btnCreateAndSave.TabIndex = 17;
+			this.btnCreateAndSave.TabIndex = 18;
 			this.btnCreateAndSave.Text = "Create and save";
 			this.btnCreateAndSave.UseVisualStyleBackColor = true;
 			this.btnCreateAndSave.Click += new System.EventHandler(this.CreateAndSave_Click);
@@ -248,7 +251,7 @@
 			// chkBase
 			// 
 			this.chkBase.AutoSize = true;
-			this.chkBase.Location = new System.Drawing.Point(6, 29);
+			this.chkBase.Location = new System.Drawing.Point(6, 19);
 			this.chkBase.Name = "chkBase";
 			this.chkBase.Size = new System.Drawing.Size(50, 17);
 			this.chkBase.TabIndex = 6;
@@ -258,7 +261,7 @@
 			// chkAgentSelfService
 			// 
 			this.chkAgentSelfService.AutoSize = true;
-			this.chkAgentSelfService.Location = new System.Drawing.Point(6, 52);
+			this.chkAgentSelfService.Location = new System.Drawing.Point(6, 42);
 			this.chkAgentSelfService.Name = "chkAgentSelfService";
 			this.chkAgentSelfService.Size = new System.Drawing.Size(132, 17);
 			this.chkAgentSelfService.TabIndex = 7;
@@ -269,7 +272,7 @@
 			// chkShiftTrades
 			// 
 			this.chkShiftTrades.AutoSize = true;
-			this.chkShiftTrades.Location = new System.Drawing.Point(33, 75);
+			this.chkShiftTrades.Location = new System.Drawing.Point(33, 65);
 			this.chkShiftTrades.Name = "chkShiftTrades";
 			this.chkShiftTrades.Size = new System.Drawing.Size(83, 17);
 			this.chkShiftTrades.TabIndex = 8;
@@ -279,7 +282,7 @@
 			// chkAgentScheduleMessenger
 			// 
 			this.chkAgentScheduleMessenger.AutoSize = true;
-			this.chkAgentScheduleMessenger.Location = new System.Drawing.Point(33, 98);
+			this.chkAgentScheduleMessenger.Location = new System.Drawing.Point(33, 88);
 			this.chkAgentScheduleMessenger.Name = "chkAgentScheduleMessenger";
 			this.chkAgentScheduleMessenger.Size = new System.Drawing.Size(157, 17);
 			this.chkAgentScheduleMessenger.TabIndex = 9;
@@ -289,7 +292,7 @@
 			// chkHolidayPlanner
 			// 
 			this.chkHolidayPlanner.AutoSize = true;
-			this.chkHolidayPlanner.Location = new System.Drawing.Point(33, 121);
+			this.chkHolidayPlanner.Location = new System.Drawing.Point(33, 111);
 			this.chkHolidayPlanner.Name = "chkHolidayPlanner";
 			this.chkHolidayPlanner.Size = new System.Drawing.Size(100, 17);
 			this.chkHolidayPlanner.TabIndex = 10;
@@ -299,7 +302,7 @@
 			// chkRealtimeAdherence
 			// 
 			this.chkRealtimeAdherence.AutoSize = true;
-			this.chkRealtimeAdherence.Location = new System.Drawing.Point(6, 144);
+			this.chkRealtimeAdherence.Location = new System.Drawing.Point(6, 134);
 			this.chkRealtimeAdherence.Name = "chkRealtimeAdherence";
 			this.chkRealtimeAdherence.Size = new System.Drawing.Size(122, 17);
 			this.chkRealtimeAdherence.TabIndex = 11;
@@ -309,7 +312,7 @@
 			// chkPerformanceManager
 			// 
 			this.chkPerformanceManager.AutoSize = true;
-			this.chkPerformanceManager.Location = new System.Drawing.Point(6, 168);
+			this.chkPerformanceManager.Location = new System.Drawing.Point(6, 158);
 			this.chkPerformanceManager.Name = "chkPerformanceManager";
 			this.chkPerformanceManager.Size = new System.Drawing.Size(131, 17);
 			this.chkPerformanceManager.TabIndex = 12;
@@ -319,7 +322,7 @@
 			// chkPayrollIntegration
 			// 
 			this.chkPayrollIntegration.AutoSize = true;
-			this.chkPayrollIntegration.Location = new System.Drawing.Point(6, 191);
+			this.chkPayrollIntegration.Location = new System.Drawing.Point(6, 181);
 			this.chkPayrollIntegration.Name = "chkPayrollIntegration";
 			this.chkPayrollIntegration.Size = new System.Drawing.Size(110, 17);
 			this.chkPayrollIntegration.TabIndex = 13;
@@ -341,15 +344,15 @@
 			this.grpBoxModules.Controls.Add(this.chkBase);
 			this.grpBoxModules.Location = new System.Drawing.Point(70, 338);
 			this.grpBoxModules.Name = "grpBoxModules";
-			this.grpBoxModules.Size = new System.Drawing.Size(211, 283);
-			this.grpBoxModules.TabIndex = 26;
+			this.grpBoxModules.Size = new System.Drawing.Size(211, 271);
+			this.grpBoxModules.TabIndex = 14;
 			this.grpBoxModules.TabStop = false;
 			this.grpBoxModules.Text = "TeleoptiCCC options";
 			// 
 			// checkBoxSMS
 			// 
 			this.checkBoxSMS.AutoSize = true;
-			this.checkBoxSMS.Location = new System.Drawing.Point(6, 258);
+			this.checkBoxSMS.Location = new System.Drawing.Point(6, 248);
 			this.checkBoxSMS.Name = "checkBoxSMS";
 			this.checkBoxSMS.Size = new System.Drawing.Size(72, 17);
 			this.checkBoxSMS.TabIndex = 17;
@@ -360,7 +363,7 @@
 			// chkAnywhere
 			// 
 			this.chkAnywhere.AutoSize = true;
-			this.chkAnywhere.Location = new System.Drawing.Point(6, 235);
+			this.chkAnywhere.Location = new System.Drawing.Point(6, 225);
 			this.chkAnywhere.Name = "chkAnywhere";
 			this.chkAnywhere.Size = new System.Drawing.Size(142, 17);
 			this.chkAnywhere.TabIndex = 16;
@@ -371,7 +374,7 @@
 			// chkMyTimeWeb
 			// 
 			this.chkMyTimeWeb.AutoSize = true;
-			this.chkMyTimeWeb.Location = new System.Drawing.Point(6, 214);
+			this.chkMyTimeWeb.Location = new System.Drawing.Point(6, 204);
 			this.chkMyTimeWeb.Name = "chkMyTimeWeb";
 			this.chkMyTimeWeb.Size = new System.Drawing.Size(89, 17);
 			this.chkMyTimeWeb.TabIndex = 15;
@@ -381,10 +384,10 @@
 			// chkDeveloper
 			// 
 			this.chkDeveloper.AutoSize = true;
-			this.chkDeveloper.Location = new System.Drawing.Point(76, 627);
+			this.chkDeveloper.Location = new System.Drawing.Point(76, 615);
 			this.chkDeveloper.Name = "chkDeveloper";
 			this.chkDeveloper.Size = new System.Drawing.Size(75, 17);
-			this.chkDeveloper.TabIndex = 14;
+			this.chkDeveloper.TabIndex = 15;
 			this.chkDeveloper.Text = "Developer";
 			this.chkDeveloper.UseVisualStyleBackColor = true;
 			// 
@@ -393,7 +396,7 @@
 			this.btnAdd2Yrs.Location = new System.Drawing.Point(179, 22);
 			this.btnAdd2Yrs.Name = "btnAdd2Yrs";
 			this.btnAdd2Yrs.Size = new System.Drawing.Size(121, 23);
-			this.btnAdd2Yrs.TabIndex = 28;
+			this.btnAdd2Yrs.TabIndex = 1;
 			this.btnAdd2Yrs.Text = "Extend 2 years";
 			this.btnAdd2Yrs.UseVisualStyleBackColor = true;
 			this.btnAdd2Yrs.Click += new System.EventHandler(this.btnAdd2Yrs_Click);
@@ -403,7 +406,7 @@
 			this.btnAdd3Mon.Location = new System.Drawing.Point(28, 22);
 			this.btnAdd3Mon.Name = "btnAdd3Mon";
 			this.btnAdd3Mon.Size = new System.Drawing.Size(132, 23);
-			this.btnAdd3Mon.TabIndex = 29;
+			this.btnAdd3Mon.TabIndex = 1;
 			this.btnAdd3Mon.Text = "Extend 3 months";
 			this.btnAdd3Mon.UseVisualStyleBackColor = true;
 			this.btnAdd3Mon.Click += new System.EventHandler(this.btnAdd3Mon_Click);
@@ -415,7 +418,7 @@
 			this.grpbxPresets.Location = new System.Drawing.Point(271, 141);
 			this.grpbxPresets.Name = "grpbxPresets";
 			this.grpbxPresets.Size = new System.Drawing.Size(336, 66);
-			this.grpbxPresets.TabIndex = 30;
+			this.grpbxPresets.TabIndex = 7;
 			this.grpbxPresets.TabStop = false;
 			this.grpbxPresets.Text = "Preset expiration dates";
 			// 
@@ -438,7 +441,7 @@
             0});
 			this.ExpirationGracePeriodHours.Name = "ExpirationGracePeriodHours";
 			this.ExpirationGracePeriodHours.Size = new System.Drawing.Size(42, 20);
-			this.ExpirationGracePeriodHours.TabIndex = 32;
+			this.ExpirationGracePeriodHours.TabIndex = 9;
 			// 
 			// label8
 			// 
@@ -465,7 +468,7 @@
 			this.comboBoxAgreement.Location = new System.Drawing.Point(119, 108);
 			this.comboBoxAgreement.Name = "comboBoxAgreement";
 			this.comboBoxAgreement.Size = new System.Drawing.Size(369, 21);
-			this.comboBoxAgreement.TabIndex = 35;
+			this.comboBoxAgreement.TabIndex = 5;
 			// 
 			// menuTopmenu
 			// 
@@ -556,7 +559,7 @@
 			this.comboBoxAgentsOrSeats.Location = new System.Drawing.Point(291, 260);
 			this.comboBoxAgentsOrSeats.Name = "comboBoxAgentsOrSeats";
 			this.comboBoxAgentsOrSeats.Size = new System.Drawing.Size(121, 21);
-			this.comboBoxAgentsOrSeats.TabIndex = 37;
+			this.comboBoxAgentsOrSeats.TabIndex = 11;
 			this.comboBoxAgentsOrSeats.SelectedIndexChanged += new System.EventHandler(this.comboBoxAgentsOrSeats_SelectedIndexChanged);
 			// 
 			// label10
@@ -589,7 +592,7 @@
             0});
 			this.numericUpDownCountRatio.Name = "numericUpDownCountRatio";
 			this.numericUpDownCountRatio.Size = new System.Drawing.Size(51, 20);
-			this.numericUpDownCountRatio.TabIndex = 39;
+			this.numericUpDownCountRatio.TabIndex = 12;
 			this.numericUpDownCountRatio.Value = new decimal(new int[] {
             15,
             0,
@@ -610,15 +613,15 @@
 			this.groupBox1.Controls.Add(this.chkFreemium);
 			this.groupBox1.Location = new System.Drawing.Point(352, 338);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(200, 283);
-			this.groupBox1.TabIndex = 41;
+			this.groupBox1.Size = new System.Drawing.Size(200, 128);
+			this.groupBox1.TabIndex = 16;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Freemium";
 			// 
 			// chkFreemium
 			// 
 			this.chkFreemium.AutoSize = true;
-			this.chkFreemium.Location = new System.Drawing.Point(10, 29);
+			this.chkFreemium.Location = new System.Drawing.Point(8, 19);
 			this.chkFreemium.Name = "chkFreemium";
 			this.chkFreemium.Size = new System.Drawing.Size(71, 17);
 			this.chkFreemium.TabIndex = 7;
@@ -626,11 +629,32 @@
 			this.chkFreemium.UseVisualStyleBackColor = true;
 			this.chkFreemium.CheckedChanged += new System.EventHandler(this.chkFreemium_CheckedChanged);
 			// 
+			// groupBoxVersion8
+			// 
+			this.groupBoxVersion8.Controls.Add(this.checkBoxVersion8);
+			this.groupBoxVersion8.Location = new System.Drawing.Point(352, 481);
+			this.groupBoxVersion8.Name = "groupBoxVersion8";
+			this.groupBoxVersion8.Size = new System.Drawing.Size(200, 128);
+			this.groupBoxVersion8.TabIndex = 17;
+			this.groupBoxVersion8.TabStop = false;
+			this.groupBoxVersion8.Text = "Version 8";
+			// 
+			// checkBoxVersion8
+			// 
+			this.checkBoxVersion8.AutoSize = true;
+			this.checkBoxVersion8.Location = new System.Drawing.Point(8, 19);
+			this.checkBoxVersion8.Name = "checkBoxVersion8";
+			this.checkBoxVersion8.Size = new System.Drawing.Size(70, 17);
+			this.checkBoxVersion8.TabIndex = 7;
+			this.checkBoxVersion8.Text = "Version 8";
+			this.checkBoxVersion8.UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(639, 665);
+			this.Controls.Add(this.groupBoxVersion8);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.labelRatio);
 			this.Controls.Add(this.numericUpDownCountRatio);
@@ -675,6 +699,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownCountRatio)).EndInit();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.groupBoxVersion8.ResumeLayout(false);
+			this.groupBoxVersion8.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -734,6 +760,8 @@
 		private System.Windows.Forms.CheckBox chkFreemium;
 		private System.Windows.Forms.CheckBox chkAnywhere;
 		private System.Windows.Forms.CheckBox checkBoxSMS;
+		private System.Windows.Forms.GroupBox groupBoxVersion8;
+		private System.Windows.Forms.CheckBox checkBoxVersion8;
 	}
 }
 

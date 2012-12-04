@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
         private readonly IPasswordPolicy _passwordPolicy;
 
 	    public CheckPasswordChange(IPasswordPolicy passwordPolicy)
-        {
-	        _passwordPolicy = passwordPolicy;
-        }
+	    {
+		    _passwordPolicy = passwordPolicy;
+	    }
 
 	    public AuthenticationResult Check(IUserDetail userDetail)
         {
@@ -19,27 +19,28 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
         	var passwordValidForDayCount = _passwordPolicy.PasswordValidForDayCount;
         	var maxDays = DateTime.MaxValue.Subtract(lastPasswordChange);
             var result = new AuthenticationResult{Successful = true, Person = userDetail.Person};
+		    var utcNow = DateTime.UtcNow;
 
-			DateTime expirationDate = DateTime.MaxValue;
+			var expirationDate = DateTime.MaxValue;
 			if (passwordValidForDayCount<maxDays.TotalDays)
 			{
 				expirationDate = lastPasswordChange.AddDays(passwordValidForDayCount);
 			}
 
-			if (expirationDate <= DateTime.UtcNow)
+			if (expirationDate <= utcNow)
             {
                 userDetail.Lock();
                 result.Successful = false;
                 result.HasMessage = true;
-                result.Message = UserTexts.Resources.LogOnFailedInvalidUserNameOrPassword;
+				result.Message = UserTexts.Resources.LogOnFailedPasswordExpired;
                 return result;
             }
-            DateTime warningDate = expirationDate.AddDays(-_passwordPolicy.PasswordExpireWarningDayCount);
-			if (warningDate <= DateTime.UtcNow)
+            var warningDate = expirationDate.AddDays(-_passwordPolicy.PasswordExpireWarningDayCount);
+			if (warningDate <= utcNow)
             {
                 result.HasMessage = true;
                 result.Message = string.Format(CultureInfo.CurrentUICulture, UserTexts.Resources.LogOnWarningPasswordWillSoonExpire,
-											   (int)expirationDate.Subtract(DateTime.UtcNow).TotalDays);
+											   (int)expirationDate.Subtract(utcNow).TotalDays);
             }
             return result;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 
@@ -14,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
         private IUserDetail userDetail;
         private IPasswordPolicy passwordPolicy;
         private IPerson person;
-	    private IUtcNow now;
 
 	    [SetUp]
         public void Setup()
@@ -23,9 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             passwordPolicy = mocks.StrictMock<IPasswordPolicy>();
             userDetail = mocks.StrictMock<IUserDetail>();
             person = mocks.StrictMock<IPerson>();
-	        now = MockRepository.GenerateMock<IUtcNow>();
-		    now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow);
-            target = new CheckPasswordChange(passwordPolicy);
+		    target = new CheckPasswordChange(passwordPolicy);
         }
 
         [Test]
@@ -66,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
                 AuthenticationResult result = target.Check(userDetail);
                 Assert.IsFalse(result.Successful);
                 Assert.IsTrue(result.HasMessage);
-                Assert.AreEqual(UserTexts.Resources.LogOnFailedInvalidUserNameOrPassword, result.Message);
+                Assert.AreEqual(UserTexts.Resources.LogOnFailedPasswordExpired, result.Message);
             }
         }
 

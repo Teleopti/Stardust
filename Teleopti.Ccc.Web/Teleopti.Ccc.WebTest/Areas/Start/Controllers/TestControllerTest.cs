@@ -20,10 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var modifyNow = MockRepository.GenerateStrictMock<IModifyNow>();
 			modifyNow.Expect(mock => mock.SetNow(dateSet));
 
-			var modifyUtcNow = MockRepository.GenerateStrictMock<IModifyUtcNow>();
-			modifyUtcNow.Expect(mock => mock.SetUtcNow(dateSet));
-
-			using (var target = new TestController(modifyNow, modifyUtcNow, null, null, null, null))
+			using (var target = new TestController(modifyNow, null, null, null, null))
 			{
 				target.SetCurrentTime(dateSet);
 			}
@@ -33,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void PlainStupid()
 		{
 			var sessionSpecificDataProvider = MockRepository.GenerateMock<ISessionSpecificDataProvider>();
-			using (var target = new TestController(new Now(null), new UtcNow(), sessionSpecificDataProvider, null, null, null))
+			using (var target = new TestController(new Now(null), sessionSpecificDataProvider, null, null, null))
 			{
 				target.BeforeScenario();
 				target.CorruptMyCookie();
@@ -54,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			businessUnit.SetId(Guid.NewGuid());
 			var businessUnitProvider = MockRepository.GenerateMock<IBusinessUnitProvider>();
 			businessUnitProvider.Stub(x => x.RetrieveBusinessUnitsForPerson(null, null)).IgnoreArguments().Return(new[] { businessUnit });
-			using (var target = new TestController(null, null, null, authenticator, logon, businessUnitProvider))
+			using (var target = new TestController(null, null, authenticator, logon, businessUnitProvider))
 			{
 				target.Logon(null, businessUnit.Name, null, null);
 			}

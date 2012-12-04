@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			return MakeUser(userName.LogOnName, userName.LastName, TestData.CommonPassword);
 		}
 
-		private string MakeUser(string logonName, string lastName, string password)
+		public string MakeUser(string logonName, string lastName, string password)
 		{
 			Person = PersonFactory.CreatePersonWithBasicPermissionInfo(logonName, password);
 			Person.Name = new Name("Agent", lastName);

@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<CheckUserDetail>().As<ICheckUserDetail>().SingleInstance();
 			builder.RegisterType<CheckBruteForce>().As<ICheckBruteForce>().SingleInstance();
 			builder.RegisterType<CheckPasswordChange>().As<ICheckPasswordChange>().SingleInstance();
-			builder.RegisterType<UtcNow>().As<IUtcNow>().SingleInstance();
 			builder.RegisterType<SystemUserSpecification>().As<ISystemUserSpecification>().SingleInstance();
 			builder.RegisterType<SystemUserPasswordSpecification>().As<ISystemUserPasswordSpecification>().SingleInstance();
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();

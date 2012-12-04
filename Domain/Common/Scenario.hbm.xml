@@ -46,10 +46,6 @@
               type="boolean"
               not-null="true" />
     
-    <property name="AuditTrail"
-              type="boolean"
-              not-null="true" />
-    
     <property name="Restricted"
               type="boolean"
               not-null="true"/>

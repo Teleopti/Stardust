@@ -336,8 +336,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanFindAgentDayOffsWithCorrectScenario()
         {
-            IScenario okScenario = ScenarioFactory.CreateScenarioAggregate("Low",false,false);
-            IScenario noScenario = ScenarioFactory.CreateScenarioAggregate("High", false, false);
+            IScenario okScenario = ScenarioFactory.CreateScenarioAggregate("Low",false);
+            IScenario noScenario = ScenarioFactory.CreateScenarioAggregate("High", false);
             IPerson dummyAgent = PersonFactory.CreatePerson("245");
             PersistAndRemoveFromUnitOfWork(dummyAgent);
             PersistAndRemoveFromUnitOfWork(okScenario);

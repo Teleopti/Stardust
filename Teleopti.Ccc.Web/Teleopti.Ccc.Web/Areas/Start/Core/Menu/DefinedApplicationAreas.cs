@@ -24,6 +24,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 		                                                                            					.MyTimeWeb,
 		                                                                            				Area = "MyTime",
 		                                                                            				Name = "MyTime"
+		                                                                            			},
+		                                                                            		new ApplicationArea
+		                                                                            			{
+		                                                                            				ApplicationFunctionPath =
+		                                                                            					DefinedRaptorApplicationFunctionPaths
+		                                                                            					.AdminWeb,
+		                                                                            				Area = "Team",
+		                                                                            				Name = "Team"
 		                                                                            			}
 		                                                                            	};
 

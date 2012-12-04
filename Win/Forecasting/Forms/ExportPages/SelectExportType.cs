@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
     public partial class SelectExportType : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
     {
         private readonly Action<bool> _callbackOnPageChange;
-        private ExportSkillModel _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
 
         protected SelectExportType()
@@ -33,8 +32,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 
         public void Populate(ExportSkillModel stateObj)
         {
-            _stateObj = stateObj;
-            rbtExportToFile.Checked = stateObj.ExportToFile;
+        	rbtExportToBU.Visible = stateObj.DirectExportPermitted;
+        	rbtExportToFile.Visible = stateObj.FileExportPermitted;
+			if (stateObj.ExportToFile)
+			{
+				rbtExportToFile.Checked = true;
+			}
+			else
+			{
+				rbtExportToBU.Checked = true;
+			}
         }
 
         public bool Depopulate(ExportSkillModel stateObj)

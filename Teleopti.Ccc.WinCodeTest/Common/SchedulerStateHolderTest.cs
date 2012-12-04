@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             IPersonRequest personRequest = new PersonRequest(person);
             personRequest.Request = new AbsenceRequest(AbsenceFactory.CreateAbsence("abs"), new DateTimePeriod(2001,1,1,2001,1,2));
             IList<IPersonRequest> requestList = new List<IPersonRequest> {personRequest};
-            target.SetRequestedScenario(ScenarioFactory.CreateScenarioAggregate("test", true, false));
+            target.SetRequestedScenario(ScenarioFactory.CreateScenarioAggregate("test", true));
             using (mocks.Record())
             {
                 Expect.Call(repositoryFactory.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             IList<IPersonRequest> originalList = new List<IPersonRequest> { personRequest };
             IList<IPerson> personList = new List<IPerson> { person1 };
-            target.SetRequestedScenario(ScenarioFactory.CreateScenarioAggregate("test", true, false));
+            target.SetRequestedScenario(ScenarioFactory.CreateScenarioAggregate("test", true));
 
             using (mocks.Record())
             {

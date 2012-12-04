@@ -82,13 +82,13 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=1.7.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache, Version=2.0.1.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.1.7\lib\Net35\MbCache.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.2.0-Beta1\lib\Net35\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=1.7.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.0.1.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.1.7\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.2.0-Beta1\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -352,8 +352,6 @@
     <Compile Include="Areas\Start\Core\Authentication\Services\IFormsAuthentication.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\IWebLogOn.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\WebLogOn.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\AuthenticationViewModelFactory.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\IAuthenticationViewModelFactory.cs" />
     <Compile Include="Areas\Start\Core\IoC\StartAreaModule.cs" />
     <Compile Include="Areas\MyTime\Core\DatePatternConverter.cs" />
     <Compile Include="Core\IoC\AutofacWebTypesModuleFromRepository20111123.cs" />
@@ -365,14 +363,6 @@
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificData.cs" />
     <Compile Include="Areas\Start\Models\Authentication\BusinessUnitViewModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\DataSourceViewModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInApplicationModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInApplicationViewModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInBusinessUnitModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInBusinessUnitViewModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInTypeViewModelBase.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInViewModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInWindowsModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\SignInWindowsViewModel.cs" />
     <Compile Include="Areas\MyTime\MyTimeAreaRegistration.cs" />
     <Compile Include="Core\CoreExtensions.cs" />
     <Compile Include="Core\Logging\Log4NetModule.cs" />
@@ -619,7 +609,6 @@
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Navigation.js" />
     <Content Include="Areas\Start\Content\Scripts\knockout.bindings.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.js" />
-    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Mobile.Common.js" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.selectbox.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.connector.css" />
     <Content Include="Areas\MyTime\Content\Css\TeamSchedule.css" />
@@ -664,6 +653,7 @@
     <Content Include="Content\crossroads\crossroads.min.js" />
     <Content Include="Content\hasher\hasher.js" />
     <Content Include="Content\hasher\hasher.min.js" />
+    <Content Include="Content\jquery-plugin\jquery.swipeListener.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.min.js" />
     <Content Include="Content\jqueryui\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />

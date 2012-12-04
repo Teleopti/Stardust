@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.Common
 
         private Description _description;
         private bool _defaultScenario;
-        private bool _auditTrail;
         private bool _enableReporting;
         private bool _isDeleted;
     	private bool _restricted;
@@ -71,17 +70,6 @@ namespace Teleopti.Ccc.Domain.Common
             get { return _defaultScenario; }
             //TODO: only one scenario may be default, create special scenariocollection for this
             set { _defaultScenario = value; }
-        }
-
-
-        /// <summary>
-        /// Gets if audit_trail is on.
-        /// </summary>
-        /// <value>Audit trail is on.</value>
-        public virtual bool AuditTrail
-        {
-            get { return _auditTrail; }
-            set { _auditTrail = value; }
         }
 
         public virtual bool IsDeleted

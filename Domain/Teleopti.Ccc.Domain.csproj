@@ -141,8 +141,6 @@
     <Compile Include="Collection\IdenticalLayersSpecification.cs" />
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
-    <Compile Include="Common\IModifyUtcNow.cs" />
-    <Compile Include="Common\UtcNow.cs" />
     <Compile Include="Common\EntityExtensions.cs" />
     <Compile Include="Common\IModifyNow.cs" />
     <Compile Include="Common\ListAggregator.cs" />
@@ -822,6 +820,7 @@
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettings.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccVersion8LicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseStatus.cs" />
     <Compile Include="Security\ISystemUserPasswordSpecification.cs" />

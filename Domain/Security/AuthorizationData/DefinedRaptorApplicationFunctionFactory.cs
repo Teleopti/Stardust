@@ -116,7 +116,11 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
             CreateAndAddApplicationFunction(applicationFunctionList,
 			                                DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile,
                                             "xxImportForecastFromFile",
-                                            DefinedRaptorApplicationFunctionForeignIds.ImportForecastFromFile, null);
+											DefinedRaptorApplicationFunctionForeignIds.ImportForecastFromFile, null);
+			CreateAndAddApplicationFunction(applicationFunctionList,
+											DefinedRaptorApplicationFunctionPaths.ExportForecastFile,
+											"xxExportToFile",
+											DefinedRaptorApplicationFunctionForeignIds.ExportForecastFile, null);
 			// Budget
 			CreateAndAddApplicationFunction(applicationFunctionList,
 			                                DefinedRaptorApplicationFunctionPaths.RequestAllowances,
@@ -160,6 +164,12 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger, "xxAgentScheduleMessengerPermission", DefinedRaptorApplicationFunctionForeignIds.AgentScheduleMessenger, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, "xxShiftTradeRequests", DefinedRaptorApplicationFunctionForeignIds.ShiftTradeRequestsWeb, null);
 
+			// Team Web
+			var function = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AdminWeb, "xxWeb", DefinedRaptorApplicationFunctionForeignIds.AdminWeb, null);
+			function.IsPreliminary = true;
+			function = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SchedulesAdminWeb, "xxSchedules", DefinedRaptorApplicationFunctionForeignIds.SchedulesAdminWeb, null);
+			function.IsPreliminary = true;
+
 			return new ReadOnlyCollection<IApplicationFunction>(applicationFunctionList);
 		}
 
@@ -175,13 +185,15 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			string codeName = ApplicationFunction.GetCode(functionPath);
 			string parentPath = ApplicationFunction.GetParentPath(functionPath);
 
-			ApplicationFunction newFunction = new ApplicationFunction();
-			newFunction.FunctionCode = codeName;
-			newFunction.FunctionDescription = functionDescription;
-			newFunction.Parent = ApplicationFunction.FindByPath(applicationFunctionList, parentPath);
-			newFunction.ForeignId = definedKey;
-			newFunction.ForeignSource = DefinedForeignSourceNames.SourceRaptor;
-			newFunction.SortOrder = sortOrder;
+			var newFunction = new ApplicationFunction
+			                  	{
+			                  		FunctionCode = codeName,
+			                  		FunctionDescription = functionDescription,
+			                  		Parent = ApplicationFunction.FindByPath(applicationFunctionList, parentPath),
+			                  		ForeignId = definedKey,
+			                  		ForeignSource = DefinedForeignSourceNames.SourceRaptor,
+			                  		SortOrder = sortOrder
+			                  	};
 			applicationFunctionList.Add(newFunction);
 			return newFunction;
 		}

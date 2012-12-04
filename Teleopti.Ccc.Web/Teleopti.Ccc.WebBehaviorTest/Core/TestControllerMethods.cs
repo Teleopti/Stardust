@@ -38,16 +38,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void Logon()
 		{
-			Pages.Pages.CurrentSignInPage = Browser.Current.Page<SignInPage>();
-			InnerLogon();
+			var userName = UserFactory.User().MakeUser();
+			var password = TestData.CommonPassword;
+			InnerLogon(userName, password);
 		}
 
-		private static void InnerLogon()
+		public static void LogonForSpecificUser(string userName, string password)
 		{
+			UserFactory.User().MakeUser(userName, userName, password);
+			InnerLogon(userName, password);
+		}
+
+		private static void InnerLogon(string userName, string password)
+		{
+			Pages.Pages.CurrentSignInPage = Browser.Current.Page<SignInPage>();
 			const string dataSourceName = "TestData";
-			var userName = UserFactory.User().MakeUser();
 			var businessUnitName = UserFactory.User().Person.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
-			var password = TestData.CommonPassword;
 			var queryString = string.Format("?dataSourceName={0}&businessUnitName={1}&userName={2}&password={3}", dataSourceName, businessUnitName, userName, password);
 			Navigation.GoTo("Test/Logon" + queryString);
 		}

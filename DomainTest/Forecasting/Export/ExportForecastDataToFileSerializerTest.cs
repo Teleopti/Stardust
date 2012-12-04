@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
         public void Setup()
         {
             _target = new ExportForecastDataToFileSerializer();
-            _scenario = ScenarioFactory.CreateScenarioAggregate("test scenario", true, false);
+            _scenario = ScenarioFactory.CreateScenarioAggregate("test scenario", true);
             _skill = SkillFactory.CreateSkill("Test Skill");
             
             _skillDay1 = SkillDayFactory.CreateSkillDay(_skill, new DateTime(2012, 09, 14));

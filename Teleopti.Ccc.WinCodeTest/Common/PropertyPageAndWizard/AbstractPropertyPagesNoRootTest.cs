@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
         public void VerifyAggregateRootObjectWorks()
         {
             var obj = new object();
-            Expect.On(target).Call(target.CreateNewSateObj()).Return(obj);
+            Expect.On(target).Call(target.CreateNewStateObj()).Return(obj);
 
             mocks.ReplayAll();
 
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
         public void VerifyNextPageWorks()
         {
             var obj = new object();
-            Expect.Call(target.CreateNewSateObj()).Return(obj).Repeat.Once();
+            Expect.Call(target.CreateNewStateObj()).Return(obj).Repeat.Once();
 
             Expect.Call(pages[0].Depopulate(obj)).Return(true).Repeat.Once();
             pages[1].Populate(obj);
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
         {
             var obj = new object();
 
-            Expect.Call(target.CreateNewSateObj()).Return(obj).Repeat.Once();
+            Expect.Call(target.CreateNewStateObj()).Return(obj).Repeat.Once();
 
             pages[0].Populate(obj);
 
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
         {
             var obj = new object();
 
-            Expect.Call(target.CreateNewSateObj()).Return(obj).Repeat.Once();
+            Expect.Call(target.CreateNewStateObj()).Return(obj).Repeat.Once();
 
             pages[0].Depopulate(0);
             LastCall.IgnoreArguments().Return(true).Repeat.Once();

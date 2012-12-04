@@ -15,8 +15,10 @@ namespace Teleopti.Ccc.Web.Core
 
 		public TimeZoneInfo TimeZone()
 		{
-            var dbg = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			return dbg;
+			var currentUser = _loggedOnUser.CurrentUser();
+			return currentUser==null ? 
+				null : 
+				currentUser.PermissionInformation.DefaultTimeZone();
 		}
 	}
 }

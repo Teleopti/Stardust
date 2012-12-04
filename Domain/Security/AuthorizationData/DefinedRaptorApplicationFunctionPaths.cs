@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
         public const string OpenAgentPortal = "Raptor/AgentPortal";
 		public const string MyTimeWeb = "Raptor/MyTimeWeb";
 		public const string Anywhere = "Raptor/Anywhere";
+		public const string AdminWeb = "Raptor/AdminWeb";
 		
 
         // Global
@@ -68,6 +69,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 		// Forecaster
     	public const string ExportForecastToOtherBusinessUnit = "Raptor/Forecaster/ExportForecastToOtherBusinessUnit";
         public const string ImportForecastFromFile = "Raptor/Forecaster/ImportForecastFromFile";
+        public const string ExportForecastFile = "Raptor/Forecaster/ExportForecastFile";
+
         // Budget
         public const string RequestAllowances = "Raptor/Budgets/RequestAllowances";
         
@@ -107,5 +110,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 		public const string AgentScheduleMessenger = "Raptor/MyTimeWeb/AgentScheduleMessenger";
 		public const string ExtendedPreferencesWeb = "Raptor/MyTimeWeb/ExtendedPreferences";
 		public const string ShiftTradeRequestsWeb = "Raptor/MyTimeWeb/ShiftTradeRequests";
+
+		// Admin Web
+		public const string SchedulesAdminWeb = "Raptor/AdminWeb/Schedules";
     }
 }

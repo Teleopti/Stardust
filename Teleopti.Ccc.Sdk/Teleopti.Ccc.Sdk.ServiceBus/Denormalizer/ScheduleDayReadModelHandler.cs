@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				if (Logger.IsInfoEnabled)
 					Logger.Info("Checking SMSLink license.");
 				//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
-				if (DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains("TeleoptiCcc/SMSLink"))
+				if (DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
 				{
 					var smsMessages = _significantChangeChecker.SignificantChangeNotificationMessage(dateOnlyPeriod, person, newReadModels);
 					if (!string.IsNullOrEmpty(smsMessages.Subject))

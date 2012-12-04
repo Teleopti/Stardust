@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
@@ -24,6 +23,20 @@ namespace Teleopti.Ccc.DomainTest.Common
 			target.DateOnly().Should().Be.EqualTo(new DateOnly(date));
 			target.LocalDateTime().Should().Be.EqualTo(date);
 			target.UtcDateTime().Should().Be.EqualTo(TimeZoneHelper.ConvertToUtc(date, cccTimeZone));
+		}
+
+		[Test]
+		public void ShouldReturnFixedTimeAsUtcIfNotLoggedOn()
+		{
+			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			userTimeZone.Expect(mock => mock.TimeZone()).Return(null);
+			var fixedDate = new DateTime(2000, 1, 1, 2, 3, 4);
+			var target = new Now(() => userTimeZone);
+			((IModifyNow)target).SetNow(fixedDate);
+
+			target.DateOnly().Should().Be.EqualTo(new DateOnly(fixedDate));
+			target.LocalDateTime().Should().Be.EqualTo(fixedDate);
+			target.UtcDateTime().Should().Be.EqualTo(fixedDate);
 		}
 
 		[Test]

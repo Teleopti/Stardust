@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
                                HasMessage = true,
                                Person = userDetail.Person,
                                Successful = false,
-                               Message = UserTexts.Resources.LogOnFailedInvalidUserNameOrPassword
+                               Message = UserTexts.Resources.LogOnFailedAccountIsLocked
                            };
             }
             return _checkPassword.CheckLogOn(userDetail, password);

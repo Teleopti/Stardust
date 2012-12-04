@@ -10,10 +10,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
     /// </summary>
     public class TeleoptiCccFreemiumForecastsLicenseOption : LicenseOption
     {
-
-        #region Interface
-
-        /// <summary>
+    	/// <summary>
         /// Initializes a new instance of the <see cref="TeleoptiCccFreemiumForecastsLicenseOption"/> class.
         /// </summary>
         public TeleoptiCccFreemiumForecastsLicenseOption()
@@ -33,9 +30,8 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
             EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication));
             EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.RaptorGlobal));
             EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenForecasterPage));
+            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ExportForecastFile));
             EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenBudgets));
         }
-
-        #endregion
     }
 }

@@ -49,7 +49,7 @@ Teleopti.Start.Authentication = function () {
 			html: getTemplate("changepassword"),
 			baseUrl: Teleopti.Start.Authentication.Settings.baseUrl,
 			authenticationState: authenticationState
-		}),
+		})
 	};
 	
 	function _displayView(viewData) {
@@ -62,7 +62,7 @@ Teleopti.Start.Authentication = function () {
 	}
 
 	function _initRoutes() {
-		var viewRegex = '[a-z]+';
+		var viewRegex = 'signin|businessunit|menu|changepassword';
 		var authenticationTypeRegex = 'windows|application';
 		var dataSourceNameRegex = '.*';
 		crossroads.addRoute(
@@ -80,6 +80,9 @@ Teleopti.Start.Authentication = function () {
 					_displayView({ view: view });
 				});
 		crossroads.addRoute('', function () {
+			_displayView({ view: defaultView });
+		});
+		crossroads.bypassed.add(function () {
 			_displayView({ view: defaultView });
 		});
 	}

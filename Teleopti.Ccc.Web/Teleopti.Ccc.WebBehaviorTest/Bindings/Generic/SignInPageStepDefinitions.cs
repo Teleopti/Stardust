@@ -1,9 +1,11 @@
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -19,6 +21,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				Navigation.GotoGlobalSignInPage();
 			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
+		}
+
+		[When(@"I sign in with")]
+		public void WhenISignInWith(Table table)
+		{
+			var user = table.CreateInstance<UserConfigurable>();
+			var userName = user.UserName;
+			var password = user.Password;
+			WhenISelectApplicationLogonDataSource();
+			Pages.Pages.CurrentSignInPage.SignInApplication(userName, password);
+		}
+
+		[When(@"I try to sign in with")]
+		public void WhenITryToSignInWith(Table table)
+		{
+			Navigation.GotoGlobalSignInPage();
+			WhenISignInWith(table);
 		}
 
 		[When(@"I sign in by windows credentials")]
@@ -43,6 +62,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenISignInByUserNameAndWrongPassword()
 		{
 			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
+			Pages.Pages.CurrentSignInPage.SelectApplicationTestDataSource();
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, "wrong password");
 		}
 
@@ -56,6 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenISignInAgain()
 		{
 			Navigation.GotoGlobalSignInPage();
+			Pages.Pages.CurrentSignInPage.SelectApplicationTestDataSource();
 			Pages.Pages.CurrentSignInPage.SignInApplication(UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName, TestData.CommonPassword);
 		}
 

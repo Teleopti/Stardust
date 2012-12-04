@@ -77,7 +77,10 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		} else {
 			calendarDay.addClass('deletable');
 		}
-		calendarDay.find('div.day-content').html('<span class="fullwidth displayblock mt15"></span>').find('span').text(data.AvailableTimeSpan);
+		var span = calendarDay.find('div.day-content').html('<span class="fullwidth displayblock mt15"></span>').find('span');
+		if (data.AvailableTimeSpan != null)
+			span.text(data.AvailableTimeSpan);
+		
 		calendarDay.addClass('unvalidated');
 	};
 

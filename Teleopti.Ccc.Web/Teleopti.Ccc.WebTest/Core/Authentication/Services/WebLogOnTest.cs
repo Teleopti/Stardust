@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		}
 
 		[Test]
-		public void ShouldResolveIndataAndLogonWithAnywherePermission()
+		public void ShouldResolveIndataAndLogonWithMobileReportsPermission()
 		{
 			var buId = Guid.NewGuid();
 			const string dataSourceName = "sdfsjdlfkjsd ";
@@ -120,7 +120,39 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		}
 
 		[Test]
-		public void ShouldThrowIfNoMyTimeWebAndAnywherePermission()
+		public void ShouldResolveIndataAndLogonWithAdminWebPermission()
+		{
+			var buId = Guid.NewGuid();
+			const string dataSourceName = "sdfsjdlfkjsd ";
+			var personId = Guid.NewGuid();
+
+			var choosenBusinessUnit = new BusinessUnit("sdfsdf");
+			var choosenDatasource = mocks.DynamicMock<IDataSource>();
+			var uow = mocks.DynamicMock<IUnitOfWork>();
+			var logonPerson = new Person();
+
+			using (mocks.Record())
+			{
+				Expect.Call(dataSourcesProvider.RetrieveDataSourceByName(dataSourceName))
+					.Return(choosenDatasource);
+				Expect.Call(choosenDatasource.Application).Return(unitOfWorkFactory);
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+				Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRepository);
+				Expect.Call(repositoryFactory.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
+				Expect.Call(personRepository.Get(personId)).Return(logonPerson);
+				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
+				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
+				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AdminWeb)).Return(true);
+				Expect.Call(() => sessionSpecificDataProvider.StoreInCookie(null)).IgnoreArguments();
+			}
+			using (mocks.Playback())
+			{
+				target.LogOn(buId, dataSourceName, personId);
+			}
+		}
+
+		[Test]
+		public void ShouldThrowIfNoMyTimeWebAndAnywhereAndMobileReportsPermission()
 		{
 			var buId = Guid.NewGuid();
 			const string dataSourceName = "sdfsjdlfkjsd ";
@@ -144,6 +176,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(false);
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
+				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AdminWeb)).Return(false);
 			}
 			using (mocks.Playback())
 			{

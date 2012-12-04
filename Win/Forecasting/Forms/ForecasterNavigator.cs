@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -22,7 +21,6 @@ using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
 using Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast;
-using Teleopti.Ccc.Win.Forecasting.Forms.SkillPages;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -74,17 +72,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 	    private void setVisibility()
 	    {
+	    	var instance = PrincipalAuthorization.Instance();
 	        toolStripMenuItemQuickForecast.Visible =
-	            PrincipalAuthorization.Instance().IsPermitted(
+	            instance.IsPermitted(
 	                DefinedRaptorApplicationFunctionPaths.UnderConstruction);
 	        toolStripMenuItemCopyTo.Visible =
-	            PrincipalAuthorization.Instance().IsPermitted(
+	            instance.IsPermitted(
 	                DefinedRaptorApplicationFunctionPaths.UnderConstruction);
 	        toolStripMenuItemActionSkillImportForecast.Visible =
-	            PrincipalAuthorization.Instance().IsPermitted(
+	            instance.IsPermitted(
 	                DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile);
 	        toolStripMenuItemSkillsImportForecast.Visible =
-	            PrincipalAuthorization.Instance().IsPermitted(
+	            instance.IsPermitted(
 	                DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile);
 	    }
 
@@ -685,10 +684,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toggleExportMenu()
 		{
-			var exportContextItemsVisible = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit);
-			toolStripMenuItemExport.Visible = exportContextItemsVisible;
-			toolStripMenuItemJobHistory.Visible = exportContextItemsVisible;
-			toolStripSeparatorExport.Visible = exportContextItemsVisible;
+			var instance = PrincipalAuthorization.Instance();
+			var directExportEnabled = instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit);
+			var fileExportEnabled = instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastFile);
+			var fileImportEnabled = instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile);
+			toolStripMenuItemExport.Visible = directExportEnabled || fileExportEnabled;
+			toolStripMenuItemJobHistory.Visible = directExportEnabled || fileImportEnabled;
+			toolStripSeparatorExport.Visible = directExportEnabled || fileExportEnabled;
 		}
 
 		private TreeNode getNodeFromPosition(MouseEventArgs e)
@@ -1258,82 +1260,83 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void toolStripMenuItemExport_Click(object sender, EventArgs e)
-		{
-			using (var model = new ExportSkillModel())
+        {
+        	var instance = PrincipalAuthorization.Instance();
+			using (var model = new ExportSkillModel(instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit), instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastFile)))
 			{
-                var settingProvider = new ExportAcrossBusinessUnitsSettingsProvider(_unitOfWorkFactory, _repositoryFactory);
-			    var forecastExportSettingProvider = new ExportForecastToFileSettingsProvider(_unitOfWorkFactory,
-			                                                                                _repositoryFactory);
-			    _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(
-                    () => initializeExportAcrossBusinessUnitsWizard(model, settingProvider));
+				var settingProvider = new ExportAcrossBusinessUnitsSettingsProvider(_unitOfWorkFactory, _repositoryFactory);
+				var forecastExportSettingProvider = new ExportForecastToFileSettingsProvider(_unitOfWorkFactory,
+				                                                                             _repositoryFactory);
+				_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(
+					() => initializeExportAcrossBusinessUnitsWizard(model, settingProvider));
 
-                _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(
-                    () => initializeExportForecastToFileWizard(model, forecastExportSettingProvider));
+				_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(
+					() => initializeExportForecastToFileWizard(model, forecastExportSettingProvider));
 
-                using (var pages = new ExportSkillWizardPages(model, settingProvider,forecastExportSettingProvider))
-                {
-                    var firstPage =
-                        PropertyPagesHelper.GetExportSkillFirstPage(
-                            b =>
-                                {
-                                    var firstPageFromPages = (SelectExportType) pages.FirstPage;
-                                    if (b)
-                                    {
-                                        pages.ChangePages(PropertyPagesHelper.GetExportSkillToFilePages(firstPageFromPages));
-                                    }
-                                    else
-                                    {
-                                        pages.ChangePages(
-                                            PropertyPagesHelper.GetExportAcrossBusinessUnitsPages(firstPageFromPages));
-                                    }
-                                });
-                    var exportToFilePages = PropertyPagesHelper.GetExportSkillToFilePages(firstPage);
-                    
-                    pages.Initialize(exportToFilePages);
+				using (var pages = new ExportSkillWizardPages(model, settingProvider, forecastExportSettingProvider))
+				{
+					var firstPage =
+						PropertyPagesHelper.GetExportSkillFirstPage(
+							b =>
+								{
+									var firstPageFromPages = (SelectExportType) pages.FirstPage;
+									if (b)
+									{
+										pages.ChangePages(PropertyPagesHelper.GetExportSkillToFilePages(firstPageFromPages));
+									}
+									else
+									{
+										pages.ChangePages(
+											PropertyPagesHelper.GetExportAcrossBusinessUnitsPages(firstPageFromPages));
+									}
+								});
+					var exportToFilePages = PropertyPagesHelper.GetExportSkillToFilePages(firstPage);
+
+					pages.Initialize(exportToFilePages);
 					using (var wizard = new WizardNoRoot<ExportSkillModel>(pages))
 					{
 						if (wizard.ShowDialog(this) == DialogResult.OK)
 						{
-                            if (model.ExportToFile)
-                            { 
-                                try
-                                {
-                                    pages.SaveSettings();
-                                }
-                                catch(DataSourceException exception)
-                                {
-                                    _dataSourceExceptionHandler.DataSourceExceptionOccurred(exception);
-                                }
-                            }
-                            else
-                            {
-                                var dto = model.ExportMultisiteSkillToSkillCommandModel.TransformToDto();
-                                try
-                                {
-                                    pages.SaveSettings();
-                                    var statusDialog =
-                                        new JobStatusView(new JobStatusModel {JobStatusId = Guid.NewGuid()});
-                                    statusDialog.Show(this);
-                                    statusDialog.SetJobStatusId(
-                                        _sendCommandToSdk.ExecuteCommand(dto).AffectedId.GetValueOrDefault());
-                                }
-                                catch (OptimisticLockException)
-                                {
-                                    ViewBase.ShowErrorMessage(
-                                        string.Concat(Resources.SomeoneChangedTheSameDataBeforeYouDot,
-                                                      Resources.YourChangesWillBeDiscarded),
-                                        Resources.PleaseTryAgainLater);
-                                }
-                                catch (DataSourceException exception)
-                                {
-                                    _dataSourceExceptionHandler.DataSourceExceptionOccurred(exception);
-                                }
-                            }
+							if (model.ExportToFile)
+							{
+								try
+								{
+									pages.SaveSettings();
+								}
+								catch (DataSourceException exception)
+								{
+									_dataSourceExceptionHandler.DataSourceExceptionOccurred(exception);
+								}
+							}
+							else
+							{
+								var dto = model.ExportMultisiteSkillToSkillCommandModel.TransformToDto();
+								try
+								{
+									pages.SaveSettings();
+									var statusDialog =
+										new JobStatusView(new JobStatusModel {JobStatusId = Guid.NewGuid()});
+									statusDialog.Show(this);
+									statusDialog.SetJobStatusId(
+										_sendCommandToSdk.ExecuteCommand(dto).AffectedId.GetValueOrDefault());
+								}
+								catch (OptimisticLockException)
+								{
+									ViewBase.ShowErrorMessage(
+										string.Concat(Resources.SomeoneChangedTheSameDataBeforeYouDot,
+										              Resources.YourChangesWillBeDiscarded),
+										Resources.PleaseTryAgainLater);
+								}
+								catch (DataSourceException exception)
+								{
+									_dataSourceExceptionHandler.DataSourceExceptionOccurred(exception);
+								}
+							}
 						}
 					}
 				}
 			}
-		}
+        }
 
 	    private static void initializeExportForecastToFileWizard(ExportSkillModel model, ExportForecastToFileSettingsProvider forecastExportSettingProvider)
 	    {

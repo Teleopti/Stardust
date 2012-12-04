@@ -167,11 +167,16 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         IList<IDayOffTemplate> LoadDayOff();
 
         /// <summary>
-        /// Truncates stage table and then Persists all day offs in data table.
+        /// Truncates stage table and then Persists all day offs found in scheduled preferences.
         /// </summary>
-        /// <param name="dataTable">The data table.</param>
         /// <returns></returns>
-        int PersistDayOff(DataTable dataTable);
+        int PersistDayOffFromSchedulePreference();
+
+		/// <summary>
+		/// Truncates stage table and then Persists all day offs found in scheduled day offs.
+		/// </summary>
+		/// <returns></returns>
+		int PersistDayOffFromScheduleDayOffCount();
 
         IList<IApplicationFunction> LoadApplicationFunction();
         IList<IApplicationRole> LoadApplicationRole(ICommonStateHolder stateHolder);

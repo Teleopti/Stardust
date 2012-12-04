@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlTypes;
-using System.Globalization;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -14,60 +12,66 @@ using Teleopti.Ccc.Rta.LogClient;
 
 namespace Teleopti.Ccc.Rta.TestApplication
 {
-    class Program
+    internal class Program
     {
-        private static ILog _logger = LogManager.GetLogger(typeof (Program));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)")]
-        static void Main(string[] args)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
+            "CA1303:Do not pass literals as localized parameters",
+            MessageId = "System.Console.WriteLine(System.String,System.Object)"),
+         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
+             "CA1303:Do not pass literals as localized parameters",
+             MessageId = "System.Console.WriteLine(System.String)")]
+        private static void Main(string[] args)
         {
             XmlConfigurator.Configure();
-			ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ignoreInvalidCertificate);
-            string serviceUrl = ConfigurationManager.AppSettings["serviceUrl"];
+            ServicePointManager.ServerCertificateValidationCallback = IgnoreInvalidCertificate;
+            var serviceUrl = ConfigurationManager.AppSettings["serviceUrl"];
 
             var connectionProperties = new Hashtable();
             if (!string.IsNullOrEmpty(serviceUrl)) connectionProperties.Add("serviceUrl", serviceUrl);
 
-            bool keepRunning = true;
-
+            var keepRunning = true;
             while (keepRunning)
             {
                 var sendSettings = new SendSettings();
-                int sendCount = sendSettings.RemainingCount;
-
+                var sendCount = sendSettings.RemainingCount;
+                var platformTypeId = sendSettings.PlatformId;
                 var clientHandler = new ClientHandler(connectionProperties);
                 clientHandler.StartLogClient();
                 while (sendSettings.RemainingCount > 0)
                 {
-                    IEnumerable<AgentStateForTest> statesForTest = sendSettings.Read();
-                    foreach (AgentStateForTest stateForTest in statesForTest)
+                    var statesForTest = sendSettings.Read();
+                    foreach (var stateForTest in statesForTest)
                     {
                         try
                         {
                             clientHandler.SendRtaDataToServer(stateForTest.LogOn, stateForTest.StateCode, TimeSpan.Zero,
-                                                              DateTime.UtcNow, Guid.Empty, stateForTest.DataSourceId, stateForTest.BatchIdentifier,
+                                                              DateTime.UtcNow, platformTypeId, stateForTest.DataSourceId,
+                                                              stateForTest.BatchIdentifier,
                                                               stateForTest.IsSnapshot);
                         }
                         catch (Exception exception)
                         {
-                            _logger.Error("An error occured while sending RTA data to server", exception);
+                            Logger.Error("An error occured while sending RTA data to server", exception);
                             break;
                         }
                         Thread.Sleep(stateForTest.WaitTime);
                     }
                 }
                 //Run the end of sequence (making sure LogOff signal is sent)
-                foreach (AgentStateForTest stateForTest in sendSettings.EndSequence())
+                foreach (var stateForTest in sendSettings.EndSequence())
                 {
                     try
                     {
                         clientHandler.SendRtaDataToServer(stateForTest.LogOn, stateForTest.StateCode, TimeSpan.Zero,
-                                                          DateTime.UtcNow, Guid.Empty, 1, SqlDateTime.MinValue.Value,
+                                                          DateTime.UtcNow, platformTypeId, stateForTest.DataSourceId,
+                                                          SqlDateTime.MinValue.Value,
                                                           false);
                     }
                     catch (Exception exception)
                     {
-                        _logger.Error("An error occured while sending RTA data to server",exception);
+                        Logger.Error("An error occured while sending RTA data to server", exception);
                         break;
                     }
                 }
@@ -75,14 +79,15 @@ namespace Teleopti.Ccc.Rta.TestApplication
 
                 Console.WriteLine("Done with sending {0} rows of RTA data.", sendCount);
                 Console.WriteLine("Press Y to send again or any other key to exit.");
-                ConsoleKeyInfo info = Console.ReadKey();
+                var info = Console.ReadKey();
                 keepRunning = (info.Key == ConsoleKey.Y);
             }
         }
 
-    	private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
-    	{
-    		return true;
-    	}
+        private static bool IgnoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain,
+                                                     SslPolicyErrors sslpolicyerrors)
+        {
+            return true;
+        }
     }
 }
