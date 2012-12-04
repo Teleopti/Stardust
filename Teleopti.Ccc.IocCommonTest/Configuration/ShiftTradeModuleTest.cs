@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			const int noOfSpecs = 2;
 			using (var ioc = containerBuilder.Build())
 			{
-				var specs = ioc.Resolve<IEnumerable<ISpecification<ShiftTradeAvailableCheckItem>>>().ToArray();
+				var specs = ioc.Resolve<IEnumerable<IShiftTradeLightSpecification>>().ToArray();
 				specs.Count().Should().Be.EqualTo(noOfSpecs);
 				var uniqueTypes = new HashSet<Type>();
 				specs.ForEach(spec => uniqueTypes.Add(spec.GetType()));
