@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
-	public class ShiftTradeAbsenceSpecification : ShiftTradeSpecification, IShiftTradeAbsenceSpecification
+	public class ShiftTradeAbsenceSpecification : ShiftTradeSpecification
 	{
 		public override string DenyReason
 		{

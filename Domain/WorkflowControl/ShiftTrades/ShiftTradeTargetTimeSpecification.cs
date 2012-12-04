@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
-    public class ShiftTradeTargetTimeSpecification : ShiftTradeSpecification, IShiftTradeTargetTimeSpecification
+    public class ShiftTradeTargetTimeSpecification : ShiftTradeSpecification
     {
         private readonly ISchedulingResultStateHolder _stateHolder;
         private readonly ISchedulePeriodTargetTimeCalculator _targetTimeTimeCalculator;

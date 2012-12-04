@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
-    public class OpenShiftTradePeriodSpecification : ShiftTradeSpecification, IOpenShiftTradePeriodSpecification
+    public class OpenShiftTradePeriodSpecification : ShiftTradeSpecification
     {
         public override string DenyReason
         {

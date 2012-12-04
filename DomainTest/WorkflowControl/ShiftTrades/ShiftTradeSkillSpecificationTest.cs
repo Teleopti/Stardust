@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
     [TestFixture]
     public class ShiftTradeSkillSpecificationTest
     {
-        private IShiftTradeSkillSpecification _target;
+        private ShiftTradeSkillSpecification _target;
         private MockRepository _mock;
 
         private IPerson _personFrom;

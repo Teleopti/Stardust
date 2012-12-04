@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
-	public class ShiftTradeMeetingSpecification : ShiftTradeSpecification, IShiftTradeMeetingSpecification
+	public class ShiftTradeMeetingSpecification : ShiftTradeSpecification
 	{
 		public override string DenyReason
 		{

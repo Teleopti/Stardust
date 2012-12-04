@@ -109,6 +109,7 @@
     <Compile Include="Configuration\RuleSetTest.cs" />
     <Compile Include="Configuration\ScheduleScreenPersisterModuleTest.cs" />
     <Compile Include="Configuration\ScheduleScreenRefresherModuleTest.cs" />
+    <Compile Include="Configuration\ShiftTradeModuleTest.cs" />
     <Compile Include="Configuration\TeleoptiCacheKeyTest.cs" />
     <Compile Include="Configuration\UnitOfWorkModuleTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />

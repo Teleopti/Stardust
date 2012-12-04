@@ -33,13 +33,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
         private IShiftTradeValidator CreateValidator()
         {
-            return new ShiftTradeValidator(_openShiftTradePeriodSpecification, 
+            return new ShiftTradeValidator(new[]{_openShiftTradePeriodSpecification, 
                 _shiftTradeSkillSpecification, 
                 _shiftTradeTargetTimeSpecification,
                 _isWorkflowControlSetNotNullSpecification,
 				_shiftTradeAbsenceSpecification,
 				_shiftTradePersonalActivitySpecification,
-				_shiftTradeMeetingSpecification);
+				_shiftTradeMeetingSpecification});
         }
 
         
@@ -74,26 +74,26 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
             Assert.IsTrue(validator.Validate(details).Value);
 
             var falseValidator = new ValidatorSpecificationForTest(false, denyReason);
-            validator = new ShiftTradeValidator(falseValidator, _shiftTradeSkillSpecification, _shiftTradeTargetTimeSpecification, _isWorkflowControlSetNotNullSpecification, _shiftTradeAbsenceSpecification, _shiftTradePersonalActivitySpecification, _shiftTradeMeetingSpecification);
+            validator = new ShiftTradeValidator(new[]{falseValidator, _shiftTradeSkillSpecification, _shiftTradeTargetTimeSpecification, _isWorkflowControlSetNotNullSpecification, _shiftTradeAbsenceSpecification, _shiftTradePersonalActivitySpecification, _shiftTradeMeetingSpecification});
             CheckResult(validator.Validate(details), false, denyReason);
 
-			validator = new ShiftTradeValidator(_openShiftTradePeriodSpecification, falseValidator, _shiftTradeTargetTimeSpecification, _isWorkflowControlSetNotNullSpecification, _shiftTradeAbsenceSpecification, _shiftTradePersonalActivitySpecification, _shiftTradeMeetingSpecification);
-            CheckResult(validator.Validate(details), false, denyReason);
+				validator = new ShiftTradeValidator(new[] { falseValidator, _shiftTradeSkillSpecification, _shiftTradeTargetTimeSpecification, _isWorkflowControlSetNotNullSpecification, _shiftTradeAbsenceSpecification, _shiftTradePersonalActivitySpecification, _shiftTradeMeetingSpecification });
+				CheckResult(validator.Validate(details), false, denyReason);
 
-			validator = new ShiftTradeValidator(_openShiftTradePeriodSpecification, _shiftTradeSkillSpecification, falseValidator, _isWorkflowControlSetNotNullSpecification, _shiftTradeAbsenceSpecification, _shiftTradePersonalActivitySpecification, _shiftTradeMeetingSpecification);
-            CheckResult(validator.Validate(details), false, denyReason);
+				validator = new ShiftTradeValidator(new[] { falseValidator, _shiftTradeSkillSpecification, _shiftTradeTargetTimeSpecification, _isWorkflowControlSetNotNullSpecification, _shiftTradeAbsenceSpecification, _shiftTradePersonalActivitySpecification, _shiftTradeMeetingSpecification });
+				CheckResult(validator.Validate(details), false, denyReason);
 
-			validator = new ShiftTradeValidator(_openShiftTradePeriodSpecification, _shiftTradeSkillSpecification, _shiftTradeTargetTimeSpecification, falseValidator, _shiftTradeAbsenceSpecification, _shiftTradePersonalActivitySpecification, _shiftTradeMeetingSpecification);
-            CheckResult(validator.Validate(details), false, denyReason);
+				validator = new ShiftTradeValidator(new[] { falseValidator, _shiftTradeSkillSpecification, _shiftTradeTargetTimeSpecification, _isWorkflowControlSetNotNullSpecification, _shiftTradeAbsenceSpecification, _shiftTradePersonalActivitySpecification, _shiftTradeMeetingSpecification });
+				CheckResult(validator.Validate(details), false, denyReason);
 
-			validator = new ShiftTradeValidator(_openShiftTradePeriodSpecification, _shiftTradeSkillSpecification, _shiftTradeTargetTimeSpecification, _isWorkflowControlSetNotNullSpecification, falseValidator, _shiftTradePersonalActivitySpecification, _shiftTradeMeetingSpecification);
-			CheckResult(validator.Validate(details), false, denyReason);
+				validator = new ShiftTradeValidator(new[] { falseValidator, _shiftTradeSkillSpecification, _shiftTradeTargetTimeSpecification, _isWorkflowControlSetNotNullSpecification, _shiftTradeAbsenceSpecification, _shiftTradePersonalActivitySpecification, _shiftTradeMeetingSpecification });
+				CheckResult(validator.Validate(details), false, denyReason);
 
-			validator = new ShiftTradeValidator(_openShiftTradePeriodSpecification, _shiftTradeSkillSpecification, _shiftTradeTargetTimeSpecification, _isWorkflowControlSetNotNullSpecification, _shiftTradeAbsenceSpecification, falseValidator, _shiftTradeMeetingSpecification);
-			CheckResult(validator.Validate(details), false, denyReason);
+				validator = new ShiftTradeValidator(new[] { falseValidator, _shiftTradeSkillSpecification, _shiftTradeTargetTimeSpecification, _isWorkflowControlSetNotNullSpecification, _shiftTradeAbsenceSpecification, _shiftTradePersonalActivitySpecification, _shiftTradeMeetingSpecification });
+				CheckResult(validator.Validate(details), false, denyReason);
 
-			validator = new ShiftTradeValidator(_openShiftTradePeriodSpecification, _shiftTradeSkillSpecification, _shiftTradeTargetTimeSpecification, _isWorkflowControlSetNotNullSpecification, _shiftTradeAbsenceSpecification, _shiftTradePersonalActivitySpecification, falseValidator);
-			CheckResult(validator.Validate(details), false, denyReason);
+				validator = new ShiftTradeValidator(new[] { falseValidator, _shiftTradeSkillSpecification, _shiftTradeTargetTimeSpecification, _isWorkflowControlSetNotNullSpecification, _shiftTradeAbsenceSpecification, _shiftTradePersonalActivitySpecification, _shiftTradeMeetingSpecification });
+				CheckResult(validator.Validate(details), false, denyReason);
         }
 
         private static void CheckResult(ShiftTradeRequestValidationResult result,bool expectedValue,string expectedDenyReason)
@@ -118,14 +118,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
         /// <summary>
         /// Stub so we dont have to mock validators, gets a little bit easier to follow
         /// </summary>
-        internal class ValidatorSpecificationForTest : ShiftTradeSpecification, 
-            IOpenShiftTradePeriodSpecification , 
-            IShiftTradeSkillSpecification,
-            IShiftTradeTargetTimeSpecification,
-            IIsWorkflowControlSetNullSpecification,
-			IShiftTradeAbsenceSpecification,
-			IShiftTradePersonalActivitySpecification,
-			IShiftTradeMeetingSpecification
+        internal class ValidatorSpecificationForTest : ShiftTradeSpecification
         {
             private readonly bool _isSatisfiedBy;
             private readonly string _denyReason;
