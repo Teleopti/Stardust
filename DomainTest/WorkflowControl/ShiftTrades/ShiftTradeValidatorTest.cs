@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			_shiftTradeMeetingSpecification = new ValidatorSpecificationForTest(true, "_shiftTradeMettingSpecification");
 		}
 
-        private IShiftTradeValidator CreateValidator()
+        private ShiftTradeValidator CreateValidator()
         {
             return new ShiftTradeValidator(new[]{_openShiftTradePeriodSpecification, 
                 _shiftTradeSkillSpecification, 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
         public void VerifyThatAllSpecificationsGetsCalled()
         {
 
-            IShiftTradeValidator validator = CreateValidator();
+            ShiftTradeValidator validator = CreateValidator();
             
             IList<IShiftTradeSwapDetail> details = new List<IShiftTradeSwapDetail>();
 
