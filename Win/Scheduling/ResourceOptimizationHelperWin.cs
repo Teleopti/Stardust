@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     public class ResourceOptimizationHelperWin :ResourceOptimizationHelper, IResourceOptimizationHelperWin
     {
         private readonly ISchedulerStateHolder _stateHolder;
-
+    	
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOptimizationHelperWin"/> class.
         /// </summary>
@@ -33,8 +34,9 @@ namespace Teleopti.Ccc.Win.Scheduling
         /// Created by: henrika
         /// Created date: 2008-05-27
         /// </remarks>
-		public ResourceOptimizationHelperWin(ISchedulerStateHolder stateHolder)
-			: base(stateHolder.SchedulingResultState, new OccupiedSeatCalculator(new SkillVisualLayerCollectionDictionaryCreator(), new SeatImpactOnPeriodForProjection()), new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()))
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public ResourceOptimizationHelperWin(ISchedulerStateHolder stateHolder, ISingleSkillDictionary singleSkillDictionary)
+			: base(stateHolder.SchedulingResultState, new OccupiedSeatCalculator(new SkillVisualLayerCollectionDictionaryCreator(), new SeatImpactOnPeriodForProjection()), new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary)
         {
             _stateHolder = stateHolder;
         }
