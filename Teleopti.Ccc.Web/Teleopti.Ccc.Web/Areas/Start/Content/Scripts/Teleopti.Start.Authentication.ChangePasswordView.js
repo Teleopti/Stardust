@@ -2,11 +2,14 @@
 Teleopti.Start.Authentication.ChangePasswordView = function (data) {
 	this.Display = function (viewInfo) {
 
+		if (!data.authenticationState.CheckState()) {
+			Teleopti.Start.Authentication.Navigation.GotoSignIn();
+			return;
+		}
 		var viewModel = new Teleopti.Start.Authentication.ChangePasswordViewModel({
 			baseUrl: Teleopti.Start.Authentication.Settings.baseUrl,
 			mustChangePassword: viewInfo.mustChangePassword,
 			authenticationState: data.authenticationState,
-//			authenticationType: viewInfo.authenticationType,
 			dataSourceName: viewInfo.dataSourceName
 		});
 		viewInfo.render(data.html);
