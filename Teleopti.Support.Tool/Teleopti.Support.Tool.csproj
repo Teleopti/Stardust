@@ -171,6 +171,7 @@
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsInRegistry.cs" />
     <EmbeddedResource Include="Controls\ConnectionString\ConnectionSettings.resx">
       <DependentUpon>ConnectionSettings.cs</DependentUpon>
     </EmbeddedResource>
