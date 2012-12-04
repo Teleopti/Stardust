@@ -38,9 +38,10 @@ namespace Teleopti.Support.Tool.Controls
         /// The Constructor
         /// </summary>
         /// <param name="mainForm">A reference to it's parent form</param>
-        public MainChangeDBSettings(MainForm mainForm)
+        public MainChangeDBSettings(MainForm mainForm, DBHelper dbHelper)
         {
             InitializeComponent();
+
             this._mainForm = mainForm;
             configFile = System.Configuration.ConfigurationManager.AppSettings["configFilePath"];
             setConfileParam();
@@ -53,7 +54,7 @@ namespace Teleopti.Support.Tool.Controls
             dbConnect = new DBConnect();
             _connStringSetting = new ConnectionSettings();
             connSummary = new Summary();
-            _li.AddLast(dbConnect);
+            //_li.AddLast(dbConnect);
             _li.AddLast(_connStringSetting);
             _li.AddLast(connSummary);
 
@@ -61,6 +62,10 @@ namespace Teleopti.Support.Tool.Controls
             connSummary.ViewLog.Click += viewLog_Click;
 
             _connStringSetting.TestConnectButton.Click += testConnectButton_Click;
+
+            _db = dbHelper;
+            loadDatabases();
+            loadSqlUsers();
             switchControl(1);
             BNext.Enabled = false;
         }
