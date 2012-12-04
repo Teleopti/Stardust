@@ -27,41 +27,48 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriodDictionary.Values)
 				{
-					double result;
+					double result1;
+					double result2;
 					if(toRemove.Count > 0 || toAdd.Count > 0)
 					{
-						double resultToRemove = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, toRemove, skill);
-						double resultToAdd = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, toAdd, skill);
-						result = skillStaffPeriod.Payload.CalculatedLoggedOn - resultToRemove + resultToAdd;
+						Tuple<double, double> resultToRemove = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, toRemove, skill);
+						Tuple<double, double> resultToAdd = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, toAdd, skill);
+						result1 = skillStaffPeriod.Payload.CalculatedLoggedOn - resultToRemove.Item1 + resultToAdd.Item1;
+						result2 = skillStaffPeriod.Payload.CalculatedLoggedOn - resultToRemove.Item2 + resultToAdd.Item2;
 					}
 					else
 					{
-						result = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, relevantProjections, skill);
+						Tuple<double, double> result = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, relevantProjections, skill);
+						result1 = result.Item1;
+						result2 = result.Item2;
 					}
 
-					if (!skillStaffPeriod.Payload.CalculatedLoggedOn.Equals(result))
+					if (!skillStaffPeriod.Payload.CalculatedLoggedOn.Equals(result2))
 					{
-						skillStaffPeriod.Payload.CalculatedLoggedOn = result;
-						skillStaffPeriod.SetCalculatedResource65(result);
+						skillStaffPeriod.Payload.CalculatedLoggedOn = result2;
+						skillStaffPeriod.SetCalculatedResource65(result1);
 					}
 					
 				}
 			}
 		}
 
-		private static double nonBlendSkillImpactOnPeriodForProjection(ISkillStaffPeriod skillStaffPeriod, IList<IVisualLayerCollection> shiftList, ISkill skill)
+		private static Tuple<double, double> nonBlendSkillImpactOnPeriodForProjection(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IVisualLayerCollection> shiftList, ISkill skill)
 		{
-			double result = 0;
+			double result1 = 0;
+			double result2 = 0;
 			foreach (var layercollection in shiftList)
 			{
 				DateOnly dateOnly = skillStaffPeriodDate(skillStaffPeriod, layercollection.Person);
-				if (!checkPersonSkill(skill, layercollection.Person, dateOnly))
+				double skillEfficiency = checkPersonSkill(skill, layercollection.Person, dateOnly);
+				if (skillEfficiency == 0)
 					continue;
-
-				result += calculateShift(skillStaffPeriod, layercollection, skill.Activity);
+				
+				result2 += calculateShift(skillStaffPeriod, layercollection, skill.Activity);
+				result1 += result2 * skillEfficiency;
 			}
 
-			return result;
+			return new Tuple<double, double>(result1, result2);
 		}
 
 		private static double calculateShift(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IVisualLayer> layercollection, IActivity skillActivity)
@@ -93,19 +100,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return new DateOnly(localStartDateTime.Date);
 		}
 
-		private static bool checkPersonSkill(ISkill skill, IPerson person, DateOnly skillStaffPeriodDate)
+		private static double checkPersonSkill(ISkill skill, IPerson person, DateOnly skillStaffPeriodDate)
 		{
 			IPersonPeriod personPeriod = person.Period(skillStaffPeriodDate);
 			if (personPeriod == null)
-				return false;
+				return 0;
 
 			foreach (var personSkill in personPeriod.PersonSkillCollection)
 			{
-				if (personSkill.Skill.Equals(skill))
-					return true;
+				if (personSkill.Skill.Equals(skill) && personSkill.Active)
+					return personSkill.SkillPercentage.Value;
 			}
 
-			return false;
+			return 0;
 		}
 	}
 }
