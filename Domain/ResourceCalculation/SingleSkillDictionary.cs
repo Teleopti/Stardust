@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -33,17 +35,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					var personPeriod = person.Period(date);
 
-					if(personPeriod.PersonSkillCollection.Count > 1)
-					{
-						singleSkilledPersons.Remove(person);
-						_dictionary.Add(new KeyValuePair<IPerson, DateOnly>(person, date), false);
+					var activePersonSkills = (from a in personPeriod.PersonSkillCollection
+					                         where a.Active && !((IDeleteTag) a.Skill).IsDeleted
+					                         select a).ToList();
 
-						foreach (var personSkill in personPeriod.PersonSkillCollection)
+					if (activePersonSkills.Count <= 1) continue;
+					singleSkilledPersons.Remove(person);
+					_dictionary.Add(new KeyValuePair<IPerson, DateOnly>(person, date), false);
+
+					foreach (var personSkill in activePersonSkills)
+					{
+						if(!notSingleSkills.Contains(personSkill.Skill))
 						{
-							if(!notSingleSkills.Contains(personSkill.Skill))
-							{
-								notSingleSkills.Add(personSkill.Skill);	
-							}
+							notSingleSkills.Add(personSkill.Skill);	
 						}
 					}
 				}
@@ -51,8 +55,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				foreach (var singleSkilledPerson in singleSkilledPersons)
 				{
 					var personPeriod = singleSkilledPerson.Period(date);
+					var activePersonSkills = (from a in personPeriod.PersonSkillCollection
+											  where a.Active && !((IDeleteTag)a.Skill).IsDeleted
+											  select a).ToList();
 					var isSingleSkill = true;
-					foreach (var personSkill in personPeriod.PersonSkillCollection)
+					foreach (var personSkill in activePersonSkills)
 					{
 						var skill = personSkill.Skill;
 						var skillType = skill.SkillType as SkillTypePhone;

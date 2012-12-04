@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -184,7 +185,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var skills = new List<ISkill>();
 
-			foreach (var personSkill in personPeriod.PersonSkillCollection)
+			var activePersonSkills = (from a in personPeriod.PersonSkillCollection
+									  where a.Active && !((IDeleteTag)a.Skill).IsDeleted
+									  select a).ToList();
+
+			foreach (var personSkill in activePersonSkills)
 			{
 				skills.Add(personSkill.Skill);	
 			}

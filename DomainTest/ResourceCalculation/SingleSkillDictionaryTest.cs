@@ -75,9 +75,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mock.Record())
 			{
 				Expect.Call(_person1.Period(_period.StartDate)).Return(_personPeriod1);
-				Expect.Call(_personPeriod1.PersonSkillCollection).Return(_personSkills1).Repeat.Twice();
-				Expect.Call(_personSkill1.Skill).Return(_phoneSkill1).Repeat.Twice();
-				Expect.Call(_personSkill2.Skill).Return(_phoneSkill2).Repeat.Twice();
+				Expect.Call(_personPeriod1.PersonSkillCollection).Return(_personSkills1).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill1.Skill).Return(_phoneSkill1).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill2.Skill).Return(_phoneSkill2).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill1.Active).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill2.Active).Return(true).Repeat.AtLeastOnce();
 			}
 
 			using (_mock.Playback())
@@ -108,6 +110,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				Expect.Call(_personSkill1.Skill).Return(_phoneSkill1).Repeat.AtLeastOnce();
 				Expect.Call(_personSkill2.Skill).Return(_phoneSkill1).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill1.Active).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill2.Active).Return(true).Repeat.AtLeastOnce();
 			}
 
 			using (_mock.Playback())
@@ -147,6 +151,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_personSkill1.Skill).Return(_phoneSkill1).Repeat.AtLeastOnce();
 				Expect.Call(_personSkill2.Skill).Return(_phoneSkill1).Repeat.AtLeastOnce();
 				Expect.Call(_personSkill3.Skill).Return(_phoneSkill2).Repeat.AtLeastOnce();
+
+				Expect.Call(_personSkill1.Active).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill2.Active).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill3.Active).Return(true).Repeat.AtLeastOnce();
 			}
 
 			using (_mock.Playback())
@@ -183,6 +191,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				Expect.Call(_personSkill1.Skill).Return(_phoneSkill1).Repeat.AtLeastOnce();
 				Expect.Call(_personSkill2.Skill).Return(_mailSkill).Repeat.AtLeastOnce();
+
+				Expect.Call(_personSkill1.Active).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_personSkill2.Active).Return(true).Repeat.AtLeastOnce();
 			}
 
 			using (_mock.Playback())
