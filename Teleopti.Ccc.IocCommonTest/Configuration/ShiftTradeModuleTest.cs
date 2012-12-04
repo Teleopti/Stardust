@@ -28,10 +28,24 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldRegisterShiftTradeSpecifications()
 		{
-			const int noOfSpecs = 6;
+			const int noOfSpecs = 4;
 			using (var ioc = containerBuilder.Build())
 			{
 				var specs = ioc.Resolve<IEnumerable<IShiftTradeSpecification>>().ToArray();
+				specs.Count().Should().Be.EqualTo(noOfSpecs);
+				var uniqueTypes = new HashSet<Type>();
+				specs.ForEach(spec => uniqueTypes.Add(spec.GetType()));
+				uniqueTypes.Count.Should().Be.EqualTo(noOfSpecs);
+			}
+		}
+
+		[Test]
+		public void ShouldRegisterShiftTradeLightSpecifications()
+		{
+			const int noOfSpecs = 2;
+			using (var ioc = containerBuilder.Build())
+			{
+				var specs = ioc.Resolve<IEnumerable<ISpecification<ShiftTradeAvailableCheckItem>>>().ToArray();
 				specs.Count().Should().Be.EqualTo(noOfSpecs);
 				var uniqueTypes = new HashSet<Type>();
 				specs.ForEach(spec => uniqueTypes.Add(spec.GetType()));
@@ -45,6 +59,15 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			using (var ioc = containerBuilder.Build())
 			{
 				ioc.Resolve<IShiftTradeValidator>().Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void CanCreateShiftTradeLightValidator()
+		{
+			using (var ioc = containerBuilder.Build())
+			{
+				ioc.Resolve<IShiftTradeLightValidator>().Should().Not.Be.Null();
 			}
 		}
 	}
