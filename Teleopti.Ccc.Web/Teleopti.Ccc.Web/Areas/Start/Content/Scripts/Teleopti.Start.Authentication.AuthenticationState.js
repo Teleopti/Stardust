@@ -69,6 +69,10 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 	};
 
 	this.ApplyChangePassword = function (options) {
+		if (!authenticationModel) {
+			gotoSignInView();
+			return;
+		}
 		options.data.UserName = authenticationModel.username;
 		changePasswordAjax(options);
 	};
