@@ -227,7 +227,6 @@
     <Compile Include="QueryHandler\IHandleQuery.cs" />
     <Compile Include="Restrictions\IIsEditablePredicate.cs" />
     <Compile Include="Restrictions\IsEditablePredicate.cs" />
-    <Compile Include="Restrictions\IsWorkflowControlSetNullSpecification.cs" />
     <Compile Include="Restrictions\MinMaxWorkTimeChecker.cs" />
     <Compile Include="Restrictions\NightlyRestFromPersonOnDayExtractor.cs" />
     <Compile Include="Restrictions\OpenShiftTradePeriodSpecification.cs" />
