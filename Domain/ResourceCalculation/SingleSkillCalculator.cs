@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					{
 						Tuple<double, double> resultToRemove = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, toRemove, skill);
 						Tuple<double, double> resultToAdd = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, toAdd, skill);
-						result1 = skillStaffPeriod.Payload.CalculatedLoggedOn - resultToRemove.Item1 + resultToAdd.Item1;
+						result1 = skillStaffPeriod.Payload.CalculatedResource - resultToRemove.Item1 + resultToAdd.Item1;
 						result2 = skillStaffPeriod.Payload.CalculatedLoggedOn - resultToRemove.Item2 + resultToAdd.Item2;
 					}
 					else
