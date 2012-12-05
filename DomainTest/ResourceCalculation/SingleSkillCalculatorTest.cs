@@ -273,6 +273,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			Assert.AreEqual(0.5, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(1, skillStaffPeriod.CalculatedLoggedOn);
+
+			_target.Calculate(new List<IVisualLayerCollection>(), relevantSkillStaffPeriods, _toRemove, list);
+			Assert.AreEqual(1, skillStaffPeriod.CalculatedResource);
+			Assert.AreEqual(2, skillStaffPeriod.CalculatedLoggedOn);
+
+			_target.Calculate(new List<IVisualLayerCollection>(), relevantSkillStaffPeriods, _toRemove, list);
+			Assert.AreEqual(1.5, skillStaffPeriod.CalculatedResource);
+			Assert.AreEqual(3, skillStaffPeriod.CalculatedLoggedOn);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
