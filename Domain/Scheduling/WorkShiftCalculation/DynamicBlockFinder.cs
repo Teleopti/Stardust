@@ -7,17 +7,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
-    public interface ISkillDayBlockFinder
+    public interface IDynamicBlockFinder
     {
         List<DateOnly > ExtractSkillDays(DateTime dateTime);
     }
 
-    public class SkillDayBlockFinder : ISkillDayBlockFinder
+    public class DynamicBlockFinder : IDynamicBlockFinder
     {
         public ISchedulingResultStateHolder SchedulingResultStateHolder { get; set; }
         private readonly SchedulingOptions _schedulingOptions;
 
-        public SkillDayBlockFinder(SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder)
+        public DynamicBlockFinder(SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder)
         {
             SchedulingResultStateHolder = schedulingResultStateHolder;
             _schedulingOptions = schedulingOptions;

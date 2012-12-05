@@ -9,9 +9,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 {
     [TestFixture]
-    public class SkillDayBlockFinderTest
+    public class DynamicBlockFinderTest
     {
-        private ISkillDayBlockFinder _target;
+        private IDynamicBlockFinder _target;
         private SchedulingOptions  _schedulingOptions;
         private MockRepository _mock;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         public void FindSkillDayFromBlockUsingPeriod()
         {
             _schedulingOptions.UsePeriodAsBlock = true;
-            _target = new SkillDayBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
+            _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
             var date = DateTime.UtcNow ;
             
             var scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _schedulingOptions.UseCalenderWeekAsBlock = false;
             _schedulingOptions.UsePeriodAsBlock = false;
             _schedulingOptions.UseTwoDaysOffAsBlock = true;
-            _target = new SkillDayBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
+            _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
             var date = DateTime.UtcNow;
             
             var scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _schedulingOptions.UseCalenderWeekAsBlock  = true;
             _schedulingOptions.UsePeriodAsBlock = false;
             _schedulingOptions.UseTwoDaysOffAsBlock = false;
-            _target = new SkillDayBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
+            _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
             var startDate = new DateTime(2012, 11, 1, 0, 0, 0, DateTimeKind.Utc);
 
             var scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
