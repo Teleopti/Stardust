@@ -150,6 +150,7 @@
     <EmbeddedResource Include="Resources.th.resx" />
     <EmbeddedResource Include="Resources.tr.resx" />
     <EmbeddedResource Include="Resources.uz.resx" />
+    <EmbeddedResource Include="Resources.vi.resx" />
     <EmbeddedResource Include="Resources.zh-CN.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
