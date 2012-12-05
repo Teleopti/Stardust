@@ -111,8 +111,8 @@ ECHO un-rar Exe-file is: %UNRAR%
 
 ::Get 7-zip exe
 ECHO Refreshing 7-zip ...
-ECHO ROBOCOPY "\\a380\T-files\Develop\Test\Baselines\7zip" "%Zip7Folder%" /MIR
-ROBOCOPY "\\a380\T-files\Develop\Test\Baselines\7zip" "%Zip7Folder%" /MIR
+ECHO ROBOCOPY "\\a380\T-files\R&D\Test\Baselines\7zip" "%Zip7Folder%" /MIR
+ROBOCOPY "\\a380\T-files\R&D\Test\Baselines\7zip" "%Zip7Folder%" /MIR
 
 CLS
 ECHO --- Note! ---
@@ -140,7 +140,7 @@ GOTO Start
 ::Get user input
 CLS
 ECHO Available Baselines:
-TYPE "\\a380\T-files\Develop\Test\Baselines\Databases.txt"
+TYPE "\\a380\T-files\R&D\Test\Baselines\Databases.txt"
 ECHO.
 ECHO ---
 
@@ -194,7 +194,7 @@ ECHO. > "%temp%\NumberOfFiles.txt"
 
 ::Check if app databases changed
 ECHO Refreshing %AppRar% ...
-XCOPY "\\a380\T-files\Develop\Test\Baselines\%AppRar%" "%RarFolder%\" /D /Y > "%temp%\NumberOfFiles.txt"
+XCOPY "\\a380\T-files\R&D\Test\Baselines\%AppRar%" "%RarFolder%\" /D /Y > "%temp%\NumberOfFiles.txt"
 
 ::unRar only if new
 findstr /C:"0 File(s) copied" "%temp%\NumberOfFiles.txt"
@@ -210,7 +210,7 @@ ECHO. > "%temp%\NumberOfFiles.txt"
 
 IF %LOADSTAT% EQU 1 (
 ECHO Refreshing %StatRar% ...
-XCOPY "\\a380\T-files\Develop\Test\Baselines\%StatRar%" "%RarFolder%\" /D /Y > "%temp%\NumberOfFiles.txt"
+XCOPY "\\a380\T-files\R&D\Test\Baselines\%StatRar%" "%RarFolder%\" /D /Y > "%temp%\NumberOfFiles.txt"
 ) ELSE (
 GOTO SkipStat
 )
