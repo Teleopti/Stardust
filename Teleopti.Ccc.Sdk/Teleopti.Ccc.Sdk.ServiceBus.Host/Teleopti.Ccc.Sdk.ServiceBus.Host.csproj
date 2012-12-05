@@ -250,8 +250,7 @@
 if not exist "$(TargetDir)Payroll" mkdir "$(TargetDir)Payroll"
 xcopy "$(ProjectDir)..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(ConfigurationName)\Teleopti.Ccc.Payroll.dll" "$(TargetDir)Payroll" /y
 xcopy "$(ProjectDir)..\Teleopti.Ccc.Sdk.Notification\bin\$(ConfigurationName)\Teleopti.Ccc.Sdk.Notification.dll" "$(TargetDir)" /y</PostBuildEvent>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBusHost.config" "$(ProjectDir)App.config"</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>
