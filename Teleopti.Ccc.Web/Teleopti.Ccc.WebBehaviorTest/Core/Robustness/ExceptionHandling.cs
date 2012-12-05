@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using WatiN.Core;
@@ -43,6 +44,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 			{
 				return failureCallback.Invoke(ex);
 			}
+			catch (TargetInvocationException ex)
+			{
+				return failureCallback.Invoke(ex);
+			}
 			catch (NullReferenceException ex)
 			{
 				return failureCallback.Invoke(ex);
@@ -80,6 +85,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 				failureCallback.Invoke(ex);
 			}
 			catch (SecurityException ex)
+			{
+				failureCallback.Invoke(ex);
+			}
+			catch (TargetInvocationException ex)
 			{
 				failureCallback.Invoke(ex);
 			}
