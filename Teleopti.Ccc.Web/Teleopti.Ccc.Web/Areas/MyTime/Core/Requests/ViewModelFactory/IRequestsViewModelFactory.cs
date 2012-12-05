@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		RequestsViewModel CreatePageViewModel();
 		IEnumerable<RequestViewModel> CreatePagingViewModel(Paging paging);
 		RequestViewModel CreateRequestViewModel(Guid id);
+		ShiftTradeRequestsPreparationViewModel CreateShiftTradePreparationViewModel();
 	}
 }

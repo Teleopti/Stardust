@@ -157,6 +157,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeRequestProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestsPreparationDomainData.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestsPreparationViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsPreparationViewModel.cs" />
     <Compile Include="Areas\Team\TeamAreaRegistration.cs" />
     <Compile Include="Areas\Team\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MobileReports\Controllers\ReportController.cs" />
@@ -517,6 +522,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js" />
     <Content Include="Areas\Team\Content\Scripts\helpers.js" />
     <Content Include="Areas\Team\Content\Scripts\layout.js" />
     <Content Include="Areas\Team\Content\Scripts\main.js" />

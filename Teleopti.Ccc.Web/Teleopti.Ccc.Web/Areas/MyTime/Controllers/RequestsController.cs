@@ -90,5 +90,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_textRequestPersister.Delete(id);
 			return new EmptyResult();
 		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult ShiftTradeRequest()
+		{
+			return Json(_requestsViewModelFactory.CreateShiftTradePreparationViewModel(), JsonRequestBehavior.AllowGet);
+		}
 	}
 }

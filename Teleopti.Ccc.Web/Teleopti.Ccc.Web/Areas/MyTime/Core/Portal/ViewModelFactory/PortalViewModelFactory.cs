@@ -102,30 +102,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private SectionNavigationItem createRequestsNavigationItem()
 		{
 			var toolbarItems = new List<ToolBarItemBase>();
-
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
-			{
-				toolbarItems.AddRange(new ToolBarItemBase[]
-			                        {
-			                            new ToolBarButtonItem
-			                                {
-			                                    Title = Resources.Requests,
-			                                    ButtonType = "showRequests"
-			                                },
-			                            new ToolBarButtonItem
-			                                {
-			                                    Title = "xxAdd Shift Trade Requests",
-			                                    ButtonType = "addShiftTradeRequest"
-			                                },
-			                            new ToolBarSeparatorItem(),
-			                            new ToolBarDatePicker
-			                                {
-			                                    NextTitle = Resources.NextPeriod,
-			                                    PrevTitle = Resources.PreviousPeriod,
-			                                    IsHhidden = true
-			                                }
-			                        });
-			}
+			
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests) ||
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb))
 			{
