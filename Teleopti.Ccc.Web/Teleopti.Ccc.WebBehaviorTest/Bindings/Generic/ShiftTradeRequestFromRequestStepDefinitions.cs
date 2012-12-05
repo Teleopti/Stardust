@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	public class ShiftTradeRequestFromRequestStepDefinitions
 	{
 		[Given(@"I click the shift trade request's delete button")]
+		[When(@"I click the shift trade request's delete button")]
 		public void GivenIClickTheShiftTradeRequestSDeleteButton()
 		{
 			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldNotSeeAnyDeleteButtonOnMyExistingShiftTradeRequest()
 		{
 			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
-			EventualAssert.That(()=>Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId).IsDisplayed(),Is.False);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId).Parent.IsDisplayed(), Is.False);
 		}
 	}
 }
