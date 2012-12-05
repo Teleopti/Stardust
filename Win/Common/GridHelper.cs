@@ -629,9 +629,8 @@ namespace Teleopti.Ccc.Win.Common
             {
                 GridRangeInfo tempRange = (GridRangeInfo)range.Clone();
                 int offset = gridControl.Cols.FrozenCount - tempRange.Left;
-                if (offset > 0)
-                    tempRange = tempRange.OffsetRange(0, offset + 1);
-                rangelistTemp.Add(tempRange);
+                if (offset < 0)
+                    rangelistTemp.Add(tempRange);
             }
 
             return gridPasteAction.PasteBehavior.DoPaste(gridControl, clipHandler, gridPasteAction, rangelistTemp);
