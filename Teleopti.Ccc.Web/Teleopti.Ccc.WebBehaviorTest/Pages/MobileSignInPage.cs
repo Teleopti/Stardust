@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SelectApplicationTestDataSource()
 		{
-			SigninDataSources.Filter(Find.ByValue("TestData")).First().Click();
+			SigninDataSources.Filter(Find.ByValue("TestData")).First().EventualClick();
 		}
 		
 		public void SignInWindows()
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void TrySignInApplication(string userName, string password)
 		{
-			SigninDataSources.Filter(Find.ByValue("TestData")).First().Click();
+			SigninDataSources.Filter(Find.ByValue("TestData")).First().EventualClick();
 			UserNameTextField.Value = userName;
 			PasswordTextField.Value = password;
 			SignInButton.EventualClick();
@@ -69,12 +69,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			EventualAssert.That(() =>
 			                    	{
-			                    		if (SignoutButton.Exists)
+			                    		if (SignoutButton.SafeExists())
 			                    			return true;
-			                    		if (Document.RadioButton(Find.ByName("signin-sel-businessunit")).Exists)
+			                    		if (Document.RadioButton(Find.ByName("signin-sel-businessunit")).SafeExists())
 			                    			return true;
 										var span = Document.Span(QuicklyFind.ByClass("error"));
-			                    		if (span.Exists)
+			                    		if (span.SafeExists())
 			                    		{
 			                    			if (span.Text == null)
 			                    				return false;
@@ -86,12 +86,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SelectFirstBusinessUnit()
 		{
-			SignInBusinessUnits.First().Click();
+			SignInBusinessUnits.First().EventualClick();
 		}
 
 		public void ClickBusinessUnitOkButton()
 		{
-			SignInBusinessInitsOkButton.Click();
+			SignInBusinessInitsOkButton.EventualClick();
 		}
 	}
 }
