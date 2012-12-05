@@ -75,16 +75,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
         private List<DateOnly > GetDaysOffFromSchedule(IEnumerable<DateOnly> dateOnlyListForFullPeriod )
         {
-            var dayOffList   = new List<DateOnly>();
-            foreach(var dateOnly in dateOnlyListForFullPeriod )
-            {
-                var scheduleDayList = SchedulingResultStateHolder.Schedules.SchedulesForDay(dateOnly);
-                if (scheduleDayList.Any(schedule => schedule.SignificantPart() == SchedulePartView.DayOff))
-                {
-                    dayOffList.Add(dateOnly);
-                }
-            }
-            return dayOffList;
-        } 
+            return (from dateOnly in dateOnlyListForFullPeriod let scheduleDayList = SchedulingResultStateHolder.Schedules.SchedulesForDay(dateOnly) 
+                    where scheduleDayList.Any(schedule => schedule.SignificantPart() == SchedulePartView.DayOff) select dateOnly).ToList();
+        }
     }
 }
