@@ -28,7 +28,7 @@ SET SQLPwd=cadadi
 SET SUPPORTTOOL=
 SET CreateAgg=
 SET CreateAnalytics=
-SET Tfiles=\\a380\T-files\Develop\Test\Baselines
+SET Tfiles=\\gigantes\Customer Databases\CCC\RestoreToLocal\Baselines
 
 ::Get current Branch
 CD "%ROOTDIR%\..\..\.."
@@ -144,7 +144,7 @@ ECHO Available Baselines:
 ECHO -------------------------------------------
 ECHO Database                           @@Version     Comment         Path
 ECHO -------------------------------------------
-for /f "tokens=1,2 delims=;" %%g in (%Tfiles%\Databases.txt) do echo %%g
+for /f "usebackq tokens=1,2 delims=;" %%g in ("%Tfiles%\Databases.txt") do echo %%g
 ECHO.
 ECHO -------------------------------------------
 
