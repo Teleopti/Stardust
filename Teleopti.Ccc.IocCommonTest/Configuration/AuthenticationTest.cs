@@ -2,8 +2,6 @@ using NUnit.Framework;
 using Autofac;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

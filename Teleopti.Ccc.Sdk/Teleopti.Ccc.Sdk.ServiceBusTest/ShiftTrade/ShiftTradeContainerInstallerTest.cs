@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade;
 using Teleopti.Interfaces.Infrastructure;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			var builder = new ContainerBuilder();
 			builder.RegisterType<ShiftTradeRequestSaga>().As<ConsumerOf<NewShiftTradeRequestCreated>>();
 
-			builder.RegisterModule<ShiftTradeContainerInstaller>();
+			builder.RegisterModule<ShiftTradeModule>();
 			builder.RegisterModule<RepositoryContainerInstaller>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<ForecastContainerInstaller>();
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			var builder = new ContainerBuilder();
 			builder.RegisterType<ShiftTradeRequestSaga>().As<ConsumerOf<AcceptShiftTrade>>();
 
-			builder.RegisterModule<ShiftTradeContainerInstaller>();
+			builder.RegisterModule<ShiftTradeModule>();
 			builder.RegisterModule<RepositoryContainerInstaller>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<ForecastContainerInstaller>();

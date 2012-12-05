@@ -1032,9 +1032,9 @@
     <Compile Include="WorkflowControl\PersonAccountBalanceCalculatorTest.cs" />
     <Compile Include="WorkflowControl\PersonAccountBalanceValidatorTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IsShiftTradeRequestNotNullSpecificationTest.cs" />
-    <Compile Include="WorkflowControl\ShiftTrades\IsWorkflowControlSetNullSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\OpenShiftTradePeriodSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAbsenceSpecificationTest.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeLightValidatorTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMeetingSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradePersonalActivitySpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeSkillSpecificationTest.cs" />

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
-
-    public class ShiftTradeTargetTimeSpecification : ShiftTradeSpecification, IShiftTradeTargetTimeSpecification
+    public class ShiftTradeTargetTimeSpecification : ShiftTradeSpecification
     {
         private readonly ISchedulingResultStateHolder _stateHolder;
         private readonly ISchedulePeriodTargetTimeCalculator _targetTimeTimeCalculator;
@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
             _targetTimeTimeCalculator = targetTimeTimeCalculator;
         }
 
-        public override bool IsSatisfiedBy(IList<IShiftTradeSwapDetail> obj)
+		  public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
         {
-            IList<IScheduleDay> scheduleDays = new List<IScheduleDay>(obj.Count*2);
+            IList<IScheduleDay> scheduleDays = new List<IScheduleDay>(obj.Count()*2);
 
             // Här vill jag bara få en lista på alla inblandade scheduleDays så jag kan få fram min lista av schemaperioder (matrixes), gör det innan motbyten är tillagda
             foreach (var shiftTradeDetail in obj)
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
             return true;
         }
 
-        private static IList<IShiftTradeSwapDetail> createSwapDetails(IEnumerable<IShiftTradeSwapDetail> originalList)
+        private static IEnumerable<IShiftTradeSwapDetail> createSwapDetails(IEnumerable<IShiftTradeSwapDetail> originalList)
         {
             IList<IShiftTradeSwapDetail> ret = new List<IShiftTradeSwapDetail>();
             foreach (var currentDetail in originalList)
