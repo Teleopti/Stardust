@@ -6,6 +6,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -15,10 +17,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public class AddAbsenceCommand : AddLayerCommand
 	{
+		private readonly IPrincipalAuthorization _principalAuthorization;
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public AddAbsenceCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, ISchedulePresenterBase presenter, IList<IScheduleDay> scheduleParts)
+		public AddAbsenceCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, ISchedulePresenterBase presenter, IList<IScheduleDay> scheduleParts, IPrincipalAuthorization principalAuthorization)
 			: base(schedulerStateHolder, scheduleViewBase, presenter, scheduleParts ?? scheduleViewBase.CurrentColumnSelectedSchedules())
 		{
+			_principalAuthorization = principalAuthorization;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -123,11 +128,29 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IList<IScheduleDay> schedulesToKeep = new List<IScheduleDay>();
 			foreach (IScheduleDay schedulePart in selectedSchedules)
 			{
-				GridlockDictionary lockDictionary = Presenter.LockManager.Gridlocks(schedulePart.Person,
-																					schedulePart.DateOnlyAsPeriod.DateOnly);
-				if (lockDictionary == null || lockDictionary.Count == 0)
+				GridlockDictionary lockDictionary = Presenter.LockManager.Gridlocks(schedulePart.Person, schedulePart.DateOnlyAsPeriod.DateOnly);
+				var keep = true;
+				if (!(lockDictionary == null || lockDictionary.Count == 0))
+				{
+					foreach (var gridLock in lockDictionary)
+					{
+						if (!gridLock.Value.LockType.Equals(LockType.WriteProtected))
+						{
+							keep = false;
+							break;
+						}
+
+						if (_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+							continue;
+						keep = false;
+						break;
+					}
+				}
+
+				if (keep)
 					schedulesToKeep.Add(schedulePart);
 			}
+
 			return schedulesToKeep.OrderBy(p => p.DateOnlyAsPeriod.DateOnly).ToList();
 		}
 

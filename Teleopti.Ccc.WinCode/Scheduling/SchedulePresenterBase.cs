@@ -925,7 +925,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public void AddAbsence(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod)
         {
-            var command = new AddAbsenceCommand(_schedulerState, _view, this, schedules)
+			var command = new AddAbsenceCommand(_schedulerState, _view, this, schedules, TeleoptiPrincipal.Current.PrincipalAuthorization)
                               {DefaultPeriod = defaultPeriod};
             command.Execute();
         }

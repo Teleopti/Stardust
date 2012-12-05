@@ -5,6 +5,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -32,6 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest
         private IScheduleDay _schedulePart;
 		private IScheduleDay _schedulePart2;
         private IScheduleRange _scheduleRange;
+		private IPrincipalAuthorization _principalAuthorization;
 
         [SetUp]
         public void Setup()
@@ -47,7 +50,8 @@ namespace Teleopti.Ccc.WinCodeTest
             _schedulerStateHolder = new SchedulerStateHolder(_scenario, _period, new List<IPerson>());
             _selectedItem = _mocks.StrictMock<IAbsence>();
             _schedulePresenterBase = _mocks.DynamicMock<ISchedulePresenterBase>();
-            _target = new AddAbsenceCommand(_schedulerStateHolder, _viewBase, _schedulePresenterBase, _selectedSchedules);
+			_principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
+			_target = new AddAbsenceCommand(_schedulerStateHolder, _viewBase, _schedulePresenterBase, _selectedSchedules, _principalAuthorization);
             _person = PersonFactory.CreatePerson("person");
             _gridlockManager = _mocks.DynamicMock<IGridlockManager>();
             _scheduleRange = _mocks.DynamicMultiMock<IScheduleRange>(typeof(IValidateScheduleRange));
@@ -80,6 +84,98 @@ namespace Teleopti.Ccc.WinCodeTest
                 _target.Execute();
             }
         }
+
+		[Test]
+		public void ShouldNotAddAbsenceOnLockedDay()
+		{
+			var dateOnly = new DateOnly(2012, 07, 16);
+			var gridLockManager = new GridlockManager();
+			gridLockManager.AddLock(_person, dateOnly, LockType.Normal, _period);
+
+			_selectedSchedules.Add(_schedulePart);
+			var period = new DateTimePeriod(_date.AddHours(1), _date.AddHours(22));
+			var scheduleDictionary = CreateExpectationForModifySchedulePart(_schedulePart, _person);
+
+			using (_mocks.Record())
+			{
+				ExpectCallsDialogOnShouldAddAbsenceWithDefaultPeriod(period);
+				ExpectCallsViewBaseOnShouldAddAbsenceWithDefaultPeriod();
+
+				Expect.Call(_schedulePresenterBase.LockManager).Return(gridLockManager);
+				Expect.Call(_schedulePart.Period).Return(DateTimeFactory.CreateDateTimePeriod(_date, 0)).Repeat.Any();
+				Expect.Call(scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(dateOnly)).Return(_schedulePart);
+				Expect.Call(_schedulePart.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+				_schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
+			}
+			using (_mocks.Playback())
+			{
+				_target.Execute();
+			}
+		}
+
+		[Test]
+		public void ShouldNotAddAbsenceNoPermissionOnWriteProtectedDay()
+		{
+			var dateOnly = new DateOnly(2012, 07, 16);
+			var gridLockManager = new GridlockManager();
+			gridLockManager.AddLock(_person, dateOnly, LockType.WriteProtected, _period);
+
+			_selectedSchedules.Add(_schedulePart);
+			var period = new DateTimePeriod(_date.AddHours(1), _date.AddHours(22));
+			var scheduleDictionary = CreateExpectationForModifySchedulePart(_schedulePart, _person);
+
+			using (_mocks.Record())
+			{
+				ExpectCallsDialogOnShouldAddAbsenceWithDefaultPeriod(period);
+				ExpectCallsViewBaseOnShouldAddAbsenceWithDefaultPeriod();
+
+				Expect.Call(_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)).Return(false);
+				Expect.Call(_schedulePresenterBase.LockManager).Return(gridLockManager);
+				Expect.Call(_schedulePart.Period).Return(DateTimeFactory.CreateDateTimePeriod(_date, 0)).Repeat.Any();
+				Expect.Call(scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(dateOnly)).Return(_schedulePart);
+				Expect.Call(_schedulePart.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+				_schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
+			}
+			using (_mocks.Playback())
+			{
+				_target.Execute();
+			}
+		}
+
+		[Test]
+		public void ShouldAddAbsencePermissionOnWriteProtectedDay()
+		{
+			var dateOnly = new DateOnly(2012, 07, 16);
+			var gridLockManager = new GridlockManager();
+			gridLockManager.AddLock(_person, dateOnly, LockType.WriteProtected, _period);
+
+			_selectedSchedules.Add(_schedulePart);
+			var period = new DateTimePeriod(_date.AddHours(1), _date.AddHours(22));
+			var scheduleDictionary = CreateExpectationForModifySchedulePart(_schedulePart, _person);
+
+			using (_mocks.Record())
+			{
+				ExpectCallsDialogOnShouldAddAbsenceWithDefaultPeriod(period);
+				ExpectCallsViewBaseOnShouldAddAbsenceWithDefaultPeriod();
+
+				Expect.Call(_schedulePresenterBase.LockManager).Return(gridLockManager);
+				Expect.Call(_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)).Return(true);
+				Expect.Call(_schedulePart.Period).Return(new DateTimePeriod(_date, _date.AddDays(1))).Repeat.Any();
+				Expect.Call(_schedulePart2.Period).Return(new DateTimePeriod(_date.AddDays(1), _date.AddDays(2))).Repeat.Any();
+				Expect.Call(() => _schedulePart.CreateAndAddAbsence(null)).IgnoreArguments().Repeat.Once(); // only add absence to the first day
+				Expect.Call(scheduleDictionary[_person]).Return(_scheduleRange).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2012, 07, 16))).Return(_schedulePart);
+				Expect.Call(_schedulePart.TimeZone).Return(CccTimeZoneInfoFactory.StockholmTimeZoneInfo());
+				Expect.Call(() => ((IValidateScheduleRange)_scheduleRange).ValidateBusinessRules(null)).IgnoreArguments();
+				_schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
+			}
+			using (_mocks.Playback())
+			{
+				_target.Execute();
+			}
+		}
 
 		[Test]
 		public void CreateCloneScheduleForEveryDaysAffectedByAbsence()
