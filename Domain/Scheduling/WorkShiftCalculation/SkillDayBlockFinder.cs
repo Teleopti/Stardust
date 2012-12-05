@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
     public interface ISkillDayBlockFinder
     {
-        List<ISkillDay> ExtractSkillDays(DateTime dateTime);
+        List<DateOnly > ExtractSkillDays(DateTime dateTime);
     }
 
     public class SkillDayBlockFinder : ISkillDayBlockFinder
@@ -23,14 +23,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             _schedulingOptions = schedulingOptions;
         }
 
-        public List<ISkillDay> ExtractSkillDays(DateTime dateTime)
+        public List<DateOnly> ExtractSkillDays(DateTime dateTime)
         {
             var selectedPeriod = SchedulingResultStateHolder.Schedules.Period.LoadedPeriod();
             var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-            var retList = new List<ISkillDay>();
+            var retList = new List<DateOnly>();
             if(_schedulingOptions.UsePeriodAsBlock )
             {
-                retList = SchedulingResultStateHolder.SkillDaysOnDateOnly(selectedPeriod.ToDateOnlyPeriod(timeZone).DayCollection()).ToList();
+                retList = selectedPeriod.ToDateOnlyPeriod(timeZone).DayCollection().ToList() ;
             }
             else if (_schedulingOptions.UseCalenderWeekAsBlock)
             {
@@ -38,9 +38,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                 var dateOnlyList = new List<DateOnly >();
                 foreach (var dateOnly in selectedPeriod.ToDateOnlyPeriod(timeZone).DayCollection().Where(day => day >= new DateOnly(dateTime)))
                 {
-                    if (dateOnly.DayOfWeek.Equals(DayOfWeek.Sunday))
+                    if (dateOnly.DayOfWeek.Equals(DayOfWeek.Sunday) || dateOnly.DayOfWeek.Equals(DayOfWeek.Saturday ))
                     {
-                        dateOnlyList.Add(dateOnly);
                         break;
                     }
                     if (scheduleList.Contains(dateOnly))
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                     }
                 }
 
-                retList = SchedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList).ToList();
+                retList = dateOnlyList.ToList();
             }
             else if(_schedulingOptions.UseTwoDaysOffAsBlock )
             {
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                     }
                     extractedBlock.Add(dateOnlyList[i]);
                 }
-                retList = SchedulingResultStateHolder.SkillDaysOnDateOnly(extractedBlock).ToList() ;
+                retList = extractedBlock.ToList() ;
             }
            
            
