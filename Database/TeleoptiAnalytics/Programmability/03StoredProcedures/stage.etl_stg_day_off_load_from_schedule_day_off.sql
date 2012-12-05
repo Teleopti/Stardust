@@ -8,6 +8,7 @@ GO
 -- Description:	Load stage.stg_day_off from scheduled day offs data.
 -- =============================================
 CREATE PROCEDURE [stage].[etl_stg_day_off_load_from_schedule_day_off]
+WITH EXECUTE AS OWNER
 AS
 BEGIN
 	SET NOCOUNT ON;

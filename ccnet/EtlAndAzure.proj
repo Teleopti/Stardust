@@ -19,9 +19,11 @@
 		<CCC7DB>$(DBNamePrefix)_ccc7</CCC7DB>
 		<AnalyticsDB>$(DBNamePrefix)_analytics</AnalyticsDB>
 		<AggDB>$(DBNamePrefix)_agg</AggDB>
-		<DBManagerTeleoptiCCC7Args>-S$(COMPUTERNAME) -D$(CCC7DB) -OTeleoptiCCC7 -T -E</DBManagerTeleoptiCCC7Args>
-		<DBManagerTeleoptiCCCAggArgs>-S$(COMPUTERNAME) -D$(AggDB) -OTeleoptiCCCAgg -T -E</DBManagerTeleoptiCCCAggArgs>
-		<DBManagerTeleoptiAnalyticsArgs>-S$(COMPUTERNAME) -D$(AnalyticsDB) -OTeleoptiAnalytics -T -E</DBManagerTeleoptiAnalyticsArgs>
+		<AppSqlLogin>EtlNightlyUser</AppSqlLogin>
+		<AppSqlPwd>EtlNightlyPwd2</AppSqlPwd>
+		<DBManagerTeleoptiCCC7Args>-S$(COMPUTERNAME) -D$(CCC7DB) -OTeleoptiCCC7 -T -E -R -L$(AppSqlLogin):$(AppSqlPwd)</DBManagerTeleoptiCCC7Args>
+		<DBManagerTeleoptiCCCAggArgs>-S$(COMPUTERNAME) -D$(AggDB) -OTeleoptiCCCAgg -T -E -R -L$(AppSqlLogin):$(AppSqlPwd)</DBManagerTeleoptiCCCAggArgs>
+		<DBManagerTeleoptiAnalyticsArgs>-S$(COMPUTERNAME) -D$(AnalyticsDB) -OTeleoptiAnalytics -T -E -R -L$(AppSqlLogin):$(AppSqlPwd)</DBManagerTeleoptiAnalyticsArgs>
 		<LoadDimensionSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\LoadDimension.sql"</LoadDimensionSQL>
 		<moveDataSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\MoveData.sql"</moveDataSQL>
 		<BakDir>\\hebe\Installation\Dependencies\ccc7_server\DemoDatabase</BakDir>
@@ -31,7 +33,7 @@
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
-	<Target Name="Run" DependsOnTargets="AzureDeploy;Compile;PrepareDB;RunETL">
+		<Target Name="Run" DependsOnTargets="AzureDeploy;Compile;PrepareDB;RunETL">
 		<Message Text="All target executed!" Importance="high" />
 	</Target>
 	<Target Name="RunETL">
@@ -45,8 +47,8 @@
 
 		<!-- Delete Old and Copy new ETL bin files + config to a temporary dir-->
 		<Message Text="Prepare Files. Working..." Importance="high" />
-		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration)" Importance="high" />
-		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration)"/>
+		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd)" Importance="high" />
+		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd)"/>
 		<Message Text="Prepare Files. Done!" Importance="high" />
 
 		<!-- Install ETL Service-->

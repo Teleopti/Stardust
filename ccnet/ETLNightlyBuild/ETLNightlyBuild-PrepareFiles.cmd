@@ -5,6 +5,8 @@ SET TargetDir=%~2
 SET CCC7DB=%~3
 SET AnalyticsDB=%~4
 SET config=%~5
+SET AppSqlLogin=%~6
+SET AppSqlPwd=%~7
 
 ::Delete target Dir
 ECHO RMDIR "%TargetDir%" /S /Q
@@ -29,3 +31,7 @@ COPY "%CCNetWorkDir%\BuildArtifacts\TeleoptiCCC7.nhib.xml" "%TargetDir%\Teleopti
 cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" $(CCC7DB) %CCC7DB% "%TargetDir%\TeleoptiCCC7.nhib.xml"
 cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" $(AnalyticsDB) %AnalyticsDB% "%TargetDir%\TeleoptiCCC7.nhib.xml"
 cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" $(AnalyticsDB) %AnalyticsDB% "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config"
+
+::lowered permission account
+cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "Integrated Security=True" "User Id=%AppSqlLogin%;Password=%AppSqlPwd%" "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config"
+cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "Integrated Security=True" "User Id=%AppSqlLogin%;Password=%AppSqlPwd%" "%TargetDir%\TeleoptiCCC7.nhib.xml"
