@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Security;
 using WatiN.Core;
 using WatiN.Core.Exceptions;
 
@@ -38,6 +39,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 			{
 				return failureCallback.Invoke(ex);
 			}
+			catch (SecurityException ex)
+			{
+				return failureCallback.Invoke(ex);
+			}
 			catch (NullReferenceException ex)
 			{
 				return failureCallback.Invoke(ex);
@@ -71,6 +76,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 			}
 			// sometimes IE api gives these errors when the page is in a state between pages or something, and elements like body is null
 			catch (UnauthorizedAccessException ex)
+			{
+				failureCallback.Invoke(ex);
+			}
+			catch (SecurityException ex)
 			{
 				failureCallback.Invoke(ex);
 			}
