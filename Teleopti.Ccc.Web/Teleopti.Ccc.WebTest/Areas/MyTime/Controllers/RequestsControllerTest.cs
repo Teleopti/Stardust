@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 
 			var target = new RequestsController(viewModelFactory, null, null);
-			var model = new RequestViewModel[]{};
+			var model = new RequestViewModel[] { };
 			var paging = new Paging();
 
 			viewModelFactory.Stub(x => x.CreatePagingViewModel(paging)).Return(model);
@@ -133,8 +133,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				var result = target.RequestDetail(id);
 				var data = (RequestViewModel)result.Data;
 
-				assertRequestEqual(data, viewModel);	
+				assertRequestEqual(data, viewModel);
 			}
+		}
+
+		[Test]
+		public void ShouldGetDataForMakingShiftTrades()
+		{
+			var modelFactory = MockRepository.GenerateStub<IRequestsViewModelFactory>();
+
+			var model = new ShiftTradeRequestsPreparationViewModel { HasWorkflowControlSet = true };
+
+			modelFactory.Stub(x => x.CreateShiftTradePreparationViewModel()).Return(model);
+
+			var target = new RequestsController(modelFactory, null, null);
+			var result = target.ShiftTradeRequest();
+			var data = result.Data as ShiftTradeRequestsPreparationViewModel;
+
+			data.Should().Be.SameInstanceAs(model);
 		}
 
 		private static void assertRequestEqual(RequestViewModel target, RequestViewModel expected)

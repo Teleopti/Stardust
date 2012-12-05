@@ -95,6 +95,13 @@ Scenario: Time line when I have a scheduled shift
 	When I navigate to shift trade page
 	Then I should see the time line span from '5:45' to '16:15'
 
+Scenario: No workflow control set
+	Given I have the role 'Full access to mytime'
+	And I do not have a workflow control set
+	When I view Add Shift Trade Request
+	Then I should see a message text saying I am missing a workflow control set
+
+
 Scenario: Show my scheduled shift
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-01'
