@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SelectWindowsTestDataSource()
 		{
+			EventualAssert.That(() => Document.Element(Find.BySelector("li.windows a:contains(TestData)")).Exists, Is.True);
 		    Document.Element(Find.BySelector("li.windows a:contains(TestData)")).EventualClick();
 		}
 
