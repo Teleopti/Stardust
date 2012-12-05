@@ -63,9 +63,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				double skillEfficiency = checkPersonSkill(skill, layercollection.Person, dateOnly);
 				if (skillEfficiency == 0)
 					continue;
-				
-				result2 += calculateShift(skillStaffPeriod, layercollection, skill.Activity);
-				result1 += result2 * skillEfficiency;
+
+				double result = calculateShift(skillStaffPeriod, layercollection, skill.Activity);
+				result2 += result;
+				result1 += result * skillEfficiency;
 			}
 
 			return new Tuple<double, double>(result1, result2);
