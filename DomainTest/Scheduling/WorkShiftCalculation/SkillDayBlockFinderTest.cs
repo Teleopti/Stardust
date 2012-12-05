@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
@@ -22,13 +21,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         {
             _mock = new MockRepository();
             _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-            _target = new SkillDayBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
             _schedulingOptions = new SchedulingOptions();
+            
+            
         }
 
         [Test]
-        public void FindSkillDayFromBlock()
+        public void FindSkillDayFromBlockUsingPeriod()
         {
+            _schedulingOptions.UsePeriodAsBlock = true;
+            _target = new SkillDayBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
             var date = DateTime.UtcNow ;
             var skillDay1 = _mock.StrictMock<ISkillDay>();
             var skillDay2 = _mock.StrictMock<ISkillDay>();
@@ -49,31 +51,77 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
                 Assert.AreEqual(_target.ExtractSkillDays(date), new List<ISkillDay>{skillDay1, skillDay2});    
             }
         }
-    }
 
-    public  interface ISkillDayBlockFinder
-    {
-        List<ISkillDay> ExtractSkillDays(DateTime dateTime);
-    }
-
-    public class SkillDayBlockFinder : ISkillDayBlockFinder
-    {
-        public ISchedulingResultStateHolder SchedulingResultStateHolder { get; set; }
-        private readonly SchedulingOptions _schedulingOptions;
-
-        public SkillDayBlockFinder(SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder)
+        [Test]
+        public void FindSkillDayFromBlockUsingTwoDaysOff()
         {
-            SchedulingResultStateHolder = schedulingResultStateHolder;
-            _schedulingOptions = schedulingOptions;
+            _schedulingOptions.UseCalenderWeekAsBlock = false;
+            _schedulingOptions.UsePeriodAsBlock = false;
+            _schedulingOptions.UseTwoDaysOffAsBlock = true;
+            _target = new SkillDayBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
+            var date = DateTime.UtcNow;
+            var skillDay1 = _mock.StrictMock<ISkillDay>();
+            var skillDay2 = _mock.StrictMock<ISkillDay>();
+
+            var scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
+            var scheduleDateTimePeriod = _mock.StrictMock<IScheduleDateTimePeriod>();
+            var dateTimePeriod = new DateTimePeriod(date, date.AddDays(4));
+            var scheduleDay1 = _mock.StrictMock<IScheduleDay>(); 
+            var scheduleDayList1 = new List<IScheduleDay>(){scheduleDay1};
+            var scheduleDay2 = _mock.StrictMock<IScheduleDay>(); 
+            var scheduleDayList2 = new List<IScheduleDay>(){scheduleDay2};
+            using (_mock.Record())
+            {
+                Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.AtLeastOnce();
+                Expect.Call(scheduleDictionary.Period).Return(scheduleDateTimePeriod);
+                Expect.Call(scheduleDateTimePeriod.LoadedPeriod()).Return(dateTimePeriod);
+                Expect.Call(scheduleDictionary.SchedulesForDay(new DateOnly(date))).Return(new List<IScheduleDay>(){});
+                Expect.Call(scheduleDictionary.SchedulesForDay(new DateOnly(date.AddDays(1)))).Return(new List<IScheduleDay>(){});
+                Expect.Call(scheduleDictionary.SchedulesForDay(new DateOnly(date.AddDays(2)))).Return(scheduleDayList1);
+                Expect.Call(scheduleDictionary.SchedulesForDay(new DateOnly(date.AddDays(3)))).Return(scheduleDayList2);
+                Expect.Call(scheduleDictionary.SchedulesForDay(new DateOnly(date.AddDays(4)))).Return(new List<IScheduleDay>() { });
+                Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
+                Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
+                //Expect.Call(scheduleDictionary.SchedulesForDay(new DateOnly(date.AddDays(3)))).IgnoreArguments().Return(scheduleDayList);
+                //
+                Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).Return(new List<ISkillDay> { skillDay1, skillDay2 }).IgnoreArguments();
+            }
+            using (_mock.Playback())
+            {
+                Assert.AreEqual(_target.ExtractSkillDays(date), new List<ISkillDay> { skillDay1, skillDay2 });
+            }
         }
 
-        public List<ISkillDay> ExtractSkillDays(DateTime dateTime)
+        [Test]
+        public void FindSkillDayFromBlockUsingCalenderWeek()
         {
-            var selectedPeriod = SchedulingResultStateHolder.Schedules.Period.LoadedPeriod();
-            var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-            var retList = SchedulingResultStateHolder.SkillDaysOnDateOnly(selectedPeriod.ToDateOnlyPeriod(timeZone).DayCollection()).ToList();
-           
-            return retList;
+            _schedulingOptions.UseCalenderWeekAsBlock  = true;
+            _schedulingOptions.UsePeriodAsBlock = false;
+            _schedulingOptions.UseTwoDaysOffAsBlock = false;
+            _target = new SkillDayBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
+            var startDate = new DateTime(2012, 11, 1, 0, 0, 0, DateTimeKind.Utc);
+            var skillDay1 = _mock.StrictMock<ISkillDay>();
+            var skillDay2 = _mock.StrictMock<ISkillDay>();
+            var skillDay3 = _mock.StrictMock<ISkillDay>();
+
+            var scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
+            var scheduleDateTimePeriod = _mock.StrictMock<IScheduleDateTimePeriod>();
+            var dateTimePeriod = new DateTimePeriod(startDate, startDate.AddDays(11));
+
+            using (_mock.Record())
+            {
+                Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
+                Expect.Call(scheduleDictionary.Period).Return(scheduleDateTimePeriod);
+                Expect.Call(scheduleDateTimePeriod.LoadedPeriod()).Return(dateTimePeriod);
+                Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).Return(new List<ISkillDay> { skillDay1, skillDay2,skillDay3  }).IgnoreArguments();
+            }
+            using (_mock.Playback())
+            {
+                
+                Assert.AreEqual(_target.ExtractSkillDays(startDate ), new List<ISkillDay> { skillDay1, skillDay2,skillDay3  });
+            }
         }
     }
+
+    
 }
