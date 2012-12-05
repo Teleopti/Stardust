@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SelectApplicationTestDataSource()
 		{
+			EventualAssert.That(() => Document.Element(Find.BySelector("li.application a:contains(TestData)")).Exists, Is.True);
 		    Document.Element(Find.BySelector("li.application a:contains(TestData)")).EventualClick();
 		}
 
