@@ -19,10 +19,13 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 		var selected = self.SelectedDataSource();
 		if (selected)
 			if (selected.Type == "application") {
+				setTimeout(function () { self.UserNameFocus(true); }, 1);
 				return true;
 			}
 		return false;
 	});
+
+	this.UserNameFocus = ko.observable(false);
 
 	data.events.subscribe(function (dataSource) {
 		ko.utils.arrayForEach(self.DataSources(), function (d) {

@@ -15,7 +15,4 @@ Teleopti.Start.Authentication.SignInView = function (args) {
 
 		Teleopti.Start.Common.Layout.ActivatePlaceHolderText();
 	};
-
-
-
 };
