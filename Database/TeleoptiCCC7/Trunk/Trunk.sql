@@ -51,3 +51,27 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
+
+CREATE TABLE [ReadModel].[PersonScheduleDay](
+	[Id] [uniqueidentifier] NOT NULL,
+	[PersonId] [uniqueidentifier] NOT NULL,
+	[TeamId] [uniqueidentifier] NOT NULL,
+	[BelongsToDate] [smalldatetime] NOT NULL,
+	[ShiftStart] [datetime] NULL,
+	[ShiftEnd] [datetime] NULL,
+	[Shift] [nvarchar](4000) NOT NULL,
+	[SiteId] [uniqueidentifier] NOT NULL,
+	[BusinessUnitId] [uniqueidentifier] NOT NULL,
+	[InsertedOn] [datetime] NOT NULL,
+ CONSTRAINT [PK_PersonScheduleDay] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [ReadModel].[PersonScheduleDay] ADD  CONSTRAINT [DF_PersonScheduleDay_InsertedOn]  DEFAULT (getutcdate()) FOR [InsertedOn]
+GO
+
+
