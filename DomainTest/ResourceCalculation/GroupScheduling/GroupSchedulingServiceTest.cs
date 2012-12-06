@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		[Test]
 		public void ShouldNotScheduleOneDayOnePersonSteadyStateWhenGroupPersonIsNull()
 		{
-			var result = _target.ScheduleOneDayOnePersonSteadyState(new DateOnly(), _person1, _schedulingOptions, null, new List<IScheduleMatrixPro>());
+			var result = _target.ScheduleOneDayOnePersonSteadyState(new DateOnly(), _person1, _schedulingOptions, null, new List<IScheduleMatrixPro>(), _rollbackService);
 			Assert.IsFalse(result);
 		}
 
@@ -469,7 +469,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
 			using(_mock.Playback())
 			{
-				var result = _target.ScheduleOneDayOnePersonSteadyState(_date1, _person1, _schedulingOptions, _groupPerson, new List<IScheduleMatrixPro>());
+				var result = _target.ScheduleOneDayOnePersonSteadyState(_date1, _person1, _schedulingOptions, _groupPerson, new List<IScheduleMatrixPro>(), _rollbackService);
 				Assert.IsTrue(result);
 			}	
 		}
