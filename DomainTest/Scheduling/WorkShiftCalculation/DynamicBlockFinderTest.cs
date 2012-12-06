@@ -78,9 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
                 Expect.Call(scheduleDictionary.SchedulesForDay(new DateOnly(date.AddDays(4)))).Return(new List<IScheduleDay>() { });
                 Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
                 Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
-                
-                //Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).Return(new List<ISkillDay> { skillDay1, skillDay2 }).IgnoreArguments();
-            }
+           }
             using (_mock.Playback())
             {
                 Assert.AreEqual(_target.ExtractSkillDays(date), new List<DateOnly> { new DateOnly(date), new DateOnly(date.AddDays(1)) });
