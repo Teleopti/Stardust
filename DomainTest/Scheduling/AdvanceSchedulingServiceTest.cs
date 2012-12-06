@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
@@ -39,28 +39,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         }
     }
 
-    public interface IAdvanceSchedulingService 
-    {
-        object BlockIntradayAggregation();
-        object EffectiveRestrictionAggregation();
-        object RunScheduling();
-    }
-
-    public class AdvanceSchedulingService : IAdvanceSchedulingService
-    {
-        public object BlockIntradayAggregation()
-        {
-            throw new NotImplementedException();
-        }
-
-        public object EffectiveRestrictionAggregation()
-        {
-            throw new NotImplementedException();
-        }
-
-        public object RunScheduling()
-        {
-            throw new NotImplementedException();
-        }
-    }
+    
 }

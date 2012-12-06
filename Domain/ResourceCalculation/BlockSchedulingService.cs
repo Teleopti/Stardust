@@ -48,18 +48,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IBestBlockShiftCategoryFinder _blockShiftCategoryFinder;
         private readonly IScheduleDayService _scheduleDayService;
         private readonly IBlockFinderFactory _blockFinderFactory;
-        private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-        private readonly ISkillDayPeriodIntervalData _skillDayPeriodIntervalData;
         private bool _cancelMe;
 
         public BlockSchedulingService( IBestBlockShiftCategoryFinder blockShiftCategoryFinder,
-            IScheduleDayService scheduleDayService, IBlockFinderFactory blockFinderFactory, ISchedulingResultStateHolder schedulingResultStateHolder, ISkillDayPeriodIntervalData skillDayPeriodIntervalData )
+            IScheduleDayService scheduleDayService, IBlockFinderFactory blockFinderFactory )
         {
             _blockShiftCategoryFinder = blockShiftCategoryFinder;
             _scheduleDayService = scheduleDayService;
             _blockFinderFactory = blockFinderFactory;
-            _schedulingResultStateHolder = schedulingResultStateHolder;
-            _skillDayPeriodIntervalData = skillDayPeriodIntervalData;
         }
 
         public event EventHandler<BlockSchedulingServiceEventArgs> BlockScheduled;

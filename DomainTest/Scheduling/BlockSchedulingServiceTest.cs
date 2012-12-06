@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyExecute()
         {
-            _interface = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory, _schedulingResultStateHolder, _skillDayPeriodIntervalData);
+            _interface = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
 
             var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
             var schedulePart = _mocks.StrictMock<IScheduleDay>();
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void VerifyBlockFinderList()
         {
-            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory, _schedulingResultStateHolder, _skillDayPeriodIntervalData);
+            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
             IList<IBlockFinder> result = _instance.CreateFinders(_matrixList, BlockFinderType.BetweenDayOff);
             Assert.AreEqual(1, result.Count);
         }
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void VerifyActOnResultReturnsWhenNoBlock()
         {
-            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory, _schedulingResultStateHolder, _skillDayPeriodIntervalData);
+            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
             IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly>(), _reportList);
 			_instance.ActOnResult(result, null, _schedulingOptions);
         }
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                     new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { scheduleDayPro })).Repeat.Any();
 				Expect.Call(_scheduleDayService.ScheduleDay(schedulePart, _schedulingOptions)).Return(true).Repeat.Once();
             }
-            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory, _schedulingResultStateHolder, _skillDayPeriodIntervalData);
+            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
             IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { new DateOnly(2010, 1, 1) }, _reportList);
 
             using(_mocks.Playback())
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_matrix0.UnlockedDays).Return(
 					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { scheduleDayPro })).Repeat.Any();
 			}
-            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory, _schedulingResultStateHolder, _skillDayPeriodIntervalData);
+            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
 			IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { new DateOnly(2010, 1, 1) }, _reportList);
 
 			using (_mocks.Playback())
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { scheduleDayPro })).Repeat.Any();
 				Expect.Call(_scheduleDayService.ScheduleDay(schedulePart, _schedulingOptions)).Return(false).Repeat.AtLeastOnce();
 			}
-            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory, _schedulingResultStateHolder, _skillDayPeriodIntervalData);
+            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
 			IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { new DateOnly(2010, 1, 1) }, _reportList);
 
 			using (_mocks.Playback())
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             		IgnoreArguments().Return(new BestShiftCategoryResult(new PossibleStartEndCategory(), FailureCause.AlreadyAssigned)).Repeat.Once();
                 Expect.Call(_matrix0.Person).Return(_person).Repeat.Any();
             }
-            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory, _schedulingResultStateHolder, _skillDayPeriodIntervalData);
+            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
 			IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { new DateOnly(2010, 1, 1) }, _reportList);
 
 			_instance.ActOnResult(result, _matrix0, _schedulingOptions);
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 				Expect.Call(_scheduleDayService.ScheduleDay(schedulePart, _schedulingOptions)).Return(true).Repeat.Once();
             }
-            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory, _schedulingResultStateHolder, _skillDayPeriodIntervalData);
+            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
             IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { new DateOnly(2010, 1, 1) }, _reportList);
 
             using (_mocks.Playback())
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                     new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>())).Repeat.Any();
 				Expect.Call(_scheduleDayService.ScheduleDay(schedulePart, _schedulingOptions)).Repeat.Never();
             }
-            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory, _schedulingResultStateHolder, _skillDayPeriodIntervalData);
+            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
             IBlockFinderResult result = new BlockFinderResult(ShiftCategoryFactory.CreateShiftCategory("xx"), new List<DateOnly> { new DateOnly(2010, 1, 1) }, _reportList);
 
             using (_mocks.Playback())
@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             using(_mocks.Playback())
             {
-                _interface = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory, _schedulingResultStateHolder, _skillDayPeriodIntervalData);
+                _interface = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
                 _interface.BlockScheduled += interfaceBlockScheduled;
 				_interface.Execute(_matrixList, _schedulingOptions, _reportList);
                 _interface.BlockScheduled -= interfaceBlockScheduled; 
@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                 Expect.Call(scheduleDayPro.DaySchedulePart()).Return(schedulePart).Repeat.Once();
 				Expect.Call(_scheduleDayService.ScheduleDay(schedulePart, _schedulingOptions)).Return(true).Repeat.Once();
             }
-            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory, _schedulingResultStateHolder, _skillDayPeriodIntervalData);
+            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
             IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { new DateOnly(2010, 1, 1) }, _reportList);
 
 			Assert.IsTrue(_instance.TryScheduleBlock(result, _matrix0, _schedulingOptions));
@@ -402,7 +402,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_scheduleDayService.DeleteMainShift(new List<IScheduleDay> { schedulePart }, _schedulingOptions)).Return(
                     new List<IScheduleDay> {schedulePart}).Repeat.Once();
             }
-            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory, _schedulingResultStateHolder, _skillDayPeriodIntervalData);
+            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
             IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { new DateOnly(2010, 1, 1), new DateOnly(2010, 1, 2) }, _reportList);
 
             using(_mocks.Playback())
