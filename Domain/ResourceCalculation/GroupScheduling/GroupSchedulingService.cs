@@ -14,14 +14,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     public interface IGroupSchedulingService
     {
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker, ITeamSteadyStateHolder teamSteadyStateHolder, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
+
+    	void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList,
+    	             ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons,
+    	             BackgroundWorker backgroundWorker, ITeamSteadyStateHolder teamSteadyStateHolder,
+    	             ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler,
+    	             IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
+
         bool ScheduleOneDay(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList);
 
     	bool ScheduleOneDayOnOnePerson(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions,
     	                               IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList);
 
     	bool ScheduleOneDayOnePersonSteadyState(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions,
-    	                                        IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList);
+    	                                        IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList,
+    	                                        ISchedulePartModifyAndRollbackService rollbackService);
 
         IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions);
     }
@@ -196,11 +203,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			return true;
         }
 
-		public bool ScheduleOneDayOnePersonSteadyState(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList)
+		public bool ScheduleOneDayOnePersonSteadyState(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions, 
+			IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList,
+			ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			if (groupPerson == null) return false;
 			var members = groupPerson.GroupMembers;
-			return ScheduleThePersonOnDay(dateOnly, person, schedulingOptions, members, matrixList, null);	
+			return ScheduleThePersonOnDay(dateOnly, person, schedulingOptions, members, matrixList, null, rollbackService);	
 		}
 
 		public bool ScheduleOneDayOnOnePerson(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList)
@@ -234,10 +243,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				return false;
 			}
 
-			return ScheduleThePersonOnDay(dateOnly, person, schedulingOptions, members, matrixList, best);
+			return ScheduleThePersonOnDay(dateOnly, person, schedulingOptions, members, matrixList, best, _rollbackService);
 		}
 
-		private bool ScheduleThePersonOnDay(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions, IList<IPerson> members, IList<IScheduleMatrixPro> matrixList, IPossibleStartEndCategory possibleStartEndCategory)
+		private bool ScheduleThePersonOnDay(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions, 
+			IList<IPerson> members, IList<IScheduleMatrixPro> matrixList, IPossibleStartEndCategory possibleStartEndCategory, 
+			ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			var scheduleDictionary = _resultStateHolder.Schedules;
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(members, dateOnly, schedulingOptions, scheduleDictionary);
@@ -266,7 +277,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			}
 
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
-			bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, possibleStartEndCategory, _rollbackService);
+			bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, possibleStartEndCategory, rollbackService);
 
 			if (!sucess)
 			{
