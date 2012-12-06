@@ -1155,7 +1155,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
             {
                 var advanceSchedulingService = _container.Resolve<AdvanceSchedulingService>();
-                advanceSchedulingService.Execute(matrixes, schedulingResults);
+                advanceSchedulingService.Execute( schedulingResults);
             }
 
             if (schedulingOptions.RotationDaysOnly)

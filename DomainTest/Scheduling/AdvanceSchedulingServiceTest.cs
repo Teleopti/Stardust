@@ -14,18 +14,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
     {
         private MockRepository _mocks;
         private IAdvanceSchedulingService _target;
+        private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
-            _target = new AdvanceSchedulingService(new SchedulingOptions());
+            _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+            _target = new AdvanceSchedulingService(new SchedulingOptions(), _schedulingResultStateHolder);
         }
 
         [Test]
         public void ShouldVerifyExecution()
         {
-            Assert.That(_target.Execute(new List<IScheduleMatrixPro>( ),new Dictionary<string, IWorkShiftFinderResult>() ),Is.True   );
+            Assert.That(_target.Execute(new Dictionary<string, IWorkShiftFinderResult>() ),Is.True   );
         }
 
        
