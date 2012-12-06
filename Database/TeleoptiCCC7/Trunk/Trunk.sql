@@ -1,11 +1,11 @@
 ----------------
 --Name: Roger K
 --Date: 2012-11-30
---Desc: Remove scenario.audittrail
+--Desc: Remove scenario.audittrail and dbo.AuditTrailSetting
 ----------------
 alter table dbo.Scenario
 drop column audittrail
-
+drop table dbo.AuditTrailSetting
 
 
 ----------------  
