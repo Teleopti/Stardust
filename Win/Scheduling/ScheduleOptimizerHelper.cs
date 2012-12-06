@@ -1150,7 +1150,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			schedulingOptions.UseGroupSchedulingCommonStart = false;
 
             using (PerformanceOutput.ForOperation("Scheduling x blocks"))
-                blockSchedulingService.Execute(matrixes, schedulingOptions, schedulingResults);
+                blockSchedulingService  .Execute(matrixes, schedulingOptions, schedulingResults);
+
+            if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+            {
+                var advanceSchedulingService = _container.Resolve<AdvanceSchedulingService>();
+                advanceSchedulingService.Execute(matrixes, schedulingResults);
+            }
 
             if (schedulingOptions.RotationDaysOnly)
                 schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();

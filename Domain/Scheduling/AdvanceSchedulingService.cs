@@ -1,29 +1,30 @@
 using System;
+using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 
     public interface IAdvanceSchedulingService
     {
-        object BlockIntradayAggregation();
-        object EffectiveRestrictionAggregation();
-        object RunScheduling();
+        bool Execute(IList<IScheduleMatrixPro> matrixList,
+                                     IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList);
     }
     public class AdvanceSchedulingService : IAdvanceSchedulingService
     {
-        public object BlockIntradayAggregation()
+        public ISchedulingOptions SchedulingOptions { get; set; }
+
+        public AdvanceSchedulingService(ISchedulingOptions schedulingOptions )
         {
-            throw new NotImplementedException();
+            SchedulingOptions = schedulingOptions;
         }
 
-        public object EffectiveRestrictionAggregation()
+        public bool Execute(IList<IScheduleMatrixPro> matrixList,
+            IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList)
         {
-            throw new NotImplementedException();
-        }
+            bool success = true;
 
-        public object RunScheduling()
-        {
-            throw new NotImplementedException();
+            return success;
         }
     }
 }
