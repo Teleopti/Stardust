@@ -13,6 +13,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var readyForInteraction = function () { };
 	var completelyLoaded = function () { };
+	var requestDetailViewModel;
 
 	function _initScrollPaging() {
 		_loadAPage();
@@ -258,11 +259,13 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	return {
-		Init: function (readyForInteractionCallback, completelyLoadedCallback) {
+		Init: function (readyForInteractionCallback, completelyLoadedCallback, detailViewModel) {
 			readyForInteraction = readyForInteractionCallback;
 			completelyLoaded = completelyLoadedCallback;
+			requestDetailViewModel = detailViewModel;
 			_initScrollPaging();
 			_initListClick();
+
 		},
 		AddItemAtTop: function (request) {
 			_drawRequestAtTop(request);
