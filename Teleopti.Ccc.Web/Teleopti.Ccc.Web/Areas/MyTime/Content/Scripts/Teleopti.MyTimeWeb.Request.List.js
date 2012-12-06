@@ -13,7 +13,18 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var readyForInteraction = function () { };
 	var completelyLoaded = function () { };
+
 	var requestDetailViewModel;
+	var requestpageViewModel;
+
+	function RequestPageViewModel(requestDetailViewModel) {
+		var self = this;
+		self.details = requestDetailViewModel;
+		self.exmaple = ko.observable("tell Henke to remove this!!...");
+		self.changeExample = function () {
+			self.exmaple("really... tell Henke to remove this!!");
+		};
+	}
 
 	function _initScrollPaging() {
 		_loadAPage();
@@ -265,6 +276,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			requestDetailViewModel = detailViewModel;
 			_initScrollPaging();
 			_initListClick();
+
+			//TODO: set the viewmodel:
+			var viewmodel = new RequestPageViewModel(requestDetailViewModel);
+			//ko.ApplyBindings(viewmodel);
 
 		},
 		AddItemAtTop: function (request) {
