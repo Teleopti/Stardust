@@ -920,9 +920,6 @@
     <Content Include="Areas\MyTime\Views\Settings\RegionalSettingsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Start\Views\Shared\MobileLayoutBase.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Areas\MyTime\Views\Settings\PasswordPartial.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
