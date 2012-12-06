@@ -166,8 +166,8 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 				return;
 			}
 			if (jqXHR.status == 500) {
-				var response = $.parseJSON(jqXHR.responseText);
-				$('#Exception-message').text(response.Message);
+//				var response = $.parseJSON(jqXHR.responseText);
+				$('#Exception-message').text(errorThrown);
 				$('#Exception-div').show();
 				return;
 			}
