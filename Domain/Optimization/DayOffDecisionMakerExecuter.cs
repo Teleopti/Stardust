@@ -135,10 +135,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (movedDays.Count > 0)
             {
                 writeToLogDayOffBackToLegalStateRemovedDays(movedDays);
-                foreach (var day in movedDays)
-                {
-                    currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(day, day));
-                }
+				foreach (var day in movedDays)
+				{
+					currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(day, day));
+				}
+				return true;
             }
 
             if (doReschedule)
