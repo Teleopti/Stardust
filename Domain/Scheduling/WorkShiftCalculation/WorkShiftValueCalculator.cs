@@ -6,6 +6,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
 	public interface IWorkShiftValueCalculator
 	{
+		double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity, IDictionary<DateTime, ISkillIntervalData> skillIntervalDatas,
+		                                            WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, double overStaffingFactor, double priorityFactor);
 	}
 
 	public class WorkShiftValueCalculator : IWorkShiftValueCalculator
@@ -32,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			{
 				IActivity activity = (IActivity) layer.Payload;
 				if (activity != skillActivity)
-					return null;
+					continue;
 
 				DateTime layerStart = layer.Period.StartDateTime;
 				DateTime layerEnd = layer.Period.EndDateTime;
@@ -57,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 				if (!skillIntervalDatas.ContainsKey(currentStart))
 
 					if (activity.RequiresSkill)
-						return double.MinValue;
+						return null;
 					else
 					{
 						// try to find a SkillStaffPeriodDataHolder
