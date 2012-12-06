@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			                                                    	{
 																		typeof(AuthenticationController),
 																		typeof(AuthenticationApiController),
+																		typeof(ApplicationAuthenticationApiController),
 																		typeof(TestController)
 			                                                    	}));
 			filters.Add(new CheckStartupExceptionAttribute());

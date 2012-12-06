@@ -11175,10 +11175,6 @@ These options are activated:
   <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
     <value>After checking against keep activity</value>
   </data>
-  <data name="InvalidPassword" xml:space="preserve">
-    <value>Password policy requires a safer password.</value>
-    <comment>Password policy requires a safer password.</comment>
-  </data>
   <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
     <value>Your schedule the {0} has changed!</value>
     <comment>Your schedule the 2/16/2012 has changed!</comment>
@@ -11196,7 +11192,27 @@ These options are activated:
     <comment>Log on failed! Account is locked.</comment>
   </data>
   <data name="LogOnFailedPasswordExpired" xml:space="preserve">
-    <value>Log on failed! Password has expired, and your account is locked.</value>
-    <comment>Log on failed! Password has expired, and your account is locked.</comment>
+    <value>Log on failed! Password has expired.</value>
+    <comment>Log on failed! Password has expired.</comment>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Skip</value>
+    <comment>Skip</comment>
+  </data>
+  <data name="InvalidUserNameOrPassword" xml:space="preserve">
+    <value>Invalid user name or password.</value>
+    <comment>Invalid user name or password.</comment>
+  </data>
+  <data name="YourPasswordHasAlreadyExpired" xml:space="preserve">
+    <value>Your password has already expired.</value>
+    <comment>Your password has already expired.</comment>
+  </data>
+  <data name="YourPasswordWillExpireSoon" xml:space="preserve">
+    <value>Your password will expire soon.</value>
+    <comment>Your password will expire soon.</comment>
+  </data>
+  <data name="WarningWithExclamatory" xml:space="preserve">
+    <value>Warning!</value>
+    <comment>Warning!</comment>
   </data>
 </root>

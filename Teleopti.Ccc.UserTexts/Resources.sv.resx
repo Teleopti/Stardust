@@ -10770,9 +10770,6 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Använd genomsnittlig skiftlängd</value>
     <comment>Use Average Shift Lengths</comment>
   </data>
-  <data name="InvalidPassword" xml:space="preserve">
-    <value>Lösenordspolicyn kräver ett säkrare lösenord.</value>
-  </data>
   <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
     <value>Ditt schema {0} har ändrats!</value>
   </data>

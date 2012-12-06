@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					{
 						Tuple<double, double> resultToRemove = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, toRemove, skill);
 						Tuple<double, double> resultToAdd = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, toAdd, skill);
-						result1 = skillStaffPeriod.Payload.CalculatedLoggedOn - resultToRemove.Item1 + resultToAdd.Item1;
+						result1 = skillStaffPeriod.Payload.CalculatedResource - resultToRemove.Item1 + resultToAdd.Item1;
 						result2 = skillStaffPeriod.Payload.CalculatedLoggedOn - resultToRemove.Item2 + resultToAdd.Item2;
 					}
 					else
@@ -63,9 +63,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				double skillEfficiency = checkPersonSkill(skill, layercollection.Person, dateOnly);
 				if (skillEfficiency == 0)
 					continue;
-				
-				result2 += calculateShift(skillStaffPeriod, layercollection, skill.Activity);
-				result1 += result2 * skillEfficiency;
+
+				double result = calculateShift(skillStaffPeriod, layercollection, skill.Activity);
+				result2 += result;
+				result1 += result * skillEfficiency;
 			}
 
 			return new Tuple<double, double>(result1, result2);

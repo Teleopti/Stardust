@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			{
 				return ReturnErrorMessage(Resources.InsufficientPermissionForWeb);
 			}
-			return Json(null);
+			return Json(null, JsonRequestBehavior.AllowGet);
 		}
 
 		private JsonResult ReturnErrorMessage(string message)

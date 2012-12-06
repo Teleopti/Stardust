@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
         public string Message { get; set; }
         public bool HasMessage { get; set; }
         public IPerson Person { get; set; }
+	    public bool PasswordExpired { get; set; }
     }
 }

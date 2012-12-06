@@ -15,21 +15,19 @@ Background:
 	| Field | Value |
 	| Name  | Agent |
 
-@ignore
 Scenario: Change password fails against the policy
 	Given I am a user signed in with
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	When I view password setting page
-	And I change my password with
+	And I change my password in my profile with
 	| Field              | Value     |
 	| Password           | aa        |
 	| Confirmed Password | aa        |
 	| Old Password       | P@ssword1 |
 	Then I should see password change failed with message
 
-@ignore
 Scenario: Sign in fails after account is locked
 	Given I have user logon details with
 	| Field    | Value |
@@ -45,8 +43,7 @@ Scenario: Sign in fails after account is locked
 	Then I should not be signed in
 	And I should see a log on error 'LogOnFailedAccountIsLocked'
 
-@ignore
-Scenario: Sign in with password will expire soon
+Scenario: See change password when password will expire soon
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 29    |
@@ -58,10 +55,24 @@ Scenario: Sign in with password will expire soon
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	Then I should see a warning 'LogOnWarningPasswordWillSoonExpire'
-	And I should be signed in
-@ignore
-Scenario: Sign in passes with password already expired
+	Then I should see change password page with warning 'YourPasswordWillExpireSoon'
+
+Scenario: Skip change password when password will expire soon
+	Given I have user logon details with
+	| Field                           | Value |
+	| Last Password Change X Days Ago | 29    |
+	And I have user credential with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	When I try to sign in with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	And I click skip button
+	Then I should be signed in
+
+Scenario: See change password when password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
@@ -73,11 +84,10 @@ Scenario: Sign in passes with password already expired
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
-	Then I should not be signed in
-	And I should see an error 'LogOnFailedPasswordExpired'
-	And I should see the must change password page
-@ignore
-Scenario: Manually Navigate to other page when sign in with password already expired
+	Then I should see must change password page with warning 'YourPasswordHasAlreadyExpired'
+	And I should not see skip button
+
+Scenario: Manually navigate to other page when sign in with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
@@ -91,8 +101,8 @@ Scenario: Manually Navigate to other page when sign in with password already exp
 	| Password | P@ssword1 |
 	And I manually navigate to week schedule page
 	Then I should see the sign in page
-@ignore
-Scenario: Change password successfully when password already expired
+
+Scenario: Change password successfully
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
@@ -110,8 +120,8 @@ Scenario: Change password successfully when password already expired
 	| Confirmed Password | NewP@ssword1 |
 	| Old Password       | P@ssword1    |
 	Then I should be signed in
-@ignore
-Scenario: Change password fails when password already expired
+
+Scenario: Change password fails if new password is weak
 	Given I have user logon details with
 	| Field                           | Value |
 	| Last Password Change X Days Ago | 30    |
@@ -128,5 +138,23 @@ Scenario: Change password fails when password already expired
 	| Password           | aa        |
 	| Confirmed Password | aa        |
 	| Old Password       | P@ssword1 |
-	Then I should see an error 'PasswordChangeFailed'
-	And I should not be signed in
+	Then I should see an error 'PasswordPolicyWarning'
+
+Scenario: Change password fails if old password is wrong
+	Given I have user logon details with
+	| Field                           | Value |
+	| Last Password Change X Days Ago | 30    |
+	And I have user credential with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	When I try to sign in with
+	| Field    | Value     |
+	| UserName | aa        |
+	| Password | P@ssword1 |
+	And I change my password with
+	| Field              | Value         |
+	| Password           | P@ssword2     |
+	| Confirmed Password | P@ssword2     |
+	| Old Password       | wrongPassword |
+	Then I should see an error 'InvalidUserNameOrPassword'

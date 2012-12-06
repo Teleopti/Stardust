@@ -21,6 +21,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnApplicationPage();
 		}
 
+		[When(@"I manually navigate to week schedule page")]
+		public void WhenIManuallyNavigateToWeekSchedulePage()
+		{
+			Navigation.GotoAnApplicationPage();
+		}
+
 		[When(@"I view my week schedule")]
 		[When(@"I am viewing week schedule")]
 		[Given(@"I view my week schedule")]

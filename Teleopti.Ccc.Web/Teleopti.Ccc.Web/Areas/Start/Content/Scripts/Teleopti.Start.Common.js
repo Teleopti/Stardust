@@ -47,6 +47,9 @@ Teleopti.Start.Common.Layout = (function ($) {
 		},
 		ActivateCustomInput: function () {
 			$('.edit-module input[type="checkbox"], .edit-module input[type="radio"]').customInput();
+		},
+		ActivatePlaceHolderText: function () {
+			$(':text, :password').placeholder();
 		}
 	};
 })(jQuery);

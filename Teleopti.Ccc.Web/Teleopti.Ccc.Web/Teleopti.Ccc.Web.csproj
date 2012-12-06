@@ -157,6 +157,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiController.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\PasswordWarningViewModel.cs" />
     <Compile Include="Areas\Team\TeamAreaRegistration.cs" />
     <Compile Include="Areas\Team\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MobileReports\Controllers\ReportController.cs" />
@@ -507,6 +510,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordViewModel.js" />
     <Content Include="Areas\Team\Content\Scripts\helpers.js" />
     <Content Include="Areas\Team\Content\Scripts\layout.js" />
     <Content Include="Areas\Team\Content\Scripts\main.js" />
@@ -639,9 +643,7 @@
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
     <Content Include="Areas\Start\Views\Authentication\SignIn.cshtml" />
-    <None Include="Areas\Start\Views\Test\Message.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="Areas\Start\Views\Test\Message.cshtml" />
     <Content Include="Areas\Start\Content\Css\login.css" />
     <Content Include="Areas\Team\Content\Templates\layout.html" />
     <Content Include="Areas\Team\Content\Templates\menu.html" />
@@ -650,6 +652,7 @@
     <Content Include="Content\crossroads\crossroads.min.js" />
     <Content Include="Content\hasher\hasher.js" />
     <Content Include="Content\hasher\hasher.min.js" />
+    <Content Include="Content\jquery-plugin\jquery.placeholder.min.js" />
     <Content Include="Content\jquery-plugin\jquery.swipeListener.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.min.js" />
@@ -807,6 +810,9 @@
     <Content Include="Content\Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Areas\Start\Views\Test\WidgetStylingSample.cshtml" />
+    <None Include="PasswordPolicy.xml.notinuse">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

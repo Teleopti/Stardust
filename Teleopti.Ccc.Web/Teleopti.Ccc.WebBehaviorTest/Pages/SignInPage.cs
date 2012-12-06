@@ -1,4 +1,4 @@
-using Teleopti.Ccc.UserTexts;
+using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
@@ -14,18 +14,40 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public TextField PasswordTextField { get; set; }
 
 		[FindBy(Id = "Signin-error")]
-		public Element ValidationSummary { get; private set; }
+		public Element ValidationSummary { get; set; }
+
+		[FindBy(Id = "PasswordExpireSoon")]
+		public Div PasswordExpireSoonError { get; set; }
+
+		[FindBy(Id = "PasswordAlreadyExpired")]
+		public Div PasswordAlreadyExpiredError { get; set; }
 
 		[FindBy(Id = "Login-button")]
 		public Button LoginButton;
 
+		[FindBy(Id = "Skip-button")]
+		public Button SkipButton { get; set; }
+
+		[FindBy(Id = "New-password")]
+		public TextField NewPassword { get; set; }
+		[FindBy(Id = "Confirm-new-password")]
+		public TextField ConfirmNewPassword { get; set; }
+		[FindBy(Id = "Old-password")]
+		public TextField OldPassword { get; set; }
+		[FindBy(Id = "Change-password-button")]
+		public Button ChangePasswordButton { get; set; }
+		[FindBy(Id = "Password-change-error")]
+		public Div ChangePasswordErrorMessage { get; set; }
+
 		public void SelectApplicationTestDataSource()
 		{
+			EventualAssert.That(() => Document.Element(Find.BySelector("li.application a:contains(TestData)")).Exists, Is.True);
 		    Document.Element(Find.BySelector("li.application a:contains(TestData)")).EventualClick();
 		}
 
 		public void SelectWindowsTestDataSource()
 		{
+			EventualAssert.That(() => Document.Element(Find.BySelector("li.windows a:contains(TestData)")).Exists, Is.True);
 		    Document.Element(Find.BySelector("li.windows a:contains(TestData)")).EventualClick();
 		}
 
@@ -34,6 +56,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		    UserNameTextField.ChangeValue(username);
 		    PasswordTextField.ChangeValue(password);
 		    LoginButton.EventualClick();
+		}
+
+		public void ChangePassword(string newPassword, string confirmedNewPassword, string oldPassword)
+		{
+			NewPassword.ChangeValue(newPassword);
+			ConfirmNewPassword.ChangeValue(newPassword);
+			OldPassword.ChangeValue(oldPassword);
+			ChangePasswordButton.EventualClick();
 		}
 
 		public void SignInWindows()

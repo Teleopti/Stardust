@@ -56,14 +56,13 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
                 Expect.Call(userDetail.Person).Return(person);
                 Expect.Call(userDetail.LastPasswordChange).Return(DateTime.Today.AddDays(-15));
                 Expect.Call(passwordPolicy.PasswordValidForDayCount).Return(10);
-
-                Expect.Call(userDetail.Lock);
             }
             using (mocks.Playback())
             {
                 AuthenticationResult result = target.Check(userDetail);
                 Assert.IsFalse(result.Successful);
                 Assert.IsTrue(result.HasMessage);
+				Assert.IsTrue(result.PasswordExpired);
                 Assert.AreEqual(UserTexts.Resources.LogOnFailedPasswordExpired, result.Message);
             }
         }
