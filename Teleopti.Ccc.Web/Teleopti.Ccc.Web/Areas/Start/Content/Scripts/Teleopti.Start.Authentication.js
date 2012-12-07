@@ -71,7 +71,7 @@ Teleopti.Start.Authentication = function () {
 				_displayView({
 					view: view,
 					authenticationType: authenticationType,
-					dataSourceName: dataSourceName
+					dataSourceName: decodeURIComponent(dataSourceName)
 				});
 			});
 		crossroads.addRoute(
@@ -80,7 +80,7 @@ Teleopti.Start.Authentication = function () {
 				_displayView({
 					view: "changepassword",
 					mustChangePassword: false,
-					dataSourceName: dataSourceName
+					dataSourceName: decodeURIComponent(dataSourceName)
 				});
 			});
 		crossroads.addRoute(
@@ -89,7 +89,7 @@ Teleopti.Start.Authentication = function () {
 				_displayView({
 					view: "changepassword",
 					mustChangePassword: true,
-					dataSourceName: dataSourceName
+					dataSourceName: decodeURIComponent(dataSourceName)
 				});
 			});
 		crossroads.addRoute(
