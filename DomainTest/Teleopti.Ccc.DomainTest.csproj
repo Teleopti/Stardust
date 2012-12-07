@@ -730,6 +730,7 @@
     <Compile Include="Scheduling\SkillDayHelperTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\IntervalDataMedianCalculatorTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\DynamicBlockFinderTest.cs" />
+    <Compile Include="Scheduling\WorkShiftCalculation\RestrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillDayPeriodIntervalDataTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\TeamExtractorTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\WorkShiftLengthValueCalculatorTest.cs" />
