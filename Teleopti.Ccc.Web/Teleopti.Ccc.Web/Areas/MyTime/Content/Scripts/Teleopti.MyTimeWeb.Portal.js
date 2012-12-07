@@ -108,7 +108,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			;
 
 		if (location.hash.length <= 1) {
-			location.hash = '#' + _settings.defaultNavigation;
+			location.replace('#' + _settings.defaultNavigation);
 		} else {
 			$(window).trigger('hashchange');
 		}
