@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAPasswordPolicyWith(Table table)
 		{
 			var targetTestPasswordPolicyFile = Path.Combine(Path.Combine(IniFileInfo.SitePath, "bin"), "PasswordPolicy.xml");
+			if (File.Exists(targetTestPasswordPolicyFile))
+				return;
 			var contents = File.ReadAllText("Data\\PasswordPolicy.xml");
 			var passwordPolicy = table.CreateInstance<PasswordPolicyConfigurable>();
 

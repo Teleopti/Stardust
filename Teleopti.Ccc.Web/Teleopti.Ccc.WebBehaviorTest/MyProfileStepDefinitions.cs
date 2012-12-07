@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class MyProfileStepDefinitions
 	{
-		private static readonly string newPassword = TestData.CommonPassword + "new";
+		private static readonly string newPassword = TestData.CommonPassword + "newP@ssw0rd";
 
 		[When(@"I view my regional settings")]
 		public void WhenIViewMyRegionalSettings()

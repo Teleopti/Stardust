@@ -3,7 +3,7 @@
 /// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.Common.js" />
-/// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.LoginViewModel.js" />
+/// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordView.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -71,7 +71,7 @@ Teleopti.Start.Authentication = function () {
 				_displayView({
 					view: view,
 					authenticationType: authenticationType,
-					dataSourceName: dataSourceName
+					dataSourceName: decodeURIComponent(dataSourceName)
 				});
 			});
 		crossroads.addRoute(
@@ -80,7 +80,7 @@ Teleopti.Start.Authentication = function () {
 				_displayView({
 					view: "changepassword",
 					mustChangePassword: false,
-					dataSourceName: dataSourceName
+					dataSourceName: decodeURIComponent(dataSourceName)
 				});
 			});
 		crossroads.addRoute(
@@ -89,7 +89,7 @@ Teleopti.Start.Authentication = function () {
 				_displayView({
 					view: "changepassword",
 					mustChangePassword: true,
-					dataSourceName: dataSourceName
+					dataSourceName: decodeURIComponent(dataSourceName)
 				});
 			});
 		crossroads.addRoute(

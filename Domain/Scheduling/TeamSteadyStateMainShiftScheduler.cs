@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				if (scheduleDaySource.SignificantPart() != SchedulePartView.MainShift)
 				{
-					if (!groupSchedulingService.ScheduleOneDayOnePersonSteadyState(dateOnly, groupMember, schedulingOptions, groupPerson, matrixList))
+					if (!groupSchedulingService.ScheduleOneDayOnePersonSteadyState(dateOnly, groupMember, schedulingOptions, groupPerson, matrixList, rollbackService))
 					{
 						return false;
 					}

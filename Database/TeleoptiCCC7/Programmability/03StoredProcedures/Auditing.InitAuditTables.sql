@@ -233,21 +233,3 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 
 END
 GO
-
-
-------
---EXEC this proc as part of deploy, based on current situation
-------
---Enable new [Auditing] if previous [dbo].[AuditTrailSetting] exist and is running
-if (exists(SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AuditTrailSetting]') AND type in (N'U')))
-and (select IsRunning from dbo.AuditTrailSetting) = 1
-BEGIN
-	--Has not been execute/no data exist in table Revision
-	if not exists (select 1 from Auditing.Revision)
-	BEGIN
-		EXEC [Auditing].[InitAuditTables]
-		UPDATE Auditing.AuditSetting SET IsScheduleEnabled=1
-		UPDATE dbo.AuditTrailSetting SET IsRunning=-1
-	END
-END
-GO

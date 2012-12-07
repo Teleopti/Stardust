@@ -245,7 +245,7 @@
     <comment>Actual agents</comment>
   </data>
   <data name="ActualHandlingTime" xml:space="preserve">
-    <value>Ist Bearbeitungungszeit</value>
+    <value>Ist Bearbeitungszeit</value>
     <comment>Actual handling time</comment>
   </data>
   <data name="ActualTalkTime" xml:space="preserve">
@@ -836,7 +836,7 @@
     <comment>Average handling time</comment>
   </data>
   <data name="AverageSpeedOfAnswer" xml:space="preserve">
-    <value>Durschnitt Antwortzeit</value>
+    <value>Durchschnitt Antwortzeit</value>
     <comment>Average speed of answer</comment>
   </data>
   <data name="AverageTalkTime" xml:space="preserve">
@@ -2375,7 +2375,7 @@ Ausnahme</value>
     <comment>Forecasted agents with shrinkage</comment>
   </data>
   <data name="ForecastedAverageAfterCallWork" xml:space="preserve">
-    <value>Progrnostizierte durchschnittliche Nachbearbeitungszeit</value>
+    <value>Progn. durch. Nachbearbeitungszeit</value>
     <comment>Forecasted average after call work</comment>
   </data>
   <data name="ForecastedAverageTalkTime" xml:space="preserve">
@@ -2399,7 +2399,7 @@ Ausnahme</value>
     <comment>Forecasted emails</comment>
   </data>
   <data name="ForecastedFacsimiles" xml:space="preserve">
-    <value>Prognostzizierte Faxe</value>
+    <value>Prognostizierte Faxe</value>
     <comment>Forecasted facsimiles</comment>
   </data>
   <data name="ForecastedHandlingTime" xml:space="preserve">
@@ -2419,7 +2419,7 @@ Ausnahme</value>
     <comment>Forecasted talk time</comment>
   </data>
   <data name="ForecastedTalkTimeColon" xml:space="preserve">
-    <value>Progrnostizierte Gesprächszeit:</value>
+    <value>Prognostizierte Gesprächszeit:</value>
     <comment>Forecasted talk time</comment>
   </data>
   <data name="ForecastedTasks" xml:space="preserve">
@@ -4701,7 +4701,7 @@ Periods</comment>
     <comment>Do you want to create another workload?</comment>
   </data>
   <data name="QuestionCreateSubSkill" xml:space="preserve">
-    <value>Der Multisite enthält keine Teilskills. Möchten Sie einen Sub-Skill erstellen? </value>
+    <value>Der Multisite enthält keine Teilskills. Möchten Sie einen Teil-Skill erstellen? </value>
     <comment>The multi-site skill does not contain any sub skills. Would you like to create one?</comment>
   </data>
   <data name="QuestionDeleteThePlanningGroupTwoParameters" xml:space="preserve">
@@ -4801,7 +4801,7 @@ Periods</comment>
     <comment>Refresh</comment>
   </data>
   <data name="RefreshScreenEveryColon" xml:space="preserve">
-    <value>Aktualisere den Bildschirm alle:</value>
+    <value>Aktualiserung des Bildschirms alle:</value>
     <comment>Refresh screen every:</comment>
   </data>
   <data name="RelativeDifference" xml:space="preserve">
@@ -6520,7 +6520,7 @@ Periods</comment>
     <comment>Validated ATW</comment>
   </data>
   <data name="ValidatedAverageHandlingTime" xml:space="preserve">
-    <value>ValidierteDurchschnittlicheBearbeitungszeit</value>
+    <value>ValidiertedurchschnittlicheBearbeitungszeit</value>
     <comment>Validated average handling time</comment>
   </data>
   <data name="ValidatedCalls" xml:space="preserve">
@@ -7131,7 +7131,7 @@ Datum</value>
     <value>Pausen</value>
   </data>
   <data name="BuiltInBusinessUnitAdministratorRole" xml:space="preserve">
-    <value>Administrator der Business Unit</value>
+    <value>Administrator der Geschäftseinheit</value>
   </data>
   <data name="UpdatedByColon" xml:space="preserve">
     <value>Aktualisiert von:</value>
@@ -7197,7 +7197,7 @@ Datum</value>
     <value>Studentenverfügbarkeit anwenden</value>
   </data>
   <data name="SubskillDistributionMustSumToHundredPercent" xml:space="preserve">
-    <value>Die Summe der Verteilungen zwischen den Unter-Skill muß 100% ergeben</value>
+    <value>Die Summe der Verteilungen zwischen den Teil-Skills muß 100% ergeben</value>
   </data>
   <data name="ConsecutiveDaysOffPerWeekMustBeLowerOrEqualToMax" xml:space="preserve">
     <value>Aufeinanderfolgende Freie Tage müssen gleich max oder weniger sein</value>
@@ -9342,7 +9342,7 @@ Diese Optionen sind aktiviert:
     <value>Verarbeite...</value>
   </data>
   <data name="YouHaveToMapAtLeastOneSubSkill" xml:space="preserve">
-    <value>Sie müssen mindestens einen Unterskill zuordnen.</value>
+    <value>Sie müssen mindestens einen Teilskill zuordnen.</value>
   </data>
   <data name="YouHaveToSelectAtLeastOneSkill" xml:space="preserve">
     <value>Sie müssen mindestens einen Skill auswählen.</value>
@@ -9916,5 +9916,380 @@ Diese Optionen sind aktiviert:
   </data>
   <data name="MissingAbsenceType" xml:space="preserve">
     <value>Fehlender Abwesenheitstyp</value>
+  </data>
+  <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
+    <value>Soll/Ist Agenten</value>
+  </data>
+  <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
+    <value>Keine Personen-Periode gefunden für den Nutzer.</value>
+  </data>
+  <data name="FromRole" xml:space="preserve">
+    <value>von Rolle</value>
+  </data>
+  <data name="PermissionsViewer" xml:space="preserve">
+    <value>Benutzerrechte Ansicht</value>
+  </data>
+  <data name="ExternalResourceInUse" xml:space="preserve">
+    <value>Externe Ressource ist in Benutzung</value>
+  </data>
+  <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
+    <value>Eine externe Ressource wird durch ein anderes Programm genutzt. Bitte versuchen Sie es später erneut.</value>
+  </data>
+  <data name="YourPreferencesCanResultXHours" xml:space="preserve">
+    <value>Das Ergebnis Ihrer Präferenz kann zu {0} h führen.</value>
+  </data>
+  <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
+    <value>Das Ergebnis Ihrer Präferenz kann zwischen {0} h bis {1} h liegen. </value>
+  </data>
+  <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
+    <value>Sie sollten {0} h bis {1} h arbeiten.</value>
+  </data>
+  <data name="SubmitRequest" xml:space="preserve">
+    <value>Übertragen</value>
+  </data>
+  <data name="OverridePeriod" xml:space="preserve">
+    <value>überschreibe Periodenzeit</value>
+  </data>
+  <data name="OverrideHoursPerDay" xml:space="preserve">
+    <value>Stunden/Tag überschreiben</value>
+  </data>
+  <data name="OverrideDaysOff" xml:space="preserve">
+    <value>Freie Tage überschreiben</value>
+  </data>
+  <data name="WorkloadWindowAlreadyOpen" xml:space="preserve">
+    <value>Das Fenster des Workloads {0} ist noch geöffnet. Bitte schließen Sie es, da es keine Gültigkeit mehr hat.</value>
+  </data>
+  <data name="LongtermForecast" xml:space="preserve">
+    <value>Langzeit-Forecast</value>
+  </data>
+  <data name="ManageRuleSets" xml:space="preserve">
+    <value>verwalten</value>
+  </data>
+  <data name="ManualAgents" xml:space="preserve">
+    <value>Agents (überschreiben)</value>
+  </data>
+  <data name="RequestCannotUpdateDelete" xml:space="preserve">
+    <value>Der Status der Anfrage hat sich geändert. Sie können diese nicht verändern oder löschen.</value>
+  </data>
+  <data name="SkillTypeRetail" xml:space="preserve">
+    <value>Retail</value>
+  </data>
+  <data name="ActualEmployees" xml:space="preserve">
+    <value>Aktuelle Mitarbeiter</value>
+  </data>
+  <data name="ExportToBU" xml:space="preserve">
+    <value>Export in Geschäftseinheit</value>
+  </data>
+  <data name="ExportToFile" xml:space="preserve">
+    <value>Export in Datei</value>
+  </data>
+  <data name="FileExportDone" xml:space="preserve">
+    <value>Datei-Export ist abgeschlossen</value>
+  </data>
+  <data name="SelectDateAndScenario" xml:space="preserve">
+    <value>Datum und Szenario wählen</value>
+  </data>
+  <data name="SelectFileDestination" xml:space="preserve">
+    <value>Zielort für Datei wählen</value>
+  </data>
+  <data name="SelectSkill" xml:space="preserve">
+    <value>Skill auswählen</value>
+  </data>
+  <data name="CSVFile" xml:space="preserve">
+    <value>CSV Datei (*.csv)|*.csv</value>
+  </data>
+  <data name="ExportStaffing" xml:space="preserve">
+    <value>Exportiere Personalbedarf</value>
+  </data>
+  <data name="ExportWorkload" xml:space="preserve">
+    <value>Exportiere Workload</value>
+  </data>
+  <data name="ExportWorkloadAndStaffing" xml:space="preserve">
+    <value>Exportiere Workload und Personalbedarf</value>
+  </data>
+  <data name="AfterCustomerWorkTime" xml:space="preserve">
+    <value>Nachbearbeitungszeit</value>
+  </data>
+  <data name="AverageAfterCustomerWork" xml:space="preserve">
+    <value>Durchschn. Nachbearbeitungszeit</value>
+  </data>
+  <data name="AverageCustomers" xml:space="preserve">
+    <value>Durchschn. Kunden</value>
+  </data>
+  <data name="CalculatedCustomers" xml:space="preserve">
+    <value>Berechnete Kunden</value>
+  </data>
+  <data name="CampaignCustomersPercent" xml:space="preserve">
+    <value>Kampagne Kunden % </value>
+  </data>
+  <data name="SameEndTime" xml:space="preserve">
+    <value>gleiche Endzeit</value>
+  </data>
+  <data name="SameShiftCategory" xml:space="preserve">
+    <value>gleiche Schichtkategorie</value>
+  </data>
+  <data name="SameStartTime" xml:space="preserve">
+    <value>gleiche Startzeit</value>
+  </data>
+  <data name="UseRestriction" xml:space="preserve">
+    <value>Benutzte Einschränkungen</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Kunden</value>
+  </data>
+  <data name="DeviationCustomersColon" xml:space="preserve">
+    <value>Differenz Kunden</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Mitarbeiter</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Mitarbeiter</value>
+  </data>
+  <data name="EmployeesInc" xml:space="preserve">
+    <value>Mitarbeiter inkl.</value>
+  </data>
+  <data name="EmployeesIncWithShrinkage" xml:space="preserve">
+    <value>Mitarbeiter inkl. mit Shrinkage</value>
+  </data>
+  <data name="EmployeesWithShrinkage" xml:space="preserve">
+    <value>Mitarbeiter mit Shrinkage</value>
+  </data>
+  <data name="ForecastedAverageAfterCustomerWork" xml:space="preserve">
+    <value>Prognost. durch. Nachbearbeitungszeit</value>
+  </data>
+  <data name="ForecastedCustomers" xml:space="preserve">
+    <value>Progn. Kunden</value>
+  </data>
+  <data name="ForecastedCustomersColon" xml:space="preserve">
+    <value>Progn. Kunden:</value>
+  </data>
+  <data name="ForecastedEmployees" xml:space="preserve">
+    <value>Progn. Mitarbeiter</value>
+  </data>
+  <data name="ForecastedEmployeesIncoming" xml:space="preserve">
+    <value>Progn. Mitarbeiter eingehend</value>
+  </data>
+  <data name="IndexAfterCustomerWork" xml:space="preserve">
+    <value>Index Nachbearbeitungszeit</value>
+  </data>
+  <data name="IndexCustomers" xml:space="preserve">
+    <value>Index Kunden</value>
+  </data>
+  <data name="MaximumEmployees" xml:space="preserve">
+    <value>Maximum Mitarbeiter</value>
+  </data>
+  <data name="MinimumEmployees" xml:space="preserve">
+    <value>Minimum Mitarbeiter</value>
+  </data>
+  <data name="OfferedCustomers" xml:space="preserve">
+    <value>Kunden</value>
+  </data>
+  <data name="OriginalAfterCustomerWork" xml:space="preserve">
+    <value>Original Nachbearbeitungszeit</value>
+  </data>
+  <data name="OriginalCustomers" xml:space="preserve">
+    <value>Original Kunden</value>
+  </data>
+  <data name="OriginalOfferedCustomers" xml:space="preserve">
+    <value>Original Kunden</value>
+  </data>
+  <data name="ScheduledEmployees" xml:space="preserve">
+    <value>Geplante Mitarbeiter</value>
+  </data>
+  <data name="ScheduledEmployeesIncoming" xml:space="preserve">
+    <value>Geplante Mitarbeiter eingehend</value>
+  </data>
+  <data name="ServedCustomers" xml:space="preserve">
+    <value>Bediente Kunden</value>
+  </data>
+  <data name="TotalCustomers" xml:space="preserve">
+    <value>Kunden Total</value>
+  </data>
+  <data name="ValidatedAfterCustomerWork" xml:space="preserve">
+    <value>Validierte Nachbearbeitungszeit</value>
+  </data>
+  <data name="ValidatedCustomers" xml:space="preserve">
+    <value>Validierte Kunden</value>
+  </data>
+  <data name="WalkAways" xml:space="preserve">
+    <value>Kunden fortgegangen</value>
+  </data>
+  <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
+    <value>Ihre Präferenz ist außerhalb des zulässigen Bereichs</value>
+  </data>
+  <data name="FileExportFailed" xml:space="preserve">
+    <value>Datei-Export fehlgeschlagen</value>
+  </data>
+  <data name="FileExportFinished" xml:space="preserve">
+    <value>Datei-Export erfolgreich beendet</value>
+  </data>
+  <data name="OptimizationOptionMessageBox" xml:space="preserve">
+    <value>Optimierungsoptionen</value>
+  </data>
+  <data name="NoActivity" xml:space="preserve">
+    <value>Keine Aktivität</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
+    <value>Bitte wählen Sie mindestens eine der Optionen "Schichtkategorie", "Startzeit" oder "Endzeit" für eine Teamoptimierung.</value>
+  </data>
+  <data name="SchedulingOptionMessageBox" xml:space="preserve">
+    <value>Planungsoptionen</value>
+  </data>
+  <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
+    <value>Bitte wählen Sie mindestens eine der Optionen "Schichtkategorie", "Startzeit" oder "Endzeit" für eine Teamplanung.</value>
+  </data>
+  <data name="ManageSmsSettings" xml:space="preserve">
+    <value>SMS Einstellungen verwalten</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
+    <value>Gültige Spalte für die Telefonnummer</value>
+  </data>
+  <data name="SmsSettings" xml:space="preserve">
+    <value>SMS Einstellungen</value>
+  </data>
+  <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
+    <value>Ihre Arbeitszeit hat sich geändert:</value>
+  </data>
+  <data name="GraphLOC" xml:space="preserve">
+    <value>Graph (loc)</value>
+  </data>
+  <data name="IntervalLOC" xml:space="preserve">
+    <value>Interval (loc)</value>
+  </data>
+  <data name="TableLOC" xml:space="preserve">
+    <value>Tabelle (loc)</value>
+  </data>
+  <data name="TypeLOC" xml:space="preserve">
+    <value>Typ (loc)</value>
+  </data>
+  <data name="FromContract" xml:space="preserve">
+    <value>aus dem Vertrag</value>
+  </data>
+  <data name="FromSchedulePeriod" xml:space="preserve">
+    <value>aus der Planperiode</value>
+  </data>
+  <data name="FullDayAbsence" xml:space="preserve">
+    <value>ganztägige Abwesenheit</value>
+  </data>
+  <data name="InsufficientPermissionForWeb" xml:space="preserve">
+    <value>Sie haben nicht die entsprechenden Nutzerrechte, um das Web-Portal zu nutzen.</value>
+  </data>
+  <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
+    <value>Monat 7-8</value>
+  </data>
+  <data name="MobileReports" xml:space="preserve">
+    <value>Mobile Reports</value>
+  </data>
+  <data name="SchedulePeriodTypeDay" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="SchedulePeriodTypeMonth" xml:space="preserve">
+    <value>Monat</value>
+  </data>
+  <data name="SchedulePeriodTypeWeek" xml:space="preserve">
+    <value>Woche</value>
+  </data>
+  <data name="PleaseChooseAReportType" xml:space="preserve">
+    <value>Bitte wählen Sie einen Report-Typ</value>
+  </data>
+  <data name="SameDaysOff" xml:space="preserve">
+    <value>gleiche freie Tage</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Planeinhaltung pro Agent</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Planeinhaltung pro Tag</value>
+  </data>
+  <data name="PleaseChooseSkillSet" xml:space="preserve">
+    <value>Bitte wählen Sie ein Skill-Set</value>
+  </data>
+  <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
+    <value>nur Notwendigkeiten (aus Präferenzen) planen</value>
+  </data>
+  <data name="AllowMeetings" xml:space="preserve">
+    <value>Meetings erlauben</value>
+  </data>
+  <data name="ShiftCategories" xml:space="preserve">
+    <value>Schichtkategorien</value>
+  </data>
+  <data name="AfterCheckingAgainstActivities" xml:space="preserve">
+    <value>Nach Gegenprüfung mit Aktivitäten</value>
+  </data>
+  <data name="AddExtendedPreference" xml:space="preserve">
+    <value>Erweiterte Präferenz hinzufügen</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>Andere</value>
+  </data>
+  <data name="MyTime" xml:space="preserve">
+    <value>MyTime</value>
+  </data>
+  <data name="AgentScheduleMessengerPermission" xml:space="preserve">
+    <value>Agent Schedule Messenger</value>
+  </data>
+  <data name="ExtendedPreferencesWeb" xml:space="preserve">
+    <value>Erweiterte Präferenz</value>
+  </data>
+  <data name="DistributionBetweenSubskillsMustbeEqualToOneHundredPercent" xml:space="preserve">
+    <value>Die Verteilung innerhalb der Teil-Skills muss in Summe 100% ergeben</value>
+  </data>
+  <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
+    <value>Maximale Agent Auslastung muss größer oder gleich der minimalen Agent Auslastung sein.</value>
+  </data>
+  <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
+    <value>Maximum Agenten müssen größer oder gleich der Minimum Agenten sein.</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Geplante Agents pro Aktivität</value>
+  </data>
+  <data name="YourScheduleHasChanged" xml:space="preserve">
+    <value>Ihr Dienstplan wurde geändert!</value>
+  </data>
+  <data name="NoMessagesFound" xml:space="preserve">
+    <value>Es konnte keine Mitteilung gefunden werden.</value>
+  </data>
+  <data name="FairnessOptimizationOn" xml:space="preserve">
+    <value>Fairness-Optimierung an</value>
+  </data>
+  <data name="FairnessOptimizationRollingBack" xml:space="preserve">
+    <value>- Wert nicht verbessert, setze zurück</value>
+  </data>
+  <data name="FairnessOptimizationValueAfter" xml:space="preserve">
+    <value>- Wert danach =</value>
+  </data>
+  <data name="FairnessOptimizationValueBefore" xml:space="preserve">
+    <value>- Wert davor =</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Absender</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>gesendet</value>
+  </data>
+  <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
+    <value>Zielort der Datei existiert nicht, bitte geben Sie einen gültigen Zielort ein.</value>
+  </data>
+  <data name="CouldNotExportForecastToFile" xml:space="preserve">
+    <value>Der Datei-Export ist fehlgeschlagen, bitte versuchen Sie ein anderes Ziel.</value>
+  </data>
+  <data name="SelectedFileDestinationIsTooLong" xml:space="preserve">
+    <value>Ausgewählter Datei-Zielort ist zu lang, bitte geben Sie einen gültigen Zielort ein.</value>
+  </data>
+  <data name="SameActivity" xml:space="preserve">
+    <value>gleiche Aktivität</value>
+  </data>
+  <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
+    <value>Nach Gegenprüfen beibehalten der Aktivität</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Password-Richtlinien verlangen ein sichereres Password</value>
+  </data>
+  <data name="WindowsLogonWithBrackets" xml:space="preserve">
+    <value>(Windows)</value>
+  </data>
+  <data name="UseAverageShiftLengths" xml:space="preserve">
+    <value>benutze durchschnittliche Schichtlänge</value>
   </data>
 </root>
