@@ -197,6 +197,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
             GoTo("MyTime#Message/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
             Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
+
+		public static void GotoAdminWebSchedule()
+		{
+			GoTo("Team", new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<AdminWebPage>());
+		}
 	}
 
 

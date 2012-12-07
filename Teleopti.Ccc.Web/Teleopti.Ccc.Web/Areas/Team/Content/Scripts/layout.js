@@ -111,6 +111,24 @@ require([
 			$('#menu-placeholder').replaceWith(menuTemplate);
 		}
 
+		function _updateMenu() {
+			var options = {
+				url: "../../Application/NavigationContent",
+				dataType: "json",
+				type: 'GET',
+				cache: false,
+				success: function (responseData, textStatus, jqXHR) {
+					if (!responseData.IsMyTimeAvailable)
+						$('#link-mytime').hide();
+					if (!responseData.IsMobileReportsAvailable)
+						$('#link-mobilereports').hide();
+
+					$('#username').text(responseData.UserName);
+				}
+			};
+			$.ajax(options);
+		}
+
 		function _fixBootstrapDropdownForMobileDevices() {
 			$('.dropdown-menu').on('touchstart.dropdown.data-api', function (e) {
 				e.stopPropagation();
@@ -118,6 +136,7 @@ require([
 		}
 
 		_render();
+		_updateMenu();
 		_setupRoutes();
 		_initializeHasher();
 
