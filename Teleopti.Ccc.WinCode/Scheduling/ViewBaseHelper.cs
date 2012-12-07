@@ -781,7 +781,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             IPersonAssignment pa = schedulePart.AssignmentHighZOrder();
 
-            if (significantPart == SchedulePartView.FullDayAbsence)
+            if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
             {
                 IVisualLayerCollection layerCollection = schedulePart.ProjectionService().CreateProjection();
                 foreach (IVisualLayer layer in layerCollection)
