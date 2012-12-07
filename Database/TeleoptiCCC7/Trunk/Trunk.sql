@@ -52,6 +52,11 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 SET NOCOUNT OFF
 GO
 
+----------------  
+--Name: Robin K
+--Date: 2012-12-07
+--Desc: Adding read model table for schedules. Not the final model...
+----------------  
 CREATE TABLE [ReadModel].[PersonScheduleDay](
 	[Id] [uniqueidentifier] NOT NULL,
 	[PersonId] [uniqueidentifier] NOT NULL,
