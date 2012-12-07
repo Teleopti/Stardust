@@ -9,6 +9,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 
 			var target = new RequestsController(viewModelFactory, null, null);
-			var model = new RequestViewModel[]{};
+			var model = new RequestViewModel[] { };
 			var paging = new Paging();
 
 			viewModelFactory.Stub(x => x.CreatePagingViewModel(paging)).Return(model);
@@ -133,8 +134,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				var result = target.RequestDetail(id);
 				var data = (RequestViewModel)result.Data;
 
-				assertRequestEqual(data, viewModel);	
+				assertRequestEqual(data, viewModel);
 			}
+		}
+
+		[Test]
+		public void ShouldGetDataForMakingShiftTrades()
+		{
+			var modelFactory = MockRepository.GenerateStub<IRequestsViewModelFactory>();
+
+			var model = new ShiftTradeRequestsPreparationViewModel { HasWorkflowControlSet = true };
+			var selectedDate = DateOnly.Today;
+
+			modelFactory.Stub(x => x.CreateShiftTradePreparationViewModel(selectedDate)).Return(model);
+
+			var target = new RequestsController(modelFactory, null, null);			
+			var result = target.ShiftTradeRequest(selectedDate);
+			var data = result.Data as ShiftTradeRequestsPreparationViewModel;
+
+			data.Should().Be.SameInstanceAs(model);
 		}
 
 		private static void assertRequestEqual(RequestViewModel target, RequestViewModel expected)

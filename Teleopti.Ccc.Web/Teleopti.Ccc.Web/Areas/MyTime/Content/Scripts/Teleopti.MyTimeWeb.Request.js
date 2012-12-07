@@ -22,6 +22,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 			Teleopti.MyTimeWeb.Request.List.Init(readyForInteractionCallback, completelyLoadedCallback);
 			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
+			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.Init();
 		}
 	};
 
