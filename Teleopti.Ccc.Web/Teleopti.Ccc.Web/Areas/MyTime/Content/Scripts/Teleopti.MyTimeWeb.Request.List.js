@@ -15,14 +15,30 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	var completelyLoaded = function () { };
 
 	var requestDetailViewModel;
-	var requestpageViewModel;
 
 	function RequestPageViewModel(requestDetailViewModel) {
+
 		var self = this;
-		self.details = requestDetailViewModel;
-		self.exmaple = ko.observable("tell Henke to remove this!!...");
+
+		self.details = ko.observable(requestDetailViewModel);
+
+		//TODO: expose detaisl instead of wrapping the properties
+		self.AbsenceRequestTabVisible = ko.computed(function () {
+			return requestDetailViewModel.AbsenceRequestTabVisible();
+		});
+		self.TabSeparatorVisible = ko.computed(function () {
+			return requestDetailViewModel.TabSeparatorVisible();
+		});
+		self.IsFullDay = ko.computed(function () {
+			return requestDetailViewModel.IsFullDay();
+		});
+		self.TextRequestTabVisible = ko.computed(function () {
+			return requestDetailViewModel.TextRequestTabVisible();
+		});
+
+		self.example = ko.observable("tell Henke to remove this!!...");
 		self.changeExample = function () {
-			self.exmaple("really... tell Henke to remove this!!");
+			self.example("really... tell Henke to remove this!!");
 		};
 	}
 
@@ -279,8 +295,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 			//TODO: set the viewmodel:
 			var viewmodel = new RequestPageViewModel(requestDetailViewModel);
-			//ko.ApplyBindings(viewmodel);
-
+			ko.applyBindings(viewmodel, $('#Requests-body-inner')[0]);
 		},
 		AddItemAtTop: function (request) {
 			_drawRequestAtTop(request);

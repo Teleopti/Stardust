@@ -309,7 +309,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = (function RequestViewModel() {
 			$('#Request-detail-toTime-input-input').reset();
 			Teleopti.MyTimeWeb.Request.RequestDetail.EnableTimeinput();
 		}
-
 	});
 
 	function _disableTimeinput() {
