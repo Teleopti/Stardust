@@ -129,13 +129,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var target = new RequestsViewModelFactory(null, mapper, null, null, provider);
 			var shiftTradePrepViewModel = new ShiftTradeRequestsPreparationViewModel();
 			var shiftTradePreparation = new ShiftTradeRequestsPreparationDomainData();
+			var date = DateOnly.Today;
 
-			provider.Stub(p => p.RetrieveShiftTradePreparationData()).Return(shiftTradePreparation);
+			provider.Stub(p => p.RetrieveShiftTradePreparationData(date)).Return(shiftTradePreparation);
 			mapper.Stub(
 				x => x.Map<ShiftTradeRequestsPreparationDomainData, ShiftTradeRequestsPreparationViewModel>(shiftTradePreparation)).
 				Return(shiftTradePrepViewModel);
 
-			var result = target.CreateShiftTradePreparationViewModel();
+			var result = target.CreateShiftTradePreparationViewModel(date);
 
 			result.Should().Be.SameInstanceAs(shiftTradePrepViewModel);
 		}

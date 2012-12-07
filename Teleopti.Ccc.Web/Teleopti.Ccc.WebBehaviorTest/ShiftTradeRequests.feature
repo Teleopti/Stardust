@@ -12,10 +12,10 @@ Background:
 	| Field								| Value						|
 	| Name								| No access to Shift Trade	|
 	| Access To Shift Trade Requests	| False						|
-	#And there are shift categories
-	#| Name  |
-	#| Day   |
-	#| Late   |
+	And there are shift categories
+	| Name  |
+	| Day   |
+	| Late   |
 	#And there is a dayoff with
 	#| Field | Value  |
 	#| Name  | DayOff |
@@ -25,20 +25,18 @@ Background:
 	#And there is a skill with
 	#| Field | Value   |
 	#| Name  | Skill 1 |
-	#And I have a workflow control set with
-	#| Field                      | Value              |
-	#| Name                       | Published schedule |
-	#| Schedule published to date | 2040-06-24         |
-	#And I have a schedule period with 
-	#| Field      | Value      |
-	#| Start date | 2012-06-18 |
-	#| Type       | Week       |
-	#| Length     | 1          |
-	#And I have a person period with 
-	#| Field      | Value      |
-	#| Start date | 2012-06-18 |	
-	#| Start date | 2012-06-18 |
-	#| Skill      | Skill 1    |
+	And I have a workflow control set with
+	| Field                      | Value              |
+	| Name                       | Published schedule |
+	| Schedule published to date | 2040-06-24         |
+	And I have a schedule period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |	
 	#And I have a shift with
 	#| Field                 | Value            |
 	#| StartTime             | 2030-01-01 06:00 |
@@ -104,8 +102,13 @@ Scenario: No workflow control set
 
 Scenario: Show my scheduled shift
 	Given I have the role 'Full access to mytime'
-	And Current time is '2030-01-01'
-	When I navigate to shift trade page
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	| Lunch3HoursAfterStart | true             |
+	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see my schedule with
 	| Field			| Value |
 	| Start time	| 06:00 |

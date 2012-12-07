@@ -14,12 +14,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.hasWorkflowControlSet = ko.observable(false);
 
-		self.loadViewModel = function () {
+		self.loadViewModel = function (date) {
 			ajax.Ajax({
 				url: "Requests/ShiftTradeRequest",
 				dataType: "json",
 				type: 'GET',
 				//beforeSend: _loading,
+				data: JSON.stringify({
+					SelectedDate: date
+				}),
 				success: function (data, textStatus, jqXHR) {
 					self.hasWorkflowControlSet(!data.HasWorkflowControlSet);
 					console.log(!self.hasWorkflowControlSet());
@@ -45,14 +48,23 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				var elementToBind = $('#Request-add-shift-trade').get(0);
 				ko.applyBindings(vm, elementToBind);
 				//ko.applyBindings(vm, document.getElementById('Request-add-shift-trade'));
-				vm.loadViewModel();
+				vm.loadViewModel($('#Request-add-selected-date').val());
 			})
+			;
+	}
+
+	function setShiftTradeRequestDate(date) {
+		$('#Request-add-selected-date')
+			.val(date)
 			;
 	}
 
 	return {
 		Init: function () {
 			_init();
+		},
+		SetShiftTradeRequestDate: function (date) {
+			setShiftTradeRequestDate(date);
 		}
 	};
 
