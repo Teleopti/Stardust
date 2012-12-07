@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
         {
             using(_mock.Record())
             {
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+                Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
                 Expect.Call(_scheduleDay.PersonDayOffCollection()).Return(_personDayOffs).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.PersonAssignmentCollection()).Return(_personAssignments);
                 Expect.Call(_personAssignment.OvertimeShiftCollection).Return(new ReadOnlyCollection<IOvertimeShift>(new List<IOvertimeShift>()));
@@ -106,8 +106,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
         {
             using(_mock.Record())
             {
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
-                Expect.Call(_scheduleDay.PersonDayOffCollection()).Return(_personDayOffs).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
+                Expect.Call(_scheduleDay.PersonDayOffCollection()).Return(_personDayOffs).Repeat.AtLeastOnce();	
                 Expect.Call(_scheduleDay.PersonAssignmentCollection()).Return(_personAssignments);
                 Expect.Call(_personAssignment.OvertimeShiftCollection).Return(new ReadOnlyCollection<IOvertimeShift>(_overtimeShifts));
             }
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
         {
             using (_mock.Record())
             {
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+                Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
             }
 
             using (_mock.Playback())
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
         {
             using(_mock.Record())
             {
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+                Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
             }
 
             using(_mock.Playback())
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
         {
             using (_mock.Record())
             {
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+                Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
                 Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.PersonDayOffCollection()).Return(_personDayOffs).Repeat.AtLeastOnce();
                 Expect.Call(_personDayOff.DayOff).Return(_dayOff).Repeat.AtLeastOnce();
