@@ -22,7 +22,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 		self.details = ko.observable(requestDetailViewModel);
 
-		//TODO: expose detaisl instead of wrapping the properties
+		//TODO: expose details instead of wrapping the properties
 		self.AbsenceRequestTabVisible = ko.computed(function () {
 			return requestDetailViewModel.AbsenceRequestTabVisible();
 		});
@@ -293,9 +293,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			_initScrollPaging();
 			_initListClick();
 
-			//TODO: set the viewmodel:
 			var viewmodel = new RequestPageViewModel(requestDetailViewModel);
-			ko.applyBindings(viewmodel, $('#Requests-body-inner')[0]);
+			var element = $('#Requests-body-inner')[0];
+			if (element) ko.applyBindings(viewmodel, element);
+
 		},
 		AddItemAtTop: function (request) {
 			_drawRequestAtTop(request);
