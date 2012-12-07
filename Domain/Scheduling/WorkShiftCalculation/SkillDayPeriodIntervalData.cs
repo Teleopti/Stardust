@@ -8,24 +8,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
     public class SkillDayPeriodIntervalData : ISkillDayPeriodIntervalData
     {
-        private readonly List<ISkillDay> _skillDays;
         private readonly IIntervalDataCalculator _intervalDataMedianCalculator;
+        private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 
         public SkillDayPeriodIntervalData()
         {
             
         }
 
-        public SkillDayPeriodIntervalData(List<ISkillDay> skillDays)
+        public SkillDayPeriodIntervalData(IIntervalDataCalculator intervalDataMedianCalculator, ISchedulingResultStateHolder schedulingResultStateHolder )
         {
-            _skillDays = skillDays;
-            _intervalDataMedianCalculator= new IntervalDataMedianCalculator();
+            _intervalDataMedianCalculator = intervalDataMedianCalculator;
+            _schedulingResultStateHolder = schedulingResultStateHolder;
         }
 
-        public Dictionary<TimeSpan, ISkillIntervalData> GetIntervalDistribution()
+        public Dictionary<TimeSpan, ISkillIntervalData> GetIntervalDistribution(List<DateOnly  > dateOnlyList )
         {
+            var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
             var intervalBasedData = new Dictionary<TimeSpan, List<double>>();
-            var firstDay = _skillDays.FirstOrDefault();
+            var firstDay = skillDays.FirstOrDefault();
             if (firstDay == null) throw new ArgumentException("skillDays are empty");
             var resolution = firstDay.Skill.DefaultResolution;
             for (var i = 0; i < TimeSpan.FromDays(2).TotalMinutes/resolution; i++)
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                 intervalBasedData.Add(TimeSpan.FromMinutes(i*resolution), new List<double>());
             }
             
-            foreach (var period in _skillDays.SelectMany(skill => skill.SkillStaffPeriodCollection))
+            foreach (var period in skillDays.SelectMany(skill => skill.SkillStaffPeriodCollection))
             {
                 var periodTimeSpan = period.Period.StartDateTime.TimeOfDay;
                 if (intervalBasedData.ContainsKey(periodTimeSpan))
@@ -58,6 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
     public interface ISkillDayPeriodIntervalData
     {
-        Dictionary<TimeSpan, ISkillIntervalData> GetIntervalDistribution();
+        Dictionary<TimeSpan, ISkillIntervalData> GetIntervalDistribution(List<DateOnly> dateOnlyList);
     }
 }

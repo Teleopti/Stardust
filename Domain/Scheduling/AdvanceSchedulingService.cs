@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -11,15 +12,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
     }
     public class AdvanceSchedulingService : IAdvanceSchedulingService
     {
-        public ISchedulingOptions SchedulingOptions { get; set; }
-        public ISchedulingResultStateHolder SchedulingResultStateHolder { get; set; }
+        private readonly IDynamicBlockFinder _dynamicBlockFinder;
+        private readonly ITeamExtractor _teamExtractor;
+        private readonly ISkillDayPeriodIntervalData _skillDayPeriodIntervalData;
 
-
-		//Are you sure we need to inject this
-        public AdvanceSchedulingService(ISchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder  )
+        public AdvanceSchedulingService(ISkillDayPeriodIntervalData skillDayPeriodIntervalData, IDynamicBlockFinder dynamicBlockFinder, ITeamExtractor teamExtractor)
         {
-            SchedulingOptions = schedulingOptions;
-            SchedulingResultStateHolder = schedulingResultStateHolder;
+            _dynamicBlockFinder = dynamicBlockFinder;
+            _teamExtractor = teamExtractor;
+            _skillDayPeriodIntervalData = skillDayPeriodIntervalData;
         }
 
         public bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList)
@@ -27,9 +28,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
             bool success = true;
             //Perhaps something like this
 			//call class that finds a random team to schedule
+            var groupPerson = _teamExtractor.GetRamdomTeam();
 			//call class that return the teamblock dates for a given date (problem if team members don't have same days off)
-			//call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
+            var dateOnlyList =  _dynamicBlockFinder.ExtractBlockDays(new DateTime());
+            //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
 			//call class that returns the aggregated intraday dist based on teamblock dates
+            var skillInternalDataList = _skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList);
 			//call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses (should we cover for max seats here?)
 			//call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need
 			//call class that schedules given date with given workshift on the complete team

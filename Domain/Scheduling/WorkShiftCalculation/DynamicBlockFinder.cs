@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
     public interface IDynamicBlockFinder
     {
-        List<DateOnly > ExtractSkillDays(DateTime dateTime);
+        List<DateOnly > ExtractBlockDays(DateTime dateTime);
     }
 
     public class DynamicBlockFinder : IDynamicBlockFinder
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             _schedulingOptions = schedulingOptions;
         }
 
-        public List<DateOnly> ExtractSkillDays(DateTime dateTime)
+        public List<DateOnly> ExtractBlockDays(DateTime dateTime)
         {
             var selectedPeriod = SchedulingResultStateHolder.Schedules.Period.LoadedPeriod();
             var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;

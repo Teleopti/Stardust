@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
             using (_mock.Playback())
             {
-                Assert.AreEqual(_target.ExtractSkillDays(date), new List<DateOnly> { new DateOnly(date), new DateOnly(date.AddDays(1)), new DateOnly(date.AddDays(2)) });    
+                Assert.AreEqual(_target.ExtractBlockDays(date), new List<DateOnly> { new DateOnly(date), new DateOnly(date.AddDays(1)), new DateOnly(date.AddDays(2)) });    
             }
         }
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
            }
             using (_mock.Playback())
             {
-                Assert.AreEqual(_target.ExtractSkillDays(date), new List<DateOnly> { new DateOnly(date), new DateOnly(date.AddDays(1)) });
+                Assert.AreEqual(_target.ExtractBlockDays(date), new List<DateOnly> { new DateOnly(date), new DateOnly(date.AddDays(1)) });
             }
         }
 
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
             using (_mock.Playback())
             {
-                Assert.AreEqual(_target.ExtractSkillDays(startDate), new List<DateOnly> { new DateOnly(startDate), new DateOnly(startDate.AddDays(1)) });
+                Assert.AreEqual(_target.ExtractBlockDays(startDate), new List<DateOnly> { new DateOnly(startDate), new DateOnly(startDate.AddDays(1)) });
             }
         }
     }

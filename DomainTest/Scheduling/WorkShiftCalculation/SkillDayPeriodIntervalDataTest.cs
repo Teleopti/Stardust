@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private MockRepository _mock;
         private ISkillDay _skillDay1;
         private ISkillDay _skillDay2;
+        private ISchedulingResultStateHolder _schedulingResultStateHolder  ;
+        private List<ISkillDay> _skillDayList;
 
         [SetUp]
         public void Setup()
@@ -24,8 +26,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _mock = new MockRepository();
             _skillDay1 = _mock.StrictMock<ISkillDay>();
             _skillDay2 = _mock.StrictMock<ISkillDay>();
-            var skillDayList = new List<ISkillDay>() {_skillDay1, _skillDay2};
-            _target = new SkillDayPeriodIntervalData(skillDayList);
+            _skillDayList = new List<ISkillDay>() {_skillDay1, _skillDay2};
+            _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
+            _target = new SkillDayPeriodIntervalData(new IntervalDataMedianCalculator(), _schedulingResultStateHolder);
         }
 
 
@@ -63,6 +66,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
             using (_mock.Record())
             {
+                Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
+                    Return(_skillDayList);
                 Expect.Call(_skillDay1.Skill).Return(skill);
                 Expect.Call(skill.DefaultResolution).Return(15);
                 Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>() { skillstaffperiod1, skillstaffperiod2, skillstaffperiod3, skillstaffperiod4 }));
@@ -96,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
             using(_mock.Playback())
             {
-                var calculatedResult = _target.GetIntervalDistribution();
+                var calculatedResult = _target.GetIntervalDistribution(new List<DateOnly>( ));
 
                 Assert.AreEqual(result[date.TimeOfDay].ForecastedDemand, calculatedResult[date.TimeOfDay].ForecastedDemand);
                 Assert.AreEqual(result[date.AddMinutes(15).TimeOfDay].ForecastedDemand, calculatedResult[date.AddMinutes(15).TimeOfDay].ForecastedDemand);

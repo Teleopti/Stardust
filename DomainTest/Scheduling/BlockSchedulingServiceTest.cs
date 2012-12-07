@@ -34,8 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
     	private IFairnessValueResult _fairness;
         private bool _eventFired;
     	private ISchedulingOptions _schedulingOptions;
-        private ISchedulingResultStateHolder _schedulingResultStateHolder;
-        private ISkillDayPeriodIntervalData _skillDayPeriodIntervalData;
 
 
         [SetUp]
@@ -55,9 +53,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         	_range = _mocks.StrictMock<IScheduleRange>();
 			_fairness = new FairnessValueResult { FairnessPoints = 5, TotalNumberOfShifts = 20 };
 			_schedulingOptions = new SchedulingOptions();
-            _schedulingResultStateHolder = new SchedulingResultStateHolder();
-            var skillDays = new List<ISkillDay>();
-            _skillDayPeriodIntervalData = new SkillDayPeriodIntervalData(skillDays);
          }
 
 		[Test]
