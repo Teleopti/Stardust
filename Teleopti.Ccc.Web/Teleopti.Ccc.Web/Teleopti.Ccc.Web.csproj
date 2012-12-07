@@ -887,12 +887,6 @@
     <Content Include="Areas\Start\Views\Shared\_LayoutBase.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Start\Views\Shared\Error.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Start\Views\Shared\ErrorPartial.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Areas\Start\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
