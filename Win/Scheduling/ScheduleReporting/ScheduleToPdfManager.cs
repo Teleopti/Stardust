@@ -312,12 +312,19 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
                         }
                         break;
 
+					case SchedulePartView.ContractDayOff:
+						IPdfScheduleTemplate fullDayAbsenceOnDayOff = new PdfScheduleFullDayAbsence(_scheduleColumnWidth,
+                                                                                             part, timeZoneInfo,
+                                                                                             rtl, culture, true);
+                        weekList.Add(fullDayAbsenceOnDayOff);
+                        break;
+
                     case SchedulePartView.FullDayAbsence:
                         IPdfScheduleTemplate fullDayAbsence = new PdfScheduleFullDayAbsence(_scheduleColumnWidth,
                                                                                              part, timeZoneInfo,
-                                                                                             rtl, culture);
+                                                                                             rtl, culture, false);
                         weekList.Add(fullDayAbsence);
-                        break;
+                        break;	
 
                     default:
                         IPdfScheduleTemplate empty = new PdfScheduleNotScheduled(_scheduleColumnWidth, date, rtl, culture);
