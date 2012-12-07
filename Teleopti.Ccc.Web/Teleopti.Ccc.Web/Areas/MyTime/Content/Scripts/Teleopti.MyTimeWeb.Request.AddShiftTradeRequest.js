@@ -15,17 +15,18 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.hasWorkflowControlSet = ko.observable(false);
 
 		self.loadViewModel = function (date) {
+			console.log(date);
 			ajax.Ajax({
 				url: "Requests/ShiftTradeRequest",
 				dataType: "json",
 				type: 'GET',
 				//beforeSend: _loading,
-				data: JSON.stringify({
+				data: {
 					SelectedDate: date
-				}),
+				},
 				success: function (data, textStatus, jqXHR) {
 					self.hasWorkflowControlSet(!data.HasWorkflowControlSet);
-					console.log(!self.hasWorkflowControlSet());
+					//console.log(data);
 				},
 				error: function () {
 					console.log('Something went wrong here...');
@@ -35,6 +36,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _init() {
+		setShiftTradeRequestDate('2012-12-07'); //Just temporary
 		_showContent();
 	}
 
