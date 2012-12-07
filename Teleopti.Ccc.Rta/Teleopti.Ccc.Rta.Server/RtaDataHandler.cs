@@ -17,36 +17,54 @@ namespace Teleopti.Ccc.Rta.Server
 {
     public class RtaDataHandler : IRtaDataHandler
     {
-        private readonly IMessageSender _messageSender;
+    	private readonly IRtaConsumer _rtaConsumer;
+    	private readonly IMessageSender _messageSender;
         private readonly string _connectionStringDataStore;
         private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
         private static ILog _loggingSvc;
         private readonly IDataSourceResolver _dataSourceResolver;
         private readonly IPersonResolver _personResolver;
+        private readonly IStateResolver _stateResolver;
 
-        protected RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore, IDatabaseConnectionFactory databaseConnectionFactory, IDataSourceResolver dataSourceResolver, IPersonResolver personResolver)
-        {
-            _loggingSvc = loggingSvc;
-            _messageSender = messageSender;
-            _connectionStringDataStore = connectionStringDataStore;
-            _databaseConnectionFactory = databaseConnectionFactory;
-            _dataSourceResolver = dataSourceResolver;
-            _personResolver = personResolver;
-            try
-            {
-                _messageSender.InstantiateBrokerService();
-            }
-            catch (BrokerNotInstantiatedException ex)
-            {
-                _loggingSvc.Error("The message broker will be unavailable until this service is restarted and initialized with correct parameters", ex);
-            }
-        }
+		protected RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
+			IDatabaseConnectionFactory databaseConnectionFactory, IDataSourceResolver dataSourceResolver, IPersonResolver personResolver,
+			 IStateResolver stateResolver)
+		{
+			_loggingSvc = loggingSvc;
+			_messageSender = messageSender;
+			_connectionStringDataStore = connectionStringDataStore;
+			_databaseConnectionFactory = databaseConnectionFactory;
+			_dataSourceResolver = dataSourceResolver;
+			_personResolver = personResolver;
+			_stateResolver = stateResolver;
+			
+			try
+			{
+				_messageSender.InstantiateBrokerService();
+			}
+			catch (BrokerNotInstantiatedException ex)
+			{
+				_loggingSvc.Error("The message broker will be unavailable until this service is restarted and initialized with correct parameters", ex);
+			}
+		}
 
-        public RtaDataHandler()
-            : this(LogManager.GetLogger(typeof(RtaDataHandler)), MessageSenderFactory.CreateMessageSender(ConfigurationManager.AppSettings["MessageBroker"]), ConfigurationManager.AppSettings["DataStore"], new DatabaseConnectionFactory(), null, null)
+        public RtaDataHandler(IRtaConsumer rtaConsumer)
+			:this(LogManager.GetLogger(typeof (RtaDataHandler)),MessageSenderFactory.CreateMessageSender(ConfigurationManager.AppSettings["MessageBroker"]),
+			ConfigurationManager.AppSettings["DataStore"],new DatabaseConnectionFactory(),null,null,null)
         {
-            _dataSourceResolver = new DataSourceResolver(_databaseConnectionFactory,_connectionStringDataStore);
-            _personResolver = new PersonResolver(_databaseConnectionFactory,_connectionStringDataStore);
+        	_rtaConsumer = rtaConsumer;
+
+			_dataSourceResolver = new DataSourceResolver(_databaseConnectionFactory, _connectionStringDataStore);
+			_personResolver = new PersonResolver(_databaseConnectionFactory, _connectionStringDataStore);
+			_stateResolver = new StateResolver(_databaseConnectionFactory, _connectionStringDataStore);
+			try
+			{
+				_messageSender.InstantiateBrokerService();
+			}
+			catch (BrokerNotInstantiatedException ex)
+			{
+				_loggingSvc.Error("The message broker will be unavailable until this service is restarted and initialized with correct parameters", ex);
+			}
         }
 
         public bool IsAlive
@@ -59,7 +77,8 @@ namespace Teleopti.Ccc.Rta.Server
 		// Probably a WaitHandle object isnt a best choice, but same applies to QueueUserWorkItem method.
 		// An alternative using Tasks should be looked at instead.
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public WaitHandle ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp, Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
+		public WaitHandle ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp, 
+			Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
         {
             int dataSourceId;
 			var waitHandle = new AutoResetEvent(false);
@@ -78,15 +97,21 @@ namespace Teleopti.Ccc.Rta.Server
 		        sendWithBroker = false;
 		    }
 
-            IExternalAgentState agentState = new ExternalAgentState(logOn, stateCode, timeInState, timestamp, platformTypeId, dataSourceId, batchId, isSnapshot);
+			//IExternalAgentState externalState = new ExternalAgentState(logOn, stateCode, timeInState, timestamp, platformTypeId, dataSourceId, batchId, isSnapshot);
+           
             if (_messageSender.IsAlive && sendWithBroker)
             {
-                _loggingSvc.InfoFormat("Trying to send object {0} through Message Broker", agentState);
                 try
                 {
                     foreach (var personWithBusinessUnit in personWithBusinessUnits)
                     {
-                        _messageSender.SendRtaData(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, agentState);
+						var agentState = _rtaConsumer.Consume(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId , platformTypeId, stateCode,
+                    	                                      timestamp, timeInState);
+						if(agentState != null)
+						{
+							_loggingSvc.InfoFormat("Trying to send object {0} through Message Broker", agentState);
+							_messageSender.SendRtaData(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, agentState);
+						}
                     }
                 }
                 catch (SocketException exception)
@@ -104,7 +129,7 @@ namespace Teleopti.Ccc.Rta.Server
 				waitHandle.Set();
 				return waitHandle;
 			}
-            ThreadPool.QueueUserWorkItem(saveToDataStore, new object [] {agentState, waitHandle});
+            //ThreadPool.QueueUserWorkItem(saveToDataStore, new object [] {agentState, waitHandle});
         	return waitHandle;
         }
 

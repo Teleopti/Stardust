@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Rta.WebService
 
         private void InitializeClientHandler()
         {
-            _rtaDataHandler = new RtaDataHandler();
+            _rtaDataHandler = RtaFactory.DataHandler;
         }
 
         public int SaveExternalUserState(string authenticationKey, string userCode, string stateCode, string stateDescription, bool isLoggedOn, int secondsInState, DateTime timestamp, string platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)

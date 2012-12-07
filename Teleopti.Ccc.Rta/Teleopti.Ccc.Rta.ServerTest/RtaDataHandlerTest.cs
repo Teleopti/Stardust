@@ -26,8 +26,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
         private RtaDataHandlerForTest target;
         private IDataSourceResolver dataSourceResolver;
         private IPersonResolver personResolver;
+    	private IRtaConsumer _rtaConsumer;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
@@ -35,13 +36,14 @@ namespace Teleopti.Ccc.Rta.ServerTest
             messageSender = mocks.StrictMock<IMessageSender>();
             databaseConnectionFactory = mocks.StrictMock<IDatabaseConnectionFactory>();
             dataSourceResolver = mocks.StrictMock<IDataSourceResolver>();
-            personResolver = mocks.DynamicMock<IPersonResolver>();
+        	personResolver = mocks.DynamicMock<IPersonResolver>();
+        	_rtaConsumer = mocks.DynamicMock<IRtaConsumer>();
         }
 
         [Test, ExpectedException(typeof(BrokerNotInstantiatedException))]
         public void VerifyCreateInstanceUsingEmptyConstructorFailsBecauseNoConfigurationAvailable()
         {
-            new RtaDataHandler();
+			new RtaDataHandler(_rtaConsumer);
         }
 
         [Test]
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
             messageSender.InstantiateBrokerService();
             LastCall.Throw(new BrokerNotInstantiatedException());
             mocks.ReplayAll();
-            target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver);
+			target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver, _rtaConsumer);
             mocks.VerifyAll();
         }
 
@@ -62,7 +64,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
             messageSender.InstantiateBrokerService();
             Expect.Call(messageSender.IsAlive).Return(true);
             mocks.ReplayAll();
-            target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver);
+			target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver, _rtaConsumer);
             Assert.IsTrue(target.IsAlive);
             mocks.VerifyAll();
         }
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
             loggingSvc.Warn("No connection information available in configuration file.");
 
             mocks.ReplayAll();
-            target = new RtaDataHandlerForTest(loggingSvc, messageSender, string.Empty, databaseConnectionFactory, dataSourceResolver, personResolver);
+			target = new RtaDataHandlerForTest(loggingSvc, messageSender, string.Empty, databaseConnectionFactory, dataSourceResolver, personResolver, _rtaConsumer);
             target.ProcessRtaData("002", "AUX2", TimeSpan.FromSeconds(45), timestamp, Guid.NewGuid(), "1",
                                   SqlDateTime.MinValue.Value, false);
             mocks.VerifyAll();
@@ -171,7 +173,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
             Expect.Call(connection.Database).Return("db1");
             LastCall.IgnoreArguments();
             mocks.ReplayAll();
-            target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver);
+			target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver, _rtaConsumer);
 			var waitHandle = target.ProcessRtaData("002", "AUX2", timeInState, timestamp, platformTypeId,
                                   dataSourceId.ToString(CultureInfo.InvariantCulture), batchId, isSnapshot);
 			waitHandle.WaitOne();
@@ -259,7 +261,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
             Expect.Call(connection.Database).Return("db1");
             LastCall.IgnoreArguments();
             mocks.ReplayAll();
-            target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver);
+			target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver, _rtaConsumer);
 			var waitHandle = target.ProcessRtaData("002", "AUX2", timeInState, timestamp, platformTypeId, dataSourceId.ToString(CultureInfo.InvariantCulture), batchId,
                                   isSnapshot);
 			waitHandle.WaitOne();
@@ -285,7 +287,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
             loggingSvc.Error("",exception);
             LastCall.IgnoreArguments();
             mocks.ReplayAll();
-            target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver);
+			target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver, _rtaConsumer);
 			var waitHandle = target.ProcessRtaData("002", "AUX2", TimeSpan.FromSeconds(45), DateTime.UtcNow, Guid.NewGuid(), "1",
                                   SqlDateTime.MinValue.Value, false);
 			waitHandle.WaitOne();
@@ -378,7 +380,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
             mocks.ReplayAll();
 
-            target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver);
+			target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver, _rtaConsumer);
             var waitHandle = target.ProcessRtaData("002", "AUX2", timeInState, timestamp, platformTypeId, dataSourceId.ToString(CultureInfo.InvariantCulture), batchId,
                                   isSnapshot);
         	waitHandle.WaitOne();
@@ -398,7 +400,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
             loggingSvc.ErrorFormat("", "1");
             LastCall.IgnoreArguments();
             mocks.ReplayAll();
-            target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver);
+			target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver, _rtaConsumer);
 			var waitHandle = target.ProcessRtaData("002", "AUX2", TimeSpan.FromSeconds(45), DateTime.UtcNow, Guid.NewGuid(), "1",
                                   SqlDateTime.MinValue.Value, false);
 			waitHandle.WaitOne();
@@ -436,7 +438,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
             Expect.Call(parameterCollection.Add(dataParameter)).Return(1).IgnoreArguments().Repeat.AtLeastOnce();
 
             mocks.ReplayAll();
-            target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver);
+			target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver, _rtaConsumer);
             var waitHandle = target.ProcessRtaData("002", "AUX2", TimeSpan.FromSeconds(45), DateTime.UtcNow, Guid.NewGuid(), "1",
                                   SqlDateTime.MinValue.Value, false);
             waitHandle.WaitOne();
@@ -496,7 +498,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
             loggingSvc.ErrorFormat("", "");
             LastCall.IgnoreArguments();
             mocks.ReplayAll();
-            target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver);
+            target = new RtaDataHandlerForTest(loggingSvc, messageSender, ConnectionString, databaseConnectionFactory, dataSourceResolver, personResolver, _rtaConsumer);
 			var waitHandle = target.ProcessRtaData("002", "AUX2", timeInState, timestamp, platformTypeId, dataSourceId.ToString(CultureInfo.InvariantCulture), batchId,
                                   isSnapshot);
 			waitHandle.WaitOne();
@@ -506,8 +508,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
         private class RtaDataHandlerForTest : RtaDataHandler
         {
-            public RtaDataHandlerForTest(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore, IDatabaseConnectionFactory databaseConnectionFactory, IDataSourceResolver dataSourceResolver, IPersonResolver personResolver)
-                : base(loggingSvc, messageSender, connectionStringDataStore,  databaseConnectionFactory, dataSourceResolver, personResolver)
+            public RtaDataHandlerForTest(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore, IDatabaseConnectionFactory databaseConnectionFactory, IDataSourceResolver dataSourceResolver, IPersonResolver personResolver, IRtaConsumer rtaConsumer)
+				: base(rtaConsumer)
             {
             }
         }

@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net.Sockets;
 using System.Runtime.Remoting;
+using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
@@ -61,50 +62,51 @@ namespace Teleopti.Messaging.Client
             get { return (_brokerService != null ? true : false); }
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		public void SendRtaData(Guid personId, Guid businessUnitId, IExternalAgentState externalAgentState)
-        {
-            if (_brokerService != null)
-            {
-                int sendAttempt = 0;
-                while (sendAttempt < 3)
-                {
-                    try
-                    {
-                        sendAttempt++;
-                        ExternalAgentStateEncoder encoder = new ExternalAgentStateEncoder();
-                        byte[] domainObject = encoder.Encode(externalAgentState);
-                        _brokerService.SendEventMessage(externalAgentState.Timestamp.Add(externalAgentState.TimeInState.Negate()),
-                            externalAgentState.Timestamp,
-                            _user,
-                            Process.GetCurrentProcess().Id,
-                            Guid.Empty,
-                            domainObject.Length,
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		public void SendRtaData(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState)
+		{
+			if (_brokerService != null)
+			{
+				int sendAttempt = 0;
+				while (sendAttempt < 3)
+				{
+					try
+					{
+						sendAttempt++;
+						//ExternalAgentStateEncoder encoder = new ExternalAgentStateEncoder();
+						//byte[] domainObject = encoder.Encode(externalAgentState);
+						var domainObject = JsonConvert.SerializeObject(actualAgentState);
+						_brokerService.SendEventMessage(actualAgentState.Timestamp.Add(actualAgentState.TimeInState.Negate()),
+							actualAgentState.Timestamp,
+							_user,
+							Process.GetCurrentProcess().Id,
+							Guid.Empty,
+							domainObject.Length,
 							false,
 							personId,
-							typeof(IExternalAgentState).AssemblyQualifiedName,
-                            personId,
-                            typeof(IExternalAgentState).AssemblyQualifiedName,
-                            DomainUpdateType.Insert,
-                            domainObject,
-                            _userName);
-                        break;
-                    }
-                    catch (Exception)
-                    {
-                        try
-                        {
-                            Logger.ErrorFormat("Error trying to send object {0} through Message Broker. Attempt {1}.", externalAgentState, sendAttempt);
-                            InstantiateBrokerService();
-                        }
-                        catch (BrokerNotInstantiatedException exception)
-                        {
-                            Logger.Error("Could not reach the message broker when trying to send RTA data.", exception);
-                        }
-                    }
-                }
-            }
-        }
+							typeof(IActualAgentState).AssemblyQualifiedName,
+							personId,
+							typeof(IActualAgentState).AssemblyQualifiedName,
+							DomainUpdateType.Insert,
+							null,
+							_userName);
+						break;
+					}
+					catch (Exception)
+					{
+						try
+						{
+							Logger.ErrorFormat("Error trying to send object {0} through Message Broker. Attempt {1}.", actualAgentState, sendAttempt);
+							InstantiateBrokerService();
+						}
+						catch (BrokerNotInstantiatedException exception)
+						{
+							Logger.Error("Could not reach the message broker when trying to send RTA data.", exception);
+						}
+					}
+				}
+			}
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, DomainUpdateType updateType, string dataSource, Guid businessUnitId)
