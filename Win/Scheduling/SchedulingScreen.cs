@@ -4674,7 +4674,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             toolStripButtonDayView.Tag = ZoomLevel.Level1;
             toolStripButtonWeekView.Tag = ZoomLevel.Level2;
-            toolStripButtonDetailView.Tag = ZoomLevel.Level3;
+            toolStripButtonFilterAgents.Tag = ZoomLevel.Level3;
             toolStripButtonPeriodView.Tag = ZoomLevel.Level4;
             toolStripButtonSummaryView.Tag = ZoomLevel.Level5;
             toolStripButtonRequestView.Tag = ZoomLevel.Level6;
@@ -4858,13 +4858,14 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _grid.ContextMenuStrip = contextMenuViews;
                     ActiveControl = _grid;
                     break;
-                case ZoomLevel.Level3:
-                    restrictionViewMode(false);
-                    _grid.BringToFront();
-                    _scheduleView = new DetailView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter,_clipHandlerSchedule, _overriddenBusinessRulesHolder, callback,_defaultScheduleTag);
-					_grid.ContextMenuStrip = contextMenuViews;
-                    ActiveControl = _grid;
-                    break;
+				//removed in PBI21261
+                //case ZoomLevel.Level3:
+					//restrictionViewMode(false);
+					//_grid.BringToFront();
+					//_scheduleView = new DetailView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter,_clipHandlerSchedule, _overriddenBusinessRulesHolder, callback,_defaultScheduleTag);
+					//_grid.ContextMenuStrip = contextMenuViews;
+					//ActiveControl = _grid;
+					//break;
                 case ZoomLevel.Level2:
                     restrictionViewMode(false);
                     _grid.BringToFront();
