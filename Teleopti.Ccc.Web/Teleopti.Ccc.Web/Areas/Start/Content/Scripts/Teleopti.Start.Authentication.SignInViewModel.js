@@ -54,7 +54,6 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 500) {
-//					var response = $.parseJSON(jqXHR.responseText);
 					$('#Exception-message').text(errorThrown);
 					$('#Exception-div').show();
 					return;

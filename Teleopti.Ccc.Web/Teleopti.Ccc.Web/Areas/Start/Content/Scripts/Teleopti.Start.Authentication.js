@@ -3,7 +3,7 @@
 /// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.Common.js" />
-/// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.LoginViewModel.js" />
+/// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordView.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
