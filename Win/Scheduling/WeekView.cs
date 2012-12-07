@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var scheduleRange = e.Style.CellValue as IScheduleDay;
                 if (scheduleRange != null)
                 {
-                    var significantPart = scheduleRange.SignificantPart();
+                    var significantPart = scheduleRange.SignificantPartForDisplay();
                     DrawSchedule(e, WeekPresenter.CreateSpanDictionaryFromSchedule(scheduleRange),significantPart);
                     drawInfoTextInCell(e, scheduleRange, significantPart);
                     AddMarkersToCell(e, scheduleRange, significantPart);
