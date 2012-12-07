@@ -128,8 +128,14 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		public Guid PlatformTypeId { get; set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public DateTime Timestamp { get; set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public TimeSpan TimeInState { get; set; }
 
 		/// <summary>

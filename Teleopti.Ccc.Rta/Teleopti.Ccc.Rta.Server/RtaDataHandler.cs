@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Rta.Server
         private readonly IPersonResolver _personResolver;
         private readonly IStateResolver _stateResolver;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		protected RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
 			IDatabaseConnectionFactory databaseConnectionFactory, IDataSourceResolver dataSourceResolver, IPersonResolver personResolver,
 			 IStateResolver stateResolver)

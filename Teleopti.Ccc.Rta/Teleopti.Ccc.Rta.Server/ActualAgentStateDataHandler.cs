@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
+using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -10,11 +13,10 @@ namespace Teleopti.Ccc.Rta.Server
 	public interface IActualAgentStateDataHandler
 	{
 		IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, Guid personId);
-		IActualAgentState LoadOldState(Guid value);
+		IActualAgentState LoadOldState(Guid personToLoad);
 		IEnumerable<RtaStateGroupLight> StateGroups();
 		IEnumerable<RtaAlarmLight> ActivityAlarms();
 		void AddOrUpdate(ActualAgentState newState);
-		ICollection<Guid> PersonIdsWithExternalLogon(Guid businessUnitId);
 	}
 
 	public class ActualAgentStateDataHandler : IActualAgentStateDataHandler
@@ -29,44 +31,134 @@ namespace Teleopti.Ccc.Rta.Server
 			
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		public IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, Guid personId)
 		{
-			//using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
-			//{
-			//    var layers = _scheduleProjectionReadOnlyRepository.CurrentLayerAndNext(onTime, personId);
+			var dateString = string.Format(CultureInfo.InvariantCulture,onTime.ToString("yyyy-MM-dd HH:mm"));
+			var idString = string.Format(CultureInfo.InvariantCulture,personId.ToString());
+			var query = string.Format(CultureInfo.InvariantCulture, @"SELECT TOP 2 PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
+						FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta
+						WHERE EndDateTime > '{0}' 
+						AND PersonId='{1}'",dateString,idString);
+			var layers = new List<ScheduleLayer>();
+			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
+			{
+				var command = connection.CreateCommand();
+				command.CommandType = CommandType.Text;
+				command.CommandText = query;
+				connection.Open();
+				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+				while (reader.Read())
+				{
+					var payloadId = reader.GetGuid(reader.GetOrdinal("PayloadId"));
+					var startDateTime = reader.GetDateTime(reader.GetOrdinal("StartDateTime"));
+					var endDateTime = reader.GetDateTime(reader.GetOrdinal("EndDateTime"));
+					var name = reader.GetString(reader.GetOrdinal("Name"));
+					var shortName = reader.GetString(reader.GetOrdinal("ShortName"));
+					var displayColor = reader.GetInt32(reader.GetOrdinal("DisplayColor"));
 
-			//    var scheduleLayer = layers.FirstOrDefault();
-			//    ScheduleLayer nextLayer = null;
+					var layer = new ScheduleLayer
+					{
+						PayloadId = payloadId,
+						StartDateTime = startDateTime,
+						EndDateTime = endDateTime,
+						Name = name,
+						ShortName = shortName,
+						DisplayColor = displayColor
+					};
+					layers.Add(layer);
+				}
+				reader.Close();
+			}
 
-			//    // no layer now
-			//    if (scheduleLayer != null && scheduleLayer.StartDateTime > onTime)
-			//    {
-			//        nextLayer = scheduleLayer;
-			//        scheduleLayer = null;
-			//    }
+			var scheduleLayer = layers.FirstOrDefault();
+			ScheduleLayer nextLayer = null;
 
-			//    if (nextLayer == null && layers != null && layers.Count > 1)
-			//    {
-			//        nextLayer = layers[1];
-			//    }
+			// no layer now
+			if (scheduleLayer != null && scheduleLayer.StartDateTime > onTime)
+			{
+			    nextLayer = scheduleLayer;
+			    scheduleLayer = null;
+			}
 
-			//    if (scheduleLayer != null && nextLayer != null)
-			//    {
-			//        //scheduleLayer is the last in assignment
-			//        if (scheduleLayer.EndDateTime != nextLayer.StartDateTime)
-			//        {
-			//            nextLayer = null;
-			//        }
-			//    }
-			//    return new List<ScheduleLayer> { scheduleLayer, nextLayer };
-			//}
-			return new List<ScheduleLayer>();
+			if (nextLayer == null && layers != null && layers.Count > 1)
+			{
+			    nextLayer = layers[1];
+			}
+
+			if (scheduleLayer != null && nextLayer != null)
+			{
+				//scheduleLayer is the last in assignment
+				if (scheduleLayer.EndDateTime != nextLayer.StartDateTime)
+				{
+					nextLayer = null;
+				}
+			}
+
+			return new List<ScheduleLayer> { scheduleLayer, nextLayer };
+			
 		}
 
-
-		public IActualAgentState LoadOldState(Guid value)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
+		public IActualAgentState LoadOldState(Guid personToLoad)
 		{
-			return null; // _statisticRepository.LoadOneActualAgentState(value);
+			var personIdString = personToLoad.ToString();
+			var query = string.Format("SELECT * FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personIdString);
+			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
+			{
+				var command = connection.CreateCommand();
+				command.CommandType = CommandType.Text;
+				command.CommandText = query;
+				connection.Open();
+				using(var reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+				{
+					while (reader.Read())
+					{
+						var stateCode = reader.GetString(reader.GetOrdinal("StateCode"));
+						var state = reader.GetString(reader.GetOrdinal("State"));
+						var alarmName = reader.GetString(reader.GetOrdinal("AlarmName"));
+						var scheduled = reader.GetString(reader.GetOrdinal("Scheduled"));
+						var scheduledNext = reader.GetString(reader.GetOrdinal("ScheduledNext"));
+
+						var platformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId"));
+						var scheduledId = reader.GetGuid(reader.GetOrdinal("ScheduledId"));
+						var alarmId = reader.GetGuid(reader.GetOrdinal("AlarmId"));
+						var scheduledNextId = reader.GetGuid(reader.GetOrdinal("ScheduledNextId"));
+						var personId = reader.GetGuid(reader.GetOrdinal("PersonId"));
+						var stateId = reader.GetGuid(reader.GetOrdinal("StateId"));
+
+						var stateStart = reader.GetDateTime(reader.GetOrdinal("StateStart"));
+						var nextStart = reader.GetDateTime(reader.GetOrdinal("NextStart"));
+						var alarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart"));
+
+						var color = reader.GetInt32(reader.GetOrdinal("Color"));
+						var staffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"));
+
+						return new ActualAgentState()
+						{
+							State = state,
+							PlatformTypeId = platformTypeId,
+							StateCode = stateCode,
+							AlarmName = alarmName,
+							StateId = stateId,
+							Scheduled = scheduled,
+							ScheduledNext = scheduledNext,
+							ScheduledId = scheduledId,
+							AlarmId = alarmId,
+							ScheduledNextId = scheduledNextId,
+							PersonId = personId,
+							StateStart = stateStart,
+							NextStart = nextStart,
+							AlarmStart = alarmStart,
+							Color = color,
+							StaffingEffect = staffingEffect
+						};
+
+					}
+					
+				}               
+			}
+			return null; 
 		}
 
 		public IEnumerable<RtaStateGroupLight> StateGroups()
@@ -131,8 +223,10 @@ namespace Teleopti.Ccc.Rta.Server
 					var alarmTypeId = reader.GetGuid(reader.GetOrdinal("AlarmTypeId"));
 					var staffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"));
 					var displayColor = reader.GetInt32(reader.GetOrdinal("DisplayColor"));
-					var activityId = reader.GetGuid(reader.GetOrdinal("ActivityId"));
-					var thresholdTime = reader.GetInt64(reader.GetOrdinal("StaffingEffect"));
+					var activityId = Guid.Empty;
+					if(!reader.IsDBNull(reader.GetOrdinal("ActivityId")))
+						activityId = reader.GetGuid(reader.GetOrdinal("ActivityId"));
+					var thresholdTime = reader.GetInt64(reader.GetOrdinal("ThresholdTime"));
 					var name = reader.GetString(reader.GetOrdinal("Name"));
 
 					var rtaAlarmLight = new RtaAlarmLight
@@ -156,14 +250,137 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public void AddOrUpdate(ActualAgentState newState)
 		{
+//                const string stringQuery = @"[RTA].[rta_addorupdate_actualagentstate] @PersonId=:personId,  @StateCode=:stateCode, @PlatformTypeId=:platform, 
+//					@State=:state, @StateId=:stateId, @Scheduled=:scheduled, @ScheduledId=:scheduledId, @StateStart=:stateStart, @ScheduledNext=:scheduledNext,  
+//					@ScheduledNextId=:scheduledNextId, @NextStart=:nextStart, @AlarmName=:alarmName, @AlarmId=:alarmId, @Color=:color, @AlarmStart=:alarmStart, 
+//					@StaffingEffect=:staffingEffect";
+
+				using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
+				{
+					var command = connection.CreateCommand();
+					command.CommandType = CommandType.StoredProcedure;
+					command.CommandText = "[RTA].[rta_addorupdate_actualagentstate]";
+
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@PersonId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = newState.PersonId
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@StateCode",
+						SqlDbType = SqlDbType.NVarChar,
+						Direction = ParameterDirection.Input,
+						Value = newState.StateCode
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@PlatformTypeId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = newState.PlatformTypeId
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@State",
+						SqlDbType = SqlDbType.NVarChar,
+						Direction = ParameterDirection.Input,
+						Value = newState.State
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@AlarmName",
+						SqlDbType = SqlDbType.NVarChar,
+						Direction = ParameterDirection.Input,
+						Value = newState.AlarmName
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@StateId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = newState.StateId
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@Scheduled",
+						SqlDbType = SqlDbType.NVarChar,
+						Direction = ParameterDirection.Input,
+						Value = newState.Scheduled
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@ScheduledId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = newState.ScheduledId
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@AlarmId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = newState.AlarmId
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@ScheduledNext",
+						SqlDbType = SqlDbType.NVarChar,
+						Direction = ParameterDirection.Input,
+						Value = newState.ScheduledNext
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@ScheduledNextId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = newState.ScheduledNextId
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@StateStart",
+						SqlDbType = SqlDbType.DateTime,
+						Direction = ParameterDirection.Input,
+						Value = newState.StateStart
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@NextStart",
+						SqlDbType = SqlDbType.DateTime,
+						Direction = ParameterDirection.Input,
+						Value = newState.NextStart
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@AlarmStart",
+						SqlDbType = SqlDbType.DateTime,
+						Direction = ParameterDirection.Input,
+						Value = newState.AlarmStart
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@Color",
+						SqlDbType = SqlDbType.Int,
+						Direction = ParameterDirection.Input,
+						Value = newState.Color
+					});
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@StaffingEffect",
+						SqlDbType = SqlDbType.Float,
+						Direction = ParameterDirection.Input,
+						Value = newState.StaffingEffect
+					});
+					connection.Open();
+					command.ExecuteNonQuery();
+				}
+				
 			//_statisticRepository.AddOrUpdateActualAgentState(newState);
 		}
 
-		public ICollection<Guid> PersonIdsWithExternalLogon(Guid businessUnitId)
-		{
-			return null;
-			//return _statisticRepository.PersonIdsWithExternalLogon(Guid.NewGuid());
-		}
+
 	}
 	
 	public class RtaStateGroupLight

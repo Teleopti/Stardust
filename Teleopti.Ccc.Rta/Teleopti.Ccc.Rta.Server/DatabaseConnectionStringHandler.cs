@@ -9,5 +9,10 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			return ConfigurationManager.AppSettings["AppDb"];
 		}
+
+		public string DataStoreConnectionString()
+		{
+			return ConfigurationManager.AppSettings["DataStore"];
+		}
 	}
 }

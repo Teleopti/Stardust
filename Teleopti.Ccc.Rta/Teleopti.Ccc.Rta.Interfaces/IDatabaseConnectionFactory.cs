@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Rta.Interfaces
 	public interface IDatabaseConnectionStringHandler
 	{
 		string AppConnectionString();
+		string DataStoreConnectionString();
 	}
 }

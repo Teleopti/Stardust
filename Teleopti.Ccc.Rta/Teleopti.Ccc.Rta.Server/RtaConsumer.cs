@@ -25,16 +25,16 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			var scheduleLayers = _actualAgentStateDataHandler.CurrentLayerAndNext(timeStamp,personId);
 			var previousState = _actualAgentStateDataHandler.LoadOldState(personId);
-			return checkState(scheduleLayers, previousState, personId, platformTypeId, stateCode,	timeStamp, timeInState);
+			return checkState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timeStamp, timeInState, businessUnitId);
 		}
 
 		IActualAgentState checkState(IList<ScheduleLayer> scheduleLayers, IActualAgentState previousState, Guid personId, Guid platformTypeId,
-			string stateCode, DateTime timeStamp, TimeSpan timeInState)
+			string stateCode, DateTime timeStamp, TimeSpan timeInState, Guid businessUnitId)
 		{
 			var scheduleLayer = scheduleLayers[0];
 			var nextLayer = scheduleLayers[1];
 
-			var foundAlarm = _actualAgentHandler.GetAlarm(platformTypeId, stateCode, scheduleLayer);
+			var foundAlarm = _actualAgentHandler.GetAlarm(platformTypeId, stateCode, scheduleLayer, businessUnitId);
 
 			var newState = new ActualAgentState
 			{
