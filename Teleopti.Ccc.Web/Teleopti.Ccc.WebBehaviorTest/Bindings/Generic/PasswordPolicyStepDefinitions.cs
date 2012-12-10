@@ -16,6 +16,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class PasswordPolicyStepDefinitions
 	{
+		[AfterFeature("Password_policy_configuration_file_teardown")]
+		public static void Hook()
+		{
+			var targetTestPasswordPolicyFile = Path.Combine(Path.Combine(IniFileInfo.SitePath, "bin"), "PasswordPolicy.xml");
+			if (File.Exists(targetTestPasswordPolicyFile))
+			{
+				File.Delete(targetTestPasswordPolicyFile);
+			}
+		}
+
 		[Given(@"There is a password policy with")]
 		public void GivenThereIsAPasswordPolicyWith(Table table)
 		{
