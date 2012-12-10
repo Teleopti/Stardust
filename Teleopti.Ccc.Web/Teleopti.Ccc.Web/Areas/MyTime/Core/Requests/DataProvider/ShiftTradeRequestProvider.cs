@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Linq;
+﻿using System.Linq;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return new ShiftTradeRequestsPreparationDomainData
 			       	{
 			       		WorkflowControlSet = person.WorkflowControlSet,
-						MyScheduleDay = _scheduleProvider.GetScheduleForPersons(date, new [] { person }).FirstOrDefault()
+						MyScheduleDay = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(date, date)).FirstOrDefault()
 			       	};
 		}
 	}

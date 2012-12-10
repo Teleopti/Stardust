@@ -101,3 +101,20 @@
 {
 	text-align: right;
 }
+.shift-trade-layer
+{
+	position: absolute;
+	zoom: 1;
+	filter: alpha(opacity=80);
+	opacity: 0.80;
+	height: 20px;
+	top: 3px;
+}
+.shift-trade-my-schedule
+{
+	border: 1px solid rgb(216, 216, 216);	
+	position: relative;
+	height: 30px;
+	background: #f8f8f8;
+	display: block;
+}

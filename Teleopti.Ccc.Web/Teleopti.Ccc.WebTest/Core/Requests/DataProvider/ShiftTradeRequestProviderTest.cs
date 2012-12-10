@@ -42,16 +42,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var person = new Person { WorkflowControlSet = new WorkflowControlSet() };
 			var date = DateTime.UtcNow;
 			IScheduleDictionary scheduleDictionary = new ScheduleDictionary(new Scenario("scenario"),
-			                                                                new ScheduleDateTimePeriod(new DateTimePeriod(date,
-			                                                                                                              date)));
+																			new ScheduleDateTimePeriod(new DateTimePeriod(date,
+																														  date)));
 			IScheduleDay scheduleDay = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, person, new DateOnly(date));
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			scheduleProvider.Stub(x => x.GetScheduleForPersons(new DateOnly(date), new List<IPerson> {person})).Return(new[]
-			                                                                                                           	{
-			                                                                                                           		scheduleDay
-			                                                                                                           	});
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)))).Return(new[] { scheduleDay });
 			var target = new ShiftTradeRequestProvider(loggedOnUser, scheduleProvider);
 
 			var result = target.RetrieveShiftTradePreparationData(new DateOnly(date));

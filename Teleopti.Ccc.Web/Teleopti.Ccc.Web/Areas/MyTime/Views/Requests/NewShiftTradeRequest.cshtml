@@ -1,7 +1,19 @@
 ﻿@using Teleopti.Ccc.UserTexts
-<div id="Request-add-shift-trade" style="display: none;z-index: 10; background-color: lightcyan; position: absolute">
+<div id="Request-add-shift-trade" style="display: none;z-index: 10; background-color: lightpink">
 	<input id="Request-add-selected-date" type="hidden"/>
 	<div style="background-color: lightblue;z-index: 10;display: block" class="friendly-message ui-corner-all floatleft" data-bind="visible : hasWorkflowControlSet">
 		@Resources.MissingWorkflowControlSet
 	</div>
+	<!--<div class="asm-sliding-schedules" data-bind="style: { left : canvasPosition }">-->
+	<div class="shift-trade-my-schedule ui-corner-all">
+		<span data-bind="foreach: myScheduleLayers">
+			<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
+		</span>
+		@*<span data-bind="foreach: hours">
+			<span class="asm-timeline-line">
+				<span class="asm-timeline-number ui-corner-all" data-bind="text: $data"></span>
+			</span>
+		</span>*@
+	</div>
+	dfgd dfghfdgh 
 </div>

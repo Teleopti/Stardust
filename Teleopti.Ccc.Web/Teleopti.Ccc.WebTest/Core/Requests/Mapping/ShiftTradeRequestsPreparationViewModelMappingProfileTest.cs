@@ -135,5 +135,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.MySchedulelayers.First().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(activtyColor));
 		}
 
+		[Test]
+		public void ShouldMapMyScheduledDayElapsedMinutesSinceShiftStart()
+		{
+			var layerPeriod1 = new DateTimePeriod(new DateTime(2013, 1, 1, 8, 15, 0, DateTimeKind.Utc), new DateTime(2013, 1, 1, 20, 15, 0, DateTimeKind.Utc));
+			var layerPeriod2 = new DateTimePeriod(new DateTime(2013, 1, 1, 20, 15, 0, DateTimeKind.Utc), new DateTime(2013, 1, 1, 21, 15, 0, DateTimeKind.Utc));
+			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime());
+			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new[]
+				                                       	{
+				                                       		_scheduleFactory.VisualLayerStub(layerPeriod1),
+															_scheduleFactory.VisualLayerStub(layerPeriod2)
+				                                       	}));
+			var domainData = new ShiftTradeRequestsPreparationDomainData { MyScheduleDay = scheduleDay };
+
+			var result = Mapper.Map<ShiftTradeRequestsPreparationDomainData, ShiftTradeRequestsPreparationViewModel>(domainData);
+
+			var expectedValue = layerPeriod2.StartDateTime.Subtract(layerPeriod1.StartDateTime).TotalMinutes;
+			result.MySchedulelayers.Last().ElapsedMinutesSinceShiftStart.Should().Be.EqualTo(expectedValue);
+		}
 	}
 }

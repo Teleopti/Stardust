@@ -31,24 +31,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				                                                   		return CreateShiftTradeLayers(
 				                                                   			_userTimeZone.Invoke().TimeZone(), layers);
 				                                                   	}))
-				;
+			;
 		}
 
 		private static IEnumerable<ShiftTradeScheduleLayer> CreateShiftTradeLayers(TimeZoneInfo timeZone, IEnumerable<IVisualLayer> layers)
 		{
-			var scheduleayers = (from visualLayer in layers
+			DateTime shiftStartTime = layers.Min(o => o.Period.StartDateTime);
+
+			
+
+			var scheduleLayers = (from visualLayer in layers
 							 let startDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.StartDateTime, timeZone)
 							 let endDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.EndDateTime, timeZone)
 							 let length = visualLayer.Period.ElapsedTime().TotalMinutes
 							 select new ShiftTradeScheduleLayer
 							 {
 								 Payload = visualLayer.DisplayDescription().Name,
-								 LengthInMinutes = length,
+								 LengthInMinutes = (int) length,
 								 Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
 								 StartTimeText = startDate.ToString("HH:mm"),
-								 EndTimeText = endDate.ToString("HH:mm")
+								 EndTimeText = endDate.ToString("HH:mm"),
+								 ElapsedMinutesSinceShiftStart = (int) startDate.Subtract(TimeZoneHelper.ConvertFromUtc(shiftStartTime, timeZone)).TotalMinutes
 							 }).ToList();
-			return scheduleayers;
+			return scheduleLayers;
 		}
 	}
 }

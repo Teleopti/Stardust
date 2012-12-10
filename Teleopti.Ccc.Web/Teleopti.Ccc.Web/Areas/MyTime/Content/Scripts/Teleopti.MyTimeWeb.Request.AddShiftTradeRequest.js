@@ -8,11 +8,23 @@
 Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
+	var layerCanvasPixelWidth = 700;
+	var pixelPerMinute;
 
 	function shiftTradeViewModel() {
 		var self = this;
 
 		self.hasWorkflowControlSet = ko.observable(false);
+		self.timeLineLengthInMinutes = ko.observable(0);
+		self.myScheduleLayers = ko.observableArray();
+
+		self._createMyScheduleLayers = function (layers) {
+			var newLayers = new Array();
+			$.each(layers, function (key, layer) {
+				newLayers.push(new shiftTradeLayerViewModel(layer));
+			});
+			self.myScheduleLayers(newLayers);
+		};
 
 		self.loadViewModel = function (date) {
 			console.log(date);
@@ -26,17 +38,36 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				},
 				success: function (data, textStatus, jqXHR) {
 					self.hasWorkflowControlSet(!data.HasWorkflowControlSet);
-					//console.log(data);
+					self.timeLineLengthInMinutes(data.TimeLineLengthInMinutes);
+					self._createMyScheduleLayers(data.MySchedulelayers);
+					console.log(data);
 				},
 				error: function () {
 					console.log('Something went wrong here...');
 				}
 			});
 		};
+
+		self.timeLineLengthInMinutes.subscribe(function () {
+			pixelPerMinute = layerCanvasPixelWidth / self.timeLineLengthInMinutes();
+		});
+	}
+
+	function shiftTradeLayerViewModel(layer) {
+		var self = this;
+
+		self.payload = layer.Payload;
+		self.backgroundColor = layer.Color;
+		self.startTime = layer.StartTimeText;
+		self.endTime = layer.EndTimeText;
+		self.lengthInMinutes = layer.LengthInMinutes;
+		self.title = 'TODO';
+		self.leftPx = (layer.ElapsedMinutesSinceShiftStart * pixelPerMinute) + 'px';
+		self.paddingLeft = (self.lengthInMinutes * pixelPerMinute) + 'px';
 	}
 
 	function _init() {
-		setShiftTradeRequestDate('2012-12-07'); //Just temporary
+		setShiftTradeRequestDate('2012-12-10'); //Just temporary
 		_showContent();
 	}
 
