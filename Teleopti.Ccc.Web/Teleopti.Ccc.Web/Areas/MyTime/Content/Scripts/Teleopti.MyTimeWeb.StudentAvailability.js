@@ -42,10 +42,14 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	}
 
 	function _updateButtonState(button, enabled) {
-		if (enabled)
-			button.removeAttr('disabled');
-		else
-			button.attr('disabled', 'disabled').removeClass('ajax-disabled');
+	    if (enabled) {
+	        button.removeAttr('disabled');
+	        button.click(function () {
+	            button.qtip('hide');
+	        });
+	    }
+	    else
+	        button.attr('disabled', 'disabled').removeClass('ajax-disabled');
 	}
 
 	function _xhr(type, successCallback, addressSuffix, reqData) {
