@@ -1241,6 +1241,10 @@
     <Compile Include="Scheduling\ExportToPdf.cs" />
     <Compile Include="Scheduling\ExportToPdfGraphical.cs" />
     <Compile Include="Scheduling\LockExecuter.cs" />
+    <Compile Include="Scheduling\OverViewDrawAbsence.cs" />
+    <Compile Include="Scheduling\OverViewDrawAbsenceDayOff.cs" />
+    <Compile Include="Scheduling\OverViewDrawDayOff.cs" />
+    <Compile Include="Scheduling\OverViewDrawMainShift.cs" />
     <Compile Include="Scheduling\PermissionClipboardControl.cs" />
     <Compile Include="Scheduling\PermissionEditControl.cs" />
     <Compile Include="Scheduling\QuickAccessState.cs" />
