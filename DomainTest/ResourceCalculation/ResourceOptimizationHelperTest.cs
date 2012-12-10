@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     [TestFixture]
     public class ResourceOptimizationHelperTest
     {
-       private IResourceOptimizationHelper _target;
+        private IResourceOptimizationHelper _target;
         private ISchedulingResultStateHolder _stateHolder;
         private MockRepository _mocks;
         private IOccupiedSeatCalculator _occupiedSeatCalculator;
@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _occupiedSeatCalculator = _mocks.StrictMock<IOccupiedSeatCalculator>();
             _target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,
                                                      new NonBlendSkillCalculator(
-                                                         new NonBlendSkillImpactOnPeriodForProjection()),
-														 new SingleSkillDictionary());
+                                                         new NonBlendSkillImpactOnPeriodForProjection()));
         }
 
         private void expectsForVerifyCalculateDay(ISkill skill1, ISkillStaffPeriodHolder skillStaffPeriodHolder,
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             IActivity activity = ActivityFactory.CreateActivity("sdf");
             var skill1 = _mocks.StrictMock<ISkill>();
-            IList<ISkill> skills = new List<ISkill> {skill1};
+            IList<ISkill> skills = new List<ISkill> { skill1 };
 
             var service1 = _mocks.StrictMock<IProjectionService>();
             var service2 = _mocks.StrictMock<IProjectionService>();
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(skillType.ForecastSource).Return(ForecastSource.Email).Repeat.AtLeastOnce();
                 Expect.Call(() => _occupiedSeatCalculator.Calculate(new DateOnly(), new List<IVisualLayerCollection>(), new SkillSkillStaffPeriodExtendedDictionary())).IgnoreArguments();
                 Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
-                
+
             }
 
             using (_mocks.Playback())
@@ -133,12 +132,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void ShouldCreateSkillStaffPeriodsJustForListOffSkills()
         {
-            var keyPeriod = new DateTimePeriod(2011,2,1,2011,2,2);
+            var keyPeriod = new DateTimePeriod(2011, 2, 1, 2011, 2, 2);
 
             var skill1 = _mocks.StrictMock<ISkill>();
             var skill2 = _mocks.StrictMock<ISkill>();
-            IList<ISkill> skills = new List<ISkill>{skill1};
-            
+            IList<ISkill> skills = new List<ISkill> { skill1 };
+
             var skillStaffPeriods = new SkillStaffPeriodDictionary(skill1);
             var skillStaffPeriods2 = new SkillStaffPeriodDictionary(skill2);
 
@@ -161,13 +160,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             var skill1 = _mocks.StrictMock<ISkill>();
             IList<ISkill> skills = new List<ISkill> { skill1 };
-            
+
             var skillStaffPeriod1 = _mocks.StrictMock<ISkillStaffPeriod>();
             var skillStaffPeriod2 = _mocks.StrictMock<ISkillStaffPeriod>();
-           
+
             Expect.Call(skillStaffPeriod1.Period).Return(keyPeriod).Repeat.AtLeastOnce();
-            Expect.Call(skillStaffPeriod2.Period).Return(keyPeriod.MovePeriod(new TimeSpan(2,0,0,0))).Repeat.AtLeastOnce();
-           
+            Expect.Call(skillStaffPeriod2.Period).Return(keyPeriod.MovePeriod(new TimeSpan(2, 0, 0, 0))).Repeat.AtLeastOnce();
+
             _mocks.ReplayAll();
             var skillStaffPeriods = new SkillStaffPeriodDictionary(skill1) { skillStaffPeriod1, skillStaffPeriod2 };
             var skillStaffPeriodDictionary = new SkillSkillStaffPeriodExtendedDictionary
@@ -177,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                  };
             var result = _target.CreateSkillSkillStaffDictionaryOnSkills(skillStaffPeriodDictionary, skills, keyPeriod);
             Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result[skill1].Count,Is.EqualTo(1));
+            Assert.That(result[skill1].Count, Is.EqualTo(1));
             _mocks.VerifyAll();
         }
 
@@ -209,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var layerCollection = new VisualLayerCollection(person, new List<IVisualLayer> { layer }, new ProjectionPayloadMerger());
             var projService = _mocks.StrictMock<IProjectionService>();
             var skillStaffPeriodHolder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
-            
+
             Expect.Call(person.VirtualSchedulePeriod(dateOnly)).Return(virtualPeriod);
             Expect.Call(virtualPeriod.IsValid).Return(true);
             Expect.Call(mainShift.ProjectionService()).Return(projService);
@@ -224,109 +223,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_stateHolder.SkillStaffPeriodHolder).Return(skillStaffPeriodHolder).Repeat.Twice();
             Expect.Call(skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary).Return(
                 new SkillSkillStaffPeriodExtendedDictionary()).Repeat.Twice();
-            Expect.Call(() =>_occupiedSeatCalculator.Calculate(new DateOnly(), new List<IVisualLayerCollection>(),
+            Expect.Call(() => _occupiedSeatCalculator.Calculate(new DateOnly(), new List<IVisualLayerCollection>(),
                                                           new SkillSkillStaffPeriodExtendedDictionary())).
                 IgnoreArguments();
             _mocks.ReplayAll();
             _target.AddResourcesToNonBlendAndMaxSeat(mainShift, person, dateOnly);
             _mocks.VerifyAll();
         }
-
-		[Test]
-		public void ShouldNotUseSingleSkillCalculationOnNoInputDays()
-		{
-			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
-			var helper = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator, new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary);
-			var toRemove = new List<IScheduleDay>();
-			var toAdd = new List<IScheduleDay>();	
-
-			var res = helper.UseSingleSkillCalculations(toRemove, toAdd);
-			Assert.IsFalse(res);
-		}
-
-		[Test]
-		public void ShouldNotUseSingleSkillCalculationsWhenToRemoveIsNotSingleSkilled()
-		{
-			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
-			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			var helper = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator, new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary);
-			var toRemove = new List<IScheduleDay>{scheduleDay};
-			var toAdd = new List<IScheduleDay>();
-			var person = _mocks.StrictMock<IPerson>();
-			var dateOnlyTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-			var dateOnly = new DateOnly();
-	
-			using(_mocks.Record())
-			{
-				Expect.Call(scheduleDay.Person).Return(person);
-				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyTimePeriod);
-				Expect.Call(dateOnlyTimePeriod.DateOnly).Return(dateOnly);
-				Expect.Call(singleSkillDictionary.IsSingleSkill(person, dateOnly)).Return(false);
-			}
-
-			using(_mocks.Playback())
-			{
-				var res = helper.UseSingleSkillCalculations(toRemove, toAdd);
-				Assert.IsFalse(res);
-			}
-		}
-
-		[Test]
-		public void ShouldNotUseSingleSkillCalculationsWhenToAddIsNotSingleSkilled()
-		{
-			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
-			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			var helper = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator, new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary);
-			var toAdd = new List<IScheduleDay> { scheduleDay };
-			var toRemove = new List<IScheduleDay>();
-			var person = _mocks.StrictMock<IPerson>();
-			var dateOnlyTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-			var dateOnly = new DateOnly();
-
-			using (_mocks.Record())
-			{
-				Expect.Call(scheduleDay.Person).Return(person);
-				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyTimePeriod);
-				Expect.Call(dateOnlyTimePeriod.DateOnly).Return(dateOnly);
-				Expect.Call(singleSkillDictionary.IsSingleSkill(person, dateOnly)).Return(false);
-			}
-
-			using (_mocks.Playback())
-			{
-				var res = helper.UseSingleSkillCalculations(toRemove, toAdd);
-				Assert.IsFalse(res);
-			}
-		}
-
-		[Test]
-		public void ShouldUseSingleSkillCalculationsWhenToAddAndToRemoveIsSingleSkilled()
-		{
-			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
-			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
-			var helper = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator, new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary);
-			var toAdd = new List<IScheduleDay> { scheduleDay1 };
-			var toRemove = new List<IScheduleDay> { scheduleDay2 };
-			var person = _mocks.StrictMock<IPerson>();
-			var dateOnlyTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-			var dateOnly = new DateOnly();
-
-			using (_mocks.Record())
-			{
-				Expect.Call(scheduleDay1.Person).Return(person);
-				Expect.Call(scheduleDay1.DateOnlyAsPeriod).Return(dateOnlyTimePeriod);
-				Expect.Call(scheduleDay2.Person).Return(person);
-				Expect.Call(scheduleDay2.DateOnlyAsPeriod).Return(dateOnlyTimePeriod);
-
-				Expect.Call(dateOnlyTimePeriod.DateOnly).Return(dateOnly).Repeat.Twice();
-				Expect.Call(singleSkillDictionary.IsSingleSkill(person, dateOnly)).Return(true).Repeat.Twice();
-			}
-
-			using (_mocks.Playback())
-			{
-				var res = helper.UseSingleSkillCalculations(toRemove, toAdd);
-				Assert.IsTrue(res);
-			}
-		}
     }
 }

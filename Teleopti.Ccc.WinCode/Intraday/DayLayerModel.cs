@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Windows;
 using Teleopti.Ccc.WinCode.Common;
@@ -14,14 +15,22 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private readonly ITeam _team;
         private readonly LayerViewModelCollection _layerViewModelCollection;
         private readonly ICommonNameDescriptionSetting _commonNameDescriptionSetting;
-        private ILayer<IPayload> _currentActivityLayer;
-        private ILayer<IPayload> _alarmLayer;
-        private ILayer<IPayload> _currentState;
-        private ILayer<IPayload> _nextActivityLayer;
+
         private DateTime _scheduleStartDateTime = DateTime.MaxValue;
         private bool _isPinned;
+        private string _currentStateDescription;
+        private DateTime _enteredCurrentState;
+        private string _currentActivityDescription;
+        private string _alarmDescription;
+        private string _nextActivityDescription;
+        private DateTime _nextActivityStartDateTime;
+        private int _colorValue = 16777215;
+        private double _staffingEffect;
+        private DateTime _alarmStart;
 
-        public DayLayerModel(IPerson person, DateTimePeriod period, ITeam team, LayerViewModelCollection layerViewModelCollection, ICommonNameDescriptionSetting commonNameDescriptionSetting)
+        public DayLayerModel(IPerson person, DateTimePeriod period, ITeam team,
+                             LayerViewModelCollection layerViewModelCollection,
+                             ICommonNameDescriptionSetting commonNameDescriptionSetting)
         {
             _person = person;
             _layerViewModelCollection = layerViewModelCollection;
@@ -42,11 +51,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         public string CommonNameDescription
         {
-            get
-            {
-                return _commonNameDescriptionSetting.BuildCommonNameDescription(_person);
-            }
+            get { return _commonNameDescriptionSetting.BuildCommonNameDescription(_person); }
         }
+
         public bool IsPinned
         {
             get { return _isPinned; }
@@ -65,117 +72,113 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _layerViewModelCollection; }
         }
 
-        public ILayer<IPayload> AlarmLayer
+        public int ColorValue
         {
-            get { return _alarmLayer; }
+            get { return _colorValue; }
             set
             {
-                if (_alarmLayer != value)
-                {
-                    _alarmLayer = value;
-                    notifyPropertyChanged("AlarmLayer");
-                    notifyPropertyChanged("AlarmDescription");
-                }
+                if (_colorValue == value) return;
+                _colorValue = value;
+                notifyPropertyChanged("Color");
             }
+        }
+
+        public Color Color
+        {
+            get { return Color.FromArgb(_colorValue); }
         }
 
         public string AlarmDescription
         {
-            get { return getPayloadDescription(_alarmLayer); }
-        }
-
-        //This property is only used for sorting the Time in the grid
-        public TimeSpan SortTime
-        {
-            get
-            {
-                return AlarmLayer == null ?
-                                              TimeSpan.Zero :
-                                                                TimeSpan.FromSeconds(Math.Round(AlarmLayer.Period.ElapsedTime().TotalSeconds));
-            }
-        }
-
-        public ILayer<IPayload> NextActivityLayer
-        {
-            get { return _nextActivityLayer; }
+            get { return _alarmDescription; }
             set
             {
-                if (_nextActivityLayer != value)
-                {
-                    _nextActivityLayer = value;
-                    notifyPropertyChanged("NextActivityLayer");
-                    notifyPropertyChanged("NextActivityDescription");
-                    notifyPropertyChanged("NextActivityStartDateTime");
-                    ShowNextActivity = _nextActivityLayer != null;
-                }
+                if (_alarmDescription == value) return;
+                _alarmDescription = value;
+                notifyPropertyChanged("AlarmDescription");
             }
+        }
+        public DateTime AlarmStart
+        {
+            get { return _alarmStart; }
+            set { _alarmStart = value; }
         }
 
         public string NextActivityDescription
         {
-            get { return getPayloadDescription(_nextActivityLayer); }
+            get { return _nextActivityDescription; }
+            set
+            {
+                if (_nextActivityDescription == value) return;
+                _nextActivityDescription = value;
+                notifyPropertyChanged("NextActivityDescription");
+            }
         }
 
-        public string NextActivityStartDateTime
+        public DateTime NextActivityStartDateTime
         {
-            get
+            get { return _nextActivityStartDateTime; }
+            set
             {
-                if (_nextActivityLayer != null)
-                    return _nextActivityLayer.Period.StartDateTime.ToShortTimeString();
-
-                return String.Empty;
+                if (_nextActivityStartDateTime == value) return;
+                _nextActivityStartDateTime = value;
+                notifyPropertyChanged("NextActivityStartDateTime");
             }
         }
 
         public DateTime ScheduleStartDateTime
         {
-            get
+            get { return _scheduleStartDateTime; }
+            set
             {
-                return _scheduleStartDateTime;
-            }
-            set { 
+                if (_scheduleStartDateTime == value) return;
                 _scheduleStartDateTime = value;
                 notifyPropertyChanged("ScheduleStartDateTime");
             }
         }
 
-        public ILayer<IPayload> CurrentActivityLayer
-        {
-            get { return _currentActivityLayer; }
-            set
-            {
-                if (_currentActivityLayer != value)
-                {
-                    _currentActivityLayer = value;
-                    notifyPropertyChanged("CurrentActivityLayer");
-                    notifyPropertyChanged("CurrentActivityDescription");
-
-                }
-            }
-        }
 
         public string CurrentActivityDescription
         {
-            get { return getPayloadDescription(_currentActivityLayer); }
-        }
-
-        public ILayer<IPayload> CurrentState
-        {
-            get { return _currentState; }
+            get { return _currentActivityDescription; }
             set
             {
-                if (_currentState != value)
-                {
-                    _currentState = value;
-                    notifyPropertyChanged("CurrentState");
-                    notifyPropertyChanged("CurrentStateDescription");
-                }
+                if (_currentActivityDescription == value) return;
+                _currentActivityDescription = value;
+                notifyPropertyChanged("CurrentActivityDescription");
             }
         }
 
         public string CurrentStateDescription
         {
-            get { return getPayloadDescription(_currentState); }
+            get { return _currentStateDescription; }
+            set
+            {
+                if (_currentStateDescription == value) return;
+                _currentStateDescription = value;
+                notifyPropertyChanged("CurrentStateDescription");
+            }
+        }
+
+        public DateTime EnteredCurrentState
+        {
+            get { return _enteredCurrentState; }
+            set
+            {
+                _enteredCurrentState = value;
+                notifyPropertyChanged("EnteredCurrentState");
+            }
+        }
+
+        public double StaffingEffect
+        {
+            get { return _staffingEffect; }
+            set
+            {
+                if (_staffingEffect.Equals(value)) return;
+                _staffingEffect = value;
+                notifyPropertyChanged("StaffingEffect");
+            }
         }
 
         public bool ShowNextActivity
@@ -186,20 +189,12 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         public DateTimePeriod Period
         {
-            get {
-                return _period;
-            }
+            get { return _period; }
         }
 
         public static readonly DependencyProperty ShowNextActivityProperty =
-            DependencyProperty.Register("ShowNextActivity", typeof(bool), typeof(DayLayerModel), new UIPropertyMetadata(false));
-
-        private string getPayloadDescription(ILayer layer)
-        {
-            if (layer == null) return string.Empty;
-            var payload = layer.Payload as IPayload;
-            return payload.ConfidentialDescription(_person,new DateOnly(layer.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone))).Name;
-        }
+            DependencyProperty.Register("ShowNextActivity", typeof(bool), typeof(DayLayerModel),
+                                        new UIPropertyMetadata(false));
 
         public int HookedEvents()
         {
@@ -214,10 +209,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         private void notifyPropertyChanged(string propertyName)
         {
-        	var handler = PropertyChanged;
+            var handler = PropertyChanged;
             if (handler != null)
             {
-            	handler(this, new PropertyChangedEventArgs(propertyName));
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 

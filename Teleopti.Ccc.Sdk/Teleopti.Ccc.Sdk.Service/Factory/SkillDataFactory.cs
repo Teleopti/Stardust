@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             {
                 IScenarioRepository scenarioRepository = repositoryFactory.CreateScenarioRepository(unitOfWork);
                 IScenario requestedScenario = scenarioRepository.LoadDefaultScenario();
-                
+
                 DateTimePeriod period = PreparePeriod(timeZoneInfo, dateOnlyDto);
                 DateTimePeriod periodForResourceCalc = new DateTimePeriod(period.StartDateTime.AddDays(-1), period.EndDateTime.AddDays(1));
 
                 IPersonRepository personRepository = repositoryFactory.CreatePersonRepository(unitOfWork);
-                using(SchedulingResultStateHolder schedulingResultStateHolder = new SchedulingResultStateHolder())
+                using (SchedulingResultStateHolder schedulingResultStateHolder = new SchedulingResultStateHolder())
                 {
                     LoadSchedulingStateHolderForResourceCalculation loader =
                         new LoadSchedulingStateHolderForResourceCalculation(personRepository,
@@ -60,14 +60,14 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                     loader.Execute(requestedScenario, periodForResourceCalc,
                                    personRepository.FindPeopleInOrganization(periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo), true));
 
-                	var resourceOptimizationHelper = new ResourceOptimizationHelper(schedulingResultStateHolder,
-                	                                                                new OccupiedSeatCalculator(
-                	                                                                	new SkillVisualLayerCollectionDictionaryCreator
-                	                                                                		(),
-                	                                                                	new SeatImpactOnPeriodForProjection()),
-                	                                                                new NonBlendSkillCalculator(
-                	                                                                	new NonBlendSkillImpactOnPeriodForProjection
-                	                                                                		()), new SingleSkillDictionary());
+                    var resourceOptimizationHelper = new ResourceOptimizationHelper(schedulingResultStateHolder,
+                                                                                    new OccupiedSeatCalculator(
+                                                                                        new SkillVisualLayerCollectionDictionaryCreator
+                                                                                            (),
+                                                                                        new SeatImpactOnPeriodForProjection()),
+                                                                                    new NonBlendSkillCalculator(
+                                                                                        new NonBlendSkillImpactOnPeriodForProjection
+                                                                                            ()));
                     foreach (DateOnly dateTime in periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo).DayCollection())
                     {
                         resourceOptimizationHelper.ResourceCalculateDate(dateTime, true, true);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                         skillDayDto.DisplayDate = dateOnlyDto;
                         IList<ISkillStaffPeriod> skillStaffPeriods =
                             schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(
-                                new List<ISkill> {skill}, period);
+                                new List<ISkill> { skill }, period);
                         skillDayDto.Esl = SkillStaffPeriodHelper.EstimatedServiceLevel(skillStaffPeriods).Value;
                         skillDayDto.SkillId = skill.Id.Value;
                         skillDayDto.SkillName = skill.Name;

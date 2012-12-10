@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IScheduleMatrixOriginalStateContainer _workShiftContainer2;
         private IScheduleMatrixPro _matrix1;
         private IScheduleMatrixPro _matrix2;
-    	private ISingleSkillDictionary _singleSkillDictionary;
 
         [SetUp]
         public void Setup()
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_singleSkillDictionary = new SingleSkillDictionary();
 
             _target = new IntradayOptimizer2Creator(_scheduleMatrixContainerList,
                 _workShiftContainerList,
@@ -55,23 +53,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                    _scheduleService,
                                                    optimizerPreferences,
                                                    _rollbackService,
-												   _schedulingResultStateHolder,
-												   _singleSkillDictionary);
+                                                   _schedulingResultStateHolder);
         }
 
         [Test]
         public void VerifyCreate()
         {
-            using(_mocks.Record())
+            using (_mocks.Record())
             {
                 Expect.Call(_matrixContainer1.ScheduleMatrix)
                     .Return(_matrix1);
                 Expect.Call(_matrixContainer2.ScheduleMatrix)
                     .Return(_matrix2);
             }
-            using(_mocks.Playback())
+            using (_mocks.Playback())
             {
-                IList<IIntradayOptimizer2> optimizers =_target.Create();
+                IList<IIntradayOptimizer2> optimizers = _target.Create();
                 Assert.AreEqual(_scheduleMatrixContainerList.Count, optimizers.Count);
             }
         }

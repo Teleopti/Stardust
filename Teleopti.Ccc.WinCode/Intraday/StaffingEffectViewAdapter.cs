@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Intraday
 {
@@ -41,37 +40,35 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         void adapter_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "AlarmLayer")
+            if (e.PropertyName == "AlarmDescription")
                 CalculateEffects();
         }
 
         private void CalculateEffects()
         {
-            double poseff=0d;
-            double negeff=0d;
-            int poscount = 0;
-            int negCount = 0;
+            var poseff = 0d;
+            var negeff = 0d;
+            var poscount = 0;
+            var negCount = 0;
+
             foreach (var model in _dayLayerViewModel.Models)
             {
-                if (model.AlarmLayer == null)
-                    continue;
-
-                IAlarmType type = model.AlarmLayer.Payload as IAlarmType;
-                if (type.StaffingEffect > 0)
+                if (model.StaffingEffect > 0)
                 {
-                    poseff += type.StaffingEffect;
+                    poseff += model.StaffingEffect;
                     poscount++;
                 }
-                if (type.StaffingEffect < 0)
+                if (model.StaffingEffect < 0)
                 {
+                    negeff += model.StaffingEffect;
                     negCount++;
-                    negeff += type.StaffingEffect;
                 }
             }
+
             PositiveEffect = poseff;
             NegativeEffect = negeff;
-            PositiveEffectPercent =(double) poscount /_dayLayerViewModel.Models.Count;
-            NegativeEffectPercent = (double)negCount/_dayLayerViewModel.Models.Count;
+            PositiveEffectPercent = (double)poscount / _dayLayerViewModel.Models.Count;
+            NegativeEffectPercent = (double)negCount / _dayLayerViewModel.Models.Count;
             Total = poseff + negeff;
             TotalPercent = PositiveEffectPercent + NegativeEffectPercent;
         }
@@ -80,7 +77,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         public double NegativeEffect
         {
             get { return _negativeEffect; }
-            set 
+            set
             {
                 if (_negativeEffect != value)
                 {
@@ -101,8 +98,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
                     NotifyPropertyChanged("Total");
                 }
             }
-        }      
-        
+        }
+
         private double _totalPercent;
         public double TotalPercent
         {
@@ -161,10 +158,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         private void NotifyPropertyChanged(string propertyName)
         {
-        	var handler = PropertyChanged;
-            if (handler!= null)
+            var handler = PropertyChanged;
+            if (handler != null)
             {
-            	handler(this, new PropertyChangedEventArgs(propertyName));
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 

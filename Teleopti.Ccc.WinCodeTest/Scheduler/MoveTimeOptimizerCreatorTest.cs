@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IMoveTimeDecisionMaker _decisionMaker;
         private IScheduleService _scheduleService;
         private ISchedulePartModifyAndRollbackService _rollbackService;
-    	private ISchedulingResultStateHolder _schedulingResultStateHolder;
+        private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
         private IScheduleMatrixOriginalStateContainer _matrixContainer1;
         private IScheduleMatrixOriginalStateContainer _matrixContainer2;
@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IScheduleMatrixOriginalStateContainer _workShiftContainer2;
         private IScheduleMatrixPro _matrix1;
         private IScheduleMatrixPro _matrix2;
-    	private ISingleSkillDictionary _singleSkillDictionary;
 
 
         [SetUp]
@@ -43,27 +42,25 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _scheduleMatrixOriginalStateContainerList = new List<IScheduleMatrixOriginalStateContainer> { _matrixContainer1, _matrixContainer2 };
             _workShiftOriginalStateContainerList = new List<IScheduleMatrixOriginalStateContainer> { _workShiftContainer1, _workShiftContainer2 };
             _decisionMaker = _mocks.StrictMock<IMoveTimeDecisionMaker>();
-			_scheduleService = _mocks.StrictMock<IScheduleService>();
-        	_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+            _scheduleService = _mocks.StrictMock<IScheduleService>();
+            _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             IOptimizationPreferences optimizerPreferences = new OptimizationPreferences();
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_singleSkillDictionary = new SingleSkillDictionary();
             _target = new MoveTimeOptimizerCreator(_scheduleMatrixOriginalStateContainerList,
                                                    _workShiftOriginalStateContainerList,
                                                    _decisionMaker,
                                                    _scheduleService,
                                                    optimizerPreferences,
                                                    _rollbackService,
-												   _schedulingResultStateHolder,
-												   _singleSkillDictionary);
+                                                   _schedulingResultStateHolder);
         }
 
         [Test]
         public void VerifyCreateOneOptimizerForEachMatrix()
         {
 
-            using(_mocks.Record())
+            using (_mocks.Record())
             {
                 Expect.Call(_matrixContainer1.ScheduleMatrix)
                     .Return(_matrix1)
@@ -71,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_matrixContainer2.ScheduleMatrix)
                     .Return(_matrix2)
                     .Repeat.AtLeastOnce();
-            	Expect.Call(_schedulingResultStateHolder.Schedules)
+                Expect.Call(_schedulingResultStateHolder.Schedules)
                     .Return(null)
                     .Repeat.Any();
                 Expect.Call(_matrix1.SchedulingStateHolder)
@@ -81,9 +78,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                     .Return(_schedulingResultStateHolder)
                     .Repeat.Any();
             }
-            using(_mocks.Playback())
+            using (_mocks.Playback())
             {
-                IList<IMoveTimeOptimizer> optimizers =_target.Create();
+                IList<IMoveTimeOptimizer> optimizers = _target.Create();
                 Assert.AreEqual(_scheduleMatrixOriginalStateContainerList.Count, optimizers.Count);
             }
         }

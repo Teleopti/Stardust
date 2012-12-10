@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Win.Intraday
         public event EventHandler<EventArgs> ViewPasteCompleted;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public IntradayScheduleView(GridControl gridControl, IIntradayView intradayView, SchedulerStateHolder schedulerState,
+		public IntradayScheduleView(GridControl gridControl, IIntradayView intradayView, ISchedulerStateHolder schedulerState,
             GridlockManager lockManager, SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
             IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
             : base(null)
