@@ -81,87 +81,84 @@ namespace Teleopti.Ccc.Rta.Server
 			    scheduleLayer = null;
 			}
 
-			if (nextLayer == null && layers != null && layers.Count > 1)
-			{
-			    nextLayer = layers[1];
-			}
+		    if (nextLayer == null && layers.Count > 1)
+		        nextLayer = layers[1];
 
-			if (scheduleLayer != null && nextLayer != null)
-			{
-				//scheduleLayer is the last in assignment
-				if (scheduleLayer.EndDateTime != nextLayer.StartDateTime)
-				{
-					nextLayer = null;
-				}
-			}
+		    if (scheduleLayer != null && nextLayer != null)
+		        //scheduleLayer is the last in assignment
+		        if (scheduleLayer.EndDateTime != nextLayer.StartDateTime)
+		            nextLayer = null;
 
-			return new List<ScheduleLayer> { scheduleLayer, nextLayer };
+		    return new List<ScheduleLayer> { scheduleLayer, nextLayer };
 			
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		public IActualAgentState LoadOldState(Guid personToLoad)
-		{
-			var personIdString = personToLoad.ToString();
-			var query = string.Format("SELECT * FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personIdString);
-			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
-			{
-				var command = connection.CreateCommand();
-				command.CommandType = CommandType.Text;
-				command.CommandText = query;
-				connection.Open();
-				using(var reader = command.ExecuteReader(CommandBehavior.CloseConnection))
-				{
-					while (reader.Read())
-					{
-						var stateCode = reader.GetString(reader.GetOrdinal("StateCode"));
-						var state = reader.GetString(reader.GetOrdinal("State"));
-						var alarmName = reader.GetString(reader.GetOrdinal("AlarmName"));
-						var scheduled = reader.GetString(reader.GetOrdinal("Scheduled"));
-						var scheduledNext = reader.GetString(reader.GetOrdinal("ScheduledNext"));
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
+        public IActualAgentState LoadOldState(Guid personToLoad)
+        {
+            var personIdString = personToLoad.ToString();
+            var query = string.Format("SELECT * FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personIdString);
+            using (
+                var connection =
+                    _databaseConnectionFactory.CreateConnection(
+                        _databaseConnectionStringHandler.DataStoreConnectionString()))
+            {
+                var command = connection.CreateCommand();
+                command.CommandType = CommandType.Text;
+                command.CommandText = query;
+                connection.Open();
+                using (var reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                {
+                    while (reader.Read())
+                    {
+                        var stateCode = reader.GetString(reader.GetOrdinal("StateCode"));
+                        var state = reader.GetString(reader.GetOrdinal("State"));
+                        var alarmName = reader.GetString(reader.GetOrdinal("AlarmName"));
+                        var scheduled = reader.GetString(reader.GetOrdinal("Scheduled"));
+                        var scheduledNext = reader.GetString(reader.GetOrdinal("ScheduledNext"));
 
-						var platformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId"));
-						var scheduledId = reader.GetGuid(reader.GetOrdinal("ScheduledId"));
-						var alarmId = reader.GetGuid(reader.GetOrdinal("AlarmId"));
-						var scheduledNextId = reader.GetGuid(reader.GetOrdinal("ScheduledNextId"));
-						var personId = reader.GetGuid(reader.GetOrdinal("PersonId"));
-						var stateId = reader.GetGuid(reader.GetOrdinal("StateId"));
+                        var platformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId"));
+                        var scheduledId = reader.GetGuid(reader.GetOrdinal("ScheduledId"));
+                        var alarmId = reader.GetGuid(reader.GetOrdinal("AlarmId"));
+                        var scheduledNextId = reader.GetGuid(reader.GetOrdinal("ScheduledNextId"));
+                        var personId = reader.GetGuid(reader.GetOrdinal("PersonId"));
+                        var stateId = reader.GetGuid(reader.GetOrdinal("StateId"));
 
-						var stateStart = reader.GetDateTime(reader.GetOrdinal("StateStart"));
-						var nextStart = reader.GetDateTime(reader.GetOrdinal("NextStart"));
-						var alarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart"));
+                        var stateStart = reader.GetDateTime(reader.GetOrdinal("StateStart"));
+                        var nextStart = reader.GetDateTime(reader.GetOrdinal("NextStart"));
+                        var alarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart"));
 
-						var color = reader.GetInt32(reader.GetOrdinal("Color"));
-						var staffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"));
+                        var color = reader.GetInt32(reader.GetOrdinal("Color"));
+                        var staffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"));
 
-						return new ActualAgentState()
-						{
-							State = state,
-							PlatformTypeId = platformTypeId,
-							StateCode = stateCode,
-							AlarmName = alarmName,
-							StateId = stateId,
-							Scheduled = scheduled,
-							ScheduledNext = scheduledNext,
-							ScheduledId = scheduledId,
-							AlarmId = alarmId,
-							ScheduledNextId = scheduledNextId,
-							PersonId = personId,
-							StateStart = stateStart,
-							NextStart = nextStart,
-							AlarmStart = alarmStart,
-							Color = color,
-							StaffingEffect = staffingEffect
-						};
+                        return new ActualAgentState
+                                   {
+                                       State = state,
+                                       PlatformTypeId = platformTypeId,
+                                       StateCode = stateCode,
+                                       AlarmName = alarmName,
+                                       StateId = stateId,
+                                       Scheduled = scheduled,
+                                       ScheduledNext = scheduledNext,
+                                       ScheduledId = scheduledId,
+                                       AlarmId = alarmId,
+                                       ScheduledNextId = scheduledNextId,
+                                       PersonId = personId,
+                                       StateStart = stateStart,
+                                       NextStart = nextStart,
+                                       AlarmStart = alarmStart,
+                                       Color = color,
+                                       StaffingEffect = staffingEffect
+                                   };
 
-					}
-					
-				}               
-			}
-			return null; 
-		}
+                    }
 
-		public IEnumerable<RtaStateGroupLight> StateGroups()
+                }
+            }
+            return null;
+        }
+
+	    public IEnumerable<RtaStateGroupLight> StateGroups()
 		{
 			const string query = @"SELECT s.Id StateId, s.Name StateName, s.PlatformTypeId,s.StateCode, sg.Id StateGroupId , BusinessUnit BusinessUnitId  
 								FROM RtaStateGroup sg

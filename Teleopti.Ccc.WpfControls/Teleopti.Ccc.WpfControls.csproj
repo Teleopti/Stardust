@@ -1189,6 +1189,7 @@
     <Compile Include="Controls\Intraday\AgentStateLayerView.xaml.cs">
       <DependentUpon>AgentStateLayerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\StringToColorConverter.cs" />
     <Compile Include="Converters\VisibilityConverter.cs" />
     <Compile Include="FileImport\ImportWizardWindow.xaml.cs">
       <DependentUpon>ImportWizardWindow.xaml</DependentUpon>

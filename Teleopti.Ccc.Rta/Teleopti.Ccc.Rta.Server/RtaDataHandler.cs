@@ -106,13 +106,17 @@ namespace Teleopti.Ccc.Rta.Server
                 {
                     foreach (var personWithBusinessUnit in personWithBusinessUnits)
                     {
+                        if (!_stateResolver.HaveStateCodeChanged(personWithBusinessUnit.PersonId, stateCode))
+                        {
+                            _loggingSvc.InfoFormat("Person {0} is already in state {1}", personWithBusinessUnit.PersonId, stateCode);
+                            continue;
+                        }
+
 						var agentState = _rtaConsumer.Consume(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId , platformTypeId, stateCode,
                     	                                      timestamp, timeInState);
-						if(agentState != null)
-						{
-							_loggingSvc.InfoFormat("Trying to send object {0} through Message Broker", agentState);
-							_messageSender.SendRtaData(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, agentState);
-						}
+                        if (agentState == null) continue;
+                        _loggingSvc.InfoFormat("Trying to send object {0} through Message Broker", agentState);
+                        _messageSender.SendRtaData(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, agentState);
                     }
                 }
                 catch (SocketException exception)

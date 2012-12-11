@@ -26,17 +26,14 @@
 						</Border>
 					</Grid>
 					<ControlTemplate.Triggers>
-						<Trigger Property="IsSelected" 
-									 Value="True">
-							<Setter TargetName="Border" 
-									Property="Background"
-									Value="White" />
+						<Trigger Property="IsSelected" Value="True">
+							<Setter TargetName="Border" Property="Background" Value="White" />
 						</Trigger>
-						<Trigger	Property="IsSelected" 
-									 Value="False">
+						<Trigger Property="IsSelected" 
+                                 Value="False">
 							<Setter TargetName="Border" 
-									Property="Background"
-									Value="{StaticResource RaptorStandardGradientBrush}" />
+                                    Property="Background"
+                                    Value="{StaticResource RaptorStandardGradientBrush}" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
