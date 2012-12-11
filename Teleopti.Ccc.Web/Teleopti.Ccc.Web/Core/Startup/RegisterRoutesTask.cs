@@ -9,14 +9,16 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	[TaskPriority(2)]
 	public class RegisterRoutesTask : IBootstrapperTask
 	{
+		private readonly Action<RouteCollection> _runBefore;
 		private readonly Action _registerAllAreas;
 
-		public RegisterRoutesTask() : this(AreaRegistration.RegisterAllAreas)
+		public RegisterRoutesTask() : this(r => { }, AreaRegistration.RegisterAllAreas)
 		{
 		}
 
-		public RegisterRoutesTask(Action registerAllAreas)
+		public RegisterRoutesTask(Action<RouteCollection> runBefore, Action registerAllAreas)
 		{
+			_runBefore = runBefore;
 			_registerAllAreas = registerAllAreas;
 		}
 
@@ -27,7 +29,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public void registerRoutes(RouteCollection routes)
 		{
-			//routes.Clear();
+			_runBefore(routes);
 
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 

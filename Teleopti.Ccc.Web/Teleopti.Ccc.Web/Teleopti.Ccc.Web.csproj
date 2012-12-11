@@ -656,6 +656,8 @@
     <Content Include="Areas\Team\Content\Templates\layout.html" />
     <Content Include="Areas\Team\Content\Templates\menu.html" />
     <Content Include="Areas\Team\Content\Templates\teamschedule\view.html" />
+    <Content Include="Content\bootstrap-datepicker\bootstrap-datepicker.js" />
+    <Content Include="Content\bootstrap-datepicker\datepicker.css" />
     <Content Include="Content\crossroads\crossroads.js" />
     <Content Include="Content\crossroads\crossroads.min.js" />
     <Content Include="Content\hasher\hasher.js" />

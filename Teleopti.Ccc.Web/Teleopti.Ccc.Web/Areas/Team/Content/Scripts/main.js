@@ -12,6 +12,7 @@ require.config({
 		signals: '../../../../Content/signals/signals',
 		signalr: '../../../../Content/signalr/jquery.signalR-1.0.0-alpha2.min',
 		signalrHubs: '../../../../Content/signalr/signalr-hubs',
+		datepicker: '../../../../Content/bootstrap-datepicker/bootstrap-datepicker',
 		crossroads: '../../../../Content/crossroads/crossroads',
 		hasher: '../../../../Content/hasher/hasher',
 		touchPunch: '../../../../Content/jqueryui.touch-punch/jquery.ui.touch-punch',
