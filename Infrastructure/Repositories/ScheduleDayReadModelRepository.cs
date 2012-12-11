@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId);
 
-		void SaveReadModels(IList<ScheduleDayReadModel> models);
+		void SaveReadModel(ScheduleDayReadModel model);
 		bool IsInitialized();
 	}
 
@@ -58,34 +58,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SaveReadModels(IList<ScheduleDayReadModel> models)
+		public void SaveReadModel(ScheduleDayReadModel model)
 		{
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				foreach (var scheduleDayReadModel in models)
-				{
-					SaveReadModel(scheduleDayReadModel, uow);
-				}
+				((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
+					"INSERT INTO ReadModel.ScheduleDay (PersonId,BelongsToDate,StartDateTime,EndDateTime,Workday,WorkTime,ContractTime,Label,DisplayColor,InsertedOn) VALUES (:PersonId,:Date,:StartDateTime,:EndDateTime,:Workday,:WorkTime,:ContractTime,:Label,:DisplayColor,:InsertedOn)")
+					.SetGuid("PersonId", model.PersonId)
+					.SetDateTime("StartDateTime", model.StartDateTime)
+					.SetDateTime("EndDateTime", model.EndDateTime)
+					.SetInt64("WorkTime", model.WorkTime.Ticks)
+					.SetInt64("ContractTime", model.ContractTime.Ticks)
+					.SetBoolean("Workday", model.Workday)
+					.SetString("Label", model.Label)
+					.SetInt32("DisplayColor", model.DisplayColor.ToArgb())
+					.SetDateTime("Date", model.BelongsToDate)
+					.SetDateTime("InsertedOn", DateTime.UtcNow)
+					.ExecuteUpdate();
+
 				uow.PersistAll();
 			}
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-		private void SaveReadModel(ScheduleDayReadModel model, IUnitOfWork uow)
-		{
-			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
-				"INSERT INTO ReadModel.ScheduleDay (PersonId,BelongsToDate,StartDateTime,EndDateTime,Workday,WorkTime,ContractTime,Label,DisplayColor,InsertedOn) VALUES (:PersonId,:Date,:StartDateTime,:EndDateTime,:Workday,:WorkTime,:ContractTime,:Label,:DisplayColor,:InsertedOn)")
-				.SetGuid("PersonId", model.PersonId)
-				.SetDateTime("StartDateTime", model.StartDateTime)
-				.SetDateTime("EndDateTime", model.EndDateTime)
-				.SetInt64("WorkTime", model.WorkTime.Ticks)
-				.SetInt64("ContractTime", model.ContractTime.Ticks)
-				.SetBoolean("Workday", model.Workday)
-				.SetString("Label", model.Label)
-				.SetInt32("DisplayColor", model.DisplayColor.ToArgb())
-				.SetDateTime("Date", model.BelongsToDate)
-				.SetDateTime("InsertedOn", DateTime.UtcNow)
-				.ExecuteUpdate();
 		}
 
 		public bool IsInitialized()

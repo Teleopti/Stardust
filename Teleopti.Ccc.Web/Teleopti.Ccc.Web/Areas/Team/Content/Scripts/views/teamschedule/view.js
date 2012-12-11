@@ -4,12 +4,12 @@ define([
 		'jquery',
 		'helpers',
 		'navigation',
+		'signalrHubs',
 		'swipeListener',
 		'moment',
 		'views/teamschedule/fakeData',
 		'views/teamschedule/vm',
 		'views/teamschedule/timeline',
-		'views/teamschedule/resources',
 		'text!templates/teamschedule/view.html'
 	], function (
 		ko,
@@ -18,8 +18,9 @@ define([
 		swipeListener,
 		momentX,
 		navigation,
+		signalrHubs,
 		fakeData,
-		teamScheduleViewModel, timeLineViewModel, resourcesViewModel,
+		teamScheduleViewModel, timeLineViewModel,
 		view
 	) {
 		return {
@@ -37,13 +38,15 @@ define([
 
 				var timeLine = new timeLineViewModel();
 
-				var resourceLayers = fakeData.GetResources(timeLine);
-				var resources = new resourcesViewModel("Resources", resourceLayers);
+				var teamSchedule = new teamScheduleViewModel(timeLine);
 
-				var teamSchedule = new teamScheduleViewModel(timeLine, resources);
+				var schedule = $.connection.scheduleHub;
+				schedule.client.teamScheduleLoaded = function (schedules) {
+					ko.utils.arrayForEach(schedules, function (s) { teamSchedule.AddAgent(s); });
+				};
 
-				var agents = fakeData.GetAgents(timeLine);
-				teamSchedule.AddAgents(agents);
+				$.connection.hub.start()
+					.done(function () { schedule.server.subscribeTeamSchedule('34590A63-6331-4921-BC9F-9B5E015AB495', $('#date-selection').val()); });
 
 				var resize = function () {
 					timeLine.WidthPixels($('.shift').width());
@@ -57,15 +60,17 @@ define([
 					TeamSchedule: teamSchedule
 				});
 
+				/*
 				$('.agent').click(function () {
-					navigation.GotoAgentSchedule($(this).data('agent-id'), $('#date-selection').attr('value'));
+				navigation.GotoAgentSchedule($(this).data('agent-id'), $('#date-selection').attr('value'));
 				});
 
 				$('.resources').click(function () {
-					navigation.GotoResources($('#date-selection').attr('value'));
+				navigation.GotoResources($('#date-selection').attr('value'));
 				});
 
 				$('.resource-layer').tooltip();
+				*/
 
 				$('.team-schedule').swipeListener({
 					swipeLeft: function () {

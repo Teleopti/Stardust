@@ -2,12 +2,11 @@ define([
 		'knockout'
 	], function (ko) {
 
-	    return function (timeLine, resources) {
+	    return function (timeLine) {
 
 	        var self = this;
 
 	        this.TimeLine = timeLine;
-	        this.Resources = resources;
 	        this.Agents = ko.observableArray();
 
 	        this.AddAgent = function (agent) {

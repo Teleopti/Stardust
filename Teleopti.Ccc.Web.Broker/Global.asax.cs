@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web;
-using SignalR;
+using Microsoft.AspNet.SignalR;
 
 namespace Teleopti.Ccc.Web.Broker
 {

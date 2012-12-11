@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -33,9 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 
 			var reposistory = new PersonScheduleDayReadModelRepository(GlobalUnitOfWorkState.UnitOfWorkFactory);
-			reposistory.SaveReadModels(new List<PersonScheduleDayReadModel>
-			                           	{
-			                           		new PersonScheduleDayReadModel
+			reposistory.SaveReadModel(new PersonScheduleDayReadModel
 			                           			{
 			                           				BusinessUnitId = mainActivity.BusinessUnit.Id.GetValueOrDefault(),
 			                           				SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
@@ -89,8 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			                           				                                                    		             			}
 			                           				                                                    		             	}
 			                           				                                                    	})
-			                           			}
-			                           	});
+			                           			});
 		}
 	}
 }

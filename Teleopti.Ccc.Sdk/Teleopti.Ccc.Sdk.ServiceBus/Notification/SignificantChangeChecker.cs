@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Interfaces.Domain;
@@ -9,7 +7,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
 	public interface ISignificantChangeChecker
 	{
-		INotificationMessage SignificantChangeNotificationMessage(DateOnlyPeriod dateOnlyPeriod, IPerson person, IList<ScheduleDayReadModel> newReadModels);
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Date")]
+		INotificationMessage SignificantChangeNotificationMessage(DateOnly date, IPerson person, ScheduleDayReadModel newReadModel);
 	}
 
 	public class SignificantChangeChecker : ISignificantChangeChecker
@@ -24,10 +23,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public INotificationMessage SignificantChangeNotificationMessage(DateOnlyPeriod dateOnlyPeriod, IPerson person, IList<ScheduleDayReadModel> newReadModels)
+		public INotificationMessage SignificantChangeNotificationMessage(DateOnly date, IPerson person, ScheduleDayReadModel newReadModel)
 		{
 			var ret = new NotificationMessage();
-            var lang = person.PermissionInformation.UICulture();
+			var lang = person.PermissionInformation.UICulture();
 			var endDate = DateOnly.Today.AddDays(14);
 
 			var wfc = person.WorkflowControlSet;
@@ -37,36 +36,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			if (wfc != null && wfc.SchedulePublishedToDate.HasValue && wfc.SchedulePublishedToDate.Value < endDate)
 				endDate = new DateOnly(wfc.SchedulePublishedToDate.Value.Date);
 
-            var period = new DateOnlyPeriod(DateOnly.Today, endDate);
-		    var overlappingPeriod = dateOnlyPeriod.Intersection(period);
-            
-            if (overlappingPeriod==null)
-                return ret;
+			var period = new DateOnlyPeriod(DateOnly.Today, endDate);
+			if (!period.Contains(date)) return ret;
 
-		    var overLapppingPeriodStartDate = overlappingPeriod.Value.StartDate;
-		    var overLappingPeriodEndDate = overlappingPeriod.Value.EndDate;
 
-		    IList<ScheduleDayReadModel> newReadModelWithinIntersectionPeriod =
-                newReadModels.Where(y => y.Date >= overLapppingPeriodStartDate && y.Date <= overLappingPeriodEndDate).ToList();
+			var oldReadModels = _scheduleDayReadModelRepository.ReadModelsOnPerson(date, date, person.Id.GetValueOrDefault());
 
-            var oldReadModels = _scheduleDayReadModelRepository.ReadModelsOnPerson(overLapppingPeriodStartDate,
-                                                                                   overLappingPeriodEndDate, person.Id.GetValueOrDefault());
-		    
-            foreach (var dateOnly in dateOnlyPeriod.DayCollection())
-			{
-			    string message = null;
-                var newReadModelDay = newReadModelWithinIntersectionPeriod.FirstOrDefault(x => x.Date == dateOnly);
-			    var existingReadModelDay = oldReadModels.FirstOrDefault(y => y.Date == dateOnly);
+			var existingReadModelDay = oldReadModels.FirstOrDefault();
 
-                message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModelDay, existingReadModelDay, lang, dateOnly);
-				if(!string.IsNullOrEmpty(message))
-					ret.Messages.Add(message);
-			}
+			string message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, existingReadModelDay, lang, date);
+			if (!string.IsNullOrEmpty(message))
+				ret.Messages.Add(message);
 
 			if (ret.Messages.Count == 0)
 				return ret;
 
-			var subject = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged",lang);
+			var subject = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged", lang);
 			if (string.IsNullOrEmpty(subject))
 				subject = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged");
 

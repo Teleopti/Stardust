@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Microsoft.AspNet.SignalR;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Startup
@@ -10,7 +11,9 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	{
 		private readonly Action _registerAllAreas;
 
-		public RegisterRoutesTask() : this(AreaRegistration.RegisterAllAreas) { }
+		public RegisterRoutesTask() : this(AreaRegistration.RegisterAllAreas)
+		{
+		}
 
 		public RegisterRoutesTask(Action registerAllAreas)
 		{
@@ -24,7 +27,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public void registerRoutes(RouteCollection routes)
 		{
-			routes.Clear();
+			//routes.Clear();
 
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 

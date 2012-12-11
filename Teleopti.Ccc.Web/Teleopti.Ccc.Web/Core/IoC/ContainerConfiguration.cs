@@ -8,6 +8,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Start.Core.IoC;
+using Teleopti.Ccc.Web.Areas.Team.Core;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -27,6 +28,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule(new AutofacWebTypesModuleFromRepository20111123());
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
+
+			builder.RegisterType<ScheduleHub>();
 
 			builder.RegisterFilterProvider();
 

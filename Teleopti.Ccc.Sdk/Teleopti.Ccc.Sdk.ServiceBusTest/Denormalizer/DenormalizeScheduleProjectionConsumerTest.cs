@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -15,31 +16,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 	{
 		private DenormalizeScheduleProjectionConsumer target;
 		private MockRepository mocks;
-		private IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel;
-		private IScenarioRepository scenarioRepository;
 		private IUnitOfWorkFactory unitOfWorkFactory;
-		private IPersonRepository personRepository;
 		private IUnitOfWork unitOfWork;
+		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			updateScheduleProjectionReadModel = mocks.DynamicMock<IUpdateScheduleProjectionReadModel>();
-			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			scheduleProjectionReadOnlyRepository = mocks.DynamicMock<IScheduleProjectionReadOnlyRepository>();
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
-			personRepository = mocks.DynamicMock<IPersonRepository>();
-			target = new DenormalizeScheduleProjectionConsumer(unitOfWorkFactory,scenarioRepository,personRepository,updateScheduleProjectionReadModel);
+			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			target = new DenormalizeScheduleProjectionConsumer(unitOfWorkFactory,scheduleProjectionReadOnlyRepository);
 		}
 
 		[Test]
 		public void ShouldDenormalizeProjection()
 		{
-			var scenario = ScenarioFactory.CreateScenarioAggregate();
-			scenario.SetId(Guid.NewGuid());
-			scenario.DefaultScenario = true;
-
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
 
@@ -47,20 +40,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (mocks.Record())
 			{
-				Expect.Call(scenarioRepository.Get(scenario.Id.GetValueOrDefault())).Return(scenario);
-				Expect.Call(personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
-				Expect.Call(()=>updateScheduleProjectionReadModel.Execute(scenario,period,person));
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(unitOfWork.PersistAll());
 			}
 			using (mocks.Playback())
 			{
-				target.Consume(new DenormalizeScheduleProjection
+				target.Consume(new DenormalizedSchedule
 				{
-					ScenarioId = scenario.Id.GetValueOrDefault(),
+					IsDefaultScenario = true,
 					PersonId = person.Id.GetValueOrDefault(),
 					StartDateTime = period.StartDateTime,
-					EndDateTime = period.EndDateTime
+					EndDateTime = period.EndDateTime,
+					Layers = new Collection<DenormalizedScheduleProjectionLayer>{new DenormalizedScheduleProjectionLayer()}
 				});
 			}
 		}
@@ -68,10 +59,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[Test]
 		public void ShouldSkipDeleteWhenDenormalizeProjectionGivenThatOptionIsSet()
 		{
-			var scenario = ScenarioFactory.CreateScenarioAggregate();
-			scenario.SetId(Guid.NewGuid());
-			scenario.DefaultScenario = true;
-
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
 
@@ -79,22 +66,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (mocks.Record())
 			{
-				Expect.Call(scenarioRepository.Get(scenario.Id.GetValueOrDefault())).Return(scenario);
-				Expect.Call(personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
-				Expect.Call(() => updateScheduleProjectionReadModel.Execute(scenario, period, person));
-				Expect.Call(() => updateScheduleProjectionReadModel.SetInitialLoad(true));
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(unitOfWork.PersistAll());
 			}
 			using (mocks.Playback())
 			{
-				target.Consume(new DenormalizeScheduleProjection
+				target.Consume(new DenormalizedSchedule
 				{
-					ScenarioId = scenario.Id.GetValueOrDefault(),
+					IsDefaultScenario = true,
 					PersonId = person.Id.GetValueOrDefault(),
 					StartDateTime = period.StartDateTime,
 					EndDateTime = period.EndDateTime,
-					SkipDelete = true
+					Layers = new Collection<DenormalizedScheduleProjectionLayer>{new DenormalizedScheduleProjectionLayer()},
+					IsInitialLoad = true,
 				});
 			}
 		}
@@ -102,10 +86,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[Test]
 		public void ShouldNotDenormalizeProjectionForOtherThanDefaultScenario()
 		{
-			var scenario = ScenarioFactory.CreateScenarioAggregate();
-			scenario.SetId(Guid.NewGuid());
-			scenario.DefaultScenario = false;
-
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
 
@@ -113,17 +93,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (mocks.Record())
 			{
-				Expect.Call(scenarioRepository.Get(scenario.Id.GetValueOrDefault())).Return(scenario);
-				Expect.Call(() => updateScheduleProjectionReadModel.Execute(scenario, period, person)).Repeat.Never();
 			}
 			using (mocks.Playback())
 			{
-				target.Consume(new DenormalizeScheduleProjection
+				target.Consume(new DenormalizedSchedule
 				{
-					ScenarioId = scenario.Id.GetValueOrDefault(),
+					IsDefaultScenario = false,
 					PersonId = person.Id.GetValueOrDefault(),
 					StartDateTime = period.StartDateTime,
-					EndDateTime = period.EndDateTime
+					EndDateTime = period.EndDateTime,
+					Layers = new Collection<DenormalizedScheduleProjectionLayer> { new DenormalizedScheduleProjectionLayer() }
 				});
 			}
 		}

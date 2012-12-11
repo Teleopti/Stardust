@@ -43,16 +43,6 @@
 						</tr>
 					</thead>
 				    <tbody>
-				        <tr class="resources">
-				            <td class="agent-name"></td>
-				            <td class="shift">
-				                <ul class="relative unstyled" data-bind="foreach: Resources.Layers">
-				                    <li class="resource-layer absolute floatleft" data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', backgroundColor: Color()}, attr: {title: Title}" ></li>
-				                </ul>
-				            </td>
-				            <td class="contract-time"></td>
-				            <td class="work-time"></td>
-				        </tr>
 				        <!-- ko foreach: Agents -->
 				        <tr class="agent" data-bind="attr: { 'data-agent-id': Id }">
 				            <td class="agent-name">

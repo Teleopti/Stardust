@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersonId = personId,
 				Workday = true
 			};
-			_target.SaveReadModels(new List<ScheduleDayReadModel>{model});
+			_target.SaveReadModel(model);
 		}
 	}
 

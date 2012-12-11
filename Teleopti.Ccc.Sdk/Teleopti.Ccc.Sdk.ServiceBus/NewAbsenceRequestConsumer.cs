@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
@@ -231,8 +230,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 using (new MessageBrokerSendEnabler())
                 {
                     unitOfWork.PersistAll();
-                    _updateScheduleProjectionReadModel.Execute(_scenarioProvider.DefaultScenario(),
-                                                               _absenceRequest.Period, _absenceRequest.Person);
+                    _updateScheduleProjectionReadModel.Execute(_schedulingResultStateHolder.Schedules[_absenceRequest.Person], dateOnlyPeriod);
 
 					unitOfWork.PersistAll();
                 }

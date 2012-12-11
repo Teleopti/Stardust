@@ -1,127 +1,43 @@
-﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Common;
+﻿using System;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public interface IPersonScheduleDayReadModelsCreator
-	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		IList<PersonScheduleDayReadModel> GetReadModels(IScenario scenario, DateTimePeriod period, IPerson person);
-
-		void SetInitialLoad(bool initialLoad);
-	}
-
-	public class PersonScheduleDayReadModelsCreator : IPersonScheduleDayReadModelsCreator
-	{
-		private readonly IScheduleRepository _scheduleRepository;
-		private readonly IPersonScheduleDayReadModelCreator _readModelCreator;
-		private bool _initialLoad;
-
-		public PersonScheduleDayReadModelsCreator(IScheduleRepository scheduleRepository, IPersonScheduleDayReadModelCreator readModelCreator)
-		{
-			_scheduleRepository = scheduleRepository;
-			_readModelCreator = readModelCreator;
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public IList<PersonScheduleDayReadModel> GetReadModels(IScenario scenario, DateTimePeriod period, IPerson person)
-		{
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
-			var schedule =
-				_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }) { DoLoadByPerson = true },
-																   new ScheduleDictionaryLoadOptions(false, false), dateOnlyPeriod.ToDateTimePeriod(timeZone), scenario);
-			var ret = new List<PersonScheduleDayReadModel>();
-
-			var range = schedule[person];
-
-			DateTimePeriod? actualPeriod;
-			if (_initialLoad)
-			{
-				actualPeriod = range.TotalPeriod();
-			}
-			else
-			{
-				actualPeriod = period;
-
-			}
-
-			if (!actualPeriod.HasValue) return ret;
-
-			dateOnlyPeriod = actualPeriod.Value.ToDateOnlyPeriod(timeZone);
-			foreach (var scheduleDay in range.ScheduledDayCollection(dateOnlyPeriod))
-			{
-				if (scheduleDay.IsScheduled())
-					ret.Add(_readModelCreator.TurnScheduleToModel(scheduleDay));
-			}
-			return ret;
-		}
-
-		public void SetInitialLoad(bool initialLoad)
-		{
-			_initialLoad = initialLoad;
-		}
-	}
-
-	public interface IScheduleDayReadModelsCreator
-	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		IList<ScheduleDayReadModel> GetReadModels(IScenario scenario, DateTimePeriod period, IPerson person);
-
-		void SetInitialLoad(bool initialLoad);
-	}
-
 	public class ScheduleDayReadModelsCreator : IScheduleDayReadModelsCreator
 	{
-		private readonly IScheduleRepository _scheduleRepository;
-		private readonly IScheduleDayReadModelCreator _readModelCreator;
-		private bool _initialLoad;
-
-		public ScheduleDayReadModelsCreator(IScheduleRepository scheduleRepository, IScheduleDayReadModelCreator readModelCreator)
+		private readonly IPersonRepository _personRepository;
+	
+		public ScheduleDayReadModelsCreator(IPersonRepository personRepository)
 		{
-			_scheduleRepository = scheduleRepository;
-			_readModelCreator = readModelCreator;
+			_personRepository = personRepository;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public IList<ScheduleDayReadModel> GetReadModels(IScenario scenario, DateTimePeriod period, IPerson person)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		public ScheduleDayReadModel GetReadModels(DenormalizedSchedule schedule)
 		{
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
-			var schedule =
-				_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }) { DoLoadByPerson = true },
-																   new ScheduleDictionaryLoadOptions(false, false), dateOnlyPeriod.ToDateTimePeriod(timeZone), scenario);
-			var ret = new List<ScheduleDayReadModel>();
+			var ret = new ScheduleDayReadModel();
+			var person = _personRepository.Get(schedule.PersonId);
+			var tz = person.PermissionInformation.DefaultTimeZone();
 
-			var range = schedule[person];
+			ret.ContractTimeTicks = schedule.ContractTime.Ticks;
+			ret.WorkTimeTicks = schedule.WorkTime.Ticks;
+			ret.PersonId = schedule.PersonId;
+			ret.Date = new DateOnly(schedule.Date);
 
-			DateTimePeriod? actualPeriod;
-			if (_initialLoad)
+			if (schedule.StartDateTime.HasValue && schedule.EndDateTime.HasValue)
 			{
-				actualPeriod = range.TotalPeriod();
-			}
-			else
-			{
-				actualPeriod = period;
-
+				ret.StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(schedule.StartDateTime.Value, tz);
+				ret.EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(schedule.EndDateTime.Value, tz);
 			}
 
-			if (!actualPeriod.HasValue) return ret;
+			ret.Label = schedule.Label;
+			ret.ColorCode = schedule.DisplayColor.ToArgb();
+			ret.Workday = schedule.IsWorkDay;
 
-			dateOnlyPeriod = actualPeriod.Value.ToDateOnlyPeriod(timeZone);
-			foreach (var scheduleDay in range.ScheduledDayCollection(dateOnlyPeriod))
-			{
-				if(scheduleDay.IsScheduled())
-					ret.Add(_readModelCreator.TurnScheduleToModel(scheduleDay));
-			}
 			return ret;
-		}
-
-		public void SetInitialLoad(bool initialLoad)
-		{
-			_initialLoad = initialLoad;
 		}
 	}
 }

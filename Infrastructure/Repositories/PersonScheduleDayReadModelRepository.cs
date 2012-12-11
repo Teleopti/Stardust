@@ -14,8 +14,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId);
 
-		void SaveReadModels(IList<PersonScheduleDayReadModel> models);
+		void SaveReadModel(PersonScheduleDayReadModel model);
 		bool IsInitialized();
+		IList<PersonScheduleDayReadModel> ForTeam(DateOnly dateOfInterest, Guid teamId);
 	}
 
 	public class PersonScheduleDayReadModelRepository : IPersonScheduleDayReadModelRepository
@@ -70,24 +71,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SaveReadModels(IList<PersonScheduleDayReadModel> models)
+		public void SaveReadModel(PersonScheduleDayReadModel model)
 		{
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				foreach (var scheduleDayReadModel in models)
-				{
-					SaveReadModel(scheduleDayReadModel, uow);
-				}
-				uow.PersistAll();
-			}
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-		private void SaveReadModel(PersonScheduleDayReadModel model, IUnitOfWork uow)
-		{
-			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
+				((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
 				"INSERT INTO ReadModel.PersonScheduleDay (Id,PersonId,TeamId,SiteId,BusinessUnitId,ShiftStart,ShiftEnd,BelongsToDate,Shift) VALUES (:Id,:PersonId,:TeamId,:SiteId,:BusinessUnitId,:ShiftStart,:ShiftEnd,:BelongsToDate,:Shift)")
-				.SetGuid("Id",Guid.NewGuid())
+				.SetGuid("Id", Guid.NewGuid())
 				.SetGuid("PersonId", model.PersonId)
 				.SetGuid("TeamId", model.TeamId)
 				.SetGuid("SiteId", model.SiteId)
@@ -95,8 +85,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetParameter("ShiftStart", model.ShiftStart)
 				.SetParameter("ShiftEnd", model.ShiftEnd)
 				.SetDateTime("BelongsToDate", model.BelongsToDate)
-				.SetString("Shift",model.Shift)
+				.SetString("Shift", model.Shift)
 				.ExecuteUpdate();
+
+				uow.PersistAll();
+			}
 		}
 
 		public bool IsInitialized()

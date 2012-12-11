@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNet.SignalR.Client.Hubs;
+using Microsoft.AspNet.SignalR.Client.Transports;
 using Newtonsoft.Json.Linq;
-using SignalR.Client;
-using SignalR.Client.Hubs;
-using SignalR.Client.Transports;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
 using log4net;
@@ -167,12 +167,12 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		private void subscription_Data(object[] obj)
+		private void subscription_Data(JToken[] obj)
 		{
 			var handler = OnNotification;
 			if (handler!=null)
 			{
-				var d = ((JObject)obj[0]).ToObject<Notification>();
+				var d = obj[0].ToObject<Notification>();
 				handler.BeginInvoke(d, onNotificationCallback,handler);
 			}
 		}
@@ -238,11 +238,7 @@ namespace Teleopti.Messaging.SignalR
 				try
 				{
 					var proxy = (HubProxy)_hubProxy;
-					var subscriptionList = new List<string>(proxy.GetSubscriptions());
-					if (subscriptionList.Contains(EventName))
-					{
-						_hubProxy.Subscribe(EventName).Data -= subscription_Data;
-					}
+					_hubProxy.Subscribe(EventName).Data -= subscription_Data;
 
 					_hubConnection.Stop();
 					_isRunning = false;
