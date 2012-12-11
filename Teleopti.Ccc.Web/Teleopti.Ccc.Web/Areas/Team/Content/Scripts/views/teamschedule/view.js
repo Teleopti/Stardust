@@ -47,6 +47,13 @@ define([
 						var agent = new agentViewModel(timeLine, s);
 						teamSchedule.AddAgent(agent);
 					});
+
+					teamSchedule.Agents.sort(function (a, b) {
+						var firstStartMinutes = a.FirstStartMinute();
+						var secondStartMinutes = b.FirstStartMinute();
+						return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
+					});
+
 					resize();
 
 					ko.applyBindings({

@@ -1,16 +1,26 @@
 define([
 		'knockout',
+		'moment',
 		'views/teamschedule/layer'
-	], function (ko, layer) {
+	], function (ko, moment, layer) {
 
 		return function (timeline, agentDay) {
 			var self = this;
+
 			this.Id = agentDay.Id;
 
 			this.Name = ko.computed(function () { return agentDay.FirstName + ' ' + agentDay.LastName; });
 			this.Layers = ko.observableArray();
-			this.ContractTime = ko.observable(agentDay.ContractTimeMinutes);
-			this.WorkTime = ko.observable(agentDay.ContractTimeMinutes);
+			
+			this.ContractTime = ko.computed(function () {
+				var time = moment().startOf('day').add('minutes', agentDay.ContractTimeMinutes);
+				return time.format("H:mm");
+			});
+
+			this.WorkTime = ko.computed(function () {
+				var time = moment().startOf('day').add('minutes', agentDay.WorkTimeMinutes);
+				return time.format("H:mm");
+			});
 
 			ko.utils.arrayForEach(agentDay.Projection, function (p) {
 				self.Layers.push(new layer(timeline, p));

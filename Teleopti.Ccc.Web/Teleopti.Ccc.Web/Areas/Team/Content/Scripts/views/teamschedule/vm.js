@@ -8,7 +8,7 @@ define([
 
 	        this.TimeLine = timeLine;
 	        this.Agents = ko.observableArray();
-
+	        
 	        this.AddAgent = function (agent) {
 	            self.Agents.push(agent);
 	            self.TimeLine.AddAgent(agent);
