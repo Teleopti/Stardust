@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 					case SchedulePartView.MainShift:
 						var cat = scheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory;
 						result.Label = cat.Description.ShortName;
-						result.DisplayColor = cat.DisplayColor;
+						result.DisplayColor = cat.DisplayColor.ToArgb();
 						break;
 					case SchedulePartView.FullDayAbsence:
 						result.Label = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
