@@ -18,6 +18,7 @@ Teleopti.Start.Authentication.ChangePasswordViewModel = function (data) {
 			self.ErrorMessage($('#Password-change-error').data('notmatch'));
 			return;
 		}
+		self.ErrorMessage('');
 		data.authenticationState.ApplyChangePassword({
 			baseUrl: data.baseUrl,
 			data: {
