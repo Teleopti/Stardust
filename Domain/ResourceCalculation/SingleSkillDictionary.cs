@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				foreach (var person in _persons)
 				{
 					var personPeriod = person.Period(date);
+					if(personPeriod == null) continue;
 
 					var activePersonSkills = (from a in personPeriod.PersonSkillCollection
 					                         where a.Active && !((IDeleteTag) a.Skill).IsDeleted
@@ -55,6 +56,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				foreach (var singleSkilledPerson in singleSkilledPersons)
 				{
 					var personPeriod = singleSkilledPerson.Period(date);
+					if (personPeriod == null) continue;
+					
 					var activePersonSkills = (from a in personPeriod.PersonSkillCollection
 											  where a.Active && !((IDeleteTag)a.Skill).IsDeleted
 											  select a).ToList();

@@ -66,10 +66,29 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldReturnFalseIfPersonIsNotSingleSkilled()
+		public void ShouldReturnFalseIfPersonDoNotHavePersonPeriod()
 		{
 			_persons = new List<IPerson> { _person1 };
 			_period = new DateOnlyPeriod(new DateOnly(2012, 1, 1), new DateOnly(2012, 1, 1));
+
+			using(_mock.Record())
+			{
+				Expect.Call(_person1.Period(_period.StartDate)).Return(null).Repeat.Twice();
+			}
+
+			using(_mock.Playback())
+			{
+				_singleSkillDictionary.Create(_persons, _period);
+				var state = _singleSkillDictionary.IsSingleSkill(_person1, _period.StartDate);
+				Assert.IsFalse(state);
+			}
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfPersonIsNotSingleSkilled()
+		{
+			_persons = new List<IPerson> { _person1 };
+			_period = new DateOnlyPeriod(new DateOnly(2012, 1, 1), new DateOnly(2012, 1, 1));	
 			_personSkills1 = new List<IPersonSkill> { _personSkill1, _personSkill2 };
 
 			using (_mock.Record())
