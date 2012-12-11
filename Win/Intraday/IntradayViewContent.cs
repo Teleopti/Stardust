@@ -10,6 +10,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.UserTexts;
@@ -150,7 +151,7 @@ namespace Teleopti.Ccc.Win.Intraday
             _backgroundWorkerResources.RunWorkerCompleted += _backgroundWorkerResources_RunWorkerCompleted;
             _backgroundWorkerResources.ProgressChanged += _backgroundWorkerResources_ProgressChanged;
 
-            _optimizerHelper = new ResourceOptimizationHelperWin(_schedulerStateHolder);
+            _optimizerHelper = new ResourceOptimizationHelperWin(_schedulerStateHolder, new SingleSkillDictionary());
             _skillIntradayGridControl = new SkillIntradayGridControl(_settingManager.ChartSetting); 
             _skillIntradayGridControl.SelectionChanged += skillIntradayGridControl_SelectionChanged;
             InitializeIntradayViewContent();

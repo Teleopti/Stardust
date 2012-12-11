@@ -167,8 +167,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 				CreateExpections(period1, period2, dateTime1, dateTime2, dateOnly, dateOnly);
 				Expect.Call(_layerCollection1.Person).Return(_person1).Repeat.AtLeastOnce();
 				Expect.Call(_layerCollection2.Person).Return(_person2).Repeat.AtLeastOnce();
-                Expect.Call(_day1.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_day2.SignificantPart()).Return(SchedulePartView.MainShift);
+                Expect.Call(_day1.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+                Expect.Call(_day2.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 			}
 
 			using (_mockRepository.Playback())
@@ -195,8 +195,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 				CreateExpections(period1, period2, dateTime1, dateTime3, dateOnly, dateOnly);
 				Expect.Call(_layerCollection1.Person).Return(_person1).Repeat.AtLeastOnce();
 				Expect.Call(_layerCollection2.Person).Return(_person2).Repeat.AtLeastOnce();
-			    Expect.Call(_day1.SignificantPart()).Return(SchedulePartView.MainShift);
-			    Expect.Call(_day2.SignificantPart()).Return(SchedulePartView.MainShift);
+			    Expect.Call(_day1.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+			    Expect.Call(_day2.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 			}
 
 			using (_mockRepository.Playback())
@@ -237,8 +237,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 			using (_mockRepository.Record())
 			{
 				CreateExpections(period1, period2, dateTime1, dateTime3, dateOnly, dateOnly);
-                Expect.Call(_day1.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_day2.SignificantPart()).Return(SchedulePartView.MainShift);
+                Expect.Call(_day1.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+                Expect.Call(_day2.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 			}
 
 			using (_mockRepository.Playback())

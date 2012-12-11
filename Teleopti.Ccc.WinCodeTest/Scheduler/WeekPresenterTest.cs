@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IScheduleDay schedulePart = mocks.StrictMock<IScheduleDay>();
             Expect.Call(schedulePart.TimeZone).Return(timeZoneInfo).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(_date, _date.AddDays(1))).Repeat.AtLeastOnce();
-            Expect.Call(schedulePart.SignificantPart()).Return(schedulePartView).Repeat.Once();
+            Expect.Call(schedulePart.SignificantPartForDisplay()).Return(schedulePartView).Repeat.Once();
 
             return schedulePart;
         }
