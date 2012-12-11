@@ -7,9 +7,9 @@ define([
 		'signalrHubs',
 		'swipeListener',
 		'moment',
-		'views/teamschedule/fakeData',
 		'views/teamschedule/vm',
 		'views/teamschedule/timeline',
+		'views/teamschedule/agent',
 		'text!templates/teamschedule/view.html'
 	], function (
 		ko,
@@ -19,8 +19,9 @@ define([
 		momentX,
 		navigation,
 		signalrHubs,
-		fakeData,
-		teamScheduleViewModel, timeLineViewModel,
+		teamScheduleViewModel,
+		timeLineViewModel,
+		agentViewModel,
 		view
 	) {
 		return {
@@ -42,7 +43,10 @@ define([
 
 				var schedule = $.connection.scheduleHub;
 				schedule.client.teamScheduleLoaded = function (schedules) {
-					ko.utils.arrayForEach(schedules, function (s) { teamSchedule.AddAgent(s); });
+					ko.utils.arrayForEach(schedules, function (s) {
+						var agent = new agentViewModel(s);
+						teamSchedule.AddAgent(agent);
+					});
 				};
 
 				$.connection.hub.start()
