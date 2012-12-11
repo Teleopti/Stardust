@@ -12,6 +12,16 @@
 
 <div id="Requests-body-inner" class="request-body-inner relative">
 	
+	<div data-bind="foreach: requests">
+		<div>----test----</div>
+		<div data-bind="text: Subject"></div>
+		<div data-bind="text: RequestType"></div>
+		<div data-bind="text: Status"></div>
+		<div data-bind="text: Dates"></div>
+		<div data-bind="text: UpdatedOn"></div>
+		<div data-bind="text: Text"></div>
+	</div>
+
 	<a onclick="$('#Request-add-shift-trade').show();">xxxLägg till shift trade request</a>
 	@Html.Partial("NewShiftTradeRequest")
 

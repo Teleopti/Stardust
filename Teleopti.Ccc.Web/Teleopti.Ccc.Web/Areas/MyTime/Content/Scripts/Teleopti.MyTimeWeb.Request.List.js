@@ -15,6 +15,18 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	var completelyLoaded = function () { };
 
 	var requestDetailViewModel;
+	var pageViewModel;
+
+	function RequestItemViewModel(request) {
+		var self = this;
+
+		self.Subject = ko.observable(request.Subject);
+		self.RequestType = ko.observable(request.Type);
+		self.Status = ko.observable(request.Status);
+		self.Dates = ko.observable(request.Dates);
+		self.UpdatedOn = ko.observable(request.UpdatedOn);
+		self.Text = ko.observable(request.Text);
+	}
 
 	function RequestPageViewModel(requestDetailViewModel) {
 
@@ -40,6 +52,18 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.changeExample = function () {
 			self.example("really... tell Henke to remove this!!");
 		};
+
+		self.requests = ko.observableArray();
+
+		//TODO: refact to use map instead
+		//TODO: use  
+		self.showRequests = function (data) {
+			for (var i = 0; i < data.length; i++) {
+				console.log(data[i]);
+				self.requests.push(new RequestItemViewModel(data[i]));
+			}
+		};
+
 	}
 
 	function _initScrollPaging() {
@@ -78,6 +102,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			},
 			success: function (data, textStatus, jqXHR) {
 				_drawRequests(data);
+				pageViewModel.showRequests(data);
 				if (data.length == 0 || data.length < take) {
 					_noMoreToLoad();
 				} else {
@@ -292,11 +317,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			requestDetailViewModel = detailViewModel;
 			_initScrollPaging();
 			_initListClick();
-
-			var viewmodel = new RequestPageViewModel(requestDetailViewModel);
+			pageViewModel = new RequestPageViewModel(requestDetailViewModel);
 			var element = $('#Requests-body-inner')[0];
-			if (element) ko.applyBindings(viewmodel, element);
 
+			if (element) ko.applyBindings(pageViewModel, element);
 		},
 		AddItemAtTop: function (request) {
 			_drawRequestAtTop(request);
