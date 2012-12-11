@@ -257,6 +257,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 								 ((int)
 								  stateHolder.Schedules[person].CachedShiftCategoryFairness().FairnessValueResult.
 									  FairnessPoints).ToString(CultureInfo.CurrentCulture), 2);
+				listViewFairness.Items.Add("");
 			}
         }
 
