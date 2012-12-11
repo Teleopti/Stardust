@@ -165,8 +165,15 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 					Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
 					_deleteRequest(listItem);
 				})
-				.removeAttr('disabled', 'disabled')
-				;
+				.removeAttr('disabled', 'disabled');
+	            // todo by tamasb: these two methods has to be somehow integrated in qtip library
+	            deleteButton.mouseenter(function () {
+	                var title = this.getAttribute('oldtitle');
+	                deleteButton.qtip('show', title);
+	            });
+	            deleteButton.mouseleave(function () {
+	                deleteButton.qtip('hide');
+	            });
 			listItem.hover(function () {
 				deleteButton
 					.stop(true, true)
