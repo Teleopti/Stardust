@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -13,6 +11,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 {
     internal class OverviewView : ScheduleViewBase
     {
+    	private readonly OverviewDrawAbsenceDayOff _drawAbsenceDayOff;
+    	private readonly OverviewDrawAbsence _drawAbsence;
+    	private readonly OverviewDrawMainShift _drawMainShift;
+    	private readonly OverviewDrawDayOff _drawDayOff;
+	
         public OverviewView(GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
             SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
             IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTag defaultScheduleTag)
@@ -20,6 +23,10 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             Presenter = new OverviewPresenter(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder, scheduleDayChangeCallback, defaultScheduleTag);
             grid.Name = "SummaryView";
+			_drawAbsenceDayOff = new OverviewDrawAbsenceDayOff(CellFontSmall);
+			_drawAbsence = new OverviewDrawAbsence(CellFontSmall);
+			_drawMainShift = new OverviewDrawMainShift(CellFontSmall);
+			_drawDayOff = new OverviewDrawDayOff();
         }
 
         protected override int CellWidth()
@@ -31,10 +38,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             e.Size = 20;
             e.Handled = true;
         }
-        #region Draw cell
+      
 
         //draw cell
-        internal override void CellDrawn(object sender, GridDrawCellEventArgs e)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Scheduling.OverviewDrawMainShift.Draw(Syncfusion.Windows.Forms.Grid.GridDrawCellEventArgs,System.String,System.Drawing.Color)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Scheduling.OverviewDrawAbsenceDayOff.Draw(Syncfusion.Windows.Forms.Grid.GridDrawCellEventArgs,System.String,System.Drawing.Color)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Scheduling.OverviewDrawAbsence.Draw(Syncfusion.Windows.Forms.Grid.GridDrawCellEventArgs,System.String,System.Drawing.Color)")]
+		internal override void CellDrawn(object sender, GridDrawCellEventArgs e)
         {
             if (e.RowIndex > 1 && e.ColIndex > ColHeaders)
             {
@@ -69,10 +77,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                     var absenceCollection = scheduleDay.PersonAbsenceCollection();
                     if (absenceCollection.Count > 0)
                     {
-                        if (significantPart == SchedulePartView.FullDayAbsence)
+                        if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
                         {
                             color2 = absenceCollection[0].Layer.Payload.ConfidentialDisplayColor(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly);
-                            symbol = "X";
+                            symbol = "X";	
                         }
                     }
 
@@ -87,50 +95,31 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                     if (!String.IsNullOrEmpty(symbol))
                     {
-                        DrawRectangle(e, symbol, color2);
+						if(significantPart == SchedulePartView.ContractDayOff)
+						{
+							_drawAbsenceDayOff.Draw(e,symbol,color2);
+						}
+
+						if(significantPart == SchedulePartView.FullDayAbsence)
+						{
+							_drawAbsence.Draw(e, symbol, color2);
+						}
+
+						if(significantPart == SchedulePartView.MainShift)
+						{
+							_drawMainShift.Draw(e, symbol, color2);	
+						}
+
+						if(significantPart == SchedulePartView.DayOff)
+						{
+							var color = scheduleDay.PersonDayOffCollection()[0].DayOff.DisplayColor;
+							_drawDayOff.Draw(e, color);
+						}
                     }
 
                     AddMarkersToCell(e, scheduleDay, significantPart);
                 }
             }
         }
-
-        //draw rectangle
-        private void DrawRectangle(GridDrawCellEventArgs e, string symbol, Color color)
-        {
-            if (symbol == "-")
-            {
-                Rectangle rect = new Rectangle(e.Bounds.Location, e.Bounds.Size);
-                rect.Inflate(-2, -2);
-                IScheduleDay schedulePart = e.Style.CellValue as IScheduleDay;
-
-                using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, schedulePart.PersonDayOffCollection()[0].DayOff.DisplayColor, Color.LightGray))
-                {
-                    e.Graphics.FillRectangle(brush, rect);
-                }
-            }
-            else
-            {
-                using (Brush lBrush = new SolidBrush(color))
-                {
-                    Rectangle rect = new Rectangle(e.Bounds.Location, e.Bounds.Size);
-                    rect.Inflate(-2, -2);
-
-                    SizeF stringWidth = e.Graphics.MeasureString(symbol, CellFontSmall);
-                    Point point =
-                        new Point(rect.X - (int)stringWidth.Width / 2 + rect.Width / 2,
-                                  rect.Y - (int)stringWidth.Height / 2 + rect.Height / 2);
-
-                    if(symbol == "X")
-                        e.Graphics.FillRectangle(lBrush, rect);
-                    else
-                        GridHelper.FillRoundedRectangle(e.Graphics, rect, 2, lBrush, -1);
-
-                    e.Graphics.DrawString(symbol, CellFontSmall, Brushes.Black, point);
-                }
-            }
-        }
-
-        #endregion
     }
 }

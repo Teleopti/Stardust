@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenISignInByUserNameAndWrongPassword()
 		{
 			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
-			Pages.Pages.CurrentSignInPage.SelectApplicationTestDataSource();
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, "wrong password");
 		}
 
