@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Rta.Server
                         }
 
 						var agentState = _rtaConsumer.Consume(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId , platformTypeId, stateCode,
-                    	                                      timestamp, timeInState);
+                    	                                      timestamp, timeInState, waitHandle);
                         if (agentState == null) continue;
                         _loggingSvc.InfoFormat("Trying to send object {0} through Message Broker", agentState);
                         _messageSender.SendRtaData(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, agentState);

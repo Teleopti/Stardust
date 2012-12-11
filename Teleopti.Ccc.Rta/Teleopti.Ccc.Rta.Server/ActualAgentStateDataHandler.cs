@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.Rta.Server
 		IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, Guid personId);
 		IActualAgentState LoadOldState(Guid personToLoad);
 		IEnumerable<RtaStateGroupLight> StateGroups();
-		IEnumerable<RtaAlarmLight> ActivityAlarms();
-		void AddOrUpdate(ActualAgentState newState);
+		Dictionary<Guid, List<RtaAlarmLight>> ActivityAlarms();
+		void AddOrUpdate(IActualAgentState newState);
 	}
 
 	public class ActualAgentStateDataHandler : IActualAgentStateDataHandler
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.Rta.Server
 			return stateGroups;
 		}
 
-		public IEnumerable<RtaAlarmLight> ActivityAlarms()
+		public Dictionary<Guid, List<RtaAlarmLight>> ActivityAlarms()
 		{
 			const string query = @"SELECT sg.Id StateGroupId , sg.Name StateGroupName, Activity ActivityId, t.Name, t.Id AlarmTypeId,
 								t.DisplayColor,t.StaffingEffect, t.ThresholdTime--, sg.BusinessUnit BusinessUnitId
@@ -241,11 +241,11 @@ namespace Teleopti.Ccc.Rta.Server
 				}
 				reader.Close();
 			}
-			return stateGroups;
+            return stateGroups.GroupBy(g => g.ActivityId).ToDictionary(k => k.Key, v => v.ToList());
 
 		}
 
-		public void AddOrUpdate(ActualAgentState newState)
+		public void AddOrUpdate(IActualAgentState newState)
 		{
 //                const string stringQuery = @"[RTA].[rta_addorupdate_actualagentstate] @PersonId=:personId,  @StateCode=:stateCode, @PlatformTypeId=:platform, 
 //					@State=:state, @StateId=:stateId, @Scheduled=:scheduled, @ScheduledId=:scheduledId, @StateStart=:stateStart, @ScheduledNext=:scheduledNext,  

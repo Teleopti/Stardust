@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Rta.Server
 {
 	public interface IRtaConsumer
 	{
-		IActualAgentState Consume(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timeStamp, TimeSpan timeInState);
+		IActualAgentState Consume(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timeStamp, TimeSpan timeInState, AutoResetEvent waitHandle);
 	}
 
 	public class RtaConsumer : IRtaConsumer
@@ -21,15 +22,15 @@ namespace Teleopti.Ccc.Rta.Server
 		}
 
 		public IActualAgentState Consume(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timeStamp,
-			TimeSpan timeInState)
+            TimeSpan timeInState, AutoResetEvent waitHandle)
 		{
 			var scheduleLayers = _actualAgentStateDataHandler.CurrentLayerAndNext(timeStamp,personId);
 			var previousState = _actualAgentStateDataHandler.LoadOldState(personId);
-			return checkState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timeStamp, timeInState, businessUnitId);
+			return checkState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timeStamp, timeInState, businessUnitId, waitHandle);
 		}
 
 		IActualAgentState checkState(IList<ScheduleLayer> scheduleLayers, IActualAgentState previousState, Guid personId, Guid platformTypeId,
-			string stateCode, DateTime timeStamp, TimeSpan timeInState, Guid businessUnitId)
+			string stateCode, DateTime timeStamp, TimeSpan timeInState, Guid businessUnitId, AutoResetEvent waitHandle)
 		{
 			var scheduleLayer = scheduleLayers[0];
 			var nextLayer = scheduleLayers[1];
@@ -81,9 +82,24 @@ namespace Teleopti.Ccc.Rta.Server
 			if (previousState != null && newState.Equals(previousState))
 				return null;
 
-			_actualAgentStateDataHandler.AddOrUpdate(newState);
+		    ThreadPool.QueueUserWorkItem(saveToDataStore, new object[] {newState, waitHandle});
 
 			return newState;
 		}
+
+        private void saveToDataStore(object arg)
+        {
+        	var argsArr = arg as object[];
+			var agentState = argsArr[0] as IActualAgentState;
+			var waitHandle = argsArr[1] as AutoResetEvent;
+
+            if (agentState == null)
+            {
+                waitHandle.Set();
+                return;
+            }
+            _actualAgentStateDataHandler.AddOrUpdate(agentState);
+            waitHandle.Set();
+        }
 	}
 }

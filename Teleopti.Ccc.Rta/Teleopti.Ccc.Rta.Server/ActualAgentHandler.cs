@@ -17,9 +17,12 @@ namespace Teleopti.Ccc.Rta.Server
 		public RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId)
 		{
 			var state = resolveStateGroupId(platformTypeId, stateCode, businessUnitId);
-
-			return _actualAgentStateDataHandler.ActivityAlarms().FirstOrDefault(
-					a => a.ActivityId == payloadId(layer) && a.StateGroupId == state);
+		    var activityAlarms = _actualAgentStateDataHandler.ActivityAlarms();
+		    var localPayloadId = payloadId(layer);
+		    return activityAlarms.ContainsKey(localPayloadId)
+		               ? activityAlarms[localPayloadId].SingleOrDefault(
+		                   s => s.StateGroupId == state)
+		               : null;
 		}
 
 		private static Guid payloadId(ScheduleLayer scheduleLayer)
