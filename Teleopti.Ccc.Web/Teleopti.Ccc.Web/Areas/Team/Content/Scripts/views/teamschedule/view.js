@@ -37,6 +37,7 @@ define([
 				var schedule = $.connection.scheduleHub;
 				schedule.client.teamScheduleLoaded = function (schedules) {
 
+					timeLine.Agents.removeAll();
 					teamSchedule.Agents.removeAll();
 
 					ko.utils.arrayForEach(schedules, function (s) {
@@ -51,10 +52,6 @@ define([
 					});
 
 					resize();
-
-					ko.applyBindings({
-						TeamSchedule: teamSchedule
-					});
 				};
 
 				var resize = function () {
@@ -66,6 +63,8 @@ define([
 					.bind('orientationchange', resize)
 					.ready(resize);
 
+				$('#date-selection').val(moment().format('YYYY-MM-DD'));
+				$.connection.hub.url = 'signalr';
 				$.connection.hub.start()
 					.done(function () {
 						schedule.server.subscribeTeamSchedule('34590A63-6331-4921-BC9F-9B5E015AB495', $('#date-selection').val());
@@ -76,17 +75,23 @@ define([
 				navigation.GotoAgentSchedule($(this).data('agent-id'), $('#date-selection').attr('value'));
 				});
 				*/
-					
+
+				ko.applyBindings({
+					TeamSchedule: teamSchedule
+				});
+
 				$('.team-schedule').swipeListener({
 					swipeLeft: function () {
 						var dateValue = $('#date-selection').attr('value');
-						var date = moment(dateValue).add('d', -1);
+						var date = moment(dateValue).add('d', 1);
 						$('#date-selection').attr('value', date.format('YYYY-MM-DD'));
+						schedule.server.subscribeTeamSchedule('34590A63-6331-4921-BC9F-9B5E015AB495', $('#date-selection').val());
 					},
 					swipeRight: function () {
 						var dateValue = $('#date-selection').attr('value');
-						var date = moment(dateValue).add('d', 1);
+						var date = moment(dateValue).add('d', -1);
 						$('#date-selection').attr('value', date.format('YYYY-MM-DD'));
+						schedule.server.subscribeTeamSchedule('34590A63-6331-4921-BC9F-9B5E015AB495', $('#date-selection').val());
 					}
 				});
 
@@ -94,7 +99,7 @@ define([
 					pullRight: true,
 					format: 'yyyy-mm-dd',
 					weekStart: 1,
-					autohide: true
+					autoclose: true
 				}).on('changeDate', function (ev) {
 					schedule.server.subscribeTeamSchedule('34590A63-6331-4921-BC9F-9B5E015AB495', $('#date-selection').val());
 				});
