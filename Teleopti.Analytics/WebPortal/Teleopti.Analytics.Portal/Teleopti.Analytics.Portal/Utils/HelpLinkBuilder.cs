@@ -7,12 +7,12 @@ namespace Teleopti.Analytics.Portal.Utils
     {
         public static string GetStandardReportHelpLink(string helpKey)
         {
-            return string.Format("{0}/{1}/{2}", ConfigurationManager.AppSettings["HelpUrl"], getLanguage(), helpKey);
+            return string.Format("{0}/{1}", ConfigurationManager.AppSettings["HelpUrl"], helpKey);
         }
 
         public static string GetPerformanceManagerHelpLink()
         {
-            return string.Format("{0}/{1}/Performance_Manager.html", ConfigurationManager.AppSettings["HelpUrl"], getLanguage());
+            return string.Format("{0}/{1}/Performance_Manager", ConfigurationManager.AppSettings["HelpUrl"], getLanguage());
         }
 
         private static string getLanguage()
