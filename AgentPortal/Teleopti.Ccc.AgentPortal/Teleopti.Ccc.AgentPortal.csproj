@@ -210,9 +210,7 @@
     <Compile Include="AgentPreferenceView\PreferenceCellPainters\ScheduledDayOffPainter.cs" />
     <Compile Include="AgentPreferenceView\PreferenceCellPainters\EffectiveRestrictionPainter.cs" />
     <Compile Include="AgentPreferenceView\PreferenceCellPainters\IPreferenceCellPainter.cs" />
-    <Compile Include="AgentPreferenceView\PlanningTimeBankForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="AgentPreferenceView\PlanningTimeBankForm.cs" />
     <Compile Include="AgentPreferenceView\PlanningTimeBankForm.Designer.cs">
       <DependentUpon>PlanningTimeBankForm.cs</DependentUpon>
     </Compile>
@@ -229,9 +227,7 @@
     <Compile Include="AgentSchedule\LegendsView.Designer.cs">
       <DependentUpon>LegendsView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\About.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\About.cs" />
     <Compile Include="Common\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
@@ -241,9 +237,7 @@
     <Compile Include="AgentScheduleMessenger\NextActivityControl.Designer.cs">
       <DependentUpon>NextActivityControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="AgentScheduleMessenger\ScheduleMessengerScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="AgentScheduleMessenger\ScheduleMessengerScreen.cs" />
     <Compile Include="AgentScheduleMessenger\ScheduleMessengerScreen.Designer.cs">
       <DependentUpon>ScheduleMessengerScreen.cs</DependentUpon>
     </Compile>
@@ -256,9 +250,7 @@
     <Compile Include="AgentSchedule\AgentScheduleViewBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Common\BaseRibbonForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\BaseRibbonForm.cs" />
     <Compile Include="Common\BaseUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -283,18 +275,14 @@
     <Compile Include="Common\Controls\Columns\RowHeaderColumn.cs" />
     <Compile Include="Common\Controls\Columns\ScheduleGridColumnBase.cs" />
     <Compile Include="Common\Controls\Columns\ScheduleGridVisualProjectionColumn.cs" />
-    <Compile Include="Common\Controls\CustomScheduleControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Common\Controls\CustomScheduleControl.cs" />
     <Compile Include="Common\Controls\MailButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Common\Controls\MailButton.Designer.cs">
       <DependentUpon>MailButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Controls\Office2007OutlookTimePickerAP.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Common\Controls\Office2007OutlookTimePickerAP.cs" />
     <Compile Include="Common\Controls\Office2007OutlookTimePickerAP.Designer.cs">
       <DependentUpon>Office2007OutlookTimePickerAP.cs</DependentUpon>
     </Compile>
@@ -304,24 +292,18 @@
     <Compile Include="Common\Controls\OutlookDateTimePicker.Designer.cs">
       <DependentUpon>OutlookDateTimePicker.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Controls\OutlookTimePicker.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Common\Controls\OutlookTimePicker.cs" />
     <Compile Include="Common\Controls\TimeSpanTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Common\Controls\TimeSpanTextBox.Designer.cs">
       <DependentUpon>TimeSpanTextBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Controls\ToolStripGallery\TeleoptiToolStrip.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Common\Controls\ToolStripGallery\TeleoptiToolStrip.cs" />
     <Compile Include="Common\Controls\ToolStripGallery\TeleoptiToolStrip.Designer.cs">
       <DependentUpon>TeleoptiToolStrip.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Controls\ToolStripGallery\TeleoptiToolStripGallery.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Common\Controls\ToolStripGallery\TeleoptiToolStripGallery.cs" />
     <Compile Include="Common\Controls\ToolStripGallery\ToolStripGalleryItemContextMenuClickEventArgs.cs" />
     <Compile Include="Common\Controls\ToolStripGallery\ToolStripGalleryItemEx.cs" />
     <Compile Include="Common\Controls\ToolStripGallery\ToolStripItemClickedEventArgs.cs" />
@@ -343,9 +325,7 @@
     <Compile Include="Helper\MessageBoxHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Main\CreateExtendedPreferencesTemplate.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Main\CreateExtendedPreferencesTemplate.cs" />
     <Compile Include="Main\CreateExtendedPreferencesTemplate.Designer.cs">
       <DependentUpon>CreateExtendedPreferencesTemplate.cs</DependentUpon>
     </Compile>
@@ -370,9 +350,7 @@
     <Compile Include="PushMessagePopup\MessageOptionsAndText.Designer.cs">
       <DependentUpon>MessageOptionsAndText.cs</DependentUpon>
     </Compile>
-    <Compile Include="PushMessagePopup\MessageForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="PushMessagePopup\MessageForm.cs" />
     <Compile Include="PushMessagePopup\MessageForm.Designer.cs">
       <DependentUpon>MessageForm.cs</DependentUpon>
     </Compile>
@@ -413,9 +391,7 @@
     </Compile>
     <Compile Include="Reports\MyReportStateHolder.cs" />
     <Compile Include="Reports\ScheduleAdherence.cs" />
-    <Compile Include="Requests\AbsenceRequestView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Requests\AbsenceRequestView.cs" />
     <Compile Include="Requests\AbsenceRequestView.Designer.cs">
       <DependentUpon>AbsenceRequestView.cs</DependentUpon>
     </Compile>
@@ -444,9 +420,7 @@
       <DependentUpon>AddDatesView.cs</DependentUpon>
     </Compile>
     <Compile Include="Requests\ShiftTrade\DateRangeSelectionEventArgs.cs" />
-    <Compile Include="Requests\ShiftTrade\ShiftTradeView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Requests\ShiftTrade\ShiftTradeView.cs" />
     <Compile Include="Requests\ShiftTrade\ShiftTradeView.Designer.cs">
       <DependentUpon>ShiftTradeView.cs</DependentUpon>
     </Compile>
@@ -457,9 +431,7 @@
       <DependentUpon>ShiftTradeVisualView.cs</DependentUpon>
     </Compile>
     <Compile Include="Requests\ShiftTrade\ShiftTradeVisualGridPresenter.cs" />
-    <Compile Include="Requests\TextRequestView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Requests\TextRequestView.cs" />
     <Compile Include="Requests\TextRequestView.Designer.cs">
       <DependentUpon>TextRequestView.cs</DependentUpon>
     </Compile>
@@ -486,15 +458,11 @@
     <Compile Include="Common\Configuration\Columns\SFGridHourMinutesColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridNumericCellColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridRowHeaderColumn.cs" />
-    <Compile Include="Settings\AgentPortalOptions.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Settings\AgentPortalOptions.cs" />
     <Compile Include="Settings\AgentPortalOptions.Designer.cs">
       <DependentUpon>AgentPortalOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Controls\CustomScheduleGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Common\Controls\CustomScheduleGrid.cs" />
     <Compile Include="Common\Controls\NavigationMonthCalendar.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -510,9 +478,7 @@
     <Compile Include="Common\HelpHelper.cs" />
     <Compile Include="Common\IDataHandling.cs" />
     <Compile Include="Common\MinMax.cs" />
-    <Compile Include="Main\MainScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Main\MainScreen.cs" />
     <Compile Include="Main\MainScreen.Designer.cs">
       <DependentUpon>MainScreen.cs</DependentUpon>
     </Compile>
