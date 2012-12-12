@@ -121,24 +121,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return TimeSpan.FromTicks(Math.Max(otherTime.Value.Ticks, thisTime.Ticks));
         }
 
-        private static TimePeriod? resolveTime(TimePeriod timePeriod, TimeSpan? limitation)
-        {
-            var startTime = timePeriod.StartTime;
-            var endTime = timePeriod.EndTime;
-
-            if (limitation.HasValue)
-                startTime = TimeSpan.FromTicks(Math.Max(limitation.Value.Ticks, startTime.Ticks));
-            if (limitation.HasValue)
-            {
-                endTime = TimeSpan.FromTicks(Math.Min(limitation.Value.Ticks, endTime.Ticks));
-                if (endTime < startTime)
-                {
-                    return null;
-                }
-            }
-            return new TimePeriod(startTime, endTime);
-        }
-
         private IEnumerable<IShiftProjectionCache> GetShiftsForRuleset(IWorkShiftRuleSet ruleSet)
         {
             IList<IShiftProjectionCache> retList;
