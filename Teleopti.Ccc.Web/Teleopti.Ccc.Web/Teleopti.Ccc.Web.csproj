@@ -524,6 +524,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordViewModel.js" />
+    <Content Include="Areas\Team\Content\Scripts\knockout.bindings.js" />
     <Content Include="Areas\Team\Content\Scripts\helpers.js" />
     <Content Include="Areas\Team\Content\Scripts\layout.js" />
     <Content Include="Areas\Team\Content\Scripts\main.js" />

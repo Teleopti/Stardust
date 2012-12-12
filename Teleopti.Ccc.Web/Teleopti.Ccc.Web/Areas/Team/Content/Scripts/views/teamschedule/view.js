@@ -90,13 +90,12 @@ define([
 
 				$('.team-schedule').swipeListener({
 					swipeLeft: function () {
-						var newDate = moment(dateValue).add('d', 1);
-						teamSchedule.SelectedDate(newDate.format('YYYY-MM-DD'));
+						var newDate = moment(teamSchedule.SelectedDate).add('d', 1);
+						teamSchedule.SelectedDate(newDate.toDate());
 					},
 					swipeRight: function () {
-						var dateValue = $('#date-selection').attr('value');
-						var newDate = moment(dateValue).add('d', -1);
-						teamSchedule.SelectedDate(newDate.format('YYYY-MM-DD'));
+						var newDate = moment(teamSchedule.SelectedDate).add('d', -1);
+						teamSchedule.SelectedDate(newDate.toDate());
 					}
 				});
 
