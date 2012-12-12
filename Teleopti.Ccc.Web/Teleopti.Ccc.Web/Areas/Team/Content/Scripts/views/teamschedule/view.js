@@ -31,13 +31,13 @@ define([
 
 				var date = options.date;
 				if (date == undefined) {
-					date = moment().format('YYYY-MM-DD');
+					date = moment();
 				} else {
-					date = moment(date, 'YYYYMMDD').format('YYYY-MM-DD');
+					date = moment(date, 'YYYYMMDD');
 				}
 
 				var timeLine = new timeLineViewModel();
-				var teamSchedule = new teamScheduleViewModel(timeLine, date);
+				var teamSchedule = new teamScheduleViewModel(timeLine, date.toDate());
 
 				var schedule = $.connection.scheduleHub;
 
@@ -90,7 +90,6 @@ define([
 
 				$('.team-schedule').swipeListener({
 					swipeLeft: function () {
-						var dateValue = $('#date-selection').attr('value');
 						var newDate = moment(dateValue).add('d', 1);
 						teamSchedule.SelectedDate(newDate.format('YYYY-MM-DD'));
 					},
@@ -110,13 +109,6 @@ define([
 				});
 
 				teamSchedule.SelectedTeam(teamSchedule.Teams()[0]);
-				
-				$('#date-selection').datepicker({
-					pullRight: true,
-					format: 'yyyy-mm-dd',
-					weekStart: 1,
-					autoclose: true
-				});
 			}
 		};
 	});

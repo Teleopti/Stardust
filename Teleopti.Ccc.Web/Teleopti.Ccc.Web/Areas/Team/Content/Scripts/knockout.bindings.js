@@ -18,12 +18,12 @@ define([
 					}
 				});
 
-				ko.utils.registerEventHandler(element, "change", function () {
+				/*ko.utils.registerEventHandler(element, "change", function () {
 					var value = valueAccessor();
 					if (ko.isObservable(value)) {
 						value(new Date(element.value));
 					}
-				});
+				});*/
 			},
 			update: function (element, valueAccessor) {
 				var widget = $(element).data("datepicker");
