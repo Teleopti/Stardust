@@ -7,6 +7,8 @@
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
 /// <reference path="jquery.ui.connector.js"/>
+/// <reference path="jquery.ui.connector.js"/>
+/// <reference path="~/Content/Scripts/knockout-2.1.0.debug.js" />
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
 
@@ -27,6 +29,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.UpdatedOn = ko.observable(request.UpdatedOn);
 		self.Text = ko.observable(request.Text);
 		self.Link = ko.observable(request.Link.href);
+		self.Id = ko.observable(request.Id);
 	}
 
 	function RequestPageViewModel(requestDetailViewModel) {
@@ -49,14 +52,9 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			return requestDetailViewModel.TextRequestTabVisible();
 		});
 
-		self.example = ko.observable("tell Henke to remove this!!...");
-		self.changeExample = function () {
-			self.example("really... tell Henke to remove this!!");
-		};
-
 		self.requests = ko.observableArray();
 
-		//TODO: refact to use map instead
+		//TODO: refact to use map & initialize instead
 		self.showRequests = function (data) {
 			for (var i = 0; i < data.length; i++) {
 				self.AddRequest(data[i]);
@@ -64,16 +62,57 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		};
 
 		self.Delete = function (requestItemViewModel) {
-			self.requests.remove(requestItemViewModel);
-			alert(requestItemViewModel.Subject() + ' deleted');
-			_deleteRequest2(requestItemViewModel);
+
+			var url = requestItemViewModel.Link();
+			ajax.Ajax({
+				url: url,
+				dataType: "json",
+				contentType: 'application/json; charset=utf-8',
+				type: "DELETE",
+				beforeSend: function () {
+					//Teleopti.MyTimeWeb.Common.LoadingOverlay.Add(listItem);
+
+				},
+				complete: function (jqXHR, textStatus) {
+					//Teleopti.MyTimeWeb.Common.LoadingOverlay.Remove(listItem);
+				},
+				success: function (data, textStatus, jqXHR) {
+					self.requests.remove(requestItemViewModel);
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+				}
+			});
 		};
 
 		self.AddRequest = function (request) {
-			self.requests.unshift(new RequestItemViewModel(request));
+			var update = function (r) { self.requests.unshift(new RequestItemViewModel(r)); };
+			ko.utils.arrayForEach(self.requests(), function (requestVm) {
+				console.log(request);
+				console.log(requestVm);
+				if (requestVm.Id() == request.Id) {
+					update = function (r) { requestVm.Initialize(r); };
+				}
+			});
+			update(request);
 		};
 
 	}
+
+	ko.utils.extend(RequestItemViewModel.prototype, {
+		Initialize: function (data) {
+			var self = this;
+			self.Subject(data.Subject);
+			self.RequestType(data.Type);
+			self.Status(data.Status);
+			self.Dates(data.Dates);
+			self.UpdatedOn(data.UpdatedOn);
+			self.Text(data.Text);
+			self.Link(data.Link.href);
+			self.Id(data.Id);
+		}
+	});
+
 
 	function _initScrollPaging() {
 		_loadAPage();
@@ -161,7 +200,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			}, 'fast', function () {
 				$(this).remove();
 				_loadAPageIfRequired();
-				_showMessageIfNoRequests();
 			});
 	}
 
@@ -200,9 +238,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		listItem.find('.request-data-updatedon').text(request.UpdatedOn);
 		listItem.find('.request-data-status').text(request.Status);
 		listItem.find('.request-data-text').text(request.Text);
-
-
-		console.log(request.Link.href);
 
 		var connector = listItem.find('.request-connector');
 		var deleteButton = listItem.find('.request-delete-button');
@@ -257,29 +292,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			},
 			success: function (data, textStatus, jqXHR) {
 				_removeRequest(listItem);
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-			}
-		});
-	}
-
-	function _deleteRequest2(requestItemViewModel) {
-		var url = requestItemViewModel.Link();
-		ajax.Ajax({
-			url: url,
-			dataType: "json",
-			contentType: 'application/json; charset=utf-8',
-			type: "DELETE",
-			beforeSend: function () {
-				//Teleopti.MyTimeWeb.Common.LoadingOverlay.Add(listItem);
-
-			},
-			complete: function (jqXHR, textStatus) {
-				//Teleopti.MyTimeWeb.Common.LoadingOverlay.Remove(listItem);
-			},
-			success: function (data, textStatus, jqXHR) {
-				//_removeRequest(listItem);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
