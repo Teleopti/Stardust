@@ -18,34 +18,16 @@ namespace Teleopti.Ccc.Win.Common
 			return _current;
 		} }
 
-		[SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-		private readonly string _http = "http://localhost/TeleoptiCCC/ContextHelp/";
-
-		[SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-		private readonly string _httpOnline = "http://onlinehelp.teleopti.com/ccc/dev";
-
-		[SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")] 
-		private readonly string _divider = "_";
-
-		[SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")] 
-		private readonly string _prefix = "f01_";
-
-		[SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-		private readonly string _suffix = ".html";
-
-		[SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-		private readonly string _dividerOnline = "+";
-
-		[SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-		private readonly string _prefixOnline = "f01:";
-
-		[SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-		private readonly string _suffixOnline = string.Empty;
-
+		private readonly string _http;
+		private readonly string _httpOnline;
+		private readonly string _divider;
+		private readonly string _prefix;
+		private readonly string _suffix  = "";
+		private readonly string _dividerOnline;
+		private readonly string _prefixOnline;
+		private readonly string _suffixOnline  = "";
 		private const HelpType _helpType = HelpType.Http;
-
-		[SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-		private readonly string _helpLang = "en";
+		private readonly string _helpLang = "";
 
   
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
@@ -70,36 +52,8 @@ namespace Teleopti.Ccc.Win.Common
 			string helpDividerOnline = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDividerOnline"];
 			if (!string.IsNullOrEmpty(helpDividerOnline)) _dividerOnline = helpDividerOnline;
 
-			//Select language for help
-
-			string helpCulture = string.Format(CultureInfo.CurrentCulture, "{0}", TeleoptiPrincipal.Current.Regional.UICulture);
-			if (!string.IsNullOrEmpty(helpCulture)) _helpLang = helpCulture.Substring(0, 2);
-
-			switch (_helpLang)
-				{
-				   case "sv":
-					   _helpLang = "sv/";
-						break;
-
-				   case "de":
-					   _helpLang = "de/";
-					   break;
-					
-				   case "ru":
-					   _helpLang = "ru/";
-						break;
-				   /*
-					case "zh":
-					   _helpLang = "zh/";
-					   break;                  
-				   */ 
-				   default:
-					  _helpLang = "en/";
-					   break;
-				}
-
-			/*    temporary hard-code */
-			/*   _helpLang = "en/"; /*  */ 
+			//Select language is handled in Wiki site
+			_helpLang = "";
 
 		}
 
