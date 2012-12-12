@@ -81,6 +81,10 @@
 	signalR.scheduleHub = signalR.hub.createHubProxy('scheduleHub');
 	signalR.scheduleHub.client = {};
 	signalR.scheduleHub.server = {
+		availableTeams: function (date) {
+			return signalR.scheduleHub.invoke.apply(signalR.scheduleHub, $.merge(["AvailableTeams"], $.makeArray(arguments)));
+		},
+
 		subscribeTeamSchedule: function (teamId, date) {
 			return signalR.scheduleHub.invoke.apply(signalR.scheduleHub, $.merge(["SubscribeTeamSchedule"], $.makeArray(arguments)));
 		}

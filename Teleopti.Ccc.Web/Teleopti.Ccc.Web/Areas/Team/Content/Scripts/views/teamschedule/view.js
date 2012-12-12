@@ -2,7 +2,6 @@
 define([
 		'knockout',
 		'jquery',
-		'helpers',
 		'navigation',
 		'signalrHubs',
 		'swipeListener',
@@ -15,7 +14,6 @@ define([
 	], function (
 		ko,
 		$,
-		helpers,
 		swipeListener,
 		momentX,
 		datepicker,
@@ -31,8 +29,15 @@ define([
 
 				options.renderHtml(view);
 
+				var date = options.date;
+				if (date == undefined) {
+					date = moment().format('YYYY-MM-DD');
+				} else {
+					date = moment(date, 'YYYYMMDD').format('YYYY-MM-DD');
+				}
+
 				var timeLine = new timeLineViewModel();
-				var teamSchedule = new teamScheduleViewModel(timeLine);
+				var teamSchedule = new teamScheduleViewModel(timeLine, date);
 
 				var schedule = $.connection.scheduleHub;
 
@@ -46,7 +51,7 @@ define([
 					.ready(resize);
 
 				var loadSchedules = function () {
-					schedule.server.subscribeTeamSchedule('34590A63-6331-4921-BC9F-9B5E015AB495', $('#date-selection').val()).done(function (schedules) {
+					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, teamSchedule.SelectedDate()).done(function (schedules) {
 						timeLine.Agents.removeAll();
 						teamSchedule.Agents.removeAll();
 
@@ -65,44 +70,53 @@ define([
 					});
 				};
 
-				$('#date-selection').val(moment().format('YYYY-MM-DD'));
+				var loadAvailableTeams = function () {
+					schedule.server.availableTeams(teamSchedule.SelectedDate()).done(function (details) {
+						ko.utils.arrayForEach(details.Teams, function (t) {
+							teamSchedule.AddTeam(t);
+						});
+					});
+				};
+
 				$.connection.hub.url = 'signalr';
 				$.connection.hub.start()
 					.done(function () {
-						loadSchedules();
+						loadAvailableTeams();
 
 						ko.applyBindings({
 							TeamSchedule: teamSchedule
 						});
 					});
 
-				/*
-				$('.agent').click(function () {
-				navigation.GotoAgentSchedule($(this).data('agent-id'), $('#date-selection').attr('value'));
-				});
-				*/
-
 				$('.team-schedule').swipeListener({
 					swipeLeft: function () {
 						var dateValue = $('#date-selection').attr('value');
-						var date = moment(dateValue).add('d', 1);
-						$('#date-selection').attr('value', date.format('YYYY-MM-DD'));
-						loadSchedules();
+						var newDate = moment(dateValue).add('d', 1);
+						teamSchedule.SelectedDate(newDate.format('YYYY-MM-DD'));
 					},
 					swipeRight: function () {
 						var dateValue = $('#date-selection').attr('value');
-						var date = moment(dateValue).add('d', -1);
-						$('#date-selection').attr('value', date.format('YYYY-MM-DD'));
-						loadSchedules();
+						var newDate = moment(dateValue).add('d', -1);
+						teamSchedule.SelectedDate(newDate.format('YYYY-MM-DD'));
 					}
 				});
 
+				teamSchedule.SelectedDate.subscribe(function () {
+					loadSchedules();
+				});
+
+				teamSchedule.SelectedTeam.subscribe(function () {
+					loadSchedules();
+				});
+
+				teamSchedule.SelectedTeam(teamSchedule.Teams()[0]);
+				
 				$('#date-selection').datepicker({
 					pullRight: true,
 					format: 'yyyy-mm-dd',
 					weekStart: 1,
 					autoclose: true
-				}).on('changeDate', loadSchedules);
+				});
 			}
 		};
 	});

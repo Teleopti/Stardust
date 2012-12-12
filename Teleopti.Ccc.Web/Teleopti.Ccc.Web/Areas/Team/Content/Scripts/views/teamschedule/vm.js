@@ -2,22 +2,23 @@ define([
 		'knockout'
 	], function (ko) {
 
-	    return function (timeLine) {
+		return function (timeLine, date) {
 
-	        var self = this;
+			var self = this;
 
-	        this.TimeLine = timeLine;
-	        this.Agents = ko.observableArray();
-	        
-	        this.AddAgent = function (agent) {
-	            self.Agents.push(agent);
-	            self.TimeLine.AddAgent(agent);
-	        };
+			this.TimeLine = timeLine;
+			this.Agents = ko.observableArray();
+			this.Teams = ko.observableArray();
+			this.SelectedDate = ko.observable(date);
+			this.SelectedTeam = ko.observable();
 
-	        this.AddAgents = function (agents) {
-	            for (var i = 0; i < agents.length; i++) {
-	                self.AddAgent(agents[i]);
-	            }
-	        };
-	    };
+			this.AddAgent = function (agent) {
+				self.Agents.push(agent);
+				self.TimeLine.AddAgent(agent);
+			};
+
+			this.AddTeam = function (team) {
+				self.Teams.push(team);
+			};
+		};
 	});

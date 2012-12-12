@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Team.Core
 {
@@ -12,10 +14,26 @@ namespace Teleopti.Ccc.Web.Areas.Team.Core
 	public class ScheduleHub : Hub
 	{
 		private readonly IPersonScheduleDayReadModelRepository _personScheduleDayReadModelRepository;
+		private readonly ITeamProvider _teamProvider;
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-		public ScheduleHub(IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository)
+		public ScheduleHub(IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository, ITeamProvider teamProvider, IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
+			_teamProvider = teamProvider;
+			_unitOfWorkFactory = unitOfWorkFactory;
+		}
+
+		[UnitOfWork]
+		public object AvailableTeams(DateTime date)
+		{
+			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				return new
+				{
+					Teams = _teamProvider.GetPermittedTeams(new DateOnly(date)).Select(t => new { t.Id, t.SiteAndTeam }).ToList()
+				};
+			}
 		}
 
 		[UnitOfWork]

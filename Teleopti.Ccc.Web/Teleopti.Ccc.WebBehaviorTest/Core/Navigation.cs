@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
-using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -198,9 +197,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
             Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
 
-		public static void GotoAdminWebSchedule()
+		public static void GotoAdminWebSchedule(string date = null)
 		{
-			GoTo("Team", new ApplicationStartupTimeout());
+			string hash = string.Empty;
+			if (!string.IsNullOrEmpty(date))
+			{
+				hash = string.Format(CultureInfo.InvariantCulture, "#teamschedule/{0}", date.Replace("-",""));
+			}
+			GoTo("Team" + hash, new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AdminWebPage>());
 		}
 	}

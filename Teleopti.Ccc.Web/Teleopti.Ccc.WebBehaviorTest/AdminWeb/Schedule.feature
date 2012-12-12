@@ -37,7 +37,7 @@ Scenario: View team schedule
 	| LunchStartTime | 11:30        |
 	| LunchEndTime   | 12:15        |
 	| LunchActivity  | Lunch        |
-	When I view schedules
+	When I view schedules for '2012-12-02'
 	Then I should see schedule for 'Pierre Baldi'
 
 	@ignore

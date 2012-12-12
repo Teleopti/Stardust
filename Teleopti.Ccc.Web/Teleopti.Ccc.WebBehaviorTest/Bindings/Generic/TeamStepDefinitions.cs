@@ -54,11 +54,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(shift);
 		}
 
-		[When(@"I view schedules")]
-		public void WhenIViewSchedules()
+		[When(@"I view schedules for '(.*)'")]
+		public void WhenIViewSchedules(string date)
 		{
 			TestControllerMethods.LogonForExistingUser(UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName);
-			Navigation.GotoAdminWebSchedule();
+			Navigation.GotoAdminWebSchedule(date);
 		}
 
 		[Then(@"I should see schedule for '(.*)'")]

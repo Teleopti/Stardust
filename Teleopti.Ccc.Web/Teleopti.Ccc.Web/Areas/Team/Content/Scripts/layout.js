@@ -4,13 +4,15 @@ require([
 		'text!templates/menu.html',
 		'text!templates/dummy.html',
 		'crossroads',
-		'hasher'
+		'hasher',
+		'knockout.bindings'
 	], function (
 		layoutTemplate,
 		menuTemplate,
 		dummyTemplate,
 		crossroads,
-		hasher) {
+		hasher,
+		bindings) {
 
 		var currentView;
 		var defaultView = 'teamschedule';

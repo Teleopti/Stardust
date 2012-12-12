@@ -37,7 +37,8 @@ require.config({
 			exports: '_'
 		},
 		'touchPunch': ['jqueryui'],
-		'swipeListener': ['jquery']
+		'swipeListener': ['jquery'],
+		'knockout.bindings': ['knockout']
 		//'vendor/bootstrap-datepicker': ['jquery'],
 		//'widgets/editlayer/jquery.ui.editlayer': ['jqueryui'],
 		//'widgets/editlayer/jquery.ui.editlayer.ko': ['knockout', 'widgets/editlayer/jquery.ui.editlayer'],

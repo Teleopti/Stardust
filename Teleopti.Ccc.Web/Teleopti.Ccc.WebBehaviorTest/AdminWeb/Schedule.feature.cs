@@ -173,7 +173,7 @@ this.FeatureBackground();
 #line 30
  testRunner.And("there is a shift with", ((string)(null)), table7, "And ");
 #line 40
- testRunner.When("I view schedules", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I view schedules for \'2012-12-02\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 41
  testRunner.Then("I should see schedule for \'Pierre Baldi\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
