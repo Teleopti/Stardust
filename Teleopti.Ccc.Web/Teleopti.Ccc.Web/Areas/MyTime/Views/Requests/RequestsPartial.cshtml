@@ -89,7 +89,7 @@
 	<div data-bind="foreach: requests" class="request-list2">
 		<div class="ui-corner-all request-item2 relative">
 			<div >
-				<button class="request-delete-button icon" title="@Resources.Delete" />
+				<button class="request-delete-button icon" title="@Resources.Delete" data-bind="click: $parent.Delete" />
 			</div>
 			<div class="request-subject2">
 				<h3 class="request-data-subject2" data-bind="text: Subject">

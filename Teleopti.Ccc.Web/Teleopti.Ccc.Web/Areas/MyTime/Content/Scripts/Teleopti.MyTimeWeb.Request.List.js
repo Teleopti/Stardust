@@ -58,9 +58,16 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		//TODO: refact to use map instead
 		self.showRequests = function (data) {
 			for (var i = 0; i < data.length; i++) {
-				console.log(data[i]);
-				self.requests.push(new RequestItemViewModel(data[i]));
+				self.AddRequest(data[i]);
 			}
+		};
+
+		self.Delete = function (request) {
+			alert(request.Subject() + ' deleted');
+		};
+
+		self.AddRequest = function (request) {
+			self.requests.unshift(new RequestItemViewModel(request));
 		};
 
 	}
@@ -154,6 +161,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				_showMessageIfNoRequests();
 			});
 	}
+
+
 
 	function _drawRequests(requests) {
 		for (var i = 0; i < requests.length; i++) {
@@ -313,8 +322,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			if (element) ko.applyBindings(pageViewModel, element);
 		},
 		AddItemAtTop: function (request) {
+			pageViewModel.AddRequest(request);
 			_drawRequestAtTop(request);
-			_showMessageIfNoRequests();
 		},
 		RemoveItem: function (request) {
 			_removeRequest(request);
