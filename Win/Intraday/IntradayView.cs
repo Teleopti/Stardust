@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
@@ -20,6 +21,7 @@ using Teleopti.Ccc.Win.Common.Controls.Chart;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
 using Cursors = System.Windows.Forms.Cursors;
@@ -32,8 +34,9 @@ namespace Teleopti.Ccc.Win.Intraday
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
+    	private readonly ISendCommandToSdk _sendCommandToSdk;
 
-        private DateNavigateControl _timeNavigationControl;
+    	private DateNavigateControl _timeNavigationControl;
         private GridRowInChartSettingButtons _gridrowInChartSetting;
         private IntradayViewContent _intradayViewContent;
         private ToolStripGalleryItem _previousClickedGalleryItem;
@@ -41,12 +44,13 @@ namespace Teleopti.Ccc.Win.Intraday
         private bool _forceClose;
         private readonly IntradaySettingManager _settingManager;
 
-        public IntradayView(IEventAggregator eventAggregator, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder)
+		public IntradayView(IEventAggregator eventAggregator, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, ISendCommandToSdk sendCommandToSdk)
         {
             _eventAggregator = eventAggregator;
             _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
+			_sendCommandToSdk = sendCommandToSdk;
 
-            InitializeComponent();
+			InitializeComponent();
             if (DesignMode) return;
 
             ribbonControlAdv1.Enabled = false;
@@ -643,5 +647,12 @@ namespace Teleopti.Ccc.Win.Intraday
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
+		private void toolStripButtonChangeForecastClick(object sender, EventArgs e)
+		{
+			var dto = new RecalculateForecastOnSkillCommandDto();
+			_sendCommandToSdk.ExecuteCommand(dto);
+		}
+
     }
 }
