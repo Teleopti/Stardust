@@ -18,5 +18,15 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSetBag(DateOnly scheduleDateOnly, TimeZoneInfo timeZone,
                                                     IRuleSetBag bag, bool forRestrictionsOnly);// IPerson person);
+        /// <summary>
+        /// Returns a list of IShiftProjectionCaches based on a RulesSetBag valid for a Day.
+        /// </summary>
+        /// <param name="scheduleDateOnly">The schedule date only.</param>
+        /// <param name="timeZone">The timezone the person is in</param>
+        /// <param name="bag">The bag the person has</param>
+        /// <param name="forRestrictionsOnly">if true returns from RuleSetBags where OnlyForRestrictions = true, else where it is false</param>
+        /// <param name="restriction">The effective restriction the person has</param>
+        /// <returns></returns>
+        IList<IShiftProjectionCache> ShiftProjectionCachesFromAdjustedRuleSetBag(DateOnly scheduleDateOnly, TimeZoneInfo timeZone, IRuleSetBag bag, bool forRestrictionsOnly, IEffectiveRestriction restriction);
     }
 }

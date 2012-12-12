@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -67,6 +68,66 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 var ret = _target.ShiftProjectionCachesFromRuleSetBag(dateOnly, timeZoneInfo, _ruleSetBag, false);
                 Assert.IsNotNull(ret);
                 Assert.AreEqual(3,ret.Count);
+            }
+        }
+
+        [Test]
+        public void CanAdjustWorkShiftsFromRuleSetBag()
+        {
+            var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
+            var ruleSet2 = _mocks.StrictMock<IWorkShiftRuleSet>();
+            var ruleSet3 = _mocks.StrictMock<IWorkShiftRuleSet>();
+            var templateGenerator1 = _mocks.StrictMock<IWorkShiftTemplateGenerator>();
+            var templateGenerator2 = _mocks.StrictMock<IWorkShiftTemplateGenerator>();
+            var templateGenerator3 = _mocks.StrictMock<IWorkShiftTemplateGenerator>();
+            var startPeriod1 = new TimePeriodWithSegment(new TimePeriod(6, 0, 7, 0), TimeSpan.FromMinutes(15));
+            var endPeriod1 = new TimePeriodWithSegment(new TimePeriod(17, 0, 19, 0), TimeSpan.FromMinutes(15));
+            var startPeriod2 = new TimePeriodWithSegment(new TimePeriod(9, 0, 11, 0), TimeSpan.FromMinutes(15));
+            var endPeriod2 = new TimePeriodWithSegment(new TimePeriod(16, 0, 18, 0), TimeSpan.FromMinutes(15));
+            var startPeriod3 = new TimePeriodWithSegment(new TimePeriod(8, 0, 10, 0), TimeSpan.FromMinutes(15));
+            var endPeriod3 = new TimePeriodWithSegment(new TimePeriod(16, 0, 16, 59), TimeSpan.FromMinutes(15));
+            
+            IList<IWorkShiftRuleSet> ruleSets = new List<IWorkShiftRuleSet> { ruleSet1, ruleSet2, ruleSet3 };
+            var readOnlyRuleSets = new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets);
+            var dateOnly = new DateOnly(2009, 2, 2);
+            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+            var restriction = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(10)),
+                                      new EndTimeLimitation(TimeSpan.FromHours(17), TimeSpan.FromHours(19)),
+                                      new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+            using (_mocks.Record())
+            {
+                Expect.Call(_ruleSetBag.RuleSetCollection).Return(readOnlyRuleSets);
+                Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
+                Expect.Call(ruleSet2.OnlyForRestrictions).Return(false);
+                Expect.Call(ruleSet3.OnlyForRestrictions).Return(false);
+                Expect.Call(ruleSet1.IsValidDate(dateOnly)).Return(true);
+                Expect.Call(ruleSet2.IsValidDate(dateOnly)).Return(true);
+                Expect.Call(ruleSet3.IsValidDate(dateOnly)).Return(true);
+                Expect.Call(ruleSet1.Clone()).Return(ruleSet1);
+                Expect.Call(ruleSet2.Clone()).Return(ruleSet2);
+                Expect.Call(ruleSet3.Clone()).Return(ruleSet3);
+                Expect.Call(ruleSet1.TemplateGenerator).Return(templateGenerator1).Repeat.AtLeastOnce();
+                Expect.Call(ruleSet2.TemplateGenerator).Return(templateGenerator2).Repeat.AtLeastOnce();
+                Expect.Call(ruleSet3.TemplateGenerator).Return(templateGenerator3).Repeat.AtLeastOnce();
+                Expect.Call(templateGenerator1.StartPeriod).Return(startPeriod1).Repeat.AtLeastOnce();
+                Expect.Call(templateGenerator2.StartPeriod).Return(startPeriod2).Repeat.AtLeastOnce();
+                Expect.Call(templateGenerator2.StartPeriod = new TimePeriodWithSegment(9, 0, 10, 0, 15));
+                Expect.Call(templateGenerator2.EndPeriod).Return(endPeriod2).Repeat.AtLeastOnce();
+                Expect.Call(templateGenerator2.EndPeriod = new TimePeriodWithSegment(17, 0, 18, 0, 15));
+                Expect.Call(templateGenerator3.StartPeriod).Return(startPeriod3).Repeat.AtLeastOnce();
+                Expect.Call(templateGenerator3.EndPeriod).Return(endPeriod3).Repeat.AtLeastOnce();
+                Expect.Call(_activityChecker.ContainsDeletedActivity(ruleSet2)).Return(false);
+                Expect.Call(_shiftCategoryChecker.ContainsDeletedActivity(ruleSet2)).Return(false);
+                Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(ruleSet2)).Return(GetWorkShiftsInfo());
+                Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());
+                Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(GetWorkShifts());
+                Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());
+            }
+
+            using (_mocks.Playback())
+            {
+                var ret = _target.ShiftProjectionCachesFromAdjustedRuleSetBag(dateOnly, timeZoneInfo, _ruleSetBag, false, restriction);
+                Assert.That(ret.Count, Is.EqualTo(3));
             }
         }
 
