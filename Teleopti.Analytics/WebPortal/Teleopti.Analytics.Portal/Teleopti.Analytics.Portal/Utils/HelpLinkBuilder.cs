@@ -12,7 +12,7 @@ namespace Teleopti.Analytics.Portal.Utils
 
         public static string GetPerformanceManagerHelpLink()
         {
-            return string.Format("{0}/{1}/Performance_Manager", ConfigurationManager.AppSettings["HelpUrl"], getLanguage());
+			return string.Format("{0}/Performance_Manager_Module", ConfigurationManager.AppSettings["HelpUrl"]);
         }
 
         private static string getLanguage()
