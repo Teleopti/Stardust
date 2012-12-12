@@ -20,29 +20,15 @@ namespace Teleopti.Ccc.AgentPortal.Common
 
     public static class HelpHelper
     {
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        private static readonly string _http = "http://localhost/TeleoptiCCC/ContextHelp/";
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        private static readonly string _divider = "+";
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        private static readonly string _prefix = "f01:";
-        private static readonly string _suffix = string.Empty;
-
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        private static readonly string
-            _httpOnline = "http://onlinehelp.teleopti.com/ccc/";
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        private static readonly string _dividerOnline = "+";
-
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        private static readonly string _prefixOnline = "f01:";
-
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        private static readonly string _suffixOnline = string.Empty;
-
-        [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        private static string _helpLang = "en";
-        
+        private static readonly string _http;
+        private static readonly string _divider;
+        private static readonly string _prefix;
+        private static readonly string _suffix;
+		private static readonly string _httpOnline;
+        private static readonly string _dividerOnline;
+		private static readonly string _prefixOnline = string.Empty;
+        private static readonly string _suffixOnline;
+		private static string _helpLang = string.Empty;
         private const HelpType _helpType = HelpType.Http;
 
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
@@ -70,39 +56,6 @@ namespace Teleopti.Ccc.AgentPortal.Common
             if (!string.IsNullOrEmpty(helpSuffixOnline)) _suffixOnline = helpSuffixOnline;
             StateHolder.Instance.StateReader.SessionScopeData.AppSettings.TryGetValue("HelpDividerOnline", out helpDividerOnline);
             if (!string.IsNullOrEmpty(helpDividerOnline)) _dividerOnline = helpDividerOnline;
-
-
-            //Select language for help
-
-            string helpCulture = string.Format(CultureInfo.CurrentCulture, "{0}", CultureInfo.CurrentUICulture );
-            if (!string.IsNullOrEmpty(helpCulture)) _helpLang = helpCulture.Substring(0, 2);
-           
-        /*
-        temporary hard-code
-        _helpLang = "en/"; 
-        */
-            switch (_helpLang)
-            {
-                case "sv":
-                    _helpLang = "sv/";
-                    break;
-                case "de":
-                    _helpLang = "de/";
-                    break;
-                case "ru":
-                    _helpLang = "ru/";
-                    break;
-						/*
-							case "zh":
-								_helpLang = "zh/";
-								break;
-				   /* */
-                default:
-                    _helpLang = "en/";
-                    break;
-            }
-
-          /*  */
 
         }
 
