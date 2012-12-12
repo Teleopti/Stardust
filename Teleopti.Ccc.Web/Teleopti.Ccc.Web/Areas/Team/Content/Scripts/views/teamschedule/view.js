@@ -35,24 +35,6 @@ define([
 				var teamSchedule = new teamScheduleViewModel(timeLine);
 
 				var schedule = $.connection.scheduleHub;
-				schedule.client.teamScheduleLoaded = function (schedules) {
-
-					timeLine.Agents.removeAll();
-					teamSchedule.Agents.removeAll();
-
-					ko.utils.arrayForEach(schedules, function (s) {
-						var agent = new agentViewModel(timeLine, s);
-						teamSchedule.AddAgent(agent);
-					});
-
-					teamSchedule.Agents.sort(function (a, b) {
-						var firstStartMinutes = a.FirstStartMinute();
-						var secondStartMinutes = b.FirstStartMinute();
-						return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
-					});
-
-					resize();
-				};
 
 				var resize = function () {
 					timeLine.WidthPixels($('.shift').width());
@@ -63,11 +45,35 @@ define([
 					.bind('orientationchange', resize)
 					.ready(resize);
 
+				var loadSchedules = function () {
+					schedule.server.subscribeTeamSchedule('34590A63-6331-4921-BC9F-9B5E015AB495', $('#date-selection').val()).done(function (schedules) {
+						timeLine.Agents.removeAll();
+						teamSchedule.Agents.removeAll();
+
+						ko.utils.arrayForEach(schedules, function (s) {
+							var agent = new agentViewModel(timeLine, s);
+							teamSchedule.AddAgent(agent);
+						});
+
+						teamSchedule.Agents.sort(function (a, b) {
+							var firstStartMinutes = a.FirstStartMinute();
+							var secondStartMinutes = b.FirstStartMinute();
+							return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
+						});
+
+						resize();
+					});
+				};
+
 				$('#date-selection').val(moment().format('YYYY-MM-DD'));
 				$.connection.hub.url = 'signalr';
 				$.connection.hub.start()
 					.done(function () {
-						schedule.server.subscribeTeamSchedule('34590A63-6331-4921-BC9F-9B5E015AB495', $('#date-selection').val());
+						loadSchedules();
+
+						ko.applyBindings({
+							TeamSchedule: teamSchedule
+						});
 					});
 
 				/*
@@ -76,22 +82,18 @@ define([
 				});
 				*/
 
-				ko.applyBindings({
-					TeamSchedule: teamSchedule
-				});
-
 				$('.team-schedule').swipeListener({
 					swipeLeft: function () {
 						var dateValue = $('#date-selection').attr('value');
 						var date = moment(dateValue).add('d', 1);
 						$('#date-selection').attr('value', date.format('YYYY-MM-DD'));
-						schedule.server.subscribeTeamSchedule('34590A63-6331-4921-BC9F-9B5E015AB495', $('#date-selection').val());
+						loadSchedules();
 					},
 					swipeRight: function () {
 						var dateValue = $('#date-selection').attr('value');
 						var date = moment(dateValue).add('d', -1);
 						$('#date-selection').attr('value', date.format('YYYY-MM-DD'));
-						schedule.server.subscribeTeamSchedule('34590A63-6331-4921-BC9F-9B5E015AB495', $('#date-selection').val());
+						loadSchedules();
 					}
 				});
 
@@ -100,9 +102,7 @@ define([
 					format: 'yyyy-mm-dd',
 					weekStart: 1,
 					autoclose: true
-				}).on('changeDate', function (ev) {
-					schedule.server.subscribeTeamSchedule('34590A63-6331-4921-BC9F-9B5E015AB495', $('#date-selection').val());
-				});
+				}).on('changeDate', loadSchedules);
 			}
 		};
 	});

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -18,10 +19,10 @@ namespace Teleopti.Ccc.Web.Areas.Team.Core
 		}
 
 		[UnitOfWork]
-		public void SubscribeTeamSchedule(Guid teamId, DateTime date)
+		public IEnumerable<object> SubscribeTeamSchedule(Guid teamId, DateTime date)
 		{
 			var schedule = _personScheduleDayReadModelRepository.ForTeam(new DateOnly(date), teamId);
-			Clients.Caller.teamScheduleLoaded(schedule.Select(s => Newtonsoft.Json.JsonConvert.DeserializeObject(s.Shift)));
+			return schedule.Select(s => Newtonsoft.Json.JsonConvert.DeserializeObject(s.Shift));
 		}
 	}
 }
