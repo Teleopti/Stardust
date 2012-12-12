@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 6;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 9;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -452,7 +452,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.xxExportToolStripMenuItem,
             this.toolStripMenuItemChangeTagRM});
 			this.contextMenuViews.Name = "contextMenuStrip1";
-			this.contextMenuViews.Size = new System.Drawing.Size(283, 666);
+			this.contextMenuViews.Size = new System.Drawing.Size(283, 688);
 			this.contextMenuViews.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuViews_Opening);
 			// 
 			// toolStripMenuItemCut
@@ -678,6 +678,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripMenuItemDetailView, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemDetailView.Size = new System.Drawing.Size(160, 22);
 			this.toolStripMenuItemDetailView.Text = "xxDetailView";
+			this.toolStripMenuItemDetailView.Visible = false;
 			this.toolStripMenuItemDetailView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemZoomMouseUp);
 			// 
 			// toolStripMenuItemPeriodView

@@ -220,9 +220,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.timeSpan = ko.observable(layer.TimeSpan);
 		self.color = ko.observable('rgb(' + layer.Color + ')');
 		self.tooltipText = ko.computed(function () {
+			//not nice! rewrite tooltips in the future!
 			if (self.hasMeeting()) {
 				return '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt><dt>{5} {6}</dt></dl></div>'
-					.format(self.timeSpan(), parent.userTexts.subjectColon, self.meetingTitle(), parent.userTexts.locationColon, self.meetingLocation(), parent.userTexts.descriptionColon, self.meetingDescription());
+					.format(self.timeSpan(),
+							parent.userTexts.subjectColon,
+							$('<div/>').text(self.meetingTitle()).html(),
+							parent.userTexts.locationColon,
+							$('<div/>').text(self.meetingLocation()).html(),
+							parent.userTexts.descriptionColon,
+							$('<div/>').text(self.meetingDescription()).html());
 			} else {
 				return self.timeSpan();
 			}

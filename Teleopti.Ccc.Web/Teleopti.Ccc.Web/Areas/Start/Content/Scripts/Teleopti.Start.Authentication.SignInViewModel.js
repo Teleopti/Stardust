@@ -28,6 +28,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	this.UserNameFocus = ko.observable(false);
 
 	data.events.subscribe(function (dataSource) {
+		self.ErrorMessage('');
 		ko.utils.arrayForEach(self.DataSources(), function (d) {
 			d.Selected(d === dataSource);
 		});
@@ -65,6 +66,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	this.SignIn = function () {
 		var state = data.authenticationState;
 
+		self.ErrorMessage('');
 		state.TryToSignIn({
 			data: {
 				type: self.SelectedDataSource().Type,
