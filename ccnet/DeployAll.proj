@@ -659,11 +659,7 @@
 		<Message Importance="high" Text="make folder ..."/>
 		<Exec Command="if not exist &quot;$(MSIPath)&quot; mkdir &quot;$(MSIPath)&quot;"/>
 		<Message Importance="high" Text="make folderWiki. Done!"/>
-		
-		<Message Importance="high" Text="Fetch latest Wiki ..."/>
-		<Exec Command="&quot;$(FetchContextHelp)&quot; &quot;$(MSIPath)&quot;"/>
-		<Message Importance="high" Text="Fetch latest Wiki. Done!"/>
-		
+	
 		<Copy SourceFiles="@(PreReq)"
 			  DestinationFiles="@(PreReq->'$(MSIPath)\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy SourceFiles="$(SDKDocOutput)"
