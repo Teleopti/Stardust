@@ -107,6 +107,11 @@
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SignInPageStepDefinitions.cs" />
+    <Compile Include="StudentAvailabilityMultidays.feature.cs">
+      <DependentUpon>StudentAvailabilityMultidays.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Data\Setups\Generic\ScenarioConfigurable.cs" />
     <Compile Include="Bindings\Generic\ScenarioStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
@@ -532,6 +537,10 @@
     <None Include="BrowserNotifications.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>BrowserNotifications.feature.cs</LastGenOutput>
+    </None>
+    <None Include="StudentAvailabilityMultidays.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>StudentAvailabilityMultidays.feature.cs</LastGenOutput>
     </None>
     <None Include="Routing.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
