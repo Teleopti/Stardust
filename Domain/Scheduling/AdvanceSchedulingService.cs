@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             //call class that return the teamblock dates for a given date (problem if team members don't have same days off)
             var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(new DateTime());
             //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
-            _restrictionAggregator.Aggregate(dateOnlyList, groupPerson);
+            var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson);
             //call class that returns the aggregated intraday dist based on teamblock dates
             var skillInternalDataList = _skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList);
             //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses (should we cover for max seats here?)
