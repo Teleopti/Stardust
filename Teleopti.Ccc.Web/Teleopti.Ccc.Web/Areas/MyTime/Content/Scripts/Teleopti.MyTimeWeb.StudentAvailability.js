@@ -43,13 +43,15 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 
 	function _updateButtonState(button, enabled) {
 	    if (enabled) {
-	        button.removeAttr('disabled');
+	        //button.removeAttr('disabled');
 	        button.click(function () {
 	            button.qtip('hide');
 	        });
 	    }
 	    else
-	        button.attr('disabled', 'disabled').removeClass('ajax-disabled');
+	    	button
+	    		//.attr('disabled', 'disabled')
+	    		.removeClass('ajax-disabled');
 	}
 
 	function _xhr(type, successCallback, addressSuffix, reqData) {
@@ -114,6 +116,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 
 	function _initToolbarButtons() {
 		var editButton = $('#StudentAvailability-edit-button');
+		editButton.removeAttr('disabled');
 		editButton.click(function () {
 			_xhr('GET', function (data) {
 				_bindDataToForm(data);
@@ -127,13 +130,13 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		});
 
 		var deleteButton = $('#StudentAvailability-delete-button');
+		deleteButton.removeAttr('disabled');
 		deleteButton.click(function (event) {
 			_xhr('DELETE',
 				_updateDayAndCloseEditSection,
 				Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl($('#StudentAvailability-edit-section').data('mytime-selected-date')),
 				null);
 		});
-
 	}
 
 	function _initEditSection() {

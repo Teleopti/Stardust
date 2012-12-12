@@ -130,12 +130,12 @@ this.ScenarioSetup(scenarioInfo);
 this.FeatureBackground();
 #line 25
  testRunner.Given("I have the role \'Access to student availability\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 28
+#line 26
  testRunner.And("I am viewing student availability for date \'2012-06-20\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 29
+#line 27
  testRunner.When("I select day \'2012-06-20\' in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 31
- testRunner.And("I click the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 28
+ testRunner.And("I click the edit button in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -146,9 +146,9 @@ this.FeatureBackground();
             table5.AddRow(new string[] {
                         "End time",
                         "11:00"});
-#line 32
+#line 29
  testRunner.And("I input student availability with", ((string)(null)), table5, "And ");
-#line 36
+#line 33
  testRunner.And("I click the apply student availability button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
@@ -163,7 +163,7 @@ this.FeatureBackground();
             table6.AddRow(new string[] {
                         "End time",
                         "11:00"});
-#line 37
+#line 34
  testRunner.Then("I should see the student availability with", ((string)(null)), table6, "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -174,13 +174,13 @@ this.FeatureBackground();
         public virtual void AddStudentAvailabilityForMultipleDays()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add student availability for multiple days", ((string[])(null)));
-#line 43
+#line 40
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 44
+#line 41
  testRunner.Given("I have the role \'Access to student availability\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 45
+#line 42
  testRunner.And("I am viewing student availability for date \'2012-06-20\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
@@ -189,10 +189,10 @@ this.FeatureBackground();
                         "\'2012-06-20\'"});
             table7.AddRow(new string[] {
                         "\'2012-06-22\'"});
-#line 46
+#line 43
  testRunner.When("I select following days in student availability", ((string)(null)), table7, "When ");
-#line 50
- testRunner.And("I click the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 47
+ testRunner.And("I click the edit button in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -203,9 +203,9 @@ this.FeatureBackground();
             table8.AddRow(new string[] {
                         "End time",
                         "11:00"});
-#line 51
+#line 48
  testRunner.And("I input student availability with", ((string)(null)), table8, "And ");
-#line 55
+#line 52
  testRunner.And("I click the apply student availability button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
@@ -220,7 +220,7 @@ this.FeatureBackground();
             table9.AddRow(new string[] {
                         "End time",
                         "11:00"});
-#line 56
+#line 53
  testRunner.Then("I should see the student availability with", ((string)(null)), table9, "Then ");
 #line hidden
             TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
@@ -235,7 +235,7 @@ this.FeatureBackground();
             table10.AddRow(new string[] {
                         "End time",
                         "11:00"});
-#line 61
+#line 58
  testRunner.And("I should see the student availability with", ((string)(null)), table10, "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -246,18 +246,18 @@ this.FeatureBackground();
         public virtual void AddStudentAvailabilityWithEndTimeOnNextDay()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add student availability with end time on next day", ((string[])(null)));
-#line 67
+#line 64
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 68
+#line 65
  testRunner.Given("I have the role \'Access to student availability\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 69
+#line 66
  testRunner.And("I am viewing student availability for date \'2012-06-20\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 70
+#line 67
  testRunner.When("I select day \'2012-06-20\' in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 71
- testRunner.And("I click the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 68
+ testRunner.And("I click the edit button in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -271,9 +271,9 @@ this.FeatureBackground();
             table11.AddRow(new string[] {
                         "Next day",
                         "true"});
-#line 72
+#line 69
  testRunner.And("I input student availability with", ((string)(null)), table11, "And ");
-#line 77
+#line 74
  testRunner.And("I click the apply student availability button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
@@ -288,9 +288,9 @@ this.FeatureBackground();
             table12.AddRow(new string[] {
                         "End time",
                         "01:00 +1"});
-#line 78
+#line 75
  testRunner.Then("I should see the student availability with", ((string)(null)), table12, "Then ");
-#line 83
+#line 80
  testRunner.And("I should not see the student availability on \'2012-06-21\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -301,11 +301,11 @@ this.FeatureBackground();
         public virtual void CancelStudentAvailabilityEditing()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cancel student availability editing", ((string[])(null)));
-#line 85
+#line 82
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 86
+#line 83
  testRunner.Given("I have the role \'Access to student availability\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
@@ -320,14 +320,14 @@ this.FeatureBackground();
             table13.AddRow(new string[] {
                         "End time",
                         "11:00"});
-#line 87
+#line 84
  testRunner.And("I have a student availability with", ((string)(null)), table13, "And ");
-#line 92
+#line 89
  testRunner.And("I am viewing student availability for date \'2012-06-20\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 93
+#line 90
  testRunner.When("I select day \'2012-06-20\' in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 94
- testRunner.And("I click the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 91
+ testRunner.And("I click the edit button in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -338,9 +338,9 @@ this.FeatureBackground();
             table14.AddRow(new string[] {
                         "End time",
                         "15:00"});
-#line 95
+#line 92
  testRunner.And("I input student availability with", ((string)(null)), table14, "And ");
-#line 99
+#line 96
  testRunner.And("I click the close button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
@@ -355,7 +355,7 @@ this.FeatureBackground();
             table15.AddRow(new string[] {
                         "End time",
                         "11:00"});
-#line 100
+#line 97
  testRunner.Then("I should see the student availability with", ((string)(null)), table15, "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -366,11 +366,11 @@ this.FeatureBackground();
         public virtual void ReplaceStudentAvailability()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Replace student availability", ((string[])(null)));
-#line 106
+#line 103
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 107
+#line 104
  testRunner.Given("I have the role \'Access to student availability\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
@@ -385,14 +385,14 @@ this.FeatureBackground();
             table16.AddRow(new string[] {
                         "End time",
                         "11:00"});
-#line 108
+#line 105
  testRunner.And("I have a student availability with", ((string)(null)), table16, "And ");
-#line 113
+#line 110
  testRunner.And("I am viewing student availability for date \'2012-06-20\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 114
+#line 111
  testRunner.When("I select day \'2012-06-20\' in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 115
- testRunner.And("I click the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 112
+ testRunner.And("I click the edit button in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -403,9 +403,9 @@ this.FeatureBackground();
             table17.AddRow(new string[] {
                         "End time",
                         "15:00"});
-#line 116
+#line 113
  testRunner.And("I input student availability with", ((string)(null)), table17, "And ");
-#line 120
+#line 117
  testRunner.And("I click the apply student availability button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
@@ -420,7 +420,7 @@ this.FeatureBackground();
             table18.AddRow(new string[] {
                         "End time",
                         "15:00"});
-#line 121
+#line 118
  testRunner.Then("I should see the student availability with", ((string)(null)), table18, "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -431,11 +431,11 @@ this.FeatureBackground();
         public virtual void DeleteStudentAvailability()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Delete student availability", ((string[])(null)));
-#line 127
+#line 124
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 128
+#line 125
  testRunner.Given("I have the role \'Access to student availability\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
@@ -450,15 +450,15 @@ this.FeatureBackground();
             table19.AddRow(new string[] {
                         "End time",
                         "11:00"});
-#line 129
+#line 126
  testRunner.And("I have a student availability with", ((string)(null)), table19, "And ");
-#line 134
+#line 131
  testRunner.And("I am viewing student availability for date \'2012-06-20\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 135
+#line 132
  testRunner.When("I select day \'2012-06-20\' in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 136
- testRunner.And("I click the delete button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 137
+#line 133
+ testRunner.And("I click the delete button in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 134
  testRunner.And("I should not see the student availability on \'2012-06-20\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -469,18 +469,18 @@ this.FeatureBackground();
         public virtual void AddInvalidStudentAvailability()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add invalid student availability", ((string[])(null)));
-#line 139
+#line 136
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 140
+#line 137
  testRunner.Given("I have the role \'Access to student availability\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 141
+#line 138
  testRunner.And("I am viewing student availability for date \'2012-06-20\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 142
+#line 139
  testRunner.When("I select day \'2012-06-20\' in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 143
- testRunner.And("I click the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 140
+ testRunner.And("I click the edit button in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
                         "Field",
@@ -491,11 +491,11 @@ this.FeatureBackground();
             table20.AddRow(new string[] {
                         "End time",
                         "11:00"});
-#line 144
+#line 141
  testRunner.And("I input student availability with", ((string)(null)), table20, "And ");
-#line 148
+#line 145
  testRunner.And("I click the apply student availability button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 149
+#line 146
  testRunner.Then("I should see a message \'InvalidTimeValue\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

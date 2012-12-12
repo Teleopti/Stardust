@@ -31,6 +31,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public IEnumerable<IOption> ActivityOptions { get; set; }
 	}
 
+	public class StudentAvailabilityNavigationItem : SectionNavigationItem
+	{
+	}
+
 	public abstract class ToolBarItemBase
 	{
 		public string Title { get; set; }

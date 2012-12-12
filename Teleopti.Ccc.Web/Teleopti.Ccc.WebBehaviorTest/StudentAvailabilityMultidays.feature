@@ -23,12 +23,9 @@ Background:
 
 Scenario: Add student availability
 	Given I have the role 'Access to student availability'
-	#And I am in an open student availability period
-	#And I am viewing student availability
 	And I am viewing student availability for date '2012-06-20'
 	When I select day '2012-06-20' in student availability
-	#When I select an editable day without student availability
-	And I click the edit button
+	And I click the edit button in student availability
 	And I input student availability with
 	| Field      | Value |
 	| Start time | 10:30 |
@@ -47,7 +44,7 @@ Scenario: Add student availability for multiple days
 	| Value        |
 	| '2012-06-20' |
 	| '2012-06-22' |
-	And I click the edit button
+	And I click the edit button in student availability
 	And I input student availability with
 	| Field      | Value |
 	| Start time | 10:30 |
@@ -68,7 +65,7 @@ Scenario: Add student availability with end time on next day
 	Given I have the role 'Access to student availability'
 	And I am viewing student availability for date '2012-06-20'
 	When I select day '2012-06-20' in student availability
-	And I click the edit button
+	And I click the edit button in student availability
 	And I input student availability with
 	| Field      | Value |
 	| Start time | 16:30 |
@@ -91,7 +88,7 @@ Scenario: Cancel student availability editing
 	| End time   | 11:00      |
 	And I am viewing student availability for date '2012-06-20'
 	When I select day '2012-06-20' in student availability
-	And I click the edit button
+	And I click the edit button in student availability
 	And I input student availability with
 	| Field      | Value |
 	| Start time | 13:30 |
@@ -112,7 +109,7 @@ Scenario: Replace student availability
 	| End time   | 11:00      |
 	And I am viewing student availability for date '2012-06-20'
 	When I select day '2012-06-20' in student availability
-	And I click the edit button
+	And I click the edit button in student availability
 	And I input student availability with
 	| Field      | Value |
 	| Start time | 13:30 |
@@ -133,14 +130,14 @@ Scenario: Delete student availability
 	| End time   | 11:00      |
 	And I am viewing student availability for date '2012-06-20'
 	When I select day '2012-06-20' in student availability
-	And I click the delete button
+	And I click the delete button in student availability
 	And I should not see the student availability on '2012-06-20'
 
 Scenario: Add invalid student availability
 	Given I have the role 'Access to student availability'
 	And I am viewing student availability for date '2012-06-20'
 	When I select day '2012-06-20' in student availability
-	And I click the edit button
+	And I click the edit button in student availability
 	And I input student availability with
 	| Field      | Value |
 	| Start time | 13:30 |

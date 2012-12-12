@@ -16,6 +16,24 @@ using Table = TechTalk.SpecFlow.Table;
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
 	[Binding]
+	public class StudentAvailabilityPageStepDefinitions
+	{
+		[When(@"I select day '(.*)' in student availability")]
+		public void WhenISelectDayInStudentAvailability(DateTime date)
+		{
+			Pages.Pages.StudentAvailabilityPage.SelectCalendarCellByClass(date);
+		}
+
+		[When(@"I click the edit button in student availability")]
+		public void WhenIClickTheEditButtonInStudentAvailability()
+		{
+			Pages.Pages.StudentAvailabilityPage.EditButton.Focus();
+			Pages.Pages.StudentAvailabilityPage.EditButton.EventualClick();
+		}
+
+	}
+
+	[Binding]
 	public class PreferencesPageStepDefinitions
 	{
 		[When(@"I select day '(.*)'")]
