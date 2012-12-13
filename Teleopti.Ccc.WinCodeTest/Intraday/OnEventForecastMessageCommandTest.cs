@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Expect.Call(_view.SelectedSkill).Return(skill);
 			Expect.Call(() => _view.SelectSkillTab(skill));
 			Expect.Call(_view.SetupSkillTabs);
+		    Expect.Call(_view.DrawSkillGrid);
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(() => _schedulingResultLoader.ReloadForecastData(_unitOfWork));
 			Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder).Repeat.AtLeastOnce();
