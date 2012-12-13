@@ -512,7 +512,7 @@
         <DataSetName>DataSet1</DataSetName>
         <Left>0.25cm</Left>
         <Height>2.5cm</Height>
-        <Width>18.74999cm</Width>
+        <Width>18.74998cm</Width>
         <Style />
       </Tablix>
       <Tablix Name="table2">
@@ -1001,7 +1001,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(avg(Fields!relative_difference.Value),1)</Value>
+                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value),1)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1046,7 +1046,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(avg(Fields!relative_difference_incl_shrinkage.Value),1)</Value>
+                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value),1)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1296,10 +1296,12 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(avg(Fields!relative_difference.Value),1)</Value>
+                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value),1)</Value>
                               <Style>
+                                <FontStyle>Normal</FontStyle>
                                 <FontWeight>Bold</FontWeight>
-                                <Color>DimGray</Color>
+                                <TextDecoration>None</TextDecoration>
+                                <Color>#696969</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1335,7 +1337,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(avg(Fields!relative_difference_incl_shrinkage.Value),1)</Value>
+                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value),1)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1580,10 +1582,12 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(avg(Fields!relative_difference.Value),1)</Value>
+                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value),1)</Value>
                               <Style>
+                                <FontStyle>Normal</FontStyle>
                                 <FontWeight>Bold</FontWeight>
-                                <Color>DimGray</Color>
+                                <TextDecoration>None</TextDecoration>
+                                <Color>#696969</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1613,7 +1617,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(avg(Fields!relative_difference_incl_shrinkage.Value),1)</Value>
+                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value),1)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -2140,10 +2144,12 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(avg(Fields!relative_difference.Value),1)</Value>
+                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value),1)</Value>
                               <Style>
+                                <FontStyle>Normal</FontStyle>
                                 <FontWeight>Bold</FontWeight>
-                                <Color>DimGray</Color>
+                                <TextDecoration>None</TextDecoration>
+                                <Color>#696969</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2183,10 +2189,12 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(avg(Fields!relative_difference_incl_shrinkage.Value),1)</Value>
+                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value),1)</Value>
                               <Style>
+                                <FontStyle>Normal</FontStyle>
                                 <FontWeight>Bold</FontWeight>
-                                <Color>DimGray</Color>
+                                <TextDecoration>None</TextDecoration>
+                                <Color>#696969</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2336,7 +2344,7 @@
         <DataSetName>DataSet1</DataSetName>
         <Top>3.25cm</Top>
         <Left>0.25cm</Left>
-        <Height>4.88492cm</Height>
+        <Height>4.88493cm</Height>
         <Width>18.75cm</Width>
         <ZIndex>1</ZIndex>
         <Style />
@@ -2355,7 +2363,7 @@
         </Style>
       </Line>
     </ReportItems>
-    <Height>8.13492cm</Height>
+    <Height>8.13493cm</Height>
     <Style />
   </Body>
   <ReportParameters>
