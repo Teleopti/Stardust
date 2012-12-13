@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Store(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
+		public virtual void Store(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
 		{
 			_matrix = matrix;
 			foreach (var scheduleDayPro in _matrix.EffectivePeriodDays)
