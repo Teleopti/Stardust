@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
             _view.SetupSkillTabs();
             _view.SelectSkillTab(skill);
+            _view.DrawSkillGrid();
         }
     }
 }
