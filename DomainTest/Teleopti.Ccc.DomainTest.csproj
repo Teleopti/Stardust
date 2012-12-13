@@ -368,8 +368,10 @@
     <Compile Include="Scheduling\Assignment\SchedulePartStringVisualizerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessManagerTest.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitCheckerTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\BestSpotForAddingDayOffFinderTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataListCreatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataMapperTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataTest.cs" />
     <Compile Include="Scheduling\DayOffTemplateSorterTest.cs" />
     <Compile Include="Scheduling\LoadScheduleByPersonSpecificationTest.cs" />

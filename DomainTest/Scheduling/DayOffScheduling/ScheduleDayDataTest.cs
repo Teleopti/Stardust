@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		[Test]
 		public void DefaultProperties()
 		{
-			Assert.AreEqual(DateOnly.MinValue, _target.Date);
+			Assert.AreEqual(DateOnly.MinValue, _target.DateOnly);
 			Assert.IsFalse(_target.IsContractDayOff);
 			Assert.IsFalse(_target.IsDayOff);
 			Assert.IsFalse(_target.IsScheduled);

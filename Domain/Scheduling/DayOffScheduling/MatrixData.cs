@@ -6,24 +6,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
 	public interface IMatrixData
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
 		IScheduleDayData this[DateOnly key] { get; }
 		IScheduleMatrixPro Matrix { get; }
-		ReadOnlyCollection<IScheduleDayData> ScheduleDayDatas { get; }
+		ReadOnlyCollection<IScheduleDayData> ScheduleDayDataCollection { get; }
+		void Store(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
 	}
 
 	public class MatrixData : IMatrixData
 	{
-		private readonly IScheduleMatrixPro _matrix;
-		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly ISchedulingOptions _schedulingOptions;
+		private IScheduleMatrixPro _matrix;
+		private readonly IScheduleDayDataMapper _scheduleDayDataMapper;
 		private readonly IDictionary<DateOnly, IScheduleDayData> _scheduleDayDatas = new Dictionary<DateOnly, IScheduleDayData>();
 
-		public MatrixData(IScheduleMatrixPro matrix, IEffectiveRestrictionCreator effectiveRestrictionCreator, ISchedulingOptions schedulingOptions)
+		public MatrixData(IScheduleDayDataMapper scheduleDayDataMapper)
 		{
-			_matrix = matrix;
-			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_schedulingOptions = schedulingOptions;
-			initialize();
+			_scheduleDayDataMapper = scheduleDayDataMapper;
 		}
 
 		public IScheduleDayData this[DateOnly key]
@@ -36,25 +34,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			get { return _matrix; }
 		}
 
-		public ReadOnlyCollection<IScheduleDayData> ScheduleDayDatas
+		public ReadOnlyCollection<IScheduleDayData> ScheduleDayDataCollection
 		{
 			get { return new ReadOnlyCollection<IScheduleDayData>(new List<IScheduleDayData>(_scheduleDayDatas.Values)); }
 		}
 
-		private void initialize()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void Store(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
 		{
+			_matrix = matrix;
 			foreach (var scheduleDayPro in _matrix.EffectivePeriodDays)
 			{
-				IScheduleDayData toAdd = new ScheduleDayData(scheduleDayPro.Day);
-				IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
-				toAdd.IsScheduled = scheduleDay.IsScheduled();
-				SchedulePartView significant = scheduleDay.SignificantPart();
-				toAdd.IsDayOff = significant == SchedulePartView.DayOff;
-				toAdd.IsContractDayOff = significant == SchedulePartView.ContractDayOff;
-				IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay,
-				                                                                                                  _schedulingOptions);
-				toAdd.HaveRestriction = effectiveRestriction.IsRestriction;
-				_scheduleDayDatas.Add(toAdd.Date, toAdd);
+				IScheduleDayData toAdd = _scheduleDayDataMapper.Map(scheduleDayPro, schedulingOptions);
+				_scheduleDayDatas.Add(toAdd.DateOnly, toAdd);
 			}
 		}
 	}

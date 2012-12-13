@@ -16,21 +16,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		private IMatrixDataListCreator _target;
 		private IScheduleMatrixPro _matrix;
 		private IScheduleDayPro _scheduleDayPro1;
-		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private IScheduleDay _scheduleDay1;
-		private IEffectiveRestriction _effectiveRestriction;
+		private IScheduleDayDataMapper _scheduleDayDataMapper;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
 			_schedulingOptions = new SchedulingOptions();
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-			_target = new MatrixDataListCreator(_effectiveRestrictionCreator);
+			_scheduleDayDataMapper = _mocks.StrictMock<IScheduleDayDataMapper>();
+			_target = new MatrixDataListCreator(_scheduleDayDataMapper);
 			_scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
-			_scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-			_effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
 		}
 
 		[Test]
@@ -41,14 +37,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				IList<IScheduleDayPro> matrixDays = new List<IScheduleDayPro> { _scheduleDayPro1 };
 
 				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(matrixDays));
-
-				Expect.Call(_scheduleDayPro1.Day).Return(DateOnly.MinValue);
-				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
-				Expect.Call(_scheduleDay1.IsScheduled()).Return(true);
-				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
-				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay1, _schedulingOptions)).Return(
-					_effectiveRestriction);
-				Expect.Call(_effectiveRestriction.IsRestriction).Return(true);
+				Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro1, _schedulingOptions)).Return(
+					new ScheduleDayData(DateOnly.MinValue));
 			}
 
 			using (_mocks.Playback())

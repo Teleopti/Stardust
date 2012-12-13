@@ -10,19 +10,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 	public class MatrixDataListCreator : IMatrixDataListCreator
 	{
-		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
+		private readonly IScheduleDayDataMapper _effectiveRestrictionCreator;
 
-		public MatrixDataListCreator(IEffectiveRestrictionCreator effectiveRestrictionCreator)
+		public MatrixDataListCreator(IScheduleDayDataMapper effectiveRestrictionCreator)
 		{
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IMatrixData> Create(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)
 		{
 			IList<IMatrixData> result = new List<IMatrixData>();
 			foreach (var scheduleMatrixPro in matrixList)
 			{
-				result.Add(new MatrixData(scheduleMatrixPro, _effectiveRestrictionCreator, schedulingOptions));
+				IMatrixData dataHolder = new MatrixData(_effectiveRestrictionCreator);
+				dataHolder.Store(scheduleMatrixPro, schedulingOptions);
+				result.Add(dataHolder);
 			}
 
 			return result;
