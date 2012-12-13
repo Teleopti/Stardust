@@ -64,6 +64,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retList;
         }
 
+		public IList<IStudentAvailabilityDay> FindAndLock(DateOnly dateOnly, IPerson person)
+		{
+			// set lock mode to upgrade
+			ICriteria crit = Session.CreateCriteria(typeof(StudentAvailabilityDay))
+				.Add(Restrictions.Eq("RestrictionDate", dateOnly))
+				.Add(Restrictions.Eq("Person", person))
+				.SetLockMode(LockMode.Upgrade)
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.SetFetchMode("Restriction", FetchMode.Join);
+			IList<IStudentAvailabilityDay> retList = crit.List<IStudentAvailabilityDay>();
+
+			InitializeStudentDays(retList);
+			return retList;
+		}
+
         private ICriteria FilterByPeriod(DateOnlyPeriod period)
         {
             return Session.CreateCriteria(typeof(StudentAvailabilityDay))

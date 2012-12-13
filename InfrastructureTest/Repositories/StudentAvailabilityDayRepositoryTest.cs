@@ -86,6 +86,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(days[0].NotAvailable);
         }
 
+		[Test]
+		public void CanFindStudentDaysOnDayAndPersonAndLock()
+		{
+			var date = new DateOnly(2009, 2, 1);
+			IPerson person2 = PersonFactory.CreatePerson();
+			PersistAndRemoveFromUnitOfWork(person2);
+			PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
+			PersistAndRemoveFromUnitOfWork(CreateStudentAvailabilityDay(date, _person, true));
+			PersistAndRemoveFromUnitOfWork(CreateStudentAvailabilityDay(date, person2, false));
+			PersistAndRemoveFromUnitOfWork(CreateStudentAvailabilityDay(date.AddDays(1), _person, false));
+
+			IList<IStudentAvailabilityDay> days = new StudentAvailabilityDayRepository(UnitOfWork).FindAndLock(date, _person);
+			Assert.AreEqual(1, days.Count);
+
+			Assert.IsTrue(days[0].NotAvailable);
+		}
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldCreateRepositoryWithUnitOfWorkFactory()
         {
