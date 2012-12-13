@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using log4net;
 using Microsoft.Practices.Composite.Events;
@@ -246,9 +247,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         public void OnEventScheduleMessageHandler(object sender, EventMessageArgs e)
         {
             if (_view.InvokeRequired)
-            {
                 _view.BeginInvoke(new Action<object, EventMessageArgs>(OnEventScheduleMessageHandler), sender, e);
-            }
             else
             {
                 if (e.Message.ModuleId == _moduleId) return;
@@ -276,9 +275,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         public void OnEventStatisticMessageHandler(object sender, EventMessageArgs e)
         {
             if (_view.InvokeRequired)
-            {
-                _view.BeginInvoke(new Action<object,EventMessageArgs>(OnEventStatisticMessageHandler), sender, e );
-            }
+                _view.BeginInvoke(new Action<object, EventMessageArgs>(OnEventStatisticMessageHandler), sender, e);
             else
             {
                 if (e.Message.ModuleId == _moduleId) return;
@@ -312,22 +309,17 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private void loadExternalAgentStates()
         {
             using (PerformanceOutput.ForOperation("Loading the schedules before first use"))
-            {
                 _rtaStateHolder.InitializeSchedules();
-            } 
 
             if (!_realTimeAdherenceEnabled) return; //If RTA isn't enabled, we don't need the rest of the stuff...
 
-            IStatisticRepository statisticRepository = _repositoryFactory.CreateStatisticRepository();
+            var statisticRepository = _repositoryFactory.CreateStatisticRepository();
             using (PerformanceOutput.ForOperation("Read and collect agent states"))
-            {
                 _rtaStateHolder.CollectAgentStates(
-                    statisticRepository.LoadRtaAgentStates(SchedulerStateHolder.RequestedPeriod.Period(),_rtaStateHolder.ExternalLogOnPersons));
-            }
+                    statisticRepository.LoadRtaAgentStates(SchedulerStateHolder.RequestedPeriod.Period(),
+                                                           _rtaStateHolder.ExternalLogOnPersons));
             using (PerformanceOutput.ForOperation("Analyzing alarms for initial states"))
-            {
                 _rtaStateHolder.AnalyzeAlarmSituations(DateTime.UtcNow);
-            }
         }
 
         private void initializeRtaStateHolder()
@@ -347,7 +339,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         {
             using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                IRtaStateGroupRepository rtaStateGroupRepository = _repositoryFactory.CreateRtaStateGroupRepository(uow);
+                var rtaStateGroupRepository = _repositoryFactory.CreateRtaStateGroupRepository(uow);
                 rtaStateGroupRepository.Add(e.Value.StateGroup);
 
                 try
@@ -387,11 +379,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
         /// </remarks>
         public IList<ISkillStaffPeriod> PrepareSkillIntradayCollection()
         {
-            ISkill skill = _view.SelectedSkill;
-            DateTimePeriod utcDayPeriod =
+            var skill = _view.SelectedSkill;
+            var utcDayPeriod =
                 new DateOnlyPeriod(_intradayDate, _intradayDate).ToDateTimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
 
-            IList<ISkillStaffPeriod> skillStaffPeriods =
+            var skillStaffPeriods =
                 SchedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
                     new List<ISkill> { skill }, utcDayPeriod);
             if (skillStaffPeriods.Count == 0) return skillStaffPeriods;
@@ -427,7 +419,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
             try
             {
-                using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+                using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
                     reassociateCommonStateHolder(uow);
                     uow.Reassociate(_schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization);
@@ -448,9 +440,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
                 _view.ToggleSchedulePartModified(false);
                 using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-                {
                     _schedulingResultLoader.ReloadScheduleData(unitOfWork);
-                }
+                
                 _rtaStateHolder.InitializeSchedules();
                 _view.RefreshRealTimeScheduleControls();
                 _view.ToggleSchedulePartModified(true);
@@ -465,7 +456,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             if (SchedulerStateHolder.Schedules!=null &&
                 !SchedulerStateHolder.Schedules.DifferenceSinceSnapshot().IsEmpty())
             {
-                DialogResult res = _view.ShowConfirmationMessage(UserTexts.Resources.DoYouWantToSaveChangesYouMade,
+                var res = _view.ShowConfirmationMessage(UserTexts.Resources.DoYouWantToSaveChangesYouMade,
                                                            UserTexts.Resources.Save);
 
                 switch (res)
@@ -511,10 +502,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         public IEnumerable<AgentStateViewAdapter> CreateAgentStateViewAdapterCollection()
         {
-            foreach (var rtaStateGroup in _rtaStateHolder.RtaStateGroups)
-            {
-                yield return new AgentStateViewAdapter(_rtaStateHolder, rtaStateGroup);
-            }
+            return _rtaStateHolder.RtaStateGroups.Select(rtaStateGroup => new AgentStateViewAdapter(_rtaStateHolder, rtaStateGroup));
         }
 
         public void RetryHandlingMessages()

@@ -12,7 +12,9 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
@@ -20,6 +22,7 @@ using Teleopti.Ccc.Win.Common.Controls.Chart;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
 using Cursors = System.Windows.Forms.Cursors;
@@ -32,8 +35,9 @@ namespace Teleopti.Ccc.Win.Intraday
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
+    	private readonly ISendCommandToSdk _sendCommandToSdk;
 
-        private DateNavigateControl _timeNavigationControl;
+    	private DateNavigateControl _timeNavigationControl;
         private GridRowInChartSettingButtons _gridrowInChartSetting;
         private IntradayViewContent _intradayViewContent;
         private ToolStripGalleryItem _previousClickedGalleryItem;
@@ -41,12 +45,13 @@ namespace Teleopti.Ccc.Win.Intraday
         private bool _forceClose;
         private readonly IntradaySettingManager _settingManager;
 
-        public IntradayView(IEventAggregator eventAggregator, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder)
+		public IntradayView(IEventAggregator eventAggregator, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, ISendCommandToSdk sendCommandToSdk)
         {
             _eventAggregator = eventAggregator;
             _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
+			_sendCommandToSdk = sendCommandToSdk;
 
-            InitializeComponent();
+			InitializeComponent();
             if (DesignMode) return;
 
             ribbonControlAdv1.Enabled = false;
@@ -59,6 +64,9 @@ namespace Teleopti.Ccc.Win.Intraday
                 Icon = Properties.Resources.intraday;
 
             _settingManager = new IntradaySettingManager();
+
+			if (DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccVersion8))
+				toolStripExChangeForecast.Visible = true;
         }
 
         public IntradayPresenter Presenter { get; set; }
@@ -120,7 +128,7 @@ namespace Teleopti.Ccc.Win.Intraday
         private void initializeChartSettings()
         { 
             _gridrowInChartSetting = new GridRowInChartSettingButtons();
-            ToolStripControlHost chartSettingHost = new ToolStripControlHost(_gridrowInChartSetting);
+            var chartSettingHost = new ToolStripControlHost(_gridrowInChartSetting);
             toolStripExGridRowInChartButtons.Items.Add(chartSettingHost);
             _gridrowInChartSetting.SetButtons();
 
@@ -132,7 +140,7 @@ namespace Teleopti.Ccc.Win.Intraday
         {
             _timeNavigationControl = new DateNavigateControl();
             _timeNavigationControl.SelectedDateChanged += timeNavigationControl_SelectedDateChanged;
-            ToolStripControlHost hostDatepicker = new ToolStripControlHost(_timeNavigationControl);
+            var hostDatepicker = new ToolStripControlHost(_timeNavigationControl);
             toolStripExDatePicker.Items.Add(hostDatepicker);
         }
 
@@ -171,8 +179,6 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void FinalizeGallery()
         {
-
-
             _settingManager.Remove("xxDefaultView");
             
             FillGallery();
@@ -217,12 +223,10 @@ namespace Teleopti.Ccc.Win.Intraday
         private void presenter_ExternalAgentStateReceived(object sender, EventArgs e)
         {
             if (InvokeRequired)
-            {
                 BeginInvoke(new EventHandler(presenter_ExternalAgentStateReceived), sender, e);
-            }
             else
             {
-                if ((int)_lastUpdateUtc.TimeOfDay.TotalSeconds == (int)DateTime.UtcNow.TimeOfDay.TotalSeconds)
+                if ((int) _lastUpdateUtc.TimeOfDay.TotalSeconds == (int) DateTime.UtcNow.TimeOfDay.TotalSeconds)
                     return; //To avoid updates that doesn't change the content
 
                 _lastUpdateUtc = DateTime.UtcNow;
@@ -285,21 +289,15 @@ namespace Teleopti.Ccc.Win.Intraday
         private void itemRemove_Click(object sender, EventArgs e)
         {
             var item = (TupleItem)((ToolStripItem)sender).Tag;
-            //IntradaySetting intradaySetting = _intradayViewContent.Settings.GetIntradaySetting(item.Text);
 			var deletedItemIndex = teleoptiToolStripGalleryViews.Items.IndexOf(FindGalleryItemByName(item.Text));
            
             _settingManager.Remove(item.Text);
-            //_intradayViewContent.Settings.RemoveIntradaySetting(intradaySetting);
-			
             FillGallery();
             toolStripExLayouts.Refresh();
 
             //select the previous one
 			var previousOne = deletedItemIndex < 1 ? defaultView() : teleoptiToolStripGalleryViews.Items[deletedItemIndex - 1];
             
-            //intradaySetting = _intradayViewContent.Settings.GetIntradaySetting(((IntradaySetting)previousOne.Tag).Name);
-            //_intradayViewContent.LoadDockingState(intradaySetting.DockingState);
-
             var name = ((IntradaySetting) previousOne.Tag).Name;
             _settingManager.LoadDockingState(name);
 
@@ -328,9 +326,7 @@ namespace Teleopti.Ccc.Win.Intraday
             catch (DataSourceException dataSourceException)
             {
                 if (dataSourceExceptionOccurred(dataSourceException))
-                {
                     return;
-                }
             }
 
             _intradayViewContent.SelectChartView(e.Value.Text);
@@ -359,11 +355,12 @@ namespace Teleopti.Ccc.Win.Intraday
        
         private void toolStripButtonExit_Click(object sender, EventArgs e)
         {
+            // a form was canceled
             if (!CloseAllOtherForms(this))
-                return; // a form was canceled
+                return; 
 
             Close();
-            ////this canceled
+            //this canceled
             if (Visible)
                 return;
             Application.Exit();
@@ -385,22 +382,20 @@ namespace Teleopti.Ccc.Win.Intraday
             }
 
             e.Cancel = cancelClosing;
-            if (!e.Cancel && _intradayViewContent!=null)
+            if (e.Cancel || _intradayViewContent == null) return;
+            var view = ((IntradaySetting) teleoptiToolStripGalleryViews.CheckedItem.Tag).Name;
+
+            try
             {
-                string view = ((IntradaySetting) teleoptiToolStripGalleryViews.CheckedItem.Tag).Name;
-
-                try
-                {
-                    _settingManager.Persist(view);
-                }
-                catch (DataSourceException)
-                {
-                    //Suppress save of settings...
-                }
-
-                _intradayViewContent.Visible = false;
-            	_intradayViewContent.Close();
+                _settingManager.Persist(view);
             }
+            catch (DataSourceException)
+            {
+                //Suppress save of settings...
+            }
+
+            _intradayViewContent.Visible = false;
+            _intradayViewContent.Close();
         }
 
         private void toolStripButtonQuickAccessSave_Click(object sender, EventArgs e)
@@ -442,7 +437,7 @@ namespace Teleopti.Ccc.Win.Intraday
         public void DrawSkillGrid()
         {
             if (_intradayViewContent!=null)
-            _intradayViewContent.DrawSkillGrid(true);
+                _intradayViewContent.DrawSkillGrid(true);
         }
 
         public ISkill SelectedSkill
@@ -562,7 +557,7 @@ namespace Teleopti.Ccc.Win.Intraday
         private void selectDefaultView()
         {
             var selectedItem = defaultView();
-
+            
             foreach (ToolStripGalleryItem item in teleoptiToolStripGalleryViews.Items)
             {
                 if (item.Tag == _settingManager.CurrentIntradaySetting)
@@ -643,5 +638,12 @@ namespace Teleopti.Ccc.Win.Intraday
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
+		private void toolStripButtonChangeForecastClick(object sender, EventArgs e)
+		{
+			var dto = new RecalculateForecastOnSkillCommandDto();
+			_sendCommandToSdk.ExecuteCommand(dto);
+		}
+
     }
 }
