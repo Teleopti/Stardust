@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		private readonly IScheduleMatrixPro _matrix;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly ISchedulingOptions _schedulingOptions;
-		private readonly IDictionary<DateOnly, IScheduleDayData> _scheduleDayDatas;
+		private readonly IDictionary<DateOnly, IScheduleDayData> _scheduleDayDatas = new Dictionary<DateOnly, IScheduleDayData>();
 
 		public MatrixData(IScheduleMatrixPro matrix, IEffectiveRestrictionCreator effectiveRestrictionCreator, ISchedulingOptions schedulingOptions)
 		{
@@ -48,8 +48,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 				IScheduleDayData toAdd = new ScheduleDayData(scheduleDayPro.Day);
 				IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
 				toAdd.IsScheduled = scheduleDay.IsScheduled();
-				toAdd.IsDayOff = scheduleDay.SignificantPart() == SchedulePartView.DayOff;
-				toAdd.IsContractDayOff = scheduleDay.SignificantPart() == SchedulePartView.ContractDayOff;
+				SchedulePartView significant = scheduleDay.SignificantPart();
+				toAdd.IsDayOff = significant == SchedulePartView.DayOff;
+				toAdd.IsContractDayOff = significant == SchedulePartView.ContractDayOff;
 				IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay,
 				                                                                                                  _schedulingOptions);
 				toAdd.HaveRestriction = effectiveRestriction.IsRestriction;
