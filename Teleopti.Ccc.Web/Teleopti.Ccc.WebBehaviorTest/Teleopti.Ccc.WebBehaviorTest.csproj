@@ -107,6 +107,7 @@
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SignInPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\StudentAvailabilityPageStepDefinitions.cs" />
     <Compile Include="StudentAvailabilityMultidays.feature.cs">
       <DependentUpon>StudentAvailabilityMultidays.feature</DependentUpon>
       <AutoGen>True</AutoGen>

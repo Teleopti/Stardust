@@ -41,9 +41,9 @@ Scenario: Add student availability for multiple days
 	Given I have the role 'Access to student availability'
 	And I am viewing student availability for date '2012-06-20'
 	When I select following days in student availability
-	| Value        |
-	| '2012-06-20' |
-	| '2012-06-22' |
+	| Value      |
+	| 2012-06-20 |
+	| 2012-06-22 |
 	And I click the edit button in student availability
 	And I input student availability with
 	| Field      | Value |

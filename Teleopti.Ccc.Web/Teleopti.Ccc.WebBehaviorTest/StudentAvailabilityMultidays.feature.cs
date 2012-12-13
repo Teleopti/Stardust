@@ -186,9 +186,9 @@ this.FeatureBackground();
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
                         "Value"});
             table7.AddRow(new string[] {
-                        "\'2012-06-20\'"});
+                        "2012-06-20"});
             table7.AddRow(new string[] {
-                        "\'2012-06-22\'"});
+                        "2012-06-22"});
 #line 43
  testRunner.When("I select following days in student availability", ((string)(null)), table7, "When ");
 #line 47
