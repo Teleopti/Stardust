@@ -373,6 +373,7 @@
     <Compile Include="Scheduling\MasterActivityTest.cs" />
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecificationTest.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangeTrackerTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MissingDaysOffSchedulerTest.cs" />
     <Compile Include="Scheduling\PublicNoteByDateSorterTest.cs" />
     <Compile Include="Scheduling\PublicNoteTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCalculatorTest.cs" />
