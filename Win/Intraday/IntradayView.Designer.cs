@@ -203,6 +203,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripExChangeForecast.TabIndex = 1;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExChangeForecast, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripExChangeForecast, false);
+			this.toolStripExChangeForecast.Visible = false;
 			// 
 			// toolStripButtonChangeForecast
 			// 
