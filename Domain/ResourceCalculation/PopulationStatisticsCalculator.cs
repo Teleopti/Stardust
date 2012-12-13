@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Teleopti.Interfaces.Domain;
 
@@ -43,12 +44,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public PopulationStatisticsCalculator(IEnumerable<double> values, bool ignoreNonNumberValues) : this(ignoreNonNumberValues)
         {
             if (values != null)
-            {
-                foreach (double value in values)
-                {
+                foreach (var value in values)
                     AddItem(value);
-                }
-            }
             Analyze();
         }
 
@@ -114,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             CalculateStandardDeviation();
             CalculateSquareSumma();
             CalculateRootMeanSquare();
-			calculateTeleopti();
+			CalculateTeleopti();
         }
 
         public bool IgnoreNonNumberValues 
@@ -128,15 +125,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     		get { return _teleopti; }
     	}
 
-		private void calculateTeleopti()
+		private void CalculateTeleopti()
 		{
-			double absSumm = 0;
-			foreach (PopulationStatisticsData statisticData in _values)
-			{
-				absSumm += Math.Abs(statisticData.Value);
-			}
-
-			_teleopti = absSumm + _standardDeviation;
+            _teleopti = _values.Cast<PopulationStatisticsData>().Sum(statisticData => Math.Abs(statisticData.Value)) + _standardDeviation;
 		}
 
     	/// <summary>
@@ -152,12 +143,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// </summary>
         protected void CalculateSumma()
         {
-            double summa = 0;
-            foreach (PopulationStatisticsData statisticData in _values)
-            {
-                summa += statisticData.Value;
-            }
-            _summa = summa;
+            _summa = _values.Cast<PopulationStatisticsData>().Sum(statisticData => statisticData.Value);
         }
 
         /// <summary>
@@ -165,12 +151,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// </summary>
         protected void CalculateDeviationSquareFromAverageSumma()
         {
-            double summa = 0;
-            foreach (PopulationStatisticsData statisticData in _values)
-            {
-                summa += statisticData.DeviationSquareFromAverage;
-            }
-            _deviationSquareFromAverageSumma = summa;
+            _deviationSquareFromAverageSumma = _values.Cast<PopulationStatisticsData>().Sum(statisticData => statisticData.DeviationSquareFromAverage);
         }
 
         /// <summary>
@@ -178,12 +159,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// </summary>
         protected void CalculateSquareSumma()
         {
-            double summa = 0;
-            foreach (PopulationStatisticsData statisticData in _values)
-            {
-                summa += Math.Pow(statisticData.Value, 2d);
-            }
-            _squareSumma = summa;
+            _squareSumma = _values.Cast<PopulationStatisticsData>().Sum(statisticData => Math.Pow(statisticData.Value, 2d));
         }
 
         /// <summary>
@@ -214,8 +190,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder(); 
-            foreach (IPopulationStatisticsData statisticsData in _values)
+            var builder = new StringBuilder(); 
+            foreach (var statisticsData in _values)
             {
                 builder.Append(statisticsData.Value.ToString(CultureInfo.CurrentCulture));
                 builder.Append(";");

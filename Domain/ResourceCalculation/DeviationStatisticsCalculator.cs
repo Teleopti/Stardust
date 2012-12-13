@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (expectedList.Count != realList.Count)
                 throw new ArgumentException("The count of the input arrays are not equals.");
 
-            for (int i = 0; i < expectedList.Count; i++)
+            for (var i = 0; i < expectedList.Count; i++)
             {
                 AddItem(expectedList[i], realList[i]);
             }
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <param name="realValue">The real value.</param>
         public void AddItem(double expectedValue, double realValue)
         {
-            DeviationStatisticData item = new DeviationStatisticData(expectedValue, realValue);
+            var item = new DeviationStatisticData(expectedValue, realValue);
             //_items.Add(item);
             AbsoluteStatisticsCalculator.AddItem(item.AbsoluteDeviation);
             if (!item.RelativeDeviation.Equals(double.NaN))
