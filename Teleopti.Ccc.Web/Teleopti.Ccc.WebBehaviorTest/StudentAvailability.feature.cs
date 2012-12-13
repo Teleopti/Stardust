@@ -225,9 +225,11 @@ this.ScenarioSetup(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Add student availability")]
+        [NUnit.Framework.IgnoreAttribute()]
         public virtual void AddStudentAvailability()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add student availability", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add student availability", new string[] {
+                        "ignore"});
 #line 59
 this.ScenarioSetup(scenarioInfo);
 #line 60
@@ -252,9 +254,11 @@ this.ScenarioSetup(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Add student availability with end time on next day")]
+        [NUnit.Framework.IgnoreAttribute()]
         public virtual void AddStudentAvailabilityWithEndTimeOnNextDay()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add student availability with end time on next day", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add student availability with end time on next day", new string[] {
+                        "ignore"});
 #line 69
 this.ScenarioSetup(scenarioInfo);
 #line 70
@@ -279,9 +283,11 @@ this.ScenarioSetup(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Clicking edit student availability")]
+        [NUnit.Framework.IgnoreAttribute()]
         public virtual void ClickingEditStudentAvailability()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Clicking edit student availability", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Clicking edit student availability", new string[] {
+                        "ignore"});
 #line 79
 this.ScenarioSetup(scenarioInfo);
 #line 80
@@ -306,9 +312,11 @@ this.ScenarioSetup(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Cancelling student availability editing")]
+        [NUnit.Framework.IgnoreAttribute()]
         public virtual void CancellingStudentAvailabilityEditing()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cancelling student availability editing", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cancelling student availability editing", new string[] {
+                        "ignore"});
 #line 89
 this.ScenarioSetup(scenarioInfo);
 #line 90
@@ -333,9 +341,11 @@ this.ScenarioSetup(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Editing student availability")]
+        [NUnit.Framework.IgnoreAttribute()]
         public virtual void EditingStudentAvailability()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Editing student availability", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Editing student availability", new string[] {
+                        "ignore"});
 #line 99
 this.ScenarioSetup(scenarioInfo);
 #line 100
@@ -362,9 +372,11 @@ this.ScenarioSetup(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Deleting student availability")]
+        [NUnit.Framework.IgnoreAttribute()]
         public virtual void DeletingStudentAvailability()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Deleting student availability", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Deleting student availability", new string[] {
+                        "ignore"});
 #line 110
 this.ScenarioSetup(scenarioInfo);
 #line 111
@@ -387,9 +399,11 @@ this.ScenarioSetup(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Adding invalid student availability values")]
+        [NUnit.Framework.IgnoreAttribute()]
         public virtual void AddingInvalidStudentAvailabilityValues()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Adding invalid student availability values", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Adding invalid student availability values", new string[] {
+                        "ignore"});
 #line 119
 this.ScenarioSetup(scenarioInfo);
 #line 120

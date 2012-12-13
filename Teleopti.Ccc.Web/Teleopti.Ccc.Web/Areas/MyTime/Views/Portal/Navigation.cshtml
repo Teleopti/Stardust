@@ -104,23 +104,32 @@
 				@if (navSection is StudentAvailabilityNavigationItem)
 				{
 					<div id="Student-availability-edit-form" class="displaynone">
-						<div class="time-limitation-label icon leftarrow"></div>
-						<select id="Student-availability-start-time" class="time-input" data-bind="combobox: StartTime" title="@Resources.StartTime">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in times)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-						<div class="time-limitation-label icon rightarrow"></div>
-						<select id="Student-availability-end-time" class="time-input" data-bind="combobox: EndTime" title="@Resources.EndTime">
-							<option value="">&nbsp;</option>
-							@foreach (var timeSpan in times)
-							{
-								<option value="@timeSpan.Value">@timeSpan.Text</option>
-							}
-						</select>
-						<input type="checkbox" id="Student-availability-end-time-next-day" class="student-availability-next-day-checkbox" data-bind="checked: EndTimeNextDay" title="@Resources.NextDay" />
+						<div>
+							<div class="time-limitation-label icon leftarrow"></div>
+						
+							<select id="Student-availability-start-time" class="time-input" data-bind="combobox: StartTime" title="@Resources.StartTime">
+								<option value="">&nbsp;</option>
+								@foreach (var timeSpan in times)
+								{
+									<option value="@timeSpan.Value">@timeSpan.Text</option>
+								}
+							</select>
+						</div>
+						<div>
+							<div class="time-limitation-label icon rightarrow"></div>
+						
+							<select id="Student-availability-end-time" class="time-input" data-bind="combobox: EndTime" title="@Resources.EndTime">
+								<option value="">&nbsp;</option>
+								@foreach (var timeSpan in times)
+								{
+									<option value="@timeSpan.Value">@timeSpan.Text</option>
+								}
+							</select>
+							<input type="checkbox" id="Student-availability-end-time-next-day" class="student-availability-next-day-checkbox" data-bind="checked: NextDay" title="@Resources.NextDay" />
+						</div>
+						<div class="mt5">
+							<button id="Student-availability-apply" class="mr25 mt10 mb5 floatright">@Resources.Apply</button>
+						</div>
 					</div>
 				}
 
