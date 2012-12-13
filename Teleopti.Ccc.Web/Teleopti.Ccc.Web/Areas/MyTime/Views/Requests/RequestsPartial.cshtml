@@ -28,7 +28,6 @@
 			margin-bottom: 0.1em;
 		}
 		
-		
 		.request-subject2
 		{
 			border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -63,7 +62,6 @@
 			padding-left: 20px;
 		}
 	
-		
 		.request-text2
 		{
 			padding-top: 0.3em;
@@ -72,6 +70,9 @@
 		.request-list2
 		{
 			width: 483px;
+		}
+		.apa {
+			
 		}
 		
 .request-data-type2 {
@@ -86,8 +87,12 @@
 	<a onclick="$('#Request-add-shift-trade').show();">xxxLägg till shift trade request</a>
 	@Html.Partial("NewShiftTradeRequest")
 	
-	<div data-bind="foreach: requests" class="request-list2">
-		<div class="ui-corner-all request-item2 relative">
+	<div id="request-list" data-bind="foreach: requests" class="request-list2">
+		<div class="ui-corner-all request-item2 relative" data-bind="click: ShowDetails, event: { mouseover: toggle, mouseout: toggle }" >
+			<div data-bind="text: isMouseOver"></div>
+			<div class="request-arrow-right" data-bind="fadeTo: isMouseOver">
+				<img src="@Url.Content("~/Areas/MyTime/Content/Images/arrow-right.png")"/>   
+			</div>
 			<div >
 				<button class="request-delete-button icon" title="@Resources.Delete" data-bind="click: $parent.Delete" />
 			</div>
@@ -108,22 +113,20 @@
 			</div>
 			<div class="request-text2" data-bind="text: Text">
 			</div>
-			<div class="request-connector">
-			</div>
+			
 		</div>
 	</div>
 	
-
 
 	<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all">
 		<input type="hidden" id="Request-detail-entityid" />
 		<div id="Schedule-addRequest-title" class="pdb5">
 			<span id="Text-request-tab" class="selectable-tab selected-tab" data-bind="visible: TextRequestTabVisible">@Resources.TextRequest</span>
 			@if (Model.RequestPermission.AbsenceRequestPermission)
-	{
+			{
 				<span data-bind="visible: TabSeparatorVisible">|</span>
 				<span id="Absence-request-tab" class="selectable-tab" data-bind="visible: AbsenceRequestTabVisible">@Resources.AbsenceRequest</span>
-	}
+			}
 		</div>
 		<div class="edit-module-element">
 			<span id="Request-detail-deny-reason"></span>
@@ -143,9 +146,9 @@
 			<div class="edit-module-element floatleft">
 				<select id="Absence-type" class="absence-input combobox">
 					@foreach (var absenceType in Model.AbsenceTypes)
-	  {
+					{
 						<option value="@Html.AttributeEncode(absenceType.Name)" typeid="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
-	  }
+					}
 				</select>
 			</div>
 		</div>
@@ -153,27 +156,27 @@
 			<span class="edit-module-element floatleft">
 				<input id="Request-detail-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
 			</span><span id="Request-detail-fromTime" class="edit-module-element floatleft">
-				<label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
-				<select id="Request-detail-fromTime-input" class="time-input combobox">
-					@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
-	  {
-						<option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-	  }
-				</select>
-			</span>
+				       <label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
+				       <select id="Request-detail-fromTime-input" class="time-input combobox">
+					       @foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
+					       {
+						       <option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+					       }
+				       </select>
+			       </span>
 		</div>
 		<div>
 			<span class="edit-module-element clearleftfloat floatleft">
 				<input id="Request-detail-toDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()"  />
 			</span><span id="Request-detail-toTime" class="edit-module-element floatleft">
-				<label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
-				<select id="Request-detail-toTime-input" class="time-input combobox">
-					@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
-	  {
-						<option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-	  }
-				</select>
-			</span>
+				       <label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
+				       <select id="Request-detail-toTime-input" class="time-input combobox">
+					       @foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
+					       {
+						       <option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+					       }
+				       </select>
+			       </span>
 		</div>
 		<span class="edit-module-element clearleftfloat floatleft">
 			<input type="checkbox" id="Fullday-check" data-bind="checked: IsFullDay" />
@@ -185,6 +188,7 @@
 		<div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat">
 		</div>
 	</div>
+
 	<div class="request-list">
 		<div id="friendly-message" class="friendly-message ui-corner-all floatleft" style="display: none;">
 			@Resources.NoRequestsFound

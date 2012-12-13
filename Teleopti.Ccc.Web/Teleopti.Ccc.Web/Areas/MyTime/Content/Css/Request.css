@@ -36,6 +36,14 @@
 	height: 5em;
 }
 
+.request-arrow-right
+{
+	position: relative;
+	top:23px;
+	left:20px;
+	float: right;
+}
+
 .no-rgba .request-body-inner li {
 	 border: 1px solid #dfdfdf;
 }

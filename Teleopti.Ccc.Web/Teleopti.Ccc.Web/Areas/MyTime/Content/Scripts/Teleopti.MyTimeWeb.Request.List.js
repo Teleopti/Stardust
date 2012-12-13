@@ -12,6 +12,28 @@
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
 
+	ko.bindingHandlers.fadeTo = {
+		init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+			//todo
+		},
+		update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+			var value = valueAccessor(), allBindings = allBindingsAccessor();
+
+			var valueUnwrapped = ko.utils.unwrapObservable(value);
+
+			var fadeInOpacity = allBindings.fadeInOpacity || 1.0;
+			var fadeOutOpacity = allBindings.fadeOutOpacity || 0.1;
+			var fadeInDuration = allBindings.fadeInDuration || 300;
+			var fadeOutDuration = allBindings.fadeOutDuration || 300;
+
+			$(element).stop();
+			if (valueUnwrapped == true)
+				$(element).animate({ opacity: fadeInOpacity }, fadeInDuration);
+			else
+				$(element).animate({ opacity: fadeOutOpacity }, fadeOutDuration);
+		}
+	};
+
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var readyForInteraction = function () { };
 	var completelyLoaded = function () { };
@@ -30,6 +52,29 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.Text = ko.observable(request.Text);
 		self.Link = ko.observable(request.Link.href);
 		self.Id = ko.observable(request.Id);
+
+		self.ShowDetails = function () {
+			self.showRequest2();
+		};
+
+		self.showRequest2 = function () {
+			ajax.Ajax({
+				url: self.Link(),
+				dataType: "json",
+				type: 'GET',
+				success: function (data, textStatus, jqXHR) {
+					//TODO, fix height........
+					//Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, listItem.position().top - 30);
+					Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, 300);
+				}
+			});
+		};
+
+		self.toggle = function () {
+			self.isMouseOver(!self.isMouseOver());
+		};
+
+		self.isMouseOver = ko.observable(true);
 	}
 
 	function RequestPageViewModel(requestDetailViewModel) {
@@ -88,15 +133,12 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.AddRequest = function (request) {
 			var update = function (r) { self.requests.unshift(new RequestItemViewModel(r)); };
 			ko.utils.arrayForEach(self.requests(), function (requestVm) {
-				console.log(request);
-				console.log(requestVm);
 				if (requestVm.Id() == request.Id) {
 					update = function (r) { requestVm.Initialize(r); };
 				}
 			});
 			update(request);
 		};
-
 	}
 
 	ko.utils.extend(RequestItemViewModel.prototype, {
@@ -112,7 +154,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			self.Id(data.Id);
 		}
 	});
-
 
 	function _initScrollPaging() {
 		_loadAPage();
@@ -202,8 +243,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				_loadAPageIfRequired();
 			});
 	}
-
-
 
 	function _drawRequests(requests) {
 		for (var i = 0; i < requests.length; i++) {
