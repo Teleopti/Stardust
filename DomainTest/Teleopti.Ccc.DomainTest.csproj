@@ -370,6 +370,7 @@
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitCheckerTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\BestSpotForAddingDayOffFinderTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataListCreatorTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixDataListInSteadyStateTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataMapperTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataTest.cs" />

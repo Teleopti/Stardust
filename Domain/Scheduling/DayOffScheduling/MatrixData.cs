@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	{
 		private IScheduleMatrixPro _matrix;
 		private readonly IScheduleDayDataMapper _scheduleDayDataMapper;
-		private readonly IDictionary<DateOnly, IScheduleDayData> _scheduleDayDatas = new Dictionary<DateOnly, IScheduleDayData>();
+		protected IDictionary<DateOnly, IScheduleDayData> ScheduleDayDataDictionary = new Dictionary<DateOnly, IScheduleDayData>();
 
 		public MatrixData(IScheduleDayDataMapper scheduleDayDataMapper)
 		{
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 		public IScheduleDayData this[DateOnly key]
 		{
-			get { return _scheduleDayDatas[key]; }
+			get { return ScheduleDayDataDictionary[key]; }
 		}
 
 		public IScheduleMatrixPro Matrix
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 		public ReadOnlyCollection<IScheduleDayData> ScheduleDayDataCollection
 		{
-			get { return new ReadOnlyCollection<IScheduleDayData>(new List<IScheduleDayData>(_scheduleDayDatas.Values)); }
+			get { return new ReadOnlyCollection<IScheduleDayData>(new List<IScheduleDayData>(ScheduleDayDataDictionary.Values)); }
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			foreach (var scheduleDayPro in _matrix.EffectivePeriodDays)
 			{
 				IScheduleDayData toAdd = _scheduleDayDataMapper.Map(scheduleDayPro, schedulingOptions);
-				_scheduleDayDatas.Add(toAdd.DateOnly, toAdd);
+				ScheduleDayDataDictionary.Add(toAdd.DateOnly, toAdd);
 			}
 		}
 	}

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
 			dataList[new DateOnly(2013, 1, 3)].IsContractDayOff = true;
 
-			DateOnly? result = _target.Find(dataList);
+			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
 			Assert.AreEqual(new DateOnly(2013, 1, 2), result.Value);
 		}
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			dataList[new DateOnly(2013, 1, 1)].IsContractDayOff = true;
 			dataList[new DateOnly(2013, 1, 5)].IsContractDayOff = true;
 
-			DateOnly? result = _target.Find(dataList);
+			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
 			Assert.AreEqual(new DateOnly(2013, 1, 4), result.Value);
 		}
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			dataList[new DateOnly(2013, 1, 9)].IsContractDayOff = true;
 			dataList[new DateOnly(2013, 1, 10)].IsContractDayOff = true;
 
-			DateOnly? result = _target.Find(dataList);
+			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
 			Assert.IsFalse(result.HasValue);
 		}
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		public void EmptyListShouldReturnNull()
 		{
 			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
-			DateOnly? result = _target.Find(dataList);
+			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
 			Assert.IsFalse(result.HasValue);
 		}
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			dataList[new DateOnly(2013, 1, 2)].IsContractDayOff = true;
 			dataList[new DateOnly(2013, 1, 5)].IsContractDayOff = true;
 
-			DateOnly? result = _target.Find(dataList);
+			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
 			Assert.AreEqual(new DateOnly(2013, 1, 4), result.Value);
 		}
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			dataList[new DateOnly(2013, 1, 5)].IsContractDayOff = true;
 			dataList[new DateOnly(2013, 1, 7)].IsContractDayOff = true;
 
-			DateOnly? result = _target.Find(dataList);
+			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
 			Assert.AreEqual(new DateOnly(2013, 1, 6), result.Value);
 		}
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			dataList[new DateOnly(2013, 1, 5)].IsContractDayOff = true;
 			dataList[new DateOnly(2013, 1, 7)].IsContractDayOff = true;
 
-			DateOnly? result = _target.Find(dataList);
+			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
 			Assert.AreEqual(new DateOnly(2013, 1, 6), result.Value);
 		}
 
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			dataList[new DateOnly(2013, 1, 7)].HaveRestriction = true;
 			dataList[new DateOnly(2013, 1, 8)].IsContractDayOff = true;
 
-			DateOnly? result = _target.Find(dataList);
+			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
 			Assert.AreEqual(new DateOnly(2013, 1, 3), result.Value);
 		}
 
