@@ -353,7 +353,7 @@
       <DependentUpon>PreferencesPeriodFeedback.feature</DependentUpon>
     </Compile>
     <Compile Include="PreferencesScheduleStepDefinition.cs" />
-    <Compile Include="PreferencesFeedback2.feature.cs">
+    <Compile Include="PreferencesFeedback.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedback.feature</DependentUpon>
@@ -677,7 +677,7 @@
     </None>
     <None Include="PreferencesFeedback.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>PreferencesFeedback2.feature.cs</LastGenOutput>
+      <LastGenOutput>PreferencesFeedback.feature.cs</LastGenOutput>
     </None>
     <None Include="WeekSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
