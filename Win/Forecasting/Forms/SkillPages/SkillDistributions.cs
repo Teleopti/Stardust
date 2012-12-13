@@ -43,14 +43,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 
         public void Populate(IAggregateRoot aggregateRoot)
         {
-            ISkill skill = aggregateRoot as ISkill;
-            ISkillDayTemplate skillDayTemplate = (ISkillDayTemplate) skill.GetTemplate(TemplateTarget.Skill, DayOfWeek.Monday);
+            var skill = aggregateRoot as ISkill;
+            var skillDayTemplate = (ISkillDayTemplate) skill.GetTemplate(TemplateTarget.Skill, DayOfWeek.Monday);
             if (skillDayTemplate.TemplateSkillDataPeriodCollection.Count > 0)
             {
                 ITemplateSkillDataPeriod skillDataPeriodTemplate = skillDayTemplate.TemplateSkillDataPeriodCollection[0];
 
                 serviceLevelPercentTextBox.DoubleValue =
                     skillDataPeriodTemplate.ServiceAgreement.ServiceLevel.Percent.Value;
+                serviceLevelPercentTextBox.DefaultValue = skillDataPeriodTemplate.ServiceAgreement.ServiceLevel.Percent.Value * 100;
                 integerTextBoxServiceLevelSeconds.IntegerValue =
                     Convert.ToInt32(skillDataPeriodTemplate.ServiceAgreement.ServiceLevel.Seconds);
                 minimumOccupancyPercentTextBox.DoubleValue = skillDataPeriodTemplate.ServiceAgreement.MinOccupancy.Value;
@@ -70,30 +71,32 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 
         public bool Depopulate(IAggregateRoot aggregateRoot)
         {
-            ISkill skill = aggregateRoot as ISkill;
+            var skill = aggregateRoot as ISkill;
 
-            double serviceLevelPercent =
-                Convert.ToDouble(serviceLevelPercentTextBox.DoubleValue);
+            Percent percent;
+            if (!Percent.TryParse(serviceLevelPercentTextBox.Text, out percent)) return false;
 
-            ServiceLevel serviceLevel = new ServiceLevel(new Percent(serviceLevelPercent),
+            var serviceLevel = new ServiceLevel(percent,
                                                          Convert.ToDouble(
                                                              integerTextBoxServiceLevelSeconds.IntegerValue,
                                                              CultureInfo.CurrentCulture));
-            ServiceAgreement serviceAgreement = new ServiceAgreement();
-            serviceAgreement.ServiceLevel = serviceLevel;
-            serviceAgreement.MinOccupancy = new Percent(minimumOccupancyPercentTextBox.DoubleValue);
-            serviceAgreement.MaxOccupancy = new Percent(maximunOccupancyPercentTextBox.DoubleValue);
+            var serviceAgreement = new ServiceAgreement
+                                       {
+                                           ServiceLevel = serviceLevel,
+                                           MinOccupancy = new Percent(minimumOccupancyPercentTextBox.DoubleValue),
+                                           MaxOccupancy = new Percent(maximunOccupancyPercentTextBox.DoubleValue)
+                                       };
 
-            int staffMin = (int) integerTextBoxMinimumAgents.IntegerValue;
-            int staffMax = (int) integerTextBoxMaximumAgents.IntegerValue;
+            var staffMin = (int) integerTextBoxMinimumAgents.IntegerValue;
+            var staffMax = (int) integerTextBoxMaximumAgents.IntegerValue;
 
-            SkillPersonData skillPersonData = new SkillPersonData(staffMin, staffMax);
+            var skillPersonData = new SkillPersonData(staffMin, staffMax);
 
             //Percent shrinkage =
             //    new Percent(Convert.ToDouble(integerTextBoxShrinkage.IntegerValue, CultureInfo.CurrentCulture)/100);
-            Percent shrinkage = new Percent(shrinkagePercentTextBox.DoubleValue);
+            var shrinkage = new Percent(shrinkagePercentTextBox.DoubleValue);
 
-            Percent efficiency = new Percent(efficiencyPercentTextBox.DoubleValue);
+            var efficiency = new Percent(efficiencyPercentTextBox.DoubleValue);
 
             DateTime startDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone);
             startDateTime = startDateTime.Add(skill.MidnightBreakOffset);
@@ -101,18 +104,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             DateTime endDateTime = TimeZoneInfo.ConvertTimeToUtc(
                 SkillDayTemplate.BaseDate.AddDays(1), skill.TimeZone);
             endDateTime = endDateTime.Add(skill.MidnightBreakOffset);
-            DateTimePeriod timePeriod = new DateTimePeriod(startDateTime, endDateTime);
+            var timePeriod = new DateTimePeriod(startDateTime, endDateTime);
 
-            ITemplateSkillDataPeriod templateSkillDataPeriod = new TemplateSkillDataPeriod(serviceAgreement,
+            var templateSkillDataPeriod = new TemplateSkillDataPeriod(serviceAgreement,
                                                                                           skillPersonData, timePeriod);
             templateSkillDataPeriod.Shrinkage = shrinkage;
             templateSkillDataPeriod.Efficiency = efficiency;
-            IList<ITemplateSkillDataPeriod> skillDataPeriods = new List<ITemplateSkillDataPeriod>();
+            var skillDataPeriods = new List<ITemplateSkillDataPeriod>();
             skillDataPeriods.Add((ITemplateSkillDataPeriod) templateSkillDataPeriod.Clone());
 
             foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof (DayOfWeek)))
             {
-                ISkillDayTemplate skillDayTemplate =
+                var skillDayTemplate =
                     (ISkillDayTemplate) skill.GetTemplate(TemplateTarget.Skill, dayOfWeek);
                 
                 skillDayTemplate.SetSkillDataPeriodCollection(new List<ITemplateSkillDataPeriod>
