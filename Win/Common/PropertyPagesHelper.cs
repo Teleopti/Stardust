@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Win.Budgeting;
 using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
@@ -91,7 +90,7 @@ namespace Teleopti.Ccc.Win.Common
             list.Add(new SkillGeneral(abstractPropertyPages));
             list.Add(new SkillThresholds());
             list.Add(new SkillOptimisation());
-            if (forWizard && !typeof(SkillTypePhone).IsInstanceOfType(skillType))
+            if (forWizard && !(skillType is SkillTypePhone))
             {
                 list.Add(new SkillEmailDistributions());
             }
