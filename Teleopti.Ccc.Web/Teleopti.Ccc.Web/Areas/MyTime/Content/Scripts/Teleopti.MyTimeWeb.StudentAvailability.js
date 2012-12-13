@@ -20,7 +20,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	var editStudentAvailabilityFormViewModel = null;
 
 	function _setEditError(message) {
-		$('#StudentAvailability-edit-error').html(message || '');
+		editStudentAvailabilityFormViewModel.ValidationError(message || '');
 	}
 
 	function _layout() {
@@ -87,7 +87,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		if (data.AvailableTimeSpan != null)
 			span.text(data.AvailableTimeSpan);
 
-		calendarDay.addClass('unvalidated');
+//		calendarDay.addClass('unvalidated');
 	};
 
 	function _initToolbarButtons() {
@@ -159,7 +159,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 
 		var deleteButton = $('#StudentAvailability-delete-button');
 		deleteButton.removeAttr('disabled');
-		deleteButton.click(function() {
+		deleteButton.click(function () {
 			_deleteStudentAvailability();
 		});
 	}
@@ -181,12 +181,12 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	function _setStudentAvailability(studentAvailability) {
 		//		var promises = [];
 
-		//		addExtendedPreferenceFormViewModel.ValidationError('');
+		editStudentAvailabilityFormViewModel.ValidationError('');
 
-		//		var validationErrorCallback = function (data) {
-		//			var message = data.Errors.join('</br>');
-		//			addExtendedPreferenceFormViewModel.ValidationError(message);
-		//		};
+		var validationErrorCallback = function(data) {
+			var message = data.Errors.join('</br>');
+			editStudentAvailabilityFormViewModel.ValidationError(message);
+		};
 		$('#StudentAvailability-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');

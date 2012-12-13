@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "StudentAvailability-period")]
 		public Div StudentAvailabilityPeriod;
 
-		[FindBy(Id = "StudentAvailability-edit-error")]
-		public Div ValidationErrorText;
+		[FindBy(Id = "Student-availability-apply-error")]
+		public Div ValidationError;
 
 		[FindBy(Id = "StudentAvailabilityDateRangeSelector")] public Div DateRangeSelectorContainer { get; set; }
 		[FindBy(Id = "StudentAvailabilityScheduleDatePicker")] public DatePicker DatePicker { get; set; }

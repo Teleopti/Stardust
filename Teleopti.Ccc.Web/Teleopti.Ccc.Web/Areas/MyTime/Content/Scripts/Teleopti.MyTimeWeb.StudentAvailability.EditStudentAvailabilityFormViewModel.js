@@ -7,9 +7,9 @@
 Teleopti.MyTimeWeb.StudentAvailability.EditStudentAvailabilityFormViewModel = function () {
 	var self = this;
 
-	this.StartTime = ko.observable();
-	this.EndTime = ko.observable();
-	this.NextDay = ko.observable();
+	this.StartTime = ko.observable('');
+	this.EndTime = ko.observable('');
+	this.NextDay = ko.observable(false);
 
 	this.ValidationError = ko.observable();
 };

@@ -207,9 +207,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a message saying I have given an invalid time value")]
 		public void ThenIShouldSeeAMessageSayingIHaveGivenAnInvalidTimeValue()
 		{
-			EventualAssert.That(() => _page.ValidationErrorText.Exists, Is.True);
-			EventualAssert.That(() => _page.ValidationErrorText.InnerHtml, Is.StringContaining(string.Format(Resources.InvalidTimeValue, "not-a")));
-			EventualAssert.That(() => _page.ValidationErrorText.InnerHtml, Is.StringContaining(string.Format(Resources.InvalidTimeValue, "-time")));
+			EventualAssert.That(() => _page.ValidationError.Exists, Is.True);
+			EventualAssert.That(() => _page.ValidationError.InnerHtml, Is.StringContaining(string.Format(Resources.InvalidTimeValue, "not-a")));
+			EventualAssert.That(() => _page.ValidationError.InnerHtml, Is.StringContaining(string.Format(Resources.InvalidTimeValue, "-time")));
 		}
 
 		private void calendarShouldDisplayPeriod(DateOnlyPeriod displayedPeriod)

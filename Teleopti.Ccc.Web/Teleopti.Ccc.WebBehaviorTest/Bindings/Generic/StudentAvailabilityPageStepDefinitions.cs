@@ -102,6 +102,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			if (fields.EndTime != null) EventualAssert.That(() => studentAvailabilityForDate.InnerHtml, Is.StringContaining(fields.EndTime));
 		}
 
+		[Then(@"I should see a message '(.*)'")]
+		public void ThenIShouldSeeAMessage(string message)
+		{
+			EventualAssert.That(() => Pages.Pages.StudentAvailabilityPage.EditStudentAvailabilityPanel.Exists, Is.True);
+			EventualAssert.That(() => Pages.Pages.StudentAvailabilityPage.ValidationError.Text, Is.StringStarting(string.Format(Resources.InvalidTimeValue, Resources.EndTime)));
+		}
+
 		private class SingleValue
 		{
 			public DateTime Value { get; set; }

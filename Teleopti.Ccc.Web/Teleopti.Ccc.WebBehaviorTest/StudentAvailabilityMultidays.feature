@@ -143,4 +143,4 @@ Scenario: Add invalid student availability
 	| Start time | 13:30 |
 	| End time   | 11:00 |
 	And I click the apply student availability button
-	#Then I should see a message 'InvalidTimeValue'
+	Then I should see a message 'InvalidTimeValue'

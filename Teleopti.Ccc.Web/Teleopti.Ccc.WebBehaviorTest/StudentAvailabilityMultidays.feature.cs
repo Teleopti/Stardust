@@ -495,6 +495,8 @@ this.FeatureBackground();
  testRunner.And("I input student availability with", ((string)(null)), table20, "And ");
 #line 145
  testRunner.And("I click the apply student availability button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 146
+ testRunner.Then("I should see a message \'InvalidTimeValue\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
