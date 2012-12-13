@@ -709,8 +709,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>::tasklist /fi "imagename eq iexplore.exe*" | FIND "INFO: No tasks" &gt; NUL
-::if %25errorlevel%25 NEQ 0 taskkill /IM iexplore.exe* /F</PreBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)packages\SpecFlow.1.9.0\tools\specflow.exe" generateall Teleopti.Ccc.WebBehaviorTest.csproj</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
