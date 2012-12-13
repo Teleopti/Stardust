@@ -641,7 +641,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
 		private void toolStripButtonChangeForecastClick(object sender, EventArgs e)
 		{
-			var dto = new RecalculateForecastOnSkillCommandDto();
+			var dto = new RecalculateForecastOnSkillCommandDto { ScenarioId = Presenter.RequestedScenario.Id.GetValueOrDefault(), SkillId = SelectedSkill.Id.GetValueOrDefault() };
 			_sendCommandToSdk.ExecuteCommand(dto);
 		}
 

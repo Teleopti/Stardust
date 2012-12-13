@@ -33,6 +33,10 @@ namespace Teleopti.Interfaces.Messages.General
 		/// </summary>
 		public Guid OwnerPersonId { get; set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		public Guid ScenarioId { get; set; }
 
 		// add information how the forecast should change
 		// percent up/down or some other way

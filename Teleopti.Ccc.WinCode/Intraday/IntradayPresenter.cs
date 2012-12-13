@@ -484,7 +484,12 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return !SchedulerStateHolder.RequestedPeriod.Period().Contains(DateTime.UtcNow); }
         }
 
-        public event EventHandler ExternalAgentStateReceived;
+    	public IScenario RequestedScenario
+    	{
+			get { return SchedulerStateHolder.RequestedScenario; }
+    	}
+
+    	public event EventHandler ExternalAgentStateReceived;
 
         public void RefreshAgentStates(DateTime timestamp, TimeSpan refreshRate)
         {

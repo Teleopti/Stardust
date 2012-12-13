@@ -1,41 +1,49 @@
 ﻿using System;
+using System.Collections.Generic;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
-using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
 	public class RecalculateForecastOnSkillConsumer:  ConsumerOf<RecalculateForecastOnSkillMessage>
 	{
-		private readonly static ILog Logger = LogManager.GetLogger(typeof(RecalculateForecastOnSkillConsumer));
-		private readonly IMessageBroker _messageBroker;
+		private readonly IScenarioRepository _scenarioRepository;
+		private readonly ISkillDayRepository _skillDayRepository;
+		private readonly ISkillRepository _skillRepository;
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		//private readonly static ILog Logger = LogManager.GetLogger(typeof(RecalculateForecastOnSkillConsumer));
 
-		public RecalculateForecastOnSkillConsumer(IMessageBroker messageBroker)
+		public RecalculateForecastOnSkillConsumer(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository, ISkillRepository skillRepository, IUnitOfWorkFactory unitOfWorkFactory)
 		{
-			_messageBroker = messageBroker;
+			_scenarioRepository = scenarioRepository;
+			_skillDayRepository = skillDayRepository;
+			_skillRepository = skillRepository;
+			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
 		public void Consume(RecalculateForecastOnSkillMessage message)
 		{
-			// just send a message via broker to the GUI now
-			using (new MessageBrokerSendEnabler())
+			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				if (MessageBrokerIsRunning())
-				{
-					_messageBroker.SendEventMessage(UnitOfWorkFactoryContainer.Current.Name, message.BusinessUnitId, DateTime.Now, DateTime.Now, Guid.Empty, Guid.Empty, typeof(IForecastData), Guid.Empty, typeof(IForecastData), DomainUpdateType.NotApplicable, null);
-				}
-				else
-				{
-					Logger.Warn("Notification about forecast updates could not be sent because the message broker is unavailable.");
-				}
-			}
-		}
+				var scenario = _scenarioRepository.Get(message.ScenarioId);
+				if (!scenario.DefaultScenario) return;
 
-		private bool MessageBrokerIsRunning()
-		{
-			return _messageBroker != null && _messageBroker.IsInitialized;
+				var skill = _skillRepository.Get(message.SkillId);
+				var period = new DateOnlyPeriod(new DateOnly(DateTime.Today), new DateOnly(DateTime.Today));
+
+				var skillDays = new List<ISkillDay>(_skillDayRepository.FindRange(period, skill, scenario));
+				foreach (var skillDay in skillDays)
+				{
+					foreach (var workloadDay in skillDay.WorkloadDayCollection)
+					{
+						workloadDay.Tasks = workloadDay.Tasks * 1.1;
+					}
+				}
+				unitOfWork.PersistAll();
+			}
 		}
 	}
 }
