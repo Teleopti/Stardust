@@ -18,15 +18,6 @@ namespace Teleopti.Interfaces.Messages.General
 			get { return _messageId; }
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="skill"></param>
-		public RecalculateForecastOnSkillMessage(ISkill skill)
-		{
-			Skill = skill;
-		}
-
 		///<summary>
 		/// The period to recalculate in the skills time zone.
 		///</summary>
@@ -35,7 +26,7 @@ namespace Teleopti.Interfaces.Messages.General
 		///<summary>
 		/// The skill to recalculate.
 		///</summary>
-		public ISkill Skill { get; set; }
+		public Guid SkillId { get; set; }
 
 		/// <summary>
 		/// The owner of this action. can we use this to say that this person updated the forecast????
