@@ -3,14 +3,11 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
-using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
 	public class PersonScheduleDayReadModelHandler : ConsumerOf<DenormalizedSchedule>
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(PersonScheduleDayReadModelHandler));
-
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IPersonScheduleDayReadModelRepository _scheduleDayReadModelRepository;

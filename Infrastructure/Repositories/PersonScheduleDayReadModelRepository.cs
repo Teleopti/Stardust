@@ -30,16 +30,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<PersonScheduleDayReadModel> ForTeam(DateOnly dateOfInterest, Guid teamId)
 		{
-			using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
-			{
-				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+				return ((NHibernateUnitOfWork)_unitOfWorkFactory.CurrentUnitOfWork()).Session.CreateSQLQuery(
 					"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE TeamId=:TeamId AND BelongsToDate=:Date")
 					.SetGuid("TeamId", teamId)
 					.SetDateTime("Date", dateOfInterest)
 					 .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
 					 .SetReadOnly(true)
 					 .List<PersonScheduleDayReadModel>();
-			}
 		}
 
 		public IList<PersonScheduleDayReadModel> ReadModelsOnPerson(DateOnly startDate, DateOnly toDate, Guid personId)

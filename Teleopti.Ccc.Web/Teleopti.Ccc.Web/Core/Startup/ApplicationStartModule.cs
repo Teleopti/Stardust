@@ -6,6 +6,7 @@ using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
@@ -101,6 +102,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 					var resolver = new Areas.Team.Core.AutofacDependencyResolver(container.BeginLifetimeScope());
 					GlobalHost.DependencyResolver = resolver;
+					GlobalHost.HubPipeline.AddModule(container.Resolve<IHubPipelineModule>());
 					RouteTable.Routes.MapHubs(resolver);
 				}
 				_bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>());
@@ -110,7 +112,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				log.Error(ex);
 				ErrorAtStartup = ex;
 			}
-
 		}
 	}
 }

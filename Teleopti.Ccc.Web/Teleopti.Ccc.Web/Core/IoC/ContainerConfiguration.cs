@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using Autofac;
 using Autofac.Integration.Mvc;
+using AutofacContrib.DynamicProxy2;
 using MbCache.Configuration;
+using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -29,7 +31,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new AutofacWebTypesModuleFromRepository20111123());
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
 
-			builder.RegisterType<ScheduleHub>();
+			builder.RegisterType<ScheduleHub>().EnableClassInterceptors();
+			builder.RegisterType<InterceptorPipelineModule>().As<IHubPipelineModule>();
 
 			builder.RegisterFilterProvider();
 
