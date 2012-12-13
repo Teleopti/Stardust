@@ -1,9 +1,9 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.8.2.js" />
-/// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.9.1.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.8.2-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/date.js" />
-/// <reference path="~/Content/Scripts/knockout-2.1.0.js"/>
+/// <reference path="~/Content/Scripts/knockout-2.2.0.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
