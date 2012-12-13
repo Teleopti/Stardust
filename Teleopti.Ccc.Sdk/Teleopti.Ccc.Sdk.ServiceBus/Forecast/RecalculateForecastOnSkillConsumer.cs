@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(RecalculateForecastOnSkillMessage message)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
