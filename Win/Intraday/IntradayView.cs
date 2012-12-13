@@ -12,6 +12,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.UserTexts;
@@ -63,6 +64,9 @@ namespace Teleopti.Ccc.Win.Intraday
                 Icon = Properties.Resources.intraday;
 
             _settingManager = new IntradaySettingManager();
+
+			if (DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccVersion8))
+				toolStripExChangeForecast.Visible = true;
         }
 
         public IntradayPresenter Presenter { get; set; }
@@ -637,7 +641,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
 		private void toolStripButtonChangeForecastClick(object sender, EventArgs e)
 		{
-			var dto = new RecalculateForecastOnSkillCommandDto();
+			var dto = new RecalculateForecastOnSkillCommandDto { ScenarioId = Presenter.RequestedScenario.Id.GetValueOrDefault(), SkillId = SelectedSkill.Id.GetValueOrDefault() };
 			_sendCommandToSdk.ExecuteCommand(dto);
 		}
 

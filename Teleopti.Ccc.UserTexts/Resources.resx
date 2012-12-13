@@ -11215,4 +11215,8 @@ These options are activated:
     <value>Warning!</value>
     <comment>Warning!</comment>
   </data>
+  <data name="Reforecast" xml:space="preserve">
+    <value>Reforecast</value>
+    <comment>Reforecast form in Intraday</comment>
+  </data>
 </root>

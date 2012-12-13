@@ -199,10 +199,13 @@ namespace Teleopti.Ccc.Win.Intraday
             this.toolStripButtonChangeForecast});
 			this.toolStripExChangeForecast.Location = new System.Drawing.Point(108, 1);
 			this.toolStripExChangeForecast.Name = "toolStripExChangeForecast";
-			this.toolStripExChangeForecast.Size = new System.Drawing.Size(144, 88);
+			this.toolStripExChangeForecast.ShowCaption = false;
+			this.toolStripExChangeForecast.ShowLauncher = false;
+			this.toolStripExChangeForecast.Size = new System.Drawing.Size(114, 88);
 			this.toolStripExChangeForecast.TabIndex = 1;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExChangeForecast, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripExChangeForecast, false);
+			this.toolStripExChangeForecast.Visible = false;
 			// 
 			// toolStripButtonChangeForecast
 			// 
@@ -212,8 +215,8 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripButtonChangeForecast.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonChangeForecast.Name = "toolStripButtonChangeForecast";
 			this.SetShortcut(this.toolStripButtonChangeForecast, System.Windows.Forms.Keys.None);
-			this.toolStripButtonChangeForecast.Size = new System.Drawing.Size(106, 67);
-			this.toolStripButtonChangeForecast.Text = "xxChangeForecast";
+			this.toolStripButtonChangeForecast.Size = new System.Drawing.Size(76, 81);
+			this.toolStripButtonChangeForecast.Text = "xxReforecast";
 			this.toolStripButtonChangeForecast.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonChangeForecast, false);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonChangeForecast, false);

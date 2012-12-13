@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				SkillId = command.SkillId,
 				BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
 				Datasource = identity.DataSource.Application.Name,
-				Timestamp = DateTime.UtcNow
+				Timestamp = DateTime.UtcNow,
+				ScenarioId = command.ScenarioId
 			};
 			_busSender.NotifyServiceBus(message);
 			return new CommandResultDto { AffectedId = Guid.Empty, AffectedItems = 1 };

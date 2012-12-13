@@ -15,6 +15,9 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 		[DataMember]
 		public Guid OwnerPersonId { get; set; }
 
+		[DataMember]
+		public Guid ScenarioId { get; set; }
+
 		// add information how the forecast should change
 		// percent up/down or some other way
 	}
