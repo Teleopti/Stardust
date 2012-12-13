@@ -8,6 +8,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 	{
 		[FindBy(Id = "StudentAvailability-edit-button")]
 		public Button EditButton;
+		[FindBy(Id = "StudentAvailability-delete-button")]
+		public Button DeleteButton { get; set; }
 
 		//[FindBy(Id = "StudentAvailability-edit-starttime-input")]
 		//public TextField StartTimeTextField;
@@ -31,18 +33,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public ComboBox StudentAvailabilityStartTime;
 		[FindBy(Id = "Student-availability-end-time")]
 		public ComboBox StudentAvailabilityEndTime;
+		[FindBy(Id = "Student-availability-end-time-next-day")]
+		public CheckBox StudentAvailabilityEndTimeNextDay;
 		[FindBy(Id = "Student-availability-apply")]
 		public Button StudentAvailabilityApplyButton { get; set; }
-
 
 		[FindBy(Id = "StudentAvailability-period")]
 		public Div StudentAvailabilityPeriod;
 
 		[FindBy(Id = "StudentAvailability-edit-error")]
 		public Div ValidationErrorText;
-
-		[FindBy(Id = "StudentAvailability-delete-button")]
-		public Button DeleteButton { get; set; }
 
 		[FindBy(Id = "StudentAvailabilityDateRangeSelector")] public Div DateRangeSelectorContainer { get; set; }
 		[FindBy(Id = "StudentAvailabilityScheduleDatePicker")] public DatePicker DatePicker { get; set; }

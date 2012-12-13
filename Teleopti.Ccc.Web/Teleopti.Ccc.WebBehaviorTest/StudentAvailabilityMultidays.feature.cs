@@ -459,7 +459,7 @@ this.FeatureBackground();
 #line 133
  testRunner.And("I click the delete button in student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 134
- testRunner.And("I should not see the student availability on \'2012-06-20\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("I should not see the student availability on \'2012-06-20\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -495,8 +495,6 @@ this.FeatureBackground();
  testRunner.And("I input student availability with", ((string)(null)), table20, "And ");
 #line 145
  testRunner.And("I click the apply student availability button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 146
- testRunner.Then("I should see a message \'InvalidTimeValue\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
