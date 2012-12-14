@@ -15,7 +15,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _initToolbarButtons() {
 		$('#Requests-addRequest-button')
 			.click(function () {
-				Teleopti.MyTimeWeb.Request.List.DisconnectAll();
 				_clearFormData();
 				requestViewModel.TextRequestTabVisible(true);
 				requestViewModel.AbsenceRequestTabVisible(true);
@@ -101,7 +100,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			type: "POST",
 			data: JSON.stringify(formData),
 			success: function (data, textStatus, jqXHR) {
-				Teleopti.MyTimeWeb.Request.List.RemoveItem(data);
 				_fadeEditSection(null);
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
 			},

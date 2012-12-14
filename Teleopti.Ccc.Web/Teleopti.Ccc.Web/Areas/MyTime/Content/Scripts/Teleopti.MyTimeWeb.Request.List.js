@@ -12,10 +12,9 @@
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
 
+//TODO: move bindings to separate js-file
 	ko.bindingHandlers.fadeInIf = {
-		init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-			//todo
-		},
+		
 		update: function (element, valueAccessor, allBindingsAccessor) {
 			var value = valueAccessor(), allBindings = allBindingsAccessor();
 
@@ -72,7 +71,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	var requestDetailViewModel;
 	var pageViewModel;
 
-	//Represents an item in the list
 	function RequestItemViewModel() {
 
 		var self = this;
@@ -267,123 +265,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		$('.request-list .arrow-down').show();
 		$('.request-list .loading-gradient').hide();
 	}
-
-	function _removeRequest(requestOrListItem) {
-		console.log('removing....');
-		var listItem;
-		if (requestOrListItem.Id)
-			listItem = $('#Requests-list li[data-mytime-requestid="' + requestOrListItem.Id + '"]');
-		else
-			listItem = requestOrListItem;
-		listItem
-			.animate({
-				'height': '0',
-				'opacity': '0'
-			}, 'fast', function () {
-				$(this).remove();
-				_loadAPageIfRequired();
-			});
-	}
-
-	function _drawRequestAtTop(request) {
-		var request = _createRequestListItem(request)
-			.hide()
-			;
-		$('#Requests-list')
-			.prepend(request)
-			;
-		request.slideDown();
-	}
-
-	function _createRequestListItem(request) {
-		var listItem = $('#Requests-list li.template')
-			.clone(true)
-			.removeClass('template')
-			;
-		listItem.attr('data-mytime-requestid', request.Id);
-		listItem.attr('data-mytime-link', request.Link.href);
-		listItem.find('.request-data-subject').text(request.Subject);
-		listItem.find('.request-data-date').text(request.Dates);
-		listItem.find('.request-data-updatedon').text(request.UpdatedOn);
-		listItem.find('.request-data-status').text(request.Status);
-		listItem.find('.request-data-text').text(request.Text);
-
-		var connector = listItem.find('.request-connector');
-		var deleteButton = listItem.find('.request-delete-button');
-
-		if (!request.IsCreatedByUser) {
-			var buttonContainer = listItem.find('.request-delete-button-container');
-			buttonContainer.hide();
-		}
-
-		if (request.Payload != '') {
-			listItem.find('.request-data-type').text(request.Type + ' \u2013 ' + request.Payload);
-		} else {
-			listItem.find('.request-data-type').text(request.Type);
-		}
-		connector.connector();
-
-		if (request.Link.Methods.indexOf("DELETE") != -1) {
-			deleteButton
-				.click(function (event) {
-					$(this).prop('disabled', true);
-					event.stopPropagation();
-					_disconnectAll();
-					Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
-					_deleteRequest(listItem);
-				})
-				.removeAttr('disabled', 'disabled')
-				;
-			listItem.hover(function () {
-				deleteButton
-					.stop(true, true)
-					.fadeToggle();
-			});
-		} else {
-			deleteButton.remove();
-		}
-		return listItem;
-	}
-
-	function _deleteRequest(listItem) {
-		var url = listItem.data('mytime-link');
-		ajax.Ajax({
-			url: url,
-			dataType: "json",
-			contentType: 'application/json; charset=utf-8',
-			type: "DELETE",
-			beforeSend: function () {
-				Teleopti.MyTimeWeb.Common.LoadingOverlay.Add(listItem);
-
-			},
-			complete: function (jqXHR, textStatus) {
-				Teleopti.MyTimeWeb.Common.LoadingOverlay.Remove(listItem);
-			},
-			success: function (data, textStatus, jqXHR) {
-				_removeRequest(listItem);
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-			}
-		});
-	}
-
 	
-	function _disconnectAll() {
-		$('#Requests-list li:not(.template) .request-connector')
-			.connector('disconnect')
-		;
-	}
-
-	function _disconnectAllOthers(listItem) {
-		listItem.siblings()
-					.not('.template')
-					.data('connected', false)
-					.find('.request-connector')
-					.connector('disconnect')
-					;
-	}
-
 	return {
 		Init: function (readyForInteractionCallback, completelyLoadedCallback, detailViewModel) {
 			readyForInteraction = readyForInteractionCallback;
@@ -397,12 +279,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		},
 		AddItemAtTop: function (request) {
 			pageViewModel.AddRequest(request);
-		},
-		RemoveItem: function (request) {
-			_removeRequest(request);
-		},
-		DisconnectAll: function () {
-			_disconnectAll();
 		}
 	};
 
