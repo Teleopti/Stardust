@@ -5,64 +5,75 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
 	public interface IMissingDaysOffScheduler
 	{
-		bool Execute(IList<IMatrixData> matrixDataList);
+		bool Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class MissingDaysOffScheduler : IMissingDaysOffScheduler
 	{
-		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 		private readonly IBestSpotForAddingDayOffFinder _bestSpotForAddingDayOffFinder;
+		private readonly IMatrixDataListInSteadyState _matrixDataListInSteadyState;
+		private readonly IMatrixDataListCreator _matrixDataListCreator;
+		private readonly IMatrixDatasWithToFewDaysOff _matrixDatasWithToFewDaysOff;
 
-		public MissingDaysOffScheduler(IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, IBestSpotForAddingDayOffFinder bestSpotForAddingDayOffFinder)
+		public MissingDaysOffScheduler(IBestSpotForAddingDayOffFinder bestSpotForAddingDayOffFinder,
+			IMatrixDataListInSteadyState matrixDataListInSteadyState, IMatrixDataListCreator matrixDataListCreator, 
+			IMatrixDatasWithToFewDaysOff matrixDatasWithToFewDaysOff)
 		{
-			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_bestSpotForAddingDayOffFinder = bestSpotForAddingDayOffFinder;
+			_matrixDataListInSteadyState = matrixDataListInSteadyState;
+			_matrixDataListCreator = matrixDataListCreator;
+			_matrixDatasWithToFewDaysOff = matrixDatasWithToFewDaysOff;
 		}
 
-		public bool Execute(IList<IMatrixData> matrixDataList)
+		public bool Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
 		{
-			bool useSameDaysOffOnAll = true;// = allMatrixesHaveSameDaysOff(matrixDataList);
-			IList<IMatrixData> workingList = findMatrixesWithToFewDaysOff(matrixDataList);
+			var matrixDataList = _matrixDataListCreator.Create(matrixList, schedulingOptions);
+			bool useSameDaysOffOnAll = _matrixDataListInSteadyState.IsListInSteadyState(matrixDataList);
+			IList<IMatrixData> workingList = _matrixDatasWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixDataList);
 			while (workingList.Count > 0)
 			{
-				if(useSameDaysOffOnAll)
+				DateOnly? resultingDate = _bestSpotForAddingDayOffFinder.Find(workingList[0].ScheduleDayDataCollection);
+				if (!resultingDate.HasValue)
 				{
-					DateOnly? resultingDate = _bestSpotForAddingDayOffFinder.Find(workingList[0].ScheduleDayDataCollection);
-					if(!resultingDate.HasValue)
+					//rollback?
+					return false;
+				}
+				if (useSameDaysOffOnAll)
+				{
+					foreach (var matrixData in workingList)
 					{
-						//rollback
-						return false;
+						assignDayOff(resultingDate.Value, matrixData, schedulingOptions.DayOffTemplate, rollbackService);
 					}
 				}
-				//find first possible day before first contract day off that are available in all matrixes
-				workingList = findMatrixesWithToFewDaysOff(workingList);
+				else
+				{
+					assignDayOff(resultingDate.Value, workingList[0], schedulingOptions.DayOffTemplate, rollbackService);
+				}
+
+				matrixList = extractMatrixes(workingList);
+				matrixDataList = _matrixDataListCreator.Create(matrixList, schedulingOptions);
+				workingList = _matrixDatasWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixDataList);
 			}
-
-
-			//om alla är lika så jobbar vi bara med första matrixen och sedan assignar vi till alla
-			//om de inte är lika så jobbar vi med var och en försig
-
-			//en metod som hittar nästa möjliga spot på en matrix, hur ska jag kunna testa den
-
-			
 
 			return true;
 		}
 
-		private IList<IMatrixData> findMatrixesWithToFewDaysOff(IList<IMatrixData> matrixDataList)
+		private IList<IScheduleMatrixPro> extractMatrixes(IList<IMatrixData> workingList)
 		{
-			IList<IMatrixData> result = new List<IMatrixData>();
-			foreach (var matrixData in matrixDataList)
+			var ret = new List<IScheduleMatrixPro>();
+			foreach (var matrixData in workingList)
 			{
-				int targetDaysOff;
-				int daysOffNow;
-				if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(matrixData.Matrix.SchedulePeriod, out targetDaysOff, out daysOffNow))
-					result.Add(matrixData);
+				ret.Add(matrixData.Matrix);
 			}
 
-			return result;
+			return ret;
 		}
 
-		
+		private void assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService)
+		{
+			IScheduleDay scheduleDay = matrixData.Matrix.GetScheduleDayByKey(date).DaySchedulePart();
+			scheduleDay.CreateAndAddDayOff(dayOffTemplate);
+			rollbackService.Modify(scheduleDay);
+		}
 	}
 }
