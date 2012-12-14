@@ -104,6 +104,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFormTest.cs" />
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Core\AuthenticationModelBinderTest.cs" />
