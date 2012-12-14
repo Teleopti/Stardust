@@ -58,8 +58,10 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	function _xhr(type, successCallback, addressSuffix, reqData) {
 		ajax.Ajax({
 			url: "StudentAvailability/StudentAvailability" + addressSuffix,
+			dataType: "json",
+			contentType: "application/json; charset=utf-8",
 			type: type,
-			data: reqData,
+			data: JSON.stringify(reqData),
 			success: successCallback,
 			statusCode404: function () { }
 		});
@@ -87,7 +89,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		if (data.AvailableTimeSpan != null)
 			span.text(data.AvailableTimeSpan);
 
-//		calendarDay.addClass('unvalidated');
+		//		calendarDay.addClass('unvalidated');
 	};
 
 	function _initToolbarButtons() {
@@ -132,14 +134,16 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 				},
 				events: {
 					render: function () {
-						//						$('#Preference-extended-reset')
-						//							.button()
-						//							.click(function () {
-						//								addExtendedPreferenceFormViewModel.reset();
-						//							});
-						$('#Student-availability-apply').button().click(function () {
-							_setStudentAvailability(ko.toJS(editStudentAvailabilityFormViewModel));
-						});
+						$('#Student-availability-reset')
+							.button()
+							.click(function () {
+								editStudentAvailabilityFormViewModel.reset();
+							});
+						$('#Student-availability-apply')
+							.button()
+							.click(function () {
+								_setStudentAvailability(ko.toJS(editStudentAvailabilityFormViewModel));
+							});
 						ko.applyBindings(editStudentAvailabilityFormViewModel, template[0]);
 					}
 				}
@@ -183,7 +187,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 
 		editStudentAvailabilityFormViewModel.ValidationError('');
 
-		var validationErrorCallback = function(data) {
+		var validationErrorCallback = function (data) {
 			var message = data.Errors.join('</br>');
 			editStudentAvailabilityFormViewModel.ValidationError(message);
 		};
