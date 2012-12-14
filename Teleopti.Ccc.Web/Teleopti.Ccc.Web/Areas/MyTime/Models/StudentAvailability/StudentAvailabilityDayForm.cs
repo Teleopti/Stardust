@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Teleopti.Ccc.UserTexts;
@@ -15,18 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
 			var result = new List<ValidationResult>();
-			if (ValidateTimeOfDay(StartTime, EndTime))
+			var end = EndTime.Time;
+			if (NextDay)
+				end = end.Add(TimeSpan.FromDays(1));
+			if (StartTime.Time > end)
 				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.EndTime)));
+				
 			return result;
-		}
-
-		private static bool ValidateTimeOfDay(TimeOfDay? early, TimeOfDay? late)
-		{
-			if (early.HasValue && late.HasValue)
-			{
-				return early.Value.Time > late.Value.Time;
-			}
-			return false;
 		}
 	}
 }
