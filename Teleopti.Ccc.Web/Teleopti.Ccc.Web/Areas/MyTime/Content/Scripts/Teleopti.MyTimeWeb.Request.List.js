@@ -12,9 +12,9 @@
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
 
-//TODO: move bindings to separate js-file
+	var scrollCount = 0;
+	//TODO: move bindings to separate js-file
 	ko.bindingHandlers.fadeInIf = {
-		
 		update: function (element, valueAccessor, allBindingsAccessor) {
 			var value = valueAccessor(), allBindings = allBindingsAccessor();
 
@@ -38,13 +38,11 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 					if (hiddenWhenFalse) {
 						$(element).hide();
 					}
-
 				});
 		}
 	};
 
 	ko.bindingHandlers.increaseWidthIf = {
-
 		update: function (element, valueAccessor, allBindingsAccessor) {
 			var value = valueAccessor(), allBindings = allBindingsAccessor();
 			if (!element.initialWidthForIncreaseIfBinding) {
@@ -265,14 +263,25 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		$('.request-list .arrow-down').show();
 		$('.request-list .loading-gradient').hide();
 	}
-	
+
+	function _checkScroll() {
+		$(window).scroll(function () {
+			
+
+								if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
+					console.log('at bottom..');
+				}
+		});
+	}
+
 	return {
 		Init: function (readyForInteractionCallback, completelyLoadedCallback, detailViewModel) {
 			readyForInteraction = readyForInteractionCallback;
 			completelyLoaded = completelyLoadedCallback;
 			requestDetailViewModel = detailViewModel;
-			_initScrollPaging();
 			pageViewModel = new RequestPageViewModel(requestDetailViewModel);
+			_checkScroll();
+			_initScrollPaging();
 			var element = $('#Requests-body-inner')[0];
 
 			if (element) ko.applyBindings(pageViewModel, element);
