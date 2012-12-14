@@ -1162,7 +1162,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var restrictionAggregator = new RestrictionAggregator(effectiveRestrictionCreator,schedulingOptions,_stateHolder );
                 var advanceSchedulingService = new AdvanceSchedulingService(skillDayPeriodIntervalData,
                                                                             dynamicBlockFinder, teamExtractor,
-                                                                            restrictionAggregator, matrixList);
+                                                                            restrictionAggregator, matrixList, null);
                 
                 advanceSchedulingService.Execute(schedulingResults);
             }

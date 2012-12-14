@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly ITeamExtractor _teamExtractor;
         private readonly IRestrictionAggregator _restrictionAggregator;
         private readonly IList<IScheduleMatrixPro> _matrixList;
+        private readonly IWorkShiftFilterService _workShiftFilterService;
         private readonly ISkillDayPeriodIntervalData _skillDayPeriodIntervalData;
         private List<DateOnly> _effectiveDays;
         private List<DateOnly> _dayOff; 
@@ -25,13 +26,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public AdvanceSchedulingService(ISkillDayPeriodIntervalData skillDayPeriodIntervalData,
             IDynamicBlockFinder dynamicBlockFinder,
             ITeamExtractor teamExtractor,
-            IRestrictionAggregator restrictionAggregator, IList< IScheduleMatrixPro > matrixList )
+            IRestrictionAggregator restrictionAggregator, IList< IScheduleMatrixPro > matrixList, 
             IWorkShiftFilterService workShiftFilterService)
         {
             _dynamicBlockFinder = dynamicBlockFinder;
             _teamExtractor = teamExtractor;
             _restrictionAggregator = restrictionAggregator;
             _matrixList = matrixList;
+            _workShiftFilterService = workShiftFilterService;
             _skillDayPeriodIntervalData = skillDayPeriodIntervalData;
             _effectiveDays = new List<DateOnly>();
             _dayOff = new List<DateOnly>();
