@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider
 
 		public StudentAvailabilityDayFormResult Delete(DateOnly date)
 		{
-			var studentAvailInDatasource = _studentAvailabilityDayRepository.FindAndLock(date, _loggedOnUser.CurrentUser());
+			var studentAvailInDatasource = _studentAvailabilityDayRepository.Find(date, _loggedOnUser.CurrentUser());
 			if (studentAvailInDatasource.IsEmpty())
 				throw new HttpException(404, "StudentAvailability not found");
 
