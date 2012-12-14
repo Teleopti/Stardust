@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveTheRoleAccessToMytime(string name)
 		{
 			var userRole = new RoleForUser { Name = name };
-			UserFactory.User().Setup(userRole);
+			UserFactory.User().Setup(userRole); // creates and persists role 
 		}
 
 		[Given(@"I have a role with")]

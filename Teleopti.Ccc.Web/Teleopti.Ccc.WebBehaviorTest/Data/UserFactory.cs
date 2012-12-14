@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		}
 
 		/// <summary>
-		/// Creates a person with an automatic number as name, plus creates the list of persons who are in the inner Colleague list.
+		/// Creates ans persists a person with an automatic number as name, plus creates and persists the list of persons who are in the inner Colleague list.
 		/// </summary>
 		/// <returns></returns>
 		public string MakeUser()
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		}
 
 		/// <summary>
-		/// Creates a person with the given name, plus creates the list of persons who are in the inner Colleague list.
+		/// Creates and persists a person with the given name, plus creates and persists the list of persons who are in the inner Colleague list.
 		/// </summary>
 		/// <param name="logonName">Name of the logon.</param>
 		/// <param name="lastName">The last name.</param>
