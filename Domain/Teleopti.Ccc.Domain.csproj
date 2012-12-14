@@ -794,6 +794,7 @@
     <Compile Include="Scheduling\WorkShiftCalculation\RestrictionAggregator.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillDayPeriodIntervalData.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\TeamExtractor.cs" />
+    <Compile Include="Scheduling\WorkShiftCalculation\WorkShiftFilterService.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\WorkShiftLengthValueCalculator.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\WorkShiftPeriodValueCalculator.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\WorkShiftValueCalculator.cs" />

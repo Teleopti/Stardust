@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
@@ -51,6 +52,73 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
 
             return shiftProjectionCaches;
+        }
+
+        public IList<IShiftProjectionCache> ShiftProjectionCachesFromAdjustedRuleSetBag(DateOnly scheduleDateOnly, TimeZoneInfo timeZone, IRuleSetBag bag, bool forRestrictionsOnly, IEffectiveRestriction restriction)//, IPerson person)
+        {
+            var shiftProjectionCaches = new List<IShiftProjectionCache>();
+            if (bag == null)
+                return shiftProjectionCaches;
+            
+            var ruleSets = bag.RuleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.OnlyForRestrictions == forRestrictionsOnly).ToList();
+            
+            foreach (IWorkShiftRuleSet ruleSet in ruleSets)
+            {
+                if (ruleSet.IsValidDate(scheduleDateOnly))
+                {
+                    var clonedRuleSet = (IWorkShiftRuleSet)ruleSet.Clone();
+
+                    var start = resolveTime(clonedRuleSet.TemplateGenerator.StartPeriod.Period.StartTime, restriction.StartTimeLimitation.StartTime, false);
+                    var end = resolveTime(clonedRuleSet.TemplateGenerator.StartPeriod.Period.EndTime, restriction.StartTimeLimitation.EndTime, true);
+                    if (start > end)
+                        continue;
+                    var startTimePeriod = new TimePeriod(start, end);
+
+                    start = resolveTime(clonedRuleSet.TemplateGenerator.EndPeriod.Period.StartTime, restriction.EndTimeLimitation.StartTime, false);
+                    end = resolveTime(clonedRuleSet.TemplateGenerator.EndPeriod.Period.EndTime, restriction.EndTimeLimitation.EndTime, true);
+                    if (start > end)
+                        continue;
+                    var endTimePeriod = new TimePeriod(start, end);
+
+                    if (endTimePeriod.EndTime < startTimePeriod.StartTime)
+                        continue;
+
+                    if (startTimePeriod.EndTime > endTimePeriod.EndTime)
+                        startTimePeriod = new TimePeriod(startTimePeriod.StartTime, endTimePeriod.EndTime);
+
+                    if (endTimePeriod.StartTime < startTimePeriod.StartTime)
+                        endTimePeriod = new TimePeriod(startTimePeriod.StartTime, endTimePeriod.EndTime);
+
+                    clonedRuleSet.TemplateGenerator.StartPeriod = new TimePeriodWithSegment(startTimePeriod, clonedRuleSet.TemplateGenerator.StartPeriod.Segment);
+                    clonedRuleSet.TemplateGenerator.EndPeriod = new TimePeriodWithSegment(endTimePeriod, clonedRuleSet.TemplateGenerator.EndPeriod.Segment);
+
+                    if (!_ruleSetDeletedActivityChecker.ContainsDeletedActivity(clonedRuleSet) && !_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(clonedRuleSet))
+                    {
+                        IEnumerable<IShiftProjectionCache> ruleSetList = GetShiftsForRuleset(clonedRuleSet);
+                        if (ruleSetList != null)
+                        {
+                            foreach (var projectionCache in ruleSetList)
+                            {
+                                shiftProjectionCaches.Add(projectionCache);
+                                projectionCache.SetDate(scheduleDateOnly, timeZone);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return shiftProjectionCaches;
+        }
+
+        private static TimeSpan resolveTime(TimeSpan thisTime, TimeSpan? otherTime, bool min)
+        {
+            if (!otherTime.HasValue)
+                return thisTime;
+
+            if (min)
+                return TimeSpan.FromTicks(Math.Min(otherTime.Value.Ticks, thisTime.Ticks));
+
+            return TimeSpan.FromTicks(Math.Max(otherTime.Value.Ticks, thisTime.Ticks));
         }
 
         private IEnumerable<IShiftProjectionCache> GetShiftsForRuleset(IWorkShiftRuleSet ruleSet)

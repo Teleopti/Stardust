@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             IDynamicBlockFinder dynamicBlockFinder,
             ITeamExtractor teamExtractor,
             IRestrictionAggregator restrictionAggregator, IList< IScheduleMatrixPro > matrixList )
+            IWorkShiftFilterService workShiftFilterService)
         {
             _dynamicBlockFinder = dynamicBlockFinder;
             _teamExtractor = teamExtractor;
@@ -75,12 +76,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 var groupPerson = _teamExtractor.GetRamdomTeam(startDate);
 
                 //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
-                _restrictionAggregator.Aggregate(dateOnlyList, groupPerson);
+            var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson);
 
                 //call class that returns the aggregated intraday dist based on teamblock dates
                 var skillInternalDataList = _skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList);
 
                 //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses (should we cover for max seats here?)
+
                 //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need
                 //call class that schedules given date with given workshift on the complete team
                 //call class that schedules the unscheduled days for the teamblock using the same start time from the given shift, this class will handle steady state as well as individual
