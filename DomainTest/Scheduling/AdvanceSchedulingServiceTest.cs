@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _dynamicBlockFinder = _mocks.StrictMock<IDynamicBlockFinder>();
             _teamExtractor = _mocks.StrictMock<ITeamExtractor>();
             _restrictionAggregator = _mocks.StrictMock<IRestrictionAggregator>();
-            _target = new AdvanceSchedulingService(_skillDayPeriodIntervalData, _dynamicBlockFinder, _teamExtractor, _restrictionAggregator);
+            _target = new AdvanceSchedulingService(_skillDayPeriodIntervalData, _dynamicBlockFinder, _teamExtractor, _restrictionAggregator, new List<IScheduleMatrixPro>( ));
         }
 
         [Test]

@@ -91,7 +91,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<ShiftProjectionCacheFilter>().As<IShiftProjectionCacheFilter>().InstancePerLifetimeScope();
             
             builder.RegisterType<BlockSchedulingService>().As<IBlockSchedulingService>().InstancePerLifetimeScope();
-            builder.RegisterType<AdvanceSchedulingService>().As<IBlockSchedulingService>().InstancePerLifetimeScope();
             builder.RegisterType<SkillDayPeriodIntervalData>().As<ISkillDayPeriodIntervalData>().InstancePerLifetimeScope();
             builder.RegisterType<BestBlockShiftCategoryFinder>().As<IBestBlockShiftCategoryFinder>().InstancePerLifetimeScope();
             builder.RegisterType<BlockSchedulingWorkShiftFinderService>().As<IBlockSchedulingWorkShiftFinderService>().InstancePerLifetimeScope();

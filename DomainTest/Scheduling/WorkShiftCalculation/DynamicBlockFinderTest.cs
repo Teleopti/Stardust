@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         {
             _schedulingOptions.UsePeriodAsBlock = true;
             _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
-            var date = DateTime.UtcNow ;
+            var date = new DateOnly(  DateTime.UtcNow );
             
             var scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
             var scheduleDateTimePeriod = _mock.StrictMock<IScheduleDateTimePeriod>();
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _schedulingOptions.UsePeriodAsBlock = false;
             _schedulingOptions.UseTwoDaysOffAsBlock = true;
             _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
-            var date = DateTime.UtcNow;
+            var date = new DateOnly(DateTime.UtcNow);
             
             var scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
             var scheduleDateTimePeriod = _mock.StrictMock<IScheduleDateTimePeriod>();
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _schedulingOptions.UsePeriodAsBlock = false;
             _schedulingOptions.UseTwoDaysOffAsBlock = false;
             _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
-            var startDate = new DateTime(2012, 11, 1, 0, 0, 0, DateTimeKind.Utc);
+            var startDate = new  DateOnly( new DateTime(2012, 11, 1, 0, 0, 0, DateTimeKind.Utc));
 
             var scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
             var scheduleDateTimePeriod = _mock.StrictMock<IScheduleDateTimePeriod>();

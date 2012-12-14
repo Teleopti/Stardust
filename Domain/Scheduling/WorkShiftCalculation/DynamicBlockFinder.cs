@@ -9,21 +9,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
     public interface IDynamicBlockFinder
     {
-        List<DateOnly > ExtractBlockDays(DateTime dateTime);
+        List<DateOnly> ExtractBlockDays(DateOnly startDateOnly);
     }
 
     public class DynamicBlockFinder : IDynamicBlockFinder
     {
         public ISchedulingResultStateHolder SchedulingResultStateHolder { get; set; }
-        private readonly SchedulingOptions _schedulingOptions;
+        private readonly ISchedulingOptions _schedulingOptions;
 
-        public DynamicBlockFinder(SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder)
+        public DynamicBlockFinder(ISchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder)
         {
             SchedulingResultStateHolder = schedulingResultStateHolder;
             _schedulingOptions = schedulingOptions;
         }
 
-        public List<DateOnly> ExtractBlockDays(DateTime dateTime)
+        public List<DateOnly> ExtractBlockDays(DateOnly startDateOnly)
         {
             var selectedPeriod = SchedulingResultStateHolder.Schedules.Period.LoadedPeriod();
             var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             {
                 var scheduleList = selectedPeriod.ToDateOnlyPeriod(timeZone).DayCollection();
                 var dateOnlyList = new List<DateOnly >();
-                foreach (var dateOnly in selectedPeriod.ToDateOnlyPeriod(timeZone).DayCollection().Where(day => day >= new DateOnly(dateTime)))
+                foreach (var dateOnly in selectedPeriod.ToDateOnlyPeriod(timeZone).DayCollection().Where(day => day >= startDateOnly))
                 {
                     if (dateOnly.DayOfWeek.Equals(DayOfWeek.Sunday) || dateOnly.DayOfWeek.Equals(DayOfWeek.Saturday ))
                     {
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             else if(_schedulingOptions.UseTwoDaysOffAsBlock )
             {
                 var dateOnlyList =
-                    selectedPeriod.ToDateOnlyPeriod(timeZone).DayCollection().Where(day => day >= new DateOnly(dateTime))
+                    selectedPeriod.ToDateOnlyPeriod(timeZone).DayCollection().Where(day => day >= startDateOnly)
                         .ToList();
                 var dayOffList = GetDaysOffFromSchedule(dateOnlyList );
                 var extractedBlock = new List<DateOnly>();

@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
     public class TeamExtractor : ITeamExtractor
     {
-        private readonly List<IScheduleMatrixPro> _matrixLit;
+        private readonly IList<IScheduleMatrixPro> _matrixLit;
         private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
         private List<int> _processedIndex;
         private static Random _random;
 
-        public TeamExtractor(List<IScheduleMatrixPro> matrixLit, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization )
+        public TeamExtractor(IList<IScheduleMatrixPro> matrixLit, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
             _matrixLit = matrixLit;
             _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             _processedIndex = new List<int>();
         }
 
-        public IGroupPerson GetRamdomTeam()
+        public IGroupPerson GetRamdomTeam(DateOnly dateOnly )
         {
             var selectedPersonList = _matrixLit.Select(scheduleMatrixPro => scheduleMatrixPro.Person).ToList();
             int randomeNum;
@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                 return null;
             _processedIndex.Add(randomeNum);
             var selectedPerson = selectedPersonList[randomeNum];
-            return _groupPersonBuilderForOptimization.BuildGroupPerson(selectedPerson, new DateOnly());
+            return _groupPersonBuilderForOptimization.BuildGroupPerson(selectedPerson, dateOnly);
         }
 
     }
 
     public interface ITeamExtractor
     {
-        IGroupPerson GetRamdomTeam();
+        IGroupPerson GetRamdomTeam(DateOnly dateOnly);
     }
 }

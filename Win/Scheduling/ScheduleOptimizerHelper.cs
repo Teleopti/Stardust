@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.UserTexts;
@@ -1149,15 +1150,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 			schedulingOptions.UseGroupSchedulingCommonEnd = false;
 			schedulingOptions.UseGroupSchedulingCommonStart = false;
 
-            using (PerformanceOutput.ForOperation("Scheduling x blocks"))
-                blockSchedulingService  .Execute(matrixes, schedulingOptions, schedulingResults);
-
             if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
             {
-                var advanceSchedulingService = _container.Resolve<AdvanceSchedulingService>();
-                advanceSchedulingService.Execute( schedulingResults);
+                //for testing
+                schedulingOptions.UseTwoDaysOffAsBlock  = true;
+                var intervalDataCalculator = new IntervalDataMedianCalculator();
+                var skillDayPeriodIntervalData = new SkillDayPeriodIntervalData(intervalDataCalculator, _stateHolder);
+                var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions,_stateHolder );
+                var teamExtractor = new TeamExtractor(matrixList,_groupPersonBuilderForOptimization  );
+                var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
+                var restrictionAggregator = new RestrictionAggregator(effectiveRestrictionCreator,schedulingOptions,_stateHolder );
+                var advanceSchedulingService = new AdvanceSchedulingService(skillDayPeriodIntervalData,
+                                                                            dynamicBlockFinder, teamExtractor,
+                                                                            restrictionAggregator, matrixList);
+                
+                advanceSchedulingService.Execute(schedulingResults);
             }
-
+            using (PerformanceOutput.ForOperation("Scheduling x blocks"))
+                blockSchedulingService  .Execute(matrixes, schedulingOptions, schedulingResults);
+            
             if (schedulingOptions.RotationDaysOnly)
                 schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
 
