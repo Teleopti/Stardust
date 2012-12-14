@@ -160,7 +160,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 												cell.ClassName.Should().Not.Contain("ui-selectee");
 												_page.SelectCalendarCellByClick(cell);
 												cell.ClassName.Should().Not.Contain("ui-selected");
-												_page.EditButton.Enabled.Should().Be.False();
 			                            	});
 		}
 

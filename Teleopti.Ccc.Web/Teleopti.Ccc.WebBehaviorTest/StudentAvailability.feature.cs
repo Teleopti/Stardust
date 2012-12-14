@@ -224,224 +224,21 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Add student availability")]
-        [NUnit.Framework.IgnoreAttribute()]
-        public virtual void AddStudentAvailability()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add student availability", new string[] {
-                        "ignore"});
-#line 59
-this.ScenarioSetup(scenarioInfo);
-#line 60
- testRunner.Given("I am a student agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 61
- testRunner.And("I am in an open student availability period", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 62
- testRunner.And("I am viewing student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 63
- testRunner.When("I select an editable day without student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 64
- testRunner.And("I click the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 65
- testRunner.And("I input student availability values", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 66
- testRunner.And("I click the OK button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 67
- testRunner.Then("I should see the student availability in the calendar", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Add student availability with end time on next day")]
-        [NUnit.Framework.IgnoreAttribute()]
-        public virtual void AddStudentAvailabilityWithEndTimeOnNextDay()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add student availability with end time on next day", new string[] {
-                        "ignore"});
-#line 69
-this.ScenarioSetup(scenarioInfo);
-#line 70
- testRunner.Given("I am a student agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 71
- testRunner.And("I am in an open student availability period", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 72
- testRunner.And("I am viewing student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 73
- testRunner.When("I select an editable day without student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 74
- testRunner.And("I click the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 75
- testRunner.And("I input student availability values with end time on next day", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 76
- testRunner.And("I click the OK button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 77
- testRunner.Then("I should see the student availability in the calendar", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Clicking edit student availability")]
-        [NUnit.Framework.IgnoreAttribute()]
-        public virtual void ClickingEditStudentAvailability()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Clicking edit student availability", new string[] {
-                        "ignore"});
-#line 79
-this.ScenarioSetup(scenarioInfo);
-#line 80
- testRunner.Given("I am a student agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 81
- testRunner.And("I am in an open student availability period", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 82
- testRunner.And("I have a student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 83
- testRunner.And("I am viewing student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 84
- testRunner.When("I select a day with student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 85
- testRunner.And("I click the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 86
- testRunner.Then("I should see the student availability values in the input form", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 87
- testRunner.And("the calendar is disabled", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Cancelling student availability editing")]
-        [NUnit.Framework.IgnoreAttribute()]
-        public virtual void CancellingStudentAvailabilityEditing()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cancelling student availability editing", new string[] {
-                        "ignore"});
-#line 89
-this.ScenarioSetup(scenarioInfo);
-#line 90
- testRunner.Given("I am a student agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 91
- testRunner.And("I am in an open student availability period", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 92
- testRunner.And("I have a student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 93
- testRunner.And("I am viewing student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 94
- testRunner.When("I select the day with student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 95
- testRunner.And("I click the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 96
- testRunner.And("I click the cancel button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 97
- testRunner.Then("I should not see the student availability values", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Editing student availability")]
-        [NUnit.Framework.IgnoreAttribute()]
-        public virtual void EditingStudentAvailability()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Editing student availability", new string[] {
-                        "ignore"});
-#line 99
-this.ScenarioSetup(scenarioInfo);
-#line 100
- testRunner.Given("I am a student agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 101
- testRunner.And("I am in an open student availability period", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 102
- testRunner.And("I have a student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 103
- testRunner.And("I am viewing student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 104
- testRunner.When("I select a day with student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 105
- testRunner.And("I click the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 106
- testRunner.And("I input student availability values", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 107
- testRunner.And("I click the OK button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 108
- testRunner.Then("I should see the new student availability values in the calendar", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Deleting student availability")]
-        [NUnit.Framework.IgnoreAttribute()]
-        public virtual void DeletingStudentAvailability()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Deleting student availability", new string[] {
-                        "ignore"});
-#line 110
-this.ScenarioSetup(scenarioInfo);
-#line 111
- testRunner.Given("I am a student agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 112
- testRunner.And("I am in an open student availability period", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 113
- testRunner.And("I have a student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 114
- testRunner.And("I am viewing student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 115
- testRunner.When("I select a day with student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 116
- testRunner.And("I click the delete button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 117
- testRunner.Then("the student availability values in the calendar should disappear", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Adding invalid student availability values")]
-        [NUnit.Framework.IgnoreAttribute()]
-        public virtual void AddingInvalidStudentAvailabilityValues()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Adding invalid student availability values", new string[] {
-                        "ignore"});
-#line 119
-this.ScenarioSetup(scenarioInfo);
-#line 120
- testRunner.Given("I am a student agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 121
- testRunner.And("I am in an open student availability period", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 122
- testRunner.And("I am viewing student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 123
- testRunner.When("I select an editable day without student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 124
- testRunner.And("I click the edit button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 125
- testRunner.And("I input invalid student availability values", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 126
- testRunner.And("I click the OK button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 127
- testRunner.Then("I should see a message saying I have given an invalid time value", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Can not edit student availability without workflow control set")]
         public virtual void CanNotEditStudentAvailabilityWithoutWorkflowControlSet()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can not edit student availability without workflow control set", ((string[])(null)));
-#line 133
+#line 60
 this.ScenarioSetup(scenarioInfo);
-#line 134
+#line 61
  testRunner.Given("I am a student agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 135
+#line 62
  testRunner.And("I do not have a workflow control set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 136
+#line 63
  testRunner.When("I view student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 137
+#line 64
  testRunner.Then("I should see a message saying I am missing a workflow control set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 138
+#line 65
  testRunner.And("the student availability calendar should not be editable", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -452,15 +249,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void DisplayStudentAvailabilityPeriodInformation()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Display student availability period information", ((string[])(null)));
-#line 140
+#line 67
 this.ScenarioSetup(scenarioInfo);
-#line 141
+#line 68
  testRunner.Given("I am a student agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 142
+#line 69
  testRunner.And("I have a workflow control set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 143
+#line 70
  testRunner.When("I view student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 144
+#line 71
  testRunner.Then("I should see the student availability period information", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -471,15 +268,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void CanNotEditStudentAvailabilityInClosedPeriod()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can not edit student availability in closed period", ((string[])(null)));
-#line 146
+#line 73
 this.ScenarioSetup(scenarioInfo);
-#line 147
+#line 74
  testRunner.Given("I am a student agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 148
+#line 75
  testRunner.And("I have a workflow control set with closed student availability periods", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 149
+#line 76
  testRunner.When("I view student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 150
+#line 77
  testRunner.Then("the student availability calendar should not be editable", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -490,15 +287,15 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void CanEditStudentAvailabilityInOpenPeriod()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can edit student availability in open period", ((string[])(null)));
-#line 152
+#line 79
 this.ScenarioSetup(scenarioInfo);
-#line 153
+#line 80
  testRunner.Given("I am a student agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 154
+#line 81
  testRunner.And("I have a workflow control set with open availability periods", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 155
+#line 82
  testRunner.When("I view student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 156
+#line 83
  testRunner.Then("the student availabilty calendar should be editable", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -511,15 +308,15 @@ this.ScenarioSetup(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Default to first virtual schedule period overlapping open student availability pe" +
                     "riod", ((string[])(null)));
-#line 158
+#line 85
 this.ScenarioSetup(scenarioInfo);
-#line 159
+#line 86
  testRunner.Given("I am a student agent", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 160
+#line 87
  testRunner.And("I have a workflow control set with student availability periods open next month", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 161
+#line 88
  testRunner.When("I view student availability", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 162
+#line 89
  testRunner.Then("I should see the first virtual schedule period overlapping open student availabil" +
                     "ity period", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden

@@ -149,17 +149,6 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 				}
 			});
 		editButton.removeAttr('disabled');
-		//		editButton.click(function () {
-		//			_xhr('GET', function (data) {
-		//				_bindDataToForm(data);
-		//			},
-		//				Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl($('#StudentAvailability-edit-section').data('mytime-selected-date')),
-		//				null);
-		//			var calendarDay = $('li[data-mytime-date="' + $('#StudentAvailability-edit-section').data('mytime-selected-date') + '"]');
-		//			_enableToolbarButtons(calendarDay);
-		//			_setEditError();
-		//			Teleopti.MyTimeWeb.Common.OpenEditSection('#StudentAvailability-edit-section');
-		//		});
 
 		var deleteButton = $('#StudentAvailability-delete-button');
 		deleteButton.removeAttr('disabled');
