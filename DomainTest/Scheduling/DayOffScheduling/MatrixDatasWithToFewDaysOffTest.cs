@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			using (_mocks.Playback())
 			{
 				IList<IMatrixData> result = _target.FindMatrixesWithToFewDaysOff(new List<IMatrixData> {_matrixData});
-				Assert.AreSame(_matrix, result[0].Matrix);
+				Assert.AreEqual(1, result.Count);
 			}
 		}
 	}

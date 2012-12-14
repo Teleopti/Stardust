@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			toAdd.IsScheduled = scheduleDay.IsScheduled();
 			SchedulePartView significant = scheduleDay.SignificantPart();
 			toAdd.IsDayOff = significant == SchedulePartView.DayOff;
-			toAdd.IsContractDayOff = significant == SchedulePartView.ContractDayOff;
+			//toAdd.IsContractDayOff = hasDayOffDefinition.IsDayOff();
 			IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay,
 			                                                                                                  schedulingOptions);
 			toAdd.HaveRestriction = effectiveRestriction.IsRestriction;

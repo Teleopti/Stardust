@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
+		private IMissingDaysOffScheduler _missingDaysOffScheduler;
 
 		[SetUp]
 		public void Setup()
@@ -53,6 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_dayOffScheduler = _mocks.StrictMock<IDayOffScheduler>();
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
+			_missingDaysOffScheduler = _mocks.StrictMock<IMissingDaysOffScheduler>();
 
 			Expect.Call(() => _absencePreferenseScheduler.DayScheduled += null).IgnoreArguments();
 			Expect.Call(() => _dayOffScheduler.DayScheduled += null).IgnoreArguments();
@@ -62,7 +65,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																 _effectiveRestrictionCreator, 
                                                                  _scheduleService,
                                                                  _absencePreferenseScheduler,
-																 _dayOffScheduler, _resourceOptimizationHelper);
+																 _dayOffScheduler, 
+																 _resourceOptimizationHelper,
+																 _missingDaysOffScheduler);
 			_mocks.VerifyAll();
 			_mocks.BackToRecordAll();
 		}
@@ -81,7 +86,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																 _effectiveRestrictionCreator, 
                                                                  _scheduleService,
                                                                  _absencePreferenseScheduler,
-																 null, _resourceOptimizationHelper);
+																 null, 
+																 _resourceOptimizationHelper,
+																 _missingDaysOffScheduler);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
@@ -92,7 +99,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																 _effectiveRestrictionCreator, 
                                                                  _scheduleService,
                                                                  null,
-																 _dayOffScheduler, _resourceOptimizationHelper);	
+																 _dayOffScheduler, 
+																 _resourceOptimizationHelper,
+																 _missingDaysOffScheduler);	
 		}
 
 		[Test]
