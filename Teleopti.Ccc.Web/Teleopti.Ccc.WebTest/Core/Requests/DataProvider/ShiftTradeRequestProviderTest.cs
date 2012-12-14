@@ -23,13 +23,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldRetrieveWorkflowControlSetForUser()
 		{
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			var person = new Person { WorkflowControlSet = new WorkflowControlSet() };
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything)).Return(new[] { MockRepository.GenerateMock<IScheduleDay>() });
 
-			var target = new ShiftTradeRequestProvider(loggedOnUser, null);
+			var target = new ShiftTradeRequestProvider(loggedOnUser, scheduleProvider);
 
-			var result = target.RetrieveShiftTradePreparationData(null);
+			var result = target.RetrieveShiftTradePreparationData(DateOnly.Today);
 
 			result.WorkflowControlSet.Should().Be.SameInstanceAs(person.WorkflowControlSet);
 		}

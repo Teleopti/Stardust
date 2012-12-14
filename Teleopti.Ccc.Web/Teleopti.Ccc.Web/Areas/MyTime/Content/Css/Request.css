@@ -109,6 +109,7 @@
 	opacity: 0.80;
 	height: 20px;
 	top: 3px;
+	z-index: 10;
 }
 .shift-trade-my-schedule
 {
@@ -117,4 +118,5 @@
 	height: 30px;
 	background: #f8f8f8;
 	display: block;
+	z-index: 9;
 }

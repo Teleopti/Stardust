@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -27,7 +28,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.HasWorkflowControlSet, o => o.MapFrom(s => s.WorkflowControlSet != null))
 				.ForMember(d => d.MySchedulelayers, o => o.MapFrom(s =>
 				                                                   	{
-																		var layers = _projectionProvider.Invoke().Projection(s.MyScheduleDay).Where(proj => proj != null).ToList();
+				                                                   		if (s.MyScheduleDay == null)
+				                                                   			return null;
+
+				                                                   		var layers = _projectionProvider.Invoke().Projection(s.MyScheduleDay).Where(proj => proj != null).ToList();
 				                                                   		return CreateShiftTradeLayers(
 				                                                   			_userTimeZone.Invoke().TimeZone(), layers);
 				                                                   	}))
@@ -36,6 +40,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private static IEnumerable<ShiftTradeScheduleLayer> CreateShiftTradeLayers(TimeZoneInfo timeZone, IEnumerable<IVisualLayer> layers)
 		{
+			if (layers.Count() == 0)
+				return new ShiftTradeScheduleLayer[] {};
+
 			DateTime shiftStartTime = layers.Min(o => o.Period.StartDateTime);
 
 			

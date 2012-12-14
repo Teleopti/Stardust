@@ -27,7 +27,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self.loadViewModel = function (date) {
-			console.log(date);
+			//console.log(date);
 			ajax.Ajax({
 				url: "Requests/ShiftTradeRequest",
 				dataType: "json",
@@ -40,10 +40,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self.hasWorkflowControlSet(!data.HasWorkflowControlSet);
 					self.timeLineLengthInMinutes(data.TimeLineLengthInMinutes);
 					self._createMyScheduleLayers(data.MySchedulelayers);
-					console.log(data);
+					//console.log(data);
 				},
-				error: function () {
-					console.log('Something went wrong here...');
+				error: function (err) {
+					//console.log('Something went wrong here...');
+					alert(err);
+					//console.log(err);
 				}
 			});
 		};
@@ -61,26 +63,27 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.startTime = layer.StartTimeText;
 		self.endTime = layer.EndTimeText;
 		self.lengthInMinutes = layer.LengthInMinutes;
-		self.title = 'TODO';
 		self.leftPx = (layer.ElapsedMinutesSinceShiftStart * pixelPerMinute) + 'px';
 		self.paddingLeft = (self.lengthInMinutes * pixelPerMinute) + 'px';
+		self.title = ko.computed(function () {
+			return self.startTime + '-' + self.endTime + ' ' + self.payload;
+		});
 	}
 
 	function _init() {
-		setShiftTradeRequestDate('2012-12-10'); //Just temporary
+		setShiftTradeRequestDate('2030-01-01'); //Just temporary
+		vm = new shiftTradeViewModel();
+		var elementToBind = $('#Request-add-shift-trade').get(0);
+		ko.applyBindings(vm, elementToBind);
 		_showContent();
 	}
 
 	function _showContent() {
-		$('#Request-add-shift-trade-link')
+		$('#Request-add-shift-trade-button')
 			.click(function () {
 				$('#Request-add-shift-trade')
 					.show();
 
-				vm = new shiftTradeViewModel();
-				var elementToBind = $('#Request-add-shift-trade').get(0);
-				ko.applyBindings(vm, elementToBind);
-				//ko.applyBindings(vm, document.getElementById('Request-add-shift-trade'));
 				vm.loadViewModel($('#Request-add-selected-date').val());
 			})
 			;

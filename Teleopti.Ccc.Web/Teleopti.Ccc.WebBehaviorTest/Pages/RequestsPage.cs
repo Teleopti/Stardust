@@ -87,12 +87,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-detail-deny-reason")]
 		public Span RequestDetailDenyReason { get; set; }
 
-		[FindBy(Id = "Request-add-shift-trade-link")]
-		public Link ShiftTradeRequestsLink { get; set; }
+		[FindBy(Id = "Request-add-shift-trade-button")]
+		public Button ShiftTradeRequestsButton { get; set; }
 
 		public Div FriendlyMessage
 		{
 			get { return Document.Div(QuicklyFind.ByClass("friendly-message")); }
+		}
+
+		public SpanCollection MyScheduleLayers
+		{
+			get
+			{
+				return Document.Div(QuicklyFind.ByClass("shift-trade-my-schedule")).Span(Find.First()).Spans;
+			}
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using AutoMapper;
@@ -38,8 +39,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapHasWorkflowControlSetToFalse()
 		{
-			var domainData = new ShiftTradeRequestsPreparationDomainData();
+			var emptyScheduleDay = _scheduleFactory.ScheduleDayStub(DateTime.Now);
+			_projectionProvider.Expect(p => p.Projection(emptyScheduleDay)).Return(_scheduleFactory.ProjectionStub(new List<IVisualLayer>()));
 
+			var domainData = new ShiftTradeRequestsPreparationDomainData
+			                 	{
+			                 		WorkflowControlSet = null,
+									MyScheduleDay = emptyScheduleDay
+			                 	};
+			
 			var result = Mapper.Map<ShiftTradeRequestsPreparationDomainData, ShiftTradeRequestsPreparationViewModel>(domainData);
 
 			result.HasWorkflowControlSet.Should().Be.False();
@@ -48,7 +56,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapHasWorkflowControlSetToTrue()
 		{
-			var domainData = new ShiftTradeRequestsPreparationDomainData { WorkflowControlSet = new WorkflowControlSet() };
+			var emptyScheduleDay = _scheduleFactory.ScheduleDayStub(DateTime.Now);
+			_projectionProvider.Expect(p => p.Projection(emptyScheduleDay)).Return(_scheduleFactory.ProjectionStub(new List<IVisualLayer>()));
+
+			var domainData = new ShiftTradeRequestsPreparationDomainData
+			{
+				WorkflowControlSet = new WorkflowControlSet(),
+				MyScheduleDay = emptyScheduleDay
+			};
 
 			var result = Mapper.Map<ShiftTradeRequestsPreparationDomainData, ShiftTradeRequestsPreparationViewModel>(domainData);
 

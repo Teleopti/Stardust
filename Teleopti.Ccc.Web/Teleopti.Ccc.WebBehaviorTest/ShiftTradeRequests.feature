@@ -107,7 +107,6 @@ Scenario: Show my scheduled shift
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	| Lunch3HoursAfterStart | true             |
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see my schedule with
 	| Field			| Value |

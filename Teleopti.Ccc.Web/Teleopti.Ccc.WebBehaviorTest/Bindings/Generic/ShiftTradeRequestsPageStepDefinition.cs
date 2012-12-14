@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
-			Pages.Pages.RequestsPage.ShiftTradeRequestsLink.EventualClick();
+			Pages.Pages.RequestsPage.ShiftTradeRequestsButton.EventualClick();
 		}
 
 		[When(@"I view Add Shift Trade Request for date '(.*)'")]
@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
-			Pages.Pages.RequestsPage.ShiftTradeRequestsLink.EventualClick();
+			Pages.Pages.RequestsPage.ShiftTradeRequestsButton.EventualClick();
 			Browser.Current.Eval("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate(" +
-			                     date.ToString("d", CultureInfo.GetCultureInfo("sv-SE")) + ");");
+								 date.ToString("d", CultureInfo.GetCultureInfo("sv-SE")) + ");");
 		}
 
 
@@ -46,6 +46,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldSeeAMessageTextSayingIAmMissingAWorkflowControlSet()
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.FriendlyMessage.DisplayVisible(), Is.True);
+		}
+
+		[Then(@"I should see my schedule with")]
+		public void ThenIShouldSeeMyScheduleWith(Table table)
+		{
+			var expectedTimes = table.Rows[0][1] + "-" + table.Rows[1][1];
+
+			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.Count, Is.GreaterThan(0));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers[0].Title, Contains.Substring(expectedTimes));
 		}
 	}
 }
