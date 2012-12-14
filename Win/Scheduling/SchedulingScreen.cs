@@ -5959,7 +5959,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             toolStripExHandleRequests.Enabled = eventParameters.Value.SelectionIsEditable && isPermittedApproveRequest(_requestView.SelectedAdapters());
             ToolStripMenuItemViewDetails.Enabled =toolStripButtonViewDetails.Enabled = isViewRequestDetailsAvailable();
             if (_budgetPermissionService.IsAllowancePermitted)
+            {
+                toolStripButtonViewAllowance.Enabled =
                 toolStripMenuItemViewAllowance.Enabled = isViewAllowanceAvailable();
+            }
         }
 
         private void wpfShiftEditor1_DeleteMeeting(object sender, CustomEventArgs<IPersonMeeting> e)
