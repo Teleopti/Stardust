@@ -231,7 +231,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				Skip: skip
 			},
 			success: function (data, textStatus, jqXHR) {
-				//_drawRequests(data);
 				pageViewModel.showRequests(data);
 				if (data.length == 0 || data.length < take) {
 					_noMoreToLoad();
@@ -284,17 +283,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				$(this).remove();
 				_loadAPageIfRequired();
 			});
-	}
-
-	function _drawRequests(requests) {
-		for (var i = 0; i < requests.length; i++) {
-			var request = requests[i];
-			_drawRequest(request);
-		}
-	}
-
-	function _drawRequest(request) {
-		$('#Requests-list').append(_createRequestListItem(request));
 	}
 
 	function _drawRequestAtTop(request) {
@@ -409,7 +397,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		},
 		AddItemAtTop: function (request) {
 			pageViewModel.AddRequest(request);
-			_drawRequestAtTop(request);
 		},
 		RemoveItem: function (request) {
 			_removeRequest(request);
