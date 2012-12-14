@@ -1,9 +1,7 @@
-using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
@@ -64,7 +62,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see schedule for '(.*)'")]
 		public void ThenIShouldSeeScheduleFor(string personName)
 		{
-			EventualAssert.That(() => Pages.Pages.AdminWebPage.ScheduleTable.Text.Contains(personName), Is.True);
+			EventualAssert.That(() => Pages.Pages.AdminWebPage.ScheduleTable.Text.Contains(personName), Is.True.After(10000, 50));
 		}
 	}
 }

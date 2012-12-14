@@ -90,12 +90,10 @@ define([
 
 				$('.team-schedule').swipeListener({
 					swipeLeft: function () {
-						var newDate = moment(teamSchedule.SelectedDate()).add('d', 1);
-						teamSchedule.SelectedDate(newDate.toDate());
+						teamSchedule.NextDay();
 					},
 					swipeRight: function () {
-						var newDate = moment(teamSchedule.SelectedDate()).add('d', -1);
-						teamSchedule.SelectedDate(newDate.toDate());
+						teamSchedule.PreviousDay();
 					}
 				});
 

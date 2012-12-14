@@ -1,6 +1,7 @@
 define([
-		'knockout'
-	], function (ko) {
+		'knockout',
+		'moment'
+	], function (ko, moment) {
 
 		return function (timeLine, date) {
 
@@ -19,6 +20,16 @@ define([
 
 			this.AddTeam = function (team) {
 				self.Teams.push(team);
+			};
+
+			this.NextDay = function () {
+				var newDate = moment(self.SelectedDate()).add('d', 1);
+				self.SelectedDate(newDate.toDate());
+			};
+
+			this.PreviousDay = function () {
+				var newDate = moment(self.SelectedDate()).add('d', -1);
+				self.SelectedDate(newDate.toDate());
 			};
 		};
 	});

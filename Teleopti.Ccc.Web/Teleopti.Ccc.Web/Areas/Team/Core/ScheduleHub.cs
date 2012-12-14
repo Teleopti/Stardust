@@ -5,25 +5,20 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
-using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Team.Core
 {
 	[HubName("scheduleHub")]
-	[Aspects]
 	public class ScheduleHub : Hub
 	{
 		private readonly IPersonScheduleDayReadModelRepository _personScheduleDayReadModelRepository;
 		private readonly ITeamProvider _teamProvider;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-		public ScheduleHub(IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository, ITeamProvider teamProvider, IUnitOfWorkFactory unitOfWorkFactory)
+		
+		public ScheduleHub(IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository, ITeamProvider teamProvider)
 		{
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
 			_teamProvider = teamProvider;
-			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
 		[UnitOfWork]
