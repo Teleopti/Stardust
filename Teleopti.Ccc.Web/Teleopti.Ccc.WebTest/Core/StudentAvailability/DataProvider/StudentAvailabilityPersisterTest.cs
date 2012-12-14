@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.DataProvider
 			var form = new StudentAvailabilityDayForm {Date = DateOnly.Today};
 			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, mapper, MockRepository.GenerateMock<ILoggedOnUser>());
 
-			studentAvailabilityDayRepository.Stub(x => x.Find(form.Date, null)).Return(new List<IStudentAvailabilityDay> {studentAvailabilityDay});
+			studentAvailabilityDayRepository.Stub(x => x.Find(form.Date, null)).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
 			mapper.Stub(x => x.Map(form, studentAvailabilityDay)).Return(studentAvailabilityDay);
 
 			target.Persist(form);
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.DataProvider
 			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
 			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, null, MockRepository.GenerateMock<ILoggedOnUser>());
 
-			studentAvailabilityDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
+			studentAvailabilityDayRepository.Stub(x => x.FindAndLock(DateOnly.Today, null)).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
 
 			target.Delete(DateOnly.Today);
 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.DataProvider
 			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
 			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, null, MockRepository.GenerateMock<ILoggedOnUser>());
 
-			studentAvailabilityDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
+			studentAvailabilityDayRepository.Stub(x => x.FindAndLock(DateOnly.Today, null)).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
 
 			var result = target.Delete(DateOnly.Today);
 
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.DataProvider
 			var studentAvailabilityDayRepository = MockRepository.GenerateMock<IStudentAvailabilityDayRepository>();
 			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, null, MockRepository.GenerateMock<ILoggedOnUser>());
 
-			studentAvailabilityDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IStudentAvailabilityDay>());
+			studentAvailabilityDayRepository.Stub(x => x.FindAndLock(DateOnly.Today, null)).Return(new List<IStudentAvailabilityDay>());
 
 			var exception = Assert.Throws<HttpException>(() => target.Delete(DateOnly.Today));
 			exception.GetHttpCode().Should().Be(404);
