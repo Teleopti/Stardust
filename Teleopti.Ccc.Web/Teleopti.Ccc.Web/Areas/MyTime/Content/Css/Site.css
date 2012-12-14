@@ -771,7 +771,7 @@ select.time-input
 	height: 16px;
 	z-index: 100;
 	position: absolute;
-	right: 5px;
+	left: 462px;
 }
 
 .ie9 .request-edit-section button.ui-button-icon-only {

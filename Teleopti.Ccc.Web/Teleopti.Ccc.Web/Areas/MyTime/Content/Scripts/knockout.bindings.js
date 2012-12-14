@@ -18,3 +18,4 @@ ko.bindingHandlers['class'] = {
 		element['__ko__previousClassValue__'] = value;
 	}
 };
+

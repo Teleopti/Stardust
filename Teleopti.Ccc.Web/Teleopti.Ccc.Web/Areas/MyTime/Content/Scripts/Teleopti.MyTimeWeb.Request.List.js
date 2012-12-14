@@ -12,11 +12,11 @@
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
 
-	ko.bindingHandlers.fadeTo = {
+	ko.bindingHandlers.fadeInIf = {
 		init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 			//todo
 		},
-		update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+		update: function (element, valueAccessor, allBindingsAccessor) {
 			var value = valueAccessor(), allBindings = allBindingsAccessor();
 
 			var valueUnwrapped = ko.utils.unwrapObservable(value);
@@ -25,12 +25,43 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			var fadeOutOpacity = allBindings.fadeOutOpacity || 0.1;
 			var fadeInDuration = allBindings.fadeInDuration || 300;
 			var fadeOutDuration = allBindings.fadeOutDuration || 300;
+			var hiddenWhenFalse = allBindings.hiddenWhenFalse || false;
 
 			$(element).stop();
-			if (valueUnwrapped == true)
+			if (valueUnwrapped) {
+				if (hiddenWhenFalse) {
+					$(element).show();
+				}
 				$(element).animate({ opacity: fadeInOpacity }, fadeInDuration);
+			}
 			else
-				$(element).animate({ opacity: fadeOutOpacity }, fadeOutDuration);
+				$(element).animate({ opacity: fadeOutOpacity }, fadeOutDuration, function () {
+					if (hiddenWhenFalse) {
+						$(element).hide();
+					}
+
+				});
+		}
+	};
+
+	ko.bindingHandlers.increaseWidthIf = {
+
+		update: function (element, valueAccessor, allBindingsAccessor) {
+			var value = valueAccessor(), allBindings = allBindingsAccessor();
+			if (!element.initialWidthForIncreaseIfBinding) {
+				element.initialWidthForIncreaseIfBinding = $(element).width();
+			}
+			var valueUnwrapped = ko.utils.unwrapObservable(value);
+
+			var increaseBy = allBindings.increaseBy || 20;
+			var increaseDuration = allBindings.fadeInDuration || 150;
+			var decreaseDuration = allBindings.fadeOutDuration || 150;
+			$(element).stop();
+
+			if (valueUnwrapped)
+				$(element).animate({ width: element.initialWidthForIncreaseIfBinding + increaseBy }, decreaseDuration);
+			else
+				$(element).animate({ width: element.initialWidthForIncreaseIfBinding }, increaseDuration);
 		}
 	};
 
@@ -41,40 +72,46 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	var requestDetailViewModel;
 	var pageViewModel;
 
-	function RequestItemViewModel(request) {
+	//Represents an item in the list
+	function RequestItemViewModel() {
+
 		var self = this;
 
-		self.Subject = ko.observable(request.Subject);
-		self.RequestType = ko.observable(request.Type);
-		self.Status = ko.observable(request.Status);
-		self.Dates = ko.observable(request.Dates);
-		self.UpdatedOn = ko.observable(request.UpdatedOn);
-		self.Text = ko.observable(request.Text);
-		self.Link = ko.observable(request.Link.href);
-		self.Id = ko.observable(request.Id);
+		self.Subject = ko.observable();
+		self.RequestType = ko.observable();
+		self.Status = ko.observable();
+		self.Dates = ko.observable();
+		self.UpdatedOn = ko.observable();
+		self.Text = ko.observable();
+		self.Link = ko.observable();
+		self.Id = ko.observable();
+		self.mouseIsOver = ko.observable(false);
+		self.isSelected = ko.observable(false);
+		self.isLoading = ko.observable(false);
 
-		self.ShowDetails = function () {
-			self.showRequest2();
-		};
-
-		self.showRequest2 = function () {
+		//TODO: too much gui-info, remove it to be called from the view
+		self.ShowDetails = function (viewmodel, event) {
+			var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
 			ajax.Ajax({
 				url: self.Link(),
 				dataType: "json",
 				type: 'GET',
-				success: function (data, textStatus, jqXHR) {
-					//TODO, fix height........
-					//Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, listItem.position().top - 30);
-					Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, 300);
+				beforeSend: function () {
+					self.isLoading(true);
+				},
+				complete: function () {
+					setTimeout(function () { self.isLoading(false); }, 2000);
+				},
+				success: function (data) {
+					Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, distanceFromTop);
 				}
 			});
 		};
 
 		self.toggle = function () {
-			self.isMouseOver(!self.isMouseOver());
+			self.mouseIsOver(!self.mouseIsOver());
 		};
 
-		self.isMouseOver = ko.observable(true);
 	}
 
 	function RequestPageViewModel(requestDetailViewModel) {
@@ -99,6 +136,13 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 		self.requests = ko.observableArray();
 
+		self.SelectItem = function (requestItemViewModel, event) {
+			ko.utils.arrayForEach(self.requests(), function (item) {
+				item.isSelected(item == requestItemViewModel);
+			});
+			requestItemViewModel.ShowDetails(requestItemViewModel,event);
+		};
+
 		//TODO: refact to use map & initialize instead
 		self.showRequests = function (data) {
 			for (var i = 0; i < data.length; i++) {
@@ -114,24 +158,21 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				dataType: "json",
 				contentType: 'application/json; charset=utf-8',
 				type: "DELETE",
-				beforeSend: function () {
-					//Teleopti.MyTimeWeb.Common.LoadingOverlay.Add(listItem);
-
-				},
-				complete: function (jqXHR, textStatus) {
-					//Teleopti.MyTimeWeb.Common.LoadingOverlay.Remove(listItem);
-				},
-				success: function (data, textStatus, jqXHR) {
+				success: function () {
 					self.requests.remove(requestItemViewModel);
 				},
-				error: function (jqXHR, textStatus, errorThrown) {
+				error: function (jqXHR, textStatus) {
 					Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
 				}
 			});
 		};
 
 		self.AddRequest = function (request) {
-			var update = function (r) { self.requests.unshift(new RequestItemViewModel(r)); };
+			var update = function (r) {
+				var vm = new RequestItemViewModel();
+				vm.Initialize(r);
+				self.requests.unshift(vm);
+			};
 			ko.utils.arrayForEach(self.requests(), function (requestVm) {
 				if (requestVm.Id() == request.Id) {
 					update = function (r) { requestVm.Initialize(r); };

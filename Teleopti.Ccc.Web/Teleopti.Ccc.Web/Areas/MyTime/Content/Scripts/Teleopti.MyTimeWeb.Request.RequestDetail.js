@@ -169,11 +169,11 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _showEditSection(position) {
 		_SetOkButtonValue();
-		var topPosition = $('#Requests-list').position().top - 1;
-		if (!position)
-			position = topPosition;
-		if (position < topPosition)
-			position = topPosition;
+//		var topPosition = $('#Requests-list').position().top - 1;
+//		if (!position)
+//			position = topPosition;
+//		if (position < topPosition)
+//			position = topPosition;
 		$('#Request-detail-section')
 			.css({
 				'top': position
