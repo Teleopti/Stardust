@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			_busSender = busSender;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public CommandResultDto Handle(RecalculateForecastOnSkillCommandDto command)
 		{
 			

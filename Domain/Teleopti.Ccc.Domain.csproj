@@ -191,6 +191,7 @@
     <Compile Include="Forecasting\Import\IForecastFile.cs" />
     <Compile Include="Forecasting\Import\IsColumnCountInRowValid.cs" />
     <Compile Include="Forecasting\IntervalLengthServiceLevelSpecification.cs" />
+    <Compile Include="Forecasting\ReforecastPercentCalculator.cs" />
     <Compile Include="Forecasting\TimeDefinition.cs" />
     <Compile Include="Forecasting\UnsavedDaysInfo.cs" />
     <Compile Include="Forecasting\WorkloadDayTemplateCalculator.cs" />
