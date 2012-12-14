@@ -140,7 +140,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			ko.utils.arrayForEach(self.requests(), function (item) {
 				item.isSelected(item == requestItemViewModel);
 			});
-			requestItemViewModel.ShowDetails(requestItemViewModel,event);
+			requestItemViewModel.ShowDetails(requestItemViewModel, event);
 		};
 
 		//TODO: refact to use map & initialize instead
@@ -219,7 +219,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	function _loadAPage() {
-		var skip = $('#Requests-list li:not(.template)').length;
+		if (pageViewModel) var skip = pageViewModel.requests.length;
 		var take = 20;
 		ajax.Ajax({
 			url: "Requests/Requests",
@@ -231,7 +231,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				Skip: skip
 			},
 			success: function (data, textStatus, jqXHR) {
-				_drawRequests(data);
+				//_drawRequests(data);
 				pageViewModel.showRequests(data);
 				if (data.length == 0 || data.length < take) {
 					_noMoreToLoad();
@@ -270,6 +270,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	function _removeRequest(requestOrListItem) {
+		console.log('removing....');
 		var listItem;
 		if (requestOrListItem.Id)
 			listItem = $('#Requests-list li[data-mytime-requestid="' + requestOrListItem.Id + '"]');
@@ -379,42 +380,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		});
 	}
 
-	function _initListClick() {
-		$('#Requests-list li')
-			.click(function () {
-				_showRequest($(this));
-			}
-		);
-	}
-
-	function _showRequest(listItem) {
-		var url = listItem.attr('data-mytime-link');
-		var connector = listItem
-			.find('.request-connector')
-			;
-		var bindListItemClick = function _bindClick() {
-			listItem.bind('click', function () {
-				_showRequest($(this));
-			});
-		};
-		ajax.Ajax({
-			url: url,
-			dataType: "json",
-			type: 'GET',
-			beforeSend: function () {
-				listItem.unbind('click');
-				_disconnectAllOthers(listItem);
-				Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection(bindListItemClick);
-				connector.connector("connecting");
-			},
-			success: function (data, textStatus, jqXHR) {
-				Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, listItem.position().top - 30);
-				connector.connector("connect");
-			}
-		});
-
-	}
-
+	
 	function _disconnectAll() {
 		$('#Requests-list li:not(.template) .request-connector')
 			.connector('disconnect')
@@ -436,7 +402,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			completelyLoaded = completelyLoadedCallback;
 			requestDetailViewModel = detailViewModel;
 			_initScrollPaging();
-			_initListClick();
 			pageViewModel = new RequestPageViewModel(requestDetailViewModel);
 			var element = $('#Requests-body-inner')[0];
 
