@@ -16,7 +16,7 @@ using log4net;
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	/// <summary>
-	/// Creates, do a complete setup and persist a user. Also creates and persists collegaues (persons) for the user.
+	/// Creates a user or do setups for the current user and persist those settings. Also can create and persists collegaues (persons) for the user.
 	/// </summary>
 	public class UserFactory
 	{
