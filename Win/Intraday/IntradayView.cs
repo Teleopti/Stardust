@@ -20,6 +20,7 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.Controls.Chart;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
+using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
@@ -641,8 +642,33 @@ namespace Teleopti.Ccc.Win.Intraday
 
 		private void toolStripButtonChangeForecastClick(object sender, EventArgs e)
 		{
-			var dto = new RecalculateForecastOnSkillCommandDto { ScenarioId = Presenter.RequestedScenario.Id.GetValueOrDefault(), SkillId = SelectedSkill.Id.GetValueOrDefault() };
-			_sendCommandToSdk.ExecuteCommand(dto);
+		    var skillList = _intradayViewContent.GetSkills();
+		    var models = new ReforecastModelCollection();
+            using (var pages = new ReforecastWizardPages(models))
+            {
+                var reforecastPages = PropertyPagesHelper.GetReforecastFilePages(skillList);
+                pages.Initialize(reforecastPages);
+                using (var wizard = new WizardNoRoot<ReforecastModelCollection>(pages))
+                {
+                    if (wizard.ShowDialog(this) != DialogResult.OK) return;
+
+                    var dto = new RecalculateForecastOnSkillCommandCollectionDto
+                                  {SkillCommandDtos = new List<RecalculateForecastOnSkillCommandDto>()};
+                    foreach (var model in models.ReforecastModels)
+                    {
+                        dto.SkillCommandDtos.Add(
+                            new RecalculateForecastOnSkillCommandDto
+                                {
+                                    SkillId = model.Skill.Id.GetValueOrDefault(),
+                                    WorkloadId =
+                                        model.Workload.Select(w => w.Id.GetValueOrDefault()).
+                                        ToList(),
+                                    ScenarioId = Presenter.RequestedScenario.Id.GetValueOrDefault(),
+                                });
+                    }
+                    _sendCommandToSdk.ExecuteCommand(dto);
+                }
+            }
 		}
 
     }

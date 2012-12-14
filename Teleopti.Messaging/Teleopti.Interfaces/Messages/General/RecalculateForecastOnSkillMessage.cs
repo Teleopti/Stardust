@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.Messages.General
@@ -28,6 +29,11 @@ namespace Teleopti.Interfaces.Messages.General
 		///</summary>
 		public Guid SkillId { get; set; }
 
+        /// <summary>
+        /// The workloads to recalculate
+        /// </summary>
+        public List<Guid> WorkloadIds { get; set; }
+
 		/// <summary>
 		/// The owner of this action. can we use this to say that this person updated the forecast????
 		/// </summary>
@@ -41,4 +47,25 @@ namespace Teleopti.Interfaces.Messages.General
 		// add information how the forecast should change
 		// percent up/down or some other way
 	}
+
+    /// <summary>
+    /// Container for Recalculate messages
+    /// </summary>
+    public class RecalculateForecastOnSkillMessageCollection : RaptorDomainMessage
+    {
+        private readonly Guid _messageId = Guid.NewGuid();
+
+        /// <summary>
+        /// Gets the message identity.
+        /// </summary>
+        public override Guid Identity
+        {
+            get { return _messageId; }
+        }
+
+        /// <summary>
+        /// Collection of recalculate messages
+        /// </summary>
+        public List<RecalculateForecastOnSkillMessage> MessageCollection { get; set; } 
+    }
 }
