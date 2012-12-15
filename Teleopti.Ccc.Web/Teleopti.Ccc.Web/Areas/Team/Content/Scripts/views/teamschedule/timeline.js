@@ -14,14 +14,8 @@ define([
 			this.WidthPixels = ko.observable();
 			this.Agents = ko.observableArray();
 			
-			this.AddAgent = function (agent) {
-				self.Agents.push(agent);
-			};
-
 			this.AddAgents = function (agents) {
-				ko.utils.arrayForEach(agents, function (a) {
-					self.AddAgent(a);
-				});
+				self.Agents.push.apply(self.Agents, agents);
 			};
 
 			this.StartMinutes = ko.computed(function () {

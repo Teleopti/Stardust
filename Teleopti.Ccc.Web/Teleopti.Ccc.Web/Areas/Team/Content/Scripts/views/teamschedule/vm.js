@@ -13,13 +13,13 @@ define([
 			this.SelectedDate = ko.observable(date);
 			this.SelectedTeam = ko.observable();
 
-			this.AddAgent = function (agent) {
-				self.Agents.push(agent);
-				self.TimeLine.AddAgent(agent);
+			this.AddAgents = function (agents) {
+				self.Agents.push.apply(self.Agents, agents);
+				self.TimeLine.AddAgents(agents);
 			};
 
-			this.AddTeam = function (team) {
-				self.Teams.push(team);
+			this.AddTeams = function (teams) {
+				self.Teams.push.apply(self.Teams, teams);
 			};
 
 			this.NextDay = function () {

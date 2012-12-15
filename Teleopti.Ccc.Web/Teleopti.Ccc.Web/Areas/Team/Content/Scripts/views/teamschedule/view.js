@@ -55,10 +55,10 @@ define([
 						timeLine.Agents.removeAll();
 						teamSchedule.Agents.removeAll();
 
-						ko.utils.arrayForEach(schedules, function (s) {
-							var agent = new agentViewModel(timeLine, s);
-							teamSchedule.AddAgent(agent);
+						var newItems = ko.utils.arrayMap(schedules, function (s) {
+							return new agentViewModel(timeLine, s);
 						});
+						teamSchedule.AddAgents(newItems);
 
 						teamSchedule.Agents.sort(function (a, b) {
 							var firstStartMinutes = a.FirstStartMinute();
@@ -72,9 +72,7 @@ define([
 
 				var loadAvailableTeams = function () {
 					schedule.server.availableTeams(teamSchedule.SelectedDate()).done(function (details) {
-						ko.utils.arrayForEach(details.Teams, function (t) {
-							teamSchedule.AddTeam(t);
-						});
+						teamSchedule.AddTeams(details.Teams);
 					});
 				};
 
