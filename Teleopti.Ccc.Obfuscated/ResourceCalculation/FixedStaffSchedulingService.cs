@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
     	private readonly IAbsencePreferenceScheduler _absencePreferenceScheduler;
     	private readonly IDayOffScheduler _dayOffScheduler;
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+    	private readonly IMissingDaysOffScheduler _missingDaysOffScheduler;
 
     	private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
         private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
@@ -40,7 +42,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			IScheduleService scheduleService, 
 			IAbsencePreferenceScheduler absencePreferenceScheduler, 
             IDayOffScheduler dayOffScheduler,
-			IResourceOptimizationHelper resourceOptimizationHelper)
+			IResourceOptimizationHelper resourceOptimizationHelper,
+			IMissingDaysOffScheduler missingDaysOffScheduler)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
@@ -54,6 +57,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				throw new ArgumentNullException("dayOffScheduler");
 			_dayOffScheduler = dayOffScheduler;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_missingDaysOffScheduler = missingDaysOffScheduler;
 
 			_absencePreferenceScheduler.DayScheduled += schedulerDayScheduled;
 			_dayOffScheduler.DayScheduled += schedulerDayScheduled;
@@ -85,6 +89,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         {
             _absencePreferenceScheduler.AddPreferredAbsence(matrixList, schedulingOptions);
             _dayOffScheduler.DayOffScheduling(matrixList, matrixListAll, rollbackService, schedulingOptions);
+        	_missingDaysOffScheduler.Execute(matrixList, schedulingOptions, rollbackService);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
