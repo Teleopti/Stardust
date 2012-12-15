@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		}
 
 		[Test]
-		public void IfAllDaysBeforeIsBlockedWeShouldTryTwoDaysBefore()
+		public void IfAllDaysBeforeIsBlockedWeeShouldTryTwoDaysBefore()
 		{
 			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
 			dataList[new DateOnly(2013, 1, 1)].IsContractDayOff = true;
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			Assert.AreEqual(new DateOnly(2013, 1, 3), result.Value);
 		}
 
-		private IDictionary<DateOnly, IScheduleDayData> createList()
+		private static IDictionary<DateOnly, IScheduleDayData> createList()
 		{
 			IDictionary<DateOnly, IScheduleDayData> dataList = new Dictionary<DateOnly, IScheduleDayData>();
 			IScheduleDayData data;
@@ -144,6 +144,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			data = new ScheduleDayData(new DateOnly(2013, 1, 9));
 			dataList.Add(data.DateOnly, data);
 			data = new ScheduleDayData(new DateOnly(2013, 1, 10));
+			dataList.Add(data.DateOnly, data);
+			data = new ScheduleDayData(new DateOnly(2013, 1, 11));
+			dataList.Add(data.DateOnly, data);
+			data = new ScheduleDayData(new DateOnly(2013, 1, 12));
+			dataList.Add(data.DateOnly, data);
+			data = new ScheduleDayData(new DateOnly(2013, 1, 13));
+			dataList.Add(data.DateOnly, data);
+			data = new ScheduleDayData(new DateOnly(2013, 1, 14));
 			dataList.Add(data.DateOnly, data);
 
 			return dataList;

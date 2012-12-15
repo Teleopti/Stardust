@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	{
 		private IScheduleMatrixPro _matrix;
 		private readonly IScheduleDayDataMapper _scheduleDayDataMapper;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		protected IDictionary<DateOnly, IScheduleDayData> ScheduleDayDataDictionary = new Dictionary<DateOnly, IScheduleDayData>();
 
 		public MatrixData(IScheduleDayDataMapper scheduleDayDataMapper)

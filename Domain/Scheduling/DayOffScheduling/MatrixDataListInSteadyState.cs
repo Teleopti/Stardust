@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 	public class MatrixDataListInSteadyState : IMatrixDataListInSteadyState
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool IsListInSteadyState(IList<IMatrixData> matrixDataList)
 		{
 			IMatrixData masterMatrix = matrixDataList[0];
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			return true;
 		}
 
-		private DateOnlyPeriod dateOnlyPeriodFromData(IMatrixData data)
+		private static DateOnlyPeriod dateOnlyPeriodFromData(IMatrixData data)
 		{
 			return new DateOnlyPeriod(data.ScheduleDayDataCollection.First().DateOnly, data.ScheduleDayDataCollection.Last().DateOnly);
 		}

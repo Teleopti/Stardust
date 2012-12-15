@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		private MockRepository _mocks;
 		private ISchedulingOptions _schedulingOptions;
 		private IEffectiveRestriction _effectiveRestriction;
+		private IHasDayOffDefinition _hasDayOffDefinition;
 
 		[SetUp]
 		public void Setup()
@@ -27,7 +28,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			_scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			_schedulingOptions = new SchedulingOptions();
 			_effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-			_target = new ScheduleDayDataMapper(_effectiveRestrictionCreator);
+			_hasDayOffDefinition = _mocks.StrictMock<IHasDayOffDefinition>();
+			_target = new ScheduleDayDataMapper(_effectiveRestrictionCreator, _hasDayOffDefinition);
 		}
 
 		[Test]
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
 				Expect.Call(_scheduleDay1.IsScheduled()).Return(true);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
+				Expect.Call(_hasDayOffDefinition.IsDayOff(_scheduleDay1)).Return(false);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay1, _schedulingOptions)).Return(
 					_effectiveRestriction);
 				Expect.Call(_effectiveRestriction.IsRestriction).Return(true);

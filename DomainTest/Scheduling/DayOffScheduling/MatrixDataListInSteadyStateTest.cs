@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		}
 
 		[Test]
-		public void ShouldReturnFalseSameNumberOfDaysOffButInDifferntPlaces()
+		public void ShouldReturnFalseSameNumberOfDaysOffButAtDifferentPlaces()
 		{
 			IDictionary<DateOnly, IScheduleDayData> dataList;
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			Assert.IsFalse(result);
 		}
 
-		private IDictionary<DateOnly, IScheduleDayData> createList()
+		private static IDictionary<DateOnly, IScheduleDayData> createList()
 		{
 			IDictionary<DateOnly, IScheduleDayData> dataList = new Dictionary<DateOnly, IScheduleDayData>();
 			IScheduleDayData data;
@@ -136,6 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 	public class MatrixDataForTest : MatrixData
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public MatrixDataForTest(IEnumerable<IScheduleDayData> scheduleDayDataCollectionForTest)
 			: base(null)
 		{

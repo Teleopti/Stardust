@@ -7,10 +7,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 {
 	[TestFixture]
-	public class MatrixDatasWithToFewDaysOffTest
+	public class MatrixDataWithToFewDaysOffTest
 	{
 		private MockRepository _mocks;
-		private IMatrixDatasWithToFewDaysOff _target;
+		private IMatrixDataWithToFewDaysOff _target;
 		private IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 		private IScheduleMatrixPro _matrix;
 		private IVirtualSchedulePeriod _schedulePeriod;
@@ -21,14 +21,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		{
 			_mocks = new MockRepository();
 			_dayOffsInPeriodCalculator = _mocks.StrictMock<IDayOffsInPeriodCalculator>();
-			_target = new MatrixDatasWithToFewDaysOff(_dayOffsInPeriodCalculator);
+			_target = new MatrixDataWithToFewDaysOff(_dayOffsInPeriodCalculator);
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_matrixData = _mocks.StrictMock<IMatrixData>();
 		}
 
 		[Test]
-		public void ShouldReturnMatrixDatasIfNotEnoughDaysOff()
+		public void ShouldReturnMatrixDataIfNotEnoughDaysOff()
 		{
 			using (_mocks.Record())
 			{

@@ -174,9 +174,10 @@ namespace Teleopti.Ccc.Win.Scheduling
         	builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().
         		InstancePerDependency();
         	builder.RegisterType<MatrixDataListInSteadyState>().As<IMatrixDataListInSteadyState>().InstancePerDependency();
+        	builder.RegisterType<HasDayOffDefinition>().As<IHasDayOffDefinition>().InstancePerDependency();
         	builder.RegisterType<ScheduleDayDataMapper>().As<IScheduleDayDataMapper>().InstancePerDependency();
         	builder.RegisterType<MatrixDataListCreator>().As<IMatrixDataListCreator>().InstancePerDependency();
-        	builder.RegisterType<MatrixDatasWithToFewDaysOff>().As<IMatrixDatasWithToFewDaysOff>().InstancePerDependency();
+        	builder.RegisterType<MatrixDataWithToFewDaysOff>().As<IMatrixDataWithToFewDaysOff>().InstancePerDependency();
         	builder.RegisterType<MissingDaysOffScheduler>().As<IMissingDaysOffScheduler>().InstancePerDependency();
 
         }

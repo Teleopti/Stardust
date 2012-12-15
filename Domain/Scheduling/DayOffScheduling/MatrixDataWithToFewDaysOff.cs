@@ -3,20 +3,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
-	public interface IMatrixDatasWithToFewDaysOff
+	public interface IMatrixDataWithToFewDaysOff
 	{
 		IList<IMatrixData> FindMatrixesWithToFewDaysOff(IList<IMatrixData> matrixDataList);
 	}
 
-	public class MatrixDatasWithToFewDaysOff : IMatrixDatasWithToFewDaysOff
+	public class MatrixDataWithToFewDaysOff : IMatrixDataWithToFewDaysOff
 	{
 		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 
-		public MatrixDatasWithToFewDaysOff(IDayOffsInPeriodCalculator dayOffsInPeriodCalculator)
+		public MatrixDataWithToFewDaysOff(IDayOffsInPeriodCalculator dayOffsInPeriodCalculator)
 		{
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IMatrixData> FindMatrixesWithToFewDaysOff(IList<IMatrixData> matrixDataList)
 		{
 			IList<IMatrixData> result = new List<IMatrixData>();

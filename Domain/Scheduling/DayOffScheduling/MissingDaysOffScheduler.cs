@@ -13,23 +13,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		private readonly IBestSpotForAddingDayOffFinder _bestSpotForAddingDayOffFinder;
 		private readonly IMatrixDataListInSteadyState _matrixDataListInSteadyState;
 		private readonly IMatrixDataListCreator _matrixDataListCreator;
-		private readonly IMatrixDatasWithToFewDaysOff _matrixDatasWithToFewDaysOff;
+		private readonly IMatrixDataWithToFewDaysOff _matrixDataWithToFewDaysOff;
 
 		public MissingDaysOffScheduler(IBestSpotForAddingDayOffFinder bestSpotForAddingDayOffFinder,
 			IMatrixDataListInSteadyState matrixDataListInSteadyState, IMatrixDataListCreator matrixDataListCreator, 
-			IMatrixDatasWithToFewDaysOff matrixDatasWithToFewDaysOff)
+			IMatrixDataWithToFewDaysOff matrixDataWithToFewDaysOff)
 		{
 			_bestSpotForAddingDayOffFinder = bestSpotForAddingDayOffFinder;
 			_matrixDataListInSteadyState = matrixDataListInSteadyState;
 			_matrixDataListCreator = matrixDataListCreator;
-			_matrixDatasWithToFewDaysOff = matrixDatasWithToFewDaysOff;
+			_matrixDataWithToFewDaysOff = matrixDataWithToFewDaysOff;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			var matrixDataList = _matrixDataListCreator.Create(matrixList, schedulingOptions);
 			bool useSameDaysOffOnAll = _matrixDataListInSteadyState.IsListInSteadyState(matrixDataList);
-			IList<IMatrixData> workingList = _matrixDatasWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixDataList);
+			IList<IMatrixData> workingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixDataList);
 			while (workingList.Count > 0)
 			{
 				DateOnly? resultingDate = _bestSpotForAddingDayOffFinder.Find(workingList[0].ScheduleDayDataCollection);
@@ -52,13 +53,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 				matrixList = extractMatrixes(workingList);
 				matrixDataList = _matrixDataListCreator.Create(matrixList, schedulingOptions);
-				workingList = _matrixDatasWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixDataList);
+				workingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixDataList);
 			}
 
 			return true;
 		}
 
-		private IList<IScheduleMatrixPro> extractMatrixes(IList<IMatrixData> workingList)
+		private static IList<IScheduleMatrixPro> extractMatrixes(IList<IMatrixData> workingList)
 		{
 			var ret = new List<IScheduleMatrixPro>();
 			foreach (var matrixData in workingList)
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			return ret;
 		}
 
-		private void assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService)
+		private static void assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			IScheduleDay scheduleDay = matrixData.Matrix.GetScheduleDayByKey(date).DaySchedulePart();
 			scheduleDay.CreateAndAddDayOff(dayOffTemplate);

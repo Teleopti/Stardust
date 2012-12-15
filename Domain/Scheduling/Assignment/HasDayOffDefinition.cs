@@ -6,11 +6,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	public interface IHasDayOffDefinition
 	{
 		bool IsDayOff();
+		bool IsDayOff(IScheduleDay scheduleDay);
 	}
 
 	public class HasDayOffDefinition : IHasDayOffDefinition
 	{
 		private readonly IScheduleDay _scheduleDay;
+
+		public HasDayOffDefinition()
+		{}
 
 		public HasDayOffDefinition(IScheduleDay scheduleDay)
 		{
@@ -20,13 +24,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public bool IsDayOff()
 		{
-			var dateOnlyAsPeriod = _scheduleDay.DateOnlyAsPeriod;
+			return IsDayOff(_scheduleDay);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool IsDayOff(IScheduleDay scheduleDay)
+		{
+			var dateOnlyAsPeriod = scheduleDay.DateOnlyAsPeriod;
 			if (dateOnlyAsPeriod == null)
 				return false;
 
 			var dateOnly = dateOnlyAsPeriod.DateOnly;
 
-			var person = _scheduleDay.Person;
+			var person = scheduleDay.Person;
 			if (person == null)
 				return false;
 

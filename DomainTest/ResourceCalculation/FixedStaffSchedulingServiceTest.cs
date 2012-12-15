@@ -262,6 +262,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             Expect.Call(() => _absencePreferenseScheduler.AddPreferredAbsence(matrixProList, _schedulingOptions));
             Expect.Call(() => _dayOffScheduler.DayOffScheduling(matrixProList, matrixProList, rollbackService ,_schedulingOptions));
+        	Expect.Call(_missingDaysOffScheduler.Execute(matrixProList, _schedulingOptions, rollbackService)).Return(true);
             _mocks.ReplayAll();
             
             _schedulingService.DayOffScheduling(matrixProList, matrixProList, rollbackService, _schedulingOptions);

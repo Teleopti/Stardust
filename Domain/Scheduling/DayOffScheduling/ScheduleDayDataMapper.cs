@@ -11,10 +11,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	public class ScheduleDayDataMapper : IScheduleDayDataMapper
 	{
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
+		private readonly IHasDayOffDefinition _hasDayOffDefinition;
 
-		public ScheduleDayDataMapper(IEffectiveRestrictionCreator effectiveRestrictionCreator)
+		public ScheduleDayDataMapper(IEffectiveRestrictionCreator effectiveRestrictionCreator, IHasDayOffDefinition hasDayOffDefinition)
 		{
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
+			_hasDayOffDefinition = hasDayOffDefinition;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -25,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			toAdd.IsScheduled = scheduleDay.IsScheduled();
 			SchedulePartView significant = scheduleDay.SignificantPart();
 			toAdd.IsDayOff = significant == SchedulePartView.DayOff;
-			//toAdd.IsContractDayOff = hasDayOffDefinition.IsDayOff();
+			toAdd.IsContractDayOff = _hasDayOffDefinition.IsDayOff(scheduleDay);
 			IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay,
 			                                                                                                  schedulingOptions);
 			toAdd.HaveRestriction = effectiveRestriction.IsRestriction;

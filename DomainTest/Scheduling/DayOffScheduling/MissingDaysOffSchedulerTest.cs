@@ -17,15 +17,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		private IMatrixDataListInSteadyState _matrixDataListInSteadyState;
 		private IMatrixDataListCreator _matrixDataListCreator;
 		private IScheduleMatrixPro _matrix1;
-		//private IScheduleMatrixPro _matrix2;
 		private IList<IScheduleMatrixPro> _matrixList;
-		private IVirtualSchedulePeriod _virtualSchedulePeriod;
 		private ISchedulingOptions _schedulingOptions;
 		private IList<IMatrixData> _matrixDataList;
 		private IMatrixData _matrixData1;
 		private IMatrixData _matrixData2;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
-		private IMatrixDatasWithToFewDaysOff _matrixDatasWithToFewDaysOff;
+		private IMatrixDataWithToFewDaysOff _matrixDataWithToFewDaysOff;
 		private IScheduleDayPro _scheduleDayPro;
 		private IScheduleDay _scheduleDay;
 		private ReadOnlyCollection<IScheduleDayData> _scheduleDayDataCollection;
@@ -37,13 +35,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			_bestSpotForAddingDayOffFinder = _mocks.StrictMock<IBestSpotForAddingDayOffFinder>();
 			_matrixDataListInSteadyState = _mocks.StrictMock<IMatrixDataListInSteadyState>();
 			_matrixDataListCreator = _mocks.StrictMock<IMatrixDataListCreator>();
-			_matrixDatasWithToFewDaysOff = _mocks.StrictMock<IMatrixDatasWithToFewDaysOff>();
+			_matrixDataWithToFewDaysOff = _mocks.StrictMock<IMatrixDataWithToFewDaysOff>();
 			_target = new MissingDaysOffScheduler(_bestSpotForAddingDayOffFinder, _matrixDataListInSteadyState,
-			                                      _matrixDataListCreator, _matrixDatasWithToFewDaysOff);
+			                                      _matrixDataListCreator, _matrixDataWithToFewDaysOff);
 			_matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
-			//_matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_matrixList = new List<IScheduleMatrixPro> {_matrix1};
-			_virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_schedulingOptions = new SchedulingOptions();
 			_matrixData1 = _mocks.StrictMock<IMatrixData>();
 			_matrixData2 = _mocks.StrictMock<IMatrixData>();
@@ -63,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			{
 				Expect.Call(_matrixDataListCreator.Create(_matrixList, _schedulingOptions)).Return(_matrixDataList);
 				Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(_matrixDataList)).Return(true);
-				Expect.Call(_matrixDatasWithToFewDaysOff.FindMatrixesWithToFewDaysOff(_matrixDataList)).Return(
+				Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(_matrixDataList)).Return(
 					new List<IMatrixData>());
 			}
 
@@ -75,13 +71,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		}
 
 		[Test]
-		public void ShouldAddOnAllMatrixDatasIfInSteadyState()
+		public void ShouldAddOnAllMatrixDataIfInSteadyState()
 		{
 			using (_mocks.Record())
 			{
 				Expect.Call(_matrixDataListCreator.Create(_matrixList, _schedulingOptions)).Return(_matrixDataList);
 				Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(_matrixDataList)).Return(true);
-				Expect.Call(_matrixDatasWithToFewDaysOff.FindMatrixesWithToFewDaysOff(_matrixDataList)).Return(
+				Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(_matrixDataList)).Return(
 					_matrixDataList);
 				Expect.Call(_matrixDataList[0].ScheduleDayDataCollection).Return(_scheduleDayDataCollection);
 				Expect.Call(_bestSpotForAddingDayOffFinder.Find(_scheduleDayDataCollection)).Return(
@@ -103,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_matrixData2.Matrix).Return(_matrix1);
 
 				Expect.Call(_matrixDataListCreator.Create(new List<IScheduleMatrixPro>(_matrixList), _schedulingOptions)).IgnoreArguments().Return(_matrixDataList);
-				Expect.Call(_matrixDatasWithToFewDaysOff.FindMatrixesWithToFewDaysOff(_matrixDataList)).Return(
+				Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(_matrixDataList)).Return(
 					new List<IMatrixData>());
 			}
 
@@ -114,30 +110,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			}
 		}
 
-		[Test]
-		public void ShouldAddOnFirstMatrixDataIfNotInSteadyState()
-		{
+		//[Test]
+		//public void ShouldAddOnFirstMatrixDataIfNotInSteadyState()
+		//{
 			
-		}
-
-		//private void initialMocks()
-		//{
-		//    Expect.Call(_matrix1.SchedulePeriod).Return(_virtualSchedulePeriod);
-		//    Expect.Call(_matrix2.SchedulePeriod).Return(_virtualSchedulePeriod);
-		//    int targetDaysOff;
-		//    int current;
-		//    Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff,
-		//                                                                     out current)).Return(false).Repeat.Twice();
-		//}
-
-		//private void allSolved()
-		//{
-		//    Expect.Call(_matrix1.SchedulePeriod).Return(_virtualSchedulePeriod);
-		//    Expect.Call(_matrix2.SchedulePeriod).Return(_virtualSchedulePeriod);
-		//    int targetDaysOff;
-		//    int current;
-		//    Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff,
-		//                                                                     out current)).Return(true).Repeat.Twice();
 		//}
 	}
 

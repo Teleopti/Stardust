@@ -422,7 +422,7 @@
     <Compile Include="Scheduling\DayOffScheduling\MatrixData.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataListCreator.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataListInSteadyState.cs" />
-    <Compile Include="Scheduling\DayOffScheduling\MatrixDatasWithToFewDaysOff.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixDataWithToFewDaysOff.cs" />
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayData.cs" />
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataMapper.cs" />
     <Compile Include="Scheduling\DayOffTemplateSorter.cs" />
