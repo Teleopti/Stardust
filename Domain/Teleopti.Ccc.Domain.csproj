@@ -419,6 +419,8 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessManager.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitChecker.cs" />
     <Compile Include="Scheduling\DayOffScheduling\BestSpotForAddingDayOffFinder.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\DayOffScheduler.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\DaysOffSchedulingService.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixData.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataListCreator.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataListInSteadyState.cs" />

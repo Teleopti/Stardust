@@ -323,7 +323,7 @@
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
-    <Compile Include="ResourceCalculation\DayOffSchedulerTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\DayOffSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManagerTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet3.cs" />
@@ -369,6 +369,7 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessManagerTest.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitCheckerTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\BestSpotForAddingDayOffFinderTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\DaysOffSchedulingServiceTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataListCreatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataListInSteadyStateTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataWithToFewDaysOffTest.cs" />
