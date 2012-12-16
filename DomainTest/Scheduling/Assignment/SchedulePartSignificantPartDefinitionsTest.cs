@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private IPerson _person;
         private IScheduleDictionary _scheduleDictionary;
         private IScheduleDay _mockedPart;
-    	private IHasDayOffDefinition _hasDayOffDefinition;
+    	private IHasContractDayOffDefinition _hasContractDayOffDefinition;
 
         [SetUp]
         public void Setup()
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(2001,1,1));
             _mocker.BackToRecordAll();
             _mockedPart = _mocker.StrictMock<IScheduleDay>();
-        	_hasDayOffDefinition = _mocker.StrictMock<IHasDayOffDefinition>();
+        	_hasContractDayOffDefinition = _mocker.StrictMock<IHasContractDayOffDefinition>();
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyPartIsNotNull()
         {
             _part = null;
-			ISignificantPartProvider provider = new SchedulePartSignificantPartDefinitions(_part, _hasDayOffDefinition);
+			ISignificantPartProvider provider = new SchedulePartSignificantPartDefinitions(_part, _hasContractDayOffDefinition);
             Assert.IsNull(provider,"We will not touch this, but fxcop will");
         }
 
@@ -69,8 +69,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocker.Playback())
             {
-                Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasDayOff());
-				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasDayOff(), "empty");
+                Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasDayOff());
+				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasDayOff(), "empty");
             }
 
         }
@@ -88,11 +88,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             //only mainshifts
             _part.CreateAndAddActivity(mainLayer1, category);
             _part.CreateAndAddActivity(mainLayer2, category);
-			Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_part, _hasDayOffDefinition).HasFullAbsence());
+			Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_part, _hasContractDayOffDefinition).HasFullAbsence());
 
             //one absence not covering whole mainshifts
             _part.CreateAndAddAbsence(absenceLayer1);
-			Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_part, _hasDayOffDefinition).HasFullAbsence());
+			Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_part, _hasContractDayOffDefinition).HasFullAbsence());
 
             //rk: anders said no to this one
             ////two absences covering whole mainshifts together
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             //one absence covering whole mainshifts
             _part.Clear<IPersonAbsence>();
             _part.CreateAndAddAbsence(absenceLayer3);
-			Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_part, _hasDayOffDefinition).HasFullAbsence());
+			Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_part, _hasContractDayOffDefinition).HasFullAbsence());
 
             //only absence
             IContract contract = new Contract("contract");
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             IPersonPeriod personPeriod = new PersonPeriod(new DateOnly(new DateTime(2001, 1, 1)), personContract, new Team());
             _part.Person.AddPersonPeriod(personPeriod);
             _part.Clear<IPersonAssignment>();
-			Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_part, _hasDayOffDefinition).HasFullAbsence());
+			Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_part, _hasContractDayOffDefinition).HasFullAbsence());
         }
 
         [Test]
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocker.Playback())
             {
-				var definitions = new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition);
+				var definitions = new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition);
                 using(definitions.BeginRead())
                 {
                     Assert.IsTrue(definitions.HasFullAbsence());
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var layer2 = new MainShiftActivityLayer(new Activity("underlying2"), new DateTimePeriod(_baseDateTime.AddHours(5), _baseDateTime.AddHours(8)));
             var absenceLayer = new AbsenceLayer(new Absence(), new DateTimePeriod(_baseDateTime.AddHours(4), _baseDateTime.AddHours(6)));
             var absenceLayer2 = new AbsenceLayer(new Absence(), new DateTimePeriod(_baseDateTime.AddHours(5), _baseDateTime.AddHours(8)));
-			var target = new SchedulePartSignificantPartDefinitions(_part, _hasDayOffDefinition);
+			var target = new SchedulePartSignificantPartDefinitions(_part, _hasContractDayOffDefinition);
 
             _part.CreateAndAddActivity(layer, category);
             Assert.IsFalse(target.HasAbsence(), "no absence");
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                              new AbsenceLayer(new Absence(),
                                               new DateTimePeriod(_baseDateTime.AddHours(26),
                                                                  _baseDateTime.AddHours(30))));
-			var target = new SchedulePartSignificantPartDefinitions(_part, _hasDayOffDefinition);
+			var target = new SchedulePartSignificantPartDefinitions(_part, _hasContractDayOffDefinition);
             _part.CreateAndAddActivity(layer, category);
             _part.Add(pAbs);
 
@@ -203,9 +203,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocker.Playback())
             {
-				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasMainShift());
-				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasMainShift());
-				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasMainShift());
+				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasMainShift());
+				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasMainShift());
+				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasMainShift());
             }
         }
 
@@ -224,8 +224,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocker.Playback())
             {
-				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasAssignment());
-				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasAssignment());
+				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasAssignment());
+				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasAssignment());
             }
         }
 
@@ -246,9 +246,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocker.Playback())
             {
-				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasPersonalShift());
-				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasPersonalShift());
-				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasPersonalShift());
+				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasPersonalShift());
+				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasPersonalShift());
+				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasPersonalShift());
             }
         }
 
@@ -269,9 +269,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocker.Playback())
             {
-				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasOvertimeShift());
-				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasOvertimeShift());
-				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasOvertimeShift());
+				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasOvertimeShift());
+				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasOvertimeShift());
+				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasOvertimeShift());
             }
         }
 
@@ -287,9 +287,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocker.Playback())
             {
-				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasPreferenceRestriction());
+				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasPreferenceRestriction());
                 restrictions.Add(new PreferenceRestriction());
-				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasPreferenceRestriction());
+				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasPreferenceRestriction());
             }
 
         }
@@ -306,9 +306,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             using (_mocker.Playback())
             {
-				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasStudentAvailabilityRestriction());
+				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasStudentAvailabilityRestriction());
                 restrictions.Add(new StudentAvailabilityRestriction());
-				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasStudentAvailabilityRestriction());
+				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasStudentAvailabilityRestriction());
             }
         }
 
@@ -332,15 +332,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(visualLayerCollection.GetEnumerator()).Return(new List<IVisualLayer> { visualLayer }.GetEnumerator()).Repeat.AtLeastOnce();
 				Expect.Call(visualLayer.Payload).Return(absence).Repeat.AtLeastOnce();
 				Expect.Call(visualLayerCollection.HasLayers).Return(true).Repeat.AtLeastOnce();
-				Expect.Call(_hasDayOffDefinition.IsDayOff()).Return(true);
+				Expect.Call(_hasContractDayOffDefinition.IsDayOff(_mockedPart)).Return(true);
 				Expect.Call(_mockedPart.PersonDayOffCollection()).Return(
 					new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
 			}
 
 			using (_mocker.Playback())
 			{
-				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasContractDayOff());
-				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasDayOffDefinition).HasContractDayOff());
+				Assert.IsFalse(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasContractDayOff());
+				Assert.IsTrue(new SchedulePartSignificantPartDefinitions(_mockedPart, _hasContractDayOffDefinition).HasContractDayOff());
 			}
 		}
     }

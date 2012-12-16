@@ -165,7 +165,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _schedulingOptions.UseRotations = true;
             _schedulingOptions.UsePreferences = true;
             _schedulingOptions.UseAvailability = true;
-            _schedulingOptions.AddContractScheduleDaysOff = false;
 
 			_schedulingService.DoTheScheduling(new List<IScheduleDay> { part4, part3, part2, part1 }, _schedulingOptions, true, false, _rollbackService);
 			Assert.IsNotNull(_schedulingService.FinderResults);
@@ -213,7 +212,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _schedulingOptions.UseRotations = true;
             _schedulingOptions.UseAvailability = true;
             _schedulingOptions.UsePreferences = true;
-            _schedulingOptions.AddContractScheduleDaysOff = false;
 
 			_schedulingService.DayScheduled += (sender, e) => { e.Cancel = true; };
 			_schedulingService.DoTheScheduling(new List<IScheduleDay> { part2, part1 }, _schedulingOptions, true, false, _rollbackService);

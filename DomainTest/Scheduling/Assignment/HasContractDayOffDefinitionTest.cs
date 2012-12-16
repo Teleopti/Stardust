@@ -9,10 +9,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     [TestFixture]
-    public class HasDayOffDefinitionTest
+    public class HasContractDayOffDefinitionTest
     {
         private MockRepository _mocks;
-        private HasDayOffDefinition _target;
+        private HasContractDayOffDefinition _target;
         private IScheduleDay _scheduleDay;
         private IDateOnlyAsDateTimePeriod _dateOnlyPeriod;
         private DateOnly _dateOnly;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             _mocks = new MockRepository();
             _scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            _target = new HasDayOffDefinition(_scheduleDay);
+            _target = new HasContractDayOffDefinition();
             _dateOnly = new DateOnly(2010, 12, 20);
             _dateOnlyPeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
             _person = _mocks.StrictMock<IPerson>();
@@ -37,14 +37,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _contractSchedule = _mocks.StrictMock<IContractSchedule>();
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
-        public void ShouldThrowIsScheduleDayIsNull()
-        {
-            _scheduleDay = null;
-            _target = new HasDayOffDefinition(_scheduleDay);
-        }
-
-        
         [Test]
         public void ShouldReturnFalseIfNoPersonPeriod()
         {
@@ -53,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(_scheduleDay.Person).Return(_person);
             Expect.Call(_person.Period(_dateOnly)).Return(null);
             _mocks.ReplayAll();
-            Assert.That(_target.IsDayOff(),Is.False);
+			Assert.That(_target.IsDayOff(_scheduleDay), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -66,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
             Expect.Call(_personPeriod.PersonContract).Return(null);
             _mocks.ReplayAll();
-            Assert.That(_target.IsDayOff(), Is.False);
+			Assert.That(_target.IsDayOff(_scheduleDay), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -80,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(_personPeriod.PersonContract).Return(_personContract);
             Expect.Call(_personContract.Contract).Return(null);
             _mocks.ReplayAll();
-            Assert.That(_target.IsDayOff(), Is.False);
+			Assert.That(_target.IsDayOff(_scheduleDay), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -95,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(_personContract.Contract).Return(_contract);
             Expect.Call(_contract.EmploymentType).Return(EmploymentType.HourlyStaff);
             _mocks.ReplayAll();
-            Assert.That(_target.IsDayOff(), Is.False);
+			Assert.That(_target.IsDayOff(_scheduleDay), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -111,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(_contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
             Expect.Call(_personContract.ContractSchedule).Return(null);
             _mocks.ReplayAll();
-            Assert.That(_target.IsDayOff(), Is.False);
+			Assert.That(_target.IsDayOff(_scheduleDay), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -132,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Expect.Call(_contractSchedule.IsWorkday(_dateOnly, _dateOnly))
 				.Return(false);
             _mocks.ReplayAll();
-            Assert.That(_target.IsDayOff(), Is.True);
+			Assert.That(_target.IsDayOff(_scheduleDay), Is.True);
             _mocks.VerifyAll();
         }
     }

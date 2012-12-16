@@ -3,30 +3,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public interface IHasDayOffDefinition
+	public interface IHasContractDayOffDefinition
 	{
-		bool IsDayOff();
 		bool IsDayOff(IScheduleDay scheduleDay);
 	}
 
-	public class HasDayOffDefinition : IHasDayOffDefinition
+	public class HasContractDayOffDefinition : IHasContractDayOffDefinition
 	{
-		private readonly IScheduleDay _scheduleDay;
-
-		public HasDayOffDefinition()
-		{}
-
-		public HasDayOffDefinition(IScheduleDay scheduleDay)
-		{
-			InParameter.NotNull("scheduleDay", scheduleDay);
-			_scheduleDay = scheduleDay;
-		}
-
-		public bool IsDayOff()
-		{
-			return IsDayOff(_scheduleDay);
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool IsDayOff(IScheduleDay scheduleDay)
 		{

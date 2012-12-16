@@ -20,19 +20,22 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly IScheduleDayAvailableForDayOffSpecification _scheduleDayAvailableForDayOffSpecification;
+		private readonly IHasContractDayOffDefinition _hasContractDayOffDefinition;
 
-	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
+		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public DayOffScheduler(
             IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
-            IScheduleDayAvailableForDayOffSpecification scheduleDayAvailableForDayOffSpecification)
+            IScheduleDayAvailableForDayOffSpecification scheduleDayAvailableForDayOffSpecification,
+			IHasContractDayOffDefinition hasContractDayOffDefinition)
 		{
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_scheduleDayAvailableForDayOffSpecification = scheduleDayAvailableForDayOffSpecification;
+			_hasContractDayOffDefinition = hasContractDayOffDefinition;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
@@ -41,7 +44,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             using (PerformanceOutput.ForOperation("Inital assignment of days off"))
             {
                 addDaysOff(matrixList, schedulingOptions);
-                if (schedulingOptions.AddContractScheduleDaysOff) addContractDaysOff(matrixListAll, rollbackService, schedulingOptions);
+                addContractDaysOff(matrixListAll, rollbackService, schedulingOptions);
             }
         }
 
@@ -88,10 +91,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 if (!schedulePeriod.IsValid)
                     continue;
 
-                EmploymentType employmentType = schedulePeriod.Contract.EmploymentType;
-                if (employmentType == EmploymentType.HourlyStaff)
-                    continue;
-
                 int targetDaysOff;
                 int currentDaysOff;
                 bool hasCorrectNumberOfDaysOff = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod,
@@ -111,13 +110,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                     if (!_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(part))
                         continue;
 
-                	DateOnly currentDay = scheduleDayPro.Day;
-
-                	DateOnly? periodStartDay = matrix.Person.SchedulePeriodStartDate(currentDay);
-					if(!periodStartDay.HasValue)
-						continue;
-
-					if (schedulePeriod.ContractSchedule.IsWorkday(periodStartDay.Value, currentDay))
+					if (!_hasContractDayOffDefinition.IsDayOff(part))
                         continue;
 
 					IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);

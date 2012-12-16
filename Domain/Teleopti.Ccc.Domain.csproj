@@ -409,7 +409,7 @@
     <Compile Include="Scheduling\Assignment\RestoreSchedulePartService.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartForDisplayDefinitions.cs" />
     <Compile Include="Scheduling\Assignment\GroupShiftCategoryFairnessCreator.cs" />
-    <Compile Include="Scheduling\Assignment\HasDayOffDefinition.cs" />
+    <Compile Include="Scheduling\Assignment\HasContractDayOffDefinition.cs" />
     <Compile Include="Scheduling\Assignment\IRangeProjectionService.cs" />
     <Compile Include="Scheduling\Assignment\NewDynamicDayOffSchedulePeriodTargetCalculator.cs" />
     <Compile Include="Scheduling\Assignment\NewFixedDayOffSchedulePeriodTargetCalculator.cs" />

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		private MockRepository _mocks;
 		private ISchedulingOptions _schedulingOptions;
 		private IEffectiveRestriction _effectiveRestriction;
-		private IHasDayOffDefinition _hasDayOffDefinition;
+		private IHasContractDayOffDefinition _hasContractDayOffDefinition;
 
 		[SetUp]
 		public void Setup()
@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			_scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			_schedulingOptions = new SchedulingOptions();
 			_effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-			_hasDayOffDefinition = _mocks.StrictMock<IHasDayOffDefinition>();
-			_target = new ScheduleDayDataMapper(_effectiveRestrictionCreator, _hasDayOffDefinition);
+			_hasContractDayOffDefinition = _mocks.StrictMock<IHasContractDayOffDefinition>();
+			_target = new ScheduleDayDataMapper(_effectiveRestrictionCreator, _hasContractDayOffDefinition);
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
 				Expect.Call(_scheduleDay1.IsScheduled()).Return(true);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
-				Expect.Call(_hasDayOffDefinition.IsDayOff(_scheduleDay1)).Return(false);
+				Expect.Call(_hasContractDayOffDefinition.IsDayOff(_scheduleDay1)).Return(false);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay1, _schedulingOptions)).Return(
 					_effectiveRestriction);
 				Expect.Call(_effectiveRestriction.IsRestriction).Return(true);
@@ -57,6 +57,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Assert.IsTrue(result.IsScheduled);
 			}
 			
+		}
+
+		[Test]
+		public void EffectiveRestrictionCanBeNull()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleDayPro1.Day).Return(DateOnly.MinValue);
+				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.IsScheduled()).Return(true);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
+				Expect.Call(_hasContractDayOffDefinition.IsDayOff(_scheduleDay1)).Return(false);
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay1, _schedulingOptions)).Return(null);
+			}
+
+			using (_mocks.Playback())
+			{
+				IScheduleDayData result = _target.Map(_scheduleDayPro1, _schedulingOptions);
+				Assert.AreEqual(DateOnly.MinValue, result.DateOnly);
+				Assert.IsFalse(result.HaveRestriction);
+				Assert.IsFalse(result.IsContractDayOff);
+				Assert.IsTrue(result.IsDayOff);
+				Assert.IsTrue(result.IsScheduled);
+			}
 		}
 	}
 }
