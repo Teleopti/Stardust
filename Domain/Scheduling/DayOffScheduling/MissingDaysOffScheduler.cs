@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
 	public interface IMissingDaysOffScheduler
 	{
+		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 		bool Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService);
 	}
 
@@ -14,6 +16,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		private readonly IMatrixDataListInSteadyState _matrixDataListInSteadyState;
 		private readonly IMatrixDataListCreator _matrixDataListCreator;
 		private readonly IMatrixDataWithToFewDaysOff _matrixDataWithToFewDaysOff;
+
+		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public MissingDaysOffScheduler(IBestSpotForAddingDayOffFinder bestSpotForAddingDayOffFinder,
 			IMatrixDataListInSteadyState matrixDataListInSteadyState, IMatrixDataListCreator matrixDataListCreator, 
@@ -43,12 +47,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 				{
 					foreach (var matrixData in workingList)
 					{
-						assignDayOff(resultingDate.Value, matrixData, schedulingOptions.DayOffTemplate, rollbackService);
+						var result = assignDayOff(resultingDate.Value, matrixData, schedulingOptions.DayOffTemplate, rollbackService);
+						if (!result)
+							return false;
 					}
 				}
 				else
 				{
-					assignDayOff(resultingDate.Value, workingList[0], schedulingOptions.DayOffTemplate, rollbackService);
+					var result = assignDayOff(resultingDate.Value, workingList[0], schedulingOptions.DayOffTemplate, rollbackService);
+					if (!result)
+						return false;
 				}
 
 				matrixList = extractMatrixes(workingList);
@@ -70,11 +78,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			return ret;
 		}
 
-		private static void assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService)
+		private bool assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			IScheduleDay scheduleDay = matrixData.Matrix.GetScheduleDayByKey(date).DaySchedulePart();
 			scheduleDay.CreateAndAddDayOff(dayOffTemplate);
-			rollbackService.Modify(scheduleDay);
+			rollbackService.Modify(scheduleDay); var eventArgs = new SchedulingServiceBaseEventArgs(scheduleDay);
+			OnDayScheduled(eventArgs);
+			if (eventArgs.Cancel)
+				return false;
+
+			return true;
+		}
+
+		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+		{
+			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
+			if (temp != null)
+			{
+				temp(this, scheduleServiceBaseEventArgs);
+			}
 		}
 	}
 }

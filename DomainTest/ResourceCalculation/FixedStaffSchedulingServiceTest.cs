@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			Expect.Call(() => _absencePreferenseScheduler.DayScheduled += null).IgnoreArguments();
 			Expect.Call(() => _dayOffScheduler.DayScheduled += null).IgnoreArguments();
+			Expect.Call(() => _missingDaysOffScheduler.DayScheduled += null).IgnoreArguments();
 			_mocks.ReplayAll();
 			_schedulingService = new FixedStaffSchedulingService( _schedulingResultStateHolder,
 																 _dayOffsInPeriodCalculator,

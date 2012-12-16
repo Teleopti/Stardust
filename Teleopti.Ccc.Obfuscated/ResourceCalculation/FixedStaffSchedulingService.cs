@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 			_absencePreferenceScheduler.DayScheduled += schedulerDayScheduled;
 			_dayOffScheduler.DayScheduled += schedulerDayScheduled;
+			_missingDaysOffScheduler.DayScheduled += schedulerDayScheduled;
 		}
 
 		void schedulerDayScheduled(object sender, SchedulingServiceBaseEventArgs e)

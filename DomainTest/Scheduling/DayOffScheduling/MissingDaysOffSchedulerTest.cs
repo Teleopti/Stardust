@@ -110,11 +110,90 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			}
 		}
 
-		//[Test]
-		//public void ShouldAddOnFirstMatrixDataIfNotInSteadyState()
-		//{
-			
-		//}
+		[Test]
+		public void ShouldCancelAndReturnFalseIfCanceled()
+		{
+			_target.DayScheduled += _target_DayScheduled;
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrixDataListCreator.Create(_matrixList, _schedulingOptions)).Return(_matrixDataList);
+				Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(_matrixDataList)).Return(true);
+				Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(_matrixDataList)).Return(
+					_matrixDataList);
+				Expect.Call(_matrixDataList[0].ScheduleDayDataCollection).Return(_scheduleDayDataCollection);
+				Expect.Call(_bestSpotForAddingDayOffFinder.Find(_scheduleDayDataCollection)).Return(
+					DateOnly.MinValue);
+
+				Expect.Call(_matrixData1.Matrix).Return(_matrix1);
+				Expect.Call(_matrix1.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+				Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
+				Expect.Call(() => _rollbackService.Modify(_scheduleDay));
+			}
+
+			using (_mocks.Playback())
+			{
+				bool result = _target.Execute(_matrixList, _schedulingOptions, _rollbackService);
+				Assert.IsFalse(result);
+			}
+			_target.DayScheduled -= _target_DayScheduled;
+		}
+
+		void _target_DayScheduled(object sender, SchedulingServiceBaseEventArgs e)
+		{
+			e.Cancel = true;
+		}
+
+		[Test]
+		public void ShouldAddOnFirstMatrixDataIfNotInSteadyState()
+		{
+			IList<IScheduleMatrixPro> secondMatrixList = new List<IScheduleMatrixPro> { _matrix1  };
+			IList<IMatrixData> secondMatrixDataList = new List<IMatrixData> {_matrixData2};
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrixDataListCreator.Create(_matrixList, _schedulingOptions)).Return(_matrixDataList);
+				Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(_matrixDataList)).Return(false);
+				Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(_matrixDataList)).Return(
+					_matrixDataList);
+				Expect.Call(_matrixDataList[0].ScheduleDayDataCollection).Return(_scheduleDayDataCollection);
+				Expect.Call(_bestSpotForAddingDayOffFinder.Find(_scheduleDayDataCollection)).Return(
+					DateOnly.MinValue);
+
+				Expect.Call(_matrixData1.Matrix).Return(_matrix1);
+				Expect.Call(_matrix1.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+				Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
+				Expect.Call(() => _rollbackService.Modify(_scheduleDay));
+
+				Expect.Call(_matrixData1.Matrix).Return(_matrix1);
+				Expect.Call(_matrixData2.Matrix).Return(_matrix1);
+				Expect.Call(_matrixDataListCreator.Create(new List<IScheduleMatrixPro>(_matrixList), _schedulingOptions)).IgnoreArguments().Return(_matrixDataList);
+				Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(_matrixDataList)).Return(
+					secondMatrixDataList);
+
+				Expect.Call(secondMatrixDataList[0].ScheduleDayDataCollection).Return(_scheduleDayDataCollection);
+				Expect.Call(_bestSpotForAddingDayOffFinder.Find(_scheduleDayDataCollection)).Return(
+					DateOnly.MinValue);
+				Expect.Call(_matrixData2.Matrix).Return(_matrix1);
+				Expect.Call(_matrix1.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+				Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
+				Expect.Call(() => _rollbackService.Modify(_scheduleDay));
+
+				Expect.Call(_matrixData2.Matrix).Return(_matrix1);
+
+				Expect.Call(_matrixDataListCreator.Create(new List<IScheduleMatrixPro>(secondMatrixList), _schedulingOptions)).IgnoreArguments().Return(secondMatrixDataList);
+				Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(secondMatrixDataList)).Return(
+					new List<IMatrixData>());
+			}
+
+			using (_mocks.Playback())
+			{
+				bool result = _target.Execute(_matrixList, _schedulingOptions, _rollbackService);
+				Assert.IsTrue(result);
+			}
+		}
 	}
 
 	
