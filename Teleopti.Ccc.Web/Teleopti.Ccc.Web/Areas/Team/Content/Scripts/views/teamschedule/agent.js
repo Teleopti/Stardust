@@ -22,9 +22,10 @@ define([
 				return time.format("H:mm");
 			});
 
-			ko.utils.arrayForEach(agentDay.Projection, function (p) {
-				self.Layers.push(new layer(timeline, p));
+			var newItems = ko.utils.arrayMap(agentDay.Projection, function (p) {
+				return new layer(timeline, p);
 			});
+			self.Layers.push.apply(self.Layers, newItems);
 
 			this.FirstStartMinute = ko.computed(function () {
 				var start = undefined;
