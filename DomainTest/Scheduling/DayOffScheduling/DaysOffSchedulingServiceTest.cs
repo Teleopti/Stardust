@@ -126,11 +126,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			}
 		}
 
-		[Test]
-		public void ShouldFireEvent()
-		{
+		//[Test]
+		//public void ShouldFireEvent()
+		//{
 			
-		}
+		//}
 
 		void targetDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{

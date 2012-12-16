@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
 		public FixedStaffSchedulingService(
             ISchedulingResultStateHolder schedulingResultStateHolder,
 			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, 
