@@ -7,6 +7,5 @@ namespace Teleopti.Ccc.Domain.Repositories
     {
         IList<IStudentAvailabilityDay> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons);
         IList<IStudentAvailabilityDay> Find(DateOnly dateOnly, IPerson person);
-		IList<IStudentAvailabilityDay> FindAndLock(DateOnly dateOnly, IPerson person);
     }
 }
