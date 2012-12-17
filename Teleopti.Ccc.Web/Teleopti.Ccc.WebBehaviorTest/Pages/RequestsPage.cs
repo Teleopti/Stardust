@@ -86,5 +86,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Request-detail-deny-reason")]
 		public Span RequestDetailDenyReason { get; set; }
+
+		[FindBy(Class = "arrow-down")]
+		public Div MoreToLoadArrow { get; set; }
 	}
 }

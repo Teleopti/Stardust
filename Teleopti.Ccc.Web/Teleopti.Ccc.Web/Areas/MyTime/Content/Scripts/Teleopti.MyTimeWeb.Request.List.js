@@ -92,6 +92,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			requestItemViewModel.ShowDetails(requestItemViewModel, event);
 		};
 
+		self.moreToLoad = ko.observable(false);
+
 		//TODO: refact to use map & initialize instead
 		self.showRequests = function (data) {
 			for (var i = 0; i < data.length; i++) {
@@ -142,6 +144,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 					Skip: skip
 				},
 				success: function (data) {
+					self.moreToLoad(data.length == take);
 					self.showRequests(data);
 				},
 				complete: function () {
@@ -158,7 +161,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		};
 	}
 
-	
+
 
 	ko.utils.extend(RequestItemViewModel.prototype, {
 		Initialize: function (data) {
