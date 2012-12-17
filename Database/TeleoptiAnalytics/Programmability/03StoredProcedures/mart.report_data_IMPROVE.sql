@@ -25,16 +25,16 @@ CREATE PROCEDURE [mart].[report_data_IMPROVE]
 @scenario_id int,
 @skill_set nvarchar(max),
 @workload_set nvarchar(max),
-@interval_type int, --anger vilket intervall rapporten ska grupperas pa : lagsta intervall/halvtimme/timme/dag/vecka/manad
+@interval_type int, --group by: [interval/half hour/hour/day/week/month] : [1-7]
 @date_from datetime,
 @date_to datetime,
-@interval_from int,--mellan vilka tider
+@interval_from int,--Time converted to intervals
 @interval_to int,
 @group_page_code uniqueidentifier,
 @group_page_group_set nvarchar(max),
 @site_id int,
 @team_set nvarchar(max),
-@adherence_id int,--1,2 eller 3 fran adherence_calculation tabellen
+@adherence_id int,--1,2 or 3 lookup from adherence_calculation table
 @sl_calc_id int,
 @time_zone_id int,
 @person_code uniqueidentifier,
@@ -58,17 +58,11 @@ CREATE TABLE #person_acd_subSP
 	person_id int,
 	acd_login_id int
 	)
-
-/*
-CREATE TABLE #schedule_deviation(
-			period nvarchar(30),
-			deviation_s decimal(18,4)
-			)
-*/
 			
 CREATE TABLE #pre_result(
 	date_id int,
 	interval_id int,
+	date_date smalldatetime,
 	scheduled_paid_time_s int,
 	calls_offered int,
 	calls_answered int,
@@ -82,10 +76,10 @@ CREATE TABLE #pre_result(
 	adherence_calc_s decimal(18,3),
 	deviation_s decimal(18,3)
 	)
+
 CREATE TABLE #fact_schedule
 	(
 	schedule_date_id int,
-	date smalldatetime,
 	interval_id int,
 	person_id int,
 	scheduled_ready_time_m int,
@@ -93,7 +87,7 @@ CREATE TABLE #fact_schedule
 	scheduled_contract_time_m int,
 	scheduled_paid_time_m int
 	)
-        
+
 CREATE TABLE #result(
            period nvarchar(30),
            scheduled_paid_time_s int,
@@ -104,8 +98,8 @@ CREATE TABLE #result(
            calls_answ_within_sl int,
            calls_abnd_within_sl int,
            service_level decimal(18,3),
-           service_level_numerator decimal(18,3), --täljare
-           service_level_denominator decimal(18,3), --nämnare    
+           service_level_numerator decimal(18,3), --numerator
+           service_level_denominator decimal(18,3), --denumerator    
            adherence_calc_s decimal(18,3),
            deviation_s decimal(18,3),
            adherence decimal(18,3),
@@ -116,27 +110,14 @@ CREATE TABLE #result(
                                             
 CREATE TABLE #bridge_time_zone
 	(
-	local_date_id int,
-	local_interval_id int,
-	date_id int,
-	interval_id int
+	local_date_id int not null,
+	local_interval_id int not null,
+	date_id int not null,
+	interval_id int not null,
+	date_date_local smalldatetime not null
 	)
 	
-/*
-CREATE TABLE #fact_schedule_deviation (
-	date_id INT,
-	person_id INT,
-	interval_id INT,
-	deviation_schedule_ready_s INT,
-	deviation_schedule_s INT,
-	deviation_contract_s INT,
-	ready_time_s INT,
-	is_logged_in INT,
-	contract_time_s INT
-	)
-*/
-
---Local datetime data	
+--utc raw data	
 CREATE TABLE #pre_result_subSP
 	(
 	date_id int,
@@ -161,12 +142,13 @@ CREATE TABLE #pre_result_subSP
 ---------
 --DECLARE
 ---------           
-DECLARE @date TABLE (date_from_id INT, date_to_id INT)	 
 DECLARE @hide_time_zone bit
 DECLARE @intervals_length_m INT
 DECLARE @intervals_per_day INT
 DECLARE @group_page_agent_code uniqueidentifier
 DECLARE @agent_person_code uniqueidentifier
+DECLARE @date_from_id int
+DECLARE @date_to_id int
 
 ---------
 --INIT
@@ -220,7 +202,8 @@ SELECT
 	local_date_id		= d.date_id,
 	local_interval_id	= i.interval_id,
 	date_id				= b.date_id,
-	interval_id			= b.interval_id
+	interval_id			= b.interval_id,
+	date_date_local		= d.date_date
 FROM mart.bridge_time_zone b
 INNER JOIN mart.dim_date d 
 	ON b.local_date_id = d.date_id
@@ -231,38 +214,12 @@ INNER JOIN mart.dim_interval i
 WHERE b.time_zone_id = @time_zone_id
 
 --Get the min/max UTC date_id
-INSERT INTO @date (date_from_id,date_to_id)
-	SELECT MIN(b.date_id),MAX(b.date_id)
-	FROM #bridge_time_zone b
-	INNER JOIN mart.dim_date d 
-		ON b.local_date_id = d.date_id
-	WHERE	d.date_date	between @date_from AND @date_to
-
---Create UTC table from: mart.fact_schedule_deviation
-/*
-INSERT INTO #fact_schedule_deviation
-SELECT 
-	fsd.date_id,
-	fsd.person_id,
-	fsd.interval_id,
-	deviation_schedule_ready_s,
-	deviation_schedule_s,
-	deviation_contract_s,
-	ready_time_s,
-	is_logged_in,
-	contract_time_s
-FROM mart.fact_schedule_deviation fsd
-INNER JOIN #person_acd_subSP a
-	ON fsd.person_id = a.person_id
-INNER JOIN #bridge_time_zone b
-	ON	fsd.interval_id= b.interval_id
-	AND fsd.date_id= b.date_id
+--Get the min/max UTC date_id. Expand UTC -1 +1 when fetching fact_tables (subSP
+SELECT @date_from_id=MIN(b.date_id)-1,@date_to_id=MAX(b.date_id)+1
+FROM #bridge_time_zone b
 INNER JOIN mart.dim_date d 
 	ON b.local_date_id = d.date_id
-	AND d.date_date BETWEEN @date_from AND @date_to
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
-*/
+WHERE	d.date_date	between @date_from AND @date_to
 
 --Create UTC table from: mart.fact_schedule
 INSERT INTO #fact_schedule(schedule_date_id, interval_id, person_id, scheduled_time_m, scheduled_ready_time_m, scheduled_contract_time_m, scheduled_paid_time_m)
@@ -276,21 +233,14 @@ SELECT fs.schedule_date_id,
 FROM mart.fact_schedule fs
 INNER JOIN #person_acd_subSP a
 	ON fs.person_id = a.person_id
-INNER JOIN #bridge_time_zone b
-	ON	fs.interval_id= b.interval_id
-	AND fs.schedule_date_id= b.date_id
-INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-	AND d.date_date BETWEEN @date_from AND @date_to
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
+WHERE fs.schedule_date_id between @date_from_id and @date_to_id	
 AND fs.scenario_id=@scenario_id
 
 
 --This SP will insert Adherence data into table: #pre_result_subSP
 EXEC [mart].[report_data_schedule_result_subSP]
-	@date_from		= @date_from,
-	@date_to		= @date_to,
+	@date_from_id	= @date_from_id,
+	@date_to_id		= @date_to_id,
 	@interval_from	= @interval_from,
 	@interval_to	= @interval_to,
 	@adherence_id	= @adherence_id,
@@ -306,175 +256,36 @@ SELECT date_id,interval_id,SUM(adherence_calc_s),SUM(deviation_s)
 FROM #pre_result_subSP
 GROUP BY date_id, interval_id
 
-/*
---Add [adherence_calc_m] if we are outside scheduled time
-IF @adherence_id=2
-BEGIN
-
-	-------------
-	--adherence_cals_s
-	-------------
-	--fake schedule_time_s for all intervals _outside_ the shift.
-	--Set fake = @interval_length. Later used as adherance_cals_s
-	--#pre_result = Local datetime table
-	
-	SELECT
-		date_id				= d.date_id,
-		interval_id			= i.interval_id,
-		adherence_calc_s	= sum(@intervals_length_m)  --one row per person x interval_length
-		FROM #fact_schedule_deviation fsd
-	INNER JOIN #bridge_time_zone b
-		ON	fsd.interval_id = b.interval_id
-		AND fsd.date_id = b.date_id
-	INNER JOIN mart.dim_date d 
-		ON b.local_date_id = d.date_id
-		AND d.date_date BETWEEN @date_from AND @date_to
-	INNER JOIN mart.dim_interval i
-		ON b.local_interval_id = i.interval_id
-		AND i.interval_id BETWEEN @interval_from AND @interval_to
-	WHERE NOT EXISTS
-		--do the compare on UTC
-		(SELECT 1 FROM #fact_schedule fs
-		WHERE fsd.person_id=fs.person_id
-		AND fsd.date_id=fs.schedule_date_id
-		AND fsd.interval_id=fs.interval_id
-		AND fsd.person_id = fs.person_id)
-	GROUP BY d.date_id, i.interval_id --Group by Local date_id,interval		
-
-	-------------
-	--deviation_s
-	-------------
-	INSERT #schedule_deviation(period,deviation_s)  --Local datetime table
-	SELECT	CASE @interval_type 
-			WHEN 1 THEN i.interval_name  --d. and i. are local dates/intervals!
-			WHEN 2 THEN i.halfhour_name
-			WHEN 3 THEN i.hour_name		
-			WHEN 4 THEN LEFT(convert(varchar(30),d.date_date,120),10)
-			WHEN 5 THEN convert(varchar(10),left(d.year_week,4) + '-' + right(d.year_week,2))
-			WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
-			WHEN 7 THEN d.weekday_resource_key
-			END AS 'period',	
-			CASE @adherence_id 
-				WHEN 1 THEN SUM(ISNULL(deviation_schedule_ready_s,0))
-				WHEN 2 THEN SUM(ISNULL(deviation_schedule_s,0)) 
-				WHEN 3 THEN SUM(ISNULL(deviation_contract_s,0))
-			END AS 'deviation_s'
-	FROM #fact_schedule_deviation fsd --UTC
-	INNER JOIN #bridge_time_zone b
-		ON	fsd.interval_id= b.interval_id
-		AND fsd.date_id= b.date_id
-	INNER JOIN mart.dim_date d 
-		ON b.local_date_id = d.date_id
-		AND d.date_date BETWEEN @date_from AND @date_to
-	INNER JOIN mart.dim_interval i
-		ON b.local_interval_id = i.interval_id
-		AND i.interval_id BETWEEN @interval_from AND @interval_to
-	WHERE NOT EXISTS
-		--do the compare on UTC
-		(SELECT 1 FROM #fact_schedule fs
-		WHERE fsd.person_id=fs.person_id
-		AND fsd.date_id=fs.schedule_date_id
-		AND fsd.interval_id=fs.interval_id
-		AND fsd.person_id = fs.person_id)
-	GROUP BY
-		CASE @interval_type 
-		WHEN 1 THEN i.interval_name
-			WHEN 2 THEN i.halfhour_name
-			WHEN 3 THEN i.hour_name
-			WHEN 4 THEN LEFT(convert(varchar(30),d.date_date,120),10)--mÃ¥ste vara enligt den kultur som anvÃ¤nds
-			WHEN 5 THEN convert(varchar(10),left(d.year_week,4) + '-' + right(d.year_week,2))
-			WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
-			WHEN 7 THEN d.weekday_resource_key
-		END
-	ORDER BY 
-			CASE @interval_type 
-			WHEN 1 THEN i.interval_name
-			WHEN 2 THEN i.halfhour_name
-			WHEN 3 THEN i.hour_name
-			WHEN 4 THEN LEFT(convert(varchar(30),d.date_date,120),10)--mÃ¥ste vara enligt den kultur som anvÃ¤nds
-			WHEN 5 THEN convert(varchar(10),left(d.year_week,4) + '-' + right(d.year_week,2))
-			WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
-			WHEN 7 THEN d.weekday_resource_key
-			END
-END
-
--------------
---adherence_cals_s
--------------
---inside shift
---#pre_result = Local datetime table
-INSERT INTO #pre_result(date_id,interval_id,adherence_calc_s)
-SELECT
-	date_id				= d.date_id,
-	interval_id			= i.interval_id,
-	CASE @adherence_id 
-		WHEN 1 THEN sum(isnull(fs.scheduled_ready_time_m,0))*60
-		WHEN 2 THEN sum(isnull(fs.scheduled_time_m,0))*60
-		WHEN 3 THEN sum(isnull(fs.scheduled_contract_time_m,0))*60
-	END AS 'adherence_calc_s'
-	FROM #fact_schedule_deviation fsd
-LEFT JOIN #fact_schedule fs
-	ON fsd.person_id=fs.person_id
-	AND fsd.date_id=fs.schedule_date_id
-	AND fsd.interval_id=fs.interval_id
-INNER JOIN #bridge_time_zone b
-	ON	fsd.interval_id = b.interval_id
-	AND fsd.date_id = b.date_id
-INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-	AND d.date_date BETWEEN @date_from AND @date_to
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
-	AND i.interval_id BETWEEN @interval_from AND @interval_to
-GROUP BY d.date_id, i.interval_id --Group by Local date_id,interval		
-*/
-
 --Sum agent schedule, local datetime
 INSERT INTO #pre_result (date_id,interval_id,scheduled_time_m,scheduled_contract_time_m,scheduled_ready_time_m,scheduled_paid_time_s)
 SELECT
-	d.date_id, --local date
-	i.interval_id, --local interval
+	fs.schedule_date_id, --utc date
+	fs.interval_id, --utc interval
 	sum(fs.scheduled_time_m),
 	sum(fs.scheduled_contract_time_m),
 	sum(fs.scheduled_ready_time_m),
 	sum(fs.scheduled_paid_time_m * 60) --we want seconds here
 FROM #fact_schedule fs
-	INNER JOIN #bridge_time_zone b
-		ON	fs.interval_id= b.interval_id
-		AND fs.schedule_date_id= b.date_id
-	INNER JOIN mart.dim_date d 
-		ON b.local_date_id = d.date_id
-	INNER JOIN mart.dim_interval i
-		ON b.local_interval_id = i.interval_id
-		AND i.interval_id BETWEEN @interval_from AND @interval_to				
-GROUP BY d.date_id, i.interval_id --Group by Local date_id,interval
+GROUP BY fs.schedule_date_id, fs.interval_id --Group by utc date_id,interval
 
--- fact_agent_queue, local datetime
+-- fact_agent_queue, utc datetime
 INSERT INTO #pre_result (date_id,interval_id,talk_time_s,after_call_work_time_s)
 SELECT 
-	d.date_id, --local date
-	i.interval_id, --local interval
+	faq.date_id, --utc date
+	faq.interval_id, --utc interval
 	sum(faq.talk_time_s),
 	sum(faq.after_call_work_time_s)
 FROM mart.fact_agent_queue faq
 INNER JOIN #person_acd_subSP al
 	ON faq.acd_login_id = al.acd_login_id
-INNER JOIN #bridge_time_zone b
-	ON	faq.interval_id = b.interval_id
-	AND faq.date_id = b.date_id
-INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-	AND d.date_date BETWEEN @date_from AND @date_to
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
-	AND i.interval_id BETWEEN @interval_from AND @interval_to
-GROUP BY d.date_id, i.interval_id --Group by Local date_id,interval
+WHERE faq.date_id between @date_from_id and @date_to_id	
+GROUP BY faq.date_id, faq.interval_id --Group by utc date_id,interval
 
--- fact_queue, local datetime
+-- fact_queue, utc datetime
 INSERT INTO #pre_result (date_id,interval_id,calls_offered,calls_answered,calls_answ_within_sl,calls_abnd_within_sl)
 SELECT 
-	d.date_id, --local date
-	i.interval_id, --local interval
+	fq.date_id, --utc date
+	fq.interval_id, --utc interval
 	sum(fq.offered_calls),
 	sum(fq.answered_calls),
 	sum(fq.answered_calls_within_SL),
@@ -482,29 +293,26 @@ SELECT
 FROM mart.fact_queue fq
 INNER JOIN #queues q
 	ON fq.queue_id = q.queue_id
-INNER JOIN #bridge_time_zone b
-	ON	fq.interval_id = b.interval_id
-	AND fq.date_id = b.date_id
-INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-	AND d.date_date BETWEEN @date_from AND @date_to
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
-	AND i.interval_id BETWEEN @interval_from AND @interval_to
-GROUP BY d.date_id, i.interval_id --Group by Local date_id,interval
+WHERE fq.date_id between @date_from_id and @date_to_id
+GROUP BY fq.date_id, fq.interval_id --Group by utc date_id,interval
 
-/*
-SELECT 	ISNULL(SUM(pr.adherence_calc_s),0) as 'adherence_calc_s',		
-		ISNULL(SUM(pr.deviation_s),0) as 'deviation_s',
-		CASE
-			WHEN ISNULL(SUM(pr.adherence_calc_s),0) = 0 THEN 1
-			ELSE (SUM(pr.adherence_calc_s) - ISNULL(SUM(pr.deviation_s),0))/ SUM(pr.adherence_calc_s)
-		END as 'adherence'
- FROm #pre_result pr
- GROUP BY date_id,interval_id
- 
-RETURN 0
-*/
+--convert to local date
+--switch utc date to local date
+update #pre_result
+set
+	date_id		= btz.local_date_id,
+	interval_id = btz.local_interval_id,
+	date_date	= btz.date_date_local
+from #bridge_time_zone btz
+inner join #pre_result me
+	on me.date_id = btz.date_id
+	and me.interval_id = btz.interval_id
+
+--delete data outside local dates
+DELETE FROM #pre_result
+WHERE date_date < @date_from
+OR date_date > @date_to
+OR date_date IS NULL
 
 --Arrange the #result table, Local datetime table
 INSERT INTO #result(period,scheduled_paid_time_s,handling_time_s,handling_time_per_scheduled_paid_time,calls_offered,calls_answered,calls_answ_within_sl,calls_abnd_within_sl,service_level,service_level_numerator,service_level_denominator,adherence_calc_s,deviation_s,adherence,hide_time_zone,interval_type,weekday_number)
@@ -529,12 +337,6 @@ SELECT	CASE @interval_type
 		0 as 'service_level',
 		0 as 'service_level_numerator',
 		0 as'service_level_denominator',
-		/*
-		CASE @adherence_id 
-			WHEN 1 THEN SUM(ISNULL(pr.scheduled_ready_time_m,0)*60)
-			WHEN 2 THEN SUM(ISNULL(ISNULL(pr.adherence_calc_s, pr.scheduled_time_m),0)*60) --If we have no [scheduled_time_m] go for [adherence_calc_outside_shift_m]
-			WHEN 3 THEN SUM(ISNULL(pr.scheduled_contract_time_m,0)*60)
-		END AS 'adherence_calc_s', */
 		ISNULL(SUM(pr.adherence_calc_s),0) as 'adherence_calc_s',		
 		ISNULL(SUM(pr.deviation_s),0) as 'deviation_s',
 		CASE
@@ -555,7 +357,7 @@ GROUP BY
 	WHEN 1 THEN i.interval_name
 		WHEN 2 THEN i.halfhour_name
 		WHEN 3 THEN i.hour_name
-		WHEN 4 THEN LEFT(convert(varchar(30),d.date_date,120),10)--mÃ¥ste vara enligt den kultur som anvÃ¤nds
+		WHEN 4 THEN LEFT(convert(varchar(30),d.date_date,120),10)--According to current culture
 		WHEN 5 THEN convert(varchar(10),left(d.year_week,4) + '-' + right(d.year_week,2))
 		WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
 		WHEN 7 THEN d.weekday_resource_key
@@ -565,82 +367,11 @@ ORDER BY
 		WHEN 1 THEN i.interval_name
 		WHEN 2 THEN i.halfhour_name
 		WHEN 3 THEN i.hour_name
-		WHEN 4 THEN LEFT(convert(varchar(30),d.date_date,120),10)--mÃ¥ste vara enligt den kultur som anvÃ¤nds
+		WHEN 4 THEN LEFT(convert(varchar(30),d.date_date,120),10)--According to current culture
 		WHEN 5 THEN convert(varchar(10),left(d.year_week,4) + '-' + right(d.year_week,2))
 		WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
 		WHEN 7 THEN d.weekday_resource_key
 		END
-
-/* Adherence calculations */
-/*
-INSERT #schedule_deviation(period,deviation_s)  --Local datetime
-SELECT	CASE @interval_type 
-		WHEN 1 THEN i.interval_name  --d. and i. are local dates/intervals
-		WHEN 2 THEN i.halfhour_name
-		WHEN 3 THEN i.hour_name		
-		WHEN 4 THEN LEFT(convert(varchar(30),d.date_date,120),10)
-		WHEN 5 THEN convert(varchar(10),left(d.year_week,4) + '-' + right(d.year_week,2))
-		WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
-		WHEN 7 THEN d.weekday_resource_key
-		END AS 'period',	
-		CASE @adherence_id 
-			WHEN 1 THEN  SUM(ISNULL(deviation_schedule_ready_s,0))
-			WHEN 2 THEN  sum(ISNULL(deviation_schedule_s,0)) 
-			WHEN 3 THEN sum(ISNULL(deviation_contract_s,0))
-		END AS 'deviation_s'
-FROM #pre_result fsd --UTC
-INNER JOIN #bridge_time_zone b
-	ON	fsd.interval_id= b.interval_id
-	AND fsd.date_id= b.date_id
-INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-	AND d.date_date BETWEEN @date_from AND @date_to
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
-	AND i.interval_id BETWEEN @interval_from AND @interval_to
-WHERE EXISTS
-		--do the compare on UTC
-		(SELECT 1 FROM #fact_schedule fs
-		WHERE fsd.person_id=fs.person_id
-		AND fsd.date_id=fs.schedule_date_id
-		AND fsd.interval_id=fs.interval_id
-		AND fsd.person_id = fs.person_id)
-GROUP BY
-	CASE @interval_type 
-	WHEN 1 THEN i.interval_name
-		WHEN 2 THEN i.halfhour_name
-		WHEN 3 THEN i.hour_name
-		WHEN 4 THEN LEFT(convert(varchar(30),d.date_date,120),10)--mÃ¥ste vara enligt den kultur som anvÃ¤nds
-		WHEN 5 THEN convert(varchar(10),left(d.year_week,4) + '-' + right(d.year_week,2))
-		WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
-		WHEN 7 THEN d.weekday_resource_key
-	END
-ORDER BY 
-		CASE @interval_type 
-		WHEN 1 THEN i.interval_name
-		WHEN 2 THEN i.halfhour_name
-		WHEN 3 THEN i.hour_name
-		WHEN 4 THEN LEFT(convert(varchar(30),d.date_date,120),10)--mÃ¥ste vara enligt den kultur som anvÃ¤nds
-		WHEN 5 THEN convert(varchar(10),left(d.year_week,4) + '-' + right(d.year_week,2))
-		WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
-		WHEN 7 THEN d.weekday_resource_key
-		END
-
---SELECT * FROM #result
-
---Adherence calc
-UPDATE #result
-SET adherence =
-	CASE
-		WHEN ISNULL(r.adherence_calc_s,0) = 0 THEN 1
-		ELSE (r.adherence_calc_s - ISNULL(d.deviation_s,0))/ r.adherence_calc_s
-	END,
-	deviation_s = ISNULL(d.deviation_s,0)
-FROM #schedule_deviation d
-RIGHT OUTER JOIN #result r 
-ON r.period=d.period 
---SELECT * FROM #result r 
-*/
 
 /*Service Level Calculations*/
 IF @sl_calc_id=1
