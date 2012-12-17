@@ -11219,4 +11219,11 @@ These options are activated:
     <value>Reforecast</value>
     <comment>Reforecast form in Intraday</comment>
   </data>
+  <data name="SelectWorkload" xml:space="preserve">
+    <value>Select workload</value>
+    <comment>Select workload</comment>
+  </data>
+  <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
+    <value>You have to select at least one workload</value>
+  </data>
 </root>

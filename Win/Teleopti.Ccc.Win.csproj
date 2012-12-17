@@ -785,6 +785,18 @@
     <Compile Include="Intraday\IntradayViewContent.Designer.cs">
       <DependentUpon>IntradayViewContent.cs</DependentUpon>
     </Compile>
+    <Compile Include="Intraday\Reforecast\SelectSkills.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Intraday\Reforecast\SelectSkills.Designer.cs">
+      <DependentUpon>SelectSkills.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Intraday\Reforecast\SelectWorkload.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Intraday\Reforecast\SelectWorkload.Designer.cs">
+      <DependentUpon>SelectWorkload.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main\IDataSourceHandler.cs" />
     <Compile Include="Main\Legal.cs">
       <SubType>Form</SubType>
@@ -2580,6 +2592,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Intraday\IntradayNavigator.resx">
       <DependentUpon>IntradayNavigator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Intraday\Reforecast\SelectSkills.resx">
+      <DependentUpon>SelectSkills.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Intraday\Reforecast\SelectWorkload.resx">
+      <DependentUpon>SelectWorkload.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main\Legal.resx">
       <DependentUpon>Legal.cs</DependentUpon>
