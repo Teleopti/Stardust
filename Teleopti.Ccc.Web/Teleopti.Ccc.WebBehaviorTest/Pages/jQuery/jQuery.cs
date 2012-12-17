@@ -2,6 +2,9 @@
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages.jQuery
 {
+	/// <summary>
+	/// JQuery helper methods
+	/// </summary>
 	public static class JQuery
 	{
 		public static IJQueryExpression Select(string selector)
