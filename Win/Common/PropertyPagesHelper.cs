@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Win.Common
             list.Add(new SkillGeneral(abstractPropertyPages));
             list.Add(new SkillThresholds());
             list.Add(new SkillOptimisation());
-            if (forWizard && !typeof(SkillTypePhone).IsInstanceOfType(skillType))
+            if (forWizard && !(skillType is SkillTypePhone))
             {
                 list.Add(new SkillEmailDistributions());
             }

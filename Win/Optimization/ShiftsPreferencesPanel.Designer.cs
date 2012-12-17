@@ -15,6 +15,11 @@
         {
             if (disposing && (components != null))
             {
+                if (fromToTimePicker1 != null)
+                {
+                    fromToTimePicker1.StartTime.TextChanged -= startTimeTextChanged;
+                    fromToTimePicker1.EndTime.TextChanged -= endTimeTextChanged;
+                }
                 components.Dispose();
             }
             base.Dispose(disposing);

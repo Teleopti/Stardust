@@ -1,4 +1,5 @@
-﻿using SchedulingSessionPreferencesPanel=
+﻿using System.Drawing;
+using SchedulingSessionPreferencesPanel=
     Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences.SchedulingSessionPreferencesTabPanel;
 
 namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
@@ -42,6 +43,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             this.tabPageSchedulingOptions = new System.Windows.Forms.TabPage();
             this.tabPageDayOffPlanningOptions = new System.Windows.Forms.TabPage();
             this.dayOffPreferencesPanel1 = new Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences.ResourceOptimizerDayOffPreferencesPanel();
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular,
+                                                System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.schedulingSessionPreferencesTabPanel1 = new Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences.SchedulingSessionPreferencesTabPanel();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();

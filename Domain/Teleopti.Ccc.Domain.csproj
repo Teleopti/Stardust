@@ -410,7 +410,7 @@
     <Compile Include="Scheduling\Assignment\RestoreSchedulePartService.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartForDisplayDefinitions.cs" />
     <Compile Include="Scheduling\Assignment\GroupShiftCategoryFairnessCreator.cs" />
-    <Compile Include="Scheduling\Assignment\HasDayOffDefinition.cs" />
+    <Compile Include="Scheduling\Assignment\HasContractDayOffDefinition.cs" />
     <Compile Include="Scheduling\Assignment\IRangeProjectionService.cs" />
     <Compile Include="Scheduling\Assignment\NewDynamicDayOffSchedulePeriodTargetCalculator.cs" />
     <Compile Include="Scheduling\Assignment\NewFixedDayOffSchedulePeriodTargetCalculator.cs" />
@@ -419,6 +419,15 @@
     <Compile Include="Scheduling\Assignment\ScheduleDayStringVisualizer.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessManager.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitChecker.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\BestSpotForAddingDayOffFinder.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\DayOffScheduler.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\DaysOffSchedulingService.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixData.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixDataListCreator.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixDataListInSteadyState.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixDataWithToFewDaysOff.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\ScheduleDayData.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataMapper.cs" />
     <Compile Include="Scheduling\DayOffTemplateSorter.cs" />
     <Compile Include="Scheduling\DeletedDescription.cs" />
     <Compile Include="Scheduling\EmptyScheduleDayChangeCallback.cs" />
@@ -426,6 +435,7 @@
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecification.cs" />
     <Compile Include="Scheduling\Meetings\IChangeTracker.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangeTracker.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MissingDaysOffScheduler.cs" />
     <Compile Include="Scheduling\PublicNoteByDateSorter.cs" />
     <Compile Include="Scheduling\PublicNote.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessHolder.cs" />
@@ -1680,6 +1690,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\Import\ForecastFile.hbm.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

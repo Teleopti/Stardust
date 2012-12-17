@@ -4,8 +4,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
     public class SchedulePartSignificantPartForDisplayDefinitions :SchedulePartSignificantPartDefinitions
     {
-        public SchedulePartSignificantPartForDisplayDefinitions(IScheduleDay schedulePart, IHasDayOffDefinition hasDayOffDefinition)
-			: base(schedulePart, hasDayOffDefinition)
+        public SchedulePartSignificantPartForDisplayDefinitions(IScheduleDay schedulePart, IHasContractDayOffDefinition hasContractDayOffDefinition)
+			: base(schedulePart, hasContractDayOffDefinition)
         { }
 
         public override bool HasContractDayOff()
