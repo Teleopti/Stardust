@@ -34,6 +34,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.isSelected = ko.observable(false);
 		self.isLoading = ko.observable(false);
 
+		//prenumerera på updated
+
 		//TODO: too much gui-info, remove it to be called from the view
 		self.ShowDetails = function (viewmodel, event) {
 			var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
@@ -45,7 +47,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 					self.isLoading(true);
 				},
 				complete: function () {
-					setTimeout(function () { self.isLoading(false); }, 2000);
+					self.isLoading(false);
 				},
 				success: function (data) {
 					Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, distanceFromTop);
@@ -58,6 +60,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		};
 
 	}
+
 
 	function RequestPageViewModel(requestDetailViewModel, readyForInteraction, completelyLoaded) {
 
