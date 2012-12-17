@@ -14,11 +14,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Requests-list")]
 		public List RequestsList { get; set; }
 
-		private Constraint RequestConstraint = Find.BySelector(".request-item:not(.template)");
-		private ListItemCollection RequestListItems { get { return Document.ListItems.Filter(RequestConstraint); } }
-		public IEnumerable<ListItem> Requests { get { return RequestListItems; } }
-		public ListItem FirstRequest { get { return Document.ListItem(RequestConstraint).EventualGet(); } }
-		public ListItem LastRequest { get { return RequestListItems.Last(); } }
+		private Constraint RequestConstraint = Find.BySelector(".request-item2");
+		private DivCollection RequestListItems { get { return Document.Divs.Filter(RequestConstraint); } }
+		public IEnumerable<Div> Requests { get { return RequestListItems; } }
+		public Div FirstRequest { get { return Document.Div(RequestConstraint).EventualGet(); } }
+		public Div LastRequest { get { return RequestListItems.Last(); } }
 
 		public ListItem RequestById(Guid id)
 		{
