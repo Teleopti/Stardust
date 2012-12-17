@@ -33,7 +33,6 @@ define([
 				} else {
 					date = moment(date, 'YYYYMMDD');
 				}
-				date.local();
 
 				var timeLine = new timeLineViewModel();
 				var teamSchedule = new teamScheduleViewModel(timeLine, date);
@@ -49,8 +48,13 @@ define([
 					.bind('orientationchange', resize)
 					.ready(resize);
 
+				var utcFromMoment = function (momentDate) {
+					return new Date(Date.UTC(momentDate.year(), momentDate.month(), momentDate.date()));
+				};
+
 				var loadSchedules = function () {
-					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, teamSchedule.SelectedDate().toDate()).done(function (schedules) {
+					var queryDate = teamSchedule.SelectedDate();
+					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, utcFromMoment(queryDate)).done(function (schedules) {
 						timeLine.Agents.removeAll();
 						teamSchedule.Agents.removeAll();
 
@@ -70,7 +74,7 @@ define([
 				};
 
 				var loadAvailableTeams = function () {
-					schedule.server.availableTeams(teamSchedule.SelectedDate().toDate()).done(function (details) {
+					schedule.server.availableTeams(utcFromMoment(teamSchedule.SelectedDate())).done(function (details) {
 						teamSchedule.AddTeams(details.Teams);
 
 						teamSchedule.TeamDateCombination.subscribe(function () {

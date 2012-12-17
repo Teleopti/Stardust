@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.SignalR.Hubs;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Team.Core
 		public IEnumerable<object> SubscribeTeamSchedule(Guid teamId, DateTime date)
 		{
 			var schedule = _personScheduleDayReadModelRepository.ForTeam(new DateOnly(date), teamId);
-			return schedule.Select(s => Newtonsoft.Json.JsonConvert.DeserializeObject(s.Shift));
+			return schedule.Select(s => JsonConvert.DeserializeObject(s.Shift));
 		}
 	}
 }
