@@ -179,11 +179,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                          resourceOptimizationHelper,
                                                                          mainShiftOptimizeActivitySpecificationSetter);
             var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
+			var groupMoveTimeResourceHelper = new GroupMoveTimeOptimizationResourceHelper(_resourceOptimizationHelper);
             var groupMoveTimeOptimizerExecuter = new GroupMoveTimeOptimizationExecuter(rollbackService,
                                                             deleteSchedulePartService, schedulingOptionsCreator, optimizationPreferences,
                                                             mainShiftOptimizeActivitySpecificationSetter,
                                                             groupMatrixHelper, groupSchedulingService,
-                                                            groupPersonBuilderForOptimization, _resourceOptimizationHelper);
+															groupPersonBuilderForOptimization, groupMoveTimeResourceHelper);
             var groupMoveTimeValidatorRunner =
                 new GroupMoveTimeValidatorRunner(new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup),
                                                  new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup));
@@ -456,7 +457,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
         		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
 			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
-			var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, _resourceOptimizationHelper, groupOptimizerFindMatrixesForGroup, optimizerPreferences.DaysOff);
+			IGroupDayOffOptimizationResourceHelper groupDayOffOptimizationResourceHelper = new GroupDayOffOptimizationResourceHelper(_resourceOptimizationHelper);
+			var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, groupOptimizerFindMatrixesForGroup, optimizerPreferences.DaysOff, groupDayOffOptimizationResourceHelper);
 
 			service.ReportProgress += resourceOptimizerPersonOptimized;
             service.Execute(optimizerContainers, optimizerPreferences.Extra.KeepSameDaysOffInTeam);
