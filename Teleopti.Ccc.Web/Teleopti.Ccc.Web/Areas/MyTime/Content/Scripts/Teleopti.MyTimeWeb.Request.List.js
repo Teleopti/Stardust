@@ -64,6 +64,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.completed = completelyLoaded;
 		self.details = ko.observable(requestDetailViewModel);
 
+		self.isUpdate = ko.computed(function () {
+			return requestDetailViewModel.isUpdate();
+		});
+
 		self.AbsenceRequestTabVisible = ko.computed(function () {
 			return requestDetailViewModel.AbsenceRequestTabVisible();
 		});

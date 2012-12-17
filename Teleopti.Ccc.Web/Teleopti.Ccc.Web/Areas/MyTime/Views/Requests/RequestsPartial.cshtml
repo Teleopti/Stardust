@@ -42,15 +42,15 @@
 			</div>
 		</div>
 	</div>
-	<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all request-selected">
+	<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all request-selected" data-bind=" css: { 'request-selected': isUpdate() == true , 'request-not-selected': isUpdate() == false}">
 		<input type="hidden" id="Request-detail-entityid" />
 		<div id="Schedule-addRequest-title" class="pdb5">
 			<span id="Text-request-tab" class="selectable-tab selected-tab" data-bind="visible: TextRequestTabVisible">@Resources.TextRequest</span>
 			@if (Model.RequestPermission.AbsenceRequestPermission)
-	{
+			{
 				<span data-bind="visible: TabSeparatorVisible">|</span>
 				<span id="Absence-request-tab" class="selectable-tab" data-bind="visible: AbsenceRequestTabVisible">@Resources.AbsenceRequest</span>
-	}
+			}
 		</div>
 		<div class="edit-module-element">
 			<span id="Request-detail-deny-reason"></span>
@@ -70,9 +70,9 @@
 			<div class="edit-module-element floatleft">
 				<select id="Absence-type" class="absence-input combobox">
 					@foreach (var absenceType in Model.AbsenceTypes)
-	  {
+					{
 						<option value="@Html.AttributeEncode(absenceType.Name)" typeid="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
-	  }
+					}
 				</select>
 			</div>
 		</div>
@@ -80,27 +80,27 @@
 			<span class="edit-module-element floatleft">
 				<input id="Request-detail-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
 			</span><span id="Request-detail-fromTime" class="edit-module-element floatleft">
-				<label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
-				<select id="Request-detail-fromTime-input" class="time-input combobox">
-					@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
-	  {
-						<option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-	  }
-				</select>
-			</span>
+				       <label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
+				       <select id="Request-detail-fromTime-input" class="time-input combobox">
+					       @foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
+					       {
+						       <option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+					       }
+				       </select>
+			       </span>
 		</div>
 		<div>
 			<span class="edit-module-element clearleftfloat floatleft">
 				<input id="Request-detail-toDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()"  />
 			</span><span id="Request-detail-toTime" class="edit-module-element floatleft">
-				<label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
-				<select id="Request-detail-toTime-input" class="time-input combobox">
-					@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
-	  {
-						<option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-	  }
-				</select>
-			</span>
+				       <label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
+				       <select id="Request-detail-toTime-input" class="time-input combobox">
+					       @foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
+					       {
+						       <option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+					       }
+				       </select>
+			       </span>
 		</div>
 		<span class="edit-module-element clearleftfloat floatleft">
 			<input type="checkbox" id="Fullday-check" data-bind="checked: IsFullDay" />

@@ -18,6 +18,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 				_clearFormData();
 				requestViewModel.TextRequestTabVisible(true);
 				requestViewModel.AbsenceRequestTabVisible(true);
+				requestViewModel.isUpdate(false);
 				_hideEditSection();
 				_showEditSection();
 				$('#Text-request-tab').click();
@@ -122,6 +123,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _showRequest(data, position) {
+		requestViewModel.isUpdate(true);
 		_hideEditSection();
 		_clearFormData();
 		_showRequestTypeTab(data.TypeEnum);
@@ -285,14 +287,17 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 })(jQuery);
 
-Teleopti.MyTimeWeb.Request.RequestViewModel = (function RequestViewModel() {
+Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 	var self = this;
-	this.TextRequestTabVisible = ko.observable(true);
-	this.AbsenceRequestTabVisible = ko.observable(true);
-	this.TabSeparatorVisible = ko.computed(function () {
+
+	self.TextRequestTabVisible = ko.observable(true);
+	self.AbsenceRequestTabVisible = ko.observable(true);
+	self.IsFullDay = ko.observable(false);
+	self.isUpdate = ko.observable(true);
+
+	self.TabSeparatorVisible = ko.computed(function () {
 		return self.TextRequestTabVisible() && self.AbsenceRequestTabVisible();
 	});
-	this.IsFullDay = ko.observable(false);
 
 	ko.computed(function () {
 		if (self.IsFullDay()) {
@@ -312,4 +317,4 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = (function RequestViewModel() {
 		$('#Request-detail-fromTime-input-input').css("color", "grey");
 		$('#Request-detail-toTime-input-input').css("color", "grey");
 	}
-});
+};
