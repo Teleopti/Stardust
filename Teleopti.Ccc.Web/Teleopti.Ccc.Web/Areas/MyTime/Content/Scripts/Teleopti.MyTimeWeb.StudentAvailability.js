@@ -56,6 +56,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	}
 
 	function _xhr(type, successCallback, addressSuffix, reqData) {
+		var deferred = $.Deferred();
 		ajax.Ajax({
 			url: "StudentAvailability/StudentAvailability" + addressSuffix,
 			dataType: "json",
@@ -63,8 +64,12 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 			type: type,
 			data: JSON.stringify(reqData),
 			success: successCallback,
-			statusCode404: function () { }
+			statusCode404: function () { },
+			complete: function () {
+				deferred.resolve();
+			}
 		});
+		return deferred.promise();
 	}
 
 	function _updateDay(data) {
@@ -158,21 +163,29 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	}
 
 	function _deleteStudentAvailability() {
+		var promises = [];
 		$('#StudentAvailability-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
 				//				var promise = preferencesAndScheduleViewModel.DayViewModels[date].SetPreference(preference, validationErrorCallback);
 				//				promises.push(promise);
-				_xhr('DELETE',
+				var promise = _xhr('DELETE',
 					_updateDay,
 					Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date),
 					null);
+				promises.push(promise);
 			});
+		if (promises.length != 0) {
+			$.when.apply(null, promises)
+				.done(function () {
+
+				});
+		}
 	}
 
 
 	function _setStudentAvailability(studentAvailability) {
-		//		var promises = [];
+		var promises = [];
 
 		editStudentAvailabilityFormViewModel.ValidationError('');
 
@@ -186,12 +199,15 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 				studentAvailability.Date = date;
 				//				var promise = preferencesAndScheduleViewModel.DayViewModels[date].SetPreference(preference, validationErrorCallback);
 				//				promises.push(promise);
-				_xhr('POST', _updateDay, '', studentAvailability);
+				var promise = _xhr('POST', _updateDay, '', studentAvailability);
+				promises.push(promise);
 			});
-		//		if (promises.length != 0) {
-		//			$.when.apply(null, promises)
-		//				.done(function () { periodFeedbackViewModel.LoadFeedback(); });
-		//		}
+		if (promises.length != 0) {
+			$.when.apply(null, promises)
+				.done(function () {
+					
+				});
+		}
 	}
 
 	function _handleDaysSelected(dates) {
