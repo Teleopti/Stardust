@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
             using (_mocks.Playback())
             {
-                var retShift = _target.Filter(dateOnly, _person, _matrix, effectiveRestriction, _schedulingOptions, null);
+                var retShift = _target.Filter(dateOnly, _person, new List<IScheduleMatrixPro>{_matrix}, effectiveRestriction, _schedulingOptions, null);
                 Assert.IsNotNull(retShift);
             }
         }

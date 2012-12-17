@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
     public interface IWorkShiftFilterService
     {
-        IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IPossibleStartEndCategory possibleStartEndCategory);
+        IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IPossibleStartEndCategory possibleStartEndCategory);
     }
 
     public class WorkShiftFilterService : IWorkShiftFilterService
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             _shiftLengthDecider = shiftLengthDecider;
         }
 
-        public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IPossibleStartEndCategory possibleStartEndCategory)
+        public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IPossibleStartEndCategory possibleStartEndCategory)
         {
             FinderResult = new WorkShiftFinderResult(person, dateOnly);
             _workShiftMinMaxCalculator.ResetCache();
@@ -82,8 +82,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                 if (shiftList.Count == 0)
                     return null;
 
-                MinMax<TimeSpan>? allowedMinMax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix,
-                                                                                                            schedulingOptions);
+                MinMax<TimeSpan>? allowedMinMax = null;
+                foreach (var matrix in matrixList)
+                {
+                    var minMax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);
+                    if (!minMax.HasValue) break;
+                    if (!allowedMinMax.HasValue)
+                        allowedMinMax = minMax;
+                    else
+                    {
+                        if (minMax.Value.Minimum > allowedMinMax.Value.Minimum)
+                            allowedMinMax = new MinMax<TimeSpan>(minMax.Value.Minimum, allowedMinMax.Value.Maximum);
+                        if (minMax.Value.Maximum < allowedMinMax.Value.Maximum)
+                            allowedMinMax = new MinMax<TimeSpan>(allowedMinMax.Value.Minimum, minMax.Value.Maximum);
+                    }
+                }
 
                 if (!allowedMinMax.HasValue)
                 {
@@ -99,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
                 if (schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
                 {
-                    shiftList = _shiftLengthDecider.FilterList(shiftList, _workShiftMinMaxCalculator, matrix, schedulingOptions);
+                    shiftList = _shiftLengthDecider.FilterList(shiftList, _workShiftMinMaxCalculator, matrixList[0], schedulingOptions);
                     if (shiftList.Count == 0)
                         return null;
                 }

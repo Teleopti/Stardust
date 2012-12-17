@@ -19,11 +19,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private IRestrictionAggregator _restrictionAggregator;
         private IWorkShiftFilterService _workShiftFilterService;
         private ITeamScheduling _teamScheduling;
+        private ISchedulingOptions _schedulingOptions;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
+            _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _skillDayPeriodIntervalData =  _mocks.StrictMock<ISkillDayPeriodIntervalData>();
             _dynamicBlockFinder = _mocks.StrictMock<IDynamicBlockFinder>();
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                                                 _dynamicBlockFinder, 
                                                 _teamExtractor, 
                                                 _restrictionAggregator,
-                                                new List<IScheduleMatrixPro>(), _workShiftFilterService, _teamScheduling);
+                                                new List<IScheduleMatrixPro>(), _workShiftFilterService, _teamScheduling, _schedulingOptions);
         }
 
         [Test]
