@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IStudentAvailabilityViewModelFactory>();
 
 			var target = new StudentAvailabilityController(viewModelFactory, null, null);
-			var model = new StudentAvailabilityDayViewModel();
+			var model = new StudentAvailabilityDayFormResult();
 
 			viewModelFactory.Stub(x => x.CreateDayViewModel(DateOnly.Today)).Return(model);
 

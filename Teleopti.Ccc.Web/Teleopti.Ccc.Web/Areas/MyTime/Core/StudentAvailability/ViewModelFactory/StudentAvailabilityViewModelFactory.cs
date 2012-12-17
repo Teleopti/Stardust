@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
 using Teleopti.Interfaces.Domain;
@@ -21,12 +23,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 			return _mapper.Map<DateOnly, StudentAvailabilityViewModel>(dateInPeriod);
 		}
 		
-		public StudentAvailabilityDayViewModel CreateDayViewModel(DateOnly date)
+		public StudentAvailabilityDayFormResult CreateDayViewModel(DateOnly date)
 		{
-			var studentAvailability = _studentAvailabilityProvider.GetStudentAvailabilityForDate(date);
-			if (studentAvailability == null)
-				return new StudentAvailabilityDayViewModel();
-			return _mapper.Map<IStudentAvailabilityRestriction, StudentAvailabilityDayViewModel>(studentAvailability);
+			var studentAvailability = _studentAvailabilityProvider.GetStudentAvailabilityDayForDate(date);
+			if (studentAvailability == null) return null;
+			return _mapper.Map<IStudentAvailabilityDay, StudentAvailabilityDayFormResult>(studentAvailability);
 		}
 	}
 }

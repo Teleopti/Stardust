@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -34,13 +35,14 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.ViewModelFactory
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
 			var target = new StudentAvailabilityViewModelFactory(mapper, studentAvailabilityProvider);
-			var studentAvailability = new StudentAvailabilityRestriction();
-			var viewModel = new StudentAvailabilityDayViewModel();
+			var date = DateOnly.Today;
+			var studentAvailabilityDay = new StudentAvailabilityDay(null, date, new List<IStudentAvailabilityRestriction>());
+			var viewModel = new StudentAvailabilityDayFormResult();
 
-			studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDate(DateOnly.Today)).Return(studentAvailability);
-			mapper.Stub(x => x.Map<IStudentAvailabilityRestriction, StudentAvailabilityDayViewModel>(studentAvailability)).Return(viewModel);
+			studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityDayForDate(date)).Return(studentAvailabilityDay);
+			mapper.Stub(x => x.Map<IStudentAvailabilityDay, StudentAvailabilityDayFormResult>(studentAvailabilityDay)).Return(viewModel);
 
-			var result = target.CreateDayViewModel(DateOnly.Today);
+			var result = target.CreateDayViewModel(date);
 
 			result.Should().Be.SameInstanceAs(viewModel);
 		}
@@ -51,13 +53,12 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.ViewModelFactory
 			var studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
 			var target = new StudentAvailabilityViewModelFactory(null, studentAvailabilityProvider);
 
-			studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDate(DateOnly.Today)).Return(null);
+			var date = DateOnly.Today;
+			studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDate(date)).Return(null);
 
-			var result = target.CreateDayViewModel(DateOnly.Today);
+			var result = target.CreateDayViewModel(date);
 
-			result.NextDay.Should().Be.False();
-			result.StartTime.Should().Be.Null();
-			result.EndTime.Should().Be.Null();
+			result.Should().Be.Null();
 		}
 	}
 }

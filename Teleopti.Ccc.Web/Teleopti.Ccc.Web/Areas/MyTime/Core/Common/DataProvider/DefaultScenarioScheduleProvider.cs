@@ -82,6 +82,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				throw new MoreThanOneStudentAvailabilityFoundException();
 			return studentAvailabilityRestrictions.Single();
 		}
+
+		public IStudentAvailabilityDay GetStudentAvailabilityDayForDate(DateOnly date)
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]
