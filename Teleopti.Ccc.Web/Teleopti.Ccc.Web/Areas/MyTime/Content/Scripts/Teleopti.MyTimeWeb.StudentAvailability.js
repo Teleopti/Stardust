@@ -2,6 +2,7 @@
 /// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
 /// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.EditStudentAvailabilityFormViewModel.js" />
 
@@ -242,7 +243,11 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		Init: function () {
 			_layout();
 			_initToolbarButtons();
-			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('StudentAvailability/Index', Teleopti.MyTimeWeb.StudentAvailability.StudentAvailabilityPartialInit);
+			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack(
+				'StudentAvailability/Index',
+				Teleopti.MyTimeWeb.StudentAvailability.StudentAvailabilityPartialInit,
+				Teleopti.MyTimeWeb.StudentAvailability.StudentAvailabilityPartialDispose
+			);
 		},
 		StudentAvailabilityPartialInit: function () {
 			_layout();
@@ -250,6 +255,10 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 			_initPeriodSelection();
 			_disableToolbarButtons();
 			_activateSelectable();
+		},
+		StudentAvailabilityPartialDispose: function () {
+			studentAvailabilityToolTip.qtip('toggle', false);
+			ajax.AbortAll();
 		}
 	};
 
