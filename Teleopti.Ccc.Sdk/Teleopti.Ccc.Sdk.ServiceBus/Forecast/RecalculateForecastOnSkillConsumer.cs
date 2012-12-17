@@ -36,17 +36,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		{
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-			    foreach (var skillMessage in message.MessageCollection)
-			    {
-                    var scenario = _scenarioRepository.Get(skillMessage.ScenarioId);
-                    if (!scenario.DefaultScenario) return;
-				var dateOnly = DateOnly.Today;
-                    var skill = _skillRepository.Get(skillMessage.SkillId);
-				var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-				var period = new DateOnlyPeriod(dateOnly, dateOnly).ToDateTimePeriod(skill.TimeZone);
-				period = period.ChangeEndTime(skill.MidnightBreakOffset.Add(TimeSpan.FromHours(1)));
+				var scenario = _scenarioRepository.Get(message.ScenarioId);
+				if (!scenario.DefaultScenario) return;
 
-				var skillDays = new List<ISkillDay>(_skillDayRepository.FindRange(dateOnlyPeriod, skill, scenario));
+			    foreach (var skillMessage in message.MessageCollection)
+			    { 
+					var dateOnly = DateOnly.Today;
+                    var skill = _skillRepository.Get(skillMessage.SkillId);
+					var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
+					var period = new DateOnlyPeriod(dateOnly, dateOnly).ToDateTimePeriod(skill.TimeZone);
+					period = period.ChangeEndTime(skill.MidnightBreakOffset.Add(TimeSpan.FromHours(1)));
+
+					var skillDays = new List<ISkillDay>(_skillDayRepository.FindRange(dateOnlyPeriod, skill, scenario));
                     foreach (var skillDay in skillDays)
                     {
                         foreach (var workloadDay in skillDay.WorkloadDayCollection)
