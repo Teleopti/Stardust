@@ -193,8 +193,11 @@ inner join #pre_result_subSP me
 	on me.date_id = btz.date_id
 	and me.interval_id = btz.interval_id
 	
---delete dates out side selected period
-delete #pre_result_subSP where date_date is null
+--delete data outside local dates
+DELETE FROM #pre_result_subSP
+WHERE date_date < @date_from
+OR date_date > @date_to
+OR date_date IS NULL
 
 --Delete ACD-logins that have been logged on without being a agent in CCC7
 DELETE FROM #pre_result_subSP
