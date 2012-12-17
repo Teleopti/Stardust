@@ -24,6 +24,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     	                                        IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList);
 
         IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions);
+
+        void ExecuteForAdvanceSchedulingService(IList<DateOnly  > selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
+                                                                IGroupPerson  groupPerson, BackgroundWorker backgroundWorker, ITeamSteadyStateHolder teamSteadyStateHolder, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
     }
 
     public class GroupSchedulingService : IGroupSchedulingService
@@ -71,8 +74,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5")]
-		public void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, 
-			IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker, ITeamSteadyStateHolder teamSteadyStateHolder, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+		public void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
+            IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker, ITeamSteadyStateHolder teamSteadyStateHolder, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
 		{
             if(matrixList == null) throw new ArgumentNullException("matrixList");
             if(backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -109,6 +112,45 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				}
 			}
 		}
+
+        public void ExecuteForAdvanceSchedulingService(IList<DateOnly  > selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
+            IGroupPerson  groupPerson, BackgroundWorker backgroundWorker, ITeamSteadyStateHolder teamSteadyStateHolder, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+        {
+            if (matrixList == null) throw new ArgumentNullException("matrixList");
+            if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
+
+            _cancelMe = false;
+            foreach (var dateOnly in selectedDays)
+            {
+                //var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(dateOnly, selectedPersons, true, schedulingOptions);
+
+                //foreach (var groupPerson in groupPersons.GetRandom(groupPersons.Count, true))
+                //{
+                    if (backgroundWorker.CancellationPending)
+                        return;
+
+                    var teamSteadyStateSuccess = false;
+
+                    if (teamSteadyStateHolder.IsSteadyState(groupPerson))
+                    {
+                        if (!teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, this, _rollbackService, schedulingOptions, groupPersonBuilderForOptimization, matrixList, _resultStateHolder.Schedules))
+                            teamSteadyStateHolder.SetSteadyState(groupPerson, false);
+
+                        else teamSteadyStateSuccess = true;
+                    }
+
+                    if (!teamSteadyStateSuccess)
+                    {
+                        _rollbackService.ClearModificationCollection();
+                        if (!ScheduleOneDay(dateOnly, schedulingOptions, groupPerson, matrixList))
+                        {
+                            _rollbackService.Rollback();
+                            _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+                        }
+                    }
+                //}
+            }
+        }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool ScheduleOneDay(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList)
