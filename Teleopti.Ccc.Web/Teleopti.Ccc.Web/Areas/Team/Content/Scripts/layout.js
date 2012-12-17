@@ -5,14 +5,14 @@ require([
 		'text!templates/dummy.html',
 		'crossroads',
 		'hasher',
-		'knockout.bindings'
+		'momentDatepickerKo'
 	], function (
 		layoutTemplate,
 		menuTemplate,
 		dummyTemplate,
 		crossroads,
 		hasher,
-		bindings) {
+		datepicker) {
 
 		var currentView;
 		var defaultView = 'teamschedule';

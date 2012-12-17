@@ -24,12 +24,21 @@ define([
 
 			this.NextDay = function () {
 				var newDate = moment(self.SelectedDate()).add('d', 1);
-				self.SelectedDate(newDate.toDate());
+				self.SelectedDate(newDate);
 			};
 
 			this.PreviousDay = function () {
 				var newDate = moment(self.SelectedDate()).add('d', -1);
-				self.SelectedDate(newDate.toDate());
+				self.SelectedDate(newDate);
 			};
+
+			this.TeamDateCombination = ko.computed(function () {
+				var teamId = '';
+				var team = self.SelectedTeam();
+				if (team != undefined)
+					teamId = team.Id;
+				
+				return self.SelectedDate().format('YYYYMMDD') + '_' + teamId;
+			});
 		};
 	});
