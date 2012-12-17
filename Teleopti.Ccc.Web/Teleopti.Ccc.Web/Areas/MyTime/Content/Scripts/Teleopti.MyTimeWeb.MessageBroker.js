@@ -1,5 +1,5 @@
 /// <reference path="../../../../Content/Scripts/jquery.signalR-1.0.0-alpha2.js" />
-/// <reference path="../../../../Content/Scripts/jquery-1.8.2.js" />
+/// <reference path="../../../../Content/Scripts/jquery-1.8.3.js" />
 
 
 Teleopti.MyTimeWeb.MessageBroker = (function () {

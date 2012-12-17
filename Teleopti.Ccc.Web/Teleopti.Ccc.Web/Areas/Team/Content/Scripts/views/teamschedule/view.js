@@ -6,7 +6,6 @@ define([
 		'signalrHubs',
 		'swipeListener',
 		'moment',
-		'datepicker',
 		'views/teamschedule/vm',
 		'views/teamschedule/timeline',
 		'views/teamschedule/agent',
@@ -16,7 +15,6 @@ define([
 		$,
 		swipeListener,
 		momentX,
-		datepicker,
 		navigation,
 		signalrHubs,
 		teamScheduleViewModel,
@@ -31,13 +29,14 @@ define([
 
 				var date = options.date;
 				if (date == undefined) {
-					date = moment();
+					date = moment().sod();
 				} else {
 					date = moment(date, 'YYYYMMDD');
 				}
+				date.local();
 
 				var timeLine = new timeLineViewModel();
-				var teamSchedule = new teamScheduleViewModel(timeLine, date.toDate());
+				var teamSchedule = new teamScheduleViewModel(timeLine, date);
 
 				var schedule = $.connection.scheduleHub;
 
@@ -51,7 +50,7 @@ define([
 					.ready(resize);
 
 				var loadSchedules = function () {
-					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, teamSchedule.SelectedDate()).done(function (schedules) {
+					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, teamSchedule.SelectedDate().toDate()).done(function (schedules) {
 						timeLine.Agents.removeAll();
 						teamSchedule.Agents.removeAll();
 
@@ -71,8 +70,14 @@ define([
 				};
 
 				var loadAvailableTeams = function () {
-					schedule.server.availableTeams(teamSchedule.SelectedDate()).done(function (details) {
+					schedule.server.availableTeams(teamSchedule.SelectedDate().toDate()).done(function (details) {
 						teamSchedule.AddTeams(details.Teams);
+
+						teamSchedule.TeamDateCombination.subscribe(function () {
+							loadSchedules();
+						});
+
+						teamSchedule.SelectedTeam(teamSchedule.Teams()[0]);
 					});
 				};
 
@@ -84,7 +89,11 @@ define([
 						ko.applyBindings({
 							TeamSchedule: teamSchedule
 						});
+					})
+					.fail(function (error) {
+						$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
 					});
+
 
 				$('.team-schedule').swipeListener({
 					swipeLeft: function () {
@@ -94,16 +103,6 @@ define([
 						teamSchedule.PreviousDay();
 					}
 				});
-
-				teamSchedule.SelectedDate.subscribe(function () {
-					loadSchedules();
-				});
-
-				teamSchedule.SelectedTeam.subscribe(function () {
-					loadSchedules();
-				});
-
-				teamSchedule.SelectedTeam(teamSchedule.Teams()[0]);
 			}
 		};
 	});

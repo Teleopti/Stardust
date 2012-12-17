@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"I am a team leader for '(.*)' with role '(.*)'")]
 		public void GivenIAmATeamLeaderFor(string teamName, string roleName)
 		{
-			UserFactory.User().Setup(new RoleForUser{Name = roleName});
+			UserFactory.User().Setup(new RoleForUser{Name = roleName, Team = teamName});
 
 			UserFactory.User().MakeUser();
 		}
@@ -49,7 +49,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var shift = table.CreateInstance<ReadModelShiftConfigurable>();
 
-			UserFactory.User().Setup(shift);
+			GlobalDataContext.Data().Setup(shift);
+			GlobalDataContext.Persist();
 		}
 
 		[When(@"I view schedules for '(.*)'")]
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see schedule for '(.*)'")]
 		public void ThenIShouldSeeScheduleFor(string personName)
 		{
-			EventualAssert.That(() => Pages.Pages.AdminWebPage.ScheduleTable.Text.Contains(personName), Is.True.After(10000, 50));
+			EventualAssert.That(() => Pages.Pages.AdminWebPage.ScheduleTable.Text.Contains(personName), Is.True.After(30000, 50));
 		}
 	}
 }

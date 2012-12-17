@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var repository = MockRepository.GenerateMock<ITeamRepository>();
 			var target = new TeamProvider(repository, MockRepository.GenerateMock<IPermissionProvider>());
 
-			target.GetPermittedTeams(DateOnly.Today);
+			target.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 
 			repository.AssertWasCalled(x => x.FindAllTeamByDescription());
 		}
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 			var target = new TeamProvider(repository, permissionProvider);
 
-			var result = target.GetPermittedTeams(DateOnly.Today);
+			var result = target.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 
 			result.Single().Should().Be(teams.ElementAt(1));
 		}

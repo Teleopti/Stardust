@@ -18,11 +18,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 			_permissionProvider = permissionProvider;
 		}
 
-		public IEnumerable<ITeam> GetPermittedTeams(DateOnly date)
+		public IEnumerable<ITeam> GetPermittedTeams(DateOnly date, string functionPath)
 		{
 			var teams = _repository.FindAllTeamByDescription() ?? new ITeam[] { };
 			return (from t in teams
-					where _permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, date, t)
+					where _permissionProvider.HasTeamPermission(functionPath, date, t)
 					select t).ToArray();
 		}
 	}

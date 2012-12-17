@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var myTeam = _loggedOnUser.MyTeam(date);
 			if (myTeam != null && _permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, date, myTeam))
 				return myTeam;
-			var team = _teamProvider.GetPermittedTeams(date).FirstOrDefault();
+			var team = _teamProvider.GetPermittedTeams(date, DefinedRaptorApplicationFunctionPaths.TeamSchedule).FirstOrDefault();
 			if (team == null)
 				return myTeam;
 			return team;

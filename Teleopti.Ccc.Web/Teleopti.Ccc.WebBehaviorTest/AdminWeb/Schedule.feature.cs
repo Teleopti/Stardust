@@ -75,6 +75,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.AdminWeb
             table1.AddRow(new string[] {
                         "Name",
                         "Full access to Admin web"});
+            table1.AddRow(new string[] {
+                        "Access to Admin web",
+                        "true"});
+            table1.AddRow(new string[] {
+                        "View unpublished schedules",
+                        "true"});
 #line 7
  testRunner.Given("there is a role with", ((string)(null)), table1, "Given ");
 #line hidden
@@ -84,7 +90,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.AdminWeb
             table2.AddRow(new string[] {
                         "Name",
                         "Team green"});
-#line 10
+#line 12
  testRunner.And("there is a team with", ((string)(null)), table2, "And ");
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
@@ -96,7 +102,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.AdminWeb
             table3.AddRow(new string[] {
                         "TerminalDate",
                         "2012-12-31"});
-#line 13
+#line 15
  testRunner.Given("there is a team member with", ((string)(null)), table3, "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
@@ -108,7 +114,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.AdminWeb
             table4.AddRow(new string[] {
                         "StartDate",
                         "2012-12-01"});
-#line 17
+#line 19
  testRunner.And("there is a person period for \'Pierre Baldi\' with", ((string)(null)), table4, "And ");
 #line hidden
             TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
@@ -117,7 +123,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.AdminWeb
             table5.AddRow(new string[] {
                         "Name",
                         "Lunch"});
-#line 21
+#line 23
  testRunner.And("there is an activity with", ((string)(null)), table5, "And ");
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
@@ -126,7 +132,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.AdminWeb
             table6.AddRow(new string[] {
                         "Name",
                         "Phone"});
-#line 24
+#line 26
  testRunner.And("there is an activity with", ((string)(null)), table6, "And ");
 #line hidden
         }
@@ -136,11 +142,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.AdminWeb
         public virtual void ViewTeamSchedule()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View team schedule", ((string[])(null)));
-#line 28
+#line 30
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 29
+#line 31
  testRunner.Given("I am a team leader for \'Team green\' with role \'Full access to Admin web\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
@@ -170,11 +176,11 @@ this.FeatureBackground();
             table7.AddRow(new string[] {
                         "LunchActivity",
                         "Lunch"});
-#line 30
+#line 32
  testRunner.And("there is a shift with", ((string)(null)), table7, "And ");
-#line 40
+#line 42
  testRunner.When("I view schedules for \'2012-12-02\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 41
+#line 43
  testRunner.Then("I should see schedule for \'Pierre Baldi\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -187,29 +193,29 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View only my team\'s schedule", new string[] {
                         "ignore"});
-#line 44
+#line 46
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 45
- testRunner.Given("I am an agent in a team with access to the whole site", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 46
- testRunner.And("I have a shift today", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 47
- testRunner.And("I have a colleague", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Given("I am an agent in a team with access to the whole site", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 48
- testRunner.And("My colleague has a shift today", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I have a shift today", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 49
- testRunner.And("I have a colleague in another team", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I have a colleague", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 50
- testRunner.And("The colleague in the other team has a shift today", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("My colleague has a shift today", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 51
- testRunner.When("I view team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("I have a colleague in another team", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 52
- testRunner.Then("I should see my schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("The colleague in the other team has a shift today", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 53
- testRunner.And("I should see my colleague\'s schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When("I view team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 54
+ testRunner.Then("I should see my schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 55
+ testRunner.And("I should see my colleague\'s schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 56
  testRunner.And("I should not see the other colleague\'s schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -222,19 +228,19 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View team schedule, day off", new string[] {
                         "ignore"});
-#line 57
+#line 59
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 58
- testRunner.Given("I am an agent in a team", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 59
- testRunner.And("I have a colleague", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 60
- testRunner.And("My colleague has a dayoff today", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Given("I am an agent in a team", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 61
- testRunner.When("I view team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("I have a colleague", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 62
+ testRunner.And("My colleague has a dayoff today", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 63
+ testRunner.When("I view team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 64
  testRunner.Then("I should see my colleague\'s day off", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -247,19 +253,19 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View team schedule, absence", new string[] {
                         "ignore"});
-#line 65
+#line 67
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 66
- testRunner.Given("I am an agent in a team", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 67
- testRunner.And("I have a colleague", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 68
- testRunner.And("My colleague has an absence today", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Given("I am an agent in a team", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 69
- testRunner.When("I view team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("I have a colleague", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 70
+ testRunner.And("My colleague has an absence today", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 71
+ testRunner.When("I view team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 72
  testRunner.Then("I should see my colleague\'s absence", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -272,19 +278,19 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View team schedule, no shift", new string[] {
                         "ignore"});
-#line 73
+#line 75
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 74
- testRunner.Given("I am an agent in a team", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 75
- testRunner.And("I have a colleague", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 76
- testRunner.When("I view team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.Given("I am an agent in a team", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 77
- testRunner.Then("I should see myself without schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("I have a colleague", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 78
+ testRunner.When("I view team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 79
+ testRunner.Then("I should see myself without schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 80
  testRunner.And("I should see my colleague without schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -297,21 +303,21 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can\'t see confidential absence", new string[] {
                         "ignore"});
-#line 81
+#line 83
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 82
- testRunner.Given("I am an agent in a team", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 83
- testRunner.And("I have a colleague", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 84
- testRunner.And("My colleague has a confidential absence", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Given("I am an agent in a team", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 85
- testRunner.When("I view team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("I have a colleague", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 86
- testRunner.Then("I should see my colleague\'s schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("My colleague has a confidential absence", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 87
+ testRunner.When("I view team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 88
+ testRunner.Then("I should see my colleague\'s schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 89
  testRunner.And("I should not see the absence\'s color", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -324,15 +330,15 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can\'t see the team schedule tab without permission", new string[] {
                         "ignore"});
-#line 90
+#line 92
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 91
- testRunner.Given("I am an agent with no access to team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 92
- testRunner.When("I am viewing an application page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 93
+ testRunner.Given("I am an agent with no access to team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 94
+ testRunner.When("I am viewing an application page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 95
  testRunner.Then("I should not see the team schedule tab", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -345,17 +351,17 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can\'t navigate to team schedule without permission", new string[] {
                         "ignore"});
-#line 96
+#line 98
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 97
- testRunner.Given("I am an agent with no access to team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 98
- testRunner.When("I am viewing an application page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 99
- testRunner.And("I navigate to the team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Given("I am an agent with no access to team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 100
+ testRunner.When("I am viewing an application page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 101
+ testRunner.And("I navigate to the team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 102
  testRunner.Then("I should see an error message", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -368,19 +374,19 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can\'t see colleagues schedule without permission", new string[] {
                         "ignore"});
-#line 103
+#line 105
 this.ScenarioSetup(scenarioInfo);
 #line 6
 this.FeatureBackground();
-#line 104
- testRunner.Given("I am an agent in a team with access only to my own data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 105
- testRunner.And("I have a colleague", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 106
- testRunner.And("My colleague has a shift today", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Given("I am an agent in a team with access only to my own data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 107
- testRunner.When("I view team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("I have a colleague", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 108
+ testRunner.And("My colleague has a shift today", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 109
+ testRunner.When("I view team schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 110
  testRunner.Then("I should not see my colleagues schedule", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

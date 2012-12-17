@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 {
 	public interface ITeamProvider
 	{
-		IEnumerable<ITeam> GetPermittedTeams(DateOnly date);
+		IEnumerable<ITeam> GetPermittedTeams(DateOnly date, string functionPath);
 	}
 }

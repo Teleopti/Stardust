@@ -5,8 +5,10 @@
 	
 Background:
 	Given there is a role with
-	| Field | Value                    |
-	| Name  | Full access to Admin web |
+	| Field                      | Value                    |
+	| Name                       | Full access to Admin web |
+	| Access to Admin web        | true                     |
+	| View unpublished schedules | true                     |
 	And there is a team with
 	| Field | Value            |
 	| Name  | Team green |

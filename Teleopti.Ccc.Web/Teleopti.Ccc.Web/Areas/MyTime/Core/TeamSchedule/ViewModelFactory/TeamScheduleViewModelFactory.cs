@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 
 		public IEnumerable<IOption> CreateTeamOptionsViewModel(DateOnly date)
 		{
-			var teams = _teamProvider.GetPermittedTeams(date);
+			var teams = _teamProvider.GetPermittedTeams(date, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 			var sites = teams
 				.Select(t => t.Site)
 				.Distinct()

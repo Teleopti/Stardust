@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.SignalR.Hubs;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Team.Core
 		{
 			return new
 			       	{
-			       		Teams = _teamProvider.GetPermittedTeams(new DateOnly(date)).Select(t => new {t.Id, t.SiteAndTeam}).ToList()
+			       		Teams = _teamProvider.GetPermittedTeams(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.SchedulesAdminWeb).Select(t => new {t.Id, t.SiteAndTeam}).ToList()
 			       	};
 		}
 

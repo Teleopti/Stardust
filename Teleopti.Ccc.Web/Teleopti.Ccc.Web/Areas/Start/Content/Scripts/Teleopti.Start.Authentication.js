@@ -1,7 +1,7 @@
-﻿/// <reference path="~/Scripts/jquery-1.5.1.js" />
-/// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
-/// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
-/// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.8.3.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.9.1.custom.js" />
+/// <reference path="~/Content/Scripts/jquery-1.8.3-vsdoc.js" />
+/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.Common.js" />
 /// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordView.js" />
 

@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			teams[0].Description = new Description("team");
 			teams[0].Site = new Site("site");
 			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
-			teamProvider.Stub(x => x.GetPermittedTeams(DateOnly.Today)).Return(teams);
+			teamProvider.Stub(x => x.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(teams);
 			var target = new TeamScheduleViewModelFactory(null, teamProvider);
 
 			var result = target.CreateTeamOptionsViewModel(DateOnly.Today);
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var expected = new[]
 			               	{
 			               		new {Value = "-", Text = "site"},
-			               		new {Value = teams[0].Id.Value.ToString(), Text = "team"}
+			               		new {Value = teams[0].Id.GetValueOrDefault().ToString(), Text = "team"}
 			               	};
 			result.Select(t => t.Value).Should().Have.SameSequenceAs(expected.Select(t => t.Value));
 			result.Select(t => t.Text).Should().Have.SameSequenceAs(expected.Select(t => t.Text));
