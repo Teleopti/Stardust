@@ -57,21 +57,15 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 			_setEditError(data.Errors.join(' '));
 			return;
 		}
-		_markDayAsUpdated(data);
+		_updateTimespan(data);
 	}
 
-	function _markDayAsUpdated(data) {
+	function _updateTimespan(data) {
 		var calendarDay = $('li[data-mytime-date="' + data.Date + '"]');
-		if (data.AvailableTimeSpan == null) { // was deleted
-			_makeNotDeletable(calendarDay);
-		} else {
-			calendarDay.addClass('deletable');
-		}
+
 		var span = calendarDay.find('div.day-content').html('<span class="fullwidth displayblock mt15"></span>').find('span');
 		if (data.AvailableTimeSpan != null)
 			span.text(data.AvailableTimeSpan);
-
-		//		calendarDay.addClass('unvalidated');
 	};
 
 	function _initToolbarButtons() {
@@ -187,11 +181,6 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		}
 	}
 
-	function _makeNotDeletable(day) {
-		day.removeClass('deletable');
-		Teleopti.MyTimeWeb.StudentAvailability.Layout.RemoveDeletableState(day);
-	}
-
 	function _activateSelectable() {
 		$('#StudentAvailability-body-inner').calendarselectable();
 
@@ -233,16 +222,7 @@ Teleopti.MyTimeWeb.StudentAvailability.Layout = (function ($) {
 			if (state & 1) {
 				curDay.addClass('editable');
 			}
-			if (state & 2) {
-				curDay.addClass('deletable');
-			}
 		});
-	}
-
-	function _removeState(day, stateToRemove) {
-		var currentState = parseInt(day.data('mytime-state'));
-		var newState = currentState ^ stateToRemove;
-		day.data('mytime-state', newState);
 	}
 
 	return {
@@ -252,9 +232,6 @@ Teleopti.MyTimeWeb.StudentAvailability.Layout = (function ($) {
 				_setDayState($(this));
 			});
 		}
-		,
-		RemoveDeletableState: function (day) {
-			_removeState(day, 2);
-		}
+
 	};
 })(jQuery);
