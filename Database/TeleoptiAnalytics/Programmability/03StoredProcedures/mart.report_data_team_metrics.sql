@@ -69,11 +69,21 @@ CREATE TABLE #pre_result_subSP
 	adherence_calc_s decimal(18,3)	
 	)
 
-
+--Create temporary tables
+CREATE TABLE #bridge_time_zone
+	(
+	local_date_id int not null,
+	local_interval_id int not null,
+	date_id int not null,
+	interval_id int not null,
+	date_date_local smalldatetime not null
+	)
 
 DECLARE @group_page_agent_code uniqueidentifier
 DECLARE @agent_person_code uniqueidentifier
 DECLARE @scenario_id int
+DECLARE @date_from_id int
+DECLARE @date_to_id int
 
 -- Get default scenario for given business unit
 SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE default_scenario = 1 AND business_unit_code = @business_unit_code
@@ -97,11 +107,34 @@ FROM #rights_agents a
 LEFT JOIN mart.bridge_acd_login_person acd
 	ON acd.person_id = a.right_id
 
+--Get needed dates and intervals from bridge time zone into temp table
+INSERT INTO #bridge_time_zone
+SELECT 
+	local_date_id		= d.date_id,
+	local_interval_id	= i.interval_id,
+	date_id				= b.date_id,
+	interval_id			= b.interval_id,
+	date_date_local		= d.date_date
+FROM mart.bridge_time_zone b
+INNER JOIN mart.dim_date d 
+	ON b.local_date_id = d.date_id
+	AND d.date_date BETWEEN @date_from AND @date_to
+INNER JOIN mart.dim_interval i
+	ON b.local_interval_id = i.interval_id
+	AND i.interval_id BETWEEN @interval_from AND @interval_to
+WHERE b.time_zone_id = @time_zone_id
+
+--Get the min/max UTC date_id. Expand UTC -1 +1 when fetching fact_tables (subSP
+SELECT @date_from_id=MIN(b.date_id)-1,@date_to_id=MAX(b.date_id)+1
+FROM #bridge_time_zone b
+INNER JOIN mart.dim_date d 
+	ON b.local_date_id = d.date_id
+WHERE	d.date_date	between @date_from AND @date_to
 
 --This SP will insert data into #pre_result_subSP
 EXEC [mart].[report_data_schedule_result_subSP]
-	@date_from		= @date_from,
-	@date_to		= @date_to,
+	@date_from_id	= @date_from_id,
+	@date_to_id		= @date_to_id,
 	@interval_from	= @interval_from,
 	@interval_to	= @interval_to,
 	@adherence_id	= @adherence_id,
@@ -110,6 +143,23 @@ EXEC [mart].[report_data_schedule_result_subSP]
 	@report_id		= @report_id,
 	@scenario_id	= @scenario_id,
 	@language_id	= @language_id
+
+--switch utc date to local date
+update #pre_result_subSP
+set
+	date_id		= btz.local_date_id,
+	interval_id = btz.local_interval_id,
+	date_date	= btz.date_date_local
+from #bridge_time_zone btz
+inner join #pre_result_subSP me
+	on me.date_id = btz.date_id
+	and me.interval_id = btz.interval_id
+	
+--delete data outside local dates
+DELETE FROM #pre_result_subSP
+WHERE date_date < @date_from
+OR date_date > @date_to
+OR date_date IS NULL
 
 --Delete ACD-logins that have been logged on without being a agent in CCC7
 DELETE FROM #pre_result_subSP
