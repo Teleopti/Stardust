@@ -167,11 +167,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _showEditSection(position) {
 		_SetOkButtonValue();
-//		var topPosition = $('#Requests-list').position().top - 1;
-//		if (!position)
-//			position = topPosition;
-//		if (position < topPosition)
-//			position = topPosition;
+		if (!position) {
+			position = '15px';
+		}
 		$('#Request-detail-section')
 			.css({
 				'top': position
@@ -289,7 +287,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 Teleopti.MyTimeWeb.Request.RequestViewModel = (function RequestViewModel() {
 	var self = this;
-
 	this.TextRequestTabVisible = ko.observable(true);
 	this.AbsenceRequestTabVisible = ko.observable(true);
 	this.TabSeparatorVisible = ko.computed(function () {

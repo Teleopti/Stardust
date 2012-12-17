@@ -22,7 +22,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 
 			var requestDetailViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
-			Teleopti.MyTimeWeb.Request.List.Init(readyForInteractionCallback, completelyLoadedCallback, requestDetailViewModel);
+			Teleopti.MyTimeWeb.Request.List.Init(requestDetailViewModel, readyForInteractionCallback, completelyLoadedCallback);
 			Teleopti.MyTimeWeb.Request.RequestDetail.Init(requestDetailViewModel);
 		}
 	};

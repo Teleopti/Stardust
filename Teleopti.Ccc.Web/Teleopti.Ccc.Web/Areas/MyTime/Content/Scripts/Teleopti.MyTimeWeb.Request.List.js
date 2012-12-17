@@ -13,9 +13,6 @@
 Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
-	var readyForInteraction = function () { };
-	var completelyLoaded = function () { };
-	var requestDetailViewModel;
 	var pageViewModel;
 
 	function RequestItemViewModel() {
@@ -33,8 +30,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.mouseIsOver = ko.observable(false);
 		self.isSelected = ko.observable(false);
 		self.isLoading = ko.observable(false);
-
-		//prenumerera på updated
 
 		//TODO: too much gui-info, remove it to be called from the view
 		self.ShowDetails = function (viewmodel, event) {
@@ -69,7 +64,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.completed = completelyLoaded;
 		self.details = ko.observable(requestDetailViewModel);
 
-		//TODO: expose details instead of wrapping the properties
 		self.AbsenceRequestTabVisible = ko.computed(function () {
 			return requestDetailViewModel.AbsenceRequestTabVisible();
 		});
@@ -202,11 +196,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	return {
-		Init: function (readyForInteractionCallback, completelyLoadedCallback, detailViewModel) {
+		Init: function (detailViewModel, readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
 			completelyLoaded = completelyLoadedCallback;
-			requestDetailViewModel = detailViewModel;
-			pageViewModel = new RequestPageViewModel(requestDetailViewModel, readyForInteractionCallback, completelyLoadedCallback);
+			pageViewModel = new RequestPageViewModel(detailViewModel, readyForInteractionCallback, completelyLoadedCallback);
 			_initScrollPaging();
 			var element = $('#Requests-body-inner')[0];
 
