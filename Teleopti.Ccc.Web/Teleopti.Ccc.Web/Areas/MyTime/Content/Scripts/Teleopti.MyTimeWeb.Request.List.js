@@ -66,7 +66,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	var readyForInteraction = function () { };
 	var completelyLoaded = function () { };
 
-	var noMoreToLoad;
 	var requestDetailViewModel;
 	var pageViewModel;
 
@@ -147,10 +146,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			}
 		};
 
-		self.loadData = function () {
-			//TODO: put initialization of data here
-		};
-
 		self.Delete = function (requestItemViewModel) {
 
 			var url = requestItemViewModel.Link();
@@ -203,8 +198,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	function _loadAPageIfRequired() {
-		if (!_hasMoreToLoad())
-			return;
 		var jqWindow = $(window);
 		var jqDocument = $(window.document);
 		if (_isAtBottom(jqDocument, jqWindow)) {
@@ -213,6 +206,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	function _isAtBottom(jqDocument, jqWindow) {
+
 		var totalContentHeight = jqDocument.height();
 		var inViewContentHeight = jqWindow.height();
 		var aboveViewContentHeight = jqWindow.scrollTop();
@@ -220,24 +214,24 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	function _loadAPage() {
-		if (pageViewModel) var skip = pageViewModel.requests.length;
+		if (pageViewModel) var skip = pageViewModel.requests().length;
 		var take = 20;
 		ajax.Ajax({
 			url: "Requests/Requests",
 			dataType: "json",
 			type: 'GET',
-			beforeSend: _loading,
+			//beforeSend: _loading,
 			data: {
 				Take: take,
 				Skip: skip
 			},
 			success: function (data, textStatus, jqXHR) {
 				pageViewModel.showRequests(data);
-				if (data.length == 0 || data.length < take) {
-					_noMoreToLoad();
-				} else {
-					_moreToLoad();
-				}
+				//				if (data.length == 0 || data.length < take) {
+				//					_noMoreToLoad();
+				//				} else {
+				//					_moreToLoad();
+				//				}
 			},
 			complete: function () {
 				if (readyForInteraction)
@@ -250,31 +244,25 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		});
 	}
 
-	function _hasMoreToLoad() {
-		return $('.request-list .arrow-down').is(':visible');
-	}
+	//	function _hasMoreToLoad() {
+	//		return $('.request-list .arrow-down').is(':visible');
+	//	}
 
-	function _loading() {
-		$('.request-list .arrow-down').hide();
-		$('.request-list .loading-gradient').show();
-	}
+	//	function _loading() {
+	//		$('.request-list .arrow-down').hide();
+	//		$('.request-list .loading-gradient').show();
+	//	}
 
-	function _noMoreToLoad() {
-		noMoreToLoad = true;
-		$('.request-list .arrow-down').hide();
-		$('.request-list .loading-gradient').hide();
-	}
+	//	function _noMoreToLoad() {
+	//		$('.request-list .arrow-down').hide();
+	//		$('.request-list .loading-gradient').hide();
+	//	}
 
-	function _moreToLoad() {
-		$('.request-list .arrow-down').show();
-		$('.request-list .loading-gradient').hide();
-	}
+	//	function _moreToLoad() {
+	//		$('.request-list .arrow-down').show();
+	//		$('.request-list .loading-gradient').hide();
+	//	}
 
-	function _checkScroll() {
-		$(window).scroll(function () {
-			_loadAPageIfRequired();
-		});
-	}
 
 	return {
 		Init: function (readyForInteractionCallback, completelyLoadedCallback, detailViewModel) {
@@ -282,7 +270,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			completelyLoaded = completelyLoadedCallback;
 			requestDetailViewModel = detailViewModel;
 			pageViewModel = new RequestPageViewModel(requestDetailViewModel);
-			_checkScroll();
 			_initScrollPaging();
 			var element = $('#Requests-body-inner')[0];
 
