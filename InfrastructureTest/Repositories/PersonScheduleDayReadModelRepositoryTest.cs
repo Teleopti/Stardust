@@ -65,23 +65,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			createAndSaveReadModel(personId, teamId);
 
-			var ret = _target.ForTeam(dateOnly, teamId);
-
-			Assert.That(ret.Count, Is.EqualTo(1));
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var ret = _target.ForTeam(dateOnly, teamId);
+				Assert.That(ret.Count, Is.EqualTo(1));
+			}
 		}
 
 		private void createAndSaveReadModel(Guid personId, Guid teamId)
 		{
-			var model = new PersonScheduleDayReadModel
-			{
-				Date = new DateTime(2012, 8, 29),
-				TeamId = teamId,
-				PersonId = personId,
-				ShiftStart = new DateTime(2012,8,29,10,0,0,DateTimeKind.Utc),
-				ShiftEnd = new DateTime(2012,8,29,18,0,0,DateTimeKind.Utc),
-				Shift = "",
-			};
-			_target.SaveReadModel(model);
+				var model = new PersonScheduleDayReadModel
+				            	{
+				            		Date = new DateTime(2012, 8, 29),
+				            		TeamId = teamId,
+				            		PersonId = personId,
+				            		ShiftStart = new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc),
+				            		ShiftEnd = new DateTime(2012, 8, 29, 18, 0, 0, DateTimeKind.Utc),
+				            		Shift = "",
+				            	};
+				_target.SaveReadModel(model);
+			
 		}
 	}
 
