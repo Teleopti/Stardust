@@ -1154,13 +1154,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 //for testing
                 schedulingOptions.UseTwoDaysOffAsBlock  = true;
-                var intervalDataCalculator = new IntervalDataMedianCalculator();
-                var skillDayPeriodIntervalData = new SkillDayPeriodIntervalData(intervalDataCalculator, _stateHolder);
+                var skillDayPeriodIntervalData = _container.Resolve<ISkillDayPeriodIntervalData>();
                 var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions,_stateHolder );
                 var teamExtractor = new TeamExtractor(matrixList,_groupPersonBuilderForOptimization  );
-                var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
-                var restrictionAggregator = new RestrictionAggregator(effectiveRestrictionCreator,schedulingOptions,_stateHolder );
-                
+                var restrictionAggregator = _container.Resolve<IRestrictionAggregator>();
+                var workShiftFilterService = _container.Resolve<IWorkShiftFilterService>();
 
                 var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
                 var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
@@ -1189,10 +1187,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var teamScheduling = new TeamScheduling(schedulingOptions, teamSteadyStateHolder,
                                                         teamSteadyStateMainShiftScheduler,
                                                         groupPersonBuilderForOptimization, groupSchedulingService);
-                
+
                 var advanceSchedulingService = new AdvanceSchedulingService(skillDayPeriodIntervalData,
                                                                             dynamicBlockFinder, teamExtractor,
-                                                                            restrictionAggregator, matrixList, null, teamScheduling);
+                                                                            restrictionAggregator, matrixList,
+                                                                            workShiftFilterService, teamScheduling,
+                                                                            schedulingOptions);
 
                 advanceSchedulingService.Execute(schedulingResults);
             }

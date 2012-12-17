@@ -20,13 +20,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly IList<IScheduleMatrixPro> _matrixList;
         private readonly IWorkShiftFilterService _workShiftFilterService;
         private ITeamScheduling _teamScheduling;
+        private readonly ISchedulingOptions _schedulingOptions;
         private readonly ISkillDayPeriodIntervalData _skillDayPeriodIntervalData;
-        private List<DateOnly> _effectiveDays;
-        private List<DateOnly> _dayOff; 
+        private readonly IList<DateOnly> _effectiveDays;
+        private readonly IList<DateOnly> _dayOff; 
 
-        public AdvanceSchedulingService(ISkillDayPeriodIntervalData skillDayPeriodIntervalData, IDynamicBlockFinder dynamicBlockFinder, 
-            ITeamExtractor teamExtractor, IRestrictionAggregator restrictionAggregator, IList<IScheduleMatrixPro> matrixList, 
-            IWorkShiftFilterService workShiftFilterService, ITeamScheduling teamScheduling)
+        public AdvanceSchedulingService(ISkillDayPeriodIntervalData skillDayPeriodIntervalData,
+            IDynamicBlockFinder dynamicBlockFinder, 
+            ITeamExtractor teamExtractor,
+            IRestrictionAggregator restrictionAggregator,
+            IList<IScheduleMatrixPro> matrixList, 
+            IWorkShiftFilterService workShiftFilterService,
+            ITeamScheduling teamScheduling,
+            ISchedulingOptions schedulingOptions
+            )
         {
             _dynamicBlockFinder = dynamicBlockFinder;
             _teamExtractor = teamExtractor;
@@ -34,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _matrixList = matrixList;
             _workShiftFilterService = workShiftFilterService;
             _teamScheduling = teamScheduling;
+            _schedulingOptions = schedulingOptions;
             _skillDayPeriodIntervalData = skillDayPeriodIntervalData;
             _effectiveDays = new List<DateOnly>();
             _dayOff = new List<DateOnly>();
@@ -85,8 +93,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                 //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
                 // (should we cover for max seats here?)
-
+                var shifts = _workShiftFilterService.Filter(startDate, groupPerson, _matrixList[0], restriction, _schedulingOptions, null);
                 //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need
+                
                 //call class that schedules given date with given workshift on the complete team
                 
                 //call class that schedules the unscheduled days for the teamblock using the same start time from the given shift, 
