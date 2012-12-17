@@ -101,7 +101,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	function _initAddExtendedButton() {
 		var button = $('#Preference-add-extended-button');
 		var template = $('#Preference-add-extended-form');
-		addExtendedPreferenceFormViewModel = new AddExtendedPreferenceFormViewModel();
+		addExtendedPreferenceFormViewModel = new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel();
 
 		addExtendedTooltip = $('<div/>')
 			.qtip({
