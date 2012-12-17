@@ -34,28 +34,6 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		Teleopti.MyTimeWeb.Portal.InitPeriodSelection(rangeSelectorId, periodData);
 	}
 
-	function _disableToolbarButtons() {
-		_updateButtonState($('#StudentAvailability-edit-button'), false);
-		_updateButtonState($('#StudentAvailability-delete-button'), false);
-	}
-
-	function _enableToolbarButtons(selectedDay) {
-		var editable = selectedDay.hasClass('editable');
-		var deletable = selectedDay.hasClass('deletable');
-		_updateButtonState($('#StudentAvailability-edit-button'), editable);
-		_updateButtonState($('#StudentAvailability-delete-button'), deletable);
-	}
-
-	function _updateButtonState(button, enabled) {
-		if (enabled) {
-			button.click(function () {
-				button.qtip('hide');
-			});
-		}
-		else
-			button.removeClass('ajax-disabled');
-	}
-
 	function _xhr(type, successCallback, addressSuffix, reqData) {
 		var deferred = $.Deferred();
 		ajax.Ajax({
@@ -85,9 +63,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	function _markDayAsUpdated(data) {
 		var calendarDay = $('li[data-mytime-date="' + data.Date + '"]');
 		if (data.AvailableTimeSpan == null) { // was deleted
-			_handleDaySelected(calendarDay);
 			_makeNotDeletable(calendarDay);
-			_enableToolbarButtons(calendarDay);
 		} else {
 			calendarDay.addClass('deletable');
 		}
@@ -211,32 +187,13 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		}
 	}
 
-	function _handleDaysSelected(dates) {
-		if (dates.length !== 1) {
-			_disableToolbarButtons();
-			return;
-		}
-		var cell = $('li[data-mytime-date=' + dates[0] + ']');
-		_handleDaySelected(cell);
-	}
-
-	function _handleDaySelected(day) {
-		var date = day.data('mytime-date');
-		_enableToolbarButtons(day);
-		$('#StudentAvailability-edit-section').data('mytime-selected-date', date);
-	}
-
 	function _makeNotDeletable(day) {
 		day.removeClass('deletable');
 		Teleopti.MyTimeWeb.StudentAvailability.Layout.RemoveDeletableState(day);
 	}
 
 	function _activateSelectable() {
-		$('#StudentAvailability-body-inner').calendarselectable({
-			datesChanged: function (event, data) {
-				_handleDaysSelected(data.dates);
-			}
-		});
+		$('#StudentAvailability-body-inner').calendarselectable();
 
 	}
 	return {
@@ -253,7 +210,6 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 			_layout();
 
 			_initPeriodSelection();
-			_disableToolbarButtons();
 			_activateSelectable();
 		},
 		StudentAvailabilityPartialDispose: function () {
