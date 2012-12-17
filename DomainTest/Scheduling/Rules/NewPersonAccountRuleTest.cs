@@ -105,9 +105,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(scheduleDay.Person).Return(person).Repeat.AtLeastOnce();
                 Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(
                                                                      new DateOnly(2012, 12, 14),
-                                                                     new CccTimeZoneInfo(
-                                                                         TimeZoneInfo.FindSystemTimeZoneById(
-                                                                             "W. Europe Standard Time"))));
+                                                                     TimeZoneInfo.FindSystemTimeZoneById(
+                                                                         "W. Europe Standard Time")));
 
             }
             using (mocks.Playback())
