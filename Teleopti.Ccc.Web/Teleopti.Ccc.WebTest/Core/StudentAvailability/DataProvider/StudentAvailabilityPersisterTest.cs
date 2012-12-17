@@ -39,10 +39,10 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.DataProvider
 			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
 			var target = new StudentAvailabilityPersister(MockRepository.GenerateMock<IStudentAvailabilityDayRepository>(), mapper, MockRepository.GenerateMock<ILoggedOnUser>());
 			var form = new StudentAvailabilityDayForm();
-			var viewModel = new StudentAvailabilityDayFormResult();
+			var viewModel = new StudentAvailabilityDayViewModel();
 
 			mapper.Stub(x => x.Map<StudentAvailabilityDayForm, IStudentAvailabilityDay>(form)).Return(studentAvailabilityDay);
-			mapper.Stub(x => x.Map<IStudentAvailabilityDay, StudentAvailabilityDayFormResult>(studentAvailabilityDay)).Return(viewModel);
+			mapper.Stub(x => x.Map<IStudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailabilityDay)).Return(viewModel);
 
 			var result = target.Persist(form);
 
@@ -74,11 +74,11 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.DataProvider
 			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
 			var form = new StudentAvailabilityDayForm { Date = DateOnly.Today };
 			var target = new StudentAvailabilityPersister(studentAvailabilityDayRepository, mapper, MockRepository.GenerateMock<ILoggedOnUser>());
-			var viewModel = new StudentAvailabilityDayFormResult();
+			var viewModel = new StudentAvailabilityDayViewModel();
 
 			studentAvailabilityDayRepository.Stub(x => x.Find(form.Date, null)).Return(new List<IStudentAvailabilityDay> { studentAvailabilityDay });
 			mapper.Stub(x => x.Map(form, studentAvailabilityDay)).Return(studentAvailabilityDay);
-			mapper.Stub(x => x.Map<IStudentAvailabilityDay, StudentAvailabilityDayFormResult>(studentAvailabilityDay)).Return(viewModel);
+			mapper.Stub(x => x.Map<IStudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailabilityDay)).Return(viewModel);
 
 			var result = target.Persist(form);
 

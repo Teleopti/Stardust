@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 	public interface IStudentAvailabilityViewModelFactory
 	{
 		StudentAvailabilityViewModel CreateViewModel(DateOnly dateInPeriod);
-		StudentAvailabilityDayFormResult CreateDayViewModel(DateOnly date);
+		StudentAvailabilityDayViewModel CreateDayViewModel(DateOnly date);
 	}
 }

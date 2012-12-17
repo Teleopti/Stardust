@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public StudentAvailabilityDayFormResult Persist(StudentAvailabilityDayForm form)
+		public StudentAvailabilityDayViewModel Persist(StudentAvailabilityDayForm form)
 		{
 			var studentAvailabilityDay = _studentAvailabilityDayRepository.Find(form.Date, _loggedOnUser.CurrentUser()).SingleOrDefaultNullSafe();
 			if (studentAvailabilityDay != null)
@@ -35,17 +35,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider
 				studentAvailabilityDay = _mapper.Map<StudentAvailabilityDayForm, IStudentAvailabilityDay>(form);
 				_studentAvailabilityDayRepository.Add(studentAvailabilityDay);
 			}
-			return _mapper.Map<IStudentAvailabilityDay, StudentAvailabilityDayFormResult>(studentAvailabilityDay);
+			return _mapper.Map<IStudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailabilityDay);
 		}
 
-		public StudentAvailabilityDayFormResult Delete(DateOnly date)
+		public StudentAvailabilityDayViewModel Delete(DateOnly date)
 		{
 			var studentAvailInDatasource = _studentAvailabilityDayRepository.Find(date, _loggedOnUser.CurrentUser());
 			if (studentAvailInDatasource.IsEmpty())
 				throw new HttpException(404, "StudentAvailability not found");
 
 			_studentAvailabilityDayRepository.Remove( studentAvailInDatasource.Single());
-			return new StudentAvailabilityDayFormResult { Date = date.ToFixedClientDateOnlyFormat() };
+			return new StudentAvailabilityDayViewModel { Date = date.ToFixedClientDateOnlyFormat() };
 		}
 	}
 }

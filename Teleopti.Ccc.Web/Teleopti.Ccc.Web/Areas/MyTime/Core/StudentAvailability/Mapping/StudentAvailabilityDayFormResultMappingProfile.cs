@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 		{
 			base.Configure();
 
-			CreateMap<IStudentAvailabilityDay, StudentAvailabilityDayFormResult>()
+			CreateMap<IStudentAvailabilityDay, StudentAvailabilityDayViewModel>()
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.RestrictionDate.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.AvailableTimeSpan, o => o.MapFrom(s =>
 				                                                    	{

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		{
 			var studentAvailabilityDay = new StudentAvailabilityDay(null, DateOnly.Today, new List<IStudentAvailabilityRestriction>());
 
-			var result = Mapper.Map<StudentAvailabilityDay, StudentAvailabilityDayFormResult>(studentAvailabilityDay);
+			var result = Mapper.Map<StudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailabilityDay);
 
 			result.Date.Should().Be(DateOnly.Today.ToFixedClientDateOnlyFormat());
 		}
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 
 			studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDay(studentAvailabilityDay)).Return(studentAvailabilityRestriction);
 
-			var result = Mapper.Map<StudentAvailabilityDay, StudentAvailabilityDayFormResult>(studentAvailabilityDay);
+			var result = Mapper.Map<StudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailabilityDay);
 
 			result.AvailableTimeSpan.Should().Be(studentAvailabilityRestriction.StartTimeLimitation.StartTimeString + " - " + studentAvailabilityRestriction.EndTimeLimitation.EndTimeString);
 		}
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 
 			studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDay(studentAvailabilityDay)).Return(null);
 
-			var result = Mapper.Map<StudentAvailabilityDay, StudentAvailabilityDayFormResult>(studentAvailabilityDay);
+			var result = Mapper.Map<StudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailabilityDay);
 
 			result.AvailableTimeSpan.Should().Be.Null();
 		}

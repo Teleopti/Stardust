@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IStudentAvailabilityViewModelFactory>();
 
 			var target = new StudentAvailabilityController(viewModelFactory, null, null);
-			var model = new StudentAvailabilityDayFormResult();
+			var model = new StudentAvailabilityDayViewModel();
 
 			viewModelFactory.Stub(x => x.CreateDayViewModel(DateOnly.Today)).Return(model);
 
@@ -80,14 +80,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{ 
 			var studentAvailabilityPersister = MockRepository.GenerateMock<IStudentAvailabilityPersister>();
 			var form = new StudentAvailabilityDayForm();
-			var resultData = new StudentAvailabilityDayFormResult();
+			var resultData = new StudentAvailabilityDayViewModel();
 
 			var target = new StudentAvailabilityController(null, null, studentAvailabilityPersister);
 
 			studentAvailabilityPersister.Stub(x => x.Persist(form)).Return(resultData);
 
 			var result = target.StudentAvailability(form) as JsonResult;
-			var data = result.Data as StudentAvailabilityDayFormResult;
+			var data = result.Data as StudentAvailabilityDayViewModel;
 
 			data.Should().Be.SameInstanceAs(resultData);
 		}
@@ -111,12 +111,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var studentAvailabilityPersister = MockRepository.GenerateMock<IStudentAvailabilityPersister>();
 			var target = new StudentAvailabilityController(null, null, studentAvailabilityPersister);
-			var resultData = new StudentAvailabilityDayFormResult();
+			var resultData = new StudentAvailabilityDayViewModel();
 
 			studentAvailabilityPersister.Stub(x => x.Delete(DateOnly.Today)).Return(resultData);
 
 			var result = target.StudentAvailabilityDelete(DateOnly.Today) as JsonResult;
-			var data = result.Data as StudentAvailabilityDayFormResult;
+			var data = result.Data as StudentAvailabilityDayViewModel;
 
 			data.Should().Be.SameInstanceAs(resultData);
 		}

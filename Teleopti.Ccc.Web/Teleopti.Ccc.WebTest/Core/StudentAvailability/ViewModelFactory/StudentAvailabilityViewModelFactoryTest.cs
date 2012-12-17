@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.ViewModelFactory
 			var target = new StudentAvailabilityViewModelFactory(mapper, studentAvailabilityProvider);
 			var date = DateOnly.Today;
 			var studentAvailabilityDay = new StudentAvailabilityDay(null, date, new List<IStudentAvailabilityRestriction>());
-			var viewModel = new StudentAvailabilityDayFormResult();
+			var viewModel = new StudentAvailabilityDayViewModel();
 
 			studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityDayForDate(date)).Return(studentAvailabilityDay);
-			mapper.Stub(x => x.Map<IStudentAvailabilityDay, StudentAvailabilityDayFormResult>(studentAvailabilityDay)).Return(viewModel);
+			mapper.Stub(x => x.Map<IStudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailabilityDay)).Return(viewModel);
 
 			var result = target.CreateDayViewModel(date);
 

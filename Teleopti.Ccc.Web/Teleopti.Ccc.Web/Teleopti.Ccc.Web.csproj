@@ -433,7 +433,7 @@
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\RequestsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\DateTimePeriodFormValidator.cs" />
-    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFormResult.cs" />
+    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayForm.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\IStudentAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\StudentAvailabilityPersister.cs" />
