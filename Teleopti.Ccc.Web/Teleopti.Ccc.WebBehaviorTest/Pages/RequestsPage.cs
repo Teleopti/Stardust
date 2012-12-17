@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Requests-list")]
 		public List RequestsList { get; set; }
 
-		private Constraint RequestConstraint = Find.BySelector(".request-item2");
+		private Constraint RequestConstraint = Find.BySelector(".request-item");
 		private DivCollection RequestListItems { get { return Document.Divs.Filter(RequestConstraint); } }
 		public IEnumerable<Div> Requests { get { return RequestListItems; } }
 		public Div FirstRequest { get { return Document.Div(RequestConstraint).EventualGet(); } }
