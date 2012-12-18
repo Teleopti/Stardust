@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public static SignificantPartService CreateService(IScheduleDay part)
         {
-            return new SignificantPartService(new SchedulePartSignificantPartDefinitions(part, new HasDayOffDefinition(part)));
+            return new SignificantPartService(new SchedulePartSignificantPartDefinitions(part, new HasContractDayOffDefinition()));
         }
 
         public static SignificantPartService CreateService(ISignificantPartProvider source)
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public static SignificantPartService CreateServiceForDisplay(IScheduleDay part)
         {
-            return new SignificantPartService(new SchedulePartSignificantPartForDisplayDefinitions(part, new HasDayOffDefinition(part)));
+            return new SignificantPartService(new SchedulePartSignificantPartForDisplayDefinitions(part, new HasContractDayOffDefinition()));
         }
 
         public static SignificantPartService CreateServiceForDisplay(ISignificantPartProvider source)

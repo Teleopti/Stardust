@@ -22,12 +22,12 @@ namespace Teleopti.Ccc.Win.Common
 		private readonly string _httpOnline;
 		private readonly string _divider;
 		private readonly string _prefix;
-		private readonly string _suffix  = "";
+		private readonly string _suffix  = string.Empty;
 		private readonly string _dividerOnline;
 		private readonly string _prefixOnline;
-		private readonly string _suffixOnline  = "";
+		private readonly string _suffixOnline  = string.Empty;
 		private const HelpType _helpType = HelpType.Http;
-		private readonly string _helpLang = "";
+		private readonly string _helpLang = string.Empty;
 
   
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Win.Common
 			if (!string.IsNullOrEmpty(helpDividerOnline)) _dividerOnline = helpDividerOnline;
 
 			//Select language is handled in Wiki site
-			_helpLang = "";
+			_helpLang = string.Empty;
 
 		}
 
