@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-            _target = new RestrictionAggregator(_effectiveRestrictionCreator, _schedulingOptions,
+            _target = new RestrictionAggregator(_effectiveRestrictionCreator,
                                                 _schedulingResultStateHolder);
         }
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
             using (_mocks.Playback())
             {
-                Assert.That(_target.Aggregate(dateList, groupPerson), Is.EqualTo(result));
+                Assert.That(_target.Aggregate(dateList, groupPerson, _schedulingOptions), Is.EqualTo(result));
             }
         }
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             var dateOnly = new DateOnly(2012, 12, 7);
             var dateList = new List<DateOnly> {dateOnly, dateOnly.AddDays(1)};
 
-            Assert.That(_target.Aggregate(dateList, null), Is.Null);
+            Assert.That(_target.Aggregate(dateList, null, _schedulingOptions), Is.Null);
         }
     }
 }

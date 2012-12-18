@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 var groupPerson = _teamExtractor.GetRamdomTeam(startDate);
 
                 //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
-                var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson);
+                var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson,_schedulingOptions );
 
                 //call class that returns the aggregated intraday dist based on teamblock dates
                 var skillInternalDataList = _skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList);

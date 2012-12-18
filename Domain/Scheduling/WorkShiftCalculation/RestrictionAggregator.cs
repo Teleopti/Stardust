@@ -5,27 +5,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
     public interface IRestrictionAggregator
     {
-        IEffectiveRestriction Aggregate(IEnumerable<DateOnly> dateOnlyList, IGroupPerson groupPerson);
+        IEffectiveRestriction Aggregate(IEnumerable<DateOnly> dateOnlyList, IGroupPerson groupPerson, ISchedulingOptions schedulingOptions);
     }
 
     public class RestrictionAggregator : IRestrictionAggregator
     {
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-        private readonly ISchedulingOptions _schedulingOptions;
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-
+        
         public RestrictionAggregator(
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
-            ISchedulingOptions schedulingOptions,
-
             ISchedulingResultStateHolder schedulingResultStateHolder)
         {
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
-            _schedulingOptions = schedulingOptions;
             _schedulingResultStateHolder = schedulingResultStateHolder;
         }
 
-        public IEffectiveRestriction Aggregate(IEnumerable<DateOnly> dateOnlyList, IGroupPerson groupPerson)
+        public IEffectiveRestriction Aggregate(IEnumerable<DateOnly> dateOnlyList, IGroupPerson groupPerson, ISchedulingOptions schedulingOptions )
         {
             var scheduleDictionary = _schedulingResultStateHolder.Schedules;
             if (groupPerson == null)
@@ -34,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             foreach (var dateOnly in dateOnlyList)
             {
                 var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
-                                                                                       dateOnly, _schedulingOptions,
+                                                                                       dateOnly, schedulingOptions,
                                                                                        scheduleDictionary);
                 if (restriction == null)
                     return null;

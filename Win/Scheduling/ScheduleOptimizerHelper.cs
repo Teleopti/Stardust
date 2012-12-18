@@ -1184,6 +1184,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 																		 resourceOptimizationHelper,
 																		 mainShiftOptimizeActivitySpecificationSetter);
                 var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(groupMatrixHelper, coherentChecker, scheduleMatrixProFinder);
+                
                 var teamScheduling = new TeamScheduling(schedulingOptions, teamSteadyStateHolder,
                                                         teamSteadyStateMainShiftScheduler,
                                                         groupPersonBuilderForOptimization, groupSchedulingService);
