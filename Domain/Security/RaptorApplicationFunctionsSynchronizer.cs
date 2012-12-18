@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Security
         /// <summary>
         /// Digests the reports from matrix.
         /// </summary>
-        public bool CheckRaptorApplicationFunctions()
+        public bool CheckRaptorApplicationFunctions(out IEnumerable<IApplicationFunction> addedFunctions, out IEnumerable<IApplicationFunction> deletedFunctions)
         {
             using (IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
@@ -53,28 +53,20 @@ namespace Teleopti.Ccc.Domain.Security
                     FilterExistingDefinedRaptorApplicationFunctions(databaseApplicationFunctions);
 
 
-                IList<IApplicationFunction> addedFunctions =
+                addedFunctions =
                     new List<IApplicationFunction>(AddedRaptorApplicationFunctions(databaseRaptorApplicationFunctions,
                                                                                    definedRaptorApplicationFunctions));
 
 
-                IList<IApplicationFunction> deletedFunctions =
+                deletedFunctions =
                     new List<IApplicationFunction>(DeletedRaptorApplicationFunctions(definedRaptorApplicationFunctions,
                                                                                      databaseRaptorApplicationFunctions));
 
-                // Add
-                if (addedFunctions.Count > 0)
-                {
-                    throw new PermissionException("The following Application Function has been added recently in code but not found in the database: " + addedFunctions[0].FunctionPath + "\nApply the suitable database script.");
-                }
+				if (addedFunctions.Any() || deletedFunctions.Any())
+					return false;
 
-                // Deleted
-                if (deletedFunctions.Count > 0)
-                {
-                    throw new PermissionException("The following Application Function has been removed recently from code but still exists in the database: " + deletedFunctions[0].FunctionPath + "\nApply the suitable database script.");
-                }
+            	return true;
             }
-            return true;
         }
 
         /// <summary>

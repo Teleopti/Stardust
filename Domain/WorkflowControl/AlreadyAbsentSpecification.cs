@@ -3,7 +3,11 @@ using Teleopti.Ccc.Domain.Specification;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-	public class AlreadyAbsentSpecification : Specification<IAbsenceRequest>
+	public interface IAlreadyAbsentSpecification : ISpecification<IAbsenceRequest>
+	{
+	}
+
+	public class AlreadyAbsentSpecification : Specification<IAbsenceRequest>, IAlreadyAbsentSpecification
 	{
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 

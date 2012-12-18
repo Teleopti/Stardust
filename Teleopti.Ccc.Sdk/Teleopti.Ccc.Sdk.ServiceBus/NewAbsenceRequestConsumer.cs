@@ -45,13 +45,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private readonly IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
     	private readonly IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
     	private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
-    	private readonly AlreadyAbsentSpecification _alreadyAbsentSpecification;
+    	private readonly IAlreadyAbsentSpecification _alreadyAbsentSpecification;
     	private IProcessAbsenceRequest _process;
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
     	public NewAbsenceRequestConsumer(IScheduleRepository scheduleRepository, IPersonAbsenceAccountProvider personAbsenceAccountProvider, IScenarioProvider scenarioProvider, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
                                          IAbsenceRequestOpenPeriodMerger absenceRequestOpenPeriodMerger, IRequestFactory factory,
-                                         IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, AlreadyAbsentSpecification alreadyAbsentSpecification)
+                                         IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification)
         {
             _scheduleRepository = scheduleRepository;
             _personAbsenceAccountProvider = personAbsenceAccountProvider;
@@ -124,83 +124,88 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 
                 if (HasWorkflowControlSet())
                 {
-                    IPersonAccountCollection allAccounts = _personAbsenceAccountProvider.Find(_absenceRequest.Person);
-                    foreach (IPersonAbsenceAccount personAbsenceAccount in allAccounts)
-                    {
-                        undoRedoContainer.SaveState(personAbsenceAccount);
-                    }
-                    
-                    IPersonAccountBalanceCalculator personAccountBalanceCalculator;
-                    personAccount = allAccounts.Find(_absenceRequest.Absence); //Find for all later periods
-                    if (personAccount == null)
-                    {
-                        if (_absenceRequest.Absence.Tracker != null)
-                        {
-                            if (Logger.IsWarnEnabled)
-                            {
-                                Logger.WarnFormat(CultureInfo.CurrentCulture,
-                                    "No person account defined for {0}, {1} (PersonId = {2}) with absence {4} for {5}. (Request Id = {3})",
-                                    _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name,
-                                    _absenceRequest.Person.Id, message.PersonRequestId,
-                                    _absenceRequest.Absence.Description,
-                                    dateOnlyPeriod.StartDate);
-                            }
-                        }
-                        personAccountBalanceCalculator = new EmptyPersonAccountBalanceCalculator(_absenceRequest.Absence);
-                    }
-                    else
-                    {
-                        TrackAccounts(personAccount, dateOnlyPeriod);
-                        var affectedAccounts =
-                            personAccount.Find(new DateOnlyPeriod(dateOnlyPeriod.StartDate, DateOnly.MaxValue)); //We must have the current and all after...
-                        personAccountBalanceCalculator = new PersonAccountBalanceCalculator(affectedAccounts);
-                    }
+                	IPersonAccountCollection allAccounts = _personAbsenceAccountProvider.Find(_absenceRequest.Person);
+                	foreach (IPersonAbsenceAccount personAbsenceAccount in allAccounts)
+                	{
+                		undoRedoContainer.SaveState(personAbsenceAccount);
+                	}
 
-					if (personAlreadyAbsentDuringRequestPeriod())
+                	IPersonAccountBalanceCalculator personAccountBalanceCalculator;
+                	personAccount = allAccounts.Find(_absenceRequest.Absence); //Find for all later periods
+                	if (personAccount == null)
+                	{
+                		if (_absenceRequest.Absence.Tracker != null)
+                		{
+                			if (Logger.IsWarnEnabled)
+                			{
+                				Logger.WarnFormat(CultureInfo.CurrentCulture,
+                				                  "No person account defined for {0}, {1} (PersonId = {2}) with absence {4} for {5}. (Request Id = {3})",
+                				                  _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name,
+                				                  _absenceRequest.Person.Id, message.PersonRequestId,
+                				                  _absenceRequest.Absence.Description,
+                				                  dateOnlyPeriod.StartDate);
+                			}
+                		}
+                		personAccountBalanceCalculator = new EmptyPersonAccountBalanceCalculator(_absenceRequest.Absence);
+                	}
+                	else
+                	{
+                		TrackAccounts(personAccount, dateOnlyPeriod);
+                		var affectedAccounts =
+                			personAccount.Find(new DateOnlyPeriod(dateOnlyPeriod.StartDate, DateOnly.MaxValue));
+                			//We must have the current and all after...
+                		personAccountBalanceCalculator = new PersonAccountBalanceCalculator(affectedAccounts);
+                	}
+
+                	var alreadyAbsent = personAlreadyAbsentDuringRequestPeriod();
+                	var allNewRules = NewBusinessRuleCollection.Minimum();
+                	var requestApprovalServiceScheduler = _factory.GetRequestApprovalService(allNewRules,
+                	                                                                         _scenarioProvider.
+                	                                                                         	DefaultScenario());
+                	var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(_absenceRequest.Absence,
+                	                                                                         _absenceRequest.Period,
+                	                                                                         _absenceRequest.Person);
+                	if (Logger.IsWarnEnabled)
+                	{
+                		foreach (var brokenBusinessRule in brokenBusinessRules)
+                		{
+                			Logger.WarnFormat("A rule was broken: {0}", brokenBusinessRule.Message);
+                		}
+                	}
+                	if (Logger.IsDebugEnabled)
+                	{
+                		Logger.Debug("Simulated approving absence successfully");
+                	}
+
+                	IOpenAbsenceRequestPeriodExtractor extractor =
+                		_absenceRequest.Person.WorkflowControlSet.GetExtractorForAbsence
+                			(_absenceRequest.Absence);
+                	extractor.ViewpointDate = DateOnly.Today;
+
+                	var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod);
+                	var mergedPeriod = _absenceRequestOpenPeriodMerger.Merge(openPeriods);
+
+                	validatorList = mergedPeriod.GetSelectedValidatorList(_schedulingResultStateHolder,
+                	                                                      _resourceOptimizationHelper,
+                	                                                      personAccountBalanceCalculator,
+                	                                                      _budgetGroupAllowanceSpecification);
+
+                	_process = mergedPeriod.GetSelectedProcess(requestApprovalServiceScheduler, undoRedoContainer);
+
+					if (_process.GetType() == typeof(GrantAbsenceRequest) && alreadyAbsent)
 					{
 						denyAbsenceRequest(undoRedoContainer, "RequestDenyReasonAlreadyAbsent");
 						if (Logger.IsWarnEnabled)
 						{
-							Logger.WarnFormat(CultureInfo.CurrentCulture, "The person is already absent during the absence request period. {0}, {1} (PersonId = {2}). The request with Id = {3} will be denied.",
-											  _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name, _absenceRequest.Person.Id, message.PersonRequestId);
+							Logger.WarnFormat(CultureInfo.CurrentCulture,
+							                  "The person is already absent during the absence request period. {0}, {1} (PersonId = {2}). The request with Id = {3} will be denied.",
+							                  _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name, _absenceRequest.Person.Id,
+							                  message.PersonRequestId);
 						}
 					}
-					else
-					{
-                    var allNewRules = NewBusinessRuleCollection.Minimum(); 
-                    var requestApprovalServiceScheduler = _factory.GetRequestApprovalService(allNewRules,
-                                                                                             _scenarioProvider.DefaultScenario());
-                    var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(_absenceRequest.Absence, _absenceRequest.Period,
-                                                                   _absenceRequest.Person);
-                    if (Logger.IsWarnEnabled)
-                    {
-                        foreach (var brokenBusinessRule in brokenBusinessRules)
-                        {
-                            Logger.WarnFormat("A rule was broken: {0}",brokenBusinessRule.Message);
-                        }
-                    }
-                    if (Logger.IsDebugEnabled)
-                    {
-                        Logger.Debug("Simulated approving absence successfully");
-                    }
+                }
 
-                    IOpenAbsenceRequestPeriodExtractor extractor =
-                        _absenceRequest.Person.WorkflowControlSet.GetExtractorForAbsence
-                            (_absenceRequest.Absence);
-                    extractor.ViewpointDate = DateOnly.Today;
-
-                    var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod);
-                    var mergedPeriod = _absenceRequestOpenPeriodMerger.Merge(openPeriods);
-                    
-                    validatorList = mergedPeriod.GetSelectedValidatorList(_schedulingResultStateHolder,
-                                                                          _resourceOptimizationHelper,
-                                                                          personAccountBalanceCalculator, _budgetGroupAllowanceSpecification);
-
-                    _process = mergedPeriod.GetSelectedProcess(requestApprovalServiceScheduler, undoRedoContainer);
-					}
-				}
-
-                HandleInvalidSchedule(undoRedoContainer);
+            	HandleInvalidSchedule(undoRedoContainer);
 
                 //Will issue a rollback for simulated schedule data
                 if (Logger.IsInfoEnabled)
@@ -256,8 +261,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         {
             var persistResult = _scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository,
 																	 _schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot());
-			//vet inte denna behövs - går itne att följa "consume-metoden"....
-        	//unitOfWork.PersistAll();
             _scheduleDictionaryModifiedCallback.Callback(_schedulingResultStateHolder.Schedules, persistResult.ModifiedEntities, persistResult.AddedEntities, persistResult.DeletedEntities);
         }
 
