@@ -5832,7 +5832,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (_schedulerMeetingHelper != null)
                 _schedulerMeetingHelper.ModificationOccured -= _schedulerMeetingHelper_ModificationOccured;
             if (schedulerSplitters1 != null)
+            {
+                schedulerSplitters1.HandlePersonRequestView1.RemoveEvents();
                 schedulerSplitters1.TabSkillData.SelectedIndexChanged -= tabSkillData_SelectedIndexChanged;
+            }
             if (_grid != null)
             {
                 _grid.CurrentCellKeyDown -= grid_CurrentCellKeyDown;
