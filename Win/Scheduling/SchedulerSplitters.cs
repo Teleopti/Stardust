@@ -219,5 +219,10 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             _pinnedSkillHelper.ReplaceOldWithNew(newSkill, oldSkill);
         }
+
+        public void RemoveHandlePersonEvents()
+        {
+            handlePersonRequestView1.RemoveEvents();
+        }
     }
 }

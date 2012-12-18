@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
             string helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefix"];
             string helpSuffix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpSuffix"];
             string helpDivider = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDivider"];
-            string helpLang = "en/"; //default en for now...
+            string helpLang = string.Empty; //empty for now
 
             if (Keyboard.Modifiers == ModifierKeys.Shift)
             {
