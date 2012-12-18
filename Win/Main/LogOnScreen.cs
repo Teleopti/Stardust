@@ -507,11 +507,8 @@ namespace Teleopti.Ccc.Win.Main
 				return true;
 
 			ShowInTaskbar = true;
-			string message = string.Empty;
-
-			#if DEBUG
-
-			message = BuildApplicationFunctionWarningMessage(addedFunctions, deletedFunctions);
+			string message = 
+				BuildApplicationFunctionWarningMessage(addedFunctions, deletedFunctions);
 			DialogResult answer = MessageBox.Show(
 					this,
 					message,
@@ -520,25 +517,25 @@ namespace Teleopti.Ccc.Win.Main
 					MessageBoxIcon.Warning,
 					MessageBoxDefaultButton.Button1,
 					0);
+
 			return (answer == DialogResult.Yes);
 
-			#endif
 
-			message = BuildApplicationFunctionErrorMessage(addedFunctions, deletedFunctions);
+			//message = BuildApplicationFunctionErrorMessage(addedFunctions, deletedFunctions);
 
-			MessageBox.Show(
-			this,
-			message,
-			Resources.VerifyingPermissionsTreeDots,
-			MessageBoxButtons.OK,
-			MessageBoxIcon.Error,
-			MessageBoxDefaultButton.Button1, 
-			0);
-
-			return false;
+			//MessageBox.Show(
+			//this,
+			//message,
+			//Resources.VerifyingPermissionsTreeDots,
+			//MessageBoxButtons.OK,
+			//MessageBoxIcon.Error,
+			//MessageBoxDefaultButton.Button1, 
+			//0);
+			
+			//return false;
 		}
 
-		private string BuildApplicationFunctionWarningMessage(IEnumerable<IApplicationFunction> addedFunctions, IEnumerable<IApplicationFunction> deletedFunctions)
+		private static string BuildApplicationFunctionWarningMessage(IEnumerable<IApplicationFunction> addedFunctions, IEnumerable<IApplicationFunction> deletedFunctions)
 		{
 			string message = string.Empty;
 			// Added
@@ -569,35 +566,35 @@ namespace Teleopti.Ccc.Win.Main
 			return message;
 		}
 
-		private string BuildApplicationFunctionErrorMessage(IEnumerable<IApplicationFunction> addedFunctions, IEnumerable<IApplicationFunction> deletedFunctions)
-		{
-			string message = string.Empty;
-			// Added
-			if (addedFunctions.Any())
-			{
-				string appFunctionsText =
-					addedFunctions.Aggregate(string.Empty, (current, appFunction) => current + (appFunction.FunctionPath + ", "));
-				appFunctionsText = appFunctionsText.Substring(0, appFunctionsText.Length - 2);
+		//private static string BuildApplicationFunctionErrorMessage(IEnumerable<IApplicationFunction> addedFunctions, IEnumerable<IApplicationFunction> deletedFunctions)
+		//{
+		//    string message = string.Empty;
+		//    // Added
+		//    if (addedFunctions.Any())
+		//    {
+		//        string appFunctionsText =
+		//            addedFunctions.Aggregate(string.Empty, (current, appFunction) => current + (appFunction.FunctionPath + ", "));
+		//        appFunctionsText = appFunctionsText.Substring(0, appFunctionsText.Length - 2);
 
-				message = "The following Application Function(s) has been added recently in code but not found in the database: "
-							+ appFunctionsText
-							+ "\nApply the suitable database script.";
-				return message;
-			}
+		//        message = "The following Application Function(s) has been added recently in code but not found in the database: "
+		//                    + appFunctionsText
+		//                    + "\nApply the suitable database script.";
+		//        return message;
+		//    }
 
-			// Deleted
-			if (deletedFunctions.Any())
-			{
-				string appFunctionsText =
-					deletedFunctions.Aggregate(string.Empty, (current, appFunction) => current + (appFunction.FunctionPath + ", "));
-				appFunctionsText = appFunctionsText.Substring(0, appFunctionsText.Length - 2);
+		//    // Deleted
+		//    if (deletedFunctions.Any())
+		//    {
+		//        string appFunctionsText =
+		//            deletedFunctions.Aggregate(string.Empty, (current, appFunction) => current + (appFunction.FunctionPath + ", "));
+		//        appFunctionsText = appFunctionsText.Substring(0, appFunctionsText.Length - 2);
 
-				message = "The following Application Function(s) has been removed recently from code but still exists in the database: "
-						   + appFunctionsText
-						   + "\nApply the suitable database script.";
-			}
-			return message;
-		}
+		//        message = "The following Application Function(s) has been removed recently from code but still exists in the database: "
+		//                   + appFunctionsText
+		//                   + "\nApply the suitable database script.";
+		//    }
+		//    return message;
+		//}
 
 
 		private bool CheckAndReportInvalidDataSources()
