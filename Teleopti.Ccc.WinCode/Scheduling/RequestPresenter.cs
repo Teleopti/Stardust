@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     {
         private readonly IRequestPresenterCallback _callback;
         private readonly IPersonRequestCheckAuthorization _authorization;
-        private const string DenyReasonResourceKey = "xxRequestDenyReasonSupervisor";
+        private const string DenyReasonResourceKey = "RequestDenyReasonSupervisor";
 
         public DenyPersonRequestCommand(IRequestPresenterCallback callback, IPersonRequestCheckAuthorization authorization)
         {
