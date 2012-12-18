@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.ViewName.Should().Be.EqualTo("NoSchedulePeriodPartial");
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnStudentAvailabilitiesAndSchedules()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IStudentAvailabilityViewModelFactory>();
