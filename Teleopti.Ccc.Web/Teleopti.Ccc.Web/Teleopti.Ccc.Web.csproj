@@ -509,7 +509,7 @@
   <ItemGroup>
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8.gif" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.EditStudentAvailabilityFormViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordViewModel.js" />
     <Content Include="Areas\Team\Content\Scripts\helpers.js" />
     <Content Include="Areas\Team\Content\Scripts\layout.js" />

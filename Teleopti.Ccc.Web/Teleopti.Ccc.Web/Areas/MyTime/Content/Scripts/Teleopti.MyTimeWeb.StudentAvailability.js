@@ -19,10 +19,10 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var dayViewModels = [];
 	var studentAvailabilityToolTip = null;
-	var editStudentAvailabilityFormViewModel = null;
+	var editFormViewModel = null;
 
 	function _setEditError(message) {
-		editStudentAvailabilityFormViewModel.ValidationError(message || '');
+		editFormViewModel.ValidationError(message || '');
 	}
 
 	function _layout() {
@@ -118,7 +118,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		var editButton = $('#StudentAvailability-edit-button');
 		var template = $('#Student-availability-edit-form');
 
-		editStudentAvailabilityFormViewModel = new Teleopti.MyTimeWeb.StudentAvailability.EditStudentAvailabilityFormViewModel();
+		editFormViewModel = new Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel();
 
 		studentAvailabilityToolTip = $('<div/>')
 			.qtip({
@@ -159,14 +159,14 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 						$('#Student-availability-reset')
 							.button()
 							.click(function () {
-								editStudentAvailabilityFormViewModel.reset();
+								editFormViewModel.reset();
 							});
 						$('#Student-availability-apply')
 							.button()
 							.click(function () {
-								_setStudentAvailability(ko.toJS(editStudentAvailabilityFormViewModel));
+								_setStudentAvailability(ko.toJS(editFormViewModel));
 							});
-						ko.applyBindings(editStudentAvailabilityFormViewModel, template[0]);
+						ko.applyBindings(editFormViewModel, template[0]);
 					}
 				}
 			});
@@ -204,11 +204,11 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	function _setStudentAvailability(studentAvailability) {
 		var promises = [];
 
-		editStudentAvailabilityFormViewModel.ValidationError('');
+		editFormViewModel.ValidationError('');
 
 		var validationErrorCallback = function (data) {
 			var message = data.Errors.join('</br>');
-			editStudentAvailabilityFormViewModel.ValidationError(message);
+			editFormViewModel.ValidationError(message);
 		};
 		$('#StudentAvailability-body-inner .ui-selected')
 			.each(function (index, cell) {

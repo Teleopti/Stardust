@@ -4,7 +4,7 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
-Teleopti.MyTimeWeb.StudentAvailability.EditStudentAvailabilityFormViewModel = function () {
+Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel = function () {
 	var self = this;
 
 	this.StartTime = ko.observable('');
