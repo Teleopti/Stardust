@@ -38,16 +38,19 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
 
         public void Populate(ReforecastModelCollection stateObj)
         {
-            ReloadSkillsListView(_skills.Any() ? _skills[0] : null);
+            ReloadSkillsListView(stateObj, _skills.Any() ? _skills[0] : null);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool Depopulate(ReforecastModelCollection stateObj)
         {
             if (!validated()) return false;
-
-            foreach (ListViewItem item in listViewSkills.CheckedItems)
-                stateObj.ReforecastModels.Add(new ReforecastModel { Skill = (ISkill)item.Tag});
+            stateObj.ReforecastModels.Clear();
+            foreach (
+                var item in
+                    listViewSkills.CheckedItems.Cast<ListViewItem>().Where(
+                        item => stateObj.ReforecastModels.All(m => m.Skill != (ISkill) item.Tag)))
+                stateObj.ReforecastModels.Add(new ReforecastModel {Skill = (ISkill) item.Tag});
 
             return true;
         }
@@ -73,14 +76,13 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
             listViewSkills.Columns.Add(header);
         }
 
-        private static void FindChecked(ListViewItem lvi, ISkill skill, ISkill selectedSkill)
+        private static void FindChecked(ListViewItem lvi)
         {
-            if (!skill.Id.Equals(selectedSkill.Id)) return;
             lvi.Selected = true;
             lvi.Checked = true;
         }
 
-        private void ReloadSkillsListView(ISkill selectedSkill)
+        private void ReloadSkillsListView(ReforecastModelCollection stateObj, ISkill selectedSkill)
         {
             listViewSkills.BeginUpdate();
             listViewSkills.ListViewItemSorter = null;
@@ -96,8 +98,10 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
             foreach (var skill in _skills)
             {
                 var lvi = new ListViewItem { Tag = skill,  Text = skill.Name };
-                if (selectedSkill != null)
-                    FindChecked(lvi, skill, selectedSkill);
+                if (stateObj.ReforecastModels.Any(m => m.Skill == skill)) FindChecked(lvi);
+                else if (!stateObj.ReforecastModels.Select(m => m.Skill).Intersect(_skills).Any() 
+                    && selectedSkill != null
+                    && selectedSkill == skill) FindChecked(lvi);
                 _allItems.Add(lvi);
             }
 
