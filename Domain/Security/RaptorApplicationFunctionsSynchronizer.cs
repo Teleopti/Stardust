@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -38,8 +39,7 @@ namespace Teleopti.Ccc.Domain.Security
         /// <summary>
         /// Digests the reports from matrix.
         /// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#")]
-		public bool CheckRaptorApplicationFunctions(out IEnumerable<IApplicationFunction> addedFunctions, out IEnumerable<IApplicationFunction> deletedFunctions)
+		public CheckRaptorApplicationFunctionsResult CheckRaptorApplicationFunctions()
         {
             using (IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
@@ -54,19 +54,17 @@ namespace Teleopti.Ccc.Domain.Security
                     FilterExistingDefinedRaptorApplicationFunctions(databaseApplicationFunctions);
 
 
-                addedFunctions =
+                var addedFunctions =
                     new List<IApplicationFunction>(AddedRaptorApplicationFunctions(databaseRaptorApplicationFunctions,
                                                                                    definedRaptorApplicationFunctions));
 
 
-                deletedFunctions =
+                var deletedFunctions =
                     new List<IApplicationFunction>(DeletedRaptorApplicationFunctions(definedRaptorApplicationFunctions,
-                                                                                     databaseRaptorApplicationFunctions));
+																					 databaseRaptorApplicationFunctions));
 
-				if (addedFunctions.Any() || deletedFunctions.Any())
-					return false;
+				return new CheckRaptorApplicationFunctionsResult(addedFunctions, deletedFunctions);
 
-            	return true;
             }
         }
 
@@ -299,4 +297,39 @@ namespace Teleopti.Ccc.Domain.Security
             unitOfWork.PersistAll();
         }
     }
+
+
+	public class CheckRaptorApplicationFunctionsResult
+	{
+		private readonly IList<IApplicationFunction> _addedFunctions;
+		private readonly IList<IApplicationFunction> _deletedFunctions;
+
+		public CheckRaptorApplicationFunctionsResult(
+			IEnumerable<IApplicationFunction> addedFunctions,
+			IEnumerable<IApplicationFunction> deletedFunctions)
+		{
+			_addedFunctions = new List<IApplicationFunction>(addedFunctions);
+			_deletedFunctions = new List<IApplicationFunction>(deletedFunctions);
+		}
+
+		public ReadOnlyCollection<IApplicationFunction> AddedFunctions
+		{
+			get { return new ReadOnlyCollection<IApplicationFunction>(_addedFunctions); }
+		}
+
+		public ReadOnlyCollection<IApplicationFunction> DeletedFunctions
+		{
+			get { return new ReadOnlyCollection<IApplicationFunction>(_deletedFunctions); }
+		}
+
+		public bool Result
+		{
+			get
+			{
+				if (_addedFunctions.Any() || _deletedFunctions.Any())
+					return false;
+				return true;
+			}
+		}
+	}
 }
