@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			_statistic = statistic;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public DateTime Execute(DateTimePeriod period, IWorkloadDay workloadDay, IList<ISkillStaffPeriod> skillStaffPeriods)
 		{
 			var ret = new DateTime();

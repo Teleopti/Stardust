@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		}
 
 		[Test]
-		public void ShouldOnlyDoDefaulScenario()
+		public void ShouldOnlyDoDefaultScenario()
 		{
 			var scenarioId = Guid.NewGuid();
 			_scenario = _mocks.StrictMock<IScenario>();
@@ -107,8 +107,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_mocks.VerifyAll();
 		}
 
-		[Test]
-		public void ShouldRecalcWorkloadDay()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldRecalculateWorkloadDay()
 		{
 			var scenarioId = Guid.NewGuid();
 			var skillId = Guid.NewGuid();
