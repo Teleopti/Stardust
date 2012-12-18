@@ -140,7 +140,6 @@
     <Compile Include="Configuration\UnitOfWorkModule.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Configuration\MbCacheModule.cs" />
-    <Compile Include="Configuration\RuleSetModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

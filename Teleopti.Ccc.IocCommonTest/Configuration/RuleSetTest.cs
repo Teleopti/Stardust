@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using MbCache.Configuration;
 using MbCache.Core;
 using NUnit.Framework;
 using Autofac;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -28,7 +26,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var mbCacheModule = new MbCacheModule(null);
 			containerBuilder.RegisterModule(mbCacheModule);
-			containerBuilder.RegisterModule(new RuleSetModule());
 			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
 			using (var container = containerBuilder.Build())
 			{
@@ -47,7 +44,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var mbCacheModule = new MbCacheModule(null);
 			containerBuilder.RegisterModule(mbCacheModule);
-			containerBuilder.RegisterModule(new RuleSetModule());
 			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
 			var wsRs = createRuleset(true);
 
@@ -73,7 +69,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var mbCacheModule = new MbCacheModule(null);
 			containerBuilder.RegisterModule(mbCacheModule);
-			containerBuilder.RegisterModule(new RuleSetModule());
 			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
 
 			using (var container = containerBuilder.Build())
@@ -88,7 +83,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var mbCacheModule = new MbCacheModule(null);
 			containerBuilder.RegisterModule(mbCacheModule);
-			containerBuilder.RegisterModule(new RuleSetModule());
 			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
 			var wsRs = createRuleset(true);
 
@@ -107,25 +101,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		public void VerifyProjectionServiceIsNotCached()
-		{
-			containerBuilder.RegisterModule(new MbCacheModule(null));
-			containerBuilder.RegisterModule(new RuleSetModule());
-			using (var container = containerBuilder.Build())
-			{
-				var wsRs = createRuleset(true);
-				var projSvc = container.Resolve<IRuleSetProjectionEntityService>();
-
-				Assert.AreNotSame(projSvc.ProjectionCollection(wsRs), projSvc.ProjectionCollection(wsRs));
-			}
-		}
-
-		[Test]
 		public void ShouldNotCacheRuleSetWithNoId()
 		{
 			var mbCacheModule = new MbCacheModule(null);
 			containerBuilder.RegisterModule(mbCacheModule);
-			containerBuilder.RegisterModule(new RuleSetModule());
 			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
 			var wsRs = createRuleset(false);
 

@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb()));
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<LogModule>();
-			builder.RegisterModule<RuleSetModule>();
 
 			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
