@@ -2576,7 +2576,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 
             	disableButtonsIfTeamLeaderMode();
-                if (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp)
+                if (_scheduleView != null && (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp) || e.Reason == GridSelectionReason.ArrowKey)
                 {
                     _scheduleView.Presenter.UpdateFromEditor();
                     updateShiftEditor();
