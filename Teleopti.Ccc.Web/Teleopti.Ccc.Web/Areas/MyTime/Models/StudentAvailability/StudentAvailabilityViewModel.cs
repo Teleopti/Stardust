@@ -62,10 +62,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability
 
 	public class AvailableDayViewModel : DayViewModelBase
 	{
-		public string AvailableTimeSpan { get; set; }
-		public string StartTimeSpan { get; set; }
-		public string EndTimeSpan { get; set; }
-		public string WorkTimeSpan { get; set; }
 	}
 
 	public class ScheduledDayViewModel : DayViewModelBase

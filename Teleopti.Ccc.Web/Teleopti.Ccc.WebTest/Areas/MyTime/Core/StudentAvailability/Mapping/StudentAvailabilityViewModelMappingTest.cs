@@ -295,24 +295,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		}
 
 		[Test]
-		public void ShouldMapAvailableDayAvailableTimeSpan()
-		{
-			var result = Mapper.Map<StudentAvailabilityDayDomainData, AvailableDayViewModel>(new StudentAvailabilityDayDomainData(date, period, null, studentAvailabilityProvider, scheduleDays));
-
-			result.AvailableTimeSpan.Should().Be(studentAvailabilityRestriction.StartTimeLimitation.StartTimeString + " - " + studentAvailabilityRestriction.EndTimeLimitation.EndTimeString);
-		}
-
-		[Test]
-		public void ShouldMapEmptyAvailableDayViewModelWhenNoStudentAvailability()
-		{
-			var dateWithoutStudentAvailability = date.AddDays(1);
-
-			var result = Mapper.Map<StudentAvailabilityDayDomainData, AvailableDayViewModel>(new StudentAvailabilityDayDomainData(dateWithoutStudentAvailability, period, null, studentAvailabilityProvider, scheduleDays));
-
-			result.AvailableTimeSpan.Should().Be.Empty();
-		}
-
-		[Test]
 		public void ShouldMapStudentAvailabilityPeriod()
 		{
 			var result = Mapper.Map<DateOnly, StudentAvailabilityViewModel>(date);

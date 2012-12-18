@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using AutoMapper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
@@ -24,7 +25,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				.ForMember(d => d.AvailableTimeSpan, o => o.MapFrom(s =>
 				                                                    	{
 																			var studentAvailabilityRestriction = _studentAvailabilityProvider().GetStudentAvailabilityForDay(s);
-				                                                    		return studentAvailabilityRestriction.FormatLimitationTimes();
+				                                                    		return studentAvailabilityRestriction == null ? string.Empty : string.Format(
+				                                                    			CultureInfo.InvariantCulture,
+				                                                    			"{0} - {1}", studentAvailabilityRestriction.StartTimeLimitation.StartTimeString,
+				                                                    			studentAvailabilityRestriction.EndTimeLimitation.EndTimeString);
 				                                                    	}))
 				;
 		}

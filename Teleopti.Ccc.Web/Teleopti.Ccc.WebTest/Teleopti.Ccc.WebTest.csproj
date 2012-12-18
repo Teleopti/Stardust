@@ -281,7 +281,6 @@
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayViewModelMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFormMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityViewModelMappingTest.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\StudentAvilabilityHtmlExtensionTest.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityViewModelFactoryTest.cs" />
     <Compile Include="Core\TimeOfDayModelBinderTest.cs" />
     <Compile Include="Core\WebStateTest.cs" />

@@ -427,7 +427,6 @@
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFormMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDomainData.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityRestrictionExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\TimeOfDayModelBinder.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInput.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayViewModel.cs" />
@@ -491,7 +490,6 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IVirtualSchedulePeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\VirtualSchedulePeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityViewModelMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\StudentAvilabilityHtmlExtension.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\IStudentAvailabilityViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityViewModelFactory.cs" />
     <Compile Include="Filters\AjaxHandleErrorAttribute.cs" />

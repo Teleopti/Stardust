@@ -115,14 +115,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				                                        		return state;
 				                                        	}))
 				.ForMember(d => d.StyleClassName, c => c.Ignore())
-				.ForMember(d => d.AvailableTimeSpan, c => c.MapFrom(s =>
-				                                                    	{
-				                                                    		var availabilityRestriction = s.StudentAvailability;
-				                                                    		return availabilityRestriction == null ? string.Empty : availabilityRestriction.FormatLimitationTimes();
-				                                                    	}))
-				.ForMember(d => d.StartTimeSpan, c => c.Ignore())
-				.ForMember(d => d.EndTimeSpan, c => c.Ignore())
-				.ForMember(d => d.WorkTimeSpan, c => c.Ignore())
 				;
 
 			CreateMap<StudentAvailabilityDayDomainData, HeaderViewModel>()
