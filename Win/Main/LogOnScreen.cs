@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -494,21 +495,19 @@ namespace Teleopti.Ccc.Win.Main
 			var repositoryFactory = new RepositoryFactory();
 			var raptorSynchronizer = new RaptorApplicationFunctionsSynchronizer(repositoryFactory, UnitOfWorkFactory.Current);
 
-			IEnumerable<IApplicationFunction> addedFunctions;
-			IEnumerable<IApplicationFunction> deletedFunctions;
-			var result = raptorSynchronizer.CheckRaptorApplicationFunctions(out addedFunctions, out deletedFunctions);
+			var result = raptorSynchronizer.CheckRaptorApplicationFunctions();
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				_roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, uow, repositoryFactory.CreatePersonRepository(uow));
 			}
 
-			if (result)
+			if (result.Result)
 				return true;
 
 			ShowInTaskbar = true;
-			string message = 
-				BuildApplicationFunctionWarningMessage(addedFunctions, deletedFunctions);
+			string message =
+				BuildApplicationFunctionWarningMessage(result);
 			DialogResult answer = MessageBox.Show(
 					this,
 					message,
@@ -535,14 +534,14 @@ namespace Teleopti.Ccc.Win.Main
 			//return false;
 		}
 
-		private static string BuildApplicationFunctionWarningMessage(IEnumerable<IApplicationFunction> addedFunctions, IEnumerable<IApplicationFunction> deletedFunctions)
+		private static string BuildApplicationFunctionWarningMessage(CheckRaptorApplicationFunctionsResult result)
 		{
 			string message = string.Empty;
 			// Added
-			if (addedFunctions.Any())
+			if (result.AddedFunctions.Any())
 			{
 				string appFunctionsText =
-					addedFunctions.Aggregate(string.Empty, (current, appFunction) => current + (appFunction.FunctionPath + ", "));
+					result.AddedFunctions.Aggregate(string.Empty, (current, appFunction) => current + (appFunction.FunctionPath + ", "));
 				appFunctionsText = appFunctionsText.Substring(0, appFunctionsText.Length - 2);
 
 				message = "The following Application Function(s) has been added recently in code but not found in the database: "
@@ -552,10 +551,10 @@ namespace Teleopti.Ccc.Win.Main
 			}
 
 			// Deleted
-			if (deletedFunctions.Any())
+			if (result.DeletedFunctions.Any())
 			{
 				string appFunctionsText =
-					deletedFunctions.Aggregate(string.Empty, (current, appFunction) => current + (appFunction.FunctionPath + ", "));
+					result.DeletedFunctions.Aggregate(string.Empty, (current, appFunction) => current + (appFunction.FunctionPath + ", "));
 				appFunctionsText = appFunctionsText.Substring(0, appFunctionsText.Length - 2);
 
 				message = "The following Application Function(s) has been removed recently from code but still exists in the database: "
@@ -738,6 +737,5 @@ namespace Teleopti.Ccc.Win.Main
 				ApplicationLogOn();
 			}
 		}
-
 	}
 }
