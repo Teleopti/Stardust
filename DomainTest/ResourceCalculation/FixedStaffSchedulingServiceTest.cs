@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
@@ -24,11 +25,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IEffectiveRestriction _effectiveRestriction;
 		private IScheduleService _scheduleService;
         private ISchedulingOptions _schedulingOptions;
-		private IAbsencePreferenceScheduler _absencePreferenseScheduler;
-		private IDayOffScheduler _dayOffScheduler;
 		private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
+		private IDaysOffSchedulingService _daysOffSchedulingService;
 
 		[SetUp]
 		public void Setup()
@@ -49,20 +49,18 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																				  new List<IActivityRestriction>());
             _schedulingOptions = new SchedulingOptions();
 			_scheduleService = _mocks.StrictMock<IScheduleService>();
-			_absencePreferenseScheduler = _mocks.StrictMock<IAbsencePreferenceScheduler>();
-			_dayOffScheduler = _mocks.StrictMock<IDayOffScheduler>();
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
+			_daysOffSchedulingService = _mocks.StrictMock<IDaysOffSchedulingService>();
 
-			Expect.Call(() => _absencePreferenseScheduler.DayScheduled += null).IgnoreArguments();
-			Expect.Call(() => _dayOffScheduler.DayScheduled += null).IgnoreArguments();
+			Expect.Call(() => _daysOffSchedulingService.DayScheduled += null).IgnoreArguments();
 			_mocks.ReplayAll();
 			_schedulingService = new FixedStaffSchedulingService( _schedulingResultStateHolder,
 																 _dayOffsInPeriodCalculator,
 																 _effectiveRestrictionCreator, 
                                                                  _scheduleService,
-                                                                 _absencePreferenseScheduler,
-																 _dayOffScheduler, _resourceOptimizationHelper);
+																 _daysOffSchedulingService,
+																 _resourceOptimizationHelper);
 			_mocks.VerifyAll();
 			_mocks.BackToRecordAll();
 		}
@@ -71,28 +69,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void VerifySetup()
 		{
 			Assert.IsNotNull(_schedulingService);
-		}
-
-		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ShouldThrowIfDayOffSchedulerIsNull()
-		{
-			_schedulingService = new FixedStaffSchedulingService( _schedulingResultStateHolder,
-																 _dayOffsInPeriodCalculator,
-																 _effectiveRestrictionCreator, 
-                                                                 _scheduleService,
-                                                                 _absencePreferenseScheduler,
-																 null, _resourceOptimizationHelper);
-		}
-
-		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ShouldThrowIfAbsenceSchedulerIsNull()
-		{
-			_schedulingService = new FixedStaffSchedulingService(_schedulingResultStateHolder,
-																 _dayOffsInPeriodCalculator,
-																 _effectiveRestrictionCreator, 
-                                                                 _scheduleService,
-                                                                 null,
-																 _dayOffScheduler, _resourceOptimizationHelper);	
 		}
 
 		[Test]
@@ -156,7 +132,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _schedulingOptions.UseRotations = true;
             _schedulingOptions.UsePreferences = true;
             _schedulingOptions.UseAvailability = true;
-            _schedulingOptions.AddContractScheduleDaysOff = false;
 
 			_schedulingService.DoTheScheduling(new List<IScheduleDay> { part4, part3, part2, part1 }, _schedulingOptions, true, false, _rollbackService);
 			Assert.IsNotNull(_schedulingService.FinderResults);
@@ -204,7 +179,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _schedulingOptions.UseRotations = true;
             _schedulingOptions.UseAvailability = true;
             _schedulingOptions.UsePreferences = true;
-            _schedulingOptions.AddContractScheduleDaysOff = false;
 
 			_schedulingService.DayScheduled += (sender, e) => { e.Cancel = true; };
 			_schedulingService.DoTheScheduling(new List<IScheduleDay> { part2, part1 }, _schedulingOptions, true, false, _rollbackService);
@@ -244,22 +218,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 		}
 
-
-        [Test]
-        public void ShouldAddPreferredAbsencesAndThenDayOffs()
-        {
-            var rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-            var matrixProList = new List<IScheduleMatrixPro>();
-
-            Expect.Call(() => _absencePreferenseScheduler.AddPreferredAbsence(matrixProList, _schedulingOptions));
-            Expect.Call(() => _dayOffScheduler.DayOffScheduling(matrixProList, matrixProList, rollbackService ,_schedulingOptions));
-            _mocks.ReplayAll();
-            
-            _schedulingService.DayOffScheduling(matrixProList, matrixProList, rollbackService, _schedulingOptions);
-            _mocks.VerifyAll();
-        }
-
-		
 		[Test]
 		public void ShouldReturnFalseOnCorrectNumberOfDaysOffIfDaysOffPeriodCalculatorReturnsFalse()
 		{

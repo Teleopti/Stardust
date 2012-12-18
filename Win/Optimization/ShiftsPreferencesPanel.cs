@@ -51,6 +51,25 @@ namespace Teleopti.Ccc.Win.Optimization
 
             fromToTimePicker1.StartTime.SetTimeValue(start);
             fromToTimePicker1.EndTime.SetTimeValue(end);
+
+            fromToTimePicker1.StartTime.TextChanged += startTimeTextChanged;
+            fromToTimePicker1.EndTime.TextChanged += endTimeTextChanged;
+        }
+
+        private void endTimeTextChanged(object sender, EventArgs e)
+        {
+            var startTime = fromToTimePicker1.StartTime.TimeValue();
+            var endTime = fromToTimePicker1.EndTime.TimeValue();
+            if (startTime > endTime)
+                fromToTimePicker1.StartTime.SetTimeValue(endTime);
+        }
+
+        private void startTimeTextChanged(object sender, EventArgs e)
+        {
+            var startTime = fromToTimePicker1.StartTime.TimeValue();
+            var endTime = fromToTimePicker1.EndTime.TimeValue();
+            if (startTime > endTime)
+                fromToTimePicker1.EndTime.SetTimeValue(startTime);
         }
 
         private void SetInitialValues()

@@ -653,7 +653,10 @@ namespace Teleopti.Ccc.Win.Intraday
                     if (wizard.ShowDialog(this) != DialogResult.OK) return;
 
                     var dto = new RecalculateForecastOnSkillCommandCollectionDto
-                                  {SkillCommandDtos = new List<RecalculateForecastOnSkillCommandDto>()};
+                                  {
+									SkillCommandDtos = new List<RecalculateForecastOnSkillCommandDto>(),
+									ScenarioId = Presenter.RequestedScenario.Id.GetValueOrDefault(),
+								  };
                     foreach (var model in models.ReforecastModels)
                     {
                         dto.SkillCommandDtos.Add(
@@ -663,7 +666,7 @@ namespace Teleopti.Ccc.Win.Intraday
                                     WorkloadId =
                                         model.Workload.Select(w => w.Id.GetValueOrDefault()).
                                         ToList(),
-                                    ScenarioId = Presenter.RequestedScenario.Id.GetValueOrDefault(),
+                                   
                                 });
                     }
                     _sendCommandToSdk.ExecuteCommand(dto);

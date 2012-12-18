@@ -107,10 +107,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
                             if (!ForDelete)
                                 responseList.Add(createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, message, typeof(NewPersonAccountRule)));
-                            oldResponses.Add(createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, message, typeof(NewPersonAccountRule)));
                         }
                     }
                     
+                }
+                foreach (var businessRuleResponse in responseList)
+                {
+                    rangeCloneValueKey.Value.BusinessRuleResponseInternalCollection.Add(businessRuleResponse);
                 }
             }
 

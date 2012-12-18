@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         IList<IWorkShiftFinderResult> FinderResults { get; }
         void ClearFinderResults();
-		void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions);
 		bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService);
     }
 
@@ -24,8 +23,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 	    private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 	    private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 	    private readonly IScheduleService _scheduleService;
-    	private readonly IAbsencePreferenceScheduler _absencePreferenceScheduler;
-    	private readonly IDayOffScheduler _dayOffScheduler;
+    	private readonly IDaysOffSchedulingService _daysOffSchedulingService;
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
     	private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
@@ -33,30 +31,22 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
 		public FixedStaffSchedulingService(
             ISchedulingResultStateHolder schedulingResultStateHolder,
 			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, 
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IScheduleService scheduleService, 
-			IAbsencePreferenceScheduler absencePreferenceScheduler, 
-            IDayOffScheduler dayOffScheduler,
+			IDaysOffSchedulingService daysOffSchedulingService, 
 			IResourceOptimizationHelper resourceOptimizationHelper)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_scheduleService = scheduleService;
-			if (absencePreferenceScheduler == null)
-				throw new ArgumentNullException("absencePreferenceScheduler");
-
-			_absencePreferenceScheduler = absencePreferenceScheduler;
-			if (dayOffScheduler == null)
-				throw new ArgumentNullException("dayOffScheduler");
-			_dayOffScheduler = dayOffScheduler;
+			_daysOffSchedulingService = daysOffSchedulingService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-
-			_absencePreferenceScheduler.DayScheduled += schedulerDayScheduled;
-			_dayOffScheduler.DayScheduled += schedulerDayScheduled;
+			_daysOffSchedulingService.DayScheduled += schedulerDayScheduled;
 		}
 
 		void schedulerDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
@@ -79,12 +69,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         {
             _finderResults.Clear();
             _scheduleService.ClearFinderResults();
-        }
-
-        public void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
-        {
-            _absencePreferenceScheduler.AddPreferredAbsence(matrixList, schedulingOptions);
-            _dayOffScheduler.DayOffScheduling(matrixList, matrixListAll, rollbackService, schedulingOptions);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]

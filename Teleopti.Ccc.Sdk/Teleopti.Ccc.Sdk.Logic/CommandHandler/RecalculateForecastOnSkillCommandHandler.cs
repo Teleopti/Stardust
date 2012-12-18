@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -29,18 +29,20 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
 
             var message = new RecalculateForecastOnSkillMessageCollection
-                {  MessageCollection = new List<RecalculateForecastOnSkillMessage>()};
+                {	
+					MessageCollection = new Collection<RecalculateForecastOnSkillMessage>(),
+					BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
+					Datasource = identity.DataSource.Application.Name,
+					Timestamp = DateTime.UtcNow,
+					ScenarioId = command.ScenarioId
+				};
             foreach (var model in command.SkillCommandDtos)
             {
                 message.MessageCollection.Add(
                     new RecalculateForecastOnSkillMessage
                         {
                             SkillId = model.SkillId,
-                            ScenarioId = model.ScenarioId,
-                            WorkloadIds = model.WorkloadId,
-                            BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-                            Datasource = identity.DataSource.Application.Name,
-                            Timestamp = DateTime.UtcNow
+                            WorkloadIds = new Collection<Guid>(model.WorkloadId)                            
                         });
 
             }

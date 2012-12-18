@@ -335,9 +335,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage);
             toolStripButtonSystemOptions.Enabled =
                 authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
-            toolStripButtonMyProfile.Enabled =
+        	toolStripButtonMyProfile.Enabled =
                 ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.AuthenticationSettings.LogOnMode !=
-                LogOnModeOption.Win;
+        		LogOnModeOption.Win &&
+        		((IUnsafePerson) TeleoptiPrincipal.Current).Person.ApplicationAuthenticationInfo != null;
         }
 
         private void LoadOutLookBar()

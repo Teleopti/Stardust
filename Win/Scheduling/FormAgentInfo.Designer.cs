@@ -43,6 +43,8 @@
 			System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
             "Hej : hej",
             ""}, -1);
+		    this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular,
+		                                        System.Drawing.GraphicsUnit.Point, ((byte) (0)));
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.tabControlAgentInfo = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageAdvSchedulePeriod = new Syncfusion.Windows.Forms.Tools.TabPageAdv();

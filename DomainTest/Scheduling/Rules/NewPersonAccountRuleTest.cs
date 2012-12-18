@@ -1,13 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -68,6 +74,52 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                                                                 new ScheduleDateTimePeriod(new DateTimePeriod()));
 
                 _target.Validate(new Dictionary<IPerson, IScheduleRange> { { person, null } }, new[] { scheduleDay }).Should().Be.Empty();
+            }
+        }
+
+        [Test]
+        public void ShouldUpdateRuleResponse()
+        {
+            var mocks = new MockRepository();
+            var scheduleDay = mocks.StrictMock<IScheduleDay>();
+            var person = PersonFactory.CreatePerson();
+            var range = new DateTimePeriod(2012, 12, 14, 2012, 12, 14);
+            var personAccountCollection = new PersonAccountCollection(person);
+            var absence1 = AbsenceFactory.CreateAbsence("ab1");
+            absence1.Tracker = Tracker.CreateDayTracker();
+            var absense2 = AbsenceFactory.CreateAbsence("ab2");
+            absense2.Tracker = Tracker.CreateDayTracker();
+            var account1 = new PersonAbsenceAccount(person, absence1);
+            var account2 = new PersonAbsenceAccount(person, absense2);
+            account1.Add(new AccountDay(new DateOnly(2012, 12, 13)) { BalanceOut = TimeSpan.FromDays(2), Accrued = TimeSpan.FromDays(1) });
+            account2.Add(new AccountDay(new DateOnly(2012, 12, 13)) { BalanceOut = TimeSpan.FromDays(1), Accrued = TimeSpan.FromDays(1) });
+            personAccountCollection.Add(account1);
+            personAccountCollection.Add(account2);
+
+            _allAccounts.Add(person, personAccountCollection);
+            var scenario = new Scenario("Default") { DefaultScenario = true };
+            _stateHolder.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(range));
+
+            using (mocks.Record())
+            {
+                Expect.Call(scheduleDay.Person).Return(person).Repeat.AtLeastOnce();
+                Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(
+                                                                     new DateOnly(2012, 12, 14),
+                                                                     TimeZoneInfo.FindSystemTimeZoneById(
+                                                                         "W. Europe Standard Time")));
+
+            }
+            using (mocks.Playback())
+            {
+                var responses = _target.Validate(new Dictionary<IPerson, IScheduleRange>
+                                     {
+                                         {
+                                             person,
+                                             new ScheduleRange(_stateHolder.Schedules,
+                                                               new ScheduleParameters(scenario, person, range))
+                                             }
+                                     }, new Collection<IScheduleDay> { scheduleDay });
+                Assert.That(responses.Count(), Is.EqualTo(1));
             }
         }
     }
