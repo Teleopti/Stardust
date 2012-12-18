@@ -38,7 +38,8 @@ namespace Teleopti.Ccc.Domain.Security
         /// <summary>
         /// Digests the reports from matrix.
         /// </summary>
-        public bool CheckRaptorApplicationFunctions(out IEnumerable<IApplicationFunction> addedFunctions, out IEnumerable<IApplicationFunction> deletedFunctions)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#")]
+		public bool CheckRaptorApplicationFunctions(out IEnumerable<IApplicationFunction> addedFunctions, out IEnumerable<IApplicationFunction> deletedFunctions)
         {
             using (IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
