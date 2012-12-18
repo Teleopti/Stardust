@@ -87,18 +87,23 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.requests = ko.observableArray();
 
 		self.SelectItem = function (requestItemViewModel, event) {
+			self.setSelected(requestItemViewModel);
+			requestItemViewModel.ShowDetails(requestItemViewModel, event);
+		};
+
+		self.setSelected = function (requestItemViewModel) {
 			ko.utils.arrayForEach(self.requests(), function (item) {
 				item.isSelected(item == requestItemViewModel);
 			});
-			requestItemViewModel.ShowDetails(requestItemViewModel, event);
 		};
 
 		self.moreToLoad = ko.observable(false);
 
-		//TODO: refact to use map & initialize instead
 		self.showRequests = function (data) {
 			for (var i = 0; i < data.length; i++) {
-				self.AddRequest(data[i]);
+				var vm = new RequestItemViewModel();
+				vm.Initialize(data[i]);
+				self.requests.push(vm);
 			}
 		};
 
@@ -120,17 +125,28 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		};
 
 		self.AddRequest = function (request) {
-			var update = function (r) {
-				var vm = new RequestItemViewModel();
-				vm.Initialize(r);
-				self.requests.unshift(vm);
-			};
-			ko.utils.arrayForEach(self.requests(), function (requestVm) {
-				if (requestVm.Id() == request.Id) {
-					update = function (r) { requestVm.Initialize(r); };
+			var selectedViewModel = ko.utils.arrayFirst(self.requests(), function (item) {
+				return item.Id() == request.Id;
+			});
+
+			if (selectedViewModel) {
+				self.requests.remove(selectedViewModel);
+			}
+			else {
+				selectedViewModel = new RequestItemViewModel();
+				selectedViewModel.Initialize(request);
+			}
+
+			ajax.Ajax({
+				url: selectedViewModel.Link(),
+				dataType: "json",
+				type: 'GET',
+				success: function (data) {
+					selectedViewModel.Initialize(data);
+					self.requests.unshift(selectedViewModel);
+					self.setSelected(selectedViewModel);
 				}
 			});
-			update(request);
 		};
 
 		self.loadPage = function () {
