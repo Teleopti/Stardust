@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 			ret.Label = schedule.Label;
 			ret.ColorCode = schedule.DisplayColor;
-			ret.Workday = schedule.IsWorkDay;
+			ret.Workday = schedule.IsWorkday;
 
 			return ret;
 		}

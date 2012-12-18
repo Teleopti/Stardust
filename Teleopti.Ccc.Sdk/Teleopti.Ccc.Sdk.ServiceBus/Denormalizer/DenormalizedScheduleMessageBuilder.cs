@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				             		Layers = new Collection<DenormalizedScheduleProjectionLayer>(),
 				             		WorkTime = projection.WorkTime(),
 				             		ContractTime = projection.ContractTime(),
-				             		IsWorkDay = IsWorkDay(significantPart),
+				             		IsWorkday = IsWorkDay(significantPart),
 				             	};
 
 				switch (significantPart)

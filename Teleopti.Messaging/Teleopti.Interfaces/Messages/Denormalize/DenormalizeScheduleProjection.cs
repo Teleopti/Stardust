@@ -103,7 +103,7 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 		/// <summary>
 		/// Is this a work day
 		/// </summary>
-		public bool IsWorkDay { get; set; }
+		public bool IsWorkday { get; set; }
 		/// <summary>
 		/// Optional shift start
 		/// </summary>
@@ -116,6 +116,7 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 		/// <summary>
 		/// The layers for this shift
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public ICollection<DenormalizedScheduleProjectionLayer> Layers { get; set; }
 
 		/// <summary>

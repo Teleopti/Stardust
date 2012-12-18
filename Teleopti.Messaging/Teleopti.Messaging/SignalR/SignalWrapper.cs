@@ -237,7 +237,6 @@ namespace Teleopti.Messaging.SignalR
 			{
 				try
 				{
-					var proxy = (HubProxy)_hubProxy;
 					_hubProxy.Subscribe(EventName).Data -= subscription_Data;
 
 					_hubConnection.Stop();
