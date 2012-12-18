@@ -11,7 +11,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.DataProvider
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvider
 {
 	[TestFixture]
 	public class StudentAvailabilityPersisterTest

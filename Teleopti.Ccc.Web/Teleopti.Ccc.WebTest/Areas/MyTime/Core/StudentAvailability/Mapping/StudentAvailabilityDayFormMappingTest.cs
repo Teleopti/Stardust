@@ -13,34 +13,34 @@ using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 {
 	[TestFixture]
 	public class StudentAvailabilityDayFormMappingTest
 	{
-		private TestMappingDependencyResolver mappingDependencyResolver;
-		private ILoggedOnUser loggedOnUser;
+		private TestMappingDependencyResolver _mappingDependencyResolver;
+		private ILoggedOnUser _loggedOnUser;
 
 		[SetUp]
 		public void Setup()
 		{
 
-			mappingDependencyResolver = new TestMappingDependencyResolver();
+			_mappingDependencyResolver = new TestMappingDependencyResolver();
 
 			Mapper.Reset();
 			Mapper.Initialize(
 				c =>
 					{
-						c.ConstructServicesUsing(mappingDependencyResolver.Resolve);
+						c.ConstructServicesUsing(_mappingDependencyResolver.Resolve);
 						c.AddProfile(new StudentAvailabilityDayFormMappingProfile());
 					}
 				);
 
-			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var typeConverter = new StudentAvailabilityDayFormMappingProfile.StudentAvailabilityDayFormToStudentAvailabilityDay(loggedOnUser, Mapper.Engine);
-			mappingDependencyResolver
+			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var typeConverter = new StudentAvailabilityDayFormMappingProfile.StudentAvailabilityDayFormToStudentAvailabilityDay(_loggedOnUser, Mapper.Engine);
+			_mappingDependencyResolver
 				.Register(typeConverter)
-				.Register(loggedOnUser)
+				.Register(_loggedOnUser)
 				;
 		}
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.Mapping
 		public void ShouldMapPerson()
 		{
 			var person = new Person();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
 			var result = Mapper.Map<StudentAvailabilityDayForm, IStudentAvailabilityDay>(new StudentAvailabilityDayForm());
 

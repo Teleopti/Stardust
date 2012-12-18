@@ -8,7 +8,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.DataProvider
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 {
 	[TestFixture]
 	public class VirtualSchedulePeriodProviderTest

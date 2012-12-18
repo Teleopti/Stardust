@@ -10,7 +10,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.StudentAvailability
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability
 {
 	[TestFixture]
 	public class StudentAvilabilityHtmlExtensionTest
