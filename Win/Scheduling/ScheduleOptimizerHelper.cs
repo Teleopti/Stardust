@@ -10,12 +10,12 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
     	private readonly ISingleSkillDictionary _singleSkillDictionary;
+    	private readonly IDaysOffSchedulingService _daysOffSchedulingService;
 
         public ScheduleOptimizerHelper(ILifetimeScope container)
         {
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _scheduleMatrixListCreator = _container.Resolve<IScheduleMatrixListCreator>();
             _groupPersonBuilderForOptimization = _container.Resolve<IGroupPersonBuilderForOptimization>();
         	_singleSkillDictionary = _container.Resolve<ISingleSkillDictionary>();
+        	_daysOffSchedulingService = _container.Resolve<IDaysOffSchedulingService>();
         }
 
         #region Interface
@@ -293,7 +295,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             using (PerformanceOutput.ForOperation(string.Concat("Scheduling ", unlockedSchedules.Count, " days")))
             {
                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-                fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
+				_daysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
+				_daysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
+				_daysOffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
+
                 IList<IScheduleMatrixOriginalStateContainer> originalStateContainers =
                     CreateScheduleMatrixOriginalStateContainers(allSelectedSchedules);
 
@@ -1083,7 +1088,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             tagSetter.ChangeTagToSet(schedulingOptions.TagToUseOnScheduling);
             fixedStaffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceforContractDaysOff = new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-            fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceforContractDaysOff, schedulingOptions);
+			_daysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceforContractDaysOff, schedulingOptions);
 
 			var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
 			var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
@@ -1138,13 +1143,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             fixedStaffSchedulingService.ClearFinderResults();
 
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-            //fixedStaffSchedulingService.DayOffScheduling(allScheduleDays, schedulePartModifyAndRollbackServiceForContractDaysOff);
-            fixedStaffSchedulingService.DayOffScheduling(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
+			_daysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
 
             var tagSetter = _container.Resolve<IScheduleTagSetter>();
             tagSetter.ChangeTagToSet(schedulingOptions.TagToUseOnScheduling);
 
-            //IList<IScheduleMatrixPro> matrixes = OptimizerHelperHelper.CreateMatrixList(allScheduleDays, SchedulingStateHolder, _container);
             IList<IScheduleMatrixPro> matrixes = matrixList;
 
             IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
@@ -1153,7 +1156,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             var blockSchedulingService = _container.Resolve<IBlockSchedulingService>();
             _allResults = new WorkShiftFinderResultHolder();
 
-            //int refreshRate = optimizerPreferences.OriginalOptimizerPreferences.SchedulingOptions.RefreshRate;
             int refreshRate = schedulingOptions.RefreshRate;
 
             schedulingOptions.RefreshRate = 1;

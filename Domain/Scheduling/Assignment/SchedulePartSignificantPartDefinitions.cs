@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     public class SchedulePartSignificantPartDefinitions : ISignificantPartProvider
     {
         private readonly IScheduleDay _schedulePart;
-        private readonly IHasDayOffDefinition _hasDayOffDefinition;
+        private readonly IHasContractDayOffDefinition _hasContractDayOffDefinition;
         private IVisualLayerCollection _layerCollcetion;
 
-        public SchedulePartSignificantPartDefinitions(IScheduleDay schedulePart, IHasDayOffDefinition hasDayOffDefinition)
+        public SchedulePartSignificantPartDefinitions(IScheduleDay schedulePart, IHasContractDayOffDefinition hasContractDayOffDefinition)
         {
             InParameter.NotNull("schedulePart", schedulePart);
             _schedulePart = schedulePart;
-			_hasDayOffDefinition = hasDayOffDefinition;
+			_hasContractDayOffDefinition = hasContractDayOffDefinition;
         }
 
         public IDisposable BeginRead()
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (HasDayOff())
 				return false;
 
-        	return _hasDayOffDefinition.IsDayOff();
+			return _hasContractDayOffDefinition.IsDayOff(_schedulePart);
         }
 
         public bool HasFullAbsence()
