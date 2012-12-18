@@ -38,22 +38,15 @@ require.config({
 		'momentDatepickerKo': ['momentDatepicker'],
 		'touchPunch': ['jqueryui'],
 		'swipeListener': ['jquery']
-		//'vendor/bootstrap-datepicker': ['jquery'],
-		//'widgets/editlayer/jquery.ui.editlayer': ['jqueryui'],
-		//'widgets/editlayer/jquery.ui.editlayer.ko': ['knockout', 'widgets/editlayer/jquery.ui.editlayer'],
 	}
 });
 
 require([
 	'jquery',
-	//'jqueryui',
 	'modernizr',
 	'respond',
 	'bootstrap',
 	'touchPunch',
-	//'vendor/bootstrap-datepicker',
-	//'widgets/editlayer/jquery.ui.editlayer',
-	//'widgets/editlayer/jquery.ui.editlayer.ko',
 	'layout'
 ], function () {
 	
