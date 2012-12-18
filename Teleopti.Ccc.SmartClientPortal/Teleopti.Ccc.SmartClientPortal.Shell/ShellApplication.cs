@@ -118,8 +118,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 					 var mbCacheModule = new MbCacheModule(null);
 				builder.RegisterModule(mbCacheModule);
-				builder.RegisterModule<RuleSetModule>();
-				builder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
+				builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 				builder.RegisterModule(new EncryptionModule());
                 builder.RegisterModule(new AuthenticationModule());
                 builder.RegisterModule(new EventAggregatorModule());
