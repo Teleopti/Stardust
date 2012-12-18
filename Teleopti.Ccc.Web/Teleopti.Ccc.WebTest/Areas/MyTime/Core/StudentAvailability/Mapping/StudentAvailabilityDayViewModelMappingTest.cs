@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 
 			var result = Mapper.Map<StudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailabilityDay);
 
-			result.AvailableTimeSpan.Should().Be.Null();
+			result.AvailableTimeSpan.Should().Be.Empty();
 		}
 	}
 }

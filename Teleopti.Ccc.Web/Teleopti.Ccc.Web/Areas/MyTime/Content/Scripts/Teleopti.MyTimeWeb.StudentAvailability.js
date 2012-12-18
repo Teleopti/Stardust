@@ -46,23 +46,6 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		_loadStudentAvailabilityAndSchedules(from, to);
 	}
 
-	function _xhr(type, successCallback, addressSuffix, reqData) {
-		var deferred = $.Deferred();
-		ajax.Ajax({
-			url: "StudentAvailability/StudentAvailability" + addressSuffix,
-			dataType: "json",
-			contentType: "application/json; charset=utf-8",
-			type: type,
-			data: JSON.stringify(reqData),
-			success: successCallback,
-			statusCode404: function () { },
-			complete: function () {
-				deferred.resolve();
-			}
-		});
-		return deferred.promise();
-	}
-
 	function _loadStudentAvailabilityAndSchedules(from, to) {
 		var deferred = $.Deferred();
 		ajax.Ajax({
@@ -92,15 +75,6 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		});
 		return deferred.promise();
 	};
-
-	function _updateDay(data) {
-		// {"Errors":["The Date field is required."]}
-		if (typeof data.Errors != 'undefined') {
-			editFormViewModel.ValidationError(data.Errors.join(' ') || '');
-			return;
-		}
-		dayViewModels[data.Date].AvailableTimeSpan(data.AvailableTimeSpan);
-	}
 
 	function _initToolbarButtons() {
 		var editButton = $('#StudentAvailability-edit-button');
@@ -172,12 +146,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		$('#StudentAvailability-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
-				//				var promise = preferencesAndScheduleViewModel.DayViewModels[date].SetPreference(preference, validationErrorCallback);
-				//				promises.push(promise);
-				var promise = _xhr('DELETE',
-					_updateDay,
-					Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date),
-					null);
+				var promise = dayViewModels[date].DeleteStudentAvailability();
 				promises.push(promise);
 			});
 		if (promises.length != 0) {
@@ -188,23 +157,16 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		}
 	}
 
-
 	function _setStudentAvailability(studentAvailability) {
 		var promises = [];
 
 		editFormViewModel.ValidationError('');
 
-		var validationErrorCallback = function (data) {
-			var message = data.Errors.join('</br>');
-			editFormViewModel.ValidationError(message);
-		};
 		$('#StudentAvailability-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
 				studentAvailability.Date = date;
-				//				var promise = preferencesAndScheduleViewModel.DayViewModels[date].SetPreference(preference, validationErrorCallback);
-				//				promises.push(promise);
-				var promise = _xhr('POST', _updateDay, '', studentAvailability);
+				var promise = dayViewModels[date].SetStudentAvailability(studentAvailability, editFormViewModel);
 				promises.push(promise);
 			});
 		if (promises.length != 0) {
@@ -217,8 +179,8 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 
 	function _activateSelectable() {
 		$('#StudentAvailability-body-inner').calendarselectable();
-
 	}
+	
 	return {
 		Init: function () {
 			_layout();
