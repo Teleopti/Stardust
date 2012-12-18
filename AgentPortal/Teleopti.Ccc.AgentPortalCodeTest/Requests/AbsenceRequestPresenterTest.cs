@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
 			var requestDto = new TextRequestDto();
 			requestDto.Period = new DateTimePeriodDto();
 
-			var personRequest = new PersonRequestDto { DenyReason = "xxRequestDenyReasonSupervisor", Request = requestDto, Subject = "sub" };
+			var personRequest = new PersonRequestDto { DenyReason = "RequestDenyReasonSupervisor", Request = requestDto, Subject = "sub" };
 			personRequest.Id = "12";
 
 			var exception = new SoapException("asdf", XmlQualifiedName.Empty);
@@ -113,10 +113,10 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
             var requestDto = new RequestDto();
             requestDto.Period = new DateTimePeriodDto();
 
-            var personRequest = new PersonRequestDto() { DenyReason = "xxRequestDenyReasonSupervisor", Request = requestDto };
+            var personRequest = new PersonRequestDto() { DenyReason = "RequestDenyReasonSupervisor", Request = requestDto };
             using (_mocks.Record())
             {
-                _view.DenyReason = LanguageResourceHelper.Translate("xxRequestDenyReasonSupervisor");      
+                _view.DenyReason = LanguageResourceHelper.Translate("RequestDenyReasonSupervisor");      
             }
             
             using(_mocks.Playback())
