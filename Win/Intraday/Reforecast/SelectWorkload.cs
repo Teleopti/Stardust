@@ -44,17 +44,16 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
         {
             if (!validated()) return false;
 
-            var workloadList = new List<IWorkload>();
-            workloadList.AddRange(listViewWorkloads.CheckedItems.Cast<ListViewItem>().Select(a => (IWorkload) a.Tag));
+            foreach (var model in stateObj.ReforecastModels)
+                model.Workload.Clear();
 
-            foreach (var item in workloadList)
+            foreach (var item in listViewWorkloads.CheckedItems.Cast<ListViewItem>().Select(a => (IWorkload)a.Tag))
             {
                 var item1 = item;
+
                 foreach (var model in stateObj.ReforecastModels.Where(m => m.Skill == item1.Skill))
                     model.Workload.Add(item);
             }
-
-            // stateObj.Workload.AddRange(listViewWorkloads.CheckedItems.Cast<ListViewItem>().Select(a => (IWorkload)a.Tag));
 
             return true;
         }
