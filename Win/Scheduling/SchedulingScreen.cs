@@ -3413,8 +3413,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if(TeleoptiPrincipal.Current.PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
 					toolStripSplitButtonSchedule.Enabled = _scheduleView.TheGrid.Selections.Count == 1;
             	disableButtonsIfTeamLeaderMode();
-                if (_scheduleView != null &&
-                    (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp))
+                if (_scheduleView != null && (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp) || e.Reason == GridSelectionReason.ArrowKey)
                 {
                     _scheduleView.Presenter.UpdateFromEditor();
                     updateShiftEditor();
