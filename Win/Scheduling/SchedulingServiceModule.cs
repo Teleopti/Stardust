@@ -98,7 +98,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<ScheduleDayService>().As<IScheduleDayService>().InstancePerLifetimeScope();
             builder.RegisterType<BlockFinderFactory>().As<IBlockFinderFactory>().InstancePerLifetimeScope();
             builder.RegisterType<IntervalDataMedianCalculator>().As<IIntervalDataCalculator>().InstancePerLifetimeScope();
-
+            builder.RegisterType<RestrictionAggregator>().As<IRestrictionAggregator>().InstancePerLifetimeScope();
+            builder.RegisterType<WorkShiftFilterService>().As<IWorkShiftFilterService>().InstancePerLifetimeScope();
 
                     
             builder.RegisterType<GroupSchedulingService>().As<IGroupSchedulingService>().InstancePerLifetimeScope();

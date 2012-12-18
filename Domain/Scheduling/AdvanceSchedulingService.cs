@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly IRestrictionAggregator _restrictionAggregator;
         private readonly IList<IScheduleMatrixPro> _matrixList;
         private readonly IWorkShiftFilterService _workShiftFilterService;
-        private ITeamScheduling _teamScheduling;
+        private readonly ITeamScheduling _teamScheduling;
         private readonly ISchedulingOptions _schedulingOptions;
         private readonly ISkillDayPeriodIntervalData _skillDayPeriodIntervalData;
         private readonly IList<DateOnly> _effectiveDays;
