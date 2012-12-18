@@ -44,11 +44,12 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			var provider = new QueueStatisticsProvider(statisticTasks,
 			                                           new QueueStatisticsCalculator(
 			                                           	skill.WorkloadCollection.First().QueueAdjustments));
+			var stat = new Statistic(null);
 			foreach (var taskPeriod in taskPeriods)
 			{
-				Statistic.UpdateStatisticTask(provider.GetStatisticsForPeriod(taskPeriod.Period), taskPeriod);
+				stat.UpdateStatisticTask(provider.GetStatisticsForPeriod(taskPeriod.Period), taskPeriod);
 			}
-			Statistic.Match(skillStaffPeriods, taskPeriods, activeAgentCounts);
+			stat.Match(skillStaffPeriods, taskPeriods, activeAgentCounts);
 		}
 	}
 }
