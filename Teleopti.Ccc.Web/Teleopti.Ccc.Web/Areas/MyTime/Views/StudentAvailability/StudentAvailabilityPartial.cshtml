@@ -1,6 +1,5 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
-@using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability
 @model StudentAvailabilityViewModel
 @{
@@ -45,15 +44,14 @@
 				</li>
 				@foreach (var day in week.Days)
 				{
-					var timespan = (day as AvailableDayViewModel).AvailableTimeSpan;
 					<li data-mytime-state="@Html.Schedule().FormatState(day.State)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="@Html.AttributeEncode(day.StyleClassName)">
 						<div>
 							<div class="day-header">
 								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
 							</div>
 							<div class="day-content pdt10">
-								<div class="fullwidth mt15">
-									@timespan
+								<img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
+								<div class="fullwidth mt15" data-bind="text: AvailableTimeSpan">
 								</div>
 							</div>
 						</div>

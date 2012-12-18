@@ -17,6 +17,7 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var dayViewModels = [];
 	var studentAvailabilityToolTip = null;
 	var editStudentAvailabilityFormViewModel = null;
 
@@ -32,6 +33,21 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		var rangeSelectorId = '#StudentAvailabilityDateRangeSelector';
 		var periodData = $('#StudentAvailability-body').data('mytime-periodselection');
 		Teleopti.MyTimeWeb.Portal.InitPeriodSelection(rangeSelectorId, periodData);
+	}
+
+	function _initViewModels() {
+		dayViewModels = [];
+		$('li[data-mytime-date].editable').each(function (index, element) {
+			var dayViewModel = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel(ajax);
+			dayViewModel.ReadElement(element);
+			dayViewModels[dayViewModel.Date] = dayViewModel;
+			ko.applyBindings(dayViewModel, element);
+		});
+
+		var from = $('li[data-mytime-date].editable').first().data('mytime-date');
+		var to = $('li[data-mytime-date].editable').last().data('mytime-date');
+
+		_loadStudentAvailabilityAndSchedules(from, to);
 	}
 
 	function _xhr(type, successCallback, addressSuffix, reqData) {
@@ -50,6 +66,36 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		});
 		return deferred.promise();
 	}
+
+	function _loadStudentAvailabilityAndSchedules(from, to) {
+		var deferred = $.Deferred();
+		ajax.Ajax({
+			url: "StudentAvailability/StudentAvailabilitiesAndSchedules",
+			dataType: "json",
+			contentType: "application/json; charset=utf-8",
+			type: 'GET',
+			data: {
+				From: from,
+				To: to
+			},
+			beforeSend: function (jqXHR) {
+				$.each(dayViewModels, function (index, day) {
+					day.IsLoading(true);
+				});
+			},
+			success: function (data, textStatus, jqXHR) {
+				data = data || [];
+				$.each(data, function (index, element) {
+					var dayViewModel = dayViewModels[element.Date];
+					if (element.StudentAvailability)
+						dayViewModel.ReadStudentAvailability(element.StudentAvailability);
+					dayViewModel.IsLoading(false);
+				});
+				deferred.resolve();
+			}
+		});
+		return deferred.promise();
+	};
 
 	function _updateDay(data) {
 		// {"Errors":["The Date field is required."]}
@@ -176,7 +222,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		if (promises.length != 0) {
 			$.when.apply(null, promises)
 				.done(function () {
-					
+
 				});
 		}
 	}
@@ -199,6 +245,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 			_layout();
 
 			_initPeriodSelection();
+			_initViewModels();
 			_activateSelectable();
 		},
 		StudentAvailabilityPartialDispose: function () {

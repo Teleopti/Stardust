@@ -21,13 +21,24 @@ Teleopti.MyTimeWeb.StudentAvailability.EditStudentAvailabilityFormViewModel = fu
 	};
 };
 
-Teleopti.MyTimeWeb.StudentAvailability.StudentAvailabilityViewModel = function () {
-	var self = this;
-
-};
-
 Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function () {
 	var self = this;
 
+	this.Date = "";
+
+	this.IsLoading = ko.observable(false);
+	this.AvailableTimeSpan = ko.observable('');
+
+	this.ReadElement = function (element) {
+		var item = $(element);
+		self.Date = item.attr('data-mytime-date');
+//		self.EditableIsInOpenPeriod(item.attr('data-mytime-editable') == "True");
+	};
+
+	this.ReadStudentAvailability = function (data) {
+		if (!data) return;
+
+		self.AvailableTimeSpan(data.AvailableTimeSpan);
+	};
 };
 
