@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.StudentAvailability
 		[Test]
 		public void ShouldAcceptCorrectTimeOfDays()
 		{
-			var input = new StudentAvailabilityDayForm
+			var input = new StudentAvailabilityDayInput
 				{
 					StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
 					EndTime = new TimeOfDay(TimeSpan.FromHours(9))
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.StudentAvailability
 		[Test]
 		public void ShouldNotAcceptStartTimeLaterThanEndTime()
 		{
-			var input = new StudentAvailabilityDayForm
+			var input = new StudentAvailabilityDayInput
 				{
 					StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
 					EndTime = new TimeOfDay(TimeSpan.FromHours(7))
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.StudentAvailability
 		[Test]
 		public void ShouldAcceptCorrectTimesWithNextDay()
 		{
-			var input = new StudentAvailabilityDayForm
+			var input = new StudentAvailabilityDayInput
 				{
 					StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
 					EndTime = new TimeOfDay(TimeSpan.FromHours(7)),
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.StudentAvailability
 		[Test]
 		public void ShouldNotAcceptWrongTimesWithNextDay()
 		{
-			var input = new StudentAvailabilityDayForm
+			var input = new StudentAvailabilityDayInput
 				{
 					StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
 					EndTime = new TimeOfDay(TimeSpan.FromHours(7)),

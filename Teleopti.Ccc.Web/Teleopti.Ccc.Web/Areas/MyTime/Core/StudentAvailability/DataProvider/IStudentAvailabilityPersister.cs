@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider
 {
 	public interface IStudentAvailabilityPersister
 	{
-		StudentAvailabilityDayViewModel Persist(StudentAvailabilityDayForm form);
+		StudentAvailabilityDayViewModel Persist(StudentAvailabilityDayInput input);
 		StudentAvailabilityDayViewModel Delete(DateOnly date);
 	}
 }

@@ -56,10 +56,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public JsonResult StudentAvailability(StudentAvailabilityDayForm form)
+		public JsonResult StudentAvailability(StudentAvailabilityDayInput input)
 		{
 			return ModelState.IsValid ? 
-								Json(_studentAvailabilityPersister.Persist(form)) : 
+								Json(_studentAvailabilityPersister.Persist(input)) : 
 								ModelState.ToJson();
 		}
 

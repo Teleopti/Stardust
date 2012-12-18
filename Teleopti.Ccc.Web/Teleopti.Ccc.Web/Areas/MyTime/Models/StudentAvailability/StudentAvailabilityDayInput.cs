@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability
 {
-	public class StudentAvailabilityDayForm : IValidatableObject
+	public class StudentAvailabilityDayInput : IValidatableObject
 	{
 		public DateOnly Date { get; set; }
 		public TimeOfDay StartTime { get; set; }

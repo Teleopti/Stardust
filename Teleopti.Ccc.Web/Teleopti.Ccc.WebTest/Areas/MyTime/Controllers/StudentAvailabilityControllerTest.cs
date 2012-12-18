@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldPersistStudentAvailabilityForm()
 		{ 
 			var studentAvailabilityPersister = MockRepository.GenerateMock<IStudentAvailabilityPersister>();
-			var form = new StudentAvailabilityDayForm();
+			var form = new StudentAvailabilityDayInput();
 			var resultData = new StudentAvailabilityDayViewModel();
 
 			var target = new StudentAvailabilityController(null, null, studentAvailabilityPersister);
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			target.ModelState.AddModelError("Test", message);
 
-			var result = target.StudentAvailability(new StudentAvailabilityDayForm());
+			var result = target.StudentAvailability(new StudentAvailabilityDayInput());
 			var data = result.Data as ModelStateResult;
 
 			Assert.That(data.Errors.Single(), Is.EqualTo(message));
