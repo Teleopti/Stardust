@@ -145,11 +145,6 @@
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
     <Compile Include="ConfigSanityCheck.cs" />
     <Compile Include="Bindings\Generic\PortalPageStepDefinitions.cs" />
-    <Compile Include="PasswordPolicyMobile.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BrowserNotifications.feature</DependentUpon>
-    </Compile>
     <Compile Include="PreferencesFeedbackRefact.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
