@@ -6,11 +6,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 {
-	public class StudentAvailabilityDayFormResultMappingProfile : Profile
+	public class StudentAvailabilityDayViewModelMappingProfile : Profile
 	{
 		private readonly Func<IStudentAvailabilityProvider> _studentAvailabilityProvider;
 
-		public StudentAvailabilityDayFormResultMappingProfile(Func<IStudentAvailabilityProvider> studentAvailabilityProvider)
+		public StudentAvailabilityDayViewModelMappingProfile(Func<IStudentAvailabilityProvider> studentAvailabilityProvider)
 		{
 			_studentAvailabilityProvider = studentAvailabilityProvider;
 		}

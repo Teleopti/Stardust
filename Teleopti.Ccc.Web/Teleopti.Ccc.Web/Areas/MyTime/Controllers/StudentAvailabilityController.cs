@@ -42,14 +42,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
-		public ActionResult StudentAvailability(DateOnly date)
+		public virtual JsonResult StudentAvailabilitiesAndSchedules(DateOnly @from, DateOnly to)
+		{
+			return Json(_viewModelFactory.CreateStudentAvailabilityAndSchedulesViewModels(from, to), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult StudentAvailability(DateOnly date)
 		{
 			return Json(_viewModelFactory.CreateDayViewModel(date), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public ActionResult StudentAvailability(StudentAvailabilityDayForm form)
+		public JsonResult StudentAvailability(StudentAvailabilityDayForm form)
 		{
 			return ModelState.IsValid ? 
 								Json(_studentAvailabilityPersister.Persist(form)) : 
@@ -64,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWorkAction]
 		[HttpDelete]
 		[ActionName("StudentAvailability")]
-		public ActionResult StudentAvailabilityDelete(DateOnly date)
+		public JsonResult StudentAvailabilityDelete(DateOnly date)
 		{
 			return Json(_studentAvailabilityPersister.Delete(date));
 		}

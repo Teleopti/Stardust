@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.ViewModelFactory
 		public void ShoudCreateViewModelByMapping()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new StudentAvailabilityViewModelFactory(mapper, null);
+			var target = new StudentAvailabilityViewModelFactory(mapper, null, null);
 			var date = DateOnly.Today;
 			var viewModel = new StudentAvailabilityViewModel();
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.ViewModelFactory
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
-			var target = new StudentAvailabilityViewModelFactory(mapper, studentAvailabilityProvider);
+			var target = new StudentAvailabilityViewModelFactory(mapper, studentAvailabilityProvider, null);
 			var date = DateOnly.Today;
 			var studentAvailabilityDay = new StudentAvailabilityDay(null, date, new List<IStudentAvailabilityRestriction>());
 			var viewModel = new StudentAvailabilityDayViewModel();
@@ -48,10 +48,29 @@ namespace Teleopti.Ccc.WebTest.Core.StudentAvailability.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldCreateStudentAvailabilityAndSchedulesViewModels()
+		{
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
+			var target = new StudentAvailabilityViewModelFactory(mapper, null, scheduleProvider);
+			var scheduleDays = new IScheduleDay[] { };
+			var models = new StudentAvailabilityAndScheduleDayViewModel[] {};
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1))))
+				.Return(scheduleDays);
+			mapper.Stub(x => x.Map<IEnumerable<IScheduleDay>, IEnumerable<StudentAvailabilityAndScheduleDayViewModel>>(scheduleDays))
+				.Return(models);
+
+			var result = target.CreateStudentAvailabilityAndSchedulesViewModels(DateOnly.Today, DateOnly.Today.AddDays(1));
+
+			result.Should().Be.SameInstanceAs(models);
+		}
+
+		[Test]
 		public void ShouldCreateEmptyDayViewModelWhenNoStudentAvailabilityFound()
 		{
 			var studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
-			var target = new StudentAvailabilityViewModelFactory(null, studentAvailabilityProvider);
+			var target = new StudentAvailabilityViewModelFactory(null, studentAvailabilityProvider, null);
 
 			var date = DateOnly.Today;
 			studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDate(date)).Return(null);
