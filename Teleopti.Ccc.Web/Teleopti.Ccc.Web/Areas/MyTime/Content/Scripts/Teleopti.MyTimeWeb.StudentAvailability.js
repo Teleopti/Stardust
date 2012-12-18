@@ -4,7 +4,7 @@
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.EditStudentAvailabilityFormViewModel.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -20,10 +20,6 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	var dayViewModels = [];
 	var studentAvailabilityToolTip = null;
 	var editFormViewModel = null;
-
-	function _setEditError(message) {
-		editFormViewModel.ValidationError(message || '');
-	}
 
 	function _layout() {
 		Teleopti.MyTimeWeb.StudentAvailability.Layout.SetClassesFromDayState();
@@ -100,19 +96,11 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	function _updateDay(data) {
 		// {"Errors":["The Date field is required."]}
 		if (typeof data.Errors != 'undefined') {
-			_setEditError(data.Errors.join(' '));
+			editFormViewModel.ValidationError(data.Errors.join(' ') || '');
 			return;
 		}
-		_updateTimespan(data);
+		dayViewModels[data.Date].AvailableTimeSpan(data.AvailableTimeSpan);
 	}
-
-	function _updateTimespan(data) {
-		var calendarDay = $('li[data-mytime-date="' + data.Date + '"]');
-
-		var span = calendarDay.find('div.day-content').html('<span class="fullwidth displayblock mt15"></span>').find('span');
-		if (data.AvailableTimeSpan != null)
-			span.text(data.AvailableTimeSpan);
-	};
 
 	function _initToolbarButtons() {
 		var editButton = $('#StudentAvailability-edit-button');
