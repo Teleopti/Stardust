@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Specification;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
 	public interface IAlreadyAbsentSpecification : ISpecification<IAbsenceRequest>
 	{
 	}
