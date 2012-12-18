@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			var mbCacheModule = new MbCacheModule(new FixedNumberOfLockObjects(100));
 			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RuleSetCacheModule(mbCacheModule, false));
+			builder.RegisterModule(new RuleSetModule(mbCacheModule, false));
 			builder.RegisterModule(new AuthenticationCachedModule(mbCacheModule));
 
 			return builder.Build();

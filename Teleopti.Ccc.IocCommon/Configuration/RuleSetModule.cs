@@ -9,12 +9,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class RuleSetCacheModule : Module
+	public class RuleSetModule : Module
 	{
 		private readonly bool _perLifetimeScope;
 		private readonly CacheBuilder _cacheBuilder;
 
-		public RuleSetCacheModule(MbCacheModule mbCacheModule, bool perLifetimeScope) 
+		public RuleSetModule(MbCacheModule mbCacheModule, bool perLifetimeScope) 
 		{
 			_perLifetimeScope = perLifetimeScope;
 			if (mbCacheModule == null)

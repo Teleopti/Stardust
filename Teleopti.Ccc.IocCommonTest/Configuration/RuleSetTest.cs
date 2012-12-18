@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var mbCacheModule = new MbCacheModule(null);
 			containerBuilder.RegisterModule(mbCacheModule);
-			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
+			containerBuilder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			using (var container = containerBuilder.Build())
 			{
 				var wsRs = createRuleset(true);
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var mbCacheModule = new MbCacheModule(null);
 			containerBuilder.RegisterModule(mbCacheModule);
-			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
+			containerBuilder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			var wsRs = createRuleset(true);
 
 			using (var container = containerBuilder.Build())
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var mbCacheModule = new MbCacheModule(null);
 			containerBuilder.RegisterModule(mbCacheModule);
-			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
+			containerBuilder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 
 			using (var container = containerBuilder.Build())
 			{
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var mbCacheModule = new MbCacheModule(null);
 			containerBuilder.RegisterModule(mbCacheModule);
-			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
+			containerBuilder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			var wsRs = createRuleset(true);
 
 			using (var container = containerBuilder.Build())
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var mbCacheModule = new MbCacheModule(null);
 			containerBuilder.RegisterModule(mbCacheModule);
-			containerBuilder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
+			containerBuilder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			var wsRs = createRuleset(false);
 
 			using (var container = containerBuilder.Build())
