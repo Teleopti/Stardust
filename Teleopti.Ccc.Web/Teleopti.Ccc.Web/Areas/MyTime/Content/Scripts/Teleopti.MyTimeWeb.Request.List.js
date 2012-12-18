@@ -100,11 +100,11 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.moreToLoad = ko.observable(false);
 
 		self.showRequests = function (data) {
-			for (var i = 0; i < data.length; i++) {
+			ko.utils.arrayForEach(data, function (item) {
 				var vm = new RequestItemViewModel();
-				vm.Initialize(data[i]);
+				vm.Initialize(item);
 				self.requests.push(vm);
-			}
+			});
 		};
 
 		self.Delete = function (requestItemViewModel) {
