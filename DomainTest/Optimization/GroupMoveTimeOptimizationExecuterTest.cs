@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
         private IGroupMatrixHelper _groupMatrixHelper;
         private IGroupSchedulingService _groupSchedulingService;
-        private IResourceOptimizationHelper _resourceOptimizationHelper;
         private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
         private IList<IScheduleDay  > _daysToDelete;
         private IList<KeyValuePair<DayReadyToMove, IScheduleDay>> _daysToSave;
@@ -40,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IScheduleDictionary _scheduleDictionary;
 		private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
 		private IGroupPerson _groupPerson;
+		private IGroupMoveTimeOptimizationResourceHelper _groupMoveTimeOptimizationResourceHelper;
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_mainShiftOptimizeActivitySpecificationSetter = _mock.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
 			_groupMatrixHelper = _mock.StrictMock<IGroupMatrixHelper>();
 			_groupSchedulingService = _mock.StrictMock<IGroupSchedulingService>();
-			_resourceOptimizationHelper = _mock.StrictMock<IResourceOptimizationHelper>();
 			_groupPersonBuilderForOptimization = _mock.StrictMock<IGroupPersonBuilderForOptimization>();
             _scheduleDay1 = _mock.StrictMock<IScheduleDay>();
             _scheduleDay2 = _mock.StrictMock<IScheduleDay>();
@@ -72,13 +71,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_teamSteadyStateHolder = _mock.StrictMock<ITeamSteadyStateHolder>();
 			_scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
 			_groupPerson = _mock.StrictMock<IGroupPerson>();
+			_groupMoveTimeOptimizationResourceHelper = _mock.StrictMock<IGroupMoveTimeOptimizationResourceHelper>();
 
             _target = new GroupMoveTimeOptimizationExecuter(_schedulePartModifyAndRollbackService, _deleteService,
                                                             _schedulingOptionsCreator, _optimizerPreferences,
                                                             _mainShiftOptimizeActivitySpecificationSetter,
                                                             _groupMatrixHelper,
                                                             _groupSchedulingService, _groupPersonBuilderForOptimization,
-                                                            _resourceOptimizationHelper);
+															_groupMoveTimeOptimizationResourceHelper);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -125,8 +125,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay2.Person).Return(_person);
 				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true)).Repeat.AtLeastOnce();
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, true)).Repeat.AtLeastOnce();
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
 				
 				Expect.Call(_optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit()).Return(false).Repeat.Twice();
@@ -246,7 +244,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 																			_schedulingOptions, _groupPersonBuilderForOptimization,
 																			_allMatrixes, _scheduleDictionary)).Return(true);
 
-				Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
+				//Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
+				Expect.Call(() => _groupMoveTimeOptimizationResourceHelper.Rollback(_schedulePartModifyAndRollbackService, _scheduleDictionary));
 
 			}
 
@@ -287,7 +286,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 																			_schedulingOptions, _groupPersonBuilderForOptimization,
 																			_allMatrixes, _scheduleDictionary)).Return(true);
 
-				Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
+				//Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
+				Expect.Call(() => _groupMoveTimeOptimizationResourceHelper.Rollback(_schedulePartModifyAndRollbackService, _scheduleDictionary));
 
 			}
 
@@ -314,8 +314,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay2.AssignmentHighZOrder()).Return(_personAssignment);
             Expect.Call(_personAssignment.MainShift).Return(_mainShift).Repeat.Twice();
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true)).Repeat.AtLeastOnce();
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, true)).Repeat.AtLeastOnce();
+			//Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true)).Repeat.AtLeastOnce();
+			//Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, true)).Repeat.AtLeastOnce();
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -368,10 +368,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment);
             Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-            Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
+            //Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
             Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(date).Repeat.AtLeastOnce();
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date, true, true)).Repeat.AtLeastOnce();
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), true, true)).Repeat.AtLeastOnce();
+			//Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date, true, true)).Repeat.AtLeastOnce();
+			//Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), true, true)).Repeat.AtLeastOnce();
         }
 
         [Test]
@@ -382,9 +382,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 commonMocks();
                 ShouldRollbackIfMovedToManyDaysExpectValues();
                 Expect.Call(_optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit()).Return(true);
-                Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true)).Repeat.AtLeastOnce();
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, true)).Repeat.AtLeastOnce();
+                //Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
+            	Expect.Call(() =>_groupMoveTimeOptimizationResourceHelper.Rollback(_schedulePartModifyAndRollbackService,_scheduleDictionary));
+				//Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true)).Repeat.AtLeastOnce();
+				//Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, true)).Repeat.AtLeastOnce();
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long);
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly(2012, 1, 1))).Return(_groupPerson);
             	Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
@@ -407,7 +408,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment);
-            Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
+            //Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
             Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
             Expect.Call(_personAssignment.MainShift).Return(_mainShift);
@@ -433,7 +434,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment);
                 Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
+                //Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
                 Expect.Call(_personAssignment.MainShift).Return(_mainShift);
                 Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences, _mainShift, date));
@@ -443,9 +444,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                                     _groupPersonBuilderForOptimization, _allMatrixes)).Return(true);
                 Expect.Call(_optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit()).Return(false);
                 Expect.Call(_optimizationOverLimitByRestrictionDecider.OverLimit()).Return(new List<DateOnly> { new DateOnly() });
-                Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date, true, true)).Repeat.AtLeastOnce();
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), true, true)).Repeat.AtLeastOnce();
+                //Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
+            	Expect.Call(() =>_groupMoveTimeOptimizationResourceHelper.Rollback(_schedulePartModifyAndRollbackService,_scheduleDictionary));
+				//Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date, true, true)).Repeat.AtLeastOnce();
+				//Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), true, true)).Repeat.AtLeastOnce();
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long);
             	Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly(2012, 1, 1))).Return(_groupPerson);
             	Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
@@ -466,6 +468,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection());
             Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
             Expect.Call(() => _deleteService.Delete(_daysToDelete, _schedulePartModifyAndRollbackService));
+        	Expect.Call(() => _groupMoveTimeOptimizationResourceHelper.CalculateDeletedDays(_daysToDelete));
             Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences)).Return(_schedulingOptions);
         }
 

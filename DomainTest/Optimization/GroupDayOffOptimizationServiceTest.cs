@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IGroupDayOffOptimizerContainer _container1;
         private IGroupDayOffOptimizerContainer _container2;
         private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
-        private IResourceOptimizationHelper _resourceOptimizationHelper;
         private IScheduleDay _scheduleDay;
         private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
     	private IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
@@ -30,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IVirtualSchedulePeriod _virtualSchedulePeriod2;
     	private IScheduleDayPro _scheduleDayPro;
 		private IDaysOffPreferences _daysOffPreferences;
+    	private IGroupDayOffOptimizationResourceHelper _groupDayOffOptimizationResourceHelper;
         
 		[SetUp]
         public void Setup()
@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _container1 = _mocks.StrictMock<IGroupDayOffOptimizerContainer>();
             _container2 = _mocks.StrictMock<IGroupDayOffOptimizerContainer>();
             _schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-            _resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
             _scheduleDay = _mocks.StrictMock<IScheduleDay>();
             _dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
         	_groupOptimizerFindMatrixesForGroup = _mocks.StrictMock<IGroupOptimizerFindMatrixesForGroup>();
@@ -48,7 +47,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         	_virtualSchedulePeriod1 = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_virtualSchedulePeriod2 = _mocks.StrictMock<IVirtualSchedulePeriod>();
  			_daysOffPreferences = _mocks.StrictMock<IDaysOffPreferences>();
-			_target = new GroupDayOffOptimizationService(_periodValueCalculator, _schedulePartModifyAndRollbackService, _resourceOptimizationHelper, _groupOptimizerFindMatrixesForGroup,_daysOffPreferences);
+			_groupDayOffOptimizationResourceHelper = _mocks.StrictMock<IGroupDayOffOptimizationResourceHelper>();
+			_target = new GroupDayOffOptimizationService(_periodValueCalculator, _schedulePartModifyAndRollbackService, _groupOptimizerFindMatrixesForGroup, _daysOffPreferences, _groupDayOffOptimizationResourceHelper);
         	_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
         }
 
@@ -201,10 +201,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(11);
             Expect.Call(_schedulePartModifyAndRollbackService.ModificationCollection).Return(
                 new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay> {_scheduleDay}));
-            Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
-            Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2011, 1, 1));
+            Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
+            Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2011, 1, 1)).Repeat.AtLeastOnce();
             Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2011, 1, 1), false, false));
+        	Expect.Call(_matrix1.GetScheduleDayByKey(new DateOnly(2011, 1, 1))).Return(_scheduleDayPro);
+        	Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+        	Expect.Call(() =>_groupDayOffOptimizationResourceHelper.ResourceCalculateContainersToRemove(new List<IScheduleDay>{_scheduleDay}, new List<IScheduleDay>{_scheduleDay}));
+            //Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2011, 1, 1), false, false));
 
             Expect.Call(scheduleDay1.DaySchedulePart())
                 .Return(part).Repeat.AtLeastOnce();
