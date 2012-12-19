@@ -3,7 +3,6 @@ require.config({
 
 	paths: {
 		jquery: '../../../../Content/Scripts/jquery-1.8.3',
-		jqueryui: '../../../../Content/jqueryui/jquery-ui-1.9.1.custom',
 		knockout: '../../../../Content/Scripts/knockout-2.2.0',
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
 		respond: '../../../../Content/respondjs/respond.min',
@@ -35,7 +34,6 @@ require.config({
 		'signalrHubs': ['signalr'],
 		'momentDatepicker': ['moment'],
 		'momentDatepickerKo': ['momentDatepicker'],
-		'touchPunch': ['jqueryui'],
 		'swipeListener': ['jquery']
 	}
 });
