@@ -316,7 +316,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay1, _groupPerson.GroupMembers)).Return(_scheduleDay1);
 				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay1)).Return(_scheduleMatrixPro);
-				Expect.Call(() => _groupMatrixHelper.SafeResourceCalculate(new List<IScheduleDay> { _scheduleDay1 }));
 			}
 
 			using (_mocks.Playback())
