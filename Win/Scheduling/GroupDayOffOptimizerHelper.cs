@@ -570,11 +570,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGroupOptimizerValidateProposedDatesInSameGroup groupOptimizerValidateProposedDatesInSameGroup = new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup);
 			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner = new GroupOptimizationValidatorRunner(groupDayOffOptimizerValidateDayOffToRemove,
 				groupDayOffOptimizerValidateDayOffToAdd, groupOptimizerValidateProposedDatesInSameMatrix, groupOptimizerValidateProposedDatesInSameGroup);
-
+        	var smartDayOffBackToLegalStateService =
+        		new SmartDayOffBackToLegalStateService(new DayOffBackToLegalStateFunctions(null), optimizerPreferences.DaysOff,
+        		                                       100);
         	IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator =
         		new GroupDayOffOptimizerCreator(scheduleResultDataExtractorProvider, lockableBitArrayChangesTracker,
         		                                rollbackService, groupSchedulingService,
-												groupMatrixHelper, groupOptimizationValidatorRunner, groupPersonBuilderForOptimization);
+												groupMatrixHelper, groupOptimizationValidatorRunner, 
+												groupPersonBuilderForOptimization,
+												smartDayOffBackToLegalStateService);
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationPreferences, originalStateContainer);
 
             var schedulingOptionsCreator = new SchedulingOptionsCreator();

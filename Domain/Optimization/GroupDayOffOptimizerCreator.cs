@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IGroupMatrixHelper _groupMatrixHelper;
     	private readonly IGroupOptimizationValidatorRunner _groupOptimizationValidatorRunner;
     	private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+    	private readonly ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
 
     	public GroupDayOffOptimizerCreator(
             IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
@@ -30,7 +31,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IGroupSchedulingService groupSchedulingService, 
             IGroupMatrixHelper groupMatrixHelper,
 			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner,
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+			ISmartDayOffBackToLegalStateService smartDayOffBackToLegalStateService)
         {
             _scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
             _changesTracker = changesTracker;
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupMatrixHelper = groupMatrixHelper;
         	_groupOptimizationValidatorRunner = groupOptimizationValidatorRunner;
     		_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
+    		_smartDayOffBackToLegalStateService = smartDayOffBackToLegalStateService;
         }
 
 		public IGroupDayOffOptimizer CreateDayOffOptimizer(
@@ -57,7 +60,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			                                _groupSchedulingService,
 			                                _groupMatrixHelper,
 			                                _groupOptimizationValidatorRunner,
-			                                _groupPersonBuilderForOptimization);
+			                                _groupPersonBuilderForOptimization,
+											_smartDayOffBackToLegalStateService);
 
 		}
     }

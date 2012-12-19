@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IDaysOffPreferences _daysOffPreferences;
     	private IGroupOptimizationValidatorRunner _groupOptimizationValidatorRunner;
     	private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+		private ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
 
         [SetUp]
         public void Setup()
@@ -36,10 +37,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _daysOffPreferences = new DaysOffPreferences();
         	_groupOptimizationValidatorRunner = _mock.StrictMock<IGroupOptimizationValidatorRunner>();
         	_groupPersonBuilderForOptimization = _mock.StrictMock<IGroupPersonBuilderForOptimization>();
+			_smartDayOffBackToLegalStateService = _mock.StrictMock<ISmartDayOffBackToLegalStateService>();
             _target = new GroupDayOffOptimizerCreator(_scheduleResultDataExtractorProvider,
                                                       _changesTracker, _schedulePartModifyAndRollbackService,
                                                       _groupSchedulingService, 
-													  _groupMatrixHelper, _groupOptimizationValidatorRunner, _groupPersonBuilderForOptimization);
+													  _groupMatrixHelper, _groupOptimizationValidatorRunner, 
+													  _groupPersonBuilderForOptimization,
+													  _smartDayOffBackToLegalStateService);
         }
 
        

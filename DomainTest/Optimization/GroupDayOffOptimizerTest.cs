@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     	private ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
     	private ITeamSteadyStateHolder _teamSteadyStateHolder;
     	private IScheduleDictionary _scheduleDictionary;
+    	private ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
 
         [SetUp]
         public void Setup()
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_groupOptimizationValidatorRunner = _mocks.StrictMock<IGroupOptimizationValidatorRunner>();
 			_groupPersonBuilderForOptimization = _mocks.StrictMock<IGroupPersonBuilderForOptimization>();
         	_groupPerson = _mocks.StrictMock<IGroupPerson>();
-        	//_workShiftBackToLegalStateServicePro = _mocks.StrictMock<IWorkShiftBackToLegalStateServicePro>();
+        	_smartDayOffBackToLegalStateService = _mocks.StrictMock<ISmartDayOffBackToLegalStateService>();
 
             _allScheduleMatrixes.Add(_activeScheduleMatrix);
             _allScheduleMatrixes.Add(_scheduleMatrix2);
@@ -101,6 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			_target = createTarget();
 			_validatorResult.Success = true;
+			IList<IDayOffBackToLegalStateSolver> solverList = new List<IDayOffBackToLegalStateSolver>();
 
 			using (_mocks.Record())
 			{
@@ -112,8 +114,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(workingBitArray);
 				Expect.Call(scheduleResultDataExtractor.Values())
 					.Return(dataExtractorValues);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
 				Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
 					.Return(true);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
 				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray, _activeScheduleMatrix, false))
 					.Return(daysOffToRemove);
 				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
@@ -184,6 +190,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			_target = createTarget();
 			_validatorResult.Success = true;
+			IList<IDayOffBackToLegalStateSolver> solverList = new List<IDayOffBackToLegalStateSolver>();
 
 			using (_mocks.Record())
 			{
@@ -195,8 +202,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(workingBitArray);
 				Expect.Call(scheduleResultDataExtractor.Values())
 					.Return(dataExtractorValues);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
 				Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
 					.Return(true);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
 				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray, _activeScheduleMatrix, false))
 					.Return(daysOffToRemove);
 				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
@@ -260,6 +271,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _target = createTarget();
 			_validatorResult.Success = true;
+			IList<IDayOffBackToLegalStateSolver> solverList = new List<IDayOffBackToLegalStateSolver>();
 
             using (_mocks.Record())
             {
@@ -271,8 +283,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(workingBitArray);
                 Expect.Call(scheduleResultDataExtractor.Values())
                     .Return(dataExtractorValues);
-                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
-                    .Return(true);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
+				Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
+					.Return(true);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
                 Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray,_activeScheduleMatrix, false))
                     .Return(daysOffToRemove);
                 Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
@@ -329,6 +345,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var dataExtractorValues = new List<double?>();
 
             _target = createTarget();
+			IList<IDayOffBackToLegalStateSolver> solverList = new List<IDayOffBackToLegalStateSolver>();
 
             using (_mocks.Record())
             {
@@ -340,8 +357,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(workingBitArray);
                 Expect.Call(scheduleResultDataExtractor.Values())
                     .Return(dataExtractorValues);
-                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
-                    .Return(false);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
+				Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
+					.Return(false);
 
             }
             using (_mocks.Playback())
@@ -373,6 +392,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var dataExtractorValues = new List<double?>();
 
             _target = createTarget();
+			IList<IDayOffBackToLegalStateSolver> solverList = new List<IDayOffBackToLegalStateSolver>();
 
             using (_mocks.Record())
             {
@@ -384,8 +404,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(workingBitArray);
                 Expect.Call(scheduleResultDataExtractor.Values())
                     .Return(dataExtractorValues);
-                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
-                    .Return(true);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
+				Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
+					.Return(true);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
                 Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray, _activeScheduleMatrix, false))
                     .Return(daysOffToRemove);
                 Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
@@ -425,6 +449,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<double?> dataExtractorValues = new List<double?>();
 
             _target = createTarget();
+			IList<IDayOffBackToLegalStateSolver> solverList = new List<IDayOffBackToLegalStateSolver>();
 
             using (_mocks.Record())
             {
@@ -436,8 +461,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(workingBitArray);
                 Expect.Call(scheduleResultDataExtractor.Values())
                     .Return(dataExtractorValues);
+            	Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+            	Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
                 Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
                     .Return(true);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
                 Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray, _activeScheduleMatrix, false))
                     .Return(daysOffToRemove);
                 Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
@@ -481,6 +510,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _target = createTarget();
         	_validatorResult.Success = true;
+			IList<IDayOffBackToLegalStateSolver> solverList = new List<IDayOffBackToLegalStateSolver>();
 
             using (_mocks.Record())
             {
@@ -492,8 +522,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(workingBitArray);
                 Expect.Call(scheduleResultDataExtractor.Values())
                     .Return(dataExtractorValues);
-                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
-                    .Return(true);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
+				Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
+					.Return(true);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
                 Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray, _activeScheduleMatrix, false))
                     .Return(daysOffToRemove);
                 Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
@@ -535,6 +569,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _daysOffPreferences.ConsiderWeekAfter = false;
 
             IList<double?> dataExtractorValues = new List<double?>();
+			IList<IDayOffBackToLegalStateSolver> solverList = new List<IDayOffBackToLegalStateSolver>();
 
             using (_mocks.Record())
             {
@@ -547,8 +582,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(scheduleResultDataExtractor.Values())
                     .Return(dataExtractorValues);
 
-                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
-                    .Return(true);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
+				Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
+					.Return(true);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
                 Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray,
                                                                            _activeScheduleMatrix, false))
                     .Return(daysOffToRemove);
@@ -590,6 +629,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _target = createTarget();
 			_validatorResult.Success = true;
+			IList<IDayOffBackToLegalStateSolver> solverList = new List<IDayOffBackToLegalStateSolver>();
 
             using (_mocks.Record())
             {
@@ -601,8 +641,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(workingBitArray);
                 Expect.Call(scheduleResultDataExtractor.Values())
                     .Return(dataExtractorValues);
-                Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
-                    .Return(true);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
+				Expect.Call(_decisionMaker.Execute(workingBitArray, dataExtractorValues))
+					.Return(true);
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray)).Return(solverList);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solverList, 100)).Return(true);
                 Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(workingBitArray, originalArray, _activeScheduleMatrix, false))
                     .Return(daysOffToRemove);
                 Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(workingBitArray, originalArray, _activeScheduleMatrix, false))
@@ -646,7 +690,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                       _groupSchedulingService, 
                                       _groupMatrixHelper,
 									  _groupOptimizationValidatorRunner,
-									  _groupPersonBuilderForOptimization);
+									  _groupPersonBuilderForOptimization,
+									  _smartDayOffBackToLegalStateService);
         }
     }
 }
