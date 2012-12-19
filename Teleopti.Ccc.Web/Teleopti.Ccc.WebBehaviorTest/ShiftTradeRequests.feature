@@ -25,10 +25,12 @@ Background:
 	#And there is a skill with
 	#| Field | Value   |
 	#| Name  | Skill 1 |
-	And I have a workflow control set with
-	| Field                      | Value              |
-	| Name                       | Published schedule |
-	| Schedule published to date | 2040-06-24         |
+	And there is a workflow control set with
+	| Field                            | Value                                                    |
+	| Name                             | Trade scheduled days from tomorrow until 30 days forward |
+	| Schedule published to date       | 2040-06-24                                               |
+	| Shift Trade sliding period start | 2                                                        |
+	| Shift Trade sliding period end   | 30                                                       |
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
@@ -76,10 +78,10 @@ Scenario: Default to today if no open shift trade period
 
 Scenario: Default to first day of open shift trade period
 	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade scheduled days from tomorrow until 30 days forward'
 	And Current time is '2030-01-01'
-	And I can do shift trades between '2030-01-03' and '2030-01-17'
-	When I navigate to shift trade page
-	Then the selected date should be '2030-01-03'
+	When I view Add Shift Trade Request
+	Then the selected date should be '2030-01-02'
 
 Scenario: Default time line when I am not scheduled
 	Given I have the role 'Full access to mytime'

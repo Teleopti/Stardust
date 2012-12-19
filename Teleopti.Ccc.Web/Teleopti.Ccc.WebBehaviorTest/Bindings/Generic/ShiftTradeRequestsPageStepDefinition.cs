@@ -56,5 +56,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.Count, Is.GreaterThan(0));
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers[0].Title, Contains.Substring(expectedTimes));
 		}
+
+		[Then(@"the selected date should be '(.*)'")]
+		public void ThenTheSelectedDateShouldBe(DateTime date)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
 	}
 }

@@ -4,7 +4,11 @@
 	<div style="background-color: lightblue;z-index: 10;display: block" class="friendly-message ui-corner-all" data-bind="visible : hasWorkflowControlSet">
 		@Resources.MissingWorkflowControlSet
 	</div>
-	<!--<div class="asm-sliding-schedules" data-bind="style: { left : canvasPosition }">-->
+	<div>
+		<button><</button>
+		<input id="Request-add-shift-trade-datepicker" type="text" data-bind="datepicker: selectedDate" style="position:relative; z-index: 9999999" />
+		<button>></button>
+	</div>
 	<div class="shift-trade-my-schedule ui-corner-all">
 		<span data-bind="foreach: myScheduleLayers">
 			<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
