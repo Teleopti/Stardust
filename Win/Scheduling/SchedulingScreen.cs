@@ -2134,19 +2134,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             return true;
         }
 
-        private bool isViewAllowanceAvailable()
-        {
-            var defaultRequest = _requestView.SelectedAdapters().Count > 0 ? _requestView.SelectedAdapters().First().PersonRequest : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
-            if (defaultRequest != null)
-            {
-                var requestDate = new DateOnly(defaultRequest.RequestedDate);
-                var personPeriod = defaultRequest.Person.PersonPeriodCollection.Where(
-                    p => p.Period.Contains(requestDate)).FirstOrDefault();
-                return personPeriod != null && personPeriod.BudgetGroup != null;
-            }
-            return false;
-        }
-
         #region Virtual skill handling
 
 		private void SkillGridMenuItemPeriodClick(object sender, EventArgs e)
@@ -5949,11 +5936,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             toolStripExHandleRequests.Enabled = eventParameters.Value.SelectionIsEditable && isPermittedApproveRequest(_requestView.SelectedAdapters());
             ToolStripMenuItemViewDetails.Enabled =toolStripButtonViewDetails.Enabled = isViewRequestDetailsAvailable();
-            if (_budgetPermissionService.IsAllowancePermitted)
-            {
-                toolStripButtonViewAllowance.Enabled =
-                toolStripMenuItemViewAllowance.Enabled = isViewAllowanceAvailable();
-            }
         }
 
         private void wpfShiftEditor1_DeleteMeeting(object sender, CustomEventArgs<IPersonMeeting> e)
@@ -6981,7 +6963,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                      : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
             if (defaultRequest == null)
             {
-                var firstOpenDay = _schedulerState.RequestedPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).DayCollection().First();
+                var firstOpenDay = _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection().First();
                 var allowanceView = new RequestAllowanceView(null, firstOpenDay);
                 allowanceView.Show(this);
 
