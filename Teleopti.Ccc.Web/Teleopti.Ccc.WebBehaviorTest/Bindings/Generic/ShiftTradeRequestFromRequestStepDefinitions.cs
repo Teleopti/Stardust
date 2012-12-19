@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldNotSeeAnyDeleteButtonOnMyExistingShiftTradeRequest()
 		{
 			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
-			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId).Parent.IsDisplayed(), Is.False);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId).IsDisplayed(), Is.False);
 		}
 	}
 }
