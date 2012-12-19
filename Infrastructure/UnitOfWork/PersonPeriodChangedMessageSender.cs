@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IContractSchedule),
 		                                                        		typeof (IPartTimePercentage),
 		                                                        		typeof (IRuleSetBag),
-		                                                        		typeof (ISkill)
+		                                                        		typeof (ISkill),
+		                                                        		typeof (IPersonWriteProtectionInfo)
 		                                                        	};
 
     	private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
