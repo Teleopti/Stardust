@@ -42,12 +42,6 @@ Teleopti.Start.Common = (function ($) {
 
 Teleopti.Start.Common.Layout = (function ($) {
 	return {
-		ActivateStdButtons: function () {
-			$(".button").button();
-		},
-		ActivateCustomInput: function () {
-			$('.edit-module input[type="checkbox"], .edit-module input[type="radio"]').customInput();
-		},
 		ActivatePlaceHolderText: function () {
 			$(':text, :password').placeholder();
 		}

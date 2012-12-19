@@ -14,7 +14,6 @@ require.config({
 		signalrHubs: '../../../../Content/signalr/signalr-hubs',
 		crossroads: '../../../../Content/crossroads/crossroads',
 		hasher: '../../../../Content/hasher/hasher',
-		touchPunch: '../../../../Content/jqueryui.touch-punch/jquery.ui.touch-punch',
 		swipeListener: '../../../../Content/jquery-plugin/jquery.swipeListener',
 		momentDatepicker: '../../../../Content/moment-datepicker/moment-datepicker',
 		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko',
@@ -46,7 +45,6 @@ require([
 	'modernizr',
 	'respond',
 	'bootstrap',
-	'touchPunch',
 	'layout'
 ], function () {
 	

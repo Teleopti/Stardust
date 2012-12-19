@@ -9,33 +9,25 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 
 	this.Ajax = new Teleopti.Start.Authentication.JQueryAjaxViewModel();
 
-	this.SelectedDataSource = ko.computed(function () {
-		return ko.utils.arrayFirst(self.DataSources(), function (d) {
-			return d.Selected();
-		});
-	});
+	this.SelectedDataSource = ko.observable();
 
-	this.DisplayUserNameAndPasswordBoxes = ko.computed(function () {
-		var selected = self.SelectedDataSource();
-		if (selected)
-			if (selected.Type == "application") {
-				setTimeout(function () { self.UserNameFocus(true); }, 1);
-				return true;
-			}
-		return false;
-	});
+	this.DisplayUserNameAndPasswordBoxes = ko.observable(false);
 
 	this.UserNameFocus = ko.observable(false);
 
-	data.events.subscribe(function (dataSource) {
-		self.ErrorMessage('');
-		ko.utils.arrayForEach(self.DataSources(), function (d) {
-			d.Selected(d === dataSource);
-		});
-	}, null, "dataSourceSelected");
+	this.SelectDataSource = function (dataSource) {
+		self.SelectedDataSource(dataSource);
+
+		if (dataSource.Type == "application") {
+			self.DisplayUserNameAndPasswordBoxes(true);
+			setTimeout(function() { self.UserNameFocus(true); }, 1);
+		} else {
+			self.DisplayUserNameAndPasswordBoxes(false);
+			self.UserNameFocus(false);
+		}
+	};
 
 	this.LoadDataSources = function () {
-		var events = data.events;
 		$.ajax({
 			url: data.baseUrl + "Start/AuthenticationApi/DataSources",
 			dataType: "json",
@@ -43,15 +35,12 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 			cache: false,
 			success: function (data, textStatus, jqXHR) {
 				self.DataSources.removeAll();
-				for (var i = 0; i < data.length; i++) {
-					var dataSource = new Teleopti.Start.Authentication.DataSourceViewModel({
-						events: events
-					});
-					dataSource.Selected(i == 0);
-					dataSource.Name = data[i].Name;
-					dataSource.Type = data[i].Type;
-					self.DataSources.push(dataSource);
-				}
+
+				var map = ko.utils.arrayMap(data, function (d) {
+					return new Teleopti.Start.Authentication.DataSourceViewModel(d.Name, d.Type);
+				});
+				self.DataSources.push.apply(self.DataSources, map);
+				self.SelectDataSource(self.DataSources()[0]);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 500) {

@@ -9,15 +9,3 @@ ko.bindingHandlers['class'] = {
 		element['__ko__previousClassValue__'] = value;
 	}
 };
-
-ko.bindingHandlers.returnKey = {
-	init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
-		ko.utils.registerEventHandler(element, 'keydown', function(evt) {
-			if (evt.keyCode === 13) {
-				evt.preventDefault();
-				evt.target.blur();
-				valueAccessor().call(viewModel);
-			}
-		});
-	}
-};

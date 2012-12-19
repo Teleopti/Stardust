@@ -4,7 +4,7 @@
 	<link href="@Url.Content("~/Content/bootstrap/bootstrap-responsive.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/Start/Content/Css/Login.css")" rel="stylesheet" type="text/css" />
 	
-	<script src="@Url.Content("~/Content/bootstrap/bootstrap.min.js")"></script>
+	<script src="@Url.Content("~/Content/bootstrap/bootstrap.js")"></script>
 	<script src="@Url.Content("~/Content/Scripts/knockout-2.2.0.js")"></script>
 	<script src="@Url.Content("~/Content/signals/signals.js")"></script>
 	<script src="@Url.Content("~/Content/hasher/hasher.js")"></script>
@@ -38,9 +38,6 @@
 		});
 	</script>
 }
-<script>
-	
-</script>
 
 <section id="page-signin">
 	<div class="container" id="Login-container">
@@ -57,29 +54,31 @@
 		<div id="signin">
 
 			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked">
-				<li data-bind="css: {'active': Selected}, class: Type">
-					<a href="#" data-bind="click: Select">
+				<li data-bind="css: {'active': $parent.SelectedDataSource() == $data}, class: Type">
+					<a href="#" data-bind="click: $parent.SelectDataSource">
 						<span data-bind="text: Name"></span>
 						<span data-bind="if: Type == 'windows'">@Resources.WindowsLogonWithBrackets</span>
 					</a>
 				</li>
 			</ul>
-			<div data-bind="visible: DisplayUserNameAndPasswordBoxes()">
-				<div>
-					<input type="text" id="Username-input" placeholder=@Resources.UserName class="input-block-level" data-bind="value: UserName, returnKey: SignIn, hasfocus: UserNameFocus" autocapitalize="off" autocorrect="off" />
+			<form data-bind="submit: SignIn">
+				<div data-bind="visible: DisplayUserNameAndPasswordBoxes">
+					<div>
+						<input type="text" id="Username-input" placeholder="@Resources.UserName" class="input-block-level" data-bind="value: UserName, hasfocus: UserNameFocus" autocapitalize="off" autocorrect="off" />
+					</div>
+					<div>
+						<input type="password" id="Password-input" placeholder="@Resources.Password" class="input-block-level" data-bind="value: Password" />
+					</div>
 				</div>
-				<div>
-					<input type="password" id="Password-input" placeholder=@Resources.Password class="input-block-level" data-bind="value: Password, returnKey: SignIn" />
+				<div id="Signin-error" 
+					 class="alert" 
+					 data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
+					 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase">
 				</div>
-			</div>
-			<div id="Signin-error" 
-				 class="alert" 
-				 data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
-				 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase">
-			</div>
 			
-			<button class="btn btn-primary" id="Login-button" data-bind="click: SignIn, enable: Ajax.Inactive()">@Resources.LogOn</button>
-			<img data-bind="visible: Ajax.Active()" src="@Url.Content("~/Areas/Start/Content/Images/ajax-loader-small.gif")" alt="..." />
+				<button class="btn btn-primary" id="Login-button" type="submit" data-bind="enable: Ajax.Inactive()">@Resources.LogOn</button>
+				<img data-bind="visible: Ajax.Active()" src="@Url.Content("~/Areas/Start/Content/Images/ajax-loader-small.gif")" alt="..." />
+			</form>
 		</div>
 		
 		<div id="businessunit">
@@ -106,10 +105,10 @@
 				<strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordWillExpireSoon
 			</div>
 			<div class="login-form">
-				<input type="password" id="New-password" placeholder="New Password" data-bind="value: NewPassword" class="input-block-level" />
-				<input type="password" id="Confirm-new-password" placeholder="Confirm New Password" data-bind="value: ConfirmNewPassword" class="input-block-level" />
+				<input type="password" id="New-password" placeholder="@Resources.NewPassword" data-bind="value: NewPassword" class="input-block-level" />
+				<input type="password" id="Confirm-new-password" placeholder="@Resources.ConfirmNewPassword" data-bind="value: ConfirmNewPassword" class="input-block-level" />
 				
-				<input type="password" id="Old-password" placeholder="Old Password" data-bind="value: OldPassword" class="input-block-level" />
+				<input type="password" id="Old-password" placeholder="@Resources.PasswordOld" data-bind="value: OldPassword" class="input-block-level" />
 				<div id="Password-change-error" class="alert" data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
 					data-notmatch="@Resources.PasswordsDoNotMatch">
 				</div>

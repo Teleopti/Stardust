@@ -49,8 +49,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var shift = table.CreateInstance<ReadModelShiftConfigurable>();
 
-			GlobalDataContext.Data().Setup(shift);
-			GlobalDataContext.Persist();
+			var datafactory = new DataFactory(GlobalUnitOfWorkState.UnitOfWorkAction);
+			datafactory.Setup(shift);
+			datafactory.Apply();
 		}
 
 		[When(@"I view schedules for '(.*)'")]
