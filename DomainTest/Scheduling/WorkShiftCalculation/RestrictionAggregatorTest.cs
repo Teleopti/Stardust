@@ -33,27 +33,32 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         public void ShouldAggregateRestrictions()
         {
             var dateOnly = new DateOnly(2012, 12, 7);
-            var dateList = new List<DateOnly> {dateOnly, dateOnly.AddDays(1)};
+            var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
             var person1 = _mocks.StrictMock<IPerson>();
             var person2 = _mocks.StrictMock<IPerson>();
             var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             var groupPerson = _mocks.StrictMock<IGroupPerson>();
-
-            IEffectiveRestriction firstDay =
+            var skillDay1 = _mocks.StrictMock<ISkillDay>();
+            var skillDay2 = _mocks.StrictMock<ISkillDay>();
+            var skillDays = new List<ISkillDay> { skillDay1, skillDay2 };
+            var firstDay =
                 new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(12)),
                                          new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(18)),
                                          new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-            IEffectiveRestriction secondDay =
+            var secondDay =
                 new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(13)),
-                                         new EndTimeLimitation(TimeSpan.FromHours(18), TimeSpan.FromHours(18)),
+                                         new EndTimeLimitation(TimeSpan.FromHours(17), TimeSpan.FromHours(18)),
                                          new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-            IEffectiveRestriction result =
-                            new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(12)),
-                                                     new EndTimeLimitation(TimeSpan.FromHours(18), TimeSpan.FromHours(18)),
+            var result =
+                            new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11), TimeSpan.FromHours(12)),
+                                                     new EndTimeLimitation(TimeSpan.FromHours(17), TimeSpan.FromHours(17.5)),
                                                      new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 
             using (_mocks.Record())
             {
+                Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(dateList)).Return(skillDays);
+                Expect.Call(skillDay1.OpenHours()).Return(new ReadOnlyCollection<TimePeriod>(new List<TimePeriod> { new TimePeriod(11, 0, 18, 0) }));
+                Expect.Call(skillDay2.OpenHours()).Return(new ReadOnlyCollection<TimePeriod>(new List<TimePeriod> { new TimePeriod(10, 0, 17, 30) }));
                 Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person1, person2 })).Repeat.Twice();
                 Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new ReadOnlyCollection<IPerson>(new List<IPerson> { person1, person2 }), dateOnly,
@@ -74,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         public void ShouldReturnNullWhenNoGroupPerson()
         {
             var dateOnly = new DateOnly(2012, 12, 7);
-            var dateList = new List<DateOnly> {dateOnly, dateOnly.AddDays(1)};
+            var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
 
             Assert.That(_target.Aggregate(dateList, null, _schedulingOptions), Is.Null);
         }
