@@ -13,7 +13,22 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajax) {
 	this.AjaxError = ko.observable('');
 	this.AvailableTimeSpan = ko.observable('');
 
+	this.EditableIsInOpenPeriod = ko.observable(false);
+	this.EditableHasNoSchedule = ko.computed(function () {
+		// for future use
+		return true;
+	});
+	
+	this.Editable = ko.computed(function () {
+		return self.EditableIsInOpenPeriod() && self.EditableHasNoSchedule();
+	});
 
+	this.ReadElement = function (element) {
+		var item = $(element);
+		self.Date = item.attr('data-mytime-date');
+		self.EditableIsInOpenPeriod(item.attr('data-mytime-editable') == "True");
+	};
+	
 	var ajaxForDate = function (options) {
 
 		var type = options.type || 'GET',
@@ -21,8 +36,7 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajax) {
 		    statusCode400 = options.statusCode400,
 		    statusCode404 = options.statusCode404,
 		    url = options.url || "StudentAvailability/StudentAvailability",
-		    success = options.success || function () {
-		    },
+		    success = options.success || function () {},
 		    complete = options.complete || null;
 
 		return ajax.Ajax({
@@ -91,12 +105,6 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajax) {
 			}
 		});
 		return deferred.promise();
-	};
-
-	this.ReadElement = function (element) {
-		var item = $(element);
-		self.Date = item.attr('data-mytime-date');
-		//		self.EditableIsInOpenPeriod(item.attr('data-mytime-editable') == "True");
 	};
 
 	this.ReadStudentAvailability = function (data) {

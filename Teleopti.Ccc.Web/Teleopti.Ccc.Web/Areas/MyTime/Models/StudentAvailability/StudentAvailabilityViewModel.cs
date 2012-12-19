@@ -47,9 +47,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability
 	public class DayViewModelBase
 	{
 		public DateOnly Date { get; set; }
-		public DayState State { get; set; }
 		public HeaderViewModel Header { get; set; }
-		public string StyleClassName { get; set; }
+		public bool InPeriod { get; set; }
+		public bool Editable { get; set; }
 	}
 
 	[Flags]

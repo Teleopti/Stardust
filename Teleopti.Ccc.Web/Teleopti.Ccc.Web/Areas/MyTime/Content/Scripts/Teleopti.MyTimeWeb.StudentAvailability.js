@@ -21,10 +21,6 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	var studentAvailabilityToolTip = null;
 	var editFormViewModel = null;
 
-	function _layout() {
-		Teleopti.MyTimeWeb.StudentAvailability.Layout.SetClassesFromDayState();
-	}
-
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#StudentAvailabilityDateRangeSelector';
 		var periodData = $('#StudentAvailability-body').data('mytime-periodselection');
@@ -33,15 +29,15 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 
 	function _initViewModels() {
 		dayViewModels = [];
-		$('li[data-mytime-date].editable').each(function (index, element) {
+		$('li[data-mytime-date].inperiod').each(function (index, element) {
 			var dayViewModel = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel(ajax);
 			dayViewModel.ReadElement(element);
 			dayViewModels[dayViewModel.Date] = dayViewModel;
 			ko.applyBindings(dayViewModel, element);
 		});
 
-		var from = $('li[data-mytime-date].editable').first().data('mytime-date');
-		var to = $('li[data-mytime-date].editable').last().data('mytime-date');
+		var from = $('li[data-mytime-date].inperiod').first().data('mytime-date');
+		var to = $('li[data-mytime-date].inperiod').last().data('mytime-date');
 
 		_loadStudentAvailabilityAndSchedules(from, to);
 	}
@@ -183,7 +179,6 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	
 	return {
 		Init: function () {
-			_layout();
 			_initToolbarButtons();
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack(
 				'StudentAvailability/Index',
@@ -192,8 +187,9 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 			);
 		},
 		StudentAvailabilityPartialInit: function () {
-			_layout();
-
+			if (!$('#StudentAvailability-body').length) {
+				return;
+			}
 			_initPeriodSelection();
 			_initViewModels();
 			_activateSelectable();
@@ -204,31 +200,4 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		}
 	};
 
-})(jQuery);
-
-Teleopti.MyTimeWeb.StudentAvailability.Layout = (function ($) {
-
-	function _setDayState(week) {
-		$('li[data-mytime-date]', week).each(function () {
-			var curDay = $(this);
-			var state = parseInt(curDay.data('mytime-state'));
-			if (!state) {
-				curDay.addClass('non-editable');
-				return;
-			}
-			if (state & 1) {
-				curDay.addClass('editable');
-			}
-		});
-	}
-
-	return {
-		SetClassesFromDayState: function () {
-			var weeks = $('.calendarview-week');
-			weeks.each(function () {
-				_setDayState($(this));
-			});
-		}
-
-	};
 })(jQuery);
