@@ -51,6 +51,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _workload = workload;
         }
 
+		public Statistic()
+		{}
+
         /// <summary>
         /// Matches the specified Task to statisticTasks.
         /// </summary>
