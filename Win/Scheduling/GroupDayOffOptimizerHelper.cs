@@ -371,45 +371,36 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   where ((IDeleteTag)item).IsDeleted == false
                                                   select item).ToList();
 
-            // Do not use DO back to legal when groupscheduling as every agent is treated differently
-            //var e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.DaysOffBackToLegalState + Resources.ThreeDots);
-            //resourceOptimizerPersonOptimized(this, e);
-
-            //// to make sure we are in legal state before we can do day off optimization
-            //((List<IDayOffTemplate>)displayList).Sort(new DayOffTemplateSorter());
-            //DaysOffBackToLegalState(matrixOriginalStateContainers, optimizerPreferences, _backgroundWorker,
-            //                        displayList[0], false);
-
             var e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.Rescheduling + Resources.ThreeDots);
             resourceOptimizerPersonOptimized(this, e);
 
             // Schedule White Spots after back to legal state
             var scheduleService = _container.Resolve<IScheduleService>();
 
-			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
+			//ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
 
-            // schedule those are the white spots after back to legal state
-            // ??? check if all white spots could be scheduled ??????
-			OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container, rollbackService);
+			//// schedule those are the white spots after back to legal state
+			//// ??? check if all white spots could be scheduled ??????
+			//OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container, rollbackService);
 
             
-            bool found = false;
-            foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixContainerList)
-            {
-                if (!matrixOriginalStateContainer.IsFullyScheduled())
-                {
-                    found = true;
-                    rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService);
-                }
-            }
+			//bool found = false;
+			//foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixContainerList)
+			//{
+			//    if (!matrixOriginalStateContainer.IsFullyScheduled())
+			//    {
+			//        found = true;
+			//        rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService);
+			//    }
+			//}
 
-            if (found)
-            {
-                foreach (var dateOnly in selectedPeriod.DayCollection())
-                {
-                    _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, optimizerPreferences.Rescheduling.ConsiderShortBreaks);
-                }
-            }
+			//if (found)
+			//{
+			//    foreach (var dateOnly in selectedPeriod.DayCollection())
+			//    {
+			//        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, optimizerPreferences.Rescheduling.ConsiderShortBreaks);
+			//    }
+			//}
 
             // day off optimization
 
