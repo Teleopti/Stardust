@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				Expect.Call(personRepository.Get(personId)).Return(logonPerson);
 				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
 				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
+				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MobileReports)).Return(false);
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
 				Expect.Call(() => sessionSpecificDataProvider.StoreInCookie(null)).IgnoreArguments();
 			}
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				Expect.Call(personRepository.Get(personId)).Return(logonPerson);
 				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
 				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(true);
+				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MobileReports)).Return(true);
 				Expect.Call(() => sessionSpecificDataProvider.StoreInCookie(null)).IgnoreArguments();
 			}
 			using (mocks.Playback())
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
 				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(false);
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
+				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MobileReports)).Return(false);
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AdminWeb)).Return(false);
 			}
 			using (mocks.Playback())

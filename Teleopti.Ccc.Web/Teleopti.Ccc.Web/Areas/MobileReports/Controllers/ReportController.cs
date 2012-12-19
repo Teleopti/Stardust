@@ -10,7 +10,7 @@ using Teleopti.Ccc.Web.Filters;
 namespace Teleopti.Ccc.Web.Areas.MobileReports.Controllers
 {
 	[OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
-	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.Anywhere)]
+	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.MobileReports)]
 	public class ReportController : Controller
 	{
 		private readonly IReportRequestValidator _reportRequestValidator;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Controllers
 		[UnitOfWorkAction]
 		public ViewResult Index()
 		{
-			ViewBag.Title = "Anywhere";
+			ViewBag.Title = "MobileReports";
 			ReportViewModel reportModel = _reportsViewModelFactory.CreateReportViewModel();
 
 			return View(reportModel);
