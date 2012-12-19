@@ -115,6 +115,7 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
                 {
                     workload.SubItems.Add(skill);
                     _allItems.Add(workload);
+                    workload.Checked = true;
                 }
             }
 
