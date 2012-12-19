@@ -279,6 +279,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         {
             HandleMove(delegate(IList<int> selectedList, int adapterCount)
             {
+				if (selectedList.Count.Equals(adapterCount)) return false;
                 return (selectedList.Count > 0 && (selectedList[0] > 1 && selectedList[0] <= adapterCount));
             }, MoveType.MoveUp);
         }
@@ -287,6 +288,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         {
             HandleMove(delegate(IList<int> selectedList, int adapterCount)
             {
+				if (selectedList.Count.Equals(adapterCount)) return false;
                 return (selectedList.Count > 0 && selectedList[0] < adapterCount);
             }, MoveType.MoveDown);
         }
