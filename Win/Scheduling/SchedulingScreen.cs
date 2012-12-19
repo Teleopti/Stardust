@@ -6976,8 +6976,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                      : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
             if (defaultRequest == null)
             {
-                var firstOpenDay = _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection().First();
-                var allowanceView = new RequestAllowanceView(null, firstOpenDay);
+                var allowanceView = new RequestAllowanceView(null, _defaultFilterDate);
                 allowanceView.Show(this);
 
             }else
