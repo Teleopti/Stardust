@@ -15,6 +15,7 @@ using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
+	
 	[Binding]
 	public class PreferencesPageStepDefinitions
 	{

@@ -167,6 +167,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />
     <Compile Include="Areas\Start\Models\Authentication\PasswordWarningViewModel.cs" />
@@ -438,21 +439,18 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleDomainDataMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFormMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFormResultMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDomainData.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityRestrictionExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\TimeOfDayModelBinder.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInput.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\RequestsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\DateTimePeriodFormValidator.cs" />
-    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFormResult.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayViewModel.cs" />
-    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayForm.cs" />
+    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayInput.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\IStudentAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\StudentAvailabilityPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayViewModelMappingProfile.cs" />
     <Compile Include="Filters\ApplicationFunctionAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PortalController.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleController.cs" />
@@ -506,7 +504,6 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IVirtualSchedulePeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\VirtualSchedulePeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityViewModelMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\StudentAvilabilityHtmlExtension.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\IStudentAvailabilityViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityViewModelFactory.cs" />
     <Compile Include="Filters\AjaxHandleErrorAttribute.cs" />
@@ -524,6 +521,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
+    <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8.gif" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordViewModel.js" />
     <Content Include="Areas\Team\Content\Scripts\helpers.js" />
     <Content Include="Areas\Team\Content\Scripts\layout.js" />

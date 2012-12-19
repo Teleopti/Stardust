@@ -1,8 +1,6 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
-@using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability
-@using Teleopti.Interfaces.Domain
 @model StudentAvailabilityViewModel
 @{
 	Layout = null;
@@ -25,8 +23,6 @@
 		{
 			@string.Format(".calendarview-week li.{0} div.day-content{{border-left-color: #{1}; border-right-color: #{1};}}\n", style.Name, style.ColorHex)
 		}
-
-		
 	</style>
 	<div id="StudentAvailability-body-inner" class="body-calendarview-inner clearfix">
 		<ul class="weekdays">
@@ -46,54 +42,26 @@
 				</li>
 				@foreach (var day in week.Days)
 				{
-					<li data-mytime-state="@Html.Schedule().FormatState(day.State)" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="@Html.AttributeEncode(day.StyleClassName)">
+					<li data-mytime-editable="@day.Editable" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-bind="css: {editable: Editable, 'non-editable': !Editable()}">
 						<div>
 							<div class="day-header">
 								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
 							</div>
-							@Html.DayContent(day)
+							<div class="day-content pdt10">
+								@if (day.InPeriod)
+								{
+									<img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
+									<!-- ko if: AjaxError().length > 0 -->
+									<h2 class="error" data-bind="text: AjaxError"></h2>
+									<!-- /ko -->
+									<div class="fullwidth mt15" data-bind="text: AvailableTimeSpan">
+									</div>
+								}
+							</div>
 						</div>
 					</li>
 				}
 			</ul>
 		}
-	</div>
-</div>
-<div id="StudentAvailability-edit-section" class="edit-section col-1 floatleft mt10 displaynone">
-	<div class="edit-section-content col-1">
-		<div class="edit-module ui-corner-all">
-			<div class="edit-module-inner clearfix">
-				<div class="edit-module-element floatleft">
-					<label class="displayblock" for="StudentAvailability-edit-starttime-input">@Resources.FromColon</label>
-					<select id="StudentAvailability-edit-starttime" class="time-input combobox">
-						@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
-						{
-							<option value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-						}
-					</select>
-				</div>
-				<div class="edit-module-element floatleft">
-					<label class="displayblock" for="StudentAvailability-edit-endtime-input">@Resources.ToColon</label>
-					<select id="StudentAvailability-edit-endtime" class="time-input combobox">
-						@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0)))
-						{
-							<option value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-						}
-					</select>
-				</div>
-				<div class="edit-module-element floatleft">
-					<input id="StudentAvailability-edit-nextday-cb" type="checkbox" />
-					<label for="StudentAvailability-edit-nextday-cb">@Resources.NextDay</label>
-				</div>
-			</div>
-		</div>
-		<div class="edit-button-bar mr5 ml5 clearleftfloat">
-			<div id="StudentAvailability-edit-error" class="error floatleft">
-			</div>
-			<div class="floatright">
-				<input id="StudentAvailability-edit-ok-button" type="button" disabled="disabled" class="button mb5" value="@Html.AttributeEncode(Resources.Save)"/>
-				<input id="StudentAvailability-edit-cancel-button" type="button" class="button cancel mb5" value="@Html.AttributeEncode(Resources.Cancel)" />
-			</div>
-		</div>
 	</div>
 </div>

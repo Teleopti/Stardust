@@ -68,6 +68,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoPreference(date);
 		}
 
+		[Given(@"I am viewing student availability for date '(.*)'")]
+		public void GivenIAmViewingStudentAvailabilityForDate(DateTime date)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoStudentAvailability(date);
+		}
+
 		[When(@"I navigate to the preferences page")]
 		public void WhenINavigateToThePreferencesPage()
 		{

@@ -21,16 +21,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveTheRoleAccessToMytime(string name)
 		{
 			var userRole = new RoleForUser { Name = name };
-			UserFactory.User().Setup(userRole);
+			UserFactory.User().Setup(userRole); // creates and persists role 
 		}
 
 		[Given(@"I have a role with")]
 		public void GivenIHaveARoleWith(Table table)
 		{
 			var role = table.CreateInstance<RoleConfigurable>();
-			UserFactory.User().Setup(role);
-			var userRole = new RoleForUser { Name = role.Name };
-			UserFactory.User().Setup(userRole);
+			UserFactory.User().Setup(role); // creates and persists role 
+			var userRole = new RoleForUser { Name = role.Name }; // loads the role again
+			UserFactory.User().Setup(userRole); // adds the role to the user and persist
 		}
 
 		[Given(@"I have a role named '(.*)'")]
