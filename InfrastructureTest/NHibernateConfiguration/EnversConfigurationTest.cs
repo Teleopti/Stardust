@@ -7,8 +7,9 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 {
+	//note: integrations tests for envers (configuration) are made from repositores/audit/*repositorytest
 	[TestFixture]
-	public class EnversConfigurationDelegateTest
+	public class EnversConfigurationTest
 	{
 		private EnversConfiguration target;
 
