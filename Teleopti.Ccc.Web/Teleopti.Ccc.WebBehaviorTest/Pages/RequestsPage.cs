@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Div FirstRequest { get { return Document.Div(RequestConstraint).EventualGet(); } }
 		public Div LastRequest { get { return RequestListItems.Last(); } }
 
-		public ListItem RequestById(Guid id)
+		public Div RequestById(Guid id)
 		{
-			return Document.ListItem(RequestConstraint && Find.By("data-mytime-requestid", id.ToString()));
+			return Document.Div(RequestConstraint && Find.By("data-mytime-requestid", id.ToString()));
 		}
 
 		public Button RequestDeleteButtonById(Guid Id)

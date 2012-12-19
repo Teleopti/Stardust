@@ -21,6 +21,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 		self.Subject = ko.observable();
 		self.RequestType = ko.observable();
+		self.RequestPayload = ko.observable();
 		self.Status = ko.observable();
 		self.Dates = ko.observable();
 		self.UpdatedOn = ko.observable();
@@ -30,6 +31,13 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.mouseIsOver = ko.observable(false);
 		self.isSelected = ko.observable(false);
 		self.isLoading = ko.observable(false);
+		self.CanDelete = ko.observable(true);
+
+		self.Type = ko.computed(function () {
+			var payload = (self.RequestPayload() != '') ? ', ' + self.RequestPayload() : '';
+			return self.RequestType() + payload;
+		});
+
 
 		//TODO: too much gui-info, remove it to be called from the view
 		self.ShowDetails = function (viewmodel, event) {
@@ -178,8 +186,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		};
 	}
 
-
-
 	ko.utils.extend(RequestItemViewModel.prototype, {
 		Initialize: function (data) {
 			var self = this;
@@ -191,6 +197,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			self.Text(data.Text);
 			self.Link(data.Link.href);
 			self.Id(data.Id);
+			self.RequestPayload(data.Payload);
+			self.CanDelete(data.Link.Methods.indexOf("DELETE") != -1);
 		}
 	});
 
