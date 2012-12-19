@@ -93,12 +93,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var mainShift = personAssignmentSource.MainShift;
 				var scheduleRange = scheduleDictionary[groupMember];
 				var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
-				var significantPart = scheduleDay.SignificantPart();
+				var significantPart = scheduleDay.SignificantPartForDisplay();
 				var cloneMainShift = mainShift.NoneEntityClone() as IMainShift;
 
 				if (significantPart == SchedulePartView.MainShift) continue;
-					
-				if (significantPart == SchedulePartView.DayOff || significantPart == SchedulePartView.FullDayAbsence) continue;
+	
+				if (significantPart == SchedulePartView.DayOff || significantPart == SchedulePartView.FullDayAbsence|| significantPart == SchedulePartView.ContractDayOff) continue;
 
 				var theMatrix = _teamSteadyStateScheduleMatrixProFinder.MatrixPro(matrixes, scheduleDay);
 				if (theMatrix == null) continue;
