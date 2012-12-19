@@ -55,13 +55,10 @@ namespace Teleopti.Ccc.Domain.Security
 
 
                 var addedFunctions =
-                    new List<IApplicationFunction>(AddedRaptorApplicationFunctions(databaseRaptorApplicationFunctions,
-                                                                                   definedRaptorApplicationFunctions));
-
+                    AddedRaptorApplicationFunctions(databaseRaptorApplicationFunctions, definedRaptorApplicationFunctions);
 
                 var deletedFunctions =
-                    new List<IApplicationFunction>(DeletedRaptorApplicationFunctions(definedRaptorApplicationFunctions,
-																					 databaseRaptorApplicationFunctions));
+                    DeletedRaptorApplicationFunctions(definedRaptorApplicationFunctions, databaseRaptorApplicationFunctions);
 
 				return new CheckRaptorApplicationFunctionsResult(addedFunctions, deletedFunctions);
 
@@ -301,25 +298,25 @@ namespace Teleopti.Ccc.Domain.Security
 
 	public class CheckRaptorApplicationFunctionsResult
 	{
-		private readonly IList<IApplicationFunction> _addedFunctions;
-		private readonly IList<IApplicationFunction> _deletedFunctions;
+		private readonly IEnumerable<IApplicationFunction> _addedFunctions;
+		private readonly IEnumerable<IApplicationFunction> _deletedFunctions;
 
 		public CheckRaptorApplicationFunctionsResult(
 			IEnumerable<IApplicationFunction> addedFunctions,
 			IEnumerable<IApplicationFunction> deletedFunctions)
 		{
-			_addedFunctions = new List<IApplicationFunction>(addedFunctions);
-			_deletedFunctions = new List<IApplicationFunction>(deletedFunctions);
+			_addedFunctions = addedFunctions;
+			_deletedFunctions = deletedFunctions;
 		}
 
-		public ReadOnlyCollection<IApplicationFunction> AddedFunctions
+		public IEnumerable<IApplicationFunction> AddedFunctions
 		{
-			get { return new ReadOnlyCollection<IApplicationFunction>(_addedFunctions); }
+			get { return _addedFunctions; }
 		}
 
-		public ReadOnlyCollection<IApplicationFunction> DeletedFunctions
+		public IEnumerable<IApplicationFunction> DeletedFunctions
 		{
-			get { return new ReadOnlyCollection<IApplicationFunction>(_deletedFunctions); }
+			get { return _deletedFunctions; }
 		}
 
 		public bool Result
