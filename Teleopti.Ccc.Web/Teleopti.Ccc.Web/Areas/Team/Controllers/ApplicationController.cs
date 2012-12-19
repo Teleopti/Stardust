@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Team.Controllers
 			            	{
 			            		UserName = Thread.CurrentPrincipal.Identity.Name,
 								IsMyTimeAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
-								IsMobileReportsAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere),
+								IsMobileReportsAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MobileReports),
 			            	}, JsonRequestBehavior.AllowGet);
 		}
 	}
