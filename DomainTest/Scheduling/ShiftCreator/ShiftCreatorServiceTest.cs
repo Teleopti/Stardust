@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyDefaultConstructor()
         {
-            target = new ShiftCreatorService();
+			  target = new ShiftCreatorService(new CreateWorkShiftsFromTemplate());
             Assert.IsInstanceOf<CreateWorkShiftsFromTemplate>(target.WorkShiftGenerator);
         }
 

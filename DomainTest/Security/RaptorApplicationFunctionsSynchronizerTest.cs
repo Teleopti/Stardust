@@ -271,14 +271,11 @@ namespace Teleopti.Ccc.DomainTest.Security
             _unitOfWork.Dispose();
             LastCall.Repeat.Once();
 
-        	IEnumerable<IApplicationFunction> addedFunctions;
-			IEnumerable<IApplicationFunction> deletedFunctions;
-
             _mocks.ReplayAll();
 
-			bool result = _target.CheckRaptorApplicationFunctions(out addedFunctions, out deletedFunctions);
-			Assert.IsFalse(result);
-			Assert.AreEqual(1, deletedFunctions.Count());
+			var result = _target.CheckRaptorApplicationFunctions();
+			Assert.IsFalse(result.Result);
+			Assert.AreEqual(1, result.DeletedFunctions.Count());
 
 
             _mocks.VerifyAll();
@@ -300,15 +297,12 @@ namespace Teleopti.Ccc.DomainTest.Security
             _unitOfWork.Dispose();
             LastCall.Repeat.Once();
 
-        	IEnumerable<IApplicationFunction> addedFunctions;
-        	IEnumerable<IApplicationFunction> deletedFunctions;
-
             _mocks.ReplayAll();
 
-			bool result = _target.CheckRaptorApplicationFunctions(out addedFunctions, out deletedFunctions);
+			var result = _target.CheckRaptorApplicationFunctions();
 
-			Assert.IsFalse(result);
-			Assert.AreEqual(1, addedFunctions.Count());
+			Assert.IsFalse(result.Result);
+			Assert.AreEqual(1, result.AddedFunctions.Count());
 
             _mocks.VerifyAll();
 

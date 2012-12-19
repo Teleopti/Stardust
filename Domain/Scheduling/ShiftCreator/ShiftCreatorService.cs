@@ -13,11 +13,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             _shiftGenerator = shiftGenerator;
         }
 
-        public ShiftCreatorService()
-        {
-            _shiftGenerator = new CreateWorkShiftsFromTemplate();
-        }
-
         public ICreateWorkShiftsFromTemplate WorkShiftGenerator
         {
             get { return _shiftGenerator; }
