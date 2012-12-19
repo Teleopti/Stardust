@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewConfidential select f;
 
 			if (!AccessToMobileReports)
-				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere select f;
+				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MobileReports select f;
 
 			if (!AccessToExtendedPreferences)
 				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb select f;

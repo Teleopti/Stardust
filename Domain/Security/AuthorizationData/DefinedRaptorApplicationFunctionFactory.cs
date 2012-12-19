@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			IApplicationFunction underConstruction = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.UnderConstruction, "xxUnderConstruction", DefinedRaptorApplicationFunctionForeignIds.UnderConstruction, null);
 				underConstruction.IsPreliminary = true;
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenAgentPortal, "xxAgentPortal", DefinedRaptorApplicationFunctionForeignIds.OpenAgentPortal, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Anywhere, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.Anywhere, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MobileReports, "xxMobileReports", DefinedRaptorApplicationFunctionForeignIds.MobileReports, null);
 
 			// Global
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifySchedule, "xxModifySchedule", DefinedRaptorApplicationFunctionForeignIds.ModifySchedule, null);
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger, "xxAgentScheduleMessengerPermission", DefinedRaptorApplicationFunctionForeignIds.AgentScheduleMessenger, null);
 
 			// Team Web
-			var function = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AdminWeb, "xxWeb", DefinedRaptorApplicationFunctionForeignIds.AdminWeb, null);
+			var function = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AdminWeb, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.AdminWeb, null);
 			function.IsPreliminary = true;
 			function = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SchedulesAdminWeb, "xxSchedules", DefinedRaptorApplicationFunctionForeignIds.SchedulesAdminWeb, null);
 			function.IsPreliminary = true;
