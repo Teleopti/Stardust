@@ -1150,57 +1150,64 @@ namespace Teleopti.Ccc.Win.Scheduling
 			schedulingOptions.UseGroupSchedulingCommonEnd = false;
 			schedulingOptions.UseGroupSchedulingCommonStart = false;
 
-            if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
-            {
-                //for testing
-                schedulingOptions.UseTwoDaysOffAsBlock  = true;
-                var skillDayPeriodIntervalData = _container.Resolve<ISkillDayPeriodIntervalData>();
-                var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions,_stateHolder );
-                var teamExtractor = new TeamExtractor(matrixList,_groupPersonBuilderForOptimization  );
-                var restrictionAggregator = _container.Resolve<IRestrictionAggregator>();
-                var workShiftFilterService = _container.Resolve<IWorkShiftFilterService>();
+		    if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+		    {
+		        //for testing
+		        schedulingOptions.UseTwoDaysOffAsBlock = true;
+		        var skillDayPeriodIntervalData = _container.Resolve<ISkillDayPeriodIntervalData>();
+		        var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder);
+		        var teamExtractor = new TeamExtractor(matrixList, _groupPersonBuilderForOptimization);
+		        var restrictionAggregator = _container.Resolve<IRestrictionAggregator>();
+		        var workShiftFilterService = _container.Resolve<IWorkShiftFilterService>();
 
-                var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
-                var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
-                var teamSteadyStateRunner = new TeamSteadyStateRunner(matrixList, targetTimeCalculator);
-                var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
-			    var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, matrixList, groupPersonsBuilder, schedulingOptions);
-			    var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(allScheduleDays );
-                var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
-                var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
-                var coherentChecker = new TeamSteadyStateCoherentChecker();
-			    var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-                var workShiftBackToLegalStateService = OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
-			    var groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
-			    var groupPersonConsistentChecker = _container.Resolve<IGroupPersonConsistentChecker>();
-			    var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-			    var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
-                IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = 
-                    new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState,
-                        _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
-                IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
-																		 groupPersonConsistentChecker,
-																		 workShiftBackToLegalStateService,
-																		 resourceOptimizationHelper,
-																		 mainShiftOptimizeActivitySpecificationSetter);
-                var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(groupMatrixHelper, coherentChecker, scheduleMatrixProFinder);
-                
-                var teamScheduling = new TeamScheduling(schedulingOptions, teamSteadyStateHolder,
-                                                        teamSteadyStateMainShiftScheduler,
-                                                        groupPersonBuilderForOptimization, groupSchedulingService);
+		        var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
+		        var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
+		        var teamSteadyStateRunner = new TeamSteadyStateRunner(matrixList, targetTimeCalculator);
+		        var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
+		        var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, matrixList,
+		                                                                          groupPersonsBuilder, schedulingOptions);
+		        var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(allScheduleDays);
+		        var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
+		        var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
+		        var coherentChecker = new TeamSteadyStateCoherentChecker();
+		        var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
+		        var workShiftBackToLegalStateService =
+		            OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
+		        var groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
+		        var groupPersonConsistentChecker = _container.Resolve<IGroupPersonConsistentChecker>();
+		        var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+		        var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+		        IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+		            new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState,
+		                                                  _container.Resolve<IGroupPersonFactory>(),
+		                                                  _container.Resolve<IGroupPagePerDateHolder>());
+		        IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
+		                                                                     groupPersonConsistentChecker,
+		                                                                     workShiftBackToLegalStateService,
+		                                                                     resourceOptimizationHelper,
+		                                                                     mainShiftOptimizeActivitySpecificationSetter);
+		        var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(groupMatrixHelper,
+		                                                                                      coherentChecker,
+		                                                                                      scheduleMatrixProFinder);
 
-                var advanceSchedulingService = new AdvanceSchedulingService(skillDayPeriodIntervalData,
-                                                                            dynamicBlockFinder, teamExtractor,
-                                                                            restrictionAggregator, matrixList,
-                                                                            workShiftFilterService, teamScheduling,
-                                                                            schedulingOptions);
+		        var teamScheduling = new TeamScheduling(schedulingOptions, teamSteadyStateHolder,
+		                                                teamSteadyStateMainShiftScheduler,
+		                                                groupPersonBuilderForOptimization, groupSchedulingService);
 
-                advanceSchedulingService.Execute(schedulingResults);
-            }
-            using (PerformanceOutput.ForOperation("Scheduling x blocks"))
-                blockSchedulingService  .Execute(matrixes, schedulingOptions, schedulingResults);
-            
-            if (schedulingOptions.RotationDaysOnly)
+		        var advanceSchedulingService = new AdvanceSchedulingService(skillDayPeriodIntervalData,
+		                                                                    dynamicBlockFinder, teamExtractor,
+		                                                                    restrictionAggregator, matrixList,
+		                                                                    workShiftFilterService, teamScheduling,
+		                                                                    schedulingOptions);
+
+		        advanceSchedulingService.Execute(schedulingResults);
+		    }
+		    else
+		        using (PerformanceOutput.ForOperation("Scheduling x blocks"))
+		            blockSchedulingService.Execute(matrixes, schedulingOptions, schedulingResults);
+
+
+		    if (schedulingOptions.RotationDaysOnly)
                 schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
 
             blockSchedulingService.BlockScheduled -= blockSchedulingServiceBlockScheduled;
