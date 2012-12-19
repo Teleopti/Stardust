@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
     public interface IRestrictionAggregator
     {
-        IEffectiveRestriction Aggregate(IList<DateOnly> dateOnlyList, IGroupPerson groupPerson);
+        IEffectiveRestriction Aggregate(IList<DateOnly> dateOnlyList, IGroupPerson groupPerson, ISchedulingOptions schedulingOptions);
     }
 
     public class RestrictionAggregator : IRestrictionAggregator
@@ -21,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             _schedulingResultStateHolder = schedulingResultStateHolder;
         }
 
-        public IEffectiveRestriction Aggregate(IList<DateOnly> dateOnlyList, IGroupPerson groupPerson, ISchedulingOptions schedulingOptions )
+        public IEffectiveRestriction Aggregate(IList<DateOnly> dateOnlyList, IGroupPerson groupPerson, ISchedulingOptions schedulingOptions)
         {
             var scheduleDictionary = _schedulingResultStateHolder.Schedules;
             if (groupPerson == null)
