@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
@@ -16,6 +17,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class PasswordPolicyStepDefinitions
 	{
+		private static TimeSpan? timeoutBefore;
+
 		[AfterFeature("Password_policy_configuration_file_teardown")]
 		public static void Hook()
 		{
@@ -23,6 +26,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			if (File.Exists(targetTestPasswordPolicyFile))
 			{
 				File.Delete(targetTestPasswordPolicyFile);
+			}
+
+			if (timeoutBefore.HasValue)
+			{
+				Timeouts.Set(timeoutBefore.Value);
 			}
 		}
 
@@ -45,6 +53,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			}
 
 			File.WriteAllText(targetTestPasswordPolicyFile, contents);
+
+			if (!timeoutBefore.HasValue)
+			{
+				timeoutBefore = Timeouts.Timeout;
+			}
+			Timeouts.Set(TimeSpan.FromSeconds(20));
 		}
 
 		[Given(@"I have user logon details with")]
