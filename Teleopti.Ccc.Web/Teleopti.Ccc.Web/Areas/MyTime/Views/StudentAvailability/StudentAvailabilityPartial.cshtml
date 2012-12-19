@@ -42,15 +42,21 @@
 				</li>
 				@foreach (var day in week.Days)
 				{
-					<li data-mytime-editable="@day.Editable" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="@(day.InPeriod ? "inperiod" : "non-editable")" data-bind="css: {editable: Editable, 'non-editable': !Editable()}">
+					<li data-mytime-editable="@day.Editable" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-bind="css: {editable: Editable, 'non-editable': !Editable()}">
 						<div>
 							<div class="day-header">
 								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
 							</div>
 							<div class="day-content pdt10">
-								<img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
-								<div class="fullwidth mt15" data-bind="text: AvailableTimeSpan">
-								</div>
+								@if (day.InPeriod)
+								{
+									<img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
+									<!-- ko if: AjaxError().length > 0 -->
+									<h2 class="error" data-bind="text: AjaxError"></h2>
+									<!-- /ko -->
+									<div class="fullwidth mt15" data-bind="text: AvailableTimeSpan">
+									</div>
+								}
 							</div>
 						</div>
 					</li>

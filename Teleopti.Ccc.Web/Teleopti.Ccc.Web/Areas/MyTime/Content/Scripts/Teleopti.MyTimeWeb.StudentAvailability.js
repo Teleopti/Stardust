@@ -4,6 +4,7 @@
 /// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
 
 
@@ -17,7 +18,7 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
-	var dayViewModels = [];
+	var dayViewModels = {};
 	var studentAvailabilityToolTip = null;
 	var editFormViewModel = null;
 
@@ -28,7 +29,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	}
 
 	function _initViewModels() {
-		dayViewModels = [];
+		dayViewModels = {};
 		$('li[data-mytime-date].inperiod').each(function (index, element) {
 			var dayViewModel = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel(ajax);
 			dayViewModel.ReadElement(element);
@@ -176,7 +177,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	function _activateSelectable() {
 		$('#StudentAvailability-body-inner').calendarselectable();
 	}
-	
+
 	return {
 		Init: function () {
 			_initToolbarButtons();
