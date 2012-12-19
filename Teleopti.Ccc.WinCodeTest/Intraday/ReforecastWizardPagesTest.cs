@@ -1,21 +1,19 @@
-﻿using NUnit.Framework;
-using Rhino.Mocks;
+﻿using System;
+using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Intraday;
 
 namespace Teleopti.Ccc.WinCodeTest.Intraday
 {
     [TestFixture]
-    public class ReforecastWizardPagesTest
+    public class ReforecastWizardPagesTest : IDisposable
     {
         private ReforecastWizardPages _target;
-        private MockRepository _mock;
         private ReforecastModelCollection _modelColletion;
         private ReforecastModel _model;
 
         [SetUp]
         public void Setup()
         {
-            _mock = new MockRepository();
             _model = new ReforecastModel();
             _modelColletion = new ReforecastModelCollection();
             _modelColletion.ReforecastModels.Add(_model);
@@ -38,6 +36,25 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         public void ShouldReturnObject()
         {
             Assert.That(_target.CreateNewStateObj(), Is.Not.Null);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+                ReleaseResources();
+
+        }
+
+        private void ReleaseResources()
+        {
+            _target = new ReforecastWizardPages(null);
+            _target.Dispose();
         }
     }
 }

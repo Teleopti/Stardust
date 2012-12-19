@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         }
 
         [Test]
-        public void ShouldInitializeWorloadList()
+        public void ShouldInitializeWorkloadList()
         {
             Assert.That(_target.Workload, Is.Not.Null);
         }
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         }
 
         [Test]
-        public void ShouldInitializeWorloadList()
+        public void ShouldInitializeWorkloadList()
         {
             Assert.That(_target.ReforecastModels, Is.Not.Null);
         }
