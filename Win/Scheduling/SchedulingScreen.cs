@@ -3018,21 +3018,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             return true;
         }
 
-        private bool isViewAllowanceAvailable()
-        {
-            var defaultRequest = _requestView.SelectedAdapters().Count > 0
-                                     ? _requestView.SelectedAdapters().First().PersonRequest
-                                     : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
-            if (defaultRequest != null)
-            {
-                var requestDate = new DateOnly(defaultRequest.RequestedDate);
-                var personPeriod = defaultRequest.Person.PersonPeriodCollection.Where(
-                    p => p.Period.Contains(requestDate)).FirstOrDefault();
-                return personPeriod != null && personPeriod.BudgetGroup != null;
-            }
-            return false;
-        }
-
         #region Virtual skill handling
 
         private void skillGridMenuItemDay_Click(object sender, EventArgs e)
@@ -3643,10 +3628,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void setupRequestViewButtonStates()
         {
-            toolStripMenuItemViewAllowance.Visible =
-                toolStripButtonViewAllowance.Available = _budgetPermissionService.IsAllowancePermitted;
-            if (toolStripButtonViewAllowance.Available)
-                toolStripButtonViewAllowance.Enabled = isViewAllowanceAvailable();
+            toolStripButtonViewAllowance.Available = _budgetPermissionService.IsAllowancePermitted;
+            toolStripMenuItemViewAllowance.Visible = _budgetPermissionService.IsAllowancePermitted;
+            toolStripMenuItemViewAllowance.Enabled = _budgetPermissionService.IsAllowancePermitted;
         }
 
         private bool stateHolderExceptionOccurred(RunWorkerCompletedEventArgs e)
@@ -7250,11 +7234,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                 && isPermittedApproveRequest(_requestView.SelectedAdapters());
             ToolStripMenuItemViewDetails.Enabled =
                 toolStripButtonViewDetails.Enabled = isViewRequestDetailsAvailable();
-            if (_budgetPermissionService.IsAllowancePermitted)
-            {
-                toolStripButtonViewAllowance.Enabled =
-                toolStripMenuItemViewAllowance.Enabled = isViewAllowanceAvailable();
-            }
         }
 
         private void wpfShiftEditor1_DeleteMeeting(object sender, CustomEventArgs<IPersonMeeting> e)
@@ -8530,14 +8509,21 @@ namespace Teleopti.Ccc.Win.Scheduling
             var defaultRequest = _requestView.SelectedAdapters().Count > 0
                                      ? _requestView.SelectedAdapters().First().PersonRequest
                                      : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
-            if (defaultRequest == null) return;
-            var requestDate = new DateOnly(defaultRequest.RequestedDate);
-            var personPeriod =
-                defaultRequest.Person.PersonPeriodCollection.Where(p => p.Period.Contains(requestDate)).FirstOrDefault();
-            if (personPeriod != null && personPeriod.BudgetGroup != null)
+            if (defaultRequest == null)
             {
-                var allowanceView = new RequestAllowanceView(defaultRequest, new DateOnly(_defaultFilterDate));
+                var firstOpenDay = _schedulerState.RequestedPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).DayCollection().First();
+                var allowanceView = new RequestAllowanceView(null, firstOpenDay);
                 allowanceView.Show(this);
+
+            }else
+            {
+                var requestDate = new DateOnly(defaultRequest.RequestedDate);
+                var personPeriod = defaultRequest.Person.PersonPeriodCollection.Where(p => p.Period.Contains(requestDate)).FirstOrDefault();
+                if (personPeriod != null)
+                {
+                    var allowanceView = new RequestAllowanceView(personPeriod.BudgetGroup, requestDate);
+                    allowanceView.Show(this);
+                }
             }
         }
 
