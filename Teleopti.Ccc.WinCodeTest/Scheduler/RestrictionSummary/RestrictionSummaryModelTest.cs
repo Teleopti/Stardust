@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _stateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
             _resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_preferenceNightRestChecker = _mocks.StrictMock<IPreferenceNightRestChecker>();
-			_target = new RestrictionSummaryModel(_schedulingResultStateHolder, new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService())), _stateHolder, _preferenceNightRestChecker);
+			_target = new RestrictionSummaryModel(_schedulingResultStateHolder, new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate()))), _stateHolder, _preferenceNightRestChecker);
             _options = new RestrictionSchedulingOptions
                            {
                                UseScheduling = true,
@@ -422,7 +422,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             var cultureInfo = new CultureInfo(1033);
             regional.CultureLCID = cultureInfo.LCID;
 
-			_target = new RestrictionSummaryModel(_schedulingResultStateHolder, new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService())), _stateHolder, _preferenceNightRestChecker);
+				_target = new RestrictionSummaryModel(_schedulingResultStateHolder, new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate()))), _stateHolder, _preferenceNightRestChecker);
 
             var timeZoneInfoAgent = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _person.PermissionInformation.SetDefaultTimeZone(timeZoneInfoAgent);

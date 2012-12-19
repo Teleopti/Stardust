@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				var principal = _currentTeleoptiPrincipal.Current();
 				_roleToPrincipalCommand.Execute(principal, uow, personRep);
 
-				var allowed = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere) ||
+				var allowed = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MobileReports) ||
 				               _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb) ||
 							   _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AdminWeb);
 

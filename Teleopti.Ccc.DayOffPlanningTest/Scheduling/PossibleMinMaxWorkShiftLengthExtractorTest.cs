@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
             var end = new EndTimeLimitation();
             var time = new WorkTimeLimitation();
             _extractedRestriction = new EffectiveRestriction(start, end, time, null, null, null, new List<IActivityRestriction>());
-				_workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService()));
+				_workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())));
             _schedulingOptions = new SchedulingOptions();
 
 				_target = new PossibleMinMaxWorkShiftLengthExtractor(_restrictionExctractor, _workShiftWorkTime);

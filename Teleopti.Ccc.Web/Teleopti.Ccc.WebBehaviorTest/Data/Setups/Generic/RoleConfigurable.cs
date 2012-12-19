@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			if (!AccessToMobileReports)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere
+				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MobileReports
 				                       select f;
 
 			if (!AccessToExtendedPreferences)
