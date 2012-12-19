@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             _person.AddSchedulePeriod(_schedulePeriod);
             _schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipal.Current.Regional.TimeZone), new List<IPerson>());
         	_preferenceNightRestChecker = _mocks.StrictMock<IPreferenceNightRestChecker>();
-			_model = new RestrictionSummaryModel(_schedulingResultStateHolder, new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService())), _schedulerState, _preferenceNightRestChecker);
+			_model = new RestrictionSummaryModel(_schedulingResultStateHolder, new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate()))), _schedulerState, _preferenceNightRestChecker);
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
             _target = new RestrictionSummaryPresenter(_viewBase, _schedulerState, _gridlockManager, _clipHandlerSchedulePart,
                                       SchedulePartFilter.None, _model, _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance);

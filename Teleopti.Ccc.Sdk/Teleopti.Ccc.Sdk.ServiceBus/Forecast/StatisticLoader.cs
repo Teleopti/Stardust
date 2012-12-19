@@ -15,12 +15,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 	public class StatisticLoader : IStatisticLoader
 	{
 		private readonly IStatisticRepository _statisticRepository;
+		private readonly IStatistic _statistic;
 
-		public StatisticLoader(IStatisticRepository statisticRepository)
+		public StatisticLoader(IStatisticRepository statisticRepository, IStatistic statistic)
 		{
 			_statisticRepository = statisticRepository;
+			_statistic = statistic;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public DateTime Execute(DateTimePeriod period, IWorkloadDay workloadDay, IList<ISkillStaffPeriod> skillStaffPeriods)
 		{
 			var ret = new DateTime();
@@ -33,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				ret = (from t in tasks select t.Interval).Max();
 			}
 
-			new Statistic(workloadDay.Workload).Match(new List<IWorkloadDayBase>{workloadDay}, tasks);
+			_statistic.Match(workloadDay.Workload, new List<IWorkloadDayBase> { workloadDay }, tasks);
 			
 			statisticTasks.AddRange(workloadDay.OpenTaskPeriodList.Select(t => t.StatisticTask));
 			
@@ -45,10 +48,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 														workloadDay.Workload.QueueAdjustments));
 			foreach (var taskPeriod in taskPeriods)
 			{
-				Statistic.UpdateStatisticTask(provider.GetStatisticsForPeriod(taskPeriod.Period), taskPeriod);
+				_statistic.UpdateStatisticTask(provider.GetStatisticsForPeriod(taskPeriod.Period), taskPeriod);
 			}
 			// we don't care about active agents
-			Statistic.Match(skillStaffPeriods, taskPeriods, new List<IActiveAgentCount>());
+			_statistic.Match(skillStaffPeriods, taskPeriods, new List<IActiveAgentCount>());
 
 			return ret;
 		}

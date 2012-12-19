@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 	public class ReforecastPercentCalculator : IReforecastPercentCalculator
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public double Calculate(IWorkloadDay workloadDay, DateTime lastPeriodEndToUse)
 		{
 			var sumTasks = 0.0;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			// how should we know if it is zero because we don't have statistic?????????
 			foreach (var templateTaskPeriod in workloadDay.SortedTaskPeriodList)
 			{
-				if (!(templateTaskPeriod.Period.EndDateTime > lastPeriodEndToUse))
+				if (!(templateTaskPeriod.Period.StartDateTime > lastPeriodEndToUse))
 				{
 					sumTasks += templateTaskPeriod.Tasks;
 					sumStat += templateTaskPeriod.StatisticTask.StatOfferedTasks;

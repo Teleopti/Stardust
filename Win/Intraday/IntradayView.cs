@@ -651,11 +651,13 @@ namespace Teleopti.Ccc.Win.Intraday
                 using (var wizard = new WizardNoRoot<ReforecastModelCollection>(pages))
                 {
                     if (wizard.ShowDialog(this) != DialogResult.OK) return;
-
+					var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
                     var dto = new RecalculateForecastOnSkillCommandCollectionDto
                                   {
 									SkillCommandDtos = new List<RecalculateForecastOnSkillCommandDto>(),
 									ScenarioId = Presenter.RequestedScenario.Id.GetValueOrDefault(),
+									BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(),
+									DataSource = identity.DataSource.Application.Name
 								  };
                     foreach (var model in models.ReforecastModels)
                     {

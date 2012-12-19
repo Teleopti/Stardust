@@ -17,14 +17,16 @@ namespace Teleopti.Interfaces.Messages.General
         /// <summary>
         /// The workloads to recalculate
         /// </summary>
-        public Collection<Guid> WorkloadIds { get; set; }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		public Collection<Guid> WorkloadIds { get; set; }
 
 	}
 
     /// <summary>
     /// Container for Recalculate messages
     /// </summary>
-    public class RecalculateForecastOnSkillMessageCollection : RaptorDomainMessage
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
+	public class RecalculateForecastOnSkillMessageCollection : RaptorDomainMessage
     {
         private readonly Guid _messageId = Guid.NewGuid();
 
@@ -49,6 +51,7 @@ namespace Teleopti.Interfaces.Messages.General
         /// <summary>
         /// Collection of recalculate messages
         /// </summary>
-        public Collection<RecalculateForecastOnSkillMessage> MessageCollection { get; set; } 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		public Collection<RecalculateForecastOnSkillMessage> MessageCollection { get; set; } 
     }
 }

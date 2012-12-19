@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
                 RuleSetBagCollection = new ReadOnlyCollection<IRuleSetBag>(new List<IRuleSetBag>())
             };
 
-            _target = new ExplorerPresenter(_view, _helper, new RuleSetProjectionEntityService(new ShiftCreatorService()),
+				_target = new ExplorerPresenter(_view, _helper, new RuleSetProjectionEntityService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())),
                 _unitOfWorkFactory, _eventAggregator, _mbCacheFactory, model);
             
             

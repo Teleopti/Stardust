@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ServiceModel;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Messages.General;
 
@@ -26,13 +25,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			}
 
 			//todo create correct message
-			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
+			
 
             var message = new RecalculateForecastOnSkillMessageCollection
                 {	
 					MessageCollection = new Collection<RecalculateForecastOnSkillMessage>(),
-					BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-					Datasource = identity.DataSource.Application.Name,
+					BusinessUnitId = command.BusinessUnitId,
+					Datasource = command.DataSource,
 					Timestamp = DateTime.UtcNow,
 					ScenarioId = command.ScenarioId
 				};

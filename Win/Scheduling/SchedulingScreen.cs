@@ -2576,7 +2576,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 
             	disableButtonsIfTeamLeaderMode();
-                if (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp)
+                if (_scheduleView != null && (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp) || e.Reason == GridSelectionReason.ArrowKey)
                 {
                     _scheduleView.Presenter.UpdateFromEditor();
                     updateShiftEditor();
@@ -5845,7 +5845,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (_schedulerMeetingHelper != null)
                 _schedulerMeetingHelper.ModificationOccured -= _schedulerMeetingHelper_ModificationOccured;
             if (schedulerSplitters1 != null)
+            {
+                schedulerSplitters1.HandlePersonRequestView1.RemoveEvents();
                 schedulerSplitters1.TabSkillData.SelectedIndexChanged -= tabSkillData_SelectedIndexChanged;
+            }
             if (_grid != null)
             {
                 _grid.CurrentCellKeyDown -= grid_CurrentCellKeyDown;
