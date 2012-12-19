@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
     public class RequestAllowanceModelTest
     {
         private IRequestAllowanceModel _target;
-        private IPersonRequest _request;
+        private IBudgetGroup _budgetGroup;
         private IUnitOfWorkFactory _uowFactory;
         private IBudgetDayRepository _budgetDayRepository;
         private IBudgetGroupRepository _budgetGroupRepository;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         [SetUp]
         public void Setup()
         {
-            _request = new PersonRequest(new Person());
+            _budgetGroup = new BudgetGroup();
             _uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
             _budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
             _budgetGroupRepository = MockRepository.GenerateMock<IBudgetGroupRepository>();
@@ -44,11 +43,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         [Test]
         public void ShouldInitializeRequestAllowanceModel()
         {
-            _budgetGroupRepository.Stub(x => x.LoadAll()).Return(new List<IBudgetGroup> { new BudgetGroup() });
+            _budgetGroupRepository.Stub(x => x.LoadAll()).Return(new List<IBudgetGroup> { _budgetGroup});
             _budgetDayRepository.Stub(x => x.Find(null, null, new DateOnlyPeriod())).IgnoreArguments().Return(new List<IBudgetDay>());
-            _request.Request = new AbsenceRequest(new Absence(), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-            
-            _target.Initialize(_request, new DateOnly());
+
+            _target.Initialize(_budgetGroup, new DateOnly(2000, 1, 1));
 
             _target.BudgetGroups.Count().Should().Be.EqualTo(1);
         }
@@ -56,11 +54,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         [Test]
         public void ShouldReturnDateOnly()
         {
-            _budgetGroupRepository.Stub(x => x.LoadAll()).Return(new List<IBudgetGroup> { new BudgetGroup() });
+            _budgetGroupRepository.Stub(x => x.LoadAll()).Return(new List<IBudgetGroup> { _budgetGroup });
             _budgetDayRepository.Stub(x => x.Find(null, null, new DateOnlyPeriod())).IgnoreArguments().Return(new List<IBudgetDay>());
-            _request.Request = new AbsenceRequest(new Absence(), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-
-            _target.Initialize(_request, new DateOnly());
+            
+            _target.Initialize(_budgetGroup, new DateOnly(2000, 1, 1));
             _target.SelectedDate.Should().Be.EqualTo(new DateOnly(2000, 1, 1));
         }
 
@@ -71,9 +68,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             budgetGroup.Name = "Test Budget Group";
             _budgetGroupRepository.Stub(x => x.LoadAll()).Return(new List<IBudgetGroup> { budgetGroup });
             _budgetDayRepository.Stub(x => x.Find(null, null, new DateOnlyPeriod())).IgnoreArguments().Return(new List<IBudgetDay>());
-            _request.Request = new AbsenceRequest(new Absence(), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-
-            _target.Initialize(_request, new DateOnly());
+           
+            _target.Initialize(budgetGroup, new DateOnly(2000, 1, 1));
 
             _target.SelectedBudgetGroup.Name.Should().Be.EqualTo("Test Budget Group");
         }
@@ -81,11 +77,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         [Test]
         public void ShouldReloadModel()
         {
-            _budgetGroupRepository.Stub(x => x.LoadAll()).Return(new List<IBudgetGroup> { new BudgetGroup() });
+            _budgetGroupRepository.Stub(x => x.LoadAll()).Return(new List<IBudgetGroup> { _budgetGroup });
             _budgetDayRepository.Stub(x => x.Find(null, null, new DateOnlyPeriod())).IgnoreArguments().Return(new List<IBudgetDay>());
-            _request.Request = new AbsenceRequest(new Absence(), new DateTimePeriod(2011, 12, 1, 2011, 12, 6));
-
-            _target.Initialize(_request, new DateOnly());
+            
+            _target.Initialize(_budgetGroup, new DateOnly(2011, 12, 1));
             
             _target.ReloadModel(new DateOnlyPeriod(new DateOnly(2011,12,1), new DateOnly(2011,12,6)), true);
             _target.BudgetGroups.Count.Should().Be.EqualTo(1);
@@ -94,11 +89,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         [Test]
         public void ShouldMoveToPreviousWeek()
         {
-            _budgetGroupRepository.Stub(x => x.LoadAll()).Return(new List<IBudgetGroup> { new BudgetGroup() });
+            _budgetGroupRepository.Stub(x => x.LoadAll()).Return(new List<IBudgetGroup> { _budgetGroup });
             _budgetDayRepository.Stub(x => x.Find(null, null, new DateOnlyPeriod())).IgnoreArguments().Return(new List<IBudgetDay>());
-            _request.Request = new AbsenceRequest(new Absence(), new DateTimePeriod(2011, 12, 19, 2011, 12, 25));
 
-            _target.Initialize(_request, new DateOnly());
+            _target.Initialize(_budgetGroup, new DateOnly(2011, 12, 19));
             _target.MoveToPreviousWeek();
             _target.VisibleWeek.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2011,12,12), new DateOnly(2011,12,18)));
 
@@ -107,11 +101,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         [Test]
         public void ShouldMoveToNextWeek()
         {
-            _budgetGroupRepository.Stub(x => x.LoadAll()).Return(new List<IBudgetGroup> { new BudgetGroup() });
+            _budgetGroupRepository.Stub(x => x.LoadAll()).Return(new List<IBudgetGroup> { _budgetGroup });
             _budgetDayRepository.Stub(x => x.Find(null, null, new DateOnlyPeriod())).IgnoreArguments().Return(new List<IBudgetDay>());
-            _request.Request = new AbsenceRequest(new Absence(), new DateTimePeriod(2011, 12, 19, 2011, 12, 25));
 
-            _target.Initialize(_request, new DateOnly());
+            _target.Initialize(_budgetGroup, new DateOnly(2011, 12, 19));
             _target.MoveToNextWeek();
             _target.VisibleWeek.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2011, 12, 26), new DateOnly(2012, 1, 1)));
 
@@ -129,22 +122,18 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
                                                                      new ContractSchedule("Test")), new Team());
 
             personPeriod.BudgetGroup = budgetGroup;
-            _request.Person.AddPersonPeriod(personPeriod);
-            _request.Request = new AbsenceRequest(new Absence(), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-            _uowFactory.Stub(x => x.CurrentUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
+             _uowFactory.Stub(x => x.CurrentUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 
-            _target.Initialize(_request, new DateOnly());
-            _request.Person.PersonPeriodCollection.Count.Should().Be.EqualTo(1);
+            _target.Initialize(budgetGroup, new DateOnly(2000, 1, 1));
         }
 
         [Test]
         public void ShouldLoadAbsencesInBudgetGroup()
         {
-            _budgetGroupRepository.Stub(x => x.LoadAll()).Return(new List<IBudgetGroup> { new BudgetGroup() });
+            _budgetGroupRepository.Stub(x => x.LoadAll()).Return(new List<IBudgetGroup> { _budgetGroup });
             _budgetDayRepository.Stub(x => x.Find(null, null, new DateOnlyPeriod())).IgnoreArguments().Return(new List<IBudgetDay>());
-            _request.Request = new AbsenceRequest(new Absence(), new DateTimePeriod(2011, 12, 19, 2011, 12, 25));
-
-            _target.Initialize(_request, new DateOnly());
+            
+            _target.Initialize(_budgetGroup, new DateOnly(2011, 12, 19));
             _target.AbsencesInBudgetGroup.Count.Should().Be.EqualTo(0);
         }
 
@@ -166,11 +155,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             budgetGroup.AddCustomShrinkage(customShrinkage);
             personPeriod.BudgetGroup = budgetGroup;
 
-            _request.Person.AddPersonPeriod(personPeriod);
-            _request.Request = new AbsenceRequest(new Absence(), new DateTimePeriod(2011, 12, 20, 2011, 12, 20));
             _uowFactory.Stub(x => x.CurrentUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 
-            _target.Initialize(_request, new DateOnly());
+            _target.Initialize(budgetGroup, new DateOnly(2011, 12, 20));
             _target.SelectedBudgetGroup.CustomShrinkages.Count().Should().Be.EqualTo(1);
         }
 
@@ -192,13 +179,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             budgetGroup.AddCustomShrinkage(customShrinkage);
             personPeriod.BudgetGroup = budgetGroup;
 
-            _request.Person.AddPersonPeriod(personPeriod);
-            _request.Request = new AbsenceRequest(new Absence(), new DateTimePeriod(2011, 12, 20, 2011, 12, 20));
             _uowFactory.Stub(x => x.CurrentUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 
             _scheduleProjRepository.Stub(x => x.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(2011, 12, 19), new DateOnly(2011, 12, 25)), budgetGroup, new Scenario("test"))).IgnoreArguments().Return(new List<PayloadWorkTime>());
 
-            _target.Initialize(_request, new DateOnly());
+            _target.Initialize(budgetGroup, new DateOnly(2011, 12, 20));
             _target.ReloadModel(new DateOnlyPeriod(new DateOnly(2011, 12, 19), new DateOnly(2011, 12, 25)), true);
             _target.AbsencesInBudgetGroup.Count.Should().Be.EqualTo(1);
         }
@@ -209,13 +194,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             var budgetGroup = new BudgetGroup {Name = "Test Budget Group"};
             _budgetGroupRepository.Stub(x => x.LoadAll()).Return(null);
             _budgetDayRepository.Stub(x => x.Find(null, null, new DateOnlyPeriod())).IgnoreArguments().Return(new List<IBudgetDay>());
-            _request = null;
             _scheduleProjRepository.Stub(
                 x =>
                 x.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(2011, 12, 19), new DateOnly(2011, 12, 25)),
                                             budgetGroup, new Scenario("test"))).IgnoreArguments().Return(
                                                 new List<PayloadWorkTime>());
-            _target.Initialize(_request, new DateOnly());
+            _target.Initialize(null, new DateOnly(2011, 12, 19));
             _target.ReloadModel(new DateOnlyPeriod(new DateOnly(2011, 12, 19), new DateOnly(2011, 12, 25)), true);
 
             _target.SelectedBudgetGroup.Should().Be.InstanceOf<EmptyBudgetGroup>();
@@ -252,7 +236,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
                                             budgetGroup, scenario)).IgnoreArguments().Return(
                                                 new List<PayloadWorkTime>());
 
-            _target.Initialize(request, new DateOnly());
+            _target.Initialize(budgetGroup, new DateOnly(2011, 12, 19));
             _target.ReloadModel(new DateOnlyPeriod(new DateOnly(2011, 12, 19), new DateOnly(2011, 12, 25)), true);
             _target.AbsencesInBudgetGroup.Count.Should().Be.EqualTo(1);
         }
