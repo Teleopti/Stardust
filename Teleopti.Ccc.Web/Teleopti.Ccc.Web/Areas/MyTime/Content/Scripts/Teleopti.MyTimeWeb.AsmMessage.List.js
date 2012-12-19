@@ -115,9 +115,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
             success: function (data, textStatus, jqXHR) {
                 messageItem.isRead(true);
                 _noMoreToLoad();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert('felfelfel! ' + messageItem.messageId());
             }
         });
     }
