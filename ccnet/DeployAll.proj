@@ -178,7 +178,7 @@
 
 			<!-- Wise -->
 			<Wise
-			Include="$(CCNetWorkingDirectory)\Wise\**\*.*
+			Include="$(CCNetWorkingDirectory)\Wise\**\*.*;
 			$(CCNetWorkingDirectory)\Cube\ascmd\bin\$(Configuration)\Ascmd.exe;
 			$(CCNetWorkingDirectory)\Cube\ascmd\bin\$(Configuration)\Microsoft.AnalysisServices.AdomdClient.dll;
 			$(CCNetWorkingDirectory)\Cube\ascmd\bin\$(Configuration)\Microsoft.AnalysisServices.dll" />
