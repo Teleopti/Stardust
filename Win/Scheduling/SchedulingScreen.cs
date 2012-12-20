@@ -2032,7 +2032,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var setTagCommand = new SetTagCommand(_undoRedo, gridSchedulesExtractor, _scheduleView.Presenter,
                                                   _scheduleView, scheduleTag, LockManager);
-            setTagCommand.Execute();
+        	_backgroundWorkerRunning = true;
+        	toolStripStatusLabelStatus.Text = Resources.ScheduleTags;
+			statusStrip1.Refresh();
+			setTagCommand.Execute();
+        	toolStripStatusLabelStatus.Text = Resources.Ready;
+			statusStrip1.Refresh();
+        	_backgroundWorkerRunning = false;
 
             updateSelectionInfo(gridSchedulesExtractor.ExtractSelected());
             Refresh();
