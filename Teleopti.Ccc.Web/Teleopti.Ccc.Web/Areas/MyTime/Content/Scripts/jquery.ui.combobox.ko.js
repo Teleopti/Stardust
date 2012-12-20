@@ -16,14 +16,20 @@ jqueryui: {
 
 (function ($) {
 
-	ko.bindingHandlers['combobox'] = {
-		update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+	ko.bindingHandlers.combobox = {
+		init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
 			var observable = valueAccessor();
 			$(element).combobox({
 				value: ko.utils.unwrapObservable(observable),
 				changed: function (event, ui) {
 					observable(ui.value);
 				}
+			});
+		},
+		update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+			var observable = valueAccessor();
+			$(element).combobox({
+				value: ko.utils.unwrapObservable(observable)
 			});
 		}
 	};
