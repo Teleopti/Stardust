@@ -61,13 +61,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target = new PersonScheduleDayReadModelRepository(UnitOfWorkFactory.Current);
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			var dateOnly = new DateOnly(2012, 8, 29);
 
 			createAndSaveReadModel(personId, teamId);
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var ret = _target.ForTeam(dateOnly, teamId);
+				var ret = _target.ForTeam(new DateTimePeriod(new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc), new DateTime(2012, 8, 29, 12, 0, 0, DateTimeKind.Utc)), teamId);
 				Assert.That(ret.Count, Is.EqualTo(1));
 			}
 		}

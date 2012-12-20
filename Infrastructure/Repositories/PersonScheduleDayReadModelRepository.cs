@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		void SaveReadModel(PersonScheduleDayReadModel model);
 		bool IsInitialized();
-		IList<PersonScheduleDayReadModel> ForTeam(DateOnly dateOfInterest, Guid teamId);
+		IList<PersonScheduleDayReadModel> ForTeam(DateTimePeriod period, Guid teamId);
 	}
 
 	public class PersonScheduleDayReadModelRepository : IPersonScheduleDayReadModelRepository
@@ -28,12 +28,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
-		public IList<PersonScheduleDayReadModel> ForTeam(DateOnly dateOfInterest, Guid teamId)
+		public IList<PersonScheduleDayReadModel> ForTeam(DateTimePeriod period, Guid teamId)
 		{
 				return ((NHibernateUnitOfWork)_unitOfWorkFactory.CurrentUnitOfWork()).Session.CreateSQLQuery(
-					"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE TeamId=:TeamId AND BelongsToDate=:Date")
+					"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE TeamId=:TeamId AND ShiftStart IS NOT NULL AND ShiftStart < :DateEnd AND ShiftEnd > :DateStart")
 					.SetGuid("TeamId", teamId)
-					.SetDateTime("Date", dateOfInterest)
+					.SetDateTime("DateStart", period.StartDateTime)
+					.SetDateTime("DateEnd", period.EndDateTime)
 					 .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
 					 .SetReadOnly(true)
 					 .List<PersonScheduleDayReadModel>();

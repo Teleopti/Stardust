@@ -11,12 +11,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public string Person { get; set; }
 		public DateTime Date { get; set; }
-		public TimeSpan StartTime { get; set; }
-		public TimeSpan EndTime { get; set; }
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
 		public string Activity { get; set; }
-		public TimeSpan LunchStartTime { get; set; }
-		public TimeSpan LunchEndTime { get; set; }
+		public string LunchStartTime { get; set; }
+		public string LunchEndTime { get; set; }
 		public string LunchActivity { get; set; }
+
+		private static TimeSpan AsTimeSpan(string value)
+		{
+			TimeSpan result;
+			TimeSpan.TryParse(value, out result);
+			return result;
+		}
 
 		public void Apply(IUnitOfWork uow)
 		{
@@ -39,8 +46,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			                           				TeamId = personPeriod.Team.Id.GetValueOrDefault(),
 			                           				PersonId = person.Id.GetValueOrDefault(),
 			                           				Date = Date,
-			                           				ShiftStart = TimeZoneInfo.ConvertTimeToUtc(Date.Add(StartTime), timeZone),
-			                           				ShiftEnd = TimeZoneInfo.ConvertTimeToUtc(Date.Add(EndTime), timeZone),
+			                           				ShiftStart = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(StartTime)), timeZone),
+			                           				ShiftEnd = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(EndTime)), timeZone),
 			                           				Shift = Newtonsoft.Json.JsonConvert.SerializeObject(new
 			                           				                                                    	{
 			                           				                                                    		Date,
@@ -51,38 +58,38 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			                           				                                                    	person.Id.GetValueOrDefault().
 			                           				                                                    	ToString(),
 			                           				                                                    		ContractTimeMinutes =
-			                           				                                                    	EndTime.Subtract(StartTime).
-			                           				                                                    	Subtract(LunchEndTime).Add(
-			                           				                                                    		LunchStartTime).TotalMinutes,
+			                           				                                                    	AsTimeSpan(EndTime).Subtract(AsTimeSpan(StartTime)).
+			                           				                                                    	Subtract(AsTimeSpan(LunchEndTime)).Add(
+			                           				                                                    		AsTimeSpan(LunchStartTime)).TotalMinutes,
 			                           				                                                    		WorkTimeMinutes =
-			                           				                                                    	EndTime.Subtract(StartTime).
-			                           				                                                    	Subtract(LunchEndTime).Add(
-			                           				                                                    		LunchStartTime).TotalMinutes,
+			                           				                                                    	AsTimeSpan(EndTime).Subtract(AsTimeSpan(StartTime)).
+			                           				                                                    	Subtract(AsTimeSpan(LunchEndTime)).Add(
+			                           				                                                    		AsTimeSpan(LunchStartTime)).TotalMinutes,
 			                           				                                                    		Projection = new[]
 			                           				                                                    		             	{
 			                           				                                                    		             		new
 			                           				                                                    		             			{
 			                           				                                                    		             				Color = ColorTranslator. ToHtml(mainActivity.DisplayColor),
 			                           				                                                    		             				Title = mainActivity.Name,
-																																			Start = TimeZoneInfo.ConvertTimeToUtc(Date.Add(StartTime),timeZone),
-																																			End = TimeZoneInfo.ConvertTimeToUtc(Date.Add(LunchStartTime),timeZone),
-			                           				                                                    		             				Minutes = LunchStartTime.Subtract(StartTime).TotalMinutes
+																																			Start = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(StartTime)),timeZone),
+																																			End = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(LunchStartTime)),timeZone),
+			                           				                                                    		             				Minutes = AsTimeSpan(LunchStartTime).Subtract(AsTimeSpan(StartTime)).TotalMinutes
 			                           				                                                    		             			},
 																																		new
 			                           				                                                    		             			{
 			                           				                                                    		             				Color = ColorTranslator. ToHtml(lunchActivity.DisplayColor),
 			                           				                                                    		             				Title = lunchActivity.Name,
-																																			Start = TimeZoneInfo.ConvertTimeToUtc(Date.Add(LunchStartTime),timeZone),
-																																			End = TimeZoneInfo.ConvertTimeToUtc(Date.Add(LunchEndTime),timeZone),
-			                           				                                                    		             				Minutes = LunchEndTime.Subtract(LunchStartTime).TotalMinutes
+																																			Start = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(LunchStartTime)),timeZone),
+																																			End = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(LunchEndTime)),timeZone),
+			                           				                                                    		             				Minutes = AsTimeSpan(LunchEndTime).Subtract(AsTimeSpan(LunchStartTime)).TotalMinutes
 			                           				                                                    		             			},
 																																		new
 			                           				                                                    		             			{
 			                           				                                                    		             				Color = ColorTranslator. ToHtml(mainActivity.DisplayColor),
 			                           				                                                    		             				Title = mainActivity.Name,
-																																			Start = TimeZoneInfo.ConvertTimeToUtc(Date.Add(LunchEndTime),timeZone),
-																																			End = TimeZoneInfo.ConvertTimeToUtc(Date.Add(EndTime),timeZone),
-			                           				                                                    		             				Minutes = EndTime.Subtract(LunchEndTime).TotalMinutes
+																																			Start = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(LunchEndTime)),timeZone),
+																																			End = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(EndTime)),timeZone),
+			                           				                                                    		             				Minutes = AsTimeSpan(EndTime).Subtract(AsTimeSpan(LunchEndTime)).TotalMinutes
 			                           				                                                    		             			}
 			                           				                                                    		             	}
 			                           				                                                    	})

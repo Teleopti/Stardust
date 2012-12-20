@@ -41,19 +41,21 @@ Scenario: View team schedule
 	| LunchActivity  | Lunch        |
 	When I view schedules for '2012-12-02'
 	Then I should see schedule for 'Pierre Baldi'
-
-	@ignore
-Scenario: View only my team's schedule
-	Given I am an agent in a team with access to the whole site
-	And I have a shift today
-	And I have a colleague
-	And My colleague has a shift today
-	And I have a colleague in another team
-	And The colleague in the other team has a shift today
-	When I view team schedule
-	Then I should see my schedule
-	And I should see my colleague's schedule
-	And I should not see the other colleague's schedule
+	
+Scenario: View team schedule with night shift from yesterday
+	Given I am a team leader for 'Team green' with role 'Full access to Admin web'
+	And there is a shift with
+	| Field          | Value        |
+	| Person         | Pierre Baldi |
+	| Date           | 2012-12-02   |
+	| StartTime      | 20:00        |
+	| EndTime        | 1.04:00      |
+	| Activity       | Phone        |
+	| LunchStartTime | 23:30        |
+	| LunchEndTime   | 1.00:15      |
+	| LunchActivity  | Lunch        |
+	When I view schedules for '2012-12-03'
+	Then I should see schedule for 'Pierre Baldi'
 
 	@ignore
 Scenario: View team schedule, day off

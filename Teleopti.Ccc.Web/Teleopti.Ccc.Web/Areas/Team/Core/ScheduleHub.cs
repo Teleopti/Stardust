@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Web.Areas.Team.Core
 		[UnitOfWork]
 		public IEnumerable<object> SubscribeTeamSchedule(Guid teamId, DateTime date)
 		{
-			var schedule = _personScheduleDayReadModelRepository.ForTeam(new DateOnly(date), teamId);
+			var dateTimePeriod = new DateTimePeriod(date, date.AddHours(25));
+			var schedule = _personScheduleDayReadModelRepository.ForTeam(dateTimePeriod, teamId);
 			return schedule.Select(s => JsonConvert.DeserializeObject(s.Shift));
 		}
 	}

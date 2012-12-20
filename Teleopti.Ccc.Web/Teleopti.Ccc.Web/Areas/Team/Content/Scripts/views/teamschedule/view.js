@@ -54,7 +54,8 @@ define([
 
 				var loadSchedules = function () {
 					var queryDate = teamSchedule.SelectedDate();
-					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, utcFromMoment(queryDate)).done(function (schedules) {
+					queryDate.utc();
+					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, queryDate.toDate()).done(function (schedules) {
 						timeLine.Agents.removeAll();
 						teamSchedule.Agents.removeAll();
 
