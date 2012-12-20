@@ -6,6 +6,7 @@ On Error Resume Next 'With out this, any error will crash MsiExec
 
 'declare
 Dim dummy
+Dim strPath
 Dim oShell 
 Dim AsServerName
 Dim returnValue
@@ -14,6 +15,10 @@ Dim PmAuthMode
 Dim INSTALLDIR
 Dim USERNAME
 Const xmlaStatement="<Statement></Statement>"
+
+'current path
+strPath = Left(Wscript.ScriptFullName,(Len(Wscript.ScriptFullName)-Len(Wscript.ScriptName)-1))
+
 
 'init
 Set oShell = CreateObject("WScript.Shell")
@@ -32,7 +37,7 @@ Else
 End If
 
 'Connect using current windows user
-returnValue = oShell.Run("ascmd.exe -S " & chr(34) & AsServerName & chr(34) & " -Q " & chr(34) & xmlaStatement & chr(34), 0, true)
+returnValue = oShell.Run(chr(34) & strPath & "\ascmd.exe" & chr(34) & " -S " & chr(34) & AsServerName & chr(34) & " -Q " & chr(34) & xmlaStatement & chr(34), 0, true)
 If Err.Number = 0 Then
 	If returnValue <> 0 Then
 			dummy=Msgbox("Could not connect to AS Server using current Windows account" &_

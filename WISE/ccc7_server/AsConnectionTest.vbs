@@ -5,6 +5,7 @@ Option Explicit
 On Error Resume Next 'Supress all errors since they will crash MsiExec
 
 'declare
+Dim strPath
 Dim dummy
 Dim oShell 
 Dim username
@@ -16,9 +17,12 @@ Dim PmAuthMode
 Const isAnonymous="Anonymous"
 Const xmlaStatement="<Statement></Statement>"
 
+'current path
+strPath = Left(Wscript.ScriptFullName,(Len(Wscript.ScriptFullName)-Len(Wscript.ScriptName)-1))
+
 'init
 Set oShell = CreateObject("WScript.Shell")
-debug = true
+debug = false
 returnValue=0
 
 'Get input
@@ -36,7 +40,7 @@ End If
 
 'If PM in impersonate mode try connect to AS account thoose Windows credentials
 if PmAuthMode = isAnonymous Then
-	returnValue = oShell.Run("ascmd.exe -S " & chr(34) & AsServerName & chr(34) & " -U " & chr(34) & username & chr(34) & " -P " & chr(34) & password & chr(34) & " -Q " & chr(34) & xmlaStatement & chr(34), 0, true)
+	returnValue = oShell.Run(chr(34) & strPath & "\ascmd.exe" & chr(34) & " -S " & chr(34) & AsServerName & chr(34) & " -U " & chr(34) & username & chr(34) & " -P " & chr(34) & password & chr(34) & " -Q " & chr(34) & xmlaStatement & chr(34), 0, true)
 	If Err.Number = 0 Then
 		If returnValue <> 0 Then
 			dummy=Msgbox("Could not connect to AS Server using Windows impersonation" &_

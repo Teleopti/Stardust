@@ -62,7 +62,7 @@
 		<VersionFile Include="$(CCNetWorkingDirectory)\ActiveBranchVersion.txt"/>
 		<MajorVersionFile Include="$(CCNetWorkingDirectory)\ActiveMajorVersion.txt"/>
 		<PreReqTool Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\CCC.CCC7Prereq.csproj" />
-		<AsCmd Include="$(CCNetWorkingDirectory)\Cube\ascmd\ascmd.csproj" />
+		<AsCmdProj Include="$(CCNetWorkingDirectory)\Cube\ascmd\ascmd.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>
@@ -90,7 +90,7 @@
 
 	<Target Name="CompileExtraApps">
 		<MSBuild Projects="@(PreReqTool)" Properties="Configuration=Release" Targets="Build" />
-		<MSBuild Projects="@(AsCmd)" Properties="Configuration=Release" Targets="Build" />
+		<MSBuild Projects="@(AsCmdProj)" Properties="Configuration=Release" Targets="Build" />
 	</Target>
 
 	<Target Name="CleanUpUnwantedFiles">
