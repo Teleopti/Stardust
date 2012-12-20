@@ -11219,4 +11219,12 @@ These options are activated:
     <value>Reforecast</value>
     <comment>Reforecast form in Intraday</comment>
   </data>
+  <data name="PeopleCap" xml:space="preserve">
+    <value>People</value>
+    <comment>People toolstrip in Permissions </comment>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+    <comment>Remove person from Role</comment>
+  </data>
 </root>
