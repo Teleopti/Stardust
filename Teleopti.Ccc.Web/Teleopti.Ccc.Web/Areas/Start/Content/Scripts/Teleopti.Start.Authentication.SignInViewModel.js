@@ -52,6 +52,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 					dataSource.Type = data[i].Type;
 					self.DataSources.push(dataSource);
 				}
+				$('#DataSources').show();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 500) {

@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SelectApplicationTestDataSource()
 		{
+			EventualAssert.That(() => DataSources.DisplayVisible(), Is.True);
 			var dataSource = DataSources.Element(Find.BySelector(".application a:contains(TestData)"));
 			EventualAssert.That(() => dataSource.Exists, Is.True);
 			dataSource.EventualClick();
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SelectWindowsTestDataSource()
 		{
+			EventualAssert.That(() => DataSources.DisplayVisible(), Is.True);
 			var dataSource = DataSources.Element(Find.BySelector(".windows a:contains(TestData)"));
 			EventualAssert.That(() => dataSource.Exists, Is.True);
 			dataSource.EventualClick();
