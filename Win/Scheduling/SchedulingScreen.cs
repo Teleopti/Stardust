@@ -3540,6 +3540,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             //Next line will start work on another background thread.
             //No code after next line please.
             RecalculateResources();
+			//afterBackgroundWorkersCompleted(false);
 
         }
 
@@ -3693,6 +3694,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             //Next line will start work on another background thread.
             //No code after next line please.
             RecalculateResources();
+			//afterBackgroundWorkersCompleted(false);
         }
 
         private void _backgroundWorkerOptimization_ProgressChanged(object sender, ProgressChangedEventArgs e)
