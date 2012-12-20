@@ -101,8 +101,10 @@ namespace Teleopti.Ccc.Domain.Optimization
                     var isPeriodWorse = newPeriodValue > oldPeriodValue;
                     if (isPeriodWorse)
                     {
-                        _groupMoveTimeOptimizerExecuter.Rollback(dayToBeLengthen);
-                        _groupMoveTimeOptimizerExecuter.Rollback(dayToBeShorten);
+                    	_groupMoveTimeOptimizerExecuter.Rollback(scheduleDictionary);
+						_groupMoveTimeOptimizerExecuter.Rollback(scheduleDictionary);
+						//_groupMoveTimeOptimizerExecuter.Rollback(dayToBeLengthen);
+						//_groupMoveTimeOptimizerExecuter.Rollback(dayToBeShorten);
                     }
                 }
                 reportProgress(dayToBeLengthen,dayToBeShorten, success, pendingOptimizers.Count, executes, person);

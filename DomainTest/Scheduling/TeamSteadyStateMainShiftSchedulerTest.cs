@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	public class TeamSteadyStateMainShiftSchedulerTest
 	{
 		private MockRepository _mocks;
-		private IGroupMatrixHelper _groupMatrixHelper;
 		private TeamSteadyStateMainShiftScheduler _target;
 		private DateOnly _dateOnly;
 		private IPerson _person1;
@@ -41,13 +40,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private Guid _guid;
 		private ITeamSteadyStateCoherentChecker _coherentChecker;
 		private ITeamSteadyStateScheduleMatrixProFinder _teamSteadyStateScheduleMatrixProFinder;
+		private IResourceOptimizationHelper _resourceOptimizationHelper;
+		private DateTimePeriod _dateTimePeriod;
 	
 		[SetUp]
 		public void Setup()
 		{
 			_guid = Guid.NewGuid();
 			_mocks = new MockRepository();
-			_groupMatrixHelper = _mocks.StrictMock<IGroupMatrixHelper>();
 			_dateOnly = new DateOnly(2012, 1, 1);
 			_person1 = PersonFactory.CreatePersonWithPersonPeriod(_dateOnly, new List<ISkill>());
 			_person2 = PersonFactory.CreatePersonWithPersonPeriod(_dateOnly, new List<ISkill>());
@@ -70,7 +70,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_mainShift2 = _mocks.StrictMock<IMainShift>();
 			_coherentChecker = _mocks.StrictMock<ITeamSteadyStateCoherentChecker>();
 			_teamSteadyStateScheduleMatrixProFinder = _mocks.StrictMock<ITeamSteadyStateScheduleMatrixProFinder>();
-			_target = new TeamSteadyStateMainShiftScheduler(_groupMatrixHelper, _coherentChecker, _teamSteadyStateScheduleMatrixProFinder);
+			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
+			_dateTimePeriod = new DateTimePeriod(2012, 1, 1, 2012, 1, 2);
+			_target = new TeamSteadyStateMainShiftScheduler(_coherentChecker, _teamSteadyStateScheduleMatrixProFinder, _resourceOptimizationHelper);
 		}
 
 		[Test]
@@ -142,7 +144,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay1, _groupPerson.GroupMembers)).Return(_scheduleDay1);
 				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay1)).Return(_scheduleMatrixPro);
 				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay2)).Return(_scheduleMatrixPro2);
-				Expect.Call(() => _groupMatrixHelper.SafeResourceCalculate(new List<IScheduleDay> { _scheduleDay1 }));
+				Expect.Call(_scheduleDay2.Period).Return(_dateTimePeriod);
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_dateOnly, true, true, new List<IScheduleDay>(), new List<IScheduleDay> {_scheduleDay2}));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_dateOnly.AddDays(1), true, true, new List<IScheduleDay>(), new List<IScheduleDay> { _scheduleDay2 }));
 			}
 
 			using(_mocks.Playback())
@@ -151,6 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Assert.IsTrue(result);	
 			}
 		}
+
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldScheduleFirstMemberIfNoMainShift()
@@ -168,7 +173,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro);
 				Expect.Call(_groupSchedulingService.ScheduleOneDayOnePersonSteadyState(_dateOnly, _person1, _schedulingOptions, _groupPerson, _matrixes, _rollbackService)).Return(true).IgnoreArguments();
 				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
-				Expect.Call(() => _groupMatrixHelper.SafeResourceCalculate(new List<IScheduleDay> { _scheduleDay1 }));
 			}
 
 			using(_mocks.Playback())
@@ -227,7 +231,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay1, _groupPerson.GroupMembers)).Return(_scheduleDay1);
 				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay1)).Return(_scheduleMatrixPro);
 				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay2)).Return(_scheduleMatrixPro2);
-				Expect.Call(() => _groupMatrixHelper.SafeResourceCalculate(new List<IScheduleDay> { _scheduleDay1 }));
 			}
 
 			using (_mocks.Playback())
@@ -259,7 +262,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay1, _groupPerson.GroupMembers)).Return(_scheduleDay1);
 				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay1)).Return(_scheduleMatrixPro);
 				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay2)).Return(null);
-				Expect.Call(() => _groupMatrixHelper.SafeResourceCalculate(new List<IScheduleDay> { _scheduleDay1 }));
 			}
 
 			using (_mocks.Playback())
@@ -314,7 +316,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay1, _groupPerson.GroupMembers)).Return(_scheduleDay1);
 				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay1)).Return(_scheduleMatrixPro);
-				Expect.Call(() => _groupMatrixHelper.SafeResourceCalculate(new List<IScheduleDay> { _scheduleDay1 }));
 			}
 
 			using (_mocks.Playback())
@@ -345,7 +346,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay1, _groupPerson.GroupMembers)).Return(_scheduleDay1);
 				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay1)).Return(_scheduleMatrixPro);
-				Expect.Call(() => _groupMatrixHelper.SafeResourceCalculate(new List<IScheduleDay> { _scheduleDay1 }));
 			}
 
 			using (_mocks.Playback())
@@ -383,7 +383,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay2, _groupPerson.GroupMembers)).Return(_scheduleDay2);
 				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay1)).Return(_scheduleMatrixPro);
 				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay2)).Return(_scheduleMatrixPro2);
-				Expect.Call(() => _groupMatrixHelper.SafeResourceCalculate(new List<IScheduleDay> { _scheduleDay2 }));
 			}
 
 			using (_mocks.Playback())
