@@ -235,15 +235,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 
                 using (new MessageBrokerSendEnabler())
                 {
-                    unitOfWork.PersistAll();
-                    _updateScheduleProjectionReadModel.Execute(_scenarioProvider.DefaultScenario(),
-                                                               _absenceRequest.Period, _absenceRequest.Person);
+                	unitOfWork.PersistAll();
 
-					unitOfWork.PersistAll();
+                	updateScheduleReadModelsIfRequestWasApproved(unitOfWork);
                 }
             }
             ClearStateHolder();
         }
+
+    	private void updateScheduleReadModelsIfRequestWasApproved(IUnitOfWork unitOfWork)
+    	{
+    		if (_personRequest.IsApproved)
+    		{
+    			_updateScheduleProjectionReadModel.Execute(_scenarioProvider.DefaultScenario(),
+    			                                           _absenceRequest.Period, _absenceRequest.Person);
+
+    			unitOfWork.PersistAll();
+    		}
+    	}
 
     	private bool personAlreadyAbsentDuringRequestPeriod()
     	{
