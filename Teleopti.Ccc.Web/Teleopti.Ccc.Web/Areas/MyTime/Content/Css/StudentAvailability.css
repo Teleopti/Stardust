@@ -1,6 +1,10 @@
 ﻿
 .student-availability-next-day-checkbox {
-    width: 17px;
-    padding: 0 0 0 0;
-    vertical-align: baseline;
+	width: 17px;
+	padding: 0 0 0 0;
+	vertical-align: baseline;
+}
+
+#ui-tooltip-edit-student-availability {
+	max-width: 220px;
 }
