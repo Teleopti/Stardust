@@ -1731,6 +1731,7 @@ namespace Teleopti.Ccc.Win.Permissions
         {
             Cursor.Current = Cursors.WaitCursor;
             initializePermissionsExplorer();
+			listViewRoles.Select();
             Cursor.Current = Cursors.Default;
         }
 
