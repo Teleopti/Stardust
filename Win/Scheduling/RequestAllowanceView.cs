@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             requestAllowanceGridControl.NextButtonClicked += requestAllowanceGridControlNextButtonClicked;
         }
 
-        public RequestAllowanceView(IPersonRequest personRequest, DateOnly defaultDate) : this()
+        public RequestAllowanceView(IBudgetGroup budgetGroup, DateOnly defaultDate) : this()
         {
             var currentUowFactory = UnitOfWorkFactory.Current;
             _presenter = new RequestAllowancePresenter(this,
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                            new BudgetGroupRepository(currentUowFactory),
                                                            new ScenarioRepository(currentUowFactory),
                                                            new ScheduleProjectionReadOnlyRepository(currentUowFactory)));
-            _presenter.Initialize(personRequest, defaultDate);
+            _presenter.Initialize(budgetGroup, defaultDate);
             initializeGrid();
             _presenter.InitializeGridBinding();
             initialize();

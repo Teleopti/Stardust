@@ -518,20 +518,6 @@ namespace Teleopti.Ccc.Win.Main
 					0);
 
 			return (answer == DialogResult.Yes);
-
-
-			//message = BuildApplicationFunctionErrorMessage(addedFunctions, deletedFunctions);
-
-			//MessageBox.Show(
-			//this,
-			//message,
-			//Resources.VerifyingPermissionsTreeDots,
-			//MessageBoxButtons.OK,
-			//MessageBoxIcon.Error,
-			//MessageBoxDefaultButton.Button1, 
-			//0);
-			
-			//return false;
 		}
 
 		private static string BuildApplicationFunctionWarningMessage(CheckRaptorApplicationFunctionsResult result)
@@ -540,9 +526,8 @@ namespace Teleopti.Ccc.Win.Main
 			// Added
 			if (result.AddedFunctions.Any())
 			{
-				string appFunctionsText =
-					result.AddedFunctions.Aggregate(string.Empty, (current, appFunction) => current + (appFunction.FunctionPath + ", "));
-				appFunctionsText = appFunctionsText.Substring(0, appFunctionsText.Length - 2);
+				var p = result.AddedFunctions.Select(f => f.FunctionPath);
+				var appFunctionsText = string.Join(", ", p);
 
 				message = "The following Application Function(s) has been added recently in code but not found in the database: "
 							+ appFunctionsText
@@ -553,9 +538,8 @@ namespace Teleopti.Ccc.Win.Main
 			// Deleted
 			if (result.DeletedFunctions.Any())
 			{
-				string appFunctionsText =
-					result.DeletedFunctions.Aggregate(string.Empty, (current, appFunction) => current + (appFunction.FunctionPath + ", "));
-				appFunctionsText = appFunctionsText.Substring(0, appFunctionsText.Length - 2);
+				var p = result.DeletedFunctions.Select(f => f.FunctionPath);
+				var appFunctionsText = string.Join(", ", p);
 
 				message = "The following Application Function(s) has been removed recently from code but still exists in the database: "
 						   + appFunctionsText
@@ -564,37 +548,6 @@ namespace Teleopti.Ccc.Win.Main
 
 			return message;
 		}
-
-		//private static string BuildApplicationFunctionErrorMessage(IEnumerable<IApplicationFunction> addedFunctions, IEnumerable<IApplicationFunction> deletedFunctions)
-		//{
-		//    string message = string.Empty;
-		//    // Added
-		//    if (addedFunctions.Any())
-		//    {
-		//        string appFunctionsText =
-		//            addedFunctions.Aggregate(string.Empty, (current, appFunction) => current + (appFunction.FunctionPath + ", "));
-		//        appFunctionsText = appFunctionsText.Substring(0, appFunctionsText.Length - 2);
-
-		//        message = "The following Application Function(s) has been added recently in code but not found in the database: "
-		//                    + appFunctionsText
-		//                    + "\nApply the suitable database script.";
-		//        return message;
-		//    }
-
-		//    // Deleted
-		//    if (deletedFunctions.Any())
-		//    {
-		//        string appFunctionsText =
-		//            deletedFunctions.Aggregate(string.Empty, (current, appFunction) => current + (appFunction.FunctionPath + ", "));
-		//        appFunctionsText = appFunctionsText.Substring(0, appFunctionsText.Length - 2);
-
-		//        message = "The following Application Function(s) has been removed recently from code but still exists in the database: "
-		//                   + appFunctionsText
-		//                   + "\nApply the suitable database script.";
-		//    }
-		//    return message;
-		//}
-
 
 		private bool CheckAndReportInvalidDataSources()
 		{

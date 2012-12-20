@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         HashSet<IAbsence> AbsencesInBudgetGroup { get; }
         IList<IBudgetGroup> BudgetGroups { get; }
         IList<BudgetAbsenceAllowanceDetailModel> VisibleModel { get; }
-        void Initialize(IPersonRequest personRequest, DateOnly defaultDate);
+        void Initialize(IBudgetGroup budgetGroup, DateOnly defaultDate);
         void ReloadModel(DateOnlyPeriod visibleWeek, bool reloadAllowance);
         void MoveToPreviousWeek();
         void MoveToNextWeek();
@@ -80,34 +81,29 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
         public IList<BudgetAbsenceAllowanceDetailModel> VisibleModel { get; private set; }
 
-        public void Initialize(IPersonRequest personRequest, DateOnly defaultDate)
+        public void Initialize(IBudgetGroup budgetGroup, DateOnly defaultDate)
         {
             using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                _selectedDate = personRequest != null ? personRequest.RequestedDate : defaultDate;
+                _selectedDate = defaultDate;
                 calculateVisibleWeek();
                 loadDefaultScenario();
                 loadBudgetGroups();
-                initializeSelectedBudgetGroup(personRequest);
+                initializeSelectedBudgetGroup(budgetGroup);
             }
         }
 
         private void calculateVisibleWeek()
         {
-            VisibleWeek = DateHelper.GetWeekPeriod(SelectedDate, CultureInfo.CurrentCulture);
+            VisibleWeek = DateHelper.GetWeekPeriod(SelectedDate, TeleoptiPrincipal.Current.Regional.Culture);
         }
 
-        private void initializeSelectedBudgetGroup(IPersonRequest personRequest)
+        private void initializeSelectedBudgetGroup(IBudgetGroup budgetGroup)
         {
-            if(personRequest != null)
+            if (budgetGroup != null)
             {
-                var personPeriod = personRequest.Person.PersonPeriodCollection.Where(
-                   p => p.Period.Contains(SelectedDate)).FirstOrDefault();
-                if (personPeriod != null && personPeriod.BudgetGroup != null)
-                {
-                    SelectedBudgetGroup = personPeriod.BudgetGroup;
-                    return;
-                }
+                SelectedBudgetGroup = budgetGroup;
+                return;
             }
             SelectedBudgetGroup = BudgetGroups.FirstOrDefault() ?? new EmptyBudgetGroup();
         }
