@@ -8,10 +8,12 @@ namespace Teleopti.Ccc.Web.Areas.Team.Controllers
 	public class ApplicationController : Controller
 	{
 		private readonly IPrincipalAuthorization _principalAuthorization;
-
-		public ApplicationController(IPrincipalAuthorization principalAuthorization)
+		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+		
+		public ApplicationController(IPrincipalAuthorization principalAuthorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
 		{
 			_principalAuthorization = principalAuthorization;
+			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 		}
 
 		public FilePathResult Index()
@@ -24,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Team.Controllers
 		{
 			return Json(new
 			            	{
-			            		UserName = Thread.CurrentPrincipal.Identity.Name,
+			            		UserName = _currentTeleoptiPrincipal.Current().Identity.Name,
 								IsMyTimeAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
 								IsMobileReportsAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MobileReports),
 			            	}, JsonRequestBehavior.AllowGet);

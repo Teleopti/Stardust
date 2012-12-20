@@ -8,7 +8,7 @@
 *
 */
 
-/// <reference path="..\..\SignalR.Client.JS\Scripts\jquery-1.6.2.js" />
+/// <reference path="..\..\SignalR.Client.JS\Scripts\jquery-1.6.4.js" />
 /// <reference path="jquery.signalR.js" />
 (function ($, window) {
 	/// <param name="$" type="jQuery" />
@@ -82,10 +82,15 @@
 	signalR.scheduleHub.client = {};
 	signalR.scheduleHub.server = {
 		availableTeams: function (date) {
+			/// <summary>Calls the AvailableTeams method on the server-side scheduleHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
+			/// <param name=\"date\" type=\"Object\">Server side type is System.DateTime</param>
 			return signalR.scheduleHub.invoke.apply(signalR.scheduleHub, $.merge(["AvailableTeams"], $.makeArray(arguments)));
 		},
 
 		subscribeTeamSchedule: function (teamId, date) {
+			/// <summary>Calls the SubscribeTeamSchedule method on the server-side scheduleHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
+			/// <param name=\"teamId\" type=\"Object\">Server side type is System.Guid</param>
+			/// <param name=\"date\" type=\"Object\">Server side type is System.DateTime</param>
 			return signalR.scheduleHub.invoke.apply(signalR.scheduleHub, $.merge(["SubscribeTeamSchedule"], $.makeArray(arguments)));
 		}
 	};
