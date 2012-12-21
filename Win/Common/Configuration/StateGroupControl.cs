@@ -39,7 +39,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         void ButtonDeleteClick(object sender, EventArgs e)
         {
-            DeleteStateGroup();
+			if (treeViewAdv1.SelectedNode == null)
+				return;
+
+			var stateGroupToDelete = treeViewAdv1.SelectedNode.Tag as IRtaStateGroup;
+			if(stateGroupToDelete != null)
+				DeleteStateGroup(stateGroupToDelete);
+			var stateToDelete = treeViewAdv1.SelectedNode.Tag as IRtaState;
+			if (stateToDelete != null)
+				DeleteState(stateToDelete);
         }
 
         void ButtonNewClick(object sender, EventArgs e)
@@ -47,12 +55,24 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             AddStateGroup();
         }
 
-        private void DeleteStateGroup()
-        {
-            if (treeViewAdv1.SelectedNode == null)
-                return;
+		private void DeleteState(IRtaState stateToDelete)
+		{
+			string text = string.Format(
+				CurrentCulture,
+				Resources.AreYouSureYouWantToDeleteItem,
+				stateToDelete.Name);
 
-            var stateGroupToDelete = treeViewAdv1.SelectedNode.Tag as IRtaStateGroup;
+			string caption = string.Format(CurrentCulture, Resources.ConfirmDelete);
+			DialogResult response = ViewBase.ShowConfirmationMessage(text, caption);
+			if (response != DialogResult.Yes) return;
+
+			((IRtaStateGroup)stateToDelete.Parent).DeleteState(stateToDelete);
+			treeViewAdv1.SelectedNode.Remove();
+		}
+
+		private void DeleteStateGroup(IRtaStateGroup stateGroupToDelete)
+        {
+            
             // A state group set as default can not be deleted
         	if (stateGroupToDelete == null || stateGroupToDelete.DefaultStateGroup) return;
 
@@ -102,20 +122,23 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private TreeNodeAdv findNodeWithState(IRtaState state, TreeNodeAdv node)
 		{
+			TreeNodeAdv retNode = null;
 			if(node == null)
 			{
 				foreach (TreeNodeAdv treeNode in treeViewAdv1.Nodes)
 				{
-					return findNodeWithState(state, treeNode);
+					retNode = findNodeWithState(state, treeNode);
+					if (retNode != null) return retNode;
 				}
 			}
 			if (node.Tag.Equals(state))
 				return node;
 			foreach (TreeNodeAdv treeNodeAdv in node.Nodes)
 			{
-				return findNodeWithState(state, treeNodeAdv);
+				retNode = findNodeWithState(state, treeNodeAdv);
+				if (retNode != null) return retNode;
 			}
-			return null;
+			return retNode;
 		}
 
         private void AddStateGroup()
@@ -585,6 +608,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         public ViewType ViewType
         {
             get { return ViewType.StateGroup; }
-        }
+        }	
     }
 }
