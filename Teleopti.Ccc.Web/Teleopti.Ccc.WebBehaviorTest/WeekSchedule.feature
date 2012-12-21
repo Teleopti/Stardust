@@ -208,8 +208,8 @@ Scenario: Show timeline with no schedule
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field						| Value |
 	| start timeline			| 0:00  |
-	| end timeline				| 23:59 |
-	| number of timeline labels	| 25    |
+	| end timeline				| 23:00 |
+	| number of timeline labels	| 24    |
 
 Scenario: Show timeline with schedule 
 	Given I have the role 'Full access to mytime'
@@ -246,8 +246,8 @@ Scenario: Show timeline with night shift
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field						| Value |
 	| start timeline			| 0:00  |
-	| end timeline				| 23:59 |
-	| number of timeline labels	| 25    |
+	| end timeline				| 23:00 |
+	| number of timeline labels	| 24    |
 
 Scenario: Show timeline with night shift from the last day of the previous week
 	Given I have the role 'Full access to mytime'
@@ -278,8 +278,8 @@ Scenario: Show timeline with night shift starting on the last day of current wee
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field						| Value	|
 	| start timeline			| 20:00	|
-	| end timeline				| 23:59 |
-	| number of timeline labels	| 5		|
+	| end timeline				| 23:00 |
+	| number of timeline labels	| 4		|
 
 Scenario: Show activity at correct times
 	Given I have the role 'Full access to mytime'
