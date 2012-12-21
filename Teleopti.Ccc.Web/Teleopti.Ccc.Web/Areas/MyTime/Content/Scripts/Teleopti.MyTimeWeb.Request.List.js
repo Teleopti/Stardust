@@ -71,6 +71,11 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.ready = readyForInteraction;
 		self.completed = completelyLoaded;
 		self.details = ko.observable(requestDetailViewModel);
+		
+		//todo: for now, this means, unselect everything if its not an update
+		requestDetailViewModel.isUpdate.subscribe(function (newValue) {
+			if (!newValue) self.setSelected(null);
+		});
 
 		self.isUpdate = ko.computed(function () {
 			return requestDetailViewModel.isUpdate();
@@ -228,6 +233,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			readyForInteraction = readyForInteractionCallback;
 			completelyLoaded = completelyLoadedCallback;
 			pageViewModel = new RequestPageViewModel(detailViewModel, readyForInteractionCallback, completelyLoadedCallback);
+			
 			_initScrollPaging();
 			var element = $('#Requests-body-inner')[0];
 
