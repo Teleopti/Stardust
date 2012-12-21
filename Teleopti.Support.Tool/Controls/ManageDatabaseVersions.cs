@@ -260,7 +260,7 @@ namespace Teleopti.Support.Tool.Controls
         private ProcessStartInfo CreateProcessStartInfoForAnalyticsSecurity(NHibDataSource nHibDataSource)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nHibDataSource.ConnectionString);
+            SqlConnectionStringBuilder sqlConnectionStringBuilderAdmin = new SqlConnectionStringBuilder(_dbHelper.ConnectionString);
             string workingDirectory = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\Enrypted\";
 
             string command = workingDirectory + @"Teleopti.Support.Security.exe";
@@ -268,11 +268,12 @@ namespace Teleopti.Support.Tool.Controls
             stringBuilder.Append(SPACE);
             stringBuilder.Append(@"-DS");
             stringBuilder.Append(nHibDataSource.ServerName + SPACE);
-            stringBuilder.Append(getLogonString(sqlConnectionStringBuilder));
+            stringBuilder.Append(getLogonString(sqlConnectionStringBuilderAdmin));
             stringBuilder.Append(@"-DD");
             stringBuilder.Append(nHibDataSource.DatabaseName + SPACE);
             stringBuilder.Append(@"-CD");
-            stringBuilder.Append(nHibDataSource.DatabaseName + SPACE);
+            string aggDBName = _dbHelper.GetAggDatabaseName(nHibDataSource.DatabaseName);
+            stringBuilder.Append(aggDBName + SPACE);
             processStartInfo.Arguments = stringBuilder.ToString();
 
             processStartInfo.WorkingDirectory = workingDirectory;
@@ -290,7 +291,7 @@ namespace Teleopti.Support.Tool.Controls
         private ProcessStartInfo createProcessStartInfoForApplicationSecurity(NHibDataSource nHibDataSource)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(nHibDataSource.ConnectionString);
+            SqlConnectionStringBuilder sqlConnectionStringBuilderAdmin = new SqlConnectionStringBuilder(_dbHelper.ConnectionString);
             string workingDirectory = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\Enrypted\";
 
             string command = workingDirectory + @"Teleopti.Support.Security.exe";
@@ -298,7 +299,7 @@ namespace Teleopti.Support.Tool.Controls
             stringBuilder.Append(SPACE);
             stringBuilder.Append(@"-DS");
             stringBuilder.Append(nHibDataSource.ServerName + SPACE);
-            stringBuilder.Append(getLogonString(sqlConnectionStringBuilder));
+            stringBuilder.Append(getLogonString(sqlConnectionStringBuilderAdmin));
             stringBuilder.Append(@"-DD");
             stringBuilder.Append(nHibDataSource.DatabaseName + SPACE);
             processStartInfo.Arguments = stringBuilder.ToString();
