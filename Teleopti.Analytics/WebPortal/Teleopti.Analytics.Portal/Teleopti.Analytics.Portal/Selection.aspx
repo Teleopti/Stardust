@@ -35,8 +35,8 @@
 						<asp:Label ID="labelRepCaption" CssClass="ReportName" runat="server" Text="xxxRapportnamnet"></asp:Label>
 					</div>
 					
-			</asp:Panel>
-			<div style="float: right; width: 25px; padding-top: 3px">
+				</asp:Panel>
+					<div style="float: right; width: 25px; padding-top: 3px">
 						<asp:ImageButton ID="ImageButtonHelp" runat="server" ImageUrl="~/images/Question_16x16.png" ToolTip="xxHelp" OnClientClick="javascript:return false;" />
 					</div>
 				</div>
