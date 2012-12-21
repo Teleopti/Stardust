@@ -649,7 +649,7 @@
 		<Copy	SourceFiles="@(Wise)"
 			DestinationFiles="@(Wise->'$(DeployPath)\Wise\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy	SourceFiles="@(AsCmd)"
-			DestinationFiles="@(AsCmd->'$(DeployPath)\Wise\ccc7_server\%(RecursiveDir)%(Filename)%(Extension)')"/>		
+			DestinationFiles="@(AsCmd->'$(DeployPath)\Cube\ascmd\%(RecursiveDir)%(Filename)%(Extension)')"/>		
 		<Copy SourceFiles="@(ClickOnceSign)"
 			DestinationFiles="@(ClickOnceSign->'$(DeployPath)\ClickOnceSignTools\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy SourceFiles="@(AgentPortalWeb)"
