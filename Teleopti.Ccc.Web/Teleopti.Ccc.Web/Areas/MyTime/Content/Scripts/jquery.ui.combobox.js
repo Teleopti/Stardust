@@ -122,8 +122,6 @@
 		},
 
 		_setValue: function (value) {
-			if (this.value == value)
-				return;
 			this.value = value;
 			this.element.val(value);
 			this.input.val(value);
