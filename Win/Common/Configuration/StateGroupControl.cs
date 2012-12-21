@@ -317,6 +317,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private static bool CanNodeBeDropped(TreeNodeAdv sourceNode, TreeNodeAdv destinationNode)
         {
+			if (destinationNode == null) return false;
             var sourceState = sourceNode.Tag as IRtaState;
             var destinationStateGroup = destinationNode.Tag as IRtaStateGroup;
             if (sourceState != null && destinationStateGroup != null && sourceState.StateGroup != destinationStateGroup)
