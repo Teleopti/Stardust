@@ -264,9 +264,25 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var self = this;
 
 		self.positionPercentage = ko.observable(timeline.PositionPercentage);
-		self.time = ko.observable(timeline.Time);
-		self.topPosition = ko.computed(function () {
-			return Math.round(scheduleHeight * self.positionPercentage()) + timeLineOffset + 'px';
+	    self.timeLineTime = ko.observable(timeline.Time);
+		self.time = ko.computed(function () {
+			var timeArray = self.timeLineTime().split(/:| /);
+			if (timeArray[1] != 0 )
+				return "";
+			else if (timeArray.length > 2) {
+				timeArray.splice(1, 1);
+				return timeArray.join(" ");
+			}
+			else {
+				return self.timeLineTime();
+			}
+		});
+ 		self.topPosition = ko.computed(function () {
+ 			return Math.round(scheduleHeight * self.positionPercentage()) + timeLineOffset + 'px';
+ 		});
+		self.evenHour = ko.computed(function () {
+			if (self.time().length == 0) { return false; }
+			else { return true; }
 		});
 	};
 

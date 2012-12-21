@@ -25,6 +25,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private IHeaderViewModelFactory headerViewModelFactory;
 		private IScheduleColorProvider scheduleColorProvider;
 		private IPermissionProvider permissionProvider;
+		private ILoggedOnUser loggedOnUser;
 
 		[SetUp]
 		public void Setup()
@@ -46,6 +48,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			headerViewModelFactory = MockRepository.GenerateMock<IHeaderViewModelFactory>();
 			scheduleColorProvider = MockRepository.GenerateMock<IScheduleColorProvider>();
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
@@ -56,8 +59,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                  		             	() => periodViewModelFactory,
 			                  		             	() => headerViewModelFactory,
 			                  		             	() => scheduleColorProvider,
-			                  		             	() => permissionProvider
-			                  		             	));
+			                  		             	() => permissionProvider,
+													() => loggedOnUser
+ 			                  		             	));
 			                  		c.AddProfile(new CommonViewModelMappingProfile());
 			                  	});
 		}
@@ -306,6 +310,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapTimeLine()
 		{
+			loggedOnUser.Stub(x => x.CurrentUser().PermissionInformation.Culture()).Return(CultureInfo.CurrentCulture);
 			var domainData = new WeekScheduleDomainData()
 			{
 				MinMaxTime = new TimePeriod(8, 30, 17, 30)
@@ -314,9 +319,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 
 			result.TimeLine.Count().Should().Be.EqualTo(11);
-			result.TimeLine.First().Time.Should().Be.EqualTo("8:30");
+			result.TimeLine.First().Time.Should().Be.EqualTo("08:30");
 			result.TimeLine.First().PositionPercentage.Should().Be.EqualTo(0.0);
-			result.TimeLine.ElementAt(1).Time.Should().Be.EqualTo("9:00");
+			result.TimeLine.ElementAt(1).Time.Should().Be.EqualTo("09:00");
 			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be.EqualTo(0.5/(17.5 - 8.5));
 		}
 
