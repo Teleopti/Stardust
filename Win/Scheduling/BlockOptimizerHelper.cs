@@ -363,25 +363,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                     var groupOptimizerFindMatrixesForGroup =
                         new GroupOptimizerFindMatrixesForGroup(_groupPersonBuilderForOptimization, matrixList);
 
-
-
-					IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
-			   OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
-					var groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
-					var groupPersonConsistentChecker =
-						_container.Resolve<IGroupPersonConsistentChecker>();
-					var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-					var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
-					IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
-																			 groupPersonConsistentChecker,
-																			 workShiftBackToLegalStateService,
-																			 resourceOptimizationHelper,
-																			 mainShiftOptimizeActivitySpecificationSetter);
-
-
 					var coherentChecker = new TeamSteadyStateCoherentChecker();
 					var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-					var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(groupMatrixHelper, coherentChecker, scheduleMatrixProFinder);
+					var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, _resourceOptimizationHelper);
 					var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
 					var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
                 	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
