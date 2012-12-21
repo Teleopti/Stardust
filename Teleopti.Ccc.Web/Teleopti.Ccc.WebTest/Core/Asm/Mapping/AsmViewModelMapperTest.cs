@@ -6,10 +6,12 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
@@ -22,16 +24,20 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		private IAsmViewModelMapper target;
 		private IUserTimeZone userTimeZone;
 		private TimeZoneInfo timeZone;
+		private ILoggedOnUser loggedOnUser;
 
 		[SetUp]
 		public void Setup()
 		{
 			projectionProvider = MockRepository.GenerateStub<IProjectionProvider>();
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			scheduleFactory = new StubFactory();
 			timeZone = ((TimeZoneInfo) TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);
-			target = new AsmViewModelMapper(projectionProvider, userTimeZone);
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person());
+			
+			target = new AsmViewModelMapper(projectionProvider, userTimeZone, loggedOnUser);
 		}
 
 		[Test]
@@ -137,7 +143,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
-			var expected = hoursAsInts.ConvertAll(x => x.ToString(CultureInfo.InvariantCulture));
+			var expected = hoursAsInts.ConvertAll(x => x.ToString(loggedOnUser.CurrentUser().PermissionInformation.Culture()));
 
 			var date = new DateTime(2000, 1, 1);
 			var scheduleDay = scheduleFactory.ScheduleDayStub(date);
