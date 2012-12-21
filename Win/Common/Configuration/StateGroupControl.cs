@@ -72,21 +72,61 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         		stateToMoveList.Add(state);
         	}
         	IRtaStateGroup defaultStateGroup = GetDefaultStateGroup();
+        	TreeNodeAdv nodeWithDefaultGroup = null;
+			foreach (TreeNodeAdv node in treeViewAdv1.Nodes)
+        	{
+				var group = node.Tag as IRtaStateGroup;
+				if (group != null && group.DefaultStateGroup)
+				{
+					nodeWithDefaultGroup = node;
+				}
+        	}
         	foreach (var state in stateToMoveList)
         	{
         		stateGroupToDelete.MoveStateTo(defaultStateGroup, state);
+				if(nodeWithDefaultGroup != null)
+				{
+					var nodeWithState = findNodeWithState(state, null);
+					if(nodeWithState != null)
+					{
+						nodeWithState.Remove();
+						nodeWithDefaultGroup.Nodes.Add(nodeWithState);
+					}
+				}
         	}
         	_repository.Remove(stateGroupToDelete);
         	_stateGroupCollection.Remove(stateGroupToDelete);
-        	UpdateTreeview(null, false);
+			treeViewAdv1.SelectedNode.Remove();
+        	//UpdateTreeview(null, false);
         }
+
+		private TreeNodeAdv findNodeWithState(IRtaState state, TreeNodeAdv node)
+		{
+			if(node == null)
+			{
+				foreach (TreeNodeAdv treeNode in treeViewAdv1.Nodes)
+				{
+					return findNodeWithState(state, treeNode);
+				}
+			}
+			if (node.Tag.Equals(state))
+				return node;
+			foreach (TreeNodeAdv treeNodeAdv in node.Nodes)
+			{
+				return findNodeWithState(state, treeNodeAdv);
+			}
+			return null;
+		}
 
         private void AddStateGroup()
         {
             IRtaStateGroup newStateGroup = new RtaStateGroup(Resources.NewStateGroup, false, false);
             _repository.Add(newStateGroup);
             _stateGroupCollection.Add(newStateGroup);
-            UpdateTreeview(newStateGroup, true);
+			var parentNode = (CreateNode(newStateGroup));
+			treeViewAdv1.Nodes.Add(parentNode);
+			treeViewAdv1.Root.Sort(TreeNodeAdvSortType.Text);
+            //UpdateTreeview(newStateGroup, true);
         }
 
         private IRtaStateGroup GetDefaultStateGroup()
