@@ -268,17 +268,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 return;
 
             // Get the destination and source node.
-            var sourceNode = (TreeNodeAdv)e.Data.GetData(typeof(TreeNodeAdv));
+            var sourceNode = (TreeNodeAdv[])e.Data.GetData(typeof(TreeNodeAdv[]));
 
             Point pt = treeViewAdv1.PointToClient(new Point(e.X, e.Y));
             TreeNodeAdv destinationNode = treeViewAdv1.GetNodeAtPoint(pt);
             //sourceNode.Move(destinationNode, NodePositions.Next);
             MoveState(sourceNode, destinationNode);
-            sourceNode.Move(destinationNode.Nodes, destinationNode.Nodes.Count);
-
+			foreach (var node in sourceNode)
+			{
+				node.Move(destinationNode.Nodes, destinationNode.Nodes.Count);
+			}
+            
             _currentSourceNode = null;
-
-            treeView.SelectedNode = sourceNode;
+			treeViewAdv1.Root.Sort(TreeNodeAdvSortType.Text);
+            treeView.SelectedNode = sourceNode[0];
 
         }
 
@@ -294,25 +297,26 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _currentSourceNode = null;
 
             // Looking for a single tree node.
-            if (e.Data.GetDataPresent(typeof(TreeNodeAdv)))
+            if (e.Data.GetDataPresent(typeof(TreeNodeAdv[])))
             {
                 // Get the destination and source node.
                 var destinationNode = treeView.GetNodeAtPoint(ptInTree);
-                var sourceNode = (TreeNodeAdv)e.Data.GetData(typeof(TreeNodeAdv));
+                var sourceNode = (TreeNodeAdv[])e.Data.GetData(typeof(TreeNodeAdv[]));
 
-                _currentSourceNode = sourceNode;
+                _currentSourceNode = sourceNode[0];
 
-                droppable = CanNodeBeDropped(sourceNode, destinationNode);
+                droppable = CanNodeBeDropped(sourceNode[0], destinationNode);
 
             }
             else
                 droppable = false;
 
+        	//droppable = true;
             e.Effect = droppable ? DragDropEffects.Move : DragDropEffects.None;
 
             var pt = treeViewAdv1.PointToClient(new Point(e.X, e.Y));
             treeViewAdv1.SelectedNode = treeViewAdv1.GetNodeAtPoint(pt);
-            Console.WriteLine(treeViewAdv1.SelectedNode.Text);
+            //Console.WriteLine(treeViewAdv1.SelectedNode.Text);
         }
 
         private static bool CanNodeBeDropped(TreeNodeAdv sourceNode, TreeNodeAdv destinationNode)
@@ -339,19 +343,23 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             // Let us get only the first selected node.
             var node = nodes[0];
-
             var state = node.Tag as IRtaState;
-        	treeViewAdv.DoDragDrop(node, state != null ? DragDropEffects.Move : DragDropEffects.None);
+			if(node == null) return;
+        	treeViewAdv.DoDragDrop(nodes, state != null ? DragDropEffects.Move : DragDropEffects.None);
         }
 
-        private static void MoveState(TreeNodeAdv sourceNode, TreeNodeAdv destinationNode)
+        private static void MoveState(TreeNodeAdv[] sourceNode, TreeNodeAdv destinationNode)
         {
-            var stateGroup = destinationNode.Tag as IRtaStateGroup;
-            var state = sourceNode.Tag as IRtaState;
-            if (stateGroup != null && state != null)
-            {
-                state.StateGroup.MoveStateTo(stateGroup, state);
-            }
+        	foreach (var treeNodeAdv in sourceNode)
+        	{
+				var stateGroup = destinationNode.Tag as IRtaStateGroup;
+				var state = treeNodeAdv.Tag as IRtaState;
+				if (stateGroup != null && state != null)
+				{
+					state.StateGroup.MoveStateTo(stateGroup, state);
+				}
+        	}
+            
         }
 
         private static void SetAvailableDescriptionToNode(TreeNodeAdv node)
