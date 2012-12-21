@@ -1,4 +1,7 @@
-﻿namespace Teleopti.Ccc.Win.Intraday.Reforecast
+﻿using System;
+using System.Windows.Forms;
+
+namespace Teleopti.Ccc.Win.Intraday.Reforecast
 {
     partial class SelectWorkload
     {
@@ -65,6 +68,7 @@
             this.listViewWorkloads.TileSize = new System.Drawing.Size(100, 100);
             this.listViewWorkloads.UseCompatibleStateImageBehavior = false;
             this.listViewWorkloads.View = System.Windows.Forms.View.Details;
+            this.listViewWorkloads.ColumnClick += ListViewWorkloadsOnColumnClick;
             // 
             // tableLayoutPanel1
             // 
@@ -120,7 +124,7 @@
             this.ResumeLayout(false);
 
         }
-
+        
         #endregion
 
         private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxExFilter;

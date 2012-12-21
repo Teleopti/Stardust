@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
         private IList<ListViewItem> _allItems;
         private Dictionary<ISkill, List<IWorkload>> _workloads;
         private readonly ICollection<string> _errorMessages = new List<string>();
+        private readonly ListViewColumnSorter _listViewColumnSorter = new ListViewColumnSorter { Order = SortOrder.Ascending };
 
         public SelectWorkload()
         {
@@ -89,15 +90,14 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
                 var workloadList = skill.WorkloadCollection.ToList();
                 listDictionary.Add(skill, workloadList);
             }
-            var listViewColumnSorter = new ListViewColumnSorter { Order = SortOrder.Ascending };
-            listViewWorkloads.ListViewItemSorter = listViewColumnSorter;
+            listViewWorkloads.ListViewItemSorter = _listViewColumnSorter;
             _workloads = listDictionary;
         }
 
         private void ReloadSkillsListView()
         {
             listViewWorkloads.BeginUpdate();
-            listViewWorkloads.ListViewItemSorter = null;
+            listViewWorkloads.ListViewItemSorter = _listViewColumnSorter;
             listViewWorkloads.Items.Clear();
             listViewWorkloads.Columns.Clear();
             _filteredItems = new List<ListViewItem>();
@@ -147,12 +147,26 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
         private bool validated()
         {
             if (listViewWorkloads.CheckedItems.Count != 0)
-            {
                 return true;
-            }
+
             MessageBoxAdv.Show(Resources.YouHaveToSelectAtLeastOneWorkload, Resources.Message,
                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             return false;
+        }
+
+        private void ListViewWorkloadsOnColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            if (e.Column == _listViewColumnSorter.SortColumn)
+                _listViewColumnSorter.Order = _listViewColumnSorter.Order == SortOrder.Ascending
+                                                  ? SortOrder.Descending
+                                                  : SortOrder.Ascending;
+            else
+            {
+                _listViewColumnSorter.SortColumn = e.Column;
+                _listViewColumnSorter.Order = SortOrder.Ascending;
+            }
+
+            listViewWorkloads.Sort();
         }
     }
 }

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.Filter;
@@ -21,6 +19,7 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
         private IList<ListViewItem> _allItems;
         private readonly IList<ISkill> _skills;
         private readonly ICollection<string> _errorMessages = new List<string>();
+        private readonly ListViewColumnSorter _listViewColumnSorter = new ListViewColumnSorter { Order = SortOrder.Ascending };
 
         public SelectSkills(IList<ISkill> skills)
         {
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void BuildColumns()
         {
-            var header = new ColumnHeader {Text = Resources.Skill, Width = 250};
+            var header = new ColumnHeader { Text = Resources.Skill, Width = 357 };
             listViewSkills.Columns.Add(header);
         }
 
@@ -85,7 +84,7 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
         private void ReloadSkillsListView(ReforecastModelCollection stateObj, ISkill selectedSkill)
         {
             listViewSkills.BeginUpdate();
-            listViewSkills.ListViewItemSorter = null;
+            listViewSkills.ListViewItemSorter = _listViewColumnSorter;
             listViewSkills.Items.Clear();
             listViewSkills.Columns.Clear();
             _filteredItems = new List<ListViewItem>();
@@ -133,12 +132,26 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
         private bool validated()
         {
             if (listViewSkills.CheckedItems.Count != 0)
-            {
                 return true;
-            }
+
             MessageBoxAdv.Show(Resources.YouHaveToSelectAtLeastOneSkill, Resources.Message,
                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             return false;
+        }
+
+        private void ListViewSkillsOnColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            if (e.Column == _listViewColumnSorter.SortColumn)
+                _listViewColumnSorter.Order = _listViewColumnSorter.Order == SortOrder.Ascending
+                                                  ? SortOrder.Descending
+                                                  : SortOrder.Ascending;
+            else
+            {
+                _listViewColumnSorter.SortColumn = e.Column;
+                _listViewColumnSorter.Order = SortOrder.Ascending;
+            }
+
+            listViewSkills.Sort();
         }
     }
 }

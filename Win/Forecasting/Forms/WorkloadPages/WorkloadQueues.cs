@@ -38,8 +38,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
         public void Populate(IAggregateRoot aggregateRoot)
         {
             _workload = aggregateRoot as IWorkload;
-            var listViewColumnSorter = new ListViewColumnSorter();
-            listViewColumnSorter.Order = SortOrder.Ascending;
+            var listViewColumnSorter = new ListViewColumnSorter {Order = SortOrder.Ascending};
             listViewQueues.ListViewItemSorter = listViewColumnSorter;
             reloadQueuesListView(SortOrder.Ascending);
 
