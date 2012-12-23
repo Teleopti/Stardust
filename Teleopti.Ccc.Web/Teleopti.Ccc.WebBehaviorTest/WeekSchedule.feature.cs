@@ -722,10 +722,10 @@ this.FeatureBackground();
                         "0:00"});
             table21.AddRow(new string[] {
                         "end timeline",
-                        "23:00"});
+                        "23:59"});
             table21.AddRow(new string[] {
                         "number of timeline labels",
-                        "24"});
+                        "25"});
 #line 208
  testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table21);
 #line hidden
@@ -844,10 +844,10 @@ this.FeatureBackground();
                         "0:00"});
             table26.AddRow(new string[] {
                         "end timeline",
-                        "23:00"});
+                        "23:59"});
             table26.AddRow(new string[] {
                         "number of timeline labels",
-                        "24"});
+                        "25"});
 #line 246
  testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table26);
 #line hidden
@@ -948,10 +948,10 @@ this.FeatureBackground();
                         "20:00"});
             table30.AddRow(new string[] {
                         "end timeline",
-                        "23:00"});
+                        "23:59"});
             table30.AddRow(new string[] {
                         "number of timeline labels",
-                        "4"});
+                        "5"});
 #line 278
  testRunner.Then("I should see start timeline and end timeline according to schedule with:", ((string)(null)), table30);
 #line hidden
