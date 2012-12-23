@@ -86,31 +86,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 													return lateEnd;
 												});
 									
-									const int margin = 15;
-									var early = earliest;
-									var late = latest;
-
-									if (early > late)
-									{
-										early = latest;
-										late = earliest;
-									}
-
-									if (early.Ticks > TimeSpan.Zero.Add(new TimeSpan(0, margin, 0)).Ticks)
-										early = early.Subtract(new TimeSpan(0, margin, 0));
-									else
-									{
-										early = TimeSpan.Zero;
-									}
-
-									if (late.Ticks < new TimeSpan(23, 59, 59).Subtract(new TimeSpan(0, margin, 0)).Ticks)
-										late = late.Add(new TimeSpan(0, margin, 0));
-									else
-									{
-										late = new TimeSpan(23, 59, 59);
-									}
-
-									var minMaxTime = new TimePeriod(early, late);
+									var minMaxTime = earliest > latest
+									                        	? new TimePeriod(latest, earliest)
+									                        	: new TimePeriod(earliest, latest);
 
 									var days = (from day in firstDayOfWeek.Date.DateRange(7)
 												let scheduleDay = scheduleDays.SingleOrDefault(d => d.DateOnlyAsPeriod.DateOnly == day)
