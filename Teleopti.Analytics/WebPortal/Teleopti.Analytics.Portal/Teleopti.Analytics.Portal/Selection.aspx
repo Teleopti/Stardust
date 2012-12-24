@@ -26,17 +26,21 @@
 				Collapsed="false" ExpandDirection="Vertical" ImageControlID="ImageReportsToggle"
 				ExpandedImage="~/images/up.png" ExpandedText='xxCollapse' CollapsedImage="~/images/down.png"
 				CollapsedText='xxExpand' SuppressPostBack="true" />
-			<asp:Panel ID="Reports_HeaderPanel" runat="server" Style="cursor: pointer;" CssClass="Caption">
+				<div class="Caption">
+					<asp:Panel ID="Reports_HeaderPanel" runat="server" Style="cursor: pointer;" >
 					<div style="float: left;padding-top: 2px">
 						<asp:Image ID="ImageReportsToggle" runat="server" ImageUrl="~/images/down.png" />
 					</div>
 					<div style="float: left;padding-top: 2px">
 						<asp:Label ID="labelRepCaption" CssClass="ReportName" runat="server" Text="xxxRapportnamnet"></asp:Label>
 					</div>
+					
+				</asp:Panel>
 					<div style="float: right; width: 25px; padding-top: 3px">
 						<asp:ImageButton ID="ImageButtonHelp" runat="server" ImageUrl="~/images/Question_16x16.png" ToolTip="xxHelp" OnClientClick="javascript:return false;" />
 					</div>
-			</asp:Panel>
+				</div>
+			
 			<asp:Panel ID="Reports_ContentPanel" runat="server" Height="0px">
 				<div class="DetailsView" >
 					<Analytics:Selector LabelWidth="30%" List1Width="75%" ID="Parameter" runat="server" OnInit="Selector_OnInit">

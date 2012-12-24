@@ -82,7 +82,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             internalAdd.AddStateInternal(state);
         }
 
-		public virtual Description ConfidentialDescription(IPerson assignedPerson, DateOnly assignedDate)
+		public virtual void DeleteState(IRtaState state)
+    	{
+    		_stateCollection.Remove(state);
+    	}
+
+    	public virtual Description ConfidentialDescription(IPerson assignedPerson, DateOnly assignedDate)
         {
             return new Description(_name);
         }

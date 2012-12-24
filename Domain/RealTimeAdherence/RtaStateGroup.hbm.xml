@@ -45,7 +45,7 @@
           type="boolean"
           not-null="true" />
     <bag name="StateCollection"
-				 cascade="all"
+				 cascade="all-delete-orphan"
          inverse="true">
       <key column="Parent" />
       <one-to-many class="RtaState"/>

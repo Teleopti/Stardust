@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 								UnreadMessageCount = unreadMessageCount
 			          	};
 		}
-
+		
 		private static IEnumerable<string> createHours(DateTime asmZero, TimeZoneInfo timeZone)
 		{
 			const int numberOfHoursToShow = 24*3;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			
 			for (var hour = 0; hour < numberOfHoursToShow; hour++)
 			{
-				var localTime = TimeZoneInfo.ConvertTimeFromUtc(asmZeroAsUtc.AddHours(hour), timeZone);
+ 				var localTime = TimeZoneInfo.ConvertTimeFromUtc(asmZeroAsUtc.AddHours(hour), timeZone);
 				hoursAsInts.Add(localTime.Hour);
 			}
 

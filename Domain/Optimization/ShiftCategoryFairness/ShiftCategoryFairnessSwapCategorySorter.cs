@@ -6,8 +6,6 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 {
     public interface IShiftCategoryFairnessCategorySorter
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference",
-            MessageId = "4#")]
         IEnumerable<IShiftCategoryFairnessCompareValue> GetGroupCategories(
             IShiftCategoryFairnessCompareResult selectedGroup,
             IEnumerable<IShiftCategoryFairnessCompareValue> selectedGroupCategories,
@@ -18,8 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 
     public class ShiftCategoryFairnessSwapCategorySorter : IShiftCategoryFairnessCategorySorter
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")
-        , System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         public IEnumerable<IShiftCategoryFairnessCompareValue> GetGroupCategories(
             IShiftCategoryFairnessCompareResult selectedGroup,
             IEnumerable<IShiftCategoryFairnessCompareValue> selectedGroupCategories,
@@ -36,28 +33,27 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
                 selectedGroupCategories.OrderByDescending(c => c.Original - c.ComparedTo);
 
             var firstCategory =
-                selectedGroupCategoriesOrdered.FirstOrDefault(c => c.Original > c.ComparedTo);
+                selectedGroupCategoriesOrdered.FirstOrDefault();
             var secondCategory =
-                selectedGroupCategoriesOrdered.LastOrDefault(c => c.Original < c.ComparedTo);
-            var categoryCount = selectedGroupCategoriesOrdered.Count();
-
+                selectedGroupCategoriesOrdered.LastOrDefault();
+            
             if (firstCategory == null || secondCategory == null)
             {
-                if (!blacklistedGroups.Contains(selectedGroup)) blacklistedGroups.Add(selectedGroup);
+                if (!blacklistedGroups.Contains(selectedGroup)) 
+                    blacklistedGroups.Add(selectedGroup);
                 return new List<IShiftCategoryFairnessCompareValue>();
             }
 
-            var availableSwaps = ((numberOfGroups - 1)*(categoryCount - 1));
+            List<IShiftCategoryFairnessCompareValue> exceptList;
+
+            //  if all swaps for selected group highest category are blacklisted
+            var availableSwaps = (numberOfGroups - 1) * selectedGroupCategoriesOrdered.Count(g => g.Original < g.ComparedTo);
             var selectedGroupBlackListItems =
                 blacklist.Where(
                     g => (g.Group1 == selectedGroup && g.ShiftCategoryFromGroup1 == firstCategory.ShiftCategory)
-                         || (g.Group2 == selectedGroup && g.ShiftCategoryFromGroup2 == firstCategory.ShiftCategory)).
-                    ToList();
-
-            List<IShiftCategoryFairnessCompareValue> exceptList;
-
-            // ES: if all swaps for selected group highest category is blacklisted
-            if (selectedGroupBlackListItems.Count() == availableSwaps)
+                         || (g.Group2 == selectedGroup && g.ShiftCategoryFromGroup2 == firstCategory.ShiftCategory))
+                    .ToList();
+            if (availableSwaps == 0 || selectedGroupBlackListItems.Count() >= availableSwaps)
             {
                 exceptList = new List<IShiftCategoryFairnessCompareValue> {firstCategory};
                 if (selectedGroupCategoriesOrdered.Except(exceptList).Any(b => b.Original > b.ComparedTo))
@@ -67,17 +63,15 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 
                 if (!blacklistedGroups.Contains(selectedGroup)) blacklistedGroups.Add(selectedGroup);
                 return new List<IShiftCategoryFairnessCompareValue>();
-
             }
-
-            var category = secondCategory;
-            selectedGroupBlackListItems = blacklist.Where(
-                g => (g.Group1 == selectedGroup && g.ShiftCategoryFromGroup2 == category.ShiftCategory)
-                     || (g.Group2 == selectedGroup && g.ShiftCategoryFromGroup1 == category.ShiftCategory)).ToList();
-
             
-            // ES: if all swaps for selected group lowest category is blacklisted
-            if (selectedGroupBlackListItems.Count() == availableSwaps)
+            //  if all swaps for selected group lowest category are blacklisted
+            availableSwaps = (numberOfGroups - 1)*selectedGroupCategoriesOrdered.Count(g => g.Original > g.ComparedTo);
+            selectedGroupBlackListItems = blacklist.Where(
+                g => (g.Group1 == selectedGroup && g.ShiftCategoryFromGroup2 == secondCategory.ShiftCategory)
+                     || (g.Group2 == selectedGroup && g.ShiftCategoryFromGroup1 == secondCategory.ShiftCategory))
+                .ToList();
+            if (availableSwaps == 0 || selectedGroupBlackListItems.Count() >= availableSwaps)
             {
                 exceptList = new List<IShiftCategoryFairnessCompareValue> {secondCategory};
                 if (selectedGroupCategoriesOrdered.Except(exceptList).Any(b => b.Original < b.ComparedTo))
@@ -87,8 +81,36 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 
                 if (!blacklistedGroups.Contains(selectedGroup)) blacklistedGroups.Add(selectedGroup);
                 return new List<IShiftCategoryFairnessCompareValue>();
-
             }
+
+            // if current swap is blacklisted and we need to reselect category
+            selectedGroupBlackListItems = blacklist.Where(
+                b => (b.Group1 == selectedGroup
+                     && b.ShiftCategoryFromGroup1 == firstCategory.ShiftCategory
+                     && b.ShiftCategoryFromGroup2 == secondCategory.ShiftCategory)).ToList();
+            var selectedGroupBlackListItemsCount = selectedGroupBlackListItems.Count();
+            if (selectedGroupBlackListItemsCount == numberOfGroups - 1)
+            {
+                var firstCategoryCompare =
+                    selectedGroupCategoriesOrdered.Skip(1).FirstOrDefault();
+                var secondCategoryCompare =
+                    selectedGroupCategoriesOrdered.Take(selectedGroupCategoriesOrdered.Count() - 1).LastOrDefault();
+                if (firstCategoryCompare == null || secondCategoryCompare == null) return new List<IShiftCategoryFairnessCompareValue>();
+                var firstDiff = firstCategoryCompare.Original - firstCategoryCompare.ComparedTo;
+                var secondDiff = secondCategoryCompare.ComparedTo - secondCategory.Original;
+
+                var exceptedCategory = firstDiff > secondDiff ? firstCategory : secondCategory;
+                exceptList = new List<IShiftCategoryFairnessCompareValue> { exceptedCategory };
+
+                if (selectedGroupCategoriesOrdered.Except(exceptList).Any())
+                    return GetGroupCategories(selectedGroup, selectedGroupCategoriesOrdered.Except(exceptList),
+                                              numberOfGroups, blacklist.Except(selectedGroupBlackListItems),
+                                              ref blacklistedGroups);
+
+                if (!blacklistedGroups.Contains(selectedGroup)) blacklistedGroups.Add(selectedGroup);
+                return new List<IShiftCategoryFairnessCompareValue>();
+            }
+
             return new List<IShiftCategoryFairnessCompareValue> {firstCategory, secondCategory};
         }
     }

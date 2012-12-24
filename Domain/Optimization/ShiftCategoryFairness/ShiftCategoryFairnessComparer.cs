@@ -43,6 +43,11 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 	            return result;
 	        }
 	    }
+
+        public override string ToString()
+        {
+            return ShiftCategory.Description.Name;
+        }
 	}
 
 	public interface IShiftCategoryFairnessCompareResult
