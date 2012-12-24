@@ -30,15 +30,15 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 
 	function _initViewModels() {
 		dayViewModels = {};
-		$('li[data-mytime-date].inperiod').each(function (index, element) {
+		$('li[data-mytime-date]').each(function (index, element) {
 			var dayViewModel = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel(ajax);
 			dayViewModel.ReadElement(element);
 			dayViewModels[dayViewModel.Date] = dayViewModel;
 			ko.applyBindings(dayViewModel, element);
 		});
 
-		var from = $('li[data-mytime-date].inperiod').first().data('mytime-date');
-		var to = $('li[data-mytime-date].inperiod').last().data('mytime-date');
+		var from = $('li[data-mytime-date]').first().data('mytime-date');
+		var to = $('li[data-mytime-date]').last().data('mytime-date');
 
 		_loadStudentAvailabilityAndSchedules(from, to);
 	}
