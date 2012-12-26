@@ -21,6 +21,20 @@ Background:
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
 
+Scenario: Display student availabilities outside current period
+	Given I have the role 'Access to student availability'
+	And I have a student availability with
+	| Field      | Value      |
+	| Date       | 2012-06-27 |
+	| Start time | 10:30      |
+	| End time   | 11:00      |
+	And I am viewing student availability for date '2012-06-20'
+	Then I should see the student availability with
+	| Field      | Value      |
+	| Date       | 2012-06-27 |
+	| Start time | 10:30      |
+	| End time   | 11:00      |
+
 Scenario: Add student availability
 	Given I have the role 'Access to student availability'
 	And I am viewing student availability for date '2012-06-20'
