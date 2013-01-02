@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -32,23 +31,6 @@ namespace Teleopti.Ccc.Win.Permissions
     public partial class PermissionsExplorer : BaseRibbonForm
     {
         private readonly IComponentContext _container;
-
-        /// <summary>
-        /// Items located in the EditToolStrip control 
-        /// </summary>
-        private enum ToolStripItemType
-        {
-            /// <summary>
-            /// Role
-            /// </summary>
-            Role,
-
-            /// <summary>
-            /// Person
-            /// </summary>
-            Person,
-        }
-
         public event EventHandler Saved;
 
         private IList<IAvailableData> _availableDataCollection;
@@ -59,7 +41,6 @@ namespace Teleopti.Ccc.Win.Permissions
         private readonly IList<IApplicationFunction> _excludedFunctions = new List<IApplicationFunction>();        //This list holds the functions which are NOT assigned to any of the selected roles
         private readonly Dictionary<int, IList<IApplicationFunction>> _functionsDic = new Dictionary<int, IList<IApplicationFunction>>();
         private const int firstElement = 0;
-        private EditControl _editControl;
         private ClipboardControl _clipboardControl;
         private static IList<IApplicationFunction> _licensedFunctions;
         private Control _lastInFocus;
@@ -73,7 +54,6 @@ namespace Teleopti.Ccc.Win.Permissions
 
             
             InitializeComponent();
-            instantiateEditControl();
             instantiateClipboardControl();
             setupLastFocus();
 
@@ -119,7 +99,7 @@ namespace Teleopti.Ccc.Win.Permissions
         private void setToolStripsToPreferredSize()
         {
             toolStripExRoles.Size = toolStripExRoles.PreferredSize;
-            toolStripExRename.Size = toolStripExRename.PreferredSize;
+            toolStripExPersons.Size = toolStripExPersons.PreferredSize;
             toolStripExClipboard.Size = toolStripExClipboard.PreferredSize;
         }
 
@@ -1332,48 +1312,6 @@ namespace Teleopti.Ccc.Win.Permissions
             newRoleItem.BeginEdit();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        private void instantiateEditControl()
-        {
-            _editControl = new EditControl();
-            var editControlHost = new ToolStripControlHost(_editControl);
-            toolStripExRoles.Items.Add(editControlHost);
-
-            _editControl.NewSpecialItems.Add(new ToolStripButton
-            {
-                Text = UserTexts.Resources.AddRole,
-                Tag = ToolStripItemType.Role.ToString()
-            }
-        )
-            ;
-            _editControl.NewSpecialItems.Add(new ToolStripButton
-            {
-                Text = UserTexts.Resources.AddPersonToRole,
-                Tag = ToolStripItemType.Person.ToString()
-            }
-        )
-            ;
-            _editControl.NewClicked += editControlNewClicked;
-            _editControl.NewSpecialClicked += (editControlNewSpecialClicked);
-
-            _editControl.DeleteSpecialItems.Add(new ToolStripButton
-            {
-                Text = UserTexts.Resources.DeleteRole,
-                Tag = ToolStripItemType.Role.ToString()
-            }
-        )
-            ;
-            _editControl.DeleteSpecialItems.Add(new ToolStripButton
-            {
-                Text = UserTexts.Resources.DeletePersonFromRole,
-                Tag = ToolStripItemType.Person.ToString()
-            }
-        )
-            ;
-            _editControl.DeleteClicked += editControlDeleteClicked;
-            _editControl.DeleteSpecialClicked += editControlDeleteSpecialClicked;
-        }
-
         private void setupLastFocus()
         {
             listViewPeople.GotFocus += controlGotFocus;
@@ -1383,11 +1321,8 @@ namespace Teleopti.Ccc.Win.Permissions
         private void controlGotFocus(object obj, EventArgs e)
         {
             _lastInFocus = (Control)obj;
-        }
-
-        private static ToolStripItemType getToolStripItem(ToolStripItemClickedEventArgs e)
-        {
-            return (ToolStripItemType)Enum.Parse(typeof(ToolStripItemType), (string)e.ClickedItem.Tag);
+        	toolStripExPersons.Enabled = _lastInFocus == listViewPeople;
+        	toolStripExRoles.Enabled = _lastInFocus == listViewRoles;
         }
 
         private void handleRenameRole()
@@ -1796,6 +1731,7 @@ namespace Teleopti.Ccc.Win.Permissions
         {
             Cursor.Current = Cursors.WaitCursor;
             initializePermissionsExplorer();
+			listViewRoles.Select();
             Cursor.Current = Cursors.Default;
         }
 
@@ -2087,38 +2023,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
         }
 
-        private void editControlDeleteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            switch (getToolStripItem(e))
-            {
-                case ToolStripItemType.Role:
-                    if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleDeleteRole))
-                    {
-                    	FormKill();
-                    }
-                    break;
-                case ToolStripItemType.Person:
-                    handleRemovePeople();
-                    break;
-            }
-        }
-
-        private void editControlNewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            switch (getToolStripItem(e))
-            {
-                case ToolStripItemType.Role:
-                    if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleAddNewRole))
-                    {
-                    	FormKill();
-                    }
-                    break;
-                case ToolStripItemType.Person:
-                    _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleInsertPeople);
-                    break;
-            }
-        }
-
+        
         private void toolStripButtonRenameRoleClick(object sender, EventArgs e)
         {
             handleRenameRole();
@@ -2140,10 +2045,10 @@ namespace Teleopti.Ccc.Win.Permissions
 
         private void toolStripButtonNewClick(object sender, EventArgs e)
         {
-            if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleAddNewRole))
-            {
-            	FormKill();
-            }
+			if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleAddNewRole))
+			{
+				FormKill();
+			}
         }
 
         private void copyToolStripMenuItemClick(object sender, EventArgs e)
@@ -2160,26 +2065,6 @@ namespace Teleopti.Ccc.Win.Permissions
         {
             e.Cancel = true;
         }
-
-        private void editControlNewClicked(object sender, EventArgs e)
-        {
-            if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleAddNewRole))
-            {
-            	FormKill();
-            }
-        }
-
-        private void editControlDeleteClicked(object sender, EventArgs e)
-        {
-            if (_lastInFocus == listViewRoles)
-                if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleDeleteRole))
-                {
-                	FormKill();
-                }
-            if (_lastInFocus == listViewPeople)
-                handleRemovePeople();
-        }
-
 
         private void instantiateClipboardControl()
         {
@@ -2410,6 +2295,36 @@ namespace Teleopti.Ccc.Win.Permissions
 
             _permissionsViewerPresenter.ShowViewer();
         }
+
+		private void toolStripButtonAddRole_Click(object sender, EventArgs e)
+		{
+			if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleAddNewRole))
+			{
+				FormKill();
+			}
+		}
+
+		private void toolStripButtonDeleteRole_Click(object sender, EventArgs e)
+		{
+			//set disabled instead?
+			if (_lastInFocus != listViewRoles) return;
+			if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleDeleteRole))
+			{
+				FormKill();
+			}
+			
+		}
+
+		private void toolStripButtonAddPerson_Click(object sender, EventArgs e)
+		{
+			_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleInsertPeople);
+		}
+
+		private void toolStripButtonRemovePerson_Click(object sender, EventArgs e)
+		{
+			if (_lastInFocus != listViewPeople) return;
+			handleRemovePeople();
+		}
 
     }
 }

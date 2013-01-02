@@ -6,7 +6,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
@@ -137,8 +136,8 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
+			
 			var expected = hoursAsInts.ConvertAll(x => x.ToString(CultureInfo.InvariantCulture));
-
 			var date = new DateTime(2000, 1, 1);
 			var scheduleDay = scheduleFactory.ScheduleDayStub(date);
 			var res = target.Map(new DateTime(2000,1,1), new[] {scheduleDay},0);

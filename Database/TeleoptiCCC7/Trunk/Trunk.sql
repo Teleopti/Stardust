@@ -52,7 +52,17 @@ where ForeignId = '0074'
 --Name: David + Kunning
 --Date: 2012-12-13
 --Desc: Reduce deadlock, by Cascade delete and moved clustered index to parent
-----------------  
+----------------
+
+DECLARE @PKName nvarchar(1000)
+SELECT @PKName= '[dbo].[StudentAvailabilityRestriction].['+name+']' FROM sys.indexes
+WHERE OBJECT_NAME(object_id) = 'StudentAvailabilityRestriction'
+AND index_id = 1
+AND is_primary_key = 1
+SELECT @PKName
+EXEC sp_rename @PKName, N'PK_StudentAvailabilityRestriction', N'INDEX'
+
+--Alter Indexes
 ALTER TABLE [dbo].[StudentAvailabilityRestriction] DROP CONSTRAINT [PK_StudentAvailabilityRestriction]
 GO
 

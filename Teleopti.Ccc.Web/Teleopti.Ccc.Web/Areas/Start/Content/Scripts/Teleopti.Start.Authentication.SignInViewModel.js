@@ -41,6 +41,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 				});
 				self.DataSources.push.apply(self.DataSources, map);
 				self.SelectDataSource(self.DataSources()[0]);
+				$('#DataSources').show();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 500) {

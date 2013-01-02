@@ -264,8 +264,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var self = this;
 
 		self.positionPercentage = ko.observable(timeline.PositionPercentage);
+
 		self.time = ko.observable(timeline.Time);
-		self.topPosition = ko.computed(function () {
+		self.topPosition = ko.computed(function() {
 			return Math.round(scheduleHeight * self.positionPercentage()) + timeLineOffset + 'px';
 		});
 	};

@@ -108,51 +108,93 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationValueBefore + diff);
 			//it goes to fast
 			//Thread.Sleep(300);
-			var swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
-			if (swapSuggestion == null)
-				return;
-			do
-			{
-				if (backgroundWorker.CancellationPending)
-					return;
+            //var swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
+            //if (swapSuggestion == null)
+            //    return;
 
-				var success = _shiftCategoryFairnessSwapper.TrySwap(swapSuggestion, dateOnly, matrixListForFairnessOptimization, rollbackService, backgroundWorker);
-				if (!success)
-				{
-					blackList.Add(swapSuggestion);
-					rollbackService.Rollback();
-				}
-				else
-				{
-					// success but did it get better
-					if (runPersonal)
-						fairnessResults = _shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, groupPage, dateOnly).OrderBy(
-								x => x.StandardDeviation).ToList();
-					else
-						fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
-							x => x.StandardDeviation).ToList();
+		    var swapSuggestionList = _shiftCategoryFairnessSwapFinder.GetGroupListOfSwaps(fairnessResults, blackList);
+            foreach (var swap in swapSuggestionList)
+            {
+                if (backgroundWorker.CancellationPending)
+                    return;
 
-					fairnessResults = stripOutAllZeros(fairnessResults);
-					var newdiff = fairnessResults.Sum(shiftCategoryFairnessCompareResult => shiftCategoryFairnessCompareResult.StandardDeviation);
-					if (newdiff >= diff) // not better
-					{
-						OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationRollingBack);
-						blackList.Add(swapSuggestion);
-						// do a rollback (if scheduled we need to resourcecalculate again??)
-						rollbackService.Rollback();
-					}
-					else
-					{
-						diff = newdiff;
-						OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationValueAfter + diff);
-						// if we did swap start all over again and we do this day until no more suggestions
-						blackList = new List<IShiftCategoryFairnessSwap>();
-						rollbackService.ClearModificationCollection();
-					}
-				}
-				//get another one, could we get stucked here with new suggestions all the time?
-				swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
-			} while (swapSuggestion != null);
+                var success = _shiftCategoryFairnessSwapper.TrySwap(swap, dateOnly, matrixListForFairnessOptimization, rollbackService, backgroundWorker);
+                if (!success)
+                {
+                    blackList.Add(swap);
+                    rollbackService.Rollback();
+                }
+                else
+                {
+                    // success but did it get better
+                    if (runPersonal)
+                        fairnessResults = _shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, groupPage, dateOnly).OrderBy(
+                                x => x.StandardDeviation).ToList();
+                    else
+                        fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
+                            x => x.StandardDeviation).ToList();
+
+                    fairnessResults = stripOutAllZeros(fairnessResults);
+                    var newdiff = fairnessResults.Sum(shiftCategoryFairnessCompareResult => shiftCategoryFairnessCompareResult.StandardDeviation);
+                    if (newdiff >= diff) // not better
+                    {
+                        OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationRollingBack);
+                        blackList.Add(swap);
+                        // do a rollback (if scheduled we need to resourcecalculate again??)
+                        rollbackService.Rollback();
+                    }
+                    else
+                    {
+                        diff = newdiff;
+                        OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationValueAfter + diff);
+                        // if we did swap start all over again and we do this day until no more suggestions
+                        blackList = new List<IShiftCategoryFairnessSwap>();
+                        rollbackService.ClearModificationCollection();
+                    }
+                }
+            }
+            //do
+            //{
+            //    if (backgroundWorker.CancellationPending)
+            //        return;
+
+            //    var success = _shiftCategoryFairnessSwapper.TrySwap(swapSuggestion, dateOnly, matrixListForFairnessOptimization, rollbackService, backgroundWorker);
+            //    if (!success)
+            //    {
+            //        blackList.Add(swapSuggestion);
+            //        rollbackService.Rollback();
+            //    }
+            //    else
+            //    {
+            //        // success but did it get better
+            //        if (runPersonal)
+            //            fairnessResults = _shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, groupPage, dateOnly).OrderBy(
+            //                    x => x.StandardDeviation).ToList();
+            //        else
+            //            fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
+            //                x => x.StandardDeviation).ToList();
+
+            //        fairnessResults = stripOutAllZeros(fairnessResults);
+            //        var newdiff = fairnessResults.Sum(shiftCategoryFairnessCompareResult => shiftCategoryFairnessCompareResult.StandardDeviation);
+            //        if (newdiff >= diff) // not better
+            //        {
+            //            OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationRollingBack);
+            //            blackList.Add(swapSuggestion);
+            //            // do a rollback (if scheduled we need to resourcecalculate again??)
+            //            rollbackService.Rollback();
+            //        }
+            //        else
+            //        {
+            //            diff = newdiff;
+            //            OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationValueAfter + diff);
+            //            // if we did swap start all over again and we do this day until no more suggestions
+            //            blackList = new List<IShiftCategoryFairnessSwap>();
+            //            rollbackService.ClearModificationCollection();
+            //        }
+            //    }
+            //    //get another one, could we get stucked here with new suggestions all the time?
+            //    swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
+            //} while (swapSuggestion != null);
 
 		}
 

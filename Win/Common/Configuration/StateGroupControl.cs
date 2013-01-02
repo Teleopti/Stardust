@@ -39,7 +39,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         void ButtonDeleteClick(object sender, EventArgs e)
         {
-            DeleteStateGroup();
+			if (treeViewAdv1.SelectedNode == null)
+				return;
+
+			var stateGroupToDelete = treeViewAdv1.SelectedNode.Tag as IRtaStateGroup;
+			if(stateGroupToDelete != null)
+				DeleteStateGroup(stateGroupToDelete);
+			var stateToDelete = treeViewAdv1.SelectedNode.Tag as IRtaState;
+			if (stateToDelete != null)
+				DeleteState(stateToDelete);
         }
 
         void ButtonNewClick(object sender, EventArgs e)
@@ -47,12 +55,24 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             AddStateGroup();
         }
 
-        private void DeleteStateGroup()
-        {
-            if (treeViewAdv1.SelectedNode == null)
-                return;
+		private void DeleteState(IRtaState stateToDelete)
+		{
+			string text = string.Format(
+				CurrentCulture,
+				Resources.AreYouSureYouWantToDeleteItem,
+				stateToDelete.Name);
 
-            var stateGroupToDelete = treeViewAdv1.SelectedNode.Tag as IRtaStateGroup;
+			string caption = string.Format(CurrentCulture, Resources.ConfirmDelete);
+			DialogResult response = ViewBase.ShowConfirmationMessage(text, caption);
+			if (response != DialogResult.Yes) return;
+
+			((IRtaStateGroup)stateToDelete.Parent).DeleteState(stateToDelete);
+			treeViewAdv1.SelectedNode.Remove();
+		}
+
+		private void DeleteStateGroup(IRtaStateGroup stateGroupToDelete)
+        {
+            
             // A state group set as default can not be deleted
         	if (stateGroupToDelete == null || stateGroupToDelete.DefaultStateGroup) return;
 
@@ -72,21 +92,64 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         		stateToMoveList.Add(state);
         	}
         	IRtaStateGroup defaultStateGroup = GetDefaultStateGroup();
+        	TreeNodeAdv nodeWithDefaultGroup = null;
+			foreach (TreeNodeAdv node in treeViewAdv1.Nodes)
+        	{
+				var group = node.Tag as IRtaStateGroup;
+				if (group != null && group.DefaultStateGroup)
+				{
+					nodeWithDefaultGroup = node;
+				}
+        	}
         	foreach (var state in stateToMoveList)
         	{
         		stateGroupToDelete.MoveStateTo(defaultStateGroup, state);
+				if(nodeWithDefaultGroup != null)
+				{
+					var nodeWithState = findNodeWithState(state, null);
+					if(nodeWithState != null)
+					{
+						nodeWithState.Remove();
+						nodeWithDefaultGroup.Nodes.Add(nodeWithState);
+					}
+				}
         	}
         	_repository.Remove(stateGroupToDelete);
         	_stateGroupCollection.Remove(stateGroupToDelete);
-        	UpdateTreeview(null, false);
+			treeViewAdv1.SelectedNode.Remove();
+        	//UpdateTreeview(null, false);
         }
+
+		private TreeNodeAdv findNodeWithState(IRtaState state, TreeNodeAdv node)
+		{
+			TreeNodeAdv retNode = null;
+			if(node == null)
+			{
+				foreach (TreeNodeAdv treeNode in treeViewAdv1.Nodes)
+				{
+					retNode = findNodeWithState(state, treeNode);
+					if (retNode != null) return retNode;
+				}
+			}
+			if (node.Tag.Equals(state))
+				return node;
+			foreach (TreeNodeAdv treeNodeAdv in node.Nodes)
+			{
+				retNode = findNodeWithState(state, treeNodeAdv);
+				if (retNode != null) return retNode;
+			}
+			return retNode;
+		}
 
         private void AddStateGroup()
         {
             IRtaStateGroup newStateGroup = new RtaStateGroup(Resources.NewStateGroup, false, false);
             _repository.Add(newStateGroup);
             _stateGroupCollection.Add(newStateGroup);
-            UpdateTreeview(newStateGroup, true);
+			var parentNode = (CreateNode(newStateGroup));
+			treeViewAdv1.Nodes.Add(parentNode);
+			treeViewAdv1.Root.Sort(TreeNodeAdvSortType.Text);
+            //UpdateTreeview(newStateGroup, true);
         }
 
         private IRtaStateGroup GetDefaultStateGroup()
@@ -268,17 +331,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 return;
 
             // Get the destination and source node.
-            var sourceNode = (TreeNodeAdv)e.Data.GetData(typeof(TreeNodeAdv));
+            var sourceNode = (TreeNodeAdv[])e.Data.GetData(typeof(TreeNodeAdv[]));
 
             Point pt = treeViewAdv1.PointToClient(new Point(e.X, e.Y));
             TreeNodeAdv destinationNode = treeViewAdv1.GetNodeAtPoint(pt);
             //sourceNode.Move(destinationNode, NodePositions.Next);
             MoveState(sourceNode, destinationNode);
-            sourceNode.Move(destinationNode.Nodes, destinationNode.Nodes.Count);
-
+			foreach (var node in sourceNode)
+			{
+				node.Move(destinationNode.Nodes, destinationNode.Nodes.Count);
+			}
+            
             _currentSourceNode = null;
-
-            treeView.SelectedNode = sourceNode;
+			treeViewAdv1.Root.Sort(TreeNodeAdvSortType.Text);
+            treeView.SelectedNode = sourceNode[0];
 
         }
 
@@ -294,29 +360,31 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _currentSourceNode = null;
 
             // Looking for a single tree node.
-            if (e.Data.GetDataPresent(typeof(TreeNodeAdv)))
+            if (e.Data.GetDataPresent(typeof(TreeNodeAdv[])))
             {
                 // Get the destination and source node.
                 var destinationNode = treeView.GetNodeAtPoint(ptInTree);
-                var sourceNode = (TreeNodeAdv)e.Data.GetData(typeof(TreeNodeAdv));
+                var sourceNode = (TreeNodeAdv[])e.Data.GetData(typeof(TreeNodeAdv[]));
 
-                _currentSourceNode = sourceNode;
+                _currentSourceNode = sourceNode[0];
 
-                droppable = CanNodeBeDropped(sourceNode, destinationNode);
+                droppable = CanNodeBeDropped(sourceNode[0], destinationNode);
 
             }
             else
                 droppable = false;
 
+        	//droppable = true;
             e.Effect = droppable ? DragDropEffects.Move : DragDropEffects.None;
 
             var pt = treeViewAdv1.PointToClient(new Point(e.X, e.Y));
             treeViewAdv1.SelectedNode = treeViewAdv1.GetNodeAtPoint(pt);
-            Console.WriteLine(treeViewAdv1.SelectedNode.Text);
+            //Console.WriteLine(treeViewAdv1.SelectedNode.Text);
         }
 
         private static bool CanNodeBeDropped(TreeNodeAdv sourceNode, TreeNodeAdv destinationNode)
         {
+			if (destinationNode == null) return false;
             var sourceState = sourceNode.Tag as IRtaState;
             var destinationStateGroup = destinationNode.Tag as IRtaStateGroup;
             if (sourceState != null && destinationStateGroup != null && sourceState.StateGroup != destinationStateGroup)
@@ -338,19 +406,23 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             // Let us get only the first selected node.
             var node = nodes[0];
-
             var state = node.Tag as IRtaState;
-        	treeViewAdv.DoDragDrop(node, state != null ? DragDropEffects.Move : DragDropEffects.None);
+			if(node == null) return;
+        	treeViewAdv.DoDragDrop(nodes, state != null ? DragDropEffects.Move : DragDropEffects.None);
         }
 
-        private static void MoveState(TreeNodeAdv sourceNode, TreeNodeAdv destinationNode)
+        private static void MoveState(TreeNodeAdv[] sourceNode, TreeNodeAdv destinationNode)
         {
-            var stateGroup = destinationNode.Tag as IRtaStateGroup;
-            var state = sourceNode.Tag as IRtaState;
-            if (stateGroup != null && state != null)
-            {
-                state.StateGroup.MoveStateTo(stateGroup, state);
-            }
+        	foreach (var treeNodeAdv in sourceNode)
+        	{
+				var stateGroup = destinationNode.Tag as IRtaStateGroup;
+				var state = treeNodeAdv.Tag as IRtaState;
+				if (stateGroup != null && state != null)
+				{
+					state.StateGroup.MoveStateTo(stateGroup, state);
+				}
+        	}
+            
         }
 
         private static void SetAvailableDescriptionToNode(TreeNodeAdv node)
@@ -536,6 +608,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         public ViewType ViewType
         {
             get { return ViewType.StateGroup; }
-        }
+        }	
     }
 }

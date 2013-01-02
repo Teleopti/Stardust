@@ -53,7 +53,7 @@
 
 		<div id="signin">
 
-			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked">
+			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked" style="display: none;">
 				<li data-bind="css: {'active': $parent.SelectedDataSource() == $data}, class: Type">
 					<a href="#" data-bind="click: $parent.SelectDataSource">
 						<span data-bind="text: Name"></span>

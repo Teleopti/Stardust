@@ -1498,7 +1498,13 @@ namespace Teleopti.Ccc.Win.Scheduling
             var scheduleTag = (IScheduleTag) (((ToolStripMenuItem) (sender)).Tag);
             var gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
             var setTagCommand = new SetTagCommand(_undoRedo, gridSchedulesExtractor, _scheduleView.Presenter,_scheduleView, scheduleTag, LockManager);
-            setTagCommand.Execute();
+        	_backgroundWorkerRunning = true;
+        	toolStripStatusLabelStatus.Text = Resources.ScheduleTags;
+			statusStrip1.Refresh();
+			setTagCommand.Execute();
+        	toolStripStatusLabelStatus.Text = Resources.Ready;
+			statusStrip1.Refresh();
+        	_backgroundWorkerRunning = false;
             updateSelectionInfo(gridSchedulesExtractor.ExtractSelected());
             Refresh();
             RefreshSelection();
@@ -2145,19 +2151,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             return true;
         }
 
-        private bool isViewAllowanceAvailable()
-        {
-            var defaultRequest = _requestView.SelectedAdapters().Count > 0 ? _requestView.SelectedAdapters().First().PersonRequest : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
-            if (defaultRequest != null)
-            {
-                var requestDate = new DateOnly(defaultRequest.RequestedDate);
-                var personPeriod = defaultRequest.Person.PersonPeriodCollection.Where(
-                    p => p.Period.Contains(requestDate)).FirstOrDefault();
-                return personPeriod != null && personPeriod.BudgetGroup != null;
-            }
-            return false;
-        }
-
         #region Virtual skill handling
 
 		private void SkillGridMenuItemPeriodClick(object sender, EventArgs e)
@@ -2778,9 +2771,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void setupRequestViewButtonStates()
         {
-            toolStripMenuItemViewAllowance.Visible = toolStripButtonViewAllowance.Available = _budgetPermissionService.IsAllowancePermitted;
-            if (toolStripButtonViewAllowance.Available)
-                toolStripButtonViewAllowance.Enabled = isViewAllowanceAvailable();
+            toolStripButtonViewAllowance.Available = _budgetPermissionService.IsAllowancePermitted;
+            toolStripMenuItemViewAllowance.Visible = _budgetPermissionService.IsAllowancePermitted;
+            toolStripMenuItemViewAllowance.Enabled = _budgetPermissionService.IsAllowancePermitted;
         }
 
         private bool stateHolderExceptionOccurred(RunWorkerCompletedEventArgs e)
@@ -5962,11 +5955,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             toolStripExHandleRequests.Enabled = eventParameters.Value.SelectionIsEditable && isPermittedApproveRequest(_requestView.SelectedAdapters());
             ToolStripMenuItemViewDetails.Enabled =toolStripButtonViewDetails.Enabled = isViewRequestDetailsAvailable();
-            if (_budgetPermissionService.IsAllowancePermitted)
-            {
-                toolStripButtonViewAllowance.Enabled =
-                toolStripMenuItemViewAllowance.Enabled = isViewAllowanceAvailable();
-            }
         }
 
         private void wpfShiftEditor1_DeleteMeeting(object sender, CustomEventArgs<IPersonMeeting> e)
@@ -6989,14 +6977,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void showRequestAllowanceView()
         {
-            var defaultRequest = _requestView.SelectedAdapters().Count > 0 ? _requestView.SelectedAdapters().First().PersonRequest : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
-            if (defaultRequest == null) return;
-            var requestDate = new DateOnly(defaultRequest.RequestedDate);
-            var personPeriod = defaultRequest.Person.PersonPeriodCollection.Where(p => p.Period.Contains(requestDate)).FirstOrDefault();
-            if (personPeriod != null && personPeriod.BudgetGroup != null)
+            var defaultRequest = _requestView.SelectedAdapters().Count > 0
+                                     ? _requestView.SelectedAdapters().First().PersonRequest
+                                     : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
+            if (defaultRequest == null)
             {
-                var allowanceView = new RequestAllowanceView(defaultRequest, new DateOnly(_defaultFilterDate));
+                var allowanceView = new RequestAllowanceView(null, _defaultFilterDate);
                 allowanceView.Show(this);
+
+            }else
+            {
+                var requestDate = new DateOnly(defaultRequest.RequestedDate);
+                var personPeriod = defaultRequest.Person.PersonPeriodCollection.Where(p => p.Period.Contains(requestDate)).FirstOrDefault();
+                if (personPeriod != null)
+                {
+                    var allowanceView = new RequestAllowanceView(personPeriod.BudgetGroup, requestDate);
+                    allowanceView.Show(this);
+                }
             }
         }
 
