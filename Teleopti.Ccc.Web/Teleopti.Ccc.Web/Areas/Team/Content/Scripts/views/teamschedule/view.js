@@ -37,9 +37,13 @@ define([
 				var timeLine = new timeLineViewModel();
 				var teamSchedule = new teamScheduleViewModel(timeLine, date);
 
+				var previousOffset;
+				var teamScheduleContainer = $('.team-schedule');
+
 				var schedule = $.connection.scheduleHub;
 
 				var resize = function () {
+					previousOffset = teamScheduleContainer.offset().left;
 					timeLine.WidthPixels($('.shift').width());
 				};
 
@@ -55,6 +59,8 @@ define([
 				var loadSchedules = function () {
 					var queryDate = teamSchedule.SelectedDate();
 					queryDate.utc();
+
+					teamSchedule.isLoading(true);
 					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, queryDate.toDate()).done(function (schedules) {
 						timeLine.Agents.removeAll();
 						teamSchedule.Agents.removeAll();
@@ -70,6 +76,7 @@ define([
 							return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
 						});
 
+						teamSchedule.isLoading(false);
 						resize();
 					});
 				};
@@ -99,13 +106,17 @@ define([
 						$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
 					});
 
-
-				$('.team-schedule').swipeListener({
+				teamScheduleContainer.swipeListener({
 					swipeLeft: function () {
+						teamScheduleContainer.offset({ left: previousOffset });
 						teamSchedule.NextDay();
 					},
 					swipeRight: function () {
+						teamScheduleContainer.offset({ left: previousOffset });
 						teamSchedule.PreviousDay();
+					},
+					swipeMove: function (movementX, movementY) {
+						teamScheduleContainer.offset({ left: -movementX });
 					}
 				});
 			}

@@ -15,7 +15,8 @@
 
     <div class="row">
         <div class="span12">
-            <div class="team-schedule relative">
+            <div data-bind="visible: isLoading">Loading...</div>
+            <div class="team-schedule relative" data-bind="visible: !isLoading()">
     			
                 <div class="time-line absolute">
                     <div class="relative">

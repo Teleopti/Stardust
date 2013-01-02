@@ -12,6 +12,7 @@ define([
 			this.Teams = ko.observableArray();
 			this.SelectedDate = ko.observable(date);
 			this.SelectedTeam = ko.observable();
+			this.isLoading = ko.observable(false);
 
 			this.AddAgents = function (agents) {
 				self.Agents.push.apply(self.Agents, agents);
@@ -37,7 +38,7 @@ define([
 				var team = self.SelectedTeam();
 				if (team != undefined)
 					teamId = team.Id;
-				
+
 				return self.SelectedDate().format('YYYYMMDD') + '_' + teamId;
 			});
 		};
