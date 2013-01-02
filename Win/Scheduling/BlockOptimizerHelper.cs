@@ -426,7 +426,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             ILockableBitArray scheduleMatrixArray = scheduleMatrixArrayConverter.Convert(daysOffPreferences.ConsiderWeekBefore, daysOffPreferences.ConsiderWeekAfter);
 
             IEnumerable<IDayOffDecisionMaker> decisionMakers =
-                OptimizerHelperHelper.CreateDecisionMakers(scheduleMatrixArray, daysOffPreferences, optimizerPreferences);
+                OptimizerHelperHelper.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences);
             IScheduleResultDataExtractor scheduleResultDataExtractor =
                 OptimizerHelperHelper.CreatePersonalSkillsDataExtractor(optimizerPreferences.Advanced, scheduleMatrix);
 

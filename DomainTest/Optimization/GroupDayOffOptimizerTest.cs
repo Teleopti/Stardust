@@ -213,10 +213,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_workingBitArray);
                 Expect.Call(_scheduleResultDataExtractor.Values())
                     .Return(_dataExtractorValues);
-				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(_workingBitArray)).Return(solvers);
-				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solvers, 100)).Return(true);
                 Expect.Call(_decisionMaker.Execute(_workingBitArray, _dataExtractorValues))
                     .Return(false);
+
+				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(_workingBitArray)).Return(solvers);
+				Expect.Call(_smartDayOffBackToLegalStateService.Execute(solvers, 100)).Return(true);
+
+				Expect.Call(_scheduleResultDataExtractor.Values())
+					.Return(_dataExtractorValues);
+				Expect.Call(_decisionMaker.Execute(_workingBitArray, _dataExtractorValues))
+					.Return(false);
 
             }
             using (_mocks.Playback())
@@ -302,8 +308,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleResultDataExtractor.Values())
                     .Return(_dataExtractorValues);
 
-                Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(_workingBitArray)).Return(solvers);
-                Expect.Call(_smartDayOffBackToLegalStateService.Execute(solvers, 100)).Return(true);
                 Expect.Call(_decisionMaker.Execute(_workingBitArray, _dataExtractorValues))
                     .Return(true);
 				Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(_workingBitArray)).Return(solvers);
@@ -366,8 +370,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(_scheduleResultDataExtractor);
 			Expect.Call(_scheduleResultDataExtractor.Values())
 					.Return(_dataExtractorValues);
-			Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(_workingBitArray)).Return(solvers);
-			Expect.Call(_smartDayOffBackToLegalStateService.Execute(solvers, 100)).Return(true);
+			//Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(_workingBitArray)).Return(solvers);
+			//Expect.Call(_smartDayOffBackToLegalStateService.Execute(solvers, 100)).Return(true);
 			Expect.Call(_decisionMaker.Execute(_workingBitArray, _dataExtractorValues))
 					.Return(true);
 			Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(_workingBitArray)).Return(solvers);
