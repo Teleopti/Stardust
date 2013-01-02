@@ -143,8 +143,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 		}
 
+
+        
 		[Test]
-		public void ShouldNotSwapDaysWithAbsences()
+		public void ShouldSwapDaysWithAbsences()
 		{
 			_dates.Clear();
 			_dates.Add(new DateOnly(2009, 02, 01));
@@ -160,6 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				_swapService.Init(null);
 				LastCall.IgnoreArguments().Repeat.AtLeastOnce();
 				Expect.Call(_swapService.Swap(_dictionary)).Return(new List<IScheduleDay> { _p1D2, _p2D2 });
+                Expect.Call(_swapService.Swap(_dictionary)).Return(new List<IScheduleDay> { _p1D2, _p2D2 });
                 Expect.Call(_dictionary.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay>(), null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).IgnoreArguments().Return(new List<IBusinessRuleResponse>());
 			}
 			using (_mock.Playback())
