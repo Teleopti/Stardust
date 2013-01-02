@@ -236,13 +236,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 {
                 	unitOfWork.PersistAll();
 
-                	updateScheduleReadModelsIfRequestWasApproved(unitOfWork);
+                	updateScheduleReadModelsIfRequestWasApproved(unitOfWork, dateOnlyPeriod);
                 }
             }
             ClearStateHolder();
         }
 
-    	private void updateScheduleReadModelsIfRequestWasApproved(IUnitOfWork unitOfWork)
+    	private void updateScheduleReadModelsIfRequestWasApproved(IUnitOfWork unitOfWork, DateOnlyPeriod dateOnlyPeriod)
     	{
     		if (_personRequest.IsApproved)
     		{
