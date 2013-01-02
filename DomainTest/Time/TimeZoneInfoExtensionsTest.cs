@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime theDate = new DateTime(2010,3,26);
 
             DateTime ret = _target.SafeConvertTimeToUtc(theDate);
-            Assert.AreEqual(new DateTime(2010,3,25,22,00,0,DateTimeKind.Utc),ret);
+            Assert.AreEqual(new DateTime(2010,3,25,21,00,0,DateTimeKind.Utc),ret);
         }
 
         [Test]
