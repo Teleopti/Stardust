@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Team.Hubs
 		[Test]
 		public void ShouldGetSchedulesForDateAndTeam()
 		{
-			var period = new DateTimePeriod(2012, 12, 01,2012,12,02);
+			var period = new DateTimePeriod(2012, 12, 01,2012,12,01);
 			var teamId = Guid.NewGuid();
 			var model = new PersonScheduleDayReadModel
 			            	{
