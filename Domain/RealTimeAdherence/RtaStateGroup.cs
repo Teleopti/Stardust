@@ -79,7 +79,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             _stateCollection.Remove(state);
             RtaStateGroup internalAdd = target as RtaStateGroup;
             if (internalAdd==null) return;
-            internalAdd.AddStateInternal(state);
+            if (state==null) return;
+            internalAdd.AddStateInternal(new RtaState(state.Name,state.StateCode,state.PlatformTypeId));
         }
 
 		public virtual void DeleteState(IRtaState state)
