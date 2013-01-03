@@ -43,7 +43,6 @@ define([
 				var schedule = $.connection.scheduleHub;
 
 				var resize = function () {
-					previousOffset = teamScheduleContainer.offset().left;
 					timeLine.WidthPixels($('.shift').width());
 				};
 
@@ -108,12 +107,16 @@ define([
 
 				teamScheduleContainer.swipeListener({
 					swipeLeft: function () {
-						teamScheduleContainer.offset({ left: previousOffset });
 						teamSchedule.NextDay();
 					},
 					swipeRight: function () {
-						teamScheduleContainer.offset({ left: previousOffset });
 						teamSchedule.PreviousDay();
+					},
+					swipeEnd: function () {
+						teamScheduleContainer.offset({ left: previousOffset });
+					},
+					swipeStart: function () {
+						previousOffset = teamScheduleContainer.offset().left;
 					},
 					swipeMove: function (movementX, movementY) {
 						teamScheduleContainer.offset({ left: -movementX });

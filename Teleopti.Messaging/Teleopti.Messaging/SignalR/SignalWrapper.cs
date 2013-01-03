@@ -126,7 +126,7 @@ namespace Teleopti.Messaging.SignalR
 			try
 			{
 				Exception exception = null;
-				var startTask = _hubConnection.Start(new LongPollingTransport());
+				var startTask = _hubConnection.Start();
 				startTask.ContinueWith(t =>
 				                       	{
 				                       		if (t.IsFaulted && t.Exception != null)

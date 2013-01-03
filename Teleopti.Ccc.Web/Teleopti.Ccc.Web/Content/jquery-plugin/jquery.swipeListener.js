@@ -15,7 +15,9 @@
 			swipeDown: undefined, // or swipe down,
 			swipeLeft: undefined, // or swipe left,
 			swipeRight: undefined, // or swipe right,
-			swipeMove: undefined
+			swipeMove: undefined,
+			swipeStart: undefined,
+			swipeEnd: undefined
 		};
 
 		if (option) {
@@ -41,6 +43,10 @@
 					time: (new Date()).getTime()
 				};
 				event.stopPropagation();
+
+				if (isTouchDevice && config.swipeStart) {
+					config.swipeStart();
+				}
 
 				$this.bind(touchMoveEvent, touchMove).one(touchEndEvent, touchEnd);
 			};
@@ -70,6 +76,10 @@
 			function touchEnd(event) {
 				$this.unbind("touchmove mousemove", touchMove);
 
+				if (isTouchDevice && config.swipeEnd) {
+					config.swipeEnd();
+				}
+				
 				if (start && stop && stop.time - start.time < config.duration) {
 					var diffX = start.x - stop.x;
 					var diffY = start.y - stop.y;
