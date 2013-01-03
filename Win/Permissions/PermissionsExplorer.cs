@@ -2069,6 +2069,7 @@ namespace Teleopti.Ccc.Win.Permissions
         private void instantiateClipboardControl()
         {
             _clipboardControl = new ClipboardControl();
+           _clipboardControl.ToolStripSplitButtonCut.Visible = false ;
             var clipboardhost = new ToolStripControlHost(_clipboardControl);
             toolStripExClipboard.Items.Add(clipboardhost);
 
