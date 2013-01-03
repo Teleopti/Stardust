@@ -4,10 +4,7 @@ using NUnit.Framework;
 using Newtonsoft.Json.Linq;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Team.Core;
 using Teleopti.Interfaces.Domain;
 
@@ -17,31 +14,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Team.Hubs
 	public class ScheduleHubTest
 	{
 		private IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository;
-		private ITeamProvider teamProvider;
 		private ScheduleHub hub;
 
 		[SetUp]
 		public void Setup()
 		{
 			personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
-			teamProvider = MockRepository.GenerateMock<ITeamProvider>();
-			hub = new ScheduleHub(personScheduleDayReadModelRepository, teamProvider);
-		}
-
-		[Test]
-		public void ShouldGetTeamsForDate()
-		{
-			var date = new DateOnly(2012, 12, 01);
-			var team = TeamFactory.CreateTeam("Team","Site");
-			team.SetId(Guid.NewGuid());
-
-			teamProvider.Stub(x => x.GetPermittedTeams(date, DefinedRaptorApplicationFunctionPaths.SchedulesAdminWeb)).Return(
-				new[] {team});
-
-			dynamic result = hub.AvailableTeams(date.Date);
-			dynamic teamResult = result.Teams[0];
-			((object) teamResult.Id).Should().Be.EqualTo(team.Id);
-			((object)teamResult.SiteAndTeam).Should().Be.EqualTo(team.SiteAndTeam);
+			hub = new ScheduleHub(personScheduleDayReadModelRepository);
 		}
 
 		[Test]

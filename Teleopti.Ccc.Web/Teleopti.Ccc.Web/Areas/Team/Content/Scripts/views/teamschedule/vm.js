@@ -20,6 +20,7 @@ define([
 			};
 
 			this.AddTeams = function (teams) {
+				self.Teams.removeAll();
 				self.Teams.push.apply(self.Teams, teams);
 			};
 

@@ -15,21 +15,10 @@ namespace Teleopti.Ccc.Web.Areas.Team.Core
 	public class ScheduleHub : Hub
 	{
 		private readonly IPersonScheduleDayReadModelRepository _personScheduleDayReadModelRepository;
-		private readonly ITeamProvider _teamProvider;
 		
-		public ScheduleHub(IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository, ITeamProvider teamProvider)
+		public ScheduleHub(IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository)
 		{
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
-			_teamProvider = teamProvider;
-		}
-
-		[UnitOfWork]
-		public object AvailableTeams(DateTime date)
-		{
-			return new
-			       	{
-			       		Teams = _teamProvider.GetPermittedTeams(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.SchedulesAdminWeb).Select(t => new {t.Id, t.SiteAndTeam}).ToList()
-			       	};
 		}
 
 		[UnitOfWork]

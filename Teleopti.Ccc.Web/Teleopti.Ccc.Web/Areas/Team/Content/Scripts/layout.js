@@ -114,21 +114,14 @@ require([
 		}
 
 		function _updateMenu() {
-			var options = {
-				url: "../../Application/NavigationContent",
-				dataType: "json",
-				type: 'GET',
-				cache: false,
-				success: function (responseData, textStatus, jqXHR) {
-					if (!responseData.IsMyTimeAvailable)
-						$('#link-mytime').hide();
-					if (!responseData.IsMobileReportsAvailable)
-						$('#link-mobilereports').hide();
+			$.getJSON('../../Application/NavigationContent?' + Math.round(new Date().getTime())).success(function(responseData, textStatus, jqXHR) {
+				if (!responseData.IsMyTimeAvailable)
+					$('#link-mytime').hide();
+				if (!responseData.IsMobileReportsAvailable)
+					$('#link-mobilereports').hide();
 
-					$('#username').text(responseData.UserName);
-				}
-			};
-			$.ajax(options);
+				$('#username').text(responseData.UserName);
+			});
 		}
 
 		function _fixBootstrapDropdownForMobileDevices() {

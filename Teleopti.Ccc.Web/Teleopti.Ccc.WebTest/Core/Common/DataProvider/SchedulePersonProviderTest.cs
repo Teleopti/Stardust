@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -27,11 +26,11 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			team.SetId(Guid.NewGuid());
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
 
-			teamRepository.Stub(x => x.Load(team.Id.Value)).Return(team);
+			teamRepository.Stub(x => x.Load(team.Id.GetValueOrDefault())).Return(team);
 
 			var target = new SchedulePersonProvider(personRepository, new FakePermissionProvider(), teamRepository);
 
-			target.GetPermittedPersonsForTeam(DateOnly.Today, team.Id.Value);
+			target.GetPermittedPersonsForTeam(DateOnly.Today, team.Id.GetValueOrDefault(), DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 
 			personRepository.AssertWasCalled(x => x.FindPeopleBelongTeam(team, period));
 		}
@@ -46,14 +45,14 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			var persons = new[] { new Person(), new Person() };
 
-			teamRepository.Stub(x => x.Load(team.Id.Value)).Return(team);
+			teamRepository.Stub(x => x.Load(team.Id.GetValueOrDefault())).Return(team);
 			personRepository.Stub(x => x.FindPeopleBelongTeam(team, new DateOnlyPeriod())).IgnoreArguments().Return(persons);
 			permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, DateOnly.Today, persons.ElementAt(0))).Return(false);
 			permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, DateOnly.Today, persons.ElementAt(1))).Return(true);
 
 			var target = new SchedulePersonProvider(personRepository, permissionProvider, teamRepository);
 
-			var result = target.GetPermittedPersonsForTeam(DateOnly.Today, team.Id.Value);
+			var result = target.GetPermittedPersonsForTeam(DateOnly.Today, team.Id.GetValueOrDefault(), DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 
 			result.Single().Should().Be(persons.ElementAt(1));
 		}

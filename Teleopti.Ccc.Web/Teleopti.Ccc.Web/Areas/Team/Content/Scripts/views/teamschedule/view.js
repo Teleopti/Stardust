@@ -61,13 +61,15 @@ define([
 
 					teamSchedule.isLoading(true);
 					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, queryDate.toDate()).done(function (schedules) {
-						timeLine.Agents.removeAll();
-						teamSchedule.Agents.removeAll();
-
-						var newItems = ko.utils.arrayMap(schedules, function (s) {
-							return new agentViewModel(timeLine, s);
-						});
-						teamSchedule.AddAgents(newItems);
+						var agents = teamSchedule.Agents();
+						for (var i = 0; i < schedules.length; i++) {
+							for (var j = 0; j < agents.length; j++) {
+								if (agents[j].Id == schedules[i].Id) {
+									agents[j].AddLayers(schedules[i].Projection);
+									break;
+								}
+							}
+						}
 
 						teamSchedule.Agents.sort(function (a, b) {
 							var firstStartMinutes = a.FirstStartMinute();
@@ -81,16 +83,46 @@ define([
 				};
 
 				var loadAvailableTeams = function () {
-					schedule.server.availableTeams(utcFromMoment(teamSchedule.SelectedDate())).done(function (details) {
+					$.getJSON('../Person/AvailableTeams?' + Math.round(new Date().getTime()), { date: teamSchedule.SelectedDate().toDate().toJSON() }).success(function (details, textStatus, jqXHR) {
+						var selectedTeamBefore = teamSchedule.SelectedTeam();
+
 						teamSchedule.AddTeams(details.Teams);
 
-						teamSchedule.TeamDateCombination.subscribe(function () {
-							loadSchedules();
-						});
-
-						teamSchedule.SelectedTeam(teamSchedule.Teams()[0]);
+						var teams = teamSchedule.Teams();
+						var teamToSelect = teams[0];
+						if (selectedTeamBefore) {
+							for (var i = 0; i < teams.length; i++) {
+								if (selectedTeamBefore.Id == teams[i].Id) {
+									teamToSelect = teams[i];
+									break;
+								}
+							}
+						}
+						teamSchedule.SelectedTeam(teamToSelect);
 					});
 				};
+
+				var loadPeople = function () {
+					$.getJSON('../Person/PeopleInTeam?' + Math.round(new Date().getTime()), { date: teamSchedule.SelectedDate().toDate().toJSON(), teamId: teamSchedule.SelectedTeam().Id }).success(function (people, textStatus, jqXHR) {
+						timeLine.Agents.removeAll();
+						teamSchedule.Agents.removeAll();
+
+						var newItems = ko.utils.arrayMap(people, function (s) {
+							return new agentViewModel(timeLine, s);
+						});
+						teamSchedule.AddAgents(newItems);
+
+						loadSchedules();
+					});
+				};
+
+				teamSchedule.SelectedTeam.subscribe(function () {
+					loadPeople();
+				});
+
+				teamSchedule.SelectedDate.subscribe(function () {
+					loadAvailableTeams();
+				});
 
 				$.connection.hub.url = 'signalr';
 				$.connection.hub.start()

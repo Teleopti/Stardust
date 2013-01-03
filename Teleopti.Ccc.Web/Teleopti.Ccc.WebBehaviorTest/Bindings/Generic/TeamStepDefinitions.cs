@@ -66,5 +66,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			EventualAssert.That(() => Pages.Pages.AdminWebPage.ScheduleTable.Text.Contains(personName), Is.True);
 		}
+
+		[Then(@"I should see no schedule for '(.*)'")]
+		public void ThenIShouldSeeNoScheduleFor(string personName)
+		{
+			EventualAssert.That(() => Pages.Pages.AdminWebPage.ScheduleTable.Text.Contains(personName), Is.True);
+		}
 	}
 }

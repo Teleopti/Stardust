@@ -73,13 +73,10 @@ Scenario: View team schedule, absence
 	When I view team schedule
 	Then I should see my colleague's absence
 
-	@ignore
 Scenario: View team schedule, no shift
-	Given I am an agent in a team
-	And I have a colleague
-	When I view team schedule
-	Then I should see myself without schedule
-	And I should see my colleague without schedule
+	Given I am a team leader for 'Team green' with role 'Full access to Admin web'
+	When I view schedules for '2012-12-03'
+	Then I should see no schedule for 'Pierre Baldi'
 
 	@ignore
 Scenario: Can't see confidential absence

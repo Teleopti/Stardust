@@ -178,6 +178,7 @@
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />
     <Compile Include="Areas\Start\Models\Authentication\PasswordWarningViewModel.cs" />
+    <Compile Include="Areas\Team\Controllers\PersonController.cs" />
     <Compile Include="Areas\Team\Core\AutofacDependencyResolver.cs" />
     <Compile Include="Areas\Team\Core\ScheduleHub.cs" />
     <Compile Include="Areas\Team\TeamAreaRegistration.cs" />
