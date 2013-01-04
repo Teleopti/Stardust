@@ -113,12 +113,8 @@ require([
 			$('#menu-placeholder').replaceWith(menuTemplate);
 		}
 		
-		function _randomNumber() {
-			return Math.round(new Date().getTime());
-		}
-
 		function _updateMenu() {
-			$.getJSON('Application/NavigationContent?' + _randomNumber()).success(function(responseData, textStatus, jqXHR) {
+			$.getJSON('Application/NavigationContent?' + $.now()).success(function (responseData, textStatus, jqXHR) {
 				if (!responseData.IsMyTimeAvailable)
 					$('#link-mytime').hide();
 				if (!responseData.IsMobileReportsAvailable)
