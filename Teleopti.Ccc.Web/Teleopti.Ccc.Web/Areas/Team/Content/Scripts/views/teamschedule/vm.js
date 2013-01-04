@@ -9,9 +9,19 @@ define([
 			this.TimeLine = timeLine;
 			this.Agents = ko.observableArray();
 			this.Teams = ko.observableArray();
-			this.SelectedDate = ko.observable(date);
+			this.SelectedDateInternal = ko.observable(date);
 			this.SelectedTeam = ko.observable();
 			this.isLoading = ko.observable(false);
+
+			this.SelectedDate = ko.computed({
+				read: function() {
+					return self.SelectedDateInternal().clone();
+				},
+				write: function(value) {
+					if (value.toDate() == self.SelectedDateInternal().toDate()) return;
+					self.SelectedDateInternal(value);
+				}
+			});
 
 			this.AddAgents = function (agents) {
 				self.Agents.push.apply(self.Agents, agents);
@@ -24,22 +34,11 @@ define([
 			};
 
 			this.NextDay = function () {
-				self.SelectedDate().add('d', 1);
-				self.SelectedDate.valueHasMutated();
+				self.SelectedDate(self.SelectedDate().add('d', 1));
 			};
 
 			this.PreviousDay = function () {
-				self.SelectedDate().add('d', -1);
-				self.SelectedDate.valueHasMutated();
+				self.SelectedDate(self.SelectedDate().add('d', -1));
 			};
-
-			this.TeamDateCombination = ko.computed(function () {
-				var teamId = '';
-				var team = self.SelectedTeam();
-				if (team != undefined)
-					teamId = team.Id;
-
-				return self.SelectedDate().format('YYYYMMDD') + '_' + teamId;
-			});
 		};
 	});

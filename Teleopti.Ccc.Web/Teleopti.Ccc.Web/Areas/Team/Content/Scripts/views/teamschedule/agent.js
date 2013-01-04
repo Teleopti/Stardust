@@ -11,21 +11,23 @@ define([
 
 			this.Name = ko.computed(function () { return agentDay.FirstName + ' ' + agentDay.LastName; });
 			this.Layers = ko.observableArray();
+			this.WorkTimeMinutes = ko.observable(0);
+			this.ContractTimeMinutes = ko.observable(0);
 
 			this.ContractTime = ko.computed(function () {
-				var time = moment().startOf('day').add('minutes', agentDay.ContractTimeMinutes);
+				var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
 				return time.format("H:mm");
 			});
 
 			this.WorkTime = ko.computed(function () {
-				var time = moment().startOf('day').add('minutes', agentDay.WorkTimeMinutes);
+				var time = moment().startOf('day').add('minutes', self.WorkTimeMinutes());
 				return time.format("H:mm");
 			});
 
 			this.ClearLayers = function () {
 				self.Layers.removeAll();
 			};
-			
+
 			this.AddLayers = function (layers) {
 				var newItems = ko.utils.arrayMap(layers, function (p) {
 					return new layer(timeline, p);
@@ -33,6 +35,14 @@ define([
 				self.Layers.push.apply(self.Layers, newItems);
 			};
 
+			this.AddContractTime = function (minutes) {
+				self.ContractTimeMinutes(self.ContractTimeMinutes() + minutes);
+			};
+
+			this.AddWorkTime = function (minutes) {
+				self.WorkTimeMinutes(self.WorkTimeMinutes() + minutes);
+			};
+			
 			this.FirstStartMinute = ko.computed(function () {
 				var start = undefined;
 				ko.utils.arrayForEach(self.Layers(), function (l) {

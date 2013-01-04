@@ -51,10 +51,6 @@ define([
 					.bind('orientationchange', resize)
 					.ready(resize);
 
-				var utcFromMoment = function (momentDate) {
-					return new Date(Date.UTC(momentDate.year(), momentDate.month(), momentDate.date()));
-				};
-
 				var initialLoad = true;
 				var loadSchedules = function () {
 					var queryDate = teamSchedule.SelectedDate().clone();
@@ -68,6 +64,8 @@ define([
 							for (var j = 0; j < agents.length; j++) {
 								if (agents[j].Id == schedules[i].Id) {
 									agents[j].AddLayers(schedules[i].Projection);
+									agents[j].AddContractTime(schedules[i].ContractTimeMinutes);
+									agents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
 									break;
 								}
 							}
@@ -98,15 +96,24 @@ define([
 					});
 				};
 
-				var arrayIndexOf = function (a, fnc) {
+				var arrayIndexOf = function (a, fnc, b) {
 					if (!fnc || typeof (fnc) != 'function') {
 						return -1;
 					}
 					if (!a || !a.length || a.length < 1) return -1;
 					for (var i = 0; i < a.length; i++) {
-						if (fnc(a[i])) return i;
+						if (fnc(a[i], b)) return i;
 					}
 					return -1;
+				};
+
+				var arrayExcept = function (sourceArray, exceptArray, predicate) {
+					for (var i = 0; i < exceptArray.length; i++) {
+						var index = arrayIndexOf(sourceArray, predicate, exceptArray[i]);
+						if (index > -1) {
+							sourceArray.splice(index, 1);
+						}
+					}
 				};
 
 				var loadAvailableTeams = function () {
@@ -114,34 +121,14 @@ define([
 						var teams = teamSchedule.Teams();
 						var teamsToRemove = teams.slice(0);
 						var teamsToAdd = details.Teams;
-						var index;
 
-						for (var i = 0; i < teamsToAdd.length; i++) {
-							index = arrayIndexOf(teamsToRemove, function (t) {
-								return t.Id == teamsToAdd[i].Id;
-							});
-							if (index > -1) {
-								teamsToRemove.splice(index, 1);
-							}
-						}
+						var teamEqualityComparer = function (a, b) {
+							return a.Id == b.Id;
+						};
 
-						for (var j = 0; j < teams.length; j++) {
-							index = arrayIndexOf(teamsToAdd, function (t) {
-								return t.Id == teams[j].Id;
-							});
-							if (index > -1) {
-								teamsToAdd.splice(index, 1);
-							}
-						}
-
-						for (var k = 0; k < teamsToRemove.length; k++) {
-							index = arrayIndexOf(teams, function (t) {
-								return t.Id == teamsToRemove[k].Id;
-							});
-							if (index > -1) {
-								teams.splice(index, 1);
-							}
-						}
+						arrayExcept(teamsToRemove, teamsToAdd, teamEqualityComparer);
+						arrayExcept(teamsToAdd, teams, teamEqualityComparer);
+						arrayExcept(teams, teamsToRemove, teamEqualityComparer);
 
 						$.merge(teams, teamsToAdd);
 
