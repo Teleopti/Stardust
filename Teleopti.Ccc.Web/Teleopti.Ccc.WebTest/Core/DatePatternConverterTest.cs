@@ -24,5 +24,23 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			DatePatternConverter.TojQueryPattern(dotNetPattern).Should().Be(jQueryPattern);
 		}
+
+		[Test]
+		public void ShouldConvertLongFormat()
+		{
+			const string dotNetPattern = "dd MMMM yyyy";
+			const string jQueryPattern = "dd MM yy";
+
+			DatePatternConverter.TojQueryPattern(dotNetPattern).Should().Be(jQueryPattern);
+		}
+
+		[Test]
+		public void ShouldConvertOtherLongFormat()
+		{
+			const string dotNetPattern = "dd MMM yyyy";
+			const string jQueryPattern = "dd M yy";
+
+			DatePatternConverter.TojQueryPattern(dotNetPattern).Should().Be(jQueryPattern);
+		}
 	}
 }

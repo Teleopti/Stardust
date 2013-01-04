@@ -57,12 +57,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return studentAvailabilityDay == null ? null : GetStudentAvailabilityForDay(studentAvailabilityDay);
 		}
 
-		public IStudentAvailabilityRestriction GetStudentAvailabilityForDate(DateOnly date)
-		{
-			var studentAvailabilityDay = GetStudentAvailabilityDayForDate(date);
-			return studentAvailabilityDay == null ? null : GetStudentAvailabilityForDay(studentAvailabilityDay);
-		}
-
 		public IStudentAvailabilityRestriction GetStudentAvailabilityForDay(IStudentAvailabilityDay studentAvailabilityDay)
 		{
 			var studentAvailabilityRestrictions =
