@@ -55,6 +55,7 @@ define([
 					return new Date(Date.UTC(momentDate.year(), momentDate.month(), momentDate.date()));
 				};
 
+				var initialLoad = true;
 				var loadSchedules = function () {
 					var queryDate = teamSchedule.SelectedDate();
 					queryDate.utc();
@@ -81,6 +82,18 @@ define([
 						teamSchedule.Agents.valueHasMutated();
 
 						teamSchedule.isLoading(false);
+
+						if (initialLoad) {
+							teamSchedule.SelectedTeam.subscribe(function () {
+								loadPeople();
+							});
+
+							teamSchedule.SelectedDate.subscribe(function () {
+								loadAvailableTeams();
+							});
+							initialLoad = false;
+						}
+
 						resize();
 					});
 				};
@@ -151,14 +164,6 @@ define([
 						loadSchedules();
 					});
 				};
-
-				teamSchedule.SelectedTeam.subscribe(function () {
-					loadPeople();
-				});
-
-				teamSchedule.SelectedDate.subscribe(function () {
-					loadAvailableTeams();
-				});
 
 				$.connection.hub.url = 'signalr';
 				$.connection.hub.start()
