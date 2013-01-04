@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Team.Controllers
 		{
 			var teams =
 				_teamProvider.GetPermittedTeams(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.SchedulesAdminWeb).Select(
-					t => new {t.Id, t.SiteAndTeam}).ToList();
+					t => new {t.Id, t.SiteAndTeam}).OrderBy(t => t.SiteAndTeam).ToList();
 			return Json(new
 			            	{
 			            		Teams = teams

@@ -55,6 +55,10 @@ define([
 					return new Date(Date.UTC(momentDate.year(), momentDate.month(), momentDate.date()));
 				};
 
+				var randomNumber = function () {
+					return Math.round(new Date().getTime());
+				};
+
 				var loadSchedules = function () {
 					var queryDate = teamSchedule.SelectedDate();
 					queryDate.utc();
@@ -62,6 +66,7 @@ define([
 					teamSchedule.isLoading(true);
 					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, queryDate.toDate()).done(function (schedules) {
 						var agents = teamSchedule.Agents();
+
 						for (var i = 0; i < schedules.length; i++) {
 							for (var j = 0; j < agents.length; j++) {
 								if (agents[j].Id == schedules[i].Id) {
@@ -71,39 +76,76 @@ define([
 							}
 						}
 
-						teamSchedule.Agents.sort(function (a, b) {
+						agents.sort(function (a, b) {
 							var firstStartMinutes = a.FirstStartMinute();
 							var secondStartMinutes = b.FirstStartMinute();
 							return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
 						});
+
+						teamSchedule.Agents.valueHasMutated();
 
 						teamSchedule.isLoading(false);
 						resize();
 					});
 				};
 
+				var arrayIndexOf = function (a, fnc) {
+					if (!fnc || typeof (fnc) != 'function') {
+						return -1;
+					}
+					if (!a || !a.length || a.length < 1) return -1;
+					for (var i = 0; i < a.length; i++) {
+						if (fnc(a[i])) return i;
+					}
+					return -1;
+				};
+
 				var loadAvailableTeams = function () {
-					$.getJSON('../Person/AvailableTeams?' + Math.round(new Date().getTime()), { date: teamSchedule.SelectedDate().toDate().toJSON() }).success(function (details, textStatus, jqXHR) {
-						var selectedTeamBefore = teamSchedule.SelectedTeam();
-
-						teamSchedule.AddTeams(details.Teams);
-
+					$.getJSON('Person/AvailableTeams?' + randomNumber(), { date: teamSchedule.SelectedDate().toDate().toJSON() }).success(function (details, textStatus, jqXHR) {
 						var teams = teamSchedule.Teams();
-						var teamToSelect = teams[0];
-						if (selectedTeamBefore) {
-							for (var i = 0; i < teams.length; i++) {
-								if (selectedTeamBefore.Id == teams[i].Id) {
-									teamToSelect = teams[i];
-									break;
-								}
+						var teamsToRemove = teams.slice(0);
+						var teamsToAdd = details.Teams;
+						var index;
+
+						for (var i = 0; i < teamsToAdd.length; i++) {
+							index = arrayIndexOf(teamsToRemove, function (t) {
+								return t.Id == teamsToAdd[i].Id;
+							});
+							if (index > -1) {
+								teamsToRemove.splice(index, 1);
 							}
 						}
-						teamSchedule.SelectedTeam(teamToSelect);
+
+						for (var j = 0; j < teams.length; j++) {
+							index = arrayIndexOf(teamsToAdd, function (t) {
+								return t.Id == teams[j].Id;
+							});
+							if (index > -1) {
+								teamsToAdd.splice(index, 1);
+							}
+						}
+
+						for (var k = 0; k < teamsToRemove.length; k++) {
+							index = arrayIndexOf(teams, function (t) {
+								return t.Id == teamsToRemove[k].Id;
+							});
+							if (index > -1) {
+								teams.splice(index, 1);
+							}
+						}
+
+						for (var l = 0; l < teamsToAdd.length; l++) {
+							teams.push(teamsToAdd[l]);
+						}
+
+						teamSchedule.Teams.valueHasMutated();
+
+						loadPeople();
 					});
 				};
 
 				var loadPeople = function () {
-					$.getJSON('../Person/PeopleInTeam?' + Math.round(new Date().getTime()), { date: teamSchedule.SelectedDate().toDate().toJSON(), teamId: teamSchedule.SelectedTeam().Id }).success(function (people, textStatus, jqXHR) {
+					$.getJSON('Person/PeopleInTeam?' + randomNumber(), { date: teamSchedule.SelectedDate().toDate().toJSON(), teamId: teamSchedule.SelectedTeam().Id }).success(function (people, textStatus, jqXHR) {
 						timeLine.Agents.removeAll();
 						teamSchedule.Agents.removeAll();
 
