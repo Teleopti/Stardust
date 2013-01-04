@@ -57,7 +57,7 @@ define([
 
 				var initialLoad = true;
 				var loadSchedules = function () {
-					var queryDate = teamSchedule.SelectedDate();
+					var queryDate = teamSchedule.SelectedDate().clone();
 					queryDate.utc();
 
 					teamSchedule.isLoading(true);

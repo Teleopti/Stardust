@@ -1,7 +1,6 @@
 define([
-		'knockout',
-		'moment'
-	], function (ko, moment) {
+		'knockout'
+	], function (ko) {
 
 		return function (timeLine, date) {
 
@@ -25,13 +24,13 @@ define([
 			};
 
 			this.NextDay = function () {
-				var newDate = moment(self.SelectedDate()).add('d', 1);
-				self.SelectedDate(newDate);
+				self.SelectedDate().add('d', 1);
+				self.SelectedDate.valueHasMutated();
 			};
 
 			this.PreviousDay = function () {
-				var newDate = moment(self.SelectedDate()).add('d', -1);
-				self.SelectedDate(newDate);
+				self.SelectedDate().add('d', -1);
+				self.SelectedDate.valueHasMutated();
 			};
 
 			this.TeamDateCombination = ko.computed(function () {
