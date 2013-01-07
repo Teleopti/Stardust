@@ -122,12 +122,10 @@
 		},
 
 		_setValue: function (value) {
-			if (this.value == value)
-				return;
 			this.value = value;
 			this.element.val(value);
 			this.input.val(value);
-			this._trigger("changed", event, { value: value });
+			this._trigger("changed", null, { value: value });
 		},
 
 		_setEnabled: function (value) {

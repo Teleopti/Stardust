@@ -3,11 +3,12 @@ using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
 
-/// <summary>
-/// This class is an implementation of the 'IComparer' interface.
-/// </summary>
+
 namespace Teleopti.Ccc.Win.Common
 {
+    /// <summary>
+    /// This class is an implementation of the 'IComparer' interface.
+    /// </summary>
     public class ListViewColumnSorter : IComparer
     {
         /// <summary>

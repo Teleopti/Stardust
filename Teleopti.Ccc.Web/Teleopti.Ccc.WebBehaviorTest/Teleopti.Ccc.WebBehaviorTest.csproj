@@ -108,6 +108,12 @@
     <Compile Include="Bindings\Generic\ShiftTradeRequestFromRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SignInPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\StudentAvailabilityPageStepDefinitions.cs" />
+    <Compile Include="StudentAvailabilityMultidays.feature.cs">
+      <DependentUpon>StudentAvailabilityMultidays.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Data\Setups\Generic\ScenarioConfigurable.cs" />
     <Compile Include="Bindings\Generic\ScenarioStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
@@ -356,7 +362,7 @@
       <DependentUpon>PreferencesPeriodFeedback.feature</DependentUpon>
     </Compile>
     <Compile Include="PreferencesScheduleStepDefinition.cs" />
-    <Compile Include="PreferencesFeedback2.feature.cs">
+    <Compile Include="PreferencesFeedback.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedback.feature</DependentUpon>
@@ -536,6 +542,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>BrowserNotifications.feature.cs</LastGenOutput>
     </None>
+    <None Include="StudentAvailabilityMultidays.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>StudentAvailabilityMultidays.feature.cs</LastGenOutput>
+    </None>
     <None Include="Routing.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Routing.feature.cs</LastGenOutput>
@@ -680,7 +690,7 @@
     </None>
     <None Include="PreferencesFeedback.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>PreferencesFeedback2.feature.cs</LastGenOutput>
+      <LastGenOutput>PreferencesFeedback.feature.cs</LastGenOutput>
     </None>
     <None Include="WeekSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -712,8 +722,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>::tasklist /fi "imagename eq iexplore.exe*" | FIND "INFO: No tasks" &gt; NUL
-::if %25errorlevel%25 NEQ 0 taskkill /IM iexplore.exe* /F</PreBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)packages\SpecFlow.1.9.0\tools\specflow.exe" generateall "$(ProjectDir)Teleopti.Ccc.WebBehaviorTest.csproj"</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

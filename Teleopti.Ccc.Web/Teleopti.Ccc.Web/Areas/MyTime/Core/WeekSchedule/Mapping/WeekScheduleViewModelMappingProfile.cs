@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AutoMapper;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Helper;
@@ -11,6 +12,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
@@ -23,8 +25,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly Func<IHeaderViewModelFactory> _headerViewModelFactory;
 		private readonly Func<IScheduleColorProvider> _scheduleColorProvider;
 		private readonly Func<IPermissionProvider> _permissionProvider;
+		private readonly Func<ILoggedOnUser> _loggedOnUser;
 
-		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory, Func<IScheduleColorProvider> scheduleColorProvider, Func<IPermissionProvider> permissionProvider)
+		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory, Func<IScheduleColorProvider> scheduleColorProvider, Func<IPermissionProvider> permissionProvider, Func<ILoggedOnUser> loggedOnUser)
 		{
 			_mapper = mapper;
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;
@@ -32,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_headerViewModelFactory = headerViewModelFactory;
 			_scheduleColorProvider = scheduleColorProvider;
 			_permissionProvider = permissionProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		protected override void Configure()
@@ -62,7 +66,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						   select new TimeLineViewModel
 									{
 										PositionPercentage = (decimal)(t - startTime).Ticks / (endTime - startTime).Ticks,
-										Time = t.ToString("h\\:mm")
+										Culture = _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture().ToString(),
+										Time = t
 									};
 				}))
 				.ForMember(d => d.RequestPermission, c => c.MapFrom(s => new RequestPermission

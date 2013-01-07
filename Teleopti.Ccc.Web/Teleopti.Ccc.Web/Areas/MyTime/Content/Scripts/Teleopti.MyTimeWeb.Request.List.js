@@ -245,3 +245,4 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	};
 
 })(jQuery);
+

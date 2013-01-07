@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     public interface IGroupDayOffOptimizer
     {
 		bool Execute(IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, ITeamSteadyStateHolder teamSteadyStateHolder, IScheduleDictionary scheduleDictionary);
+        ILockableBitArray WorkingBitArray { get; }
     }
 
     public class GroupDayOffOptimizer : IGroupDayOffOptimizer
@@ -60,21 +61,31 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			ILockableBitArray originalArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore,
 			                                                     _daysOffPreferences.ConsiderWeekAfter);
-			ILockableBitArray workingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore,
+            WorkingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore,
 			                                                       _daysOffPreferences.ConsiderWeekAfter);
 
 			IScheduleResultDataExtractor scheduleResultDataExtractor =
 				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix);
-			bool decisionMakerFoundDays = _decisionMaker.Execute(workingBitArray, scheduleResultDataExtractor.Values());
-			if (!decisionMakerFoundDays)
-				return false;
-			bool success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(workingBitArray), 100);
+
+            bool success = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
+			if (!success)
+			{
+				success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(WorkingBitArray), 100);
+				if (!success)
+					return false;
+
+				success = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
+				if (!success)
+					return false;
+			}
+			// DayOffBackToLegal if decisionMaker did something wrong
+            success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(WorkingBitArray), 100);
 			if (!success)
 				return false;
 
-			IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(workingBitArray, originalArray, matrix,
+            IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(WorkingBitArray, originalArray, matrix,
 			                                                                 _daysOffPreferences.ConsiderWeekBefore);
-			IList<DateOnly> daysOffToAdd = _changesTracker.DaysOffAdded(workingBitArray, originalArray, matrix,
+            IList<DateOnly> daysOffToAdd = _changesTracker.DaysOffAdded(WorkingBitArray, originalArray, matrix,
 			                                                            _daysOffPreferences.ConsiderWeekBefore);
 
             if (daysOffToRemove.Count == 0)
@@ -113,7 +124,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				//kan flytta hur mycket som helst, behöver få veta vad som ska schemaläggas
 				if (!_groupMatrixHelper.ExecuteDayOffMoves(containers, _dayOffDecisionMakerExecuter, _schedulePartModifyAndRollbackService))
 					return false;
-				daysOffToRemove = _changesTracker.DaysOffRemoved(workingBitArray, originalArray, matrix,
+                daysOffToRemove = _changesTracker.DaysOffRemoved(WorkingBitArray, originalArray, matrix,
 																			 _daysOffPreferences.ConsiderWeekBefore);
 
 				IList<IScheduleDay> removedDays = _groupMatrixHelper.GoBackToLegalState(daysOffToRemove, groupPerson, schedulingOptions, allMatrixes, _schedulePartModifyAndRollbackService);
@@ -146,7 +157,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return true;
 		}
 
-
+        public ILockableBitArray WorkingBitArray { get; private set; }
     }
 
     public class GroupMatrixContainer

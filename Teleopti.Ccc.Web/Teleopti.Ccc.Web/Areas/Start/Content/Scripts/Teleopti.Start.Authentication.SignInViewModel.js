@@ -6,7 +6,6 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	this.UserName = ko.observable('');
 	this.Password = ko.observable('');
 	this.ErrorMessage = ko.observable('');
-	this.UserNameHasFocus = ko.observable(false);
 
 	this.Ajax = new Teleopti.Start.Authentication.JQueryAjaxViewModel();
 
@@ -20,13 +19,16 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 		var selected = self.SelectedDataSource();
 		if (selected)
 			if (selected.Type == "application") {
-				self.UserNameHasFocus(true);
+				setTimeout(function () { self.UserNameFocus(true); }, 1);
 				return true;
 			}
 		return false;
 	});
 
+	this.UserNameFocus = ko.observable(false);
+
 	data.events.subscribe(function (dataSource) {
+		self.ErrorMessage('');
 		ko.utils.arrayForEach(self.DataSources(), function (d) {
 			d.Selected(d === dataSource);
 		});
@@ -50,11 +52,11 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 					dataSource.Type = data[i].Type;
 					self.DataSources.push(dataSource);
 				}
+				$('#DataSources').show();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 500) {
-					var response = $.parseJSON(jqXHR.responseText);
-					$('#Exception-message').text(response.Message);
+					$('#Exception-message').text(errorThrown);
 					$('#Exception-div').show();
 					return;
 				}
@@ -65,7 +67,8 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	this.SignIn = function () {
 		var state = data.authenticationState;
 
-		state.AttemptGotoApplicationBySignIn({
+		self.ErrorMessage('');
+		state.TryToSignIn({
 			data: {
 				type: self.SelectedDataSource().Type,
 				datasource: self.SelectedDataSource().Name,
@@ -74,9 +77,6 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 			},
 			errormessage: function (message) {
 				self.ErrorMessage(message);
-			},
-			exceptionmessage: function (message) {
-				self.ExceptionMessage(message);
 			},
 			nobusinessunit: function () {
 				self.ErrorMessage($('#Signin-error').data('nobusinessunitext'));

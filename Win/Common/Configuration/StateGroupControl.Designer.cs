@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			Syncfusion.Windows.Forms.Tools.TreeNodeAdvStyleInfo treeNodeAdvStyleInfo1 = new Syncfusion.Windows.Forms.Tools.TreeNodeAdvStyleInfo();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
@@ -67,7 +66,7 @@
 			// 
 			this.tableLayoutPanelHeader.BackColor = System.Drawing.Color.Transparent;
 			this.tableLayoutPanelHeader.ColumnCount = 1;
-			this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 525F));
+			this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 530F));
 			this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelHeader.Controls.Add(this.labelHeader, 1, 0);
 			this.tableLayoutPanelHeader.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -88,15 +87,12 @@
 			this.labelHeader.Location = new System.Drawing.Point(3, 8);
 			this.labelHeader.Name = "labelHeader";
 			this.labelHeader.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
-			this.labelHeader.Size = new System.Drawing.Size(227, 18);
+			this.labelHeader.Size = new System.Drawing.Size(225, 18);
 			this.labelHeader.TabIndex = 0;
 			this.labelHeader.Text = "xxManageStateGroupsAndStates";
 			// 
 			// treeViewAdv1
 			// 
-			treeNodeAdvStyleInfo1.EnsureDefaultOptionedChild = true;
-			this.treeViewAdv1.BaseStylePairs.AddRange(new Syncfusion.Windows.Forms.Tools.StyleNamePair[] {
-            new Syncfusion.Windows.Forms.Tools.StyleNamePair("Standard", treeNodeAdvStyleInfo1)});
 			this.treeViewAdv1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.treeViewAdv1.Dock = System.Windows.Forms.DockStyle.Fill;
 			// 
@@ -110,6 +106,8 @@
 			this.treeViewAdv1.HelpTextControl.Text = "help text";
 			this.treeViewAdv1.Location = new System.Drawing.Point(3, 36);
 			this.treeViewAdv1.Name = "treeViewAdv1";
+			this.treeViewAdv1.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
+			this.treeViewAdv1.ShowFocusRect = true;
 			this.treeViewAdv1.Size = new System.Drawing.Size(544, 353);
 			this.treeViewAdv1.TabIndex = 65;
 			this.treeViewAdv1.Text = "treeViewAdv1";

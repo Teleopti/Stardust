@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 {
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				var principal = _currentTeleoptiPrincipal.Current();
 				_roleToPrincipalCommand.Execute(principal, uow, personRep);
 
-				var allowed = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere) ||
+				var allowed = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MobileReports) ||
 				               _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb) ||
 							   _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AdminWeb);
 

@@ -15,9 +15,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		[FindBy(Id = "friendly-message")] public Div FriendlyMessage;
 
 		private Constraint CalendarCellConstraint = Find.By("data-mytime-date", v => v != null);
+		
 		private ListItemCollection CalendarCellsListItems { get { return Document.ListItems.Filter(CalendarCellConstraint); } }
+
 		public IEnumerable<ListItem> CalendarCells { get { return CalendarCellsListItems; } }
+		
 		public ListItem FirstCalendarCell { get { return Document.ListItem(CalendarCellConstraint).EventualGet(); } }
+		
 		public ListItem LastCalendarCell { get { return CalendarCellsListItems.Last(); } }
 
 		public ListItem CalendarCellForDate(string formattedDate)
@@ -31,6 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		}
 
 		public static string DateSelector(string formattedDate) { return "[data-mytime-date=" + formattedDate + "]"; }
+		
 		public static string DateSelector(DateTime date) { return DateSelector(date.ToString("yyyy-MM-dd")); }
 
 		public Div CalendarCellDataForDate(DateTime date, string className)
@@ -58,6 +63,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		}
 
 		public void SelectCalendarCellForDateByClick(DateTime date) { SelectCalendarCellByClick(CalendarCellForDate(date)); }
+
 		public void SelectCalendarCellByClick(ListItem cell) { cell.Click(); }
 
 		public void SelectCalendarCellByClass(DateTime date)

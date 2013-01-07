@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             get { return _model.AbsencesInBudgetGroup; }
         }
 
-        public void Initialize(IPersonRequest personRequest, DateOnly defaultDate)
+        public void Initialize(IBudgetGroup budgetGroup, DateOnly defaultDate)
         {
-            _model.Initialize(personRequest, defaultDate);
+            _model.Initialize(budgetGroup, defaultDate);
         }
 
         public void InitializeGridBinding()

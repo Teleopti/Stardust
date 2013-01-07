@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Interfaces.Domain;
@@ -19,12 +16,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         private IRequestAllowanceView _view;
         private IRequestAllowanceModel _model;
         private RequestAllowancePresenter _target;
-        private IPersonRequest _request;
+        private IBudgetGroup _budgetGroup;
 
         [SetUp]
         public void Setup()
         {
-            _request = new PersonRequest(new Person());
+            _budgetGroup = new BudgetGroup();
             _view = MockRepository.GenerateMock<IRequestAllowanceView>();
             _model = MockRepository.GenerateMock<IRequestAllowanceModel>();
             _target = new RequestAllowancePresenter(_view, _model);
@@ -40,9 +37,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             bg.AddCustomShrinkage(new CustomShrinkage("Vacation"));
             _model.Stub(x => x.SelectedBudgetGroup).Return(bg);
             _model.Stub(x => x.AbsencesInBudgetGroup).Return(new HashSet<IAbsence>(new[] {absence}));
-            //"setup state"
-            _request.Request = new AbsenceRequest(new Absence(), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-            _target.Initialize(_request, new DateOnly());
+            
+            _target.Initialize(_budgetGroup, new DateOnly());
 
             Assert.That(_target.Absences.Count(), Is.EqualTo(1));
         }

@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 				Expect.Call(_payload.ConfidentialDisplayColor(_person,dateOnly)).Return(Color.Blue);
 			    Expect.Call(_person.Period(new DateOnly(2011, 1, 1))).Return(_personPeriod);
 			    Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod).Repeat.AtLeastOnce();
-			    Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+			    Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.ContractDayOff).Repeat.AtLeastOnce();
 			}
 
 			using(_mockRepository.Playback())
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
                 Expect.Call(_payload.ConfidentialDisplayColor(_person,dateOnly)).Return(Color.Blue);
                 Expect.Call(_person.Period(new DateOnly(2011, 1, 1))).Return(_personPeriod);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+                Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote> {_publicNote}));
                 Expect.Call(_publicNote.GetScheduleNote(new NoFormatting())).IgnoreArguments().Return("publicNote");
             }
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
                 Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_person.Period(new DateOnly(2011, 1, 1))).Return(null);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1), TeleoptiPrincipal.Current.Regional.TimeZone));
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+                Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.None);
             }
 
             using (_mockRepository.Playback())

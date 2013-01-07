@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var dataSource = mocks.DynamicMock<IDataSource>();
 			var unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 			var uow = mocks.DynamicMock<IUnitOfWork>();
-			var domainAuthResult = new AuthenticationResult { HasMessage = true, Message = "sdf", Person = new Person(), Successful = true };
+			var domainAuthResult = new AuthenticationResult { HasMessage = true, Message = "sdf", Person = new Person(), Successful = true , PasswordExpired = true};
 			
 
 			using (mocks.Record())
@@ -94,6 +94,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				result.HasMessage = domainAuthResult.HasMessage;
 				result.Message = domainAuthResult.Message;
 				result.Person = domainAuthResult.Person;
+				result.PasswordExpired = domainAuthResult.PasswordExpired;
 				result.Successful = domainAuthResult.Successful;
 			}
 		}

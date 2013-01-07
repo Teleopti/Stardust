@@ -492,21 +492,20 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IVisualLayerCollection layerCollection = scheduleRange.ProjectionService().CreateProjection();
                 foreach (IVisualLayer layer in layerCollection)
                 {
-                    DrawLayer(e, layer, timeSpans, scheduleRange.Person);
+					DrawLayer(e, layer, timeSpans, scheduleRange.Person, significantPart);
                 }
 
                 if (layerCollection.Count() == 0)
                 {
-                 
-                    if (significantPart == SchedulePartView.FullDayAbsence)
-                    {
-                        var absenceCollection = scheduleRange.PersonAbsenceCollection();
-                        IPersonAbsence personAbsence = absenceCollection[absenceCollection.Count - 1];
-                        IVisualLayerFactory layerFactory = new VisualLayerFactory();
-                        IVisualLayer actLayer = layerFactory.CreateShiftSetupLayer(new Activity("activity"),
-                                                                             personAbsence.Period, personAbsence.Person);
-                        DrawLayer(e, layerFactory.CreateAbsenceSetupLayer(personAbsence.Layer.Payload, actLayer, personAbsence.Period), timeSpans, scheduleRange.Person);
-                    }
+					if(significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
+					{
+						var absenceCollection = scheduleRange.PersonAbsenceCollection();
+						IPersonAbsence personAbsence = absenceCollection[absenceCollection.Count - 1];
+						IVisualLayerFactory layerFactory = new VisualLayerFactory();
+						IVisualLayer actLayer = layerFactory.CreateShiftSetupLayer(new Activity("activity"), personAbsence.Period, personAbsence.Person);
+	
+						DrawLayer(e, layerFactory.CreateAbsenceSetupLayer(personAbsence.Layer.Payload, actLayer, personAbsence.Period), timeSpans, scheduleRange.Person, significantPart);
+					}
                 }
             }
         }
@@ -758,7 +757,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             return null;
         }
 
-        protected void DrawLayer(GridDrawCellEventArgs e, ILayer<IPayload> layer, DateDateTimePeriodDictionary timeSpans, IPerson person)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		protected void DrawLayer(GridDrawCellEventArgs e, ILayer<IPayload> layer, DateDateTimePeriodDictionary timeSpans, IPerson person, SchedulePartView significantPart)
         {
         	var dateOnly = (DateOnly) e.Style.Tag;
             DateTimePeriod period = timeSpans[dateOnly];
@@ -772,10 +772,20 @@ namespace Teleopti.Ccc.Win.Scheduling
             Rectangle rect = ViewBaseHelper.GetLayerRectangle(period, projectionRectangle, layer.Period, IsRightToLeft);
             if (!rect.IsEmpty)
             {
-                using (LinearGradientBrush lBrush = GridHelper.GetGradientBrush(rect, layer.Payload.ConfidentialDisplayColor(person,dateOnly)))
-                {
-                    e.Graphics.FillRectangle(lBrush, rect);
-                }
+				if (significantPart == SchedulePartView.ContractDayOff)
+				{
+					using (var brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, layer.Payload.ConfidentialDisplayColor(person, dateOnly)))
+					{
+						e.Graphics.FillRectangle(brush, rect);
+					}
+				}
+				else
+				{
+					using (LinearGradientBrush lBrush = GridHelper.GetGradientBrush(rect,layer.Payload.ConfidentialDisplayColor(person, dateOnly)))
+					{
+						e.Graphics.FillRectangle(lBrush, rect);
+					}
+				}
             }
         }
 

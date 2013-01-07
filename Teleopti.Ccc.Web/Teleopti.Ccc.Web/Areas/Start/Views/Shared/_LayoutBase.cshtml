@@ -13,7 +13,7 @@
 	<title>@ViewBag.LayoutBase.Title</title>
 	<meta name="description" content="" />
 	<meta name="author" content="" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
 	<link href="@Url.Content("~/Content/jqueryui/smoothness/jquery-ui-1.9.1.custom.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/Start/Content/Css/Site.css")" rel="stylesheet" type="text/css" />
@@ -24,6 +24,7 @@
 	<script src="@Url.Content("~/Content/Scripts/jquery.ba-hashchange.min.js")"></script>
 	<script src="@Url.Content("~/Content/Scripts/modernizr-2.6.2.js")"></script>
 	<script src="@Url.Content("~/Content/jqueryui/jquery-ui-1.9.1.custom.min.js")"></script>
+	<script src="@Url.Content("~/Content/jquery-plugin/jquery.placeholder.min.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/jquery.extensions.js")"></script>
 
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.js")"></script>
@@ -34,7 +35,7 @@
 <body @Html.LayoutBase().FullDirClass()@Html.LayoutBase().FullDirAttribute()>
 	@RenderSection("header", required: false)
 	@RenderBody()
-	<footer class="col-1"> 
+	<footer> 
 		
         <p>@ViewBag.LayoutBase.Footer</p>
 		

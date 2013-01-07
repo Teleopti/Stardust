@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -674,7 +673,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             //Send in same
             Assert.IsFalse(_target.ChangePassword(oldNotEncrypted, oldNotEncrypted, service, details).IsSuccessful);
-			Assert.IsFalse(_target.ChangePassword(oldNotEncrypted, oldNotEncrypted, service, details).IsAuthenticationSuccessful);
+			Assert.IsTrue(_target.ChangePassword(oldNotEncrypted, oldNotEncrypted, service, details).IsAuthenticationSuccessful);
 
          }
 

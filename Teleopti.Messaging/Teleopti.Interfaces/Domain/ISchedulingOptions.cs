@@ -28,19 +28,6 @@ namespace Teleopti.Interfaces.Domain
     /// </remarks>
     public interface ISchedulingOptions : ICloneable
     {
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [add contract schedule days off].
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [add contract schedule days off]; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-02-01
-        /// </remarks>
-        bool AddContractScheduleDaysOff { get; set; }
-
         /// <summary>
         /// Gets or sets a value indicating whether [use minimum persons].
         /// </summary>

@@ -15,6 +15,9 @@ using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
+	/// <summary>
+	/// Creates a user or do setups for the current user and persist those settings. Also can create and persists collegaues (persons) for the user.
+	/// </summary>
 	public class UserFactory
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(UserFactory));
@@ -120,37 +123,72 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		}
 
 		public CultureInfo Culture { get { return Person.PermissionInformation.Culture(); } }
+		
 		public IPerson Person { get; private set; }
 
+		public bool HasSetup<T>()
+		{
+			return QueryData<T>().Any();
+		}
+
+		public T UserData<T>()
+		{
+			return QueryData<T>().SingleOrDefault();
+		}
+
+		/// <summary>
+		/// Creates ans persists a person with an automatic number as name, plus creates and persists the list of persons who are in the inner Colleague list.
+		/// </summary>
+		/// <returns></returns>
 		public string MakeUser()
 		{
 			var userName = NextUserName();
 			return MakeUser(userName.LogOnName, userName.LastName, TestData.CommonPassword);
 		}
 
+		/// <summary>
+		/// Creates and persists a person with the given name, plus creates and persists the list of persons who are in the inner Colleague list.
+		/// </summary>
+		/// <param name="logonName">Name of the logon.</param>
+		/// <param name="lastName">The last name.</param>
+		/// <param name="password">The password.</param>
+		/// <returns>Returns the given logonName</returns>
 		public string MakeUser(string logonName, string lastName, string password)
 		{
-			Person = PersonFactory.CreatePersonWithBasicPermissionInfo(logonName, password);
-			Person.Name = new Name("Agent", lastName);
+			CreatePersonWithPermissions(logonName, lastName, password);
 
 			Log.Write("Making user " + Person.Name);
 
-			MakePerson(Person);
+			SetupAndPersistPerson(Person);
 
-			_colleagues.ForEach(colleague =>
-			{
-				var colleagueName = NextColleagueName();
-				colleague.Person = PersonFactory.CreatePerson();
-				colleague.Person.Name = new Name("Colleague", colleagueName.LastName);
-				colleague.MakePerson(colleague.Person);
-			});
+			CreateAndPersistColleagueList();
 
 			Resources.Culture = Culture;
 
 			return logonName;
 		}
 
-		public void MakePerson(IPerson person)
+		private void CreatePersonWithPermissions(string logonName, string lastName, string password)
+		{
+			Person = PersonFactory.CreatePersonWithBasicPermissionInfo(logonName, password);
+			Person.Name = new Name("Agent", lastName);
+		}
+
+		/// <summary>
+		/// Creates the colleague list of persons who are in the inner Colleague list.
+		/// </summary>
+		private void CreateAndPersistColleagueList()
+		{
+			_colleagues.ForEach(colleague =>
+			                    	{
+			                    		var colleagueName = NextColleagueName();
+			                    		colleague.Person = PersonFactory.CreatePerson();
+			                    		colleague.Person.Name = new Name("Colleague", colleagueName.LastName);
+			                    		colleague.SetupAndPersistPerson(colleague.Person);
+			                    	});
+		}
+
+		private void SetupAndPersistPerson(IPerson person)
 		{
 			CultureInfo culture = null;
 
@@ -187,16 +225,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private IEnumerable<T> QueryData<T>()
 		{
 			return from s in AllSpecs where typeof (T).IsAssignableFrom(s.GetType()) select (T) s;
-		}
-
-		public bool HasSetup<T>()
-		{
-			return QueryData<T>().Any();
-		}
-
-		public T UserData<T>()
-		{
-			return QueryData<T>().SingleOrDefault();
 		}
 
 	}

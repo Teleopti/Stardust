@@ -1,15 +1,16 @@
 ﻿
 Teleopti.Start.Authentication.NavigationConstructor = function () {
-	this.GotoBusinessUnits = function (authenticationType, dataSourceName) {
-		window.location.hash = 'businessunit/' + authenticationType + '/' + dataSourceName;
+	this.GotoChangePassword = function (dataSourceName) {
+		window.location.hash = 'changepassword/' + encodeURIComponent(dataSourceName);
 	};
-	this.GotoSignIn = function (jqXHR, textStatus, errorThrown) {
+	this.GotoMustChangePassword = function (dataSourceName) {
+		window.location.hash = 'mustchangepassword/' + encodeURIComponent(dataSourceName);
+	};
+	this.GotoBusinessUnits = function (authenticationType, dataSourceName) {
+		window.location.hash = 'businessunit/' + authenticationType + '/' + encodeURIComponent(dataSourceName);
+	};
+	this.GotoSignIn = function () {
 		window.location.hash = '';
-		if (jqXHR.status == 500) {
-			var response = $.parseJSON(jqXHR.responseText);
-			$('#Exception-message').text(response.Message);
-			$('#Exception-div').show();
-		}
 	};
 	this.GotoMenu = function () {
 		window.location.hash = 'menu';

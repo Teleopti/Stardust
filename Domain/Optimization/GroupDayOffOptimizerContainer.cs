@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         bool Execute();
         IPerson Owner { get; }
     	IScheduleMatrixPro Matrix { get; }
+        ILockableBitArray WorkingBitArray { get; }
     }
 
     public class GroupDayOffOptimizerContainer : IGroupDayOffOptimizerContainer
@@ -76,6 +77,8 @@ namespace Teleopti.Ccc.Domain.Optimization
                 _groupDayOffOptimizerCreator.CreateDayOffOptimizer(_converter, decisionMaker, _dayOffDecisionMakerExecuter , daysOffPreferences);
 
 			bool dayOffOptimizerResult = dayOffOptimizer.Execute(_matrix, _allMatrixes, schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
+            if (dayOffOptimizerResult)
+                WorkingBitArray = dayOffOptimizer.WorkingBitArray;
             return dayOffOptimizerResult;
         }
 
@@ -89,5 +92,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			get { return _matrix; }
     	}
 
+        public ILockableBitArray WorkingBitArray { get; private set; }
     }
 }

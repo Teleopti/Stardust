@@ -3,7 +3,12 @@ using Teleopti.Ccc.Domain.Specification;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-	public class AlreadyAbsentSpecification : Specification<IAbsenceRequest>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
+	public interface IAlreadyAbsentSpecification : ISpecification<IAbsenceRequest>
+	{
+	}
+
+	public class AlreadyAbsentSpecification : Specification<IAbsenceRequest>, IAlreadyAbsentSpecification
 	{
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 

@@ -138,6 +138,9 @@
   <data name="AmpersandPeriodColon" xml:space="preserve">
     <value>&amp;ระยะเวลา</value>
   </data>
+  <data name="Clipboard" xml:space="preserve">
+    <value>คลิปบอร์ด</value>
+  </data>
   <data name="Copy" xml:space="preserve">
     <value>คัดลอก</value>
   </data>
@@ -329,5 +332,38 @@
   </data>
   <data name="AuditingReportAbsence" xml:space="preserve">
     <value>ขาด</value>
+  </data>
+  <data name="Preference" xml:space="preserve">
+    <value>การตั้งค่า</value>
+  </data>
+  <data name="Absences" xml:space="preserve">
+    <value>ขาด</value>
+  </data>
+  <data name="AbsencesColon" xml:space="preserve">
+    <value>ขาด:</value>
+  </data>
+  <data name="Activities" xml:space="preserve">
+    <value>กิจกรรม</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>ไม่</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>ประหยัด</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>ลำดับชั้นธุรกิจ</value>
+  </data>
+  <data name="CombinedGrid" xml:space="preserve">
+    <value>กิจกรรม</value>
+  </data>
+  <data name="ReportLevelDetailNone" xml:space="preserve">
+    <value>ไม่</value>
+  </data>
+  <data name="Starting" xml:space="preserve">
+    <value>ที่เริ่มต้น</value>
+  </data>
+  <data name="DefaultTag" xml:space="preserve">
+    <value>&lt;ไม่&gt;</value>
   </data>
 </root>

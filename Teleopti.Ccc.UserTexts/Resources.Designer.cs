@@ -10176,15 +10176,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password policy requires a safer password..
-        /// </summary>
-        public static string InvalidPassword {
-            get {
-                return ResourceManager.GetString("InvalidPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Invalid percentage value.
         /// </summary>
         public static string InvalidPercentageValue {
@@ -10217,6 +10208,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InvalidTimeValue {
             get {
                 return ResourceManager.GetString("InvalidTimeValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid user name or password..
+        /// </summary>
+        public static string InvalidUserNameOrPassword {
+            get {
+                return ResourceManager.GetString("InvalidUserNameOrPassword", resourceCulture);
             }
         }
         
@@ -11220,7 +11220,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log on failed! Password has expired, and your account is locked..
+        ///   Looks up a localized string similar to Log on failed! Password has expired..
         /// </summary>
         public static string LogOnFailedPasswordExpired {
             get {
@@ -13084,7 +13084,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MyTimeWeb.
+        ///   Looks up a localized string similar to MyTime Web.
         /// </summary>
         public static string MyTimeWeb {
             get {
@@ -15888,6 +15888,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to People.
+        /// </summary>
+        public static string PeopleCap {
+            get {
+                return ResourceManager.GetString("PeopleCap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to People Insert Screen.
         /// </summary>
         public static string PeopleInsertScreen {
@@ -17227,6 +17236,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reforecast.
+        /// </summary>
+        public static string Reforecast {
+            get {
+                return ResourceManager.GetString("Reforecast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Refresh.
         /// </summary>
         public static string Refresh {
@@ -17322,6 +17340,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Remaining {
             get {
                 return ResourceManager.GetString("Remaining", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
             }
         }
         
@@ -19846,6 +19873,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select workload.
+        /// </summary>
+        public static string SelectWorkload {
+            get {
+                return ResourceManager.GetString("SelectWorkload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select your list of rule sets.
         /// </summary>
         public static string SelectYourListOfValues {
@@ -21121,6 +21157,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SkillWizardWelcome {
             get {
                 return ResourceManager.GetString("SkillWizardWelcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skip.
+        /// </summary>
+        public static string Skip {
+            get {
+                return ResourceManager.GetString("Skip", resourceCulture);
             }
         }
         
@@ -24340,6 +24385,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Warning!.
+        /// </summary>
+        public static string WarningWithExclamatory {
+            get {
+                return ResourceManager.GetString("WarningWithExclamatory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to was not successful.
         /// </summary>
         public static string wasNotSuccessful {
@@ -25180,6 +25234,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have to select at least one workload.
+        /// </summary>
+        public static string YouHaveToSelectAtLeastOneWorkload {
+            get {
+                return ResourceManager.GetString("YouHaveToSelectAtLeastOneWorkload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to save changes in schedule?.
         /// </summary>
         public static string YouHaveUnsavedDataDoYouWantToCloseAnyWay {
@@ -25230,6 +25293,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YourLicensWillExpireDoNotForgetToRenewItInTime {
             get {
                 return ResourceManager.GetString("YourLicensWillExpireDoNotForgetToRenewItInTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your password has already expired..
+        /// </summary>
+        public static string YourPasswordHasAlreadyExpired {
+            get {
+                return ResourceManager.GetString("YourPasswordHasAlreadyExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your password will expire soon..
+        /// </summary>
+        public static string YourPasswordWillExpireSoon {
+            get {
+                return ResourceManager.GetString("YourPasswordWillExpireSoon", resourceCulture);
             }
         }
         

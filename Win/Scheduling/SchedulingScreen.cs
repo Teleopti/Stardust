@@ -147,7 +147,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _showGraph = true;
         private bool _showRibbonTexts = true;
         #endregion
-
         private ControlType _controlType;
         private SchedulerMessageBrokerHandler _schedulerMessageBrokerHandler;
 		private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
@@ -183,6 +182,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     	private ISchedulerGroupPagesProvider _groupPagesProvider;
         public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet { get; private set; }
     	private SkillResultViewSetting _skillResultViewSetting;
+    	private ISingleSkillDictionary _singleSkillDictionary;
 
         #region enums
         private enum ZoomLevel
@@ -595,7 +595,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         #endregion
-
         #region editcontrol
 
         private void instantiateEditControl()
@@ -706,7 +705,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripMenuItemFindMatching.Visible = StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
 				toolStripMenuItemFindMatching2.Visible = StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
                 Refresh();
-				drawSkillGrid();
+				drawSkillGrid();	
             }
             if (e.KeyCode == Keys.Z && e.Modifiers == Keys.Control)
             {
@@ -724,6 +723,18 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (e.KeyValue == 107 && e.Alt && e.Shift && e.Control)
                 nonBlendSkills();
 
+			if(e.KeyCode == Keys.Q && e.Control && e.Shift)
+			{
+				if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+				{
+					using(var agentSkillExplorer = new AgentSkillExplorer())
+					{
+						agentSkillExplorer.Setup(_schedulerState, _singleSkillDictionary);
+						agentSkillExplorer.ShowDialog(this);
+					}
+				}
+			}
+		
             base.OnKeyDown(e);
         }
 
@@ -1487,7 +1498,13 @@ namespace Teleopti.Ccc.Win.Scheduling
             var scheduleTag = (IScheduleTag) (((ToolStripMenuItem) (sender)).Tag);
             var gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
             var setTagCommand = new SetTagCommand(_undoRedo, gridSchedulesExtractor, _scheduleView.Presenter,_scheduleView, scheduleTag, LockManager);
-            setTagCommand.Execute();
+        	_backgroundWorkerRunning = true;
+        	toolStripStatusLabelStatus.Text = Resources.ScheduleTags;
+			statusStrip1.Refresh();
+			setTagCommand.Execute();
+        	toolStripStatusLabelStatus.Text = Resources.Ready;
+			statusStrip1.Refresh();
+        	_backgroundWorkerRunning = false;
             updateSelectionInfo(gridSchedulesExtractor.ExtractSelected());
             Refresh();
             RefreshSelection();
@@ -2134,19 +2151,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             return true;
         }
 
-        private bool isViewAllowanceAvailable()
-        {
-            var defaultRequest = _requestView.SelectedAdapters().Count > 0 ? _requestView.SelectedAdapters().First().PersonRequest : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
-            if (defaultRequest != null)
-            {
-                var requestDate = new DateOnly(defaultRequest.RequestedDate);
-                var personPeriod = defaultRequest.Person.PersonPeriodCollection.Where(
-                    p => p.Period.Contains(requestDate)).FirstOrDefault();
-                return personPeriod != null && personPeriod.BudgetGroup != null;
-            }
-            return false;
-        }
-
         #region Virtual skill handling
 
 		private void SkillGridMenuItemPeriodClick(object sender, EventArgs e)
@@ -2565,7 +2569,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 
             	disableButtonsIfTeamLeaderMode();
-                if (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp)
+                if (_scheduleView != null && (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp) || e.Reason == GridSelectionReason.ArrowKey)
                 {
                     _scheduleView.Presenter.UpdateFromEditor();
                     updateShiftEditor();
@@ -2767,9 +2771,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void setupRequestViewButtonStates()
         {
-            toolStripMenuItemViewAllowance.Visible = toolStripButtonViewAllowance.Available = _budgetPermissionService.IsAllowancePermitted;
-            if (toolStripButtonViewAllowance.Available)
-                toolStripButtonViewAllowance.Enabled = isViewAllowanceAvailable();
+            toolStripButtonViewAllowance.Available = _budgetPermissionService.IsAllowancePermitted;
+            toolStripMenuItemViewAllowance.Visible = _budgetPermissionService.IsAllowancePermitted;
+            toolStripMenuItemViewAllowance.Enabled = _budgetPermissionService.IsAllowancePermitted;
         }
 
         private bool stateHolderExceptionOccurred(RunWorkerCompletedEventArgs e)
@@ -4025,7 +4029,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                 initMessageBroker(period.LoadedPeriod());
             }
 
-            _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState);
+        	_singleSkillDictionary = _container.Resolve<ISingleSkillDictionary>();
+			_singleSkillDictionary.Create(SchedulerState.SchedulingResultState.PersonsInOrganization.ToList(), SchedulerState.RequestedPeriod.DateOnlyPeriod);
+
+            _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _singleSkillDictionary);
             _scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
 
             _groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container);
@@ -4059,7 +4066,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _defaultScheduleTag = tag;
                 break;
             }
-
         }
 
         private void createMaxSeatSkills(ISkillDayRepository skillDayRepository)
@@ -4310,7 +4316,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     if (_scheduleView != null && _scheduleView.SelectedSchedules().Count == 1)
                         updateShiftEditor();
                 }
-
             }
         }
 
@@ -4647,7 +4652,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             skillGridMenuItem = new ToolStripMenuItem(Resources.CreateSkillSummery);
             skillGridMenuItem.Click += skillGridMenuItem_Click;
             _contextMenuSkillGrid.Items.Add(skillGridMenuItem);
-            skillGridMenuItem = new ToolStripMenuItem(Resources.EditSkillSummery) {Name = "Edit", Enabled = false};
+            skillGridMenuItem = new ToolStripMenuItem(Resources.EditSkillSummery) {Name = "Edit", Enabled = false};	
             _contextMenuSkillGrid.Items.Add(skillGridMenuItem);
             skillGridMenuItem = new ToolStripMenuItem(Resources.DeleteSkillSummery) {Name = "Delete", Enabled = false};
             _contextMenuSkillGrid.Items.Add(skillGridMenuItem);
@@ -4662,7 +4667,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             toolStripButtonDayView.Tag = ZoomLevel.Level1;
             toolStripButtonWeekView.Tag = ZoomLevel.Level2;
-            toolStripButtonDetailView.Tag = ZoomLevel.Level3;
+            toolStripButtonFilterAgents.Tag = ZoomLevel.Level3;
             toolStripButtonPeriodView.Tag = ZoomLevel.Level4;
             toolStripButtonSummaryView.Tag = ZoomLevel.Level5;
             toolStripButtonRequestView.Tag = ZoomLevel.Level6;
@@ -4846,13 +4851,14 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _grid.ContextMenuStrip = contextMenuViews;
                     ActiveControl = _grid;
                     break;
-                case ZoomLevel.Level3:
-                    restrictionViewMode(false);
-                    _grid.BringToFront();
-                    _scheduleView = new DetailView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter,_clipHandlerSchedule, _overriddenBusinessRulesHolder, callback,_defaultScheduleTag);
-					_grid.ContextMenuStrip = contextMenuViews;
-                    ActiveControl = _grid;
-                    break;
+				//removed in PBI21261
+                //case ZoomLevel.Level3:
+					//restrictionViewMode(false);
+					//_grid.BringToFront();
+					//_scheduleView = new DetailView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter,_clipHandlerSchedule, _overriddenBusinessRulesHolder, callback,_defaultScheduleTag);
+					//_grid.ContextMenuStrip = contextMenuViews;
+					//ActiveControl = _grid;
+					//break;
                 case ZoomLevel.Level2:
                     restrictionViewMode(false);
                     _grid.BringToFront();
@@ -5832,7 +5838,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (_schedulerMeetingHelper != null)
                 _schedulerMeetingHelper.ModificationOccured -= _schedulerMeetingHelper_ModificationOccured;
             if (schedulerSplitters1 != null)
+            {
+                schedulerSplitters1.HandlePersonRequestView1.RemoveEvents();
                 schedulerSplitters1.TabSkillData.SelectedIndexChanged -= tabSkillData_SelectedIndexChanged;
+            }
             if (_grid != null)
             {
                 _grid.CurrentCellKeyDown -= grid_CurrentCellKeyDown;
@@ -5946,8 +5955,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             toolStripExHandleRequests.Enabled = eventParameters.Value.SelectionIsEditable && isPermittedApproveRequest(_requestView.SelectedAdapters());
             ToolStripMenuItemViewDetails.Enabled =toolStripButtonViewDetails.Enabled = isViewRequestDetailsAvailable();
-            if (_budgetPermissionService.IsAllowancePermitted)
-                toolStripMenuItemViewAllowance.Enabled = isViewAllowanceAvailable();
         }
 
         private void wpfShiftEditor1_DeleteMeeting(object sender, CustomEventArgs<IPersonMeeting> e)
@@ -6970,14 +6977,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void showRequestAllowanceView()
         {
-            var defaultRequest = _requestView.SelectedAdapters().Count > 0 ? _requestView.SelectedAdapters().First().PersonRequest : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
-            if (defaultRequest == null) return;
-            var requestDate = new DateOnly(defaultRequest.RequestedDate);
-            var personPeriod = defaultRequest.Person.PersonPeriodCollection.Where(p => p.Period.Contains(requestDate)).FirstOrDefault();
-            if (personPeriod != null && personPeriod.BudgetGroup != null)
+            var defaultRequest = _requestView.SelectedAdapters().Count > 0
+                                     ? _requestView.SelectedAdapters().First().PersonRequest
+                                     : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
+            if (defaultRequest == null)
             {
-                var allowanceView = new RequestAllowanceView(defaultRequest, new DateOnly(_defaultFilterDate));
+                var allowanceView = new RequestAllowanceView(null, _defaultFilterDate);
                 allowanceView.Show(this);
+
+            }else
+            {
+                var requestDate = new DateOnly(defaultRequest.RequestedDate);
+                var personPeriod = defaultRequest.Person.PersonPeriodCollection.Where(p => p.Period.Contains(requestDate)).FirstOrDefault();
+                if (personPeriod != null)
+                {
+                    var allowanceView = new RequestAllowanceView(personPeriod.BudgetGroup, requestDate);
+                    allowanceView.Show(this);
+                }
             }
         }
 

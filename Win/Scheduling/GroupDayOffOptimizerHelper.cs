@@ -60,13 +60,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
             var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedDays, currentPersonTimeZone));
-
+			var openPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
 
             IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
             var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
 
 			groupPagePerDateHolder.GroupPersonGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
-					.CreateGroupPagePerDate(selectedPeriod.DayCollection(), groupPageDataProvider,
+					.CreateGroupPagePerDate(openPeriod.DayCollection(), groupPageDataProvider,
 					optimizerPreferences.Extra.GroupPageOnTeam);
 			
             OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, selectedPeriod, optimizerPreferences.Rescheduling, _container);
@@ -371,45 +371,36 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   where ((IDeleteTag)item).IsDeleted == false
                                                   select item).ToList();
 
-            // Do not use DO back to legal when groupscheduling as every agent is treated differently
-            //var e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.DaysOffBackToLegalState + Resources.ThreeDots);
-            //resourceOptimizerPersonOptimized(this, e);
-
-            //// to make sure we are in legal state before we can do day off optimization
-            //((List<IDayOffTemplate>)displayList).Sort(new DayOffTemplateSorter());
-            //DaysOffBackToLegalState(matrixOriginalStateContainers, optimizerPreferences, _backgroundWorker,
-            //                        displayList[0], false);
-
             var e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.Rescheduling + Resources.ThreeDots);
             resourceOptimizerPersonOptimized(this, e);
 
             // Schedule White Spots after back to legal state
             var scheduleService = _container.Resolve<IScheduleService>();
 
-			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
+			//ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
 
-            // schedule those are the white spots after back to legal state
-            // ??? check if all white spots could be scheduled ??????
-			OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container, rollbackService);
+			//// schedule those are the white spots after back to legal state
+			//// ??? check if all white spots could be scheduled ??????
+			//OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container, rollbackService);
 
             
-            bool found = false;
-            foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixContainerList)
-            {
-                if (!matrixOriginalStateContainer.IsFullyScheduled())
-                {
-                    found = true;
-                    rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService);
-                }
-            }
+			//bool found = false;
+			//foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixContainerList)
+			//{
+			//    if (!matrixOriginalStateContainer.IsFullyScheduled())
+			//    {
+			//        found = true;
+			//        rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService);
+			//    }
+			//}
 
-            if (found)
-            {
-                foreach (var dateOnly in selectedPeriod.DayCollection())
-                {
-                    _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, optimizerPreferences.Rescheduling.ConsiderShortBreaks);
-                }
-            }
+			//if (found)
+			//{
+			//    foreach (var dateOnly in selectedPeriod.DayCollection())
+			//    {
+			//        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, optimizerPreferences.Rescheduling.ConsiderShortBreaks);
+			//    }
+			//}
 
             // day off optimization
 
@@ -469,26 +460,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
         		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
 			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
-			var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, _resourceOptimizationHelper, groupOptimizerFindMatrixesForGroup);
+			var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, _resourceOptimizationHelper, groupOptimizerFindMatrixesForGroup, optimizerPreferences.DaysOff);
 
 			service.ReportProgress += resourceOptimizerPersonOptimized;
             service.Execute(optimizerContainers, optimizerPreferences.Extra.KeepSameDaysOffInTeam);
             service.ReportProgress -= resourceOptimizerPersonOptimized;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ResourceOptimizerProgressEventArgs.#ctor(Teleopti.Interfaces.Domain.IPerson,System.Double,System.Double,System.String)")]
-        private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService)
-        {
-            var e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name);
-            resourceOptimizerPersonOptimized(this, e);
+		//[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ResourceOptimizerProgressEventArgs.#ctor(Teleopti.Interfaces.Domain.IPerson,System.Double,System.Double,System.String)")]
+		//private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService)
+		//{
+		//    var e = new ResourceOptimizerProgressEventArgs(null, 0, 0, Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name);
+		//    resourceOptimizerPersonOptimized(this, e);
 
-            rollbackService.ClearModificationCollection();
-            foreach (IScheduleDayPro scheduleDayPro in matrixOriginalStateContainer.ScheduleMatrix.EffectivePeriodDays)
-            {
-                IScheduleDay originalPart = matrixOriginalStateContainer.OldPeriodDaysState[scheduleDayPro.Day];
-                rollbackService.Modify(originalPart);
-            }
-        }
+		//    rollbackService.ClearModificationCollection();
+		//    foreach (IScheduleDayPro scheduleDayPro in matrixOriginalStateContainer.ScheduleMatrix.EffectivePeriodDays)
+		//    {
+		//        IScheduleDay originalPart = matrixOriginalStateContainer.OldPeriodDaysState[scheduleDayPro.Day];
+		//        rollbackService.Modify(originalPart);
+		//    }
+		//}
 
         void resourceOptimizerPersonOptimized(object sender, ResourceOptimizerProgressEventArgs e)
         {
@@ -526,7 +517,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             // create decisionmakers
 
             IEnumerable<IDayOffDecisionMaker> decisionMakers =
-                OptimizerHelperHelper.CreateDecisionMakers(scheduleMatrixArray, dayOffPreferences, optimizerPreferences);
+                OptimizerHelperHelper.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences);
 
             IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions();
             ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService

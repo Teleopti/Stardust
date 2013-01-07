@@ -11,8 +11,7 @@
 	padding: 5px;
 	font-size: 12px;
 	line-height: 18px;
-   overflow: hidden;
-   max-height: 245px;
+	overflow: visible;
 }
 
 .rtl .ui-tooltip-custom .ui-tooltip-content {

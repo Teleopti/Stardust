@@ -100,8 +100,7 @@
       <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NHibernate.3.3.1.4000\lib\Net35\NHibernate.dll</HintPath>
+      <HintPath>..\packages\NHibernate.3.3.2.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
@@ -177,6 +176,7 @@
     <Compile Include="Forecasting\Import\ForecastsRowExtractorTest.cs" />
     <Compile Include="Forecasting\MultisiteDayCloneIssueTest.cs" />
     <Compile Include="Forecasting\OpenForWorkTest.cs" />
+    <Compile Include="Forecasting\ReforecastPercentCalculatorTest.cs" />
     <Compile Include="Forecasting\SkillDayBug14724Test.cs" />
     <Compile Include="Forecasting\DayHasAboveMaxSeatsTest.cs" />
     <Compile Include="Forecasting\IntervalHasAboveMaxSeatsTest.cs" />
@@ -324,7 +324,7 @@
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
-    <Compile Include="ResourceCalculation\DayOffSchedulerTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\DayOffSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManagerTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet3.cs" />
@@ -346,7 +346,9 @@
     <Compile Include="ResourceCalculation\ScheduleServiceTest.cs" />
     <Compile Include="Optimization\SkillExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="ResourceCalculation\SingleSkillCalculatorTest.cs" />
+    <Compile Include="ResourceCalculation\SingleSkillDictionaryTest.cs" />
     <Compile Include="ResourceCalculation\SingleSkillLoadedDeciderTest.cs" />
+    <Compile Include="ResourceCalculation\SingleSkillMaxSeatCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\SwapRawServiceTest.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNewTest.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNewTest.cs" />
@@ -354,7 +356,7 @@
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateServiceTest.cs" />
     <Compile Include="Scheduling\Assignment\GroupShiftCategoryFairnessCreatorTest.cs" />
-    <Compile Include="Scheduling\Assignment\HasDayOffDefinitionTest.cs" />
+    <Compile Include="Scheduling\Assignment\HasContractDayOffDefinitionTest.cs" />
     <Compile Include="Scheduling\Assignment\NewDynamicDayOffSchedulePeriodTargetCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\NewFixedDayOffSchedulePeriodTargetCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\NewSchedulePeriodTargetCalculatorFactoryTest.cs" />
@@ -367,11 +369,20 @@
     <Compile Include="Scheduling\Assignment\SchedulePartStringVisualizerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessManagerTest.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitCheckerTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\BestSpotForAddingDayOffFinderTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\DaysOffSchedulingServiceTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixDataListCreatorTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixDataListInSteadyStateTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixDataWithToFewDaysOffTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixDataTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataMapperTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataTest.cs" />
     <Compile Include="Scheduling\DayOffTemplateSorterTest.cs" />
     <Compile Include="Scheduling\LoadScheduleByPersonSpecificationTest.cs" />
     <Compile Include="Scheduling\MasterActivityTest.cs" />
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecificationTest.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangeTrackerTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MissingDaysOffSchedulerTest.cs" />
     <Compile Include="Scheduling\PublicNoteByDateSorterTest.cs" />
     <Compile Include="Scheduling\PublicNoteTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCalculatorTest.cs" />

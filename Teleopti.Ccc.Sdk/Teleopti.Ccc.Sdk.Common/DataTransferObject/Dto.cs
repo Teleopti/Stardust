@@ -16,6 +16,9 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         [DataMember]
         public Guid? Id { get; set; }
 
+		/// <summary>
+		/// Internal data for version compatibility.
+		/// </summary>
         public ExtensionDataObject ExtensionData
         {
             get; set;

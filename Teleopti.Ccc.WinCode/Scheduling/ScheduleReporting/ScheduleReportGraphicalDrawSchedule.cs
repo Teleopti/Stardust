@@ -69,6 +69,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
                     rectangles.Add(rect);
                     var lBrush = GradientBrush(rect, layer.Payload.ConfidentialDisplayColor(_part.Person,_part.DateOnlyAsPeriod.DateOnly));
                     _page.Graphics.DrawRectangle(lBrush, rect);
+
+					if(_part.SignificantPartForDisplay() == SchedulePartView.ContractDayOff)
+					{
+						var tilingBrush = TilingBrush(rect);
+						_page.Graphics.DrawRectangle(tilingBrush, rect);
+					}
                 }
             }
 
@@ -86,6 +92,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             }
 
 		    return top;
+		}
+
+		private static PdfTilingBrush TilingBrush(Rectangle destinationRectangle)
+		{
+			var rect = new RectangleF(0, 0, destinationRectangle.Height, destinationRectangle.Height);
+			var tilingBrush = new PdfTilingBrush(rect);
+			var pen = new PdfPen(Color.LightGray, 0.5f);
+			tilingBrush.Graphics.DrawLine(pen, 0, destinationRectangle.Height, destinationRectangle.Height, 0);
+			return tilingBrush;
 		}
 
 		private static PdfLinearGradientBrush GradientBrush(Rectangle destinationRectangle, Color color)

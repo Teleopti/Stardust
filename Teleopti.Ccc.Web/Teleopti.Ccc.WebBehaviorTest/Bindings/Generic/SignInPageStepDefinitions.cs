@@ -2,7 +2,6 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
@@ -62,7 +61,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenISignInByUserNameAndWrongPassword()
 		{
 			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
-			Pages.Pages.CurrentSignInPage.SelectApplicationTestDataSource();
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, "wrong password");
 		}
 

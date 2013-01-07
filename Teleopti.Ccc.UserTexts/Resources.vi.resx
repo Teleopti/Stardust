@@ -1,0 +1,365 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Absence" xml:space="preserve">
+    <value>Vắng mặt</value>
+  </data>
+  <data name="Activity" xml:space="preserve">
+    <value>Hoạt động</value>
+  </data>
+  <data name="ActivityColon" xml:space="preserve">
+    <value>Hoạt động:</value>
+  </data>
+  <data name="ActivityLength" xml:space="preserve">
+    <value>Thời gian hoạt động</value>
+  </data>
+  <data name="AmpersandPeriodColon" xml:space="preserve">
+    <value>&amp;Thời gian</value>
+  </data>
+  <data name="Clipboard" xml:space="preserve">
+    <value>Hộp công cụ</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Sao chép</value>
+  </data>
+  <data name="Cut" xml:space="preserve">
+    <value>cắt</value>
+  </data>
+  <data name="DayOff" xml:space="preserve">
+    <value>Ngày nghỉ</value>
+  </data>
+  <data name="DayView" xml:space="preserve">
+    <value>Xem theo ngày</value>
+  </data>
+  <data name="EndTime" xml:space="preserve">
+    <value>Thời gian kết thúc</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>giờ</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>màn hình chủ</value>
+  </data>
+  <data name="Legends" xml:space="preserve">
+    <value>Thông số</value>
+  </data>
+  <data name="MaxTime" xml:space="preserve">
+    <value>Cao nhất</value>
+  </data>
+  <data name="MinTime" xml:space="preserve">
+    <value>Thấp nhất</value>
+  </data>
+  <data name="MonthView" xml:space="preserve">
+    <value>Xem theo tháng</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>dán</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Thời gian</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Báo cáo</value>
+  </data>
+  <data name="Schedule" xml:space="preserve">
+    <value>Lịch trình</value>
+  </data>
+  <data name="ScoreCard" xml:space="preserve">
+    <value>Thẻ điểm</value>
+  </data>
+  <data name="ShiftCategoryColon" xml:space="preserve">
+    <value>Phân loại ca làm việc:</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Thời gian bắt đầu</value>
+  </data>
+  <data name="TeamView" xml:space="preserve">
+    <value>Xem theo nhóm</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Xem </value>
+  </data>
+  <data name="RequestStatus" xml:space="preserve">
+    <value>yêu cầu tình trạng</value>
+  </data>
+  <data name="Requests" xml:space="preserve">
+    <value>yêu cầu</value>
+  </data>
+  <data name="ASM" xml:space="preserve">
+    <value>ASM mở</value>
+  </data>
+  <data name="WeekView" xml:space="preserve">
+    <value>Xem theo tuần</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Thứ 6</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Thứ 2</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Thứ 7</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Chủ Nhật</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Thứ 5</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Thứ 3</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Thứ 4</value>
+  </data>
+  <data name="PeriodColon" xml:space="preserve">
+    <value>Thời gian:</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Cao nhất</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Thấp nhất</value>
+  </data>
+  <data name="ShiftCategory" xml:space="preserve">
+    <value>Phân loại ca làm việc</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Hiển thị</value>
+  </data>
+  <data name="EndTimeColon" xml:space="preserve">
+    <value>Thời gian kết thúc:</value>
+  </data>
+  <data name="StartTimeColon" xml:space="preserve">
+    <value>Thời gian bắt đầu:</value>
+  </data>
+  <data name="OpenReports" xml:space="preserve">
+    <value>Báo cáo</value>
+  </data>
+  <data name="PersonAccounts" xml:space="preserve">
+    <value>Tài khoản cá nhân</value>
+  </data>
+  <data name="RequestTypeAbsence" xml:space="preserve">
+    <value>Vắng mặt</value>
+  </data>
+  <data name="RequestStatusColon" xml:space="preserve">
+    <value>yêu cầu tình trạng:</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Tuỳ chọn</value>
+  </data>
+  <data name="WorkTime" xml:space="preserve">
+    <value>Thời gian làm việc</value>
+  </data>
+  <data name="TimeTypeHours" xml:space="preserve">
+    <value>giờ</value>
+  </data>
+  <data name="StudentAvailability" xml:space="preserve">
+    <value>sinh viên sẵn có</value>
+  </data>
+  <data name="CreateStudentAvailability" xml:space="preserve">
+    <value>sinh viên sẵn có</value>
+  </data>
+  <data name="DayOffColon" xml:space="preserve">
+    <value>Ngày nghỉ:</value>
+  </data>
+  <data name="UndoRedoPaste" xml:space="preserve">
+    <value>dán</value>
+  </data>
+  <data name="Messages" xml:space="preserve">
+    <value>Tin nhắn</value>
+  </data>
+  <data name="MaxColon" xml:space="preserve">
+    <value>Cao nhất</value>
+  </data>
+  <data name="MinColon" xml:space="preserve">
+    <value>Thấp nhất</value>
+  </data>
+  <data name="WeeklyWorkTime" xml:space="preserve">
+    <value>Thời gian làm việc hàng tuần</value>
+  </data>
+  <data name="Validate" xml:space="preserve">
+    <value>Xác thực</value>
+  </data>
+  <data name="NextPeriod" xml:space="preserve">
+    <value>Giai đoạn 
+sau</value>
+  </data>
+  <data name="PreviousPeriod" xml:space="preserve">
+    <value>Giai đoạn 
+trước</value>
+  </data>
+  <data name="YouShouldWorkParameterHDotYourPreferencesCanNowResultInParameterHToParameterHDot" xml:space="preserve">
+    <value>Bạn nên làm việc {0}h, Tuỳ chọn của bạn bây giờ có thể dẫn đến{1}-{2}h.</value>
+  </data>
+  <data name="SchedulePut" xml:space="preserve">
+    <value>Lịch trình</value>
+  </data>
+  <data name="MustHave" xml:space="preserve">
+    <value>Bắt buộc</value>
+  </data>
+  <data name="MustHaveCapitalized" xml:space="preserve">
+    <value>Bắt buộc</value>
+  </data>
+  <data name="MessageForm" xml:space="preserve">
+    <value>Tin nhắn</value>
+  </data>
+  <data name="YouShouldHaveDaysOffParameterDotYouHaveParameterDot" xml:space="preserve">
+    <value>Bạn nên có {0} ngày nghỉ. Hiện nay bạn có {1}.</value>
+  </data>
+  <data name="ActivityGrid" xml:space="preserve">
+    <value>Hoạt động</value>
+  </data>
+  <data name="AuditingReportAbsence" xml:space="preserve">
+    <value>Vắng mặt</value>
+  </data>
+  <data name="Preference" xml:space="preserve">
+    <value>Tuỳ chọn</value>
+  </data>
+  <data name="Absences" xml:space="preserve">
+    <value>Vắng mặt</value>
+  </data>
+  <data name="AbsencesColon" xml:space="preserve">
+    <value>Vắng mặt:</value>
+  </data>
+  <data name="Activities" xml:space="preserve">
+    <value>hoạt động</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>không ai</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>tiết kiệm</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>kinh doanh hệ thống phân cấp</value>
+  </data>
+  <data name="CombinedGrid" xml:space="preserve">
+    <value>hoạt động</value>
+  </data>
+  <data name="ReportLevelDetailNone" xml:space="preserve">
+    <value>không ai</value>
+  </data>
+  <data name="Starting" xml:space="preserve">
+    <value>Bắt đầu</value>
+  </data>
+  <data name="DefaultTag" xml:space="preserve">
+    <value>&lt;không ai&gt;</value>
+  </data>
+</root>

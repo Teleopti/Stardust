@@ -82,13 +82,13 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=2.0.1.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache, Version=2.0.2.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.2.0-Beta1\lib\Net35\MbCache.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.2.0\lib\net40\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.0.1.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.0.2.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.2.0-Beta1\lib\Net35\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.2.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -157,6 +157,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingProfile.cs" />
+    <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiController.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\PasswordWarningViewModel.cs" />
     <Compile Include="Areas\Team\TeamAreaRegistration.cs" />
     <Compile Include="Areas\Team\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MobileReports\Controllers\ReportController.cs" />
@@ -421,21 +425,18 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleDomainDataMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFormMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFormResultMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDomainData.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityRestrictionExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\TimeOfDayModelBinder.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInput.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\RequestsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\DateTimePeriodFormValidator.cs" />
-    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFormResult.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayViewModel.cs" />
-    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayForm.cs" />
+    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayInput.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\IStudentAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\StudentAvailabilityPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayViewModelMappingProfile.cs" />
     <Compile Include="Filters\ApplicationFunctionAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PortalController.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleController.cs" />
@@ -489,7 +490,6 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IVirtualSchedulePeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\VirtualSchedulePeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityViewModelMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\StudentAvilabilityHtmlExtension.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\IStudentAvailabilityViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityViewModelFactory.cs" />
     <Compile Include="Filters\AjaxHandleErrorAttribute.cs" />
@@ -507,6 +507,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
+    <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8.gif" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
+    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordViewModel.js" />
     <Content Include="Areas\Team\Content\Scripts\helpers.js" />
     <Content Include="Areas\Team\Content\Scripts\layout.js" />
     <Content Include="Areas\Team\Content\Scripts\main.js" />
@@ -540,7 +545,6 @@
     <Content Include="Areas\MyTime\Content\Css\TooltipCustom.css" />
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
-    <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8-A1C7D3.gif" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Images\header_bg_2x.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.js" />
@@ -640,10 +644,6 @@
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\NewShiftTradeRequest.cshtml" />
     <Content Include="Areas\Start\Views\Authentication\SignIn.cshtml" />
-    <None Include="Areas\Start\Views\Authentication\Index.cshtml" />
-    <None Include="Areas\Start\Views\Test\Message.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <Content Include="Areas\Start\Content\signonvm.js" />
     <Content Include="Areas\Start\Content\Css\login.css" />
     <Content Include="Areas\Team\Content\Templates\layout.html" />
@@ -653,6 +653,7 @@
     <Content Include="Content\crossroads\crossroads.min.js" />
     <Content Include="Content\hasher\hasher.js" />
     <Content Include="Content\hasher\hasher.min.js" />
+    <Content Include="Content\jquery-plugin\jquery.placeholder.min.js" />
     <Content Include="Content\jquery-plugin\jquery.swipeListener.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.min.js" />
@@ -810,6 +811,9 @@
     <Content Include="Content\Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Areas\Start\Views\Test\WidgetStylingSample.cshtml" />
+    <None Include="PasswordPolicy.xml.notinuse">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -884,12 +888,6 @@
     <Content Include="Areas\Start\Views\Shared\_LayoutBase.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Start\Views\Shared\Error.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Start\Views\Shared\ErrorPartial.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Areas\Start\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -915,9 +913,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\Settings\RegionalSettingsPartial.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Start\Views\Shared\MobileLayoutBase.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\Settings\PasswordPartial.cshtml" />

@@ -1,4 +1,7 @@
+using System;
+using System.Globalization;
 using AutoMapper;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
 using Teleopti.Interfaces.Domain;
 
@@ -6,24 +9,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 {
 	public class StudentAvailabilityDayViewModelMappingProfile : Profile
 	{
+		private readonly Func<IStudentAvailabilityProvider> _studentAvailabilityProvider;
+
+		public StudentAvailabilityDayViewModelMappingProfile(Func<IStudentAvailabilityProvider> studentAvailabilityProvider)
+		{
+			_studentAvailabilityProvider = studentAvailabilityProvider;
+		}
+
 		protected override void Configure()
 		{
-			CreateMap<IStudentAvailabilityRestriction, StudentAvailabilityDayViewModel>()
-				.ForMember(d => d.StartTime, o => o.MapFrom(s => s.StartTimeLimitation.StartTimeString))
-				.ForMember(d => d.EndTime, o => o.MapFrom(s =>
-				                                          	{
-				                                          		if (!s.EndTimeLimitation.EndTime.HasValue)
-				                                          			return string.Empty;
-				                                          		var timeOfDay = TimeHelper.ParseTimeOfDayFromTimeSpan(s.EndTimeLimitation.EndTime.Value).TimeOfDay;
-				                                          		return TimeHelper.TimeOfDayFromTimeSpan(timeOfDay);
-				                                          	}))
-				.ForMember(d => d.NextDay, o => o.MapFrom(s =>
-				                                          	{
-				                                          		if (!s.EndTimeLimitation.EndTime.HasValue)
-				                                          			return false;
-				                                          		return TimeHelper.ParseTimeOfDayFromTimeSpan(s.EndTimeLimitation.EndTime.Value).Days == 1;
-				                                          	})
-				);
+			base.Configure();
+
+			CreateMap<IStudentAvailabilityDay, StudentAvailabilityDayViewModel>()
+				.ForMember(d => d.Date, o => o.MapFrom(s => s.RestrictionDate.ToFixedClientDateOnlyFormat()))
+				.ForMember(d => d.AvailableTimeSpan, o => o.MapFrom(s =>
+				                                                    	{
+																			var studentAvailabilityRestriction = _studentAvailabilityProvider().GetStudentAvailabilityForDay(s);
+				                                                    		return studentAvailabilityRestriction == null ? string.Empty : string.Format(
+				                                                    			CultureInfo.InvariantCulture,
+				                                                    			"{0} - {1}", studentAvailabilityRestriction.StartTimeLimitation.StartTimeString,
+				                                                    			studentAvailabilityRestriction.EndTimeLimitation.EndTimeString);
+				                                                    	}))
+				;
 		}
 	}
 }

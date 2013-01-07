@@ -35,6 +35,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			new ScenarioContextLazy<PreferencePage>(() => Browser.Current.Page<PreferencePage>());
 		public static PreferencePage PreferencePage { get { return _preferencePage.Value; } }
 
+		private static readonly ScenarioContextLazy<StudentAvailabilityPage> _studentAvailabilityPage =
+			new ScenarioContextLazy<StudentAvailabilityPage>(() => Browser.Current.Page<StudentAvailabilityPage>());
+		public static StudentAvailabilityPage StudentAvailabilityPage { get { return _studentAvailabilityPage.Value; } }
+
 		private static readonly ScenarioContextLazy<TeamSchedulePage> _teamSchedulePage =
 			new ScenarioContextLazy<TeamSchedulePage>(() => Browser.Current.Page<TeamSchedulePage>());
 		public static TeamSchedulePage TeamSchedulePage { get { return _teamSchedulePage.Value; } }

@@ -165,5 +165,38 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			Assert.Throws<MoreThanOneStudentAvailabilityFoundException>(() => _target.GetStudentAvailabilityForDate(scheduleDays, date));
 		}
 
+
+		[Test]
+		public void ShouldGetStudentAvailabilityDayForDate()
+		{
+			var date = DateOnly.Today;
+			var period = new DateOnlyPeriod(date, date);
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var scenario = MockRepository.GenerateMock<IScenario>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+
+			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+			_scenarioProvider.Stub(x => x.DefaultScenario()).Return(scenario);
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, true),
+																			period.ToDateTimePeriod(timeZone),
+																			scenario)).Return(scheduleDictionary).IgnoreArguments();
+			scheduleDictionary.Stub(x => x[person]).Return(scheduleRange);
+			scheduleRange.Stub(x => x.ScheduledDayCollection(period)).Return(new[] { scheduleDay });
+
+			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
+			var personRestrictions = new[] { MockRepository.GenerateMock<IScheduleData>(), studentAvailabilityDay, MockRepository.GenerateMock<IScheduleData>() };
+
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDay.Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(personRestrictions)));
+
+			var result = _target.GetStudentAvailabilityDayForDate(date);
+
+			result.Should().Be.SameInstanceAs(studentAvailabilityDay);
+		}
+
 	}
 }

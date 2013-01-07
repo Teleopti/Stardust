@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Security
         /// <summary>
         /// Digests the reports from matrix.
         /// </summary>
-        public bool CheckRaptorApplicationFunctions()
+		public CheckRaptorApplicationFunctionsResult CheckRaptorApplicationFunctions()
         {
             using (IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
@@ -53,28 +54,15 @@ namespace Teleopti.Ccc.Domain.Security
                     FilterExistingDefinedRaptorApplicationFunctions(databaseApplicationFunctions);
 
 
-                IList<IApplicationFunction> addedFunctions =
-                    new List<IApplicationFunction>(AddedRaptorApplicationFunctions(databaseRaptorApplicationFunctions,
-                                                                                   definedRaptorApplicationFunctions));
+                var addedFunctions =
+                    AddedRaptorApplicationFunctions(databaseRaptorApplicationFunctions, definedRaptorApplicationFunctions);
 
+                var deletedFunctions =
+                    DeletedRaptorApplicationFunctions(definedRaptorApplicationFunctions, databaseRaptorApplicationFunctions);
 
-                IList<IApplicationFunction> deletedFunctions =
-                    new List<IApplicationFunction>(DeletedRaptorApplicationFunctions(definedRaptorApplicationFunctions,
-                                                                                     databaseRaptorApplicationFunctions));
+				return new CheckRaptorApplicationFunctionsResult(addedFunctions, deletedFunctions);
 
-                // Add
-                if (addedFunctions.Count > 0)
-                {
-                    throw new PermissionException("The following Application Function has been added recently in code but not found in the database: " + addedFunctions[0].FunctionPath + "\nApply the suitable database script.");
-                }
-
-                // Deleted
-                if (deletedFunctions.Count > 0)
-                {
-                    throw new PermissionException("The following Application Function has been removed recently from code but still exists in the database: " + deletedFunctions[0].FunctionPath + "\nApply the suitable database script.");
-                }
             }
-            return true;
         }
 
         /// <summary>
@@ -306,4 +294,39 @@ namespace Teleopti.Ccc.Domain.Security
             unitOfWork.PersistAll();
         }
     }
+
+
+	public class CheckRaptorApplicationFunctionsResult
+	{
+		private readonly IEnumerable<IApplicationFunction> _addedFunctions;
+		private readonly IEnumerable<IApplicationFunction> _deletedFunctions;
+
+		public CheckRaptorApplicationFunctionsResult(
+			IEnumerable<IApplicationFunction> addedFunctions,
+			IEnumerable<IApplicationFunction> deletedFunctions)
+		{
+			_addedFunctions = addedFunctions;
+			_deletedFunctions = deletedFunctions;
+		}
+
+		public IEnumerable<IApplicationFunction> AddedFunctions
+		{
+			get { return _addedFunctions; }
+		}
+
+		public IEnumerable<IApplicationFunction> DeletedFunctions
+		{
+			get { return _deletedFunctions; }
+		}
+
+		public bool Result
+		{
+			get
+			{
+				if (_addedFunctions.Any() || _deletedFunctions.Any())
+					return false;
+				return true;
+			}
+		}
+	}
 }

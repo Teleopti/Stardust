@@ -48,6 +48,9 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         [DataMember(IsRequired = false, Order = 1)]
         public TeamDto Team { get; set; }
 
+		/// <summary>
+		/// Internal data for version compatibility.
+		/// </summary>
     	public ExtensionDataObject ExtensionData
     	{
     		get { return _extensionData; }

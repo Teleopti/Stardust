@@ -53,22 +53,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		public IStudentAvailabilityRestriction GetStudentAvailabilityForDate(IEnumerable<IScheduleDay> scheduleDays, DateOnly date)
 		{
-			var studentAvailabilityDays = (from d in scheduleDays
-													where d.DateOnlyAsPeriod.DateOnly.Equals(date)
-													from sd in d.PersonRestrictionCollection().OfType<IStudentAvailabilityDay>()
-													select sd).ToList();
-			if (studentAvailabilityDays.Count() > 1)
-				throw new MoreThanOneStudentAvailabilityFoundException();
-			if (studentAvailabilityDays.Any())
-				return GetStudentAvailabilityForDay(studentAvailabilityDays.Single());
-			return null;
+			var studentAvailabilityDay = GetStudentAvailabilityDayForDate(scheduleDays, date);
+			return studentAvailabilityDay == null ? null : GetStudentAvailabilityForDay(studentAvailabilityDay);
 		}
 
 		public IStudentAvailabilityRestriction GetStudentAvailabilityForDate(DateOnly date)
 		{
-			var period = new DateOnlyPeriod(date, date);
-			var scheduleDays = GetScheduleForPeriod(period);
-			return GetStudentAvailabilityForDate(scheduleDays, date);
+			var studentAvailabilityDay = GetStudentAvailabilityDayForDate(date);
+			return studentAvailabilityDay == null ? null : GetStudentAvailabilityForDay(studentAvailabilityDay);
 		}
 
 		public IStudentAvailabilityRestriction GetStudentAvailabilityForDay(IStudentAvailabilityDay studentAvailabilityDay)
@@ -81,6 +73,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			if (studentAvailabilityRestrictions.Count() > 1)
 				throw new MoreThanOneStudentAvailabilityFoundException();
 			return studentAvailabilityRestrictions.Single();
+		}
+
+		public IStudentAvailabilityDay GetStudentAvailabilityDayForDate(DateOnly date)
+		{
+			var period = new DateOnlyPeriod(date, date);
+			var scheduleDays = GetScheduleForPeriod(period);
+			return GetStudentAvailabilityDayForDate(scheduleDays, date);
+		}
+
+		private IStudentAvailabilityDay GetStudentAvailabilityDayForDate(IEnumerable<IScheduleDay> scheduleDays, DateOnly date)
+		{
+			var studentAvailabilityDays = (from d in scheduleDays
+										   where d.DateOnlyAsPeriod.DateOnly.Equals(date)
+										   from sd in d.PersonRestrictionCollection().OfType<IStudentAvailabilityDay>()
+										   select sd).ToList();
+			if (studentAvailabilityDays.Count() > 1)
+				throw new MoreThanOneStudentAvailabilityFoundException();
+			if (studentAvailabilityDays.Any())
+				return studentAvailabilityDays.Single();
+			return null;
 		}
 	}
 

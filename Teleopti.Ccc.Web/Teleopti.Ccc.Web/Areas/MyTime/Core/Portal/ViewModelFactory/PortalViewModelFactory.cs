@@ -278,9 +278,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			return options;
 		}
 
-		private static SectionNavigationItem createStudentAvailabilityNavigationItem()
+		private static StudentAvailabilityNavigationItem createStudentAvailabilityNavigationItem()
 		{
-			return new SectionNavigationItem
+			return new StudentAvailabilityNavigationItem
 					{
 						Action = "Index",
 						Controller = "StudentAvailability",

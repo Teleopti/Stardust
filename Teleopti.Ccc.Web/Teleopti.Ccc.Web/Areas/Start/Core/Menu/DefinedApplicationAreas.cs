@@ -1,3 +1,6 @@
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.UserTexts;
+
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 {
 	using System.Collections.Generic;
@@ -13,17 +16,17 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 		                                                                            			{
 		                                                                            				ApplicationFunctionPath =
 		                                                                            					DefinedRaptorApplicationFunctionPaths
-		                                                                            					.Anywhere,
-		                                                                            				Area = "MobileReports",
-		                                                                            				Name = "Anywhere"
+		                                                                            					.MyTimeWeb,
+		                                                                            				Area = "MyTime",
+		                                                                            				Name = Resources.MyTime
 		                                                                            			},
-		                                                                            		new ApplicationArea
+																							new ApplicationArea
 		                                                                            			{
 		                                                                            				ApplicationFunctionPath =
 		                                                                            					DefinedRaptorApplicationFunctionPaths
-		                                                                            					.MyTimeWeb,
-		                                                                            				Area = "MyTime",
-		                                                                            				Name = "MyTime"
+		                                                                            					.MobileReports,
+		                                                                            				Area = "MobileReports",
+		                                                                            				Name = GetMenuText(DefinedRaptorApplicationFunctionPaths.MobileReports)
 		                                                                            			},
 		                                                                            		new ApplicationArea
 		                                                                            			{
@@ -31,9 +34,17 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 		                                                                            					DefinedRaptorApplicationFunctionPaths
 		                                                                            					.AdminWeb,
 		                                                                            				Area = "Team",
-		                                                                            				Name = "Team"
+		                                                                            				Name = GetMenuText(DefinedRaptorApplicationFunctionPaths.AdminWeb)
 		                                                                            			}
 		                                                                            	};
+
+		private static string GetMenuText(string applicationFunctionPath)
+		{
+			var factory = new DefinedRaptorApplicationFunctionFactory();
+			var rawResourceKey = ApplicationFunction.FindByPath(factory.ApplicationFunctionList, applicationFunctionPath).FunctionDescription;
+
+			return Resources.ResourceManager.GetString(rawResourceKey.Replace("xx", string.Empty));
+		}
 
 		public static IEnumerable<ApplicationArea> ApplicationAreas
 		{

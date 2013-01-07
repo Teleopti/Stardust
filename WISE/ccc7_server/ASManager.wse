@@ -142,7 +142,7 @@ item: Remark
 end
 item: Set Variable
   Variable=FP
-  Value=%DIR%DropDatabase.xmla
+  Value=DropDatabase.xmla
 end
 item: Execute Program
   Pathname=.\AnalysisServicesManager.exe
@@ -155,24 +155,13 @@ item: Remark
 end
 item: Set Variable
   Variable=FP
-  Value=%DIR%CreateDatabase.xmla
+  Value=CreateDatabase.xmla
 end
 item: Execute Program
   Pathname=.\AnalysisServicesManager.exe
   Command Line=-AS"%AS%" -AD"%AD%" -SS"%SS%" -SD"%SD%" %SA% -FP"%FP%"
   Default Directory=%DIR%
   Flags=00000010
-end
-item: If/While Statement
-  Variable=INSTALL_RESULT
-  Value=0
-  Flags=00000001
-end
-item: Display Message
-  Title=Database Installation Failed
-  Text=Couldn't create Analysis Services database: %AD% on server: %AS%
-end
-item: End Block
 end
 item: Execute Program
   Pathname=PING
@@ -195,17 +184,6 @@ item: Execute Program
   Command Line=-AS"%AS%" -AD"%AD%" -SS"%SS%" -SD"%SD%" %SA% -FP"%FP%"
   Default Directory=%DIR%
   Flags=00000010
-end
-item: If/While Statement
-  Variable=INSTALL_RESULT
-  Value=0
-  Flags=00000001
-end
-item: Display Message
-  Title=Process Database Failed
-  Text=The Proccesing of: %AD% on server %AS% failed. Please investigate and process manually
-end
-item: End Block
 end
 item: End Block
 end

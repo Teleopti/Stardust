@@ -111,8 +111,8 @@
 		public const string ExtendedPreferencesWeb = "0079";
 		public const string ShiftTradeRequestsWeb = "0080";
 
-		// MobileReports Anywhere
-		public const string Anywhere = "0074";
+		// Mobile Reports
+		public const string MobileReports = "0074";
 
 		// Team Web
 		public const string AdminWeb = "0080";

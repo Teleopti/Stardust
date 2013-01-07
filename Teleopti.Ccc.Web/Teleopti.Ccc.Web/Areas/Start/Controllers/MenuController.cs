@@ -1,6 +1,4 @@
 ﻿using System.Web.Mvc;
-using System.Web.Routing;
-using System.Linq;
 using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers

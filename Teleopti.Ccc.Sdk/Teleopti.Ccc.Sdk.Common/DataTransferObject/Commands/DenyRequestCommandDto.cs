@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     public class DenyRequestCommandDto : CommandDto
     { 
         /// <summary>
-        /// Gets and sets the request id.
+        /// Gets and sets the mandatory request id.
         /// </summary>
-        /// <value>PersonRequestId</value>
+        /// <value>The person request id.</value>
         [DataMember]
         public Guid PersonRequestId
         {

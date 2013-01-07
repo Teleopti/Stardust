@@ -1,5 +1,4 @@
-﻿using System.Web;
-using Teleopti.Ccc.Web.Core.RequestContext;
+﻿using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 {

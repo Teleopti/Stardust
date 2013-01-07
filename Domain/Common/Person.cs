@@ -618,27 +618,54 @@ namespace Teleopti.Ccc.Domain.Common
             if (_applicationAuthenticationInfo == null)
                 _applicationAuthenticationInfo = new ApplicationAuthenticationInfo();
 
-            if (!checkOldPassword(oldPassword, newPassword, _applicationAuthenticationInfo))
-            {
-	            return new ChangePasswordResultInfo {IsAuthenticationSuccessful = false, IsSuccessful = false};
-            }
+			IPasswordPolicy policy = new PasswordPolicy(loadPasswordPolicyService);
+			var checkBruteForce= new CheckBruteForce(policy);
+			var encryption = new OneWayEncryption();
+			if (CheckNewPassword(newPassword, encryption))
+				return new ChangePasswordResultInfo
+					{
+						IsAuthenticationSuccessful = true,
+						IsSuccessful = false
+					};
+			if (!CheckOldPassword(oldPassword, userDetail, encryption, checkBruteForce))
+				return new ChangePasswordResultInfo
+					{
+						IsAuthenticationSuccessful = false,
+						IsSuccessful = false
+					};
 
-	        var result = new ChangePasswordResultInfo {IsAuthenticationSuccessful = true};
-
-            IPasswordPolicy policy = new PasswordPolicy(loadPasswordPolicyService);
+			var changePassword = new ChangePasswordResultInfo
+		        {
+			        IsAuthenticationSuccessful = true
+		        };
 
             if (policy.CheckPasswordStrength(newPassword))
             {
                 _applicationAuthenticationInfo.Password = newPassword;
                 userDetail.RegisterPasswordChange();
-	            result.IsSuccessful = true;
-	            return result;
+				changePassword.IsSuccessful = true;
+				return changePassword;
             }
-	        result.IsSuccessful = false;
-            return result;
+			changePassword.IsSuccessful = false;
+			return changePassword;
         }
 
-        public virtual IWindowsAuthenticationInfo WindowsAuthenticationInfo
+		private bool CheckOldPassword(string oldPassword, IUserDetail userDetail, OneWayEncryption encryption, CheckBruteForce checkBruteForce)
+	    {
+		    if (encryption.EncryptString(oldPassword) == _applicationAuthenticationInfo.Password)
+		    {
+				return true;
+		    }
+			checkBruteForce.Check(userDetail);
+		    return false;
+	    }
+
+	    private bool CheckNewPassword(string newPassword, OneWayEncryption encryption)
+	    {
+		    return encryption.EncryptString(newPassword) == _applicationAuthenticationInfo.Password;
+	    }
+
+	    public virtual IWindowsAuthenticationInfo WindowsAuthenticationInfo
         {
             get
             {
@@ -659,14 +686,7 @@ namespace Teleopti.Ccc.Domain.Common
             }
         }
 
-        private bool checkOldPassword(string oldPassword, string newPassword, IApplicationAuthenticationInfo authenticationInfo)
-        {
-            var encryption = new OneWayEncryption();
-            if (encryption.EncryptString(oldPassword) != authenticationInfo.Password || encryption.EncryptString(newPassword) == authenticationInfo.Password) return false;
-            return true;
-        }
-
-        public virtual IVirtualSchedulePeriod VirtualSchedulePeriod(DateOnly dateOnly)
+	    public virtual IVirtualSchedulePeriod VirtualSchedulePeriod(DateOnly dateOnly)
         {
             var splitChecker = new VirtualSchedulePeriodSplitChecker(this);
             return new VirtualSchedulePeriod(this, dateOnly, splitChecker);

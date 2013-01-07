@@ -26,6 +26,9 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 			return KnownTypesHelper.GetKnownTypes<CommandDto>();
 		}
 
+		/// <summary>
+		/// Internal data for version compatibility.
+		/// </summary>
     	public ExtensionDataObject ExtensionData
     	{
     		get { return _extensionData; }

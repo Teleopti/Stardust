@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Interfaces.Domain;
 using log4net;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie

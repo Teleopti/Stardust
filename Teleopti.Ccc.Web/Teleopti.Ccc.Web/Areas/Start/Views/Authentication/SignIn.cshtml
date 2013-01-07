@@ -27,6 +27,7 @@
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.MenuViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ApplicationViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordView.js")"></script>
+	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordViewModel.js")"></script>
 
 	<script type="text/javascript">
 		var authentication;
@@ -56,7 +57,7 @@
 
 		<div id="signin">
 
-			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked">
+			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked" style="display: none;">
 				<li data-bind="css: {'active': Selected}, class: Type">
 					<a href="#" data-bind="click: Select">
 						<span data-bind="text: Name"></span>
@@ -64,13 +65,14 @@
 					</a>
 				</li>
 			</ul>
-			<div data-bind="visible: DisplayUserNameAndPasswordBoxes">
-				<input type="text" id="Username-input" placeholder=@Resources.UserName class="input-block-level" data-bind="value: UserName, returnKey: SignIn, hasfocus: UserNameHasFocus() && DisplayUserNameAndPasswordBoxes()" />
+			<div data-bind="visible: DisplayUserNameAndPasswordBoxes()">
+				<div>
+					<input type="text" id="Username-input" placeholder=@Resources.UserName class="input-block-level" data-bind="value: UserName, returnKey: SignIn, hasfocus: UserNameFocus" autocapitalize="off" autocorrect="off" />
+				</div>
+				<div>
+					<input type="password" id="Password-input" placeholder=@Resources.Password class="input-block-level" data-bind="value: Password, returnKey: SignIn" />
+				</div>
 			</div>
-			<div data-bind="visible: DisplayUserNameAndPasswordBoxes">
-				<input type="password" id="Password-input" placeholder=@Resources.Password class="input-block-level" data-bind="value: Password, returnKey: SignIn" />
-			</div>
-			
 			<div id="Signin-error" 
 				 class="alert" 
 				 data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
@@ -94,26 +96,28 @@
 				</li>
 			</ul>
 		</div>
-
-		@*
-		<div data-bind="visible: (MustChangePasswordActive() || WarningActive())">
-			<div class="alert login-warning" data-bind="visible:MustChangePasswordActive">
+		
+		<div id="changepassword">
+			<div id="PasswordAlreadyExpired" class="alert login-warning" data-bind="visible: MustChangePassword()">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<strong>Warning!</strong> Your password has already expired. 
+				<strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordHasAlreadyExpired 
 			</div>
-			<div class="alert login-warning" data-bind="visible:WarningActive">
+			<div id="PasswordExpireSoon" class="alert login-warning" data-bind="visible: !MustChangePassword()">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<strong>Warning!</strong> Your password will expire soon. Click <a data-bind="click: ToggleChangingPassword">here</a> to change your password.
+				<strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordWillExpireSoon
 			</div>
-			<div class="login-form well well-large" data-bind="visible:ChangingPasswordActive">
-				<input type="password" id="New-password" placeholder="New Password" class="input-block-level" />
-				<input type="password" id="Confirm-new-password" placeholder="Confirm New Password" class="input-block-level" />
-				<input type="password" id="Old-password" placeholder="Old Password" class="input-block-level" />
-				<button class="btn btn-primary" id="Change-password-button" type="submit">@Resources.Apply</button>
+			<div class="login-form">
+				<input type="password" id="New-password" placeholder="New Password" data-bind="value: NewPassword" class="input-block-level" />
+				<input type="password" id="Confirm-new-password" placeholder="Confirm New Password" data-bind="value: ConfirmNewPassword" class="input-block-level" />
+				
+				<input type="password" id="Old-password" placeholder="Old Password" data-bind="value: OldPassword" class="input-block-level" />
+				<div id="Password-change-error" class="alert" data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
+					data-notmatch="@Resources.PasswordsDoNotMatch">
+				</div>
+				<button class="btn btn-primary" id="Change-password-button" data-bind="click: ApplyChangePassword">@Resources.Apply</button>
+				<button class="btn btn-primary" id="Skip-button" data-bind="visible: !MustChangePassword(), click: SkipChangePassword">@Resources.Skip</button>
 			</div>
 		</div>
-		*@
-
 	</div>
 </section>
 
