@@ -115,9 +115,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			_page.AnyTimelineLabel.WaitUntilExists();
 			var divs = _page.TimelineLabels;
-			EventualAssert.That(() => divs[0].InnerHtml, Is.StringContaining(table.Rows[0][1]));
-			EventualAssert.That(() => divs[divs.Count - 1].InnerHtml, Is.StringContaining(table.Rows[1][1]));
-			EventualAssert.That(() => string.Format("{0}", divs.Count), Is.EqualTo(table.Rows[2][1]));
+			EventualAssert.That(() => divs[0].InnerHtml.Split('<')[0] + divs[1].InnerHtml.Split('<')[0], Is.StringContaining(table.Rows[0][1]));
+			EventualAssert.That(() => divs[divs.Count - 1].InnerHtml.Split('<')[0] + divs[divs.Count - 2].InnerHtml.Split('<')[0], Is.StringContaining(table.Rows[1][1]));
+			var count = int.Parse(table.Rows[2][1]);
+			EventualAssert.That(() => divs.Count, Is.InRange(count, count + 2));
 		}
 
 		[Then(@"I should see activities on date '(.*)' with:")]
@@ -126,16 +127,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			DivCollection layers = _page.DayLayers(date);
 
 			EventualAssert.That(() => layers[0].GetAttributeValue("tooltip-text"), Is.EqualTo(table.Rows[0][1]));
-			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("0px"));
-			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("199px"));
+			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("16px"));
+			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("190px"));
 
 			EventualAssert.That(() => layers[1].GetAttributeValue("tooltip-text"), Is.EqualTo(table.Rows[1][1]));
-			EventualAssert.That(() => layers[1].Style.GetAttributeValue("Top"), Is.EqualTo("200px"));
-			EventualAssert.That(() => layers[1].Style.GetAttributeValue("Height"), Is.EqualTo("66px"));
+			EventualAssert.That(() => layers[1].Style.GetAttributeValue("Top"), Is.EqualTo("207px"));
+			EventualAssert.That(() => layers[1].Style.GetAttributeValue("Height"), Is.EqualTo("62px"));
 
 			EventualAssert.That(() => layers[2].GetAttributeValue("tooltip-text"), Is.EqualTo(table.Rows[2][1]));
-			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Top"), Is.EqualTo("267px"));
-			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Height"), Is.EqualTo("400px"));
+			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Top"), Is.EqualTo("270px"));
+			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Height"), Is.EqualTo("381px"));
 		}
 
 		[Then(@"I should see activities on date '(.*)'")]
