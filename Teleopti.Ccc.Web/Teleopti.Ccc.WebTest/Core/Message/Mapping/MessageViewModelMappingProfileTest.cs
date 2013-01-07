@@ -76,17 +76,6 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 		}
 
 		[Test]
-		public void ShouldMapMessageToShowOnlyThirtyCharacters()
-		{
-			_pushMessage.Message = "this is the long message text that should be truncated";
-			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
-
-			const int length = 50;
-			var shortMessage = _pushMessage.GetMessage(new NoFormatting()).Substring(0, length) + "...";
-			_result.First().Message.Should().Be.EqualTo(shortMessage);
-		}
-
-		[Test]
 		public void ShouldMapMessageToShowShortMessage()
 		{
 			_result.First().Message.Should().Be.EqualTo(_pushMessage.GetMessage(new NoFormatting()));
