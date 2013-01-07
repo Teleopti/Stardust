@@ -42,7 +42,7 @@ namespace Teleopti.Support.Tool.Controls
         {
             InitializeComponent();
 
-            this._mainForm = mainForm;
+            _mainForm = mainForm;
             configFile = System.Configuration.ConfigurationManager.AppSettings["configFilePath"];
             setConfileParam();
             //TODO remove this 3 lines
@@ -337,9 +337,7 @@ namespace Teleopti.Support.Tool.Controls
                 _connStringSetting.FillDatabases(databases.ToList(), databases.ToList(), databases.ToList());
             }
             else
-            {
                 _connStringSetting.FillDatabases(null, null, null);
-            }
         }
 
         /// <summary>
@@ -348,13 +346,9 @@ namespace Teleopti.Support.Tool.Controls
         private void loadSqlUsers()
         {
             if (_db != null && _db.TestConnection(null))
-            {
                 _connStringSetting.FillSqlUsers(_db.DBUsers);
-            }
             else
-            {
                 _connStringSetting.FillSqlUsers(null);
-            }
         }
 
         /// <summary>
@@ -387,7 +381,6 @@ namespace Teleopti.Support.Tool.Controls
             executeJob();
         }
 
-
         #region ConnStringSettings functionality
 
         /// <summary>
@@ -397,18 +390,23 @@ namespace Teleopti.Support.Tool.Controls
         /// <param name="ea">The Events</param>
         private void testConnectButton_Click(object sender, EventArgs ea)
         {
+            BNext.Enabled = false;
             Cursor = Cursors.WaitCursor;
             _connStringSetting.ConnectedColor = Color.Black;
             _connStringSetting.TestConnection = "Connecting...";
             _connStringSetting.RefreshConnected();
             try
             {
-                DBHelper tempDb = new DBHelper(dbConnect.Server, _connStringSetting.SqlUser, _connStringSetting.SqlUserPassword);
+                DBHelper tempDb = new DBHelper(dbConnect.Server, _connStringSetting.SqlUser,
+                                               _connStringSetting.SqlUserPassword);
                 List<string> databases = new List<string>();
                 databases.Add(_connStringSetting.AggregationDB);
                 databases.Add(_connStringSetting.ApplicationDB);
                 databases.Add(_connStringSetting.AnalyticDB);
                 connStringConnected(tempDb.ConnectType(databases));
+                
+                if (HaveDatabasesBeenSelected() && tempDb.ConnectType(databases) != DataLayer.Right.None)
+                    BNext.Enabled = true;
             }
             catch (SqlException ex)
             {
@@ -418,14 +416,18 @@ namespace Teleopti.Support.Tool.Controls
             Cursor = Cursors.Default;
         }
 
-
-
+        private bool HaveDatabasesBeenSelected()
+        {
+            return !string.IsNullOrEmpty(_connStringSetting.ApplicationDB) && _connStringSetting.ApplicationDB != "---------------" &&
+                   !string.IsNullOrEmpty(_connStringSetting.AnalyticDB) && _connStringSetting.AnalyticDB != "---------------" &&
+                   !string.IsNullOrEmpty(_connStringSetting.AggregationDB) && _connStringSetting.AggregationDB != "---------------";
+        }
 
         /// <summary>
         /// Sets the Connection text
         /// </summary>
         /// <param name="dbRights"></param>
-        private void connStringConnected(DataLayer.Right dbRights)
+        private void connStringConnected(Right dbRights)
         {
             switch (dbRights)
             {
@@ -458,10 +460,6 @@ namespace Teleopti.Support.Tool.Controls
         {
             processHelper.Start(_logFile);
         }
-
-
-
-
 
         #region DBCOnnect functionality
         /// <summary>
