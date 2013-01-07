@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
@@ -12,11 +14,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 	{
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly IUserTimeZone _userTimeZoneInfo;
+		private ILoggedOnUser _loggedOnUser;
 
-		public AsmViewModelMapper(IProjectionProvider projectionProvider, IUserTimeZone userTimeZoneInfo)
+		public AsmViewModelMapper(IProjectionProvider projectionProvider, IUserTimeZone userTimeZoneInfo, ILoggedOnUser loggedOnUser)
 		{
 			_projectionProvider = projectionProvider;
 			_userTimeZoneInfo = userTimeZoneInfo;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public AsmViewModel Map(DateTime asmZero, IEnumerable<IScheduleDay> scheduleDays, int unreadMessageCount)
@@ -35,22 +39,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			          	};
 		}
 		
-		private static IEnumerable<string> createHours(DateTime asmZero, TimeZoneInfo timeZone)
+		private IEnumerable<string> createHours(DateTime asmZero, TimeZoneInfo timeZone)
 		{
 			const int numberOfHoursToShow = 24*3;
-			var hoursAsInts = new List<int>();
+			var hoursAsInts = new List<string>();
 			var asmZeroAsUtc = TimeZoneHelper.ConvertToUtc(asmZero, timeZone);
 			
 			for (var hour = 0; hour < numberOfHoursToShow; hour++)
 			{
  				var localTime = TimeZoneInfo.ConvertTimeFromUtc(asmZeroAsUtc.AddHours(hour), timeZone);
-				hoursAsInts.Add(localTime.Hour);
-			}
-
-			return hoursAsInts.Take(numberOfHoursToShow).Select(x => x.ToString(CultureInfo.InvariantCulture));
+				var hourString = string.Format(_loggedOnUser.CurrentUser().PermissionInformation.Culture(), localTime.ToShortTimeString());
+ 
+				const string regex = "(\\:.*\\ )";
+				var output = Regex.Replace(hourString, regex, " ");
+				if (output.Contains(":"))
+					output = localTime.Hour.ToString();
+				hoursAsInts.Add(output);
+ 			}
+			return hoursAsInts;
 		}
 
-		private static IEnumerable<AsmLayer> createAsmLayers(DateTime asmZero, TimeZoneInfo timeZone, IEnumerable<IVisualLayer> layers)
+		private IEnumerable<AsmLayer> createAsmLayers(DateTime asmZero, TimeZoneInfo timeZone, IEnumerable<IVisualLayer> layers)
 		{
 			var asmLayers = (from visualLayer in layers
 			                 let startDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.StartDateTime, timeZone)
@@ -62,9 +71,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 													StartMinutesSinceAsmZero = startDate.Subtract(asmZero).TotalMinutes,
 			                        		LengthInMinutes = length,
 			                        		Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
-			                        		StartTimeText = startDate.ToString("HH:mm"),
-			                        		EndTimeText = endDate.ToString("HH:mm")
-			                        	}).ToList();
+			                        		StartTimeText = string.Format(_loggedOnUser.CurrentUser().PermissionInformation.Culture(), startDate.ToShortTimeString()),
+											EndTimeText = string.Format(_loggedOnUser.CurrentUser().PermissionInformation.Culture(), endDate.ToShortTimeString())
+ 			                        	}).ToList();
 			return asmLayers;
 		}
 	}

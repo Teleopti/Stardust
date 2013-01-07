@@ -268,11 +268,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
 
-			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(8);
-			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(00);
+			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(7);
+			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
 
 			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(17);
-			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(00);
+			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(15);
 		}
 
         [Test]
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
             result.MinMaxTime.EndTime.Days.Should().Be.EqualTo(0);
 			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(4);
-			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(00);
+			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(15);
         }
 
         [Test]
@@ -355,8 +355,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
             var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(lastDayOfWeek);
 
-			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(20);
-			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(00);
+			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(19);
+			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
 
 			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(23);
 			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(59);

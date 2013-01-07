@@ -7,6 +7,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
+/// <reference path="~/Content/moment/moment.js" />
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -262,12 +263,23 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	var TimelineViewModel = function (timeline) {
 		var self = this;
-
 		self.positionPercentage = ko.observable(timeline.PositionPercentage);
-
-		self.time = ko.observable(timeline.Time);
-		self.topPosition = ko.computed(function() {
+		
+		self.minutes = ko.observable(timeline.Time.TotalMinutes);
+		var timeFromMinutes = moment().startOf('day').add('minutes', self.minutes());
+		
+		self.time = ko.observable(timeFromMinutes.format('H:mm'));
+		if (timeline.Culture == "en-US") {
+			self.time(timeFromMinutes.format('h A'));
+		}
+		self.timeText = self.time() + "\ntotalMinutes" + self.minutes();
+		
+		self.topPosition = ko.computed(function () {
 			return Math.round(scheduleHeight * self.positionPercentage()) + timeLineOffset + 'px';
+		});
+		self.evenHour = ko.computed(function () {
+			if (timeFromMinutes.format('mm') != 0) { return false; }
+			else { return true; }
 		});
 	};
 
@@ -314,8 +326,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		} else {
 			timeString = children.last().text();
 		}
-		var timeParts = timeString.split(":");
-		return (timeParts[0] * 60) + (timeParts[1] * 1);
+		var timeParts = timeString.split("totalMinutes");
+		return timeParts[1];
 	}
 
 	function _subscribeForChanges() {
