@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_gridControl.Cols.DefaultSize = 55;
 				_skill = skill;
 
-				DateTimePeriod period = createDateTimePeriod(skillStaffPeriods);
+				var period = createDateTimePeriod(skillStaffPeriods);
 				createIntervalList(period, stateHolder);
 
 				if (_gridRows.Count == 0 || !_skill.SkillType.Equals(_lastSkillType) || !_skill.IsVirtual.Equals(_isLastVirtual))

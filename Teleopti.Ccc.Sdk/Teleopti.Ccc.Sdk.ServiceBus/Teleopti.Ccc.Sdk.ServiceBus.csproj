@@ -160,6 +160,8 @@
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreator.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleDayMessageConsumer.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleDayConsumer.cs" />
+    <Compile Include="Forecast\RecalculateForecastOnSkillConsumer.cs" />
+    <Compile Include="Forecast\StatisticLoader.cs" />
     <Compile Include="InitialLoadOfScheduleDayReadModel.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />

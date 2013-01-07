@@ -8,9 +8,10 @@ using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
 using Teleopti.Ccc.Win.Forecasting.Forms.SkillPages;
 using Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages;
 using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
+using Teleopti.Ccc.WinCode.Intraday;
+using Intraday = Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages;
 using Teleopti.Interfaces.Domain;
 
@@ -222,6 +223,16 @@ namespace Teleopti.Ccc.Win.Common
                            new SelectDateAndScenario(),
                            new SelectFileDestination(),
                            new FileExportFinished()
+                       };
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        public static IList<IPropertyPageNoRoot<ReforecastModelCollection>> GetReforecastFilePages(IList<ISkill> skills)
+        {
+            return new List<IPropertyPageNoRoot<ReforecastModelCollection>>
+                       {
+                           new Intraday.Reforecast.SelectSkills(skills),
+                           new Intraday.Reforecast.SelectWorkload()
                        };
         }
     }

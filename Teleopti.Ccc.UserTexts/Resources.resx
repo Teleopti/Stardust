@@ -11227,4 +11227,11 @@ These options are activated:
     <value>Remove</value>
     <comment>Remove person from Role</comment>
   </data>
+  <data name="SelectWorkload" xml:space="preserve">
+    <value>Select workload</value>
+    <comment>Select workload</comment>
+  </data>
+  <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
+    <value>You have to select at least one workload</value>
+  </data>
 </root>

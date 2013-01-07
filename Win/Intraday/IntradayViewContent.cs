@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.Win.Intraday
             System.Threading.Thread.CurrentThread.CurrentUICulture = Domain.Security.Principal.TeleoptiPrincipal.Current.Regional.UICulture;
             System.Threading.Thread.CurrentThread.CurrentCulture = Domain.Security.Principal.TeleoptiPrincipal.Current.Regional.Culture;
 
-            IList<ISkillStaffPeriod> periods = _presenter.PrepareSkillIntradayCollection();
+            var periods = _presenter.PrepareSkillIntradayCollection();
             _skillIntradayGridControl.SetupDataSource(periods, SelectedSkill, true, _presenter.SchedulerStateHolder);
 
             e.Result = e.Argument;
@@ -348,6 +348,17 @@ namespace Teleopti.Ccc.Win.Intraday
             }
 
             tabSkillData.SelectedIndexChanged += tabSkillData_SelectedIndexChanged;
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), 
+        System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
+        public List<ISkill> GetSkills()
+        {
+            var selectedTab = (ISkill) tabSkillData.SelectedTab.Tag;
+            var list = (from TabPageAdv page in tabSkillData.TabPages select (ISkill) page.Tag).ToList();
+            list.Remove(selectedTab);
+            list.Insert(0, selectedTab);
+            return list;
         }
 
         private void tabSkillData_SelectedIndexChanged(object sender, EventArgs e)

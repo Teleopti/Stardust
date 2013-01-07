@@ -1561,9 +1561,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
         protected void ResetStatistics()
         {
             if (_queueStatisticsProvider == null) return;
+        	var stat = new Statistic(null);
             foreach (var taskPeriod in _taskPeriodList)
             {
-                Statistic.UpdateStatisticTask(_queueStatisticsProvider.GetStatisticsForPeriod(taskPeriod.Period),
+				stat.UpdateStatisticTask(_queueStatisticsProvider.GetStatisticsForPeriod(taskPeriod.Period),
                                               taskPeriod);
             }
             RecalculateDailyStatisticTasks();
