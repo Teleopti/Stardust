@@ -26,19 +26,15 @@ namespace Teleopti.Support.Tool
         {
             InitializeComponent();
         }
-
         
-
-     
-
         public void ShowPTracks()
         {
-          this.PTracks.Show();
+          PTracks.Show();
         }
 
         public void HidePTracks()
         {
-            this.PTracks.Hide();
+            PTracks.Hide();
         }
 
         private void LLChangeDBConn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -47,10 +43,9 @@ namespace Teleopti.Support.Tool
             panelContent.Controls.Remove(activeControl);
             activeControl = new MainChangeDBSettings(this, _db);
             activeControl.Dock = DockStyle.Fill;
-            this.PTracks.Hide();
+            PTracks.Hide();
             panelContent.Controls.Add(activeControl);
             //this.Controls.Add(activeControl);
-    
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -59,13 +54,9 @@ namespace Teleopti.Support.Tool
             Version version = new Version(_productVersion.Major, _productVersion.Minor, _productVersion.Build);
             activeControl = new ManageDatabaseVersions(this, version, _db);
             activeControl.Dock = DockStyle.Fill;
-            this.PTracks.Hide();
+            PTracks.Hide();
             panelContent.Controls.Add(activeControl);
         }
-
-        
-    
-      
 
         private void MainForm_Load(object sender, EventArgs e)
         {
