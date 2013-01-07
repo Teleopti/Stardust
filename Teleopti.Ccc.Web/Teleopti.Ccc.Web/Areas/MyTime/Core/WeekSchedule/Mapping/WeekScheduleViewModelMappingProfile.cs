@@ -66,9 +66,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						   select new TimeLineViewModel
 									{
 										PositionPercentage = (decimal)(t - startTime).Ticks / (endTime - startTime).Ticks,
-
-										Time = string.Format(_loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture(),
-										new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, t.Hours, t.Minutes, t.Seconds).ToShortTimeString())
+										Culture = _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture().ToString(),
+										Time = t
 									};
 				}))
 				.ForMember(d => d.RequestPermission, c => c.MapFrom(s => new RequestPermission

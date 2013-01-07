@@ -153,15 +153,15 @@ this.FeatureBackground();
 #line 31
  testRunner.Given("I have the role \'Full access to mytime\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 32
- testRunner.And("Current time is \'2030-09-20 12:00\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Current time is \'2030-03-12 11:00\'");
 #line 33
- testRunner.And("I view my week schedule for date \'2030-09-20\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I view my week schedule for date \'2030-03-12\'");
 #line 34
- testRunner.And("I should see the time indicator at time \'2030-09-20 12:00\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I should see the time indicator at time \'2030-03-12 11:00\'");
 #line 35
- testRunner.When("Current browser time has changed to \'2030-09-20 12:01\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Current browser time has changed to \'2030-03-12 11:01\'");
 #line 36
- testRunner.Then("I should see the time indicator at time \'2030-09-20 12:01\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("I should see the time indicator at time \'2030-03-12 11:01\'");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -347,13 +347,13 @@ this.FeatureBackground();
 #line 89
  testRunner.And("I have a shift with", ((string)(null)), table11, "And ");
 #line 94
- testRunner.And("Current time is \'2030-03-12 12:00\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Current time is \'2030-03-12 12:15\'");
 #line 95
  testRunner.And("I view my week schedule for date \'2030-03-12\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 96
- testRunner.And("I should see the time indicator at time \'2030-03-12 12:00\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I should see the time indicator at time \'2030-03-12 12:15\'");
 #line 97
- testRunner.When("Current browser time has changed to \'2030-03-12 12:01\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Current browser time has changed to \'2030-03-12 12:16\'");
 #line 98
  testRunner.Then("I should not see the time indicator", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden

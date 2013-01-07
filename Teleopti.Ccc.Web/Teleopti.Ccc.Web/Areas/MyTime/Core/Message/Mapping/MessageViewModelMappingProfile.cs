@@ -32,8 +32,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
                 .ForMember(d => d.Message, o => o.MapFrom(m =>
                                                           	{
                                                           		var message = m.PushMessage.GetMessage(new NoFormatting());
-                                                          		if (message.Length > 50)
-                                                          			return message.Substring(0, 50) + "...";
                                                           		return message;
                                                           	}))
                 .ForMember(d => d.Sender, o => o.MapFrom(m => m.PushMessage.Sender.Name.ToString()))
