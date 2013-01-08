@@ -289,8 +289,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			// CreateProjection Skill Type
 			ISkill skill = SkillFactory.CreateSkill("dummy skill");
 			skill.Activity = activity;
+			var skill2 = skill.NoneEntityClone();
 			PersistAndRemoveFromUnitOfWork(skill.SkillType);
 			PersistAndRemoveFromUnitOfWork(skill);
+			PersistAndRemoveFromUnitOfWork(skill2);
 
 			IRuleSetBag rsBag = new RuleSetBag();
 			rsBag.Description = new Description("for test");
@@ -303,7 +305,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 												personContract,
 												team);
 			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
-			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.54)));
+			personPeriod.AddPersonSkill(new PersonSkill(skill2, new Percent(0.54)));
 			personPeriod.RuleSetBag = rsBag;
 			personToTest.AddPersonPeriod(personPeriod);
 
@@ -365,8 +367,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			// CreateProjection Skill Type
 			ISkill skill = SkillFactory.CreateSkill("dummy skill");
 			skill.Activity = activity;
+        	var skill2 = skill.NoneEntityClone();
 			PersistAndRemoveFromUnitOfWork(skill.SkillType);
 			PersistAndRemoveFromUnitOfWork(skill);
+			PersistAndRemoveFromUnitOfWork(skill2);
 
 			IRuleSetBag rsBag = new RuleSetBag();
 			rsBag.Description = new Description("for test");
@@ -379,7 +383,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 												personContract,
 												team);
 			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
-			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.54)));
+			personPeriod.AddPersonSkill(new PersonSkill(skill2, new Percent(0.54)));
 			personPeriod.RuleSetBag = rsBag;
             userOk.AddPersonPeriod(personPeriod);
 
