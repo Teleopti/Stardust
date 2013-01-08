@@ -155,6 +155,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		/// <returns>Returns the given logonName</returns>
 		public string MakeUser(string logonName, string lastName, string password)
 		{
+			Person = PersonFactory.CreatePersonWithBasicPermissionInfo(logonName, password);
+			Person.Name = new Name("Agent", lastName);
+
+			MakePerson(Person);
+
 			CreatePersonWithPermissions(logonName, lastName, password);
 
 			Log.Write("Making user " + Person.Name);
@@ -166,6 +171,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Resources.Culture = Culture;
 
 			return logonName;
+		}
+
+		public void MakePerson(IPerson person)
+		{
+			CultureInfo culture = null;
+
+			_dataFactory.Apply();
+
+			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
+			{
+				_cultureSetup.Apply(uow, person, null);
+				culture = person.PermissionInformation.Culture();
+				_userSetups.ForEach(s => s.Apply(uow, person, culture));
+				new PersonRepository(uow).Add(person);
+			});
+
+			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _userDataSetups.ForEach(s => s.Apply(uow, person, culture)));
+
+			_postSetups.ForEach(s => s.Apply(person, culture));
+
+			_analyticsDataFactory.Persist(culture);
 		}
 
 		private void CreatePersonWithPermissions(string logonName, string lastName, string password)

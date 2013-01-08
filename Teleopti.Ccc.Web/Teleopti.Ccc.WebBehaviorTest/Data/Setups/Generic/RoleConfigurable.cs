@@ -49,8 +49,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public void Apply(IUnitOfWork uow)
 		{
-			if (!AccessToShiftTradeRequests)
-				applicationFunctions = from f in applicationFunctions where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb select f;
 			var role = ApplicationRoleFactory.CreateRole(Name, null);
 
 			var availableData = new AvailableData
