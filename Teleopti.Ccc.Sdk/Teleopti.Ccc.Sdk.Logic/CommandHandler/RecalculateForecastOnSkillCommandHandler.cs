@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
-    public class RecalculateForecastOnSkillCommandHandler : IHandleCommand<RecalculateForecastOnSkillCommandCollectionDto>
+    public class RecalculateForecastOnSkillCommandHandler : IHandleCommand<RecalculateForecastOnSkillCollectionCommandDto>
 	{
 		private readonly IServiceBusSender _busSender;
 
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public CommandResultDto Handle(RecalculateForecastOnSkillCommandCollectionDto command)
+        public CommandResultDto Handle(RecalculateForecastOnSkillCollectionCommandDto command)
 		{
 			// denna borde fångas
 			if (!_busSender.EnsureBus())
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					Timestamp = DateTime.UtcNow,
 					ScenarioId = command.ScenarioId
 				};
-            foreach (var model in command.SkillCommandDtos)
+            foreach (var model in command.WorkloadOnSkillSelectionDtos)
             {
                 message.MessageCollection.Add(
                     new RecalculateForecastOnSkillMessage
