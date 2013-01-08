@@ -118,13 +118,13 @@
 														<thead>@Resources.Meeting</thead>
 														<tbody data-bind="foreach: Meetings">
 															<tr>
+																	<td data-bind="text: TimeSpan"></td>
+															</tr>
+															<tr>
 																<td data-bind="text: Subject"></td>
 																<!-- ko if: IsOptional -->
 																<td>(@Resources.Optional)</td>
 																<!-- /ko -->
-																<td>:</td>
-																<td data-bind="text: TimeSpan"></td>
-															
 															</tr>
 														</tbody>
 													</table>
