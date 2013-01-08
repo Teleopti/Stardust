@@ -28,9 +28,9 @@ define([
 				self.Layers.removeAll();
 			};
 
-			this.AddLayers = function (layers) {
+			this.AddLayers = function (layers, date) {
 				var newItems = ko.utils.arrayMap(layers, function (p) {
-					return new layer(timeline, p);
+					return new layer(timeline, p, date);
 				});
 				self.Layers.push.apply(self.Layers, newItems);
 			};

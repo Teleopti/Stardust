@@ -44,7 +44,7 @@
                             </td>
                             <td class="shift">
                                 <ul class="relative unstyled" data-bind="foreach: Layers">
-                                    <li class="layer absolute floatleft" data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', backgroundColor: Color()}" ></li>
+                                    <li class="layer absolute floatleft" data-bind="if: IsVisible, style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', backgroundColor: Color}" ></li>
                                 </ul>
                             </td>
                             <td class="contract-time" data-bind="text: ContractTime"></td>

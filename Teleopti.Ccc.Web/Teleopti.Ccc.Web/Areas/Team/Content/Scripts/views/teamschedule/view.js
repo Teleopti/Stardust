@@ -62,10 +62,11 @@ define([
 					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, queryDate.toDate()).done(function (schedules) {
 						var agents = teamSchedule.Agents();
 
+						var dateClone = teamSchedule.SelectedDate().clone();
 						for (var i = 0; i < schedules.length; i++) {
 							for (var j = 0; j < agents.length; j++) {
 								if (agents[j].Id == schedules[i].Id) {
-									agents[j].AddLayers(schedules[i].Projection);
+									agents[j].AddLayers(schedules[i].Projection,dateClone);
 									agents[j].AddContractTime(schedules[i].ContractTimeMinutes);
 									agents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
 									break;
