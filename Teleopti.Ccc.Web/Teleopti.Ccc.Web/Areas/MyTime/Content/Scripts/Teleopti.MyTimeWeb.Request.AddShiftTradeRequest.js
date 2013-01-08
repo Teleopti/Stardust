@@ -16,6 +16,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		var layerCanvasPixelWidth = 700;
 
 		self.now = new Date(new Date().getTeleoptiTime()).clearTime();
+		self.openPeriodStartDate = null;
+		self.openPeriodEndDate = null;
 		self.selectedDate = ko.observable();
 		self.hasWorkflowControlSet = ko.observable(false);
 		self.timeLineLengthInMinutes = ko.observable(0);
@@ -116,11 +118,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function setDatePickerRange(relativeStart, relativeEnd) {
-		var element = $('#Request-add-shift-trade-datepicker');
-		element.datepicker("option", "minDate", relativeStart);
-		element.datepicker("option", "maxDate", relativeEnd);
 		vm.openPeriodStartDate = new Date(vm.now).addDays(relativeStart);
 		vm.openPeriodEndDate = new Date(vm.now).addDays(relativeEnd);
+
+		var element = $('#Request-add-shift-trade-datepicker');
+		element.datepicker("option", "minDate", vm.openPeriodStartDate);
+		element.datepicker("option", "maxDate", vm.openPeriodEndDate);
 	}
 
 	function bindClickToOpenShiftTrade() {

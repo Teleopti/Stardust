@@ -26,11 +26,11 @@ Background:
 	#| Field | Value   |
 	#| Name  | Skill 1 |
 	And there is a workflow control set with
-	| Field                            | Value                                        |
-	| Name                             | Trade from tomorrow until 10000 days forward |
-	| Schedule published to date       | 2040-06-24                                   |
-	| Shift Trade sliding period start | 2                                            |
-	| Shift Trade sliding period end   | 10000                                        |
+	| Field                            | Value                                     |
+	| Name                             | Trade from tomorrow until 30 days forward |
+	| Schedule published to date       | 2040-06-24                                |
+	| Shift Trade sliding period start | 2                                         |
+	| Shift Trade sliding period end   | 30                                        |
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
@@ -76,14 +76,22 @@ Scenario: No workflow control set
 
 Scenario: Default to first day of open shift trade period
 	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 10000 days forward'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request
 	Then the selected date should be '2030-01-03'
 
+Scenario: Trades can only be made within the shift trade period
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Current time is '2030-01-01'
+	When I view Add Shift Trade Request for date '2030-02-15'
+	Then the selected date should be '2030-01-31'
+
 Scenario: Show my scheduled shift
 	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 10000 days forward'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Current time is '2029-12-27'
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
