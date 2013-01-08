@@ -5,12 +5,14 @@ using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Policy;
 using log4net;
 using log4net.Config;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
+	[Serializable]
 	public class ServiceBusRunner
 	{
 		private readonly Action<Exception> _unhandledExceptionHandler;
@@ -18,9 +20,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private readonly Action<int> _requestExtraTimeHandler;
 		private static readonly ILog log = LogManager.GetLogger(typeof(ServiceBusRunner));
 
+		[NonSerialized] 
 		private ConfigFileDefaultHost _requestBus;
+		[NonSerialized] 
 		private ConfigFileDefaultHost _generalBus;
+		[NonSerialized] 
 		private ConfigFileDefaultHost _denormalizeBus;
+
+		[NonSerialized] 
+		private AppDomain _requestDomain;
+		[NonSerialized] 
+		private AppDomain _generalDomain;
+		[NonSerialized] 
+		private AppDomain _denormalizeDomain;
 
 		public ServiceBusRunner(Action<Exception> unhandledExceptionHandler, Action<Exception> startupExceptionHandler, Action<int> requestExtraTimeHandler)
 		{
@@ -71,15 +83,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
 
-			_requestBus = new ConfigFileDefaultHost();
+			var e = new Evidence(AppDomain.CurrentDomain.Evidence);
+			var setup = AppDomain.CurrentDomain.SetupInformation;
+
+			log.Error("Ska starta request.");
+			_requestDomain = AppDomain.CreateDomain("Req", e, setup);
+			_requestDomain.UnhandledException += CurrentDomain_UnhandledException;
+			//_requestBus = new ConfigFileDefaultHost();
+			_requestBus = (ConfigFileDefaultHost)_requestDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
 			_requestBus.UseFileBasedBusConfiguration("RequestQueue.config");
 			_requestBus.Start<BusBootStrapper>();
 
-			_generalBus = new ConfigFileDefaultHost();
+			_generalDomain = AppDomain.CreateDomain("Gen", e, setup);
+			_generalDomain.UnhandledException += CurrentDomain_UnhandledException;
+			//_generalBus = new ConfigFileDefaultHost();
+			_generalBus = (ConfigFileDefaultHost)_generalDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
 			_generalBus.UseFileBasedBusConfiguration("GeneralQueue.config");
 			_generalBus.Start<BusBootStrapper>();
 
-			_denormalizeBus = new ConfigFileDefaultHost();
+			_denormalizeDomain = AppDomain.CreateDomain("Den", e, setup);
+			_denormalizeDomain.UnhandledException += CurrentDomain_UnhandledException;
+			//_denormalizeBus = new ConfigFileDefaultHost();
+			_denormalizeBus = (ConfigFileDefaultHost)_denormalizeDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
 			_denormalizeBus.UseFileBasedBusConfiguration("DenormalizeQueue.config");
 			_denormalizeBus.Start<DenormalizeBusBootStrapper>();
 
@@ -124,6 +149,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public void Stop()
 		{
+			log.Warn("Ska stanna.");
 			HostServiceStop();
 		}
 
@@ -139,11 +165,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void DisposeBusHosts()
 		{
+			
 			if (_requestBus != null)
 			{
 				try
 				{
+					log.Warn("Ska stanna request.");
 					_requestBus.Dispose();
+					log.Warn("Stannade request.");
 				}
 				catch (Exception)
 				{
@@ -153,7 +182,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				try
 				{
+					log.Warn("Ska stanna general.");
 					_generalBus.Dispose();
+					log.Warn("Stannade general.");
 				}
 				catch (Exception)
 				{
@@ -163,11 +194,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				try
 				{
+					log.Warn("Ska stanna denormalize.");
 					_denormalizeBus.Dispose();
+					log.Warn("Stannade denormalize.");
 				}
 				catch (Exception)
 				{
 				}
+			}
+			if (_requestDomain != null)
+			{
+				AppDomain.Unload(_requestDomain);
+				log.Warn("Stannade domän request.");
+			}
+			if (_generalDomain != null)
+			{
+				AppDomain.Unload(_generalDomain);
+				log.Warn("Stannade domän general.");
+			}
+			if (_denormalizeDomain != null)
+			{
+				AppDomain.Unload(_denormalizeDomain);
+				log.Warn("Stannade domän denormalize.");
 			}
 		}
 	}
