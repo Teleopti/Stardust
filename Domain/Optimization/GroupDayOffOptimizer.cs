@@ -67,13 +67,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IScheduleResultDataExtractor scheduleResultDataExtractor =
 				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix);
 
-			// DayOffBackToLegal if initial days off not in legal
-			bool success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(WorkingBitArray), 100);
+            bool success = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
 			if (!success)
-				return false;
-            bool decisionMakerFoundDays = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
-			if (!decisionMakerFoundDays)
-				return false;
+			{
+				success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(WorkingBitArray), 100);
+				if (!success)
+					return false;
+
+				success = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
+				if (!success)
+					return false;
+			}
 			// DayOffBackToLegal if decisionMaker did something wrong
             success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(WorkingBitArray), 100);
 			if (!success)

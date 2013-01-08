@@ -64,6 +64,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		var self = this;
 		self.title = ko.observable(item.Title);
 		self.message = ko.observable(item.Message);
+		self.listMessage = ko.observable(item.Message.substring(0, 50) + '...');
 		self.date = ko.observable(item.Date);
 		self.sender = ko.observable(item.Sender);
 		self.messageId = ko.observable(item.MessageId);
@@ -97,7 +98,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.canConfirm = ko.computed(function () {
 			if (self.isSending() || (self.allowDialogueReply() && self.reply().length == 0 && (self.selectedReply() == undefined || self.selectedReply() == 'OK')) || self.selectedReply() == undefined && self.userMustSelectReplyOption()) {
 				return false;
-			}
+	}
 			return true;
 		});
 

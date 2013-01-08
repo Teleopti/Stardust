@@ -321,3 +321,4 @@ Scenario: Keep user request input when schedules are refreshed
 	And My schedule between '2013-10-03 08:00' to '2013-10-03 18:00' reloads
 	Then I should see the add text request form
 	And Subject should not be empty
+	 

@@ -310,18 +310,20 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapTimeLine()
 		{
-			loggedOnUser.Stub(x => x.CurrentUser().PermissionInformation.Culture()).Return(CultureInfo.CurrentCulture);
+			loggedOnUser.Stub(x => x.CurrentUser().PermissionInformation.Culture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
 			var domainData = new WeekScheduleDomainData()
 			{
 				MinMaxTime = new TimePeriod(8, 30, 17, 30)
 			};
 
 			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
-
+			result.TimeLine.First().Culture.Should().Be.EqualTo("sv-SE");
 			result.TimeLine.Count().Should().Be.EqualTo(11);
-			result.TimeLine.First().Time.Should().Be.EqualTo("08:30");
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(30);
 			result.TimeLine.First().PositionPercentage.Should().Be.EqualTo(0.0);
-			result.TimeLine.ElementAt(1).Time.Should().Be.EqualTo("09:00");
+			result.TimeLine.ElementAt(1).Time.Hours.Should().Be.EqualTo(9);
+			result.TimeLine.ElementAt(1).Time.Minutes.Should().Be.EqualTo(0);
 			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be.EqualTo(0.5/(17.5 - 8.5));
 		}
 

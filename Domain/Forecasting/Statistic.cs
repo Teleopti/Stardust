@@ -9,16 +9,34 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-    /// <summary>
+	public interface IStatistic
+	{
+		void Match(IEnumerable<IWorkloadDayBase> workloadDays, IList<IStatisticTask> statisticTasks);
+
+		void Match(IWorkload workload, IEnumerable<IWorkloadDayBase> workloadDays, IList<IStatisticTask> statisticTasks);
+
+		IWorkload CalculateTemplateDays(IList<IWorkloadDayBase> workloadDays);
+
+		IWorkload CalculateCustomTemplateDay(IList<IWorkloadDayBase> workloadDays, int dayIndex);
+
+		IWorkloadDayBase GetTemplateWorkloadDay(IWorkloadDayTemplate workloadDayTemplate, IList<IWorkloadDayBase> workloadDays);
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		void Match(IList<ISkillStaffPeriod> targetSkillStaffPeriods, IList<ITemplateTaskPeriod> templateTaskPeriodsWithStatistics, IEnumerable<IActiveAgentCount> activeAgentCountCollection);
+
+		void UpdateStatisticTask(IStatisticTask statisticTask, ITemplateTaskPeriod taskPeriod);
+	}
+
+	/// <summary>
     /// Class for handling StatisticTask 
     /// </summary>
     /// <remarks>
     /// Created by: peterwe
     /// Created date: 2008-02-20
     /// </remarks>
-    public class Statistic
-    {
-        private readonly IWorkload _workload;
+    public class Statistic : IStatistic
+	{
+        private IWorkload _workload;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Statistic"/> class.
@@ -32,6 +50,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             _workload = workload;
         }
+
+		public Statistic()
+		{}
 
         /// <summary>
         /// Matches the specified Task to statisticTasks.
@@ -55,6 +76,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 wld.RecalculateDailyAverageStatisticTimes();
             });
         }
+
+		public void Match(IWorkload workload, IEnumerable<IWorkloadDayBase> workloadDays, IList<IStatisticTask> statisticTasks)
+		{
+			_workload = workload;
+			Match(workloadDays,statisticTasks);
+		}
 
 		/// <summary>
 		/// Calculates the template days.
@@ -194,7 +221,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-02-26
         /// </remarks>
-        public static void UpdateStatisticTask(IStatisticTask statisticTask, ITemplateTaskPeriod taskPeriod)
+        public void UpdateStatisticTask(IStatisticTask statisticTask, ITemplateTaskPeriod taskPeriod)
         {
             taskPeriod.StatisticTask.Interval = statisticTask.Interval;
             taskPeriod.StatisticTask.StatAbandonedTasks = statisticTask.StatAbandonedTasks;
@@ -421,7 +448,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created date: 2008-09-22
         /// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public static void Match(IList<ISkillStaffPeriod> targetSkillStaffPeriods, IList<ITemplateTaskPeriod> templateTaskPeriodsWithStatistics, IEnumerable<IActiveAgentCount> activeAgentCountCollection)
+		public void Match(IList<ISkillStaffPeriod> targetSkillStaffPeriods, IList<ITemplateTaskPeriod> templateTaskPeriodsWithStatistics, IEnumerable<IActiveAgentCount> activeAgentCountCollection)
         {
             foreach (ISkillStaffPeriod skillStaffPeriod in targetSkillStaffPeriods)
             {

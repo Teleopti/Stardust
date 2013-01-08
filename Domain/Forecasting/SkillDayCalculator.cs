@@ -25,18 +25,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _visiblePeriod = visiblePeriod;
             _skillDays.ForEach(s => s.SkillDayCalculator = this);
             _workloadDaysCache = new Dictionary<IWorkload,SortedList<DateOnly, IWorkloadDay>>();
-            foreach (var skillDay in skillDays)
+            foreach (var workloadDay in skillDays.SelectMany(skillDay => skillDay.WorkloadDayCollection))
             {
-                foreach (var workloadDay in skillDay.WorkloadDayCollection)
+                SortedList<DateOnly, IWorkloadDay> workloadDayList;
+                if (!_workloadDaysCache.TryGetValue(workloadDay.Workload,out workloadDayList))
                 {
-                    SortedList<DateOnly, IWorkloadDay> workloadDayList;
-                    if (!_workloadDaysCache.TryGetValue(workloadDay.Workload,out workloadDayList))
-                    {
-                        workloadDayList = new SortedList<DateOnly, IWorkloadDay>();
-                        _workloadDaysCache.Add(workloadDay.Workload,workloadDayList);
-                    }
-                    workloadDayList.Add(workloadDay.CurrentDate, workloadDay);
+                    workloadDayList = new SortedList<DateOnly, IWorkloadDay>();
+                    _workloadDaysCache.Add(workloadDay.Workload,workloadDayList);
                 }
+                workloadDayList.Add(workloadDay.CurrentDate, workloadDay);
             }
         }
 
@@ -93,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public IEnumerable<ITemplateTaskPeriod> CalculateTaskPeriods(ISkillDay skillDay, bool enableSpillover)
         {
-            List<ITemplateTaskPeriod> result = new List<ITemplateTaskPeriod>();
+            var result = new List<ITemplateTaskPeriod>();
 
             if (_skill.SkillType.ForecastSource == ForecastSource.InboundTelephony ||_skill.SkillType.ForecastSource==ForecastSource.Retail)
             {
@@ -126,25 +123,17 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     var closedTaskPeriodsBefore =
                         GetClosedTaskPeriodsBeforeDateTime(workload, workloadDay.CurrentDate, firstOpenTaskPeriod.Period.StartDateTime);
 
-                    double numberOfTasks = 0;
-                    foreach (var taskPeriod in closedTaskPeriodsBefore)
-                    {
-                        numberOfTasks += taskPeriod.TotalTasks;
-                    }
+                    var numberOfTasks = closedTaskPeriodsBefore.Sum(taskPeriod => taskPeriod.TotalTasks);
 
                     firstOpenTaskPeriod.AggregatedTasks = numberOfTasks;
                     result.AddRange(openTaskPeriods);
 
-                    if (enableSpillover)
-                    {
-                        ISkillDay nextSkillDay = FindNextOpenDay(workload, workloadDay.CurrentDate);
-                        if (nextSkillDay != null)
-                        {
-                            nextSkillDay.EnableSpillover = false;
-                            nextSkillDay.RecalculateDailyTasks();
-                            nextSkillDay.EnableSpillover = true;
-                        }
-                    }
+                    if (!enableSpillover) continue;
+                    var nextSkillDay = FindNextOpenDay(workload, workloadDay.CurrentDate);
+                    if (nextSkillDay == null) continue;
+                    nextSkillDay.EnableSpillover = false;
+                    nextSkillDay.RecalculateDailyTasks();
+                    nextSkillDay.EnableSpillover = true;
                 }
 
                 _isCalculatedWithinDay = false;
@@ -161,13 +150,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 return null;
             }
 
-            foreach (var workloadDay in foundList)
-            {
-                if (workloadDay.Key<=dateTime) continue;
-                if (workloadDay.Value.OpenForWork.IsOpen) return (ISkillDay)workloadDay.Value.Parent;
-            }
-
-            return null;
+            return (from workloadDay in foundList 
+                    where workloadDay.Key > dateTime 
+                    where workloadDay.Value.OpenForWork.IsOpen 
+                    select (ISkillDay) workloadDay.Value.Parent).FirstOrDefault();
         }
 
         public ISkillDay FindNextOpenDay(ISkillDay skillDay)
@@ -188,22 +174,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
 
             var lowerDateLimit = dateLimit.AddDays(-8);
-            foreach (var workloadDay in foundList)
+            foreach (var workloadDay in foundList.TakeWhile(workloadDay => workloadDay.Key <= dateLimit).Where(workloadDay => workloadDay.Key >= lowerDateLimit))
             {
-                if (workloadDay.Key > dateLimit) break;
-                if (workloadDay.Key < lowerDateLimit) continue;
-
                 taskPeriodList.AddRange(workloadDay.Value.TaskPeriodList.OrderBy(t => t.Period.StartDateTime));
             }
 
             taskPeriodList.Reverse();
-            foreach (var templateTaskPeriod in taskPeriodList)
-            {
-                if (templateTaskPeriod.Period.StartDateTime>=timeLimit) continue;
-                if (!((IWorkloadDayBase) templateTaskPeriod.Parent).IsOnlyIncoming(templateTaskPeriod)) break;
-
-                result.Add(templateTaskPeriod);
-            }
+            result.AddRange(taskPeriodList.Where(templateTaskPeriod => templateTaskPeriod.Period.StartDateTime < timeLimit).TakeWhile(templateTaskPeriod => ((IWorkloadDayBase) templateTaskPeriod.Parent).IsOnlyIncoming(templateTaskPeriod)));
             return result;
         }
 
@@ -223,31 +200,23 @@ namespace Teleopti.Ccc.Domain.Forecasting
             if (_skill.Equals(skillDay.Skill))
             {
                 if (ShouldHandleAllTasksWithinSkillStaffPeriod(skillDay))
-                {
                     return skillDay.SkillStaffPeriodCollection;
-                }
 
                 if (_skillStaffPeriods.Count == 0)
                 {
-                    foreach (var currentSkillDay in _skillDays)
+                    foreach (var skillStaffPeriod in _skillDays.SelectMany(currentSkillDay => currentSkillDay.CompleteSkillStaffPeriodCollection))
                     {
-                        foreach (
-                            ISkillStaffPeriod skillStaffPeriod in currentSkillDay.CompleteSkillStaffPeriodCollection)
-                        {
-                            _skillStaffPeriods.Add(skillStaffPeriod.Period.StartDateTime, skillStaffPeriod);
-                        }
+                        _skillStaffPeriods.Add(skillStaffPeriod.Period.StartDateTime, skillStaffPeriod);
                     }
                 }
 
                 var skillResolution = _skill.DefaultResolution;
                 var endDateTime = skillDay.CurrentDate.AddDays(10).Date;
-                for (DateTime currentDateTime = TimeZoneHelper.ConvertToUtc(skillDay.CurrentDate.Date, _skill.TimeZone); currentDateTime < endDateTime; currentDateTime = currentDateTime.AddMinutes(skillResolution))
+                for (var currentDateTime = TimeZoneHelper.ConvertToUtc(skillDay.CurrentDate.Date, _skill.TimeZone); currentDateTime < endDateTime; currentDateTime = currentDateTime.AddMinutes(skillResolution))
                 {
                     ISkillStaffPeriod foundSkillStaffPeriod;
-                    if (!_skillStaffPeriods.TryGetValue(currentDateTime,out foundSkillStaffPeriod))
-                    {
+                    if (!_skillStaffPeriods.TryGetValue(currentDateTime, out foundSkillStaffPeriod))
                         break;
-                    }
                     if (!foundSkillStaffPeriod.IsAvailable) continue;
 
                     foundSkillStaffPeriods.Add(foundSkillStaffPeriod);
@@ -301,14 +270,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual ISkillDayCalculator CloneToScenario(IScenario scenario)
         {
-            IList<ISkillDay> newSkillDays = new List<ISkillDay>();
-            foreach (ISkillDay skillDay in _skillDays)
-            {
-                ISkillDay newSkillDay = skillDay.NoneEntityClone(scenario);
-                newSkillDays.Add(newSkillDay);
-            }
-
-            ISkillDayCalculator skillDayCalculator = new SkillDayCalculator(_skill, newSkillDays, _visiblePeriod);
+            var newSkillDays = _skillDays.Select(skillDay => skillDay.NoneEntityClone(scenario)).ToList();
+            var skillDayCalculator = new SkillDayCalculator(_skill, newSkillDays, _visiblePeriod);
             return skillDayCalculator;
         }
     }

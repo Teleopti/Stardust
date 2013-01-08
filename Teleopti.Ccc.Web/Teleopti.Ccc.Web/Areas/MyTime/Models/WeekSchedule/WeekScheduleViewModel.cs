@@ -30,9 +30,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 
 	public class TimeLineViewModel
 	{
-		public string Time { get; set; }
+		public TimeSpan Time { get; set; }
 		public decimal PositionPercentage { get; set; }
 		public string TimeFixedFormat { get; set; }
+		public string Culture { get; set; }
 	}
 
 	[Flags]

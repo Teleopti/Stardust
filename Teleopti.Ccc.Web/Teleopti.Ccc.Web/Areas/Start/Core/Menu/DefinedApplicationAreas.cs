@@ -10,8 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 
 	public static class DefinedApplicationAreas
 	{
-		private static readonly IDefinedRaptorApplicationFunctionFactory Factory = new DefinedRaptorApplicationFunctionFactory();
-
 		private static readonly List<ApplicationArea> ApplicationApplicationAreas = new List<ApplicationArea>
 		                                                                            	{
 		                                                                            		new ApplicationArea
@@ -20,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 		                                                                            					DefinedRaptorApplicationFunctionPaths
 		                                                                            					.MyTimeWeb,
 		                                                                            				Area = "MyTime",
-		                                                                            				Name = GetMenuText(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)
+		                                                                            				Name = Resources.MyTime
 		                                                                            			},
 																							new ApplicationArea
 		                                                                            			{

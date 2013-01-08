@@ -9864,7 +9864,7 @@ Period</comment>
   </data>
   <data name="MyTimeWeb" xml:space="preserve">
     <value>MyTime Web</value>
-    <comment>Used in permissions module and in web start menu.</comment>
+    <comment>Used in permissions module</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>Log out</value>
@@ -11226,5 +11226,12 @@ These options are activated:
   <data name="Remove" xml:space="preserve">
     <value>Remove</value>
     <comment>Remove person from Role</comment>
+  </data>
+  <data name="SelectWorkload" xml:space="preserve">
+    <value>Select workload</value>
+    <comment>Select workload</comment>
+  </data>
+  <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
+    <value>You have to select at least one workload</value>
   </data>
 </root>
