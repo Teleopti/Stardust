@@ -7,6 +7,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -27,11 +28,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			
 			_page.AnyTimelineLabel.WaitUntilExists();
 
-			if (!TimeSpan.TryParse(_page.TimelineLabels.First().InnerHtml.Split('<')[0], out minTimelineTime))
+			if (!TimeHelper.TryParse(_page.TimelineLabels.First().InnerHtml.Split('<')[0], out minTimelineTime))
 			{
 				throw new ValidationException("Could not find timeline start label time.");
 			}
-			if (!TimeSpan.TryParse(_page.TimelineLabels[_page.TimelineLabels.Count - 1].InnerHtml.Split('<')[0], out maxTimelineTime))
+			if (!TimeHelper.TryParse(_page.TimelineLabels[_page.TimelineLabels.Count - 1].InnerHtml.Split('<')[0], out maxTimelineTime))
 			{
 				throw new ValidationException("Could not find timeline end label time.");
 			}

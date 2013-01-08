@@ -9,7 +9,8 @@ define([
 		'views/teamschedule/vm',
 		'views/teamschedule/timeline',
 		'views/teamschedule/agent',
-		'text!templates/teamschedule/view.html'
+		'text!templates/teamschedule/view.html',
+		'noext!application/resources'
 	], function (
 		ko,
 		$,
@@ -20,7 +21,8 @@ define([
 		teamScheduleViewModel,
 		timeLineViewModel,
 		agentViewModel,
-		view
+		view,
+		translations
 	) {
 		return {
 			display: function (options) {
@@ -158,7 +160,8 @@ define([
 						loadAvailableTeams();
 
 						ko.applyBindings({
-							TeamSchedule: teamSchedule
+							TeamSchedule: teamSchedule,
+							Translations: translations
 						});
 					})
 					.fail(function (error) {

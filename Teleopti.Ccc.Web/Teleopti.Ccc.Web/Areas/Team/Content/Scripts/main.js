@@ -16,9 +16,11 @@ require.config({
 		swipeListener: '../../../../Content/jquery-plugin/jquery.swipeListener',
 		momentDatepicker: '../../../../Content/moment-datepicker/moment-datepicker',
 		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko',
+		
+		noext: '../../../../Content/require/noext',
 
 		templates: '../templates',
-
+		
 		text: '../../../../Content/require/text'
 		
 	},

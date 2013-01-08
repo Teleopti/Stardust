@@ -5,17 +5,27 @@ require([
 		'text!templates/dummy.html',
 		'crossroads',
 		'hasher',
-		'momentDatepickerKo'
+		'knockout',
+		'momentDatepickerKo',
+		'noext!application/resources'
 	], function (
 		layoutTemplate,
 		menuTemplate,
 		dummyTemplate,
 		crossroads,
 		hasher,
-		datepicker) {
+		ko,
+		datepicker,
+		translations) {
 
 		var currentView;
 		var defaultView = 'teamschedule';
+
+		var navigationViewModel = {
+			Translations: translations,
+			MyTimeVisible: ko.observable(false),
+			MobileReportsVisible: ko.observable(false)
+		};
 
 		function _displayView(routeInfo) {
 
@@ -112,13 +122,13 @@ require([
 			$('body').append(layoutTemplate);
 			$('#menu-placeholder').replaceWith(menuTemplate);
 		}
-		
+
 		function _updateMenu() {
 			$.getJSON('Application/NavigationContent?' + $.now()).success(function (responseData, textStatus, jqXHR) {
-				if (!responseData.IsMyTimeAvailable)
-					$('#link-mytime').hide();
-				if (!responseData.IsMobileReportsAvailable)
-					$('#link-mobilereports').hide();
+				if (responseData.IsMyTimeAvailable)
+					navigationViewModel.MyTimeVisible(true);
+				if (responseData.IsMobileReportsAvailable)
+					navigationViewModel.MobileReportsVisible(true);
 
 				$('#username').text(responseData.UserName);
 			});
@@ -130,9 +140,13 @@ require([
 			});
 		}
 
+		function _bindViewModel() {
+			ko.applyBindings(navigationViewModel, $('nav')[0]);
+		}
+
 		_render();
 		_updateMenu();
 		_setupRoutes();
 		_initializeHasher();
-
+		_bindViewModel();
 	});
