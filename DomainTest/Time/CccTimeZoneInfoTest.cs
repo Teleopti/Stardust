@@ -55,13 +55,13 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void VerifyConvertOverDaylightSaving()
         {
             _master = TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time");
-            DateTime theDate = new DateTime(2010,3,26);
+        	var theDate = new DateTime(2010, 3, 26);
             _target = new CccTimeZoneInfo(_master);
 
-            DateTime ret = _target.ConvertTimeToUtc(theDate, _target);
-            Assert.AreEqual(new DateTime(2010,3,25,22,00,0,DateTimeKind.Utc),ret);
+            var ret = _target.ConvertTimeToUtc(theDate, _target);
+        	Assert.AreEqual(new DateTime(2010, 3, 25, 21, 00, 0, DateTimeKind.Utc), ret);
             ret = _target.ConvertTimeToUtc(theDate);
-            Assert.AreEqual(new DateTime(2010, 3, 25, 22, 00, 0, DateTimeKind.Utc), ret);
+        	Assert.AreEqual(new DateTime(2010, 3, 25, 21, 00, 0, DateTimeKind.Utc), ret);
         }
 
         [Test]
