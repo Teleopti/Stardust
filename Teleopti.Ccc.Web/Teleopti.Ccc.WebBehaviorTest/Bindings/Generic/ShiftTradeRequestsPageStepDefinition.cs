@@ -2,6 +2,7 @@
 using System.Globalization;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
@@ -37,8 +38,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
 			Pages.Pages.RequestsPage.ShiftTradeRequestsButton.EventualClick();
-			Browser.Current.Eval("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate(" +
-								 date.ToString("d", CultureInfo.GetCultureInfo("sv-SE")) + ");");
+			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');",
+			                           date.ToShortDateString(CultureInfo.GetCultureInfo("en-US")));
+			Browser.Current.Eval(script);
 		}
 
 
@@ -60,7 +62,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"the selected date should be '(.*)'")]
 		public void ThenTheSelectedDateShouldBe(DateTime date)
 		{
-			ScenarioContext.Current.Pending();
+			EventualAssert.That(() => DateTime.Parse(Pages.Pages.RequestsPage.AddShiftTradeDatePicker.Text), Is.EqualTo(date));
 		}
 
 	}

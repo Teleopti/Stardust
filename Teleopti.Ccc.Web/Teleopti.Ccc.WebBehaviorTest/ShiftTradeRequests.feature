@@ -26,11 +26,11 @@ Background:
 	#| Field | Value   |
 	#| Name  | Skill 1 |
 	And there is a workflow control set with
-	| Field                            | Value                                                    |
-	| Name                             | Trade scheduled days from tomorrow until 30 days forward |
-	| Schedule published to date       | 2040-06-24                                               |
-	| Shift Trade sliding period start | 2                                                        |
-	| Shift Trade sliding period end   | 30                                                       |
+	| Field                            | Value                                        |
+	| Name                             | Trade from tomorrow until 10000 days forward |
+	| Schedule published to date       | 2040-06-24                                   |
+	| Shift Trade sliding period start | 2                                            |
+	| Shift Trade sliding period end   | 10000                                        |
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
@@ -68,20 +68,32 @@ Scenario: No access to make shift trade reuquests
 	Then I should not see the Create Shift Trade Request button
 	And I should not see the Requests button
 
-Scenario: Default to today if no open shift trade period
+Scenario: No workflow control set
 	Given I have the role 'Full access to mytime'
-	And I have no workflow control set
-	And Current time is '2030-01-01'
-	When I navigate to shift trade page
-	And I navigate to messages
-	Then the selected date should be '2030-01-01'
+	And I do not have a workflow control set
+	When I view Add Shift Trade Request
+	Then I should see a message text saying I am missing a workflow control set
 
 Scenario: Default to first day of open shift trade period
 	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade scheduled days from tomorrow until 30 days forward'
+	And I have the workflow control set 'Trade from tomorrow until 10000 days forward'
 	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request
-	Then the selected date should be '2030-01-02'
+	Then the selected date should be '2030-01-03'
+
+Scenario: Show my scheduled shift
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 10000 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see my schedule with
+	| Field			| Value |
+	| Start time	| 06:00 |
+	| End time		| 16:00 |
 
 Scenario: Default time line when I am not scheduled
 	Given I have the role 'Full access to mytime'
@@ -94,26 +106,6 @@ Scenario: Time line when I have a scheduled shift
 	And Current time is '2030-01-01'
 	When I navigate to shift trade page
 	Then I should see the time line span from '5:45' to '16:15'
-
-Scenario: No workflow control set
-	Given I have the role 'Full access to mytime'
-	And I do not have a workflow control set
-	When I view Add Shift Trade Request
-	Then I should see a message text saying I am missing a workflow control set
-
-
-Scenario: Show my scheduled shift
-	Given I have the role 'Full access to mytime'
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category		| Day	           |
-	When I view Add Shift Trade Request for date '2030-01-01'
-	Then I should see my schedule with
-	| Field			| Value |
-	| Start time	| 06:00 |
-	| End time		| 16:00 |
 
 Scenario: Show my scheduled day off
 	Given I have the role 'Full access to mytime'

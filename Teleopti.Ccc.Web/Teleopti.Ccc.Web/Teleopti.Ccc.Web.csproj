@@ -159,10 +159,12 @@
   <ItemGroup>
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeRequestProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestsPreparationDomainData.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestsPreparationViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeRequestsPeriodViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestsScheduleMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestsPeriodViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleLayer.cs" />
-    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsPreparationViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsPeriodViewModel.cs" />
     <Compile Include="Areas\Team\TeamAreaRegistration.cs" />
     <Compile Include="Areas\Team\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MobileReports\Controllers\ReportController.cs" />

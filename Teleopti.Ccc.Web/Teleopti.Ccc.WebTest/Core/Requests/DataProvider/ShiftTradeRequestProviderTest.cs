@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -20,43 +21,40 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 	public class ShiftTradeRequestProviderTest
 	{
 		[Test]
-		public void ShouldRetrieveWorkflowControlSetForUser()
+		public void ShouldGetWorkflowControlSetForUser()
 		{
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			var person = new Person { WorkflowControlSet = new WorkflowControlSet() };
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything)).Return(new[] { MockRepository.GenerateMock<IScheduleDay>() });
 
-			var target = new ShiftTradeRequestProvider(loggedOnUser, scheduleProvider);
+			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IScheduleProvider>());
 
-			var result = target.RetrieveShiftTradePreparationData(DateOnly.Today);
+			var result = target.RetrieveUserWorkflowControlSet();
 
-			result.WorkflowControlSet.Should().Be.SameInstanceAs(person.WorkflowControlSet);
+			result.Should().Be.SameInstanceAs(person.WorkflowControlSet);
 		}
 
 		[Test]
-		public void ShouldRetrieveScheduleForUser()
+		public void ShouldGetScheduleForUser()
 		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			var person = new Person { WorkflowControlSet = new WorkflowControlSet() };
-			var date = DateTime.UtcNow;
+			var person = new Person();
+			var date = DateOnly.Today;
 			IScheduleDictionary scheduleDictionary = new ScheduleDictionary(new Scenario("scenario"),
-																			new ScheduleDateTimePeriod(new DateTimePeriod(date,
-																														  date)));
-			IScheduleDay scheduleDay = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, person, new DateOnly(date));
+			                                                                new ScheduleDateTimePeriod(
+			                                                                	new DateTimePeriod(
+			                                                                		DateTime.SpecifyKind(date.Date, DateTimeKind.Utc),
+			                                                                		DateTime.SpecifyKind(date.Date, DateTimeKind.Utc))));
+			IScheduleDay scheduleDay = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, person, date);
 
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(new DateOnlyPeriod(date, date))).Return(new[] { scheduleDay });
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)))).Return(new[] { scheduleDay });
-			var target = new ShiftTradeRequestProvider(loggedOnUser, scheduleProvider);
+			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider);
 
-			var result = target.RetrieveShiftTradePreparationData(new DateOnly(date));
+			var result = target.RetrieveUserScheduledDay(date);
 
-			result.WorkflowControlSet.Should().Be.SameInstanceAs(person.WorkflowControlSet);
-			result.MyScheduleDay.Should().Be.SameInstanceAs(scheduleDay);
+			result.Should().Be.SameInstanceAs(scheduleDay);
 		}
 	}
 }

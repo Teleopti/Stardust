@@ -21,14 +21,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IAbsenceTypesProvider _absenceTypesProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IShiftTradeRequestProvider _shiftTradeRequestprovider;
+		private readonly IShiftTradeRequestsPeriodViewModelMapper _shiftTradeRequestsPeriodViewModelMapper;
 
-		public RequestsViewModelFactory(IPersonRequestProvider personRequestProvider, IMappingEngine mapper, IAbsenceTypesProvider absenceTypesProvider, IPermissionProvider permissionProvider, IShiftTradeRequestProvider shiftTradeRequestprovider)
+		public RequestsViewModelFactory(IPersonRequestProvider personRequestProvider, IMappingEngine mapper, IAbsenceTypesProvider absenceTypesProvider, 
+										IPermissionProvider permissionProvider, IShiftTradeRequestProvider shiftTradeRequestprovider, 
+										IShiftTradeRequestsPeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper)
 		{
 			_personRequestProvider = personRequestProvider;
 			_mapper = mapper;
 			_absenceTypesProvider = absenceTypesProvider;
 			_permissionProvider = permissionProvider;
 			_shiftTradeRequestprovider = shiftTradeRequestprovider;
+			_shiftTradeRequestsPeriodViewModelMapper = shiftTradeRequestsPeriodViewModelMapper;
 		}
 
 		public RequestsViewModel CreatePageViewModel()
@@ -67,11 +71,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			var request = _personRequestProvider.RetrieveRequest(id);
 			return _mapper.Map<IPersonRequest, RequestViewModel>(request);
 		}
-
-		public ShiftTradeRequestsPreparationViewModel CreateShiftTradePreparationViewModel(DateOnly selectedDate)
+		
+		public ShiftTradeRequestsPeriodViewModel CreateShiftTradePeriodViewModel()
 		{
-			var shiftTradePreparationStuff = _shiftTradeRequestprovider.RetrieveShiftTradePreparationData(selectedDate);
-			return _mapper.Map<ShiftTradeRequestsPreparationDomainData, ShiftTradeRequestsPreparationViewModel>(shiftTradePreparationStuff);
+			return _shiftTradeRequestsPeriodViewModelMapper.Map(_shiftTradeRequestprovider.RetrieveUserWorkflowControlSet());
+		}
+
+		public ShiftTradeRequestsScheduleViewModel CreateShiftTradeScheduleViewModel(DateTime selectedDate)
+		{
+			return _mapper.Map<DateOnly, ShiftTradeRequestsScheduleViewModel>(new DateOnly(selectedDate));
 		}
 	}
 }

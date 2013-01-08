@@ -15,47 +15,78 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		var self = this;
 		var layerCanvasPixelWidth = 700;
 
-		self.selectedDate = ko.observable(new Date('2013-11-29'));
+		self.now = new Date(new Date().getTeleoptiTime()).clearTime();
+		self.selectedDate = ko.observable();
 		self.hasWorkflowControlSet = ko.observable(false);
 		self.timeLineLengthInMinutes = ko.observable(0);
 		self.myScheduleLayers = ko.observableArray();
 
 		self._createMyScheduleLayers = function (layers) {
-			var map = ko.utils.arrayMap(layers, function (layer) {
+			var arrayMap = ko.utils.arrayMap(layers, function (layer) {
 				return new shiftTradeLayerViewModel(layer, self);
 			});
-			self.myScheduleLayers.push.apply(self.myScheduleLayers, map);
+			self.myScheduleLayers(arrayMap);
 		};
 
 		self.pixelPerMinute = ko.computed(function () {
 			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
 		});
 
-		self.loadViewModel = function (date) {
-			//console.log(date);
+		self.selectedDate.subscribe(function () {
+			if (Date.compare(self.selectedDate(), self.openPeriodStartDate) == -1) {
+				self.selectedDate(new Date(self.openPeriodStartDate));
+				return;
+			}
+			if (Date.compare(self.openPeriodEndDate, self.selectedDate()) == -1) {
+				self.selectedDate(new Date(self.openPeriodEndDate));
+				return;
+			}
+			self.loadSchedule(self.selectedDate());
+		});
+
+		self.loadPeriod = function () {
 			ajax.Ajax({
-				url: "Requests/ShiftTradeRequest",
+				url: "Requests/ShiftTradeRequestPeriod",
 				dataType: "json",
 				type: 'GET',
 				//beforeSend: _loading,
-				data: { selectedDate: date.toJSON() },
 				success: function (data, textStatus, jqXHR) {
 					self.hasWorkflowControlSet(!data.HasWorkflowControlSet);
-					self.timeLineLengthInMinutes(data.TimeLineLengthInMinutes);
-					self._createMyScheduleLayers(data.MySchedulelayers);
-					//console.log(data);
+					setDatePickerRange(data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
+					self.selectedDate(new Date(self.now).addDays(data.OpenPeriodRelativeStart));
 				},
 				error: function (err) {
-					//console.log('Something went wrong here...');
 					alert("error!");
 					//console.log(err);
 				}
 			});
 		};
 
-		self.selectedDate.subscribe(function () {
-			self.loadViewModel(self.selectedDate());
-		});
+		self.loadSchedule = function (date) {
+			ajax.Ajax({
+				url: "Requests/ShiftTradeRequestSchedule",
+				dataType: "json",
+				type: 'GET',
+				//beforeSend: _loading,
+				data: { selectedDate: vm.selectedDate().toJSON() },
+				success: function (data, textStatus, jqXHR) {
+					self.timeLineLengthInMinutes(data.TimeLineLengthInMinutes);
+					self._createMyScheduleLayers(data.MyScheduleLayers);
+				},
+				error: function (err) {
+					alert("error!");
+					//console.log(err);
+				}
+			});
+		};
+
+		self.nextDate = function () {
+			self.selectedDate(self.selectedDate().addDays(1));
+		};
+
+		self.previousDate = function () {
+			self.selectedDate(self.selectedDate().addDays(-1));
+		};
 	}
 
 	function shiftTradeLayerViewModel(layer, parentViewModel) {
@@ -75,16 +106,21 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.title = ko.computed(function () {
 			return self.startTime + '-' + self.endTime + ' ' + self.payload;
 		});
-
 	}
 
 	function _init() {
-		//setShiftTradeRequestDate('2030-01-01'); //Just temporary
 		vm = new shiftTradeViewModel();
 		var elementToBind = $('#Request-add-shift-trade').get(0);
 		ko.applyBindings(vm, elementToBind);
-		//_activateDateButtons();		
 		bindClickToOpenShiftTrade();
+	}
+
+	function setDatePickerRange(relativeStart, relativeEnd) {
+		var element = $('#Request-add-shift-trade-datepicker');
+		element.datepicker("option", "minDate", relativeStart);
+		element.datepicker("option", "maxDate", relativeEnd);
+		vm.openPeriodStartDate = new Date(vm.now).addDays(relativeStart);
+		vm.openPeriodEndDate = new Date(vm.now).addDays(relativeEnd);
 	}
 
 	function bindClickToOpenShiftTrade() {
@@ -93,27 +129,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				$('#Request-add-shift-trade')
 					.show();
 
-				vm.loadViewModel($('#Request-add-selected-date').val());
-				_initDatePicker();
-			})
-			;
+				vm.loadPeriod();
+			});
 	}
 
 	function setShiftTradeRequestDate(date) {
-		$('#Request-add-selected-date')
-			.val(date)
-			;
-	}
-
-	function _initDatePicker() {
-		$('#Request-add-shift-trade-datepicker').datepicker({
-			showAnim: "slideDown",
-			onSelect: function (dateText, inst) {
-				//alert(dateText);
-				//alert('selectedDate = ' + inst.selectedYear + '-' + inst.selectedMonth + '-' + inst.selectedDay);
-				//var fixedDate = _datePickerPartsToFixedDate(inst.selectedYear, inst.selectedMonth, inst.selectedDay);
-			}
-		});
+		vm.selectedDate(Date.parse(date));
 	}
 
 	return {
@@ -130,7 +151,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 ko.bindingHandlers.datepicker = {
 	init: function (element, valueAccessor, allBindingsAccessor) {
 		//initialize datepicker with some optional options
-		var options = allBindingsAccessor().datepickerOptions || {};
+		var options = allBindingsAccessor().datepickerOptions || { showAnim: 'slideDown' };
 		$(element).datepicker(options);
 
 		//handle the field changing
@@ -148,7 +169,6 @@ ko.bindingHandlers.datepicker = {
 	update: function (element, valueAccessor) {
 		var value = ko.utils.unwrapObservable(valueAccessor()),
             current = $(element).datepicker("getDate");
-		//alert(current);
 		if (value - current !== 0) {
 			$(element).datepicker("setDate", value);
 		}

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 {
@@ -11,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		RequestsViewModel CreatePageViewModel();
 		IEnumerable<RequestViewModel> CreatePagingViewModel(Paging paging);
 		RequestViewModel CreateRequestViewModel(Guid id);
-		ShiftTradeRequestsPreparationViewModel CreateShiftTradePreparationViewModel(DateOnly selectedDate);
+		ShiftTradeRequestsPeriodViewModel CreateShiftTradePeriodViewModel();
+		ShiftTradeRequestsScheduleViewModel CreateShiftTradeScheduleViewModel(DateTime selectedDate);
 	}
 }

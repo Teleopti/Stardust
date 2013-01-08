@@ -3,18 +3,17 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
-	public class ShiftTradeRequestsPreparationViewModel
+	public class ShiftTradeRequestsScheduleViewModel
 	{
-		public bool HasWorkflowControlSet { get; set; }
-
-		public IEnumerable<ShiftTradeScheduleLayer> MySchedulelayers { get; set; }
+		//public IScheduleDay MyScheduleDay { get; set; }
+		public IEnumerable<ShiftTradeScheduleLayer> MyScheduleLayers { get; set; }
 
 		public int TimeLineLengthInMinutes
 		{
 			get
 			{
 				// Temporary. Later this will prob be done in mapping and calculated from both my schedule and all other schedules.
-				return MySchedulelayers.Sum(layer => layer.LengthInMinutes);
+				return MyScheduleLayers.Sum(layer => layer.LengthInMinutes);
 			}
 		}
 	}
