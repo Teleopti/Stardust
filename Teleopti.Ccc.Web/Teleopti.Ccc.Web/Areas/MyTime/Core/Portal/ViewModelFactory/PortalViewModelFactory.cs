@@ -107,17 +107,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			{
 				toolbarItems.AddRange(new ToolBarItemBase[]
 			                        {
-			                            new ToolBarButtonItem
-			                                {
-			                                    Title = Resources.Requests,
-			                                    ButtonType = "showRequests"
-			                                },
-			                            new ToolBarButtonItem
-			                                {
-			                                    Title = "xxAdd Shift Trade Requests",
-			                                    ButtonType = "addShiftTradeRequest"
-			                                },
-			                            new ToolBarSeparatorItem(),
+												 //new ToolBarButtonItem
+												 //    {
+												 //        Title = Resources.Requests,
+												 //        ButtonType = "showRequests"
+												 //    },
+												 //new ToolBarButtonItem
+												 //    {
+												 //        Title = "xxAdd Shift Trade Requests",
+												 //        ButtonType = "addShiftTradeRequest"
+												 //    },
+			                            //new ToolBarSeparatorItem(),
 			                            new ToolBarDatePicker
 			                                {
 			                                    NextTitle = Resources.NextPeriod,
@@ -131,6 +131,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			{
 				toolbarItems.AddRange(new ToolBarItemBase[]
 									{
+										new ToolBarSeparatorItem(),
 										new ToolBarButtonItem
 											{
 												Title = Resources.NewRequest,
