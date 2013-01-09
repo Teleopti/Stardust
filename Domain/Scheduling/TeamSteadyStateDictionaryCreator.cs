@@ -43,15 +43,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			foreach (var scheduleMatrixPro in _matrixList)
 			{
-				var day = scheduleMatrixPro.EffectivePeriodDays[0].Day;
-				if (dateOnlyPeriod.Contains(day))
+				var effectivePeriodDays = scheduleMatrixPro.EffectivePeriodDays;
+				var firstEffectiveDay = effectivePeriodDays[0].Day;
+				var lastEffectiveDay = effectivePeriodDays[effectivePeriodDays.Count - 1].Day;
+				var effectivePeriod = new DateOnlyPeriod(firstEffectiveDay, lastEffectiveDay);
+				var firstSelectedDay = dateOnlyPeriod.StartDate;
+
+				if (!effectivePeriod.Contains(dateOnlyPeriod)) continue;
+
+				var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(firstSelectedDay, persons, true, _schedulingOptions);
+				foreach (var groupPerson in groupPersons)
 				{
-					var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(day, persons, true, _schedulingOptions);
-					foreach (var groupPerson in groupPersons)
-					{
-						if (!groupPersonDic.ContainsKey(groupPerson))
-							groupPersonDic.Add(groupPerson, day);
-					}
+					if (!groupPersonDic.ContainsKey(groupPerson))
+						groupPersonDic.Add(groupPerson, firstEffectiveDay);
 				}
 			}
 
