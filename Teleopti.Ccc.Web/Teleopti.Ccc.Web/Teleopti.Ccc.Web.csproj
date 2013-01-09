@@ -157,6 +157,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeRequestProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeRequestsPeriodViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestsScheduleMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestsPeriodViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleLayer.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsPeriodViewModel.cs" />
     <Compile Include="Areas\Team\TeamAreaRegistration.cs" />
     <Compile Include="Areas\Team\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MobileReports\Controllers\ReportController.cs" />
@@ -507,6 +515,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js" />
     <Content Include="Areas\Team\Content\Scripts\helpers.js" />
     <Content Include="Areas\Team\Content\Scripts\layout.js" />
     <Content Include="Areas\Team\Content\Scripts\main.js" />
