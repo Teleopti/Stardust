@@ -96,7 +96,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			result.Any(x => x.ButtonType == "addRequest").Should().Be.True();
 		}
 
-		[Test]
+
+		[Test, Ignore("Henrik 2013-01-09 Shifttrades are not implemented yet")]
 		public void ShouldNotHaveCreateShiftTradeRequestsButtonIfNoPermission()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();

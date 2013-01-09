@@ -228,6 +228,7 @@ Scenario: Delete created shift trade request
 	When I click the shift trade request's delete button
 	Then I should not see the shift trade request in the list
 
+@ignore
 Scenario: Should not be able to delete received shift trade request
 	Given I am an agent
 	And I have received a shift trade request from 'Ashley'
