@@ -6,29 +6,28 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
-	public class ShiftTradeAbsenceSpecification : ShiftTradeSpecification, IShiftTradeAbsenceSpecification
+	public class ShiftTradeAbsenceSpecification : ShiftTradeSpecification
 	{
-		
 		public override string DenyReason
 		{
 			get { return "ShiftTradeAbsenceDenyReason"; }
 		}
 
-		public override bool IsSatisfiedBy(IList<IShiftTradeSwapDetail> obj)
+		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
 		{
-			if(obj == null)
+			if (obj == null)
 				throw new ArgumentNullException("obj");
 
 			foreach (var shiftTradeSwapDetail in obj)
 			{
 				var visualLayerCollectionFrom = shiftTradeSwapDetail.SchedulePartFrom.ProjectionService().CreateProjection();
-				
-				if(visualLayerCollectionFrom.Select(visualLayer => visualLayer.Payload).OfType<Absence>().Any())
+
+				if (visualLayerCollectionFrom.Select(visualLayer => visualLayer.Payload).OfType<Absence>().Any())
 					return false;
 
 				var visualLayerCollectionTo = shiftTradeSwapDetail.SchedulePartTo.ProjectionService().CreateProjection();
 
-				if(visualLayerCollectionTo.Select(visualLayer => visualLayer.Payload).OfType<Absence>().Any())
+				if (visualLayerCollectionTo.Select(visualLayer => visualLayer.Payload).OfType<Absence>().Any())
 					return false;
 			}
 

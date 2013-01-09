@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
     [TestFixture]
     public class ShiftTradeTargetTimeSpecificationTest
     {
-        private IShiftTradeTargetTimeSpecification _target;
+        private ShiftTradeTargetTimeSpecification _target;
         private MockRepository _mocks;
         private ISchedulingResultStateHolder _stateHolder;
         private ISchedulePeriodTargetTimeCalculator _targetTimeTimeCalculator;

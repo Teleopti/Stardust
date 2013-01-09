@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public bool AccessToAsm { get; set; }
         public bool AccessToTextRequests { get; set; }
         public bool AccessToAbsenceRequests { get; set; }
+        public bool AccessToShiftTradeRequests { get; set; }
 		public bool AccessToStudentAvailability { get; set; }
 
 		public RoleConfigurable()
@@ -127,7 +128,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			if (!AccessToStudentAvailability)
 				applicationFunctions = from f in applicationFunctions
 				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.StudentAvailability
+				                       select f;		                       
+		       if (!AccessToShiftTradeRequests)
+				applicationFunctions = from f in applicationFunctions 
+				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb 
 				                       select f;
+
 			return applicationFunctions;
 		}
 	}

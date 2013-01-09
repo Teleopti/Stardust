@@ -7,275 +7,241 @@
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
 /// <reference path="jquery.ui.connector.js"/>
+/// <reference path="jquery.ui.connector.js"/>
+/// <reference path="~/Content/Scripts/knockout-2.1.0.debug.js" />
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
-	var readyForInteraction = function () { };
-	var completelyLoaded = function () { };
+	var pageViewModel;
+
+	function RequestItemViewModel() {
+
+		var self = this;
+
+		self.Subject = ko.observable();
+		self.RequestType = ko.observable();
+		self.RequestPayload = ko.observable();
+		self.Status = ko.observable();
+		self.Dates = ko.observable();
+		self.UpdatedOn = ko.observable();
+		self.Text = ko.observable();
+		self.Link = ko.observable();
+		self.Id = ko.observable();
+		self.mouseIsOver = ko.observable(false);
+		self.isSelected = ko.observable(false);
+		self.isLoading = ko.observable(false);
+		self.CanDelete = ko.observable(true);
+
+		self.Type = ko.computed(function () {
+			var payload = (self.RequestPayload() != '') ? ', ' + self.RequestPayload() : '';
+			return self.RequestType() + payload;
+		});
+
+
+		//TODO: too much gui-info, remove it to be called from the view
+		self.ShowDetails = function (viewmodel, event) {
+			var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
+			ajax.Ajax({
+				url: self.Link(),
+				dataType: "json",
+				type: 'GET',
+				beforeSend: function () {
+					self.isLoading(true);
+				},
+				complete: function () {
+					self.isLoading(false);
+				},
+				success: function (data) {
+					Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, distanceFromTop);
+				}
+			});
+		};
+
+		self.toggle = function () {
+			self.mouseIsOver(!self.mouseIsOver());
+		};
+
+	}
+
+
+	function RequestPageViewModel(requestDetailViewModel, readyForInteraction, completelyLoaded) {
+
+		var self = this;
+		self.ready = readyForInteraction;
+		self.completed = completelyLoaded;
+		self.details = ko.observable(requestDetailViewModel);
+		
+		requestDetailViewModel.isUpdate.subscribe(function (newValue) {
+			if (!newValue) self.setSelected(null);
+		});
+
+		self.isUpdate = ko.computed(function () {
+			return requestDetailViewModel.isUpdate();
+		});
+
+		self.AbsenceRequestTabVisible = ko.computed(function () {
+			return requestDetailViewModel.AbsenceRequestTabVisible();
+		});
+
+		self.TabSeparatorVisible = ko.computed(function () {
+			return requestDetailViewModel.TabSeparatorVisible();
+		});
+
+		self.IsFullDay = ko.computed(function () {
+			return requestDetailViewModel.IsFullDay();
+		});
+
+		self.TextRequestTabVisible = ko.computed(function () {
+			return requestDetailViewModel.TextRequestTabVisible();
+		});
+
+		self.requests = ko.observableArray();
+
+		self.SelectItem = function (requestItemViewModel, event) {
+			self.setSelected(requestItemViewModel);
+			requestItemViewModel.ShowDetails(requestItemViewModel, event);
+		};
+
+		self.setSelected = function (requestItemViewModel) {
+			ko.utils.arrayForEach(self.requests(), function (item) {
+				item.isSelected(item == requestItemViewModel);
+			});
+		};
+
+		self.moreToLoad = ko.observable(false);
+
+		self.showRequests = function (data) {
+			ko.utils.arrayForEach(data, function (item) {
+				var vm = new RequestItemViewModel();
+				vm.Initialize(item);
+				self.requests.push(vm);
+			});
+		};
+
+		self.Delete = function (requestItemViewModel) {
+
+			var url = requestItemViewModel.Link();
+			ajax.Ajax({
+				url: url,
+				dataType: "json",
+				contentType: 'application/json; charset=utf-8',
+				type: "DELETE",
+				success: function () {
+					self.requests.remove(requestItemViewModel);
+				},
+				error: function (jqXHR, textStatus) {
+					Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+				}
+			});
+		};
+
+		self.AddRequest = function (request) {
+			var selectedViewModel = ko.utils.arrayFirst(self.requests(), function (item) {
+				return item.Id() == request.Id;
+			});
+
+			if (selectedViewModel) {
+				self.requests.remove(selectedViewModel);
+			}
+			else {
+				selectedViewModel = new RequestItemViewModel();
+				selectedViewModel.Initialize(request);
+			}
+
+			ajax.Ajax({
+				url: selectedViewModel.Link(),
+				dataType: "json",
+				type: 'GET',
+				success: function (data) {
+					selectedViewModel.Initialize(data);
+					self.requests.unshift(selectedViewModel);
+					self.setSelected(selectedViewModel);
+				}
+			});
+		};
+
+		self.loadPage = function () {
+			var skip = self.requests().length;
+			var take = 20;
+			ajax.Ajax({
+				url: "Requests/Requests",
+				dataType: "json",
+				type: 'GET',
+				data: {
+					Take: take,
+					Skip: skip
+				},
+				success: function (data) {
+					self.moreToLoad(data.length == take);
+					self.showRequests(data);
+				},
+				complete: function () {
+					if (self.ready) {
+						self.ready();
+						self.ready = null;
+					}
+					if (self.completed) {
+						self.completed();
+						self.completed = null;
+					}
+				}
+			});
+		};
+	}
+
+	ko.utils.extend(RequestItemViewModel.prototype, {
+		Initialize: function (data) {
+			var self = this;
+			self.Subject(data.Subject);
+			self.RequestType(data.Type);
+			self.Status(data.Status);
+			self.Dates(data.Dates);
+			self.UpdatedOn(data.UpdatedOn);
+			self.Text(data.Text);
+			self.Link(data.Link.href);
+			self.Id(data.Id);
+			self.RequestPayload(data.Payload);
+			self.CanDelete(data.Link.Methods.indexOf("DELETE") != -1 && data.IsCreatedByUser);
+		}
+	});
 
 	function _initScrollPaging() {
-		_loadAPage();
+		pageViewModel.loadPage();
 		$(window).scroll(_loadAPageIfRequired);
 	}
 
 	function _loadAPageIfRequired() {
-		if (!_hasMoreToLoad())
-			return;
 		var jqWindow = $(window);
 		var jqDocument = $(window.document);
 		if (_isAtBottom(jqDocument, jqWindow)) {
-			_loadAPage();
+			pageViewModel.loadPage();
 		}
 	}
 
 	function _isAtBottom(jqDocument, jqWindow) {
+
 		var totalContentHeight = jqDocument.height();
 		var inViewContentHeight = jqWindow.height();
 		var aboveViewContentHeight = jqWindow.scrollTop();
 		return totalContentHeight - inViewContentHeight - aboveViewContentHeight <= 0;
 	}
 
-	function _loadAPage() {
-		var skip = $('#Requests-list li:not(.template)').length;
-		var take = 20;
-		ajax.Ajax({
-			url: "Requests/Requests",
-			dataType: "json",
-			type: 'GET',
-			beforeSend: _loading,
-			data: {
-				Take: take,
-				Skip: skip
-			},
-			success: function (data, textStatus, jqXHR) {
-				_drawRequests(data);
-				if (data.length == 0 || data.length < take) {
-					_noMoreToLoad();
-				} else {
-					_moreToLoad();
-				}
-				_showMessageIfNoRequests();
-			},
-			complete: function () {
-				if (readyForInteraction)
-					readyForInteraction();
-				readyForInteraction = null;
-				if (completelyLoaded)
-					completelyLoaded();
-				completelyLoaded = null;
-			}
-		});
-	}
-
-	function _hasMoreToLoad() {
-		return $('.request-list .arrow-down').is(':visible');
-	}
-
-	function _loading() {
-		$('.request-list .arrow-down').hide();
-		$('.request-list .loading-gradient').show();
-	}
-
-	function _noMoreToLoad() {
-		$('.request-list .arrow-down').hide();
-		$('.request-list .loading-gradient').hide();
-	}
-
-	function _moreToLoad() {
-		$('.request-list .arrow-down').show();
-		$('.request-list .loading-gradient').hide();
-	}
-
-	function _showMessageIfNoRequests() {
-		if ($('.request-item').not('.template').is(':visible')) {
-			$('.friendly-message').hide();
-		} else {
-			$('.friendly-message').show();
-		}
-	}
-
-	function _removeRequest(requestOrListItem) {
-		var listItem;
-		if (requestOrListItem.Id)
-			listItem = $('#Requests-list li[data-mytime-requestid="' + requestOrListItem.Id + '"]');
-		else
-			listItem = requestOrListItem;
-		listItem
-			.animate({
-				'height': '0',
-				'opacity': '0'
-			}, 'fast', function () {
-				$(this).remove();
-				_loadAPageIfRequired();
-				_showMessageIfNoRequests();
-			});
-	}
-
-	function _drawRequests(requests) {
-		for (var i = 0; i < requests.length; i++) {
-			var request = requests[i];
-			_drawRequest(request);
-		}
-	}
-
-	function _drawRequest(request) {
-		$('#Requests-list').append(_createRequestListItem(request));
-	}
-
-	function _drawRequestAtTop(request) {
-		var request = _createRequestListItem(request)
-			.hide()
-			;
-		$('#Requests-list')
-			.prepend(request)
-			;
-		request.slideDown();
-	}
-
-	function _createRequestListItem(request) {
-		var listItem = $('#Requests-list li.template')
-			.clone(true)
-			.removeClass('template')
-			;
-		listItem.attr('data-mytime-requestid', request.Id);
-		listItem.attr('data-mytime-link', request.Link.href);
-		listItem.find('.request-data-subject').text(request.Subject);
-		listItem.find('.request-data-date').text(request.Dates);
-		listItem.find('.request-data-updatedon').text(request.UpdatedOn);
-		listItem.find('.request-data-status').text(request.Status);
-		listItem.find('.request-data-text').text(request.Text);
-
-		var connector = listItem.find('.request-connector');
-		var deleteButton = listItem.find('.request-delete-button');
-
-		if (request.Payload != '') {
-			listItem.find('.request-data-type').text(request.Type + ' \u2013 ' + request.Payload);
-		} else {
-			listItem.find('.request-data-type').text(request.Type);
-		}
-		connector.connector();
-
-		if (request.Link.Methods.indexOf("DELETE") != -1) {
-			deleteButton
-				.click(function (event) {
-					$(this).prop('disabled', true);
-					event.stopPropagation();
-					_disconnectAll();
-					Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
-					_deleteRequest(listItem);
-				})
-				.removeAttr('disabled', 'disabled');
-	            // todo by tamasb: these two methods has to be somehow integrated in qtip library
-	            deleteButton.mouseenter(function () {
-	                var title = this.getAttribute('oldtitle');
-	                deleteButton.qtip('show', title);
-	            });
-	            deleteButton.mouseleave(function () {
-	                deleteButton.qtip('hide');
-	            });
-			listItem.hover(function () {
-				deleteButton
-					.stop(true, true)
-					.fadeToggle();
-			});
-		} else {
-			deleteButton.remove();
-		}
-		return listItem;
-	}
-
-	function _deleteRequest(listItem) {
-		var url = listItem.data('mytime-link');
-		ajax.Ajax({
-			url: url,
-			dataType: "json",
-			contentType: 'application/json; charset=utf-8',
-			type: "DELETE",
-			beforeSend: function () {
-				Teleopti.MyTimeWeb.Common.LoadingOverlay.Add(listItem);
-
-			},
-			complete: function (jqXHR, textStatus) {
-				Teleopti.MyTimeWeb.Common.LoadingOverlay.Remove(listItem);
-			},
-			success: function (data, textStatus, jqXHR) {
-				_removeRequest(listItem);
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-			}
-		});
-	}
-
-	function _initListClick() {
-		$('#Requests-list li')
-			.click(function () {
-				_showRequest($(this));
-			}
-		);
-	}
-
-	function _showRequest(listItem) {
-		var url = listItem.attr('data-mytime-link');
-		var connector = listItem
-			.find('.request-connector')
-			;
-		var bindListItemClick = function _bindClick() {
-			listItem.bind('click', function () {
-				_showRequest($(this));
-			});
-		};
-		ajax.Ajax({
-			url: url,
-			dataType: "json",
-			type: 'GET',
-			beforeSend: function () {
-				listItem.unbind('click');
-				_disconnectAllOthers(listItem);
-				Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection(bindListItemClick);
-				connector.connector("connecting");
-			},
-			success: function (data, textStatus, jqXHR) {
-				Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, listItem.position().top - 30);
-				connector.connector("connect");
-			}
-		});
-
-	}
-
-	function _disconnectAll() {
-		$('#Requests-list li:not(.template) .request-connector')
-			.connector('disconnect')
-		;
-	}
-
-	function _disconnectAllOthers(listItem) {
-		listItem.siblings()
-					.not('.template')
-					.data('connected', false)
-					.find('.request-connector')
-					.connector('disconnect')
-					;
-	}
-
 	return {
-		Init: function (readyForInteractionCallback, completelyLoadedCallback) {
+		Init: function (detailViewModel, readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
 			completelyLoaded = completelyLoadedCallback;
+			pageViewModel = new RequestPageViewModel(detailViewModel, readyForInteractionCallback, completelyLoadedCallback);
+			
 			_initScrollPaging();
-			_initListClick();
+			var element = $('#Requests-body-inner')[0];
+
+			if (element) ko.applyBindings(pageViewModel, element);
 		},
 		AddItemAtTop: function (request) {
-			_drawRequestAtTop(request);
-			_showMessageIfNoRequests();
-		},
-		RemoveItem: function (request) {
-			_removeRequest(request);
-		},
-		DisconnectAll: function () {
-			_disconnectAll();
+			pageViewModel.AddRequest(request);
 		}
 	};
 
 })(jQuery);
+

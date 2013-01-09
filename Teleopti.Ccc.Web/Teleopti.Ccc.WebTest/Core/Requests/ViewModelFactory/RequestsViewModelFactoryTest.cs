@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
@@ -80,12 +79,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
 			var target = new RequestsViewModelFactory(personRequestProvider, MockRepository.GenerateMock<IMappingEngine>(), null, null);
 			var paging = new Paging();
-
-			personRequestProvider.Stub(x => x.RetrieveTextAndAbsenceRequests(paging)).Return(new IPersonRequest[] { });
+			personRequestProvider.Stub(x => x.RetrieveRequests(paging)).Return(new IPersonRequest[] { });
 
 			target.CreatePagingViewModel(paging);
 
-			personRequestProvider.AssertWasCalled(x => x.RetrieveTextAndAbsenceRequests(paging));
+			personRequestProvider.AssertWasCalled(x => x.RetrieveRequests(paging));
 		}
 
 		[Test]

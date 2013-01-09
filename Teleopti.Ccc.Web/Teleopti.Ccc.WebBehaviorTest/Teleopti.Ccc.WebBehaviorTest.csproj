@@ -105,6 +105,7 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\ShiftTradeRequestFromRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SignInPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\StudentAvailabilityPageStepDefinitions.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Bindings\Generic\ScenarioStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
+    <Compile Include="Bindings\Generic\ShiftTradeRequestsPageStepDefinition.cs" />
     <Compile Include="Bindings\Generic\WeekSchedulePageStepDefinitions.cs" />
     <Compile Include="BrowserNotifications.feature.cs">
       <AutoGen>True</AutoGen>
@@ -145,6 +147,7 @@
     <Compile Include="Bindings\Transform.cs" />
     <Compile Include="Core\Robustness\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Generic\PasswordConfigurable.cs" />
+    <Compile Include="Data\Setups\Specific\ExistingShiftTradeRequest.cs" />
     <Compile Include="PasswordPolicy.feature.cs">
       <DependentUpon>PasswordPolicy.feature</DependentUpon>
       <AutoGen>True</AutoGen>

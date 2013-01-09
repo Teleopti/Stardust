@@ -1219,12 +1219,15 @@
     <Compile Include="WorkflowControl\PersonAccountBalanceValidator.cs" />
     <Compile Include="WorkflowControl\ProcessAbsenceRequest.cs" />
     <Compile Include="WorkflowControl\SchedulePublishedSpecification.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeLightSpecification.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeLightValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IsShiftTradeRequestNotNullSpecification.cs" />
-    <Compile Include="WorkflowControl\ShiftTrades\IsWorkflowControlSetNullSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\OpenShiftTradePeriodSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAbsenceSpecification.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAvailableCheckItem.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeLightValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMeetingSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradePersonalActivitySpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeSkillSpecification.cs" />

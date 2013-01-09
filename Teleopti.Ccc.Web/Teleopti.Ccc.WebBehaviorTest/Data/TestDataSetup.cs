@@ -158,7 +158,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				from r in agentRoleApplicationFunctions
 				where
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.TextRequests &&
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb &&
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb
 				select r;
 			var agentRoleWithoutTextRequestsApplicationFunctions =
 				from r in agentRoleApplicationFunctions
