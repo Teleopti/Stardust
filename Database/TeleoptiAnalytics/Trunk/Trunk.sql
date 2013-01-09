@@ -37,3 +37,8 @@ ALTER TABLE  mart.fact_schedule_deviation ADD shift_startdate_id int NULL
 ALTER TABLE  mart.fact_schedule_deviation ADD scheduled_time_s int NULL
 
 ALTER TABLE mart.fact_schedule_deviation DROP COLUMN datasource_update_date
+
+IF NOT EXISTS(SELECT 1 FROM mart.sys_configuration WHERE [key]='AdherenceMinutesOutsideShift')
+	INSERT INTO mart.sys_configuration([key], value, insert_date)
+	SELECT 'AdherenceMinutesOutsideShift', 120, GETDATE()
+

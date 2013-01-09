@@ -37,7 +37,7 @@ DECLARE @business_unit_id int
 DECLARE @scenario_id int
 DECLARE @date_min smalldatetime = '1900-01-01'
 DECLARE @intervals_outside_shift int
-
+declare @interval_length_minutes int 
 
 CREATE TABLE #fact_schedule_deviation(
 	date_id int,
@@ -67,7 +67,10 @@ CREATE TABLE #fact_schedule (
 	[business_unit_id] [int] NULL
 )
 
-SELECT @intervals_outside_shift = COUNT(*)/12 FROM mart.dim_interval
+--get the number of intervals outside shift to consider for adherence calc
+SELECT @interval_length_minutes = 1440/COUNT(*) from mart.dim_interval 
+
+SELECT @intervals_outside_shift = value/@interval_length_minutes FROM mart.sys_configuration WHERE [KEY]='AdherenceMinutesOutsideShift'  
 
 /*Remove timestamp from datetime*/
 SET	@start_date = convert(smalldatetime,floor(convert(decimal(18,8),@start_date )))
@@ -229,7 +232,7 @@ INNER JOIN #fact_schedule_deviation stat
 ON stat.date_id=shifts.date_id AND stat.person_id=shifts.person_id
 WHERE stat.shift_startdate_id IS NULL 
 AND stat.interval_id < shifts.interval_id 
-AND stat.interval_id > shifts.interval_id - @intervals_outside_shift-- ONLY 2 Hours back
+AND stat.interval_id > shifts.interval_id - @intervals_outside_shift-- ONLY x Hours back
 
 --ALL ROWS AFTER SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
 UPDATE stat
@@ -239,7 +242,7 @@ INNER JOIN #fact_schedule_deviation stat
 ON stat.date_id=shifts.date_id AND stat.person_id=shifts.person_id
 WHERE stat.shift_startdate_id IS NULL 
 AND stat.interval_id > shifts.interval_id
-AND stat.interval_id < shifts.interval_id + @intervals_outside_shift -- ONLY 2 Hours ahead
+AND stat.interval_id < shifts.interval_id + @intervals_outside_shift -- ONLY x Hours ahead
 
 DELETE FROM #fact_schedule_deviation WHERE shift_startdate_id IS NULL
 	
