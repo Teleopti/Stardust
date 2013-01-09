@@ -3,9 +3,13 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	var self = this;
 
 	this.DataSources = ko.observableArray();
-	this.UserName = ko.observable('');
-	this.Password = ko.observable('');
-	this.ErrorMessage = ko.observable('');
+	this.UserName = ko.observable();
+	this.Password = ko.observable();
+	this.ErrorMessage = ko.observable();
+	this.HasErrorMessage = ko.computed(function () {
+		var errorMessage = self.ErrorMessage();
+		return errorMessage && errorMessage.length > 0;
+	});
 
 	this.Ajax = new Teleopti.Start.Authentication.JQueryAjaxViewModel();
 
@@ -14,13 +18,14 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	this.DisplayUserNameAndPasswordBoxes = ko.observable(false);
 
 	this.UserNameFocus = ko.observable(false);
-
+	
 	this.SelectDataSource = function (dataSource) {
 		self.SelectedDataSource(dataSource);
 
-		if (dataSource.Type == "application") {
+		if (!dataSource.IsWindows) {
 			self.DisplayUserNameAndPasswordBoxes(true);
-			setTimeout(function() { self.UserNameFocus(true); }, 1);
+			self.UserNameFocus(false);
+			self.UserNameFocus(true);
 		} else {
 			self.DisplayUserNameAndPasswordBoxes(false);
 			self.UserNameFocus(false);
@@ -41,7 +46,6 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 				});
 				self.DataSources.push.apply(self.DataSources, map);
 				self.SelectDataSource(self.DataSources()[0]);
-				$('#DataSources').show();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 500) {
@@ -57,10 +61,13 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 		var state = data.authenticationState;
 
 		self.ErrorMessage('');
+
+		var selectedDataSource = self.SelectedDataSource();
 		state.TryToSignIn({
 			data: {
-				type: self.SelectedDataSource().Type,
-				datasource: self.SelectedDataSource().Name,
+				isWindows: selectedDataSource.IsWindows,
+				type: selectedDataSource.Type,
+				datasource: selectedDataSource.Name,
 				username: self.UserName(),
 				password: self.Password()
 			},

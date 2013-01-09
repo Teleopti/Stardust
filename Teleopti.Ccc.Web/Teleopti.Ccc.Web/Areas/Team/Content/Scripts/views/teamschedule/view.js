@@ -163,7 +163,7 @@ define([
 						ko.applyBindings({
 							TeamSchedule: teamSchedule,
 							Translations: translations
-						});
+						},$('body > section')[0]);
 					})
 					.fail(function (error) {
 						$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');

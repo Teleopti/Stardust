@@ -175,7 +175,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		$.extend(options, {
 			error: error
 		});
-		if (authenticationModel.type === "application") {
+		if (!authenticationModel.isWindows) {
 			checkPasswordAjax(options);
 		} else {
 			self.AttemptGotoApplicationBySignIn(options);

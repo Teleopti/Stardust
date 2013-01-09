@@ -9,9 +9,8 @@
 	<script src="@Url.Content("~/Content/signals/signals.js")"></script>
 	<script src="@Url.Content("~/Content/hasher/hasher.js")"></script>
 	<script src="@Url.Content("~/Content/crossroads/crossroads.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/knockout.bindings.js")"></script>
-
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.js")"></script>
+    
+-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/knockout.bindings.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.JQueryAjaxViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.AuthenticationState.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.Navigation.js")"></script>
@@ -30,7 +29,7 @@
 
 	<script type="text/javascript">
 		var authentication;
-		jQuery(function () {
+		$(function () {
 			Teleopti.Start.Authentication.Settings = {
 				baseUrl: '@Url.Content("~/")'
 			};
@@ -53,18 +52,18 @@
 
 		<div id="signin">
 
-			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked" style="display: none;">
-				<li data-bind="css: {'active': $parent.SelectedDataSource() == $data}, class: Type">
+			<ul data-bind="visible: DataSources().length > 0, foreach: DataSources" class="nav nav-tabs nav-stacked">
+				<li data-bind="css: {'application': !IsWindows, 'windows': IsWindows, 'active': $parent.SelectedDataSource() == $data}">
 					<a href="#" data-bind="click: $parent.SelectDataSource">
 						<span data-bind="text: Name"></span>
-						<span data-bind="if: Type == 'windows'">@Resources.WindowsLogonWithBrackets</span>
+						<span data-bind="if: IsWindows">@Resources.WindowsLogonWithBrackets</span>
 					</a>
 				</li>
 			</ul>
 			<form data-bind="submit: SignIn">
 				<div data-bind="visible: DisplayUserNameAndPasswordBoxes">
 					<div>
-						<input type="text" id="Username-input" placeholder="@Resources.UserName" class="input-block-level" data-bind="value: UserName, hasfocus: UserNameFocus" autocapitalize="off" autocorrect="off" />
+						<input type="text" id="Username-input" placeholder="@Resources.UserName" class="input-block-level" data-bind="value: UserName" autocapitalize="off" autocorrect="off" />
 					</div>
 					<div>
 						<input type="password" id="Password-input" placeholder="@Resources.Password" class="input-block-level" data-bind="value: Password" />
@@ -72,12 +71,12 @@
 				</div>
 				<div id="Signin-error" 
 					 class="alert" 
-					 data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
+					 data-bind="visible: HasErrorMessage, text: ErrorMessage"
 					 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase">
 				</div>
 			
-				<button class="btn btn-primary" id="Login-button" type="submit" data-bind="enable: Ajax.Inactive()">@Resources.LogOn</button>
-				<img data-bind="visible: Ajax.Active()" src="@Url.Content("~/Areas/Start/Content/Images/ajax-loader-small.gif")" alt="..." />
+				<button class="btn btn-primary" id="Login-button" type="submit" data-bind="enable: Ajax.Inactive">@Resources.LogOn</button>
+				<img data-bind="visible: Ajax.Active" src="@Url.Content("~/Areas/Start/Content/Images/ajax-loader-small.gif")" alt="..." />
 			</form>
 		</div>
 		
@@ -96,7 +95,7 @@
 		</div>
 		
 		<div id="changepassword">
-			<div id="PasswordAlreadyExpired" class="alert login-warning" data-bind="visible: MustChangePassword()">
+			<div id="PasswordAlreadyExpired" class="alert login-warning" data-bind="visible: MustChangePassword">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordHasAlreadyExpired 
 			</div>
