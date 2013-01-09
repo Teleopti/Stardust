@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private readonly Action<Exception> _startupExceptionHandler;
 		private readonly Action<int> _requestExtraTimeHandler;
 		private static readonly ILog log = LogManager.GetLogger(typeof(ServiceBusRunner));
+		[NonSerialized]
+		private FileSystemWatcher _watcher;
 
 		[NonSerialized] 
 		private ConfigFileDefaultHost _requestBus;
@@ -126,9 +128,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			try
 			{
 				var configFolder = GetPayrollPath();
-				var watcher = new FileSystemWatcher(configFolder, @"*Payroll*.dll") { NotifyFilter = NotifyFilters.LastWrite };
-				watcher.Changed += OnChanged;
-				watcher.EnableRaisingEvents = true;
+				_watcher = new FileSystemWatcher(configFolder, @"*Payroll*.dll");
+				_watcher.NotifyFilter = NotifyFilters.LastWrite;
+				_watcher.Changed += OnChanged;
+				_watcher.EnableRaisingEvents = true;
 			}
 			catch (IOException exception)
 			{
@@ -143,16 +146,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			try
 			{
-				var path = GetPayrollPath();
-				var file = Directory.GetFiles(path, "*Payroll*.dll", SearchOption.TopDirectoryOnly)[0];
-				var destination = Path.Combine(Environment.CurrentDirectory, @"\Payroll\", file);
-				var fullPath = Path.Combine(path, file);
-				File.Copy(fullPath, destination, true);
+				_watcher.EnableRaisingEvents = false;
+				var fileInfo = new FileInfo(e.FullPath);
+				if (!fileInfo.Exists) return;
+				System.Threading.Thread.Sleep(5000);
+				
+				var file = e.FullPath;
+#if(DEBUG)
+				var destination = Path.GetFullPath(Environment.CurrentDirectory +
+				                 "\\..\\..\\..\\Teleopti.Ccc.Sdk.ServiceBus.Host\\bin\\Debug\\Payroll\\" + e.Name);
+#else
+				var destination = Path.Combine(Environment.CurrentDirectory, "Payroll", e.Name);
+#endif
+				File.Copy(file, destination, true);
 			}
 			catch (IOException exception)
 			{
 				log.Error("An exception was ecnountered when trying to replace Payroll dll-file", exception);
 				throw;
+			}
+			finally
+			{
+				_watcher.EnableRaisingEvents = true;
 			}
 
 			startPayrollQueue();
@@ -265,6 +280,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				AppDomain.Unload(_denormalizeDomain);
 			}
+			if (_watcher != null)
+				_watcher.Dispose();
 
 			stopPayrollQueue();
 		}
