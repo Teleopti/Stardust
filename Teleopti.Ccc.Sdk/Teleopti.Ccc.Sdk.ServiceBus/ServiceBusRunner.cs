@@ -111,13 +111,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_denormalizeBus.UseFileBasedBusConfiguration("DenormalizeQueue.config");
 			_denormalizeBus.Start<DenormalizeBusBootStrapper>();
 
-			_payrollDomain = AppDomain.CreateDomain("Den", e, setup);
+			startPayrollQueue();
+
 			RunFileWatcher();
-			_payrollDomain.UnhandledException += CurrentDomain_UnhandledException;
-			//_denormalizeBus = new ConfigFileDefaultHost();
-			_payrollBus = (ConfigFileDefaultHost)_payrollDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
-			_payrollBus.UseFileBasedBusConfiguration("PayrollQueue.config");
-			_payrollBus.Start<DenormalizeBusBootStrapper>();
 		}
 
 		private bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
@@ -125,7 +121,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			return true;
 		}
 
-		private static void RunFileWatcher()
+		private void RunFileWatcher()
 		{
 			var configFolder = GetPayrollPath();
 			var watcher = new FileSystemWatcher(configFolder, @"*Payroll*.txt") {NotifyFilter = NotifyFilters.LastWrite};
@@ -134,13 +130,46 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			watcher.EnableRaisingEvents = true;
 		}
 
-		private static void OnChanged(object sender, FileSystemEventArgs e)
+		private void OnChanged(object sender, FileSystemEventArgs e)
 		{
 			// Restart logic can be put here, 
 			// this is only to check if its working or not
 			File.WriteAllText(@"C:\Data\Payroll\Changed.txt", e.FullPath + e.Name + " was " + e.ChangeType + "  " + DateTime.Now.ToString(CultureInfo.InvariantCulture));
+			stopPayrollQueue();
+			//do the copy
+
+			startPayrollQueue();
 		}
 
+		private void startPayrollQueue()
+		{
+			var e = new Evidence(AppDomain.CurrentDomain.Evidence);
+			var setup = AppDomain.CurrentDomain.SetupInformation;
+
+			_payrollDomain = AppDomain.CreateDomain("Pay", e, setup);
+			_payrollDomain.UnhandledException += CurrentDomain_UnhandledException;
+			_payrollBus = (ConfigFileDefaultHost)_payrollDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
+			_payrollBus.UseFileBasedBusConfiguration("PayrollQueue.config");
+			_payrollBus.Start<BusBootStrapper>();
+		}
+
+		private void stopPayrollQueue()
+		{
+			if (_payrollBus != null)
+			{
+				try
+				{
+					_payrollBus.Dispose();
+				}
+				catch (Exception)
+				{
+				}
+			}
+			if (_payrollDomain != null)
+			{
+				AppDomain.Unload(_payrollDomain);
+			}
+		}
 		private static string GetPayrollPath()
 		{
 			var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -204,16 +233,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				{
 				}
 			}
-			if (_payrollBus != null)
-			{
-				try
-				{
-					_payrollBus.Dispose();
-				}
-				catch (Exception)
-				{
-				}
-			}
+			
 			if (_requestDomain != null)
 			{
 				AppDomain.Unload(_requestDomain);
@@ -226,10 +246,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				AppDomain.Unload(_denormalizeDomain);
 			}
-			if (_payrollDomain != null)
-			{
-				AppDomain.Unload(_payrollDomain);
-			}
+
+			stopPayrollQueue();
 		}
 	}
 }
