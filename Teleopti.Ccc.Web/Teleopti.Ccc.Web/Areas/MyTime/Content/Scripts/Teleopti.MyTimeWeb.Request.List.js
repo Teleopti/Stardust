@@ -234,7 +234,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			pageViewModel = new RequestPageViewModel(detailViewModel, readyForInteractionCallback, completelyLoadedCallback);
 			
 			_initScrollPaging();
-			var element = $('#Requests-body-inner')[0];
+			var element = $('#Requests-data-binding-area')[0];
 
 			if (element) ko.applyBindings(pageViewModel, element);
 		},
