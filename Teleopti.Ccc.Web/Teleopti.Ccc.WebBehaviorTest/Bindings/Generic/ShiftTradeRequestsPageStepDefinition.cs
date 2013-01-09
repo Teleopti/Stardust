@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Navigation.GotoRequests();
 			Pages.Pages.RequestsPage.ShiftTradeRequestsButton.EventualClick();
 			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');",
-			                           date.ToShortDateString(CultureInfo.GetCultureInfo("en-US")));
+			                           date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE")));
 			Browser.Current.Eval(script);
 		}
 

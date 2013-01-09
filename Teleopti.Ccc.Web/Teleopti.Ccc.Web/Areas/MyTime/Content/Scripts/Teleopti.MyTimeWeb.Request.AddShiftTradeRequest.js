@@ -5,7 +5,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
 /// <reference path="~/Content/Scripts/jquery-1.8.2-vsdoc.js" />
 /// <reference path="~/Content/Scripts/knockout-2.1.0.js" />
-/// <reference path="~/Content/Scripts/date.js" />
+/// <reference path="~/Content/moment/moment.js" />
 
 Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
@@ -15,7 +15,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		var self = this;
 		var layerCanvasPixelWidth = 700;
 
-		self.now = new Date(new Date().getTeleoptiTime()).clearTime();
+		self.now = moment(new Date().getTeleoptiTime()).startOf('day');
 		self.openPeriodStartDate = null;
 		self.openPeriodEndDate = null;
 		self.selectedDate = ko.observable();
@@ -35,15 +35,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		});
 
 		self.selectedDate.subscribe(function () {
-			if (Date.compare(self.selectedDate(), self.openPeriodStartDate) == -1) {
-				self.selectedDate(new Date(self.openPeriodStartDate));
+			if (self.selectedDate().diff(self.openPeriodStartDate) < 0) {
+				self.selectedDate(moment(self.openPeriodStartDate));
 				return;
 			}
-			if (Date.compare(self.openPeriodEndDate, self.selectedDate()) == -1) {
-				self.selectedDate(new Date(self.openPeriodEndDate));
+			if (self.openPeriodEndDate.diff(self.selectedDate()) < 0) {
+				self.selectedDate(moment(self.openPeriodEndDate));
 				return;
 			}
-			self.loadSchedule(self.selectedDate());
+			self.loadSchedule();
 		});
 
 		self.loadPeriod = function () {
@@ -55,7 +55,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				success: function (data, textStatus, jqXHR) {
 					self.hasWorkflowControlSet(!data.HasWorkflowControlSet);
 					setDatePickerRange(data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
-					self.selectedDate(new Date(self.now).addDays(data.OpenPeriodRelativeStart));
+					self.selectedDate(moment(self.now).add('days', data.OpenPeriodRelativeStart));
 				},
 				error: function (err) {
 					alert("error!");
@@ -64,13 +64,13 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		};
 
-		self.loadSchedule = function (date) {
+		self.loadSchedule = function () {
 			ajax.Ajax({
 				url: "Requests/ShiftTradeRequestSchedule",
 				dataType: "json",
 				type: 'GET',
 				//beforeSend: _loading,
-				data: { selectedDate: vm.selectedDate().toJSON() },
+				data: { selectedDate: self.selectedDate().toDate().toJSON() },
 				success: function (data, textStatus, jqXHR) {
 					self.timeLineLengthInMinutes(data.TimeLineLengthInMinutes);
 					self._createMyScheduleLayers(data.MyScheduleLayers);
@@ -83,11 +83,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self.nextDate = function () {
-			self.selectedDate(self.selectedDate().addDays(1));
+			self.selectedDate(moment(self.selectedDate()).add('days', 1));
 		};
 
 		self.previousDate = function () {
-			self.selectedDate(self.selectedDate().addDays(-1));
+			self.selectedDate(moment(self.selectedDate()).add('days', -1));
 		};
 	}
 
@@ -118,12 +118,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function setDatePickerRange(relativeStart, relativeEnd) {
-		vm.openPeriodStartDate = new Date(vm.now).addDays(relativeStart);
-		vm.openPeriodEndDate = new Date(vm.now).addDays(relativeEnd);
+		vm.openPeriodStartDate = moment(vm.now).add('days', relativeStart);
+		vm.openPeriodEndDate = moment(vm.now).add('days', relativeEnd);
 
 		var element = $('#Request-add-shift-trade-datepicker');
-		element.datepicker("option", "minDate", vm.openPeriodStartDate);
-		element.datepicker("option", "maxDate", vm.openPeriodEndDate);
+		element.datepicker("option", "minDate", vm.openPeriodStartDate.toDate());
+		element.datepicker("option", "maxDate", vm.openPeriodEndDate.toDate());
 	}
 
 	function bindClickToOpenShiftTrade() {
@@ -137,7 +137,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function setShiftTradeRequestDate(date) {
-		vm.selectedDate(Date.parse(date));
+		vm.selectedDate(moment(date));
 	}
 
 	return {
@@ -160,7 +160,7 @@ ko.bindingHandlers.datepicker = {
 		//handle the field changing
 		ko.utils.registerEventHandler(element, "change", function () {
 			var observable = valueAccessor();
-			observable($(element).datepicker("getDate"));
+			observable(moment($(element).datepicker("getDate")));
 		});
 
 		//handle disposal (if KO removes by the template binding)
@@ -173,7 +173,7 @@ ko.bindingHandlers.datepicker = {
 		var value = ko.utils.unwrapObservable(valueAccessor()),
             current = $(element).datepicker("getDate");
 		if (value - current !== 0) {
-			$(element).datepicker("setDate", value);
+			$(element).datepicker("setDate", new Date(value));
 		}
 	}
 };
