@@ -170,6 +170,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_payrollBus.Start<BusBootStrapper>();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void stopPayrollQueue()
 		{
 			if (_payrollBus != null)
