@@ -123,20 +123,37 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		private void RunFileWatcher()
 		{
-			var configFolder = GetPayrollPath();
-			var watcher = new FileSystemWatcher(configFolder, @"*Payroll*.dll") {NotifyFilter = NotifyFilters.LastWrite};
-
-			watcher.Changed += OnChanged;
-			watcher.EnableRaisingEvents = true;
+			try
+			{
+				var configFolder = GetPayrollPath();
+				var watcher = new FileSystemWatcher(configFolder, @"*Payroll*.dll") { NotifyFilter = NotifyFilters.LastWrite };
+				watcher.Changed += OnChanged;
+				watcher.EnableRaisingEvents = true;
+			}
+			catch (IOException exception)
+			{
+				log.Error("An exception was encountered when configuring the custom payroll folder", exception);
+				throw;
+			}
 		}
 
 		private void OnChanged(object sender, FileSystemEventArgs e)
 		{
-			// Restart logic can be put here, 
-			// this is only to check if its working or not
-			File.WriteAllText(@"C:\Data\Payroll\Changed.txt", e.FullPath + e.Name + " was " + e.ChangeType + "  " + DateTime.Now.ToString(CultureInfo.InvariantCulture));
 			stopPayrollQueue();
-			//do the copy
+
+			try
+			{
+				var path = GetPayrollPath();
+				var file = Directory.GetFiles(path, "*Payroll*.dll", SearchOption.TopDirectoryOnly)[0];
+				var destination = Path.Combine(Environment.CurrentDirectory, @"\Payroll\", file);
+				var fullPath = Path.Combine(path, file);
+				File.Copy(fullPath, destination, true);
+			}
+			catch (IOException exception)
+			{
+				log.Error("An exception was ecnountered when trying to replace Payroll dll-file", exception);
+				throw;
+			}
 
 			startPayrollQueue();
 		}
@@ -170,6 +187,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				AppDomain.Unload(_payrollDomain);
 			}
 		}
+
 		private static string GetPayrollPath()
 		{
 			var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
