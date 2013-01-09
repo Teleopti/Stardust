@@ -1,4 +1,6 @@
 using System;
+using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Security;
@@ -110,6 +112,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_denormalizeBus.Start<DenormalizeBusBootStrapper>();
 
 			_payrollDomain = AppDomain.CreateDomain("Den", e, setup);
+			RunFileWatcher();
 			_payrollDomain.UnhandledException += CurrentDomain_UnhandledException;
 			//_denormalizeBus = new ConfigFileDefaultHost();
 			_payrollBus = (ConfigFileDefaultHost)_payrollDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
@@ -120,6 +123,37 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
 		{
 			return true;
+		}
+
+		private static void RunFileWatcher()
+		{
+			var configFolder = GetPayrollPath();
+			var watcher = new FileSystemWatcher(configFolder, @"*Payroll*.txt") {NotifyFilter = NotifyFilters.LastWrite};
+
+			watcher.Changed += OnChanged;
+			watcher.EnableRaisingEvents = true;
+		}
+
+		private static void OnChanged(object sender, FileSystemEventArgs e)
+		{
+			// Restart logic can be put here, 
+			// this is only to check if its working or not
+			File.WriteAllText(@"C:\Data\Payroll\Changed.txt", e.FullPath + e.Name + " was " + e.ChangeType + "  " + DateTime.Now.ToString(CultureInfo.InvariantCulture));
+		}
+
+		private static string GetPayrollPath()
+		{
+			var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+			// TODO: Set this to default value
+			var value = @"C:\Data\Payroll\";
+			if (config.AppSettings != null && config.AppSettings.Settings != null &&
+			    config.AppSettings.Settings["PayrollPath"] != null &&
+			    !string.IsNullOrEmpty(config.AppSettings.Settings["PayrollPath"].Value))
+			{
+				value = config.AppSettings.Settings["PayrollPath"].Value;
+			}
+			return value;
 		}
 
 		public void Stop()
