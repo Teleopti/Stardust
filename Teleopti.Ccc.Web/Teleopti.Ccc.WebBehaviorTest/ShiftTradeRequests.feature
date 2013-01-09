@@ -81,7 +81,7 @@ Scenario: Default to first day of open shift trade period
 	When I view Add Shift Trade Request
 	Then the selected date should be '2030-01-03'
 
-Scenario: Trades can only be made within the shift trade period
+Scenario: Trades can not be made outside the shift trade period
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Current time is '2030-01-01'
@@ -103,17 +103,23 @@ Scenario: Show my scheduled shift
 	| Start time	| 06:00 |
 	| End time		| 16:00 |
 
+Scenario: Time line when I have a scheduled shift
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-03 06:00 |
+	| EndTime               | 2030-01-03 16:00 |
+	| Shift category		| Day	           |
+	And Current time is '2030-01-01'
+	When I view Add Shift Trade Request for date '2030-01-03'
+	Then I should see the time line span from '5:45' to '16:15'
+
 Scenario: Default time line when I am not scheduled
 	Given I have the role 'Full access to mytime'
 	And Current time is '2020-10-24'
 	When I navigate to shift trade page
 	Then I should see the time line span from '7:45' to '17:15'
-
-Scenario: Time line when I have a scheduled shift
-	Given I have the role 'Full access to mytime'
-	And Current time is '2030-01-01'
-	When I navigate to shift trade page
-	Then I should see the time line span from '5:45' to '16:15'
 
 Scenario: Show my scheduled day off
 	Given I have the role 'Full access to mytime'

@@ -65,5 +65,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => DateTime.Parse(Pages.Pages.RequestsPage.AddShiftTradeDatePicker.Text), Is.EqualTo(date));
 		}
 
+		[Then(@"I should see the time line span from '(.*)' to '(.*)'")]
+		public void ThenIShouldSeeTheTimeLineSpanFromTo(string p0, string p1)
+		{
+			ScenarioContext.Current.Pending();
+		}
 	}
 }
