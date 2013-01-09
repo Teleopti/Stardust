@@ -132,6 +132,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				_watcher.NotifyFilter = NotifyFilters.LastWrite;
 				_watcher.Changed += OnChanged;
 				_watcher.EnableRaisingEvents = true;
+				_watcher.IncludeSubdirectories = true;
 			}
 			catch (IOException exception)
 			{
