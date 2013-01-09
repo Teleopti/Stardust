@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private void RunFileWatcher()
 		{
 			var configFolder = GetPayrollPath();
-			var watcher = new FileSystemWatcher(configFolder, @"*Payroll*.txt") {NotifyFilter = NotifyFilters.LastWrite};
+			var watcher = new FileSystemWatcher(configFolder, @"*Payroll*.dll") {NotifyFilter = NotifyFilters.LastWrite};
 
 			watcher.Changed += OnChanged;
 			watcher.EnableRaisingEvents = true;

@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
     	public void BusStarted(IServiceBus bus)
         {
-            _initializePayrollFormats.Initialize();
+			if(bus.Endpoint.Uri.AbsolutePath.Equals("/payroll"))
+				_initializePayrollFormats.Initialize();
         }
 
         public void BusDisposing(IServiceBus bus)
