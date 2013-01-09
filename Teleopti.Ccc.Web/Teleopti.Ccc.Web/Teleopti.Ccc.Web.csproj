@@ -756,7 +756,6 @@
     <Content Include="Content\respondjs\respond.src.js" />
     <Content Include="Content\respondjs\respond.min.js" />
     <Content Include="Content\Scripts\indexOf.js" />
-    <Content Include="Content\Scripts\date.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.splitbutton.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.js" />

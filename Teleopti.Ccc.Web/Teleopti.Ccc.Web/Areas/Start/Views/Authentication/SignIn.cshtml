@@ -52,7 +52,7 @@
 
 		<div id="signin">
 
-			<ul data-bind="visible: DataSources().length > 0, foreach: DataSources" class="nav nav-tabs nav-stacked">
+			<ul id="DataSources" data-bind="visible: DataSources().length > 0, foreach: DataSources" class="nav nav-tabs nav-stacked">
 				<li data-bind="css: {'application': !IsWindows, 'windows': IsWindows, 'active': $parent.SelectedDataSource() == $data}">
 					<a href="#" data-bind="click: $parent.SelectDataSource">
 						<span data-bind="text: Name"></span>
