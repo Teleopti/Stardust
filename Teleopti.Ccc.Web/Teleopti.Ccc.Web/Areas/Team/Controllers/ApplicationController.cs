@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Team.Controllers
 		[HttpGet,OutputCache(Duration = 0,NoStore = true)]
 		public ActionResult Resources()
 		{
-			var path = Server.MapPath("~/Areas/Team/Content/Translation/TranslationTemplate.txt");
+			var path = Request.MapPath("~/Areas/Team/Content/Translation/TranslationTemplate.txt");
 			var template = System.IO.File.ReadAllText(path);
 			const string itemFormat = "{0}: '{1}'";
 

@@ -1,4 +1,8 @@
-using System.Threading;
+using System;
+using System.IO;
+using System.Web.Mvc;
+using System.Web.Routing;
+using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -49,6 +53,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Team.Controllers
 			((object) content.UserName).Should().Be.EqualTo("fake");
 			((object)content.IsMyTimeAvailable).Should().Be.EqualTo(true);
 			((object)content.IsMobileReportsAvailable).Should().Be.EqualTo(false);
+		}
+
+		[Test]
+		public void ShouldReturnTranslation()
+		{
+			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://localhost/"), new Uri("http://localhost/"));
+			var context = new FakeHttpContext("/");
+			context.SetRequest(request);
+			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
+
+			request.Stub(x => x.MapPath("")).IgnoreArguments().Return(
+				Path.GetFullPath(@"..\..\..\Teleopti.Ccc.Web\Areas\Team\Content\Translation\TranslationTemplate.txt"));
+
+			target.Resources().Should().Not.Be.Null();
 		}
 
 		[TearDown]
