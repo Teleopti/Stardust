@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI.WebControls;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.UserTexts;
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
 			{
 				toolbarItems.AddRange(new ToolBarItemBase[]
-			                        {
+									{
 												 //new ToolBarButtonItem
 												 //    {
 												 //        Title = Resources.Requests,
@@ -118,14 +119,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 												 //        ButtonType = "addShiftTradeRequest"
 												 //    },
 			                            //new ToolBarSeparatorItem(),
-			                            new ToolBarDatePicker
-			                                {
-			                                    NextTitle = Resources.NextPeriod,
-			                                    PrevTitle = Resources.PreviousPeriod,
-			                                    IsHhidden = true
-			                                }
-			                        });
+										new ToolBarDatePicker
+										{
+											NextTitle = Resources.NextPeriod,
+											PrevTitle = Resources.PreviousPeriod,
+											IsHhidden = true
+										}
+									});
 			}
+
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests) ||
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb))
 			{

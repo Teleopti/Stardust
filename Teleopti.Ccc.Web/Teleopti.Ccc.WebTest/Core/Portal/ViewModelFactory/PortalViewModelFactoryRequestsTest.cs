@@ -47,20 +47,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldHaveHiddenDatePickerIfPermission()
-		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(true);
-
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
-
-			var result = ToolBarItemOfType<ToolBarDatePicker>(target.CreatePortalViewModel());
-
-			result.Should().Not.Be.Null();
-			result.IsHhidden.Should().Be.True();
-		}
-
-		[Test]
 		public void ShouldHaveCreateShiftTradeRequestsButtonIfPermission()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
@@ -98,19 +84,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 
 		[Test, Ignore("Henrik 2013-01-09 Shifttrades are not implemented yet")]
-		public void ShouldNotHaveCreateShiftTradeRequestsButtonIfNoPermission()
-		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).Return(true);
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(false);
-
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
-			var result = ToolBarItemsOfType<ToolBarButtonItem>(target.CreatePortalViewModel());
-
-			result.Any(x => x.ButtonType == "addShiftTradeRequest").Should().Be.False();
-		}
-
-		[Test]
 		public void ShouldNotHaveAddRequestButtonIfNoPermission()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
@@ -129,14 +102,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			return (from i in result.NavigationItems where i.Controller == "Requests" select i)
 					.SingleOrDefault();
 		}
-
-		private static T ToolBarItemOfType<T>(PortalViewModel result) where T : ToolBarItemBase
-		{
-			return (from i in RelevantTab(result).ToolBarItems where i is T select i)
-				.Cast<T>()
-				.SingleOrDefault();
-		}
-
+		
 		private static List<T> ToolBarItemsOfType<T>(PortalViewModel result) where T : ToolBarItemBase
 		{
 			return (from i in RelevantTab(result).ToolBarItems where i is T select i)
