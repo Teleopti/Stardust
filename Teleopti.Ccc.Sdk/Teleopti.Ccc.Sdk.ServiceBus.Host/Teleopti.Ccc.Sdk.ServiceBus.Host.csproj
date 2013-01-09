@@ -206,6 +206,10 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="PayrollQueue.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="DenormalizeQueue.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private ConfigFileDefaultHost _generalBus;
 		[NonSerialized] 
 		private ConfigFileDefaultHost _denormalizeBus;
+		[NonSerialized]
+		private ConfigFileDefaultHost _payrollBus;
 
 		[NonSerialized] 
 		private AppDomain _requestDomain;
@@ -31,6 +33,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private AppDomain _generalDomain;
 		[NonSerialized] 
 		private AppDomain _denormalizeDomain;
+		[NonSerialized]
+		private AppDomain _payrollDomain;
 
 		public ServiceBusRunner(Action<Exception> unhandledExceptionHandler, Action<Exception> startupExceptionHandler, Action<int> requestExtraTimeHandler)
 		{
@@ -84,7 +88,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var e = new Evidence(AppDomain.CurrentDomain.Evidence);
 			var setup = AppDomain.CurrentDomain.SetupInformation;
 
-			log.Error("Ska starta request.");
 			_requestDomain = AppDomain.CreateDomain("Req", e, setup);
 			_requestDomain.UnhandledException += CurrentDomain_UnhandledException;
 			//_requestBus = new ConfigFileDefaultHost();
@@ -105,6 +108,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_denormalizeBus = (ConfigFileDefaultHost)_denormalizeDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
 			_denormalizeBus.UseFileBasedBusConfiguration("DenormalizeQueue.config");
 			_denormalizeBus.Start<DenormalizeBusBootStrapper>();
+
+			_payrollDomain = AppDomain.CreateDomain("Den", e, setup);
+			_payrollDomain.UnhandledException += CurrentDomain_UnhandledException;
+			//_denormalizeBus = new ConfigFileDefaultHost();
+			_payrollBus = (ConfigFileDefaultHost)_payrollDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
+			_payrollBus.UseFileBasedBusConfiguration("PayrollQueue.config");
+			_payrollBus.Start<DenormalizeBusBootStrapper>();
 		}
 
 		private bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
@@ -114,7 +124,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public void Stop()
 		{
-			log.Warn("Ska stanna.");
 			HostServiceStop();
 		}
 
@@ -135,9 +144,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				try
 				{
-					log.Warn("Ska stanna request.");
 					_requestBus.Dispose();
-					log.Warn("Stannade request.");
 				}
 				catch (Exception)
 				{
@@ -147,9 +154,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				try
 				{
-					log.Warn("Ska stanna general.");
 					_generalBus.Dispose();
-					log.Warn("Stannade general.");
 				}
 				catch (Exception)
 				{
@@ -159,9 +164,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				try
 				{
-					log.Warn("Ska stanna denormalize.");
 					_denormalizeBus.Dispose();
-					log.Warn("Stannade denormalize.");
+				}
+				catch (Exception)
+				{
+				}
+			}
+			if (_payrollBus != null)
+			{
+				try
+				{
+					_payrollBus.Dispose();
 				}
 				catch (Exception)
 				{
@@ -170,17 +183,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			if (_requestDomain != null)
 			{
 				AppDomain.Unload(_requestDomain);
-				log.Warn("Stannade domän request.");
 			}
 			if (_generalDomain != null)
 			{
 				AppDomain.Unload(_generalDomain);
-				log.Warn("Stannade domän general.");
 			}
 			if (_denormalizeDomain != null)
 			{
 				AppDomain.Unload(_denormalizeDomain);
-				log.Warn("Stannade domän denormalize.");
+			}
+			if (_payrollDomain != null)
+			{
+				AppDomain.Unload(_payrollDomain);
 			}
 		}
 	}
