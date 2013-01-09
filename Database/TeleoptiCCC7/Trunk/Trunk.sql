@@ -20,7 +20,7 @@ where ForeignId = '0080'
 update ApplicationFunction
 set FunctionDescription = 'xxMobileReports', FunctionCode = 'MobileReports'
 where ForeignId = '0074'
-
+GO
 ----------------  
 --Name: David Jonsson
 --Date: 2013-01-08
