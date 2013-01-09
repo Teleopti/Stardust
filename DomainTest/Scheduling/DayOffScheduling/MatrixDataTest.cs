@@ -73,5 +73,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Assert.AreEqual(DateOnly.MinValue.AddDays(1), data.DateOnly);
 			}
 		}
+
+        [Test]
+        public void ShouldFindTheKey()
+        {
+            using (_mocks.Record())
+            {
+                IList<IScheduleDayPro> matrixDays = new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 };
+                Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(matrixDays));
+                Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro1, _schedulingOptions)).Return(
+                    new ScheduleDayData(DateOnly.MinValue));
+                Expect.Call(_scheduleDayDataMapper.Map(_scheduleDayPro2, _schedulingOptions)).Return(
+                    new ScheduleDayData(DateOnly.MinValue.AddDays(1)));
+            }
+
+            using (_mocks.Playback())
+            {
+                _target.Store(_matrix, _schedulingOptions);
+                var keyExists = _target.ContainsKey( DateOnly.MinValue.AddDays(1));
+                Assert.IsTrue(keyExists);
+            }
+        }
 	}
 }
