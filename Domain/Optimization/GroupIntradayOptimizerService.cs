@@ -108,14 +108,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 					groupIntradayOptimizer.LockDate(selectedDate.Value);
 				}
 
+                var oldPeriodValue = optimizer.PeriodValue(selectedDate.Value);
+
 				var success = _groupIntradayOptimizerExecuter.Execute(daysToDelete, daysToSave, allMatrixes, optimizer.OptimizationOverLimitByRestrictionDecider);
 
-				if (!success)
-				{
-					removeList.AddRange(memberList);
-				}
-
-				skipList.AddRange(memberList);
+                if (!success)
+                {
+                    removeList.AddRange(memberList);
+                }
+                var newPeriodValue = optimizer.PeriodValue(selectedDate.Value);
+                var isPeriodWorse = newPeriodValue > oldPeriodValue;
+                if (isPeriodWorse)
+                {
+                    _groupIntradayOptimizerExecuter.Rollback(selectedDate.Value);
+                    reportProgress(selectedDate.Value, !success, runningList.Count, executes, person);
+                }
+                else
+                    reportProgress(selectedDate.Value, success, runningList.Count, executes, person);
+                skipList.AddRange(memberList);
 				reportProgress(selectedDate.Value, success, runningList.Count, executes, person);
 			}
 			return removeList;

@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		bool IsMatrixForDateAndPerson(DateOnly dateOnly, IPerson person);
 		IScheduleMatrixPro Matrix { get; }
 		IOptimizationOverLimitByRestrictionDecider OptimizationOverLimitByRestrictionDecider { get; }
+        double PeriodValue(DateOnly dateOnly);
 	}
 
 	public class GroupIntradayOptimizer : IGroupIntradayOptimizer
@@ -19,16 +20,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleResultDataExtractor _dayIntradayDeviationDataExtractor;
 		private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitByRestrictionDecider;
 		private ILockableBitArray _lockableBitArray;
+        private readonly IScheduleResultDailyValueCalculator _periodValueCalculator;
 
 		public GroupIntradayOptimizer(IScheduleMatrixLockableBitArrayConverter scheduleMatrixLockableBitArrayConverter, 
 			IIntradayDecisionMaker intradayDecisionMaker,
 			IScheduleResultDataExtractor dayIntradayDeviationDataExtractor,
-			IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider)
+            IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider, 
+            IScheduleResultDailyValueCalculator periodValueCalculator)
 		{
 			_scheduleMatrixLockableBitArrayConverter = scheduleMatrixLockableBitArrayConverter;
 			_intradayDecisionMaker = intradayDecisionMaker;
 			_dayIntradayDeviationDataExtractor = dayIntradayDeviationDataExtractor;
 			_optimizationOverLimitByRestrictionDecider = optimizationOverLimitByRestrictionDecider;
+            _periodValueCalculator = periodValueCalculator;
 		}
 
 		public DateOnly? Execute()
@@ -42,6 +46,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 												 _scheduleMatrixLockableBitArrayConverter.SourceMatrix);
 			return date;
 		}
+
+        public double PeriodValue(DateOnly dateOnly)
+        {
+            var dayValue = _periodValueCalculator.DayValue(dateOnly);
+            if (dayValue != null)
+                return dayValue.Value;
+            return 0.0;
+        }
 
 		public void LockDate(DateOnly dateOnly)
 		{
