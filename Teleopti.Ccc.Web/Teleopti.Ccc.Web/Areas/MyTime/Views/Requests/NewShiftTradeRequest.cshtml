@@ -12,11 +12,11 @@
 		<span data-bind="foreach: myScheduleLayers">
 			<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
 		</span>
-		@*<span data-bind="foreach: hours">
-			<span class="asm-timeline-line">
-				<span class="asm-timeline-number ui-corner-all" data-bind="text: $data"></span>
-			</span>
-		</span>*@
+		<span id="shift-trade-timeline" data-bind="foreach: hours">
+			@*<span class="shift-trade-timeline-line">
+				<span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText, style: { left : leftPx, paddingLeft : paddingLeft }"></span>
+			</span>*@
+		</span>
 	</div>
 	dfgd dfghfdgh 
 </div>

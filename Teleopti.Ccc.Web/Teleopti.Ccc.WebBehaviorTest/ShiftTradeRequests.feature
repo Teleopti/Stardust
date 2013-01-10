@@ -103,17 +103,17 @@ Scenario: Show my scheduled shift
 	| Start time	| 06:00 |
 	| End time		| 16:00 |
 
-Scenario: Time line when I have a scheduled shift
+Scenario: Time line stretch to 15 minutes before and after scheduled shift
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field                 | Value            |
-	| StartTime             | 2030-01-03 06:00 |
-	| EndTime               | 2030-01-03 16:00 |
+	| StartTime             | 2030-01-03 06:05 |
+	| EndTime               | 2030-01-03 15:55 |
 	| Shift category		| Day	           |
 	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request for date '2030-01-03'
-	Then I should see the time line span from '5:45' to '16:15'
+	Then I should see the time line span from '5:50' to '16:10'
 
 Scenario: Default time line when I am not scheduled
 	Given I have the role 'Full access to mytime'

@@ -1,6 +1,6 @@
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
-	public class ShiftTradeScheduleLayer
+	public class ShiftTradeScheduleLayerViewModel
 	{
 		public string Payload { get; set; }
 		public int LengthInMinutes { get; set; }

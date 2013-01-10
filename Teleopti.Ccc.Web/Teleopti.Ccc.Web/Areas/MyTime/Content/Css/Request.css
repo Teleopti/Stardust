@@ -135,3 +135,20 @@
 	display: block;
 	z-index: 9;
 }
+.shift-trade-timeline-line
+{
+	height: 40px;
+	float: left;
+	border-right: 1px solid rgb(216, 216, 216);	
+}
+
+.shift-trade-timeline-number
+{
+	padding-left: 2px;
+	padding-right: 3px;
+	position: relative;
+	top: -16px;
+	left: -20px;
+	font-family: verdana;
+	font-size: 8px;
+}

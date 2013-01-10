@@ -21,6 +21,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.selectedDate = ko.observable();
 		self.hasWorkflowControlSet = ko.observable(false);
 		self.timeLineLengthInMinutes = ko.observable(0);
+		self.hours = ko.observableArray();
 		self.myScheduleLayers = ko.observableArray();
 
 		self._createMyScheduleLayers = function (layers) {
@@ -74,6 +75,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				success: function (data, textStatus, jqXHR) {
 					self.timeLineLengthInMinutes(data.TimeLineLengthInMinutes);
 					self._createMyScheduleLayers(data.MyScheduleLayers);
+					console.log(data);
 				},
 				error: function (err) {
 					alert("error!");

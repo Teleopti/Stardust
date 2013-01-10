@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetShiftTradeSchedule()
 		{
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var layer = new ShiftTradeScheduleLayer
+			var layer = new ShiftTradeScheduleLayerViewModel
 			            	{
 			            		Payload = "phone",
 			            		Color = "green",
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			            	};
 			var model = new ShiftTradeRequestsScheduleViewModel
 			            	{
-			            		MyScheduleLayers = new List<ShiftTradeScheduleLayer>{ layer }
+			            		MyScheduleLayers = new List<ShiftTradeScheduleLayerViewModel>{ layer }
 			            	};
 
 			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<DateTime>.Is.Anything)).Return(model);

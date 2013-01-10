@@ -6,6 +6,9 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using WatiN.Core;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
+using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -66,9 +69,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 		[Then(@"I should see the time line span from '(.*)' to '(.*)'")]
-		public void ThenIShouldSeeTheTimeLineSpanFromTo(string p0, string p1)
+		public void ThenIShouldSeeTheTimeLineSpanFromTo(string timeFrom, string timeTo)
 		{
-			ScenarioContext.Current.Pending();
+			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.Count, Is.GreaterThan(0));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers[0].Span(Find.First).Text, Is.EqualTo(timeFrom));
+			EventualAssert.That(
+				() =>
+				Pages.Pages.RequestsPage.MyScheduleLayers[Pages.Pages.RequestsPage.MyScheduleLayers.Count - 1].Span(Find.First).Text,
+				Is.EqualTo(timeTo));
 		}
 	}
 }

@@ -108,5 +108,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Request-add-shift-trade-datepicker")]
 		public TextField AddShiftTradeDatePicker { get; set; }
+
+		public SpanCollection AddShiftTradeTimeLineItems
+		{
+			get
+			{
+				return Document.Span(Find.ById("shift-trade-timeline")).Spans;
+			}
+		}
 	}
 }
