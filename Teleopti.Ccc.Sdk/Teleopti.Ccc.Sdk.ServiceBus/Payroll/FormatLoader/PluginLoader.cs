@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 					if (!interfaces.Contains(typeof(IPayrollExportProcessor))) continue;
 					var obj = Activator.CreateInstance(type);
 					var t = (IPayrollExportProcessor)obj;
-					var strippedfile = file.Replace(_searchPath.Path + "\\", "");
+					var strippedfile = file.Replace(_searchPath.Path, "");
 					if (strippedfile.IndexOf("\\", StringComparison.OrdinalIgnoreCase) > 0)
 					{
 						var directory = strippedfile.Substring(0, strippedfile.IndexOf("\\", StringComparison.OrdinalIgnoreCase));
