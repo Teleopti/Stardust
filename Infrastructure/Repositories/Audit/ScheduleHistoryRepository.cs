@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			return session().Auditer().CreateQuery()
 				.ForEntitiesAtRevision<PersonAbsence>(revision.Id)
 				.Add(AuditEntity.Property("Person").Eq(agent))
-				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Le(dateTimePeriod.EndDateTime))
-				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Ge(dateTimePeriod.StartDateTime))
+				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(dateTimePeriod.EndDateTime))
+				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(dateTimePeriod.StartDateTime))
 				.Results();
 		}
 
@@ -69,8 +69,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			return session().Auditer().CreateQuery()
 				.ForEntitiesAtRevision<PersonAssignment>(revision.Id)
 				.Add(AuditEntity.Property("Person").Eq(agent))
-				.Add(AuditEntity.Property("Period.period.Minimum").Le(dateTimePeriod.EndDateTime))
-				.Add(AuditEntity.Property("Period.period.Maximum").Ge(dateTimePeriod.StartDateTime))
+				.Add(AuditEntity.Property("Period.period.Minimum").Lt(dateTimePeriod.EndDateTime))
+				.Add(AuditEntity.Property("Period.period.Maximum").Gt(dateTimePeriod.StartDateTime))
 				.Results();
 		}
 
@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.ForRevisionsOfEntity(typeof (PersonAssignment), false, true)
 				.AddProjection(AuditEntity.RevisionNumber())
 				.Add(AuditEntity.Property("Person").Eq(agent))
-				.Add(AuditEntity.Property("Period.period.Minimum").Le(dateTimePeriod.EndDateTime))
-				.Add(AuditEntity.Property("Period.period.Maximum").Ge(dateTimePeriod.StartDateTime))
+				.Add(AuditEntity.Property("Period.period.Minimum").Lt(dateTimePeriod.EndDateTime))
+				.Add(AuditEntity.Property("Period.period.Maximum").Gt(dateTimePeriod.StartDateTime))
 				.AddOrder(AuditEntity.RevisionNumber().Desc())
 				.SetMaxResults(maxSize)
 				.GetResultList<long>();
@@ -93,8 +93,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.ForRevisionsOfEntity(typeof (PersonAbsence), false, true)
 				.AddProjection(AuditEntity.RevisionNumber())
 				.Add(AuditEntity.Property("Person").Eq(agent))
-				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Le(dateTimePeriod.EndDateTime))
-				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Ge(dateTimePeriod.StartDateTime))
+				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(dateTimePeriod.EndDateTime))
+				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(dateTimePeriod.StartDateTime))
 				.AddOrder(AuditEntity.RevisionNumber().Desc())
 				.SetMaxResults(maxSize)
 				.GetResultList<long>();
