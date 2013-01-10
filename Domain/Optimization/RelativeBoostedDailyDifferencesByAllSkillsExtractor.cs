@@ -22,14 +22,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<double?> ret = new List<double?>();
             foreach (DateOnly day in _period.DayCollection())
             {
-                double? value = dayValue(day);
+                double? value = DayValue(day);
                 ret.Add(value);
             }
 
             return ret;
         }
 
-    	public double? dayValue(DateOnly scheduleDay)
+    	public double? DayValue(DateOnly scheduleDay)
         {
             double dailyForecast = 0;
             double tweakedBoostedDailyScheduled = 0;
