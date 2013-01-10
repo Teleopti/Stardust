@@ -310,5 +310,57 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				return false;
 			return new TimeSpan(Math.Abs(first.ModifiedAt.Ticks - second.ModifiedAt.Ticks)) < TimeSpan.FromMinutes(1);
 		}
+
+		[Test]
+		public void ShouldNotFindTooEarlyShift()
+		{
+			var assignmentStart = new DateOnly(PersonAssignment.Period.StartDateTimeLocal(new CccTimeZoneInfo(TimeZoneInfo.Local)));
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+								  new DateOnlyPeriod(assignmentStart.AddDays(1), assignmentStart.AddDays(10)), 
+								  new List<IPerson> { PersonAssignment.Person });
+				res.Should().Be.Empty();
+			}
+		}
+
+		[Test]
+		public void ShouldNotFindTooLateShift()
+		{
+			var assignmentStart = new DateOnly(PersonAssignment.Period.StartDateTimeLocal(new CccTimeZoneInfo(TimeZoneInfo.Local)));
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+								  new DateOnlyPeriod(assignmentStart.AddDays(-100), assignmentStart.AddDays(-1)), 
+								  new List<IPerson> { PersonAssignment.Person });
+				res.Should().Be.Empty();
+			}
+		}
+
+		[Test]
+		public void ShouldNotFindTooEarlyModification()
+		{
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today).AddDays(1), new DateOnly(Today).AddDays(100)),
+								  PersonAssignment.Period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Local)),
+								  new List<IPerson> { PersonAssignment.Person });
+				res.Should().Be.Empty();
+			}
+		}
+
+		[Test]
+		public void ShouldNotFindTooLateModification()
+		{
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today).AddDays(-100), new DateOnly(Today).AddDays(-1)),
+								  PersonAssignment.Period.ToDateOnlyPeriod(new CccTimeZoneInfo(TimeZoneInfo.Local)),
+								  new List<IPerson> { PersonAssignment.Person });
+				res.Should().Be.Empty();
+			}
+		}
 	}
 }

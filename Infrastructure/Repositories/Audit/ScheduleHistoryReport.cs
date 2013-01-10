@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			auditSession.CreateQuery().ForHistoryOf<PersonAssignment, Revision>()
 				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriod.StartDate.Date, changedPeriod.EndDate.Date))
 				.AddModifiedByIfNotNull(modifiedBy)
-				.Add(AuditEntity.Property("Period.period.Minimum").Le(scheduledPeriod.EndDate.Date))
-				.Add(AuditEntity.Property("Period.period.Maximum").Ge(scheduledPeriod.StartDate.Date))
+				.Add(AuditEntity.Property("Period.period.Minimum").Lt(scheduledPeriod.EndDate.Date))
+				.Add(AuditEntity.Property("Period.period.Maximum").Gt(scheduledPeriod.StartDate.Date))
 				.Add(AuditEntity.Property("Person").In(agents))
 				.Results()
 				.ForEach(assRev => ret.Add(createAssignmentAuditingData(assRev)));
@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			auditSession.CreateQuery().ForHistoryOf<PersonAbsence, Revision>()
 				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriod.StartDate.Date, changedPeriod.EndDate.Date))
 				.AddModifiedByIfNotNull(modifiedBy)
-				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Le(scheduledPeriod.EndDate.Date))
-				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Ge(scheduledPeriod.StartDate.Date))
+				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(scheduledPeriod.EndDate.Date))
+				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(scheduledPeriod.StartDate.Date))
 				.Add(AuditEntity.Property("Person").In(agents))
 				.Results()
 				.ForEach(absRev => ret.Add(createAbsenceAuditingData(absRev)));
