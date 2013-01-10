@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return ret;
         }
 
-    	private double? dayValue(DateOnly scheduleDay)
+    	public double? dayValue(DateOnly scheduleDay)
         {
             double dailyForecast = 0;
             double tweakedBoostedDailyScheduled = 0;
