@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -135,6 +136,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				_watcher = new FileSystemWatcher(configFolder, @"*Payroll*.dll");
 				_watcher.NotifyFilter = NotifyFilters.LastWrite;
 				_watcher.Changed += OnChanged;
+				_watcher.Created += OnChanged;
 				_watcher.EnableRaisingEvents = true;
 				_watcher.IncludeSubdirectories = true;
 			}
@@ -150,7 +152,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var info = new FileInfo(e.FullPath);
 			if (_latestFileChange == info.LastAccessTimeUtc)
 				return;
-
 			_latestFileChange = info.LastAccessTimeUtc;
 			
 			stopPayrollQueue();
@@ -159,13 +160,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				var file = e.FullPath;
 				var payrollPath = new SearchPath().Path;
-				var startInt = file.IndexOf("Payroll", StringComparison.Ordinal) + 8;
-				var dataSource = file.Substring(startInt, file.Length - startInt - e.Name.Length);
-				var fullPath = Path.GetFullPath(payrollPath + dataSource + "\\");
 				
-				if (!Directory.Exists(fullPath))
-					Directory.CreateDirectory(fullPath);
-				var destination = Path.GetFullPath(fullPath + e.Name);
+				var parent = Directory.GetParent(Directory.GetParent(file).ToString());
+				var subFolders = Directory.GetDirectories(parent.ToString());
+				
+				foreach (var subFolder in subFolders)
+				{
+					var directoryName = Path.GetFileName(subFolder);
+					if (!Directory.Exists(Path.GetFullPath(payrollPath + directoryName)))
+						Directory.CreateDirectory(Path.GetFullPath(payrollPath + directoryName));
+				}
+
+				var destination = Path.GetFullPath(payrollPath + e.Name);
 
 				File.Copy(file, destination, true);
 			}
