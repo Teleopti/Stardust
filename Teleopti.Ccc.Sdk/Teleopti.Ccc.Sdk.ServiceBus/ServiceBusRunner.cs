@@ -153,17 +153,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			if (_latestFileChange == info.LastAccessTimeUtc)
 				return;
 			_latestFileChange = info.LastAccessTimeUtc;
-			
+
 			stopPayrollQueue();
 
 			try
 			{
 				var file = e.FullPath;
 				var payrollPath = new SearchPath().Path;
-				
+
 				var parent = Directory.GetParent(Directory.GetParent(file).ToString());
 				var subFolders = Directory.GetDirectories(parent.ToString());
-				
+
 				foreach (var subFolder in subFolders)
 				{
 					var directoryName = Path.GetFileName(subFolder);
@@ -175,7 +175,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 				File.Copy(file, destination, true);
 			}
-			catch (IOException exception)
+
+			catch (Exception exception)
 			{
 				log.Error("An exception was ecnountered when trying to replace Payroll dll-file", exception);
 			}
