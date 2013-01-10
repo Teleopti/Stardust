@@ -145,6 +145,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void OnChanged(object sender, FileSystemEventArgs e)
 		{
 			var info = new FileInfo(e.FullPath);
