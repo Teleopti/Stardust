@@ -284,9 +284,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var relativeDailyStandardDeviationsByAllSkillsExtractor =
 					new RelativeDailyStandardDeviationsByAllSkillsExtractor(matrix, schedulingOptions);
 				IScheduleMatrixLockableBitArrayConverter lockableBitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(matrix);
-				var optimizer = new GroupIntradayOptimizer(lockableBitArrayConverter, decisionMaker,
-				                                           relativeDailyStandardDeviationsByAllSkillsExtractor,
-				                                           optimizerOverLimitDecider);
+                var relativeDailyValueByPersonalSkillsExtractor = new RelativeDailyValueByPersonalSkillsExtractor(matrix,
+                                                                                                          optimizationPreferences
+                                                                                                              .Advanced);
+                
+                 var optimizer = new GroupIntradayOptimizer(lockableBitArrayConverter, decisionMaker,
+                                                           relativeDailyStandardDeviationsByAllSkillsExtractor,
+                                                           optimizerOverLimitDecider, relativeDailyValueByPersonalSkillsExtractor);
 				optimizers.Add(optimizer);
 			}
 
@@ -302,7 +306,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			                                                                                                 	(optimizationPreferences
 			                                                                                                 	 	.General.
 			                                                                                                 	 	ScheduleTag));
-			var deleteSchedulePartService = _container.Resolve<IDeleteSchedulePartService>();
+            var deleteAndResourceCalculateService = _container.Resolve<IDeleteAndResourceCalculateService >();
 			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 			var groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
 			var groupPersonConsistentChecker =
@@ -318,7 +322,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 																		 mainShiftOptimizeActivitySpecificationSetter);
 			var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
 			IGroupIntradayOptimizerExecuter groupIntradayOptimizerExecuter = new GroupIntradayOptimizerExecuter(rollbackService,
-			                                                deleteSchedulePartService, schedulingOptionsCreator, optimizationPreferences,
+                                                            deleteAndResourceCalculateService, schedulingOptionsCreator, optimizationPreferences,
 			                                                mainShiftOptimizeActivitySpecificationSetter,
 			                                                groupMatrixHelper, groupSchedulingService,
 			                                                groupPersonBuilderForOptimization, _resourceOptimizationHelper);
