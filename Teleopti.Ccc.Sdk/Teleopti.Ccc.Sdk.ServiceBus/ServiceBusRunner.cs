@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			catch (Exception exception)
 			{
-				log.Error("An exception was ecnountered when trying to replace Payroll dll-file", exception);
+				log.Error("An exception was ecnountered when trying to load new payroll dll", exception);
 			}
 
 			startPayrollQueue();
@@ -194,6 +194,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_payrollBus = (ConfigFileDefaultHost)_payrollDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
 			_payrollBus.UseFileBasedBusConfiguration("PayrollQueue.config");
 			_payrollBus.Start<BusBootStrapper>();
+			log.Info("Starting payroll queue");
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
@@ -204,6 +205,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				try
 				{
 					_payrollBus.Dispose();
+					log.Info("Stopping payroll queue to load new dll-file");
 				}
 				catch (Exception)
 				{
