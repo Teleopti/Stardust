@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -50,6 +51,10 @@ namespace Teleopti.Ccc.Web.Areas.Team.Controllers
 			                		string.Format(itemFormat, "Next",UserTexts.Resources.Next),
 			                		string.Format(itemFormat, "Previous",UserTexts.Resources.Previous),
 			                		string.Format(itemFormat, "LoadingThreeDots",UserTexts.Resources.LoadingThreeDots),
+
+									string.Format(itemFormat, "ShortDatePattern", CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern),
+									string.Format(itemFormat, "LanguageCode", CultureInfo.CurrentCulture.IetfLanguageTag),
+									string.Format(itemFormat, "FirstDayOfWeek", (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek),
 			                	};
 
 			template = string.Format(template, string.Join("," + Environment.NewLine, userTexts));
