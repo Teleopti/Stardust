@@ -42,21 +42,26 @@ namespace Teleopti.Ccc.Sdk.Logic.Payroll
                 var attrName = xmlDoc.CreateAttribute("Name");
                 attrName.Value = payrollFormatDto.Name;
 
+				var attrDataSource = xmlDoc.CreateAttribute("DataSource");
+				attrDataSource.Value = payrollFormatDto.DataSource;
+
                 node.Attributes.Append(attrFormatId);
                 node.Attributes.Append(attrName);
+				node.Attributes.Append(attrDataSource);
                 rootNode.AppendChild(node);
             }
             xmlDoc.Save(_filePath);
         }
 
-        public ICollection<PayrollFormatDto> Load()
+        public ICollection<PayrollFormatDto> Load(string dataSource)
         {
             if (File.Exists(_filePath))
             {
-                return (from format in XElement.Load(_filePath).Elements("PayrollFormat")
+                var list =  (from format in XElement.Load(_filePath).Elements("PayrollFormat")
                                                             select
                                                                 new PayrollFormatDto(new Guid(format.Attribute("Id").Value),
-                                                                                     format.Attribute("Name").Value)).ToList();
+                                                                                     format.Attribute("Name").Value, format.Attribute("DataSource").Value)).ToList();
+            	return list.Where(payrollFormatDto => (string.IsNullOrEmpty(payrollFormatDto.DataSource) || payrollFormatDto.DataSource.Equals(dataSource))).ToList();
             }
 
             return new List<PayrollFormatDto>();
