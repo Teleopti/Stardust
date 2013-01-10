@@ -20,8 +20,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private readonly Action<Exception> _startupExceptionHandler;
 		private readonly Action<int> _requestExtraTimeHandler;
 		private static readonly ILog log = LogManager.GetLogger(typeof(ServiceBusRunner));
+		
 		[NonSerialized]
 		private FileSystemWatcher _watcher;
+		[NonSerialized] 
+		private DateTime _latestFileChange;
 
 		[NonSerialized] 
 		private ConfigFileDefaultHost _requestBus;
@@ -144,15 +147,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		private void OnChanged(object sender, FileSystemEventArgs e)
 		{
+			var info = new FileInfo(e.FullPath);
+			if (_latestFileChange == info.LastWriteTimeUtc)
+				return;
+
+			_latestFileChange = info.LastWriteTimeUtc;
+			
 			stopPayrollQueue();
 
 			try
 			{
-				_watcher.EnableRaisingEvents = false;
-				var fileInfo = new FileInfo(e.FullPath);
-				if (!fileInfo.Exists) return;
-				System.Threading.Thread.Sleep(5000);
-				
 				var file = e.FullPath;
 				var destination = new SearchPath().Path;
 				File.Copy(file, destination, true);
@@ -161,10 +165,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				log.Error("An exception was ecnountered when trying to replace Payroll dll-file", exception);
 				throw;
-			}
-			finally
-			{
-				_watcher.EnableRaisingEvents = true;
 			}
 
 			startPayrollQueue();
