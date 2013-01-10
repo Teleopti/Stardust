@@ -195,13 +195,12 @@ Scenario: One possible shift to trade with because shift trade periods and skill
 	When I navigate to shift trade page
 	Then I should have one possible shift to trade with
 
-@ignore
 Scenario: View shift trade request details
 	Given I have the role 'Full access to mytime'
-	And I have an existing shift trade request
+	And I have created a shift trade request with subject 'swap with me'
 	And I am viewing requests
 	When I click on the request
-	Then I should see the shift trade request form 
+	Then I should see the shift trade request form  with subject 'swap with me'
 	
 @ignore
 Scenario: Approve shift trade request

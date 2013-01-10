@@ -63,16 +63,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Request-detail-subject-input")]
 		public TextField RequestDetailSubjectInput { get; set; }
+
+		[FindBy(Id = "Schedule-addRequest-title")]
+		public TextField RequestDetailTitle { get; set; }
+		
 		[FindBy(Id = "Request-detail-fromDate-input")]
 		public TextField RequestDetailFromDateTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-fromTime-input-input")]
 		public TextField RequestDetailFromTimeTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-toDate-input")]
 		public TextField RequestDetailToDateTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-toTime-input-input")]
 		public TextField RequestDetailToTimeTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-message-input")]
 		public TextField RequestDetailMessageTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-error")]
 		public Div ValidationErrorText { get; set; }
 

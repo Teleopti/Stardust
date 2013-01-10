@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
@@ -115,15 +116,21 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeAnIndicationThatThereAreMoreRequests()
 		{
 			EventualAssert.That(() => _page.MoreToLoadArrow.IsDisplayed(), Is.True);
-
-//			EventualAssert.That(() => Browser.Current.Div(QuicklyFind.ByClass("arrow-down")).IsDisplayed(), Is.True, "More-to-load arrows should  be visible");
 		}
+
+		[Then(@"I should see the shift trade request form  with subject '(.*)'")]
+		public void ThenIShouldSeeTheShiftTradeRequestFormWithSubject(string subject)
+		{
+			EventualAssert.That(() => _page.RequestDetailSection.IsDisplayed(),Is.True, "The detailsection should be visible");
+			EventualAssert.That(()=>_page.RequestDetailSubjectInput.InnerHtml, Is.StringContaining(subject),"The title should indicate that we are viewing a shifttrade-request");
+			EventualAssert.That(()=>_page.RequestDetailTitle.Text,Is.EqualTo(Resources.ShiftTradeRequest),"The subject should indicate that we are viewing that specific request");
+		}
+
 
 		[Then(@"I should not see an indication that there are more requests")]
 		public void ThenIShouldNotSeeAnIndicationThatThereAreMoreRequests()
 		{
 			EventualAssert.That(() => _page.MoreToLoadArrow.IsDisplayed(), Is.False);
-			//EventualAssert.That(() => Browser.Current.Div(QuicklyFind.ByClass("arrow-down")).IsDisplayed(), Is.False,"More-to-load arrows should not be visible");
 		}
 	}
 
