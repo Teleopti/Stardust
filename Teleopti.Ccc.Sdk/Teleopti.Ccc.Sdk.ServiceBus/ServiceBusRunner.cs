@@ -148,23 +148,30 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private void OnChanged(object sender, FileSystemEventArgs e)
 		{
 			var info = new FileInfo(e.FullPath);
-			if (_latestFileChange == info.LastWriteTimeUtc)
+			if (_latestFileChange == info.LastAccessTimeUtc)
 				return;
 
-			_latestFileChange = info.LastWriteTimeUtc;
+			_latestFileChange = info.LastAccessTimeUtc;
 			
 			stopPayrollQueue();
 
 			try
 			{
 				var file = e.FullPath;
-				var destination = new SearchPath().Path;
+				var payrollPath = new SearchPath().Path;
+				var startInt = file.IndexOf("Payroll", StringComparison.Ordinal) + 8;
+				var dataSource = file.Substring(startInt, file.Length - startInt - e.Name.Length);
+				var fullPath = Path.GetFullPath(payrollPath + dataSource + "\\");
+				
+				if (!Directory.Exists(fullPath))
+					Directory.CreateDirectory(fullPath);
+				var destination = Path.GetFullPath(fullPath + e.Name);
+
 				File.Copy(file, destination, true);
 			}
 			catch (IOException exception)
 			{
 				log.Error("An exception was ecnountered when trying to replace Payroll dll-file", exception);
-				throw;
 			}
 
 			startPayrollQueue();
