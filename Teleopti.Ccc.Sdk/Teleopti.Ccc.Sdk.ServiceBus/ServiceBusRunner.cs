@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Policy;
+using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using log4net;
 using log4net.Config;
 
@@ -153,12 +154,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				System.Threading.Thread.Sleep(5000);
 				
 				var file = e.FullPath;
-#if(DEBUG)
-				var destination = Path.GetFullPath(Environment.CurrentDirectory +
-				                 "\\..\\..\\..\\Teleopti.Ccc.Sdk.ServiceBus.Host\\bin\\Debug\\Payroll\\" + e.Name);
-#else
-				var destination = Path.Combine(Environment.CurrentDirectory, "Payroll", e.Name);
-#endif
+				var destination = new SearchPath().Path;
 				File.Copy(file, destination, true);
 			}
 			catch (IOException exception)
