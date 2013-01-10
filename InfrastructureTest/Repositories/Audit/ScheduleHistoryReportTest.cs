@@ -314,12 +314,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		[Test]
 		public void ShouldNotFindTooEarlyShift()
 		{
-			var assignmentStart = new DateOnly(PersonAssignment.Period.StartDateTimeLocal(new CccTimeZoneInfo(TimeZoneInfo.Local)));
+			var assignmentStart = new DateOnly(PersonAssignment.Period.StartDateTimeLocal(regional.TimeZone));
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-								  new DateOnlyPeriod(assignmentStart.AddDays(1), assignmentStart.AddDays(10)), 
+								  new DateOnlyPeriod(assignmentStart.AddDays(2), assignmentStart.AddDays(10)), 
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Should().Be.Empty();
 			}
@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		[Test]
 		public void ShouldNotFindTooLateShift()
 		{
-			var assignmentStart = new DateOnly(PersonAssignment.Period.StartDateTimeLocal(new CccTimeZoneInfo(TimeZoneInfo.Local)));
+			var assignmentStart = new DateOnly(PersonAssignment.Period.StartDateTimeLocal(regional.TimeZone));
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
