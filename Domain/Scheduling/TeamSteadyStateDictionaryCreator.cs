@@ -28,10 +28,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public IDictionary<Guid, bool> Create(DateOnlyPeriod dateOnlyPeriod)
 		{
 		    var dictionary = new Dictionary<Guid, bool>();
-			//return dictionary;
 
 		    if (_matrixList.Count == 0) return dictionary;
-			var groupPersonDic = new Dictionary<IGroupPerson, DateOnly>();
+			var groupPersonDic = new Dictionary<IGroupPerson, IList<DateOnly>>();
 
 			IList<IPerson> persons = new List<IPerson>();
 
@@ -47,26 +46,46 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var firstEffectiveDay = effectivePeriodDays[0].Day;
 				var lastEffectiveDay = effectivePeriodDays[effectivePeriodDays.Count - 1].Day;
 				var effectivePeriod = new DateOnlyPeriod(firstEffectiveDay, lastEffectiveDay);
-				var firstSelectedDay = dateOnlyPeriod.StartDate;
+				var day = DateOnly.MinValue;
 
-				if (!effectivePeriod.Contains(dateOnlyPeriod)) continue;
+				//check if matrix intersect with selection
+				if (effectivePeriod.Contains(dateOnlyPeriod.StartDate)) day = dateOnlyPeriod.StartDate;
+				else if (effectivePeriod.Contains(dateOnlyPeriod.EndDate)) day = dateOnlyPeriod.EndDate;
 
-				var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(firstSelectedDay, persons, true, _schedulingOptions);
+				//continue if we dont have an intersection
+				if(day == DateOnly.MinValue) continue;
+
+				//add groupPerson + firstday on matrix to dictionary
+				var groupPersons = _groupPersonsBuilder.BuildListOfGroupPersons(day, persons, true, _schedulingOptions);
 				foreach (var groupPerson in groupPersons)
 				{
+					
 					if (!groupPersonDic.ContainsKey(groupPerson))
-						groupPersonDic.Add(groupPerson, firstEffectiveDay);
+						groupPersonDic.Add(groupPerson, new List<DateOnly>{firstEffectiveDay});
+					else
+					{
+						if(!groupPersonDic[groupPerson].Contains(firstEffectiveDay))
+							groupPersonDic[groupPerson].Add(firstEffectiveDay);
+					}
 				}
 			}
 
+			//check steady state for each date on groupPersons. Set state to false if any of the periods are false.
 			foreach (var kvp in groupPersonDic)
 			{
 				var groupPerson = kvp.Key;
-				var date = kvp.Value;
-				if (groupPerson.Id.HasValue && !dictionary.ContainsKey(groupPerson.Id.Value))
+				var dates = kvp.Value;
+				if (groupPerson.Id.HasValue && !dictionary.ContainsKey(groupPerson.Id.Value) && dates.Count > 0)
 				{
-					var res = _teamSteadyStateRunner.Run(groupPerson, date);
-					dictionary.Add(res.Key, res.Value);
+					var res = new KeyValuePair<Guid, bool>();
+
+					foreach (var dateOnly in dates)
+					{
+						res = _teamSteadyStateRunner.Run(groupPerson, dateOnly);
+						if (!res.Value) break;
+					}
+
+					dictionary.Add(res.Key, res.Value);		
 				}
 			}
 

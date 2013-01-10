@@ -75,12 +75,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private void setupStateHolder()
 		{
-			var wholePeriod = new DateTimePeriod(2012, 1, 1, 2012, 1, 31);
+			var wholePeriod = new DateTimePeriod(2012, 1, 1, 2012, 3, 31);
 			IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(wholePeriod);
 			IScenario scenario = new Scenario("Scenario");
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
 
-			var dayPeriod = new DateTimePeriod(2012, 1, 1, 2012, 1, 31);
+			var dayPeriod = new DateTimePeriod(2012, 1, 1, 2012, 3, 31);
 			IScheduleParameters parameters1 = new ScheduleParameters(scenario, _person1, dayPeriod);
 			IScheduleParameters parameters2 = new ScheduleParameters(scenario, _person2, dayPeriod);
 			IScheduleParameters parameters3 = new ScheduleParameters(scenario, _person3, dayPeriod);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Assert.AreEqual(2, result.Count);
 				Assert.IsTrue(result[_guid1]);
 				Assert.IsTrue(result[_guid2]);
-			}			
+			}				
 		}
 
 		[Test]
@@ -142,6 +142,61 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Assert.IsFalse(result[_guid1]);
 				Assert.IsTrue(result[_guid2]);
 			}			
+		}
+
+		[Test]
+		public void ShouldHandleMultiplePeriods()
+		{
+			var selection = new DateOnlyPeriod(_dateOnly.AddDays(5), _dateOnly.AddDays(40));
+			var dateOnlyPeriod = new DateOnlyPeriod(_dateOnly.AddDays(31), _dateOnly.AddDays(60));
+			_person1.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(dateOnlyPeriod.StartDate));
+			var scheduleMatrixPro2 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person1, _person1.VirtualSchedulePeriod(dateOnlyPeriod.StartDate));
+			_matrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro1, scheduleMatrixPro2};
+			_target = new TeamSteadyStateDictionaryCreator(_teamSteadyStateRunner, _matrixes, _groupPersonsBuilder, _schedulingOptions);
+			_persons = new List<IPerson> { _person1 };
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly.AddDays(5), _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly.AddDays(40), _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
+				Expect.Call(_teamSteadyStateRunner.Run(_groupPerson1, _dateOnly)).Return(new KeyValuePair<Guid, bool>(_guid1, true));
+				Expect.Call(_teamSteadyStateRunner.Run(_groupPerson1, dateOnlyPeriod.StartDate)).Return(new KeyValuePair<Guid, bool>(_guid1, true));	
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.Create(selection);
+				Assert.IsNotNull(result);
+				Assert.AreEqual(1, result.Count);
+				Assert.IsTrue(result[_guid1]);	
+			}
+		}
+
+		[Test]
+		public void ShouldSetSteadyStateToFalseIfAnyPeriodIsFalse()
+		{
+			var selection = new DateOnlyPeriod(_dateOnly.AddDays(5), _dateOnly.AddDays(40));
+			var dateOnlyPeriod = new DateOnlyPeriod(_dateOnly.AddDays(31), _dateOnly.AddDays(60));
+			_person1.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(dateOnlyPeriod.StartDate));
+			var scheduleMatrixPro2 = ScheduleMatrixProFactory.Create(dateOnlyPeriod, _stateHolder, _person1, _person1.VirtualSchedulePeriod(dateOnlyPeriod.StartDate));
+			_matrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro1, scheduleMatrixPro2 };
+			_target = new TeamSteadyStateDictionaryCreator(_teamSteadyStateRunner, _matrixes, _groupPersonsBuilder, _schedulingOptions);
+			_persons = new List<IPerson> { _person1 };
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly.AddDays(5), _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
+				Expect.Call(_groupPersonsBuilder.BuildListOfGroupPersons(_dateOnly.AddDays(40), _persons, true, _schedulingOptions)).Return(new List<IGroupPerson> { _groupPerson1 });
+				Expect.Call(_teamSteadyStateRunner.Run(_groupPerson1, _dateOnly)).Return(new KeyValuePair<Guid, bool>(_guid1, false));
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.Create(selection);
+				Assert.IsNotNull(result);
+				Assert.AreEqual(1, result.Count);
+				Assert.IsFalse(result[_guid1]);
+			}
 		}
 	}
 }
