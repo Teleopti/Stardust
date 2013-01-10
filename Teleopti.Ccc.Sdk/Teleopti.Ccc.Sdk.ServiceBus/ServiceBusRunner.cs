@@ -1,8 +1,6 @@
 using System;
 using System.Configuration;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -178,7 +176,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			catch (Exception exception)
 			{
-				log.Error("An exception was ecnountered when trying to load new payroll dll", exception);
+				log.Error("An exception was encountered when trying to load new payroll dll", exception);
 			}
 
 			startPayrollQueue();
