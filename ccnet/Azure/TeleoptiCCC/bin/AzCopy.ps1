@@ -1,15 +1,25 @@
 Param(
   [string]$directory
   )
+[Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
+
+
 
 $directory
 ## Name of the job, name of source in Windows Event Log
 $JOB = "Teleopti.Ccc.BlobStorageCopy"
 
-## Get environment varaibles
+## Local debug values
+<#
 $BlobPath = "http://teleopticcc7.blob.core.windows.net/"
 $ContainerName="forecast/Reports"
 $AccountKey = "IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ=="
+#>
+
+## Get environment varaibles
+$BlobPath = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.BlobPath")
+$ContainerName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.ContainerName")
+$AccountKey = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.AccountKey")
 
 
 $BlobSource = $BlobPath + $ContainerName
