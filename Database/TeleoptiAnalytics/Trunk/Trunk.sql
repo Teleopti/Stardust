@@ -34,7 +34,6 @@ TRUNCATE TABLE mart.fact_schedule_deviation
 
 ALTER TABLE  mart.fact_schedule_deviation ADD shift_startdate_id int NULL
 
-ALTER TABLE  mart.fact_schedule_deviation ADD scheduled_time_s int NULL
 
 ALTER TABLE mart.fact_schedule_deviation DROP COLUMN datasource_update_date
 
