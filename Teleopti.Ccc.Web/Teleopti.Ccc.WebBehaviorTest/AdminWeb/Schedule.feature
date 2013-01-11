@@ -57,53 +57,7 @@ Scenario: View team schedule with night shift from yesterday
 	When I view schedules for '2012-12-03'
 	Then I should see schedule for 'Pierre Baldi'
 
-	@ignore
-Scenario: View team schedule, day off
-	Given I am an agent in a team
-	And I have a colleague
-	And My colleague has a dayoff today
-	When I view team schedule
-	Then I should see my colleague's day off
-
-	@ignore
-Scenario: View team schedule, absence 
-	Given I am an agent in a team
-	And I have a colleague
-	And My colleague has an absence today
-	When I view team schedule
-	Then I should see my colleague's absence
-
 Scenario: View team schedule, no shift
 	Given I am a team leader for 'Team green' with role 'Full access to Admin web'
 	When I view schedules for '2012-12-03'
 	Then I should see no schedule for 'Pierre Baldi'
-
-	@ignore
-Scenario: Can't see confidential absence
-	Given I am an agent in a team
-	And I have a colleague
-	And My colleague has a confidential absence
-	When I view team schedule
-	Then I should see my colleague's schedule
-	And I should not see the absence's color
- 
- @ignore
-Scenario: Can't see the team schedule tab without permission 
-	Given I am an agent with no access to team schedule
-	When I am viewing an application page
-	Then I should not see the team schedule tab
-
-	@ignore
-Scenario: Can't navigate to team schedule without permission 
-	Given I am an agent with no access to team schedule
-	When I am viewing an application page
-	And I navigate to the team schedule
-	Then I should see an error message
-
-	@ignore
-Scenario: Can't see colleagues schedule without permission
-	Given I am an agent in a team with access only to my own data
-	And I have a colleague
-	And My colleague has a shift today
-	When I view team schedule
-	Then I should not see my colleagues schedule
