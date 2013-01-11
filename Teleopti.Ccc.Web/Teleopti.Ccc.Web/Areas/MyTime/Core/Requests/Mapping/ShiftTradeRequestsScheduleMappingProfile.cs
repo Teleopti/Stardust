@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 									var myScheduledDay = _shiftTradeRequestProvider.Invoke().RetrieveMyScheduledDay(s);
 									MinMax<DateTime> layersTimeRange;
 									var myScheduleLayersViewModel = CreateShiftTradeLayers(_projectionProvider.Invoke().Projection(myScheduledDay), 
-																						myScheduledDay.Person.PermissionInformation.DefaultTimeZone(),
-																						out layersTimeRange);
+									                                                   myScheduledDay.Person.PermissionInformation.DefaultTimeZone(),
+									                                                   out layersTimeRange);
 									var earliestShiftStart = layersTimeRange.Minimum;
 									var latestShiftEnd = layersTimeRange.Maximum;
 
@@ -55,15 +55,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 										if (layersTimeRange.Maximum > latestShiftEnd)
 											latestShiftEnd = layersTimeRange.Maximum;
 									}
-									
+
+									IEnumerable<ShiftTradeTimeLineHoursViewModel> timeLineHours;
+									int timeLineLengthInMinutes = 0;
+									if (myScheduleLayersViewModel.Any() || possibleTradePersonsViewModel.Any())
+									{
+										timeLineHours = CreateTimeLineHours(earliestShiftStart, latestShiftEnd,
+										                                    myScheduledDay.Person.PermissionInformation.DefaultTimeZone(),
+										                                    myScheduledDay.Person.PermissionInformation.Culture());
+										timeLineLengthInMinutes = (int)latestShiftEnd.AddMinutes(15).Subtract(earliestShiftStart.AddMinutes(-15)).TotalMinutes;
+									}
+									else
+									{
+										timeLineHours = Enumerable.Empty<ShiftTradeTimeLineHoursViewModel>();
+									}
 									return new ShiftTradeRequestsScheduleViewModel
 											{
 												MyScheduleLayers = myScheduleLayersViewModel,
 												PossibleTradePersons = possibleTradePersonsViewModel,
-												TimeLineHours = CreateTimeLineHours(earliestShiftStart, latestShiftEnd, 
-																	myScheduledDay.Person.PermissionInformation.DefaultTimeZone(), 
-																	myScheduledDay.Person.PermissionInformation.Culture()),
-												TimeLineLengthInMinutes = (int) latestShiftEnd.AddMinutes(15).Subtract(earliestShiftStart.AddMinutes(-15)).TotalMinutes
+												TimeLineHours = timeLineHours,
+												TimeLineLengthInMinutes = timeLineLengthInMinutes
 											};
 								})
 			;
@@ -71,24 +82,39 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private IEnumerable<ShiftTradeTimeLineHoursViewModel> CreateTimeLineHours(DateTime earliestShiftStart, DateTime latestShiftEnd, TimeZoneInfo timeZone, CultureInfo culture)
 		{
-			var hourList = new List<ShiftTradeTimeLineHoursViewModel>();
-			ShiftTradeTimeLineHoursViewModel lastHour = null;
-
 			earliestShiftStart = earliestShiftStart.AddMinutes(-15);
 			latestShiftEnd = latestShiftEnd.AddMinutes(15);
+
+			var hourList = new List<ShiftTradeTimeLineHoursViewModel>();
+			ShiftTradeTimeLineHoursViewModel lastHour = null;
+			DateTime shiftStartRounded = earliestShiftStart;
+			DateTime shiftEndRounded = latestShiftEnd;
+			
 			if (earliestShiftStart.Minute != 0)
 			{
-				hourList.Add(new ShiftTradeTimeLineHoursViewModel { HourText = string.Empty, MinutesToDisplay = 60 - earliestShiftStart.Minute });
-				earliestShiftStart = earliestShiftStart.AddMinutes(60 - earliestShiftStart.Minute);
+				int lengthInMinutes = 60 - earliestShiftStart.Minute;
+				hourList.Add(new ShiftTradeTimeLineHoursViewModel
+				             	{
+				             		HourText = string.Empty,
+									LengthInMinutesToDisplay = lengthInMinutes,
+									ElapsedMinutesSinceTimeLineStart = lengthInMinutes
+				             	});
+				shiftStartRounded = earliestShiftStart.AddMinutes(lengthInMinutes);
 			}
 			if (latestShiftEnd.Minute != 0)
 			{
-				lastHour = new ShiftTradeTimeLineHoursViewModel { HourText = string.Empty, MinutesToDisplay = latestShiftEnd.Minute };
-				latestShiftEnd = latestShiftEnd.AddMinutes(-latestShiftEnd.Minute);
+				lastHour = new ShiftTradeTimeLineHoursViewModel
+				           	{
+				           		HourText = string.Empty, 
+								LengthInMinutesToDisplay = latestShiftEnd.Minute,
+								ElapsedMinutesSinceTimeLineStart = (int) latestShiftEnd.Subtract(earliestShiftStart).TotalMinutes
+				           	};
+				shiftEndRounded = latestShiftEnd.AddMinutes(-latestShiftEnd.Minute);
 			}
 
-			for (DateTime time = earliestShiftStart; time < latestShiftEnd; time = time.AddHours(1))
+			for (DateTime time = shiftStartRounded; time < shiftEndRounded; time = time.AddHours(1))
 			{
+				
 				var localTime = TimeZoneHelper.ConvertFromUtc(time, timeZone);
 				var hourString = string.Format(culture, localTime.ToShortTimeString());
 
@@ -97,7 +123,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				if (output.Contains(":"))
 					output = localTime.Hour.ToString();
 
-				hourList.Add(new ShiftTradeTimeLineHoursViewModel { HourText = output, MinutesToDisplay = 60 });
+				hourList.Add(new ShiftTradeTimeLineHoursViewModel
+				             	{
+				             		HourText = output, 
+									LengthInMinutesToDisplay = 60, 
+									ElapsedMinutesSinceTimeLineStart = (int) time.Subtract(earliestShiftStart).TotalMinutes + 60
+				             	});
 			}
 
 			if (lastHour != null)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using AutoMapper;
@@ -170,7 +171,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
-		public void ShouldMapTimeLineStuff()
+		public void ShouldMapTimeLineStuffWhenScheduleExist()
 		{
 			var possibleTradePersonLayerPeriod = new DateTimePeriod(new DateTime(2013, 1, 1, 12, 0, 0, DateTimeKind.Utc),
 														   new DateTime(2013, 1, 1, 15, 40, 0, DateTimeKind.Utc));
@@ -200,20 +201,39 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.TimeLineHours.Count().Should().Be.EqualTo(6);
 
 			result.TimeLineHours.First().HourText.Should().Be.EqualTo(string.Empty);
-			result.TimeLineHours.First().MinutesToDisplay.Should().Be.EqualTo(10);
+			result.TimeLineHours.First().LengthInMinutesToDisplay.Should().Be.EqualTo(10);
+			result.TimeLineHours.First().ElapsedMinutesSinceTimeLineStart.Should().Be.EqualTo(10);
 
 			result.TimeLineHours.ElementAt(1).HourText.Should().Be.EqualTo("12");
-			result.TimeLineHours.ElementAt(1).MinutesToDisplay.Should().Be.EqualTo(60);
+			result.TimeLineHours.ElementAt(1).LengthInMinutesToDisplay.Should().Be.EqualTo(60);
+			result.TimeLineHours.ElementAt(1).ElapsedMinutesSinceTimeLineStart.Should().Be.EqualTo(70);
 
 			result.TimeLineHours.ElementAt(4).HourText.Should().Be.EqualTo("15");
-			result.TimeLineHours.ElementAt(4).MinutesToDisplay.Should().Be.EqualTo(60);
+			result.TimeLineHours.ElementAt(4).LengthInMinutesToDisplay.Should().Be.EqualTo(60);
+			result.TimeLineHours.ElementAt(4).ElapsedMinutesSinceTimeLineStart.Should().Be.EqualTo(250);
 
 			result.TimeLineHours.Last().HourText.Should().Be.EqualTo(string.Empty);
-			result.TimeLineHours.Last().MinutesToDisplay.Should().Be.EqualTo(55);
+			result.TimeLineHours.Last().LengthInMinutesToDisplay.Should().Be.EqualTo(55);
+			result.TimeLineHours.Last().ElapsedMinutesSinceTimeLineStart.Should().Be.EqualTo(305);
 
 			double expectedValue = possibleTradePersonLayerPeriod.EndDateTime.AddMinutes(15).Subtract(
 											myScheduleLayerPeriod.StartDateTime.AddMinutes(-15)).TotalMinutes;
 			result.TimeLineLengthInMinutes.Should().Be.EqualTo((int) expectedValue);
+		}
+
+		[Test]
+		public void ShouldMapTimeLineStuffWhenScheduleNotExist()
+		{
+			var day = _scheduleFactory.ScheduleDayStub();
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(Arg<DateOnly>.Is.Anything)).Return(day);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything)).Return(new List<IScheduleDay>());
+
+			_projectionProvider.Stub(p => p.Projection(day)).Return(_scheduleFactory.ProjectionStub());
+
+			var result = Mapper.Map<DateOnly, ShiftTradeRequestsScheduleViewModel>(DateOnly.Today);
+
+			result.TimeLineHours.Should().Be.Empty();
 		}
 	}
 }
