@@ -36,7 +36,7 @@ define([
 					date = moment(date, 'YYYYMMDD');
 				}
 
-				var timeLine = new timeLineViewModel();
+				var timeLine = new timeLineViewModel(translations.ShortTimePattern);
 				var teamSchedule = new teamScheduleViewModel(timeLine, date);
 
 				var previousOffset;

@@ -3,7 +3,7 @@ define([
 		'moment'
 	], function(ko, moment) {
 
-		return function(timeline, minutes) {
+		return function(timeline, minutes, shortTimePattern) {
 
 			var self = this;
 
@@ -11,7 +11,7 @@ define([
 
 			this.Time = ko.computed(function() {
 				var time = moment().startOf('day').add('minutes', self.Minutes());
-				return time.format("H:mm");
+				return time.format(shortTimePattern);
 			});
 
 			this.Pixel = ko.computed(function() {

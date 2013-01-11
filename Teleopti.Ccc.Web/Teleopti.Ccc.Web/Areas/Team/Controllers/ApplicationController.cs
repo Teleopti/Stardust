@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Team.Controllers
 			                		string.Format(itemFormat, "LoadingThreeDots",UserTexts.Resources.LoadingThreeDots),
 
 									string.Format(itemFormat, "ShortDatePattern", CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern),
+									string.Format(itemFormat, "ShortTimePattern", CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Replace("tt","a")),
 									string.Format(itemFormat, "LanguageCode", CultureInfo.CurrentCulture.IetfLanguageTag),
 									string.Format(itemFormat, "FirstDayOfWeek", (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek),
 			                	};
