@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Policy;
+using System.Threading;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using log4net;
 using log4net.Config;
@@ -23,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		[NonSerialized]
 		private FileSystemWatcher _watcher;
 		[NonSerialized] 
-		private DateTime _latestFileChange;
+		private Dictionary<string, DateTime> _copiedFiles;
 
 		[NonSerialized] 
 		private ConfigFileDefaultHost _requestBus;
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_unhandledExceptionHandler = unhandledExceptionHandler;
 			_startupExceptionHandler = startupExceptionHandler;
 			_requestExtraTimeHandler = requestExtraTimeHandler;
+			_copiedFiles = new Dictionary<string, DateTime>();
 
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 		}
@@ -133,8 +136,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				var configFolder = GetPayrollPath();
 				_watcher = new FileSystemWatcher(configFolder, @"*Payroll*.dll");
 				_watcher.NotifyFilter = NotifyFilters.LastWrite;
-				_watcher.Changed += OnChanged;
 				_watcher.Created += OnChanged;
+				_watcher.Changed += OnChanged;
 				_watcher.EnableRaisingEvents = true;
 				_watcher.IncludeSubdirectories = true;
 			}
@@ -148,31 +151,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void OnChanged(object sender, FileSystemEventArgs e)
 		{
+			var totalSleepTime = 0;
 			var info = new FileInfo(e.FullPath);
-			if (_latestFileChange == info.LastAccessTimeUtc)
+			
+			if (!File.Exists(e.FullPath)
+				|| (_copiedFiles.ContainsKey(e.FullPath)
+				&& _copiedFiles[e.FullPath] == info.LastAccessTimeUtc
+				&& _copiedFiles[e.FullPath].Millisecond == info.LastAccessTimeUtc.Millisecond))
 				return;
-			_latestFileChange = info.LastAccessTimeUtc;
+
+			while (IsFileLocked(info))
+			{
+				Thread.Sleep(20);
+				totalSleepTime+= 20;
+				if (totalSleepTime == 500) return;
+			}
 
 			stopPayrollQueue();
 
 			try
 			{
-				var file = e.FullPath;
-				var payrollPath = new SearchPath().Path;
-
-				var parent = Directory.GetParent(Directory.GetParent(file).ToString());
-				var subFolders = Directory.GetDirectories(parent.ToString());
-
-				foreach (var subFolder in subFolders)
-				{
-					var directoryName = Path.GetFileName(subFolder);
-					if (!Directory.Exists(Path.GetFullPath(payrollPath + directoryName)))
-						Directory.CreateDirectory(Path.GetFullPath(payrollPath + directoryName));
-				}
-
-				var destination = Path.GetFullPath(payrollPath + e.Name);
-
-				File.Copy(file, destination, true);
+				var destination = new SearchPath().Path;
+				var source = Directory.GetParent(Directory.GetParent(e.FullPath).ToString()).ToString();
+				CopyFiles(source, destination);
 			}
 
 			catch (Exception exception)
@@ -181,6 +182,36 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 
 			startPayrollQueue();
+		}
+
+		private void CopyFiles(string source, string destination)
+		{
+			foreach (var folder in Directory.GetDirectories(source))
+			{
+				var newFolderPath = Path.GetFullPath(destination + Path.GetFileName(folder));
+
+				if (!Directory.Exists(newFolderPath))
+					Directory.CreateDirectory(newFolderPath);
+
+				CopyFiles(folder, newFolderPath);
+			}
+			foreach (var file in Directory.GetFiles(source))
+			{
+				var totalSleepTime = 0;
+				var fileInfo = new FileInfo(file);
+				while (IsFileLocked(fileInfo))
+				{
+					Thread.Sleep(20);
+					totalSleepTime += 20;
+					if (totalSleepTime == 500) break;
+				}
+				
+				if (totalSleepTime == 25) continue;
+				File.Copy(file, Path.GetFullPath(destination + "\\" + Path.GetFileName(file)), true);
+
+				_copiedFiles.Add(fileInfo.FullName, fileInfo.LastAccessTimeUtc);
+			}
+
 		}
 
 		private void startPayrollQueue()
@@ -214,6 +245,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				AppDomain.Unload(_payrollDomain);
 			}
+		}
+
+		private static bool IsFileLocked(FileInfo file)
+		{
+			FileStream stream = null;
+			try
+			{
+				stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+			}
+			catch (IOException)
+			{
+				return true;
+			}
+			finally
+			{
+				if (stream != null)
+					stream.Close();
+			}
+			return false;
 		}
 
 		private static string GetPayrollPath()
