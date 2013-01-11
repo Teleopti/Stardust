@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.TimeLineHours.ElementAt(4).LengthInMinutesToDisplay.Should().Be.EqualTo(60);
 			result.TimeLineHours.ElementAt(4).ElapsedMinutesSinceTimeLineStart.Should().Be.EqualTo(250);
 
-			result.TimeLineHours.Last().HourText.Should().Be.EqualTo(string.Empty);
+			result.TimeLineHours.Last().HourText.Should().Be.EqualTo("16");
 			result.TimeLineHours.Last().LengthInMinutesToDisplay.Should().Be.EqualTo(55);
 			result.TimeLineHours.Last().ElapsedMinutesSinceTimeLineStart.Should().Be.EqualTo(305);
 

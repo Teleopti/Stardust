@@ -22,16 +22,17 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.hasWorkflowControlSet = ko.observable(false);
 		self.timeLineLengthInMinutes = ko.observable(0);
 		self.hours = ko.observableArray();
-		self.myScheduleLayers = ko.observableArray();
+		self.mySchedule = ko.observable(new scheduleViewModel());
 
 		self._createMyScheduleLayers = function (layers) {
 			var arrayMap = ko.utils.arrayMap(layers, function (layer) {
 				return new layerViewModel(layer, self);
 			});
-			self.myScheduleLayers(arrayMap);
+			self.mySchedule(new scheduleViewModel(arrayMap));
+			console.log(self.mySchedule());
 		};
 
-		self._createTimeLine = function(hours) {
+		self._createTimeLine = function (hours) {
 			var arrayMap = ko.utils.arrayMap(hours, function (hour) {
 				return new timeLineHourViewModel(hour, self);
 			});
@@ -101,6 +102,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 	}
 
+	function scheduleViewModel(layers) {
+		var self = this;
+
+		self.layers = layers;
+	}
+
 	function layerViewModel(layer, parentViewModel) {
 		var self = this;
 
@@ -110,7 +117,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.endTime = layer.EndTimeText;
 		self.lengthInMinutes = layer.LengthInMinutes;
 		self.leftPx = ko.computed(function () {
-			return layer.ElapsedMinutesSinceShiftStart * parentViewModel.pixelPerMinute() + 'px';
+			var timeLineStart = moment(new Date(2013, 1, 14, 12, 15, 0));
+			//var offset = timeLineStart
+			return (layer.ElapsedMinutesSinceShiftStart + 15) * parentViewModel.pixelPerMinute() + 'px';
 		});
 		self.paddingLeft = ko.computed(function () {
 			return self.lengthInMinutes * parentViewModel.pixelPerMinute() + 'px';
@@ -122,14 +131,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 	function timeLineHourViewModel(hour, parentViewModel) {
 		var self = this;
+		var borderWidth = 1;
 
 		self.hourText = hour.HourText;
 		self.lengthInMinutes = hour.LengthInMinutesToDisplay;
-		self.leftPx = ko.computed(function () {
-			return hour.ElapsedMinutesSinceTimeLineStart * parentViewModel.pixelPerMinute() + 'px';
-		});
-		self.paddingLeft = ko.computed(function () {
-			return self.lengthInMinutes * parentViewModel.pixelPerMinute() + 'px';
+		self.width = ko.computed(function () {
+			return self.lengthInMinutes * parentViewModel.pixelPerMinute() - borderWidth + 'px';
 		});
 	}
 

@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				lastHour = new ShiftTradeTimeLineHoursViewModel
 				           	{
-				           		HourText = string.Empty, 
+								HourText = CreateHourText(latestShiftEnd, timeZone, culture), 
 								LengthInMinutesToDisplay = latestShiftEnd.Minute,
 								ElapsedMinutesSinceTimeLineStart = (int) latestShiftEnd.Subtract(earliestShiftStart).TotalMinutes
 				           	};
@@ -114,18 +114,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			for (DateTime time = shiftStartRounded; time < shiftEndRounded; time = time.AddHours(1))
 			{
-				
-				var localTime = TimeZoneHelper.ConvertFromUtc(time, timeZone);
-				var hourString = string.Format(culture, localTime.ToShortTimeString());
-
-				const string regex = "(\\:.*\\ )";
-				var output = Regex.Replace(hourString, regex, " ");
-				if (output.Contains(":"))
-					output = localTime.Hour.ToString();
-
 				hourList.Add(new ShiftTradeTimeLineHoursViewModel
 				             	{
-				             		HourText = output, 
+									HourText = CreateHourText(time, timeZone, culture), 
 									LengthInMinutesToDisplay = 60, 
 									ElapsedMinutesSinceTimeLineStart = (int) time.Subtract(earliestShiftStart).TotalMinutes + 60
 				             	});
@@ -135,6 +126,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				hourList.Add(lastHour);
 
 			return hourList;
+		}
+
+		private string CreateHourText(DateTime time, TimeZoneInfo timeZone, CultureInfo culture)
+		{
+			var localTime = TimeZoneHelper.ConvertFromUtc(time, timeZone);
+			var hourString = string.Format(culture, localTime.ToShortTimeString());
+
+			const string regex = "(\\:.*\\ )";
+			var output = Regex.Replace(hourString, regex, " ");
+			if (output.Contains(":"))
+				output = localTime.Hour.ToString();
+
+			return output;
 		}
 
 		private static IEnumerable<ShiftTradeScheduleLayerViewModel> CreateShiftTradeLayers(IEnumerable<IVisualLayer> layers, TimeZoneInfo timeZone, out MinMax<DateTime> layersTimeRange)
