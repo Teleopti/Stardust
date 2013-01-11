@@ -1,0 +1,102 @@
+Param(
+  [string]$directory
+  )
+
+$directory
+## Name of the job, name of source in Windows Event Log
+$JOB = "Teleopti.Ccc.BlobStorageCopy"
+
+## Get environment varaibles
+$BlobPath = "http://teleopticcc7.blob.core.windows.net/"
+$ContainerName="forecast/Reports"
+$AccountKey = "IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ=="
+
+
+$BlobSource = $BlobPath + $ContainerName
+## Destination directory. Files in this directory will mirror the source directory. Extra files will be deleted!
+$DESTINATION = "c:\temp\djtemp"
+
+## Path to AzCopy logfile
+$LOGFILE = "C:\Temp\Jobs"
+
+## Log events from the script to this location
+$SCRIPTLOG = "C:\Temp\Jobs\$JOB-scriptlog.log"
+
+## Options to be added to AzCopy
+$OPTIONS = @("/S","/XO","/Y","/sourceKey:$AccountKey")
+
+## This will create a timestamp like yyyy-mm-yy
+$TIMESTAMP = get-date -uformat "%Y-%m%-%d"
+
+## This will get the time like HH:MM:SS
+$TIME = get-date -uformat "%T"
+
+## Wrap all above arguments
+$cmdArgs = @("$BlobSource","$DESTINATION",$OPTIONS)
+
+$AzCopyExe = $directory + "\AzCopy.exe"
+
+## Start the robocopy with above parameters and log errors in Windows Eventlog.
+& $AzCopyExe @cmdArgs
+
+## Get LastExitCode and store in variable
+$ExitCode = $LastExitCode
+
+$MSGType=@{
+"7"="Error"
+"2"="Error"
+"0"="Information"
+}
+
+## Message descriptions for each ExitCode.
+$MSG=@{
+"7"="Server failed to authenticate the request. Make sure the value of Authorization header is formed correctly"
+"2"="The syntax of the command is incorrect"
+"0"="$BlobSource and $DESTINATION in sync."
+}
+
+## Function to see if running with administrator privileges
+function Test-Administrator  
+{  
+    $user = [Security.Principal.WindowsIdentity]::GetCurrent();
+    (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)  
+}
+
+## If running with administrator privileges
+If (Test-Administrator -eq $True) {
+	"Has administrator privileges"
+	
+	## Create EventLog Source if not already exists
+	if ([System.Diagnostics.EventLog]::SourceExists("$JOB") -eq $false) {
+	"Creating EventLog Source `"$JOB`""
+    [System.Diagnostics.EventLog]::CreateEventSource("$JOB", "Application")
+	}
+	
+	## Write known ExitCodes to EventLog
+	if ($MSG."$ExitCode" -gt $null) {
+		Write-EventLog -LogName Application -Source $JOB -EventID $ExitCode -EntryType $MSGType."$ExitCode" -Message $MSG."$ExitCode"
+	}
+	## Write unknown ExitCodes to EventLog
+	else {
+		Write-EventLog -LogName Application -Source $JOB -EventID $ExitCode -EntryType Warning -Message "Unknown ExitCode. EventID equals ExitCode"
+	}
+}
+## If not running with administrator privileges
+else {
+	## Write to screen and logfile
+	Add-content $SCRIPTLOG "$TIMESTAMP $TIME No administrator privileges" -PassThru
+	Add-content $SCRIPTLOG "$TIMESTAMP $TIME Cannot write to EventLog" -PassThru
+	
+	## Write known ExitCodes to screen and logfile
+	if ($MSG."$ExitCode" -gt $null) {
+		Add-content $SCRIPTLOG "$TIMESTAMP $TIME Printing message to logfile:" -PassThru
+		Add-content $SCRIPTLOG ($TIMESTAMP + ' ' + $TIME + ' ' + $MSG."$ExitCode") -PassThru
+		Add-content $SCRIPTLOG "$TIMESTAMP $TIME ExitCode`=$ExitCode" -PassThru
+	}
+	## Write unknown ExitCodes to screen and logfile
+	else {
+		Add-content $SCRIPTLOG "$TIMESTAMP $TIME ExitCode`=$ExitCode (UNKNOWN)" -PassThru
+	}
+	Add-content $SCRIPTLOG ""
+	Return
+}
