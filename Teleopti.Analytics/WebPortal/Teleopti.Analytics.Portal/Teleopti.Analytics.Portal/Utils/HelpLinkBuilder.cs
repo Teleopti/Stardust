@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Threading;
+using System.Globalization;
 
 namespace Teleopti.Analytics.Portal.Utils
 {
@@ -7,12 +8,12 @@ namespace Teleopti.Analytics.Portal.Utils
     {
         public static string GetStandardReportHelpLink(string helpKey)
         {
-            return string.Format("{0}/{1}", ConfigurationManager.AppSettings["HelpUrl"], helpKey);
+            return string.Format(CultureInfo.InvariantCulture, "{0}/{1}", ConfigurationManager.AppSettings["HelpUrl"], helpKey);
         }
 
         public static string GetPerformanceManagerHelpLink()
         {
-			return string.Format("{0}/Performance_Manager_Module", ConfigurationManager.AppSettings["HelpUrl"]);
+			return string.Format(CultureInfo.InvariantCulture, "{0}/Performance_Manager_Module", ConfigurationManager.AppSettings["HelpUrl"]);
         }
     }
 }
