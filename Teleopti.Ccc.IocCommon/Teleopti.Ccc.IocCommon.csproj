@@ -136,6 +136,7 @@
     <Compile Include="Configuration\RepositoryModule.cs" />
     <Compile Include="Configuration\ScheduleScreenPersisterModule.cs" />
     <Compile Include="Configuration\ScheduleScreenRefresherModule.cs" />
+    <Compile Include="Configuration\ShiftTradeModule.cs" />
     <Compile Include="Configuration\TeleoptiCacheKey.cs" />
     <Compile Include="Configuration\UnitOfWorkModule.cs" />
     <Compile Include="GlobalSuppressions.cs" />

@@ -406,7 +406,7 @@ html.full-height #push{
 .icon.close{background-position: 0 -333px;}
 .icon.validation-req{background-position: -432px 0;}
 .icon.validation-error{background-position: -575px 0;}
-.icon.toolbar-addTextRequest {background-position: 0px -511px; width: 24px}
+.icon.toolbar-addRequest {background-position: 0px -511px; width: 24px}
 .icon.toolbar-today {background-position: -155px -26px;width: 24px;margin-left: 19px;}
 .icon.preference-warning {background-position: -159px -54px; width: 16px;	height: 16px; }
 .icon.mail-small {background-position: -159px -80px; width: 20px; height: 12px; }
@@ -769,7 +769,7 @@ select.time-input
 	height: 16px;
 	z-index: 100;
 	position: absolute;
-	right: 5px;
+	left: 462px;
 }
 
 .ie9 .request-edit-section button.ui-button-icon-only {

@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void toolStripButtonMainSave_Click(object sender, EventArgs e)
         {
-            _meetingComposerPresenter.SaveMeeting();
+			_meetingComposerPresenter.SaveMeeting();
         }
 
         public void OnModificationOccurred(IMeeting meeting, bool isDeleted)

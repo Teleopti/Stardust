@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private MockRepository _mock;
 		private IGroupIntradayOptimizerExecuter _target;
 		private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
-		private IDeleteSchedulePartService _deleteService;
+        private IDeleteAndResourceCalculateService _deleteService;
 		private ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private IOptimizationPreferences _optimizerPreferences;
 		private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_mock = new MockRepository();
 			_schedulePartModifyAndRollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_deleteService = _mock.StrictMock<IDeleteSchedulePartService>();
+            _deleteService = _mock.StrictMock<IDeleteAndResourceCalculateService>();
 			_schedulingOptionsCreator = _mock.StrictMock<ISchedulingOptionsCreator>();
 			_optimizerPreferences = new OptimizationPreferences();
 			_mainShiftOptimizeActivitySpecificationSetter = _mock.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			Expect.Call(() =>_schedulePartModifyAndRollbackService.ClearModificationCollection());
 			Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
-			Expect.Call(() => _deleteService.Delete(_daysToDelete, _schedulePartModifyAndRollbackService));
+			Expect.Call(() => _deleteService.DeleteWithResourceCalculation( _daysToDelete, _schedulePartModifyAndRollbackService));
 			Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences)).Return(_schedulingOptions);
 		}
 

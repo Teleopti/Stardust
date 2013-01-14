@@ -43,14 +43,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var ownerId = Guid.NewGuid();
 			var skillId = Guid.NewGuid();
 			var workloadId = Guid.NewGuid();
-			var command = new RecalculateForecastOnSkillCommandDto{SkillId = skillId, WorkloadId = new List<Guid>{workloadId}};
-			var commands = new RecalculateForecastOnSkillCommandCollectionDto
+			var command = new WorkloadOnSkillSelectionDto{SkillId = skillId, WorkloadId = new List<Guid>{workloadId}};
+			var commands = new RecalculateForecastOnSkillCollectionCommandDto
 			               	{
 			               		BusinessUnitId = buId,
 			               		DataSource = "datasource",
 			               		OwnerPersonId = ownerId,
 			               		ScenarioId = scenarioId,
-			               		SkillCommandDtos = new List<RecalculateForecastOnSkillCommandDto> {command}
+			               		WorkloadOnSkillSelectionDtos = new List<WorkloadOnSkillSelectionDto> {command}
 			               	};
 			var message = new RecalculateForecastOnSkillMessageCollection();
 			Expect.Call(_busSender.EnsureBus()).Return(true);

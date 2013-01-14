@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanSetStartTime()
         {
-            _view.SetEndDate(new DateOnly(2009, 10, 15));
+			_view.SetEndDate(new DateOnly(2009, 10, 15));
             _mocks.ReplayAll();
             _target.SetStartTime(TimeSpan.FromHours(22));
             Assert.AreEqual(TimeSpan.FromHours(22), _model.StartTime);

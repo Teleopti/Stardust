@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Win.Reporting
         private readonly IComponentContext _componentContext;
         private readonly IApplicationFunction _applicationFunction;
         private readonly ReportSettingsScheduleAuditingPresenter _presenter;
-        private const int numberOfDays = 1;
         //  fetch from last saved data
         private HashSet<Guid> _selectedAgentGuids = new HashSet<Guid>();
         private ReportSettingsScheduleAuditing _setting;
@@ -85,8 +84,7 @@ namespace Teleopti.Ccc.Win.Reporting
         {
             get
             {
-                var adjustedPeriod = changeEndDate(reportDateFromToSelectorSchedulePeriod.GetSelectedDates.First());
-                return adjustedPeriod;
+                return reportDateFromToSelectorSchedulePeriod.GetSelectedDates.First();
             }
         }
 
@@ -123,8 +121,7 @@ namespace Teleopti.Ccc.Win.Reporting
         {
             get
             {
-                var adjustedPeriod = changeEndDate(reportDateFromToSelectorChangePeriod.GetSelectedDates.First());
-                return adjustedPeriod;
+                return reportDateFromToSelectorChangePeriod.GetSelectedDates.First();
             }
         }
 
@@ -177,12 +174,6 @@ namespace Teleopti.Ccc.Win.Reporting
         {
             get { return _presenter.GetSettingsModel; }
         }
-
-        private static DateOnlyPeriod changeEndDate(DateOnlyPeriod dateOnlyPeriod)
-        {
-            return new DateOnlyPeriod(dateOnlyPeriod.StartDate, dateOnlyPeriod.EndDate.AddDays(numberOfDays));   
-        }
-
 
         public DateOnlyPeriod ChangePeriodDisplay
         {

@@ -13,12 +13,12 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	var requestViewModel = null;
 
 	function _initToolbarButtons() {
-		$('#Requests-addTextRequest-button')
+		$('#Requests-addRequest-button')
 			.click(function () {
-				Teleopti.MyTimeWeb.Request.List.DisconnectAll();
 				_clearFormData();
 				requestViewModel.TextRequestTabVisible(true);
 				requestViewModel.AbsenceRequestTabVisible(true);
+				requestViewModel.isUpdate(false);
 				_hideEditSection();
 				_showEditSection();
 				$('#Text-request-tab').click();
@@ -27,8 +27,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			;
 	}
 
-	function _initEditSection() {
-		_initControls();
+	function _initEditSection(requestDetailViewModel) {
+		_initControls(requestDetailViewModel);
 		_initLabels();
 	}
 
@@ -49,8 +49,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		$('#Absence-request-tab').removeClass("selected-tab");
 	}
 
-	function _initControls() {
-		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+	function _initControls(requestDetailViewModel) {
+		requestViewModel = requestDetailViewModel;
 		if ($('#Request-detail-section').length == 0)
 			return;
 		ko.applyBindings(requestViewModel, $('#Request-detail-section')[0]);
@@ -101,7 +101,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			type: "POST",
 			data: JSON.stringify(formData),
 			success: function (data, textStatus, jqXHR) {
-				Teleopti.MyTimeWeb.Request.List.RemoveItem(data);
 				_fadeEditSection(null);
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
 			},
@@ -124,6 +123,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _showRequest(data, position) {
+		requestViewModel.isUpdate(true);
 		_hideEditSection();
 		_clearFormData();
 		_showRequestTypeTab(data.TypeEnum);
@@ -169,11 +169,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _showEditSection(position) {
 		_SetOkButtonValue();
-		var topPosition = $('#Requests-list').position().top - 1;
-		if (!position)
-			position = topPosition;
-		if (position < topPosition)
-			position = topPosition;
+		if (!position) {
+			position = '15px';
+		}
 		$('#Request-detail-section')
 			.css({
 				'top': position
@@ -269,9 +267,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	return {
-		Init: function () {
+		Init: function (requestDetailViewModel) {
 			_initToolbarButtons();
-			_initEditSection();
+			_initEditSection(requestDetailViewModel);
 		},
 		HideEditSection: function () {
 			_hideEditSection();
@@ -289,15 +287,17 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 })(jQuery);
 
-Teleopti.MyTimeWeb.Request.RequestViewModel = (function RequestViewModel() {
+Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 	var self = this;
 
-	this.TextRequestTabVisible = ko.observable(true);
-	this.AbsenceRequestTabVisible = ko.observable(true);
-	this.TabSeparatorVisible = ko.computed(function () {
+	self.TextRequestTabVisible = ko.observable(true);
+	self.AbsenceRequestTabVisible = ko.observable(true);
+	self.IsFullDay = ko.observable(false);
+	self.isUpdate = ko.observable(true);
+
+	self.TabSeparatorVisible = ko.computed(function () {
 		return self.TextRequestTabVisible() && self.AbsenceRequestTabVisible();
 	});
-	this.IsFullDay = ko.observable(false);
 
 	ko.computed(function () {
 		if (self.IsFullDay()) {
@@ -309,7 +309,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = (function RequestViewModel() {
 			$('#Request-detail-toTime-input-input').reset();
 			Teleopti.MyTimeWeb.Request.RequestDetail.EnableTimeinput();
 		}
-
 	});
 
 	function _disableTimeinput() {
@@ -318,4 +317,4 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = (function RequestViewModel() {
 		$('#Request-detail-fromTime-input-input').css("color", "grey");
 		$('#Request-detail-toTime-input-input').css("color", "grey");
 	}
-});
+};

@@ -6,6 +6,7 @@ using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using WatiN.Core;
@@ -115,31 +116,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I shoud see an indication that I have an unread message")]
 		public void ThenIShoudSeeAnIndicationThatIHaveAnUnreadMessage()
 		{
-			EventualAssert.That(() =>
-				IsDisplayed(Browser.Current.Div(QuicklyFind.ByClass("asm-info-canvas-column-messages"))),
-				Is.True);
+			EventualAssert.That(() => Browser.Current.Div(QuicklyFind.ByClass("asm-info-canvas-column-messages")).IsDisplayed(), Is.True);
 		}
 
 		[Then(@"I shoud not see an indication that I have an unread message")]
 		public void ThenIShoudNotSeeAnIndicationThatIHaveAnUnreadMessage()
 		{
-			EventualAssert.That(() =>
-				IsDisplayed(Browser.Current.Div(QuicklyFind.ByClass("asm-info-canvas-column-messages"))),
-				Is.False);
+			EventualAssert.That(() =>Browser.Current.Div(QuicklyFind.ByClass("asm-info-canvas-column-messages")).IsDisplayed(), Is.False);
 		}
 
-		private static bool IsDisplayed(Element element)
-		{
-			if (string.Equals(element.Style.Display, "none"))
-			{
-				return false;
-			}
-			if (element.Parent != null)
-			{
-				return IsDisplayed(element.Parent);
-			}
-			return true;
-		}
 
 		private static int pixelLength(Element oneHourLengthLayer)
 		{

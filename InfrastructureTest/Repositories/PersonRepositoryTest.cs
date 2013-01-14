@@ -289,8 +289,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			// CreateProjection Skill Type
 			ISkill skill = SkillFactory.CreateSkill("dummy skill");
 			skill.Activity = activity;
+			var skill2 = skill.NoneEntityClone();
 			PersistAndRemoveFromUnitOfWork(skill.SkillType);
 			PersistAndRemoveFromUnitOfWork(skill);
+			PersistAndRemoveFromUnitOfWork(skill2);
 
 			IRuleSetBag rsBag = new RuleSetBag();
 			rsBag.Description = new Description("for test");
@@ -303,7 +305,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 												personContract,
 												team);
 			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
-			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.54)));
+			personPeriod.AddPersonSkill(new PersonSkill(skill2, new Percent(0.54)));
 			personPeriod.RuleSetBag = rsBag;
 			personToTest.AddPersonPeriod(personPeriod);
 
@@ -327,6 +329,41 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(2, personPeriodLoaded.PersonSkillCollection.Count);
 			Assert.AreEqual("for test", personPeriodLoaded.RuleSetBag.Description.Name);
 			Assert.AreEqual(personPeriod.BudgetGroup, personPeriodLoaded.BudgetGroup);
+		}
+
+		[Test]
+		public void ShouldThrowIfTwoPeriodsWithSameSkill()
+		{
+			//currently only fails at persist time
+			//might change later
+			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+
+			var groupActivity = new GroupingActivity("dummy group activity");
+			PersistAndRemoveFromUnitOfWork(groupActivity);
+			var activity = ActivityFactory.CreateActivity("dummy activity");
+			activity.GroupingActivity = groupActivity;
+			PersistAndRemoveFromUnitOfWork(activity);
+
+			var skill = SkillFactory.CreateSkill("dummy skill");
+			skill.Activity = activity;
+			PersistAndRemoveFromUnitOfWork(skill.SkillType);
+			PersistAndRemoveFromUnitOfWork(skill);
+
+			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+			PersistAndRemoveFromUnitOfWork(team.Site);
+			PersistAndRemoveFromUnitOfWork(team);
+
+			var personContract = PersonContractFactory.CreatePersonContract();
+			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.54)));
+
+			PersistAndRemoveFromUnitOfWork(personContract.Contract);
+			PersistAndRemoveFromUnitOfWork(personContract.PartTimePercentage);
+			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
+			personToTest.AddPersonPeriod(personPeriod);
+
+			Assert.Throws<ConstraintViolationException>(() => PersistAndRemoveFromUnitOfWork(personToTest));
 		}
 
 		[Test]
@@ -365,8 +402,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			// CreateProjection Skill Type
 			ISkill skill = SkillFactory.CreateSkill("dummy skill");
 			skill.Activity = activity;
+        	var skill2 = skill.NoneEntityClone();
 			PersistAndRemoveFromUnitOfWork(skill.SkillType);
 			PersistAndRemoveFromUnitOfWork(skill);
+			PersistAndRemoveFromUnitOfWork(skill2);
 
 			IRuleSetBag rsBag = new RuleSetBag();
 			rsBag.Description = new Description("for test");
@@ -379,7 +418,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 												personContract,
 												team);
 			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
-			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.54)));
+			personPeriod.AddPersonSkill(new PersonSkill(skill2, new Percent(0.54)));
 			personPeriod.RuleSetBag = rsBag;
             userOk.AddPersonPeriod(personPeriod);
 

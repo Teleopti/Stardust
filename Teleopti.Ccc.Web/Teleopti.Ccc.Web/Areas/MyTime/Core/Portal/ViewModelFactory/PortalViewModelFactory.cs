@@ -48,7 +48,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			{
 				navigationItems.Add(createPreferenceNavigationItem());
 			}
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests))
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests) ||
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb) ||
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
 			{
 				navigationItems.Add(createRequestsNavigationItem());
 			}
@@ -56,6 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			{
 				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
 			}
+
 			return new PortalViewModel
 						{
 							NavigationItems = navigationItems,
@@ -68,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private bool showChangePassword()
 		{
 			var agent = _loggedOnUser.CurrentUser();
-			return agent != null && agent.ApplicationAuthenticationInfo!=null && !string.IsNullOrEmpty(agent.ApplicationAuthenticationInfo.ApplicationLogOnName);
+			return agent != null && agent.ApplicationAuthenticationInfo != null && !string.IsNullOrEmpty(agent.ApplicationAuthenticationInfo.ApplicationLogOnName);
 		}
 
 		private static SectionNavigationItem createTeamScheduleNavigationItem()
@@ -96,22 +99,54 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 						};
 		}
 
-		private static SectionNavigationItem createRequestsNavigationItem()
+		private SectionNavigationItem createRequestsNavigationItem()
 		{
+			var toolbarItems = new List<ToolBarItemBase>();
+
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
+			{
+				toolbarItems.AddRange(new ToolBarItemBase[]
+			                        {
+												 //new ToolBarButtonItem
+												 //    {
+												 //        Title = Resources.Requests,
+												 //        ButtonType = "showRequests"
+												 //    },
+												 //new ToolBarButtonItem
+												 //    {
+												 //        Title = "xxAdd Shift Trade Requests",
+												 //        ButtonType = "addShiftTradeRequest"
+												 //    },
+			                            //new ToolBarSeparatorItem(),
+			                            new ToolBarDatePicker
+			                                {
+			                                    NextTitle = Resources.NextPeriod,
+			                                    PrevTitle = Resources.PreviousPeriod,
+			                                    IsHhidden = true
+			                                }
+			                        });
+			}
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests) ||
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb))
+			{
+				toolbarItems.AddRange(new ToolBarItemBase[]
+									{
+										new ToolBarSeparatorItem(),
+										new ToolBarButtonItem
+											{
+												Title = Resources.NewRequest,
+												ButtonType = "addRequest"
+											}
+									});
+			}
+
 			return new SectionNavigationItem
 					{
 						Action = "Index",
 						Controller = "Requests",
 						Title = Resources.Requests,
 						NavigationItems = new NavigationItem[0],
-						ToolBarItems = new ToolBarItemBase[]
-						{
-							new ToolBarButtonItem
-							{
-								Title = Resources.NewRequest,
-								ButtonType = "addTextRequest"
-							}
-						}
+						ToolBarItems = toolbarItems
 					};
 		}
 
@@ -185,12 +220,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private IEnumerable<IOption> ActivityOptions()
 		{
 			return from a in _preferenceOptionsProvider.RetrieveActivityOptions().MakeSureNotNull()
-					 select new Option
-								{
-									Value = a.Id.ToString(),
-									Text = a.Description.Name,
-									Color = a.DisplayColor.ToHtml()
-								};
+				   select new Option
+							  {
+								  Value = a.Id.ToString(),
+								  Text = a.Description.Name,
+								  Color = a.DisplayColor.ToHtml()
+							  };
 		}
 
 		private IEnumerable<IPreferenceOption> PreferenceOptions()
