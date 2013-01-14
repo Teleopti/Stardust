@@ -11,7 +11,7 @@
 SET customerFile=%1
 SET customer=%customerFile:~0,-4%
 SET customerSSLCertConfig=%customer%.SSLcert
-::SET customerRDPCertConfig=%customer%.RDPcert
+SET customerBlobStorageConfig=%customer%.BlobStorage
 
 ECHO customerFile is: %customerFile%
 
@@ -78,6 +78,9 @@ COPY ServiceConfig.cscfg.BuildTemplate ServiceConfig.cscfg /Y
 ::Replace SSL config in Azure config files
 for /f "tokens=1,2 delims=," %%g in (Customer\%customerSSLCertConfig%) do cscript replace.vbs %%g %%h ServiceDefinition.csdef
 for /f "tokens=1,2 delims=," %%g in (Customer\%customerSSLCertConfig%) do cscript replace.vbs %%g %%h ServiceConfig.cscfg
+
+::BlobStorage config for each customer
+for /f "tokens=1,2 delims=," %%g in (Customer\%customerBlobStorageConfig%) do cscript replace.vbs %%g %%h ServiceConfig.cscfg
 
 ::Deploy the customer .cscfg-file
 ECHO COPY "ServiceConfig.cscfg" "%output%\%customer%.cscfg" /Y

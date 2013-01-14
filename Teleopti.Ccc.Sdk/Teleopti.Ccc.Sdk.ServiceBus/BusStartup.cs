@@ -35,9 +35,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     		}
     	}
 
-    	public void BusStarted(IServiceBus bus)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void BusStarted(IServiceBus bus)
         {
-            _initializePayrollFormats.Initialize();
+			if(bus.Endpoint.Uri.AbsolutePath.Equals("/payroll"))
+				_initializePayrollFormats.Initialize();
         }
 
         public void BusDisposing(IServiceBus bus)

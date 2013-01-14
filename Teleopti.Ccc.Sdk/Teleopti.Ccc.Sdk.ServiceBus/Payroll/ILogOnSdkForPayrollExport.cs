@@ -1,5 +1,4 @@
-﻿using Teleopti.Interfaces.Messages;
-using Teleopti.Interfaces.Messages.General;
+﻿using Teleopti.Interfaces.Messages.Payroll;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
