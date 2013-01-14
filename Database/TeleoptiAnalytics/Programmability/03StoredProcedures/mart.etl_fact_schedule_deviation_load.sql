@@ -211,7 +211,7 @@ ON
 INNER JOIN 
 	mart.dim_interval di
 ON 
-	dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) = di.interval_start
+	dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) = di.interval_end
 WHERE
 	fs.schedule_date_id BETWEEN @start_date_id AND @end_date_id
 	AND fs.business_unit_id = @business_unit_id
@@ -219,39 +219,40 @@ WHERE
 	
 --UPDATE ALL ROWS WITH KNOWN SHIFT_STARTDATE_ID
 UPDATE stat
-SET shift_startdate_id = shifts.shift_startdate_id
+SET shift_startdate_id = shifts.shift_startdate_id, shift_startinterval_id=shifts.shift_startinterval_id
 FROM #fact_schedule_deviation shifts
 INNER JOIN #fact_schedule_deviation stat
 ON stat.date_id=shifts.date_id AND stat.interval_id=shifts.interval_id AND stat.person_id=shifts.person_id
 
 --ALL ROWS BEFORE SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
 UPDATE stat
-SET shift_startdate_id = shifts.shift_startdate_id
+SET shift_startdate_id = shifts.shift_startdate_id, shift_startinterval_id=shifts.shift_startinterval_id
 FROM #fact_schedule_deviation shifts
 INNER JOIN #fact_schedule_deviation stat
 ON stat.date_id=shifts.date_id AND stat.person_id=shifts.person_id
 WHERE stat.shift_startdate_id IS NULL 
-AND stat.interval_id < shifts.interval_id 
-AND stat.interval_id > shifts.interval_id - @intervals_outside_shift-- ONLY x Hours back
+AND stat.interval_id < shifts.shift_startinterval_id 
+AND stat.interval_id >= shifts.shift_startinterval_id - @intervals_outside_shift-- ONLY 2 Hours back
 
 --ALL ROWS AFTER SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
 UPDATE stat
-SET shift_startdate_id = shifts.shift_startdate_id
+SET shift_startdate_id = shifts.shift_startdate_id,shift_startinterval_id=shifts.shift_startinterval_id
 FROM #fact_schedule_deviation shifts
 INNER JOIN #fact_schedule_deviation stat
 ON stat.date_id=shifts.date_id AND stat.person_id=shifts.person_id
 WHERE stat.shift_startdate_id IS NULL 
-AND stat.interval_id > shifts.interval_id
-AND stat.interval_id < shifts.interval_id + @intervals_outside_shift -- ONLY x Hours ahead
+AND stat.interval_id > shifts.shift_endinterval_id
+AND stat.interval_id <= shifts.shift_endinterval_id + @intervals_outside_shift -- ONLY 2 Hours ahead
 
 DELETE FROM #fact_schedule_deviation WHERE shift_startdate_id IS NULL
-	
+
 
 /* Insert of new data */
 INSERT INTO mart.fact_schedule_deviation
 	(
 	date_id, 
 	shift_startdate_id,
+	shift_startinterval_id,
 	interval_id,
 	person_id, 
 	scheduled_ready_time_s,
@@ -267,6 +268,7 @@ INSERT INTO mart.fact_schedule_deviation
 SELECT
 	date_id					= date_id, 
 	shift_startdate_id		= MAX(shift_startdate_id),
+	shift_startinterval_id	= max(shift_startinterval_id),
 	interval_id				= interval_id,
 	person_id				= person_id, 
 	scheduled_ready_time_s	= sum(isnull(scheduled_ready_time_s,0)),

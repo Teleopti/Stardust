@@ -150,7 +150,7 @@
           <ConfigurationSetting>
             <Id>Teleopti Analytics</Id>
             <Name>Teleopti Analytics</Name>
-            <Value xsi:type="xsd:string">Provider=SQLNCLI10.1;Data Source=.;Integrated Security=SSPI;Initial Catalog=PBI19854_Demoreg_TeleoptiAnalytics</Value>
+            <Value xsi:type="xsd:string">Provider=SQLNCLI10.1;Data Source=.;Integrated Security=SSPI;Initial Catalog=TeleoptiAnalytics_Demo</Value>
           </ConfigurationSetting>
         </ConnectionMappings>
         <ConnectionProviderMappings>

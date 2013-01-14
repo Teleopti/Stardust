@@ -8,7 +8,7 @@
       <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
       <Value>
         <dds xmlns="">
-          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="380" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="-8885" scrolltop="-7070" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="36221" y="24500" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="1" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
+          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="381" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="19251" scrolltop="56350" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="100" x="26141" y="20532" backcolor="15334399" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="1" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
             <font>
               <ddsxmlobjectstreamwrapper binary="01000000900144420100065461686f6d61" />
             </font>
@@ -1983,7 +1983,7 @@
               <point x="3387" y="12511" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="9119" top="-4193" logicalid="313" controlid="124" masterid="0" hint1="0" hint2="0" width="71779" height="66258" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="9119" top="-5293" logicalid="313" controlid="124" masterid="0" hint1="0" hint2="0" width="71779" height="67358" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -1996,11 +1996,11 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="108" sourceattachpoint="10" destattachpoint="29" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="108" sourceattachpoint="10" destattachpoint="25" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="80598" y="61665" />
-              <point x="43130" y="61665" />
-              <point x="43130" y="-3893" />
-              <point x="9419" y="-3893" />
+              <point x="45009" y="61665" />
+              <point x="45009" y="-4993" />
+              <point x="9419" y="-4993" />
             </connector>
           </ddscontrol>
           <ddscontrol controlprogid="MSDDS.Polyline" left="9119" top="-4193" logicalid="314" controlid="125" masterid="0" hint1="0" hint2="0" width="60655" height="30732" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
@@ -2018,8 +2018,8 @@
             </layoutobject>
             <connector lineroutestyle="MSDDS.Rectilinear" sourceid="106" destid="108" sourceattachpoint="14" destattachpoint="29" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="69474" y="26139" />
-              <point x="37568" y="26139" />
-              <point x="37568" y="-3893" />
+              <point x="39447" y="26139" />
+              <point x="39447" y="-3893" />
               <point x="9419" y="-3893" />
             </connector>
           </ddscontrol>
@@ -2038,12 +2038,12 @@
             </layoutobject>
             <connector lineroutestyle="MSDDS.Rectilinear" sourceid="6" destid="108" sourceattachpoint="14" destattachpoint="31" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="175565" y="48716" />
-              <point x="90614" y="48716" />
-              <point x="90614" y="-3343" />
+              <point x="92492" y="48716" />
+              <point x="92492" y="-3343" />
               <point x="9419" y="-3343" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="9119" top="-3643" logicalid="316" controlid="127" masterid="0" hint1="0" hint2="0" width="69404" height="29441" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="9119" top="-4743" logicalid="316" controlid="127" masterid="0" hint1="0" hint2="0" width="69404" height="30541" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2056,11 +2056,11 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="107" destid="108" sourceattachpoint="14" destattachpoint="31" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="107" destid="108" sourceattachpoint="14" destattachpoint="27" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
               <point x="78223" y="25398" />
-              <point x="41943" y="25398" />
-              <point x="41943" y="-3343" />
-              <point x="9419" y="-3343" />
+              <point x="43821" y="25398" />
+              <point x="43821" y="-4443" />
+              <point x="9419" y="-4443" />
             </connector>
           </ddscontrol>
           <ddscontrol controlprogid="MSDDS.Polyline" left="9430" top="-21949" logicalid="317" controlid="128" masterid="0" hint1="0" hint2="0" width="72188" height="108626" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
@@ -2359,7 +2359,7 @@
               <point x="182410" y="48716" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="52816" logicalid="332" controlid="143" masterid="0" hint1="0" hint2="0" width="98972" height="9249" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="52266" logicalid="332" controlid="143" masterid="0" hint1="0" hint2="0" width="98972" height="10349" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2372,11 +2372,11 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="58" sourceattachpoint="11" destattachpoint="34" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="84038" y="61665" />
-              <point x="133224" y="61665" />
-              <point x="133224" y="53116" />
-              <point x="182410" y="53116" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="58" sourceattachpoint="13" destattachpoint="32" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="84038" y="62215" />
+              <point x="133224" y="62215" />
+              <point x="133224" y="52566" />
+              <point x="182410" y="52566" />
             </connector>
           </ddscontrol>
           <ddscontrol controlprogid="MSDDS.Polyline" left="83579" top="-22070" logicalid="333" controlid="144" masterid="0" hint1="0" hint2="0" width="99131" height="71086" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
@@ -2813,7 +2813,7 @@
               <point x="138774" y="22799" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="21399" logicalid="355" controlid="166" masterid="0" hint1="0" hint2="0" width="55336" height="42866" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="21399" logicalid="355" controlid="166" masterid="0" hint1="0" hint2="0" width="55336" height="43416" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2826,9 +2826,9 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="22" sourceattachpoint="19" destattachpoint="26" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="84038" y="63865" />
-              <point x="111406" y="63865" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="22" sourceattachpoint="21" destattachpoint="26" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="84038" y="64415" />
+              <point x="111406" y="64415" />
               <point x="111406" y="21699" />
               <point x="138774" y="21699" />
             </connector>
@@ -2853,7 +2853,7 @@
               <point x="143219" y="18399" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="21949" logicalid="357" controlid="168" masterid="0" hint1="0" hint2="0" width="55336" height="41766" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="21949" logicalid="357" controlid="168" masterid="0" hint1="0" hint2="0" width="55336" height="42316" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2866,9 +2866,9 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="22" sourceattachpoint="17" destattachpoint="28" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="84038" y="63315" />
-              <point x="111406" y="63315" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="22" sourceattachpoint="19" destattachpoint="28" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="84038" y="63865" />
+              <point x="111406" y="63865" />
               <point x="111406" y="22249" />
               <point x="138774" y="22249" />
             </connector>
@@ -2893,7 +2893,7 @@
               <point x="138774" y="18399" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="32885" logicalid="359" controlid="170" masterid="0" hint1="0" hint2="0" width="40641" height="30280" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="32885" logicalid="359" controlid="170" masterid="0" hint1="0" hint2="0" width="40641" height="30830" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2906,14 +2906,14 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="19" sourceattachpoint="15" destattachpoint="34" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="84038" y="62765" />
-              <point x="104058" y="62765" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="19" sourceattachpoint="17" destattachpoint="34" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="84038" y="63315" />
+              <point x="104058" y="63315" />
               <point x="104058" y="33185" />
               <point x="124079" y="33185" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="32335" logicalid="360" controlid="171" masterid="0" hint1="0" hint2="0" width="40641" height="30280" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="32335" logicalid="360" controlid="171" masterid="0" hint1="0" hint2="0" width="40641" height="30830" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -2926,9 +2926,9 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="19" sourceattachpoint="13" destattachpoint="32" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="84038" y="62215" />
-              <point x="104058" y="62215" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="19" sourceattachpoint="15" destattachpoint="32" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="84038" y="62765" />
+              <point x="104058" y="62765" />
               <point x="104058" y="32635" />
               <point x="124079" y="32635" />
             </connector>
@@ -3013,7 +3013,7 @@
               <point x="159309" y="-3950" />
             </connector>
           </ddscontrol>
-          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="-2050" logicalid="365" controlid="176" masterid="0" hint1="0" hint2="0" width="75871" height="66865" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="-2050" logicalid="365" controlid="176" masterid="0" hint1="0" hint2="0" width="75871" height="67415" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
             <control>
               <ddsxmlobj>
                 <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
@@ -3026,9 +3026,9 @@
                 <property name="VisibleAP" value="0" vartype="3" />
               </ddsxmlobj>
             </layoutobject>
-            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="14" sourceattachpoint="21" destattachpoint="34" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
-              <point x="84038" y="64415" />
-              <point x="121673" y="64415" />
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="14" sourceattachpoint="23" destattachpoint="34" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="84038" y="64965" />
+              <point x="121673" y="64965" />
               <point x="121673" y="-1750" />
               <point x="159309" y="-1750" />
             </connector>
@@ -3293,6 +3293,26 @@
               <point x="111457" y="15699" />
             </connector>
           </ddscontrol>
+          <ddscontrol controlprogid="MSDDS.Polyline" left="83738" top="52816" logicalid="380" controlid="191" masterid="0" hint1="0" hint2="0" width="98972" height="9249" noresize="0" nomove="0" nodefaultattachpoints="1" autodrag="0" usedefaultiddshape="0" selectable="1" showselectionhandles="0" allownudging="1" isannotation="0" dontautolayout="0" groupcollapsed="0" tabstop="1" visible="1" snaptogrid="0">
+            <control>
+              <ddsxmlobj>
+                <polyline endtypedst="6" endtypesrc="3" usercolor="0" linestyle="0" linerender="1" customendtypedstid="0" customendtypesrcid="0" adornsvisible="1" />
+              </ddsxmlobj>
+            </control>
+            <layoutobject>
+              <ddsxmlobj>
+                <property name="LogicalObject" value="dataSet.Relations[fact_schedule_deviation-dim_date]" vartype="8" />
+                <property name="Virtual" value="0" vartype="11" />
+                <property name="VisibleAP" value="0" vartype="3" />
+              </ddsxmlobj>
+            </layoutobject>
+            <connector lineroutestyle="MSDDS.Rectilinear" sourceid="1" destid="58" sourceattachpoint="11" destattachpoint="34" segmenteditmode="0" bendpointeditmode="0" bendpointvisibility="0" relatedid="0" virtual="0">
+              <point x="84038" y="61665" />
+              <point x="133224" y="61665" />
+              <point x="133224" y="53116" />
+              <point x="182410" y="53116" />
+            </connector>
+          </ddscontrol>
         </dds>
       </Value>
     </Annotation>
@@ -3310,11 +3330,11 @@
     </Annotation>
     <Annotation>
       <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortLeft</Name>
-      <Value>-8885</Value>
+      <Value>19251</Value>
     </Annotation>
     <Annotation>
       <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortTop</Name>
-      <Value>-7070</Value>
+      <Value>56350</Value>
     </Annotation>
     <Annotation>
       <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingLeft</Name>
@@ -4011,6 +4031,45 @@
       <Hierarchies>
         <Hierarchy dwd:design-time-name="4cadcaf4-1b13-4caa-bbdb-bd16b875abba">
           <HierarchyID>Hierarchy</HierarchyID>
+        </Hierarchy>
+      </Hierarchies>
+    </Dimension>
+    <Dimension dwd:design-time-name="699fdffc-76ba-4ec6-ae91-23e40a43264d">
+      <ID>Shift Startdate</ID>
+      <Name>Shift Startdate</Name>
+      <DimensionID>Dim Date</DimensionID>
+      <Attributes>
+        <Attribute dwd:design-time-name="f977c668-a7ca-4636-8420-2e114f1106ad">
+          <AttributeID>Dim Date</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="9bd71c29-c848-423a-9ae7-7dbde37da96b">
+          <AttributeID>Year</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="dc8ad0cb-cf9d-417e-abff-5212c15a6dc7">
+          <AttributeID>Year Month</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="e2e1ea37-6014-40a5-bc36-567b600f39a6">
+          <AttributeID>Weekday Name</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="a444ffcb-e7a5-474c-9f44-efc6f0f87779">
+          <AttributeID>Year Week</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="d523e2e4-3b17-4e22-8b3b-79fe2309bdf5">
+          <AttributeID>Weekday Number</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="6f8eeb12-5b80-4e05-acd4-38f85b7ac816">
+          <AttributeID>Quarter</AttributeID>
+        </Attribute>
+        <Attribute dwd:design-time-name="e38faa5e-2b12-4dca-bca0-5993ab98c05b">
+          <AttributeID>Date Date</AttributeID>
+        </Attribute>
+      </Attributes>
+      <Hierarchies>
+        <Hierarchy dwd:design-time-name="a9534f4a-ab78-4697-85c5-8743d7e02cb8">
+          <HierarchyID>Hierarchy</HierarchyID>
+        </Hierarchy>
+        <Hierarchy dwd:design-time-name="ba551fa9-2ed5-41c0-af05-569d8a9e237a">
+          <HierarchyID>Hierarchy 1</HierarchyID>
         </Hierarchy>
       </Hierarchies>
     </Dimension>
@@ -5056,6 +5115,24 @@
                   <Source xsi:type="ColumnBinding" dwd:design-time-name="9cf6ab19-6fe5-4544-9967-ab702ceb4ad4">
                     <TableID>dbo_fact_schedule</TableID>
                     <ColumnID>overtime_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
+        </Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="29e74827-4551-41cd-916a-acd136b14434">
+          <CubeDimensionID>Shift Startdate</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="4a0927e3-ef2c-46c7-a9cf-036ce77f219f">
+              <AttributeID>Dim Date</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="a7b016e0-f9f5-4a73-87ac-420b48012eae">
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="e80fa15b-0c0d-421a-9924-feb4cbedb5f3">
+                    <TableID>dbo_fact_schedule</TableID>
+                    <ColumnID>shift_startdate_id</ColumnID>
                   </Source>
                 </KeyColumn>
               </KeyColumns>
@@ -6203,6 +6280,24 @@
           <IntermediateGranularityAttributeID>Team Name</IntermediateGranularityAttributeID>
           <Materialization>Regular</Materialization>
           <ddl200:ProcessingState>Unprocessed</ddl200:ProcessingState>
+        </Dimension>
+        <Dimension xsi:type="RegularMeasureGroupDimension" dwd:design-time-name="83e67773-a6b7-4fdf-9b50-552541291640">
+          <CubeDimensionID>Shift Startdate</CubeDimensionID>
+          <Attributes>
+            <Attribute dwd:design-time-name="0fdfe45a-972a-45e7-bdc3-b7b8be7f3b6d">
+              <AttributeID>Dim Date</AttributeID>
+              <KeyColumns>
+                <KeyColumn dwd:design-time-name="87392afb-4469-4ac1-aae8-618c056d23dd">
+                  <DataType>Integer</DataType>
+                  <Source xsi:type="ColumnBinding" dwd:design-time-name="6417372e-4b35-4456-9cd4-7628a5c2fb0b">
+                    <TableID>dbo_fact_schedule_deviation</TableID>
+                    <ColumnID>shift_startdate_id</ColumnID>
+                  </Source>
+                </KeyColumn>
+              </KeyColumns>
+              <Type>Granularity</Type>
+            </Attribute>
+          </Attributes>
         </Dimension>
       </Dimensions>
       <Partitions />
@@ -8505,10 +8600,10 @@ The CALCULATE command controls the aggregation of leaf cells in the cube.
 If the CALCULATE command is deleted or modified, the data within the cube is affected.
 You should edit this command only if you manually specify how the cube is aggregated.
 */
-CALCULATE;   
+CALCULATE;    
 CREATE MEMBER CURRENTCUBE.[Measures].[Point Evaluations]
  AS [Measures].[Point Evaluation Raw], 
-VISIBLE = 1;      
+VISIBLE = 1;       
 CREATE MEMBER CURRENTCUBE.[Measures].[Calc Time s]
  AS CASE 
 
@@ -8526,10 +8621,10 @@ ELSE NULL
 
 END, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;   
+VISIBLE = 0;    
 CREATE MEMBER CURRENTCUBE.[Measures].[Grade Evaluations]
  AS [Measures].[Grade Evaluation Raw], 
-VISIBLE = 1;      
+VISIBLE = 1;       
 CREATE MEMBER CURRENTCUBE.[Measures].[Temp Adherence]
  AS CASE 
 
@@ -8547,7 +8642,7 @@ ELSE NULL
 
 END, 
 FORMAT_STRING = "Percent", 
-VISIBLE = 0;      
+VISIBLE = 0;       
 CREATE MEMBER CURRENTCUBE.[Measures].[Adherence]
  AS CASE
 WHEN ([Adherence Calculation].[Adherence Calculation].CurrentMember IS 
@@ -8565,55 +8660,55 @@ THEN "N/A"
 
 END, 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1  ;              CREATE HIDDEN SET CURRENTCUBE.[Date Today]
-AS filter([Date].[Date Year Month].[Date].Members,[Date].[Date Year Month].CurrentMember.Name = Format(Now(),"yyyy-MM-dd 00:00:00"));              CREATE HIDDEN SET CURRENTCUBE.[TodaySet]
-AS exists([Date].[Date Year Month].[Date].Members, [Date Today]).ITEM(0).ITEM(0);              CREATE HIDDEN SET CURRENTCUBE.[Today Weekly]
-AS filter([Date].[Date Year Week].[Date].Members,[Date].[Date Year Week].CurrentMember.Name = Format(Now(),"yyyy-MM-dd 00:00:00"));      
+VISIBLE = 1;               CREATE HIDDEN SET CURRENTCUBE.[Date Today]
+AS filter([Date].[Date Year Month].[Date].Members,[Date].[Date Year Month].CurrentMember.Name = Format(Now(),"yyyy-MM-dd 00:00:00"));               CREATE HIDDEN SET CURRENTCUBE.[TodaySet]
+AS exists([Date].[Date Year Month].[Date].Members, [Date Today]).ITEM(0).ITEM(0);               CREATE HIDDEN SET CURRENTCUBE.[Today Weekly]
+AS filter([Date].[Date Year Week].[Date].Members,[Date].[Date Year Week].CurrentMember.Name = Format(Now(),"yyyy-MM-dd 00:00:00"));       
 CREATE MEMBER CURRENTCUBE.[Measures].[Grade Average Score]
  AS [Measures].[Grade Score]/([Measures].[Grade Evaluation Raw]), 
 FORMAT_STRING = "#,##0.00", 
-VISIBLE = 1;              
+VISIBLE = 1;               
 CREATE MEMBER CURRENTCUBE.[Measures].[Point Average Score]
  AS [Measures].[Point Score]/([Measures].[Point Evaluation Raw]), 
 FORMAT_STRING = "#,##0.00", 
-VISIBLE = 1;   
+VISIBLE = 1;    
 CREATE MEMBER CURRENTCUBE.[Measures].[Percentage Evaluations]
  AS [Measures].[Percentage Evaluation Raw], 
-VISIBLE = 1;         
+VISIBLE = 1;          
 CREATE MEMBER CURRENTCUBE.[Measures].[Percentage Average Score]
  AS [Measures].[Percentage Score]/[Measures].[Percentage Evaluation Raw]/100.0000, 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1;                  
+VISIBLE = 1;                   
 CREATE SET CURRENTCUBE.[Date Yesterday]
- AS [TodaySet].ITEM(0).ITEM(0).Lag(1);              
+ AS [TodaySet].ITEM(0).ITEM(0).Lag(1);               
 CREATE SET CURRENTCUBE.[Date Current Week Until Yesterday]
- AS [Today Weekly].ITEM(0).ITEM(0).Parent.FirstChild : [Today Weekly].ITEM(0).ITEM(0).Lag(1);              
+ AS [Today Weekly].ITEM(0).ITEM(0).Parent.FirstChild : [Today Weekly].ITEM(0).ITEM(0).Lag(1);               
 CREATE SET CURRENTCUBE.[Date Last Week]
- AS [Today Weekly].ITEM(0).ITEM(0).Parent.Lag(1).FirstChild : [Today Weekly].ITEM(0).ITEM(0).Parent.Lag(1).LastChild;              
+ AS [Today Weekly].ITEM(0).ITEM(0).Parent.Lag(1).FirstChild : [Today Weekly].ITEM(0).ITEM(0).Parent.Lag(1).LastChild;               
 CREATE SET CURRENTCUBE.[Date Current Month Until Yesterday]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);              
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);               
 CREATE SET CURRENTCUBE.[Date Last Month]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.Lag(1).FirstChild : [TodaySet].ITEM(0).ITEM(0).Parent.Lag(1).LastChild;              
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.Lag(1).FirstChild : [TodaySet].ITEM(0).ITEM(0).Parent.Lag(1).LastChild;               
 CREATE SET CURRENTCUBE.[Date Current Quarter Until Yesterday]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);              
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);               
 CREATE SET CURRENTCUBE.[Date Last Quarter]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Lag(1).FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Lag(1).LastChild.LastChild;              
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Lag(1).FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Lag(1).LastChild.LastChild;               
 CREATE SET CURRENTCUBE.[Date Current Year Until Yesterday]
- AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Parent.FirstChild.FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);                                   
+ AS [TodaySet].ITEM(0).ITEM(0).Parent.Parent.Parent.FirstChild.FirstChild.FirstChild : [TodaySet].ITEM(0).ITEM(0).Lag(1);                                    
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Preferences Accepted %]
  AS [Measures].[Preferences Accepted]/[Measures].[Preferences Requested], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Preferences Requested] }, 
-VISIBLE = 1;                                   
+VISIBLE = 1;                                    
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Preferences Declined %]
  AS [Measures].[Preferences Declined]/[Measures].[Preferences Requested], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Preferences Requested] }, 
-VISIBLE = 1;                       
+VISIBLE = 1;                        
 CREATE MEMBER CURRENTCUBE.[Measures].[Logged In Time m]
  AS [Measures].[Logged In Time s]/60, 
 FORMAT_STRING = "#,##0.00", 
-VISIBLE = 1;                                                      
+VISIBLE = 1;                                                       
 CREATE MEMBER CURRENTCUBE.[MEASURES].[factor]
  AS CASE 
 WHEN [KPI].[KPI].currentmember.firstchild is [KPI].[KPI].[Resource Key].&amp;[KpiAbsenteeism] OR [KPI].[KPI].currentmember is [KPI].[KPI].[Resource Key].&amp;[KpiAbsenteeism]
@@ -8629,7 +8724,7 @@ WHEN [KPI].[KPI].currentmember.firstchild is [KPI].[KPI].[Resource Key].&amp;[Kp
 THEN -1
 ELSE 1
 END, 
-VISIBLE = 0;                                                     
+VISIBLE = 0;                                                      
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Agents Ready FTE]
  AS CASE 
 WHEN [Interval].[Interval Hour].CurrentMember.Level IS [Interval].[Interval Hour].[Hour] 
@@ -8643,11 +8738,11 @@ THEN [Measures].[Ready Time s]/(1440/[Interval].[Interval Hour].[Interval].COUNT
   
 END, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                                    
+VISIBLE = 1;                                                     
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Ready Time m]
  AS [Measures].[Ready Time s]/60, 
 FORMAT_STRING = "#,##0.00", 
-VISIBLE = 1;                                                       
+VISIBLE = 1;                                                        
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Actual]
  AS CASE 
 
@@ -8687,7 +8782,7 @@ IIF([Measures].[Scheduled Ready Time m]=0,null,[Measures].[Agent Answered Calls]
 
 END, 
 FORMAT_STRING = "#,#", 
-VISIBLE = 1;                                                      
+VISIBLE = 1;                                                       
 CREATE MEMBER CURRENTCUBE.[Measures].[Calc Deviation time s]
  AS CASE 
 
@@ -8705,75 +8800,75 @@ ELSE NULL
 
 END, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;          
+VISIBLE = 0;           
 CREATE MEMBER CURRENTCUBE.[Measures].[Adherence_KPI]
  AS [Measures].[Adherence], 
 FORMAT_STRING = "#,##0.0000", 
-VISIBLE = 0;                                               
+VISIBLE = 0;                                                
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Average Answered Calls per Scheduled Phone Hour]
  AS IIF([Measures].[Scheduled Ready Time m]=0 , null, [Measures].[Agent Answered Calls]/([Measures].[Scheduled Ready Time m]/60)), 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Scheduled Ready Time m] }, 
-VISIBLE = 1;          
+VISIBLE = 1;           
 CREATE MEMBER CURRENTCUBE.[Measures].[Absenteeism_KPI]
  AS IIF( [Measures].[Scheduled Contract Time m]= 0,null,([Measures].[Scheduled Contract Absence Time  m]/[Measures].[Scheduled Contract Time m decimal])), 
 FORMAT_STRING = "#,##0.0000", 
-VISIBLE = 0;        
+VISIBLE = 0;         
 CREATE MEMBER CURRENTCUBE.[Measures].[Scheduled Contract Time m decimal]
  AS [Measures].[Scheduled Contract Time m], 
 FORMAT_STRING = "#,##0.00", 
-VISIBLE = 0;                                                              
+VISIBLE = 0;                                                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Average Talk Time s]
  AS [Measures].[Forecasted Talk Time S]/[Measures].[Forecasted Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Calls] }, 
-VISIBLE = 1;                                                       
+VISIBLE = 1;                                                        
 CREATE MEMBER CURRENTCUBE.[MEASURES].[KPI Actual]
  AS [Actual], 
 FORMAT_STRING = "#", 
-VISIBLE = 1;                                                              
+VISIBLE = 1;                                                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Average Handle Time s]
  AS [Measures].[Forecasted Handle Time s]/[Measures].[Forecasted Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Calls] }, 
-VISIBLE = 1;                   
+VISIBLE = 1;                    
 CREATE MEMBER CURRENTCUBE.[Measures].[Readiness]
  AS [Measures].[Ready Time s]/[Measures].[Logged In Time s], 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1;          
+VISIBLE = 1;           
 CREATE MEMBER CURRENTCUBE.[Measures].[Readiness_KPI]
  AS [Measures].[Ready Time s]/[Measures].[Logged In Time s], 
 FORMAT_STRING = "#,##0.0000", 
-VISIBLE = 0;                   
+VISIBLE = 0;                    
 CREATE MEMBER CURRENTCUBE.[Measures].[Absenteeism]
  AS IIF( [Measures].[Scheduled Contract Time m]= 0,null,([Measures].[Scheduled Contract Absence Time  m]/[Measures].[Scheduled Contract Time m decimal])), 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1;                                                              
+VISIBLE = 1;                                                               
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Average After Call Work s]
  AS [Measures].[Forecasted After Call Work s]/[Measures].[Forecasted Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Calls] }, 
-VISIBLE = 1;                                                             
+VISIBLE = 1;                                                              
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Campaign Average Talk time s]
  AS [Measures].[Forecasted Campaign Talk Time S]/[Measures].[Forecasted Campaign Calls], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Campaign Calls] }, 
-VISIBLE = 0;                                                             
+VISIBLE = 0;                                                              
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Campaign Average After Call Work s ]
  AS [Measures].[Forecasted Campaign After Call Work S]/[Measures].[Forecasted Campaign Calls], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Campaign Calls] }, 
-VISIBLE = 0;                                                             
+VISIBLE = 0;                                                              
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Campaign Average Handle Time s ]
  AS [Measures].[Forecasted Campaign Handling Time S]/[Measures].[Forecasted Campaign Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Campaign Calls] }, 
-VISIBLE = 0;                                                                
+VISIBLE = 0;                                                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Answer Rate]
  AS [Measures].[Answered Calls]/[Measures].[Offered Calls], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Offered Calls] }, 
-VISIBLE = 1;                                                                
+VISIBLE = 1;                                                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Service Level]
  AS /*
 2010-03-16 DJ
@@ -8801,122 +8896,126 @@ ELSE NULL
 
 END, 
 FORMAT_STRING = "Percent", 
-VISIBLE = 1;                                                                
+VISIBLE = 1;                                                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Abandon Rate]
  AS [Measures].[Abandoned Calls]/[Measures].[Offered Calls], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Offered Calls] }, 
-VISIBLE = 1;                                          
+VISIBLE = 1;                                           
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Occupancy]
  AS ([Measures].[Agent Talk Time s]+[Measures].[Agent After Call Work s])/[Measures].[Ready Time s], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Ready Time s] }, 
-VISIBLE = 1;                                                                
+VISIBLE = 1;                                                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[AHT Average Handle Time s]
  AS ([Measures].[Agent Talk Time s]+ [Measures].[Agent After Call Work s])/[Measures].[Agent Answered Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Agent Answered Calls] }, 
-VISIBLE = 1;                                                                
+VISIBLE = 1;                                                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[ASA Average Speed of Answer s]
  AS [Measures].[Speed Of Answer s]/[Measures].[Answered Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Answered Calls] }, 
-VISIBLE = 1;                                                                
+VISIBLE = 1;                                                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Average Time to Abandon s]
  AS [Measures].[Time To Abandon s]/[Measures].[Abandoned Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Abandoned Calls] }, 
-VISIBLE = 1;                                               
+VISIBLE = 1;                                                
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Average After Call Work s]
  AS [Measures].[Agent After Call Work s]/[Measures].[Agent Answered Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Agent Answered Calls] }, 
-VISIBLE = 1;                                                   
+VISIBLE = 1;                                                    
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Time excl Shrinkage h]
  AS [Measures].[Forecasted Time excl Shrinkage m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                             
+VISIBLE = 1;                                              
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Time incl Shrinkage h]
  AS [Measures].[Forecasted Time incl Shrinkage m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                
+VISIBLE = 1;                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Time h]
  AS [Measures].[Scheduled Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;            
+VISIBLE = 1;             
 CREATE MEMBER CURRENTCUBE.[Measures].[Deviation Schedule Ready m]
  AS [Measures].[Deviation Schedule Ready s]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                
+VISIBLE = 1;                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Contract Time h]
  AS [Measures].[Scheduled Contract Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                
+VISIBLE = 1;                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Work Time h]
  AS [Measures].[Scheduled Work Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                
+VISIBLE = 1;                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Contract Absence Time h]
  AS [Measures].[Scheduled Contract Absence Time  m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                
+VISIBLE = 1;                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Over Time h]
  AS [Measures].[Scheduled Over Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                
+VISIBLE = 1;                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Ready Time h]
  AS [Measures].[Scheduled Ready Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;            
+VISIBLE = 1;             
 CREATE MEMBER CURRENTCUBE.[Measures].[Deviation Schedule m]
  AS [Measures].[Deviation Schedule s]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;            
+VISIBLE = 1;             
 CREATE MEMBER CURRENTCUBE.[Measures].[Deviation Contract m]
  AS [Measures].[Deviation Contract s]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                
+VISIBLE = 1; 
+CREATE MEMBER CURRENTCUBE.[Measures].[Actual Ready Time m]
+ AS [Measures].[Ready Time s in Schedule Deviation]/60, 
+FORMAT_STRING = "Standard", 
+VISIBLE = 1  ;                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Paid Time h]
  AS [Measures].[Scheduled Paid Time m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                             
+VISIBLE = 1;                                              
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Time Skill h]
  AS [Measures].[Scheduled Time Skill m]/60, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 1;                                             
+VISIBLE = 1;                                              
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Agents]
  AS [Measures].[Forecasted Time excl Shrinkage m]/15, 
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;                                             
+VISIBLE = 0;                                              
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Scheduled Agents Skill]
  AS [Measures].[Scheduled Time Skill m]/15
 , --beräkning ej klar
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;                                             
+VISIBLE = 0;                                              
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecasted Agents incl Shrinkage]
  AS [Measures].[Forecasted Time incl Shrinkage m]/15
 , --beräkning ej klar
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;                                           
+VISIBLE = 0;                                            
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Schedule vs Forecast Relative Difference]
  AS ([Measures].[Scheduled Time Skill m]-[Measures].[Forecasted Time excl Shrinkage m])/[Measures].[Forecasted Time excl Shrinkage m], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Forecasted Time excl Shrinkage m] }, 
-VISIBLE = 1;                                             
+VISIBLE = 1;                                              
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Schedule vs Forecast Standard Deviation]
  AS STDEVP([Measures].[Relative Difference]), 
 FORMAT_STRING = "Standard", 
-VISIBLE = 0;                                                                
+VISIBLE = 0;                                                                 
 CREATE MEMBER CURRENTCUBE.[MEASURES].[ATT Average Talk Time s]
  AS [Measures].[Agent Talk Time s]/[Measures].[Agent Answered Calls], 
 FORMAT_STRING = "#,##0.00", 
 NON_EMPTY_BEHAVIOR = { [Agent Answered Calls] }, 
-VISIBLE = 1;                                                               
+VISIBLE = 1;                                                                
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecast Accuracy Talk Time]
  AS [Measures].[Forecasted Talk Time S]/[Measures].[Talk Time s], 
 FORMAT_STRING = "Percent", 
 NON_EMPTY_BEHAVIOR = { [Talk Time s] }, 
-VISIBLE = 1;                                                               
+VISIBLE = 1;                                                                
 CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecast Accuracy After Call Work]
  AS [Measures].[Forecasted After Call Work S]/[Measures].[After Call Work s], 
 FORMAT_STRING = "Percent", 
@@ -8925,306 +9024,311 @@ VISIBLE = 1; </Text>
         </Command>
       </Commands>
       <CalculationProperties>
-        <CalculationProperty dwd:design-time-name="85fe6325-bfe8-43c1-9d1f-81fa2896bd9c">
+        <CalculationProperty dwd:design-time-name="23169dd1-2fc2-4961-bd8f-0f69d4dbbae5">
           <CalculationReference>[MEASURES].[Ready Time m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="028660cb-a7f9-4c18-be5d-d1fd4c5ec77c">
+        <CalculationProperty dwd:design-time-name="2960cd5d-d336-4bd1-9c23-cdedf8545632">
           <CalculationReference>[MEASURES].[Forecasted Average Talk Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="a8279821-fb93-459e-ac89-0c15ad339861">
+        <CalculationProperty dwd:design-time-name="9a944492-3a7e-4c53-91ed-a4083faf1ea9">
           <CalculationReference>[MEASURES].[Adherence]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="82c98b95-3c9c-4383-98dc-457dce5808f0">
+        <CalculationProperty dwd:design-time-name="c7167570-e1bf-4820-88d6-c4c4dd7692f7">
           <CalculationReference>[MEASURES].[Average Answered Calls per Scheduled Phone Hour]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="41e2b9ad-d469-49a6-870e-fd5581299008">
+        <CalculationProperty dwd:design-time-name="9bcf1f46-a5e5-47a7-ba5c-8cbf7f21812a">
           <CalculationReference>[MEASURES].[Forecasted Average Handle Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="cada4f89-c4f7-444c-ac3a-f676d6a06085">
+        <CalculationProperty dwd:design-time-name="813f9ab6-1a98-471c-8de3-19222647705a">
           <CalculationReference>[MEASURES].[Forecasted Average After Call Work s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="99aaf5ef-3285-4b04-a880-d663f46ec7eb">
+        <CalculationProperty dwd:design-time-name="1be38a63-aa6d-4931-9a66-38aef2902e36">
           <CalculationReference>[MEASURES].[Forecasted Campaign Average Talk time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="ca6c1d0c-8aaa-4f8d-9e82-9eaa92d41c91">
+        <CalculationProperty dwd:design-time-name="ca8e8ce5-f456-4c89-8cb2-a8c60d422679">
           <CalculationReference>[MEASURES].[Forecasted Campaign Average After Call Work s ]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="d302339d-406f-48f2-b71e-0ca2b088cef5">
+        <CalculationProperty dwd:design-time-name="3cfde4d4-351b-47f7-80aa-380fd1de9203">
           <CalculationReference>[MEASURES].[Forecasted Campaign Average Handle Time s ]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="9b606ca2-0c44-4eb1-8f93-e25ba9dabff3">
+        <CalculationProperty dwd:design-time-name="9b1d7b54-4a4e-4d56-b9ca-3e30d022366a">
           <CalculationReference>[MEASURES].[Answer Rate]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="15266adb-cf99-4388-9f75-8ad661f6706f">
+        <CalculationProperty dwd:design-time-name="9b23d5f8-adca-4aea-b84f-4d96dcd490b1">
           <CalculationReference>[MEASURES].[Absenteeism]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="7b44bd44-0d40-47be-9238-8485b7ab5740">
+        <CalculationProperty dwd:design-time-name="327ce3c8-f767-4453-93f2-2090dac8af39">
           <CalculationReference>[MEASURES].[Service Level]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="44b6a26a-4953-469f-9ffd-26d69b289cde">
+        <CalculationProperty dwd:design-time-name="b623c8a2-ed6b-4d0a-91dc-5472d5b2ba6d">
           <CalculationReference>[MEASURES].[Abandon Rate]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="26419f66-77df-4785-adab-6b086a75439e">
+        <CalculationProperty dwd:design-time-name="63974a22-4e8f-45f9-b935-0b89aea4b5b5">
           <CalculationReference>[MEASURES].[Occupancy]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="a530261a-ea2f-4625-8b14-7d62913455e9">
+        <CalculationProperty dwd:design-time-name="f055cb74-ffd5-4a95-9457-ed99a5f90c94">
           <CalculationReference>[MEASURES].[AHT Average Handle Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="305b9623-ae4f-45a1-89bf-147256e4099b">
+        <CalculationProperty dwd:design-time-name="e61a9cab-deb8-4fd0-955d-6853274484c5">
           <CalculationReference>[MEASURES].[ASA Average Speed of Answer s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="85f42cf6-6e5a-4edc-8d74-3fbca8fe24cd">
+        <CalculationProperty dwd:design-time-name="8aa6b697-82ca-44c2-a201-8a6101f1f180">
           <CalculationReference>[MEASURES].[Average Time to Abandon s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="869ea455-07d1-41a5-9e39-cb4e9c49947e">
+        <CalculationProperty dwd:design-time-name="1f8c4c57-1cb6-42ef-84ff-f7b90bfade4e">
           <CalculationReference>[MEASURES].[Average After Call Work s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="efad830a-0dc0-4d86-bac4-b1d279f57635">
+        <CalculationProperty dwd:design-time-name="a04f8f14-7d95-473d-856f-cbcf92abda1e">
           <CalculationReference>[MEASURES].[Forecasted Time excl Shrinkage h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="2c63df77-93a0-483e-90df-186877e27400">
+        <CalculationProperty dwd:design-time-name="525175a6-4331-4e6f-a99e-ac5f2206522d">
           <CalculationReference>[MEASURES].[Forecasted Time incl Shrinkage h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="e1a474b8-b2ef-46e2-b054-8a89b6d50e70">
+        <CalculationProperty dwd:design-time-name="acd3438f-2f66-4ccc-9e16-f106706d7e83">
           <CalculationReference>[MEASURES].[Scheduled Time Skill h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="9b1f06e6-7d3e-4ca8-bb56-678c0f366b82">
+        <CalculationProperty dwd:design-time-name="0e904c5e-1537-46d6-9b77-0987ac6d0621">
           <CalculationReference>[MEASURES].[Schedule vs Forecast Relative Difference]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="db093b6d-b5bf-4497-89b8-77441fb9a2aa">
+        <CalculationProperty dwd:design-time-name="7df13ef1-caa0-4cc8-806f-949d612feb70">
           <CalculationReference>[MEASURES].[Schedule vs Forecast Standard Deviation]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Forecast Skill</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="2ea6df85-b0f2-465d-a876-1d944191639d">
+        <CalculationProperty dwd:design-time-name="22c01ce8-7564-43b5-b0cb-2075b7089d03">
           <CalculationReference>[MEASURES].[ATT Average Talk Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent Queue</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="7d451f53-f0b6-4c0f-a6d3-51a39201962b">
+        <CalculationProperty dwd:design-time-name="352cafc4-28b4-4199-841a-03aefa5d1131">
           <CalculationReference>[MEASURES].[Forecast Accuracy Talk Time]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="0e506c39-9aa5-46e8-83af-73e2c01de457">
+        <CalculationProperty dwd:design-time-name="0e7cc453-d15f-41f8-89f0-0a7350c10abf">
           <CalculationReference>[MEASURES].[Forecast Accuracy After Call Work]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Forecast Workload</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="ba4a5220-1c2e-49d5-b4c5-701be7358974">
+        <CalculationProperty dwd:design-time-name="f856d67b-3ded-4903-bc19-00e13103b389">
           <CalculationReference>[MEASURES].[Agents Ready FTE]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Vfact Agents Ready</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="c88a0506-63b6-4df4-9c9a-7bdd2f69c7c6">
+        <CalculationProperty dwd:design-time-name="9c9ffeb0-aa62-4719-ad2d-4e07cd079211">
           <CalculationReference>[MEASURES].[Preferences Accepted %]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Preference</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="0628a3d1-dc2d-4482-a78a-8f2dc9fbfca6">
+        <CalculationProperty dwd:design-time-name="4b3d1e37-bed9-4ac1-be7e-e809c02e755a">
           <CalculationReference>[MEASURES].[Preferences Declined %]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Preference</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="588eee0f-85ee-40c5-a177-896441274622">
+        <CalculationProperty dwd:design-time-name="ebea41da-730c-4063-9099-d2c16a519a0b">
           <CalculationReference>[MEASURES].[Scheduled Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="cc3425f0-a7d7-4d4b-9805-1e6911708a99">
+        <CalculationProperty dwd:design-time-name="9a992f8d-313d-4c5e-93ec-0ff13e59e558">
           <CalculationReference>[MEASURES].[Scheduled Contract Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="a59ee6f5-88cb-44ea-8ea9-a86e24789a3d">
+        <CalculationProperty dwd:design-time-name="d0566246-774f-4f5c-9fcd-c7e67796a749">
           <CalculationReference>[MEASURES].[Scheduled Work Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="554e93d4-e698-4d68-a011-e53940927907">
+        <CalculationProperty dwd:design-time-name="64d8309d-f37c-427f-849a-5e0f4299d843">
           <CalculationReference>[MEASURES].[Scheduled Contract Absence Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="bb7be646-f2b2-4879-b696-43bfb4c0797f">
+        <CalculationProperty dwd:design-time-name="d1e954df-0511-408e-940e-9614b46ec6fb">
           <CalculationReference>[MEASURES].[Scheduled Over Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="56dcfb35-78f7-4d5c-a63f-7ed53381ac74">
+        <CalculationProperty dwd:design-time-name="0aacd401-0c42-4498-ae86-581e8a9032aa">
           <CalculationReference>[MEASURES].[Scheduled Ready Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="1b221c1c-66a1-4395-90f0-eee0ec3bff54">
+        <CalculationProperty dwd:design-time-name="f8914bff-142a-4bbc-a978-eedf2c1d48d5">
           <CalculationReference>[MEASURES].[Scheduled Paid Time h]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="1bc3f131-dff6-423b-ad8b-4d9a84fde369">
+        <CalculationProperty dwd:design-time-name="69be3eb8-7251-4e44-978d-e6fb1a33bd95">
           <CalculationReference>[MEASURES].[Adherence1]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="bd39024e-e97f-4cc2-8baf-a67eaf24207d">
+        <CalculationProperty dwd:design-time-name="a9b569cd-8688-4a1d-a466-da995839ac75">
           <CalculationReference>[Measures].[Logged In Time m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="a052197c-bfee-4cb6-a96a-5b4b1fd0d6b8">
+        <CalculationProperty dwd:design-time-name="7a3fcaa6-e068-4a1a-af98-78100a34e1bd">
           <CalculationReference>[Measures].[Adherance %]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="16fee13b-9e88-4db3-af44-f6a83df2aaf5">
+        <CalculationProperty dwd:design-time-name="68ef55cc-95ce-4e00-98f1-c61ab0da3eab">
           <CalculationReference>[Measures].[Absent]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="7aedce4e-5216-4ed2-895c-6eb9e05841b9">
+        <CalculationProperty dwd:design-time-name="2b80e5db-8b49-4271-8c63-9c66a8eaf61b">
           <CalculationReference>[Measures].[Readiness]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="e714e6af-b218-44e2-9273-c07fb1837949">
+        <CalculationProperty dwd:design-time-name="a20abe84-ef6f-4bf1-a9f7-959e893faec2">
           <CalculationReference>[MEASURES].[KPI Actual]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <Description></Description>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="b9b78a0e-f142-48ce-80c6-1f9eb03ba5da">
+        <CalculationProperty dwd:design-time-name="f88900d3-dee7-4ce1-aa2d-4785d7019af8">
           <CalculationReference>[MEASURES].[Actual]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Agent</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="f0708ae7-8e9d-4031-b38b-5f0aad6392bc">
+        <CalculationProperty dwd:design-time-name="8e52e5f2-1881-4929-80c9-bc758b00b816">
           <CalculationReference>[Measures].[Deviation Schedule Ready m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="d8955bb2-f461-4aca-ab39-8af9d0ccaf9c">
+        <CalculationProperty dwd:design-time-name="ff93792a-6c1c-4f1d-85c5-74273d033365">
           <CalculationReference>[Measures].[Deviation Schedule m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="5b2a89fe-8533-4ba8-bee6-b9d52e4fc7ea">
+        <CalculationProperty dwd:design-time-name="f30b43d0-af10-4561-80bb-da0b25315661">
           <CalculationReference>[Measures].[Deviation Contract m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="300bf1f3-c4fc-43fb-abb0-d02837c98bfe">
+        <CalculationProperty dwd:design-time-name="0c7be4c3-afce-4e1a-996d-fd42668a9183">
           <CalculationReference>[Measures].[Scheduled Contract Time m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="34447f37-3174-43b6-92df-f2336fe5d877">
+        <CalculationProperty dwd:design-time-name="645fd02e-27eb-4fc4-98cf-4d3cac2114bc">
           <CalculationReference>[Measures].[Scheduled Ready Time m]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="82636314-0a65-4d5f-aade-675f638deb0c">
+        <CalculationProperty dwd:design-time-name="92df98f0-050a-4530-b343-b8582ea686f4">
           <CalculationReference>[Measures].[Scheduled Contract Time m decimal]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="7b9f7b2c-ffff-47f0-ad60-f24a6d82453d">
+        <CalculationProperty dwd:design-time-name="039c401f-fea2-4c05-92b0-c08b2c64305f">
           <CalculationReference>[Measures].[Calc Time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="e2d1bd29-3c48-40fb-a0ec-b2b84537f392">
+        <CalculationProperty dwd:design-time-name="f88ba94c-7521-4299-b0e7-e1f5c7448ff0">
           <CalculationReference>[Measures].[Calculated Member2]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="70b301b8-1fb4-47cd-88a0-9768a29990a0">
+        <CalculationProperty dwd:design-time-name="2acafaac-6fbe-446a-a3ea-cc8abdec9d08">
           <CalculationReference>[Measures].[Calc New Adherence]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="23a85d39-0957-4d06-9fe4-68f1beb99b56">
+        <CalculationProperty dwd:design-time-name="62a2e55d-4805-4e3e-be7d-b03d3408bd2d">
           <CalculationReference>[Measures].[Calc Deviation time s]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="b6801bcc-5f84-4b01-9058-3dc34c9d84d1">
+        <CalculationProperty dwd:design-time-name="9a1c56d3-2582-4bba-9cc2-813bfe60d78d">
           <CalculationReference>[Measures].[Final Adherence Value]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="22f3b7ad-d0a3-4de1-8fbf-83dd7c77e4f4">
+        <CalculationProperty dwd:design-time-name="ea009c43-2acc-4e83-9756-2339b3d30dc5">
           <CalculationReference>[Measures].[Point Average Score]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="4257499e-768e-4291-bf80-583b0b628397">
+        <CalculationProperty dwd:design-time-name="eee06ecd-51d0-45c4-8b62-fbae78dc84ef">
           <CalculationReference>[Measures].[Grade Average Score]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="35695f8f-3b3c-485a-96d4-06ee398a0cbc">
+        <CalculationProperty dwd:design-time-name="17c6d1bd-b576-4a7c-a153-4e35284e0af3">
           <CalculationReference>[Measures].[Percentage Average Score]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="d3293c8f-4f6b-42a3-849e-3df4f48acbf2">
+        <CalculationProperty dwd:design-time-name="d6141f95-31b9-4399-ba1a-e320abb8e051">
           <CalculationReference>[Measures].[Percentage Evaluations]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="f8150668-9eab-4519-a31c-8a6556581c49">
+        <CalculationProperty dwd:design-time-name="2caa7269-76a0-4fc9-bf80-be4a12572f5c">
           <CalculationReference>[Measures].[Point Evaluations]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
         </CalculationProperty>
-        <CalculationProperty dwd:design-time-name="cee223fa-904b-4f2e-8dfb-3c2829efe6fa">
+        <CalculationProperty dwd:design-time-name="88c4627e-c585-46a9-be5e-7811eb51e590">
           <CalculationReference>[Measures].[Grade Evaluations]</CalculationReference>
           <CalculationType>Member</CalculationType>
           <AssociatedMeasureGroupID>Fact Quality Points</AssociatedMeasureGroupID>
+        </CalculationProperty>
+        <CalculationProperty dwd:design-time-name="4a227d0a-7cb2-4370-92dc-ec8c60d5e75d">
+          <CalculationReference>[Measures].[Actual Ready Time m]</CalculationReference>
+          <CalculationType>Member</CalculationType>
+          <AssociatedMeasureGroupID>Fact Schedule Deviation</AssociatedMeasureGroupID>
         </CalculationProperty>
       </CalculationProperties>
     </MdxScript>
