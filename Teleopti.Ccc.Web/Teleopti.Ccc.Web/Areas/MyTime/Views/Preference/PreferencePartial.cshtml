@@ -77,8 +77,6 @@
 								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
 							</div>
 							<div class="day-content pdt10" data-bind="style: { borderLeftColor: Color() }">
-								@if (day.InPeriod)
-								{
 									<img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
 									<!-- ko if: AjaxError().length > 0 -->
 									<h2 class="error" data-bind="text: AjaxError"></h2>
@@ -162,7 +160,6 @@
 										<span class="displayblock fullwidth" data-bind="text: PersonAssignmentContractTime"></span>
 									</div>
 									<!-- /ko -->
-								}
 								@if (day.InPeriod)
 								{
 									<!-- ko if: Feedback -->
