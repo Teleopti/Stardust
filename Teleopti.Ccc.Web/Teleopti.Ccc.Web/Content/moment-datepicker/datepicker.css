@@ -48,7 +48,14 @@
         top: -6px;
         left: 7px;
     }
-
+.datepicker-right.datepicker:before {
+    left: auto;
+    right: 6px;
+}
+.datepicker-right.datepicker:after {
+    left: auto;
+    right: 7px;
+}
     .datepicker > div {
         display: none;
     }

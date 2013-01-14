@@ -88,10 +88,14 @@
 		this.startViewMode = this.viewMode;
 		this.weekStart = options.weekStart || this.element.data('datepicker-weekstart') || 0;
 		this.weekEnd = this.weekStart === 0 ? 6 : this.weekStart - 1;
+		this.pullRight = options.pullRight;
 		this.fillDow();
 		this.fillMonths();
 		this.updateFromValue();
 		this.showMode();
+		if (this.pullRight) {
+			this.picker.addClass('datepicker-right');
+		}
 		this.refresh();
 	};
 
@@ -153,11 +157,20 @@
 		},
 
 		place: function () {
-			var offset = this.component ? this.component.offset() : this.element.offset();
-			this.picker.css({
-				top: offset.top + this.height,
-				left: offset.left
-			});
+			var sourceItem = this.component ? this.component : this.element;
+			var offset = sourceItem.offset();
+			if (this.pullRight) {
+				this.picker.css({
+					top: offset.top + this.height,
+					left: offset.left + sourceItem[0].offsetWidth - this.picker[0].offsetWidth
+				});
+			}
+			else {
+				this.picker.css({
+					top: offset.top + this.height,
+					left: offset.left
+				});
+			}
 		},
 		lastValue: null,
 		triggerChangeDate: function () {
