@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -23,7 +24,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly ISchedulingOptions _schedulingOptions;
         private readonly ISkillDayPeriodIntervalData _skillDayPeriodIntervalData;
         private readonly IList<DateOnly> _effectiveDays;
-        private readonly IList<DateOnly> _dayOff; 
+        private readonly IList<DateOnly> _dayOff;
+        private IList<DateOnly> _unLockedDays;
 
         public AdvanceSchedulingService(ISkillDayPeriodIntervalData skillDayPeriodIntervalData,
             IDynamicBlockFinder dynamicBlockFinder, 
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _skillDayPeriodIntervalData = skillDayPeriodIntervalData;
             _effectiveDays = new List<DateOnly>();
             _dayOff = new List<DateOnly>();
+            _unLockedDays = new List<DateOnly>();
         }
 
         private DateOnly StartDate()
@@ -52,13 +55,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
             DateOnly startDate = DateOnly.MinValue ;
             if(_matrixList!= null )
             {
+                
                 foreach (var scheduleDayPro in _matrixList[0].EffectivePeriodDays.OrderBy( x => x.Day))
                 {
                     if (startDate == DateOnly.MinValue && scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.DayOff)
                         startDate = scheduleDayPro.Day; 
                     if(scheduleDayPro.DaySchedulePart().SignificantPart() == SchedulePartView.DayOff)
                         _dayOff.Add(scheduleDayPro.Day);
+                    if (_matrixList[0].UnlockedDays.Contains(scheduleDayPro ))
+                        _unLockedDays.Add(scheduleDayPro.Day);
                     _effectiveDays.Add(scheduleDayPro.Day);
+
                 }
             }
             return startDate;
@@ -69,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             dateOnly = dateOnly.AddDays(1);
             while( _dayOff.Contains(dateOnly ))
                dateOnly = dateOnly.AddDays(1);
-            return _effectiveDays.Contains(dateOnly) ? dateOnly : DateOnly.MinValue ;
+            return _effectiveDays.Contains(dateOnly) && _unLockedDays.Contains(dateOnly) ? dateOnly : DateOnly.MinValue;
         }
 
         public bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList)
