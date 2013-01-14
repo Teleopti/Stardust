@@ -110,6 +110,9 @@ SET FolderPath=%~1
 ECHO FolderPath is %FolderPath%
 CD %FolderPath%
 
+::clean up old stuff
+FOR /D %%I IN (*.esent) DO RMDIR "%%I" /S /Q
+
 ::some output
 ECHO Adding file payroll file permissions for %IISPoolUser%
 ECHO.
