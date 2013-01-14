@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public List RequestsList { get; set; }
 
 		private Constraint RequestConstraint = Find.BySelector(".request-item");
-		private DivCollection RequestListItems { get { return Document.Divs.Filter(RequestConstraint); } }
+		public DivCollection RequestListItems { get { return Document.Divs.Filter(RequestConstraint); } }
 		public IEnumerable<Div> Requests { get { return RequestListItems; } }
 		public Div FirstRequest { get { return Document.Div(RequestConstraint).EventualGet(); } }
 		public Div LastRequest { get { return RequestListItems.Last(); } }
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-detail-subject-input")]
 		public TextField RequestDetailSubjectInput { get; set; }
 
-		[FindBy(Id = "Schedule-addRequest-title")]
+		[FindBy(Class = "schedule-request-title")]
 		public Div RequestDetailTitle { get; set; }
 		
 		[FindBy(Id = "Request-detail-fromDate-input")]
@@ -98,5 +98,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Class = "arrow-down")]
 		public Div MoreToLoadArrow { get; set; }
+
+		[FindBy(Id = "Requests-no-requests-found")]
+		public Div NoRequestsFound { get; set; }
 	}
 }

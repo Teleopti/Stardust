@@ -53,7 +53,7 @@ Scenario: No requests
 	Given I am an agent
 	And I have no existing requests
 	When I view requests
-	Then I should see a user-friendly message explaining I dont have anything to view
+	Then I should see a user-friendly message explaining that no requests exists
 
 Scenario: Default sorting
 	Given I am an agent

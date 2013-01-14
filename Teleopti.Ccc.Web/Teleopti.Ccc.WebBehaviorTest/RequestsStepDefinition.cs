@@ -46,7 +46,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Then(@"I should see a requests list")]
-		public void ThenIShouldSeeARequestsList() { EventualAssert.That(() => _page.RequestsList.Exists, Is.True); }
+		public void ThenIShouldSeeARequestsList()
+		{
+			EventualAssert.That(() => _page.RequestListItems.Count(r=>r.IsDisplayed()) > 0, Is.True);
+		}
 
 		[Then(@"I should see my existing text request")]
 		public void ThenIShouldSeeMyExistingTextRequest()
@@ -112,6 +115,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.LastRequest.InnerHtml, Is.StringContaining(data.PersonRequest1.GetSubject(new NoFormatting())));
 		}
 
+		[Then(@"I should see a user-friendly message explaining that no requests exists")]
+		public void ThenIShouldSeeAUser_FriendlyMessageExplainingThatNoRequestsExists()
+		{
+			EventualAssert.That(()=>_page.NoRequestsFound.IsDisplayed(),Is.True);
+		}
+
 		[Then(@"I should see an indication that there are more requests")]
 		public void ThenIShouldSeeAnIndicationThatThereAreMoreRequests()
 		{
@@ -123,7 +132,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => _page.RequestDetailSection.IsDisplayed(),Is.True, "The detailsection should be visible");
 			EventualAssert.That(()=>_page.RequestDetailSubjectInput.Text, Is.EqualTo(subject),"The title should indicate that we are viewing a shifttrade-request");
-			EventualAssert.That(() => _page.RequestDetailTitle.InnerHtml, Is.StringContaining(Resources.ShiftTradeRequest), "The subject should indicate that we are viewing that specific request");
 		}
 
 		[Then(@"I should not see an indication that there are more requests")]
