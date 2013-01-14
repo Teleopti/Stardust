@@ -15,6 +15,7 @@ require.config({
 		hasher: '../../../../Content/hasher/hasher',
 		swipeListener: '../../../../Content/jquery-plugin/jquery.swipeListener',
 		momentDatepicker: '../../../../Content/moment-datepicker/moment-datepicker',
+		momentLanguages: '../../../../Content/moment/moment.all.min',
 		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko',
 		
 		noext: '../../../../Content/require/noext',
@@ -34,7 +35,8 @@ require.config({
 		'bootstrap': ['jquery'],
 		'signalr': ['jquery'],
 		'signalrHubs': ['signalr'],
-		'momentDatepicker': ['moment'],
+		'momentLanguages': ['moment'],
+		'momentDatepicker': ['momentLanguages'],
 		'momentDatepickerKo': ['momentDatepicker'],
 		'swipeListener': ['jquery']
 	}

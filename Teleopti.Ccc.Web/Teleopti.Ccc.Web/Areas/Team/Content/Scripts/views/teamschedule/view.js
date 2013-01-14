@@ -36,6 +36,7 @@ define([
 					date = moment(date, 'YYYYMMDD');
 				}
 
+				setMomentLangWithFallback(translations.LanguageCode);
 				var timeLine = new timeLineViewModel(translations.ShortTimePattern);
 				var teamSchedule = new teamScheduleViewModel(timeLine, date);
 
@@ -66,7 +67,7 @@ define([
 						for (var i = 0; i < schedules.length; i++) {
 							for (var j = 0; j < agents.length; j++) {
 								if (agents[j].Id == schedules[i].Id) {
-									agents[j].AddLayers(schedules[i].Projection,dateClone);
+									agents[j].AddLayers(schedules[i].Projection, dateClone);
 									agents[j].AddContractTime(schedules[i].ContractTimeMinutes);
 									agents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
 									break;
@@ -163,7 +164,7 @@ define([
 						ko.applyBindings({
 							TeamSchedule: teamSchedule,
 							Translations: translations
-						},$('body > section')[0]);
+						}, $('body > section')[0]);
 					})
 					.fail(function (error) {
 						$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
@@ -186,6 +187,20 @@ define([
 						teamScheduleContainer.offset({ left: -movementX });
 					}
 				});
+
+				function setMomentLangWithFallback(ietfLanguageTag) {
+					var baseLang = 'en'; //Base
+					var languages = [ietfLanguageTag, ietfLanguageTag.split('-')[0], baseLang];
+
+					for (var i = 0; i < languages.length; i++) {
+						try {
+							moment.lang(languages[i]);
+						} catch(e) {
+							continue;
+						} 
+						if (moment.lang() == languages[i]) return;
+					}
+				}
 			}
 		};
 	});
