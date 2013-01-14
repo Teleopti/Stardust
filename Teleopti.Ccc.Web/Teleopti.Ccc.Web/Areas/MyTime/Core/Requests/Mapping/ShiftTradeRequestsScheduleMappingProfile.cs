@@ -31,37 +31,35 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ConvertUsing(s =>
 								{
 									var myScheduledDay = _shiftTradeRequestProvider.Invoke().RetrieveMyScheduledDay(s);
-									MinMax<DateTime> layersTimeRange;
+
+									DateTimePeriod timeRangeTot;
+
 									var myScheduleLayersViewModel = CreateShiftTradeLayers(_projectionProvider.Invoke().Projection(myScheduledDay), 
 									                                                   myScheduledDay.Person.PermissionInformation.DefaultTimeZone(),
-									                                                   out layersTimeRange);
-									var timeLineStart = layersTimeRange.Minimum;
-									var timeLineEnd = layersTimeRange.Maximum;
+																					   out timeRangeTot);
 
 									var possibleTradePersonsSchedule = _shiftTradeRequestProvider.Invoke().RetrievePossibleTradePersonsScheduleDay(s);
 
 									var possibleTradePersonsViewModel = new List<ShiftTradePersonViewModel>();
 									foreach (IScheduleDay scheduleDay in possibleTradePersonsSchedule)
 									{
+										DateTimePeriod timeRangeTemp;
 										possibleTradePersonsViewModel.Add(new ShiftTradePersonViewModel
 										{
 											Name = scheduleDay.Person.Name.ToString(),
 											ScheduleLayers = CreateShiftTradeLayers(_projectionProvider.Invoke().Projection(scheduleDay),
 																	scheduleDay.Person.PermissionInformation.DefaultTimeZone(),
-																	out layersTimeRange)
+																	out timeRangeTemp)
 										});
-										if (layersTimeRange.Minimum < timeLineStart)
-											timeLineStart = layersTimeRange.Minimum;
-										if (layersTimeRange.Maximum > timeLineEnd)
-											timeLineEnd = layersTimeRange.Maximum;
+										timeRangeTot = timeRangeTot.MaximumPeriod(timeRangeTemp);
 									}
 
 									IEnumerable<ShiftTradeTimeLineHoursViewModel> timeLineHours;
 									int timeLineLengthInMinutes = 0;
 									if (myScheduleLayersViewModel.Any() || possibleTradePersonsViewModel.Any())
 									{
-										timeLineStart = timeLineStart.AddMinutes(-15);
-										timeLineEnd = timeLineEnd.AddMinutes(15);
+										var timeLineStart = timeRangeTot.StartDateTime.AddMinutes(-15);
+										var timeLineEnd = timeRangeTot.EndDateTime.AddMinutes(15);
 										timeLineHours = CreateTimeLineHours(timeLineStart, timeLineEnd,
 										                                    myScheduledDay.Person.PermissionInformation.DefaultTimeZone(),
 										                                    myScheduledDay.Person.PermissionInformation.Culture());
@@ -140,16 +138,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return output;
 		}
 
-		private static IEnumerable<ShiftTradeScheduleLayerViewModel> CreateShiftTradeLayers(IEnumerable<IVisualLayer> layers, TimeZoneInfo timeZone, out MinMax<DateTime> layersTimeRange)
+		private static IEnumerable<ShiftTradeScheduleLayerViewModel> CreateShiftTradeLayers(IEnumerable<IVisualLayer> layers, TimeZoneInfo timeZone, out DateTimePeriod layersTimeRange)
 		{
 			if (layers == null || !layers.Any())
 			{
-				layersTimeRange = new MinMax<DateTime>();
+				layersTimeRange = new DateTimePeriod();
 				return new ShiftTradeScheduleLayerViewModel[] { };
 			}
 
 			DateTime shiftStartTime = layers.Min(o => o.Period.StartDateTime);
-			layersTimeRange = new MinMax<DateTime>(shiftStartTime, layers.Max(o => o.Period.EndDateTime));
+			layersTimeRange = new DateTimePeriod(shiftStartTime, layers.Max(o => o.Period.EndDateTime));
 
 			var scheduleLayers = (from visualLayer in layers
 								  let startDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.StartDateTime, timeZone)
