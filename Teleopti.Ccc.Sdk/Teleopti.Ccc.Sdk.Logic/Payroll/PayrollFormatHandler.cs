@@ -12,13 +12,13 @@ namespace Teleopti.Ccc.Sdk.Logic.Payroll
     public class PayrollFormatHandler
     {
         private readonly string _path;
-        private const string _esentPath = "one_way.esent";
+        private const string _payrollPath = "Teleopti.Payroll";
         private const string _fileName = "internal.storage.xml";
         private readonly string _filePath;
 
         public PayrollFormatHandler(string path)
         {
-            _path = string.Format(CultureInfo.InvariantCulture, @"{0}\{1}", path, _esentPath);
+            _path = string.Format(CultureInfo.InvariantCulture, @"{0}\{1}", path, _payrollPath);
             _filePath = string.Format(CultureInfo.InvariantCulture, @"{0}\{1}", _path, _fileName);
         }
 
