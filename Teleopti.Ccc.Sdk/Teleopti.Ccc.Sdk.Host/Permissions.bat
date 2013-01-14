@@ -5,4 +5,4 @@ SET IISVersion=%~3
 SET SVCLOGIN=%~4
 
 SET ROOTDIR=%~dp0
-CALL "%ROOTDIR%EsentPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%IISVersion%" "%SVCLOGIN%" >"%ROOTDIR%EsentPermissions.log"
+CALL "%ROOTDIR%PermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%IISVersion%" "%SVCLOGIN%" >"%ROOTDIR%Permissions.log"
