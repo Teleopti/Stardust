@@ -106,6 +106,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		var self = this;
 
 		self.layers = layers;
+		
 	}
 
 	function layerViewModel(layer, parentViewModel) {

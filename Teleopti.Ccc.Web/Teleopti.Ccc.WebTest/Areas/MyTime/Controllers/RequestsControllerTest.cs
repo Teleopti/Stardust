@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetShiftTradeSchedule()
+		public void ShouldGetLayersForMySchedule()
 		{
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var layer = new ShiftTradeScheduleLayerViewModel
@@ -176,18 +176,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			            		ElapsedMinutesSinceShiftStart = 30
 			            	};
 			var model = new ShiftTradeRequestsScheduleViewModel
-			            	{
-			            		MyScheduleLayers = new List<ShiftTradeScheduleLayerViewModel>{ layer }
-			            	};
+							{
+								MySchedule = new ShiftTradeMyScheduleViewModel { ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel> { layer } }
+							};
 
 			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<DateTime>.Is.Anything)).Return(model);
 
 			var target = new RequestsController(modelFactory, null, null);
 			
 			var result = target.ShiftTradeRequestSchedule(DateTime.Now);
-			var data = (ShiftTradeRequestsScheduleViewModel) result.Data;
+			var scheduleViewModel = (ShiftTradeRequestsScheduleViewModel) result.Data;
 
-			var createdLayer = data.MyScheduleLayers.FirstOrDefault();
+			var createdLayer = scheduleViewModel.MySchedule.ScheduleLayers.FirstOrDefault();
 			createdLayer.Payload.Should().Be.EqualTo(layer.Payload);
 			createdLayer.Color.Should().Be.EqualTo(layer.Color);
 			createdLayer.StartTimeText.Should().Be.EqualTo(layer.StartTimeText);
