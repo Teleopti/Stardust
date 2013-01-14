@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanSetStartTime()
         {
-            _view.SetEndDate(new DateOnly(2009, 10, 15));
+			_view.SetEndDate(new DateOnly(2009, 10, 14));
             _mocks.ReplayAll();
             _target.SetStartTime(TimeSpan.FromHours(22));
             Assert.AreEqual(TimeSpan.FromHours(22), _model.StartTime);
@@ -178,15 +178,15 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanSetStartTimeAndEndTimeToTheSame()
         {
-            _view.SetEndDate(new DateOnly(2009, 10, 15));
-            _view.SetEndDate(new DateOnly(2009, 10, 15));
+            _view.SetEndDate(new DateOnly(2009, 10, 14));
+            _view.SetEndDate(new DateOnly(2009, 10, 14));
             _mocks.ReplayAll();
             _target.SetStartTime(TimeSpan.FromHours(22));
             _target.SetEndTime(TimeSpan.FromHours(22));
             Assert.AreEqual(TimeSpan.FromHours(22), _model.StartTime);
             Assert.AreEqual(TimeSpan.FromHours(22), _model.EndTime);
             Assert.AreEqual(new DateOnly(2009, 10, 14),_model.StartDate);
-            Assert.AreEqual(new DateOnly(2009, 10, 15), _model.EndDate);
+            Assert.AreEqual(new DateOnly(2009, 10, 14), _model.EndDate);
             Assert.AreEqual(TimeSpan.FromDays(1),_model.Meeting.MeetingDuration());
             _mocks.VerifyAll();
         }
@@ -195,14 +195,14 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public void VerifyCanSetStartTimeAndEndTimeToZero()
         {
             _view.SetEndDate(new DateOnly(2009, 10, 14));
-            _view.SetEndDate(new DateOnly(2009, 10, 15));
+            _view.SetEndDate(new DateOnly(2009, 10, 14));
             _mocks.ReplayAll();
             _target.SetStartTime(TimeSpan.FromHours(0));
             _target.SetEndTime(TimeSpan.FromHours(0));
             Assert.AreEqual(TimeSpan.FromHours(0), _model.StartTime);
             Assert.AreEqual(TimeSpan.FromHours(0), _model.EndTime);
             Assert.AreEqual(new DateOnly(2009, 10, 14), _model.StartDate);
-            Assert.AreEqual(new DateOnly(2009, 10, 15), _model.EndDate);
+            Assert.AreEqual(new DateOnly(2009, 10, 14), _model.EndDate);
             Assert.AreEqual(TimeSpan.FromDays(1), _model.Meeting.MeetingDuration());
             _mocks.VerifyAll();
         }
@@ -210,15 +210,15 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanSetEndTimeAndStartTimeToZero()
         {
-            _view.SetEndDate(new DateOnly(2009, 10, 15));
-            _view.SetEndDate(new DateOnly(2009, 10, 15));
+            _view.SetEndDate(new DateOnly(2009, 10, 14));
+            _view.SetEndDate(new DateOnly(2009, 10, 14));
             _mocks.ReplayAll();
             _target.SetEndTime(TimeSpan.FromHours(0));
             _target.SetStartTime(TimeSpan.FromHours(0));
             Assert.AreEqual(TimeSpan.FromHours(0), _model.StartTime);
             Assert.AreEqual(TimeSpan.FromHours(0), _model.EndTime);
             Assert.AreEqual(new DateOnly(2009, 10, 14), _model.StartDate);
-            Assert.AreEqual(new DateOnly(2009, 10, 15), _model.EndDate);
+            Assert.AreEqual(new DateOnly(2009, 10, 14), _model.EndDate);
             Assert.AreEqual(TimeSpan.FromDays(1), _model.Meeting.MeetingDuration());
             _mocks.VerifyAll();
         }

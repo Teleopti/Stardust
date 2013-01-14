@@ -202,6 +202,18 @@ namespace Teleopti.Ccc.WinCode.Meetings
             return true;
         }
 
+		public void InvalidTimeInfo()
+		{
+			var messageTobeDisplayed = UserTexts.Resources.EndTimeMustBeGreaterOrEqualToStartTime;
+
+			if (!string.IsNullOrEmpty(messageTobeDisplayed))
+			{
+				_view.ShowErrorMessage(
+					messageTobeDisplayed,
+					UserTexts.Resources.InvalidRequest);
+			}
+		}
+
         protected IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
         protected IRepositoryFactory RepositoryFactory { get; set; }
 
