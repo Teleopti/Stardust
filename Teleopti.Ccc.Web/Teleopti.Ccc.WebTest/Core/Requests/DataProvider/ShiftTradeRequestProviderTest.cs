@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 																					DateTime.SpecifyKind(date.Date, DateTimeKind.Utc))));
 			IScheduleDay scheduleDay = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, personList[0], date);
 
-			possibleTradePersonProvider.Stub(x => x.RetrievePersons()).Return(personList);
+			possibleTradePersonProvider.Stub(x => x.RetrievePersons(date)).Return(personList);
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(date, personList)).Return(new[] { scheduleDay });
 
 			

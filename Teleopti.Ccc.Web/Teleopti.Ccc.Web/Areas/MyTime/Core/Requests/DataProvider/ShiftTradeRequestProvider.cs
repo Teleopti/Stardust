@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		public IEnumerable<IScheduleDay> RetrievePossibleTradePersonsScheduleDay(DateOnly date)
 		{
-			return _scheduleProvider.GetScheduleForPersons(date, _possibleShiftTradePersonsProvider.RetrievePersons());
+			return _scheduleProvider.GetScheduleForPersons(date, _possibleShiftTradePersonsProvider.RetrievePersons(date));
 		}
 	}
 }

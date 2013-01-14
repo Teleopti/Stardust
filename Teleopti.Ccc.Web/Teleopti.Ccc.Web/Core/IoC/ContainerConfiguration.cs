@@ -53,6 +53,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new RuleSetModule(mbCacheModule, false));
 			builder.RegisterModule(new AuthenticationCachedModule(mbCacheModule));
 
+			builder.RegisterModule<ShiftTradeModule>();
+
 			return builder.Build();
 		}
 

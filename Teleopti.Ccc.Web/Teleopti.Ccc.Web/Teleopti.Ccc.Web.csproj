@@ -158,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeMyScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradePersonViewModel.cs" />
