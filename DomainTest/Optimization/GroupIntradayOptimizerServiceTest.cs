@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay);
 				Expect.Call(() => _optimizer.LockDate(date));
 				Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
+                Expect.Call(_optimizer.PeriodValue(new DateOnly())).IgnoreArguments().Return(0.5).Repeat.AtLeastOnce();
 				Expect.Call(_groupIntradayOptimizerExecuter.Execute(new List<IScheduleDay> {_scheduleDay},
 				                                                    new List<IScheduleDay> {_scheduleDay}, _allMatrixes,
 				                                                    _optimizationOverLimitByRestrictionDecider)).Return(
@@ -108,6 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.Twice();
 				Expect.Call(_scheduleDay.Clone()).Return(_scheduleDay).Repeat.Twice();
 				Expect.Call(_optimizer.OptimizationOverLimitByRestrictionDecider).Return(_optimizationOverLimitByRestrictionDecider);
+                Expect.Call(_optimizer.PeriodValue(new DateOnly())).IgnoreArguments().Return(0.5).Repeat.AtLeastOnce();
 				Expect.Call(_groupIntradayOptimizerExecuter.Execute(new List<IScheduleDay> {_scheduleDay},
 				                                                    new List<IScheduleDay> {_scheduleDay}, _allMatrixes,
 				                                                    _optimizationOverLimitByRestrictionDecider)).IgnoreArguments().

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             bool useMinPersonnel = _advancedPreferences.UseMinimumStaffing;
             bool useMaxPersonnel = _advancedPreferences.UseMaximumStaffing;
 
-            return SkillStaffPeriodsRelativeDifferenceHours(personsSkillStaffPeriods, useMinPersonnel, useMaxPersonnel);
+            return SkillStaffPeriodsRelativeDifference(personsSkillStaffPeriods, useMinPersonnel, useMaxPersonnel);
         }
 
         //todo: move to extractor methods
@@ -103,15 +103,15 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// that <see cref="ISkillStaffPeriod"/> list as parameter.
         /// todo: move to extractor methods
         /// </remarks>
-        public static IList<double> SkillStaffPeriodsRelativeDifferenceHours(IEnumerable<ISkillStaffPeriod> skillStaffPeriods, bool considerMinStaffing, bool considerMaxStaffing)
+        public static IList<double> SkillStaffPeriodsRelativeDifference(IEnumerable<ISkillStaffPeriod> skillStaffPeriods, bool considerMinStaffing, bool considerMaxStaffing)
         {
             if (considerMinStaffing && considerMaxStaffing)
-                return skillStaffPeriods.Select(s => s.RelativeDifferenceBoosted() * s.Period.ElapsedTime().TotalHours).ToList();
+                return skillStaffPeriods.Select(s => s.RelativeDifferenceBoosted()).ToList();
             if (considerMinStaffing)
-                return skillStaffPeriods.Select(s => s.RelativeDifferenceMinStaffBoosted() * s.Period.ElapsedTime().TotalHours).ToList();
+                return skillStaffPeriods.Select(s => s.RelativeDifferenceMinStaffBoosted() ).ToList();
             if (considerMaxStaffing)
-                return skillStaffPeriods.Select(s => s.RelativeDifferenceMaxStaffBoosted() * s.Period.ElapsedTime().TotalHours).ToList();
-            return skillStaffPeriods.Select(s => s.RelativeDifference * s.Period.ElapsedTime().TotalHours).ToList();
+                return skillStaffPeriods.Select(s => s.RelativeDifferenceMaxStaffBoosted()).ToList();
+            return skillStaffPeriods.Select(s => s.RelativeDifference).ToList();
         }
 
         //todo: move to extractor methods

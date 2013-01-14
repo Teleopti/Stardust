@@ -27,8 +27,8 @@ namespace Teleopti.Analytics.Portal
 			// Original fix credit to Stefan Mohr
 			// Bug fix for MS SSRS Blank.gif 500 server error missing parameter IterationId
 			// https://connect.microsoft.com/VisualStudio/feedback/details/556989/
-			if (HttpContext.Current.Request.Url.PathAndQuery.StartsWith("/Reserved.ReportViewerWebControl.axd",StringComparison.OrdinalIgnoreCase) &&
-				!HttpContext.Current.Request.Url.ToString().ToUpperInvariant().Contains("ITERATION") &&
+			if (HttpContext.Current.Request.Url.PathAndQuery.Contains("/Reserved.ReportViewerWebControl.axd") &&
+				!HttpContext.Current.Request.Url.ToString().ToUpperInvariant().Contains("ITERATIONID") &&
 				!String.IsNullOrEmpty(HttpContext.Current.Request.QueryString["ResourceStreamID"]) &&
 				HttpContext.Current.Request.QueryString["ResourceStreamID"].ToUpperInvariant().Equals("BLANK.GIF"))
 			{
