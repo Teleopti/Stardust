@@ -4,6 +4,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 	{
 		public string HourText { get; set; }
 		public int LengthInMinutesToDisplay { get; set; }
-		public int ElapsedMinutesSinceTimeLineStart { get; set; }
 	}
 }

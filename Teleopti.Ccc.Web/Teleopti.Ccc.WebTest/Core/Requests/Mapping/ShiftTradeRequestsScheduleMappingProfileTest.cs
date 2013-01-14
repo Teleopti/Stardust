@@ -40,6 +40,37 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
+		public void ShouldHaveMinutesSinceTimeLineStartSetOnSingleSchedule()
+		{
+			var startDate = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var scheduleDay = _scheduleFactory.ScheduleDayStub(startDate, _person);
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(new DateOnly(startDate))).Return(scheduleDay);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything)).Return(new List<IScheduleDay>());
+			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new[]
+		                                                {
+		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(startDate, startDate.AddHours(3)))
+		                                                }));
+			var result = Mapper.Map<DateOnly, ShiftTradeRequestsScheduleViewModel>(new DateOnly(startDate));
+			result.MySchedule.MinutesSinceTimeLineStart.Should().Be.EqualTo(15);
+		}
+
+		[Test]
+		public void ShouldHaveZeroMinutesSinceTimeLineStartWhenIhaveNoSchedule()
+		{
+			var day = _scheduleFactory.ScheduleDayStub();
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(Arg<DateOnly>.Is.Anything)).Return(day);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything)).Return(new List<IScheduleDay>());
+
+			_projectionProvider.Stub(p => p.Projection(day)).Return(_scheduleFactory.ProjectionStub());
+
+			var result = Mapper.Map<DateOnly, ShiftTradeRequestsScheduleViewModel>(DateOnly.Today);
+
+			result.MySchedule.MinutesSinceTimeLineStart.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldMapMyScheduledDayStartTime()
 		{
 			var startDate = new DateTime(2000, 1, 1, 8, 15, 0, DateTimeKind.Utc);
@@ -202,19 +233,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			result.TimeLineHours.First().HourText.Should().Be.EqualTo(string.Empty);
 			result.TimeLineHours.First().LengthInMinutesToDisplay.Should().Be.EqualTo(10);
-			result.TimeLineHours.First().ElapsedMinutesSinceTimeLineStart.Should().Be.EqualTo(10);
 
 			result.TimeLineHours.ElementAt(1).HourText.Should().Be.EqualTo("12");
 			result.TimeLineHours.ElementAt(1).LengthInMinutesToDisplay.Should().Be.EqualTo(60);
-			result.TimeLineHours.ElementAt(1).ElapsedMinutesSinceTimeLineStart.Should().Be.EqualTo(70);
 
 			result.TimeLineHours.ElementAt(4).HourText.Should().Be.EqualTo("15");
 			result.TimeLineHours.ElementAt(4).LengthInMinutesToDisplay.Should().Be.EqualTo(60);
-			result.TimeLineHours.ElementAt(4).ElapsedMinutesSinceTimeLineStart.Should().Be.EqualTo(250);
 
 			result.TimeLineHours.Last().HourText.Should().Be.EqualTo("16");
 			result.TimeLineHours.Last().LengthInMinutesToDisplay.Should().Be.EqualTo(55);
-			result.TimeLineHours.Last().ElapsedMinutesSinceTimeLineStart.Should().Be.EqualTo(305);
 
 			double expectedValue = possibleTradePersonLayerPeriod.EndDateTime.AddMinutes(15).Subtract(
 											myScheduleLayerPeriod.StartDateTime.AddMinutes(-15)).TotalMinutes;
