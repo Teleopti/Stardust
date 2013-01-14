@@ -47,7 +47,6 @@ CREATE TABLE #fact_schedule_deviation(
 	shift_endinterval_id smallint,
 	person_id int,
 	scheduled_ready_time_s int default 0,
-	scheduled_time_s int default 0,
 	ready_time_s int default 0,
 	is_logged_in int default 0, 
 	contract_time_s int default 0,
@@ -180,7 +179,6 @@ INSERT INTO #fact_schedule_deviation
 	person_id,
 	is_logged_in, 
 	scheduled_ready_time_s,
-	scheduled_time_s,
 	contract_time_s,
 	business_unit_id
 	)
@@ -193,7 +191,6 @@ SELECT
 	person_id				= fs.person_id,
 	is_logged_in			= 0, --Mark schedule rows as Not loggged in 
 	scheduled_ready_time_s	= fs.scheduled_ready_time_m*60,
-	scheduled_time_s		= fs.scheduled_time_m*60,
 	contract_time_s			= fs.scheduled_contract_time_m*60,
 	business_unit_id		= fs.business_unit_id
 FROM 
@@ -256,7 +253,6 @@ INSERT INTO mart.fact_schedule_deviation
 	interval_id,
 	person_id, 
 	scheduled_ready_time_s,
-	scheduled_time_s,
 	ready_time_s,
 	is_logged_in,
 	contract_time_s,
@@ -272,7 +268,6 @@ SELECT
 	interval_id				= interval_id,
 	person_id				= person_id, 
 	scheduled_ready_time_s	= sum(isnull(scheduled_ready_time_s,0)),
-	scheduled_time_s		= sum(isnull(scheduled_time_s,0)),
 	ready_time_s			= sum(isnull(ready_time_s,0)),
 	is_logged_in			= sum(is_logged_in), --Calculated bit value
 	contract_time_s			= sum(isnull(contract_time_s,0)),
