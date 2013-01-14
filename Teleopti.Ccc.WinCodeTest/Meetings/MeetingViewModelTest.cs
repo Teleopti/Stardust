@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public void VerifyDateAndTimeForMeeting()
         {
             Assert.AreEqual(_meeting.StartDate,_target.StartDate);
-			Assert.AreEqual(_meeting.StartDate.AddDays(1), _target.EndDate);
+			Assert.AreEqual(_meeting.StartDate, _target.EndDate);
             Assert.AreEqual(_meeting.EndDate, _target.RecurringEndDate);
             Assert.AreEqual(TimeSpan.FromHours(1), _target.EndTime);
             Assert.AreEqual(_meeting.StartTime, _target.StartTime);
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _target.StartDate = _meeting.StartDate.AddDays(1);
             Assert.IsTrue(_propertyChanged);
             Assert.AreEqual(_target.Meeting.StartDate, _target.StartDate);
-			Assert.AreEqual(_target.Meeting.StartDate.AddDays(1), _target.EndDate);
+			Assert.AreEqual(_target.Meeting.StartDate, _target.EndDate);
             _propertyChanged = false;
 
             _target.RecurringEndDate = _target.Meeting.EndDate.AddDays(2);
