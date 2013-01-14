@@ -318,7 +318,17 @@ namespace Teleopti.Ccc.Win.Meetings
             set { office2007OutlookTimePickerEndSpan.SelectedValue = value; }
         }
 
-        public void SetCurrentDate(DateOnly currentDate)
+    	public string GetStartTimeText
+    	{
+			get { return outlookTimePickerStartTime.Text; }
+    	}
+
+    	public string GetEndTimeText
+    	{
+			get { return outlookTimePickerEndTime.Text; }
+    	}
+
+    	public void SetCurrentDate(DateOnly currentDate)
         {
             monthCalendarAdvDateSelection.Value = currentDate;
         }
