@@ -133,7 +133,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			try
 			{
-				var configFolder = GetPayrollPath();
+				var configFolder = Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll.DeployNew\\");
+				if (!Directory.Exists(configFolder))
+					Directory.CreateDirectory(configFolder);
 				_watcher = new FileSystemWatcher(configFolder, @"*Payroll*.dll");
 				_watcher.NotifyFilter = NotifyFilters.LastWrite;
 				_watcher.Created += OnChanged;
@@ -172,8 +174,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			try
 			{
 				var destination = new SearchPath().Path;
-				var source = Directory.GetParent(Directory.GetParent(e.FullPath).ToString()).ToString();
-				CopyFiles(source, destination);
+				var source = Directory.GetParent(e.FullPath);
+				while (source.Name != "Payroll.DeployNew")
+					source = Directory.GetParent(source.ToString());
+
+				CopyFiles(source.ToString(), destination);
 			}
 
 			catch (Exception exception)
@@ -205,8 +210,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					totalSleepTime += 20;
 					if (totalSleepTime == 500) break;
 				}
-				
-				if (totalSleepTime == 25) continue;
+				// if file is still locked, we skip it
+				if (totalSleepTime == 500) continue;
 				File.Copy(file, Path.GetFullPath(destination + "\\" + Path.GetFileName(file)), true);
 
 				_copiedFiles.Add(fileInfo.FullName, fileInfo.LastAccessTimeUtc);
@@ -264,21 +269,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					stream.Close();
 			}
 			return false;
-		}
-
-		private static string GetPayrollPath()
-		{
-			var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-
-			// TODO: Set this to default value
-			var value = @"C:\Data\Payroll\";
-			if (config.AppSettings != null && config.AppSettings.Settings != null &&
-			    config.AppSettings.Settings["PayrollPath"] != null &&
-			    !string.IsNullOrEmpty(config.AppSettings.Settings["PayrollPath"].Value))
-			{
-				value = config.AppSettings.Settings["PayrollPath"].Value;
-			}
-			return value;
 		}
 
 		public void Stop()
