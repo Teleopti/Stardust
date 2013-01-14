@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanSetEndTime()
         {
-			_view.SetEndDate(_model.EndDate.AddDays(1));
+			_view.SetEndDate(_model.EndDate);
 
             _mocks.ReplayAll();
             _target.SetEndTime(TimeSpan.FromHours(7));

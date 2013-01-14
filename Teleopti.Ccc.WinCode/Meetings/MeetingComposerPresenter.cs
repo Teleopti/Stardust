@@ -428,5 +428,17 @@ namespace Teleopti.Ccc.WinCode.Meetings
         }
 
         #endregion
+
+    	public void InvalidTimeInfo()
+    	{
+    		var messageTobeDisplayed = UserTexts.Resources.EndTimeMustBeGreaterOrEqualToStartTime;
+
+			if (!string.IsNullOrEmpty(messageTobeDisplayed))
+			{
+				_view.ShowErrorMessage(
+					messageTobeDisplayed,
+					UserTexts.Resources.InvalidRequest);
+			}
+    	}
     }
 }
