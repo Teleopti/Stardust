@@ -92,28 +92,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void toolStripButtonMainSave_Click(object sender, EventArgs e)
         {
-			var start = String.Empty;
-        	var end = String.Empty;
-			if (_currentView is MeetingGeneralView)
-			{
-				start = (_currentView as MeetingGeneralView).GetStartTimeText;
-				end = (_currentView as MeetingGeneralView).GetEndTimeText;
-			}
-			else if (_currentView is MeetingSchedulesView)
-			{
-				start = (_currentView as MeetingSchedulesView).GetStartTimeText;
-				end = (_currentView as MeetingSchedulesView).GetEndTimeText;
-			}
-			TimeSpan startTime;
-			TimeSpan.TryParse(start, out startTime);
-			TimeSpan endTime;
-			TimeSpan.TryParse(end, out endTime);
-			if (endTime < startTime)
-				_meetingComposerPresenter.InvalidTimeInfo();
-			else
-			{
-				_meetingComposerPresenter.SaveMeeting();
-			}
+			_meetingComposerPresenter.SaveMeeting();
         }
 
         public void OnModificationOccurred(IMeeting meeting, bool isDeleted)
