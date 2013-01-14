@@ -136,8 +136,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				var configFolder = Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll.DeployNew\\");
 				if (!Directory.Exists(configFolder))
 					Directory.CreateDirectory(configFolder);
-				_watcher = new FileSystemWatcher(configFolder, @"*Payroll*.dll");
-				_watcher.NotifyFilter = NotifyFilters.LastWrite;
+				_watcher = new FileSystemWatcher(configFolder) {NotifyFilter = NotifyFilters.LastWrite};
 				_watcher.Created += OnChanged;
 				_watcher.Changed += OnChanged;
 				_watcher.EnableRaisingEvents = true;
@@ -155,11 +154,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			var totalSleepTime = 0;
 			var info = new FileInfo(e.FullPath);
-			
+
 			if (!File.Exists(e.FullPath)
 				|| (_copiedFiles.ContainsKey(e.FullPath)
-				&& _copiedFiles[e.FullPath] == info.LastAccessTimeUtc
-				&& _copiedFiles[e.FullPath].Millisecond == info.LastAccessTimeUtc.Millisecond))
+				&& _copiedFiles[e.FullPath] == info.LastWriteTimeUtc
+				&& _copiedFiles[e.FullPath].Millisecond == info.LastWriteTimeUtc.Millisecond))
 				return;
 
 			while (IsFileLocked(info))
@@ -212,9 +211,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				}
 				// if file is still locked, we skip it
 				if (totalSleepTime == 500) continue;
-				File.Copy(file, Path.GetFullPath(destination + "\\" + Path.GetFileName(file)), true);
+				if (file.EndsWith(".xml"))
+				{
+					var xmlFileDestination = destination;
+					while (!xmlFileDestination.EndsWith("\\Payroll"))
+						xmlFileDestination = Directory.GetParent(xmlFileDestination).ToString();
+					File.Copy(file, Path.GetFullPath(xmlFileDestination + "\\" + Path.GetFileName(file)), true);
+				}
+				else 
+					File.Copy(file, Path.GetFullPath(destination + "\\" + Path.GetFileName(file)), true);
 
-				_copiedFiles.Add(fileInfo.FullName, fileInfo.LastAccessTimeUtc);
+				if (_copiedFiles.ContainsKey(fileInfo.FullName))
+					_copiedFiles[fileInfo.FullName] = fileInfo.LastWriteTimeUtc;
+				else
+					_copiedFiles.Add(fileInfo.FullName, fileInfo.LastWriteTimeUtc);
 			}
 
 		}
