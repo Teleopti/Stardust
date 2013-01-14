@@ -68,10 +68,11 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	function RequestPageViewModel(requestDetailViewModel, readyForInteraction, completelyLoaded) {
 
 		var self = this;
+
 		self.ready = readyForInteraction;
 		self.completed = completelyLoaded;
 		self.details = ko.observable(requestDetailViewModel);
-		
+
 		requestDetailViewModel.isUpdate.subscribe(function (newValue) {
 			if (!newValue) self.setSelected(null);
 		});
@@ -94,6 +95,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 		self.TextRequestTabVisible = ko.computed(function () {
 			return requestDetailViewModel.TextRequestTabVisible();
+		});
+
+		self.Template = ko.computed(function () {
+			return requestDetailViewModel.Template();
 		});
 
 		self.requests = ko.observableArray();
@@ -232,7 +237,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			readyForInteraction = readyForInteractionCallback;
 			completelyLoaded = completelyLoadedCallback;
 			pageViewModel = new RequestPageViewModel(detailViewModel, readyForInteractionCallback, completelyLoadedCallback);
-			
+
 			_initScrollPaging();
 			var element = $('#Requests-body-inner')[0];
 
