@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 										timeLineHours = CreateTimeLineHours(timeRangeTot,
 										                                    myScheduledDay.Person.PermissionInformation.DefaultTimeZone(),
 										                                    myScheduledDay.Person.PermissionInformation.Culture());
-										timeLineLengthInMinutes = (int)timeRangeTot.StartDateTime.Subtract(timeRangeTot.EndDateTime).TotalMinutes;
+										timeLineLengthInMinutes = (int)timeRangeTot.EndDateTime.Subtract(timeRangeTot.StartDateTime).TotalMinutes;
 										minutesSinceTimeLineStart = (int)myLayerCollection.First().Period.StartDateTime.Subtract(timeRangeTot.StartDateTime).TotalMinutes;
 									}
 									else

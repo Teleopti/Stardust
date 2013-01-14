@@ -135,11 +135,15 @@
 	display: block;
 	z-index: 9;
 }
-.shift-trade-timeline-line
+#shift-trade-timeline .shift-trade-timeline-line:last-child
+{
+	border-right: 0px;		
+}
+.shift-trade-timeline-line 
 {
 	height: 40px;
 	float: left;
-	border-right: 1px solid rgb(216, 216, 216);	
+	border-right: 1px solid rgb(216, 216, 216);
 }
 
 .shift-trade-timeline-number

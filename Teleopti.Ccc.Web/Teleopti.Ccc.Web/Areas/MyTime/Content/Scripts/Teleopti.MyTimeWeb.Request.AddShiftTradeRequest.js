@@ -24,12 +24,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.hours = ko.observableArray();
 		self.mySchedule = ko.observable(new scheduleViewModel());
 
-		self._createMyScheduleLayers = function (layers) {
-			var arrayMap = ko.utils.arrayMap(layers, function (layer) {
+		self._createMyScheduleLayers = function (mySchedule) {
+			var arrayMap = ko.utils.arrayMap(mySchedule.ScheduleLayers, function (layer) {
 				return new layerViewModel(layer, self);
 			});
-			self.mySchedule(new scheduleViewModel(arrayMap));
-			console.log(self.mySchedule());
+			self.mySchedule(new scheduleViewModel(arrayMap, mySchedule.MinutesSinceTimeLineStart));
 		};
 
 		self._createTimeLine = function (hours) {
@@ -82,9 +81,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				data: { selectedDate: self.selectedDate().toDate().toJSON() },
 				success: function (data, textStatus, jqXHR) {
 					self.timeLineLengthInMinutes(data.TimeLineLengthInMinutes);
-					self._createMyScheduleLayers(data.MyScheduleLayers);
+					self._createMyScheduleLayers(data.MySchedule);
 					self._createTimeLine(data.TimeLineHours);
-					console.log(data);
+					//console.log(data);
 				},
 				error: function (err) {
 					alert("error!");
@@ -102,11 +101,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 	}
 
-	function scheduleViewModel(layers) {
+	function scheduleViewModel(layers, minutesSinceTimeLineStart) {
 		var self = this;
 
 		self.layers = layers;
-		
+		self.minutesSinceTimeLineStart = minutesSinceTimeLineStart;
+
 	}
 
 	function layerViewModel(layer, parentViewModel) {
@@ -118,9 +118,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.endTime = layer.EndTimeText;
 		self.lengthInMinutes = layer.LengthInMinutes;
 		self.leftPx = ko.computed(function () {
-			var timeLineStart = moment(new Date(2013, 1, 14, 12, 15, 0));
-			//var offset = timeLineStart
-			return (layer.ElapsedMinutesSinceShiftStart + 15) * parentViewModel.pixelPerMinute() + 'px';
+			var timeLineoffset = parentViewModel.mySchedule().minutesSinceTimeLineStart;
+			return (layer.ElapsedMinutesSinceShiftStart + timeLineoffset) * parentViewModel.pixelPerMinute() + 'px';
 		});
 		self.paddingLeft = ko.computed(function () {
 			return self.lengthInMinutes * parentViewModel.pixelPerMinute() + 'px';
@@ -132,12 +131,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 	function timeLineHourViewModel(hour, parentViewModel) {
 		var self = this;
-		var borderWidth = 1;
+		var borderSize = 1;
 
 		self.hourText = hour.HourText;
 		self.lengthInMinutes = hour.LengthInMinutesToDisplay;
 		self.width = ko.computed(function () {
-			return self.lengthInMinutes * parentViewModel.pixelPerMinute() - borderWidth + 'px';
+			return self.lengthInMinutes * parentViewModel.pixelPerMinute() - borderSize + 'px';
 		});
 	}
 
