@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Payroll
         private PayrollFormatHandler _formatHandler;
         private string path;
         private string completePath;
-        private const string esentPath = "one_way.esent";
+        private const string esentPath = "Teleopti.Payroll";
         private const string fileName = "internal.storage.xml";
 
         [SetUp]
