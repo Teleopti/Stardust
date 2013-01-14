@@ -19,8 +19,8 @@ GO
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
 CREATE PROCEDURE [mart].[report_data_schedule_result_subSP] 
-@date_from datetime,
-@date_to datetime,
+@date_from_id int,
+@date_to_id int,
 @interval_from int,--mellan vilka tider
 @interval_to int,
 @adherence_id int,
@@ -33,20 +33,9 @@ CREATE PROCEDURE [mart].[report_data_schedule_result_subSP]
 AS
 SET NOCOUNT ON
 
---Create temporary tables
-CREATE TABLE #bridge_time_zone_subSP
-	(
-	local_date_id int,
-	local_interval_id int,
-	date_id int,
-	interval_id int,
-	date_date_local smalldatetime
-	)
-
 CREATE TABLE #agent_queue_statistics_subSP
 	(
 	date_id int,
-	date_date smalldatetime,
 	interval_id int,
 	acd_login_id int,
 	person_id int,
@@ -59,7 +48,6 @@ CREATE TABLE #agent_queue_statistics_subSP
 CREATE TABLE #agent_statistics_subSP
 	(
 	date_id int,
-	date_date smalldatetime,
 	interval_id int,
 	acd_login_id int,
 	person_id int,
@@ -81,7 +69,6 @@ CREATE TABLE #fact_schedule_deviation_subSP (
 CREATE TABLE #fact_schedule_subSP
 	(
 	schedule_date_id int,
-	date_date smalldatetime,
 	interval_id int,
 	person_id int,
 	scheduled_ready_time_m int,
@@ -96,7 +83,6 @@ CREATE TABLE #person (
 ---------
 --DECLARE
 ---------           
-DECLARE @date TABLE (date_from_id INT, date_to_id INT)	 
 DECLARE @hide_time_zone bit
 
 ---------
@@ -112,134 +98,72 @@ ELSE
 INSERT INTO #person
 SELECT DISTINCT person_id FROM #person_acd_subSP
 
---Get needed dates and intervals from bridge time zone into temp table
-INSERT INTO #bridge_time_zone_subSP
-SELECT 
-	local_date_id		= d.date_id,
-	local_interval_id	= i.interval_id,
-	date_id				= b.date_id,
-	interval_id			= b.interval_id,
-	date_date_local		= d.date_date
-FROM mart.bridge_time_zone b
-INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-	AND d.date_date BETWEEN @date_from AND @date_to
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
-	AND i.interval_id BETWEEN @interval_from AND @interval_to
-WHERE b.time_zone_id = @time_zone_id
-
---Get the min/max UTC date_id
-INSERT INTO @date (date_from_id,date_to_id)
-	SELECT MIN(b.date_id),MAX(b.date_id)
-	FROM #bridge_time_zone_subSP b
-	INNER JOIN mart.dim_date d 
-		ON b.local_date_id = d.date_id
-	WHERE	d.date_date	between @date_from AND @date_to
-
-
 --Create local table from: mart.fact_schedule_deviation
 INSERT INTO #fact_schedule_deviation_subSP
 SELECT 
-	d.date_id,
+	fsd.date_id,
 	fsd.person_id,
-	i.interval_id,
-	deviation_schedule_ready_s,
-	deviation_schedule_s,
-	deviation_contract_s,
-	ready_time_s,
-	is_logged_in,
-	contract_time_s
+	fsd.interval_id,
+	fsd.deviation_schedule_ready_s,
+	fsd.deviation_schedule_s,
+	fsd.deviation_contract_s,
+	fsd.ready_time_s,
+	fsd.is_logged_in,
+	fsd.contract_time_s
 FROM mart.fact_schedule_deviation fsd
 INNER JOIN #person a
 	ON fsd.person_id = a.person_id
-INNER JOIN #bridge_time_zone_subSP b
-	ON	fsd.interval_id= b.interval_id
-	AND fsd.date_id= b.date_id
-INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-	AND d.date_date BETWEEN @date_from AND @date_to
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
+WHERE fsd.date_id BETWEEN @date_from_id AND @date_to_id	
 
 --Get agent statistics
-INSERT INTO #agent_queue_statistics_subSP (date_id,date_date,interval_id,person_id,acd_login_id,answered_calls,talk_time_s,after_call_work_time_s)
-SELECT	d.date_id,
-		d.date_date 'date_date',
-		i.interval_id,
+INSERT INTO #agent_queue_statistics_subSP (date_id,interval_id,person_id,acd_login_id,answered_calls,talk_time_s,after_call_work_time_s)
+SELECT	faq.date_id,
+		faq.interval_id,
 		-1,
 		faq.acd_login_id,
 		SUM(faq.answered_calls),
 		SUM(faq.talk_time_s),
 		SUM(faq.after_call_work_time_s)
 FROM mart.fact_agent_queue faq
-INNER JOIN #bridge_time_zone_subSP b
-	ON	faq.interval_id= b.interval_id
-	AND faq.date_id= b.date_id
-INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-	AND d.date_date BETWEEN @date_from AND @date_to
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
-	AND i.interval_id BETWEEN @interval_from AND @interval_to
 INNER JOIN #person_acd_subSP acd
 	ON acd.acd_login_id = faq.acd_login_id
-INNER JOIN mart.DimPersonLocalized(@date_from, @date_to) dpl
-	ON acd.person_id = dpl.person_id
-	AND d.date_date between dpl.valid_from_date_local and dpl.valid_to_date_local
-GROUP BY d.date_id, d.date_date, i.interval_id, faq.acd_login_id
+WHERE faq.date_id BETWEEN @date_from_id AND @date_to_id		
+GROUP BY faq.date_id, faq.date_id, faq.interval_id, faq.acd_login_id
 
 --Get the ready time from mart.fact_agent 
 INSERT INTO #agent_statistics_subSP
-SELECT	d.date_id,
-		d.date_date 'date_date',
-		i.interval_id,
+SELECT	faq.date_id,
+		faq.interval_id,
 		faq.acd_login_id,
 		-1,
 		SUM(ISNULL(faq.ready_time_s,0))
 FROM mart.fact_agent faq
-INNER JOIN #bridge_time_zone_subSP b
-	ON	faq.interval_id= b.interval_id
-	AND faq.date_id= b.date_id
-INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-	AND d.date_date BETWEEN @date_from AND @date_to
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
-	AND i.interval_id BETWEEN @interval_from AND @interval_to
 INNER JOIN #person_acd_subSP acd
 	ON acd.acd_login_id = faq.acd_login_id
-INNER JOIN mart.DimPersonLocalized(@date_from, @date_to) dpl
-	ON acd.person_id = dpl.person_id
-	AND d.date_date between dpl.valid_from_date_local and dpl.valid_to_date_local
-GROUP BY d.date_id, d.date_date, i.interval_id, faq.acd_login_id
+WHERE faq.date_id BETWEEN @date_from_id AND @date_to_id		
+GROUP BY faq.date_id, faq.interval_id, faq.acd_login_id
 
 UPDATE #agent_queue_statistics_subSP
 SET ready_time_s = a.ready_time_s
 FROM #agent_queue_statistics_subSP aqs
 INNER JOIN #agent_statistics_subSP a ON aqs.date_id = a.date_id AND aqs.interval_id = a.interval_id AND aqs.acd_login_id = a.acd_login_id
 
-INSERT INTO #agent_queue_statistics_subSP (date_id,date_date,interval_id,acd_login_id,person_id,ready_time_s)
-SELECT a.date_id,a.date_date,a.interval_id,a.acd_login_id,a.person_id,ISNULL(a.ready_time_s,0)
+UPDATE #agent_queue_statistics_subSP
+SET person_id	= acd.person_id
+FROM #agent_queue_statistics_subSP ags
+INNER JOIN #person_acd_subSP acd
+	ON ags.acd_login_id = acd.acd_login_id
+
+INSERT INTO #agent_queue_statistics_subSP (date_id,interval_id,acd_login_id,person_id,ready_time_s)
+SELECT a.date_id,a.interval_id,a.acd_login_id,a.person_id,ISNULL(a.ready_time_s,0)
 FROM #agent_statistics_subSP a
 WHERE NOT EXISTS (SELECT 1 FROM #agent_queue_statistics_subSP aqs
 					WHERE aqs.date_id = a.date_id AND aqs.interval_id = a.interval_id AND aqs.acd_login_id = a.acd_login_id)
 
---Update #agent_queue_statistics_subSP with person information
-UPDATE #agent_queue_statistics_subSP
-SET person_id	= dpl.person_id
-FROM #agent_queue_statistics_subSP ags
-INNER JOIN #person_acd_subSP acd
-	ON ags.acd_login_id = acd.acd_login_id
-INNER JOIN mart.DimPersonLocalized(@date_from, @date_to) dpl
-	ON acd.person_id = dpl.person_id
-	AND date_date between dpl.valid_from_date_local and dpl.valid_to_date_local
-
 --Get agent schedule
-INSERT INTO #fact_schedule_subSP(schedule_date_id, date_date, interval_id, person_id, scheduled_time_m, scheduled_ready_time_m, scheduled_contract_time_m)
-SELECT	d.date_id, 
-		d.date_date 'date_date',
-		i.interval_id, 
+INSERT INTO #fact_schedule_subSP(schedule_date_id, interval_id, person_id, scheduled_time_m, scheduled_ready_time_m, scheduled_contract_time_m)
+SELECT	fs.schedule_date_id, 
+		fs.interval_id, 
 		fs.person_id, 
 		SUM(fs.scheduled_time_m), 
 		SUM(fs.scheduled_ready_time_m), 
@@ -247,23 +171,14 @@ SELECT	d.date_id,
 FROM mart.fact_schedule fs
 INNER JOIN #person a
 	ON fs.person_id = a.person_id
-INNER JOIN #bridge_time_zone_subSP b
-	ON	fs.interval_id= b.interval_id
-	AND fs.schedule_date_id= b.date_id
-INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-	AND d.date_date BETWEEN @date_from AND @date_to
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
-WHERE fs.scenario_id = @scenario_id
-GROUP BY d.date_id, d.date_date, i.interval_id, fs.person_id
-ORDER BY d.date_id, i.interval_id, fs.person_id
+WHERE fs.schedule_date_id BETWEEN @date_from_id AND @date_to_id		
+AND fs.scenario_id = @scenario_id
+GROUP BY fs.schedule_date_id, fs.interval_id, fs.person_id
 
 --Prepare result
-INSERT #pre_result_subSP(date_id,interval_id,date_date,person_id,answered_calls,talk_time_s,after_call_work_time_s,ready_time_s)
+INSERT #pre_result_subSP(date_id,interval_id,person_id,answered_calls,talk_time_s,after_call_work_time_s,ready_time_s)
 SELECT	date_id,
 		interval_id, 
-		date_date, 
 		person_id,
 		answered_calls, 
 		talk_time_s, 
@@ -271,10 +186,9 @@ SELECT	date_id,
 		ready_time_s
 FROM #agent_queue_statistics_subSP
 
-INSERT #pre_result_subSP(date_id,interval_id,date_date,person_id,scheduled_ready_time_m,scheduled_time_m,scheduled_contract_time_m)
+INSERT #pre_result_subSP(date_id,interval_id,person_id,scheduled_ready_time_m,scheduled_time_m,scheduled_contract_time_m)
 SELECT	schedule_date_id,
 		interval_id,
-		date_date,
 		person_id,
 		scheduled_ready_time_m,
 		scheduled_time_m,
@@ -282,10 +196,9 @@ SELECT	schedule_date_id,
 FROM #fact_schedule_subSP
 
 --Add deviation and adherance figures
-INSERT #pre_result_subSP(date_id,interval_id,date_date,person_id,adherence_calc_s,deviation_s)
+INSERT #pre_result_subSP(date_id,interval_id,person_id,adherence_calc_s,deviation_s)
 SELECT	fs.schedule_date_id,
 		fs.interval_id,
-		fs.date_date,
 		fsd.person_id,
 		adherence_calc_s =
 		CASE @adherence_id 
@@ -313,10 +226,9 @@ BEGIN
 	SELECT @intervals_per_day = COUNT(interval_id) FROM mart.dim_interval
 	SELECT @intervals_length_m = 1440/@intervals_per_day
 
-	INSERT #pre_result_subSP(date_id,interval_id,date_date,person_id,adherence_calc_s,deviation_s)
-	SELECT	d.date_id,
-			i.interval_id,
-			d.date_date,
+	INSERT #pre_result_subSP(date_id,interval_id,person_id,adherence_calc_s,deviation_s)
+	SELECT	fsd.date_id,
+			fsd.interval_id,
 			fsd.person_id,
 			@intervals_length_m*60,
 			deviation_s		=
@@ -326,18 +238,10 @@ BEGIN
 				WHEN 3 THEN fsd.deviation_contract_s
 			END
 	FROM #fact_schedule_deviation_subSP fsd
-	INNER JOIN #bridge_time_zone_subSP b
-		ON	fsd.interval_id= b.interval_id
-		AND fsd.date_id= b.date_id
-	INNER JOIN mart.dim_date d 
-		ON b.local_date_id = d.date_id
-		AND d.date_date BETWEEN @date_from AND @date_to
-	INNER JOIN mart.dim_interval i
-		ON b.local_interval_id = i.interval_id
-		AND i.interval_id BETWEEN @interval_from AND @interval_to
 	INNER JOIN #person a
 		ON a.person_id = fsd.person_id
-	WHERE NOT EXISTS (SELECT 1 FROM #fact_schedule_subSP fs WHERE fsd.person_id=fs.person_id	AND fsd.date_id=fs.schedule_date_id
+	WHERE fsd.date_id BETWEEN @date_from_id AND @date_to_id				
+	AND NOT EXISTS (SELECT 1 FROM #fact_schedule_subSP fs WHERE fsd.person_id=fs.person_id	AND fsd.date_id=fs.schedule_date_id
 		AND fsd.interval_id=fs.interval_id)
 END
 

@@ -21,6 +21,18 @@ Scenario: See absence request
 	When I view requests
 	Then I should see my existing absence request
 
+Scenario: Do not show created shift trade request because its not implemented yet
+	Given I am an agent
+	And I have created a shift trade request
+	When I view requests
+	Then I should not see my existing shift trade request
+
+Scenario: Do not show received shift trade request because its not implemented yet
+	Given I am an agent
+	And I have received a shift trade request from 'Ashley'
+	When I view requests
+	Then I should not see my existing shift trade request
+
 Scenario: Requests tab
 	Given I am an agent
 	When I am viewing an application page
@@ -61,3 +73,15 @@ Scenario: Paging
 	When I view requests
 	And I scroll down to the bottom of the page
 	Then I should see the page fill with the next page of requests
+
+Scenario: Indicate that there are more items to load
+	Given I am an agent
+	And I have more than one page of requests
+	When I view requests
+	Then I should see an indication that there are more requests
+
+Scenario: Hide indication that there are more items to load if no more items
+	Given I am an agent
+	And I have an existing absence request
+	When I view requests
+	Then I should not see an indication that there are more requests

@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.All &&
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules &&
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewConfidential &&
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere &&
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.MobileReports &&
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.AdminWeb
 				select r;
 			var agentRoleWithoutStudentAvailabilityApplicationFunctions =
@@ -158,7 +158,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				from r in agentRoleApplicationFunctions
 				where
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.TextRequests &&
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb &&
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb
 				select r;
 			var agentRoleWithoutTextRequestsApplicationFunctions =
 				from r in agentRoleApplicationFunctions

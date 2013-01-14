@@ -27,11 +27,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			
 			_page.AnyTimelineLabel.WaitUntilExists();
 
-			if (!TimeSpan.TryParse(_page.TimelineLabels.First().InnerHtml, out minTimelineTime))
+			if (!TimeSpan.TryParse(_page.TimelineLabels.First().InnerHtml.Split('<')[0], out minTimelineTime))
 			{
 				throw new ValidationException("Could not find timeline start label time.");
 			}
-			if (!TimeSpan.TryParse(_page.TimelineLabels[_page.TimelineLabels.Count - 1].InnerHtml, out maxTimelineTime))
+			if (!TimeSpan.TryParse(_page.TimelineLabels[_page.TimelineLabels.Count - 1].InnerHtml.Split('<')[0], out maxTimelineTime))
 			{
 				throw new ValidationException("Could not find timeline end label time.");
 			}
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => _page.TimeIndicatorForDate(date).Style.GetAttributeValue("Top"), Is.EqualTo(Math.Round(heightOfTimeIndicator, 0).ToString(CultureInfo.InvariantCulture) + "px"));
 
 			EventualAssert.That(() => _page.TimeIndicatorInTimeLine.Style.GetAttributeValue("Top"),
-			                    Is.EqualTo((Math.Round(heightOfTimeIndicator, 0) + timeLineOffset).ToString(CultureInfo.InvariantCulture) + "px"));
+								Is.EqualTo((Math.Round(heightOfTimeIndicator, 0) + timeLineOffset).ToString(CultureInfo.InvariantCulture) + "px"));
 		}
 
 		[Then(@"I should not see the time indicator for date '(.*)'")]

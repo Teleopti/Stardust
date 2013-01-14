@@ -126,7 +126,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.serviceLevelPercentTextBox.DoubleValue = 0D;
 			this.serviceLevelPercentTextBox.Location = new System.Drawing.Point(197, 5);
 			this.serviceLevelPercentTextBox.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
-			this.serviceLevelPercentTextBox.Minimum = 0.01D;
+			this.serviceLevelPercentTextBox.Minimum = 1D;
+		    this.serviceLevelPercentTextBox.Maximum = 100;
 			this.serviceLevelPercentTextBox.Name = "serviceLevelPercentTextBox";
 			this.serviceLevelPercentTextBox.Size = new System.Drawing.Size(59, 20);
 			this.serviceLevelPercentTextBox.TabIndex = 13;

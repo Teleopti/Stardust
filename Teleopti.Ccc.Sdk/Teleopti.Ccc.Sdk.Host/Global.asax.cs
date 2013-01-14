@@ -143,8 +143,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 				var mbCacheModule = new MbCacheModule(null);
 			builder.RegisterModule(mbCacheModule);
-        	builder.RegisterModule<RuleSetModule>();
-			builder.RegisterModule(new RuleSetCacheModule(mbCacheModule, true));
+			builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			builder.RegisterModule<EncryptionModule>();
 			builder.RegisterModule<AuthenticationModule>();
             builder.RegisterModule<AssemblerModule>();
@@ -152,6 +151,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterModule<UnitOfWorkModule>();
             builder.RegisterModule<RequestFactoryModule>();
             builder.RegisterModule<QueryHandlerModule>();
+            builder.RegisterModule<ShiftTradeModule>();
             builder.RegisterModule<CommandHandlerModule>();
             builder.RegisterModule<UpdateScheduleModule>();
             builder.RegisterType<WebWindowsUserProvider>()

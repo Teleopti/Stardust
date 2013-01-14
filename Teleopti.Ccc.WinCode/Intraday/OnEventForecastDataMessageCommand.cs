@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Collection;
+﻿using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -36,6 +35,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
             _view.SetupSkillTabs();
             _view.SelectSkillTab(skill);
+            _view.DrawSkillGrid();
         }
     }
 }

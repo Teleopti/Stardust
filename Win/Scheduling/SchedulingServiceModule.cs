@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -93,6 +94,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<BestBlockShiftCategoryFinder>().As<IBestBlockShiftCategoryFinder>().InstancePerLifetimeScope();
             builder.RegisterType<BlockSchedulingWorkShiftFinderService>().As<IBlockSchedulingWorkShiftFinderService>().InstancePerLifetimeScope();
             builder.RegisterType<DeleteSchedulePartService>().As<IDeleteSchedulePartService>().InstancePerLifetimeScope();
+            builder.RegisterType<DeleteAndResourceCalculateService >().As<IDeleteAndResourceCalculateService >().InstancePerLifetimeScope();
             builder.RegisterType<ScheduleDayService>().As<IScheduleDayService>().InstancePerLifetimeScope();
             builder.RegisterType<BlockFinderFactory>().As<IBlockFinderFactory>().InstancePerLifetimeScope();
                     
@@ -168,6 +170,17 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<ShiftCategoryFairnessRuleSetChecker>().As<IShiftCategoryFairnessRuleSetChecker>().InstancePerLifetimeScope();
             builder.RegisterType<ShiftCategoryFairnessContractTimeChecker>().As<IShiftCategoryFairnessContractTimeChecker>().InstancePerLifetimeScope();
         	builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
+
+			//DaysOffSchedulingService
+        	builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().
+        		InstancePerDependency();
+        	builder.RegisterType<MatrixDataListInSteadyState>().As<IMatrixDataListInSteadyState>().InstancePerDependency();
+        	builder.RegisterType<HasContractDayOffDefinition>().As<IHasContractDayOffDefinition>().InstancePerDependency();
+        	builder.RegisterType<ScheduleDayDataMapper>().As<IScheduleDayDataMapper>().InstancePerDependency();
+        	builder.RegisterType<MatrixDataListCreator>().As<IMatrixDataListCreator>().InstancePerDependency();
+        	builder.RegisterType<MatrixDataWithToFewDaysOff>().As<IMatrixDataWithToFewDaysOff>().InstancePerDependency();
+        	builder.RegisterType<MissingDaysOffScheduler>().As<IMissingDaysOffScheduler>().InstancePerDependency();
+        	builder.RegisterType<DaysOffSchedulingService>().As<IDaysOffSchedulingService>().InstancePerDependency();
 
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -61,6 +62,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldReturnStudentAvailabilitiesAndSchedules()
+		{
+			var viewModelFactory = MockRepository.GenerateMock<IStudentAvailabilityViewModelFactory>();
+			var target = new StudentAvailabilityController(viewModelFactory, null, null);
+			var list = new List<StudentAvailabilityAndScheduleDayViewModel>();
+
+			viewModelFactory.Stub(x => x.CreateStudentAvailabilityAndSchedulesViewModels(DateOnly.Today, DateOnly.Today.AddDays(1))).Return(list);
+
+			var result = target.StudentAvailabilitiesAndSchedules(DateOnly.Today, DateOnly.Today.AddDays(1));
+
+			result.Data.Should().Be.SameInstanceAs(list);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnStudentAvailabilityForDate()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IStudentAvailabilityViewModelFactory>();
@@ -70,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			viewModelFactory.Stub(x => x.CreateDayViewModel(DateOnly.Today)).Return(model);
 
-			var result = target.StudentAvailability(DateOnly.Today) as JsonResult;
+			var result = target.StudentAvailability(DateOnly.Today);
 
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
@@ -79,15 +94,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldPersistStudentAvailabilityForm()
 		{ 
 			var studentAvailabilityPersister = MockRepository.GenerateMock<IStudentAvailabilityPersister>();
-			var form = new StudentAvailabilityDayForm();
-			var resultData = new StudentAvailabilityDayFormResult();
+			var form = new StudentAvailabilityDayInput();
+			var resultData = new StudentAvailabilityDayViewModel();
 
 			var target = new StudentAvailabilityController(null, null, studentAvailabilityPersister);
 
 			studentAvailabilityPersister.Stub(x => x.Persist(form)).Return(resultData);
 
-			var result = target.StudentAvailability(form) as JsonResult;
-			var data = result.Data as StudentAvailabilityDayFormResult;
+			var result = target.StudentAvailability(form);
+			var data = result.Data as StudentAvailabilityDayViewModel;
 
 			data.Should().Be.SameInstanceAs(resultData);
 		}
@@ -100,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			target.ModelState.AddModelError("Test", message);
 
-			var result = target.StudentAvailability(new StudentAvailabilityDayForm()) as JsonResult;
+			var result = target.StudentAvailability(new StudentAvailabilityDayInput());
 			var data = result.Data as ModelStateResult;
 
 			Assert.That(data.Errors.Single(), Is.EqualTo(message));
@@ -111,12 +126,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var studentAvailabilityPersister = MockRepository.GenerateMock<IStudentAvailabilityPersister>();
 			var target = new StudentAvailabilityController(null, null, studentAvailabilityPersister);
-			var resultData = new StudentAvailabilityDayFormResult();
+			var resultData = new StudentAvailabilityDayViewModel();
 
 			studentAvailabilityPersister.Stub(x => x.Delete(DateOnly.Today)).Return(resultData);
 
-			var result = target.StudentAvailabilityDelete(DateOnly.Today) as JsonResult;
-			var data = result.Data as StudentAvailabilityDayFormResult;
+			var result = target.StudentAvailabilityDelete(DateOnly.Today);
+			var data = result.Data as StudentAvailabilityDayViewModel;
 
 			data.Should().Be.SameInstanceAs(resultData);
 		}

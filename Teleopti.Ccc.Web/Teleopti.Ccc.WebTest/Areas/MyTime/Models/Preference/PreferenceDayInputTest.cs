@@ -8,6 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.Preference
 {
+	[TestFixture]
 	public class PreferenceDayInputTest
 	{
 		[Test]

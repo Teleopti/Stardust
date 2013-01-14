@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private bool _availabilityDaysOnly;
         private bool _usePreferences;
         private bool _preferencesDaysOnly;
-        private bool _addContractScheduleDaysOff = true;
         private BlockFinderType _blockFinderType;
 		private ISpecification<IMainShift> _mainShiftOptimizeActivitySpecification;
         public bool UseMinimumPersons { get; set; }
@@ -80,12 +79,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 if(_blockFinderType != BlockFinderType.None)
                     ShiftCategory = null;
             }
-        }
-
-        public bool AddContractScheduleDaysOff
-        {
-            get { return _addContractScheduleDaysOff; }
-            set { _addContractScheduleDaysOff = value; }
         }
 
         public bool UsePreferences

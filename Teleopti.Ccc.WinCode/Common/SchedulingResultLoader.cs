@@ -190,12 +190,11 @@ namespace Teleopti.Ccc.WinCode.Common
 
     	private void splitAllWorkloadDaysWithMergedIntervals()
     	{
-			if (SchedulerState==null || SchedulerState.SchedulingResultState == null || SchedulerState.SchedulingResultState.SkillDays==null)
-			{
-				return;
-			}
+    	    if (SchedulerState == null || SchedulerState.SchedulingResultState == null ||
+    	        SchedulerState.SchedulingResultState.SkillDays == null)
+    	        return;
 
-			foreach (var skillDayItem in SchedulerState.SchedulingResultState.SkillDays)
+    	    foreach (var skillDayItem in SchedulerState.SchedulingResultState.SkillDays)
 			{
 				var resolution = TimeSpan.FromMinutes(skillDayItem.Key.DefaultResolution);
 				var workloadDays = skillDayItem.Value.SelectMany(s => s.WorkloadDayCollection);

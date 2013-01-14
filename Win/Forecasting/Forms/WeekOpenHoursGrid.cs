@@ -96,7 +96,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private void WeekOpenHoursGrid_ClipboardPaste(object sender, GridCutPasteEventArgs e)
         {
             e.IgnoreCurrentCell = true;
-            if (((GridModel)sender).CurrentCellInfo.ColIndex == 1)
+        	var gridModel = (GridModel) sender;
+			if (gridModel.CurrentCellInfo != null && gridModel.CurrentCellInfo.ColIndex == 1)
             {
                 HandlePaste();
             }

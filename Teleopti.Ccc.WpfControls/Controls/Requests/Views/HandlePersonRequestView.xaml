@@ -3,8 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
     xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
-    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode" 
-    xmlns:Commands="clr-namespace:Teleopti.Ccc.WpfControls.Commands" GuiHelpers:HelpProvider.HelpString="Schedule+gridRequests" Loaded="UserControl_Loaded">
+    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
+    GuiHelpers:HelpProvider.HelpString="Schedule+gridRequests" Loaded="UserControl_Loaded">
 <UserControl.Resources>
                 <ResourceDictionary>
         <ResourceDictionary.MergedDictionaries>
@@ -81,7 +81,8 @@
             <Controls:DataGridTemplateColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Width="27"
                                              CanUserSort="False"
-                                             CanUserReorder="False">
+                                             CanUserReorder="False"
+                                             x:Name="Headers">
                 <Controls:DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <Expander IsExpanded="False" LostFocus="Expander_LostFocus" Expanded="Expander_Expanded" Collapsed="Expander_Collapsed" MinHeight="22"/>

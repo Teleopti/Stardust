@@ -176,6 +176,7 @@
     <Compile Include="Forecasting\Import\ForecastsRowExtractorTest.cs" />
     <Compile Include="Forecasting\MultisiteDayCloneIssueTest.cs" />
     <Compile Include="Forecasting\OpenForWorkTest.cs" />
+    <Compile Include="Forecasting\ReforecastPercentCalculatorTest.cs" />
     <Compile Include="Forecasting\SkillDayBug14724Test.cs" />
     <Compile Include="Forecasting\DayHasAboveMaxSeatsTest.cs" />
     <Compile Include="Forecasting\IntervalHasAboveMaxSeatsTest.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Optimization\BlockOptimizerBlockCleanerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictorTest.cs" />
+    <Compile Include="Optimization\GroupDayOffOptimizationResourceHelperTest.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerExecuterTest.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandlerTest.cs" />
@@ -242,6 +244,7 @@
     <Compile Include="Optimization\GroupMatrixContainerCreatorTest.cs" />
     <Compile Include="Optimization\GroupMatrixHelperTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizationExecuterTest.cs" />
+    <Compile Include="Optimization\GroupMoveTimeOptimizationResourceHelperTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizerServiceTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizerTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeValidatorRunnerTest.cs" />
@@ -323,7 +326,7 @@
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
-    <Compile Include="ResourceCalculation\DayOffSchedulerTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\DayOffSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManagerTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet3.cs" />
@@ -355,7 +358,7 @@
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateServiceTest.cs" />
     <Compile Include="Scheduling\Assignment\GroupShiftCategoryFairnessCreatorTest.cs" />
-    <Compile Include="Scheduling\Assignment\HasDayOffDefinitionTest.cs" />
+    <Compile Include="Scheduling\Assignment\HasContractDayOffDefinitionTest.cs" />
     <Compile Include="Scheduling\Assignment\NewDynamicDayOffSchedulePeriodTargetCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\NewFixedDayOffSchedulePeriodTargetCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\NewSchedulePeriodTargetCalculatorFactoryTest.cs" />
@@ -368,11 +371,20 @@
     <Compile Include="Scheduling\Assignment\SchedulePartStringVisualizerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessManagerTest.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitCheckerTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\BestSpotForAddingDayOffFinderTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\DaysOffSchedulingServiceTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixDataListCreatorTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixDataListInSteadyStateTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixDataWithToFewDaysOffTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MatrixDataTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataMapperTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataTest.cs" />
     <Compile Include="Scheduling\DayOffTemplateSorterTest.cs" />
     <Compile Include="Scheduling\LoadScheduleByPersonSpecificationTest.cs" />
     <Compile Include="Scheduling\MasterActivityTest.cs" />
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecificationTest.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangeTrackerTest.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\MissingDaysOffSchedulerTest.cs" />
     <Compile Include="Scheduling\PublicNoteByDateSorterTest.cs" />
     <Compile Include="Scheduling\PublicNoteTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCalculatorTest.cs" />
@@ -1033,9 +1045,9 @@
     <Compile Include="WorkflowControl\PersonAccountBalanceCalculatorTest.cs" />
     <Compile Include="WorkflowControl\PersonAccountBalanceValidatorTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IsShiftTradeRequestNotNullSpecificationTest.cs" />
-    <Compile Include="WorkflowControl\ShiftTrades\IsWorkflowControlSetNullSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\OpenShiftTradePeriodSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAbsenceSpecificationTest.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeLightValidatorTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMeetingSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradePersonalActivitySpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeSkillSpecificationTest.cs" />

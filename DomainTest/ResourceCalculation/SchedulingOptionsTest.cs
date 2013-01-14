@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsNull(_target.ShiftCategory);
             _target.ShiftCategory = category;
             Assert.AreEqual(category, _target.ShiftCategory);
-            Assert.AreEqual(true, _target.AddContractScheduleDaysOff);
             Assert.IsNull(_target.DayOffTemplate);
             IDayOffTemplate template = new DayOffTemplate(new Description("template"));
             _target.DayOffTemplate = template;
@@ -66,14 +65,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsFalse(_target.UseSameDayOffs);
             _target.UseSameDayOffs = true;
             Assert.IsTrue(_target.UseSameDayOffs);
-        }
-
-        [Test]
-        public void VerifyAddContractScheduleDaysOff()
-        {
-            Assert.AreEqual(true, _target.AddContractScheduleDaysOff);
-            _target.AddContractScheduleDaysOff = false;
-            Assert.AreEqual(false, _target.AddContractScheduleDaysOff);
         }
 
         [Test]

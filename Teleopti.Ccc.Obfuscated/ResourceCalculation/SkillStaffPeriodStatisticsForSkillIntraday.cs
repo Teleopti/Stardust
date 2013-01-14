@@ -48,12 +48,10 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         {
             foreach (ISkillStaffPeriod skillStaffPeriod in _periods)
             {
-                double expectedValue = CreateExpectedValue(skillStaffPeriod );
-                if (expectedValue > 0)
-                {
-                    double realValue = CreateRealValue(skillStaffPeriod);
-                    StatisticsCalculator.AddItem(expectedValue, realValue);
-                }
+                var expectedValue = CreateExpectedValue(skillStaffPeriod );
+                if (expectedValue <= 0) continue;
+                var realValue = CreateRealValue(skillStaffPeriod);
+                StatisticsCalculator.AddItem(expectedValue, realValue);
             }
         }
 

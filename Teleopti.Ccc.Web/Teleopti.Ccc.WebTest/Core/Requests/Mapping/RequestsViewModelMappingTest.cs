@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -6,12 +7,13 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
@@ -21,6 +23,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 	{
 		private IUserTimeZone _userTimeZone;
 		private ILinkProvider _linkProvider;
+		private ILoggedOnUser _loggedOnUser;
+		private IPerson _loggedOnPerson;
 
 		[SetUp]
 		public void Setup()
@@ -28,11 +32,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			_userTimeZone.Stub(x => x.TimeZone()).Return(TimeZoneInfo.Local);
 			_linkProvider = MockRepository.GenerateMock<ILinkProvider>();
+			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			_loggedOnPerson = PersonFactory.CreatePerson("LoggedOn", "Agent");
+			_loggedOnUser.Expect(l => l.CurrentUser()).Return(_loggedOnPerson).Repeat.Any();
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new RequestsViewModelMappingProfile(
 				() => _userTimeZone, 
-				() => _linkProvider
+				() => _linkProvider,
+				() => _loggedOnUser
 				)));
 		}
 
@@ -246,7 +254,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.DenyReason.Should().Be.EqualTo(UserTexts.Resources.RequestDenyReasonNoWorkflow);
 		}
 
-
 		[Test]
 		public void ShouldMapAlreadyTranslatedDenyReason()
 		{
@@ -257,6 +264,38 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
 			result.DenyReason.Should().Be.EqualTo(denyReason);
+		}
+
+		[Test]
+		public void ShouldSetIsCreatedByUserToTrueIfTheSenderIsTheSamePersonAsTheLoggedOnUser()
+		{
+			var receiver = PersonFactory.CreatePerson("Receiver");
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(_loggedOnPerson, receiver, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+			personRequest.TrySetMessage("This is a short text for the description of a shift trade request");
+			personRequest.SetId(new Guid());
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(result.IsCreatedByUser, Is.True);
+		}
+
+		[Test]
+		public void ShouldSetIsCreatedByUserToFalseIfTheSenderIsTheSamePersonAsTheLoggedOnUser()
+		{
+			var sender = PersonFactory.CreatePerson("Sender");
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {shiftTradeSwapDetail});
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+			personRequest.TrySetMessage("This is a short text for the description of a shift trade request");
+			personRequest.SetId(new Guid());
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			
+			Assert.That(result.IsCreatedByUser,Is.False);
 		}
 	}
 }

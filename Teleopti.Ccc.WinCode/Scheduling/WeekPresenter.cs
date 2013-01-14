@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             DateTime start = schedulePart.Period.StartDateTimeLocal(schedulePart.TimeZone).Date.AddHours(8);
             DateTime end = schedulePart.Period.StartDateTimeLocal(schedulePart.TimeZone).Date.AddHours(17);
 
-            switch (schedulePart.SignificantPart())
+            switch (schedulePart.SignificantPartForDisplay())
             {
                 case SchedulePartView.MainShift:
                     var personAssignmentCollection = schedulePart.PersonAssignmentCollection();
@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         end = personAssignmentCollection.Max(p => p.Period.EndDateTimeLocal(schedulePart.TimeZone));
                     }
                     break;
+				case SchedulePartView.ContractDayOff:
                 case SchedulePartView.FullDayAbsence:
                     IVisualLayerCollection layerCollection = schedulePart.ProjectionService().CreateProjection();
                     if (layerCollection.Any())

@@ -104,6 +104,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingTest.cs" />
+    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFormTest.cs" />
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Core\AuthenticationModelBinderTest.cs" />
@@ -142,6 +144,7 @@
     <Compile Include="Core\Message\Mapping\MessageViewModelMappingProfileTest.cs" />
     <Compile Include="Core\Message\ViewModelFactory\MessageViewModelFactoryTest.cs" />
     <Compile Include="Core\Message\DataProvider\PushMessageProviderTest.cs" />
+    <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryRequestsTest.cs" />
     <Compile Include="Core\TimeSpanModelBinderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryScheduleTest.cs" />
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
@@ -274,14 +277,12 @@
     <Compile Include="Core\Startup\RegisterRoutesTaskTest.cs" />
     <Compile Include="Core\Startup\VerifyLicenseTaskTest.cs" />
     <Compile Include="Core\Common\DataProvider\DefaultDateCalculatorTest.cs" />
-    <Compile Include="Core\StudentAvailability\DataProvider\StudentAvailabilityPersisterTest.cs" />
-    <Compile Include="Core\StudentAvailability\DataProvider\VirtualSchedulePeriodProviderTest.cs" />
-    <Compile Include="Core\StudentAvailability\Mapping\StudentAvailabilityDayFormResultMappingTest.cs" />
-    <Compile Include="Core\StudentAvailability\Mapping\StudentAvailabilityDayViewModelMappingTest.cs" />
-    <Compile Include="Core\StudentAvailability\Mapping\StudentAvailabilityDayFormMappingTest.cs" />
-    <Compile Include="Core\StudentAvailability\Mapping\StudentAvailabilityViewModelMappingTest.cs" />
-    <Compile Include="Core\StudentAvailability\StudentAvilabilityHtmlExtensionTest.cs" />
-    <Compile Include="Core\StudentAvailability\ViewModelFactory\StudentAvailabilityViewModelFactoryTest.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\StudentAvailabilityPersisterTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\VirtualSchedulePeriodProviderTest.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayViewModelMappingTest.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityDayFormMappingTest.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityViewModelMappingTest.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityViewModelFactoryTest.cs" />
     <Compile Include="Core\TimeOfDayModelBinderTest.cs" />
     <Compile Include="Core\WebStateTest.cs" />
     <Compile Include="Filters\AjaxHandleErrorAttributeCustomErrorDisabledAjaxJsonTest.cs" />

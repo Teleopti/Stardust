@@ -4,7 +4,7 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
-AddExtendedPreferenceFormViewModel = function () {
+Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function () {
 	var self = this;
 
 	this.PreferenceId = ko.observable();

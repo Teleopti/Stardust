@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxMonth"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.Tools.RibbonControlAdv.set_MaximizeToolTip(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.Tools.RibbonControlAdv.set_MinimizeToolTip(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRestrictionViewTemp"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExportToPDFShiftsPerDay"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRemoveWriteProtection"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxTags"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxChangeTag"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAutoTag"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUntagged"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockTags"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilledAbsences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllAbsences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllMustHave"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulfilledMustHave"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockRotations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockRestrictions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllUnavailable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllUnAvailable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllShifts"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilledShifts"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilledDaysOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilled"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllDaysOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllAvailable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAll"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExportToPDFGraphical"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExport"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSwapRaw")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxOldFilter"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxMonth"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.Tools.RibbonControlAdv.set_MaximizeToolTip(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.Tools.RibbonControlAdv.set_MinimizeToolTip(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRestrictionViewTemp"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExportToPDFShiftsPerDay"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRemoveWriteProtection"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxTags"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxChangeTag"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAutoTag"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUntagged"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockTags"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilledAbsences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllAbsences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllMustHave"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulfilledMustHave"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockRotations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockRestrictions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllUnavailable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllUnAvailable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllShifts"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilledShifts"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilledDaysOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilled"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllDaysOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllAvailable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAll"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExportToPDFGraphical"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExport"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSwapRaw")]
 		private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
@@ -180,14 +180,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripPanelItemViews = new Syncfusion.Windows.Forms.Tools.ToolStripPanelItem();
 			this.toolStripButtonDayView = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonWeekView = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonDetailView = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonFilterAgents = new System.Windows.Forms.ToolStripButton();
 			this.toolStripPanelItemViews2 = new Syncfusion.Windows.Forms.Tools.ToolStripPanelItem();
 			this.toolStripButtonPeriodView = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonSummaryView = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonRequestView = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonRestrictions = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonAgentInfo = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonFilterAgents = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonFilterAgentsx = new System.Windows.Forms.ToolStripButton();
 			this.toolStripExActions = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripPanelItemAssignments = new Syncfusion.Windows.Forms.Tools.ToolStripPanelItem();
 			this.toolStripSplitButtonSchedule = new System.Windows.Forms.ToolStripSplitButton();
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 11;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 9;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -452,7 +452,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.xxExportToolStripMenuItem,
             this.toolStripMenuItemChangeTagRM});
 			this.contextMenuViews.Name = "contextMenuStrip1";
-			this.contextMenuViews.Size = new System.Drawing.Size(283, 666);
+			this.contextMenuViews.Size = new System.Drawing.Size(283, 688);
 			this.contextMenuViews.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuViews_Opening);
 			// 
 			// toolStripMenuItemCut
@@ -678,6 +678,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripMenuItemDetailView, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemDetailView.Size = new System.Drawing.Size(160, 22);
 			this.toolStripMenuItemDetailView.Text = "xxDetailView";
+			this.toolStripMenuItemDetailView.Visible = false;
 			this.toolStripMenuItemDetailView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemZoomMouseUp);
 			// 
 			// toolStripMenuItemPeriodView
@@ -1458,7 +1459,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExScheduleViews.Name = "toolStripExScheduleViews";
 			this.toolStripExScheduleViews.ShowItemToolTips = true;
 			this.toolStripExScheduleViews.ShowLauncher = false;
-			this.toolStripExScheduleViews.Size = new System.Drawing.Size(259, 98);
+			this.toolStripExScheduleViews.Size = new System.Drawing.Size(285, 98);
 			this.toolStripExScheduleViews.TabIndex = 5;
 			this.toolStripExScheduleViews.Text = "xxView";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExScheduleViews, true);
@@ -1472,10 +1473,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripPanelItemViews.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonDayView,
             this.toolStripButtonWeekView,
-            this.toolStripButtonDetailView});
+            this.toolStripButtonFilterAgents});
 			this.toolStripPanelItemViews.Name = "toolStripPanelItemViews";
 			this.SetShortcut(this.toolStripPanelItemViews, System.Windows.Forms.Keys.None);
-			this.toolStripPanelItemViews.Size = new System.Drawing.Size(70, 81);
+			this.toolStripPanelItemViews.Size = new System.Drawing.Size(96, 81);
 			this.toolStripPanelItemViews.Text = "toolStripPanelItem3";
 			this.toolStripPanelItemViews.Transparent = true;
 			// 
@@ -1507,19 +1508,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonWeekView, false);
 			this.toolStripButtonWeekView.Click += new System.EventHandler(this.toolStripButtonZoom_Click);
 			// 
-			// toolStripButtonDetailView
+			// toolStripButtonFilterAgents
 			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonDetailView, "");
-			this.toolStripButtonDetailView.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_schedule_DetailView_32x321;
-			this.toolStripButtonDetailView.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonDetailView.Name = "toolStripButtonDetailView";
-			this.SetShortcut(this.toolStripButtonDetailView, System.Windows.Forms.Keys.None);
-			this.toolStripButtonDetailView.Size = new System.Drawing.Size(64, 20);
-			this.toolStripButtonDetailView.Text = "xxDetail";
-			this.toolStripButtonDetailView.ToolTipText = "xxDetail";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonDetailView, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonDetailView, false);
-			this.toolStripButtonDetailView.Click += new System.EventHandler(this.toolStripButtonZoom_Click);
+			this.ribbonControlAdv1.SetDescription(this.toolStripButtonFilterAgents, "");
+			this.toolStripButtonFilterAgents.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Filter;
+			this.toolStripButtonFilterAgents.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonFilterAgents.Name = "toolStripButtonFilterAgents";
+			this.SetShortcut(this.toolStripButtonFilterAgents, System.Windows.Forms.Keys.None);
+			this.toolStripButtonFilterAgents.Size = new System.Drawing.Size(92, 20);
+			this.toolStripButtonFilterAgents.Text = "xxFilterAgents";
+			this.toolStripButtonFilterAgents.ToolTipText = "xxFilterAgents";
+			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonFilterAgents, true);
+			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonFilterAgents, false);
+			this.toolStripButtonFilterAgents.Click += new System.EventHandler(this.toolStripButtonFilterAgents_Click);
 			// 
 			// toolStripPanelItemViews2
 			// 
@@ -1532,7 +1533,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripButtonRequestView,
             this.toolStripButtonRestrictions,
             this.toolStripButtonAgentInfo,
-            this.toolStripButtonFilterAgents});
+            this.toolStripButtonFilterAgentsx});
 			this.toolStripPanelItemViews2.Name = "toolStripPanelItemViews2";
 			this.SetShortcut(this.toolStripPanelItemViews2, System.Windows.Forms.Keys.None);
 			this.toolStripPanelItemViews2.Size = new System.Drawing.Size(178, 81);
@@ -1606,18 +1607,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonAgentInfo, false);
 			this.toolStripButtonAgentInfo.Click += new System.EventHandler(this.toolStripButtonAgentInfo_Click);
 			// 
-			// toolStripButtonFilterAgents
+			// toolStripButtonFilterAgentsx
 			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonFilterAgents, "");
-			this.toolStripButtonFilterAgents.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Filter;
-			this.toolStripButtonFilterAgents.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonFilterAgents.Name = "toolStripButtonFilterAgents";
-			this.SetShortcut(this.toolStripButtonFilterAgents, System.Windows.Forms.Keys.None);
-			this.toolStripButtonFilterAgents.Size = new System.Drawing.Size(92, 20);
-			this.toolStripButtonFilterAgents.Text = "xxFilterAgents";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonFilterAgents, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonFilterAgents, false);
-			this.toolStripButtonFilterAgents.Click += new System.EventHandler(this.toolStripButtonFilterAgents_Click);
+			this.ribbonControlAdv1.SetDescription(this.toolStripButtonFilterAgentsx, "");
+			this.toolStripButtonFilterAgentsx.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Filter;
+			this.toolStripButtonFilterAgentsx.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonFilterAgentsx.Name = "toolStripButtonFilterAgentsx";
+			this.SetShortcut(this.toolStripButtonFilterAgentsx, System.Windows.Forms.Keys.None);
+			this.toolStripButtonFilterAgentsx.Size = new System.Drawing.Size(75, 20);
+			this.toolStripButtonFilterAgentsx.Text = "xxOldFilter";
+			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonFilterAgentsx, false);
+			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonFilterAgentsx, false);
+			this.toolStripButtonFilterAgentsx.Visible = false;
+			this.toolStripButtonFilterAgentsx.Click += new System.EventHandler(this.toolStripButtonFilterAgents_Click);
 			// 
 			// toolStripExActions
 			// 
@@ -1629,7 +1631,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExActions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemAssignments});
 			this.toolStripExActions.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-			this.toolStripExActions.Location = new System.Drawing.Point(477, 1);
+			this.toolStripExActions.Location = new System.Drawing.Point(503, 1);
 			this.toolStripExActions.Name = "toolStripExActions";
 			this.toolStripExActions.ShowCaption = true;
 			this.toolStripExActions.ShowItemToolTips = true;
@@ -1777,7 +1779,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExLocks.Image = null;
 			this.toolStripExLocks.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemLocks});
-			this.toolStripExLocks.Location = new System.Drawing.Point(593, 1);
+			this.toolStripExLocks.Location = new System.Drawing.Point(619, 1);
 			this.toolStripExLocks.Name = "toolStripExLocks";
 			this.toolStripExLocks.ShowCaption = true;
 			this.toolStripExLocks.ShowLauncher = false;
@@ -2188,7 +2190,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExTags.Image = null;
 			this.toolStripExTags.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemTags});
-			this.toolStripExTags.Location = new System.Drawing.Point(700, 1);
+			this.toolStripExTags.Location = new System.Drawing.Point(726, 1);
 			this.toolStripExTags.Name = "toolStripExTags";
 			this.toolStripExTags.ShowLauncher = false;
 			this.toolStripExTags.Size = new System.Drawing.Size(145, 98);
@@ -2255,7 +2257,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripEx1.Image = null;
 			this.toolStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItem1});
-			this.toolStripEx1.Location = new System.Drawing.Point(847, 1);
+			this.toolStripEx1.Location = new System.Drawing.Point(873, 1);
 			this.toolStripEx1.MinimumSize = new System.Drawing.Size(0, 90);
 			this.toolStripEx1.Name = "toolStripEx1";
 			this.toolStripEx1.ShowLauncher = false;
@@ -2334,7 +2336,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExLoadOptions.Image = null;
 			this.toolStripExLoadOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemLoadOptions});
-			this.toolStripExLoadOptions.Location = new System.Drawing.Point(956, 1);
+			this.toolStripExLoadOptions.Location = new System.Drawing.Point(982, 1);
 			this.toolStripExLoadOptions.Name = "toolStripExLoadOptions";
 			this.toolStripExLoadOptions.ShowCaption = true;
 			this.toolStripExLoadOptions.ShowLauncher = false;
@@ -2586,7 +2588,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripEx2.Location = new System.Drawing.Point(0, 1);
 			this.toolStripEx2.Name = "toolStripEx2";
 			this.toolStripEx2.ShowLauncher = false;
-			this.toolStripEx2.Size = new System.Drawing.Size(273, 98);
+			this.toolStripEx2.Size = new System.Drawing.Size(273, 0);
 			this.toolStripEx2.TabIndex = 4;
 			this.toolStripEx2.Text = "xxDetails";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripEx2, true);
@@ -2601,7 +2603,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButtonViewDetails.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonViewDetails.Name = "toolStripButtonViewDetails";
 			this.SetShortcut(this.toolStripButtonViewDetails, System.Windows.Forms.Keys.None);
-			this.toolStripButtonViewDetails.Size = new System.Drawing.Size(81, 78);
+			this.toolStripButtonViewDetails.Size = new System.Drawing.Size(81, 0);
 			this.toolStripButtonViewDetails.Text = "xxViewDetails";
 			this.toolStripButtonViewDetails.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonViewDetails, true);
@@ -2616,7 +2618,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButtonViewAllowance.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonViewAllowance.Name = "toolStripButtonViewAllowance";
 			this.SetShortcut(this.toolStripButtonViewAllowance, System.Windows.Forms.Keys.None);
-			this.toolStripButtonViewAllowance.Size = new System.Drawing.Size(101, 78);
+			this.toolStripButtonViewAllowance.Size = new System.Drawing.Size(101, 0);
 			this.toolStripButtonViewAllowance.Text = "xxViewAllowance";
 			this.toolStripButtonViewAllowance.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonViewAllowance, true);
@@ -2631,7 +2633,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButtonViewRequestHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonViewRequestHistory.Name = "toolStripButtonViewRequestHistory";
 			this.SetShortcut(this.toolStripButtonViewRequestHistory, System.Windows.Forms.Keys.None);
-			this.toolStripButtonViewRequestHistory.Size = new System.Drawing.Size(84, 78);
+			this.toolStripButtonViewRequestHistory.Size = new System.Drawing.Size(84, 0);
 			this.toolStripButtonViewRequestHistory.Text = "xxViewHistory";
 			this.toolStripButtonViewRequestHistory.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonViewRequestHistory, true);
@@ -2654,7 +2656,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExHandleRequests.Location = new System.Drawing.Point(275, 1);
 			this.toolStripExHandleRequests.Name = "toolStripExHandleRequests";
 			this.toolStripExHandleRequests.ShowLauncher = false;
-			this.toolStripExHandleRequests.Size = new System.Drawing.Size(387, 98);
+			this.toolStripExHandleRequests.Size = new System.Drawing.Size(387, 0);
 			this.toolStripExHandleRequests.TabIndex = 1;
 			this.toolStripExHandleRequests.Text = "xxHandleRequests";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExHandleRequests, true);
@@ -2668,7 +2670,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButtonApproveRequest.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonApproveRequest.Name = "toolStripButtonApproveRequest";
 			this.SetShortcut(this.toolStripButtonApproveRequest, System.Windows.Forms.Keys.None);
-			this.toolStripButtonApproveRequest.Size = new System.Drawing.Size(66, 78);
+			this.toolStripButtonApproveRequest.Size = new System.Drawing.Size(66, 0);
 			this.toolStripButtonApproveRequest.Text = "xxApprove";
 			this.toolStripButtonApproveRequest.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonApproveRequest, true);
@@ -2683,7 +2685,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButtonDenyRequest.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonDenyRequest.Name = "toolStripButtonDenyRequest";
 			this.SetShortcut(this.toolStripButtonDenyRequest, System.Windows.Forms.Keys.None);
-			this.toolStripButtonDenyRequest.Size = new System.Drawing.Size(48, 78);
+			this.toolStripButtonDenyRequest.Size = new System.Drawing.Size(48, 0);
 			this.toolStripButtonDenyRequest.Text = "xxDeny";
 			this.toolStripButtonDenyRequest.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonDenyRequest, true);
@@ -2698,7 +2700,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButtonEditNote.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonEditNote.Name = "toolStripButtonEditNote";
 			this.SetShortcut(this.toolStripButtonEditNote, System.Windows.Forms.Keys.None);
-			this.toolStripButtonEditNote.Size = new System.Drawing.Size(50, 78);
+			this.toolStripButtonEditNote.Size = new System.Drawing.Size(50, 0);
 			this.toolStripButtonEditNote.Text = "xxReply";
 			this.toolStripButtonEditNote.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonEditNote, true);
@@ -2713,7 +2715,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButtonReplyAndApprove.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonReplyAndApprove.Name = "toolStripButtonReplyAndApprove";
 			this.SetShortcut(this.toolStripButtonReplyAndApprove, System.Windows.Forms.Keys.None);
-			this.toolStripButtonReplyAndApprove.Size = new System.Drawing.Size(117, 78);
+			this.toolStripButtonReplyAndApprove.Size = new System.Drawing.Size(117, 0);
 			this.toolStripButtonReplyAndApprove.Text = "xxReplyAndApprove";
 			this.toolStripButtonReplyAndApprove.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonReplyAndApprove, true);
@@ -2728,7 +2730,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButtonReplyAndDeny.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonReplyAndDeny.Name = "toolStripButtonReplyAndDeny";
 			this.SetShortcut(this.toolStripButtonReplyAndDeny, System.Windows.Forms.Keys.None);
-			this.toolStripButtonReplyAndDeny.Size = new System.Drawing.Size(99, 78);
+			this.toolStripButtonReplyAndDeny.Size = new System.Drawing.Size(99, 0);
 			this.toolStripButtonReplyAndDeny.Text = "xxReplyAndDeny";
 			this.toolStripButtonReplyAndDeny.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonReplyAndDeny, true);
@@ -2748,7 +2750,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripEx3.Location = new System.Drawing.Point(664, 1);
 			this.toolStripEx3.Name = "toolStripEx3";
 			this.toolStripEx3.ShowLauncher = false;
-			this.toolStripEx3.Size = new System.Drawing.Size(47, 98);
+			this.toolStripEx3.Size = new System.Drawing.Size(47, 0);
 			this.toolStripEx3.TabIndex = 2;
 			this.toolStripEx3.Text = "xxFilter";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripEx3, true);
@@ -2763,7 +2765,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton2.Name = "toolStripButton2";
 			this.SetShortcut(this.toolStripButton2, System.Windows.Forms.Keys.None);
-			this.toolStripButton2.Size = new System.Drawing.Size(36, 78);
+			this.toolStripButton2.Size = new System.Drawing.Size(36, 0);
 			this.toolStripButton2.Text = "toolStripButtonFilterRequest";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButton2, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButton2, false);
@@ -2782,7 +2784,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExFilterDays.Location = new System.Drawing.Point(713, 1);
 			this.toolStripExFilterDays.Name = "toolStripExFilterDays";
 			this.toolStripExFilterDays.ShowLauncher = false;
-			this.toolStripExFilterDays.Size = new System.Drawing.Size(242, 98);
+			this.toolStripExFilterDays.Size = new System.Drawing.Size(242, 0);
 			this.toolStripExFilterDays.TabIndex = 3;
 			this.toolStripExFilterDays.Text = "xxFilterDays";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExFilterDays, true);
@@ -2792,7 +2794,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.xxShowLastNumberOfDays.Name = "xxShowLastNumberOfDays";
 			this.SetShortcut(this.xxShowLastNumberOfDays, System.Windows.Forms.Keys.None);
-			this.xxShowLastNumberOfDays.Size = new System.Drawing.Size(181, 78);
+			this.xxShowLastNumberOfDays.Size = new System.Drawing.Size(181, 0);
 			this.xxShowLastNumberOfDays.Text = "xxShowLastNumberOfDaysColon";
 			// 
 			// toolStripComboBoxExFilterDays
@@ -3385,7 +3387,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private Syncfusion.Windows.Forms.Tools.ToolStripPanelItem toolStripPanelItemViews;
         private System.Windows.Forms.ToolStripButton toolStripButtonDayView;
         private System.Windows.Forms.ToolStripButton toolStripButtonWeekView;
-        private System.Windows.Forms.ToolStripButton toolStripButtonDetailView;
+        private System.Windows.Forms.ToolStripButton toolStripButtonFilterAgents;
         private Syncfusion.Windows.Forms.Tools.ToolStripPanelItem toolStripPanelItemViews2;
         private System.Windows.Forms.ToolStripButton toolStripButtonPeriodView;
         private System.Windows.Forms.ToolStripButton toolStripButtonSummaryView;
@@ -3468,7 +3470,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private Syncfusion.Windows.Forms.Tools.OfficeDropDownButton officeDropDownButtonMainMenuExportTo;
-        private System.Windows.Forms.ToolStripButton toolStripButtonFilterAgents;
+        private System.Windows.Forms.ToolStripButton toolStripButtonFilterAgentsx;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExFilterDays;
         private Syncfusion.Windows.Forms.Tools.ToolStripComboBoxEx toolStripComboBoxExFilterDays;
         private System.Windows.Forms.ToolStripLabel xxShowLastNumberOfDays;

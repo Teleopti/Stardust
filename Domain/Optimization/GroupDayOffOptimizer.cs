@@ -66,10 +66,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			IScheduleResultDataExtractor scheduleResultDataExtractor =
 				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix);
-            bool decisionMakerFoundDays = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
-			if (!decisionMakerFoundDays)
-				return false;
-            bool success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(WorkingBitArray), 100);
+
+            bool success = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
+			if (!success)
+			{
+				success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(WorkingBitArray), 100);
+				if (!success)
+					return false;
+
+				success = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
+				if (!success)
+					return false;
+			}
+			// DayOffBackToLegal if decisionMaker did something wrong
+            success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(WorkingBitArray), 100);
 			if (!success)
 				return false;
 

@@ -61,18 +61,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				.ForMember(d => d.Styles, c => c.UseValue(new StyleClassViewModel[] {}))
 				.ForMember(d => d.WeekDayHeaders, c => c.MapFrom(s => (from n in DateHelper.GetWeekdayNames(CultureInfo.CurrentCulture) select new WeekDayHeader {Title = n}).ToList()))
 				.ForMember(d => d.Weeks, c => c.MapFrom(s =>
-				                                        	{
-				                                        		var firstDatesOfWeeks = new List<DateOnly>();
-				                                        		var firstDateOfWeek = s.DisplayedPeriod.StartDate;
-				                                        		while (firstDateOfWeek < s.DisplayedPeriod.EndDate)
-				                                        		{
-				                                        			firstDatesOfWeeks.Add(new DateOnly(firstDateOfWeek));
-				                                        			firstDateOfWeek = firstDateOfWeek.AddDays(7);
-				                                        		}
-				                                        		var mappingDatas = firstDatesOfWeeks.Select(d =>
-				                                        				new StudentAvailabilityWeekDomainData(d, s.Person, s.Period,s.ScheduleDays));
-				                                        		return mappingDatas.ToArray();
-				                                        	}))
+					{
+						var firstDatesOfWeeks = new List<DateOnly>();
+						var firstDateOfWeek = s.DisplayedPeriod.StartDate;
+						while (firstDateOfWeek < s.DisplayedPeriod.EndDate)
+						{
+							firstDatesOfWeeks.Add(new DateOnly(firstDateOfWeek));
+							firstDateOfWeek = firstDateOfWeek.AddDays(7);
+						}
+						var mappingDatas = firstDatesOfWeeks.Select(d =>
+						                                            new StudentAvailabilityWeekDomainData(d, s.Person, s.Period, s.ScheduleDays));
+						return mappingDatas.ToArray();
+					}))
 				.ForMember(d => d.PeriodSummary, c => c.UseValue(new PeriodSummaryViewModel()))
 				.ForMember(d => d.StudentAvailabilityPeriod, c => c.MapFrom(s => s.Person.WorkflowControlSet))
 				;
@@ -80,13 +80,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 			CreateMap<StudentAvailabilityWeekDomainData, WeekViewModel>()
 				.ForMember(d => d.Summary, c => c.UseValue(new WeekSummaryViewModel()))
 				.ForMember(d => d.Days, c => c.MapFrom(s =>
-																		{
-																			var dates = s.FirstDateOfWeek.DateRange(7);
-																			var dateOnlys = dates.Select(d => new DateOnly(d));
-																			var mappingDatas = dateOnlys.Select(d =>
-																			                                new StudentAvailabilityDayDomainData(d, s.Period, s.Person, _studentAvailabilityProvider(), s.ScheduleDays));
-																			return mappingDatas.ToArray();
-																		}))
+					{
+						var dates = s.FirstDateOfWeek.DateRange(7);
+						var dateOnlys = dates.Select(d => new DateOnly(d));
+						var mappingDatas = dateOnlys.Select(d =>
+						                                    new StudentAvailabilityDayDomainData(d, s.Period, s.Person, _studentAvailabilityProvider(), s.ScheduleDays));
+						return mappingDatas.ToArray();
+					}))
 				;
 
 			CreateMap<StudentAvailabilityDayDomainData, DayViewModelBase>()
@@ -96,44 +96,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 			CreateMap<StudentAvailabilityDayDomainData, AvailableDayViewModel>()
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.Date))
 				.ForMember(d => d.Header, c => c.MapFrom(s => s))
-				.ForMember(d => d.State, c => c.MapFrom(s =>
-				                                        	{
-				                                        		var state = DayState.None;
-				                                        		var insideSchedulePeriod = s.Date >= s.Period.StartDate && s.Date <= s.Period.EndDate;
-				                                        		var hasWorkflowControlSet = s.Person.WorkflowControlSet != null;
-				                                        		if (insideSchedulePeriod && hasWorkflowControlSet)
-				                                        		{
-				                                        			var insideInputPeriod = s.Person.WorkflowControlSet.StudentAvailabilityInputPeriod.Contains(DateOnly.Today);
-				                                        			var insideStudentAvailabilityPeriod = s.Person.WorkflowControlSet.StudentAvailabilityPeriod.Contains(s.Date);
-				                                        			if (insideInputPeriod && insideStudentAvailabilityPeriod)
-				                                        			{
-				                                        				state = state | DayState.Editable;
-				                                        				if (s.StudentAvailability != null)
-				                                        					state = state | DayState.Deletable;
-				                                        			}
-				                                        		}
-				                                        		return state;
-				                                        	}))
-				.ForMember(d => d.StyleClassName, c => c.Ignore())
-				.ForMember(d => d.AvailableTimeSpan, c => c.MapFrom(s =>
-				                                                    	{
-				                                                    		var availabilityRestriction = s.StudentAvailability;
-				                                                    		return availabilityRestriction == null ? string.Empty : availabilityRestriction.FormatLimitationTimes();
-				                                                    	}))
-				.ForMember(d => d.StartTimeSpan, c => c.Ignore())
-				.ForMember(d => d.EndTimeSpan, c => c.Ignore())
-				.ForMember(d => d.WorkTimeSpan, c => c.Ignore())
+				.ForMember(d => d.Editable, c => c.MapFrom(s =>
+					{
+						if (s.Person.WorkflowControlSet == null) return false;
+						var insideSchedulePeriod = s.Period.Contains(s.Date);
+						var insideInputPeriod = s.Person.WorkflowControlSet.StudentAvailabilityInputPeriod.Contains(DateOnly.Today);
+						var insideStudentAvailabilityPeriod = s.Person.WorkflowControlSet.StudentAvailabilityPeriod.Contains(s.Date);
+						return insideSchedulePeriod && insideInputPeriod && insideStudentAvailabilityPeriod;
+					}))
+				.ForMember(d => d.InPeriod, c => c.MapFrom(s => s.Period.Contains(s.Date)))
 				;
 
 			CreateMap<StudentAvailabilityDayDomainData, HeaderViewModel>()
 				.ForMember(d => d.DayDescription, c => c.MapFrom(s =>
-				                                                 	{
-				                                                 		if (s.Date.Day.Equals(1))
-				                                                 			return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.Date.Month);
-				                                                 		if (s.Date.Date.Equals(s.DisplayedPeriod.StartDate))
-				                                                 			return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.Date.Month);
-				                                                 		return string.Empty;
-				                                                 	}))
+					{
+						if (s.Date.Day.Equals(1))
+							return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.Date.Month);
+						if (s.Date.Date.Equals(s.DisplayedPeriod.StartDate))
+							return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.Date.Month);
+						return string.Empty;
+					}))
 				.ForMember(d => d.DayNumber, c => c.MapFrom(s => s.Date.Day.ToString()))
 				;
 
@@ -142,15 +124,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				.ForMember(d => d.Display, c => c.MapFrom(s => s.Period.DateString))
 				.ForMember(d => d.PeriodNavigation, c => c.MapFrom(s => s))
 				.ForMember(d => d.SelectableDateRange, c => c.MapFrom(s => new PeriodDateRangeViewModel
-				                                                           	{
-																				MinDate = new DateOnly(CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime).ToFixedClientDateOnlyFormat(),
-																				MaxDate = new DateOnly(CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime).ToFixedClientDateOnlyFormat()
-				                                                           	}))
+					{
+						MinDate = new DateOnly(CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime).ToFixedClientDateOnlyFormat(),
+						MaxDate = new DateOnly(CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime).ToFixedClientDateOnlyFormat()
+					}))
 				.ForMember(d => d.SelectedDateRange, c => c.MapFrom(s => new PeriodDateRangeViewModel
-				                                                         	{
-																				MinDate = s.Period.StartDate.ToFixedClientDateOnlyFormat(),
-																				MaxDate = s.Period.EndDate.ToFixedClientDateOnlyFormat()
-				                                                         	}))
+					{
+						MinDate = s.Period.StartDate.ToFixedClientDateOnlyFormat(),
+						MaxDate = s.Period.EndDate.ToFixedClientDateOnlyFormat()
+					}))
 				;
 
 			CreateMap<StudentAvailabilityDomainData, PeriodNavigationViewModel>()

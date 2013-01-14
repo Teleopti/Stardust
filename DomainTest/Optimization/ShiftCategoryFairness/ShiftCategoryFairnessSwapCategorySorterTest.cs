@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                                          ShiftCategoryFromGroup1 = _shiftCategoryDay,
                                          ShiftCategoryFromGroup2 = _shiftCategoryNight
                                      },
-                                 new ShiftCategoryFairnessSwap
+                                     new ShiftCategoryFairnessSwap
                                      {
                                          Group1 = _selectedGroup,
                                          Group2 = new ShiftCategoryFairnessCompareResult(),
@@ -442,7 +442,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
             Assert.AreNotEqual(count, _list.Count);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "result"), Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals",
+            MessageId = "result"), Test]
         [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void ShouldThrowException()
         {

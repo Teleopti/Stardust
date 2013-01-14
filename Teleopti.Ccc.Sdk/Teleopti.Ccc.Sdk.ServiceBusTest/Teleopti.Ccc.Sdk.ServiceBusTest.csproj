@@ -148,7 +148,9 @@
     <Compile Include="Forecast\ImportForecastsFileToSkillConsumerResolveTest.cs" />
     <Compile Include="Forecast\ImportForecastsToSkillTest.cs" />
     <Compile Include="Forecast\OpenAndSplitTargetSkillTest.cs" />
+    <Compile Include="Forecast\RecalculateForecastOnSkillConsumerTest.cs" />
     <Compile Include="Forecast\SendImportForecastBusMessageTest.cs" />
+    <Compile Include="Forecast\StatisticLoaderTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
     <Compile Include="Notification\ScheduleDayReadModelComparerTest.cs" />
@@ -191,6 +193,10 @@
     <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>

@@ -14,24 +14,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 		{
 			base.Configure();
 
-			CreateMap<StudentAvailabilityDayForm, IStudentAvailabilityDay>()
+			CreateMap<StudentAvailabilityDayInput, IStudentAvailabilityDay>()
 				.ConvertUsing<StudentAvailabilityDayFormToStudentAvailabilityDay>()
 				;
 
-			CreateMap<StudentAvailabilityDayForm, IStudentAvailabilityRestriction>()
+			CreateMap<StudentAvailabilityDayInput, IStudentAvailabilityRestriction>()
 				.ConstructUsing(s => new StudentAvailabilityRestriction())
 				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s => s))
 				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s => s))
 				.ForMember(d => d.WorkTimeLimitation, o => o.Ignore())
 				;
 
-			CreateMap<StudentAvailabilityDayForm, StartTimeLimitation>()
+			CreateMap<StudentAvailabilityDayInput, StartTimeLimitation>()
 				.ConstructUsing(s => new StartTimeLimitation(s.StartTime.Time, null))
 				.ForMember(d => d.StartTimeString, o => o.Ignore())
 				.ForMember(d => d.EndTimeString, o => o.Ignore())
 				;
 
-			CreateMap<StudentAvailabilityDayForm, EndTimeLimitation>()
+			CreateMap<StudentAvailabilityDayInput, EndTimeLimitation>()
 				.ConstructUsing(s => new EndTimeLimitation(null, TimeHelper.ParseTimeSpanFromTimeOfDay(s.EndTime.Time, s.NextDay)))
 				.ForMember(d => d.StartTimeString, o => o.Ignore())
 				.ForMember(d => d.EndTimeString, o => o.Ignore())
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 
 		}
 
-		public class StudentAvailabilityDayFormToStudentAvailabilityDay : ITypeConverter<StudentAvailabilityDayForm, IStudentAvailabilityDay>
+		public class StudentAvailabilityDayFormToStudentAvailabilityDay : ITypeConverter<StudentAvailabilityDayInput, IStudentAvailabilityDay>
 		{
 			private readonly ILoggedOnUser _loggedOnUser;
 			private readonly IMappingEngine _mapper;
@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 
 			public IStudentAvailabilityDay Convert(ResolutionContext context)
 			{
-				var source = context.SourceValue as StudentAvailabilityDayForm;
+				var source = context.SourceValue as StudentAvailabilityDayInput;
 				var destination = context.DestinationValue as IStudentAvailabilityDay;
 				if (destination == null)
 				{
 					var person = _loggedOnUser.CurrentUser();
-					var restriction = _mapper.Map<StudentAvailabilityDayForm, IStudentAvailabilityRestriction>(source);
+					var restriction = _mapper.Map<StudentAvailabilityDayInput, IStudentAvailabilityRestriction>(source);
 					destination = new StudentAvailabilityDay(person, source.Date, new List<IStudentAvailabilityRestriction> { restriction });
 				}
 				else

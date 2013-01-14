@@ -1,122 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using NUnit.Framework;
-using Rhino.Mocks;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
+﻿using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 {
-    [TestFixture]
-    public class OpenShiftTradePeriodSpecificationTest
-    {
-        IOpenShiftTradePeriodSpecification _target;
-        private MockRepository _mock;
+	[TestFixture]
+	public class OpenShiftTradePeriodSpecificationTest
+	{
+		private OpenShiftTradePeriodSpecification _target;
+		private IPerson _personFrom;
+		private IPerson _personTo;
 
-        private IPerson _personFrom;
-        private IPerson _personTo;
-        private IWorkflowControlSet _workflowControlSetFrom;
-        private IWorkflowControlSet _workflowControlSetTo;
+		[SetUp]
+		public void Setup()
+		{
+			_target = new OpenShiftTradePeriodSpecification();
+			var wcs = new WorkflowControlSet("wcs") { ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 99) };
+			_personFrom = PersonFactory.CreatePerson("test person from");
+			_personFrom.WorkflowControlSet = wcs;
+			_personTo = PersonFactory.CreatePerson("test person to");
+			_personTo.WorkflowControlSet = wcs;
+		}
 
-        [SetUp]
-        public void Setup()
-        {
-            _target = new OpenShiftTradePeriodSpecification();
-            _mock = new MockRepository();
-            _personFrom = _mock.StrictMock<IPerson>();
-            _personTo = _mock.StrictMock<IPerson>();
-            _workflowControlSetFrom = _mock.StrictMock<IWorkflowControlSet>();
-            _workflowControlSetTo = _mock.StrictMock<IWorkflowControlSet>();
-        }
+		[Test]
+		public void ShouldBeWrongIfOutsideOfOpenPeriod()
+		{
+			var checkItem = new ShiftTradeAvailableCheckItem { DateOnly = DateOnly.Today, PersonFrom = _personFrom, PersonTo = _personTo };
+			Assert.That(_target.IsSatisfiedBy(checkItem), Is.False);
+		}
 
-        [Test]
-        public void NoWorkflowControlSetReturnsFalse()
-        {
+		[Test]
+		public void ShouldHaveCorrectDenyReasonSet()
+		{
+			_target.DenyReason.Should().Be.EqualTo("OpenShiftTradePeriodDenyReason");
+		}
 
-            using (_mock.Record())
-            {
-                Expect.Call(_personFrom.WorkflowControlSet).Return(null).Repeat.AtLeastOnce();
-                Expect.Call(_personTo.WorkflowControlSet).Return(_workflowControlSetTo).Repeat.AtLeastOnce();
-            }
+		[Test]
+		public void ShouldBeRightIfInsideOfOpenPeriod()
+		{
+			var checkItem = new ShiftTradeAvailableCheckItem { DateOnly = DateOnly.Today.AddDays(1), PersonFrom = _personFrom, PersonTo = _personTo };
+			Assert.That(_target.IsSatisfiedBy(checkItem), Is.True);
+		}
 
-            using (_mock.Playback())
-            {
-                Assert.IsFalse(_target.IsSatisfiedBy(tradeDetails()));
-            }
-
-        }
-
-        [Test]
-        public void CorrectOpenPeriodReturnsTrue()
-        {
-            using (_mock.Record())
-            {
-                Expect.Call(_personFrom.WorkflowControlSet).Return(_workflowControlSetFrom).Repeat.AtLeastOnce();
-                Expect.Call(_personTo.WorkflowControlSet).Return(_workflowControlSetTo).Repeat.AtLeastOnce();
-                Expect.Call(_workflowControlSetFrom.ShiftTradeOpenPeriodDaysForward).Return(new MinMax<int>(3, 10)).Repeat.AtLeastOnce();
-                Expect.Call(_workflowControlSetTo.ShiftTradeOpenPeriodDaysForward).Return(new MinMax<int>(3, 10)).Repeat.AtLeastOnce();
-            }
-
-            using (_mock.Playback())
-            {
-                Assert.IsTrue(_target.IsSatisfiedBy(tradeDetails()));
-            }
-        }
-
-        [Test]
-        public void PersonFromHasNotOpenPeriodReturnsFalse()
-        {
-            using (_mock.Record())
-            {
-                Expect.Call(_personFrom.WorkflowControlSet).Return(_workflowControlSetFrom).Repeat.AtLeastOnce();
-                Expect.Call(_personTo.WorkflowControlSet).Return(_workflowControlSetTo).Repeat.AtLeastOnce();
-                Expect.Call(_workflowControlSetFrom.ShiftTradeOpenPeriodDaysForward).Return(new MinMax<int>(10, 15)).Repeat.AtLeastOnce();
-                Expect.Call(_workflowControlSetTo.ShiftTradeOpenPeriodDaysForward).Return(new MinMax<int>(3, 10)).Repeat.AtLeastOnce();
-            }
-
-            using (_mock.Playback())
-            {
-                Assert.IsFalse(_target.IsSatisfiedBy(tradeDetails()));
-            }
-        }
-
-        [Test]
-        public void PersonToHasNotOpenPeriodReturnsFalse()
-        {
-            using (_mock.Record())
-            {
-                Expect.Call(_personFrom.WorkflowControlSet).Return(_workflowControlSetFrom).Repeat.AtLeastOnce();
-                Expect.Call(_personTo.WorkflowControlSet).Return(_workflowControlSetTo).Repeat.AtLeastOnce();
-                Expect.Call(_workflowControlSetFrom.ShiftTradeOpenPeriodDaysForward).Return(new MinMax<int>(3, 15)).Repeat.AtLeastOnce();
-                Expect.Call(_workflowControlSetTo.ShiftTradeOpenPeriodDaysForward).Return(new MinMax<int>(10, 20)).Repeat.AtLeastOnce();
-            }
-
-            using (_mock.Playback())
-            {
-                Assert.IsFalse(_target.IsSatisfiedBy(tradeDetails()));
-            }
-        }
-
-        [Test]
-        public void VerifyDenyReason()
-        {
-            Assert.AreEqual(_target.DenyReason, "OpenShiftTradePeriodDenyReason");
-            Assert.IsNotNull(UserTexts.Resources.OpenShiftTradePeriodDenyReason);
-        }
-
-        private IList<IShiftTradeSwapDetail> tradeDetails()
-        {
-            IList<IShiftTradeSwapDetail> ret = new List<IShiftTradeSwapDetail>();
-            IShiftTradeSwapDetail detail1 = new ShiftTradeSwapDetail(_personFrom, _personTo, DateOnly.Today.AddDays(5), DateOnly.Today.AddDays(5));
-
-            ret.Add(detail1);
-            return ret;
-        }
-
-    }
-
-    
-
-    
+		[Test]
+		public void ShouldFailIfOneHasNoWorkflowControlSet()
+		{
+			_personFrom.WorkflowControlSet = null;
+			_personTo.WorkflowControlSet = new WorkflowControlSet();
+			var checkItem = new ShiftTradeAvailableCheckItem { DateOnly = DateOnly.Today, PersonFrom = _personFrom, PersonTo = _personTo };
+			Assert.That(_target.IsSatisfiedBy(checkItem), Is.False);
+		}
+	}
 }

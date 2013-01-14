@@ -57,7 +57,7 @@
 
 		<div id="signin">
 
-			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked">
+			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked" style="display: none;">
 				<li data-bind="css: {'active': Selected}, class: Type">
 					<a href="#" data-bind="click: Select">
 						<span data-bind="text: Name"></span>
@@ -67,7 +67,7 @@
 			</ul>
 			<div data-bind="visible: DisplayUserNameAndPasswordBoxes()">
 				<div>
-					<input type="text" id="Username-input" placeholder=@Resources.UserName class="input-block-level" data-bind="value: UserName, returnKey: SignIn, hasfocus: UserNameFocus" />
+					<input type="text" id="Username-input" placeholder=@Resources.UserName class="input-block-level" data-bind="value: UserName, returnKey: SignIn, hasfocus: UserNameFocus" autocapitalize="off" autocorrect="off" />
 				</div>
 				<div>
 					<input type="password" id="Password-input" placeholder=@Resources.Password class="input-block-level" data-bind="value: Password, returnKey: SignIn" />

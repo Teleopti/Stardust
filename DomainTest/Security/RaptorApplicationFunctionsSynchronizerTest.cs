@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
@@ -255,7 +257,6 @@ namespace Teleopti.Ccc.DomainTest.Security
         }
 
         [Test]
-        [ExpectedException(typeof(PermissionException))]
         public void VerifyCheckRaptorApplicationFunctionsDeleteFunction()
         {
             // create test data. We imitate a deletion by adding a function to the database functions
@@ -272,14 +273,16 @@ namespace Teleopti.Ccc.DomainTest.Security
 
             _mocks.ReplayAll();
 
-            _target.CheckRaptorApplicationFunctions();
+			var result = _target.CheckRaptorApplicationFunctions();
+			Assert.IsFalse(result.Result);
+			Assert.AreEqual(1, result.DeletedFunctions.Count());
+
 
             _mocks.VerifyAll();
 
         }
 
         [Test]
-        [ExpectedException(typeof(PermissionException))]
         public void VerifyCheckRaptorApplicationFunctionsAddFunction()
         {
             // create test data. We imitate a deletion by adding a function to the database functions
@@ -296,7 +299,10 @@ namespace Teleopti.Ccc.DomainTest.Security
 
             _mocks.ReplayAll();
 
-            _target.CheckRaptorApplicationFunctions();
+			var result = _target.CheckRaptorApplicationFunctions();
+
+			Assert.IsFalse(result.Result);
+			Assert.AreEqual(1, result.AddedFunctions.Count());
 
             _mocks.VerifyAll();
 

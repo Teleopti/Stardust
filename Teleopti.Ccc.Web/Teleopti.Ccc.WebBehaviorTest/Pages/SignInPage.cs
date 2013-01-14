@@ -3,6 +3,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
+using List = WatiN.Core.List;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
@@ -18,6 +19,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "PasswordExpireSoon")]
 		public Div PasswordExpireSoonError { get; set; }
+
+		[FindBy(Id = "DataSources")]
+		public List DataSources { get; set; }
 
 		[FindBy(Id = "PasswordAlreadyExpired")]
 		public Div PasswordAlreadyExpiredError { get; set; }
@@ -41,14 +45,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void SelectApplicationTestDataSource()
 		{
-			EventualAssert.That(() => Document.Element(Find.BySelector("li.application a:contains(TestData)")).Exists, Is.True);
-		    Document.Element(Find.BySelector("li.application a:contains(TestData)")).EventualClick();
+			DataSources.WaitUntilDisplayed();
+			var dataSource = DataSources.Element(Find.BySelector(".application a:contains(TestData)"));
+			EventualAssert.That(() => dataSource.Exists, Is.True);
+			dataSource.EventualClick();
 		}
 
 		public void SelectWindowsTestDataSource()
 		{
-			EventualAssert.That(() => Document.Element(Find.BySelector("li.windows a:contains(TestData)")).Exists, Is.True);
-		    Document.Element(Find.BySelector("li.windows a:contains(TestData)")).EventualClick();
+			DataSources.WaitUntilDisplayed();
+			var dataSource = DataSources.Element(Find.BySelector(".windows a:contains(TestData)"));
+			EventualAssert.That(() => dataSource.Exists, Is.True);
+			dataSource.EventualClick();
 		}
 
 		public void SignInApplication(string username, string password)

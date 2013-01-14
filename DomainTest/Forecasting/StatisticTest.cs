@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             mocks.ReplayAll();
 
-            Statistic.Match(new List<ISkillStaffPeriod> {skillStaffPeriod1, skillStaffPeriod2},
+            new Statistic(null).Match(new List<ISkillStaffPeriod> {skillStaffPeriod1, skillStaffPeriod2},
                             new List<ITemplateTaskPeriod> {taskPeriod1, taskPeriod2},
                             new List<IActiveAgentCount> {activeAgentCount1, activeAgentCount2});
 
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             mocks.ReplayAll();
 
-            Statistic.Match(new List<ISkillStaffPeriod> { skillStaffPeriod1, skillStaffPeriod2 },
+            new Statistic(null).Match(new List<ISkillStaffPeriod> { skillStaffPeriod1, skillStaffPeriod2 },
                             new List<ITemplateTaskPeriod> { taskPeriod1, taskPeriod2 },
                             new List<IActiveAgentCount> { activeAgentCount1, activeAgentCount2 });
 

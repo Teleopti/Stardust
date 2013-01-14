@@ -525,6 +525,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 FormKill();
                 return;
             }
+            if (KillMode) return;
 
             //Clear validate user credential collection.
             _filteredPeopleHolder.ValidateUserCredentialsCollection.Clear();
@@ -578,18 +579,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             }
             catch (TooManyActiveAgentsException e)
             {
-            	string explanation;
-				if (e.LicenseType.Equals(LicenseType.Seat))
-				{
-					explanation = String.Format(CultureInfo.CurrentCulture, UserTexts.Resources.YouHaveTooManySeats,
-								 e.NumberOfLicensed);
-				}
-				else
-				{
-					explanation = String.Format(CultureInfo.CurrentCulture, UserTexts.Resources.YouHaveTooManyActiveAgents,
+                string explanation;
+                if (e.LicenseType.Equals(LicenseType.Seat))
+                {
+                    explanation = String.Format(CultureInfo.CurrentCulture, UserTexts.Resources.YouHaveTooManySeats,
+                                 e.NumberOfLicensed);
+                }
+                else
+                {
+                    explanation = String.Format(CultureInfo.CurrentCulture, UserTexts.Resources.YouHaveTooManyActiveAgents,
                                   e.NumberOfAttemptedActiveAgents, e.NumberOfLicensed);
-				}
-                    
+                }
+
 
                 ShowErrorMessage(explanation, UserTexts.Resources.ErrorMessage);
                 CleanUpAfterException();
@@ -597,10 +598,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             catch (OptimisticLockException)
             {
                 ShowInformationMessage(string.Concat(
-                    UserTexts.Resources.SomeoneElseHaveChanged, ".",
+                    UserTexts.Resources.SomeoneElseHaveChanged, ". ",
+                    UserTexts.Resources.YourChangesWillBeDiscarded, Environment.NewLine,
                     UserTexts.Resources.PleaseTryAgainLater),
                                        UserTexts.Resources.ErrorMessage);
-                CleanUpAfterException();
+                FormKill();
+            }
+            catch (ConstraintViolationException)
+            {
+                ShowInformationMessage(string.Concat(
+                    UserTexts.Resources.SomeoneElseHaveChanged, ". ",
+                    UserTexts.Resources.YourChangesWillBeDiscarded, Environment.NewLine,
+                    UserTexts.Resources.PleaseTryAgainLater),
+                                       UserTexts.Resources.ErrorMessage);
+                FormKill();
             }
         }
 
@@ -1492,10 +1503,16 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             unregisterEventsForFormKill();
 
             DisposeAllChildGrids();
-
-            _filteredPeopleHolder.Dispose();
-			_findAndReplaceForm.Dispose();
-			_findAndReplaceForm = null;
+            if (_filteredPeopleHolder != null)
+            {
+                _filteredPeopleHolder.Dispose();
+                _filteredPeopleHolder = null;
+            }
+            if (_findAndReplaceForm != null)
+            {
+                _findAndReplaceForm.Dispose();
+                _findAndReplaceForm = null;
+            }
             _onClose = true;
         }
 

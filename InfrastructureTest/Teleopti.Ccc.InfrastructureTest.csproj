@@ -138,6 +138,7 @@
     <Compile Include="Bugs\Bug7871.cs" />
     <Compile Include="Config\LoadPasswordPolicyServiceTest.cs" />
     <Compile Include="Config\XmlDefaultsTest.cs" />
+    <Compile Include="Repositories\Deadlock\StudentAvailabilityPersistTest.cs" />
     <Compile Include="Foundation\ApplicationDataTest.cs" />
     <Compile Include="Foundation\AvailableWindowsDataSourcesTest.cs" />
     <Compile Include="Foundation\ConfigReaderTest.cs" />
@@ -170,8 +171,7 @@
     <Compile Include="NHibernateConfiguration\Cache\PersonInApplicationRoleTest.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetterTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiDistributedTransactionContextTest.cs" />
-    <Compile Include="NHibernateConfiguration\EnversAuditDelegateTest.cs" />
-    <Compile Include="NHibernateConfiguration\EnversConfigurationDelegateTest.cs" />
+    <Compile Include="NHibernateConfiguration\EnversConfigurationTest.cs" />
     <Compile Include="NHibernateConfiguration\FasterProxyFactoryFactoryTest.cs" />
     <Compile Include="NHibernateConfiguration\HybridWebSessionContextTest.cs" />
     <Compile Include="NHibernateConfiguration\PerformanceTest.cs" />

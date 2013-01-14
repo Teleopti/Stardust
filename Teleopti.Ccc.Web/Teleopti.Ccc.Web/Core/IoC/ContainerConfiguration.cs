@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb()));
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<LogModule>();
-			builder.RegisterModule<RuleSetModule>();
 
 			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			var mbCacheModule = new MbCacheModule(new FixedNumberOfLockObjects(100));
 			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RuleSetCacheModule(mbCacheModule, false));
+			builder.RegisterModule(new RuleSetModule(mbCacheModule, false));
 			builder.RegisterModule(new AuthenticationCachedModule(mbCacheModule));
 
 			return builder.Build();

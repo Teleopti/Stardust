@@ -16,15 +16,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	public class TeamSteadyStateMainShiftScheduler : ITeamSteadyStateMainShiftScheduler
 	{
-		private readonly IGroupMatrixHelper _groupMatrixHelper;
 		private readonly ITeamSteadyStateCoherentChecker _coherentChecker;
 		private readonly ITeamSteadyStateScheduleMatrixProFinder _teamSteadyStateScheduleMatrixProFinder;
+		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
-		public TeamSteadyStateMainShiftScheduler(IGroupMatrixHelper groupMatrixHelper, ITeamSteadyStateCoherentChecker coherentChecker, ITeamSteadyStateScheduleMatrixProFinder teamSteadyStateScheduleMatrixProFinder)
+		public TeamSteadyStateMainShiftScheduler(ITeamSteadyStateCoherentChecker coherentChecker, ITeamSteadyStateScheduleMatrixProFinder teamSteadyStateScheduleMatrixProFinder, IResourceOptimizationHelper resourceOptimizationHelper)
 		{
-			_groupMatrixHelper = groupMatrixHelper;
 			_coherentChecker = coherentChecker;
 			_teamSteadyStateScheduleMatrixProFinder = teamSteadyStateScheduleMatrixProFinder;
+			_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var assignedPersons = new List<IPerson>();
 			IPersonAssignment personAssignmentSource = null;
-			IScheduleDay dayToCalculate = null;
-
+			
 			//schedule first group member or use existing main shift as source, return false if there are non coherent mainshifts
 			foreach (var groupMember in groupPerson.GroupMembers)
 			{
@@ -76,11 +75,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					assignedPersons.Add(person);
 				}
 
-				dayToCalculate = scheduleDaySource;
 				personAssignmentSource = scheduleDaySource.AssignmentHighZOrder();
 				break;
 			}
-			
+
+			var daysToRecalculate = new List<IScheduleDay>();
+
 			//add the shift to other group memembers
 			foreach (var groupMember in groupPerson.GroupMembers)
 			{
@@ -93,12 +93,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var mainShift = personAssignmentSource.MainShift;
 				var scheduleRange = scheduleDictionary[groupMember];
 				var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
-				var significantPart = scheduleDay.SignificantPart();
 				var cloneMainShift = mainShift.NoneEntityClone() as IMainShift;
 
-				if (significantPart == SchedulePartView.MainShift) continue;
-					
-				if (significantPart == SchedulePartView.DayOff || significantPart == SchedulePartView.FullDayAbsence) continue;
+				if (DontAddMainShiftIfDayNotEmpty(scheduleDay)) continue;
 
 				var theMatrix = _teamSteadyStateScheduleMatrixProFinder.MatrixPro(matrixes, scheduleDay);
 				if (theMatrix == null) continue;
@@ -108,11 +105,24 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				if (locked) continue;
 				scheduleDay.AddMainShift(cloneMainShift);
 				rollbackService.Modify(scheduleDay);
+				daysToRecalculate.Add(scheduleDay);
 			}
 
-			if (dayToCalculate != null)
-				_groupMatrixHelper.SafeResourceCalculate(new List<IScheduleDay> { dayToCalculate });
+			if (daysToRecalculate.Count > 0)
+			{
+				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true, new List<IScheduleDay>(), daysToRecalculate);	
+				var period = daysToRecalculate[0].Period;
+				if(period.StartDateTime.Date != period.EndDateTime.Date)
+					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, true, new List<IScheduleDay>(), daysToRecalculate);	
+			}
+				
 			return true;
+		}
+
+		private static bool DontAddMainShiftIfDayNotEmpty(IScheduleDay scheduleDay)
+		{
+			var significantPart = scheduleDay.SignificantPartForDisplay();
+			return significantPart == SchedulePartView.MainShift || significantPart == SchedulePartView.DayOff || significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff;
 		}
 	}
 }

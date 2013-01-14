@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		[Test]
 		public void VerifyMinMaxFromRuleSetIsNullWhenRestrictionIsNull()
 		{
-			var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService()));
+			var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())));
 			IWorkShiftRuleSet ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
 			IWorkShiftRuleSet ruleSet2 = _mocks.StrictMock<IWorkShiftRuleSet>();
 			IEffectiveRestriction effectiveRestriction = null;
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		[Test]
 		public void DayOffInRestrictionReturnsNullInMinMaxWorkTime()
 		{
-			var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService()));
+			var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())));
 			IEffectiveRestriction effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
 			using (_mocks.Record())
 			{
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		[Test]
 		public void NoValidWorkShiftRuleSetsOnDayReturnsNull()
 		{
-			var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService()));
+			var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())));
 			IEffectiveRestriction effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
 			IWorkShiftRuleSet ruleSet = _mocks.StrictMock<IWorkShiftRuleSet>();
 			_target.AddRuleSet(ruleSet);

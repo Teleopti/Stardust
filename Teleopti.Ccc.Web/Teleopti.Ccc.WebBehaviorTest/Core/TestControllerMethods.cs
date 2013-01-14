@@ -36,6 +36,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Navigation.GoTo("Test/BeforeScenario", new ApplicationStartupTimeout());
 		}
 
+		/// <summary>
+		/// Does an automatic logon with hardcoded username and password.
+		/// </summary>
+		/// <remarks>
+		/// Creates, persist a auto user, gets the hardcoded password and logs on.
+		/// </remarks>
 		public static void Logon()
 		{
 			var userName = UserFactory.User().MakeUser();
@@ -49,6 +55,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			InnerLogon(userName, password);
 		}
 
+		/// <summary>
+		/// Imitates a logon process on UI with the given username and password.
+		/// </summary>
+		/// <param name="userName">Name of the user.</param>
+		/// <param name="password">The password.</param>
 		private static void InnerLogon(string userName, string password)
 		{
 			Pages.Pages.CurrentSignInPage = Browser.Current.Page<SignInPage>();

@@ -62,6 +62,7 @@
 		<VersionFile Include="$(CCNetWorkingDirectory)\ActiveBranchVersion.txt"/>
 		<MajorVersionFile Include="$(CCNetWorkingDirectory)\ActiveMajorVersion.txt"/>
 		<PreReqTool Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\CCC.CCC7Prereq.csproj" />
+		<AsCmdProj Include="$(CCNetWorkingDirectory)\Cube\ascmd\ascmd.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>
@@ -89,6 +90,7 @@
 
 	<Target Name="CompileExtraApps">
 		<MSBuild Projects="@(PreReqTool)" Properties="Configuration=Release" Targets="Build" />
+		<MSBuild Projects="@(AsCmdProj)" Properties="Configuration=Release" Targets="Build" />
 	</Target>
 
 	<Target Name="CleanUpUnwantedFiles">
@@ -176,7 +178,12 @@
 
 			<!-- Wise -->
 			<Wise
-			Include="$(CCNetWorkingDirectory)\Wise\**\*.*" />
+			Include="$(CCNetWorkingDirectory)\Wise\**\*.*"/>
+			
+			<AsCmd
+			Include="$(CCNetWorkingDirectory)\Cube\ascmd\bin\$(Configuration)\Ascmd.exe;
+			$(CCNetWorkingDirectory)\Cube\ascmd\bin\$(Configuration)\Microsoft.AnalysisServices.AdomdClient.dll;
+			$(CCNetWorkingDirectory)\Cube\ascmd\bin\$(Configuration)\Microsoft.AnalysisServices.dll"/>
 
 			<!--AgentPortalWeb-->
 
@@ -641,6 +648,8 @@
 			DestinationFiles="@(MyTimeClickOnce->'$(DeployPath)\MyTime\ClickOnce\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy	SourceFiles="@(Wise)"
 			DestinationFiles="@(Wise->'$(DeployPath)\Wise\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy	SourceFiles="@(AsCmd)"
+			DestinationFiles="@(AsCmd->'$(DeployPath)\Cube\ascmd\%(RecursiveDir)%(Filename)%(Extension)')"/>		
 		<Copy SourceFiles="@(ClickOnceSign)"
 			DestinationFiles="@(ClickOnceSign->'$(DeployPath)\ClickOnceSignTools\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy SourceFiles="@(AgentPortalWeb)"
@@ -659,11 +668,7 @@
 		<Message Importance="high" Text="make folder ..."/>
 		<Exec Command="if not exist &quot;$(MSIPath)&quot; mkdir &quot;$(MSIPath)&quot;"/>
 		<Message Importance="high" Text="make folderWiki. Done!"/>
-		
-		<Message Importance="high" Text="Fetch latest Wiki ..."/>
-		<Exec Command="&quot;$(FetchContextHelp)&quot; &quot;$(MSIPath)&quot;"/>
-		<Message Importance="high" Text="Fetch latest Wiki. Done!"/>
-		
+	
 		<Copy SourceFiles="@(PreReq)"
 			  DestinationFiles="@(PreReq->'$(MSIPath)\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy SourceFiles="$(SDKDocOutput)"

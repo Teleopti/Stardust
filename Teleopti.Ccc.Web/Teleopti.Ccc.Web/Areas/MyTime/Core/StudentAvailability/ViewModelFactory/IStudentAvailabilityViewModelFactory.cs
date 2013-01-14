@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory
@@ -7,5 +8,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 	{
 		StudentAvailabilityViewModel CreateViewModel(DateOnly dateInPeriod);
 		StudentAvailabilityDayViewModel CreateDayViewModel(DateOnly date);
+		IEnumerable<StudentAvailabilityAndScheduleDayViewModel> CreateStudentAvailabilityAndSchedulesViewModels(DateOnly @from, DateOnly to);
+	}
+
+	public class StudentAvailabilityAndScheduleDayViewModel
+	{
+		public string Date { get; set; }
+		public StudentAvailabilityDayViewModel StudentAvailability { get; set; }
 	}
 }
