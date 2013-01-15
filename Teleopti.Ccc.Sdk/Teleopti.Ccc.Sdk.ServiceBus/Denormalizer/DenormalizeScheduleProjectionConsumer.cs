@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public class DenormalizeScheduleProjectionConsumer : ConsumerOf<DenormalizedSchedule>
+	public class DenormalizeScheduleProjectionConsumer : ConsumerOf<DenormalizedSchedule>, ConsumerOf<DenormalizedScheduleForScheduleProjection>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
@@ -19,6 +19,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(DenormalizedSchedule message)
+		{
+			createReadModel(message);
+		}
+
+		private void createReadModel(DenormalizedScheduleBase message)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
@@ -35,9 +40,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				{
 					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, message.ScenarioId, message.PersonId, layer);
 				}
-				
+
 				unitOfWork.PersistAll();
 			}
+		}
+
+		public void Consume(DenormalizedScheduleForScheduleProjection message)
+		{
+			createReadModel(message);
 		}
 	}
 }

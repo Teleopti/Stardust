@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public ScheduleDayReadModel GetReadModels(DenormalizedSchedule schedule)
+		public ScheduleDayReadModel GetReadModels(DenormalizedScheduleBase schedule)
 		{
 			var ret = new ScheduleDayReadModel();
 			var person = _personRepository.Get(schedule.PersonId);

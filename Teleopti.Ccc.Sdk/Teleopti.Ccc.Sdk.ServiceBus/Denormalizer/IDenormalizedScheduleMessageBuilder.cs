@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
 	public interface IDenormalizedScheduleMessageBuilder
 	{
-		void Build(DenormalizeScheduleProjection message, IScheduleRange range, DateOnlyPeriod realPeriod, Action<DenormalizedSchedule> actionForEachItem);
+		void Build<T>(ScheduleDenormalizeBase message, IScheduleRange range, DateOnlyPeriod realPeriod, Action<T> actionForEachItem)
+			where T : DenormalizedScheduleBase, new();
 	}
 }

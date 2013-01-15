@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 	public class DenormalizedScheduleMessageBuilder : IDenormalizedScheduleMessageBuilder
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public void Build(DenormalizeScheduleProjection message, IScheduleRange range, DateOnlyPeriod realPeriod, Action<DenormalizedSchedule> actionForEachItem)
+		public void Build<T>(ScheduleDenormalizeBase message, IScheduleRange range, DateOnlyPeriod realPeriod, Action<T> actionForEachItem) where T : DenormalizedScheduleBase, new()
 		{
 			foreach (var scheduleDay in range.ScheduledDayCollection(realPeriod))
 			{
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 				var projection = scheduleDay.ProjectionService().CreateProjection();
 				var significantPart = scheduleDay.SignificantPart();
-				var result = new DenormalizedSchedule
+				var result = new T
 				             	{
 				             		IsInitialLoad = message.SkipDelete,
 				             		IsDefaultScenario = range.Scenario.DefaultScenario,

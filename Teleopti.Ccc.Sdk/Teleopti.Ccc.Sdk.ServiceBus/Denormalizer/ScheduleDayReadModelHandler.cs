@@ -10,7 +10,7 @@ using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public class ScheduleDayReadModelHandler : ConsumerOf<DenormalizedSchedule>
+	public class ScheduleDayReadModelHandler : ConsumerOf<DenormalizedSchedule>, ConsumerOf<DenormalizedScheduleForScheduleDay>
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
 
@@ -43,6 +43,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(DenormalizedSchedule message)
 		{
+			createReadModel(message);
+		}
+
+		private void createReadModel(DenormalizedScheduleBase message)
+		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				if (!message.IsDefaultScenario) return;
@@ -63,7 +68,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				if (Logger.IsInfoEnabled)
 					Logger.Info("Checking SMSLink license.");
 				//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
-				if (DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
+				if (
+					DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(
+						DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
 				{
 					var smsMessages = _significantChangeChecker.SignificantChangeNotificationMessage(date, person, readModel);
 					if (!string.IsNullOrEmpty(smsMessages.Subject))
@@ -76,13 +83,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 						}
 					}
 				}
-				
+
 				if (!message.IsInitialLoad)
 				{
 					_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
 				}
 				_scheduleDayReadModelRepository.SaveReadModel(readModel);
 			}
+		}
+
+		public void Consume(DenormalizedScheduleForScheduleDay message)
+		{
+			createReadModel(message);
 		}
 	}
 }

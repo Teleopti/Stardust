@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public class PersonScheduleDayReadModelHandler : ConsumerOf<DenormalizedSchedule>
+	public class PersonScheduleDayReadModelHandler : ConsumerOf<DenormalizedSchedule>, ConsumerOf<DenormalizedScheduleForPersonScheduleDay>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
@@ -25,6 +25,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(DenormalizedSchedule message)
 		{
+			createReadModel(message);
+		}
+
+		private void createReadModel(DenormalizedScheduleBase message)
+		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				if (!message.IsDefaultScenario) return;
@@ -40,6 +45,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				}
 				_scheduleDayReadModelRepository.SaveReadModel(readModel);
 			}
+		}
+
+		public void Consume(DenormalizedScheduleForPersonScheduleDay message)
+		{
+			createReadModel(message);
 		}
 	}
 }

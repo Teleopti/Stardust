@@ -4,10 +4,9 @@ using System.Collections.Generic;
 namespace Teleopti.Interfaces.Messages.Denormalize
 {
 	/// <summary>
-	/// Denormalize the projection of schedules.
+	/// Schedule needs to be redenormalized for one person.
 	/// </summary>
-	[Serializable]
-	public class DenormalizeScheduleProjection : RaptorDomainMessage
+	public abstract class ScheduleDenormalizeBase : RaptorDomainMessage
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 
@@ -46,9 +45,41 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 	}
 
 	/// <summary>
+	/// Schedule have changed for one person.
+	/// </summary>
+	[Serializable]
+	public class ScheduleChanged : ScheduleDenormalizeBase
+	{
+	}
+
+	/// <summary>
+	/// Schedule day read model needs to be initialized for one person.
+	/// </summary>
+	[Serializable]
+	public class ScheduleDayInitialize : ScheduleDenormalizeBase
+	{
+	}
+
+	/// <summary>
+	/// Person schedule day read model needs to be initialized for one person.
+	/// </summary>
+	[Serializable]
+	public class PersonScheduleDayInitialize : ScheduleDenormalizeBase
+	{
+	}
+
+	/// <summary>
+	/// Schedule day projection read model needs to be initialized for one person.
+	/// </summary>
+	[Serializable]
+	public class ScheduleProjectionInitialize : ScheduleDenormalizeBase
+	{
+	}
+
+	/// <summary>
 	/// Denormalized schedule message
 	/// </summary>
-	public class DenormalizedSchedule : RaptorDomainMessage
+	public class DenormalizedScheduleBase : RaptorDomainMessage
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 
@@ -123,6 +154,34 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 		/// Is this the initial load of read models
 		/// </summary>
 		public bool IsInitialLoad { get; set; }
+	}
+
+	/// <summary>
+	/// Denormalized schedule for normal usage
+	/// </summary>
+	public class DenormalizedSchedule : DenormalizedScheduleBase
+	{
+	}
+
+	/// <summary>
+	/// Denormalized schedule for use in initial load of schedule projection read model
+	/// </summary>
+	public class DenormalizedScheduleForScheduleProjection : DenormalizedScheduleBase
+	{
+	}
+
+	/// <summary>
+	/// Denormalized schedule for use in initial load of schedule projection read model
+	/// </summary>
+	public class DenormalizedScheduleForScheduleDay : DenormalizedScheduleBase
+	{
+	}
+
+	/// <summary>
+	/// Denormalized schedule for use in initial load of schedule projection read model
+	/// </summary>
+	public class DenormalizedScheduleForPersonScheduleDay : DenormalizedScheduleBase
+	{
 	}
 
 	/// <summary>

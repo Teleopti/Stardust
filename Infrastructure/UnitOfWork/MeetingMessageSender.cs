@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					var customChange = changedRoot.Root as ICustomChangedEntity;
 					if (customChange == null) return;
 
-					var message = new DenormalizeScheduleProjection
+					var message = new ScheduleChanged
 					              	{
 					              		ScenarioId =
 					              			((IMeeting) changedMeeting.Meeting.ProvideCustomChangeInfo).

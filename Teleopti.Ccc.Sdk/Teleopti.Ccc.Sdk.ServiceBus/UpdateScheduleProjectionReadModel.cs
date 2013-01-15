@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Execute(IScheduleRange scheduleRange, DateOnlyPeriod dateOnlyPeriod)
 		{
-			_denormalizedScheduleMessageBuilder.Build(
-				new DenormalizeScheduleProjection
+			_denormalizedScheduleMessageBuilder.Build<DenormalizedSchedule>(
+				new ScheduleChanged
 					{
 						ScenarioId = scheduleRange.Scenario.Id.GetValueOrDefault(),
 						PersonId = scheduleRange.Person.Id.GetValueOrDefault()

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			using (mocks.Record())
 			{
 				Expect.Call(sendDenormalizeNotification.Notify);
-				Expect.Call(()=>saveToDenormalizationQueue.Execute<DenormalizeScheduleProjection>(null, runSql)).IgnoreArguments();
+				Expect.Call(()=>saveToDenormalizationQueue.Execute<ScheduleChanged>(null, runSql)).IgnoreArguments();
 			}
 			using (mocks.Playback())
 			{
