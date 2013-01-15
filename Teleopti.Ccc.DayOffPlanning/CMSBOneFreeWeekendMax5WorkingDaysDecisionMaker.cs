@@ -8,10 +8,12 @@ namespace Teleopti.Ccc.DayOffPlanning
 	public class CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker : IDayOffDecisionMaker
 	{
 		private readonly IOfficialWeekendDays _officialWeekendDays;
+		private readonly ITrueFalseRandomizer _trueFalseRandomizer;
 
-		public CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(IOfficialWeekendDays officialWeekendDays)
+		public CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(IOfficialWeekendDays officialWeekendDays, ITrueFalseRandomizer trueFalseRandomizer)
 		{
 			_officialWeekendDays = officialWeekendDays;
+			_trueFalseRandomizer = trueFalseRandomizer;
 		}
 
 		public bool Execute(ILockableBitArray lockableBitArray, IList<double?> values)
@@ -115,12 +117,18 @@ namespace Teleopti.Ccc.DayOffPlanning
 			double maxValue = double.MinValue;
 			foreach (var weekendDayIndexTuple in weekendDayIndexes)
 			{
-				
 				double aggregatedValue = values[weekendDayIndexTuple.Item1].Value + values[weekendDayIndexTuple.Item2].Value;
 				if (lockableBitArray.IsLocked(weekendDayIndexTuple.Item1, true))
 					continue;
 				if (lockableBitArray.IsLocked(weekendDayIndexTuple.Item2, true))
 					continue;
+				if (aggregatedValue == maxValue)
+				{
+					if(_trueFalseRandomizer.Randomize((int)DateTime.Now.Ticks))
+					{
+						maxTuple = weekendDayIndexTuple;
+					}
+				}
 				if(aggregatedValue > maxValue)
 				{
 					maxValue = aggregatedValue;

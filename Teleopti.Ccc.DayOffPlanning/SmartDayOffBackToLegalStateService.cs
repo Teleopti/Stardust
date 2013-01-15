@@ -9,12 +9,14 @@ namespace Teleopti.Ccc.DayOffPlanning
         private readonly IDaysOffPreferences _daysOffPreferences;
         private readonly IDayOffBackToLegalStateFunctions _backToLegalStateFunctions;
         private readonly int _maxIterations;
-        private readonly IList<string> _failedSolverDescriptionKeys = new List<string>();
+    	private readonly IDayOffDecisionMaker _cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker;
+    	private readonly IList<string> _failedSolverDescriptionKeys = new List<string>();
 
-        public SmartDayOffBackToLegalStateService(IDayOffBackToLegalStateFunctions backToLegalStateFunctions, IDaysOffPreferences daysOffPreferences, int maxIterations)
+		public SmartDayOffBackToLegalStateService(IDayOffBackToLegalStateFunctions backToLegalStateFunctions, IDaysOffPreferences daysOffPreferences, int maxIterations, IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker)
         {
             _maxIterations = maxIterations;
-            _backToLegalStateFunctions = backToLegalStateFunctions;
+			_cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker;
+			_backToLegalStateFunctions = backToLegalStateFunctions;
             _daysOffPreferences = daysOffPreferences;
         }
 
@@ -36,7 +38,14 @@ namespace Teleopti.Ccc.DayOffPlanning
                 if (_daysOffPreferences.UseWeekEndDaysOff)
 					solvers.Add(new TuiCaseSolver(bitArray, _backToLegalStateFunctions, _daysOffPreferences, _maxIterations, (int)DateTime.Now.TimeOfDay.TotalSeconds));
 				if(_daysOffPreferences.ConsecutiveWorkdaysValue.Maximum == 5)
+				{
 					solvers.Add(new FiveConsecutiveWorkdaysSolver(bitArray, _backToLegalStateFunctions, _daysOffPreferences));
+					if (_daysOffPreferences.FullWeekendsOffValue == new MinMax<int>(1, 1))
+					{
+						solvers.Add(new CMSBCaseSolver(bitArray, _backToLegalStateFunctions, _daysOffPreferences, _cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker));
+					}
+						
+				}
             }
 
             return solvers;

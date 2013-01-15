@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         private MockRepository _mocks;
         private int _maxIterations;
         private IDaysOffPreferences _daysOffPreferences;
+    	private IDayOffDecisionMaker _decisionMaker;
+    	private IDayOffBackToLegalStateFunctions _functions;
 
         [SetUp]
         public void Setup()
@@ -26,8 +28,9 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             _daysOffPreferences.UseDaysOffPerWeek = true;
             _daysOffPreferences.UseWeekEndDaysOff = true;
             _daysOffPreferences.UseFullWeekendsOff = true;
-            IDayOffBackToLegalStateFunctions functions = _mocks.StrictMock<IDayOffBackToLegalStateFunctions>();
-            _target = new SmartDayOffBackToLegalStateService(functions, _daysOffPreferences, _maxIterations);
+            _functions = _mocks.StrictMock<IDayOffBackToLegalStateFunctions>();
+        	_decisionMaker = _mocks.StrictMock<IDayOffDecisionMaker>();
+            _target = new SmartDayOffBackToLegalStateService(_functions, _daysOffPreferences, _maxIterations, _decisionMaker);
         }
 
         [Test]
