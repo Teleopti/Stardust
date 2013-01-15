@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 			_daysOffPreferences = new DaysOffPreferences();
 			_bitArray = new LockableBitArray(7, false, false, null);
 			_functions = new DayOffBackToLegalStateFunctions(_bitArray);
+			_daysOffPreferences.UseConsecutiveDaysOff = true;
 			_target = new CMSBCaseSolver(_bitArray, _functions, _daysOffPreferences, _cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
 		}
 
@@ -35,11 +36,11 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 			var result = _target.ResolvableState();
 			Assert.AreEqual(MinMaxNumberOfResult.ToMany, result);
 
+			_daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(0, 9);
 			_target = new CMSBCaseSolver(_bitArray, _functions, _daysOffPreferences, _cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
-			_daysOffPreferences.ConsecutiveDaysOffValue = new MinMax<int>(0, 9);
 
 			result = _target.ResolvableState();
-			Assert.AreEqual(MinMaxNumberOfResult.ToMany, result);
+			Assert.AreEqual(MinMaxNumberOfResult.Ok, result);
 		}
 
 		[Test]
@@ -76,6 +77,15 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 			}
 
 			Assert.AreEqual(true, result);
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfOk()
+		{
+			_daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(0, 9);
+			_target = new CMSBCaseSolver(_bitArray, _functions, _daysOffPreferences, _cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
+			var result = _target.SetToManyBackToLegalState();
+			Assert.IsFalse(result);
 		}
 	}
 }
