@@ -9240,7 +9240,7 @@ Periods</comment>
     <value>除去写保护</value>
   </data>
   <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
-    <value>{0} 不能被排班的坐席天数.</value>
+    <value>不能被排班的坐席天数 {0} 天.</value>
   </data>
   <data name="PreferenceFulfillment" xml:space="preserve">
     <value>完成的偏好</value>
