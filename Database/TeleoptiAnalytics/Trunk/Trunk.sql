@@ -31,7 +31,7 @@ WHERE Id='C5B88862-F7BE-431B-A63F-3DD5FF8ACE54'
 ----------------  
 ALTER TABLE mart.fact_schedule_deviation DROP COLUMN datasource_update_date
 ALTER TABLE  mart.fact_schedule_deviation ADD shift_startdate_id int NULL
-ALTER TABLE  mart.fact_schedule_deviation ADD shift_startinterval_id int NULL
+ALTER TABLE  mart.fact_schedule_deviation ADD shift_startinterval_id smallint NULL
 GO
 
 --ADD LOAD SP HERE--
