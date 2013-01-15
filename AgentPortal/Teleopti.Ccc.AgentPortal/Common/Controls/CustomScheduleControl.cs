@@ -157,7 +157,8 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
         /// Created by: Sumedah
         /// Created date: 2008-11-20
         /// </remarks>
-        public override ScheduleGrid CreateScheduleGrid(NavigationCalendar calendar, ScheduleControl schedule, DateTime initialDate)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public override ScheduleGrid CreateScheduleGrid(NavigationCalendar calendar, ScheduleControl schedule, DateTime initialDate)
         {
 			calendar.CalenderGrid.QueryCellInfo += CalendarQueryCellInfo;
             CustomScheduleGrid scheduleGrid = new CustomScheduleGrid(calendar, schedule, initialDate);
