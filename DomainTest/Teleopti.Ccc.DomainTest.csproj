@@ -157,6 +157,7 @@
     <Compile Include="Common\JobResultTest.cs" />
     <Compile Include="Common\PersonComparerTest.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptionsTest.cs" />
+    <Compile Include="Common\TrueFalseRandomizerTest.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinderTest.cs" />
     <Compile Include="Common\PersonProviderTest.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriodTest.cs" />

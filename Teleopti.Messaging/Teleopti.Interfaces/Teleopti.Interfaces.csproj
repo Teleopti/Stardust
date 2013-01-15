@@ -313,6 +313,7 @@
     <Compile Include="Domain\IterationOperationOption.cs" />
     <Compile Include="Domain\ITextFormatter.cs" />
     <Compile Include="Domain\ITimeZoneDim.cs" />
+    <Compile Include="Domain\ITrueFalseRandomizer.cs" />
     <Compile Include="Domain\IUniqueSchedulePartExtractor.cs" />
     <Compile Include="Domain\IUnsafePersonProvider.cs" />
     <Compile Include="Domain\IUnsavedDaysInfo.cs" />
