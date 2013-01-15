@@ -302,8 +302,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 		return self.TextRequestTabVisible() && self.AbsenceRequestTabVisible();
 	});
 	self.Template = ko.computed(function () {
-		if (self.isUpdate()) return self.Templates[self.TypeEnum()];
-		else return "add-new-request-detail-template";
+		return self.isUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";
 	});
 
 	ko.computed(function () {
