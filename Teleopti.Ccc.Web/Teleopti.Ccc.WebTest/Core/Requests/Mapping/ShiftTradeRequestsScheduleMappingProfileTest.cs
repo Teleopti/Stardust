@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using AutoMapper;
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
-		public void ShouldHaveMinutesSinceTimeLineStartSetOnSingleSchedule()
+		public void ShouldHaveMinutesSinceTimeLineStartSetWhenOnlyMySchedule()
 		{
 			var startDate = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(startDate, _person);
@@ -53,6 +52,33 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                }));
 			var result = Mapper.Map<DateOnly, ShiftTradeRequestsScheduleViewModel>(new DateOnly(startDate));
 			result.MySchedule.MinutesSinceTimeLineStart.Should().Be.EqualTo(15);
+		}
+
+		[Test]
+		public void ShouldHaveMinutesSinceTimeLineStartSetWhenBothScheduleForMeAndTradeBuddy()
+		{
+			var buddy = new Person();
+			buddy.PermissionInformation.SetDefaultTimeZone(_timeZone);
+			var myStartDate = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var buddyStartDate = new DateTime(2000, 1, 1, 9, 30, 0, DateTimeKind.Utc);
+			var myScheduleDay = _scheduleFactory.ScheduleDayStub(myStartDate, _person);
+			var buddyScheduleDay = _scheduleFactory.ScheduleDayStub(buddyStartDate, buddy);
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(new DateOnly(myStartDate))).Return(myScheduleDay);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(new DateOnly(buddyStartDate))).Return(new List<IScheduleDay>
+			                                                                                                                  	{
+			                                                                                                                  		buddyScheduleDay
+			                                                                                                                  	});
+			_projectionProvider.Expect(p => p.Projection(myScheduleDay)).Return(_scheduleFactory.ProjectionStub(new[]
+		                                                {
+		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(myStartDate, myStartDate.AddHours(3)))
+		                                                }));
+			_projectionProvider.Expect(p => p.Projection(buddyScheduleDay)).Return(_scheduleFactory.ProjectionStub(new[]
+		                                                {
+		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(buddyStartDate, buddyStartDate.AddHours(3)))
+		                                                }));
+			var result = Mapper.Map<DateOnly, ShiftTradeRequestsScheduleViewModel>(new DateOnly(myStartDate));
+			result.MySchedule.MinutesSinceTimeLineStart.Should().Be.EqualTo(45);
 		}
 
 		[Test]
