@@ -73,6 +73,15 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.completed = completelyLoaded;
 		self.details = ko.observable(requestDetailViewModel);
 
+		//henke remove wrapper...
+		self.AddTextRequest = function() {
+			return requestDetailViewModel.AddTextRequest;
+		};
+
+		self.AddAbsenceRequest = function () {
+			return requestDetailViewModel.AddAbsenceRequest;
+		};
+
 		requestDetailViewModel.isUpdate.subscribe(function (newValue) {
 			if (!newValue) self.setSelected(null);
 		});

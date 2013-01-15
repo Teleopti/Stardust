@@ -7,7 +7,7 @@
 }
 
 <script type="text/Html" id="shifttrade-request-detail-template">
-	<div class="pdb5">@Resources.ShiftTradeRequest</div>
+	<div class="pdb5 request-detail-title">@Resources.ShiftTradeRequest</div>
 	<br/>
 	<br/>
 	<div>| 08:00 | 09:00 | 10:00 | 11:00 | 12:00 | 13:00 | 14:00 | 15:00 | 16:00 | 17:00 | </div>
@@ -34,15 +34,23 @@
 </script>
 
 <script type="text/Html" id="text-request-detail-template">
-	<div class="pdb5">@Resources.TextRequest</div>
+	<div class="pdb5 request-detail-title">@Resources.TextRequest</div>
 </script>
 
 <script type="text/Html" id="absence-request-detail-template">
-	<div class="pdb5">@Resources.AbsenceRequest</div>
+	<div class="pdb5 request-detail-title">@Resources.AbsenceRequest</div>
 </script>
 
 <script type="text/Html" id="add-new-request-detail-template">
-	<div class="pdb5">TODO: Add new request details.......</div>
+		<div id="Schedule-addRequest-title" class="pdb5">
+			
+			<span id="Text-request-tab" class="selectable-tab selected-tab" data-bind="visible: TextRequestTabVisible, click: AddTextRequest">@Resources.TextRequest</span>
+			@if (Model.RequestPermission.AbsenceRequestPermission)
+			{
+				<span data-bind="visible: TabSeparatorVisible">|</span>
+				<span id="Absence-request-tab" class="selectable-tab" data-bind="visible: AbsenceRequestTabVisible, click: AddAbsenceRequest">@Resources.AbsenceRequest</span>
+			}
+		</div>
 </script>
 
 <div class="displaynone" id="Request-detail-default-start-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))</div>
@@ -89,16 +97,7 @@
 		</div>
 		
 		<input type="hidden" id="Request-detail-entityid" />
-		
-		<div id="Schedule-addRequest-title" class="pdb5">
-			
-			<span id="Text-request-tab" class="selectable-tab selected-tab" data-bind="visible: TextRequestTabVisible">@Resources.TextRequest</span>
-			@if (Model.RequestPermission.AbsenceRequestPermission)
-			{
-				<span data-bind="visible: TabSeparatorVisible">|</span>
-				<span id="Absence-request-tab" class="selectable-tab" data-bind="visible: AbsenceRequestTabVisible">@Resources.AbsenceRequest</span>
-			}
-		</div>
+
 		<div class="edit-module-element">
 			<span id="Request-detail-deny-reason"></span>
 		</div>
