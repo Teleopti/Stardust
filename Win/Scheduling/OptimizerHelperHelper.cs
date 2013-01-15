@@ -305,8 +305,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (daysOffPreferences.UseFullWeekendsOff && daysOffPreferences.FullWeekendsOffValue.Equals(new MinMax<int>(1, 1)))
 				{
-					IDayOffDecisionMaker cMSBOneFreeWeekendMax5WorkingdaysDecitionMaker = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(officialWeekendDays);
-					retList.Add(cMSBOneFreeWeekendMax5WorkingdaysDecitionMaker);
+					IDayOffDecisionMaker cMSBOneFreeWeekendMax5WorkingdaysDecisionMaker = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(officialWeekendDays, new TrueFalseRandomizer());
+					retList.Add(cMSBOneFreeWeekendMax5WorkingdaysDecisionMaker);
 				}
 			}
 
@@ -351,7 +351,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                       daysOffPreferences.ConsiderWeekAfter);
 
                 IDayOffBackToLegalStateFunctions functions = new DayOffBackToLegalStateFunctions(bitArray);
-                ISmartDayOffBackToLegalStateService solverService = new SmartDayOffBackToLegalStateService(functions, daysOffPreferences, 20);
+				IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new TrueFalseRandomizer());
+                ISmartDayOffBackToLegalStateService solverService = new SmartDayOffBackToLegalStateService(functions, daysOffPreferences, 20, cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
                 ISmartDayOffBackToLegalStateSolverContainer solverContainer = new SmartDayOffBackToLegalStateSolverContainer(matrixOriginalStateContainer, bitArray, solverService);
                 solverContainers.Add(solverContainer);
             }

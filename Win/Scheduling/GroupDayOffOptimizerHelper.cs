@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -513,8 +514,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 OptimizerHelperHelper.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences);
 
             IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions();
+			IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new TrueFalseRandomizer());
             ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
-                = new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, dayOffPreferences, 25);
+                = new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, dayOffPreferences, 25, cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
 
             var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);

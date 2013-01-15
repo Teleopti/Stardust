@@ -90,7 +90,8 @@ namespace Teleopti.Ccc.Win.Meetings
             BackColor = ColorHelper.ControlPanelColor;
         }
 
-        private void toolStripButtonMainSave_Click(object sender, EventArgs e)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.TimeSpan.Parse(System.String)")]
+		private void toolStripButtonMainSave_Click(object sender, EventArgs e)
         {
 			var start = String.Empty;
         	var end = String.Empty;
