@@ -1,72 +1,58 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
+	public class ShiftTradeValidator : IShiftTradeValidator
+	{
+		private readonly IShiftTradeLightValidator _shiftTradeLightValidator;
+		private readonly IEnumerable<IShiftTradeSpecification> _shiftTradeSpecifications;
 
+		public ShiftTradeValidator(IShiftTradeLightValidator shiftTradeLightValidator, IEnumerable<IShiftTradeSpecification> shiftTradeSpecifications)
+		{
+			_shiftTradeLightValidator = shiftTradeLightValidator;
+			_shiftTradeSpecifications = shiftTradeSpecifications;
+		}
 
+		public ShiftTradeRequestValidationResult Validate(IShiftTradeRequest shiftTradeRequest)
+		{
+			if (new IsShiftTradeRequestNotNullSpecification().IsSatisfiedBy(shiftTradeRequest))
+			{
+				var tradeSwapDetails = shiftTradeRequest.ShiftTradeSwapDetails;
 
-    public class ShiftTradeValidator : IShiftTradeValidator
-    {
-        //todo: refact to inject a list with common interface
-        private readonly IOpenShiftTradePeriodSpecification _openShiftTradePeriodSpecification;
-        private readonly IShiftTradeSkillSpecification _shiftTradeSkillSpecification;
-        private readonly IShiftTradeTargetTimeSpecification _shiftTradeTargetTimeSpecification;
-        private readonly IIsWorkflowControlSetNullSpecification _isWorkflowControlSetNullSpecification;
-    	private readonly IShiftTradeAbsenceSpecification _shiftTradeAbsenceSpecification;
-    	private readonly IShiftTradePersonalActivitySpecification _shiftTradePersonalActivitySpecification;
-    	private readonly IShiftTradeMeetingSpecification _shiftTradeMeetingSpecification;
+				var lightResult = validateLightSpecs(tradeSwapDetails);
+				return lightResult.Value ? Validate(tradeSwapDetails) : lightResult;
+			}
+			return new ShiftTradeRequestValidationResult(false);
+		}
 
-        public ShiftTradeValidator(IOpenShiftTradePeriodSpecification openShiftTradePeriodSpecification,
-                                    IShiftTradeSkillSpecification shiftTradeSkillSpecification,
-                                    IShiftTradeTargetTimeSpecification shiftTradeTargetTimeSpecification,
-                                    IIsWorkflowControlSetNullSpecification isWorkflowControlSetNullSpecification,
-									IShiftTradeAbsenceSpecification shiftTradeAbsenceSpecification,
-									IShiftTradePersonalActivitySpecification shiftTradePersonalActivitySpecification,
-									IShiftTradeMeetingSpecification shiftTradeMeetingSpecification)
-        {
-            _openShiftTradePeriodSpecification = openShiftTradePeriodSpecification;
-            _shiftTradeSkillSpecification = shiftTradeSkillSpecification;
-            _shiftTradeTargetTimeSpecification = shiftTradeTargetTimeSpecification;
-            _isWorkflowControlSetNullSpecification = isWorkflowControlSetNullSpecification;
-        	_shiftTradeAbsenceSpecification = shiftTradeAbsenceSpecification;
-        	_shiftTradePersonalActivitySpecification = shiftTradePersonalActivitySpecification;
-        	_shiftTradeMeetingSpecification = shiftTradeMeetingSpecification;
-        }
+		public ShiftTradeRequestValidationResult Validate(IList<IShiftTradeSwapDetail> shiftTradeDetails)
+		{
+			foreach (var specification in _shiftTradeSpecifications)
+			{
+				var result = specification.Validate(shiftTradeDetails);
+				if (!result.Value)
+				{
+					return result;
+				}
+			}
+			return new ShiftTradeRequestValidationResult(true);
+		}
 
-        public ShiftTradeRequestValidationResult Validate(IList<IShiftTradeSwapDetail> shiftTradeDetails)
-        {
-            var result = _isWorkflowControlSetNullSpecification.Validate(shiftTradeDetails);
-            if (!result.Value) return result;
-
-            result = _openShiftTradePeriodSpecification.Validate(shiftTradeDetails);
-            if (!result.Value) return result;
-
-			result = _shiftTradeAbsenceSpecification.Validate(shiftTradeDetails);
-			if (!result.Value) return result;
-
-        	result = _shiftTradePersonalActivitySpecification.Validate(shiftTradeDetails);
-			if (!result.Value) return result;
-
-        	result = _shiftTradeMeetingSpecification.Validate(shiftTradeDetails);
-			if (!result.Value) return result;
-
-            result = _shiftTradeTargetTimeSpecification.Validate(shiftTradeDetails);
-            if (!result.Value) return result;
-
-            result = _shiftTradeSkillSpecification.Validate(shiftTradeDetails);
-            if (!result.Value) return result;
-
-           return  new ShiftTradeRequestValidationResult(true);
-        }
-
-        public ShiftTradeRequestValidationResult Validate(IShiftTradeRequest shiftTradeRequest)
-        {
-            if (new IsShiftTradeRequestNotNullSpecification().IsSatisfiedBy(shiftTradeRequest))
-            {
-                return Validate(shiftTradeRequest.ShiftTradeSwapDetails);
-            }
-            return new ShiftTradeRequestValidationResult(false);
-        }
-    }
+		private ShiftTradeRequestValidationResult validateLightSpecs(IEnumerable<IShiftTradeSwapDetail> shiftTradeRequest)
+		{
+			foreach (var result in shiftTradeRequest.Select(swapDetail => new ShiftTradeAvailableCheckItem
+			                                                              	{
+			                                                              		DateOnly = swapDetail.DateFrom,
+			                                                              		PersonFrom = swapDetail.PersonFrom,
+			                                                              		PersonTo = swapDetail.PersonTo
+			                                                              	})
+						.Select(checkItem => _shiftTradeLightValidator.Validate(checkItem)).Where(result => !result.Value))
+			{
+				return result;
+			}
+			return new ShiftTradeRequestValidationResult(true);
+		}
+	}
 }

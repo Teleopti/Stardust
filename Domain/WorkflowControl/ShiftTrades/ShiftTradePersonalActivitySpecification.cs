@@ -4,14 +4,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
-	public class ShiftTradePersonalActivitySpecification : ShiftTradeSpecification, IShiftTradePersonalActivitySpecification
+	public class ShiftTradePersonalActivitySpecification : ShiftTradeSpecification
 	{
 		public override string DenyReason
 		{
 			get { return "ShiftTradePersonalActivityDenyReason"; }
 		}
 
-		public override bool IsSatisfiedBy(IList<IShiftTradeSwapDetail> obj)
+		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
 		{
 			if(obj == null)
 				throw new ArgumentNullException("obj");

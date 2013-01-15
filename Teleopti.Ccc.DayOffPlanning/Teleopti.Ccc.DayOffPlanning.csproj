@@ -114,6 +114,7 @@
   <ItemGroup>
     <Compile Include="ArrayValueValidator.cs" />
     <Compile Include="BinaryPermutation.cs" />
+    <Compile Include="CMSBCaseSolver.cs" />
     <Compile Include="CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker.cs" />
     <Compile Include="ConsecutiveDayOffValidator.cs" />
     <Compile Include="ConsecutiveDaysOffSolver.cs" />

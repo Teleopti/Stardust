@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -14,8 +12,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		bool Execute(IList<IScheduleDay> daysToDelete, IList<KeyValuePair<DayReadyToMove, IScheduleDay>> daysToSave,
 			IList<IScheduleMatrixPro> allMatrixes, IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, ITeamSteadyStateHolder teamSteadyStateHolder, IScheduleDictionary scheduleDictionary);
-        void Rollback(DateOnly dateOnly);
+        //void Rollback(DateOnly dateOnly);
         ISchedulingOptions SchedulingOptions { get; }
+    	void Rollback(IScheduleDictionary scheduleDictionary);
     }
 
     public enum DayReadyToMove
@@ -34,8 +33,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IGroupMatrixHelper _groupMatrixHelper;
         private readonly IGroupSchedulingService _groupSchedulingService;
         private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
-        private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-        private readonly IsSignificantPartFullDayAbsenceOrDayOffSpecification _isSignificantPartFullDayAbsenceOrDayOffSpecification;
+    	private readonly IGroupMoveTimeOptimizationResourceHelper _groupMoveTimeOptimizationResourceHelper;
+    	private readonly IsSignificantPartFullDayAbsenceOrDayOffSpecification _isSignificantPartFullDayAbsenceOrDayOffSpecification;
         private ISchedulingOptions _schedulingOptions;
 
         public GroupMoveTimeOptimizationExecuter(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IGroupMatrixHelper groupMatrixHelper,
             IGroupSchedulingService groupSchedulingService,
             IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
-            IResourceOptimizationHelper resourceOptimizationHelper)
+			IGroupMoveTimeOptimizationResourceHelper groupMoveTimeOptimizationResourceHelper)
 			
         {
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
@@ -57,8 +56,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             _groupMatrixHelper = groupMatrixHelper;
             _groupSchedulingService = groupSchedulingService;
             _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
-            _resourceOptimizationHelper = resourceOptimizationHelper;
-            _isSignificantPartFullDayAbsenceOrDayOffSpecification = new IsSignificantPartFullDayAbsenceOrDayOffSpecification();
+        	_groupMoveTimeOptimizationResourceHelper = groupMoveTimeOptimizationResourceHelper;
+        	_isSignificantPartFullDayAbsenceOrDayOffSpecification = new IsSignificantPartFullDayAbsenceOrDayOffSpecification();
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
@@ -75,7 +74,8 @@ namespace Teleopti.Ccc.Domain.Optimization
                                        !_isSignificantPartFullDayAbsenceOrDayOffSpecification.IsSatisfiedBy(significant)
                                    select scheduleDay).ToList();
                 _deleteService.Delete(cleanedList, _schedulePartModifyAndRollbackService);
-                cleanedList.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct().ForEach(recalculateDay);
+                //cleanedList.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct().ForEach(recalculateDay);
+				_groupMoveTimeOptimizationResourceHelper.CalculateDeletedDays(cleanedList);
             }
 
             if (daysToSave != null)
@@ -118,12 +118,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 						{
 							case DayReadyToMove.FirstDay:
 								SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;	
-								if (!reSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value, SchedulingOptions))
+								if (!reSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value, SchedulingOptions, scheduleDictionary))
 									return false;
 								break;
 							case DayReadyToMove.SecondDay:
 								SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short;
-								if (!reSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value, SchedulingOptions))
+								if (!reSchedule(allMatrixes, optimizationOverLimitByRestrictionDecider, pair.Value, SchedulingOptions, scheduleDictionary))
 									return false;
 								break;
 						}
@@ -151,13 +151,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					if (optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit())
 					{
-						Rollback(dateOnly);
+						Rollback(scheduleDictionary);
+						//Rollback(dateOnly);
 						return false;
 					}
 
 					if (optimizationOverLimitByRestrictionDecider.OverLimit().Count > 0)
 					{
-						Rollback(dateOnly);
+						Rollback(scheduleDictionary);
+						//Rollback(dateOnly);
 						return false;
 					}
 				}
@@ -185,7 +187,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private bool reSchedule(IList<IScheduleMatrixPro> allMatrixes,
                                 IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider,
-                                IScheduleDay scheduleDay, ISchedulingOptions schedulingOptions)
+                                IScheduleDay scheduleDay, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary)
         {
             if (!scheduleDay.IsScheduled())
                 return true;
@@ -208,27 +210,93 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit())
             {
-                Rollback(shiftDate);
+				Rollback(scheduleDictionary);
+                //Rollback(shiftDate);
                 return false;
             }
             if (optimizationOverLimitByRestrictionDecider.OverLimit().Count > 0)
             {
-                Rollback(shiftDate);
+				Rollback(scheduleDictionary);
+                //Rollback(shiftDate);
                 return false;
             }
             return true;
         }
 
-        public void Rollback(DateOnly dateOnly)
-        {
-            _schedulePartModifyAndRollbackService.Rollback();
-            recalculateDay(dateOnly);
-        }
+		public void Rollback(IScheduleDictionary scheduleDictionary)
+		{
+			_groupMoveTimeOptimizationResourceHelper.Rollback(_schedulePartModifyAndRollbackService, scheduleDictionary);
 
-        private void recalculateDay(DateOnly dateOnly)
-        {
-            _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
-            _resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, true);
-        }
+			//var dates = new List<DateOnly>();
+			//var modifiedDays = new List<IScheduleDay>();
+			//var orgDays = new List<IScheduleDay>();
+
+			//foreach (var modifiedSchedule in _schedulePartModifyAndRollbackService.ModificationCollection.ToList())
+			//{
+			//    if(!dates.Contains(modifiedSchedule.DateOnlyAsPeriod.DateOnly))
+			//        dates.Add(modifiedSchedule.DateOnlyAsPeriod.DateOnly);
+				
+			//    modifiedDays.Add(modifiedSchedule);
+
+			//    var scheduleRange = scheduleDictionary[modifiedSchedule.Person];
+			//    var orgDay = scheduleRange.ScheduledDay(modifiedSchedule.DateOnlyAsPeriod.DateOnly);
+			//    orgDays.Add(orgDay);
+			//}
+
+			//_schedulePartModifyAndRollbackService.Rollback();
+
+			//foreach (var date in dates)
+			//{
+			//    var toRemove = new List<IScheduleDay>();
+			//    var toAdd = new List<IScheduleDay>();
+
+			//    var toRemoveNextDay = new List<IScheduleDay>();
+			//    var toAddNextDay = new List<IScheduleDay>();
+
+			//    foreach (var modifiedDay in modifiedDays)
+			//    {
+			//        if(modifiedDay.DateOnlyAsPeriod.DateOnly == date && modifiedDay.HasProjection)
+			//        {
+			//            toAdd.Add(modifiedDay);
+
+			//            if(modifiedDay.Period.StartDateTime.Date != modifiedDay.Period.EndDateTime.Date)
+			//                toAddNextDay.Add(modifiedDay);
+			//        }
+			//    }
+
+			//    foreach (var orgDay in orgDays)
+			//    {
+			//        if(orgDay.DateOnlyAsPeriod.DateOnly == date && orgDay.HasProjection)
+			//        {
+			//            toRemove.Add(orgDay);
+
+			//            if (orgDay.Period.StartDateTime.Date != orgDay.Period.EndDateTime.Date)
+			//                toRemoveNextDay.Add(orgDay);
+			//        }
+			//    }
+
+			//    if(toRemove.Count > 0 || toAdd.Count > 0)
+			//    {
+			//        _resourceOptimizationHelper.ResourceCalculateDate(date,true,true,toRemove,toAdd);
+			//    }
+
+			//    if(toRemoveNextDay.Count > 0 || toAddNextDay.Count > 0)
+			//    {
+			//        _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), true, true, toRemoveNextDay, toAddNextDay);
+			//    }
+			//}
+		}
+
+		//public void Rollback(DateOnly dateOnly)
+		//{
+		//    _schedulePartModifyAndRollbackService.Rollback();
+		//    recalculateDay(dateOnly);
+		//}
+
+		//private void recalculateDay(DateOnly dateOnly)
+		//{
+		//    _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+		//    _resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, true);
+		//}
     }
 }

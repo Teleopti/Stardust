@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.Logic.Restrictions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
         private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    	private readonly IEnumerable<ISpecification<IShiftTradeAvailableCheckItem>> _availableForShiftTradeSpecifications;
+    	private readonly IShiftTradeLightValidator _shiftTradeLightValidator;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public GetPeopleForShiftTradeByGroupPageGroupQueryHandler(
@@ -29,13 +28,13 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
             IGroupingReadOnlyRepository groupingReadOnlyRepository,
             IPersonRepository personRepository,
             IUnitOfWorkFactory unitOfWorkFactory,
-			IEnumerable<ISpecification<IShiftTradeAvailableCheckItem>> availableForShiftTradeSpecifications)
+			IShiftTradeLightValidator shiftTradeLightValidator)
         {
             _personAssembler = personAssembler;
             _groupingReadOnlyRepository = groupingReadOnlyRepository;
             _personRepository = personRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
-        	_availableForShiftTradeSpecifications = availableForShiftTradeSpecifications;
+			_shiftTradeLightValidator = shiftTradeLightValidator;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -58,9 +57,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
             }
         }
 
-        private bool isAvailableForShiftTrade(IShiftTradeAvailableCheckItem checkItem)
+        private bool isAvailableForShiftTrade(ShiftTradeAvailableCheckItem checkItem)
         {
-            return _availableForShiftTradeSpecifications.All(s => s.IsSatisfiedBy(checkItem));
+        	return _shiftTradeLightValidator.Validate(checkItem).Value;
         }
     }
 }

@@ -43,8 +43,6 @@
 			System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
             "Hej : hej",
             ""}, -1);
-		    this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular,
-		                                        System.Drawing.GraphicsUnit.Point, ((byte) (0)));
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.tabControlAgentInfo = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageAdvSchedulePeriod = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
@@ -68,20 +66,12 @@
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.agentGroupPageLabel = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.comboBoxAgentGrouping = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.perPersonAndGroupListView = new System.Windows.Forms.ListView();
 			this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader13 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.perPersonAndGroupLabel = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.perGroupAndOthersListView = new System.Windows.Forms.ListView();
-			this.columnHeader14 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader15 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader16 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.perGroupAndOthersLabel = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.listViewFairness = new System.Windows.Forms.ListView();
-			this.columnHeader17 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader18 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
 			((System.ComponentModel.ISupportInitialize)(this.tabControlAgentInfo)).BeginInit();
 			this.tabControlAgentInfo.SuspendLayout();
@@ -93,7 +83,6 @@
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAgentGrouping)).BeginInit();
-			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -114,7 +103,7 @@
 			this.tabControlAgentInfo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControlAgentInfo.Location = new System.Drawing.Point(6, 34);
 			this.tabControlAgentInfo.Name = "tabControlAgentInfo";
-			this.tabControlAgentInfo.Size = new System.Drawing.Size(507, 496);
+			this.tabControlAgentInfo.Size = new System.Drawing.Size(663, 496);
 			this.tabControlAgentInfo.TabGap = 10;
 			this.tabControlAgentInfo.TabIndex = 1;
 			this.tabControlAgentInfo.TabPanelBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(216)))), ((int)(((byte)(237)))));
@@ -129,7 +118,7 @@
 			this.tabPageAdvSchedulePeriod.Location = new System.Drawing.Point(1, 22);
 			this.tabPageAdvSchedulePeriod.Name = "tabPageAdvSchedulePeriod";
 			this.tabPageAdvSchedulePeriod.ShowCloseButton = true;
-			this.tabPageAdvSchedulePeriod.Size = new System.Drawing.Size(504, 472);
+			this.tabPageAdvSchedulePeriod.Size = new System.Drawing.Size(660, 472);
 			this.tabPageAdvSchedulePeriod.TabIndex = 2;
 			this.tabPageAdvSchedulePeriod.Text = "xxSchedulePeriod";
 			this.tabPageAdvSchedulePeriod.ThemesEnabled = false;
@@ -148,7 +137,7 @@
             listViewItem1});
 			this.listViewSchedulePeriod.Location = new System.Drawing.Point(0, 0);
 			this.listViewSchedulePeriod.Name = "listViewSchedulePeriod";
-			this.listViewSchedulePeriod.Size = new System.Drawing.Size(504, 472);
+			this.listViewSchedulePeriod.Size = new System.Drawing.Size(660, 472);
 			this.listViewSchedulePeriod.SmallImageList = this.imageList1;
 			this.listViewSchedulePeriod.TabIndex = 1;
 			this.listViewSchedulePeriod.UseCompatibleStateImageBehavior = false;
@@ -171,7 +160,7 @@
 			this.tabPageAdvRestrictions.Location = new System.Drawing.Point(1, 22);
 			this.tabPageAdvRestrictions.Name = "tabPageAdvRestrictions";
 			this.tabPageAdvRestrictions.ShowCloseButton = true;
-			this.tabPageAdvRestrictions.Size = new System.Drawing.Size(504, 472);
+			this.tabPageAdvRestrictions.Size = new System.Drawing.Size(605, 472);
 			this.tabPageAdvRestrictions.TabIndex = 4;
 			this.tabPageAdvRestrictions.Text = "xxRestrictions";
 			this.tabPageAdvRestrictions.ThemesEnabled = false;
@@ -190,7 +179,7 @@
             listViewItem2});
 			this.listViewRestrictions.Location = new System.Drawing.Point(0, 0);
 			this.listViewRestrictions.Name = "listViewRestrictions";
-			this.listViewRestrictions.Size = new System.Drawing.Size(504, 472);
+			this.listViewRestrictions.Size = new System.Drawing.Size(605, 472);
 			this.listViewRestrictions.SmallImageList = this.imageList1;
 			this.listViewRestrictions.TabIndex = 2;
 			this.listViewRestrictions.UseCompatibleStateImageBehavior = false;
@@ -213,7 +202,7 @@
 			this.tabPageAdvPersonPeriod.Location = new System.Drawing.Point(1, 22);
 			this.tabPageAdvPersonPeriod.Name = "tabPageAdvPersonPeriod";
 			this.tabPageAdvPersonPeriod.ShowCloseButton = true;
-			this.tabPageAdvPersonPeriod.Size = new System.Drawing.Size(504, 472);
+			this.tabPageAdvPersonPeriod.Size = new System.Drawing.Size(605, 472);
 			this.tabPageAdvPersonPeriod.TabIndex = 3;
 			this.tabPageAdvPersonPeriod.Text = "xxPersonPeriod";
 			this.tabPageAdvPersonPeriod.ThemesEnabled = false;
@@ -232,7 +221,7 @@
             listViewItem3});
 			this.listViewPersonPeriod.Location = new System.Drawing.Point(0, 0);
 			this.listViewPersonPeriod.Name = "listViewPersonPeriod";
-			this.listViewPersonPeriod.Size = new System.Drawing.Size(504, 472);
+			this.listViewPersonPeriod.Size = new System.Drawing.Size(605, 472);
 			this.listViewPersonPeriod.SmallImageList = this.imageList1;
 			this.listViewPersonPeriod.TabIndex = 2;
 			this.listViewPersonPeriod.UseCompatibleStateImageBehavior = false;
@@ -255,7 +244,7 @@
 			this.tabPageAdvPerson.Location = new System.Drawing.Point(1, 22);
 			this.tabPageAdvPerson.Name = "tabPageAdvPerson";
 			this.tabPageAdvPerson.ShowCloseButton = true;
-			this.tabPageAdvPerson.Size = new System.Drawing.Size(504, 472);
+			this.tabPageAdvPerson.Size = new System.Drawing.Size(605, 472);
 			this.tabPageAdvPerson.TabIndex = 5;
 			this.tabPageAdvPerson.Text = "xxPerson";
 			this.tabPageAdvPerson.ThemesEnabled = false;
@@ -274,7 +263,7 @@
             listViewItem4});
 			this.listViewPerson.Location = new System.Drawing.Point(0, 0);
 			this.listViewPerson.Name = "listViewPerson";
-			this.listViewPerson.Size = new System.Drawing.Size(504, 472);
+			this.listViewPerson.Size = new System.Drawing.Size(605, 472);
 			this.listViewPerson.SmallImageList = this.imageList1;
 			this.listViewPerson.TabIndex = 3;
 			this.listViewPerson.UseCompatibleStateImageBehavior = false;
@@ -297,7 +286,7 @@
 			this.tabPageFairness.Location = new System.Drawing.Point(1, 22);
 			this.tabPageFairness.Name = "tabPageFairness";
 			this.tabPageFairness.ShowCloseButton = true;
-			this.tabPageFairness.Size = new System.Drawing.Size(504, 472);
+			this.tabPageFairness.Size = new System.Drawing.Size(605, 472);
 			this.tabPageFairness.TabIndex = 6;
 			this.tabPageFairness.Text = "xxFairness";
 			this.tabPageFairness.ThemesEnabled = false;
@@ -308,17 +297,15 @@
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.listViewFairness, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.perPersonAndGroupListView, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 4;
+			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(504, 472);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(605, 472);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// tableLayoutPanel2
@@ -334,13 +321,13 @@
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 3F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 97F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(498, 31);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(599, 31);
 			this.tableLayoutPanel2.TabIndex = 5;
 			// 
 			// agentGroupPageLabel
 			// 
 			this.agentGroupPageLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.agentGroupPageLabel.Location = new System.Drawing.Point(67, 9);
+			this.agentGroupPageLabel.Location = new System.Drawing.Point(81, 9);
 			this.agentGroupPageLabel.Name = "agentGroupPageLabel";
 			this.agentGroupPageLabel.Size = new System.Drawing.Size(0, 13);
 			this.agentGroupPageLabel.TabIndex = 0;
@@ -350,31 +337,12 @@
 			this.comboBoxAgentGrouping.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxAgentGrouping.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.comboBoxAgentGrouping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAgentGrouping.Location = new System.Drawing.Point(138, 5);
+			this.comboBoxAgentGrouping.Location = new System.Drawing.Point(166, 5);
 			this.comboBoxAgentGrouping.Name = "comboBoxAgentGrouping";
-			this.comboBoxAgentGrouping.Size = new System.Drawing.Size(176, 21);
+			this.comboBoxAgentGrouping.Size = new System.Drawing.Size(176, 19);
 			this.comboBoxAgentGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAgentGrouping.TabIndex = 1;
 			this.comboBoxAgentGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxAgentGrouping_SelectedIndexChanged);
-			// 
-			// tableLayoutPanel3
-			// 
-			this.tableLayoutPanel3.ColumnCount = 1;
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Controls.Add(this.perPersonAndGroupListView, 0, 0);
-			this.tableLayoutPanel3.Controls.Add(this.perPersonAndGroupLabel, 0, 1);
-			this.tableLayoutPanel3.Controls.Add(this.perGroupAndOthersListView, 0, 2);
-			this.tableLayoutPanel3.Controls.Add(this.perGroupAndOthersLabel, 0, 3);
-			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 148);
-			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 4;
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(498, 277);
-			this.tableLayoutPanel3.TabIndex = 6;
 			// 
 			// perPersonAndGroupListView
 			// 
@@ -383,12 +351,14 @@
 			this.perPersonAndGroupListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader11,
             this.columnHeader12,
-            this.columnHeader13});
+            this.columnHeader13,
+            this.columnHeader9,
+            this.columnHeader10});
 			this.perPersonAndGroupListView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.perPersonAndGroupListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.perPersonAndGroupListView.Location = new System.Drawing.Point(3, 3);
+			this.perPersonAndGroupListView.Location = new System.Drawing.Point(3, 40);
 			this.perPersonAndGroupListView.Name = "perPersonAndGroupListView";
-			this.perPersonAndGroupListView.Size = new System.Drawing.Size(492, 118);
+			this.perPersonAndGroupListView.Size = new System.Drawing.Size(599, 429);
 			this.perPersonAndGroupListView.StateImageList = this.imageList1;
 			this.perPersonAndGroupListView.TabIndex = 0;
 			this.perPersonAndGroupListView.UseCompatibleStateImageBehavior = false;
@@ -397,7 +367,7 @@
 			// columnHeader11
 			// 
 			this.columnHeader11.Text = "xxShiftCategory";
-			this.columnHeader11.Width = 150;
+			this.columnHeader11.Width = 200;
 			// 
 			// columnHeader12
 			// 
@@ -409,81 +379,15 @@
 			this.columnHeader13.Text = "xxOthers";
 			this.columnHeader13.Width = 100;
 			// 
-			// perPersonAndGroupLabel
+			// columnHeader9
 			// 
-			this.perPersonAndGroupLabel.Location = new System.Drawing.Point(3, 124);
-			this.perPersonAndGroupLabel.Name = "perPersonAndGroupLabel";
-			this.perPersonAndGroupLabel.Size = new System.Drawing.Size(0, 13);
-			this.perPersonAndGroupLabel.TabIndex = 1;
-			this.perPersonAndGroupLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.columnHeader9.Text = "xxTeam";
+			this.columnHeader9.Width = 100;
 			// 
-			// perGroupAndOthersListView
+			// columnHeader10
 			// 
-			this.perGroupAndOthersListView.BackColor = System.Drawing.SystemColors.Info;
-			this.perGroupAndOthersListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.perGroupAndOthersListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader14,
-            this.columnHeader15,
-            this.columnHeader16});
-			this.perGroupAndOthersListView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.perGroupAndOthersListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.perGroupAndOthersListView.Location = new System.Drawing.Point(3, 140);
-			this.perGroupAndOthersListView.Name = "perGroupAndOthersListView";
-			this.perGroupAndOthersListView.Size = new System.Drawing.Size(492, 118);
-			this.perGroupAndOthersListView.StateImageList = this.imageList1;
-			this.perGroupAndOthersListView.TabIndex = 2;
-			this.perGroupAndOthersListView.UseCompatibleStateImageBehavior = false;
-			this.perGroupAndOthersListView.View = System.Windows.Forms.View.Details;
-			// 
-			// columnHeader14
-			// 
-			this.columnHeader14.Text = "xxShiftCategory";
-			this.columnHeader14.Width = 150;
-			// 
-			// columnHeader15
-			// 
-			this.columnHeader15.Text = "xxTeam";
-			this.columnHeader15.Width = 100;
-			// 
-			// columnHeader16
-			// 
-			this.columnHeader16.Text = "xxOthers";
-			this.columnHeader16.Width = 100;
-			// 
-			// perGroupAndOthersLabel
-			// 
-			this.perGroupAndOthersLabel.Location = new System.Drawing.Point(3, 261);
-			this.perGroupAndOthersLabel.Name = "perGroupAndOthersLabel";
-			this.perGroupAndOthersLabel.Size = new System.Drawing.Size(0, 13);
-			this.perGroupAndOthersLabel.TabIndex = 3;
-			// 
-			// listViewFairness
-			// 
-			this.listViewFairness.BackColor = System.Drawing.SystemColors.Info;
-			this.listViewFairness.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.listViewFairness.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader17,
-            this.columnHeader18});
-			this.listViewFairness.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listViewFairness.FullRowSelect = true;
-			this.listViewFairness.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.listViewFairness.Location = new System.Drawing.Point(3, 40);
-			this.listViewFairness.Name = "listViewFairness";
-			this.listViewFairness.Scrollable = false;
-			this.listViewFairness.Size = new System.Drawing.Size(498, 102);
-			this.listViewFairness.StateImageList = this.imageList1;
-			this.listViewFairness.TabIndex = 7;
-			this.listViewFairness.UseCompatibleStateImageBehavior = false;
-			this.listViewFairness.View = System.Windows.Forms.View.Details;
-			// 
-			// columnHeader17
-			// 
-			this.columnHeader17.Text = "xxStatistics";
-			this.columnHeader17.Width = 250;
-			// 
-			// columnHeader18
-			// 
-			this.columnHeader18.Width = 249;
+			this.columnHeader10.Text = "xxOthers";
+			this.columnHeader10.Width = 100;
 			// 
 			// ribbonControlAdv1
 			// 
@@ -501,7 +405,7 @@
 			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
 			this.ribbonControlAdv1.QuickPanelVisible = false;
 			this.ribbonControlAdv1.SelectedTab = null;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(517, 33);
+			this.ribbonControlAdv1.Size = new System.Drawing.Size(673, 33);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Start menu";
 			this.ribbonControlAdv1.TabIndex = 0;
 			this.ribbonControlAdv1.Text = "ribbonControlAdv1";
@@ -510,9 +414,10 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(519, 536);
+			this.ClientSize = new System.Drawing.Size(675, 536);
 			this.Controls.Add(this.tabControlAgentInfo);
 			this.Controls.Add(this.ribbonControlAdv1);
+			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "FormAgentInfo";
 			this.Text = "xxAgentInfo";
 			this.Load += new System.EventHandler(this.AgentInfo_FromLoad);
@@ -528,8 +433,6 @@
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAgentGrouping)).EndInit();
-			this.tableLayoutPanel3.ResumeLayout(false);
-			this.tableLayoutPanel3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
 			this.ResumeLayout(false);
 
@@ -560,21 +463,13 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private Syncfusion.Windows.Forms.Tools.AutoLabel agentGroupPageLabel;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAgentGrouping;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAgentGrouping;
         private System.Windows.Forms.ListView perPersonAndGroupListView;
         private System.Windows.Forms.ColumnHeader columnHeader11;
         private System.Windows.Forms.ColumnHeader columnHeader12;
-        private System.Windows.Forms.ColumnHeader columnHeader13;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel perPersonAndGroupLabel;
-        private System.Windows.Forms.ListView perGroupAndOthersListView;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel perGroupAndOthersLabel;
-        private System.Windows.Forms.ColumnHeader columnHeader14;
-        private System.Windows.Forms.ColumnHeader columnHeader15;
-        private System.Windows.Forms.ColumnHeader columnHeader16;
-		private System.Windows.Forms.ListView listViewFairness;
-		private System.Windows.Forms.ColumnHeader columnHeader17;
-		private System.Windows.Forms.ColumnHeader columnHeader18;
+		private System.Windows.Forms.ColumnHeader columnHeader13;
+		private System.Windows.Forms.ColumnHeader columnHeader9;
+		private System.Windows.Forms.ColumnHeader columnHeader10;
         
 	}
 }

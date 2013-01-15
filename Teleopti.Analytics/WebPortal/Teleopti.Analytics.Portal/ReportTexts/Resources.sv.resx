@@ -600,7 +600,7 @@
     <comment>Inloggad tid</comment>
   </data>
   <data name="ResNotReadyTime" xml:space="preserve">
-    <value>Ej redotid</value>
+    <value>Paustid</value>
     <comment>Ej ready tid</comment>
   </data>
   <data name="ResDateInterval" xml:space="preserve">

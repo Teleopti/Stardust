@@ -258,7 +258,6 @@
     <Compile Include="SdkConfigurationReader.cs" />
     <Compile Include="SerializationContainerInstaller.cs" />
     <Compile Include="ServiceBusRunner.cs" />
-    <Compile Include="ShiftTrade\ShiftTradeContainerInstaller.cs" />
     <Compile Include="ShiftTrade\ShiftTradeRequestSaga.cs" />
     <Compile Include="UpdateScheduleProjectionReadModel.cs" />
   </ItemGroup>
@@ -287,6 +286,10 @@
     <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
       <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>

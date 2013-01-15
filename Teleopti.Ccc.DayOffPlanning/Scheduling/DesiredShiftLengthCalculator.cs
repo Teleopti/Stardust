@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 		{
 			var lengths = workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions);
 			var currentAverage = matrix.SchedulePeriod.AverageWorkTimePerDay;
+		    var oldCurrentAverage = currentAverage;
 			var targetTime = _schedulePeriodTargetTimeCalculator.TargetTime(matrix);
 			if (schedulingOptions.UseCustomTargetTime.HasValue)
 				targetTime = schedulingOptions.UseCustomTargetTime.Value;
@@ -70,6 +71,9 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 					exit = true;
 				else
 				{
+                    if (newAverage == oldCurrentAverage)
+                        exit = true;
+				    oldCurrentAverage = currentAverage;
 					currentAverage = newAverage;
 				}
 			}

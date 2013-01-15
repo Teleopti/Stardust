@@ -31,6 +31,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private MinMaxStaffBroken _aggregatedMinMaxStaffAlarm;
         private StaffingThreshold _aggregatedStaffingThreshold = StaffingThreshold.Ok;
 
+        private static readonly object Locker = new object();
+
         #endregion Fields 
 
 		#region Constructors (2) 
@@ -62,10 +64,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-                if(!_isAggregate)
-                    throw new InvalidCastException("This instance is not aggregated");
+                lock (Locker)
+                {
+                    if (!_isAggregate)
+                        throw new InvalidCastException("This instance is not aggregated");
 
-                return this;
+                    return this;
+                }
             }
         }
 
@@ -99,18 +104,17 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-                double ret = 0;
-
-                for (int i = 0; i < _segmentInThisCollection.Count; i++)
+                lock (Locker)
                 {
-                    ret += _segmentInThisCollection[i].BookedResource65;
-                }
-                //foreach (ISkillStaffSegmentPeriod ySegment in _segmentInThisCollection)
-                //{
-                //    ret += ySegment.BookedResource65;
-                //}
+                    double ret = 0;
 
-                return ret;
+                    for (int i = 0; i < _segmentInThisCollection.Count; i++)
+                    {
+                        ret += _segmentInThisCollection[i].BookedResource65;
+                    }
+                    
+                    return ret;
+                }
             }
         }
 
@@ -118,10 +122,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-                if (_isAggregate)
-                    return AsAggregated.AggregatedCalculatedLoggedOn;
+                lock (Locker)
+                {
+                    if (_isAggregate)
+                        return AsAggregated.AggregatedCalculatedLoggedOn;
 
-                return Payload.CalculatedLoggedOn;
+                    return Payload.CalculatedLoggedOn;
+                }
             }
         }
 
@@ -140,9 +147,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-                if (_isAggregate)
-                    return AsAggregated.AggregatedEstimatedServiceLevel;
-                return _estimatedServiceLevel;
+                lock (Locker)
+                {
+                    if (_isAggregate)
+                        return AsAggregated.AggregatedEstimatedServiceLevel;
+                    return _estimatedServiceLevel;
+                }
             } 
         }
 
@@ -166,26 +176,31 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-                if (_isAggregate)
-                    return AsAggregated.AggregatedCalculatedResource;
+                lock (Locker)
+                {
+                    if (_isAggregate)
+                        return AsAggregated.AggregatedCalculatedResource;
 
-                return Payload.CalculatedResource;
+                    return Payload.CalculatedResource;
+                }
             }
         }
 
         public double FStaff
         {
             get {
-
-                if (_isAggregate)
-                    return AsAggregated.AggregatedFStaff;
-
-                double ret = 0;
-                foreach (ISkillStaffSegmentPeriod ySegment in _segmentInThisCollection)
+                lock (Locker)
                 {
-                    ret += ySegment.FStaff();
+                    if (_isAggregate)
+                        return AsAggregated.AggregatedFStaff;
+
+                    double ret = 0;
+                    foreach (ISkillStaffSegmentPeriod ySegment in _segmentInThisCollection)
+                    {
+                        ret += ySegment.FStaff();
+                    }
+                    return ret;
                 }
-                return ret;
             }
         }
 
@@ -613,17 +628,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-                double ret = 0;
-                foreach (ISkillStaffSegmentPeriod segmentPeriod in _segmentInThisCollection)
+                lock (Locker)
                 {
-                    ISkillStaffPeriod owner = segmentPeriod.BelongsTo;
-                    var segmentCount = owner.SortedSegmentCollection.Count;
-                    if (segmentCount>0)
+                    double ret = 0;
+                    foreach (ISkillStaffSegmentPeriod segmentPeriod in _segmentInThisCollection)
                     {
-                        ret += owner.Payload.ForecastedIncomingDemand /segmentCount;
+                        ISkillStaffPeriod owner = segmentPeriod.BelongsTo;
+                        var segmentCount = owner.SortedSegmentCollection.Count;
+                        if (segmentCount > 0)
+                        {
+                            ret += owner.Payload.ForecastedIncomingDemand/segmentCount;
+                        }
                     }
+                    return ret;
                 }
-                return ret;
             }
         }
 

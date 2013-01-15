@@ -1,6 +1,8 @@
 using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -481,6 +483,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new ExistingAbsenceRequest());
 		}
 
+		[Given(@"I have created a shift trade request")]
+		public void GivenIHaveCreatedAShiftTradeRequest()
+		{
+			UserFactory.User().Setup(new ExistingShiftTradeRequest());
+		}
+
+		[Given(@"I have received a shift trade request from '(.*)'")]
+		public void GivenIHaveReceivedAShiftTradeRequestFrom(string from)
+		{
+			var person = PersonFactory.CreatePerson(from);
+			UserFactory.User().MakePerson(person);
+			UserFactory.User().Setup(new ExistingShiftTradeRequest() {From = person});
+		}
 
 		[Given(@"the site has another team")]
 		public void GivenTheSiteHasAnotherTeam()

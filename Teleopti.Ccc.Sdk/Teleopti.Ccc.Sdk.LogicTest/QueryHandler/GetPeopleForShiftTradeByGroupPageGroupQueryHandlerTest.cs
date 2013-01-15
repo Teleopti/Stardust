@@ -4,12 +4,12 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
-using Teleopti.Ccc.Sdk.Logic.Restrictions;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -24,8 +24,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private GetPeopleForShiftTradeByGroupPageGroupQueryHandler target;
 		private IAssembler<IPerson, PersonDto> assembler;
 		private IPersonRepository personRepository;
-		private IUnitOfWorkFactory unitOfWorkFactory;
-		private IList<ISpecification<IShiftTradeAvailableCheckItem>> shiftTradeValidationList;
 
 		[SetUp]
 		public void Setup()
@@ -34,9 +32,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			groupingReadOnlyRepository = mocks.DynamicMock<IGroupingReadOnlyRepository>();
 			assembler = mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
 			personRepository = mocks.StrictMock<IPersonRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			shiftTradeValidationList = new List<ISpecification<IShiftTradeAvailableCheckItem>>();
-			target = new GetPeopleForShiftTradeByGroupPageGroupQueryHandler(assembler, groupingReadOnlyRepository, personRepository, unitOfWorkFactory, shiftTradeValidationList);
+			var unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			var shiftTradeValidationList = new List<IShiftTradeLightSpecification>();
+			var shiftTradeLightValidator = new ShiftTradeLightValidator(shiftTradeValidationList);
+			target = new GetPeopleForShiftTradeByGroupPageGroupQueryHandler(assembler, groupingReadOnlyRepository, personRepository, unitOfWorkFactory, shiftTradeLightValidator);
 		}
 
 		[Test]

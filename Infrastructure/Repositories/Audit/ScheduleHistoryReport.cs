@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -31,29 +32,31 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		{			
 			var auditSession = session().Auditer();
 			var ret = new List<ScheduleAuditingReportData>();
+			var changedPeriodAgentTimeZone = changedPeriod.ToDateTimePeriod(_regional.TimeZone);
+			var scheduledPeriodAgentTimeZone = scheduledPeriod.ToDateTimePeriod(_regional.TimeZone);
 
 			auditSession.CreateQuery().ForHistoryOf<PersonAssignment, Revision>()
-				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriod.StartDate.Date, changedPeriod.EndDate.Date))
+				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
 				.AddModifiedByIfNotNull(modifiedBy)
-				.Add(AuditEntity.Property("Period.period.Minimum").Le(scheduledPeriod.EndDate.Date))
-				.Add(AuditEntity.Property("Period.period.Maximum").Ge(scheduledPeriod.StartDate.Date))
+				.Add(AuditEntity.Property("Period.period.Minimum").Lt(scheduledPeriodAgentTimeZone.EndDateTime))
+				.Add(AuditEntity.Property("Period.period.Maximum").Gt(scheduledPeriodAgentTimeZone.StartDateTime))
 				.Add(AuditEntity.Property("Person").In(agents))
 				.Results()
 				.ForEach(assRev => ret.Add(createAssignmentAuditingData(assRev)));
 
 			auditSession.CreateQuery().ForHistoryOf<PersonDayOff, Revision>()
-				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriod.StartDate.Date, changedPeriod.EndDate.Date))
+				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
 				.AddModifiedByIfNotNull(modifiedBy)
-				.Add(AuditEntity.Property("DayOff.Anchor").Between(scheduledPeriod.StartDate.Date, scheduledPeriod.EndDate.Date))
+				.Add(AuditEntity.Property("DayOff.Anchor").Between(scheduledPeriodAgentTimeZone.StartDateTime, scheduledPeriodAgentTimeZone.EndDateTime))
 				.Add(AuditEntity.Property("Person").In(agents))
 				.Results()
 				.ForEach(dayOffRev => ret.Add(createDayOffAuditingData(dayOffRev)));
 
 			auditSession.CreateQuery().ForHistoryOf<PersonAbsence, Revision>()
-				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriod.StartDate.Date, changedPeriod.EndDate.Date))
+				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
 				.AddModifiedByIfNotNull(modifiedBy)
-				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Le(scheduledPeriod.EndDate.Date))
-				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Ge(scheduledPeriod.StartDate.Date))
+				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(scheduledPeriodAgentTimeZone.EndDateTime))
+				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(scheduledPeriodAgentTimeZone.StartDateTime))
 				.Add(AuditEntity.Property("Person").In(agents))
 				.Results()
 				.ForEach(absRev => ret.Add(createAbsenceAuditingData(absRev)));

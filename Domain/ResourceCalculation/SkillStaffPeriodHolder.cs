@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class SkillStaffPeriodHolder : ISkillStaffPeriodHolder
     {
         private ISkillSkillStaffPeriodExtendedDictionary _internalDictionary;
+        private static readonly object Locker = new object();
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public SkillStaffPeriodHolder(IEnumerable<KeyValuePair<ISkill, IList<ISkillDay>>> skillDays)
@@ -272,7 +273,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IList<ISkillStaffPeriod> SkillStaffPeriodList(IAggregateSkill skill, DateTimePeriod utcPeriod)
         {
         	int minimumResolution = getMinimumResolution(skill);
-
+            
+            lock(Locker)
+            {
         	IDictionary<DateTimePeriod, IList<ISkillStaffPeriod>> skillStaffPeriods = new Dictionary<DateTimePeriod,IList<ISkillStaffPeriod>>();
             foreach (ISkill aggregateSkill in skill.AggregateSkills)
             {
@@ -342,6 +345,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
 
             return SortedPeriods(skillStaffPeriodsToReturn);
+            }
         }
 
     	private static int getMinimumResolution(IAggregateSkill skill)

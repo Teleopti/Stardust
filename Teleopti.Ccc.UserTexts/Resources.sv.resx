@@ -3323,7 +3323,7 @@ Ersätt</value>
     <comment>There are two overlapping shifts</comment>
   </data>
   <data name="HandledWithinColon" xml:space="preserve">
-    <value>Bahandlas inom:</value>
+    <value>Behandlas inom:</value>
     <comment>Handled within</comment>
   </data>
   <data name="AddressBook" xml:space="preserve">
@@ -3865,7 +3865,7 @@ Ersätt</value>
     <comment>Agent</comment>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Intraday – Teleopti CCC</value>
+    <value>Inom dag – Teleopti CCC</value>
     <comment>Teleopti CCC : Intraday</comment>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
@@ -5039,7 +5039,7 @@ tillgänglighet</value>
     <comment>Use Shiftcategory</comment>
   </data>
   <data name="EarlyWarning" xml:space="preserve">
-    <value>Förvarning</value>
+    <value>Tidig varning</value>
     <comment>Early warning</comment>
   </data>
   <data name="ErrorMsgCaptionDuplicateUserCredentials" xml:space="preserve">
@@ -6710,7 +6710,7 @@ Uppdaterad den: {1}</value>
     <comment>Scheduler</comment>
   </data>
   <data name="FileTypeSelection" xml:space="preserve">
-    <value>Välj typ av löneexportfil</value>
+    <value>Välj typ av exportfil</value>
     <comment>used in payrollexport</comment>
   </data>
   <data name="ESL" xml:space="preserve">
@@ -9316,7 +9316,7 @@ period</comment>
     <comment>Set Planning Time Bank</comment>
   </data>
   <data name="ExportToPDFGraphical" xml:space="preserve">
-    <value>Exportera till PDF grafisk</value>
+    <value>Exportera till PDF - Grafisk</value>
     <comment>Exportera till PDF grafisk</comment>
   </data>
   <data name="CopyDetails" xml:space="preserve">
@@ -9570,7 +9570,7 @@ period</comment>
     <value>Databskopplingen har tappats. För att bevara dataintegriteten kommer formuläret att stängas. Tyvärr kommer inte dina data att sparas.</value>
   </data>
   <data name="AdjustedDifference" xml:space="preserve">
-    <value>Justerad differens</value>
+    <value>Justerad skillnad</value>
     <comment>Adjusted difference</comment>
   </data>
   <data name="AllFulfilledMustHave" xml:space="preserve">
@@ -9761,7 +9761,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Use standard deviation in period value calculation</comment>
   </data>
   <data name="UseTweakedValues" xml:space="preserve">
-    <value>Använd justerad differens</value>
+    <value>Använd justerad skillnad</value>
     <comment>Use tweaked values</comment>
   </data>
   <data name="UseSameDayOffs" xml:space="preserve">
@@ -10256,7 +10256,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>{0} agentdagar kunde inte schemaläggas.</value>
   </data>
   <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
-    <value>Exportera till PDF skift per dag</value>
+    <value>Exportera till PDF - Skift per dag</value>
   </data>
   <data name="ShowPublicNote" xml:space="preserve">
     <value>Visa publik notering</value>
@@ -10796,5 +10796,20 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   </data>
   <data name="WarningWithExclamatory" xml:space="preserve">
     <value>Varning!</value>
+  </data>
+  <data name="Reforecast" xml:space="preserve">
+    <value>Omprognosticera</value>
+  </data>
+  <data name="PeopleCap" xml:space="preserve">
+    <value>Personer</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Ta bort</value>
+  </data>
+  <data name="SelectWorkload" xml:space="preserve">
+    <value>Välj workload</value>
+  </data>
+  <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
+    <value>Du måste välja minst en workload</value>
   </data>
 </root>

@@ -34,19 +34,21 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
-        private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+        //private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
     	private readonly IGroupOptimizerFindMatrixesForGroup _groupOptimizerFindMatrixesForGroup;
         private readonly IDaysOffPreferences _daysOffPreferences;
-        private bool _cancelMe;
+    	private readonly IGroupDayOffOptimizationResourceHelper _groupDayOffOptimizationResourceHelper;
+    	private bool _cancelMe;
 
         public GroupDayOffOptimizationService(IPeriodValueCalculator periodValueCalculator, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-            IResourceOptimizationHelper resourceOptimizationHelper, IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup, IDaysOffPreferences daysOffPreferences)
+            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup, IDaysOffPreferences daysOffPreferences, IGroupDayOffOptimizationResourceHelper groupDayOffOptimizationResourceHelper)
         {
             _periodValueCalculatorForAllSkills = periodValueCalculator;
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
-            _resourceOptimizationHelper = resourceOptimizationHelper;
+            //_resourceOptimizationHelper = resourceOptimizationHelper;
         	_groupOptimizerFindMatrixesForGroup = groupOptimizerFindMatrixesForGroup;
             _daysOffPreferences = daysOffPreferences;
+        	_groupDayOffOptimizationResourceHelper = groupDayOffOptimizationResourceHelper;
         }
 
         public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -167,9 +169,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var retList = new List<IGroupDayOffOptimizerContainer>();
 			retList.Add(optimizer);
 			HashSet<DateOnly> dates = new HashSet<DateOnly>();
+
+			var modifiedDays = new List<IScheduleDay>();
+			var orgDays = new List<IScheduleDay>();
+
 			foreach (var scheduleDay in _schedulePartModifyAndRollbackService.ModificationCollection)
 			{
+				if (!dates.Contains(scheduleDay.DateOnlyAsPeriod.DateOnly))
+				{
+					var scheduleDayPro = optimizer.Matrix.GetScheduleDayByKey(scheduleDay.DateOnlyAsPeriod.DateOnly);
+					var orgScheduleDay = scheduleDayPro.DaySchedulePart();
+					orgDays.Add(orgScheduleDay);
+				}
+
 				dates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
+				modifiedDays.Add(scheduleDay);	
 			}
 			_schedulePartModifyAndRollbackService.Rollback();
 
@@ -193,9 +207,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 						}
 					}
 				}
-				
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, false, false);
 			}
+
+			_groupDayOffOptimizationResourceHelper.ResourceCalculateContainersToRemove(orgDays, modifiedDays);
 
 			return retList;
 		}

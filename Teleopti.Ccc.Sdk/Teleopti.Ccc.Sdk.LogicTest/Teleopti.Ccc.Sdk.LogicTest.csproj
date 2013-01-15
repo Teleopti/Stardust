@@ -246,8 +246,6 @@
     <Compile Include="QueryHandler\GetAllPayrollExportsQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetAllScenariosQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetAgentPortalSettingsQueryHandlerTest.cs" />
-    <Compile Include="Restrictions\IsWorkflowControlSetNullSpecificationTest.cs" />
-    <Compile Include="Restrictions\OpenShiftTradePeriodSpecificationTest.cs" />
     <Compile Include="Restrictions\PlanningTimeBankCalculatorTest.cs" />
     <Compile Include="Restrictions\IsEditablePredicateTest.cs" />
     <Compile Include="Restrictions\MinMaxWorkTimeCheckerTest.cs" />
@@ -255,7 +253,6 @@
     <Compile Include="Restrictions\PlanningTimeBankExtractorTest.cs" />
     <Compile Include="Restrictions\PreferenceNightRestCheckerTest.cs" />
     <Compile Include="Restrictions\RestrictionsValidatorTest.cs" />
-    <Compile Include="Restrictions\ShiftTradeSkillSpecificationTest.cs" />
     <Compile Include="SaveSchedulePartServiceTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
   </ItemGroup>

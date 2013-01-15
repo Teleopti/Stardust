@@ -61,6 +61,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingAbsenceRequest>().PersonRequest.GetSubject(new NoFormatting())));
 		}
 
+		[Then(@"I should see my existing shift trade request")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequest()
+		{
+			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
+			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.GetSubject(new NoFormatting())));
+		}
+
+		[Then(@"I should not see my existing shift trade request")]
+		public void ThenIShouldNotSeeMyExistingShiftTradeRequest()
+		{
+			EventualAssert.That(() => _page.Requests.Count(), Is.EqualTo(0));
+		}
+
 		[Then(@"I should be able to see requests link")]
 		public void ThenIShouldBeAbleToSeeRequestsLink()
 		{
@@ -98,6 +111,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.LastRequest.InnerHtml, Is.StringContaining(data.PersonRequest1.GetSubject(new NoFormatting())));
 		}
 
+		[Then(@"I should see an indication that there are more requests")]
+		public void ThenIShouldSeeAnIndicationThatThereAreMoreRequests()
+		{
+			EventualAssert.That(() => _page.MoreToLoadArrow.IsDisplayed(), Is.True);
+
+//			EventualAssert.That(() => Browser.Current.Div(QuicklyFind.ByClass("arrow-down")).IsDisplayed(), Is.True, "More-to-load arrows should  be visible");
+		}
+
+		[Then(@"I should not see an indication that there are more requests")]
+		public void ThenIShouldNotSeeAnIndicationThatThereAreMoreRequests()
+		{
+			EventualAssert.That(() => _page.MoreToLoadArrow.IsDisplayed(), Is.False);
+			//EventualAssert.That(() => Browser.Current.Div(QuicklyFind.ByClass("arrow-down")).IsDisplayed(), Is.False,"More-to-load arrows should not be visible");
+		}
 	}
 
 }

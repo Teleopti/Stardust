@@ -663,8 +663,9 @@
     <Content Include="Areas\MyTime\Views\Schedule\WeekRequestPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Requests\NewShiftTradeRequest.cshtml" />
     <Content Include="Areas\Start\Views\Authentication\SignIn.cshtml" />
-    <None Include="Areas\Start\Views\Test\Message.cshtml" />
+    <Content Include="Areas\Start\Content\signonvm.js" />
     <Content Include="Areas\Start\Content\Css\login.css" />
     <Content Include="Areas\Team\Content\Templates\layout.html" />
     <Content Include="Areas\Team\Content\Templates\menu.html" />

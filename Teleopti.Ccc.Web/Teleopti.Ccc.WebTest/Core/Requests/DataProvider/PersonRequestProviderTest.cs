@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -81,6 +83,24 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			Assert.Throws<DataSourceException>(() =>
 			                                   target.RetrieveRequest(id));
+		}
+
+		[Test]
+		public void ShouldFindAllRequestsForCurrentUserWithPaging()
+		{
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var repository = MockRepository.GenerateMock<IPersonRequestRepository>();
+			var target = new PersonRequestProvider(repository, loggedOnUser, null);
+			var person = new Person();
+			var paging = new Paging();
+			var personRequests = new IPersonRequest[] { MockRepository.GenerateStub<IPersonRequest>(), MockRepository.GenerateStub<IPersonRequest>() };
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			repository.Stub(x => x.FindAllRequestsForAgent(person, paging)).Return(personRequests);
+
+			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequests(paging).Count()));
+
+			repository.AssertWasCalled(x => x.FindAllRequestsForAgent(person, paging));
 		}
 	}
 }

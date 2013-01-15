@@ -7,6 +7,7 @@ using Rhino.ServiceBus.Autofac;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.MessageModules;
 using Rhino.ServiceBus.Sagas.Persisters;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             if (bool.TryParse(ConfigurationManager.AppSettings["EnableErrorNotifier"],out enableErrorNotifier) && enableErrorNotifier)
                 build.RegisterType<ErrorNotification>();
 
-            build.RegisterModule<ShiftTradeContainerInstaller>();
+            build.RegisterModule<ShiftTradeModule>();
         	build.RegisterModule<RepositoryContainerInstaller>();
         	build.RegisterModule<AuthorizationContainerInstaller>();
         	build.RegisterModule<AuthenticationContainerInstaller>();

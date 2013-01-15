@@ -472,6 +472,19 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _mocks.VerifyAll();
         }
 
+		[Test]
+		public void VerifyCannotSaveNewMeetingWithEndTimeEarlierThanStartTime()
+		{
+			_model.StartTime = new TimeSpan(11,0,0);
+			_model.EndTime = new TimeSpan(10,0,0);
+			_view.ShowErrorMessage("", "");
+			LastCall.IgnoreArguments();
+
+			_mocks.ReplayAll();
+			_target.InvalidTimeInfo();
+			_mocks.VerifyAll();
+		}
+
         [Test]
         public void VerifyCanUpdateRecurringActive()
         {

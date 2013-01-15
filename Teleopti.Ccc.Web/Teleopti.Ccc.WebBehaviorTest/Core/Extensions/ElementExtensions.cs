@@ -16,6 +16,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 			return !(tryParse && pos < 0);
 		}
 
+		public static bool IsDisplayed(this Element element)
+		{
+			if (string.Equals(element.Style.Display, "none"))
+			{
+				return false;
+			}
+			if (element.Parent != null)
+			{
+				return IsDisplayed(element.Parent);
+			}
+			return true;
+		}
+
 		public static bool DisplayVisible(this Element element) { return element.Style.Display != "none"; }
 		public static bool DisplayHidden(this Element element) { return element.Style.Display == "none"; }
 

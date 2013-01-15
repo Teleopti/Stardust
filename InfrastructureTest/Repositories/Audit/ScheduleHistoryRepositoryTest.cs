@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				target.FindRevisions(Agent, new DateOnly(Today).AddDays(-2), 10)
+				target.FindRevisions(Agent, new DateOnly(Today).AddDays(-1), 10)
 					.Should().Be.Empty();
 			}
 		}
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				target.FindRevisions(Agent, new DateOnly(Today).AddDays(2), 10)
+				target.FindRevisions(Agent, new DateOnly(Today).AddDays(1), 10)
 					.Should().Be.Empty();
 			}
 		}

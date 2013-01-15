@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -14,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 	[TestFixture]
 	public class ShiftTradeMeetingSpecificationTest
 	{
-		private IShiftTradeMeetingSpecification _target;
+		private ShiftTradeMeetingSpecification _target;
 		private MockRepository _mock;
 		private IList<IShiftTradeSwapDetail> _details;
 		private IShiftTradeSwapDetail _swapDetail;

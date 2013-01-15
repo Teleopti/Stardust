@@ -145,6 +145,7 @@
     <Compile Include="Common\IModifyNow.cs" />
     <Compile Include="Common\ListAggregator.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
+    <Compile Include="Common\TrueFalseRandomizer.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />
     <Compile Include="Common\DateTimePeriodPerStartTimeSorter.cs" />
     <Compile Include="Common\EntityBaseTypes\SimpleAggregateRoot.cs" />
@@ -235,6 +236,7 @@
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
+    <Compile Include="Optimization\GroupDayOffOptimizationResourceHelper.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToAdd.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToRemove.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizer.cs" />
@@ -242,6 +244,7 @@
     <Compile Include="Optimization\GroupIntradayOptimizerService.cs" />
     <Compile Include="Optimization\GroupListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizationExecuter.cs" />
+    <Compile Include="Optimization\GroupMoveTimeOptimizationResourceHelper.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizer.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizerService.cs" />
     <Compile Include="Optimization\GroupMoveTimeValidatorRunner.cs" />
@@ -1219,12 +1222,15 @@
     <Compile Include="WorkflowControl\PersonAccountBalanceValidator.cs" />
     <Compile Include="WorkflowControl\ProcessAbsenceRequest.cs" />
     <Compile Include="WorkflowControl\SchedulePublishedSpecification.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeLightSpecification.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeLightValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IShiftTradeValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IsShiftTradeRequestNotNullSpecification.cs" />
-    <Compile Include="WorkflowControl\ShiftTrades\IsWorkflowControlSetNullSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\OpenShiftTradePeriodSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAbsenceSpecification.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAvailableCheckItem.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeLightValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMeetingSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradePersonalActivitySpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeSkillSpecification.cs" />

@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			if (request == null)
 				ScenarioContext.Current.Pending();
 			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestById(request.Id.Value).Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestDeleteButtonById(request.Id.Value).Exists, Is.False);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestDeleteButtonById(request.Id.Value).IsDisplayed(), Is.False);
 		}
 
 		[Then(@"I should not see a save button")]

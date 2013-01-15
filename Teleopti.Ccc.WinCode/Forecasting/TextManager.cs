@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             _wordDictionary.Add("ForecastedTasks", UserTexts.Resources.ForecastedCalls);
             _wordDictionary.Add("OfferedTasks", UserTexts.Resources.OfferedCalls);
             _wordDictionary.Add("DeviationCallsColon", UserTexts.Resources.DeviationCallsColon);
-            _wordDictionary.Add("DeviationTalkTimeColon", UserTexts.Resources.DeviationHandlingTimeColon);
+			_wordDictionary.Add("DeviationTalkTimeColon", UserTexts.Resources.DeviationTalkTimeColon);
             _wordDictionary.Add("DeviationACWColon", UserTexts.Resources.DeviationACWColon);
         }
     }

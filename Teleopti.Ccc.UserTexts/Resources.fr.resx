@@ -514,7 +514,7 @@
     <value>Resultat E-mail</value>
   </data>
   <data name="EmployeeNo" xml:space="preserve">
-    <value>Nombre employés</value>
+    <value>Numéro d'Employé</value>
   </data>
   <data name="EnterNameHere" xml:space="preserve">
     <value>Entrer nom ici</value>
@@ -985,7 +985,7 @@
     <value>File d'attente</value>
   </data>
   <data name="Queues" xml:space="preserve">
-    <value>Files d'attente</value>
+    <value>Flux</value>
   </data>
   <data name="QuickAccess" xml:space="preserve">
     <value>Accès Rapide</value>
@@ -2143,7 +2143,7 @@
     <value>Validé</value>
   </data>
   <data name="EndPeriod" xml:space="preserve">
-    <value>Fin Période</value>
+    <value>Période de fin</value>
   </data>
   <data name="EndsNextDay" xml:space="preserve">
     <value>Fin jour suivant</value>
@@ -2164,7 +2164,7 @@
     <value>&amp;Finir</value>
   </data>
   <data name="ForecastedCalls" xml:space="preserve">
-    <value>Appels </value>
+    <value>Appels prévus</value>
   </data>
   <data name="Forward" xml:space="preserve">
     <value>Suivant</value>
@@ -2479,7 +2479,7 @@
     <value>Modifier le format de la descrption du nom Agent</value>
   </data>
   <data name="Format" xml:space="preserve">
-    <value>Formater</value>
+    <value>Format</value>
   </data>
   <data name="AmpersandFirstName" xml:space="preserve">
     <value>&amp;Prénom</value>
@@ -5323,13 +5323,13 @@
     <value>Après minuit</value>
   </data>
   <data name="EarlyEndTime" xml:space="preserve">
-    <value>Fin Période tôt</value>
+    <value>Heure fin tôt</value>
   </data>
   <data name="EarlyStartTime" xml:space="preserve">
     <value>Début Période tôt</value>
   </data>
   <data name="LateEndTime" xml:space="preserve">
-    <value>Fin Période tard</value>
+    <value>Heure fin tard</value>
   </data>
   <data name="LateStartTime" xml:space="preserve">
     <value>Début Période tard</value>
@@ -8571,5 +8571,62 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   </data>
   <data name="FairnessOptimizationValueBefore" xml:space="preserve">
     <value>- valeur avant =</value>
+  </data>
+  <data name="NotWorking" xml:space="preserve">
+    <value>Hors Service</value>
+  </data>
+  <data name="NoMessagesFound" xml:space="preserve">
+    <value>Aucun message trouvé</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Expéditeur</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Envoyé</value>
+  </data>
+  <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
+    <value>La destination fichier sélectionnée n'existe pas, merci d'entrer un chemin valide</value>
+  </data>
+  <data name="CouldNotExportForecastToFile" xml:space="preserve">
+    <value>Un problème est survenu avec l'export fichier, merci d'essayer une autre destination</value>
+  </data>
+  <data name="SelectedFileDestinationIsTooLong" xml:space="preserve">
+    <value>La destination fichier sélectionnée est trop longue, merci d'entrer un chemin valide</value>
+  </data>
+  <data name="SameActivity" xml:space="preserve">
+    <value>Même activité</value>
+  </data>
+  <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
+    <value>Après vérification contre Garder l'activité</value>
+  </data>
+  <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
+    <value>Votre planning du {0} a changé!</value>
+  </data>
+  <data name="WindowsLogonWithBrackets" xml:space="preserve">
+    <value>(Windows)</value>
+  </data>
+  <data name="UseAverageShiftLengths" xml:space="preserve">
+    <value>Utiliser les Longueurs d'Horaires Moyennes</value>
+  </data>
+  <data name="LogOnFailedAccountIsLocked" xml:space="preserve">
+    <value>Echec de log on! Le compte est bloqué.</value>
+  </data>
+  <data name="LogOnFailedPasswordExpired" xml:space="preserve">
+    <value>Echec de log on! Mot de passe Expiré.</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Passer</value>
+  </data>
+  <data name="InvalidUserNameOrPassword" xml:space="preserve">
+    <value>Nom d'utilisateur ou Mot de passe invalide.</value>
+  </data>
+  <data name="YourPasswordHasAlreadyExpired" xml:space="preserve">
+    <value>Votre mot de passe a déjà expiré.</value>
+  </data>
+  <data name="YourPasswordWillExpireSoon" xml:space="preserve">
+    <value>Votre mot de passe va bientôt expirer.</value>
+  </data>
+  <data name="WarningWithExclamatory" xml:space="preserve">
+    <value>Avertissement!</value>
   </data>
 </root>

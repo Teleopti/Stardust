@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Web.Filters
 	public class RequestPermissionAttribute : ApplicationFunctionAttribute
 	{
 		public RequestPermissionAttribute()
-			: base(DefinedRaptorApplicationFunctionPaths.TextRequests, DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)
+			: base(DefinedRaptorApplicationFunctionPaths.TextRequests, DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)
 		{
 		}
 	}

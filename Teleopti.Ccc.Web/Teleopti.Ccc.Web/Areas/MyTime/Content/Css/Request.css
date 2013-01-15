@@ -5,6 +5,12 @@
 	margin-left: 0em;
 	margin-right: 0em;
 }
+.request-selected {
+	background: rgb(240, 240, 240);
+}
+.request-not-selected {
+	background: #f8f8f8;
+}
 .request-list 
 {
 	width: 483px;
@@ -20,7 +26,6 @@
 	padding-left: 1.8em;
 	padding-right: 1.8em;
 	border: 1px solid rgba(0, 0, 0, 0.15);
-	background: #f8f8f8;
 	margin-top: 0.1em;
 	margin-bottom: 0.1em;
 }
@@ -34,6 +39,14 @@
 .request-body-inner .arrow-down
 {
 	height: 5em;
+}
+
+.request-arrow-right
+{
+	position: relative;
+	top:23px;
+	left:20px;
+	float: right;
 }
 
 .no-rgba .request-body-inner li {
@@ -54,6 +67,7 @@
 	font-style: italic;
 	font-size: xx-small;
 }
+
 .request-body-inner .request-data-type {
 	padding-right: 20px;
 	padding-left: 0px;
@@ -73,6 +87,7 @@
 .request-body-inner .request-text 
 {
 	padding-top: 0.3em;
+	max-width: 440px;
 }
 .request-edit-section .edit-module-element {
 	position: relative;
@@ -101,3 +116,4 @@
 {
 	text-align: right;
 }
+
