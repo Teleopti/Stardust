@@ -8,6 +8,29 @@
 
 <script type="text/Html" id="shifttrade-request-detail-template">
 	<div class="pdb5">@Resources.ShiftTradeRequest</div>
+	<br/>
+	<br/>
+	<div>| 08:00 | 09:00 | 10:00 | 11:00 | 12:00 | 13:00 | 14:00 | 15:00 | 16:00 | 17:00 | </div>
+	<span style="background: green; width: 50px; position: relative; display:inline-block; float: left; margin-left: 80px;" >Phone</span>
+	<span style="background: red; width: 20px; position: relative; display:inline-block; float: left" >SB</span>
+	<span style="background: green; width: 50px; position: relative; display:inline-block; float: left" >Phone</span>
+	<span style="background: yellow; width: 80px; position: relative; display:inline-block; float: left" >Lunch</span>
+	<span style="background: green; width: 100px; position: relative; display:inline-block; float: left" >Phone</span>
+
+	<br/>
+	<br/>
+	<br/>
+	<div class="arrow-down"></div>
+	
+	<div>| 08:00 | 09:00 | 10:00 | 11:00 | 12:00 | 13:00 | 14:00 | 15:00 | 16:00 | 17:00 |</div>
+	<span style="background: green; width: 100px; position: relative; display:inline-block; float: left; margin-left: 30px;" >Phone</span>	
+	<span style="background: yellow; width: 80px; position: relative; display:inline-block; float: left" >Lunch</span>
+	<span style="background: green; width: 50px; position: relative; display:inline-block; float: left" >Phone</span>
+	<span style="background: red; width: 20px; position: relative; display:inline-block; float: left" >SB</span>
+	<span style="background: green; width: 50px; position: relative; display:inline-block; float: left" >Phone</span>
+	<br/>
+	<br/>
+	<br/>
 </script>
 
 <script type="text/Html" id="text-request-detail-template">
@@ -23,7 +46,7 @@
 </script>
 
 <div class="displaynone" id="Request-detail-default-start-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))</div>
-<div class="displaynone" id="Request-detail-default-end-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
+<div class="displaynone" id="Request-detail-default-end-time" >@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
 <div id="Requests-body-inner" class="request-body-inner relative">
 	<div class="ui-corner-all friendly-message ui-corner-all floatleft" data-bind="visible: requests().length == 0" id="Requests-no-requests-found">
 		@Resources.NoRequestsFound
