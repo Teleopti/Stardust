@@ -8,7 +8,7 @@ GO
 -- Create date: 2012-11-28
 -- Description: Load acual agent state
 -- =============================================
-ALTER PROCEDURE [RTA].[rta_load_actual_agent_statecode]
+CREATE PROCEDURE [RTA].[rta_load_actual_agent_statecode]
 AS
 BEGIN
  SET NOCOUNT ON;
