@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			requestTab.Should().Not.Be.Null();
 		}
 
-		[Test]
 		[Test, Ignore("Henrik 2013-01-09 Shifttrades are not implemented yet")]
 		public void ShouldHaveCreateShiftTradeRequestsButtonIfPermission()
 		{

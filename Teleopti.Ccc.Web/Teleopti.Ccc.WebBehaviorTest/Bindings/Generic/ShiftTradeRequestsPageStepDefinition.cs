@@ -72,10 +72,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldSeeTheTimeLineSpanFromTo(string timeFrom, string timeTo)
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.Count, Is.GreaterThan(0));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers[0].Span(Find.First).Text, Is.EqualTo(timeFrom));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers[0].Span(Find.First()).Text, Is.EqualTo(timeFrom));
 			EventualAssert.That(
 				() =>
-				Pages.Pages.RequestsPage.MyScheduleLayers[Pages.Pages.RequestsPage.MyScheduleLayers.Count - 1].Span(Find.First).Text,
+				Pages.Pages.RequestsPage.MyScheduleLayers[Pages.Pages.RequestsPage.MyScheduleLayers.Count - 1].Span(Find.First()).Text,
 				Is.EqualTo(timeTo));
 		}
 	}
