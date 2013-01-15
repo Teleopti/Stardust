@@ -18,5 +18,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 				PersonTo.Equals(other.PersonTo) &&
 				DateOnly.Equals(other.DateOnly);
 		}
+
+		public override int GetHashCode()
+		{
+			return PersonFrom.GetHashCode() ^
+			       PersonTo.GetHashCode() ^
+			       DateOnly.GetHashCode();
+		}
 	}
 }

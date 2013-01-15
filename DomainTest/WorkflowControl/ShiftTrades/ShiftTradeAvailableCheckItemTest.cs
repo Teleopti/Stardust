@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
+{
+	[TestFixture]
+	public class ShiftTradeAvailableCheckItemTest
+	{
+		[Test]
+		public void ShouldGenerateCorrectHashValue()
+		{
+			var date = new DateOnly(2000, 1, 1);
+			var personFrom = new Person();
+			var personTo = new Person();
+
+			var hashList = new HashSet<ShiftTradeAvailableCheckItem>();
+			hashList.Add(new ShiftTradeAvailableCheckItem{DateOnly = date, PersonFrom = personFrom, PersonTo = personTo}).Should().Be.True();
+			hashList.Add(new ShiftTradeAvailableCheckItem{DateOnly = date, PersonFrom = personFrom, PersonTo = personTo}).Should().Be.False();
+		}
+	}
+}
