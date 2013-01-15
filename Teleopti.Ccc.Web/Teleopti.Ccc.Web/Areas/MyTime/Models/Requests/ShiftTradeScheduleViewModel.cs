@@ -2,9 +2,10 @@
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
-	public class ShiftTradePersonViewModel
+	public class ShiftTradeScheduleViewModel
 	{
-		public string Name { get; set; }
 		public IEnumerable<ShiftTradeScheduleLayerViewModel> ScheduleLayers { get; set; }
+		public string Name { get; set; }
+		public int MinutesSinceTimeLineStart { get; set; }
 	}
 }

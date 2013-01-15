@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			            	};
 			var model = new ShiftTradeRequestsScheduleViewModel
 							{
-								MySchedule = new ShiftTradeMyScheduleViewModel { ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel> { layer } }
+								MySchedule = new ShiftTradeScheduleViewModel { ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel> { layer } }
 							};
 
 			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<DateTime>.Is.Anything)).Return(model);

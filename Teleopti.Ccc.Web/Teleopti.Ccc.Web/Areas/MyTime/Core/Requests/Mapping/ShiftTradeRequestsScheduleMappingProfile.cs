@@ -41,11 +41,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 									var possibleTradePersonsSchedule = _shiftTradeRequestProvider.Invoke().RetrievePossibleTradePersonsScheduleDay(s);
 
-									var possibleTradePersonsViewModel = new List<ShiftTradePersonViewModel>();
+									var possibleTradePersonsViewModel = new List<ShiftTradeScheduleViewModel>();
 									foreach (IScheduleDay scheduleDay in possibleTradePersonsSchedule)
 									{
 										DateTimePeriod timeRangeTemp;
-										possibleTradePersonsViewModel.Add(new ShiftTradePersonViewModel
+										possibleTradePersonsViewModel.Add(new ShiftTradeScheduleViewModel
 										{
 											Name = scheduleDay.Person.Name.ToString(),
 											ScheduleLayers = CreateShiftTradeLayers(_projectionProvider.Invoke().Projection(scheduleDay),
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 									}
 									return new ShiftTradeRequestsScheduleViewModel
 											{
-												MySchedule = new ShiftTradeMyScheduleViewModel
+												MySchedule = new ShiftTradeScheduleViewModel
 												             	{
 												             		ScheduleLayers = myScheduleLayersViewModel,
 																	MinutesSinceTimeLineStart = minutesSinceTimeLineStart
