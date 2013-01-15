@@ -9,6 +9,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -89,6 +90,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			_textRequestPersister.Delete(id);
 			return new EmptyResult();
+		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult ShiftTradeRequestSchedule(DateTime selectedDate)
+		{
+			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(selectedDate), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult ShiftTradeRequestPeriod()
+		{
+			return Json(_requestsViewModelFactory.CreateShiftTradePeriodViewModel(), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

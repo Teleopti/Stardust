@@ -19,6 +19,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Requests/Index', Teleopti.MyTimeWeb.Request.RequestPartialInit);
 		},
 		RequestPartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
+			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.Init();
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 
 			var requestDetailViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
