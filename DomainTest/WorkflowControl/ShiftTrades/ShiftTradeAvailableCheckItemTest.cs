@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			var personTo = new Person();
 
 			var hashList = new HashSet<ShiftTradeAvailableCheckItem>();
-			hashList.Add(new ShiftTradeAvailableCheckItem{DateOnly = date, PersonFrom = personFrom, PersonTo = personTo}).Should().Be.True();
-			hashList.Add(new ShiftTradeAvailableCheckItem{DateOnly = date, PersonFrom = personFrom, PersonTo = personTo}).Should().Be.False();
+			hashList.Add(new ShiftTradeAvailableCheckItem(date, personFrom, personTo)).Should().Be.True();
+			hashList.Add(new ShiftTradeAvailableCheckItem(date, personFrom, personTo)).Should().Be.False();
 		}
 	}
 }

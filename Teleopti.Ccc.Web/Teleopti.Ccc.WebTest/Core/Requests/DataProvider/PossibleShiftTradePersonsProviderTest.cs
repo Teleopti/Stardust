@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var date = new DateOnly(2000, 1, 1);
 			personRepository.Expect(rep => rep.LoadAll()).Return(new List<IPerson>{validAgent, invalidAgent});
 
-			var resultPersonValid = new ShiftTradeAvailableCheckItem {DateOnly = date, PersonFrom = currentUser, PersonTo = validAgent};
-			var resultPersonInvalid = new ShiftTradeAvailableCheckItem {DateOnly = date, PersonFrom = currentUser, PersonTo = invalidAgent};
+			var resultPersonValid = new ShiftTradeAvailableCheckItem(date, currentUser, validAgent);
+			var resultPersonInvalid = new ShiftTradeAvailableCheckItem(date, currentUser, invalidAgent);
 
 			shiftTradeValidator.Expect(val => val.Validate(resultPersonInvalid)).Return(new ShiftTradeRequestValidationResult(false));
 			shiftTradeValidator.Expect(val => val.Validate(resultPersonValid)).Return(new ShiftTradeRequestValidationResult(true));
