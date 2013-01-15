@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 listViewPersonPeriod.Items.Clear();
                 listViewRestrictions.Items.Clear();
                 listViewPerson.Items.Clear();
-                listViewFairness.Items.Clear();
+                //listViewFairness.Items.Clear();
                 return;
             }
             _dateIsSelected = true;
@@ -118,121 +118,28 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "perPersonAndGroup"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "perGroupAndOthers"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void updateFairnessInfo(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder)
 		{
-			var pointPerShiftCategoryOption = false;
-
 			agentGroupPageLabel.Text = Resources.GroupPage;
 
 			if (_fairnessManager == null)
 				_fairnessManager = _container.Resolve<IShiftCategoryFairnessAggregateManager>();
 
-            ISchedulingOptions schedulingOptions = new SchedulingOptions
-            {
-                UseAvailability = true,
-                UsePreferences = true,
-                UseStudentAvailability = true,
-                UseRotations = true
-            };
-            var helper = new AgentInfoHelper(person, dateOnly, stateHolder, schedulingOptions, _workShiftWorkTime);
-            listViewFairness.Items.Clear();
-            perPersonAndGroupListView.Items.Clear();
-            perGroupAndOthersListView.Items.Clear();
+			ISchedulingOptions schedulingOptions = new SchedulingOptions
+			{
+				UseAvailability = true,
+				UsePreferences = true,
+				UseStudentAvailability = true,
+				UseRotations = true
+			};
+			var helper = new AgentInfoHelper(person, dateOnly, stateHolder, schedulingOptions, _workShiftWorkTime);
+			perPersonAndGroupListView.Items.Clear();
 
-            helper.SchedulePeriodData();
-            if (!helper.Period.HasValue)
-                return;
+			helper.SchedulePeriodData();
+			if (!helper.Period.HasValue)
+				return;
 
-            //listViewFairness.Items.Add("");
-            if (person.WorkflowControlSet != null && person.WorkflowControlSet.UseShiftCategoryFairness)
-            {
-            	var groupPage = comboBoxAgentGrouping.SelectedItem as IGroupPageLight;
-            	var perPersonAndGroup = _fairnessManager.GetPerPersonAndGroup(person, groupPage, dateOnly);
-				var perGroupAndOthers = _fairnessManager.GetPerGroupAndOtherGroup(person, groupPage, dateOnly);
-                var shiftCategoryFairness = _stateHolder.Schedules[person].CachedShiftCategoryFairness();
-                //createAndAddItem(listViewFairness, Resources.EqualOfEachShiftCategory, Resources.Number, 1);
-                var categories =
-                    new List<IShiftCategory>(shiftCategoryFairness.ShiftCategoryFairnessDictionary.Keys);
-                categories.Sort(new ShiftCategorySorter());
-
-                if (perPersonAndGroup.ShiftCategoryFairnessCompareValues != null)
-                {
-                    var displayHeaders =
-                        shouldHeadersBeDisplayedOrNot(perPersonAndGroup.ShiftCategoryFairnessCompareValues);
-
-                    if(displayHeaders)
-                        createAndAddItemInMultipleColumns(perPersonAndGroupListView, ""
-                                                          , Resources.Agent
-                                                          , Resources.Others
-                                                          , true);
-
-                    foreach (var shiftCategory in perPersonAndGroup.ShiftCategoryFairnessCompareValues)
-                    {
-                        if (!(shiftCategory.Original == 0.0 && shiftCategory.ComparedTo == 0.0))
-                        {
-
-							var originalFairness = Math.Round((shiftCategory.Original * 100),2).ToString(CultureInfo.CurrentCulture) + "%";
-                        	var othersFairness = Math.Round((shiftCategory.ComparedTo*100),2).ToString(CultureInfo.CurrentCulture) + "%";
-
-							createAndAddItemInMultipleColumns(perPersonAndGroupListView,
-                                                              shiftCategory.ShiftCategory.Description.Name,
-                                                              originalFairness,
-                                                              othersFairness, 
-															  false);
-                        }
-                    }
-
-                    if(displayHeaders)
-                        createAndAddItemInMultipleColumns(perPersonAndGroupListView, Resources.StandardDeviation 
-														  ,	Math.Round(perPersonAndGroup.StandardDeviation,4).ToString(CultureInfo.CurrentCulture)
-                                                          , ""
-                                                          , true);
-                }
-
-                //perPersonAndGroupLabel.Text = Resources.StandardDeviation + "= " + perPersonAndGroup.StandardDeviation;
-              
-                if (perGroupAndOthers.ShiftCategoryFairnessCompareValues != null)
-                {
-					
-                    var displayHeaders =
-                        shouldHeadersBeDisplayedOrNot(perGroupAndOthers.ShiftCategoryFairnessCompareValues);
-
-                    if(displayHeaders)
-                        createAndAddItemInMultipleColumns(perGroupAndOthersListView, ""
-                                                             , Resources.Team
-                                                             , Resources.Others
-                                                             , true);
-
-                    foreach (var shiftCategory in perGroupAndOthers.ShiftCategoryFairnessCompareValues)
-                    {
-                        if (!(shiftCategory.Original == 0.0 && shiftCategory.ComparedTo == 0.0))
-                        {
-
-							var originalFairness = Math.Round((shiftCategory.Original * 100), 2).ToString(CultureInfo.CurrentCulture) + "%";
-							var othersFairness = Math.Round((shiftCategory.ComparedTo * 100), 2).ToString(CultureInfo.CurrentCulture) + "%";
-
-							createAndAddItemInMultipleColumns(perGroupAndOthersListView,
-                                                              shiftCategory.ShiftCategory.Description.Name,
-                                                              originalFairness,
-                                                              othersFairness,
-															  false);
-                        }
-                    }
-
-                    if(displayHeaders)
-                        createAndAddItemInMultipleColumns(perGroupAndOthersListView, Resources.StandardDeviation 
-                                                             , Math.Round(perGroupAndOthers.StandardDeviation,4).ToString(CultureInfo.CurrentCulture)
-                                                             , ""
-                                                             , true);
-                }
-
-                //perGroupAndOthersLabel.Text = Resources.StandardDeviation + "= " + perGroupAndOthers.StandardDeviation;
-            }
-            else
-            {
-            	pointPerShiftCategoryOption = true;
-		    }
 
 			var period = person.Period(helper.SelectedDate);
 			if (period != null)
@@ -240,26 +147,93 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var employmentType = period.PersonContract.Contract.EmploymentType;
 				if (employmentType != EmploymentType.HourlyStaff)
 				{
-					createAndAddItem(listViewFairness, Resources.PreferenceFulfillment, helper.PreferenceFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-					createAndAddItem(listViewFairness, Resources.MustHaveFulfillment, helper.MustHavesFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-					createAndAddItem(listViewFairness, Resources.RotationFulfillment, helper.RotationFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-					createAndAddItem(listViewFairness, Resources.AvailabilityFulfillment, helper.AvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(perPersonAndGroupListView, Resources.PreferenceFulfillment, helper.PreferenceFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(perPersonAndGroupListView, Resources.MustHaveFulfillment, helper.MustHavesFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(perPersonAndGroupListView, Resources.RotationFulfillment, helper.RotationFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(perPersonAndGroupListView, Resources.AvailabilityFulfillment, helper.AvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
 				}
 				else
 				{
-					createAndAddItem(listViewFairness, Resources.StudentAvailabilityFulfillment, helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(perPersonAndGroupListView, Resources.StudentAvailabilityFulfillment, helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
 				}
 			}
-			if(pointPerShiftCategoryOption)
+
+			var pointPerShiftCategoryOption = !(person.WorkflowControlSet != null && person.WorkflowControlSet.UseShiftCategoryFairness);
+
+			if (pointPerShiftCategoryOption)
 			{
-				listViewFairness.Items.Add("");
-				createAndAddItem(listViewFairness, Resources.FairnessValue,
+				perPersonAndGroupListView.Items.Add("");
+				createAndAddItem(perPersonAndGroupListView, Resources.FairnessValue,
 								 ((int)
 								  stateHolder.Schedules[person].CachedShiftCategoryFairness().FairnessValueResult.
 									  FairnessPoints).ToString(CultureInfo.CurrentCulture), 2);
-				listViewFairness.Items.Add("");
 			}
-        }
+
+			perPersonAndGroupListView.Items.Add("");
+			perPersonAndGroupListView.Items.Add("");
+			perPersonAndGroupListView.Items.Add("");
+
+			if (person.WorkflowControlSet != null && person.WorkflowControlSet.UseShiftCategoryFairness)
+			{
+				var groupPage = comboBoxAgentGrouping.SelectedItem as IGroupPageLight;
+				var perPersonAndGroup = _fairnessManager.GetPerPersonAndGroup(person, groupPage, dateOnly);
+				var perGroupAndOthers = _fairnessManager.GetPerGroupAndOtherGroup(person, groupPage, dateOnly);
+				var shiftCategoryFairness = _stateHolder.Schedules[person].CachedShiftCategoryFairness();
+				
+				var categories =
+					new List<IShiftCategory>(shiftCategoryFairness.ShiftCategoryFairnessDictionary.Keys);
+				categories.Sort(new ShiftCategorySorter());
+
+				var fairnessHelper = new ShiftCategoryFairnessValueHelper(perPersonAndGroup.ShiftCategoryFairnessCompareValues, perGroupAndOthers.ShiftCategoryFairnessCompareValues);
+
+				if (perPersonAndGroup.ShiftCategoryFairnessCompareValues != null || perGroupAndOthers.ShiftCategoryFairnessCompareValues != null)
+				{
+					var displayHeaders = shouldHeadersBeDisplayedOrNot(perPersonAndGroup.ShiftCategoryFairnessCompareValues) || shouldHeadersBeDisplayedOrNot(perGroupAndOthers.ShiftCategoryFairnessCompareValues); 
+
+					if (displayHeaders)
+						createAndAddItemInMultipleColumns(perPersonAndGroupListView, ""
+														  , Resources.Agent
+														  , Resources.Others
+														  , Resources.Team
+														  , Resources.Others
+														  , true);
+
+
+					foreach (var shiftCategory in fairnessHelper.ShiftCategories())
+					{
+						var agentShiftCategory = fairnessHelper.AgentValue(shiftCategory);
+						var teamShiftCategory = fairnessHelper.TeamValue(shiftCategory);
+
+						if (!(agentShiftCategory.Original == 0.0 && agentShiftCategory.ComparedTo == 0.0) || !(teamShiftCategory.Original == 0.0 && teamShiftCategory.ComparedTo == 0.0))
+						{
+							var originalFairnessAgent = Math.Round((agentShiftCategory.Original * 100), 2).ToString(CultureInfo.CurrentCulture) + "%";
+							var othersFairnessAgent = Math.Round((agentShiftCategory.ComparedTo * 100), 2).ToString(CultureInfo.CurrentCulture) + "%";
+
+							var originalFairnessTeam = Math.Round((teamShiftCategory.Original * 100), 2).ToString(CultureInfo.CurrentCulture) + "%";
+							var othersFairnessTeam = Math.Round((teamShiftCategory.ComparedTo * 100), 2).ToString(CultureInfo.CurrentCulture) + "%";
+
+							createAndAddItemInMultipleColumns(perPersonAndGroupListView,
+															  shiftCategory.Description.Name,
+															  originalFairnessAgent,
+															  othersFairnessAgent,
+															  originalFairnessTeam,
+															  othersFairnessTeam,
+															  false);
+						}
+					}
+
+
+					if (displayHeaders)
+						createAndAddItemInMultipleColumns(perPersonAndGroupListView, Resources.StandardDeviation
+														  , Math.Round(perPersonAndGroup.StandardDeviation, 4).ToString(CultureInfo.CurrentCulture)
+														  , ""
+														  , Math.Round(perGroupAndOthers.StandardDeviation, 4).ToString(CultureInfo.CurrentCulture)
+														  , ""
+														  , true);
+				}
+	
+			}
+		}
 
         private static bool shouldHeadersBeDisplayedOrNot(IList<IShiftCategoryFairnessCompareValue> shiftCategoryFairnessCompareValues)
         {
@@ -273,11 +247,13 @@ namespace Teleopti.Ccc.Win.Scheduling
             return false;
         }
 
-        private static void createAndAddItemInMultipleColumns(ListView listView, string column1Text, string column2Text, string column3Text, bool isBold )
+        private static void createAndAddItemInMultipleColumns(ListView listView, string column1Text, string column2Text, string column3Text, string column4Text, string column5Text, bool isBold )
         {
             var listViewItems = new ListViewItem(column1Text);
             listViewItems.SubItems.Add(column2Text);
             listViewItems.SubItems.Add(column3Text);
+			listViewItems.SubItems.Add(column4Text);
+			listViewItems.SubItems.Add(column5Text);
 
             if(isBold)
             {
@@ -776,6 +752,5 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             initializeFairnessTab();
         }
-
     }
 }

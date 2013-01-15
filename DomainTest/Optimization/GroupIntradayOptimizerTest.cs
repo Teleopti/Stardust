@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IScheduleMatrixPro _matrix;
 		private ILockableBitArray _lockableBitArray;
 		private IPerson _person;
+        private IScheduleResultDailyValueCalculator _periodValueCalculator;
 
 		[SetUp]
 		public void Setup()
@@ -30,9 +31,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_intradayDecisionMaker = _mock.StrictMock<IIntradayDecisionMaker>();
 			_dayIntraDayDeviationDataExtractor = _mock.StrictMock<IScheduleResultDataExtractor>();
 			_optimizationOverLimitByRestrictionDecider = _mock.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
-			_target = new GroupIntradayOptimizer(_scheduleMatrixLockableBitArrayConverter, _intradayDecisionMaker,
-			                                     _dayIntraDayDeviationDataExtractor, _optimizationOverLimitByRestrictionDecider);
-			_matrix = _mock.StrictMock<IScheduleMatrixPro>();
+            _periodValueCalculator = _mock.StrictMock<IScheduleResultDailyValueCalculator>();
+            _target = new GroupIntradayOptimizer(_scheduleMatrixLockableBitArrayConverter, _intradayDecisionMaker,
+                                                 _dayIntraDayDeviationDataExtractor, _optimizationOverLimitByRestrictionDecider, _periodValueCalculator);
+            _matrix = _mock.StrictMock<IScheduleMatrixPro>();
 			_lockableBitArray = _mock.StrictMock<ILockableBitArray>();
 			_person = PersonFactory.CreatePerson();
 		}

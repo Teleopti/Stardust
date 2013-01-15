@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 		[SetUp]
 		public void Setup()
 		{
-			_target = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays());
+			_target = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new FalseRandomizerForTest());
 			_values = new List<double?> { 0, 1, 3, 40, 25, 3, 2, 0, 1, 3, 30, 30, 3, 2 };
 			_workingArray = new LockableBitArray(21, false, false, null);
 			_workingArray.PeriodArea = new MinMax<int>(2, 15);
@@ -107,6 +107,14 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 			Assert.IsTrue(_workingArray[15]); //<-- last spot in the area
 			Assert.IsTrue(_workingArray[7]); //<-- first free spot counting 4 from right to left
 			Assert.IsTrue(_workingArray[3]); //<-- next free spot counting 4 from right to left
+		}
+	}
+
+	public class FalseRandomizerForTest : ITrueFalseRandomizer
+	{
+		public bool Randomize(int seed)
+		{
+			return false;
 		}
 	}
 }

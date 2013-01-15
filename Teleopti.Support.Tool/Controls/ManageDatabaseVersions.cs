@@ -398,13 +398,18 @@ namespace Teleopti.Support.Tool.Controls
         private static string getLogonStringForXXX(SqlConnectionStringBuilder sqlConnectionStringBuilder)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append("-R" + SPACE);
+            
+
             if (sqlConnectionStringBuilder.IntegratedSecurity)
             {
-                stringBuilder.Append(@"-W");
+				// if we are running under windows, we must provide an existing windows group from SQL SERVER.
+				// you can use this SQL Query to see what windows group are available 
+				// SET NOCOUNT ON;SELECT ROW_NUMBER() OVER (ORDER BY name) AS ComboOrder, name from sys.syslogins where isntgroup = 1 and name <> 'NT SERVICE\MSSQLSERVER' and name <> 'NT SERVICE\SQLSERVERAGENT'
+                // stringBuilder.Append(@"-W");
             }
             else
             {
+				stringBuilder.Append("-R" + SPACE);
                 stringBuilder.Append(@"-L");
                 stringBuilder.Append(sqlConnectionStringBuilder.UserID);
                 stringBuilder.Append(@":");

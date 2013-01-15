@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
         {
             get
             {
-                return new DateOnly(_meeting.StartDate.Date.Add(_meeting.EndTime));
+				return new DateOnly(_meeting.StartDate);
             }
         }
 

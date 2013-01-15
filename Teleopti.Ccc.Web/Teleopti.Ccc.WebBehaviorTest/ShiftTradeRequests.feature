@@ -238,6 +238,7 @@ Scenario: Deny shift trade request
 	And I click the Deny button on the shift request
 	Then I should not see the shift trade request in the list
 
+@ignore
 Scenario: Delete created shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have created a shift trade request

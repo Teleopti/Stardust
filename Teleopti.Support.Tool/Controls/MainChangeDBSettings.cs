@@ -397,7 +397,7 @@ namespace Teleopti.Support.Tool.Controls
             _connStringSetting.RefreshConnected();
             try
             {
-                DBHelper tempDb = new DBHelper(dbConnect.Server, _connStringSetting.SqlUser,
+                DBHelper tempDb = new DBHelper(_db.ServerName, _connStringSetting.SqlUser,
                                                _connStringSetting.SqlUserPassword);
                 List<string> databases = new List<string>();
                 databases.Add(_connStringSetting.AggregationDB);

@@ -157,6 +157,7 @@
     <Compile Include="Common\JobResultTest.cs" />
     <Compile Include="Common\PersonComparerTest.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptionsTest.cs" />
+    <Compile Include="Common\TrueFalseRandomizerTest.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinderTest.cs" />
     <Compile Include="Common\PersonProviderTest.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriodTest.cs" />
@@ -217,6 +218,7 @@
     <Compile Include="Optimization\BlockOptimizerBlockCleanerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictorTest.cs" />
+    <Compile Include="Optimization\GroupDayOffOptimizationResourceHelperTest.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerExecuterTest.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandlerTest.cs" />
@@ -243,6 +245,7 @@
     <Compile Include="Optimization\GroupMatrixContainerCreatorTest.cs" />
     <Compile Include="Optimization\GroupMatrixHelperTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizationExecuterTest.cs" />
+    <Compile Include="Optimization\GroupMoveTimeOptimizationResourceHelperTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizerServiceTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizerTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeValidatorRunnerTest.cs" />

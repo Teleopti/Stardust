@@ -10,12 +10,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		bool Execute(IList<IScheduleDay> daysToDelete, IList<IScheduleDay> daysToSave,
 		             IList<IScheduleMatrixPro> allMatrixes,
 		             IOptimizationOverLimitByRestrictionDecider optimizationOverLimitByRestrictionDecider);
+        void Rollback(DateOnly dateOnly);
 	}
 
 	public class GroupIntradayOptimizerExecuter : IGroupIntradayOptimizerExecuter
 	{
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
-		private readonly IDeleteSchedulePartService _deleteService;
+        private readonly IDeleteAndResourceCalculateService _deleteService;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly IOptimizationPreferences _optimizerPreferences;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
 		public GroupIntradayOptimizerExecuter(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
-			IDeleteSchedulePartService deleteService, 
+			IDeleteAndResourceCalculateService  deleteService, 
 			ISchedulingOptionsCreator schedulingOptionsCreator, 
 			IOptimizationPreferences optimizerPreferences,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					cleanedList.Add(scheduleDay);
 
 			}
-			_deleteService.Delete(cleanedList, _schedulePartModifyAndRollbackService);
+			_deleteService.DeleteWithResourceCalculation( cleanedList, _schedulePartModifyAndRollbackService);
 
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			foreach (var scheduleDay in daysToSave)
@@ -106,5 +107,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			return true;
 		}
+
+        public void Rollback(DateOnly dateOnly)
+        {
+            _schedulePartModifyAndRollbackService.Rollback();
+            recalculateDay(dateOnly);
+        }
+
+        private void recalculateDay(DateOnly dateOnly)
+        {
+            _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+            _resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, true);
+        }
 	}
 }

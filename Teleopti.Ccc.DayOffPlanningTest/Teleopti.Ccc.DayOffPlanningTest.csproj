@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="AlwaysTrueValidator.cs" />
     <Compile Include="BinaryPermutationTest.cs" />
+    <Compile Include="CMSBCaseSolverTest.cs" />
     <Compile Include="CMSBOneFreeWeekendMax5WorkingDaysDecisionMakerTest.cs" />
     <Compile Include="ConsecutiveDayOffValidatorTest.cs" />
     <Compile Include="ConsecutiveDaysOffSolverTest.cs" />

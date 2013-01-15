@@ -90,9 +90,29 @@ namespace Teleopti.Ccc.Win.Meetings
             BackColor = ColorHelper.ControlPanelColor;
         }
 
-        private void toolStripButtonMainSave_Click(object sender, EventArgs e)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.TimeSpan.Parse(System.String)")]
+		private void toolStripButtonMainSave_Click(object sender, EventArgs e)
         {
-            _meetingComposerPresenter.SaveMeeting();
+			var start = String.Empty;
+        	var end = String.Empty;
+			if (_currentView is MeetingGeneralView)
+			{
+				start = (_currentView as MeetingGeneralView).GetStartTimeText;
+				end = (_currentView as MeetingGeneralView).GetEndTimeText;
+			}
+			else if (_currentView is MeetingSchedulesView)
+			{
+				start = (_currentView as MeetingSchedulesView).GetStartTimeText;
+				end = (_currentView as MeetingSchedulesView).GetEndTimeText;
+			}
+			var startTime = TimeSpan.Parse(start);
+        	var endTime = TimeSpan.Parse(end);
+			if (endTime < startTime)
+				_meetingComposerPresenter.InvalidTimeInfo();
+			else
+			{
+				_meetingComposerPresenter.SaveMeeting();
+			}
         }
 
         public void OnModificationOccurred(IMeeting meeting, bool isDeleted)
