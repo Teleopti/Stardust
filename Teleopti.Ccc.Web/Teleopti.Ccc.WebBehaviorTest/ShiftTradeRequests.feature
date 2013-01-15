@@ -12,10 +12,10 @@ Background:
 	| Field								| Value						|
 	| Name								| No access to Shift Trade	|
 	| Access To Shift Trade Requests	| False						|
-	#And there are shift categories
-	#| Name  |
-	#| Day   |
-	#| Late   |
+	And there are shift categories
+	| Name  |
+	| Day   |
+	| Late   |
 	#And there is a dayoff with
 	#| Field | Value  |
 	#| Name  | DayOff |
@@ -25,20 +25,20 @@ Background:
 	#And there is a skill with
 	#| Field | Value   |
 	#| Name  | Skill 1 |
-	#And I have a workflow control set with
-	#| Field                      | Value              |
-	#| Name                       | Published schedule |
-	#| Schedule published to date | 2040-06-24         |
-	#And I have a schedule period with 
-	#| Field      | Value      |
-	#| Start date | 2012-06-18 |
-	#| Type       | Week       |
-	#| Length     | 1          |
-	#And I have a person period with 
-	#| Field      | Value      |
-	#| Start date | 2012-06-18 |	
-	#| Start date | 2012-06-18 |
-	#| Skill      | Skill 1    |
+	And there is a workflow control set with
+	| Field                            | Value                                     |
+	| Name                             | Trade from tomorrow until 30 days forward |
+	| Schedule published to date       | 2040-06-24                                |
+	| Shift Trade sliding period start | 2                                         |
+	| Shift Trade sliding period end   | 30                                        |
+	And I have a schedule period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |	
 	#And I have a shift with
 	#| Field                 | Value            |
 	#| StartTime             | 2030-01-01 06:00 |
@@ -68,41 +68,58 @@ Scenario: No access to make shift trade reuquests
 	Then I should not see the Create Shift Trade Request button
 	And I should not see the Requests button
 
-Scenario: Default to today if no open shift trade period
+Scenario: No workflow control set
 	Given I have the role 'Full access to mytime'
-	And I have no workflow control set
-	And Current time is '2030-01-01'
-	When I navigate to shift trade page
-	And I navigate to messages
-	Then the selected date should be '2030-01-01'
+	And I do not have a workflow control set
+	When I view Add Shift Trade Request
+	Then I should see a message text saying I am missing a workflow control set
 
 Scenario: Default to first day of open shift trade period
 	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Current time is '2030-01-01'
-	And I can do shift trades between '2030-01-03' and '2030-01-17'
-	When I navigate to shift trade page
+	When I view Add Shift Trade Request
 	Then the selected date should be '2030-01-03'
+
+Scenario: Trades can not be made outside the shift trade period
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Current time is '2030-01-01'
+	When I view Add Shift Trade Request for date '2030-02-15'
+	Then the selected date should be '2030-01-31'
+
+Scenario: Show my scheduled shift
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Current time is '2029-12-27'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see my schedule with
+	| Field			| Value |
+	| Start time	| 06:00 |
+	| End time		| 16:00 |
+
+Scenario: Time line stretch to 15 minutes before and after scheduled shift
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-03 06:05 |
+	| EndTime               | 2030-01-03 15:55 |
+	| Shift category		| Day	           |
+	And Current time is '2030-01-01'
+	When I view Add Shift Trade Request for date '2030-01-03'
+	Then I should see the time line span from '5:50' to '16:10'
 
 Scenario: Default time line when I am not scheduled
 	Given I have the role 'Full access to mytime'
 	And Current time is '2020-10-24'
 	When I navigate to shift trade page
 	Then I should see the time line span from '7:45' to '17:15'
-
-Scenario: Time line when I have a scheduled shift
-	Given I have the role 'Full access to mytime'
-	And Current time is '2030-01-01'
-	When I navigate to shift trade page
-	Then I should see the time line span from '5:45' to '16:15'
-
-Scenario: Show my scheduled shift
-	Given I have the role 'Full access to mytime'
-	And Current time is '2030-01-01'
-	When I navigate to shift trade page
-	Then I should see my schedule with
-	| Field			| Value |
-	| Start time	| 06:00 |
-	| End time		| 16:00 |
 
 Scenario: Show my scheduled day off
 	Given I have the role 'Full access to mytime'

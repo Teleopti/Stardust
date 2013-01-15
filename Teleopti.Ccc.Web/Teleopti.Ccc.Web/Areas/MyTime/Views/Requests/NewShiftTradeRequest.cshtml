@@ -1,4 +1,22 @@
-﻿<div id="Request-add-shift-trade" style="display: none">
-Hej och hå!
-<textarea>asdöfl</textarea>
+﻿@using Teleopti.Ccc.UserTexts
+<div id="Request-add-shift-trade" style="display: none;background-color: lightpink">
+	<div style="background-color: lightblue;z-index: 10;display: block" class="friendly-message ui-corner-all" data-bind="visible : hasWorkflowControlSet">
+		@Resources.MissingWorkflowControlSet
+	</div>
+	<div>
+		<button data-bind="click : previousDate"><</button>
+		<input id="Request-add-shift-trade-datepicker" type="text" data-bind="datepicker: selectedDate" style="position:relative; z-index: 9999999" />
+		<button data-bind="click : nextDate">></button>
+	</div>
+	<div class="shift-trade-my-schedule ui-corner-all">
+		<span data-bind="foreach: mySchedule().layers">
+			<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
+		</span>
+		<span id="shift-trade-timeline" data-bind="foreach: hours">
+			<span class="shift-trade-timeline-line" data-bind="style: { width : width }">
+				<span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText"></span>
+			</span>
+		</span>
+	</div>
 </div>
+

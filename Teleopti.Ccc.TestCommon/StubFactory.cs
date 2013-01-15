@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote)
 		{
-			return ScheduleDayStub(date, null, significantPartToDisplay, personDayOff, personAssignment, personAbsences, publicNote);
+			return ScheduleDayStub(date, new Person(), significantPartToDisplay, personDayOff, personAssignment, personAbsences, publicNote);
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote)
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.TestCommon
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
 			visualLayer.Stub(x => x.DisplayColor()).Return(displayColor);
 			visualLayer.Stub(x => x.Period).PropertyBehavior();
-			visualLayer.Period = new DateTimePeriod();
+			visualLayer.Period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
 			return visualLayer;
 		}
 
@@ -308,6 +308,8 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
 			visualLayer.Stub(x => x.DisplayDescription()).Return(new Description(activtyName));
+			visualLayer.Stub(x => x.Period).PropertyBehavior();
+			visualLayer.Period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
 			return visualLayer;
 		}
 

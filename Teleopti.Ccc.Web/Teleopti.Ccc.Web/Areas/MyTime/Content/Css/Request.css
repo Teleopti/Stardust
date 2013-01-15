@@ -116,4 +116,43 @@
 {
 	text-align: right;
 }
+.shift-trade-layer
+{
+	position: absolute;
+	zoom: 1;
+	filter: alpha(opacity=80);
+	opacity: 0.80;
+	height: 20px;
+	top: 3px;
+	z-index: 10;
+}
+.shift-trade-my-schedule
+{
+	border: 1px solid rgb(216, 216, 216);	
+	position: relative;
+	height: 30px;
+	background: #f8f8f8;
+	display: block;
+	z-index: 9;
+}
+#shift-trade-timeline .shift-trade-timeline-line:last-child
+{
+	border-right: 0px;		
+}
+.shift-trade-timeline-line 
+{
+	height: 40px;
+	float: left;
+	border-right: 1px solid rgb(216, 216, 216);
+}
 
+.shift-trade-timeline-number
+{
+	padding-left: 2px;
+	padding-right: 3px;
+	position: relative;
+	top: -16px;
+	left: -12px;
+	font-family: verdana;
+	font-size: 8px;
+}
