@@ -136,7 +136,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				var configFolder = Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll.DeployNew\\");
 				if (!Directory.Exists(configFolder))
 					Directory.CreateDirectory(configFolder);
-				_watcher = new FileSystemWatcher(configFolder) {NotifyFilter = NotifyFilters.LastWrite};
+				_watcher = new FileSystemWatcher(configFolder);
+				_watcher.NotifyFilter = NotifyFilters.LastWrite;
 				_watcher.Created += OnChanged;
 				_watcher.Changed += OnChanged;
 				_watcher.EnableRaisingEvents = true;
@@ -211,10 +212,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				}
 				// if file is still locked, we skip it
 				if (totalSleepTime == 500) continue;
-				if (file.EndsWith(".xml"))
+				if (file.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
 				{
 					var xmlFileDestination = destination;
-					while (!xmlFileDestination.EndsWith("\\Payroll"))
+					while (!xmlFileDestination.EndsWith("\\Payroll", StringComparison.OrdinalIgnoreCase))
 						xmlFileDestination = Directory.GetParent(xmlFileDestination).ToString();
 					File.Copy(file, Path.GetFullPath(xmlFileDestination + "\\" + Path.GetFileName(file)), true);
 				}
