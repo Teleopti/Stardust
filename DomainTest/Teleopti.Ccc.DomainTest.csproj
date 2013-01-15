@@ -767,7 +767,7 @@
     <Compile Include="Security\InsufficientPrivilegeExceptionTest.cs" />
     <Compile Include="Security\IsPasswordEncryptedSpecificationTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccVersion8LicenseOptionTest.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccAnywhereLicenseOptionTest.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccMobileReportsLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccMyTimeWebLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccDeveloperLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersBaseLicenseOptionTest.cs" />

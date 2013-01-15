@@ -19,7 +19,7 @@
     <RealtimeAdherence>true</RealtimeAdherence>
     <ShiftTrades>true</ShiftTrades>
     <MyTimeWeb>true</MyTimeWeb>
-    <Anywhere>true</Anywhere>
+    <MobileReports>true</MobileReports>
     <SMSLink>true</SMSLink>
     <Version8>true</Version8>
   </TeleoptiCCC>
