@@ -169,7 +169,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.summaryTitle = ko.observable(day.Summary.Title);
 		self.summaryTimeSpan = ko.observable(day.Summary.TimeSpan);
 		self.summary = ko.observable(day.Summary.Summary);
-		self.noteMessage = ko.observable(day.Note.Message);
+		self.noteMessage = ko.computed(function () {
+			//need to html encode due to not bound to "text" in ko
+			return $('<div/>').text(day.Note.Message).html();
+		});
 		self.textRequestCount = ko.observable(day.TextRequestCount);
 		self.hasTextRequest = ko.computed(function () {
 			return self.textRequestCount() > 0;
@@ -264,16 +267,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var TimelineViewModel = function (timeline) {
 		var self = this;
 		self.positionPercentage = ko.observable(timeline.PositionPercentage);
-		
+
 		self.minutes = ko.observable(timeline.Time.TotalMinutes);
 		var timeFromMinutes = moment().startOf('day').add('minutes', self.minutes());
-		
+
 		self.time = ko.observable(timeFromMinutes.format('H:mm'));
 		if (timeline.Culture == "en-US") {
 			self.time(timeFromMinutes.format('h A'));
 		}
 		self.timeText = self.time() + "\ntotalMinutes" + self.minutes();
-		
+
 		self.topPosition = ko.computed(function () {
 			return Math.round(scheduleHeight * self.positionPercentage()) + timeLineOffset + 'px';
 		});
