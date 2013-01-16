@@ -190,9 +190,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var startTime = TimeHelper.TimeOfDayFromTimeSpan(data.StartTime, UserFactory.User().Culture);
 			var endTime = TimeHelper.TimeOfDayFromTimeSpan(data.EndTime, UserFactory.User().Culture);
 
-			var innerHtml = _page.CalendarCellForDate(data.Date).InnerHtml;
-			innerHtml.Should().Contain(startTime);
-			innerHtml.Should().Contain(endTime);
+			EventualAssert.That(()=> _page.CalendarCellForDate(data.Date).InnerHtml, Is.StringContaining(startTime).And.StringContaining(endTime));
 		}
 
 		[Then(@"I should see the first virtual schedule period overlapping open student availability period")]
