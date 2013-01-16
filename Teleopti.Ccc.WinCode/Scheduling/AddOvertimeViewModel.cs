@@ -30,7 +30,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
          
             _definitionSets = new ReadOnlyCollection<IMultiplicatorDefinitionSet>(definitionSets);
             if(_definitionSets.Count==0) CanOk = false;
-            Payloads.MoveCurrentTo(activity);
+            if (activity != null)
+                Payloads.MoveCurrentTo(activity);
+            else
+                Payloads.MoveCurrentToFirst();
 
         }
 
