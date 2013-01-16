@@ -106,5 +106,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 				return Date.GetHashCode();
 			return _personId;
 		}
+
+		public bool EndsOnNextDate { get; set; }
 	}
 }
