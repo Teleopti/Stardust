@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -35,39 +35,36 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public void ClearPeriodForPerson(DateOnlyPeriod period,IScenario scenario,Guid personId)
+		public void ClearPeriodForPerson(DateOnlyPeriod period,Guid scenarioId,Guid personId)
 		{
 			var uow = _unitOfWorkFactory.CurrentUnitOfWork();
 			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
 				"DELETE FROM ReadModel.ScheduleProjectionReadOnly WHERE BelongsToDate BETWEEN :StartDate AND :EndDate AND ScenarioId=:scenario AND PersonId=:person")
 				.SetGuid("person", personId)
-				.SetGuid("scenario", scenario.Id.GetValueOrDefault())
+				.SetGuid("scenario", scenarioId)
 				.SetDateTime("StartDate", period.StartDate)
 				.SetDateTime("EndDate", period.EndDate)
 				.ExecuteUpdate();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-		public void AddProjectedLayer(DateOnly belongsToDate,IScenario scenario,Guid personId, IVisualLayer visualLayer, IVisualLayerCollection collectionLayerBelongsTo)
+		public void AddProjectedLayer(DateOnly belongsToDate,Guid scenarioId,Guid personId, DenormalizedScheduleProjectionLayer layer)
 		{
 			var uow = _unitOfWorkFactory.CurrentUnitOfWork();
-			var description = visualLayer.DisplayDescription();
-
-			var contractTime = collectionLayerBelongsTo.ContractTime(visualLayer.Period);
-
+			
 			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
 				"INSERT INTO ReadModel.ScheduleProjectionReadOnly (ScenarioId,PersonId,BelongsToDate,PayloadId,StartDateTime,EndDateTime,WorkTime,ContractTime,Name,ShortName,DisplayColor,PayrollCode,InsertedOn) VALUES (:ScenarioId,:PersonId,:Date,:PayloadId,:StartDateTime,:EndDateTime,:WorkTime,:ContractTime,:Name,:ShortName,:DisplayColor,:PayrollCode,:InsertedOn)")
-				.SetGuid("ScenarioId", scenario.Id.GetValueOrDefault())
+				.SetGuid("ScenarioId", scenarioId)
 				.SetGuid("PersonId", personId)
-				.SetGuid("PayloadId", visualLayer.Payload.UnderlyingPayload.Id.GetValueOrDefault())
-				.SetDateTime("StartDateTime", visualLayer.Period.StartDateTime)
-				.SetDateTime("EndDateTime", visualLayer.Period.EndDateTime)
-				.SetInt64("WorkTime", visualLayer.WorkTime().Ticks)
-				.SetInt64("ContractTime", contractTime.Ticks)
-				.SetString("Name", description.Name)
-				.SetString("ShortName", description.ShortName)
+				.SetGuid("PayloadId", layer.PayloadId)
+				.SetDateTime("StartDateTime", layer.StartDateTime)
+				.SetDateTime("EndDateTime", layer.EndDateTime)
+				.SetInt64("WorkTime", layer.WorkTime.Ticks)
+				.SetInt64("ContractTime", layer.ContractTime.Ticks)
+				.SetString("Name", layer.Name)
+				.SetString("ShortName", layer.ShortName)
 				.SetString("PayrollCode", string.Empty)
-				.SetInt32("DisplayColor", visualLayer.DisplayColor().ToArgb())
+				.SetInt32("DisplayColor", layer.DisplayColor)
 				.SetDateTime("Date", belongsToDate)
 				.SetDateTime("InsertedOn", DateTime.UtcNow)
 				.ExecuteUpdate();

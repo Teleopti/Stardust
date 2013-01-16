@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				                                       	{
 															var date = source.Item1;
 															var teamId = source.Item2;
-															var persons = _personProvider().GetPermittedPersonsForTeam(date, teamId);
+															var persons = _personProvider().GetPermittedPersonsForTeam(date, teamId, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 															var scheduleDays = _scheduleProvider().GetScheduleForPersons(date, persons);
 
 															if (scheduleDays == null)

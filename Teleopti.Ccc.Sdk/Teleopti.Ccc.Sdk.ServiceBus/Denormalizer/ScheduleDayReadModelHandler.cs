@@ -10,12 +10,11 @@ using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public class ScheduleDayReadModelHandler : ConsumerOf<DenormalizeScheduleProjection>
+	public class ScheduleDayReadModelHandler : ConsumerOf<DenormalizedSchedule>, ConsumerOf<DenormalizedScheduleForScheduleDay>
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
 
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly ISignificantChangeChecker _significantChangeChecker;
 		private readonly ISmsLinkChecker _smsLinkChecker;
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
-		public ScheduleDayReadModelHandler(IUnitOfWorkFactory unitOfWorkFactory, IScenarioRepository scenarioRepository,
+		public ScheduleDayReadModelHandler(IUnitOfWorkFactory unitOfWorkFactory,
 		                           IPersonRepository personRepository,
 		                           ISignificantChangeChecker significantChangeChecker, 
 								   ISmsLinkChecker smsLinkChecker,
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 									IScheduleDayReadModelRepository scheduleDayReadModelRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
 			_significantChangeChecker = significantChangeChecker;
 			_smsLinkChecker = smsLinkChecker;
@@ -43,19 +41,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(DenormalizeScheduleProjection message)
+		public void Consume(DenormalizedSchedule message)
+		{
+			createReadModel(message);
+		}
+
+		private void createReadModel(DenormalizedScheduleBase message)
 		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				var scenario = _scenarioRepository.Get(message.ScenarioId);
-				if (!scenario.DefaultScenario) return;
+				if (!message.IsDefaultScenario) return;
 
-				var period = new DateTimePeriod(message.StartDateTime, message.EndDateTime);
+				var date = new DateOnly(message.Date);
 				var person = _personRepository.Get(message.PersonId);
-				var timeZone = person.PermissionInformation.DefaultTimeZone();
-				var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
+				var dateOnlyPeriod = new DateOnlyPeriod(date, date);
 
-				var newReadModels = _scheduleDayReadModelsCreator.GetReadModels(scenario, period, person);
+				var readModel = _scheduleDayReadModelsCreator.GetReadModels(message);
 
 				if (DefinedLicenseDataFactory.LicenseActivator == null)
 				{
@@ -67,9 +68,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				if (Logger.IsInfoEnabled)
 					Logger.Info("Checking SMSLink license.");
 				//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
-				if (DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
+				if (
+					DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(
+						DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
 				{
-					var smsMessages = _significantChangeChecker.SignificantChangeNotificationMessage(dateOnlyPeriod, person, newReadModels);
+					var smsMessages = _significantChangeChecker.SignificantChangeNotificationMessage(date, person, readModel);
 					if (!string.IsNullOrEmpty(smsMessages.Subject))
 					{
 						var number = _smsLinkChecker.SmsMobileNumber(person);
@@ -80,10 +83,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 						}
 					}
 				}
-				//do update of read model
-				_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
-				_scheduleDayReadModelRepository.SaveReadModels(newReadModels);
+
+				if (!message.IsInitialLoad)
+				{
+					_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
+				}
+				_scheduleDayReadModelRepository.SaveReadModel(readModel);
 			}
+		}
+
+		public void Consume(DenormalizedScheduleForScheduleDay message)
+		{
+			createReadModel(message);
 		}
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -34,35 +33,33 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		[Test]
 		public void ShouldReturnFalseIfPeriodAfterWithinFourteenDays()
 		{
-			var date = DateTime.Now.Date;
+			var date = DateTime.Today;
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(20)), new DateOnly(date.AddDays(30)) );
 
-			Assert.That(_target.SignificantChangeNotificationMessage(period, _person, new List<ScheduleDayReadModel>()).Subject, Is.EqualTo(""));
+			Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, new ScheduleDayReadModel()).Subject, Is.EqualTo(""));
 		}
 
 		[Test]
 		public void ShouldReturnFalseIfPeriodBeforeWithinFourteenDays()
 		{
-			var date = DateTime.Now.Date;
+			var date = DateTime.Today;
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(-20)), new DateOnly(date.AddDays(-1)));
 
-			Assert.That(_target.SignificantChangeNotificationMessage(period, _person, new List<ScheduleDayReadModel>()).Subject, Is.Empty);
+			Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, new ScheduleDayReadModel()).Subject, Is.Empty);
 		}
 
         [Test]
         public void ShouldReturnMessageIfChangeIsWithinFourteenDays()
         {
-            var date = DateTime.Now.Date;
+            var date = DateTime.Today;
             var period = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date.AddDays(2)));
             
-            IList<ScheduleDayReadModel> newReadModelList = new List<ScheduleDayReadModel>();
             var newReadModel = new ScheduleDayReadModel();
             newReadModel.StartDateTime = date.AddDays(1).AddHours(2);
             newReadModel.EndDateTime = date.AddDays(1).AddHours(4);
             newReadModel.PersonId = _person.Id.GetValueOrDefault();
             newReadModel.Workday = true;
             newReadModel.Date = date.AddDays(1).Date;
-            newReadModelList.Add(newReadModel);
             
             IList<ScheduleDayReadModel> oldReadModelList = new List<ScheduleDayReadModel>();
             var oldReadModel = new ScheduleDayReadModel();
@@ -75,50 +72,41 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 
             const string message = "test message ";
 
-            Expect.Call(_scheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(date), new DateOnly(date.AddDays(2)),
+            Expect.Call(_scheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(date), new DateOnly(date),
                                                                            _person.Id.GetValueOrDefault())).Return
                                                                            (oldReadModelList);
 
-            Expect.Call(_scheduleDayReadModelComparer.FindSignificantChanges(null, null,
+            Expect.Call(_scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, oldReadModel,
                                                                              _person.PermissionInformation.UICulture(),
                                                                              new DateOnly(date))).Return(message);
 
-            Expect.Call(_scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, oldReadModel,
-                                                                             _person.PermissionInformation.UICulture(),
-                                                                             new DateOnly(date.AddDays(1)))).Return(message);
-
-            Expect.Call(_scheduleDayReadModelComparer.FindSignificantChanges(null, null,
-                                                                             _person.PermissionInformation.UICulture(),
-                                                                             new DateOnly(date.AddDays(2)))).Return(message);
             _mocks.ReplayAll();
 
-            Assert.That(_target.SignificantChangeNotificationMessage(period, _person, newReadModelList).Subject, Is.Not.Empty);
+            Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, newReadModel).Subject, Is.Not.Empty);
             _mocks.VerifyAll();
         }
 
         [Test]
 		public void ShouldReturnNullIfNoOverlappingPeriod()
 		{
-            var date = DateTime.Now.Date;
+            var date = DateTime.Today;
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(15)), new DateOnly(date.AddDays(20)));
             
-            Assert.That(_target.SignificantChangeNotificationMessage(period, _person, null).Subject, Is.Empty);
+            Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, null).Subject, Is.Empty);
        }
 
         [Test]
         public void ShouldReturnMessageIfDayNotExistInOverlappingPeriod()
         {
-            var date = DateTime.Now.Date;
+            var date = DateTime.Today;
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(1)), new DateOnly(date.AddDays(1)));
 
-            IList<ScheduleDayReadModel> newReadModelList = new List<ScheduleDayReadModel>();
             var newReadModel = new ScheduleDayReadModel();
             newReadModel.StartDateTime = date.AddDays(-1).AddHours(2);
             newReadModel.EndDateTime = date.AddDays(-1).AddHours(4);
             newReadModel.PersonId = _person.Id.GetValueOrDefault();
             newReadModel.Workday = true;
             newReadModel.Date = date.AddDays(-1).Date;
-            newReadModelList.Add(newReadModel);
 
             IList<ScheduleDayReadModel> oldReadModelList = new List<ScheduleDayReadModel>();
             var oldReadModel = new ScheduleDayReadModel();
@@ -135,38 +123,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
                                                                            _person.Id.GetValueOrDefault())).Return
                                                                            (oldReadModelList);
 
-            Expect.Call(_scheduleDayReadModelComparer.FindSignificantChanges(null, oldReadModel,
+            Expect.Call(_scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, oldReadModel,
                                                                              _person.PermissionInformation.UICulture(),
                                                                              new DateOnly(date.AddDays(1)))).Return(message);
             _mocks.ReplayAll();
 
-            Assert.That(_target.SignificantChangeNotificationMessage(period, _person, newReadModelList).Subject, Is.Not.Empty);
+            Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, newReadModel).Subject, Is.Not.Empty);
             _mocks.VerifyAll();
         }
 
         [Test]
         public void ShouldReturnNotificationIfDayNotExistIncurrentReadModel()
         {
-            var date = DateTime.Now.Date;
+            var date = DateTime.Today;
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(1)), new DateOnly(date.AddDays(1)));
 
-            IList<ScheduleDayReadModel> newReadModelList = new List<ScheduleDayReadModel>();
             var newReadModel = new ScheduleDayReadModel();
             newReadModel.StartDateTime = date.AddDays(1).AddHours(2);
             newReadModel.EndDateTime = date.AddDays(1).AddHours(4);
             newReadModel.PersonId = _person.Id.GetValueOrDefault();
             newReadModel.Workday = true;
             newReadModel.Date = date.AddDays(1).Date;
-            newReadModelList.Add(newReadModel);
-
-            IList<ScheduleDayReadModel> oldReadModelList = new List<ScheduleDayReadModel>();
-            var oldReadModel = new ScheduleDayReadModel();
-            oldReadModel.StartDateTime = date.AddDays(-1).AddHours(1);
-            oldReadModel.EndDateTime = date.AddDays(-1).AddHours(3);
-            oldReadModel.PersonId = _person.Id.GetValueOrDefault();
-            oldReadModel.Workday = true;
-            oldReadModel.Date = date.AddDays(-1).Date;
-            oldReadModelList.Add(oldReadModel);
+            
+			IList<ScheduleDayReadModel> oldReadModelList = new List<ScheduleDayReadModel>();
 
             const string message = "test message ";
 
@@ -179,7 +158,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
                                                                              new DateOnly(date.AddDays(1)))).Return(message);
             _mocks.ReplayAll();
 
-            Assert.That(_target.SignificantChangeNotificationMessage(period, _person, newReadModelList).Subject, Is.Not.Empty);
+            Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, newReadModel).Subject, Is.Not.Empty);
             _mocks.VerifyAll();
 
         }
@@ -187,22 +166,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		[Test]
 		public void ShouldReturnNullIfNoPeriodIsNotWithinPublished()
 		{
-			var date = DateTime.Now.Date;
+			var date = DateTime.Today;
 			_person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = new DateOnly(date.AddDays(7)) };
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(11)), new DateOnly(date.AddDays(13)));
 			
-			Assert.That(_target.SignificantChangeNotificationMessage(period, _person, null).Subject, Is.Empty);
+			Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, null).Subject, Is.Empty);
 			
 		}
 
 		[Test]
 		public void ShouldReturnNullIfPublishedToIsBeforeToday()
 		{
-			var date = DateTime.Now.Date;
+			var date = DateTime.Today;
 			_person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = new DateOnly(date.AddDays(-7)) };
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(11)), new DateOnly(date.AddDays(13)));
 
-			Assert.That(_target.SignificantChangeNotificationMessage(period, _person, null).Subject, Is.Empty);
+			Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, null).Subject, Is.Empty);
 
 		}
 	}

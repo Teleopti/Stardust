@@ -42,9 +42,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=2.6.1.841, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Autofac.2.6.1.841\lib\NET40\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Autofac.Configuration, Version=2.6.1.841, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Autofac.2.6.1.841\lib\NET40\Autofac.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="AutofacContrib.DynamicProxy2, Version=2.6.1.841, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -54,6 +56,7 @@
       <HintPath>..\..\packages\AutoMapper.1.1.0.118\lib\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core, Version=2.5.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Castle.Core.2.5.1\lib\NET40ClientProfile\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
@@ -70,11 +73,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MbCache.2.1\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.1.0.0-rc2\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
     <Reference Include="MvcContrib.TestHelper, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MvcContrib.Mvc3.TestHelper-ci.3.0.96.0\lib\MvcContrib.TestHelper.dll</HintPath>
     </Reference>
     <Reference Include="MvcContrib.TestHelper.WatiN">
       <HintPath>..\..\packages\MvcContrib.Mvc3.WatiN-ci.3.0.96.0\lib\MvcContrib.TestHelper.WatiN.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
@@ -109,6 +118,8 @@
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Core\AuthenticationModelBinderTest.cs" />
+    <Compile Include="Areas\Team\Controllers\PersonControllerTest.cs" />
+    <Compile Include="Areas\Team\Hubs\ScheduleHubTest.cs" />
     <Compile Include="Areas\Team\TeamAreaRegistrationTest.cs" />
     <Compile Include="Areas\Team\Controllers\ApplicationControllerTest.cs" />
     <Compile Include="Areas\MobileReports\Core\DefinedReportsTest.cs" />
@@ -332,7 +343,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Teleopti.Ccc.AgentPortalWebTest.dll.Config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
             Assert.IsTrue(storedInputList[0].IsPreliminary);
             _target.EnableApplicationFunctions(instantInputList);
             IList<IApplicationFunction> resultList = _target.EnabledApplicationFunctions;
-			Assert.AreEqual(3, resultList.Count); // we do not add any function to the enabled list
+			Assert.AreEqual(1, resultList.Count); // we do not add any function to the enabled list
             Assert.IsFalse(instantInputList[0].IsPreliminary); // instead set all IsPreliminary to false
             Assert.IsFalse(storedInputList[0].IsPreliminary);
         }

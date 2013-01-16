@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Xml;
 using System.Xml.XPath;
 using Teleopti.Ccc.Sdk.Common.Contracts;
@@ -34,11 +35,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			try
 			{
 				var dir = AppDomain.CurrentDomain.BaseDirectory;
-				if (!dir.EndsWith("\\", StringComparison.OrdinalIgnoreCase))
-					dir = dir + "\\";
-				_configXml.Load(dir + _configFile);
+				
+				var path = Path.Combine(dir, _configFile);
+				if (File.Exists(path))
+				{
+					_configXml.Load(path);
+				}
+				else
+				{
+					_configXml = null;
+					return;
+				}
 			}
-			catch (System.IO.FileNotFoundException)
+			catch (FileNotFoundException)
 			{
 				_configXml = null;
 				return;

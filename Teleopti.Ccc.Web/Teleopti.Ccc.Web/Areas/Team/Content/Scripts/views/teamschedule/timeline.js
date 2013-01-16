@@ -1,4 +1,3 @@
-
 define([
 		'knockout',
 		'helpers',
@@ -7,27 +6,21 @@ define([
 
 		var minutes = helpers.Minutes;
 
-		return function () {
+		return function (shortTimePattern) {
 
 			var self = this;
 
 			this.WidthPixels = ko.observable();
 			this.Agents = ko.observableArray();
-
-			this.AddAgent = function (agent) {
-				self.Agents.push(agent);
-			};
-
+			
 			this.AddAgents = function (agents) {
-				ko.utils.arrayForEach(agents, function (a) {
-					self.AddAgent(a);
-				});
+				self.Agents.push.apply(self.Agents, agents);
 			};
 
 			this.StartMinutes = ko.computed(function () {
 				var start = undefined;
 				ko.utils.arrayForEach(self.Agents(), function (l) {
-				    var startMinutes = l.FirstStartMinute();
+					var startMinutes = l.FirstStartMinute();
 					if (!start)
 						start = startMinutes;
 					if (startMinutes < start)
@@ -39,7 +32,7 @@ define([
 			this.EndMinutes = ko.computed(function () {
 				var end = undefined;
 				ko.utils.arrayForEach(self.Agents(), function (l) {
-				    var endMinutes = l.LastEndMinute();
+					var endMinutes = l.LastEndMinute();
 					if (!end)
 						end = endMinutes;
 					if (endMinutes > end)
@@ -53,7 +46,7 @@ define([
 				var time = self.StartMinutes();
 				var end = self.EndMinutes();
 				while (time < end + 1) {
-					times.push(new timeViewModel(self, time));
+					times.push(new timeViewModel(self, time, shortTimePattern));
 					time = minutes.AddHours(time, 1);
 				}
 				return times;

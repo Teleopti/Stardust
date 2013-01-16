@@ -113,6 +113,9 @@
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Rhino.PersistentHashTable">
       <HintPath>..\..\packages\Rhino.PersistentHashTable.1.7.0.0\lib\4.0\Rhino.PersistentHashTable.dll</HintPath>
     </Reference>
@@ -133,6 +136,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -157,16 +161,20 @@
     <Compile Include="BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
+    <Compile Include="Denormalizer\PersonScheduleDayReadModelHandler.cs" />
+    <Compile Include="Denormalizer\PersonScheduleDayReadModelsCreator.cs" />
+    <Compile Include="Denormalizer\DenormalizedScheduleMessageBuilder.cs" />
+    <Compile Include="Denormalizer\IDenormalizedScheduleMessageBuilder.cs" />
+    <Compile Include="Denormalizer\IScheduleDayReadModelCreator.cs" />
+    <Compile Include="Denormalizer\IScheduleDayReadModelsCreator.cs" />
+    <Compile Include="Denormalizer\LoadProjectedScheduleConsumer.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreator.cs" />
-    <Compile Include="Denormalizer\DenormalizeScheduleDayMessageConsumer.cs" />
-    <Compile Include="Denormalizer\InitialLoadScheduleDayConsumer.cs" />
     <Compile Include="Forecast\RecalculateForecastOnSkillConsumer.cs" />
     <Compile Include="Forecast\StatisticLoader.cs" />
-    <Compile Include="InitialLoadOfScheduleDayReadModel.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
-    <Compile Include="Denormalizer\ScheduleDayReadModelCreator.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelHandler.cs" />
+    <Compile Include="IUpdateScheduleProjectionReadModel.cs" />
     <Compile Include="Notification\NotificationMessage.cs" />
     <Compile Include="Notification\ScheduleDayReadModelComparer.cs" />
     <Compile Include="Notification\SignificantChangeChecker.cs" />
@@ -180,13 +188,11 @@
     <Compile Include="Denormalizer\IScheduleChangedNotification.cs" />
     <Compile Include="Denormalizer\IUpdateGroupingReadModel.cs" />
     <Compile Include="Denormalizer\IUpdatePersonFinderReadModel.cs" />
-    <Compile Include="Denormalizer\IUpdateScheduleProjectionReadModel.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelConsumer.cs" />
     <Compile Include="Denormalizer\ProcessDenormalizeQueueConsumer.cs" />
     <Compile Include="Denormalizer\ScheduleChangedInDefaultScenarioNotification.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonConsumer.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonDataConsumer.cs" />
-    <Compile Include="Denormalizer\UpdateScheduleProjectionReadModel.cs" />
     <Compile Include="ExportForecastContainerInstaller.cs" />
     <Compile Include="ForecastContainerInstaller.cs" />
     <Compile Include="Forecast\DateOnlyPeriodExtensions.cs" />
@@ -252,6 +258,7 @@
     <Compile Include="SerializationContainerInstaller.cs" />
     <Compile Include="ServiceBusRunner.cs" />
     <Compile Include="ShiftTrade\ShiftTradeRequestSaga.cs" />
+    <Compile Include="UpdateScheduleProjectionReadModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

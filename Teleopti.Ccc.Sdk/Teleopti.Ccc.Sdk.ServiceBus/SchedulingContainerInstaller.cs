@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<ScheduleDictionaryModifiedCallback>().As<IScheduleDictionaryModifiedCallback>();
 			builder.RegisterType<ScheduleIsInvalidSpecification>().As<IScheduleIsInvalidSpecification>();
 			builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>();
-			builder.RegisterType<UpdateScheduleProjectionReadModel>().As<IUpdateScheduleProjectionReadModel>();
 			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>();
 			builder.RegisterType<LoadSchedulingStateHolderForResourceCalculation>().As<ILoadSchedulingStateHolderForResourceCalculation>();
 			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();
@@ -44,12 +43,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<SmsLinkChecker>().As<ISmsLinkChecker>();
 			builder.RegisterType<NotificationSenderFactory>().As<INotificationSenderFactory>();
 			builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
-			builder.RegisterType<ScheduleDayReadModelCreator>().As<IScheduleDayReadModelCreator>();
 			builder.RegisterType<ScheduleDayReadModelsCreator>().As<IScheduleDayReadModelsCreator>();
+			builder.RegisterType<PersonScheduleDayReadModelsCreator>().As<IPersonScheduleDayReadModelsCreator>();
 			builder.RegisterType<ScheduleDayReadModelComparer>().As<IScheduleDayReadModelComparer>();
+			builder.RegisterType<UpdateScheduleProjectionReadModel>().As<IUpdateScheduleProjectionReadModel>();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
-            //builder.RegisterType<UpdatePersonFinderReadModel>().As<IUpdatePersonFinderReadModel>();
-			//builder.RegisterType<UpdateGroupingReadModel>().As<IUpdateGroupingReadModel>();
+			builder.RegisterType<DenormalizedScheduleMessageBuilder>().As<IDenormalizedScheduleMessageBuilder>();
 		}
 
 		private static ISchedulingResultStateHolder getSchedulingResultStateHolder(IComponentContext componentContext)

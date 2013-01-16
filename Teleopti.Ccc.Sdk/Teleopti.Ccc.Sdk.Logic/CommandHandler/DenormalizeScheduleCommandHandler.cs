@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			}
 
 			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
-			var message = new DenormalizeScheduleProjection
+			var message = new ScheduleChanged
 			              	{
 			              		BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
 			              		Datasource = identity.DataSource.Application.Name,

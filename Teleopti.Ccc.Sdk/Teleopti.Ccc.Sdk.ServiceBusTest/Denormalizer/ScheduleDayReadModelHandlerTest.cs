@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
@@ -24,20 +23,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private INotificationSender _notificationSender;
 		private ScheduleDayReadModelHandler _target;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
-		private IScenarioRepository _scenarioRepository;
 		private IPersonRepository _personRepository;
 		private ISmsLinkChecker _smsLinkChecker;
 		private INotificationSenderFactory _notificationSenderFactory;
 		private IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
-		private IScenario scenario;
+		private IPerson _person;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-			_scenarioRepository = _mocks.StrictMock<IScenarioRepository>();
 			_personRepository = _mocks.StrictMock<IPersonRepository>();
 			_significantChangeChecker = _mocks.StrictMock<ISignificantChangeChecker>();
 			_smsLinkChecker = _mocks.StrictMock<ISmsLinkChecker>();
@@ -46,14 +43,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			_scheduleDayReadModelsCreator = _mocks.StrictMock<IScheduleDayReadModelsCreator>();
 			_scheduleDayReadModelRepository = _mocks.StrictMock<IScheduleDayReadModelRepository>();
 
-			_target = new ScheduleDayReadModelHandler(_unitOfWorkFactory, _scenarioRepository, _personRepository, _significantChangeChecker, 
+			_target = new ScheduleDayReadModelHandler(_unitOfWorkFactory, _personRepository, _significantChangeChecker, 
 				_smsLinkChecker, _notificationSenderFactory,_scheduleDayReadModelsCreator, _scheduleDayReadModelRepository);
 
 			DefinedLicenseDataFactory.LicenseActivator = new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
 			                                                                  LicenseType.Agent, new Percent(.10), null, null);
 
-			scenario = ScenarioFactory.CreateScenarioAggregate();
-			scenario.SetId(Guid.NewGuid());
+			_person = PersonFactory.CreatePerson();
+			_person.SetId(Guid.NewGuid());
 		}
 
 		[Test]
@@ -61,26 +58,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		{
 			DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
 			
-			scenario.DefaultScenario = false;
-
-			var person = PersonFactory.CreatePerson();
-			person.SetId(Guid.NewGuid());
-
 			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(2));
 			var uow = _mocks.StrictMock<IUnitOfWork>();
 
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-			Expect.Call(_scenarioRepository.Get(scenario.Id.GetValueOrDefault())).Return(scenario);
-			
 			Expect.Call(uow.Dispose);
 
 			_mocks.ReplayAll();
-			_target.Consume(new DenormalizeScheduleProjection
+			_target.Consume(new DenormalizedSchedule
 			{
-				ScenarioId = scenario.Id.GetValueOrDefault(),
-				PersonId = person.Id.GetValueOrDefault(),
+				PersonId = _person.Id.GetValueOrDefault(),
 				StartDateTime = period.StartDateTime,
-				EndDateTime = period.EndDateTime
+				EndDateTime = period.EndDateTime,
+				IsDefaultScenario = false
 			});
 			_mocks.VerifyAll();
 		}
@@ -88,31 +78,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[Test]
 		public void ShouldSkipOutIfNoLicense()
 		{
-			scenario.DefaultScenario = true;
-
-			var person = PersonFactory.CreatePerson();
-			person.SetId(Guid.NewGuid());
-			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(2));
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
+			var period = new DateTimePeriod(new DateTime(2012, 12, 1, 10, 0, 0, DateTimeKind.Utc),
+											new DateTime(2012, 12, 1, 17, 0, 0, DateTimeKind.Utc));
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(_person.PermissionInformation.DefaultTimeZone());
 			var uow = _mocks.StrictMock<IUnitOfWork>();
-			var models = new List<ScheduleDayReadModel>();
+			var model = new ScheduleDayReadModel();
+			var message = new DenormalizedSchedule
+			              	{
+								Date = dateOnlyPeriod.StartDate,
+			              		PersonId = _person.Id.GetValueOrDefault(),
+			              		StartDateTime = period.StartDateTime,
+			              		EndDateTime = period.EndDateTime,
+								IsDefaultScenario = true
+			              	};
 
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-			Expect.Call(_scenarioRepository.Get(scenario.Id.GetValueOrDefault())).Return(scenario);
-			Expect.Call(_personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
-			Expect.Call(_scheduleDayReadModelsCreator.GetReadModels(scenario, period, person)).Return(models);
-			Expect.Call(() => _scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, person.Id.Value));
-			Expect.Call(() => _scheduleDayReadModelRepository.SaveReadModels(models));
+			Expect.Call(_personRepository.Get(_person.Id.GetValueOrDefault())).Return(_person);
+			Expect.Call(_scheduleDayReadModelsCreator.GetReadModels(message)).Return(model);
+			Expect.Call(() => _scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, _person.Id.GetValueOrDefault()));
+			Expect.Call(() => _scheduleDayReadModelRepository.SaveReadModel(model));
 			Expect.Call(uow.Dispose);
 
 			_mocks.ReplayAll();
-			_target.Consume(new DenormalizeScheduleProjection
-			{
-				ScenarioId = scenario.Id.GetValueOrDefault(),
-				PersonId = person.Id.GetValueOrDefault(),
-				StartDateTime = period.StartDateTime,
-				EndDateTime = period.EndDateTime
-			});
+			_target.Consume(message);
 			_mocks.VerifyAll();
 		}
 		
@@ -120,38 +108,36 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		public void ShouldCheckSignificantChangeAndSendIfTrue()
 		{
 			DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
-			scenario.DefaultScenario = true;
-
-			var person = PersonFactory.CreatePerson();
-			person.SetId(Guid.NewGuid());
+			
 			var mess = new NotificationMessage {Subject = "ändrats!"};
-			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(2));
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
+			var period = new DateTimePeriod(new DateTime(2012, 12, 1, 10, 0, 0, DateTimeKind.Utc),
+			                                new DateTime(2012, 12, 1, 17, 0, 0, DateTimeKind.Utc));
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(_person.PermissionInformation.DefaultTimeZone());
 			var uow = _mocks.StrictMock<IUnitOfWork>();
-			var models = new List<ScheduleDayReadModel>();
+			var model = new ScheduleDayReadModel();
+			var message = new DenormalizedSchedule
+			              	{
+								Date = dateOnlyPeriod.StartDate,
+			              		PersonId = _person.Id.GetValueOrDefault(),
+			              		StartDateTime = period.StartDateTime,
+			              		EndDateTime = period.EndDateTime,
+								IsDefaultScenario = true
+			              	};
 
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-			Expect.Call(_scenarioRepository.Get(scenario.Id.GetValueOrDefault())).Return(scenario);
-			Expect.Call(_personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
-			Expect.Call(_scheduleDayReadModelsCreator.GetReadModels(scenario, period, person)).Return(models);
-			Expect.Call(_significantChangeChecker.SignificantChangeNotificationMessage(dateOnlyPeriod, person, models)).Return(mess);
-			Expect.Call(_smsLinkChecker.SmsMobileNumber(person)).Return("124578");
+			Expect.Call(_personRepository.Get(_person.Id.GetValueOrDefault())).Return(_person);
+			Expect.Call(_scheduleDayReadModelsCreator.GetReadModels(message)).Return(model);
+			Expect.Call(_significantChangeChecker.SignificantChangeNotificationMessage(dateOnlyPeriod.StartDate, _person, model)).Return(mess);
+			Expect.Call(_smsLinkChecker.SmsMobileNumber(_person)).Return("124578");
 			Expect.Call(_notificationSenderFactory.GetSender()).Return(_notificationSender);
 			Expect.Call(() => _notificationSender.SendNotification(mess, "124578"));
-			Expect.Call(() =>_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, person.Id.Value));
-			Expect.Call(() => _scheduleDayReadModelRepository.SaveReadModels(models));
+			Expect.Call(() =>_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, _person.Id.GetValueOrDefault()));
+			Expect.Call(() => _scheduleDayReadModelRepository.SaveReadModel(model));
 			Expect.Call(uow.Dispose);
 
 			_mocks.ReplayAll();
-			_target.Consume(new DenormalizeScheduleProjection
-			{
-				ScenarioId = scenario.Id.GetValueOrDefault(),
-				PersonId = person.Id.GetValueOrDefault(),
-				StartDateTime = period.StartDateTime,
-				EndDateTime = period.EndDateTime
-			});
+			_target.Consume(message);
 			_mocks.VerifyAll();
 		}
 	}
-
 }

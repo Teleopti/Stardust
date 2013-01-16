@@ -3,10 +3,10 @@ using System.Globalization;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -27,11 +27,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			
 			_page.AnyTimelineLabel.WaitUntilExists();
 
-			if (!TimeSpan.TryParse(_page.TimelineLabels.First().InnerHtml.Split('<')[0], out minTimelineTime))
+			var startText = _page.TimelineLabels.First().InnerHtml.Split('<')[0];
+			var returnCharAt = startText.IndexOf('\n');
+			if (returnCharAt>=0)
+			{
+				startText = startText.Substring(0, returnCharAt+1);
+			}
+			if (!TimeHelper.TryParse(startText, out minTimelineTime))
 			{
 				throw new ValidationException("Could not find timeline start label time.");
 			}
-			if (!TimeSpan.TryParse(_page.TimelineLabels[_page.TimelineLabels.Count - 1].InnerHtml.Split('<')[0], out maxTimelineTime))
+
+			var endText = _page.TimelineLabels[_page.TimelineLabels.Count - 1].InnerHtml.Split('<')[0];
+			returnCharAt = endText.IndexOf('\n');
+			if (returnCharAt >= 0)
+			{
+				endText = endText.Substring(0, returnCharAt+1);
+			}
+			if (!TimeHelper.TryParse(endText, out maxTimelineTime))
 			{
 				throw new ValidationException("Could not find timeline end label time.");
 			}

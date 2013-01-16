@@ -2,7 +2,8 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Notifier.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
-/// <reference path="~/Content/Scripts/knockout-2.1.0.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.0.js" />
+/// <reference path="../../../../Content/moment/moment.js" />
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -94,9 +95,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			return -(pixelPerHours * hoursSinceStart) + 'px';
 		});
 		self.now.subscribe(function (currentMs) {
-			var yesterdayPlus2Days = new Date(self.yesterday().getTime()).addDays(2);
+			var yesterdayPlus2Days = moment(new Date(self.yesterday().getTime())).add('days',2).toDate();
 			if (currentMs > yesterdayPlus2Days.getTime()) {
-				var todayMinus1 = new Date(currentMs).addDays(-1).clearTime();
+				var todayMinus1 = moment(new Date(currentMs)).add('days', -1).startOf('day').toDate();
 				self.yesterday(todayMinus1);
 			}
 		});
@@ -158,7 +159,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			resize();
 		}
 
-		var yesterDayFromNow = new Date(new Date().getTeleoptiTime()).addDays(-1).clearTime();
+		var yesterDayFromNow = moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day').toDate();
 		vm = new asmViewModel(yesterDayFromNow);
 		ko.applyBindings(vm);
 		vm.loadViewModel();
@@ -191,10 +192,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	function _validSchedulePeriod(notification) {
-		var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate).addDays(-1);
-		var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate).addDays(1);
-		var listeningStartDate = new Date(new Date().getTeleoptiTime()).addHours(-1);
-		var listeningEndDate = new Date(listeningStartDate.getTime()).addDays(1);
+		var messageStartDate = moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).add('days', -1).toDate();
+		var messageEndDate = moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).add('days', 1).toDate();
+		var listeningStartDate = moment(new Date(new Date().getTeleoptiTime())).add('hours',-1).toDate();
+		var listeningEndDate = moment(new Date(listeningStartDate.getTime())).add('days', 1).toDate();
 
 		if (messageStartDate < listeningEndDate && messageEndDate > listeningStartDate) {
 			return true;

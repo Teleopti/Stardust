@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	public class RoleForUser : IUserSetup, IUserRoleSetup
 	{
 		public string Name { get; set; }
+		public string Team { get; set; }
 
 		/// <summary>
 		/// Loads the role by the name given in the Name property and adds the role to the given user.
@@ -25,6 +26,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		{
 			var roleRepository = new ApplicationRoleRepository(uow);
 			var role = roleRepository.LoadAll().Single(b => b.Name == Name);
+
+			if (!string.IsNullOrEmpty(Team))
+			{
+				var teamRepository = new TeamRepository(uow);
+				var teams = teamRepository.FindTeamByDescriptionName(Team);
+				foreach (var team in teams)
+				{
+					role.AvailableData.AddAvailableTeam(team);
+				}
+			}
 
 			user.PermissionInformation.AddApplicationRole(role);
 		}

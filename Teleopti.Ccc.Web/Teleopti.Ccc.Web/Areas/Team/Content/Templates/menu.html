@@ -1,5 +1,5 @@
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-static-top">
 	<div class="navbar-inner">
 		<div class="container">
 			<ul class="nav">  
@@ -9,24 +9,20 @@
 					   data-toggle="dropdown">Teleopti <b class="caret"></b>  
 					</a>  
 					<ul class="dropdown-menu">
-						<li><a href="#" tabindex="-1">Home</a></li>
+						<li><a href="#" tabindex="-1"><span data-bind="text: Translations.Home"></span></a></li>
 						<li class="divider"></li>
-						<li><a href="../mytime">MyTime</a></li>
-						<li><a href="../mobilereports" tabindex="-1">Mobile Reports</a></li>
+						<li id="link-mytime" data-bind="visible: MyTimeVisible"><a href="mytime">MyTime</a></li>
+						<li id="link-mobilereports" data-bind="visible: MobileReportsVisible"><a href="mobilereports" tabindex="-1">Mobile Reports</a></li>
 						<li class="divider"></li>
-						<li><a href="#settings" tabindex="-1"><i class="icon-wrench"></i> Settings</a></li>
-						<li><a href="../authentication/signout" tabindex="-1"><i class="icon-eject"></i> Sign out</a></li>  
+						<li><a href="authentication/signout" tabindex="-1"><i class="icon-eject"></i> <span data-bind="text: Translations.LogOut"></span></a></li>  
 					</ul>
 				</li>  
 			</ul>
 			<ul class="nav">
 				<li class="active"><a href="#">Schedules</a></li>
-				<li><a href="#monitor">Adherence</a></li>
-				<li><a href="#resources">Resources</a></li>
-				<li><a href="#messaging">Messaging</a></li>
 			</ul>
 			<ul class="nav pull-right">
-				<li><a href="#settings">Stephen Conant</a></li>
+				<li><a href="#settings" id="username"></a></li>
 			</ul>
 		</div>
 	</div>
