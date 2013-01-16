@@ -27,6 +27,11 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			;
 	}
 
+	function _initTemporary() {
+		_initEditSection(requestViewModel);
+		_initToolbarButtons();
+	}
+
 	function _initEditSection(requestDetailViewModel) {
 		_initControls(requestDetailViewModel);
 		_initLabels();
@@ -247,6 +252,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		},
 		ShowRequest: function (data, position) {
 			_showRequest(data, position);
+			_initTemporary();
+			_showRequest(data, position);
+
 		},
 		EnableTimeinput: function () {
 			_enableTimeinput();
