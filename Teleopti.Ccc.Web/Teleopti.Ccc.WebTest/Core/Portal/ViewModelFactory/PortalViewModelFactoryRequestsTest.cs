@@ -60,17 +60,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			result.IsHhidden.Should().Be.True();
 		}
 
-		[Test, Ignore("Henrik 2013-01-09 Shifttrades are not implemented yet")]
-		public void ShouldHaveCreateShiftTradeRequestsButtonIfPermission()
-		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(true);
-
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
-			var result = ToolBarItemsOfType<ToolBarButtonItem>(target.CreatePortalViewModel());
-
-			result.Any(x => x.ButtonType == "addShiftTradeRequest").Should().Be.True();
-		}
 
 		[Test]
 		public void ShouldHaveAddRequestButtonIfPermissionToTextRequest()
@@ -94,20 +83,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var result = ToolBarItemsOfType<ToolBarButtonItem>(target.CreatePortalViewModel());
 
 			result.Any(x => x.ButtonType == "addRequest").Should().Be.True();
-		}
-
-
-		[Test, Ignore("Henrik 2013-01-09 Shifttrades are not implemented yet")]
-		public void ShouldNotHaveCreateShiftTradeRequestsButtonIfNoPermission()
-		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).Return(true);
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(false);
-
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
-			var result = ToolBarItemsOfType<ToolBarButtonItem>(target.CreatePortalViewModel());
-
-			result.Any(x => x.ButtonType == "addShiftTradeRequest").Should().Be.False();
 		}
 
 		[Test]

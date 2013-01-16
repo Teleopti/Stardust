@@ -131,28 +131,6 @@ Scenario: View public note
 	| Note text | My note    |
 	When I view my week schedule for date '2012-08-28'
 	Then I should see the public note on date '2012-08-28'
-	
-Scenario: Select week from week-picker
-	Given I am an agent
-	And I view my week schedule
-	When I open the week-picker
-	And I click on any day of a week
-	Then the week-picker should close
-	And I should see the selected week
-
-Scenario: Week-picker monday first day of week for swedish culture
-	Given I am an agent
-	And I am swedish
-	And I view my week schedule
-	When I open the week-picker
-	Then I should see monday as the first day of week
-
-Scenario: Week-picker sunday first day of week for US culture
-	Given I am an agent
-	And I am american
-	And I view my week schedule
-	When I open the week-picker
-	Then I should see sunday as the first day of week
 
 Scenario: Show text request symbol
 	Given I have the role 'Full access to mytime'

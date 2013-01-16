@@ -46,17 +46,6 @@ Scenario: Navigate previous virtual schedule period
 	When I click previous virtual schedule period button
 	Then I should see previous virtual schedule period
 
-Scenario: Select period from period-picker
-	Given I am a student agent
-	And I am viewing student availability
-	When I open the period-picker
-	And I click on any day of a week
-	Then the period-picker should close
-	And I should see the selected virtual schedule period
-
-
-
-
 Scenario: Can not edit student availability without workflow control set
 	Given I am a student agent
 	And I do not have a workflow control set

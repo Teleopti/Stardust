@@ -44,12 +44,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				result.RouteValues["controller"].Should().Be.EqualTo("Authentication");
 			}
 		}
-
-		[Test]
-		[Ignore]
-		public void ShouldRedirectToHomeControllerWhenNonLocalUrl()
-		{
-			Assert.Fail("Not implemented.");
-		}
 	}
 }

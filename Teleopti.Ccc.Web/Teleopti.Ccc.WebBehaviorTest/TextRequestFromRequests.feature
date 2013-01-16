@@ -11,13 +11,6 @@ Scenario: Add text request
 	And I click the OK button
 	Then I should see the text request in the list
 
-Scenario: Default text-request values from request view
-	Given I am an agent
-	And I am viewing requests
-	When I click add request button in the toolbar
-	Then I should see the text request form with today's date as default
-	And I should see 8:00 - 17:00 as the default times
-
 Scenario: Adding invalid text request values
 	Given I am an agent
 	And I am viewing requests
