@@ -202,7 +202,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			self.Link(data.Link.href);
 			self.Id(data.Id);
 			self.RequestPayload(data.Payload);
-			self.CanDelete(data.Link.Methods.indexOf("DELETE") != -1 && data.IsCreatedByUser);
+			self.CanDelete(data.Link.Methods.indexOf("DELETE") != -1);
 		}
 	});
 
