@@ -125,12 +125,4 @@ Scenario: Asm should indicate number of unread messages
 	| Title         | Another Message	|
 	When I click ASM link
 	Then I shoud see an indication that I have '2' unread messages
-	
-#Not in use until version 8
-@ignore
-Scenario: Agent should be notified when activity changes
-	Given I have the role 'Full access to mytime'
-	And Current time is '2030-01-01 11:59'
-	When I click ASM link
-	And Current browser time has changed to '2030-01-01 12:00'
-	Then I should see only one alert containing 'Phone'
+
