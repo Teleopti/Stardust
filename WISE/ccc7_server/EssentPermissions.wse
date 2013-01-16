@@ -117,7 +117,3 @@ item: Display Message
 end
 item: End Block
 end
-item: Check if File/Dir Exists
-  Pathname=%MyAgentPortalWeb%
-  Flags=00000100
-end
