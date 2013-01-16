@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 			double maxValue = double.MinValue;
 			foreach (var weekendDayIndexTuple in weekendDayIndexes)
 			{
-				double aggregatedValue = values[weekendDayIndexTuple.Item1].Value + values[weekendDayIndexTuple.Item2].Value;
+				double aggregatedValue = values[weekendDayIndexTuple.Item1 - lockableBitArray.PeriodArea.Minimum].Value + values[weekendDayIndexTuple.Item2 - lockableBitArray.PeriodArea.Minimum].Value;
 				if (lockableBitArray.IsLocked(weekendDayIndexTuple.Item1, true))
 					continue;
 				if (lockableBitArray.IsLocked(weekendDayIndexTuple.Item2, true))
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DayOffPlanning
 				if (i+1 > maximumIndex)
 					break;
 				int weekPosition = i % 7;
-				if (officialWeekendDays.Contains(weekPosition))
+				if (officialWeekendDays.Contains(weekPosition) && officialWeekendDays.Contains(weekPosition + 1))
 				{
 					result.Add(new Tuple<int, int>(i, i + 1));
 					i++;
