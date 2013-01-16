@@ -5,15 +5,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 {/// <summary>
-	/// Represents the Anywhere license option
+	/// Represents the Mobile Reports license option
 	/// </summary>
-	public class TeleoptiCccAnywhereLicenseOption : LicenseOption
+	public class TeleoptiCccMobileReportsLicenseOption : LicenseOption
 	{
 
 		#region Interface
 
-		public TeleoptiCccAnywhereLicenseOption()
-			: base(DefinedLicenseOptionPaths.TeleoptiCccAnywhere, DefinedLicenseOptionNames.TeleoptiCccAnywhere)
+		public TeleoptiCccMobileReportsLicenseOption()
+			: base(DefinedLicenseOptionPaths.TeleoptiCccMobileReports, DefinedLicenseOptionNames.TeleoptiCccMobileReports)
 		{
 		}
 

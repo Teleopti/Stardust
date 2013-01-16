@@ -6,13 +6,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 {
 	[TestFixture]
-	public class TeleoptiCccAnywhereLicenseOptionTest
+	public class TeleoptiCccMobileReportsLicenseOptionTest
 	{
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void VerifyEnable()
 		{
-			var target = new TeleoptiCccAnywhereLicenseOption();
+			var target = new TeleoptiCccMobileReportsLicenseOption();
 
 			target.EnableApplicationFunctions(new List<IApplicationFunction>());
 			var result = target.EnabledApplicationFunctions;

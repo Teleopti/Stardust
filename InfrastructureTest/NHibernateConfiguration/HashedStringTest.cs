@@ -89,49 +89,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
             target.NullSafeGet(null, new[] {"name1", "name2"},null);
         }
 
-        [Test, Ignore("Meaningless test that tests nothing - needs to be ignore due to upgrade of NH (it now crashes)")]
-        public void VerifyNullSafeSet()
-        {
-            IDbCommand dbCommand = mocks.StrictMock<IDbCommand>();
-            IDataParameterCollection dataParameterCollection = mocks.StrictMock<IDataParameterCollection>();
-            IDataParameter dataParameter = mocks.StrictMock<IDataParameter>();
-            const string encryptedString2 = "###encrypted_is_safe###";
-
-            Expect.Call(dbCommand.Parameters).Return(dataParameterCollection).Repeat.Twice();
-            Expect.Call(dataParameterCollection[1]).Return(dataParameter).Repeat.Twice();
-            Expect.Call(isEncryptedSpecification.IsSatisfiedBy(string2)).Return(false);
-            Expect.Call(encryption.EncryptString(string2)).Return(encryptedString2);
-            Expect.Call(dataParameter.Value = DBNull.Value);
-            Expect.Call(dataParameter.Value = encryptedString2);
-
-            mocks.ReplayAll();
-
-            target.NullSafeSet(dbCommand, null, 1);
-            target.NullSafeSet(dbCommand, string2, 1);
-
-            mocks.VerifyAll();
-        }
-
-		  [Test, Ignore("Meaningless test that tests nothing - needs to be ignore due to upgrade of NH (it now crashes)")]
-        public void VerifyPasswordEncryptedOnlyOnce()
-        {
-            IDbCommand dbCommand = mocks.StrictMock<IDbCommand>();
-            IDataParameterCollection dataParameterCollection = mocks.StrictMock<IDataParameterCollection>();
-            IDataParameter dataParameter = mocks.StrictMock<IDataParameter>();
-            const string encryptedString2 = "###encrypted_is_safe###";
-
-            Expect.Call(dbCommand.Parameters).Return(dataParameterCollection);
-            Expect.Call(dataParameterCollection[1]).Return(dataParameter);
-            Expect.Call(isEncryptedSpecification.IsSatisfiedBy(encryptedString2)).Return(true);
-            Expect.Call(dataParameter.Value = encryptedString2);
-
-            mocks.ReplayAll();
-
-            target.NullSafeSet(dbCommand, encryptedString2, 1);
-
-            mocks.VerifyAll();
-        }
-
         [Test]
         public void VerifyDeepCopy()
         {

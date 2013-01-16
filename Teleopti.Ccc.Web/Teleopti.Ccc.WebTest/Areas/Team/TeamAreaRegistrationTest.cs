@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Team
 	{
 
 		[Test]
-		public void ShouldRouteAnywhereArea()
+		public void ShouldRouteMobileReportsArea()
 		{
 			var routes = new RouteCollection();
 			var target = new TeamAreaRegistration();

@@ -19,7 +19,7 @@
     <RealtimeAdherence>true</RealtimeAdherence>
     <ShiftTrades>true</ShiftTrades>
     <MyTimeWeb>true</MyTimeWeb>
-    <Anywhere>true</Anywhere>
+    <MobileReports>true</MobileReports>
     <SMSLink>true</SMSLink>
     <Version8>true</Version8>
   </TeleoptiCCC>
@@ -33,9 +33,9 @@
           <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <DigestValue>7ehRynffE+7ogUx28gBJA/G8qPo=</DigestValue>
+        <DigestValue>iHH1eLmSceUJ7wFicvSkfgwC7po=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>Q+FzCAEnvjOfaVxA7FGyj2tzwSCnb7UkBu9b80N1YvoROM7s+a05+av5rP9ceqO8ti7nLNiYPbGxzjKCdG82khnjOl/3jCyCc9VmA7nTHnNj/gBPBdzt1VhLlc4u58wEsEs5zifzwqdCFyic2F1X4eFzHXPipqoS/TPbg0ONcLc=</SignatureValue>
+    <SignatureValue>okJhAAG5mxGTqtXJTa2HZu8p9bab0Zsc1tfguee4RyvKKlBjr/2KkE7a5aVlIUks/NURFC6gGxwYxHf9/hhLENe1rsHlrC3pI/iSZIYNy4S/fYPwyvj+LflvPKcXVQqpwcUIBH2gt4JQ6q1i60cYVtTWD+RZ3JstoLZfGFvDm5Y=</SignatureValue>
   </Signature>
 </License>

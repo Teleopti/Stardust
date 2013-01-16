@@ -127,7 +127,7 @@ namespace Teleopti.Support.LicTool
 			chkShiftTrades.Checked = false;
 			//chkShiftTrades.Enabled = true;
 			chkMyTimeWeb.Checked = false;
-			chkAnywhere.Checked = false;
+			chkMobileReports.Checked = false;
 
 			chkDeveloper.Checked = false;
 			checkBoxVersion8.Checked = false;
@@ -151,7 +151,7 @@ namespace Teleopti.Support.LicTool
 			chkRealtimeAdherence.Checked = true;
 			chkShiftTrades.Checked = true;
 			chkMyTimeWeb.Checked = true;
-			chkAnywhere.Checked = true;
+			chkMobileReports.Checked = true;
 
 		}
 
@@ -246,7 +246,7 @@ namespace Teleopti.Support.LicTool
 						if (options.Contains("ShiftTrades")) chkShiftTrades.Checked = true;
 						if (options.Contains("Developer")) chkDeveloper.Checked = true;
 						if (options.Contains("MyTimeWeb")) chkMyTimeWeb.Checked = true;
-						if (options.Contains("Anywhere")) chkAnywhere.Checked = true;
+						if (options.Contains("MobileReports")) chkMobileReports.Checked = true;
 						if (options.Contains("SMSLink")) checkBoxSMS.Checked = true;
 						if (options.Contains("Version8")) checkBoxVersion8.Checked = true;
 
@@ -314,7 +314,7 @@ namespace Teleopti.Support.LicTool
 				if (chkRealtimeAdherence.Checked) elmOptions.AppendChild(xdoc.CreateElement("RealtimeAdherence")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkShiftTrades.Checked) elmOptions.AppendChild(xdoc.CreateElement("ShiftTrades")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkMyTimeWeb.Checked) elmOptions.AppendChild(xdoc.CreateElement("MyTimeWeb")).AppendChild(xdoc.CreateTextNode("true"));
-				if (chkAnywhere.Checked) elmOptions.AppendChild(xdoc.CreateElement("Anywhere")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkMobileReports.Checked) elmOptions.AppendChild(xdoc.CreateElement("MobileReports")).AppendChild(xdoc.CreateTextNode("true"));
 				if (checkBoxSMS.Checked) elmOptions.AppendChild(xdoc.CreateElement("SMSLink")).AppendChild(xdoc.CreateTextNode("true"));
 				if (checkBoxVersion8.Checked) elmOptions.AppendChild(xdoc.CreateElement("Version8")).AppendChild(xdoc.CreateTextNode("true"));
 

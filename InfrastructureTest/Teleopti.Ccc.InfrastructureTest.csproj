@@ -170,7 +170,6 @@
     <Compile Include="NHibernateConfiguration\Cache\AvailableDataTest.cs" />
     <Compile Include="NHibernateConfiguration\Cache\PersonInApplicationRoleTest.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetterTest.cs" />
-    <Compile Include="NHibernateConfiguration\TeleoptiDistributedTransactionContextTest.cs" />
     <Compile Include="NHibernateConfiguration\EnversConfigurationTest.cs" />
     <Compile Include="NHibernateConfiguration\FasterProxyFactoryFactoryTest.cs" />
     <Compile Include="NHibernateConfiguration\HybridWebSessionContextTest.cs" />

@@ -53,7 +53,7 @@
 			this.chkPayrollIntegration = new System.Windows.Forms.CheckBox();
 			this.grpBoxModules = new System.Windows.Forms.GroupBox();
 			this.checkBoxSMS = new System.Windows.Forms.CheckBox();
-			this.chkAnywhere = new System.Windows.Forms.CheckBox();
+			this.chkMobileReports = new System.Windows.Forms.CheckBox();
 			this.chkMyTimeWeb = new System.Windows.Forms.CheckBox();
 			this.chkDeveloper = new System.Windows.Forms.CheckBox();
 			this.btnAdd2Yrs = new System.Windows.Forms.Button();
@@ -332,7 +332,7 @@
 			// grpBoxModules
 			// 
 			this.grpBoxModules.Controls.Add(this.checkBoxSMS);
-			this.grpBoxModules.Controls.Add(this.chkAnywhere);
+			this.grpBoxModules.Controls.Add(this.chkMobileReports);
 			this.grpBoxModules.Controls.Add(this.chkMyTimeWeb);
 			this.grpBoxModules.Controls.Add(this.chkPayrollIntegration);
 			this.grpBoxModules.Controls.Add(this.chkPerformanceManager);
@@ -360,16 +360,16 @@
 			this.checkBoxSMS.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.checkBoxSMS.UseVisualStyleBackColor = true;
 			// 
-			// chkAnywhere
+			// chkMobileReports
 			// 
-			this.chkAnywhere.AutoSize = true;
-			this.chkAnywhere.Location = new System.Drawing.Point(6, 225);
-			this.chkAnywhere.Name = "chkAnywhere";
-			this.chkAnywhere.Size = new System.Drawing.Size(142, 17);
-			this.chkAnywhere.TabIndex = 16;
-			this.chkAnywhere.Text = "Anywhere Mobile reports";
-			this.chkAnywhere.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-			this.chkAnywhere.UseVisualStyleBackColor = true;
+			this.chkMobileReports.AutoSize = true;
+			this.chkMobileReports.Location = new System.Drawing.Point(6, 225);
+			this.chkMobileReports.Name = "chkMobileReports";
+			this.chkMobileReports.Size = new System.Drawing.Size(142, 17);
+			this.chkMobileReports.TabIndex = 16;
+			this.chkMobileReports.Text = "Mobile Reports";
+			this.chkMobileReports.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.chkMobileReports.UseVisualStyleBackColor = true;
 			// 
 			// chkMyTimeWeb
 			// 
@@ -758,7 +758,7 @@
 		private System.Windows.Forms.Label labelRatio;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.CheckBox chkFreemium;
-		private System.Windows.Forms.CheckBox chkAnywhere;
+		private System.Windows.Forms.CheckBox chkMobileReports;
 		private System.Windows.Forms.CheckBox checkBoxSMS;
 		private System.Windows.Forms.GroupBox groupBoxVersion8;
 		private System.Windows.Forms.CheckBox checkBoxVersion8;
