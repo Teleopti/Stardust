@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					var resolver = new Areas.Team.Core.AutofacDependencyResolver(container.BeginLifetimeScope());
 					GlobalHost.DependencyResolver = resolver;
 					GlobalHost.HubPipeline.AddModule(container.Resolve<IHubPipelineModule>());
-					RouteTable.Routes.MapHubs(resolver);
+					RouteTable.Routes.MapHubs(new HubConfiguration());
 				}
 				_bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>());
 			}

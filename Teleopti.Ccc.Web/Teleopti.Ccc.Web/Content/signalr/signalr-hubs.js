@@ -65,34 +65,35 @@
 		}
 	}
 
-	signalR.hub = $.hubConnection("/signalr", { useDefaultPath: false })
-        .starting(function () {
-        	// Register the hub proxies as subscribed
-        	// (instance, shouldSubscribe)
-        	registerHubProxies(signalR, true);
+	$.hubConnection.prototype.createHubProxies = function () {
+		var proxies = {};
+		this.starting(function () {
+			// Register the hub proxies as subscribed
+			// (instance, shouldSubscribe)
+			registerHubProxies(proxies, true);
 
-        	this._registerSubscribedHubs();
-        }).disconnected(function () {
-        	// Unsubscribe all hub proxies when we "disconnect".  This is to ensure that we do not re-add functional call backs.
-        	// (instance, shouldSubscribe)
-        	registerHubProxies(signalR, false);
-        });
+			this._registerSubscribedHubs();
+		}).disconnected(function () {
+			// Unsubscribe all hub proxies when we "disconnect".  This is to ensure that we do not re-add functional call backs.
+			// (instance, shouldSubscribe)
+			registerHubProxies(proxies, false);
+		});
 
-	signalR.scheduleHub = signalR.hub.createHubProxy('scheduleHub');
-	signalR.scheduleHub.client = {};
-	signalR.scheduleHub.server = {
-		availableTeams: function (date) {
-			/// <summary>Calls the AvailableTeams method on the server-side scheduleHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
-			/// <param name=\"date\" type=\"Object\">Server side type is System.DateTime</param>
-			return signalR.scheduleHub.invoke.apply(signalR.scheduleHub, $.merge(["AvailableTeams"], $.makeArray(arguments)));
-		},
+		proxies.scheduleHub = this.createHubProxy('scheduleHub');
+		proxies.scheduleHub.client = {};
+		proxies.scheduleHub.server = {
+			subscribeTeamSchedule: function (teamId, date) {
+				/// <summary>Calls the SubscribeTeamSchedule method on the server-side scheduleHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
+				/// <param name=\"teamId\" type=\"Object\">Server side type is System.Guid</param>
+				/// <param name=\"date\" type=\"Object\">Server side type is System.DateTime</param>
+				return proxies.scheduleHub.invoke.apply(proxies.scheduleHub, $.merge(["SubscribeTeamSchedule"], $.makeArray(arguments)));
+			}
+		};
 
-		subscribeTeamSchedule: function (teamId, date) {
-			/// <summary>Calls the SubscribeTeamSchedule method on the server-side scheduleHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
-			/// <param name=\"teamId\" type=\"Object\">Server side type is System.Guid</param>
-			/// <param name=\"date\" type=\"Object\">Server side type is System.DateTime</param>
-			return signalR.scheduleHub.invoke.apply(signalR.scheduleHub, $.merge(["SubscribeTeamSchedule"], $.makeArray(arguments)));
-		}
+		return proxies;
 	};
+
+	signalR.hub = $.hubConnection("/signalr", { useDefaultPath: false });
+	$.extend(signalR, signalR.hub.createHubProxies());
 
 } (window.jQuery, window));

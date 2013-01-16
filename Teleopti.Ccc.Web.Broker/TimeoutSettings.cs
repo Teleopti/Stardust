@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Broker
 			if (!string.IsNullOrEmpty(value))
 			{
 				int seconds;
-				settings.KeepAlive = Int32.TryParse(value,NumberStyles.Integer,CultureInfo.InvariantCulture,out seconds) ? new KeepAliveSetting { Value = TimeSpan.FromSeconds(seconds) } : new KeepAliveSetting();
+				settings.KeepAlive = Int32.TryParse(value,NumberStyles.Integer,CultureInfo.InvariantCulture,out seconds) ? seconds : (int?)null;
 			}
 
 			value = ConfigurationManager.AppSettings["ConnectionTimeout"];
@@ -38,14 +38,9 @@ namespace Teleopti.Ccc.Web.Broker
 			return settings;
 		}
 
-		public KeepAliveSetting? KeepAlive { get; set; }
+		public int? KeepAlive { get; set; }
 		public TimeSpan? ConnectionTimeout { get; set; }
 		public TimeSpan? DisconnectTimeout { get; set; }
 		public TimeSpan? HeartbeatInterval { get; set; }
 	}
-
-	public struct KeepAliveSetting
-		{
-		public TimeSpan? Value { get; set; }
-		}
 }

@@ -8,7 +8,7 @@
 *
 */
 
-/// <reference path="..\..\SignalR.Client.JS\Scripts\jquery-1.6.2.js" />
+/// <reference path="..\..\SignalR.Client.JS\Scripts\jquery-1.6.4.js" />
 /// <reference path="jquery.signalR.js" />
 (function ($, window) {
 	/// <param name="$" type="jQuery" />
@@ -65,37 +65,52 @@
 		}
 	}
 
-	signalR.hub = $.hubConnection("/signalr", { useDefaultPath: false })
-        .starting(function () {
-        	// Register the hub proxies as subscribed
-        	// (instance, shouldSubscribe)
-        	registerHubProxies(signalR, true);
+	$.hubConnection.prototype.createHubProxies = function () {
+		var proxies = {};
+		this.starting(function () {
+			// Register the hub proxies as subscribed
+			// (instance, shouldSubscribe)
+			registerHubProxies(proxies, true);
 
-        	this._registerSubscribedHubs();
-        }).disconnected(function () {
-        	// Unsubscribe all hub proxies when we "disconnect".  This is to ensure that we do not re-add functional call backs.
-        	// (instance, shouldSubscribe)
-        	registerHubProxies(signalR, false);
-        });
+			this._registerSubscribedHubs();
+		}).disconnected(function () {
+			// Unsubscribe all hub proxies when we "disconnect".  This is to ensure that we do not re-add functional call backs.
+			// (instance, shouldSubscribe)
+			registerHubProxies(proxies, false);
+		});
 
-	signalR.MessageBrokerHub = signalR.hub.createHubProxy('MessageBrokerHub');
-	signalR.MessageBrokerHub.client = {};
-	signalR.MessageBrokerHub.server = {
-		addSubscription: function (subscription) {
-			return signalR.MessageBrokerHub.invoke.apply(signalR.MessageBrokerHub, $.merge(["AddSubscription"], $.makeArray(arguments)));
-		},
+		proxies.MessageBrokerHub = this.createHubProxy('MessageBrokerHub');
+		proxies.MessageBrokerHub.client = {};
+		proxies.MessageBrokerHub.server = {
+			addSubscription: function (subscription) {
+				/// <summary>Calls the AddSubscription method on the server-side MessageBrokerHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
+				/// <param name=\"subscription\" type=\"Object\">Server side type is Teleopti.Interfaces.MessageBroker.Subscription</param>
+				return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["AddSubscription"], $.makeArray(arguments)));
+			},
 
-		removeSubscription: function (route) {
-			return signalR.MessageBrokerHub.invoke.apply(signalR.MessageBrokerHub, $.merge(["RemoveSubscription"], $.makeArray(arguments)));
-		},
+			notifyClients: function (notification) {
+				/// <summary>Calls the NotifyClients method on the server-side MessageBrokerHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
+				/// <param name=\"notification\" type=\"Object\">Server side type is Teleopti.Interfaces.MessageBroker.Notification</param>
+				return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["NotifyClients"], $.makeArray(arguments)));
+			},
 
-		notifyClients: function (notification) {
-			return signalR.MessageBrokerHub.invoke.apply(signalR.MessageBrokerHub, $.merge(["NotifyClients"], $.makeArray(arguments)));
-		},
+			notifyClientsMultiple: function (notifications) {
+				/// <summary>Calls the NotifyClientsMultiple method on the server-side MessageBrokerHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
+				/// <param name=\"notifications\" type=\"Object\">Server side type is System.Collections.Generic.IEnumerable`1[Teleopti.Interfaces.MessageBroker.Notification]</param>
+				return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["NotifyClientsMultiple"], $.makeArray(arguments)));
+			},
 
-		notifyClientsMultiple: function (notifications) {
-			return signalR.MessageBrokerHub.invoke.apply(signalR.MessageBrokerHub, $.merge(["NotifyClientsMultiple"], $.makeArray(arguments)));
-		}
+			removeSubscription: function (route) {
+				/// <summary>Calls the RemoveSubscription method on the server-side MessageBrokerHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
+				/// <param name=\"route\" type=\"String\">Server side type is System.String</param>
+				return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["RemoveSubscription"], $.makeArray(arguments)));
+			}
+		};
+
+		return proxies;
 	};
+
+	signalR.hub = $.hubConnection("/signalr", { useDefaultPath: false });
+	$.extend(signalR, signalR.hub.createHubProxies());
 
 } (window.jQuery, window));

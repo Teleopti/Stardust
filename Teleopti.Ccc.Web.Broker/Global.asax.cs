@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Broker
 				GlobalHost.Configuration.DisconnectTimeout = settingsFromParser.DisconnectTimeout.Value;
 
 			if (settingsFromParser.KeepAlive.HasValue)
-				GlobalHost.Configuration.KeepAlive = settingsFromParser.KeepAlive.Value.Value;
+				GlobalHost.Configuration.KeepAlive = settingsFromParser.KeepAlive.Value;
 
 			if (settingsFromParser.ConnectionTimeout.HasValue)
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;

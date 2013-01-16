@@ -1,4 +1,4 @@
-/// <reference path="../../../../Content/Scripts/jquery.signalR-1.0.0-rc1.js" />
+/// <reference path="../../../../Content/Scripts/jquery.signalR-1.0.0-rc2.js" />
 /// <reference path="../../../../Content/Scripts/jquery-1.8.3.js" />
 
 
@@ -6,7 +6,7 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 	var listeners = [], conn, hub;
 
 	function _oneTime(options) {
-		hub = $.connection.messageBrokerHub;
+		hub = $.connection.MessageBrokerHub;
 		$.connection.hub.url = options.url + '/signalr';
 		if(options.errCallback) {
 			$.connection.hub.error(options.errCallback);			
