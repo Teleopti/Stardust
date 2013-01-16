@@ -342,18 +342,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
         {
             return base.FitsInsideRange(range, clipRowOffset, clipColOffset, row, col);
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        internal new IScheduleDay ReducedAbsence(IScheduleDay part)
-        {
-            return NormalPasteBehavior.ReducedAbsence(part);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        internal new bool IsFullDayAbsence(IScheduleDay part)
-        {
-            return NormalPasteBehavior.IsFullDayAbsence(part);
-        }
     }
 
     internal sealed class PasteMergeBehaviorForTest : MergePasteBehavior
