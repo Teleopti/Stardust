@@ -403,8 +403,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                         workShiftsWithinPeriod.Add(proj);
                     }
                 }
-                if (workShiftsWithinPeriod.Count == 0)
-                    workShiftsWithinPeriod = shiftList;
                 finderResult.AddFilterResults(
                     new WorkShiftFilterResult(
                         string.Format(_culture,

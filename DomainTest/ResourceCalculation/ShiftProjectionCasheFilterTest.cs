@@ -975,5 +975,58 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
+
+        [Test]
+        public void ShouldGetNoShiftWhenNoMainShiftCanCoverMeetingAndPersonalShifts()
+        {
+            var period = new DateTimePeriod(new DateTime(2009, 2, 2, 8, 0, 0, DateTimeKind.Utc),
+                                            new DateTime(2009, 2, 2, 9, 30, 0, DateTimeKind.Utc));
+            var period2 = new DateTimePeriod(new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc),
+                                             new DateTime(2009, 2, 2, 17, 15, 0, DateTimeKind.Utc));
+
+            var meeting = _mocks.StrictMock<IPersonMeeting>();
+            var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { meeting });
+            _personAssignment = _mocks.StrictMock<IPersonAssignment>();
+            _personAssignments = new List<IPersonAssignment> { _personAssignment };
+
+            var personalShift = _mocks.StrictMock<IPersonalShift>();
+            var layerColl = _mocks.StrictMock<ILayerCollection<IActivity>>();
+
+            var persList = new List<IPersonalShift> { personalShift };
+            var personalShifts = new ReadOnlyCollection<IPersonalShift>(persList);
+
+            var currentDate = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
+            var phone = ActivityFactory.CreateActivity("phone");
+            phone.AllowOverwrite = true;
+            phone.InWorkTime = true;
+            var phoneLayer = new List<IVisualLayer>
+                                 {
+                                     new VisualLayer(phone, new DateTimePeriod(currentDate.AddHours(8), currentDate.AddHours(17)),
+                                                     phone, null)
+                                 };
+            var layerCollection1 = new VisualLayerCollection(null, phoneLayer, new ProjectionPayloadMerger());
+
+            IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+            var c1 = _mocks.StrictMock<IShiftProjectionCache>();
+            shifts.Add(c1);
+
+            using (_mocks.Record())
+            {
+                Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonAssignmentCollection()).Return(
+                new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
+                Expect.Call(_personAssignment.PersonalShiftCollection).Return(personalShifts).Repeat.AtLeastOnce();
+                Expect.Call(personalShift.LayerCollection).Return(layerColl).Repeat.AtLeastOnce();
+                Expect.Call(layerColl.Period()).Return(period).Repeat.AtLeastOnce();
+                Expect.Call(meeting.Period).Return(period2).Repeat.AtLeastOnce();
+                Expect.Call(c1.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
+            }
+
+            using (_mocks.Playback())
+            {
+                var shiftsList = _target.FilterOnPersonalShifts(shifts, _part, _finderResult);
+                Assert.That(shiftsList.Count, Is.EqualTo(0));
+            }
+        }
     }
 }
