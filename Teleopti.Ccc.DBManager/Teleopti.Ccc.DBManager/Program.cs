@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.DBManager
 		private static bool _loginExist;
 
         private const string AzureEdition = "SQL Azure";
+		private const string SQL2005SP2 = "9.00.3042"; //http://www.sqlteam.com/article/sql-server-versions
     	private static MyLogger _logger;
 		private static DatabaseVersionInformation _databaseVersionInformation;
 		private static SchemaVersionInformation _schemaVersionInformation;
@@ -541,7 +542,7 @@ namespace Teleopti.Ccc.DBManager
 				logWrite("DB user already exist, re-link ...");
 				using (var cmd = new SqlCommand(relinkSQLUser, _sqlConnection))
 
-					if (SQLVersionGreaterThen("9.00.3042")) //http://www.sqlteam.com/article/sql-server-versions
+					if (SQLVersionGreaterThen(SQL2005SP2))
 						cmd.ExecuteNonQuery();
 					else
 						logWrite("You need SQL Server 2005 SP2 to re-link user to");
