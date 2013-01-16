@@ -518,28 +518,6 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
             }
         }
 
-        [Test, Ignore("Henry, fix later")]
-        public void VerifyCannotAcceptDeleted()
-        {
-            ShiftTradeModel model = createModelWherePersonCreatedRequest(ShiftTradeStatusDto.OkByMe,
-                                                                         RequestStatusDto.Pending);
-            var target = new ShiftTradePresenter(_view, model);
-
-            using (_mocks.Record())
-            {
-                Expect.Call(model.SdkService.AcceptShiftTradeRequest(model.PersonRequestDto))
-                    .Return(model.PersonRequestDto);
-                model.PersonRequestDto.IsDeleted = true;
-                //view.ReasonMessage = UserTexts.Resources.RequestHasBeenDeleted;
-            }
-
-            using (_mocks.Playback())
-            {
-                target.Accept();
-                Assert.AreEqual(Resources.RequestHasBeenDeleted, _view.ReasonMessage);
-            }
-        }
-
         [Test]
         public void VerifyCannotRemoveLastDay()
         {

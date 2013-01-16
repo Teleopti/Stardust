@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -660,17 +658,6 @@ namespace Teleopti.Ccc.DomainTest.Time
 
             _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime);
             _period.IntervalsFromHourCollection(120, TimeZoneHelper.CurrentSessionTimeZone);
-        }
-
-        [Test, Ignore("Removed this check due to bug 9873")]
-        [ExpectedException(typeof(ArgumentException))]
-        public void VerifyEvenDividedOnIntervalCollection()
-        {
-            DateTime startDateTime = new DateTime(2007, 10, 27, 23, 0, 0);
-            DateTime endDateTime = new DateTime(2007, 10, 27, 23, 45, 0);
-
-            _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime);
-            _period.IntervalsFromHourCollection(13, TimeZoneHelper.CurrentSessionTimeZone);
         }
 
         /// <summary>

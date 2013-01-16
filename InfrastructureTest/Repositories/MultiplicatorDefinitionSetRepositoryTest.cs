@@ -101,21 +101,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual("MyOvertimeSet", lst[0].Name);
         }
 
-        [Test, Ignore("Måste prata med Roger")]
-        public void VerifyFindAllDefinitions()
-        {
-            PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
-            IMultiplicatorDefinitionSet multiplicatorSet = new MultiplicatorDefinitionSet("MyOvertimeSet", MultiplicatorType.Overtime);
-            IMultiplicatorDefinitionSet multiplicatorSet1 = new MultiplicatorDefinitionSet("MyOBeSet", MultiplicatorType.OBTime);
-            IList<IMultiplicatorDefinitionSet> listToPersist = new List<IMultiplicatorDefinitionSet> { multiplicatorSet, multiplicatorSet1 };
-            PersistAndRemoveFromUnitOfWork(listToPersist);
-
-            IMultiplicatorDefinitionSetRepository rep = new MultiplicatorDefinitionSetRepository(UnitOfWork);
-            IList<IMultiplicatorDefinitionSet> lst = rep.FindAllDefinitions();
-
-            Assert.AreEqual(2, lst.Count);
-        }
-
         [Test]
         public void VerifyCanRemoveDefinition()
         {

@@ -1825,55 +1825,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
         }
 
-        [Test]
-		[Ignore("What do WeakReference want to test here?")]
-		public void VerifyCanCalculateNoDayOffOnShiftPreferencePermissionState()
-		{
-			IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
-			layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
-
-			IMainShift mainShift = new MainShift(_shiftCategory);
-			IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-			assignment.SetMainShift(mainShift);
-
-
-			PreferenceRestriction dayRestriction = new PreferenceRestriction
-			{
-				StartTimeLimitation =
-					new StartTimeLimitation(
-					new TimeSpan(6, 0, 0),
-					new TimeSpan(20, 0, 0)),
-				EndTimeLimitation =
-				new EndTimeLimitation(
-					new TimeSpan(6, 0, 0),
-					new TimeSpan(20, 0, 0)),
-				ShiftCategory = _shiftCategory,
-				DayOffTemplate = DayOffFactory.CreateDayOff(new Description("WrongDayOff"))
-
-			};
-			dayRestriction.AddActivityRestriction(new ActivityRestriction(_activity));
-			IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
-			IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
-			ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-
-			using (_mockRepository.Record())
-			{
-				Expect.Call(_schedulePartMock.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment })).Repeat.Any();
-				Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
-				Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-
-				Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
-					new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-			}
-
-			using (_mockRepository.Playback())
-			{
-				_target = new RestrictionChecker(_schedulePartMock);
-				Assert.AreEqual(PermissionState.Broken, _target.CheckPreference());
-			}
-		}
-
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyCanCalculateNoPreferencePermissionState()
         {

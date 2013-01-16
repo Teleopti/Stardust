@@ -220,17 +220,6 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.AreEqual("0101", BitArrayHelper.ToString(result[1]));
         }
 
-        [Test]
-        [Ignore("Takes much time")]
-        public void VerifyPermutationWithManyMember()
-        {
-            _array = new BitArray(56, false);
-            SetRangeFromLeft(_array, 16);
-            _binaryPermutation = new BinaryPermutation(_array, new AlwaysTrueValidator());
-            IList<BitArray> result = _binaryPermutation.IterateAll(); 
-            Assert.AreEqual(6, result.Count);
-        }
-
         #region Local methods
 
 

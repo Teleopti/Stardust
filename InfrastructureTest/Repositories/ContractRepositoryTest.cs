@@ -108,24 +108,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			new ContractRepository(UnitOfWorkFactory.Current).Should().Not.Be.Null();
 		}
-
-        [Test, Ignore("do not know if this should be filtered in db?")]
-        public void VerifyDeletedMultiplicatorIsNotPartOfContract()
-        {
-            IMultiplicatorDefinitionSet originalMultiplicatorDefinitionSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
-            PersistAndRemoveFromUnitOfWork(originalMultiplicatorDefinitionSet);
-
-            IContract contract = ContractFactory.CreateContract("MyContract");
-            PersistAndRemoveFromUnitOfWork(contract);
-
-            contract.AddMultiplicatorDefinitionSetCollection(originalMultiplicatorDefinitionSet);
-            PersistAndRemoveFromUnitOfWork(contract);
-
-            new MultiplicatorDefinitionSetRepository(UnitOfWork).Remove(originalMultiplicatorDefinitionSet);
-            PersistAndRemoveFromUnitOfWork(originalMultiplicatorDefinitionSet);
-
-            contract = new ContractRepository(UnitOfWork).Get(contract.Id.Value);
-            Assert.AreEqual(0, contract.MultiplicatorDefinitionSetCollection.Count);
-        }
     }
 }

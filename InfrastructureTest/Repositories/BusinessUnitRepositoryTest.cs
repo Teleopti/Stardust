@@ -86,46 +86,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        [Ignore("Why does not this work??? See together with Roger /tamasb")]
-        public void VerifyLoadHierarchyInformation()
-        {
-            //setup
-            ISite site1 = SiteFactory.CreateSimpleSite("SITE1");
-            PersistAndRemoveFromUnitOfWork(site1);
-            ISite site2 = SiteFactory.CreateSimpleSite("SITE2");
-            PersistAndRemoveFromUnitOfWork(site2);
-
-            ITeam site1team1 = TeamFactory.CreateSimpleTeam("SITE1TEAM1");
-            site1team1.Site = site1;
-            PersistAndRemoveFromUnitOfWork(site1team1);
-            ITeam site1team2 = TeamFactory.CreateSimpleTeam("SITE1TEAM2");
-            site1team2.Site = site1;
-            PersistAndRemoveFromUnitOfWork(site1team2);
-            ITeam site2team1 = TeamFactory.CreateSimpleTeam("SITE2TEAM1");
-            site2team1.Site = site2;
-            PersistAndRemoveFromUnitOfWork(site2team1);
-
-            IBusinessUnit bu = BusinessUnitFactory.CreateSimpleBusinessUnit("BU1");
-            bu.AddSite(site1);
-            bu.AddSite(site2);
-            PersistAndRemoveFromUnitOfWork(bu);
-
-            //load
-            IBusinessUnitRepository repository = new BusinessUnitRepository(UnitOfWork);
-            //IList<IBusinessUnit> loadedList = rep.LoadAllBusinessUnitSortedByName();
-            //IBusinessUnit loadedBusinessUnit = loadedList[0];
-            IBusinessUnit loadedBusinessUnit = rep.Load(bu.Id.Value);
-
-            loadedBusinessUnit = repository.LoadHierarchyInformation(loadedBusinessUnit);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedBusinessUnit.SiteCollection));
-            Assert.AreEqual(2, loadedBusinessUnit.SiteCollection.Count);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedBusinessUnit.SiteCollection[0].TeamCollection));
-            Assert.AreEqual(2, loadedBusinessUnit.SiteCollection[0].TeamCollection.Count);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loadedBusinessUnit.SiteCollection[1].TeamCollection));
-            Assert.AreEqual(1, loadedBusinessUnit.SiteCollection[1].TeamCollection.Count);
-        }
-
-        [Test]
         public void ShouldBeInitializedAfterLoadedHierarchyInformation()
         {
             ISite site1 = SiteFactory.CreateSiteWithOneTeam("Site1");
