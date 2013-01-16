@@ -90,4 +90,4 @@ AND control_name_resource_key ='ResDateFromColon'
 UPDATE mart.report_control_collection
 SET control_name_resource_key = 'ResShiftStartDateColon'
 WHERE collection_id=42 AND control_id =2
-AND control_name_resource_key ='ResShiftStartDateToColon'
+AND control_name_resource_key ='ResDateToColon'
