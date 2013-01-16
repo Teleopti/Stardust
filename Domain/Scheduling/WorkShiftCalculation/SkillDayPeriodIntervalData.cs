@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             _schedulingResultStateHolder = schedulingResultStateHolder;
         }
 
-        public Dictionary<TimeSpan, ISkillIntervalData> GetIntervalDistribution(List<DateOnly  > dateOnlyList )
+        public IDictionary<TimeSpan, ISkillIntervalData> GetIntervalDistribution(List<DateOnly  > dateOnlyList )
         {
             var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
             var intervalBasedData = new Dictionary<TimeSpan, List<double>>();
@@ -59,6 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
     public interface ISkillDayPeriodIntervalData
     {
-        Dictionary<TimeSpan, ISkillIntervalData> GetIntervalDistribution(List<DateOnly> dateOnlyList);
+        IDictionary<TimeSpan, ISkillIntervalData> GetIntervalDistribution(List<DateOnly> dateOnlyList);
     }
 }

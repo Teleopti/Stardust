@@ -798,6 +798,7 @@
     <Compile Include="Scheduling\WorkShiftCalculation\WorkShiftFilterService.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\WorkShiftLengthValueCalculator.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\WorkShiftPeriodValueCalculator.cs" />
+    <Compile Include="Scheduling\WorkShiftCalculation\WorkShiftSelector.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\WorkShiftValueCalculator.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillIntervalData.cs" />
     <Compile Include="Scheduling\WorkShiftWorkTime.cs" />

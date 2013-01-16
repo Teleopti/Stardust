@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -22,7 +23,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly IWorkShiftFilterService _workShiftFilterService;
         private readonly ITeamScheduling _teamScheduling;
         private readonly ISchedulingOptions _schedulingOptions;
-        private readonly ISkillDayPeriodIntervalData _skillDayPeriodIntervalData;
+    	private readonly IWorkShiftSelector _workShiftSelector;
+    	private readonly ISkillDayPeriodIntervalData _skillDayPeriodIntervalData;
         private readonly IList<DateOnly> _effectiveDays;
         private readonly IList<DateOnly> _dayOff;
         private IList<DateOnly> _unLockedDays;
@@ -34,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
             IList<IScheduleMatrixPro> matrixList, 
             IWorkShiftFilterService workShiftFilterService,
             ITeamScheduling teamScheduling,
-            ISchedulingOptions schedulingOptions
+            ISchedulingOptions schedulingOptions,
+			IWorkShiftSelector workShiftSelector
             )
         {
             _dynamicBlockFinder = dynamicBlockFinder;
@@ -44,7 +47,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _workShiftFilterService = workShiftFilterService;
             _teamScheduling = teamScheduling;
             _schedulingOptions = schedulingOptions;
-            _skillDayPeriodIntervalData = skillDayPeriodIntervalData;
+        	_workShiftSelector = workShiftSelector;
+        	_skillDayPeriodIntervalData = skillDayPeriodIntervalData;
             _effectiveDays = new List<DateOnly>();
             _dayOff = new List<DateOnly>();
             _unLockedDays = new List<DateOnly>();
@@ -98,11 +102,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 //call class that returns the aggregated intraday dist based on teamblock dates
                 var skillInternalDataList = _skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList);
 
+				//temporary
+            	ISkill skill =
+            		_matrixList.First().Person.PersonPeriodCollection.First().PersonSkillCollection.First().Skill;
+				IDictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>> askMickeWhyDic = new Dictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>>();
+				askMickeWhyDic.Add(skill, skillInternalDataList);
+
                 //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
                 // (should we cover for max seats here?)
-                //var shifts = _workShiftFilterService.Filter(startDate, groupPerson, _matrixList, restriction, _schedulingOptions, null);
+                var shifts = _workShiftFilterService.Filter(startDate, groupPerson, _matrixList, restriction, _schedulingOptions, null);
+
                 //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need
-                
+            	var bestShiftProjectionCache = _workShiftSelector.Select(shifts, askMickeWhyDic,
+            	                                                         _schedulingOptions.WorkShiftLengthHintOption,
+            	                                                         _schedulingOptions.UseMinimumPersons,
+            	                                                         _schedulingOptions.UseMaximumPersons);
                 //call class that schedules given date with given workshift on the complete team
                 
                 //call class that schedules the unscheduled days for the teamblock using the same start time from the given shift, 

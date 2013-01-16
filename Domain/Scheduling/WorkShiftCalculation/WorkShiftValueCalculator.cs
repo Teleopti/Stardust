@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
 	public interface IWorkShiftValueCalculator
 	{
-		double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity, IDictionary<DateTime, ISkillIntervalData> skillIntervalDatas,
+		double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity, IDictionary<TimeSpan, ISkillIntervalData> skillIntervalDatas,
 		                                            WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, double overStaffingFactor, double priorityFactor);
 	}
 
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			_workShiftLengthValueCalculator = workShiftLengthValueCalculator;
 		}
 
-		public double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity, IDictionary<DateTime, ISkillIntervalData> skillIntervalDatas,
+		public double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity, IDictionary<TimeSpan, ISkillIntervalData> skillIntervalDatas,
 		  WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, double overStaffingFactor, double priorityFactor)
 		{
 			if (skillIntervalDatas.Count == 0)
@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 			double periodValue = 0;
 			int resourceInMinutes = 0;
+			DateTime shiftStartDate = mainShiftLayers.Period().Value.StartDateTime.Date;
 			foreach (IVisualLayer layer in mainShiftLayers)
 			{
 				IActivity activity = (IActivity) layer.Payload;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 				// IF the shift is outside opening hours and Activity needs skill dont't use it (otherwise it could be outside opening hours).
 				ISkillIntervalData currentStaffPeriod;
-				if (!skillIntervalDatas.TryGetValue(currentStart, out currentStaffPeriod))
+				if (!skillIntervalDatas.TryGetValue(timeOfDay(shiftStartDate, currentStart), out currentStaffPeriod))
 				{
 					if (activity.RequiresSkill)
 						return null;
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 						break;
 					}
 
-					if (!skillIntervalDatas.TryGetValue(currentStart, out currentStaffPeriod))
+					if (!skillIntervalDatas.TryGetValue(timeOfDay(shiftStartDate, currentStart), out currentStaffPeriod))
 					{
 						if (activity.RequiresSkill)
 							return null;
@@ -96,15 +97,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			return _workShiftLengthValueCalculator.CalculateShiftValueForPeriod(periodValue, resourceInMinutes, lengthFactor);
 		}
 
-		private static int getResolution(IDictionary<DateTime, ISkillIntervalData> staffPeriods)
+		private static int getResolution(IDictionary<TimeSpan, ISkillIntervalData> staffPeriods)
 		{
 			int resolution = 15;
-			foreach (KeyValuePair<DateTime, ISkillIntervalData> pair in staffPeriods)
+			foreach (KeyValuePair<TimeSpan, ISkillIntervalData> pair in staffPeriods)
 			{
 				resolution = (int)((pair.Value.Period.EndDateTime - pair.Value.Period.StartDateTime).TotalMinutes);
 				break;
 			}
 			return resolution;
+		}
+
+		private TimeSpan timeOfDay(DateTime shiftStartDate, DateTime currentStart)
+		{
+			if (currentStart.Date == shiftStartDate.Date)
+				return currentStart.TimeOfDay;
+
+			return currentStart.TimeOfDay.Add(TimeSpan.FromDays(1));
 		}
 	}
 }

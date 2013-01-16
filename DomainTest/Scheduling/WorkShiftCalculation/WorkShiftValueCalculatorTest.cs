@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		private DateTime _end;
 		private IActivity _phoneActivity;
 		private ISkillIntervalData _data;
-		private Dictionary<DateTime, ISkillIntervalData> _dic;
+		private IDictionary<TimeSpan, ISkillIntervalData> _dic;
 
 		[SetUp]
 		public void Setup()
@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			_phoneActivity.RequiresSkill = true;
 			_period1 = new DateTimePeriod(_start, _end);
 			_data = new SkillIntervalData(_period1, 5, -5, 0, null, null);
-			_dic = new Dictionary<DateTime, ISkillIntervalData>();
-			_dic.Add(_start, _data);
+			_dic = new Dictionary<TimeSpan, ISkillIntervalData>();
+			_dic.Add(_start.TimeOfDay, _data);
 		}
 
 		[Test]
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
 
 			double? result =_target.CalculateShiftValue(visualLayerCollection, new Activity("phone"),
-			                            new Dictionary<DateTime, ISkillIntervalData>(), WorkShiftLengthHintOption.AverageWorkTime,
+										new Dictionary<TimeSpan, ISkillIntervalData>(), WorkShiftLengthHintOption.AverageWorkTime,
 			                            false, false, 0.5, 1);
 			Assert.IsNull(result);
 		}
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		{
 			var period1 = new DateTimePeriod(_start.AddMinutes(30), _end.AddMinutes(30));
 			ISkillIntervalData data2 = new SkillIntervalData(period1, 5, -5, 0, null, null);
-			_dic.Add(period1.StartDateTime, data2);
+			_dic.Add(period1.StartDateTime.TimeOfDay, data2);
 
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(15), _end.AddMinutes(20));
 			IMainShift mainShift = MainShiftFactory.CreateMainShift(_phoneActivity, period2, new ShiftCategory("cat"));
@@ -276,6 +276,41 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 										_dic, WorkShiftLengthHintOption.AverageWorkTime,
 										false, false, 0.5, 1);
 				Assert.AreEqual(0, result);
+			}
+		}
+
+		[Test]
+		public void ShouldCalculateLayerStartingAfterMidnight()
+		{
+			_start = new DateTime(2009, 02, 02, 23, 0, 0, DateTimeKind.Utc);
+			_end = new DateTime(2009, 02, 03, 0, 0, 0, DateTimeKind.Utc);
+			DateTimePeriod period1 = new DateTimePeriod(_start, _end);
+			DateTimePeriod period2 = new DateTimePeriod(_start.AddHours(1), _end.AddHours(1));
+			IMainShift mainShift = MainShiftFactory.CreateMainShift(_phoneActivity, period1, new ShiftCategory("cat"));
+			IMainShiftActivityLayer mainShiftActivityLayer = new MainShiftActivityLayer(_phoneActivity, period2);
+			mainShift.LayerCollection.Add(mainShiftActivityLayer);
+			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
+			var data1 = new SkillIntervalData(period1, 5, -5, 0, null, null);
+			var data2 = new SkillIntervalData(period2, 5, -5, 0, null, null);
+			_dic.Clear();
+			_dic.Add(new TimeSpan(23, 0 , 0), data1);
+			_dic.Add(new TimeSpan(1, 0, 0, 0), data2);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(data1, 60, false, false, 0.5, 1)).Return(5);
+				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(data2, 60, false, false, 0.5, 1)).Return(7);
+				Expect.Call(_workShiftLengthValueCalculator.CalculateShiftValueForPeriod(12, 120,
+																						 WorkShiftLengthHintOption.AverageWorkTime))
+					.Return(50);
+			}
+
+			using (_mocks.Playback())
+			{
+				double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
+										_dic, WorkShiftLengthHintOption.AverageWorkTime,
+										false, false, 0.5, 1);
+				Assert.AreEqual(50, result);
 			}
 		}
 	}
