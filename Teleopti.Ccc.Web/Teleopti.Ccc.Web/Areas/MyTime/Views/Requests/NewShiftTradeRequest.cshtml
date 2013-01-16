@@ -1,5 +1,5 @@
 ﻿@using Teleopti.Ccc.UserTexts
-<div id="Request-add-shift-trade" style="display: none;background-color: lightpink">
+<div id="Request-add-shift-trade" class="shift-trade-add-canvas ui-corner-all">
 	<div style="background-color: lightblue;z-index: 10;display: block" class="friendly-message ui-corner-all" data-bind="visible : hasWorkflowControlSet">
 		@Resources.MissingWorkflowControlSet
 	</div>
@@ -8,15 +8,25 @@
 		<input id="Request-add-shift-trade-datepicker" type="text" data-bind="datepicker: selectedDate" style="position:relative; z-index: 9999999" />
 		<button data-bind="click : nextDate">></button>
 	</div>
-	<div class="shift-trade-my-schedule ui-corner-all">
-		<span data-bind="foreach: mySchedule().layers">
-			<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
-		</span>
-		<span id="shift-trade-timeline" data-bind="foreach: hours">
+	<div class="shift-trade-add-schedule ui-corner-bottom">
+		<div id="shift-trade-timeline" data-bind="foreach: hours" style="height: 100%; position: absolute; left: 150px">
 			<span class="shift-trade-timeline-line" data-bind="style: { width : width }">
 				<span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText"></span>
 			</span>
-		</span>
+		</div>
+		<div style="position:relative; height: 30px">
+			<span style="width: 150px; float: left">Ashley Andeen</span>
+			<div data-bind="foreach: mySchedule().layers" style="position:relative; display: inline; height: 30px">
+				<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
+			</div>
+		</div>
+		<div data-bind="foreach: possibleTradeSchedules">
+			<div class="shedulePrul" style="position:relative; height: 30px;">
+				<span data-bind="text: agentName" style="width: 150px; float: left"></span>
+				<div data-bind="foreach: $data.layers" style="position:relative; display: inline">
+					<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>					
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
-

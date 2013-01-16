@@ -23,12 +23,28 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.timeLineLengthInMinutes = ko.observable(0);
 		self.hours = ko.observableArray();
 		self.mySchedule = ko.observable(new scheduleViewModel());
+		self.possibleTradeSchedules = ko.observableArray();
 
-		self._createMyScheduleLayers = function (mySchedule) {
-			var arrayMap = ko.utils.arrayMap(mySchedule.ScheduleLayers, function (layer) {
-				return new layerViewModel(layer, self);
+		self._createMySchedule = function (myScheduleObject) {
+			var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
+				return new layerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
 			});
-			self.mySchedule(new scheduleViewModel(arrayMap, mySchedule.MinutesSinceTimeLineStart));
+			self.mySchedule(new scheduleViewModel(mappedlayers, myScheduleObject));
+		};
+
+		self._createPossibleTradeSchedules = function (possibleTradePersons) {
+			console.log(possibleTradePersons);
+			var mappedPersonsSchedule = ko.utils.arrayMap(possibleTradePersons, function (personSchedule) {
+
+				var mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
+					return new layerViewModel(layer, personSchedule.MinutesSinceTimeLineStart, self.pixelPerMinute());
+				});
+
+				return new scheduleViewModel(mappedLayers, personSchedule);
+			});
+
+			self.possibleTradeSchedules(mappedPersonsSchedule);
+			console.log(self.possibleTradeSchedules());
 		};
 
 		self._createTimeLine = function (hours) {
@@ -81,7 +97,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				data: { selectedDate: self.selectedDate().toDate().toJSON() },
 				success: function (data, textStatus, jqXHR) {
 					self.timeLineLengthInMinutes(data.TimeLineLengthInMinutes);
-					self._createMyScheduleLayers(data.MySchedule);
+					self._createMySchedule(data.MySchedule);
+					self._createPossibleTradeSchedules(data.PossibleTradePersons);
 					self._createTimeLine(data.TimeLineHours);
 					//console.log(data);
 				},
@@ -101,15 +118,22 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 	}
 
-	function scheduleViewModel(layers, minutesSinceTimeLineStart) {
+	function scheduleViewModel(layers, scheduleObject) {
 		var self = this;
+		var minutesSinceTimeLineStart = 0;
+		var agentName = '';
+		if (scheduleObject) {
+			agentName = scheduleObject.Name;
+			minutesSinceTimeLineStart = scheduleObject.MinutesSinceTimeLineStart;
+		}
 
+		self.agentName = agentName;
 		self.layers = layers;
 		self.minutesSinceTimeLineStart = minutesSinceTimeLineStart;
 
 	}
 
-	function layerViewModel(layer, parentViewModel) {
+	function layerViewModel(layer, minutesSinceTimeLineStart, pixelPerMinute) {
 		var self = this;
 
 		self.payload = layer.Payload;
@@ -118,11 +142,13 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.endTime = layer.EndTimeText;
 		self.lengthInMinutes = layer.LengthInMinutes;
 		self.leftPx = ko.computed(function () {
-			var timeLineoffset = parentViewModel.mySchedule().minutesSinceTimeLineStart;
-			return (layer.ElapsedMinutesSinceShiftStart + timeLineoffset) * parentViewModel.pixelPerMinute() + 'px';
+			var timeLineoffset = minutesSinceTimeLineStart;
+			console.log('layer.ElapsedMinutesSinceShiftStart: ' + layer.ElapsedMinutesSinceShiftStart);
+			console.log('timeLineoffset: ' + timeLineoffset);
+			return (layer.ElapsedMinutesSinceShiftStart + timeLineoffset) * pixelPerMinute + 'px';
 		});
 		self.paddingLeft = ko.computed(function () {
-			return self.lengthInMinutes * parentViewModel.pixelPerMinute() + 'px';
+			return self.lengthInMinutes * pixelPerMinute + 'px';
 		});
 		self.title = ko.computed(function () {
 			return self.startTime + '-' + self.endTime + ' ' + self.payload;
