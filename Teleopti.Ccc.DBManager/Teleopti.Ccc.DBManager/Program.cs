@@ -456,6 +456,7 @@ namespace Teleopti.Ccc.DBManager
 				creator.CreateDatabase(databaseType, databaseName);
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
 		private static bool SQLVersionGreaterThen(string checkVersion)
 		{
 			string serverVersion = _sqlConnection.ServerVersion;
@@ -463,15 +464,15 @@ namespace Teleopti.Ccc.DBManager
 			string[] checkVersionDetails = checkVersion.Split(new string[] { "." }, StringSplitOptions.None);
 
 			if (checkVersionDetails.Length < 3 && serverVersionDetails.Length < 3)
-				throw new Exception("Unknown version string given from SQL Server or DBManager code");
+				throw new Exception("Unknown version string given from SQL Server or in code");
 
-				int majorVersionNumber = int.Parse(serverVersionDetails[0]);
-				int minorVersionNumber = int.Parse(serverVersionDetails[1]);
-				int buildVersionNumber = int.Parse(serverVersionDetails[2]);
+				int majorVersionNumber = int.Parse(serverVersionDetails[0], CultureInfo.InvariantCulture);
+				int minorVersionNumber = int.Parse(serverVersionDetails[1], CultureInfo.InvariantCulture);
+				int buildVersionNumber = int.Parse(serverVersionDetails[2], CultureInfo.InvariantCulture);
 
-				int majorCheckVersionNumber = int.Parse(checkVersionDetails[0]);
-				int minorCheckVersionNumber = int.Parse(checkVersionDetails[1]);
-				int buildCheckVersionNumber = int.Parse(checkVersionDetails[2]);
+				int majorCheckVersionNumber = int.Parse(checkVersionDetails[0], CultureInfo.InvariantCulture);
+				int minorCheckVersionNumber = int.Parse(checkVersionDetails[1], CultureInfo.InvariantCulture);
+				int buildCheckVersionNumber = int.Parse(checkVersionDetails[2], CultureInfo.InvariantCulture);
 
 				if (majorCheckVersionNumber < majorVersionNumber && minorCheckVersionNumber < minorVersionNumber && buildCheckVersionNumber < buildVersionNumber)
 					return false;
