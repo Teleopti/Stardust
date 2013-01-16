@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Schedule;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Meetings.Overview
 {
@@ -12,7 +13,10 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
         public CalendarAndTextPanel()
         {
             InitializeComponent();
-            monthCalendarAdv1.Culture = CultureInfo.CurrentCulture;
+			var cultureInfo = CultureInfo.CurrentCulture;
+			monthCalendarAdv1.Culture = cultureInfo;
+			monthCalendarAdv1.Iso8601CalenderFormat =
+				DateHelper.Iso8601Cultures.Contains(cultureInfo.LCID);
         }
 
         void MonthCalendarAdv1DateSelected(object sender, EventArgs e)
