@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 _nonBlendSkillCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods, false);
             }
 
-        _stateHolder.OnResourcesChanged(new List<DateOnly> {localDate});
+        //_stateHolder.OnResourcesChanged(new List<DateOnly> {localDate});
             
         }
 

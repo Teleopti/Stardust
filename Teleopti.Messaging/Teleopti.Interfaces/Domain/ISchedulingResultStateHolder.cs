@@ -3,31 +3,31 @@ using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
-	/// <summary>
-	/// Event args for changed resources
-	/// </summary>
-	public class ResourceChangedEventArgs : EventArgs
-	{
-		private readonly IEnumerable<DateOnly> _changedDays;
+	///// <summary>
+	///// Event args for changed resources
+	///// </summary>
+	//public class ResourceChangedEventArgs : EventArgs
+	//{
+	//    private readonly IEnumerable<DateOnly> _changedDays;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ResourceChangedEventArgs"/> class.
-		/// </summary>
-		/// <param name="changedDays">The changed days.</param>
-		public ResourceChangedEventArgs(IEnumerable<DateOnly> changedDays)
-		{
-			_changedDays = changedDays;
-		}
+	//    ///// <summary>
+	//    ///// Initializes a new instance of the <see cref="ResourceChangedEventArgs"/> class.
+	//    ///// </summary>
+	//    ///// <param name="changedDays">The changed days.</param>
+	//    //public ResourceChangedEventArgs(IEnumerable<DateOnly> changedDays)
+	//    //{
+	//    //    _changedDays = changedDays;
+	//    //}
 
-		/// <summary>
-		/// Gets the changed days.
-		/// </summary>
-		/// <value>The changed days.</value>
-		public IEnumerable<DateOnly> ChangedDays
-		{
-			get { return _changedDays; }
-		}
-	}
+	//    /// <summary>
+	//    /// Gets the changed days.
+	//    /// </summary>
+	//    /// <value>The changed days.</value>
+	//    public IEnumerable<DateOnly> ChangedDays
+	//    {
+	//        get { return _changedDays; }
+	//    }
+	//}
 
     /// <summary>
     /// Scheduling result state holder
@@ -113,14 +113,14 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         IList<ISkillDay> SkillDaysOnDateOnly(IList<DateOnly> theDateList);
 
-        /// <summary>
-        /// Raises the ResourcesChanged event.
-        /// </summary>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-05-04
-        /// </remarks>
-        void OnResourcesChanged(IList<DateOnly> changedDays);
+		///// <summary>
+		///// Raises the ResourcesChanged event.
+		///// </summary>
+		///// <remarks>
+		///// Created by: micke
+		///// Created date: 2008-05-04
+		///// </remarks>
+		//void OnResourcesChanged(IList<DateOnly> changedDays);
 
         /// <summary>
         /// Gets the skill staff period holder.
@@ -138,10 +138,10 @@ namespace Teleopti.Interfaces.Domain
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         IList<IShiftCategory> ShiftCategories { get; set; }
 
-        /// <summary>
-		/// Occurs when [resources changed].
-		/// </summary>
-		event EventHandler<ResourceChangedEventArgs> ResourcesChanged;
+		///// <summary>
+		///// Occurs when [resources changed].
+		///// </summary>
+		//event EventHandler<ResourceChangedEventArgs> ResourcesChanged;
 
 		///<summary>
 		/// If the scheduler is opened in Team Leader Mode
