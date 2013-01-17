@@ -3,6 +3,9 @@
 SET DIRECTORY=%~dp0
 SET FILE=%~n0
 
+::try start the service before we contiune
+net start "task scheduler" >> "%FILE%.log"
+
 ::Delete if exist
 schtasks /Delete /F /TN "CopyPayrollDll" >> "%FILE%.log"
 
