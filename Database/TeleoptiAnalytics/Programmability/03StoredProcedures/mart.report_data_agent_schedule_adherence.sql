@@ -148,7 +148,8 @@ CREATE TABLE #result (
 	maxinterval datetime,
 	date_interval_counter int, --new 20130117
 	person_min_shiftstart_interval int,
-	person_max_shiftstart_interval int
+	person_max_shiftend_interval int, 
+	
 	)
 
 CREATE TABLE #counter(
@@ -624,7 +625,7 @@ INNER JOIN mart.dim_activity a on a.activity_id =-1
 WHERE r.count_activity_per_interval >1
 
 INSERT INTO #minmax
-SELECT min(r.interval_id) minint ,max(r.interval_id) maxint, person_id, date,shift_startdate_id, min(di.interval_start),max(di.interval_start)
+SELECT min(r.interval_id) minint ,max(r.interval_id) maxint, person_id, date,shift_startdate_id, min(di.interval_start),max(di.interval_end)
 FROM #result r
 INNER JOIN mart.dim_interval di ON r.interval_id=di.interval_id
 GROUP BY shift_startdate_id,person_id, date 
