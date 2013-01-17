@@ -12,7 +12,7 @@ $JOB = "Teleopti.Ccc.BlobStorageCopy"
 ## Local debug values
 <#
 $BlobPath = "http://teleopticcc7.blob.core.windows.net/"
-$ContainerName="teleopticcc/Payroll/"
+$ContainerName="teleopticcc/Payroll"
 $AccountKey = "IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ=="
 $DataSourceName = "teleopticcc-dev"
 #>
