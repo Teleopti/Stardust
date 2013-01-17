@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
         public void LogOn(ICommandLineArgument argument, DatabaseHandler databaseHandler, IBusinessUnit businessUnit, IPerson convertPerson)
         {
 			InitializeApplication initializeApplication = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForApplicationConfig()), null);
-            initializeApplication.Start(new StateNewVersion(), databaseHandler.DataSourceSettings(), "");
+            initializeApplication.Start(new StateNewVersion(), databaseHandler.DataSourceSettings(), "", new ConfigurationManagerWrapper());
 
             AvailableDataSourcesProvider availableDataSourcesProvider =
                 new AvailableDataSourcesProvider(StateHolderReader.Instance.StateReader.ApplicationScopeData);

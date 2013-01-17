@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Win.Main
 				new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
 				{
 					MessageBrokerDisabled = messageBrokerDisabled
-				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath));
+				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath), new ConfigurationManagerWrapper());
             return true;
         }
 

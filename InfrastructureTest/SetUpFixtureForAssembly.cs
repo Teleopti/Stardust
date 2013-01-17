@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		/// <summary>
 		/// Runs before any test.
 		/// </summary>
-		[SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), SetUp]
 		public void RunBeforeAnyTest()
 		{
 			mocks = new MockRepository();
