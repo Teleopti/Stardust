@@ -789,6 +789,7 @@
     <Compile Include="Scheduling\TimeLayer\MultiplicatorDefinitionSet.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorLayer.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorProjectionService.cs" />
+    <Compile Include="Scheduling\WorkShiftCalculation\EqualWorkShiftValueDecider.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\IntervalDataMedianCalculator.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\DynamicBlockFinder.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\RestrictionAggregator.cs" />
