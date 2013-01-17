@@ -10,27 +10,31 @@ $directory
 $JOB = "Teleopti.Ccc.BlobStorageCopy"
 
 ## Local debug values
-
+<#
 $BlobPath = "http://teleopticcc7.blob.core.windows.net/"
 $ContainerName="teleopticcc/Payroll/"
 $AccountKey = "IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ=="
 $DataSourceName = "teleopticcc-dev"
+#>
 
 ## Get environment varaibles
-<#
 $BlobPath = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.BlobPath")
 $ContainerName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.ContainerName")
 $AccountKey = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.AccountKey")
 $DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
-#>
 
-$BlobSource = $BlobPath + $ContainerName + $DataSourceName
+$BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
+$BlobSource
 
 ## Destination directory. Files in this directory will mirror the source directory. Extra files will be deleted!
 $DESTINATION = "c:\temp\PayrollInbox"
+if (-not(test-path -path $DESTINATION))
+{
+    mkdir $DESTINATION
+}
 
 ## FileWatch destination directory
-$FILEWATCH = "c:\temp\PayrollFilewatch"
+$FILEWATCH = ".\..\Services\ServiceBus\Payroll.DeployNew"
 
 ## Path to AzCopy logfile
 $LOGFILE = "c:\temp\PayrollInbox"
@@ -53,7 +57,7 @@ $TIME = get-date -uformat "%T"
 ## Wrap all above arguments
 $cmdArgs = @("$BlobSource","$DESTINATION",$OPTIONS)
 
-$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
+$AzCopyExe = ".\ccc7_azure\AzCopy\AzCopy.exe"
 
 ## Start the azcopy with above parameters and log errors in Windows Eventlog.
 & $AzCopyExe @cmdArgs
