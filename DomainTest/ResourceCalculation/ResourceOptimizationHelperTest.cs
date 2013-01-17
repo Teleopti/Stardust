@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary).Return(skillStaffPeriodDictionary).
                 Repeat.
                 AtLeastOnce();
-            _stateHolder.OnResourcesChanged(null);
+           
             LastCall.IgnoreArguments();
             Expect.Call(skill1.DefaultResolution).Return(15);
             Expect.Call(skill1.Activity).Return(activity).Repeat.AtLeastOnce();
