@@ -19,6 +19,15 @@ SET ROOTDIR=%ROOTDIR:~0,-1%
 CD "%ROOTDIR%"
 
 SET /P MyServerInstance=Your SQL Server instance: 
+
+CHOICE /C yn /M "Do you want to use WinAuth?"
+IF ERRORLEVEL 1 SET /a WinAuth=1
+IF ERRORLEVEL 2 SET /a WinAuth=0
+
+::Check input
+IF %WinAuth% equ 1 Call :WinAuth
+IF %WinAuth% equ 0 Call :SQLAuth
+
 SET /P DATABASE=Database name to patch: 
 
 SET /P DATABASETYPE=Database type [TeleoptiCCC7,TeleoptiCCCAgg,TeleoptiAnalytics]: 
@@ -57,8 +66,8 @@ GOTO :error
 ::Patch DB
 ::Upgrade DB to latest version, we now always include trunk
 CD "%DBMANAGERPATH%"
-ECHO "%DBMANAGER%" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E -R -T -Lsa:dummyPwd
-"%DBMANAGER%" -S%MyServerInstance% -E -D%DATABASE% -O%DATABASETYPE% -E -R -T -Lsa:dummyPwd
+ECHO "%DBMANAGER%" -S%MyServerInstance% %Conn1% -D%DATABASE% -O%DATABASETYPE% -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2
+"%DBMANAGER%" -S%MyServerInstance% %Conn1% -D%DATABASE% -O%DATABASETYPE% -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2
 IF %ERRORLEVEL% NEQ 0 (
 SET /A ERRORLEV=2
 GOTO :error
@@ -68,7 +77,7 @@ CD "%ROOTDIR%"
 
 IF %ISCCC7% EQU 1 (
 ECHO Encrypting passwords ...
-"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% -EE
+"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% %Conn2%
 IF %ERRORLEVEL% NEQ 0 (
 SET /A ERRORLEV=10
 GOTO :error
@@ -77,16 +86,10 @@ GOTO :error
 
 IF %CROSSDB% EQU 1 (
 ECHO Fix Cross DB stuff
-"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD"%DATABASE%" -CD"%TeleoptiCCCAgg%" -EE
+"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD"%DATABASE%" -CD"%TeleoptiCCCAgg%" %Conn2%
 if %errorlevel% NEQ 0 (
 SET /A ERRORLEV=1
 GOTO :error
-)
-ECHO Adding views for Crossdatabases
-SQLCMD -S%MyServerInstance% -E -d%DATABASE% -Q"EXEC mart.sys_crossDatabaseView_load"
-if %errorlevel% NEQ 0 (
-SET /A ERRORLEV=5
-GOTO :Error
 )
 )
 
@@ -94,6 +97,19 @@ ECHO.
 ECHO upgrade successfull!
 CD "%ROOTDIR%"
 GOTO Finish
+
+::Set Auth string
+:WinAuth
+SET Conn1=-E
+SET Conn2=-EE
+goto :eof
+
+:SQLAuth
+SET /P SQLLogin=SQL Login: 
+SET /P SQLPwd=SQL password: 
+SET Conn1=-U%SQLLogin% -P%SQLPwd%
+SET Conn2=-DU%SQLLogin% -DP%SQLPwd%
+goto :eof
 
 :Error
 CD "%ROOTDIR%"
