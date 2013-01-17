@@ -85,6 +85,7 @@
   <ItemGroup>
     <None Include="..\Teleopti.Ccc.Sdk.ServiceBus.Host\App.config">
       <Link>App.config</Link>
+      <SubType>Designer</SubType>
     </None>
     <None Include="..\Teleopti.Ccc.Sdk.ServiceBus.Host\DenormalizeQueue.config">
       <Link>DenormalizeQueue.config</Link>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Exceptions;
 using Teleopti.Messaging.SignalR;
 

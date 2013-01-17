@@ -6,7 +6,6 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Teleopti.Messaging.Composites;
 using log4net;
 using NHibernate.Cfg.ConfigurationSchema;
 using Teleopti.Ccc.Domain.Helper;
@@ -14,10 +13,8 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Exceptions;
 using System.Xml.XPath;
-using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {

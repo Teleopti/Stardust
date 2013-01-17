@@ -4,7 +4,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.SignalR;
 

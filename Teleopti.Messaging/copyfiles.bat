@@ -1,1 +1,0 @@
-xcopy C:\Data\RaptorScrum\Root\Teleopti.Messaging\TeleOpti.Messaging.Bin\*.* C:\Data\RaptorScrum\Root\ /y

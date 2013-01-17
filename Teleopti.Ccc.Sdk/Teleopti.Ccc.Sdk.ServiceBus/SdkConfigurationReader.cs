@@ -12,7 +12,6 @@ using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
-using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.SignalR;
 
