@@ -19,12 +19,15 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 				requestViewModel.TextRequestTabVisible(true);
 				requestViewModel.AbsenceRequestTabVisible(true);
 				requestViewModel.isUpdate(false);
+				_initEditSection(requestViewModel);
 				_hideEditSection();
 				_showEditSection();
+				
 				$('#Text-request-tab').click();
 			})
-			.removeAttr('disabled')
-			;
+			.removeAttr('disabled');
+
+			
 	}
 
 	function _initTemporary() {
