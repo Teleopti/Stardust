@@ -56,7 +56,7 @@ IF NOT EXIST "%ConfigPath%\DummyFolder" mkdir "%ConfigPath%\DummyFolder"
 
 ::Replace dataSouceName in nhib
 cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\SDK\TeleoptiCCC7.nhib.xml"
-cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\ETL\Tools\TeleoptiCCC7.nhib.xml"
+cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\ETL\Tool\TeleoptiCCC7.nhib.xml"
 cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\ETL\Service\TeleoptiCCC7.nhib.xml"
 cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\Web\TeleoptiCCC7.nhib.xml"
 
