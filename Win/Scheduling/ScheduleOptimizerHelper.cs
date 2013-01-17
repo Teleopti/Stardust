@@ -702,6 +702,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             matrixOvertimeLocker.Execute();
             IMatrixNoMainShiftLocker noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
             noMainShiftLocker.Execute();
+			IMatrixMultipleShiftsLocker matrixMultipleShiftsLocker = new MatrixMultipleShiftsLocker(matrixList);
+			matrixMultipleShiftsLocker.Execute();
         }
 
         internal void RunWorkShiftOptimization(
