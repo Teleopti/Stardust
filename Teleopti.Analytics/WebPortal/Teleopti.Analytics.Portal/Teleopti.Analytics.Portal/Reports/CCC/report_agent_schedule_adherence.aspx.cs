@@ -416,7 +416,8 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			var perDate = ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"));
 			var tableRowList = MakeTableRowList();
 			var dataRowReaders = from r in _dataTable.Rows.Cast<DataRow>() select new DataCellModel(r, this, perDate);
-			var dataPerPerson = from r in dataRowReaders group r by new PersonModel(r.DataRow, perDate);
+			//var dataPerPerson = from r in dataRowReaders group r by new PersonModel(r.DataRow, perDate);
+			var dataPerPerson = dataRowReaders.GroupBy(r => new PersonModel(r.DataRow, perDate));
 			dataPerPerson.ForEach((a, b) => ProcessPersonData(a, b, tableRowList));
 			return tableRowList.ToArray();
 		}
@@ -563,16 +564,16 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		public IntervalToolTip GetToolTip(int personId, int interval)
 		{
 			var toolTipList = _intervalToolTipDictionary[personId];
-			var toolTip = toolTipList.Where(t => interval >= t.StartInterval &&
-							   interval <= t.EndInterval).FirstOrDefault();
+			var toolTip = toolTipList.Where(t => interval >= t.StartIntervalCounter &&
+							   interval <= t.EndIntervalCounter).FirstOrDefault();
 			return toolTip;
 		}
 
 		public IntervalToolTip GetToolTip(DateTime date, int getIntervalId)
 		{
 			var toolTipList = _intervalDateToolTipDictionary[date];
-			var toolTip = toolTipList.Where(t => getIntervalId >= t.StartInterval &&
-							   getIntervalId <= t.EndInterval).FirstOrDefault();
+			var toolTip = toolTipList.Where(t => getIntervalId >= t.StartIntervalCounter &&
+							   getIntervalId <= t.EndIntervalCounter).FirstOrDefault();
 			return toolTip;
 		}
 
@@ -735,6 +736,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			var previousActivityId = -2;
 			var previousAbsenceId = -2;
 			var previousIntervalId = -2;
+			var previousIntervalCounter = -2;
 			IntervalToolTip intervalToolTip = null;
 			IList<IntervalToolTip> intervalToolTipList = null;//new List<IntervalToolTip>();
 			_timeLineStartInterval = _intervalsPerDay;
@@ -754,7 +756,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					_timeLineDayTwoEndInterval = (int)row["interval_id"];
 				}
 
-				if (previousDate != (DateTime)row["date"])
+				if (previousDate != (DateTime)row["shift_startdate"])
 				{
 					// Count the nr of detail rows we will need
 					_personCount++;
@@ -764,6 +766,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					if (intervalToolTip != null && intervalToolTipList != null)
 					{
 						intervalToolTip.EndInterval = previousIntervalId;
+						intervalToolTip.EndIntervalCounter = previousIntervalCounter;
 						intervalToolTipList.Add(intervalToolTip);
 						if (!_intervalDateToolTipDictionary.ContainsKey(previousDate))
 							_intervalDateToolTipDictionary.Add(previousDate, intervalToolTipList);
@@ -773,6 +776,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					intervalToolTip = new IntervalToolTip
 					{
 						StartInterval = ((int)row["interval_id"]),
+						StartIntervalCounter = ((int)row["date_interval_counter"]),
 						AbsenceOrActivityName = ((String)row["activity_absence_name"])
 					};
 
@@ -793,20 +797,24 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					intervalToolTip = new IntervalToolTip
 					{
 						StartInterval = ((int)row["interval_id"]),
+						StartIntervalCounter = ((int)row["date_interval_counter"]),
+
 						AbsenceOrActivityName = ((String)row["activity_absence_name"])
 					};
 				}
 
-				previousDate = (DateTime)row["date"];
+				previousDate = (DateTime)row["shift_startdate"];
 				previousActivityId = (int)row["activity_id"];
 				previousAbsenceId = (int)row["absence_id"];
 				previousIntervalId = (int)row["interval_id"];
+				previousIntervalCounter = (int)row["date_interval_counter"];
 			}
 
 			// Catch the end of the last layer. Save the end interval of the last layer into tooltip object.
 			if (intervalToolTip != null && intervalToolTipList != null)
 			{
 				intervalToolTip.EndInterval = previousIntervalId;
+				intervalToolTip.EndIntervalCounter = previousIntervalCounter;
 				intervalToolTipList.Add(intervalToolTip);
 				if (!_intervalDateToolTipDictionary.ContainsKey(previousDate))
 					_intervalDateToolTipDictionary.Add(previousDate, intervalToolTipList);
@@ -838,6 +846,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			var previousActivityId = -2;
 			var previousAbsenceId = -2;
 			var previousIntervalId = -2;
+			var previousIntervalCounter = -2;
 			IntervalToolTip intervalToolTip = null;
 			IList<IntervalToolTip> intervalToolTipList = null;//new List<IntervalToolTip>();
 			_timeLineStartInterval = _intervalsPerDay;
@@ -868,6 +877,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					if (intervalToolTip != null && intervalToolTipList != null)
 					{
 						intervalToolTip.EndInterval = previousIntervalId;
+						intervalToolTip.EndIntervalCounter = previousIntervalCounter;
 						intervalToolTipList.Add(intervalToolTip);
 						_intervalToolTipDictionary.Add(previousPersonId, intervalToolTipList);
 					}
@@ -876,6 +886,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					intervalToolTip = new IntervalToolTip
 					{
 						StartInterval = ((int)row["interval_id"]),
+						StartIntervalCounter = ((int)row["date_interval_counter"]),
 						AbsenceOrActivityName = ((String)row["activity_absence_name"])
 					};
 
@@ -890,12 +901,14 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					if (intervalToolTip != null && intervalToolTipList != null)
 					{
 						intervalToolTip.EndInterval = previousIntervalId;
+						intervalToolTip.EndIntervalCounter = previousIntervalCounter;
 						intervalToolTipList.Add(intervalToolTip);
 					}
 
 					intervalToolTip = new IntervalToolTip
 										  {
 											  StartInterval = ((int)row["interval_id"]),
+											  StartIntervalCounter = ((int)row["date_interval_counter"]),
 											  AbsenceOrActivityName = ((String)row["activity_absence_name"])
 										  };
 				}
@@ -904,12 +917,14 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 				previousActivityId = (int)row["activity_id"];
 				previousAbsenceId = (int)row["absence_id"];
 				previousIntervalId = (int)row["interval_id"];
+				previousIntervalCounter = (int)row["date_interval_counter"];
 			}
 
 			// Catch the end of the last layer. Save the end interval of the last layer into tooltip object.
 			if (intervalToolTip != null && intervalToolTipList != null)
 			{
 				intervalToolTip.EndInterval = previousIntervalId;
+				intervalToolTip.EndIntervalCounter = previousIntervalCounter;
 				intervalToolTipList.Add(intervalToolTip);
 				_intervalToolTipDictionary.Add(previousPersonId, intervalToolTipList);
 			}

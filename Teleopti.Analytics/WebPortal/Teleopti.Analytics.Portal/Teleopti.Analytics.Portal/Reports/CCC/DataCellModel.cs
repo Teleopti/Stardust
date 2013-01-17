@@ -47,6 +47,8 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		public int IntervalId { get { return (int)DataRow["interval_id"]; } }
 
+		public int IntervalCounter { get { return (int)DataRow["date_interval_counter"]; } }
+
 		public int PersonId { get { return (int)DataRow["person_id"]; } }
 
 		public DateTime Date
@@ -70,9 +72,9 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			{
 				if (_perDate)
 				{
-					return _tooltipContainer.GetToolTip(Date, IntervalId);
+					return _tooltipContainer.GetToolTip(ShiftStartDate, IntervalCounter);
 				}
-				return _tooltipContainer.GetToolTip(PersonId, IntervalId);
+				return _tooltipContainer.GetToolTip(PersonId, IntervalCounter);
 			} 
 		}
 
