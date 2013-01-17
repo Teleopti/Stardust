@@ -27,7 +27,10 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
             countString = ' (' + messageCount + ')';
 
         var messageTab = $('a[href*="#MessageTab"]');
-        messageTab.addClass("asm-new-message-indicator");
+		
+		if (messageCount > 0) { messageTab.addClass("asm-new-message-indicator"); }
+		else { messageTab.removeClass("asm-new-message-indicator"); }
+
         var pos = messageTab.text().indexOf(' (', 0);
         if (pos == -1) {
             pos = messageTab.text().length;
