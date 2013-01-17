@@ -77,7 +77,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
         public void SetCulture(CultureInfo cultureInfo)
         {
             dateTimePickerAdvWorkAStartDate.Culture = cultureInfo;
+        	dateTimePickerAdvWorkAStartDate.Calendar.Iso8601CalenderFormat =
+        		DateHelper.Iso8601Cultures.Contains(cultureInfo.LCID);
             dateTimePickerAdvWorkEndPeriod.Culture = cultureInfo;
+			dateTimePickerAdvWorkEndPeriod.Calendar.Iso8601CalenderFormat =
+				DateHelper.Iso8601Cultures.Contains(cultureInfo.LCID);
         }
 
         private void SetColors()
