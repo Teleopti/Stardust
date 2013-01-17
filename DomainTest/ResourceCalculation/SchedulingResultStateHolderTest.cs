@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     public class SchedulingResultStateHolderTest
     {
         private DateTimePeriod _period;
-        //private bool eventRaised;
 
         [SetUp]
         public void Setup()
@@ -81,17 +80,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreNotSame(previousHolder, target.SkillStaffPeriodHolder);
         }
 
-		//[Test]
-		//public void VerifyResourceChangedEvent()
-		//{
-		//    SchedulingResultStateHolder target = SchedulingResultStateHolderFactory.Create(_period);
-
-		//    target.ResourcesChanged += target_ResourcesChanged;
-		//    eventRaised = false;
-		//    target.OnResourcesChanged(new List<DateOnly> { new DateOnly(_period.LocalStartDateTime) });
-		//    Assert.IsTrue(eventRaised);
-		//}
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void VisibleSkillsShouldContainMaxSeatSkillsAndNonBlendSkills()
 		{
@@ -105,11 +93,5 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IList<ISkill> result = target.VisibleSkills;
 			Assert.AreEqual(3, result.Count);
 		}
-
-		//void target_ResourcesChanged(object sender, ResourceChangedEventArgs e)
-		//{
-		//    eventRaised = true;
-		//}
-
     }
 }

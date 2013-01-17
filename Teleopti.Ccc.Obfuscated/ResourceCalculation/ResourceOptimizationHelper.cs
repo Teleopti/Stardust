@@ -125,22 +125,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				}
 				relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, ordinarySkills, timePeriod);
                 _nonBlendSkillCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods, false);
-            }
-
-        //_stateHolder.OnResourcesChanged(new List<DateOnly> {localDate});
-            
+            }      
         }
-
-        ///// <summary>
-        ///// Creates a skill-skillday dictionary from the inner skilldays for a specified date and a specified list of skills.
-        ///// </summary>
-        ///// <param name="keyPeriod">The key period.</param>
-        ///// <returns></returns>
-        ////private ISkillSkillStaffPeriodExtendedDictionary createSkillSkillStaffDictionary(DateTimePeriod keyPeriod)
-        ////{
-        ////    return CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
-        ////                                                   _stateHolder.Skills, keyPeriod);
-        ////}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public ISkillSkillStaffPeriodExtendedDictionary CreateSkillSkillStaffDictionaryOnSkills(ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary, IList<ISkill> skills, DateTimePeriod keyPeriod)

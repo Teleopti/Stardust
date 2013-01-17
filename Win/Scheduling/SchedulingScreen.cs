@@ -2902,7 +2902,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-
         private IList<ITeam> getDistinctTeamList(IMeeting meeting)
         {
             IList<ITeam> teams = new List<ITeam>();
@@ -2939,26 +2938,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
             }
         }
-
-		//private void _optimizationHelper_ResourcesChanged(object sender, ResourceChangedEventArgs e)
-		//{
-		//    if (InvokeRequired)
-		//    {
-		//        BeginInvoke(new EventHandler<ResourceChangedEventArgs>(_optimizationHelper_ResourcesChanged), sender, e);
-		//    }
-		//    else
-		//    {
-		//        if (_scheduleCounter >= _optimizerOriginalPreferences.SchedulingOptions.RefreshRate)
-		//        {
-		//            _skillIntradayGridControl.RefreshGrid();
-		//            _skillDayGridControl.RefreshGrid(new List<DateOnly>(e.ChangedDays));
-		//            _skillWeekGridControl.RefreshGrid();
-		//            _skillMonthGridControl.RefreshGrid();
-		//            _skillFullPeriodGridControl.RefreshGrid();
-		//            refreshChart();
-		//        }
-		//    }
-		//}
 
         private bool _updating;
 
@@ -3535,7 +3514,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             //Next line will start work on another background thread.
             //No code after next line please.
             RecalculateResources();
-
         }
 
         private void _backgroundWorkerScheduling_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -3731,7 +3709,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			refreshChart();
             statusStrip1.Refresh();
             Application.DoEvents();
-
             _inUpdate = false;
         }
 
@@ -4024,8 +4001,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             _groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container);
             _blockOptimizerHelper = new BlockOptimizerHelper(_container, _scheduleOptimizerHelper);
 
-            //SchedulerState.SchedulingResultState.ResourcesChanged += _optimizationHelper_ResourcesChanged;
-
             if (!_schedulerState.SchedulingResultState.SkipResourceCalculation)
                 backgroundWorkerLoadData.ReportProgress(1, Resources.CalculatingResourcesDotDotDot);
             _optimizationHelperWin.ResourceCalculateAllDays(e, backgroundWorkerLoadData, true);
@@ -4052,7 +4027,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _defaultScheduleTag = tag;
                 break;
             }
-
         }
 
         private void createMaxSeatSkills(ISkillDayRepository skillDayRepository)
@@ -4303,7 +4277,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     if (_scheduleView != null && _scheduleView.SelectedSchedules().Count == 1)
                         updateShiftEditor();
                 }
-
             }
         }
 
@@ -5819,8 +5792,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (SchedulerState != null && SchedulerState.Schedules != null)
                 SchedulerState.Schedules.PartModified -= _schedules_PartModified;
-			//if (SchedulerState != null && SchedulerState.SchedulingResultState != null)
-			//    SchedulerState.SchedulingResultState.ResourcesChanged -= _optimizationHelper_ResourcesChanged;
 
             if (_schedulerMeetingHelper != null)
                 _schedulerMeetingHelper.ModificationOccured -= _schedulerMeetingHelper_ModificationOccured;

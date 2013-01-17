@@ -8,8 +8,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class SchedulingResultStateHolder : ISchedulingResultStateHolder
 	{
-        //public event EventHandler<ResourceChangedEventArgs> ResourcesChanged;
-
         private IDictionary<ISkill, IList<ISkillDay>> _skillDays;
         private readonly IList<ISkill> _skills = new List<ISkill>();
         private SkillStaffPeriodHolder _skillStaffPeriodHolder;
@@ -113,22 +111,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             return ret;
         }
-
-        /// <summary>
-        /// Raises the ResourcesChanged event.
-        /// </summary>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-05-04
-        /// </remarks>
-		//public virtual void OnResourcesChanged(IList<DateOnly> changedDays)
-		//{
-		//    // Copy to a temporary variable to be thread-safe.
-		//    EventHandler<ResourceChangedEventArgs> temp = ResourcesChanged;
-		//    if (temp != null)
-
-		//        temp(this, new ResourceChangedEventArgs(changedDays));
-		//}
 
         ///<summary>
         ///Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
