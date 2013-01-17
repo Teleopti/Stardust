@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using Teleopti.Interfaces.Messages.Payroll;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {

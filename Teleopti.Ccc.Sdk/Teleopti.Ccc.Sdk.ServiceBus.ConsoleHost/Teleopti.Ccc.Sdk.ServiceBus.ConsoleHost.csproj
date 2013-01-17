@@ -95,6 +95,10 @@
       <Link>GeneralQueue.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\Teleopti.Ccc.Sdk.ServiceBus.Host\PayrollQueue.config">
+      <Link>PayrollQueue.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\Teleopti.Ccc.Sdk.ServiceBus.Host\RequestQueue.config">
       <Link>RequestQueue.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

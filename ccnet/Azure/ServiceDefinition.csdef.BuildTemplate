@@ -12,7 +12,6 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
         <VirtualApplication name="RTA" physicalDirectory="../Azure/Temp/AzureContent/RTA" />
 		<VirtualApplication name="Broker" physicalDirectory="../Azure/Temp/AzureContent/Broker" />
         <Bindings>
-<!--          <Binding name="HttpIn" endpointName="HttpIn" /> -->
           <Binding name="HttpsIn" endpointName="HttpsIn" />
         </Bindings>
       </Site>
@@ -22,7 +21,6 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
     </Certificates>
     <Endpoints>
   		<InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="$(SSLCERTNAME)" />
-<!--  		<InputEndpoint name="HttpIn" protocol="http" port="80" /> -->
     </Endpoints>
     <Imports>
 		<Import moduleName="Diagnostics" />
@@ -32,6 +30,15 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
     <Startup>
       <Task commandLine="IIS7ConfigMoveToNET4.cmd" executionContext="elevated" taskType="background" />
       <Task commandLine="InstallService.cmd" executionContext="elevated" taskType="background" />
+	  <Task commandLine="InitializeCopyPayroll.cmd" executionContext="elevated" taskType="background" />
     </Startup>
+	<ConfigurationSettings>
+		<Setting name="TeleoptiDriveMap.BlobPath" />
+		<Setting name="TeleoptiDriveMap.AccountName" />
+		<Setting name="TeleoptiDriveMap.AccountKey" />
+		<Setting name="TeleoptiDriveMap.ContainerName" />
+		<Setting name="TeleoptiDriveMap.DataSourceName" />
+	</ConfigurationSettings>
+
   </WebRole>
 </ServiceDefinition>
