@@ -133,10 +133,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			try
 			{
-				var configFolder = Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll.DeployNew\\");
-				if (!Directory.Exists(configFolder))
-					Directory.CreateDirectory(configFolder);
-				_watcher = new FileSystemWatcher(configFolder);
+				var fileWatchFolder = Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll.DeployNew\\");
+				if (!Directory.Exists(fileWatchFolder))
+					Directory.CreateDirectory(fileWatchFolder);
+				_watcher = new FileSystemWatcher(fileWatchFolder);
 				_watcher.NotifyFilter = NotifyFilters.LastWrite;
 				_watcher.Created += OnChanged;
 				_watcher.Changed += OnChanged;
@@ -170,21 +170,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 
 			stopPayrollQueue();
-
-			try
-			{
-				var destination = new SearchPath().Path;
-				var source = Directory.GetParent(e.FullPath);
-				while (source.Name != "Payroll.DeployNew")
-					source = Directory.GetParent(source.ToString());
-
-				CopyFiles(source.ToString(), destination);
-			}
-
-			catch (Exception exception)
-			{
-				log.Error("An exception was encountered when trying to load new payroll dll", exception);
-			}
 
 			startPayrollQueue();
 		}
@@ -232,6 +217,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		private void startPayrollQueue()
 		{
+			CopyPayrollDll();
+
 			var e = new Evidence(AppDomain.CurrentDomain.Evidence);
 			var setup = AppDomain.CurrentDomain.SetupInformation;
 
@@ -241,6 +228,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_payrollBus.UseFileBasedBusConfiguration("PayrollQueue.config");
 			_payrollBus.Start<BusBootStrapper>();
 			log.Info("Starting payroll queue");
+		}
+
+		private void CopyPayrollDll()
+		{
+			try
+			{
+				var destination = new SearchPath().Path;
+				var source = new DirectoryInfo(Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll.DeployNew"));
+				CopyFiles(source.ToString(), destination);
+			}
+
+			catch (Exception exception)
+			{
+				log.Error("An exception was encountered when trying to load new payroll dll", exception);
+			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
