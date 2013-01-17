@@ -52,7 +52,8 @@ namespace Teleopti.Ccc.Win.Main
             return GetConfigFromFileSystem();
         }
 
-        private static bool GetConfigFromFileSystem()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private static bool GetConfigFromFileSystem()
         {
             string nhibConfPath;
 
@@ -77,7 +78,8 @@ namespace Teleopti.Ccc.Win.Main
         public static string ErrorMessage = string.Empty;
         public static string WarningMessage = string.Empty;
 
-        private static bool GetConfigFromWebService()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private static bool GetConfigFromWebService()
         {
             ICollection<string> encryptedNHibConfigs;
             IDictionary<string, string> encryptedAppSettings;

@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         protected void Application_Start(object sender, EventArgs e)
         {
             XmlConfigurator.Configure();
