@@ -89,5 +89,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Class = "arrow-down")]
 		public Div MoreToLoadArrow { get; set; }
+		
+		[FindBy(Id = "Request-add-shift-trade-button")]
+		public Button ShiftTradeRequestsButton { get; set; }
+
+		public Div FriendlyMessage
+		{
+			get { return Document.Div(QuicklyFind.ByClass("friendly-message")); }
+		}
+
+		public SpanCollection MyScheduleLayers
+		{
+			get
+			{
+				return Document.Div(Find.ById("Request-add-shift-trade-my-schedule")).Spans;
+			}
+		}
+
+		[FindBy(Id = "Request-add-shift-trade-datepicker")]
+		public TextField AddShiftTradeDatePicker { get; set; }
+
+		public SpanCollection AddShiftTradeTimeLineItems
+		{
+			get
+			{
+				return Document.Div(Find.ById("shift-trade-timeline")).Spans;
+			}
+		}
 	}
 }

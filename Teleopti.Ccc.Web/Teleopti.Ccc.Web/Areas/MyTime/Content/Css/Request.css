@@ -116,4 +116,59 @@
 {
 	text-align: right;
 }
+.shift-trade-add-canvas
+{
+	background-color: #f8f8f8;
+	border: 1px solid rgb(216, 216, 216);
+	display: none;
+	height: 100%;
+}
+.shift-trade-layer
+{
+	position: absolute;
+	zoom: 1;
+	filter: alpha(opacity=80);
+	opacity: 0.80;
+	height: 20px;
+	z-index: 10;
+}
+.shift-trade-add-schedule
+{
+	position: relative;
+	height: 100%;
+	top: 15px;
+	background: #f8f8f8;
+	display: block;
+	z-index: 9;
+	border: 1px solid rgb(216, 216, 216);
+	border-top: 0px;
+}
+#shift-trade-timeline .shift-trade-timeline-line:last-child
+{
+	border-right: 0px;
+}
+#shift-trade-timeline .shift-trade-timeline-line:first-child .shift-trade-timeline-number:first-child
+{
+	border: 0px;
+	background: none;
+}
+.shift-trade-timeline-line 
+{
+	height: 100%;
+	float: left;
+	border-right: 1px solid rgb(216, 216, 216);
+}
 
+.shift-trade-timeline-number
+{
+	padding-left: 2px;
+	padding-right: 3px;
+	position: relative;
+	top: -19px;
+	left: -8px;
+	font-family: verdana;
+	font-size: 8px;
+	white-space: nowrap;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	background: white;
+}

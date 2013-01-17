@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[Test]
 		public void ShouldBeWrongIfOutsideOfOpenPeriod()
 		{
-			var checkItem = new ShiftTradeAvailableCheckItem { DateOnly = DateOnly.Today, PersonFrom = _personFrom, PersonTo = _personTo };
+			var checkItem = new ShiftTradeAvailableCheckItem(DateOnly.Today, _personFrom, _personTo);
 			Assert.That(_target.IsSatisfiedBy(checkItem), Is.False);
 		}
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[Test]
 		public void ShouldBeRightIfInsideOfOpenPeriod()
 		{
-			var checkItem = new ShiftTradeAvailableCheckItem { DateOnly = DateOnly.Today.AddDays(1), PersonFrom = _personFrom, PersonTo = _personTo };
+			var checkItem = new ShiftTradeAvailableCheckItem(DateOnly.Today.AddDays(1), _personFrom, _personTo);
 			Assert.That(_target.IsSatisfiedBy(checkItem), Is.True);
 		}
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		{
 			_personFrom.WorkflowControlSet = null;
 			_personTo.WorkflowControlSet = new WorkflowControlSet();
-			var checkItem = new ShiftTradeAvailableCheckItem { DateOnly = DateOnly.Today, PersonFrom = _personFrom, PersonTo = _personTo };
+			var checkItem = new ShiftTradeAvailableCheckItem(DateOnly.Today, _personFrom, _personTo);
 			Assert.That(_target.IsSatisfiedBy(checkItem), Is.False);
 		}
 	}

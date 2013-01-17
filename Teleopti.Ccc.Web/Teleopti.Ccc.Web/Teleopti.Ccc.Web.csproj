@@ -174,13 +174,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeTimeLineHoursViewModel.cs" />
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />
     <Compile Include="Areas\Start\Models\Authentication\PasswordWarningViewModel.cs" />
     <Compile Include="Areas\Team\Controllers\PersonController.cs" />
     <Compile Include="Areas\Team\Core\AutofacDependencyResolver.cs" />
     <Compile Include="Areas\Team\Core\ScheduleHub.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeRequestProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeRequestsPeriodViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestsScheduleMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestsPeriodViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleLayerViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsPeriodViewModel.cs" />
     <Compile Include="Areas\Team\TeamAreaRegistration.cs" />
     <Compile Include="Areas\Team\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MobileReports\Controllers\ReportController.cs" />
@@ -530,6 +542,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8.gif" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
