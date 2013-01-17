@@ -38,8 +38,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			return self.RequestType() + payload;
 		});
 
-
-		//TODO: too much gui-info, remove it to be called from the view
 		self.ShowDetails = function (viewmodel, event) {
 			var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
 			ajax.Ajax({

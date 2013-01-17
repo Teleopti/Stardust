@@ -100,21 +100,15 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _showRequest(data, position) {
 
-		//henke: här skulle vi kunna sätta en vymodell istället:
-		//om det är en shifttrade, skapa en shifttradedetailviewmodel istället:
-
 		if (data.TypeEnum == 2) {
 			requestViewModel = new ShiftTradeRequestDetailViewModel();
 		}
 		else {
 			requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+			requestViewModel.isUpdate(true);
+			requestViewModel.TypeEnum(data.TypeEnum);
 		}
 
-		//annars skapar vi den gamla:
-
-
-		requestViewModel.isUpdate(true);
-		requestViewModel.TypeEnum(data.TypeEnum);
 		_hideEditSection();
 		_clearFormData();
 		_showRequestTypeTab(data.TypeEnum);
@@ -285,6 +279,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 var ShiftTradeRequestDetailViewModel = function () {
 	var self = this;
+	
 	self.isUpdate = ko.observable(true);
 	self.TypeEnum = ko.observable(2);
 	self.IsFullDay = ko.observable(true);
@@ -326,8 +321,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 		$('#Request-detail-toTime-input-input').css("color", "grey");
 	}
 
-
-	//henke todo remove these (copied from the old code)
 	self.AddTextRequest = function () {
 		self._clearValidationError();
 		self.TypeEnum(0);		
