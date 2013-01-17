@@ -539,10 +539,7 @@
     <Content Include="Areas\Team\Content\Scripts\main.js" />
     <Content Include="Areas\Team\Content\Scripts\navigation.js" />
     <Content Include="Areas\Team\Content\Scripts\views\teamschedule\agent.js" />
-    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\fakeData.js" />
     <Content Include="Areas\Team\Content\Scripts\views\teamschedule\layer.js" />
-    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\resourceLayer.js" />
-    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\resources.js" />
     <Content Include="Areas\Team\Content\Scripts\views\teamschedule\timeline-time.js" />
     <Content Include="Areas\Team\Content\Scripts\views\teamschedule\timeline.js" />
     <Content Include="Areas\Team\Content\Scripts\views\teamschedule\view.js" />
