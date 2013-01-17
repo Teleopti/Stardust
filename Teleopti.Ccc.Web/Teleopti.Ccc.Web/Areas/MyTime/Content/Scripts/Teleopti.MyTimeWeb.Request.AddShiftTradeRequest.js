@@ -33,7 +33,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self._createPossibleTradeSchedules = function (possibleTradePersons) {
-			console.log(possibleTradePersons);
 			var mappedPersonsSchedule = ko.utils.arrayMap(possibleTradePersons, function (personSchedule) {
 
 				var mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
@@ -44,7 +43,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 
 			self.possibleTradeSchedules(mappedPersonsSchedule);
-			console.log(self.possibleTradeSchedules());
 		};
 
 		self._createTimeLine = function (hours) {
@@ -143,8 +141,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.lengthInMinutes = layer.LengthInMinutes;
 		self.leftPx = ko.computed(function () {
 			var timeLineoffset = minutesSinceTimeLineStart;
-			console.log('layer.ElapsedMinutesSinceShiftStart: ' + layer.ElapsedMinutesSinceShiftStart);
-			console.log('timeLineoffset: ' + timeLineoffset);
 			return (layer.ElapsedMinutesSinceShiftStart + timeLineoffset) * pixelPerMinute + 'px';
 		});
 		self.paddingLeft = ko.computed(function () {

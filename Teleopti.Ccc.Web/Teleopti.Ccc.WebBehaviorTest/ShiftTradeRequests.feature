@@ -103,7 +103,7 @@ Scenario: Show my scheduled shift
 	| Start time	| 06:00 |
 	| End time		| 16:00 |
 
-Scenario: Time line stretch to 15 minutes before and after scheduled shift
+Scenario: Time line should cover my scheduled shift
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
@@ -113,35 +113,32 @@ Scenario: Time line stretch to 15 minutes before and after scheduled shift
 	| Shift category		| Day	           |
 	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request for date '2030-01-03'
-	Then I should see the time line span from '5:50' to '16:10'
-
-Scenario: Default time line when I am not scheduled
-	Given I have the role 'Full access to mytime'
-	And Current time is '2020-10-24'
-	When I navigate to shift trade page
-	Then I should see the time line span from '7:45' to '17:15'
+	Then I should see the time line hours span from '6' to '16'
 
 Scenario: Show my scheduled day off
 	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a day off with
 	| Field | Value      |
-	| Date  | 2030-01-03 |
+	| Date  | 2030-01-04 |
 	| Name  | DayOff     |
-	And Current time is '2030-01-03'
-	When I navigate to shift trade page
+	And Current time is '2030-01-01'
+	When I view Add Shift Trade Request for date '2030-01-04'
 	Then I should see my scheduled day off 'DayOff'
+	And I should see the time line hours span from '8' to '17'
 
-@ignore
 Scenario: Show my full-day absence
 	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have absence with
 	| Field		| Value      |
 	| Date		| 2030-01-05 |
 	| Name		| Illness	 |
 	| Full Day  | True		 |
-	And Current time is '2030-01-05'
-	When I navigate to shift trade page
+	And Current time is '2030-01-01'
+	When I view Add Shift Trade Request for date '2030-01-05'
 	Then I should see my scheduled absence 'Illness'
+	And I should see the time line hours span from '8' to '17'
 
 @ignore
 Scenario: Show message when no possible shift trades

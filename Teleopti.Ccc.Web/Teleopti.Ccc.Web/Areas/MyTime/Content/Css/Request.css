@@ -130,7 +130,6 @@
 	filter: alpha(opacity=80);
 	opacity: 0.80;
 	height: 20px;
-	top: 3px;
 	z-index: 10;
 }
 .shift-trade-add-schedule
@@ -146,11 +145,12 @@
 }
 #shift-trade-timeline .shift-trade-timeline-line:last-child
 {
-	border-right: 0px;		
+	border-right: 0px;
 }
-#shift-trade-timeline .shift-trade-timeline-number:first-child
+#shift-trade-timeline .shift-trade-timeline-line:first-child .shift-trade-timeline-number:first-child
 {
-	
+	border: 0px;
+	background: none;
 }
 .shift-trade-timeline-line 
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var expectedTimes = table.Rows[0][1] + "-" + table.Rows[1][1];
 
-			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.Count, Is.GreaterThan(0));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.Any(), Is.True);
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers[0].Title, Contains.Substring(expectedTimes));
 		}
 
@@ -68,15 +69,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => DateTime.Parse(Pages.Pages.RequestsPage.AddShiftTradeDatePicker.Text), Is.EqualTo(date));
 		}
 
-		[Then(@"I should see the time line span from '(.*)' to '(.*)'")]
-		public void ThenIShouldSeeTheTimeLineSpanFromTo(string timeFrom, string timeTo)
+		[Then(@"I should see the time line hours span from '(.*)' to '(.*)'")]
+		public void ThenIShouldSeeTheTimeLineHoursSpanFromTo(string timeLineHourFrom, string timeLineHourTo)
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.Count, Is.GreaterThan(0));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers[0].Span(Find.First()).Text, Is.EqualTo(timeFrom));
-			EventualAssert.That(
-				() =>
-				Pages.Pages.RequestsPage.MyScheduleLayers[Pages.Pages.RequestsPage.MyScheduleLayers.Count - 1].Span(Find.First()).Text,
-				Is.EqualTo(timeTo));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.Any(), Is.True);
+
+			Span firstHour = Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.First().EventualGet();
+			Span alternativeFirstHour = Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems[2].EventualGet();
+			if (string.IsNullOrEmpty(firstHour.Text))
+				firstHour = alternativeFirstHour;
+
+			Assert.That(firstHour.Text, Is.EqualTo(timeLineHourFrom));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.Last().Text, Is.EqualTo(timeLineHourTo));
 		}
+
 	}
 }

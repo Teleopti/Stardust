@@ -15,8 +15,8 @@
 			</span>
 		</div>
 		<div style="position:relative; height: 30px">
-			<span style="width: 150px; float: left">Ashley Andeen</span>
-			<div data-bind="foreach: mySchedule().layers" style="position:relative; display: inline; height: 30px">
+			<span style="width: 150px; float: left" data-bind="text: mySchedule().agentName"></span>
+			<div id="Request-add-shift-trade-my-schedule" data-bind="foreach: mySchedule().layers" style="position:relative; display: inline; height: 30px">
 				<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
 			</div>
 		</div>

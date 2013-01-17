@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get
 			{
-				return Document.Div(QuicklyFind.ByClass("shift-trade-my-schedule")).Span(Find.First()).Spans;
+				return Document.Div(Find.ById("Request-add-shift-trade-my-schedule")).Spans;
 			}
 		}
 
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get
 			{
-				return Document.Span(Find.ById("shift-trade-timeline")).Spans;
+				return Document.Div(Find.ById("shift-trade-timeline")).Spans;
 			}
 		}
 	}
