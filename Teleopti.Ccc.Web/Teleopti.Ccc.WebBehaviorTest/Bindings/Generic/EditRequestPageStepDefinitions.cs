@@ -114,11 +114,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should not see the add text request tab")]
 		public void ThenIShouldNotSeeTheTextRequestTabInvisible()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.DisplayHidden(), Is.True);
+			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.IsDisplayed(), Is.False);
 		}
-
-
-
 
 		[Then(@"I should see the add absence request form")]
 		public void ThenIShouldSeeTheAbsenceRequestTab()
