@@ -9536,15 +9536,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not Ready Time.
-        /// </summary>
-        public static string IdleTime {
-            get {
-                return ResourceManager.GetString("IdleTime", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Invalid.
         /// </summary>
         public static string Illegal {
@@ -14370,6 +14361,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NotPublished {
             get {
                 return ResourceManager.GetString("NotPublished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Ready Time.
+        /// </summary>
+        public static string NotReadyTime {
+            get {
+                return ResourceManager.GetString("NotReadyTime", resourceCulture);
             }
         }
         
