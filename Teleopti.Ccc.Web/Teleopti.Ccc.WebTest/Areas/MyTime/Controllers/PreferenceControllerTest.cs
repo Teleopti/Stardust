@@ -9,6 +9,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
@@ -117,6 +118,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = result.Data as PreferenceDayViewModel;
 
 			data.Should().Be.SameInstanceAs(resultData);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldHandleModelErrorInPersistPreferenceInput()
+		{
+			var preferencePersister = MockRepository.GenerateMock<IPreferencePersister>();
+			var response = MockRepository.GenerateStub<FakeHttpResponse>();
+			var input = new PreferenceDayInput();
+			
+			var target = new PreferenceController(null, null, preferencePersister);
+			var context = new FakeHttpContext("/");
+			context.SetResponse(response);
+			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
+			target.ModelState.AddModelError("Error", "Error");
+
+			var result = target.Preference(input);
+			var data = result.Data as ModelStateResult;
+			data.Errors.Should().Contain("Error");
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]

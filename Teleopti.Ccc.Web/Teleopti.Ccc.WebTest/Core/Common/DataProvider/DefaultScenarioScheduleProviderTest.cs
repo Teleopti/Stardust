@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -108,6 +109,25 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		}
 
 		[Test]
+		public void ShouldThrowExceptionWhenStudentAvailabilityForDateHasSeveralRestrictions()
+		{
+			var scheduleDays = new[]
+										{
+											MockRepository.GenerateMock<IScheduleDay>()
+										};
+			var date = DateOnly.Today;
+			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
+			var personRestrictions = new[] { MockRepository.GenerateMock<IScheduleData>(), studentAvailabilityDay, MockRepository.GenerateMock<IScheduleData>() };
+			var studentAvailabilityRestriction = MockRepository.GenerateMock<IStudentAvailabilityRestriction>();
+
+			scheduleDays[0].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDays[0].Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(personRestrictions)));
+			studentAvailabilityDay.Stub(x => x.RestrictionCollection).Return(new ReadOnlyCollection<IStudentAvailabilityRestriction>(new List<IStudentAvailabilityRestriction>(new[] { studentAvailabilityRestriction,studentAvailabilityRestriction })));
+
+			Assert.Throws<MoreThanOneStudentAvailabilityFoundException>(()=> _target.GetStudentAvailabilityForDate(scheduleDays, date));
+		}
+
+		[Test]
 		public void ShouldReturnNullWhenNoStudentAvailabilityForDate()
 		{
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
@@ -115,6 +135,20 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			scheduleDay.Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>()));
+
+			var result = _target.GetStudentAvailabilityForDate(new[] { scheduleDay }, date);
+
+			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnNullWhenNoStudentAvailabilityRestrictionForDate()
+		{
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+			var date = DateOnly.Today;
+
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDay.Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>{new StudentAvailabilityDay(null, date, new List<IStudentAvailabilityRestriction>())}));
 
 			var result = _target.GetStudentAvailabilityForDate(new[] { scheduleDay }, date);
 

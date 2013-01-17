@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -21,13 +20,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_teamRepository = teamRepository;
 		}
 
-		public IEnumerable<IPerson> GetPermittedPersonsForTeam(DateOnly date, Guid id)
+		public IEnumerable<IPerson> GetPermittedPersonsForTeam(DateOnly date, Guid id, string function)
 		{
 			var team = _teamRepository.Load(id);
 			var period = new DateOnlyPeriod(date, date);
 			var persons = _personRepository.FindPeopleBelongTeam(team, period) ?? new IPerson[] { };
 			return (from p in persons
-					where _permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, date, p)
+					where _permissionProvider.HasPersonPermission(function, date, p)
 					select p).ToArray();
 		}
 	}

@@ -9,14 +9,14 @@ namespace Teleopti.Ccc.DomainTest.Helper
     [TestFixture]
 	public class DenormalizeScheduleProjectionTest
     {
-    	private DenormalizeScheduleProjection target;
+    	private ScheduleChanged target;
     	private DateTimePeriod period;
 
     	[SetUp]
 		public void Setup()
     	{
     		period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
-    		target = new DenormalizeScheduleProjection
+    		target = new ScheduleChanged
     		         	{
     		         		BusinessUnitId = Guid.NewGuid(),
     		         		Datasource = "test",

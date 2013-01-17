@@ -124,8 +124,6 @@
   <ItemGroup>
     <Compile Include="AbsenceRequestResolveTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
-    <Compile Include="Denormalizer\DenormalizeScheduleDayMessageConsumerTest.cs" />
-    <Compile Include="Denormalizer\InitialLoadScheduleDayConsumerTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelHandlerTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreatorTest.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonDataConsumerTest.cs" />
@@ -136,7 +134,6 @@
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionResolveTest.cs" />
     <Compile Include="Denormalizer\UpateGroupingReadModelGroupPageConsumerTest.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonConsumerTest.cs" />
-    <Compile Include="Denormalizer\UpdateScheduleProjectionReadModelTest.cs" />
     <Compile Include="Forecast\ImportForecastsFileToSkillTest.cs" />
     <Compile Include="Forecast\ImportForecastsToSkillConsumerResolveTest.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillsToSkillResolveTest.cs" />
@@ -163,7 +160,6 @@
     <Compile Include="ShiftTrade\ShiftTradeRequestSagaTest.cs" />
     <Compile Include="SimpleBootStrapper.cs" />
     <Compile Include="Notification\ClickatellNotificationSenderTest.cs" />
-    <Compile Include="Notification\ScheduleDayReadModelCreatorTest.cs" />
     <Compile Include="Notification\SignificantChangeCheckerTest.cs" />
     <Compile Include="Notification\NotificationConfigReaderTest.cs" />
     <Compile Include="Notification\SmsLinkCheckerTest.cs" />

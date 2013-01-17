@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.AgentPortal.Reports
 			gridColumns.Add(new SFGridDateOnlyColumn<AdherenceInfoDto>("DateOnlyDto", UserTexts.Resources.Date, 150));
 			gridColumns.Add(new SFGridHourMinutesColumn<AdherenceInfoDto>("ScheduleWorkCtiTime", UserTexts.Resources.ScheduleWorkCtiTime, 150));
 			gridColumns.Add(new SFGridHourMinutesColumn<AdherenceInfoDto>("LoggedInTime", UserTexts.Resources.LoggedInTime, 150));
-			gridColumns.Add(new SFGridHourMinutesColumn<AdherenceInfoDto>("IdleTime", UserTexts.Resources.IdleTime, 150));
+			gridColumns.Add(new SFGridHourMinutesColumn<AdherenceInfoDto>("IdleTime", UserTexts.Resources.NotReadyTime, 150));
 			gridColumns.Add(new SFGridHourMinutesColumn<AdherenceInfoDto>("AvailableTime", UserTexts.Resources.AvailableTime, 150));
 
 			gridInfo.RowCount = gridRowCount();

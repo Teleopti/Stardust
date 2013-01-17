@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<DenormalizeScheduleProjectionConsumer>().As<ConsumerOf<DenormalizeScheduleProjection>>();
+			builder.RegisterType<DenormalizeScheduleProjectionConsumer>().As<ConsumerOf<DenormalizedSchedule>>();
 
 			builder.RegisterModule<RepositoryContainerInstaller>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
@@ -41,7 +41,49 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (var container = builder.Build())
 			{
-				container.Resolve<ConsumerOf<DenormalizeScheduleProjection>>().Should().Not.Be.Null();
+				container.Resolve<ConsumerOf<DenormalizedSchedule>>().Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveScheduleDayReadModelHandlerConsumer()
+		{
+			UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
+
+			var builder = new ContainerBuilder();
+			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
+			builder.RegisterType<ScheduleDayReadModelHandler>().As<ConsumerOf<DenormalizedSchedule>>();
+
+			builder.RegisterModule<RepositoryContainerInstaller>();
+			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
+			builder.RegisterModule<ForecastContainerInstaller>();
+			builder.RegisterModule<ExportForecastContainerInstaller>();
+			builder.RegisterModule<SchedulingContainerInstaller>();
+
+			using (var container = builder.Build())
+			{
+				container.Resolve<ConsumerOf<DenormalizedSchedule>>().Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldResolvePersonScheduleDayReadModelHandlerConsumer()
+		{
+			UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
+
+			var builder = new ContainerBuilder();
+			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
+			builder.RegisterType<PersonScheduleDayReadModelHandler>().As<ConsumerOf<DenormalizedSchedule>>();
+
+			builder.RegisterModule<RepositoryContainerInstaller>();
+			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
+			builder.RegisterModule<ForecastContainerInstaller>();
+			builder.RegisterModule<ExportForecastContainerInstaller>();
+			builder.RegisterModule<SchedulingContainerInstaller>();
+
+			using (var container = builder.Build())
+			{
+				container.Resolve<ConsumerOf<DenormalizedSchedule>>().Should().Not.Be.Null();
 			}
 		}
 	}

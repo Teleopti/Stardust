@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Web.Mvc;
+using System.Web.Routing;
+using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -87,6 +90,47 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = result.Data as RequestViewModel;
 
 			data.Should().Be.SameInstanceAs(resultData);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldReturnErrorFromAbsenceRequestFormWhenPersistError()
+		{
+			var absenceRequestPersister = MockRepository.GenerateMock<IAbsenceRequestPersister>();
+			var response = MockRepository.GenerateStub<FakeHttpResponse>();
+			var form = new AbsenceRequestForm();
+
+			var target = new RequestsController(null, null, absenceRequestPersister);
+			var context = new FakeHttpContext("/");
+			context.SetResponse(response);
+			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
+
+			absenceRequestPersister.Stub(x => x.Persist(form)).Throw(new InvalidOperationException());
+
+			var result = target.AbsenceRequest(form);
+			var data = result.Data as RequestViewModel;
+
+			data.Should().Be.Null();
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldReturnErrorFromAbsenceRequestFormWhenModelError()
+		{
+			var absenceRequestPersister = MockRepository.GenerateMock<IAbsenceRequestPersister>();
+			var response = MockRepository.GenerateStub<FakeHttpResponse>();
+			var form = new AbsenceRequestForm();
+
+			var target = new RequestsController(null, null, absenceRequestPersister);
+			var context = new FakeHttpContext("/");
+			context.SetResponse(response);
+			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
+			target.ModelState.AddModelError("Error", "Error");
+
+			absenceRequestPersister.Stub(x => x.Persist(form)).Throw(new InvalidOperationException());
+
+			var result = target.AbsenceRequest(form);
+			var data = result.Data as RequestViewModel;
+
+			data.Should().Be.Null();
 		}
 
 		[Test]

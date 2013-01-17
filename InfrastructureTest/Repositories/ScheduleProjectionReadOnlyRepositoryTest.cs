@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -14,6 +14,7 @@ using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -26,11 +27,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private IAbsence absence;
 		private IBudgetGroup budgetGroup;
 		private IActivity activity;
+		private Guid scenarioId;
 
 		protected override void SetupForRepositoryTest()
 		{
 			scenario = ScenarioFactory.CreateScenarioAggregate();
 			PersistAndRemoveFromUnitOfWork(scenario);
+			scenarioId = scenario.Id.GetValueOrDefault();
 
 			person = PersonFactory.CreatePerson();
 			PersistAndRemoveFromUnitOfWork(person);
@@ -69,10 +72,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var period =
 				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			var layer = new VisualLayerFactory().CreateShiftSetupLayer(activity, period, person);
-			var collection = new VisualLayerProjectionService(person);
-			collection.Add(layer);
-			target.AddProjectedLayer(DateOnly.Today, scenario, person.Id.GetValueOrDefault(),layer, collection.CreateProjection());
+			var layer = new DenormalizedScheduleProjectionLayer
+			            	{
+			            		ContractTime = TimeSpan.FromHours(8),
+			            		WorkTime = TimeSpan.FromHours(8),
+			            		DisplayColor = Color.Bisque.ToArgb(),
+								Name = "test",
+								ShortName = "te",
+								StartDateTime = period.StartDateTime,
+								EndDateTime = period.EndDateTime,
+								PayloadId = activity.Id.GetValueOrDefault()
+			            	};
+			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(),layer);
 			
 			using (NHibernateUnitOfWork unitOfWork = (NHibernateUnitOfWork) UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -101,14 +112,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldIncludeAbsenceTime()
 		{
-			var layerFactory = new VisualLayerFactory();
 			var period =
 				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			var layer = layerFactory.CreateAbsenceSetupLayer(absence,
-			                                                 layerFactory.CreateShiftSetupLayer(activity, period, person), period);
-			var collection = new VisualLayerProjectionService(person);
-			collection.Add(layer);
-			target.AddProjectedLayer(DateOnly.Today, scenario, person.Id.GetValueOrDefault(),layer,collection.CreateProjection());
+			var layer = new DenormalizedScheduleProjectionLayer
+			{
+				ContractTime = TimeSpan.FromHours(8),
+				WorkTime = TimeSpan.FromHours(8),
+				DisplayColor = Color.Bisque.ToArgb(),
+				Name = "holiday",
+				ShortName = "ho",
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime,
+				PayloadId = absence.Id.GetValueOrDefault()
+			};
+			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer);
 
 			using (NHibernateUnitOfWork unitOfWork = (NHibernateUnitOfWork)UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -126,7 +143,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldClearDataForOneDay()
 		{
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-			target.ClearPeriodForPerson(period, scenario, person.Id.GetValueOrDefault());
+			target.ClearPeriodForPerson(period, scenarioId, person.Id.GetValueOrDefault());
 		}
 
 		[Test]

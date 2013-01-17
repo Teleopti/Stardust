@@ -1,45 +1,53 @@
-﻿using System;
-using Rhino.ServiceBus;
-using Teleopti.Ccc.Domain.Repositories;
+﻿using Rhino.ServiceBus;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public class DenormalizeScheduleProjectionConsumer : ConsumerOf<DenormalizeScheduleProjection>
+	public class DenormalizeScheduleProjectionConsumer : ConsumerOf<DenormalizedSchedule>, ConsumerOf<DenormalizedScheduleForScheduleProjection>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IScenarioRepository _scenarioRepository;
-		private readonly IPersonRepository _personRepository;
-		private readonly IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
+		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 
-		public DenormalizeScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel)
+		public DenormalizeScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_scenarioRepository = scenarioRepository;
-			_personRepository = personRepository;
-			_updateScheduleProjectionReadModel = updateScheduleProjectionReadModel;
+			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(DenormalizeScheduleProjection message)
+		public void Consume(DenormalizedSchedule message)
+		{
+			createReadModel(message);
+		}
+
+		private void createReadModel(DenormalizedScheduleBase message)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				var scenario = _scenarioRepository.Get(message.ScenarioId);
-				if (!scenario.DefaultScenario) return;
+				if (!message.IsDefaultScenario) return;
 
-				var period = new DateTimePeriod(message.StartDateTime, message.EndDateTime);
-				var person = _personRepository.Get(message.PersonId);
-
-				if (message.SkipDelete)
+				var date = new DateOnly(message.Date);
+				if (!message.IsInitialLoad)
 				{
-					_updateScheduleProjectionReadModel.SetInitialLoad(true);
+					_scheduleProjectionReadOnlyRepository.ClearPeriodForPerson(
+						new DateOnlyPeriod(date, date), message.ScenarioId, message.PersonId);
 				}
-				_updateScheduleProjectionReadModel.Execute(scenario,period,person);
+
+				foreach (var layer in message.Layers)
+				{
+					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, message.ScenarioId, message.PersonId, layer);
+				}
+
 				unitOfWork.PersistAll();
 			}
+		}
+
+		public void Consume(DenormalizedScheduleForScheduleProjection message)
+		{
+			createReadModel(message);
 		}
 	}
 }

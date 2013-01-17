@@ -323,14 +323,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 
 			result.StudentAvailabilityPeriod.Should().Be.Null();
 		}
-
-		[Test, Ignore]
-		public void ShouldMapStyleClasses() { Assert.Fail("sets empty array today just to make it work"); }
-
-		[Test, Ignore]
-		public void ShouldMapPeriodSummaryViewModel() { Assert.Fail("sets an empty instance today to make it work"); }
-
-		[Test, Ignore]
-		public void ShouldMapWeekSummary() { Assert.Fail("sets an empty instance today to make it work"); }
 	}
 }

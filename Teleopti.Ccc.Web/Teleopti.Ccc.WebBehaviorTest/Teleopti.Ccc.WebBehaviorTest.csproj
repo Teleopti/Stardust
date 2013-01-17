@@ -86,10 +86,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="AdminWeb\AdminWebLogOn.feature.cs">
+    <Compile Include="AdminWeb\Schedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AdminWebLogOn.feature</DependentUpon>
+      <DependentUpon>Schedule.feature</DependentUpon>
     </Compile>
     <Compile Include="AsmSummerToWinter.feature.cs">
       <AutoGen>True</AutoGen>
@@ -105,9 +105,13 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\TeamStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftTradeRequestFromRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SignInPageStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\BasicPersonConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\ReadModelShiftConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\TeamConfigurable.cs" />
     <Compile Include="Bindings\Generic\StudentAvailabilityPageStepDefinitions.cs" />
     <Compile Include="StudentAvailabilityMultidays.feature.cs">
       <DependentUpon>StudentAvailabilityMultidays.feature</DependentUpon>
@@ -120,11 +124,6 @@
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ShiftTradeRequestsPageStepDefinition.cs" />
     <Compile Include="Bindings\Generic\WeekSchedulePageStepDefinitions.cs" />
-    <Compile Include="BrowserNotifications.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BrowserNotifications.feature</DependentUpon>
-    </Compile>
     <Compile Include="Core\Robustness\EventualAssert.cs" />
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\Robustness\Timeouts.cs" />
@@ -403,11 +402,6 @@
     <Compile Include="Core\Extensions\LogExtensions.cs" />
     <Compile Include="Data\Setups\Specific\Agent.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutStudentAvailabilityAccess.cs" />
-    <Compile Include="ApplicationStartRecovery.feature.cs">
-      <DependentUpon>ApplicationStartRecovery.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Data\TestData.cs" />
     <Compile Include="Data\Setups\Specific\AnotherStandardPreference.cs" />
     <Compile Include="Data\Setups\Specific\BasePreference.cs" />
@@ -534,13 +528,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="AdminWeb\AdminWebLogOn.feature">
+    <None Include="AdminWeb\Schedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AdminWebLogOn.feature.cs</LastGenOutput>
-    </None>
-    <None Include="BrowserNotifications.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>BrowserNotifications.feature.cs</LastGenOutput>
+      <LastGenOutput>Schedule.feature.cs</LastGenOutput>
     </None>
     <None Include="StudentAvailabilityMultidays.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -573,10 +563,6 @@
       <LastGenOutput>AbsenceRequestFromSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="App.config" />
-    <None Include="ApplicationStartRecovery.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ApplicationStartRecovery.feature.cs</LastGenOutput>
-    </None>
     <None Include="PreferencesFollowUp.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFollowUp.feature.cs</LastGenOutput>

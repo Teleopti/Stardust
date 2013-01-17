@@ -1,9 +1,8 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.8.2.js" />
-/// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
-/// <reference path="~/Content/Scripts/jquery-1.8.2-vsdoc.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.8.3.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.9.1.custom.js" />
+/// <reference path="~/Content/Scripts/jquery-1.8.3-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
-/// <reference path="~/Content/Scripts/date.js" />
-/// <reference path="~/Content/Scripts/knockout-2.1.0.js"/>
+/// <reference path="~/Content/Scripts/knockout-2.2.0.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
@@ -150,8 +149,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.days(days);
 			var minDateArr = data.PeriodSelection.SelectedDateRange.MinDate.split('-');
 			var maxDateArr = data.PeriodSelection.SelectedDateRange.MaxDate.split('-');
-			self.minDate = new Date(minDateArr[0], minDateArr[1] - 1, minDateArr[2]).addDays(-1);
-			self.maxDate = new Date(maxDateArr[0], maxDateArr[1] - 1, maxDateArr[2]).addDays(1);
+			
+			self.minDate = moment(new Date(minDateArr[0], minDateArr[1] - 1, minDateArr[2])).add('days', -1).toDate();
+			self.maxDate = moment(new Date(maxDateArr[0], maxDateArr[1] - 1, maxDateArr[2])).add('days',1).toDate();
 		}
 	});
 
@@ -169,7 +169,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.summaryTitle = ko.observable(day.Summary.Title);
 		self.summaryTimeSpan = ko.observable(day.Summary.TimeSpan);
 		self.summary = ko.observable(day.Summary.Summary);
-		self.noteMessage = ko.observable(day.Note.Message);
+		self.noteMessage = ko.computed(function () {
+			//need to html encode due to not bound to "text" in ko
+			return $('<div/>').text(day.Note.Message).html();
+		});
 		self.textRequestCount = ko.observable(day.TextRequestCount);
 		self.hasTextRequest = ko.computed(function () {
 			return self.textRequestCount() > 0;
@@ -264,16 +267,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var TimelineViewModel = function (timeline) {
 		var self = this;
 		self.positionPercentage = ko.observable(timeline.PositionPercentage);
-		
+
 		self.minutes = ko.observable(timeline.Time.TotalMinutes);
 		var timeFromMinutes = moment().startOf('day').add('minutes', self.minutes());
-		
+
 		self.time = ko.observable(timeFromMinutes.format('H:mm'));
 		if (timeline.Culture == "en-US") {
 			self.time(timeFromMinutes.format('h A'));
 		}
 		self.timeText = self.time() + "\ntotalMinutes" + self.minutes();
-		
+
 		self.topPosition = ko.computed(function () {
 			return Math.round(scheduleHeight * self.positionPercentage()) + timeLineOffset + 'px';
 		});

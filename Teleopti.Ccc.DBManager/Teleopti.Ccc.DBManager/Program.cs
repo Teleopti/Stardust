@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.DBManager
 		private static bool _loginExist;
 
         private const string AzureEdition = "SQL Azure";
+		private const string SQL2005SP2 = "9.00.3042"; //http://www.sqlteam.com/article/sql-server-versions
     	private static MyLogger _logger;
 		private static DatabaseVersionInformation _databaseVersionInformation;
 		private static SchemaVersionInformation _schemaVersionInformation;
@@ -455,6 +456,30 @@ namespace Teleopti.Ccc.DBManager
 				creator.CreateDatabase(databaseType, databaseName);
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
+		private static bool SQLVersionGreaterThen(string checkVersion)
+		{
+			string serverVersion = _sqlConnection.ServerVersion;
+			string[] serverVersionDetails = serverVersion.Split(new string[] { "." }, StringSplitOptions.None);
+			string[] checkVersionDetails = checkVersion.Split(new string[] { "." }, StringSplitOptions.None);
+
+			if (checkVersionDetails.Length < 3 && serverVersionDetails.Length < 3)
+				throw new Exception("Unknown version string given from SQL Server or in code");
+
+				int majorVersionNumber = int.Parse(serverVersionDetails[0], CultureInfo.InvariantCulture);
+				int minorVersionNumber = int.Parse(serverVersionDetails[1], CultureInfo.InvariantCulture);
+				int buildVersionNumber = int.Parse(serverVersionDetails[2], CultureInfo.InvariantCulture);
+
+				int majorCheckVersionNumber = int.Parse(checkVersionDetails[0], CultureInfo.InvariantCulture);
+				int minorCheckVersionNumber = int.Parse(checkVersionDetails[1], CultureInfo.InvariantCulture);
+				int buildCheckVersionNumber = int.Parse(checkVersionDetails[2], CultureInfo.InvariantCulture);
+
+				if (majorCheckVersionNumber < majorVersionNumber && minorCheckVersionNumber < minorVersionNumber && buildCheckVersionNumber < buildVersionNumber)
+					return false;
+				else
+					return true;
+		}
+
         private static void CreateLogin(string user, string pwd, Boolean iswingroup)
         {
             //TODO: check if windows group and run win logon script instead of "SQL Logins - Create.sql"
@@ -508,23 +533,29 @@ namespace Teleopti.Ccc.DBManager
                 return;
 
             sql = "";
-            createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
-            relinkSQLUser = string.Format(CultureInfo.CurrentCulture, @"ALTER USER [{0}] WITH LOGIN = [{0}]", user);
+			
+			//Create or Re-link e.g Alter the DB-user from SQL-Login
+			createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
+			relinkSQLUser = string.Format(CultureInfo.CurrentCulture, @"ALTER USER [{0}] WITH LOGIN = [{0}]", user);
 
-            if (!iswingroup && (DBUserExist(user) == true))
-            {
-                logWrite("DB user already exist, re-link ...");
-                using (var cmd = new SqlCommand(relinkSQLUser, _sqlConnection))
+			if (!iswingroup && (DBUserExist(user) == true))
+			{
+				logWrite("DB user already exist, re-link ...");
+				using (var cmd = new SqlCommand(relinkSQLUser, _sqlConnection))
+
+					if (SQLVersionGreaterThen(SQL2005SP2))
+						cmd.ExecuteNonQuery();
+					else
+						logWrite("You need SQL Server 2005 SP2 to re-link user to");
+			}
+			else
+			{
+				logWrite("DB user is missing. Create DB user ...");
+				using (var cmd = new SqlCommand(createDBUser, _sqlConnection))
 					cmd.ExecuteNonQuery();
-            }
-            else
+			}
 
-            {
-                logWrite("DB user is missing. Create DB user ...");
-                using (var cmd = new SqlCommand(createDBUser, _sqlConnection))
-                cmd.ExecuteNonQuery();
-            }
-
+			//Add permission
             fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\permissions - add.sql", _databaseFolder.Path());
 
             sql = System.IO.File.ReadAllText(fileName);

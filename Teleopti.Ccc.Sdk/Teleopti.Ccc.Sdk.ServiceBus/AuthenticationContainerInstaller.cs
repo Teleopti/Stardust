@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -29,6 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<SystemUserPasswordSpecification>().As<ISystemUserPasswordSpecification>().SingleInstance();
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<DummyPasswordPolicy>().As<IPasswordPolicy>().SingleInstance();
+			builder.RegisterType<ClaimCache>().SingleInstance();
 		}
     }
 }

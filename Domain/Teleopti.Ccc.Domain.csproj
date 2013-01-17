@@ -236,6 +236,7 @@
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
+    <Compile Include="Optimization\MatrixMultipleShiftsLocker.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationResourceHelper.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToAdd.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToRemove.cs" />
@@ -846,7 +847,7 @@
     </Compile>
     <Compile Include="Security\IsPasswordEncryptedSpecification.cs" />
     <Compile Include="Security\ISystemUserSpecification.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccAnywhereLicenseOption.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccMobileReportsLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccMyTimeWebLicenseOption.cs" />
     <Compile Include="Security\Matrix\ApplicationFunctionResolver.cs" />
     <Compile Include="Security\AuthorizationData\ShippedApplicationRoleNames.cs" />

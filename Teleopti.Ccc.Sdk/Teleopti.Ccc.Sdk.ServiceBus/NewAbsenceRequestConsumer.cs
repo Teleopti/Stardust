@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
@@ -237,18 +236,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 {
                 	unitOfWork.PersistAll();
 
-                	updateScheduleReadModelsIfRequestWasApproved(unitOfWork);
+                	updateScheduleReadModelsIfRequestWasApproved(unitOfWork, dateOnlyPeriod);
                 }
             }
             ClearStateHolder();
         }
 
-    	private void updateScheduleReadModelsIfRequestWasApproved(IUnitOfWork unitOfWork)
+    	private void updateScheduleReadModelsIfRequestWasApproved(IUnitOfWork unitOfWork, DateOnlyPeriod dateOnlyPeriod)
     	{
     		if (_personRequest.IsApproved)
     		{
-    			_updateScheduleProjectionReadModel.Execute(_scenarioProvider.DefaultScenario(),
-    			                                           _absenceRequest.Period, _absenceRequest.Person);
+    			_updateScheduleProjectionReadModel.Execute(_schedulingResultStateHolder.Schedules[_absenceRequest.Person], dateOnlyPeriod);
 
     			unitOfWork.PersistAll();
     		}

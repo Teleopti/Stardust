@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		}
 
 		[Test]
-		public void ShouldThrowIfNoMyTimeWebAndAnywhereAndMobileReportsPermission()
+		public void ShouldThrowIfNoMyTimeWebAndAdminWebAndMobileReportsPermission()
 		{
 			var buId = Guid.NewGuid();
 			const string dataSourceName = "sdfsjdlfkjsd ";

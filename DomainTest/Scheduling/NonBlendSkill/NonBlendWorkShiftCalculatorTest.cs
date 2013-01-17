@@ -35,38 +35,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
             _target = new NonBlendWorkShiftCalculator(_nonBlendImpactOnPeriodForProjection, _workShiftCalculator);
 		}
 
-        [Test, Ignore("Ola: we don't need this check if we do right so for speed reasons...")]
-        public void ShouldNotCalculateOtherThanNonBlend()
-        {
-            var dateTime = new DateTime(2010, 10, 10, 8, 0, 0, DateTimeKind.Utc);
-            var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-            var skill = SkillFactory.CreateSkill("Skill");
-            ISkillDay skillDay = SkillDayFactory.CreateSkillDay(skill, dateTime);
-            ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(skill, dateTime, 60, 20, 20);
-
-            skillStaffPeriod1.SetParent(skillDay);
-            ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(skill) { { dateTimePeriod, skillStaffPeriod1 } };
-            IDictionary<ISkill, ISkillStaffPeriodDictionary> dic = new Dictionary<ISkill, ISkillStaffPeriodDictionary> { { skill, skillStaffPeriodDictionary } };
-            var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
-
-            using (_mocks.Record())
-            {
-                Expect.Call(visualLayerCollection.Period()).Return(dateTimePeriod).Repeat.AtLeastOnce();
-                
-            }
-
-            double? result;
-
-            using (_mocks.Playback())
-            {
-				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
-            }
-            
-            Assert.That(result, Is.Not.Null);
-            if(result.HasValue)
-                Assert.That(result.Value, Is.EqualTo(0));
-        }
-
 		[Test]
 		public void ShouldReturnOneIfPersonHaveSkill()
 		{
@@ -145,38 +113,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
             Assert.That(result, Is.Not.Null);
             if (result.HasValue)
                 Assert.That(result.Value, Is.EqualTo(2));
-        }
-
-        [Test, Ignore("Ola: we don't need this check if we do right so for speed reasons...")]
-        public void ShouldReturnZeroIfPersonDoNotHaveSkill()
-        {
-            var dateTime = new DateTime(2010, 10, 10, 8, 0, 0, DateTimeKind.Utc);
-            var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-            ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
-            ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
-
-            skillStaffPeriod1.SetParent(skillDay);
-            ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skill) { { dateTimePeriod, skillStaffPeriod1 } };
-            IDictionary<ISkill, ISkillStaffPeriodDictionary> dic = new Dictionary<ISkill, ISkillStaffPeriodDictionary> { { _skill, skillStaffPeriodDictionary } };
-            var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
-            
-            using (_mocks.Record())
-            {
-                Expect.Call(visualLayerCollection.Period()).Return(dateTimePeriod).Repeat.AtLeastOnce();
-                Expect.Call(_nonBlendImpactOnPeriodForProjection.SkillStaffPeriodDate(skillStaffPeriod1, _person)).Return(new DateOnly());
-                Expect.Call(_nonBlendImpactOnPeriodForProjection.CheckPersonSkill(_skill, _person, new DateOnly())).Return(false);
-                
-            }
-
-            double? result;
-
-            using (_mocks.Playback())
-            {
-				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
-            }
-            Assert.That(result, Is.Not.Null);
-            if (result.HasValue)
-                Assert.That(result.Value, Is.EqualTo(0));
         }
 
         [Test]

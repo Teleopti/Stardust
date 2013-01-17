@@ -388,15 +388,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, Ignore("Just tested how to get NaN in a double")]
-        public void VerifyNaN()
-        {
-            double d1 = 0;
-            double d2 = 0;
-            double result = d1/d2;
-            Assert.IsTrue(double.IsNaN(result));
-        }
-
 		[Test]
 		public void CanHandleSameValues()
 		{

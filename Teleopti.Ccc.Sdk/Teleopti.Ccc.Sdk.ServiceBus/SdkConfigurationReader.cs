@@ -12,7 +12,6 @@ using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
-using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.SignalR;
 
@@ -24,6 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private static readonly object LockObject = new object();
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "NHibernate"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public void ReadConfiguration(Func<IServiceBus> serviceBus)
         {
             lock (LockObject)
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                                     new PersonPeriodChangedMessageSender(notify,saveToDenormalizationQueue)
             			                       	},
 															DataSourceConfigurationSetter.ForServiceBus()),
-            			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
+            			new SignalBroker(MessageFilterManager.Instance.FilterDictionary));
                 application.Start(new BasicState(), encryptedAppSettings,
                                   encryptedNHibConfigs.DecryptList(EncryptionConstants.Image1,
                                                                    EncryptionConstants.Image2), null);

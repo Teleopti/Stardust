@@ -65,19 +65,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 
 			result.Should().Be.SameInstanceAs(models);
 		}
-
-		[Test]
-		public void ShouldCreateEmptyDayViewModelWhenNoStudentAvailabilityFound()
-		{
-			var studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
-			var target = new StudentAvailabilityViewModelFactory(null, studentAvailabilityProvider, null);
-
-			var date = DateOnly.Today;
-			studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDate(date)).Return(null);
-
-			var result = target.CreateDayViewModel(date);
-
-			result.Should().Be.Null();
-		}
 	}
 }

@@ -85,6 +85,7 @@
   <ItemGroup>
     <None Include="..\Teleopti.Ccc.Sdk.ServiceBus.Host\App.config">
       <Link>App.config</Link>
+      <SubType>Designer</SubType>
     </None>
     <None Include="..\Teleopti.Ccc.Sdk.ServiceBus.Host\DenormalizeQueue.config">
       <Link>DenormalizeQueue.config</Link>
@@ -98,7 +99,6 @@
       <Link>RequestQueue.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

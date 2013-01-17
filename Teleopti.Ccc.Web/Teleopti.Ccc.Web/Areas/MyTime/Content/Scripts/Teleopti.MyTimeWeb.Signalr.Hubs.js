@@ -149,7 +149,7 @@
 
 	// Create hub signalR instance
 	$.extend(signalR, {
-		messageBrokerHub: {
+		MessageBrokerHub: {
 			_: {
 				hubName: 'MessageBrokerHub',
 				ignoreMembers: ['addSubscription', 'notifyClients', 'notifyClientsMultiple', 'removeSubscription', 'namespace', 'ignoreMembers', 'callbacks'],

@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading;
 using Teleopti.Ccc.ApplicationConfig.Creators;
 using Teleopti.Ccc.DatabaseConverter;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -19,8 +18,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Messaging.Client;
-using Teleopti.Messaging.Composites;
 
 namespace Teleopti.Ccc.ApplicationConfig.Common
 {
@@ -75,9 +72,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "If we want to really work with this we should use Autofac to supply the stuff we need!")]
         public void LogOn(ICommandLineArgument argument, DatabaseHandler databaseHandler, IBusinessUnit businessUnit, IPerson convertPerson)
         {
-			InitializeApplication initializeApplication = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForApplicationConfig()),
-				MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
-            initializeApplication.Start(new StateNewVersion(), databaseHandler.DataSourceSettings(), "");
+			InitializeApplication initializeApplication = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForApplicationConfig()), null);
+            initializeApplication.Start(new StateNewVersion(), databaseHandler.DataSourceSettings(), "", new ConfigurationManagerWrapper());
 
             AvailableDataSourcesProvider availableDataSourcesProvider =
                 new AvailableDataSourcesProvider(StateHolderReader.Instance.StateReader.ApplicationScopeData);

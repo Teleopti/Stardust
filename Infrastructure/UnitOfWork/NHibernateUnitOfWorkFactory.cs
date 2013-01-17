@@ -1,11 +1,11 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using NHibernate;
 using NHibernate.Context;
 using NHibernate.Engine;
 using NHibernate.Stat;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		//todo: byt till ConcurrentDictionary när vi uppgraderar till .net 4.0!
 		private static readonly IDictionary<Guid, NHibernateSessionRelatedData> uowRelatedData
-			 = new ThreadSafeDictionary<Guid, NHibernateSessionRelatedData>(new Dictionary<Guid, NHibernateSessionRelatedData>());
+			 = new ConcurrentDictionary<Guid, NHibernateSessionRelatedData>(new ConcurrentDictionary<Guid, NHibernateSessionRelatedData>());
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public NHibernateFilterManager FilterManager(ISession session)

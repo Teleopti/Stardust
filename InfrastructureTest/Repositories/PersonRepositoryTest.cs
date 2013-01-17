@@ -500,40 +500,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		[Ignore("tamasb: Test for showing person permission does not refresh. Not ready yet")]
-		public void VerifyRefreshApplicationRoles()
-		{
-			IPerson person = PersonFactory.CreatePerson("Testor", "Testorson");
-			PersistAndRemoveFromUnitOfWork(person);
-
-			ApplicationRole roleAdmin = ApplicationRoleFactory.CreateRole("Admin", "Admin role");
-			PersistAndRemoveFromUnitOfWork(roleAdmin);
-			ApplicationRole roleAgent = ApplicationRoleFactory.CreateRole("Agent", "Agent role");
-			PersistAndRemoveFromUnitOfWork(roleAgent);
-
-			PermissionInformation permissionInfo = new PermissionInformation(person);
-			permissionInfo.AddApplicationRole(roleAdmin);
-			permissionInfo.AddApplicationRole(roleAgent);
-			PersistAndRemoveFromUnitOfWork(person);
-
-			Session.Clear();
-
-			//Assert.AreEqual(2, person.PersonalShiftCollection.Count);
-
-			//PersonAssignment loaded = Session.CreateCriteria(typeof(PersonAssignment))
-			//    .SetFetchMode("PersonalShiftCollection", FetchMode.Join)
-			//    .List<PersonAssignment>()[0];
-
-			//Assert.AreEqual(2, loaded.PersonalShiftCollection.Count);
-			//loaded.RemovePersonalShift(loaded.PersonalShiftCollection[0]);
-			//Assert.AreEqual(1, loaded.PersonalShiftCollection.Count);
-
-			//Session.Refresh(loaded);
-			//Assert.AreEqual(2, loaded.PersonalShiftCollection.Count);
-			//Session.Clear();
-		}
-
-		[Test]
 		public void VerifyFindWhoBelongToTeam()
 		{
 			//setup

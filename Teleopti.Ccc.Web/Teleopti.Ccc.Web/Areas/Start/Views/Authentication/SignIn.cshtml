@@ -4,15 +4,13 @@
 	<link href="@Url.Content("~/Content/bootstrap/bootstrap-responsive.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/Start/Content/Css/Login.css")" rel="stylesheet" type="text/css" />
 	
-	<script src="@Url.Content("~/Content/bootstrap/bootstrap.min.js")"></script>
-	<script src="@Url.Content("~/Content/Scripts/knockout-2.1.0.js")"></script>
+	<script src="@Url.Content("~/Content/bootstrap/bootstrap.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/knockout-2.2.0.js")"></script>
 	<script src="@Url.Content("~/Content/signals/signals.js")"></script>
 	<script src="@Url.Content("~/Content/hasher/hasher.js")"></script>
 	<script src="@Url.Content("~/Content/crossroads/crossroads.js")"></script>
-	<script src="@Url.Content("~/Content/Scripts/knockout-2.1.0.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/knockout.bindings.js")"></script>
-
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.js")"></script>
+    
+-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/knockout.bindings.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.JQueryAjaxViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.AuthenticationState.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.Navigation.js")"></script>
@@ -28,10 +26,10 @@
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ApplicationViewModel.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordView.js")"></script>
 	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordViewModel.js")"></script>
-
+    
 	<script type="text/javascript">
 		var authentication;
-		jQuery(function () {
+		$(function () {
 			Teleopti.Start.Authentication.Settings = {
 				baseUrl: '@Url.Content("~/")'
 			};
@@ -39,9 +37,6 @@
 		});
 	</script>
 }
-<script>
-	
-</script>
 
 <section id="page-signin">
 	<div class="container" id="Login-container">
@@ -57,30 +52,32 @@
 
 		<div id="signin">
 
-			<ul id="DataSources" data-bind="foreach: DataSources" class="nav nav-tabs nav-stacked" style="display: none;">
-				<li data-bind="css: {'active': Selected}, class: Type">
-					<a href="#" data-bind="click: Select">
+			<ul id="DataSources" data-bind="visible: DataSources().length > 0, foreach: DataSources" class="nav nav-tabs nav-stacked">
+				<li data-bind="css: {'application': !IsWindows, 'windows': IsWindows, 'active': $parent.SelectedDataSource() == $data}">
+					<a href="#" data-bind="click: $parent.SelectDataSource">
 						<span data-bind="text: Name"></span>
-						<span data-bind="if: Type == 'windows'">@Resources.WindowsLogonWithBrackets</span>
+						<span data-bind="if: IsWindows">@Resources.WindowsLogonWithBrackets</span>
 					</a>
 				</li>
 			</ul>
-			<div data-bind="visible: DisplayUserNameAndPasswordBoxes()">
-				<div>
-					<input type="text" id="Username-input" placeholder=@Resources.UserName class="input-block-level" data-bind="value: UserName, returnKey: SignIn, hasfocus: UserNameFocus" autocapitalize="off" autocorrect="off" />
+			<form data-bind="submit: SignIn">
+				<div data-bind="visible: DisplayUserNameAndPasswordBoxes">
+					<div>
+						<input type="text" id="Username-input" placeholder="@Resources.UserName" class="input-block-level" data-bind="value: UserName" autocapitalize="off" autocorrect="off" />
+					</div>
+					<div>
+						<input type="password" id="Password-input" placeholder="@Resources.Password" class="input-block-level" data-bind="value: Password" />
+					</div>
 				</div>
-				<div>
-					<input type="password" id="Password-input" placeholder=@Resources.Password class="input-block-level" data-bind="value: Password, returnKey: SignIn" />
+				<div id="Signin-error" 
+					 class="alert" 
+					 data-bind="visible: HasErrorMessage, text: ErrorMessage"
+					 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase">
 				</div>
-			</div>
-			<div id="Signin-error" 
-				 class="alert" 
-				 data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
-				 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase">
-			</div>
 			
-			<button class="btn btn-primary" id="Login-button" data-bind="click: SignIn, enable: Ajax.Inactive()">@Resources.LogOn</button>
-			<img data-bind="visible: Ajax.Active()" src="@Url.Content("~/Areas/Start/Content/Images/ajax-loader-small.gif")" alt="..." />
+				<button class="btn btn-primary" id="Login-button" type="submit" data-bind="enable: Ajax.Inactive">@Resources.LogOn</button>
+				<img data-bind="visible: Ajax.Active" src="@Url.Content("~/Areas/Start/Content/Images/ajax-loader-small.gif")" alt="..." />
+			</form>
 		</div>
 		
 		<div id="businessunit">
@@ -98,7 +95,7 @@
 		</div>
 		
 		<div id="changepassword">
-			<div id="PasswordAlreadyExpired" class="alert login-warning" data-bind="visible: MustChangePassword()">
+			<div id="PasswordAlreadyExpired" class="alert login-warning" data-bind="visible: MustChangePassword">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordHasAlreadyExpired 
 			</div>
@@ -107,10 +104,10 @@
 				<strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordWillExpireSoon
 			</div>
 			<div class="login-form">
-				<input type="password" id="New-password" placeholder="New Password" data-bind="value: NewPassword" class="input-block-level" />
-				<input type="password" id="Confirm-new-password" placeholder="Confirm New Password" data-bind="value: ConfirmNewPassword" class="input-block-level" />
+				<input type="password" id="New-password" placeholder="@Resources.NewPassword" data-bind="value: NewPassword" class="input-block-level" />
+				<input type="password" id="Confirm-new-password" placeholder="@Resources.ConfirmNewPassword" data-bind="value: ConfirmNewPassword" class="input-block-level" />
 				
-				<input type="password" id="Old-password" placeholder="Old Password" data-bind="value: OldPassword" class="input-block-level" />
+				<input type="password" id="Old-password" placeholder="@Resources.PasswordOld" data-bind="value: OldPassword" class="input-block-level" />
 				<div id="Password-change-error" class="alert" data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
 					data-notmatch="@Resources.PasswordsDoNotMatch">
 				</div>

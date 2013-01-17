@@ -291,37 +291,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                 Assert.AreEqual(baseDate.AddDays(5), result.Layer.Period.EndDateTime);
             }
         }
-
-        [Test, Ignore("Have no idea why this test fails, can not understand the intent")]
-        public void VerifyReducedLayers()
-        {
-            DateTime baseDate = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            IList<IPersonAbsence> retList = new List<IPersonAbsence>();
-            AbsenceLayer absLayer = new AbsenceLayer(new Absence(), new DateTimePeriod(baseDate, baseDate.AddDays(2)));
-            PersonAbsence pAbs = new PersonAbsence(mockRep.StrictMock<IPerson>(), mockRep.StrictMock<IScenario>(), absLayer);
-            retList.Add(pAbs);
-            PasteBehaviorForTest testBehavior = new PasteBehaviorForTest();
-            IScheduleDay part = mockRep.StrictMock<IScheduleDay>();
-
-
-            using (mockRep.Record())
-            {
-                Expect.Call(part.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(retList)).Repeat.AtLeastOnce();
-                Expect.Call(part.Period).Return(new DateTimePeriod(baseDate, baseDate.AddDays(1))).Repeat.AtLeastOnce();
-                Expect.Call(part.SignificantPart()).Return(SchedulePartView.FullDayAbsence).Repeat.Once();
-                Expect.Call(part.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Once();
-
-            }
-            using (mockRep.Playback())
-            {
-                IPersonAbsence result = testBehavior.ReducedAbsence(part).PersonAbsenceCollection()[0];
-                Assert.AreEqual(baseDate.AddDays(1), result.Layer.Period.EndDateTime);
-                Assert.IsTrue(testBehavior.IsFullDayAbsence(part));
-                Assert.IsFalse(testBehavior.IsFullDayAbsence(part));
-            }
-
-            
-        }
     }
 
 
@@ -372,18 +341,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
         internal new bool FitsInsideRange(GridRangeInfo range, int clipRowOffset, int clipColOffset, int row, int col)
         {
             return base.FitsInsideRange(range, clipRowOffset, clipColOffset, row, col);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        internal new IScheduleDay ReducedAbsence(IScheduleDay part)
-        {
-            return NormalPasteBehavior.ReducedAbsence(part);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        internal new bool IsFullDayAbsence(IScheduleDay part)
-        {
-            return NormalPasteBehavior.IsFullDayAbsence(part);
         }
     }
 

@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
-using Teleopti.Messaging.Composites;
 using log4net;
 using NHibernate.Cfg.ConfigurationSchema;
 using Teleopti.Ccc.Domain.Helper;
@@ -14,10 +10,8 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Exceptions;
 using System.Xml.XPath;
-using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
@@ -100,31 +94,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	        return string.Empty;
 	    }
 
-	    /// <summary>
-		/// Gets application settings.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// You can get the application settings from two sources, either locally from the application config file, or fetch them over the web service.
-		/// To decide the source of the settings, make sure that the "GetConfigFromWebService" entry is "false" in in the appsettings section 
-		/// in the app.config file.
-		/// </remarks>
-		private static IDictionary<string, string> GetAppSettings()
-		{
-			IDictionary<string, string> appSettings = new Dictionary<string, string>();
-			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
-			var published = (NameValueCollection)ConfigurationManager.GetSection("teleopti/publishedSettings");
-			
-			if (published != null)
-			{
-				foreach (string item in published)
-				{
-					appSettings.Add(item, published.Get(item));
-				}
-			}
-			return appSettings;
-		}
-
 		/// <summary>
 		/// Setup the application. Should be run once per application.
 		/// Is _not_ thread safe. It's the client's responsibility.
@@ -132,7 +101,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		/// <param name="clientCache">The client cache.</param>
 		/// <param name="xmlDirectory">The directory to nhibernate's conf file(s)</param>
 		/// <param name="loadPasswordPolicyService">The password policy loading service</param>
-		public void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService)
+		/// <param name="configurationWrapper">The configuration wrapper.</param>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
+		public void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService, IConfigurationWrapper configurationWrapper)
 		{
 			StateHolder.Initialize(clientCache);
 
@@ -147,7 +118,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 					dataSources.Add(dataSource);
 				}
 			}
-			var appSettings = GetAppSettings();
+			var appSettings = configurationWrapper.AppSettings;
 			StartMessageBroker(appSettings);
 			StateHolder.Instance.State.SetApplicationData(
 				new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), MessageBroker, loadPasswordPolicyService));
@@ -161,13 +132,16 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		/// <param name="clientCache">The client cache.</param>
 		/// <param name="settings">The settings.</param>
 		/// <param name="statisticConnectionString">The statistic connectionstring.</param>
+		/// <param name="configurationWrapper">The configuration wrapper.</param>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public void Start(IState clientCache,
 						  IDictionary<string, string> settings,
-						  string statisticConnectionString)
+						  string statisticConnectionString,
+			IConfigurationWrapper configurationWrapper)
 		{
 			StateHolder.Initialize(clientCache);
 			IDataSource datasources = DataSourcesFactory.Create(settings, statisticConnectionString);
-			var appSettings = GetAppSettings();
+			var appSettings = configurationWrapper.AppSettings;
 			StartMessageBroker(appSettings);
 			StateHolder.Instance.State.SetApplicationData(new ApplicationData(appSettings, datasources,
 																			  MessageBroker));
@@ -190,14 +164,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 						Uri serverUrl;
 						if (Uri.TryCreate(messageBrokerConnection, UriKind.Absolute, out serverUrl))
 						{
-							var oldMessageBroker = MessageBroker;
-							MessageBroker = new SignalBroker(MessageFilterManager.Instance.FilterDictionary);
-							oldMessageBroker.Dispose();
+							MessageBroker.ConnectionString = messageBrokerConnection;
+							MessageBroker.StartMessageBroker();
 						}
-						MessageBroker.ConnectionString = messageBrokerConnection;
 					}
 
-					MessageBroker.StartMessageBroker();
 					log.Debug("Message broker instantiated");
 				}
 			}

@@ -138,6 +138,7 @@
     <Compile Include="Bugs\Bug7871.cs" />
     <Compile Include="Config\LoadPasswordPolicyServiceTest.cs" />
     <Compile Include="Config\XmlDefaultsTest.cs" />
+    <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
     <Compile Include="Repositories\Deadlock\StudentAvailabilityPersistTest.cs" />
     <Compile Include="Foundation\ApplicationDataTest.cs" />
     <Compile Include="Foundation\AvailableWindowsDataSourcesTest.cs" />
@@ -170,7 +171,6 @@
     <Compile Include="NHibernateConfiguration\Cache\AvailableDataTest.cs" />
     <Compile Include="NHibernateConfiguration\Cache\PersonInApplicationRoleTest.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetterTest.cs" />
-    <Compile Include="NHibernateConfiguration\TeleoptiDistributedTransactionContextTest.cs" />
     <Compile Include="NHibernateConfiguration\EnversConfigurationTest.cs" />
     <Compile Include="NHibernateConfiguration\FasterProxyFactoryFactoryTest.cs" />
     <Compile Include="NHibernateConfiguration\HybridWebSessionContextTest.cs" />
@@ -240,6 +240,7 @@
     <Compile Include="Repositories\Audit\RevisionListenerTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleHistoryReportTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleHistoryRepositoryTest.cs" />
+    <Compile Include="Repositories\PersonScheduleDayReadModelRepositoryTest.cs" />
     <Compile Include="Repositories\LicenseStatusRepositoryTest.cs" />
     <Compile Include="Repositories\DenormalizationQueueRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingReadOnlyRepositoryTest.cs" />

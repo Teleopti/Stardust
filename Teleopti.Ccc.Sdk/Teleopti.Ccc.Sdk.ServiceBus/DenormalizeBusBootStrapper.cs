@@ -8,8 +8,6 @@
 		{
 			var initialLoad = new InitialLoadOfScheduleProjectionReadModel(daBus);
 			initialLoad.Check();
-			var initialLoadDay = new InitialLoadOfScheduleDayReadModel(daBus);
-			initialLoadDay.Check();
 		}
 	}
 }

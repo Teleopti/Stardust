@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					var startDateTime = matchedItems.Min(s => s.Period.StartDateTime);
 					var endDateTime = matchedItems.Max(s => s.Period.EndDateTime);
 
-					var message = new DenormalizeScheduleProjection
+					var message = new ScheduleChanged
 					              	{
 					              		ScenarioId = scenario.Id.GetValueOrDefault(),
 					              		StartDateTime = startDateTime,

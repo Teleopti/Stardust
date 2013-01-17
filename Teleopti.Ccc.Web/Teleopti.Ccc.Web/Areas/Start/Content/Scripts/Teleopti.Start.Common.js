@@ -1,7 +1,7 @@
-﻿/// <reference path="~/Scripts/jquery-1.5.1.js" />
-/// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
-/// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
-/// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.8.3.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.9.1.custom.js" />
+/// <reference path="~/Content/Scripts/jquery-1.8.3-vsdoc.js" />
+/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -42,12 +42,6 @@ Teleopti.Start.Common = (function ($) {
 
 Teleopti.Start.Common.Layout = (function ($) {
 	return {
-		ActivateStdButtons: function () {
-			$(".button").button();
-		},
-		ActivateCustomInput: function () {
-			$('.edit-module input[type="checkbox"], .edit-module input[type="radio"]').customInput();
-		},
 		ActivatePlaceHolderText: function () {
 			$(':text, :password').placeholder();
 		}
