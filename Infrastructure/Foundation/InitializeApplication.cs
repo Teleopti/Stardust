@@ -190,14 +190,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 						Uri serverUrl;
 						if (Uri.TryCreate(messageBrokerConnection, UriKind.Absolute, out serverUrl))
 						{
-							var oldMessageBroker = MessageBroker;
-							MessageBroker = new SignalBroker(MessageFilterManager.Instance.FilterDictionary);
-							oldMessageBroker.Dispose();
+							MessageBroker.ConnectionString = messageBrokerConnection;
+							MessageBroker.StartMessageBroker();
 						}
-						MessageBroker.ConnectionString = messageBrokerConnection;
 					}
 
-					MessageBroker.StartMessageBroker();
 					log.Debug("Message broker instantiated");
 				}
 			}

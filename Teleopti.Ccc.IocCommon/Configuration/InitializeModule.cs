@@ -6,6 +6,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Composites;
+using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterInstance(_dataSourceConfigurationSetter);
 			builder.RegisterType<InitializeApplication>().As<IInitializeApplication>().SingleInstance();
 			builder.RegisterType<DataSourcesFactory>().As<IDataSourcesFactory>().SingleInstance();
-			builder.RegisterInstance(MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
+			builder.RegisterInstance(new SignalBroker(MessageFilterManager.Instance.FilterDictionary));
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<EnversConfiguration>().As<IEnversConfiguration>().SingleInstance();
 			builder.RegisterType<ConfigReader>().As<IConfigReader>().SingleInstance();

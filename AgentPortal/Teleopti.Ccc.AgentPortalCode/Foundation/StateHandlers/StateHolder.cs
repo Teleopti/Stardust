@@ -118,11 +118,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
             }
             catch (BrokerNotInstantiatedException)
             {
-                ///TODO : Handle exception more generic way
-                return;
-            }
-            catch (SocketIsNullException)
-            {
                 return;
             }
         }
@@ -142,13 +137,9 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
         	if (Uri.TryCreate(_connectionString,UriKind.Absolute,out serverUrl))
         	{
 				var broker = new SignalBroker(new Dictionary<Type, IList<Type>>()) {ConnectionString = _connectionString};
-        		_messageBroker = broker;
+				_messageBroker = broker;
+				_messageBroker.StartMessageBroker();
         	}
-			else
-        	{
-        		_messageBroker = MessageBrokerImplementation.GetInstance(_connectionString);
-        	}
-            _messageBroker.StartMessageBroker();
         }
 
         /// <summary>

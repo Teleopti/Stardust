@@ -5,6 +5,7 @@ using System.Web;
 using Autofac;
 using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Messaging.SignalR;
 using log4net;
 using log4net.Config;
 using MbCache.Configuration;
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
                                                 new PersonPeriodChangedMessageSender(busSender,saveToDenormalizationQueue )
                                             },
 													DataSourceConfigurationSetter.ForSdk()),
-        			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
+        			new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
         			{MessageBrokerDisabled = messageBrokerDisabled()};
             string sitePath = Global.sitePath();
             initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath));

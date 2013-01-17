@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                                     new PersonPeriodChangedMessageSender(notify,saveToDenormalizationQueue)
             			                       	},
 															DataSourceConfigurationSetter.ForServiceBus()),
-            			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
+            			new SignalBroker(MessageFilterManager.Instance.FilterDictionary));
                 application.Start(new BasicState(), encryptedAppSettings,
                                   encryptedNHibConfigs.DecryptList(EncryptionConstants.Image1,
                                                                    EncryptionConstants.Image2), null);

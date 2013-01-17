@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using Teleopti.Messaging.Composites;
+using Teleopti.Messaging.SignalR;
 using log4net.Appender;
 using log4net.Config;
 using log4net.Core;
@@ -21,7 +23,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Messaging.Client;
 
 #endregion
 
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			ApplicationData = new ApplicationData(appSettings,
 									new ReadOnlyCollection<IDataSource>(new List<IDataSource> { DataSource }),
-									MessageBrokerImplementation.GetInstance(), null);
+									new SignalBroker(MessageFilterManager.Instance.FilterDictionary), null);
 			sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, ApplicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
 
 			StateHolderProxyHelper.SetStateReaderExpectations(stateMock, ApplicationData, sessionData);
