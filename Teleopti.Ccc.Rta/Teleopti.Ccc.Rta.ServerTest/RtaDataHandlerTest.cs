@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
             personResolver = mocks.DynamicMock<IPersonResolver>();
         }
 
-        [Test, ExpectedException(typeof(BrokerNotInstantiatedException))]
-        public void VerifyCreateInstanceUsingEmptyConstructorFailsBecauseNoConfigurationAvailable()
+        [Test]
+        public void VerifyCreateInstanceUsingEmptyConstructorWorks()
         {
             new RtaDataHandler();
         }

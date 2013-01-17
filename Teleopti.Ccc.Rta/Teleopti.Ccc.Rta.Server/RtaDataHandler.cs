@@ -32,6 +32,9 @@ namespace Teleopti.Ccc.Rta.Server
             _databaseConnectionFactory = databaseConnectionFactory;
             _dataSourceResolver = dataSourceResolver;
             _personResolver = personResolver;
+
+			if (_messageSender == null) return;
+
             try
             {
                 _messageSender.InstantiateBrokerService();
