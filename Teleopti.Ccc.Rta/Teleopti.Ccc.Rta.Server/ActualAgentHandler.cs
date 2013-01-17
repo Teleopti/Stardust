@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Rta.Server
 	public class ActualAgentHandler : IActualAgentHandler
 	{
 		private readonly IActualAgentStateDataHandler _actualAgentStateDataHandler;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ActualAgentHandler));
+		//private static readonly ILog Logger = LogManager.GetLogger(typeof(ActualAgentHandler));
 
 		public ActualAgentHandler(IActualAgentStateDataHandler actualAgentStateDataHandler)
 		{

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Rta.Server
 {
 	public interface IRtaConsumer
 	{
-		IActualAgentState Consume(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timeStamp, TimeSpan timeInState, AutoResetEvent waitHandle);
+		IActualAgentState Consume(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timestamp, TimeSpan timeInState, AutoResetEvent waitHandle);
 	}
 
 	public class RtaConsumer : IRtaConsumer

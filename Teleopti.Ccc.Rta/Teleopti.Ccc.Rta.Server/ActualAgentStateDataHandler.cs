@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Rta.Server
 		IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, Guid personId);
 		IActualAgentState LoadOldState(Guid personToLoad);
 		IEnumerable<RtaStateGroupLight> StateGroups();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		Dictionary<Guid, List<RtaAlarmLight>> ActivityAlarms();
 		void AddOrUpdate(IActualAgentState newState);
 	}
@@ -245,6 +246,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void AddOrUpdate(IActualAgentState newState)
 		{
 //                const string stringQuery = @"[RTA].[rta_addorupdate_actualagentstate] @PersonId=:personId,  @StateCode=:stateCode, @PlatformTypeId=:platform, 

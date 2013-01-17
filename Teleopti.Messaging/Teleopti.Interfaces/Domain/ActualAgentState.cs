@@ -143,7 +143,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		public bool Equals(IActualAgentState other)
 		{
-			return GetHashCode().Equals(other.GetHashCode());
+			return other != null && GetHashCode().Equals(other.GetHashCode());
 		}
 
 		/// <summary>

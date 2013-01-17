@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        public ICollection<Guid> PersonIdsWithExternalLogon(Guid businessUnitId)
+        public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)
         {
             const string stringQuery =
                 @"SELECT DISTINCT p.person_code 
