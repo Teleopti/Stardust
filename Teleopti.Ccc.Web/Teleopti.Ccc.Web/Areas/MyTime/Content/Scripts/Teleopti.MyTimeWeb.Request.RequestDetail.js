@@ -22,12 +22,10 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 				_initEditSection(requestViewModel);
 				_hideEditSection();
 				_showEditSection();
-				
+
 				$('#Text-request-tab').click();
 			})
 			.removeAttr('disabled');
-
-			
 	}
 
 	function _initTemporary() {
@@ -58,9 +56,10 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		$('#Request-detail-ok-button')
 			.click(function () {
 				$(this).prop('disabled', true);
-				if ($('#Text-request-tab.selected-tab').length > 0) {
+				if ($('#Text-request-tab').hasClass('selected-tab') || requestViewModel.TypeEnum() == 0) {
 					_addRequest("Requests/TextRequest");
-				} else {
+				}
+				else {
 					_addRequest("Requests/AbsenceRequest");
 				}
 			});
@@ -270,7 +269,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 
 	var self = this;
 	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template"];
-
 	self.TextRequestTabVisible = ko.observable(true);
 	self.AbsenceRequestTabVisible = ko.observable(true);
 	self.IsFullDay = ko.observable(false);
@@ -306,6 +304,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 	//henke todo remove these (copied from the old code)
 	self.AddTextRequest = function () {
 		self._clearValidationError();
+		self.TypeEnum(0);		
 		if (!$('#Text-request-tab').hasClass('selected-tab')) {
 			self._selectTextRequestTab();
 			self.IsFullDay(false);
@@ -314,14 +313,14 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 
 	self.AddAbsenceRequest = function () {
 		self._clearValidationError();
+		self.TypeEnum(1);
 		if (!$('#Absence-request-tab').hasClass('selected-tab')) {
 			self._selectAbsenceRequestTab();
 			self.IsFullDay(true);
 		}
 	};
 
-
-	self._clearValidationError = function() {
+	self._clearValidationError = function () {
 		$('#Request-detail-deny-reason').text('');
 		$('#Request-detail-error').html('');
 	};
