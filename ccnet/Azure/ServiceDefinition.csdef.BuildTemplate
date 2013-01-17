@@ -37,7 +37,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 		<Setting name="TeleoptiDriveMap.AccountName" />
 		<Setting name="TeleoptiDriveMap.AccountKey" />
 		<Setting name="TeleoptiDriveMap.ContainerName" />
-		<Setting name="TeleoptiDriveMap.BlobName" />
+		<Setting name="TeleoptiDriveMap.DataSourceName" />
 	</ConfigurationSettings>
 
   </WebRole>
