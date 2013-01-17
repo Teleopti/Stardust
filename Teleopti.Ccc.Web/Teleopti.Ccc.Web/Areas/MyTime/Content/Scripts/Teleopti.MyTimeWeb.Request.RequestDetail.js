@@ -15,6 +15,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _initToolbarButtons() {
 		$('#Requests-addRequest-button')
 			.click(function () {
+				requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+				requestViewModel.TypeEnum(3);
 				_clearFormData();
 				requestViewModel.TextRequestTabVisible(true);
 				requestViewModel.AbsenceRequestTabVisible(true);
@@ -55,6 +57,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 		$('#Request-detail-ok-button')
 			.click(function () {
+				console.log('testar');
 				$(this).prop('disabled', true);
 				if ($('#Text-request-tab').hasClass('selected-tab') || requestViewModel.TypeEnum() == 0) {
 					_addRequest("Requests/TextRequest");
@@ -96,6 +99,20 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _showRequest(data, position) {
+
+		//henke: här skulle vi kunna sätta en vymodell istället:
+		//om det är en shifttrade, skapa en shifttradedetailviewmodel istället:
+
+		if (data.TypeEnum == 2) {
+			requestViewModel = new ShiftTradeRequestDetailViewModel();
+		}
+		else {
+			requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+		}
+
+		//annars skapar vi den gamla:
+
+
 		requestViewModel.isUpdate(true);
 		requestViewModel.TypeEnum(data.TypeEnum);
 		_hideEditSection();
@@ -264,6 +281,15 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	};
 
 })(jQuery);
+
+
+var ShiftTradeRequestDetailViewModel = function () {
+	var self = this;
+	self.isUpdate = ko.observable(true);
+	self.TypeEnum = ko.observable(2);
+	self.IsFullDay = ko.observable(true);
+	self.Template = ko.observable("shifttrade-request-detail-template");
+};
 
 Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 
