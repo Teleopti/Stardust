@@ -160,7 +160,9 @@ namespace Teleopti.Ccc.AgentPortal.Reports
                 new SFGridScheduleAdherenceColumn<MyScheduleGridAdapter>("MyScheduleAdherence", " ", width);
             gridControlMyWeekSchedules.ColWidths[3] = width;
             gridControlMyWeekSchedules.Invalidate();
-            adherenceColumn.TimePeriod = calculateTimePeriod();
+			adherenceColumn.TimePeriod = calculateTimePeriod();
+			//new TimePeriod(new TimeSpan(0, 8, 0, 0), new TimeSpan(1, 21, 0, 0));
+			//calculateTimePeriod();
 
             gridColumns.Add(adherenceColumn);
 

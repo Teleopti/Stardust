@@ -831,6 +831,61 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return AdherenceReportSetting.MapToMatrix(adherenceReportSetting.CalculationMethod);
 		}
 
+		public AdherenceDto GetAdherenceDataBasedOnShiftDate(DateTime dateTime, string timeZoneId, PersonDto personDto,
+										PersonDto agentPersonDto, int languageId)
+		{
+			//Kolla permissions på datat
+			//TeleoptiPrincipal.Current.Person.PermissionInformation.
+
+			AdherenceDto adherenceDto = new AdherenceDto();
+			if (!personDto.Id.HasValue || !agentPersonDto.Id.HasValue)
+				return adherenceDto;
+
+			IRepositoryFactory repositoryFactory = new RepositoryFactory();
+			IStatisticRepository repository = repositoryFactory.CreateStatisticRepository();
+			int adherenceCalculationId = GetMatrixReportSetting();
+
+			IList returnValues = repository.LoadAdherenceData(dateTime, timeZoneId, personDto.Id.Value, agentPersonDto.Id.Value, languageId, adherenceCalculationId);
+			if (returnValues.Count == 0)
+				return adherenceDto;
+			foreach (object[] data in returnValues)
+			{
+				string temp = data[2].ToString();
+				int startHour = Convert.ToInt32(temp.Substring(0, 2));
+				int startMinutes = Convert.ToInt32(temp.Substring(3, 2));
+				int endHour = Convert.ToInt32(temp.Substring(6, 2));
+				int endMinutes = Convert.ToInt32(temp.Substring(9, 2));
+				TimeSpan startTime = new TimeSpan(0, startHour, startMinutes, 0);
+				TimeSpan endTime = new TimeSpan(0, endHour, endMinutes, 0);
+				DateTime calendarDateTime = Convert.ToDateTime(data[0].ToString());
+				DateTime shiftBelongsToDateTime = Convert.ToDateTime(data[29].ToString());
+				decimal deviation;
+				decimal dayAdherence;
+				decimal readyTime;
+				decimal adherence;
+				if (data[16] == null)
+					deviation = 0;
+				else
+					deviation = (decimal)data[16];
+				if (data[13] == null)
+					dayAdherence = 0;
+				else
+					dayAdherence = (decimal)data[13];
+				if (data[17] == null)
+					readyTime = 0;
+				else
+					readyTime = (decimal)data[17];
+				if (data[12] == null)
+					adherence = 0;
+				else
+					adherence = (decimal)data[12];
+				AdherenceDataDto adherenceDataDto = new AdherenceDataDto(startTime.Ticks, endTime.Ticks, readyTime, deviation, adherence, calendarDateTime, shiftBelongsToDateTime);
+				adherenceDataDto.DayAdherence = dayAdherence;
+				adherenceDto.AdherenceDataDtos.Add(adherenceDataDto);
+			}
+			return adherenceDto;
+		}
+
 
 		[SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToInt32(System.String)")]
 		public AdherenceDto GetAdherenceData(DateTime dateTime, string timeZoneId, PersonDto personDto,
@@ -859,6 +914,9 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				int endMinutes = Convert.ToInt32(temp.Substring(9, 2));
 				TimeSpan startTime = new TimeSpan(0, startHour, startMinutes, 0);
 				TimeSpan endTime = new TimeSpan(0, endHour, endMinutes, 0);
+				DateTime calendarDateTime = Convert.ToDateTime(data[0].ToString());
+				DateTime shiftBelongsToDateTime = Convert.ToDateTime(data[29].ToString());
+
 				decimal deviation;
 				decimal dayAdherence;
 				decimal readyTime;
@@ -879,7 +937,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					adherence = 0;
 				else
 					adherence = (decimal)data[12];
-				AdherenceDataDto adherenceDataDto = new AdherenceDataDto(startTime.Ticks, endTime.Ticks, readyTime, deviation, adherence);
+				AdherenceDataDto adherenceDataDto = new AdherenceDataDto(startTime.Ticks, endTime.Ticks, readyTime, deviation, adherence, calendarDateTime, shiftBelongsToDateTime);
 				adherenceDataDto.DayAdherence = dayAdherence;
 				adherenceDto.AdherenceDataDtos.Add(adherenceDataDto);
 			}
