@@ -34,7 +34,6 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		private IDictionary<DateTime, IList<IntervalToolTip>> _intervalDateToolTipDictionary =
 			new Dictionary<DateTime, IList<IntervalToolTip>>();
 
-		private DateTime _shiftStartDate;
 		SortedDictionary<int, SummaryData> _colSummary = new SortedDictionary<int, SummaryData>();
 		class SummaryData
 		{
@@ -415,7 +414,6 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		private TableRow[] GetReportDetailRows()
 		{
 			var perDate = ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"));
-			//PrepareTeamAdherenceAndDeviantion();
 			var tableRowList = MakeTableRowList();
 			var dataRowReaders = from r in _dataTable.Rows.Cast<DataRow>() select new DataCellModel(r, this, perDate);
 			var dataPerPerson = from r in dataRowReaders group r by new PersonModel(r.DataRow, perDate);
@@ -444,7 +442,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 				var tableCellBlancList = fillWithBlankCells(previousIntervalId + 1, dataCellModel.IntervalId);
 				tableCellList.AddRange(tableCellBlancList);
 			}
-			if (!dataCellModel.Date.Equals(_shiftStartDate) )
+			if (dataCellModel.ShiftOverMidnight )
 				personModel.EndsOnNextDate = true;
 			previousIntervalId = dataCellModel.IntervalId;
 
@@ -484,7 +482,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		private void addColSummary(DataCellModel dataCellModel)
 		{
 			var key = dataCellModel.IntervalId;
-			if (!dataCellModel.Date.Equals(_shiftStartDate))
+			if (dataCellModel.ShiftOverMidnight)
 				key += 1000;
 
 			if(!_colSummary.ContainsKey(key))
@@ -743,13 +741,17 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 			foreach (DataRow row in _dataTable.Rows)
 			{
-				if ((int)row["interval_id"] < _timeLineStartInterval && ((DateTime)row["date"]).Equals(_shiftStartDate) )
+				if ((int)row["interval_id"] < _timeLineStartInterval && ((DateTime)row["date"]).Equals((DateTime)row["shift_startdate"]))
 				{
 					_timeLineStartInterval = (int)row["interval_id"];
 				}
 				if ((int)row["interval_id"] > _timeLineEndInterval)
 				{
 					_timeLineEndInterval = (int)row["interval_id"];
+				}
+				if ((int)row["interval_id"] > _timeLineDayTwoEndInterval && !((DateTime)row["date"]).Equals((DateTime)row["shift_startdate"]))
+				{
+					_timeLineDayTwoEndInterval = (int)row["interval_id"];
 				}
 
 				if (previousDate != (DateTime)row["date"])
@@ -763,7 +765,8 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					{
 						intervalToolTip.EndInterval = previousIntervalId;
 						intervalToolTipList.Add(intervalToolTip);
-						_intervalDateToolTipDictionary.Add(previousDate, intervalToolTipList);
+						if (!_intervalDateToolTipDictionary.ContainsKey(previousDate))
+							_intervalDateToolTipDictionary.Add(previousDate, intervalToolTipList);
 					}
 
 					intervalToolTipList = new List<IntervalToolTip>();
@@ -805,7 +808,8 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			{
 				intervalToolTip.EndInterval = previousIntervalId;
 				intervalToolTipList.Add(intervalToolTip);
-				_intervalDateToolTipDictionary.Add(previousDate, intervalToolTipList);
+				if (!_intervalDateToolTipDictionary.ContainsKey(previousDate))
+					_intervalDateToolTipDictionary.Add(previousDate, intervalToolTipList);
 			}
 
 			_timeLineEndInterval += 1;
@@ -817,6 +821,12 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			if (_timeLineEndInterval % _intervalsPerHour != 0)
 			{
 				_timeLineEndInterval += _intervalsPerHour - (_timeLineEndInterval % _intervalsPerHour);
+			}
+			if (_timeLineDayTwoEndInterval > 0)
+				_timeLineDayTwoEndInterval += 1;
+			if (_timeLineDayTwoEndInterval % _intervalsPerHour != 0)
+			{
+				_timeLineDayTwoEndInterval += _intervalsPerHour - (_timeLineDayTwoEndInterval % _intervalsPerHour);
 			}
 		}
 
@@ -834,7 +844,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 			foreach (DataRow row in _dataTable.Rows)
 			{
-				if ((int)row["interval_id"] < _timeLineStartInterval && ((DateTime)row["date"]).Equals(_shiftStartDate))
+				if ((int)row["interval_id"] < _timeLineStartInterval && ((DateTime)row["date"]).Equals((DateTime)row["shift_startdate"]))
 				{
 					_timeLineStartInterval = (int)row["interval_id"];
 				}
@@ -842,7 +852,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 				{
 					_timeLineEndInterval = (int)row["interval_id"];
 				}
-				if ((int)row["interval_id"] > _timeLineDayTwoEndInterval && !((DateTime)row["date"]).Equals(_shiftStartDate))
+				if ((int)row["interval_id"] > _timeLineDayTwoEndInterval && !((DateTime)row["date"]).Equals((DateTime)row["shift_startdate"]))
 				{
 					_timeLineDayTwoEndInterval = (int)row["interval_id"];
 				}
@@ -927,7 +937,6 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		private void SetIntervalInformation()
 		{
 			_intervalsPerDay = (int)_dataTable.Rows[0]["intervals_per_day"];
-			_shiftStartDate = (DateTime)_dataTable.Rows[0]["shift_startdate"];
 			_intervalLength = 1440 / _intervalsPerDay;
 			_intervalsPerHour = 60 / _intervalLength;
 		}
