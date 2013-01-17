@@ -161,10 +161,12 @@ define([
 					.done(function () {
 						loadAvailableTeams();
 
-						ko.applyBindings({
-							TeamSchedule: teamSchedule,
-							Translations: translations
-						}, $('body > section')[0]);
+						$(window).ready(function () {
+							ko.applyBindings({
+								TeamSchedule: teamSchedule,
+								Translations: translations
+							}, $('body > section')[0]);
+						});
 					})
 					.fail(function (error) {
 						$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
@@ -195,9 +197,9 @@ define([
 					for (var i = 0; i < languages.length; i++) {
 						try {
 							moment.lang(languages[i]);
-						} catch(e) {
+						} catch (e) {
 							continue;
-						} 
+						}
 						if (moment.lang() == languages[i]) return;
 					}
 				}
