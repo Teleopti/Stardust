@@ -54,6 +54,16 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			get { return (DateTime)DataRow["date"]; }
 		}
 
+		public DateTime ShiftStartDate
+		{
+			get { return (DateTime)DataRow["shift_startdate"]; }
+		}
+
+		public bool ShiftOverMidnight
+		{
+			get{return !Date.Equals(ShiftStartDate);}
+		}
+
 		public IntervalToolTip CellToolTip 
 		{ 
 			get
