@@ -63,49 +63,19 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 
-	function RequestPageViewModel(requestDetailViewModel, readyForInteraction, completelyLoaded) {
+	function RequestPageViewModel(readyForInteraction, completelyLoaded) {
 
 		var self = this;
 
 		self.ready = readyForInteraction;
 		self.completed = completelyLoaded;
-		self.details = ko.observable(requestDetailViewModel);
-
-		//henke remove wrapper...
-		self.AddTextRequest = function() {
-			return requestDetailViewModel.AddTextRequest;
-		};
-
-		self.AddAbsenceRequest = function () {
-			return requestDetailViewModel.AddAbsenceRequest;
-		};
-
-		requestDetailViewModel.isUpdate.subscribe(function (newValue) {
-			if (!newValue) self.setSelected(null);
-		});
-
+		
 		self.isUpdate = ko.computed(function () {
-			return requestDetailViewModel.isUpdate();
-		});
-
-		self.AbsenceRequestTabVisible = ko.computed(function () {
-			return requestDetailViewModel.AbsenceRequestTabVisible();
-		});
-
-		self.TabSeparatorVisible = ko.computed(function () {
-			return requestDetailViewModel.TabSeparatorVisible();
-		});
-
-		self.IsFullDay = ko.computed(function () {
-			return requestDetailViewModel.IsFullDay();
-		});
-
-		self.TextRequestTabVisible = ko.computed(function () {
-			return requestDetailViewModel.TextRequestTabVisible();
+			return false;
 		});
 
 		self.Template = ko.computed(function () {
-			return requestDetailViewModel.Template();
+			return "request-detail-not-set";
 		});
 
 		self.requests = ko.observableArray();
@@ -240,10 +210,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	return {
-		Init: function (detailViewModel, readyForInteractionCallback, completelyLoadedCallback) {
-			readyForInteraction = readyForInteractionCallback;
-			completelyLoaded = completelyLoadedCallback;
-			pageViewModel = new RequestPageViewModel(detailViewModel, readyForInteractionCallback, completelyLoadedCallback);
+		Init: function (readyForInteractionCallback, completelyLoadedCallback) {
+			pageViewModel = new RequestPageViewModel(readyForInteractionCallback, completelyLoadedCallback);
 
 			_initScrollPaging();
 			var element = $('#Requests-body-inner')[0];

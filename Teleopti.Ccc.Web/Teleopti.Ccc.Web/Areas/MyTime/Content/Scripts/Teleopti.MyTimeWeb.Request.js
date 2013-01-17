@@ -20,10 +20,8 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		},
 		RequestPartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
-
-			var requestDetailViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
-			Teleopti.MyTimeWeb.Request.List.Init(requestDetailViewModel, readyForInteractionCallback, completelyLoadedCallback);
-			Teleopti.MyTimeWeb.Request.RequestDetail.Init(requestDetailViewModel);
+			Teleopti.MyTimeWeb.Request.List.Init(readyForInteractionCallback, completelyLoadedCallback);
+			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
 		}
 	};
 

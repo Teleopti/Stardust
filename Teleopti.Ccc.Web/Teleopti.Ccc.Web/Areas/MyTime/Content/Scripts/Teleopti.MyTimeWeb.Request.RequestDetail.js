@@ -253,9 +253,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	return {
-		Init: function (requestDetailViewModel) {
+		Init: function () {
 			_initToolbarButtons();
-			_initEditSection(requestDetailViewModel);
+			_initEditSection(new Teleopti.MyTimeWeb.Request.RequestViewModel());
 		},
 		HideEditSection: function () {
 			_hideEditSection();
