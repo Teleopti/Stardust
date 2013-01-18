@@ -248,15 +248,15 @@
 <div class="displaynone" id="Request-detail-default-end-time" >@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
 
 <div id="Requests-body-inner" class="request-body-inner relative">
-	<div class="ui-corner-all friendly-message ui-corner-all floatleft" data-bind="visible: requests().length == 0" id="Requests-no-requests-found">
+	<div class="ui-corner-all friendly-message ui-corner-all floatleft" data-bind="visible: Requests().length == 0" id="Requests-no-requests-found">
 		@Resources.NoRequestsFound
 	</div>
 
-	<div id="request-list" data-bind="foreach: requests" class="request-list">
+	<div id="request-list" data-bind="foreach: Requests" class="request-list">
 		
 		<!-- Shows the requestviewmodel -->
-		<div class="ui-corner-all request-item relative" data-bind="click: $parent.SelectItem, event: { mouseover: toggle, mouseout: toggle }, increaseWidthIf: mouseIsOver,  css: { 'request-selected': isSelected() == true , 'request-not-selected': isSelected() == false}, attr:{'data-mytime-requestid' : Id}">
-			<div class="request-arrow-right" data-bind="fadeInIf: mouseIsOver">
+		<div class="ui-corner-all request-item relative" data-bind="click: $parent.SelectItem, event: { mouseover: ToggleMouseOver, mouseout: ToggleMouseOver }, increaseWidthIf: IsMouseOver,  css: { 'request-selected': isSelected() == true , 'request-not-selected': isSelected() == false}, attr:{'data-mytime-requestid' : Id}">
+			<div class="request-arrow-right" data-bind="fadeInIf: IsMouseOver">
 				<img src="@Url.Content("~/Areas/MyTime/Content/Images/arrow-right.png")"/>
 			</div>
 		
@@ -284,7 +284,7 @@
 		</div>
 	</div>
 
-	<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all request-selected" data-bind=" css: { 'request-selected': isUpdate() == true , 'request-not-selected': isUpdate() == false}">
+	<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all request-selected" data-bind=" css: { 'request-selected': IsUpdate() == true , 'request-not-selected': IsUpdate() == false}">
 		<div data-bind="template : Template">
 		</div>
 	</div>
@@ -294,7 +294,7 @@
 			<div class="loading">
 			</div>
 		</div>
-		<div class="arrow-down" data-bind="fadeInIf: moreToLoad,hiddenWhenFalse: true">
+		<div class="arrow-down" data-bind="fadeInIf: MoreToLoad,hiddenWhenFalse: true">
 		</div>
 		<div class="clearboth">
 		</div>		
