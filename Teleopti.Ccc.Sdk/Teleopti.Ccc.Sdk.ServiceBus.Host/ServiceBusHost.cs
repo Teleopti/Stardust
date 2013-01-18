@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Host
         {
             InitializeComponent();
 
-			serviceBusRunner = new ServiceBusRunner(logUnhandledException, logStartupException, RequestAdditionalTime);
+			serviceBusRunner = new ServiceBusRunner(logUnhandledException, logStartupException, RequestAdditionalTime, new PayrollDllCopy());
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.EventLog.WriteEntry(System.String,System.Diagnostics.EventLogEntryType)")]

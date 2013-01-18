@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Policy;
-using System.Threading;
-using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using log4net;
 using log4net.Config;
 
@@ -21,11 +17,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private readonly Action<Exception> _startupExceptionHandler;
 		private readonly Action<int> _requestExtraTimeHandler;
 		private static readonly ILog log = LogManager.GetLogger(typeof(ServiceBusRunner));
-		
-		[NonSerialized]
-		private FileSystemWatcher _watcher;
+
 		[NonSerialized] 
-		private Dictionary<string, DateTime> _copiedFiles;
+		private readonly IPayrollDllCopy _payrollDllCopy;
 
 		[NonSerialized] 
 		private ConfigFileDefaultHost _requestBus;
@@ -45,13 +39,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		[NonSerialized]
 		private AppDomain _payrollDomain;
 
-		public ServiceBusRunner(Action<Exception> unhandledExceptionHandler, Action<Exception> startupExceptionHandler, Action<int> requestExtraTimeHandler)
+		public ServiceBusRunner(Action<Exception> unhandledExceptionHandler, Action<Exception> startupExceptionHandler, Action<int> requestExtraTimeHandler, IPayrollDllCopy payrollDllCopy)
 		{
 			_unhandledExceptionHandler = unhandledExceptionHandler;
 			_startupExceptionHandler = startupExceptionHandler;
 			_requestExtraTimeHandler = requestExtraTimeHandler;
-			_copiedFiles = new Dictionary<string, DateTime>();
+			_payrollDllCopy = payrollDllCopy;
 
+			_payrollDllCopy.NewPayrollFileExist += RestartPayrollQueue;
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 		}
 
@@ -83,7 +78,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				throw;
 			}
 		}
-
+		
 		private void HostServiceStart()
 		{
 			if (_requestExtraTimeHandler!=null)
@@ -119,112 +114,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_denormalizeBus.UseFileBasedBusConfiguration("DenormalizeQueue.config");
 			_denormalizeBus.Start<DenormalizeBusBootStrapper>();
 
+			_payrollDllCopy.CopyPayrollDll();
 			startPayrollQueue();
-
-			RunFileWatcher();
+			_payrollDllCopy.RunFileWatcher();
+			
 		}
 
 		private bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
 		{
 			return true;
 		}
-
-		private void RunFileWatcher()
+		
+		private void RestartPayrollQueue(object sender, EventArgs eventArgs)
 		{
-			try
-			{
-				var fileWatchFolder = Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll.DeployNew\\");
-				if (!Directory.Exists(fileWatchFolder))
-					Directory.CreateDirectory(fileWatchFolder);
-				_watcher = new FileSystemWatcher(fileWatchFolder);
-				_watcher.NotifyFilter = NotifyFilters.LastWrite;
-				_watcher.Created += OnChanged;
-				_watcher.Changed += OnChanged;
-				_watcher.EnableRaisingEvents = true;
-				_watcher.IncludeSubdirectories = true;
-			}
-			catch (IOException exception)
-			{
-				log.Error("An exception was encountered when configuring the custom payroll folder", exception);
-				throw;
-			}
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		private void OnChanged(object sender, FileSystemEventArgs e)
-		{
-			var totalSleepTime = 0;
-			var info = new FileInfo(e.FullPath);
-
-			if (!File.Exists(e.FullPath)
-				|| (_copiedFiles.ContainsKey(e.FullPath)
-				&& _copiedFiles[e.FullPath] == info.LastWriteTimeUtc
-				&& _copiedFiles[e.FullPath].Millisecond == info.LastWriteTimeUtc.Millisecond))
-				return;
-
-			while (IsFileLocked(info))
-			{
-				Thread.Sleep(20);
-				totalSleepTime+= 20;
-				if (totalSleepTime == 500) return;
-			}
-
 			stopPayrollQueue();
-
+			_payrollDllCopy.CopyPayrollDll();
 			startPayrollQueue();
 		}
-
-		private void CopyFiles(string source, string destination)
+		
+		public void startPayrollQueue()
 		{
-			foreach (var folder in Directory.GetDirectories(source))
-			{
-				var newFolderPath = Path.GetFullPath(destination + Path.GetFileName(folder));
-
-				if (!Directory.Exists(newFolderPath))
-					Directory.CreateDirectory(newFolderPath);
-
-				CopyFiles(folder, newFolderPath);
-			}
-			foreach (var file in Directory.GetFiles(source))
-			{
-				var totalSleepTime = 0;
-				var fileInfo = new FileInfo(file);
-				while (IsFileLocked(fileInfo))
-				{
-					Thread.Sleep(20);
-					totalSleepTime += 20;
-					if (totalSleepTime == 500) break;
-				}
-				// if file is still locked, we skip it
-				if (totalSleepTime == 500) continue;
-				if (file.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
-				{
-					var xmlFileDestination = destination;
-					while (!xmlFileDestination.EndsWith("\\Payroll", StringComparison.OrdinalIgnoreCase))
-						xmlFileDestination = Directory.GetParent(xmlFileDestination).ToString();
-					xmlFileDestination = Path.GetFullPath(xmlFileDestination + "\\" + Path.GetFileName(file));
-					log.Info(string.Format("Copying {0} to {1}", file, xmlFileDestination));
-					File.Copy(file, xmlFileDestination, true);
-				}
-				else
-				{
-					var fileDestination = Path.GetFullPath(destination + "\\" + Path.GetFileName(file));
-					log.Info(string.Format("Copying {0} to {1}", file, fileDestination));
-					File.Copy(file, fileDestination, true);
-				}
-					
-				if (_copiedFiles.ContainsKey(fileInfo.FullName))
-					_copiedFiles[fileInfo.FullName] = fileInfo.LastWriteTimeUtc;
-				else
-					_copiedFiles.Add(fileInfo.FullName, fileInfo.LastWriteTimeUtc);
-			}
-
-		}
-
-		private void startPayrollQueue()
-		{
-			CopyPayrollDll();
-
 			var e = new Evidence(AppDomain.CurrentDomain.Evidence);
 			var setup = AppDomain.CurrentDomain.SetupInformation;
 
@@ -233,22 +142,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_payrollBus = (ConfigFileDefaultHost)_payrollDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
 			_payrollBus.UseFileBasedBusConfiguration("PayrollQueue.config");
 			_payrollBus.Start<BusBootStrapper>();
+			AppDomain.MonitoringIsEnabled = true;
 			log.Info("Starting payroll queue");
-		}
-
-		private void CopyPayrollDll()
-		{
-			try
-			{
-				var destination = new SearchPath().Path;
-				var source = new DirectoryInfo(Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll.DeployNew"));
-				CopyFiles(source.ToString(), destination);
-			}
-
-			catch (Exception exception)
-			{
-				log.Error("An exception was encountered when trying to load new payroll dll", exception);
-			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
@@ -267,27 +162,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 			if (_payrollDomain != null)
 			{
-				AppDomain.Unload(_payrollDomain);
+				try
+				{
+					AppDomain.Unload(_payrollDomain);
+				}
+				catch (Exception e)
+				{
+					var a = e;
+				}
 			}
-		}
-
-		private static bool IsFileLocked(FileInfo file)
-		{
-			FileStream stream = null;
-			try
-			{
-				stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-			}
-			catch (IOException)
-			{
-				return true;
-			}
-			finally
-			{
-				if (stream != null)
-					stream.Close();
-			}
-			return false;
 		}
 
 		public void Stop()
@@ -351,8 +234,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				AppDomain.Unload(_denormalizeDomain);
 			}
-			if (_watcher != null)
-				_watcher.Dispose();
 
 			stopPayrollQueue();
 		}
