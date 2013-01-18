@@ -22,14 +22,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		private IDictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>> _skillIntervalDataForSkill;
 		private WorkShiftLengthHintOption _lengthHint;
 		private IVisualLayerCollection _visualLayerCollection;
-
+	    private IEqualWorkShiftValueDecider _equalWorkShiftValueDecider;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_workShiftValueCalculator = _mocks.StrictMock<IWorkShiftValueCalculator>();
-			_target = new WorkShiftSelector(_workShiftValueCalculator);
+		    _equalWorkShiftValueDecider = _mocks.StrictMock<IEqualWorkShiftValueDecider>();
+            _target = new WorkShiftSelector(_workShiftValueCalculator, _equalWorkShiftValueDecider);
 			_shiftProjectionCache1 = _mocks.StrictMock<IShiftProjectionCache>();
 			_shiftProjectionCache2 = _mocks.StrictMock<IShiftProjectionCache>();
 			_shiftProjectionCaches = new List<IShiftProjectionCache> {_shiftProjectionCache1};
