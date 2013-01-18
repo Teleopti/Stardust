@@ -3,8 +3,8 @@
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
-/// <reference path="~/Content/Scripts/jquery-1.8.2-vsdoc.js" />
-/// <reference path="~/Content/Scripts/knockout-2.1.0.js" />
+/// <reference path="~/Content/Scripts/jquery-1.8.3-vsdoc.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.0.js"/>
 /// <reference path="~/Content/moment/moment.js" />
 
 Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
@@ -19,12 +19,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.openPeriodStartDate = null;
 		self.openPeriodEndDate = null;
 		self.selectedDate = ko.observable();
-		self.hasWorkflowControlSet = ko.observable(false);
+		self.missingWorkflowControlSet = ko.observable(true);
 		self.timeLineLengthInMinutes = ko.observable(0);
 		self.hours = ko.observableArray();
 		self.mySchedule = ko.observable(new scheduleViewModel());
 		self.possibleTradeSchedules = ko.observableArray();
-
+		self.pixelPerMinute = ko.computed(function () {
+			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
+		});
+		
 		self._createMySchedule = function (myScheduleObject) {
 			var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
 				return new layerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
@@ -52,10 +55,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			self.hours(arrayMap);
 		};
 
-		self.pixelPerMinute = ko.computed(function () {
-			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
-		});
-
 		self.selectedDate.subscribe(function () {
 			if (self.selectedDate().diff(self.openPeriodStartDate) < 0) {
 				self.selectedDate(moment(self.openPeriodStartDate));
@@ -75,9 +74,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				type: 'GET',
 				//beforeSend: _loading,
 				success: function (data, textStatus, jqXHR) {
-					self.hasWorkflowControlSet(!data.HasWorkflowControlSet);
-					setDatePickerRange(data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
-					self.selectedDate(moment(self.now).add('days', data.OpenPeriodRelativeStart));
+					self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
+					if (data.HasWorkflowControlSet) {
+						setDatePickerRange(data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
+						self.selectedDate(moment(self.now).add('days', data.OpenPeriodRelativeStart));
+					}
 				},
 				error: function (err) {
 					alert("error!");

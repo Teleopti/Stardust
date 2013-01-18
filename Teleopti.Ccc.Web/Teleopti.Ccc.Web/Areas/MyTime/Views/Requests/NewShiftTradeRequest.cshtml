@@ -1,9 +1,9 @@
 ﻿@using Teleopti.Ccc.UserTexts
 <div id="Request-add-shift-trade" class="shift-trade-add-canvas ui-corner-all">
-	<div style="background-color: lightblue;z-index: 10;display: block" class="friendly-message ui-corner-all" data-bind="visible : hasWorkflowControlSet">
+	<div style="background-color: lightblue;z-index: 10;display: block" class="friendly-message ui-corner-all" data-bind="visible : missingWorkflowControlSet">
 		@Resources.MissingWorkflowControlSet
 	</div>
-	<div>
+	<div data-bind="visible : !missingWorkflowControlSet()">
 		<button data-bind="click : previousDate"><</button>
 		<input id="Request-add-shift-trade-datepicker" type="text" data-bind="datepicker: selectedDate" style="position:relative; z-index: 9999999" />
 		<button data-bind="click : nextDate">></button>

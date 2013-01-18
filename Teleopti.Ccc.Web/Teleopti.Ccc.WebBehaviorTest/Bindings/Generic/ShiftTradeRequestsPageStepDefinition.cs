@@ -83,5 +83,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.Last().Text, Is.EqualTo(timeLineHourTo));
 		}
 
+		[Then(@"I should not see the datepicker")]
+		public void ThenIShouldNotSeeTheDatepicker()
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeDatePicker.Parent.DisplayVisible(), Is.False);
+		}
 	}
 }

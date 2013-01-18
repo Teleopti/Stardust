@@ -73,6 +73,7 @@ Scenario: No workflow control set
 	And I do not have a workflow control set
 	When I view Add Shift Trade Request
 	Then I should see a message text saying I am missing a workflow control set
+	And I should not see the datepicker
 
 Scenario: Default to first day of open shift trade period
 	Given I have the role 'Full access to mytime'
