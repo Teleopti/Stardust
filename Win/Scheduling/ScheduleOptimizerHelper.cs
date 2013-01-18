@@ -1194,11 +1194,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 		                                                teamSteadyStateMainShiftScheduler,
 		                                                groupPersonBuilderForOptimization, groupSchedulingService);
 
+				
+				IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator = new WorkShiftPeriodValueCalculator();
+				IWorkShiftLengthValueCalculator workShiftLengthValueCalculator = new WorkShiftLengthValueCalculator();
+				IWorkShiftValueCalculator workShiftValueCalculator = new WorkShiftValueCalculator(workShiftPeriodValueCalculator, workShiftLengthValueCalculator);
+				IEqualWorkShiftValueDecider equalWorkShiftValueDecider = new EqualWorkShiftValueDecider();
+				IWorkShiftSelector workShiftSelector = new WorkShiftSelector(workShiftValueCalculator, equalWorkShiftValueDecider);
+
 		        var advanceSchedulingService = new AdvanceSchedulingService(skillDayPeriodIntervalData,
 		                                                                    dynamicBlockFinder, teamExtractor,
 		                                                                    restrictionAggregator, matrixList,
 		                                                                    workShiftFilterService, teamScheduling,
-		                                                                    schedulingOptions,null);
+																			schedulingOptions, workShiftSelector);
 
 		        advanceSchedulingService.Execute(schedulingResults);
 		    }

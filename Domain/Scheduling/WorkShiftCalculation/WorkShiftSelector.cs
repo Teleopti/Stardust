@@ -14,10 +14,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 	public class WorkShiftSelector : IWorkShiftSelector
 	{
 		private readonly IWorkShiftValueCalculator _workShiftValueCalculator;
+		private readonly IEqualWorkShiftValueDecider _equalWorkShiftValueDecider;
 
-		public WorkShiftSelector(IWorkShiftValueCalculator workShiftValueCalculator)
+		public WorkShiftSelector(IWorkShiftValueCalculator workShiftValueCalculator, IEqualWorkShiftValueDecider equalWorkShiftValueDecider)
 		{
 			_workShiftValueCalculator = workShiftValueCalculator;
+			_equalWorkShiftValueDecider = equalWorkShiftValueDecider;
 		}
 
 		public IShiftProjectionCache Select(IList<IShiftProjectionCache> shiftList, IDictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDatas, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
@@ -39,7 +41,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 					{
 						if (valueForShift.Value == bestShiftValue)
 						{
-							//send it somwhere that can decide (short breaks?)
+							bestShiftValue = valueForShift.Value;
+							bestShift = _equalWorkShiftValueDecider.Decide(bestShift, shiftProjectionCache);
 						}
 
 						if(valueForShift.Value > bestShiftValue)

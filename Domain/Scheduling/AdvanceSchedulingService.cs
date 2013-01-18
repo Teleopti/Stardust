@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 //call class that returns the aggregated intraday dist based on teamblock dates
                 var skillInternalDataList = _skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList);
 
-				//temporary
+				//temporary, now i think it should be activity
             	ISkill skill =
             		_matrixList.First().Person.PersonPeriodCollection.First().PersonSkillCollection.First().Skill;
 				IDictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>> askMickeWhyDic = new Dictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>>();
