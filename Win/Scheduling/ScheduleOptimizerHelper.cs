@@ -1198,7 +1198,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		                                                                    dynamicBlockFinder, teamExtractor,
 		                                                                    restrictionAggregator, matrixList,
 		                                                                    workShiftFilterService, teamScheduling,
-		                                                                    schedulingOptions);
+		                                                                    schedulingOptions,null);
 
 		        advanceSchedulingService.Execute(schedulingResults);
 		    }

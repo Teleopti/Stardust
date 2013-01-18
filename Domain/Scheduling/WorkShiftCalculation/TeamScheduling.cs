@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
     public interface ITeamScheduling
     {
-        void Execute(IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixList, IGroupPerson groupPerson, IEffectiveRestriction effectiveRestriction);
+        void Execute(IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixList, IGroupPerson groupPerson, IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache);
     }
 
     public  class TeamScheduling : ITeamScheduling
@@ -34,13 +34,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 
         public void  Execute(IList<DateOnly  > selectedDays, IList<IScheduleMatrixPro> matrixList,
-                IGroupPerson groupPerson,IEffectiveRestriction effectiveRestriction  )
+                IGroupPerson groupPerson,IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache   )
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
 
             _groupSchedulingService.ExecuteForAdvanceSchedulingService(selectedDays, matrixList, _schedulingOptions, groupPerson,
                                             new BackgroundWorker(), _teamSteadyStateHolder,
-                                            _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization,effectiveRestriction );
+                                            _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization, effectiveRestriction, shiftProjectionCache);
         }
     }
 }

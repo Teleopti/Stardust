@@ -28,9 +28,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
         void ExecuteForAdvanceSchedulingService(IList<DateOnly  > selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
             IGroupPerson  groupPerson, BackgroundWorker backgroundWorker, ITeamSteadyStateHolder teamSteadyStateHolder, 
                     ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization
-                        , IEffectiveRestriction effectiveRestriction);
+                        , IEffectiveRestriction effectiveRestriction,IShiftProjectionCache shiftProjectionCache );
         bool ScheduleOneDayForAdvanceSchedulingService(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson,
-            IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction);
+            IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache);
+
+        bool ScheduleForTeamSteadyState(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> matrixList, IShiftProjectionCache shiftProjectionCache);
     }
 
     public class GroupSchedulingService : IGroupSchedulingService
@@ -120,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
         public void ExecuteForAdvanceSchedulingService(IList<DateOnly  > selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
             IGroupPerson  groupPerson, BackgroundWorker backgroundWorker, ITeamSteadyStateHolder teamSteadyStateHolder,
                 ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization
-                        , IEffectiveRestriction effectiveRestriction)
+                        , IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache )
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
             if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -136,7 +138,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
                     if (teamSteadyStateHolder.IsSteadyState(groupPerson))
                     {
-                        if (!teamSteadyStateMainShiftScheduler.ScheduleTeam(dateOnly, groupPerson, this, _rollbackService, schedulingOptions, groupPersonBuilderForOptimization, matrixList, _resultStateHolder.Schedules))
+                        if (!teamSteadyStateMainShiftScheduler.ScheduleTeamForAdvanceSchedulingService(dateOnly, groupPerson, this, _rollbackService, schedulingOptions, groupPersonBuilderForOptimization, matrixList, _resultStateHolder.Schedules,shiftProjectionCache ))
                             teamSteadyStateHolder.SetSteadyState(groupPerson, false);
 
                         else teamSteadyStateSuccess = true;
@@ -145,7 +147,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                     if (!teamSteadyStateSuccess)
                     {
                         _rollbackService.ClearModificationCollection();
-                        if (!ScheduleOneDayForAdvanceSchedulingService(dateOnly, schedulingOptions, groupPerson, matrixList,effectiveRestriction ))
+                        if (!ScheduleOneDayForAdvanceSchedulingService(dateOnly, schedulingOptions, groupPerson, matrixList,effectiveRestriction,shiftProjectionCache  ))
                         {
                             _rollbackService.Rollback();
                             _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
@@ -156,7 +158,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public bool ScheduleOneDayForAdvanceSchedulingService(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson,
-                        IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction)
+                        IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache)
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
 
@@ -223,8 +225,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                 var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
                                                                             schedulingOptions.ConsiderShortBreaks);
 
-                bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, effectiveRestriction,
-                                                                   resourceCalculateDelayer, best, _rollbackService);
+                bool sucess = _scheduleService.ScheduleForAdvanceScheduling(scheduleDay, schedulingOptions,
+                                                                   resourceCalculateDelayer, _rollbackService,shiftProjectionCache );
                 if (!sucess)
                 {
                     return false;
@@ -414,6 +416,52 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 			return true;	
 		}
+
+        public bool ScheduleForTeamSteadyState(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> matrixList, IShiftProjectionCache shiftProjectionCache )
+        {
+            var scheduleDictionary = _resultStateHolder.Schedules;
+            var scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
+
+            if (scheduleDay.IsScheduled())
+                return true;
+
+            bool locked = false;
+            foreach (var scheduleMatrixPro in matrixList)
+            {
+                if (scheduleMatrixPro.Person == scheduleDay.Person)
+                {
+                    if (scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
+                    {
+                        if (!scheduleMatrixPro.UnlockedDays.Contains(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)))
+                        {
+                            locked = true;
+                        }
+                    }
+                }
+            }
+            if (locked)
+            {
+                return true;
+            }
+
+            var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
+            bool sucess = _scheduleService.ScheduleForAdvanceScheduling(scheduleDay, schedulingOptions, resourceCalculateDelayer, _rollbackService, shiftProjectionCache);
+
+            if (!sucess)
+            {
+                return false;
+
+            }
+            OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
+            if (_cancelMe)
+            {
+                _rollbackService.Rollback();
+                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+                return false;
+            }
+
+            return true;
+        }
 
 
 
