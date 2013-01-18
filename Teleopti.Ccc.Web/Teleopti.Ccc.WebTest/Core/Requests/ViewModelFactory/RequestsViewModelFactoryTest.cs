@@ -83,7 +83,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			target.CreatePagingViewModel(paging);
 
-			personRequestProvider.AssertWasCalled(x => x.RetrieveRequests(paging));
+			//Henrik 20130118 When shifttrades is implemented, use x.RetrieveRequests(paging) instead
+			personRequestProvider.AssertWasCalled(x => x.RetrieveTextAndAbsenceRequests(paging));
 		}
 
 		[Test]
