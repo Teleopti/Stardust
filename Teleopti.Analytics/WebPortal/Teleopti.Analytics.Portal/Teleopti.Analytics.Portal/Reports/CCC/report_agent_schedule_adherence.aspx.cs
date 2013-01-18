@@ -20,22 +20,18 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		private int _timeLineStartInterval;
 		private int _timeLineEndInterval;
 		private int _timeLineDayTwoEndInterval;
-		private int _personCount;
 		private Decimal _teamAdherenceTotal = -2;
 		private Decimal _teamDeviationTotal = -2;
-		//private Decimal[] _teamAdherenceArray;
-		//private Decimal[] _teamDeviationArray;
 		private IList<SqlParameter> _sqlParameterList;
 		private IList<String> _parameterTextList;
 
-		private IDictionary<int, IList<IntervalToolTip>> _intervalToolTipDictionary =
+		private readonly IDictionary<int, IList<IntervalToolTip>> _intervalToolTipDictionary =
 			new Dictionary<int, IList<IntervalToolTip>>();
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-		private IDictionary<DateTime, IList<IntervalToolTip>> _intervalDateToolTipDictionary =
+		private readonly IDictionary<DateTime, IList<IntervalToolTip>> _intervalDateToolTipDictionary =
 			new Dictionary<DateTime, IList<IntervalToolTip>>();
 
-		SortedDictionary<int, SummaryData> _colSummary = new SortedDictionary<int, SummaryData>();
-		class SummaryData
+		readonly SortedDictionary<int, summaryData> _colSummary = new SortedDictionary<int, summaryData>();
+		class summaryData
 		{
 			public decimal Adherence { get; set; }
 			public decimal Deviation { get; set; }
@@ -61,13 +57,6 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 				}
 
 				return new List<SqlParameter>();
-			}
-			set
-			{
-				if (!String.IsNullOrEmpty((Request.QueryString.Get("PARAMETERSKEY"))))
-				{
-					Session["PARAMETERS" + Request.QueryString.Get("PARAMETERSKEY")] = value;
-				}
 			}
 		}
 
@@ -156,9 +145,9 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		private bool GetReportData()
 		{
-			CommonReports commonReports = new CommonReports(ConnectionString, ReportId);
+			var commonReports = new CommonReports(ConnectionString, ReportId);
 
-			DataSet dataset = commonReports.GetReportData(ReportId, UserCode, BusinessUnitCode, _sqlParameterList);
+			var dataset = commonReports.GetReportData(ReportId, UserCode, BusinessUnitCode, _sqlParameterList);
 			if (dataset != null && dataset.Tables.Count > 0)
 			{
 				_dataTable = dataset.Tables[0];
@@ -308,7 +297,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			for (var i = _timeLineStartInterval; i < _timeLineEndInterval; i++)
 			{
 				if(!_colSummary.ContainsKey(i))
-					_colSummary.Add(i, new SummaryData{Interval = i});
+					_colSummary.Add(i, new summaryData{Interval = i});
 			}
 			IList<TableRow> tableRowList = new List<TableRow>();
 
@@ -352,7 +341,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			return tableRowList.ToArray();
 		}
 
-		private IEnumerable<TableCell> getIntervalTotalsCells(SortedDictionary<int,SummaryData> colSummary , bool isAdherence)
+		private IEnumerable<TableCell> getIntervalTotalsCells(SortedDictionary<int,summaryData> colSummary , bool isAdherence)
 		{
 			var tableCells = new List<TableCell>();
 
@@ -416,7 +405,6 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			var perDate = ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"));
 			var tableRowList = MakeTableRowList();
 			var dataRowReaders = from r in _dataTable.Rows.Cast<DataRow>() select new DataCellModel(r, this, perDate);
-			//var dataPerPerson = from r in dataRowReaders group r by new PersonModel(r.DataRow, perDate);
 			var dataPerPerson = dataRowReaders.GroupBy(r => new PersonModel(r.DataRow, perDate));
 			dataPerPerson.ForEach((a, b) => ProcessPersonData(a, b, tableRowList));
 			return tableRowList.ToArray();
@@ -452,7 +440,6 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			tableCellList.Add(tableCell);
 
 			// Get team interval sum for adherence and deviation
-			//SetTeamAdherenceAndDeviation(dataCellModel);
 			addColSummary(dataCellModel);
 		}
 
@@ -469,17 +456,6 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			return tableRowList;
 		}
 
-		//private void PrepareTeamAdherenceAndDeviantion() {
-		//    _teamAdherenceArray = new Decimal[_timeLineEndInterval - _timeLineStartInterval];
-		//    _teamDeviationArray = new Decimal[_timeLineEndInterval - _timeLineStartInterval];
-		//}
-
-		//private void SetTeamAdherenceAndDeviation(DataCellModel dataCellModel)
-		//{
-		//    _teamAdherenceArray[dataCellModel.IntervalId - _timeLineStartInterval] = dataCellModel.TeamAdherence;
-		//    _teamDeviationArray[dataCellModel.IntervalId - _timeLineStartInterval] = dataCellModel.TeamDeviation;
-		//}
-
 		private void addColSummary(DataCellModel dataCellModel)
 		{
 			var key = dataCellModel.IntervalId;
@@ -487,7 +463,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 				key += 1000;
 
 			if(!_colSummary.ContainsKey(key))
-				_colSummary.Add(key, new SummaryData{Adherence = dataCellModel.TeamAdherence, Deviation = dataCellModel.TeamDeviation, Interval = dataCellModel.IntervalId});
+				_colSummary.Add(key, new summaryData{Adherence = dataCellModel.TeamAdherence, Deviation = dataCellModel.TeamDeviation, Interval = dataCellModel.IntervalId});
 		}
 		
 
@@ -564,16 +540,16 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		public IntervalToolTip GetToolTip(int personId, int interval)
 		{
 			var toolTipList = _intervalToolTipDictionary[personId];
-			var toolTip = toolTipList.Where(t => interval >= t.StartIntervalCounter &&
-							   interval <= t.EndIntervalCounter).FirstOrDefault();
+			var toolTip = toolTipList.FirstOrDefault(t => interval >= t.StartIntervalCounter &&
+			                                              interval <= t.EndIntervalCounter);
 			return toolTip;
 		}
 
 		public IntervalToolTip GetToolTip(DateTime date, int getIntervalId)
 		{
 			var toolTipList = _intervalDateToolTipDictionary[date];
-			var toolTip = toolTipList.Where(t => getIntervalId >= t.StartIntervalCounter &&
-							   getIntervalId <= t.EndIntervalCounter).FirstOrDefault();
+			var toolTip = toolTipList.FirstOrDefault(t => getIntervalId >= t.StartIntervalCounter &&
+			                                              getIntervalId <= t.EndIntervalCounter);
 			return toolTip;
 		}
 
@@ -758,11 +734,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 				if (previousDate != (DateTime)row["shift_startdate"])
 				{
-					// Count the nr of detail rows we will need
-					_personCount++;
-
 					// Gather tooltip for each activity/absence layer
-					//if (intervalToolTip != null && intervalToolTipList != null && intervalToolTipList.Count > 0)
 					if (intervalToolTip != null && intervalToolTipList != null)
 					{
 						intervalToolTip.EndInterval = previousIntervalId;
@@ -869,11 +841,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 				if (previousPersonId != (int)row["person_id"])
 				{
-					// Count the nr of detail rows we will need
-					_personCount++;
-
 					// Gather tooltip for each activity/absence layer
-					//if (intervalToolTip != null && intervalToolTipList != null && intervalToolTipList.Count > 0)
 					if (intervalToolTip != null && intervalToolTipList != null)
 					{
 						intervalToolTip.EndInterval = previousIntervalId;
