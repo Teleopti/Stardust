@@ -242,13 +242,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Payroll.DeployNew\ReadMe.txt">
+    <Content Include="Payroll.DeployNew\Teleopti CCC\ReadMe.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Payroll\ReadMe.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -259,9 +260,8 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)..\..\nhibernateAddons\Cache_Providers\*.dll" "$(TargetDir)" /y
-if not exist "$(TargetDir)Payroll" mkdir "$(TargetDir)Payroll"
-xcopy "$(ProjectDir)..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(ConfigurationName)\Teleopti.Ccc.Payroll.dll" "$(TargetDir)Payroll" /y
-xcopy "$(ProjectDir)..\Teleopti.Ccc.Sdk.Notification\bin\$(ConfigurationName)\Teleopti.Ccc.Sdk.Notification.dll" "$(TargetDir)" /y</PostBuildEvent>
+copy "$(ProjectDir)..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(ConfigurationName)\Teleopti.Ccc.Payroll.dll"  "$(TargetDir)Payroll.DeployNew\Teleopti CCC\" /y
+copy "$(ProjectDir)..\Teleopti.Ccc.Sdk.Notification\bin\$(ConfigurationName)\Teleopti.Ccc.Sdk.Notification.dll" "$(TargetDir)" /y</PostBuildEvent>
     <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBusHost.config" "$(ProjectDir)App.config"</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

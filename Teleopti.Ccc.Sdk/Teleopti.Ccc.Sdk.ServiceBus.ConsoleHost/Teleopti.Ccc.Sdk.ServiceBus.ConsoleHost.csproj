@@ -107,8 +107,12 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)bin\$(Configuration)\Payroll" mkdir "$(ProjectDir)bin\$(Configuration)\Payroll"
-if not exist "$(ProjectDir)bin\$(Configuration)\Payroll.DeployNew" mkdir "$(ProjectDir)bin\$(Configuration)\Payroll.DeployNew"</PreBuildEvent>
+    <PreBuildEvent>if not exist "$(TargetDir)Payroll" mkdir "$(TargetDir)Payroll"
+if not exist "$(TargetDir)Payroll.DeployNew\Teleopti CCC" mkdir "$(TargetDir)Payroll.DeployNew\Teleopti CCC"
+</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(ProjectDir)..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(ConfigurationName)\Teleopti.Ccc.Payroll.dll"  "$(TargetDir)Payroll.DeployNew\Teleopti CCC\" /y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
