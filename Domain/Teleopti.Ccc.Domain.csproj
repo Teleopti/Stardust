@@ -295,6 +295,7 @@
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictor.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessAggregator.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessContractTimeCheck.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessContractToleranceChecker.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapCategorySorter.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessComparer.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessPersonsSkillChecker.cs" />

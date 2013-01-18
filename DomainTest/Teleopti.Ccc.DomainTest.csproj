@@ -273,6 +273,7 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessAggregatorTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessComparerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessContractTimeCheckTest.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessContractToleranceCheckerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessPersonsSkillCheckerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessPersonsSwappableCheckerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessReSchedulerTest.cs" />

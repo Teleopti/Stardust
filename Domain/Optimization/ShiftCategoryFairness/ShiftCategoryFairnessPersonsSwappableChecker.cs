@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 	public interface IShiftCategoryFairnessPersonsSwappableChecker
 	{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
-        bool PersonsAreSwappable(IPerson personOne, IPerson personTwo, DateOnly onDate, List<IScheduleDay> scheduleDays);
+        bool PersonsAreSwappable(IPerson personOne, IPerson personTwo, DateOnly onDate, List<IScheduleDay> scheduleDays, bool useAverageShiftLengths);
 	}
 	public class ShiftCategoryFairnessPersonsSwappableChecker : IShiftCategoryFairnessPersonsSwappableChecker
 	{
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), 
         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), 
 		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public bool PersonsAreSwappable(IPerson personOne, IPerson personTwo, DateOnly onDate, List<IScheduleDay> scheduleDays)
+        public bool PersonsAreSwappable(IPerson personOne, IPerson personTwo, DateOnly onDate, List<IScheduleDay> scheduleDays, bool useAverageShiftLengths)
 		{
 			var personPeriodOne = personOne.Period(onDate);
 			var personPeriodTwo = personTwo.Period(onDate);
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 				return false;
             if (!_ruleSetChecker.Check(personPeriodOne, personPeriodTwo))
                 return false;
-            if (!_contractTimeChecker.Check(scheduleDays[0], scheduleDays[1]))
+            if (useAverageShiftLengths && !_contractTimeChecker.Check(scheduleDays[0], scheduleDays[1]))
                 return false;
             
 
