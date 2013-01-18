@@ -26,6 +26,11 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			get { return ((DateTime)DataRow["date"]).ToShortDateString(); }
 		}
 
+		public DateTime ShiftStartDate
+		{
+			get { return ((DateTime)DataRow["shift_startdate"]); }
+		}
+
 		public decimal AdherenceTotal
 		{
 			get
@@ -103,8 +108,10 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		public override int GetHashCode()
 		{
 			if (_perDate)
-				return Date.GetHashCode();
+				return ShiftStartDate.GetHashCode();
 			return _personId;
 		}
+
+		public bool EndsOnNextDate { get; set; }
 	}
 }

@@ -11234,4 +11234,16 @@ These options are activated:
   <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
     <value>You have to select at least one workload</value>
   </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Date (shifts starting):</value>
+    <comment>Date (shifts starting):</comment>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Date From (shifts starting):</value>
+    <comment>Date From (shifts starting):</comment>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Date To (shifts starting):</value>
+    <comment>Date To (shifts starting):</comment>
+  </data>
 </root>

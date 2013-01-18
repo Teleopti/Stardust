@@ -7,6 +7,11 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 	{
 		public int StartInterval { get; set; }
 		public int EndInterval { get; set; }
+
+		public int StartIntervalCounter { get; set; }
+		public int EndIntervalCounter { get; set; }
+
+
 		public String AbsenceOrActivityName { get; set; }
 
 		public String ToolTip(int intervalsPerHour)

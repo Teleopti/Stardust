@@ -158,6 +158,9 @@ namespace Teleopti.Ccc.AgentPortal.Reports
 
 				_dayAdherence = null;
 				IList<AdherenceLayer> adherenceLayers = GetAdherenceLayers(person, currentDate);
+				
+				// TODO find distinct calendar date and shift belongs to date 
+				// TODO Add these two fields in MySchedulerGridAdapter
 				var scheduleAdherence = new ScheduleAdherence(new VisualProjection(person, activityVisualLayers, string.Empty, false), adherenceLayers);
 				if (activityVisualLayers.Count == 0) _dayAdherence = 100;
 
@@ -202,7 +205,8 @@ namespace Teleopti.Ccc.AgentPortal.Reports
 				var adherenceLayer =
 					new AdherenceLayer(
 						new TimePeriod(TimeSpan.FromTicks(adherenceDataDto.LocalStartTime),
-						               TimeSpan.FromTicks(adherenceDataDto.LocalEndTime)), (double) adherenceDataDto.ReadyTimeMinutes);
+						               TimeSpan.FromTicks(adherenceDataDto.LocalEndTime)), (double) adherenceDataDto.ReadyTimeMinutes, 
+									   adherenceDataDto.CalendarDate, adherenceDataDto.ShiftBelongsToDate);
 				adherenceLayers.Add(adherenceLayer);
 				_dayAdherence = adherenceDataDto.DayAdherence * 100;
 			}

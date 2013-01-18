@@ -150,7 +150,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 						timeZone = value;
 						break;
 					default:
-						_logger.WarnFormat(CultureInfo.InvariantCulture, "Trying to load un unknown configuration key named: '{0}'.", key);
+						_logger.InfoFormat(CultureInfo.InvariantCulture, "Trying to load un unknown configuration key named: '{0}'.", key);
 						break;
 				}
 			}
