@@ -280,7 +280,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			else
 				tdReportName.InnerText = ReportTexts.Resources.ResReportAdherencePerDay;
 
-			tdDatesLabel.InnerText = ReportTexts.Resources.ResDateColon;
+			tdDatesLabel.InnerText = ReportTexts.Resources.ResShiftStartDateColon;
 			tdGroupPageLabel.InnerText = ReportTexts.Resources.ResGroupPageColon;
 			tdGroupPageGroupLabel.InnerText = ReportTexts.Resources.ResGroupPageGroupColon;
 			tdGroupPageAgentLabel.InnerText = ReportTexts.Resources.ResAgentColon;
@@ -291,7 +291,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			tdAdherenceCalculationLabel.InnerText = ReportTexts.Resources.ResAdherenceCalculationColon;
 			tdSortOrderLabel.InnerText = ReportTexts.Resources.ResSortByColon;
 			tdTimeZoneLabel.InnerText = ReportTexts.Resources.ResTimeZoneColon;
-			tdDateLabel.InnerText = ReportTexts.Resources.ResDateColon;
+			tdDateLabel.InnerText = ReportTexts.Resources.ResShiftStartDateColon;
 
 			tdTodaysDateTime.InnerText = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
 			imageButtonPreviousDay.ToolTip = ReportTexts.Resources.ResPrevious;
