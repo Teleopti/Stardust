@@ -57,7 +57,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 		$('#Request-detail-ok-button')
 			.click(function () {
-				console.log('testar');
 				$(this).prop('disabled', true);
 				if ($('#Text-request-tab').hasClass('selected-tab') || requestViewModel.TypeEnum() == 0) {
 					_addRequest("Requests/TextRequest");
