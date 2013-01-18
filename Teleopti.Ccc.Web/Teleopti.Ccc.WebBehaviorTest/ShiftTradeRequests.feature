@@ -195,6 +195,7 @@ Scenario: One possible shift to trade with because shift trade periods and skill
 	When I navigate to shift trade page
 	Then I should have one possible shift to trade with
 
+@ignore
 Scenario: View shift trade request details
 	Given I have the role 'Full access to mytime'
 	And I have created a shift trade request with subject 'swap with me'
