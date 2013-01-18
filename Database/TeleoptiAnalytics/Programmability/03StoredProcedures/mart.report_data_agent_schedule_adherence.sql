@@ -3,8 +3,8 @@ DROP PROCEDURE [mart].[report_data_agent_schedule_adherence]
 GO
 
 /* 
-exec mart.report_data_agent_schedule_adherence @date_from='2013-02-08 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'13',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'2',@sort_by=N'1',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=1053,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-exec mart.report_data_agent_schedule_adherence @date_from='2013-02-04 00:00:00',@date_to='2013-02-10 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'19',@agent_person_code=N'd42dfe69-185f-4504-9a17-9b5e015b256e',@adherence_id=N'1',@sort_by=N'6',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=1053,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+exec mart.report_data_agent_schedule_adherence @date_from='2013-02-08 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'13',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'2',@sort_by=N'3',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=1053,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+exec mart.report_data_agent_schedule_adherence @date_from='2013-02-04 00:00:00',@date_to='2013-02-06 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'19',@agent_person_code=N'd42dfe69-185f-4504-9a17-9b5e015b256e',@adherence_id=N'1',@sort_by=N'5',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=1053,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 exec mart.report_data_agent_schedule_adherence @date_from='2009-02-01 00:00:00',@adherence_id=1,@date_to='2009-02-28 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@site_id=N'0',@team_set=N'7',@agent_person_code=N'11610fe4-0130-4568-97de-9b5e015b2564',@sort_by=N'6',@time_zone_id=N'1',@person_code='BEDF5892-5A2A-4BB2-9B7E-35F3C71A5AD0',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 exec mart.report_data_agent_schedule_adherence @date_from='2009-01-13 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'7',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'1',@sort_by=N'1',@time_zone_id=N'2',@person_code='BEDF5892-5A2A-4BB2-9B7E-35F3C71A5AD0',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',@date_to='2009-02-11 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'1',@team_set=N'5',@agent_person_code=N'826f2a46-93bb-4b04-8d5e-9b5e015b2577',@adherence_id=N'1',@sort_by=N'6',@time_zone_id=N'1',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=2057,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
@@ -624,24 +624,42 @@ FROM #result  r
 INNER JOIN mart.dim_activity a on a.activity_id =-1
 WHERE r.count_activity_per_interval >1
 
-INSERT INTO #minmax
-SELECT min(r.interval_id) minint ,max(r.interval_id) maxint, person_id, date,shift_startdate_id, min(di.interval_start),max(di.interval_end)
+
+--maximum and minimum intervals check
+update #result
+set interval_id= interval_id+intervals_per_day
+where shift_startdate_id<date_id
+
+INSERT INTO #minmax(minint,maxint,person_id,shift_startdate_id)
+SELECT  min(r.interval_id) minint ,max(r.interval_id) maxint, person_id, shift_startdate_id
 FROM #result r
-INNER JOIN mart.dim_interval di ON r.interval_id=di.interval_id
-GROUP BY shift_startdate_id,person_id, date 
+GROUP BY shift_startdate_id,person_id
 
-UPDATE #minmax
-SET date_interval_min=date + date_interval_min,
-date_interval_max=date+date_interval_max
-FROM #minmax
+UPDATE #result 
+SET person_min_shiftstart_interval= minint
+FROM #minmax 
+INNER JOIN #result ON #result.shift_startdate_id=#minmax.shift_startdate_id AND #result.person_id=#minmax.person_id
 
+UPDATE #result 
+SET person_max_shiftend_interval= maxint
+FROM #minmax 
+INNER JOIN #result ON #result.shift_startdate_id=#minmax.shift_startdate_id AND #result.person_id=#minmax.person_id
 
---UPDATE #result set person_min_interval= date_interval_min FROM #minmax inner join #result on #result.person_id=#minmax.person_id
---UPDATE #result SET person_max_interval= date_interval_max FROM #minmax inner join #result on #result.person_id=#minmax.person_id
+UPDATE #result 
+set mininterval =  interval_start 
+from mart.dim_interval di 
+where di.interval_id in (select min(person_min_shiftstart_interval) from #result)
 
-UPDATE #result set mininterval = (SELECT MIN(date_interval_min) FROM #minmax)
-UPDATE #result SET maxinterval =(SELECT MAX(date_interval_max) FROM #minmax)
+UPDATE #result 
+set maxinterval =  interval_end 
+from mart.dim_interval di 
+where di.interval_id in (select max(person_max_shiftend_interval) from #result)
 
+UPDATE #result 
+set maxinterval =  dateadd(d,1,interval_end)--add a day when passing midnight
+from mart.dim_interval di 
+where di.interval_id in (select max(person_max_shiftend_interval)- max(intervals_per_day) from #result)
+and #result.maxinterval is null
 
 --add unique id per date_id and interval_id
 INSERT #counter(date_id,interval_id)
@@ -653,6 +671,8 @@ update #result
 set date_interval_counter=c.date_interval_counter
 from #counter c inner join #result r on r.date_id=c.date_id AND r.interval_id=c.interval_id
 
+
+SELECT * FROM #result
 
 -- Sortering 1=FirstName,2=LastName,3=Shift_start,4=Adherence,5=ShiftEnd 6=Date
 -- NOTE: If you change the column order/name you need to consider SDK DTO as well!
@@ -675,7 +695,7 @@ SELECT			date, interval_id, interval_name, intervals_per_day, site_id, site_name
 				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 as deviation_m ,deviation_tot_s/60.0 as deviation_tot_m ,round(ready_time_s/60.0,0)'ready_time_m',
 				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence ,team_adherence_tot ,team_deviation_s/60.0 as team_deviation_m ,
 				team_deviation_tot_s/60.0 as team_deviation_tot_m ,adherence_type_selected, hide_time_zone,shift_startdate,date_interval_counter, mininterval,maxinterval
-				FROM #result ORDER BY mininterval,shift_startdate, person_first_name,person_last_name,person_id,interval_id
+				FROM #result ORDER BY person_min_shiftstart_interval,shift_startdate, person_first_name,person_last_name,person_id,interval_id
 IF @sort_by=4
 	SELECT		date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
 				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 as deviation_m ,deviation_tot_s/60.0 as deviation_tot_m ,round(ready_time_s/60.0,0)'ready_time_m',
@@ -687,7 +707,7 @@ SELECT			date, interval_id, interval_name, intervals_per_day, site_id, site_name
 				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 as deviation_m ,deviation_tot_s/60.0 as deviation_tot_m ,round(ready_time_s/60.0,0)'ready_time_m',
 				is_logged_in, activity_id ,absence_id ,display_color ,activity_absence_name, team_adherence ,team_adherence_tot ,team_deviation_s/60.0 as team_deviation_m ,
 				team_deviation_tot_s/60.0 as team_deviation_tot_m ,adherence_type_selected, hide_time_zone,shift_startdate,date_interval_counter, mininterval,maxinterval
-				FROM #result ORDER BY maxinterval,shift_startdate, person_first_name,person_last_name,person_id,interval_id
+				FROM #result ORDER BY person_max_shiftend_interval desc,shift_startdate, person_first_name,person_last_name,person_id,interval_id
 IF @sort_by=6
 SELECT			date, interval_id, interval_name, intervals_per_day, site_id, site_name, team_id, team_name,
 				person_id ,	person_first_name,person_last_name ,person_name,adherence ,adherence_tot ,	deviation_s/60.0 as deviation_m ,deviation_tot_s/60.0 as deviation_tot_m ,round(ready_time_s/60.0,0)'ready_time_m',
