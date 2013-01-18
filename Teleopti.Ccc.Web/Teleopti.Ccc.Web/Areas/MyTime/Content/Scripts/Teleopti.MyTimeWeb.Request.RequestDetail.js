@@ -20,7 +20,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 				_clearFormData();
 				requestViewModel.TextRequestTabVisible(true);
 				requestViewModel.AbsenceRequestTabVisible(true);
-				requestViewModel.isUpdate(false);
+				requestViewModel.IsUpdate(false);
 				_initEditSection(requestViewModel);
 				_hideEditSection();
 				_showEditSection();
@@ -104,7 +104,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		}
 		else {
 			requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
-			requestViewModel.isUpdate(true);
+			requestViewModel.IsUpdate(true);
 			requestViewModel.TypeEnum(data.TypeEnum);
 		}
 
@@ -279,7 +279,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 var ShiftTradeRequestDetailViewModel = function () {
 	var self = this;
 	
-	self.isUpdate = ko.observable(true);
+	self.IsUpdate = ko.observable(true);
 	self.TypeEnum = ko.observable(2);
 	self.IsFullDay = ko.observable(true);
 	self.Template = ko.observable("shifttrade-request-detail-template");
@@ -292,13 +292,13 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 	self.TextRequestTabVisible = ko.observable(true);
 	self.AbsenceRequestTabVisible = ko.observable(true);
 	self.IsFullDay = ko.observable(false);
-	self.isUpdate = ko.observable(true);
+	self.IsUpdate = ko.observable(true);
 	self.TypeEnum = ko.observable(0);
 	self.TabSeparatorVisible = ko.computed(function () {
 		return self.TextRequestTabVisible() && self.AbsenceRequestTabVisible();
 	});
 	self.Template = ko.computed(function () {
-		return self.isUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";
+		return self.IsUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";
 	});
 
 	ko.computed(function () {
