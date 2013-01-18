@@ -202,11 +202,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					var xmlFileDestination = destination;
 					while (!xmlFileDestination.EndsWith("\\Payroll", StringComparison.OrdinalIgnoreCase))
 						xmlFileDestination = Directory.GetParent(xmlFileDestination).ToString();
-					File.Copy(file, Path.GetFullPath(xmlFileDestination + "\\" + Path.GetFileName(file)), true);
+					xmlFileDestination = Path.GetFullPath(xmlFileDestination + "\\" + Path.GetFileName(file));
+					log.Info(string.Format("Copying {0} to {1}", file, xmlFileDestination));
+					File.Copy(file, xmlFileDestination, true);
 				}
-				else 
-					File.Copy(file, Path.GetFullPath(destination + "\\" + Path.GetFileName(file)), true);
-
+				else
+				{
+					var fileDestination = Path.GetFullPath(destination + "\\" + Path.GetFileName(file));
+					log.Info(string.Format("Copying {0} to {1}", file, fileDestination));
+					File.Copy(file, fileDestination, true);
+				}
+					
 				if (_copiedFiles.ContainsKey(fileInfo.FullName))
 					_copiedFiles[fileInfo.FullName] = fileInfo.LastWriteTimeUtc;
 				else
