@@ -90,6 +90,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
             
             while (startDate != DateOnly.MinValue )
             {
+                
+                //split the teams if neede and then chk the min and max for each team
+                //with diff target time then split the team
+
                 //call class that return the teamblock dates for a given date (problem if team members don't have same days off)
                 var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(startDate);
 
@@ -99,20 +103,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
                 var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson,_schedulingOptions );
 
-                //call class that returns the aggregated intraday dist based on teamblock dates
+                //call class that returns the aggregated intraday dist based on teamblock dates ???? consider the priority and understaffing
                 var skillInternalDataList = _skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList);
 
-				//temporary, now i think it should be activity
+				//temporary, now i think it should be activity ???+ consider activity
             	ISkill skill =
             		_matrixList.First().Person.PersonPeriodCollection.First().PersonSkillCollection.First().Skill;
 				IDictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>> askMickeWhyDic = new Dictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>>();
 				askMickeWhyDic.Add(skill, skillInternalDataList);
 
                 //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
-                // (should we cover for max seats here?)
+                // (should we cover for max seats here?) ????
                 var shifts = _workShiftFilterService.Filter(startDate, groupPerson, _matrixList, restriction, _schedulingOptions, null);
 
-                //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need
+                //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need ???
             	var bestShiftProjectionCache = _workShiftSelector.Select(shifts, askMickeWhyDic,
             	                                                         _schedulingOptions.WorkShiftLengthHintOption,
             	                                                         _schedulingOptions.UseMinimumPersons,

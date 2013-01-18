@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             _schedulingResultStateHolder = schedulingResultStateHolder;
         }
 
+        //return a dictionary that has activity as a key and the value as the existing dic
         public IDictionary<TimeSpan, ISkillIntervalData> GetIntervalDistribution(List<DateOnly  > dateOnlyList )
         {
             var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);

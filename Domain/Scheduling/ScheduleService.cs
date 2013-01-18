@@ -79,18 +79,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
             using (PerformanceOutput.ForOperation("SchedulePersonOnDay"))
             {
-                if (schedulePart.IsScheduled())
-                {
-                    return true;
-                }
+                //if (schedulePart.IsScheduled())
+                //{
+                //    return true;
+                //}
 
                 var scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
-                var   person = schedulePart.Person;
+                //var   person = schedulePart.Person;
                 
 
                 using (PerformanceOutput.ForOperation("Finding the best shift in total"))
                 {
-                    _shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, person, scheduleDateOnly);
+                    //_shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, person, scheduleDateOnly);
 
                     IList<IScheduleMatrixPro> matrixList = _scheduleMatrixListCreator.
                         CreateMatrixListFromScheduleParts(
