@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
@@ -9,38 +11,44 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
     public interface ITeamScheduling
     {
-        void Execute(IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixList, IGroupPerson groupPerson, IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache);
+        void Execute(IList<DateOnly> daysInBlock, IList<IScheduleMatrixPro> matrixList, IGroupPerson groupPerson, IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache);
     }
 
     public  class TeamScheduling : ITeamScheduling
     {
-        private readonly IGroupSchedulingService _groupSchedulingService;
-        private readonly ISchedulingOptions _schedulingOptions;
-        private readonly ITeamSteadyStateHolder _teamSteadyStateHolder;
-        private readonly ITeamSteadyStateMainShiftScheduler _teamSteadyStateMainShiftScheduler;
-        private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+        private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
 
-        public TeamScheduling(ISchedulingOptions schedulingOptions, 
-                              ITeamSteadyStateHolder teamSteadyStateHolder, 
-                              ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler,
-                              IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,IGroupSchedulingService groupSchedulingService)
+        public TeamScheduling(IResourceCalculateDelayer  resourceCalculateDelayer)
         {
-            _schedulingOptions = schedulingOptions;
-            _teamSteadyStateHolder = teamSteadyStateHolder;
-            _teamSteadyStateMainShiftScheduler = teamSteadyStateMainShiftScheduler;
-            _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
-            _groupSchedulingService = groupSchedulingService;
+            _resourceCalculateDelayer = resourceCalculateDelayer;
         }
 
 
-        public void  Execute(IList<DateOnly  > selectedDays, IList<IScheduleMatrixPro> matrixList,
+        public void  Execute(IList<DateOnly  > daysInBlock, IList<IScheduleMatrixPro> matrixList,
                 IGroupPerson groupPerson,IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache   )
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
 
-            _groupSchedulingService.ExecuteForAdvanceSchedulingService(selectedDays, matrixList, _schedulingOptions, groupPerson,
-                                            new BackgroundWorker(), _teamSteadyStateHolder,
-                                            _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization, effectiveRestriction, shiftProjectionCache);
+            foreach(var day in daysInBlock )
+            {
+                IScheduleDay  scheduleDay = null;
+                foreach(var person in groupPerson.GroupMembers  )
+                {
+                    var matrixPro =
+                        matrixList.First(scheduleMatrixPro => scheduleMatrixPro.Person == person);
+                    scheduleDay = matrixPro.GetScheduleDayByKey(day).DaySchedulePart();
+                    
+                        
+                        scheduleDay.AddMainShift(shiftProjectionCache.TheMainShift);
+
+                        
+                    
+                }
+                if(scheduleDay != null)
+                    _resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
+                                                                   shiftProjectionCache.WorkShiftProjectionPeriod, new List<IScheduleDay> {scheduleDay });
+            }
+            
         }
     }
 }

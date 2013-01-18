@@ -53,11 +53,11 @@ namespace Teleopti.Interfaces.Domain
 			IPossibleStartEndCategory possibleStartEndCategory,
 			ISchedulePartModifyAndRollbackService rollbackService);
 
-	    bool ScheduleForAdvanceScheduling(
-	        IScheduleDay schedulePart,
-	        ISchedulingOptions schedulingOptions,
-	        IResourceCalculateDelayer resourceCalculateDelayer,
-	        ISchedulePartModifyAndRollbackService rollbackService,
-	        IShiftProjectionCache shiftProjectionCache);
+        //bool ScheduleForAdvanceScheduling(
+        //    IScheduleDay schedulePart,
+        //    ISchedulingOptions schedulingOptions,
+        //    IResourceCalculateDelayer resourceCalculateDelayer,
+        //    ISchedulePartModifyAndRollbackService rollbackService,
+        //    IShiftProjectionCache shiftProjectionCache);
 	}
 }

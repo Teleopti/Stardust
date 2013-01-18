@@ -1160,39 +1160,39 @@ namespace Teleopti.Ccc.Win.Scheduling
 		        var restrictionAggregator = _container.Resolve<IRestrictionAggregator>();
 		        var workShiftFilterService = _container.Resolve<IWorkShiftFilterService>();
 
-		        var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
-		        var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
-		        var teamSteadyStateRunner = new TeamSteadyStateRunner(matrixList, targetTimeCalculator);
-		        var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
-		        var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, matrixList,
-		                                                                          groupPersonsBuilder, schedulingOptions);
-		        var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(allScheduleDays);
-		        var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
-		        var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
-		        var coherentChecker = new TeamSteadyStateCoherentChecker();
-		        var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-		        var workShiftBackToLegalStateService =
-		            OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
-		        var groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
-		        var groupPersonConsistentChecker = _container.Resolve<IGroupPersonConsistentChecker>();
-		        var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-		        var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
-		        IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-		            new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState,
-		                                                  _container.Resolve<IGroupPersonFactory>(),
-		                                                  _container.Resolve<IGroupPagePerDateHolder>());
-		        IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
-		                                                                     groupPersonConsistentChecker,
-		                                                                     workShiftBackToLegalStateService,
-		                                                                     resourceOptimizationHelper,
-		                                                                     mainShiftOptimizeActivitySpecificationSetter);
-		        var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(groupMatrixHelper,
-		                                                                                      coherentChecker,
-		                                                                                      scheduleMatrixProFinder);
+		        //var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
+                //var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
+                //var teamSteadyStateRunner = new TeamSteadyStateRunner(matrixList, targetTimeCalculator);
+                //var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
+                //var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, matrixList,
+                //                                                                  groupPersonsBuilder, schedulingOptions);
+                //var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(allScheduleDays);
+		        //var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
+		        //var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
+                //var coherentChecker = new TeamSteadyStateCoherentChecker();
+                //var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
+                //var workShiftBackToLegalStateService =
+                //    OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
+                //var groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
+                //var groupPersonConsistentChecker = _container.Resolve<IGroupPersonConsistentChecker>();
+                //var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+                var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+                                                                            schedulingOptions.ConsiderShortBreaks);
+                //var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+                //IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+                //    new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState,
+                //                                          _container.Resolve<IGroupPersonFactory>(),
+                //                                          _container.Resolve<IGroupPagePerDateHolder>());
+                //IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
+                //                                                             groupPersonConsistentChecker,
+                //                                                             workShiftBackToLegalStateService,
+                //                                                             resourceOptimizationHelper,
+                //                                                             mainShiftOptimizeActivitySpecificationSetter);
+                //var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(groupMatrixHelper,
+                //                                                                              coherentChecker,
+                //                                                                              scheduleMatrixProFinder);
 
-		        var teamScheduling = new TeamScheduling(schedulingOptions, teamSteadyStateHolder,
-		                                                teamSteadyStateMainShiftScheduler,
-		                                                groupPersonBuilderForOptimization, groupSchedulingService);
+		        var teamScheduling = new TeamScheduling(resourceCalculateDelayer );
 
 				
 				IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator = new WorkShiftPeriodValueCalculator();
@@ -1205,7 +1205,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		                                                                    dynamicBlockFinder, teamExtractor,
 		                                                                    restrictionAggregator, matrixList,
 		                                                                    workShiftFilterService, teamScheduling,
-																			schedulingOptions, workShiftSelector);
+                                                                            schedulingOptions, workShiftSelector);
 
 		        advanceSchedulingService.Execute(schedulingResults);
 		    }
