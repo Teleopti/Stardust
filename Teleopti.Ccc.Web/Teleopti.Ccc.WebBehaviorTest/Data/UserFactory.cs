@@ -35,12 +35,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static UserFactory User()
 		{
-			if (ScenarioContext.Current.Value<UserFactory>("user") == null)
-				ScenarioContext.Current.Value("user", new UserFactory());
-			return ScenarioContext.Current.Value<UserFactory>("user");
+			return User("I");
+		}
+
+		public static UserFactory User(string userName)
+		{
+			var trimmedUserName = userName.Trim('\'');
+			if (ScenarioContext.Current.Value<UserFactory>(trimmedUserName) == null)
+				ScenarioContext.Current.Value(trimmedUserName, new UserFactory());
+			return ScenarioContext.Current.Value<UserFactory>(trimmedUserName);
 		}
 
 		public void AddColleague() { _colleagues.Add(new UserFactory()); }
+
+		public void AddColleague(string userName)
+		{
+			var userFactory = new UserFactory();
+			_colleagues.Add(userFactory);
+			ScenarioContext.Current.Value(userName, userFactory);
+		}
+
 		public void AddTeamColleague()
 		{
 			_teamColleague = new UserFactory();

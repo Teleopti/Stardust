@@ -57,6 +57,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			TestControllerMethods.LogonForSpecificUser(user.UserName, user.Password); 
 		}
 
+		[Given(@"There is an user called '(.*)'")]
+		public void GivenThereIsAnUserCalled(string userName)
+		{
+			UserFactory.User().AddColleague(userName);
+		}
 
 
 
