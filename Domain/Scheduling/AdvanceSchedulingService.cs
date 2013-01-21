@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                 //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
                 // (should we cover for max seats here?)
-                //var shifts = _workShiftFilterService.Filter(startDate, groupPerson, _matrixList, restriction, _schedulingOptions, null);
+                var shifts = _workShiftFilterService.Filter(startDate, groupPerson, _matrixList, restriction, _schedulingOptions);
                 //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need
                 
                 //call class that schedules given date with given workshift on the complete team
