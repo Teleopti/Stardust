@@ -224,7 +224,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			if (best == null)
 			{
 				IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { dateOnly }, new Dictionary<string, IWorkShiftFinderResult>());
-				var matrix = matrixList.First(d => d.Person == person);
+				var matrix = matrixList.FirstOrDefault(d => d.Person == person && d.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly));
+				if (matrix == null) return false;
 				_workShiftMinMaxCalculator.ResetCache();
 				var minmax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);
 				var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, schedulingOptions, agentAverageFairness, minmax);
