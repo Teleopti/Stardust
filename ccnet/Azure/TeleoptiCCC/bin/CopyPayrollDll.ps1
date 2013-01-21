@@ -3,9 +3,6 @@ Param(
   )
 [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
 
-
-
-$directory
 ## Name of the job, name of source in Windows Event Log
 $JOB = "Teleopti.Ccc.BlobStorageCopy"
 
@@ -57,7 +54,8 @@ $TIME = get-date -uformat "%T"
 ## Wrap all above arguments
 $cmdArgs = @("$BlobSource","$DESTINATION",$OPTIONS)
 
-$AzCopyExe = ".\ccc7_azure\AzCopy\AzCopy.exe"
+$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
+$AzCopyExe
 
 ## Start the azcopy with above parameters and log errors in Windows Eventlog.
 & $AzCopyExe @cmdArgs
