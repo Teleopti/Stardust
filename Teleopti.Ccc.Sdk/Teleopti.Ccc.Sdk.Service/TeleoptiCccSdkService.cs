@@ -831,6 +831,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return AdherenceReportSetting.MapToMatrix(adherenceReportSetting.CalculationMethod);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToInt32(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToDateTime(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
 		public AdherenceDto GetAdherenceDataBasedOnShiftDate(DateTime dateTime, string timeZoneId, PersonDto personDto,
 										PersonDto agentPersonDto, int languageId)
 		{
