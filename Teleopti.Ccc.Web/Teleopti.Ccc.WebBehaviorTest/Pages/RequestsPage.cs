@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Class = "arrow-down")]
 		public Div MoreToLoadArrow { get; set; }
-		
+
 		[FindBy(Id = "Request-add-shift-trade-button")]
 		public Button ShiftTradeRequestsButton { get; set; }
 
@@ -100,21 +100,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public SpanCollection MyScheduleLayers
 		{
-			get
-			{
-				return Document.Div(Find.ById("Request-add-shift-trade-my-schedule")).Spans;
-			}
+			get { return Document.Div(QuicklyFind.ByClass("shift-trade-my-schedule")).Spans; }
 		}
 
 		[FindBy(Id = "Request-add-shift-trade-datepicker")]
-		public TextField AddShiftTradeDatePicker { get; set; }
+		public TextField AddShiftTradeDatePicker
+		{
+			get { return Document.TextField(QuicklyFind.ByClass("shift-trade-add-datepicker")); }
+		}
 
 		public SpanCollection AddShiftTradeTimeLineItems
 		{
-			get
-			{
-				return Document.Div(Find.ById("shift-trade-timeline")).Spans;
-			}
+			get { return Document.Div(QuicklyFind.ByClass("shift-trade-timeline")).Spans; }
 		}
 	}
 }

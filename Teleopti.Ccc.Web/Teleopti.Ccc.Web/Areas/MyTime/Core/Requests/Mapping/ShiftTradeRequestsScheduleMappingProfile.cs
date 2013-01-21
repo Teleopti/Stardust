@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 										myScheduleViewModel = new ShiftTradeScheduleViewModel
 																	{
-																		Name = myScheduledDay.Person.Name.ToString(),
+																		Name = UserTexts.Resources.MySchedule,
 																		ScheduleLayers = CreateShiftTradeLayers(myLayerCollection, timeZone),
 																		MinutesSinceTimeLineStart = myLayerCollection.Any() ? (int)myLayerCollection.First().Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes : 0
 																	};

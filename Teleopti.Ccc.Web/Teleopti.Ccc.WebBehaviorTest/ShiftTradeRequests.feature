@@ -142,7 +142,7 @@ Scenario: Show my full-day absence
 	And I should see the time line hours span from '8' to '17'
 
 @ignore
-Scenario: Show message when no possible shift trades
+Scenario: Show message when no possible shift trades found
 	Given I have the role 'Full access to mytime'
 	And Current time is '2030-01-05'
 	And I can do shift trades between '2030-01-06' and '2030-01-17'

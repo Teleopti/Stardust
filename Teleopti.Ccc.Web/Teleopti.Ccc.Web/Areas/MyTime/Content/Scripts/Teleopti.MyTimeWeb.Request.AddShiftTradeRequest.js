@@ -27,7 +27,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.pixelPerMinute = ko.computed(function () {
 			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
 		});
-		
+
 		self._createMySchedule = function (myScheduleObject) {
 			var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
 				return new layerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
@@ -169,12 +169,28 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		ko.applyBindings(vm, elementToBind);
 		bindClickToOpenShiftTrade();
 	}
+	function _initDatePicker() {
+		$('.shift-trade-add-datepicker').textbox()
+
+		$('.shift-trade-add-previous-date').button({
+					icons: {
+						primary: "ui-icon-triangle-1-w"
+					},
+					text: false
+				});
+		$('.shift-trade-add-next-date').button({
+			icons: {
+				primary: "ui-icon-triangle-1-e"
+			},
+			text: false
+		});
+	}
 
 	function setDatePickerRange(relativeStart, relativeEnd) {
 		vm.openPeriodStartDate = moment(vm.now).add('days', relativeStart);
 		vm.openPeriodEndDate = moment(vm.now).add('days', relativeEnd);
 
-		var element = $('#Request-add-shift-trade-datepicker');
+		var element = $('.shift-trade-add-datepicker');
 		element.datepicker("option", "minDate", vm.openPeriodStartDate.toDate());
 		element.datepicker("option", "maxDate", vm.openPeriodEndDate.toDate());
 	}
@@ -185,6 +201,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				$('#Request-add-shift-trade')
 					.show();
 
+				_initDatePicker();
 				vm.loadPeriod();
 			});
 	}

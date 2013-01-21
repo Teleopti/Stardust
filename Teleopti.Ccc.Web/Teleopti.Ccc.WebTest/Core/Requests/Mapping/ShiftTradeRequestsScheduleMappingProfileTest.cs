@@ -55,6 +55,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
+		public void ShouldMapMyScheduleTextNextToMyScheduledShift()
+		{
+			var startDate = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var scheduleDay = _scheduleFactory.ScheduleDayStub(startDate, _person);
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(new DateOnly(startDate))).Return(scheduleDay);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything)).Return(new List<IScheduleDay>());
+			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new[]
+		                                                {
+		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(startDate, startDate.AddHours(3)))
+		                                                }));
+			var result = Mapper.Map<DateOnly, ShiftTradeRequestsScheduleViewModel>(new DateOnly(startDate));
+			result.MySchedule.Name.Should().Be.EqualTo(UserTexts.Resources.MySchedule);
+		}
+
+		[Test]
 		public void ShouldHaveMinutesSinceTimeLineStartSetWhenBothScheduleForMeAndTradeBuddy()
 		{
 			var buddy = new Person {Name = new Name("Buddy", "Bob")};
