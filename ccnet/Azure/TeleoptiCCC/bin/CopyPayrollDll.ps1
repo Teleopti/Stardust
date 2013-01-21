@@ -31,7 +31,7 @@ if (-not(test-path -path $DESTINATION))
 }
 
 ## FileWatch destination directory
-$FILEWATCH = ".\..\Services\ServiceBus\Payroll.DeployNew"
+$FILEWATCH = $directory + "\..\Services\ServiceBus\Payroll.DeployNew"
 
 ## Path to AzCopy logfile
 $LOGFILE = "c:\temp\PayrollInbox"
@@ -60,6 +60,9 @@ $AzCopyExe
 ## Start the azcopy with above parameters and log errors in Windows Eventlog.
 & $AzCopyExe @cmdArgs
 
+## Get LastExitCode and store in variable
+$ExitCode = $LastExitCode
+
 ## Wrap arguments for robocopy
 $roboArgs = @("$DESTINATION","$FILEWATCH",$ROBOOPTIONS)
 
@@ -67,7 +70,15 @@ $roboArgs = @("$DESTINATION","$FILEWATCH",$ROBOOPTIONS)
 & robocopy @roboArgs
 
 ## Get LastExitCode and store in variable
-$ExitCode = $LastExitCode
+$RoboExitCode = $LastExitCode
+
+##restart service if new file(s) arrived from BlobStorage into $FILEWATCH
+##Teleopti Service Bus will pick up new files on restart
+If ($RoboExitCode -eq 1) {
+Stop-Service -name "Teleopti Service Bus"
+write-host "-------------" -ForegroundColor blue
+Start-Service -name "Teleopti Service Bus"
+}
 
 $MSGType=@{
 "7"="Error"
