@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
     public interface IWorkShiftFilterService
     {
-        IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IPossibleStartEndCategory possibleStartEndCategory);
+        IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions);
     }
 
     public class WorkShiftFilterService : IWorkShiftFilterService
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             _shiftLengthDecider = shiftLengthDecider;
         }
 
-        public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IPossibleStartEndCategory possibleStartEndCategory)
+        public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions)
         {
             FinderResult = new WorkShiftFinderResult(person, dateOnly);
             _workShiftMinMaxCalculator.ResetCache();
@@ -59,13 +58,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                     // override the one in Effective
                     effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
                 }
-                if (possibleStartEndCategory != null)
-                    shiftList = _shiftProjectionCacheFilter.FilterOnShiftCategory(possibleStartEndCategory.ShiftCategory, shiftList, FinderResult);
-
-                shiftList = _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(shiftList, possibleStartEndCategory, schedulingOptions, FinderResult);
-
-                shiftList = _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonActivity(shiftList, schedulingOptions, possibleStartEndCategory, FinderResult);
-
                 shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(shiftList, schedulingOptions.MainShiftOptimizeActivitySpecification);
 
                 shiftList = _shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(dateOnly,
