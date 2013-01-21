@@ -35,7 +35,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static UserFactory User()
 		{
-			return User("I");
+			const string userNameForMe = "I";
+			if (ScenarioContext.Current.Value<UserFactory>(userNameForMe) == null)
+			{
+				ScenarioContext.Current.Value(userNameForMe, new UserFactory());				
+			}
+			return ScenarioContext.Current.Value<UserFactory>(userNameForMe);
 		}
 
 		public static UserFactory User(string userName)
@@ -43,14 +48,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var trimmedUserName = userName.Trim('\'');
 			if (ScenarioContext.Current.Value<UserFactory>(trimmedUserName) == null)
 			{
-				ScenarioContext.Current.Value(trimmedUserName, new UserFactory());				
+				var rootUser = User();
+				rootUser.AddColleague(trimmedUserName);			
 			}
 			return ScenarioContext.Current.Value<UserFactory>(trimmedUserName);
 		}
 
 		public void AddColleague() { _colleagues.Add(new UserFactory()); }
 
-		public void AddColleague(string userName)
+		private void AddColleague(string userName)
 		{
 			var userFactory = new UserFactory();
 			userFactory.Setup(new SetName(userName));

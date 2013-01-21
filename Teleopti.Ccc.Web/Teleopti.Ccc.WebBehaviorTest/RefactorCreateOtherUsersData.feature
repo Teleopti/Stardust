@@ -7,7 +7,6 @@ Background:
 	| Name  |
 	| Night |
 	| Day   |
-	And There is an user called 'Arne Anka'
 
 Scenario: Replacing I to a dynamic name
 	#this is the old way
