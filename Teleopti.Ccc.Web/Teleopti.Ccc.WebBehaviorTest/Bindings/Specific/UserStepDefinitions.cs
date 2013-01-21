@@ -489,6 +489,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new ExistingShiftTradeRequest());
 		}
 
+		[Given(@"I have created a shift trade request with subject '(.*)'")]
+		public void GivenIHaveCreatedAShiftTradeRequestWithSubject(string subject)
+		{
+			UserFactory.User().Setup(new ExistingShiftTradeRequest(subject));
+		}
+
 		[Given(@"I have received a shift trade request from '(.*)'")]
 		public void GivenIHaveReceivedAShiftTradeRequestFrom(string from)
 		{

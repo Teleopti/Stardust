@@ -252,6 +252,55 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_dailyValueCalculator.DayValue(new DateOnly())).IgnoreArguments().Return(2);
         }
 
+		[Test]
+		public void ShouldReturnFalseWhenHasNoPersonAssignment()
+		{
+			using (_mockRepository.Record())
+			{
+				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
+					.Return(_schedulingOptions);
+				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
+				Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
+				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].AssignmentHighZOrder()).Return(null);
+				Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>());
+				Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit()).Return(false);
+				Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor))
+				 .IgnoreArguments()
+				 .Return(_removedDate);
+				Expect.Call(_dailyValueCalculator.DayValue(new DateOnly())).IgnoreArguments().Return(2);
+			}
+			using (_mockRepository.Playback())
+			{
+				var result = _target.Execute();
+				Assert.IsFalse(result);
+			}
+		}
+
+		[Test]
+		public void ShouldReturnFalseWhenHasNoMainShift()
+		{
+			using (_mockRepository.Record())
+			{
+				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
+					.Return(_schedulingOptions);
+				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
+				Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
+				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].AssignmentHighZOrder().MainShift).Return(null);
+				Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>());
+				Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit()).Return(false);
+				Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor))
+				 .IgnoreArguments()
+				 .Return(_removedDate);
+				Expect.Call(_dailyValueCalculator.DayValue(new DateOnly())).IgnoreArguments().Return(2);
+			}
+			using (_mockRepository.Playback())
+			{
+				var result = _target.Execute();
+				Assert.IsFalse(result);
+			}
+		}
+
+
         [Test]
         public void ShouldReturnFalseButNoRollbackWhenExecuteWithSamePeriodValue()
         {

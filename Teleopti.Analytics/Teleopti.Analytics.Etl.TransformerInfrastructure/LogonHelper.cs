@@ -90,7 +90,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 					new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
 					                       DataSourceConfigurationSetter.ForEtl()), null);
 			application.MessageBrokerDisabled = true;
-			application.Start(new StateManager(), _nhibConfPath, null);
+			application.Start(new StateManager(), _nhibConfPath, null, new ConfigurationManagerWrapper());
 
 			//This one would benefit from some Autofac maybe?
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));

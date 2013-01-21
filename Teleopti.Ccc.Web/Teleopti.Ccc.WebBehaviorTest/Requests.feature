@@ -21,17 +21,19 @@ Scenario: See absence request
 	When I view requests
 	Then I should see my existing absence request
 
-Scenario: Do not show created shift trade request because its not implemented yet
+@ignore
+Scenario: Show created shift trade request 
 	Given I am an agent
 	And I have created a shift trade request
 	When I view requests
-	Then I should not see my existing shift trade request
+	Then I should see my existing shift trade request
 
-Scenario: Do not show received shift trade request because its not implemented yet
+@ignore
+Scenario: Show received shift trade request 
 	Given I am an agent
 	And I have received a shift trade request from 'Ashley'
 	When I view requests
-	Then I should not see my existing shift trade request
+	Then I should see my existing shift trade request
 
 Scenario: Requests tab
 	Given I am an agent
@@ -53,7 +55,7 @@ Scenario: No requests
 	Given I am an agent
 	And I have no existing requests
 	When I view requests
-	Then I should see a user-friendly message explaining I dont have anything to view
+	Then I should see a user-friendly message explaining that no requests exists
 
 Scenario: Default sorting
 	Given I am an agent

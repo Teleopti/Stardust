@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
             personResolver = mocks.DynamicMock<IPersonResolver>();
         }
 
-        [Test, ExpectedException(typeof(BrokerNotInstantiatedException))]
-        public void VerifyCreateInstanceUsingEmptyConstructorFailsBecauseNoConfigurationAvailable()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Teleopti.Ccc.Rta.Server.RtaDataHandler"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        public void VerifyCreateInstanceUsingEmptyConstructorWorks()
         {
             new RtaDataHandler();
         }

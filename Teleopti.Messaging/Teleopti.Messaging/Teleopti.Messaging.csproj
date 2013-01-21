@@ -12,7 +12,8 @@
     <AssemblyName>Teleopti.Messaging</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ApplicationIcon>Messages.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
     <SccProjectName>
@@ -125,134 +126,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\ConcurrentUsers.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Client\CustomTcpListner.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Client\CustomUdpListner.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Client\MessageBroker.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Client\MessageBrokerBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Client\MessageSender.cs" />
     <Compile Include="Client\MessageSenderFactory.cs" />
-    <Compile Include="Client\Subscriber.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Coders\JobResultProgressDecoder.cs" />
     <Compile Include="Coders\JobResultProgressEncoder.cs" />
-    <Compile Include="Coders\EventHeartbeatDecoder.cs" />
-    <Compile Include="Coders\EventHeartbeatEncoder.cs" />
     <Compile Include="Coders\ExternalAgentStateDecoder.cs" />
     <Compile Include="Coders\ExternalAgentStateEncoder.cs" />
-    <Compile Include="Composites\DataMapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Composites\DomainObjectFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Composites\MessageDispatcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Composites\MessageFilterManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Composites\MessageRegistrationManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Composites\StaticDataManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Core\ConfigurationInfo.cs" />
-    <Compile Include="Core\ConnectionFactory.cs" />
-    <Compile Include="Core\CustomThreadPool.cs" />
     <Compile Include="Core\FramerUtility.cs" />
-    <Compile Include="Core\MapperBase.cs" />
-    <Compile Include="Core\MessageInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Core\ObjectDeleter.cs" />
-    <Compile Include="Core\ObjectInserter.cs" />
-    <Compile Include="Core\ObjectReader.cs" />
-    <Compile Include="Core\SocketInfo.cs" />
-    <Compile Include="Coders\EventFilterDecoder.cs" />
-    <Compile Include="Coders\EventFilterEncoder.cs" />
-    <Compile Include="Coders\EventSubscriberDecoder.cs" />
-    <Compile Include="Coders\EventSubscriberEncoder.cs" />
-    <Compile Include="Coders\EventUserDecoder.cs" />
-    <Compile Include="Coders\EventUserEncoder.cs" />
-    <Compile Include="DataAccessLayer\AddressDeleter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataAccessLayer\AddressInserter.cs" />
-    <Compile Include="DataAccessLayer\AddressMapper.cs" />
-    <Compile Include="DataAccessLayer\AddressReader.cs" />
-    <Compile Include="DataAccessLayer\ConcurrentUsersMapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataAccessLayer\ConcurrentUsersReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataAccessLayer\ConfigurationDeleter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataAccessLayer\ConfigurationInfoInserter.cs" />
-    <Compile Include="DataAccessLayer\ConfigurationInfoMapper.cs" />
-    <Compile Include="DataAccessLayer\ConfigurationInfoReader.cs" />
-    <Compile Include="DataAccessLayer\EventDeleter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataAccessLayer\EventMessageInserter.cs" />
-    <Compile Include="DataAccessLayer\EventSubscriptionInserter.cs" />
-    <Compile Include="DataAccessLayer\EventUserInserter.cs" />
-    <Compile Include="DataAccessLayer\FilterDeleter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataAccessLayer\HeartbeatDeleter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataAccessLayer\HeartbeatInserter.cs" />
-    <Compile Include="DataAccessLayer\HeartbeatMapper.cs" />
-    <Compile Include="DataAccessLayer\HeartbeatReader.cs" />
-    <Compile Include="DataAccessLayer\EventFilterInserter.cs" />
-    <Compile Include="DataAccessLayer\EventFilterMapper.cs" />
-    <Compile Include="DataAccessLayer\EventFilterReader.cs" />
-    <Compile Include="DataAccessLayer\EventUserMapper.cs" />
-    <Compile Include="DataAccessLayer\EventUserReader.cs" />
-    <Compile Include="DataAccessLayer\EventSubscriptionMapper.cs" />
-    <Compile Include="DataAccessLayer\EventMessageReader.cs" />
-    <Compile Include="Coders\EventMessageDecoder.cs" />
-    <Compile Include="DataAccessLayer\EventMessageMapper.cs" />
-    <Compile Include="DataAccessLayer\EventSubscriptionReader.cs" />
-    <Compile Include="DataAccessLayer\ReceiptDeleter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataAccessLayer\ReceiptInserter.cs" />
-    <Compile Include="DataAccessLayer\ReceiptMapper.cs" />
-    <Compile Include="DataAccessLayer\ReceiptReader.cs" />
-    <Compile Include="DataAccessLayer\SubscriberDeleter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataAccessLayer\SubscriberScavager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Events\EventFilter.cs" />
-    <Compile Include="Events\EventHeartbeat.cs" />
-    <Compile Include="Events\EventSubscriber.cs" />
-    <Compile Include="Events\EventUser.cs" />
-    <Compile Include="Coders\EventMessageEncoder.cs" />
-    <Compile Include="Events\EventReceipt.cs" />
+    <Compile Include="Events\EventMessage.cs" />
     <Compile Include="Exceptions\BrokerNotInstantiatedException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Exceptions\ClientNotConnectedException.cs" />
-    <Compile Include="Exceptions\DatabaseException.cs" />
     <Compile Include="Exceptions\DomainObjectNotInFilterException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -260,48 +146,8 @@
     <Compile Include="Exceptions\NotInterfaceTypeException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Exceptions\PortNotAvailableException.cs" />
-    <Compile Include="Exceptions\SocketIsNullException.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Events\EventMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Core\SocketUtitility.cs" />
-    <Compile Include="Core\MessageQueueItem.cs" />
-    <Compile Include="Protocols\MulticastProtocol.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Server\PollingClient.cs" />
-    <Compile Include="Server\PollingManager.cs" />
-    <Compile Include="Protocols\PollingProtocol.cs" />
-    <Compile Include="Protocols\Protocol.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Protocols\TcpIpProtocol.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Protocols\UdpProtocol.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Server\BrokerService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Server\BrokerServiceBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Server\Publisher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Server\PublisherFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Server\TcpSender.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Server\UdpSender.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SignalR\SignalBroker.cs" />
     <Compile Include="SignalR\SignalSender.cs" />
     <Compile Include="SignalR\SignalWrapper.cs" />
@@ -316,17 +162,12 @@
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
       <Link>CodeAnalysisDictionary.xml</Link>
     </CodeAnalysisDictionary>
-    <Content Include="Messages.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
-    <None Include="ClassDiagrams\CodersClassDiagram.cd" />
-    <None Include="ClassDiagrams\DALClassDiagram.cd" />
-    <None Include="ClassDiagrams\EventsClassDiagram.cd" />
     <None Include="packages.config" />
-    <None Include="Teleopti.Messaging.pfx" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

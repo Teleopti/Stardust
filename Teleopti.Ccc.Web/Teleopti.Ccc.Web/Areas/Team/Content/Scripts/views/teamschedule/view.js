@@ -55,12 +55,14 @@ define([
 					.ready(resize);
 
 				var initialLoad = true;
-				var loadSchedules = function () {
+				var loadSchedules = function() {
 					var queryDate = teamSchedule.SelectedDate().clone();
 					queryDate.utc();
 
 					teamSchedule.isLoading(true);
-					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, queryDate.toDate()).done(function (schedules) {
+					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, queryDate.toDate()).fail(function() {
+						window.location.href = 'authentication/signout';
+					}).done(function(schedules) {
 						var agents = teamSchedule.Agents();
 
 						var dateClone = teamSchedule.SelectedDate().clone();
@@ -75,7 +77,7 @@ define([
 							}
 						}
 
-						agents.sort(function (a, b) {
+						agents.sort(function(a, b) {
 							var firstStartMinutes = a.FirstStartMinute();
 							var secondStartMinutes = b.FirstStartMinute();
 							return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
@@ -86,11 +88,11 @@ define([
 						teamSchedule.isLoading(false);
 
 						if (initialLoad) {
-							teamSchedule.SelectedTeam.subscribe(function () {
+							teamSchedule.SelectedTeam.subscribe(function() {
 								loadPeople();
 							});
 
-							teamSchedule.SelectedDate.subscribe(function () {
+							teamSchedule.SelectedDate.subscribe(function() {
 								loadAvailableTeams();
 							});
 							initialLoad = false;
@@ -139,6 +141,8 @@ define([
 						teamSchedule.Teams.valueHasMutated();
 
 						loadPeople();
+					}).error(function () {
+						window.location.href = 'authentication/signout';
 					});
 				};
 
@@ -153,6 +157,8 @@ define([
 						teamSchedule.AddAgents(newItems);
 
 						loadSchedules();
+					}).error(function () {
+						window.location.href = 'authentication/signout';
 					});
 				};
 
@@ -161,10 +167,12 @@ define([
 					.done(function () {
 						loadAvailableTeams();
 
-						ko.applyBindings({
-							TeamSchedule: teamSchedule,
-							Translations: translations
-						}, $('body > section')[0]);
+						$(window).ready(function () {
+							ko.applyBindings({
+								TeamSchedule: teamSchedule,
+								Translations: translations
+							}, $('body > section')[0]);
+						});
 					})
 					.fail(function (error) {
 						$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
@@ -195,9 +203,9 @@ define([
 					for (var i = 0; i < languages.length; i++) {
 						try {
 							moment.lang(languages[i]);
-						} catch(e) {
+						} catch (e) {
 							continue;
-						} 
+						}
 						if (moment.lang() == languages[i]) return;
 					}
 				}

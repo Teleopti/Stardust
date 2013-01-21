@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Web.Broker
 			if (settingsFromParser.ConnectionTimeout.HasValue)
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
 
+			GlobalHost.HubPipeline.EnableAutoRejoiningGroups();
 			RouteTable.Routes.MapHubs();
 		}
 

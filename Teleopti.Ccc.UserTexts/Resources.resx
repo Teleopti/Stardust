@@ -4855,10 +4855,6 @@ Standard</value>
     <value>Ready Time</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Not Ready Time</value>
-    <comment>AP: Information grid columns (My Report)</comment>
-  </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Logged in time</value>
     <comment>AP: Information grid columns (My Report)</comment>
@@ -11123,6 +11119,10 @@ These options are activated:
   <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
     <value>Scheduled Agents per Activity</value>
     <comment>Scheduled Agents per Activity</comment>
+  </data>
+  <data name="NotReadyTime" xml:space="preserve">
+    <value>Not Ready Time</value>
+    <comment>My report in MyTime</comment>
   </data>
   <data name="ResTotals" xml:space="preserve">
     <value>Totals</value>

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public List RequestsList { get; set; }
 
 		private Constraint RequestConstraint = Find.BySelector(".request-item");
-		private DivCollection RequestListItems { get { return Document.Divs.Filter(RequestConstraint); } }
+		public DivCollection RequestListItems { get { return Document.Divs.Filter(RequestConstraint); } }
 		public IEnumerable<Div> Requests { get { return RequestListItems; } }
 		public Div FirstRequest { get { return Document.Div(RequestConstraint).EventualGet(); } }
 		public Div LastRequest { get { return RequestListItems.Last(); } }
@@ -63,16 +63,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Request-detail-subject-input")]
 		public TextField RequestDetailSubjectInput { get; set; }
+
+		[FindBy(Id = "I-am-a-shifttrade")]
+		public Div IamAShiftTrade { get; set; }
+
+		[FindBy(Class = "request-detail-title")]
+		public Div RequestDetailTitle { get; set; }
+		
 		[FindBy(Id = "Request-detail-fromDate-input")]
 		public TextField RequestDetailFromDateTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-fromTime-input-input")]
 		public TextField RequestDetailFromTimeTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-toDate-input")]
 		public TextField RequestDetailToDateTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-toTime-input-input")]
 		public TextField RequestDetailToTimeTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-message-input")]
 		public TextField RequestDetailMessageTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-error")]
 		public Div ValidationErrorText { get; set; }
 
@@ -89,5 +101,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Class = "arrow-down")]
 		public Div MoreToLoadArrow { get; set; }
+
+		[FindBy(Id = "Requests-no-requests-found")]
+		public Div NoRequestsFound { get; set; }
 	}
 }

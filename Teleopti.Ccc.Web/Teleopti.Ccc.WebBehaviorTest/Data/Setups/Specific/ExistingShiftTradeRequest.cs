@@ -10,6 +10,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 {
 	public class ExistingShiftTradeRequest : IUserDataSetup
 	{
+		private readonly string _subject= string.Empty;
+
+		public ExistingShiftTradeRequest()
+		{
+		}
+
+		public ExistingShiftTradeRequest(string subject)
+		{
+			_subject = subject;
+		}
+
 		public PersonRequest PersonRequest { get; set; }
 		public ShiftTradeRequest ShiftTradeRequest { get; set; }
 		public IPerson From { get; set; }
@@ -21,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			var sender = From ?? user;
 			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, user, new DateOnly(today), new DateOnly(tomorrow));
 			ShiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-			PersonRequest = new PersonRequest(user) { Subject = "Swap shift with " + sender.Name };
+			PersonRequest = new PersonRequest(user) { Subject = _subject == string.Empty ? "Swap shift with " + sender.Name : _subject };
 			PersonRequest.Request = ShiftTradeRequest;
 			PersonRequest.TrySetMessage("This is a short text for the description of a shift trade request");
 

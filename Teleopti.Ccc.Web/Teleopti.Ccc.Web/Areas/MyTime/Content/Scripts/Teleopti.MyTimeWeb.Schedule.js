@@ -425,7 +425,7 @@ Teleopti.MyTimeWeb.Schedule.RequestViewModel = (function RequestViewModel() {
 			$('#Schedule-addRequest-toTime-input-input').reset();
 			_enableTimeinput();
 		}
-		
+
 	});
 
 	function _enableTimeinput() {

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
@@ -45,7 +46,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Then(@"I should see a requests list")]
-		public void ThenIShouldSeeARequestsList() { EventualAssert.That(() => _page.RequestsList.Exists, Is.True); }
+		public void ThenIShouldSeeARequestsList()
+		{
+			EventualAssert.That(() => _page.RequestListItems.Count(r=>r.IsDisplayed()) > 0, Is.True);
+		}
 
 		[Then(@"I should see my existing text request")]
 		public void ThenIShouldSeeMyExistingTextRequest()
@@ -111,19 +115,30 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.LastRequest.InnerHtml, Is.StringContaining(data.PersonRequest1.GetSubject(new NoFormatting())));
 		}
 
+		[Then(@"I should see a user-friendly message explaining that no requests exists")]
+		public void ThenIShouldSeeAUser_FriendlyMessageExplainingThatNoRequestsExists()
+		{
+			EventualAssert.That(()=>_page.NoRequestsFound.IsDisplayed(),Is.True);
+		}
+
 		[Then(@"I should see an indication that there are more requests")]
 		public void ThenIShouldSeeAnIndicationThatThereAreMoreRequests()
 		{
 			EventualAssert.That(() => _page.MoreToLoadArrow.IsDisplayed(), Is.True);
+		}
 
-//			EventualAssert.That(() => Browser.Current.Div(QuicklyFind.ByClass("arrow-down")).IsDisplayed(), Is.True, "More-to-load arrows should  be visible");
+		[Then(@"I should see the shift trade request form  with subject '(.*)'")]
+		public void ThenIShouldSeeTheShiftTradeRequestFormWithSubject(string subject)
+		{
+			EventualAssert.That(() => _page.RequestDetailSection.IsDisplayed(),Is.True, "The detailsection should be visible");
+			EventualAssert.That(() => _page.IamAShiftTrade.IsDisplayed(), Is.True, "It should show a shifttrade");
+			EventualAssert.That(()=>_page.RequestDetailSubjectInput.Text, Is.EqualTo(subject),"The subject should match the specific shifttrade-request");
 		}
 
 		[Then(@"I should not see an indication that there are more requests")]
 		public void ThenIShouldNotSeeAnIndicationThatThereAreMoreRequests()
 		{
 			EventualAssert.That(() => _page.MoreToLoadArrow.IsDisplayed(), Is.False);
-			//EventualAssert.That(() => Browser.Current.Div(QuicklyFind.ByClass("arrow-down")).IsDisplayed(), Is.False,"More-to-load arrows should not be visible");
 		}
 	}
 
