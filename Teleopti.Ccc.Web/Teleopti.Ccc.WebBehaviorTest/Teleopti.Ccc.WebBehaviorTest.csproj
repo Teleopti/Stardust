@@ -114,11 +114,6 @@
     <Compile Include="Data\Setups\Generic\TeamConfigurable.cs" />
     <Compile Include="Bindings\Generic\StudentAvailabilityPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\SetName.cs" />
-    <Compile Include="RefactorCreateOtherUsersData.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RefactorCreateOtherUsersData.feature</DependentUpon>
-    </Compile>
     <Compile Include="StudentAvailabilityMultidays.feature.cs">
       <DependentUpon>StudentAvailabilityMultidays.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -537,10 +532,6 @@
     <None Include="AdminWeb\Schedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Schedule.feature.cs</LastGenOutput>
-    </None>
-    <None Include="RefactorCreateOtherUsersData.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RefactorCreateOtherUsersData.feature.cs</LastGenOutput>
     </None>
     <None Include="StudentAvailabilityMultidays.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
