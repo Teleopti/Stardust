@@ -11238,4 +11238,8 @@ These options are activated:
     <value>My Schedule</value>
     <comment>Used in creating Shift Trade on web</comment>
   </data>
+  <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
+    <value>No agents available for shift trade</value>
+    <comment>Message in Shift Trade in MyTime Web</comment>
+  </data>
 </root>

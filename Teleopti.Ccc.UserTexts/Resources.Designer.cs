@@ -13897,6 +13897,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No agents available for shift trade.
+        /// </summary>
+        public static string NoAgentsAvailableForShiftTrade {
+            get {
+                return ResourceManager.GetString("NoAgentsAvailableForShiftTrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No allowed business unit found in current database.
         /// </summary>
         public static string NoAllowedBusinessUnitFoundInCurrentDatabase {

@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 
+		[Then(@"I should see a message text saying that no possible shift trades could be found")]
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
 		public void ThenIShouldSeeAMessageTextSayingIAmMissingAWorkflowControlSet()
 		{

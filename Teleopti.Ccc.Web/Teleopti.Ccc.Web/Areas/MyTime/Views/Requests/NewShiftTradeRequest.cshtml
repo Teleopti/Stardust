@@ -1,7 +1,12 @@
 ﻿@using Teleopti.Ccc.UserTexts
 <div id="Request-add-shift-trade" class="shift-trade-add-canvas ui-corner-all">
-	<div style="background-color: lightblue;z-index: 10;display: block" class="friendly-message ui-corner-all" data-bind="visible : missingWorkflowControlSet">
-		@Resources.MissingWorkflowControlSet
+	<div class="friendly-message ui-corner-all" data-bind="visible : missingWorkflowControlSet() || noPossibleShiftTrades()">
+		<span data-bind="visible : missingWorkflowControlSet">
+			@Resources.MissingWorkflowControlSet
+		</span>
+		<span data-bind="visible : noPossibleShiftTrades">
+			@Resources.NoAgentsAvailableForShiftTrade
+		</span>
 	</div>
 	<div data-bind="visible : !missingWorkflowControlSet()">
 		<div>

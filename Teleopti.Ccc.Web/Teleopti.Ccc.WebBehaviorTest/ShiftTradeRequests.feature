@@ -116,6 +116,18 @@ Scenario: Time line should cover my scheduled shift
 	When I view Add Shift Trade Request for date '2030-01-03'
 	Then I should see the time line hours span from '6' to '16'
 
+Scenario: Show message when no agents are available for shift trade
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Current time is '2013-01-01'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-02 06:00 |
+	| EndTime               | 2030-01-02 16:00 |
+	| Shift category		| Day	           |
+	When I view Add Shift Trade Request for date '2030-01-02'
+	Then I should see a message text saying that no possible shift trades could be found
+
 Scenario: Show my scheduled day off
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -140,14 +152,6 @@ Scenario: Show my full-day absence
 	When I view Add Shift Trade Request for date '2030-01-05'
 	Then I should see my scheduled absence 'Illness'
 	And I should see the time line hours span from '8' to '17'
-
-@ignore
-Scenario: Show message when no possible shift trades found
-	Given I have the role 'Full access to mytime'
-	And Current time is '2030-01-05'
-	And I can do shift trades between '2030-01-06' and '2030-01-17'
-	When I navigate to shift trade page for date '2030-01-05'
-	Then I should see a user-friendly message explaining that shift trades cannot be made
 
 @ignore
 Scenario: One possible shift to trade with because shift trade periods match

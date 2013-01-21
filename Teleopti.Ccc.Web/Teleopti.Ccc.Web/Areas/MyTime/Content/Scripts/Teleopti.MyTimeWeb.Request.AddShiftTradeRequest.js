@@ -19,7 +19,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.openPeriodStartDate = null;
 		self.openPeriodEndDate = null;
 		self.selectedDate = ko.observable();
-		self.missingWorkflowControlSet = ko.observable(true);
+		self.missingWorkflowControlSet = ko.observable(false);
+		self.noPossibleShiftTrades = ko.observable(false);
 		self.timeLineLengthInMinutes = ko.observable(0);
 		self.hours = ko.observableArray();
 		self.mySchedule = ko.observable(new scheduleViewModel());
@@ -45,6 +46,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				return new scheduleViewModel(mappedLayers, personSchedule);
 			});
 
+			self.noPossibleShiftTrades(mappedPersonsSchedule.length == 0 ? true : false);
 			self.possibleTradeSchedules(mappedPersonsSchedule);
 		};
 
@@ -170,14 +172,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		bindClickToOpenShiftTrade();
 	}
 	function _initDatePicker() {
-		$('.shift-trade-add-datepicker').textbox()
-
 		$('.shift-trade-add-previous-date').button({
-					icons: {
-						primary: "ui-icon-triangle-1-w"
-					},
-					text: false
-				});
+			icons: {
+				primary: "ui-icon-triangle-1-w"
+			},
+			text: false
+		});
 		$('.shift-trade-add-next-date').button({
 			icons: {
 				primary: "ui-icon-triangle-1-e"
