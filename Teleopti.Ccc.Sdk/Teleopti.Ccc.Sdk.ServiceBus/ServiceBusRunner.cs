@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Policy;
+using System.Threading;
 using log4net;
 using log4net.Config;
 
@@ -18,8 +19,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private readonly Action<int> _requestExtraTimeHandler;
 		private static readonly ILog log = LogManager.GetLogger(typeof(ServiceBusRunner));
 
+		[NonSerialized]
+		private FileSystemWatcher _watcher;
 		[NonSerialized] 
-		private readonly IPayrollDllCopy _payrollDllCopy;
+		private PayrollDllCopy _payrollDllCopy;
 
 		[NonSerialized] 
 		private ConfigFileDefaultHost _requestBus;
@@ -39,14 +42,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		[NonSerialized]
 		private AppDomain _payrollDomain;
 
-		public ServiceBusRunner(Action<Exception> unhandledExceptionHandler, Action<Exception> startupExceptionHandler, Action<int> requestExtraTimeHandler, IPayrollDllCopy payrollDllCopy)
+		public ServiceBusRunner(Action<Exception> unhandledExceptionHandler, Action<Exception> startupExceptionHandler, Action<int> requestExtraTimeHandler, PayrollDllCopy payrollDllCopy)
 		{
 			_unhandledExceptionHandler = unhandledExceptionHandler;
 			_startupExceptionHandler = startupExceptionHandler;
 			_requestExtraTimeHandler = requestExtraTimeHandler;
 			_payrollDllCopy = payrollDllCopy;
 
-			_payrollDllCopy.NewPayrollFileExist += RestartPayrollQueue;
+			payrollDllCopy.NewPayrollDll += OnChanged;
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 		}
 
@@ -114,28 +117,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_denormalizeBus.UseFileBasedBusConfiguration("DenormalizeQueue.config");
 			_denormalizeBus.Start<DenormalizeBusBootStrapper>();
 
-			_payrollDllCopy.CopyPayrollDll();
+			PayrollDllCopy.CopyPayrollDll();
 			startPayrollQueue();
-			_payrollDllCopy.RunFileWatcher();
-			
+
+			RunFileWatcher();
 		}
 
-		private bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
-		{
-			return true;
-		}
-		
-		private void RestartPayrollQueue(object sender, EventArgs eventArgs)
-		{
-			stopPayrollQueue();
-			_payrollDllCopy.CopyPayrollDll();
-			startPayrollQueue();
-		}
-		
 		public void startPayrollQueue()
 		{
 			var e = new Evidence(AppDomain.CurrentDomain.Evidence);
 			var setup = AppDomain.CurrentDomain.SetupInformation;
+			setup.ShadowCopyFiles = "true";
 
 			_payrollDomain = AppDomain.CreateDomain("Pay", e, setup);
 			_payrollDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -146,6 +138,42 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			log.Info("Starting payroll queue");
 		}
 
+		private bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+		{
+			return true;
+		}
+
+
+		private void RunFileWatcher()
+		{
+			try
+			{
+				var fileWatchFolder = Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll.DeployNew\\");
+				if (!Directory.Exists(fileWatchFolder))
+					Directory.CreateDirectory(fileWatchFolder);
+				_watcher = new FileSystemWatcher(fileWatchFolder);
+				_watcher.NotifyFilter = NotifyFilters.LastWrite;
+				_watcher.Created += OnChanged;
+				_watcher.Changed += OnChanged;
+				_watcher.EnableRaisingEvents = true;
+				_watcher.IncludeSubdirectories = true;
+			}
+			catch (IOException exception)
+			{
+				log.Error("An exception was encountered when configuring the custom payroll folder", exception);
+				throw;
+			}
+		}
+
+		private void OnChanged(object sender, FileSystemEventArgs e)
+		{
+			var ready = PayrollDllCopy.AreFilesUnlocked(sender, e);
+			if (!ready) return;
+			stopPayrollQueue();
+			PayrollDllCopy.CopyPayrollDll();
+			startPayrollQueue();
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void stopPayrollQueue()
 		{
@@ -153,6 +181,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				try
 				{
+					_payrollDomain.UnhandledException -= CurrentDomain_UnhandledException;
 					_payrollBus.Dispose();
 					log.Info("Stopping payroll queue to load new dll-file");
 				}
