@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -416,6 +417,32 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				_target.Execute(new DateOnlyPeriod(_date1, _date2), matrixProList, _schedulingOptions, _selectedPersons, _bgWorker, _teamSteadyStateHolder, _teamSteadyStateMainShiftScheduler, _groupPersonBuilderForOptimization);
             }   
         }
+
+		[Test]
+		public void ShouldCheckWhetherDateIsInSchedulePeriod()
+		{
+			var date = new DateOnly(2013, 1, 21);
+			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2013, 1, 10), new DateOnly(2013, 1, 20));
+				var person = PersonFactory.CreatePerson();
+			var groupPerson = _mock.StrictMock<IGroupPerson>();
+			var allScheduleMatrixes = new List<IScheduleMatrixPro>();
+            var activeScheduleMatrix = _mock.StrictMock<IScheduleMatrixPro>();
+            allScheduleMatrixes.Add(activeScheduleMatrix);
+			using(_mock.Record())
+			{
+				Expect.Call(activeScheduleMatrix.SchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
+				Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {person}));
+				Expect.Call(_scheduleDictionary.AverageFairnessPoints(new List<IPerson>())).Return(null).IgnoreArguments();
+				Expect.Call(groupPerson.CommonPossibleStartEndCategory).Return(null);
+				Expect.Call(activeScheduleMatrix.Person).Return(person);
+			}
+			using(_mock.Playback())
+			{
+				var result = _target.ScheduleOneDayOnOnePerson(date, person, _schedulingOptions, groupPerson, allScheduleMatrixes);
+				Assert.That(result, Is.False);
+			}
+		}
 
     	private void commonMocks(bool failOnBestShiftCategoryForDays)
     	{
