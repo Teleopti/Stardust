@@ -63,10 +63,10 @@
 			<form data-bind="submit: SignIn">
 				<div data-bind="visible: DisplayUserNameAndPasswordBoxes">
 					<div>
-						<input type="text" id="Username-input" placeholder="@Resources.UserName" class="input-block-level" data-bind="value: UserName" autocapitalize="off" autocorrect="off" />
+						<input type="text" id="Username-input" placeholder="@Resources.UserName" class="input-block-level" data-bind="value: UserName, valueUpdate: 'afterkeydown'" autocapitalize="off" autocorrect="off" />
 					</div>
 					<div>
-						<input type="password" id="Password-input" placeholder="@Resources.Password" class="input-block-level" data-bind="value: Password" />
+						<input type="password" id="Password-input" placeholder="@Resources.Password" class="input-block-level" data-bind="value: Password, valueUpdate: 'afterkeydown'" />
 					</div>
 				</div>
 				<div id="Signin-error" 
