@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
@@ -37,11 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                     var matrixPro =
                         matrixList.First(scheduleMatrixPro => scheduleMatrixPro.Person == person);
                     scheduleDay = matrixPro.GetScheduleDayByKey(day).DaySchedulePart();
-                    
-                        
-                        scheduleDay.AddMainShift(shiftProjectionCache.TheMainShift);
-
-                        
+                    scheduleDay.AddMainShift(shiftProjectionCache.TheMainShift);
                     
                 }
                 if(scheduleDay != null)
