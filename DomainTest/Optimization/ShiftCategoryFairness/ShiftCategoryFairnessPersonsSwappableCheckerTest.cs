@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(person1.Period(onDate)).Return(period);
 			Expect.Call(person2.Period(onDate)).Return(null);
 			_mocks.ReplayAll();
-			Assert.That(_target.PersonsAreSwappable(person1, person2, onDate, scheduleDays), Is.False);
+			Assert.That(_target.PersonsAreSwappable(person1, person2, onDate, scheduleDays, true), Is.False);
 			_mocks.VerifyAll();
 		}
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(person2.Period(onDate)).Return(period);
 			Expect.Call(_sameSkillChecker.PersonsHaveSameSkills(period, period)).Return(false);
 			_mocks.ReplayAll();
-			Assert.That(_target.PersonsAreSwappable(person1, person2, onDate, scheduleDays), Is.False);
+			Assert.That(_target.PersonsAreSwappable(person1, person2, onDate, scheduleDays, true), Is.False);
 			_mocks.VerifyAll();
 		}
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
             Expect.Call(_sameSkillChecker.PersonsHaveSameSkills(period, period)).Return(true);
             Expect.Call(_ruleSetChecker.Check(period, period)).Return(false);
             _mocks.ReplayAll();
-            Assert.That(_target.PersonsAreSwappable(person1, person2, onDate, scheduleDays), Is.False);
+            Assert.That(_target.PersonsAreSwappable(person1, person2, onDate, scheduleDays, true), Is.False);
             _mocks.VerifyAll();
         }
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
             Expect.Call(_ruleSetChecker.Check(period, period)).Return(true);
             Expect.Call(_contractTimeChecker.Check(scheduleDays.First(), scheduleDays.Last())).Return(false);
             _mocks.ReplayAll();
-            Assert.That(_target.PersonsAreSwappable(person1, person2, onDate, scheduleDays), Is.False);
+            Assert.That(_target.PersonsAreSwappable(person1, person2, onDate, scheduleDays, true), Is.False);
             _mocks.VerifyAll();
         }
 	}
