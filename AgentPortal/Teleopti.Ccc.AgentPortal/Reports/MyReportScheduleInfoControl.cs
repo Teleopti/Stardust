@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.AgentPortal.Reports
         private void bindForGrid()
         {
             _gridDataSource = MyReportControl.StateHolder.MyScheduleGridAdapterCollection;
-            //bind for the grid.
+			//bind for the grid.
             ReadOnlyCollection<SFGridColumnBase<MyScheduleGridAdapter>> configGrid = configureGrid();
             _columnGridHelper =
                 new SFGridColumnGridHelper<MyScheduleGridAdapter>(gridControlMyWeekSchedules, configGrid,
@@ -161,8 +161,6 @@ namespace Teleopti.Ccc.AgentPortal.Reports
             gridControlMyWeekSchedules.ColWidths[3] = width;
             gridControlMyWeekSchedules.Invalidate();
 			adherenceColumn.TimePeriod = calculateTimePeriod();
-			//new TimePeriod(new TimeSpan(0, 8, 0, 0), new TimeSpan(1, 21, 0, 0));
-			//calculateTimePeriod();
 
             gridColumns.Add(adherenceColumn);
 

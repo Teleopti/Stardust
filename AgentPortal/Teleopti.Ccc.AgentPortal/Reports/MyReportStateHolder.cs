@@ -106,61 +106,56 @@ namespace Teleopti.Ccc.AgentPortal.Reports
 
 			var startDate = DateTime.SpecifyKind(_selectedDateTimePeriodDto.LocalStartDateTime.Date, DateTimeKind.Unspecified);
 			var endDate = DateTime.SpecifyKind(_selectedDateTimePeriodDto.LocalEndDateTime.Date, DateTimeKind.Unspecified);
-			var startDateOnly = new DateOnlyDto { DateTime = startDate.AddDays(-1), DateTimeSpecified = true };
+			var startDateOnly = new DateOnlyDto { DateTime = startDate.AddDays(0), DateTimeSpecified = true };
 			var endDateOnly = new DateOnlyDto { DateTime = endDate, DateTimeSpecified = true };
 			PersonDto person = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
 			var query = new GetSchedulesByPersonQueryDto { StartDate = startDateOnly,EndDate = endDateOnly,PersonId = person.Id,TimeZoneId = person.TimeZoneId};
 			IList<SchedulePartDto> schedulePartDtos = SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query);
 
 			_myScheduleGridAdapterCollection.Clear();
-			var allProjectedLayers = new List<ProjectedLayerDto>();
+			//var allProjectedLayers = new List<ProjectedLayerDto>();
+			//foreach (SchedulePartDto mySchedulePart in schedulePartDtos)
+			//{
+			//    allProjectedLayers.AddRange(mySchedulePart.ProjectedLayerCollection);
+			//}
+			//allProjectedLayers.Sort(delegate(ProjectedLayerDto l1, ProjectedLayerDto l2)
+			//                            {
+			//                                int result =
+			//                                    l1.Period.LocalStartDateTime.CompareTo(
+			//                                        l2.Period.LocalStartDateTime);
+			//                                if (result != 0) return result;
+			//                                return l1.Period.LocalEndDateTime.CompareTo(
+			//                                    l2.Period.LocalEndDateTime);
+			//                            });
+
 			foreach (SchedulePartDto mySchedulePart in schedulePartDtos)
 			{
-				allProjectedLayers.AddRange(mySchedulePart.ProjectedLayerCollection);
-			}
-			allProjectedLayers.Sort(delegate(ProjectedLayerDto l1, ProjectedLayerDto l2)
-										{
-											int result =
-												l1.Period.LocalStartDateTime.CompareTo(
-													l2.Period.LocalStartDateTime);
-											if (result != 0) return result;
-											return l1.Period.LocalEndDateTime.CompareTo(
-												l2.Period.LocalEndDateTime);
-										});
-
-			for (DateTime currentDate = startDate; currentDate <= endDateOnly.DateTime; currentDate = currentDate.AddDays(1))
-			{
-				DateTime endDateTime = currentDate.AddDays(1);
 				IList<ActivityVisualLayer> activityVisualLayers = new List<ActivityVisualLayer>();
-				foreach (ProjectedLayerDto projectedLayerDto in allProjectedLayers)
+				foreach (ProjectedLayerDto projectedLayerDto in mySchedulePart.ProjectedLayerCollection)
 				{
-					if (projectedLayerDto.Period.LocalStartDateTime >= endDateTime) break;
-					if (projectedLayerDto.Period.LocalStartDateTime < endDateTime &&
-						projectedLayerDto.Period.LocalEndDateTime > currentDate)
-					{
-						DateTime layerStart = projectedLayerDto.Period.LocalStartDateTime;
-						if (layerStart < currentDate) layerStart = currentDate;
+					DateTime layerStart = projectedLayerDto.Period.LocalStartDateTime;
+					DateTime layerEnd = projectedLayerDto.Period.LocalEndDateTime;
 
-						DateTime layerEnd = projectedLayerDto.Period.LocalEndDateTime;
-						if (layerEnd > endDateTime) layerEnd = endDateTime;
+					int startHour = layerStart.Hour;
+					int startMinute = layerStart.Minute;
+					var endDay = 0;
+					int endHour = layerEnd.Hour;
+					int endMinute = layerEnd.Minute;
+					
+					if (endHour < startHour) 
+						endDay = 1;
+					
+					var start = new TimeSpan(startHour, startMinute, 0);
+					var end = new TimeSpan(endDay, endHour, endMinute, 0);
+					var timePeriod = new TimePeriod(start, end);
 
-						TimeSpan diff = layerEnd.Subtract(layerStart);
-						int startHour = layerStart.Hour;
-						int startMinute = layerStart.Minute;
-						int endHour = startHour + diff.Hours;
-						int endMinute = startMinute + diff.Minutes;
-						var timePeriod = new TimePeriod(startHour, startMinute, endHour, endMinute);
-
-						ActivityVisualLayer activityVisualLayer = GetMidnightActivityVisualLayer(projectedLayerDto, timePeriod);
-						activityVisualLayers.Add(activityVisualLayer);
-					}
+					ActivityVisualLayer activityVisualLayer = GetMidnightActivityVisualLayer(projectedLayerDto, timePeriod);
+					activityVisualLayers.Add(activityVisualLayer);
 				}
 
 				_dayAdherence = null;
-				IList<AdherenceLayer> adherenceLayers = GetAdherenceLayers(person, currentDate);
+				IList<AdherenceLayer> adherenceLayers = GetAdherenceLayers(person, mySchedulePart.Date.DateTime);
 				
-				// TODO find distinct calendar date and shift belongs to date 
-				// TODO Add these two fields in MySchedulerGridAdapter
 				var scheduleAdherence = new ScheduleAdherence(new VisualProjection(person, activityVisualLayers, string.Empty, false), adherenceLayers);
 				if (activityVisualLayers.Count == 0) _dayAdherence = 100;
 
@@ -168,7 +163,7 @@ namespace Teleopti.Ccc.AgentPortal.Reports
 				                            	{
 				                            		MyScheduleAdherence = scheduleAdherence,
 				                            		Adherence = (double?) _dayAdherence,
-				                            		Date = currentDate
+				                            		Date = mySchedulePart.Date.DateTime
 				                            	};
 				_myScheduleGridAdapterCollection.Add(myScheduleGridAdapter);
 			}

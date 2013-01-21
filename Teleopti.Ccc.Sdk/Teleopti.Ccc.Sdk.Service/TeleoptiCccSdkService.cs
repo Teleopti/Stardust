@@ -834,9 +834,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public AdherenceDto GetAdherenceDataBasedOnShiftDate(DateTime dateTime, string timeZoneId, PersonDto personDto,
 										PersonDto agentPersonDto, int languageId)
 		{
-			//Kolla permissions på datat
-			//TeleoptiPrincipal.Current.Person.PermissionInformation.
-
+			
 			AdherenceDto adherenceDto = new AdherenceDto();
 			if (!personDto.Id.HasValue || !agentPersonDto.Id.HasValue)
 				return adherenceDto;
@@ -855,10 +853,16 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				int startMinutes = Convert.ToInt32(temp.Substring(3, 2));
 				int endHour = Convert.ToInt32(temp.Substring(6, 2));
 				int endMinutes = Convert.ToInt32(temp.Substring(9, 2));
-				TimeSpan startTime = new TimeSpan(0, startHour, startMinutes, 0);
-				TimeSpan endTime = new TimeSpan(0, endHour, endMinutes, 0);
 				DateTime calendarDateTime = Convert.ToDateTime(data[0].ToString());
 				DateTime shiftBelongsToDateTime = Convert.ToDateTime(data[29].ToString());
+				int day = 0;
+
+				if (calendarDateTime != shiftBelongsToDateTime)
+					day = 1;
+
+				TimeSpan startTime = new TimeSpan(day, startHour, startMinutes, 0);
+				TimeSpan endTime = new TimeSpan(day, endHour, endMinutes, 0);
+				
 				decimal deviation;
 				decimal dayAdherence;
 				decimal readyTime;
@@ -912,11 +916,15 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				int startMinutes = Convert.ToInt32(temp.Substring(3, 2));
 				int endHour = Convert.ToInt32(temp.Substring(6, 2));
 				int endMinutes = Convert.ToInt32(temp.Substring(9, 2));
-				TimeSpan startTime = new TimeSpan(0, startHour, startMinutes, 0);
-				TimeSpan endTime = new TimeSpan(0, endHour, endMinutes, 0);
 				DateTime calendarDateTime = Convert.ToDateTime(data[0].ToString());
 				DateTime shiftBelongsToDateTime = Convert.ToDateTime(data[29].ToString());
-
+				int day = 0;
+				
+				if (calendarDateTime != shiftBelongsToDateTime)
+					day = 1;
+				TimeSpan startTime = new TimeSpan(day, startHour, startMinutes, 0);
+				TimeSpan endTime = new TimeSpan(day, endHour, endMinutes, 0);
+				
 				decimal deviation;
 				decimal dayAdherence;
 				decimal readyTime;
