@@ -156,6 +156,10 @@
     <Compile Include="Core\Message\ViewModelFactory\MessageViewModelFactoryTest.cs" />
     <Compile Include="Core\Message\DataProvider\PushMessageProviderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryRequestsTest.cs" />
+    <Compile Include="Core\Requests\DataProvider\PossibleShiftTradePersonsProviderTest.cs" />
+    <Compile Include="Core\Requests\DataProvider\ShiftTradeRequestProviderTest.cs" />
+    <Compile Include="Core\Requests\Mapping\ShiftTradeRequestsScheduleMappingProfileTest.cs" />
+    <Compile Include="Core\Requests\Mapping\ShiftTradeRequestsPeriodViewModelMapperTest.cs" />
     <Compile Include="Core\TimeSpanModelBinderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryScheduleTest.cs" />
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />

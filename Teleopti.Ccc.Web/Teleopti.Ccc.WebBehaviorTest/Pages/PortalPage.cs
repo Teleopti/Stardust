@@ -46,11 +46,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
             get { return Document.Link(Find.By("href", s => s.EndsWith("#MessageTab"))); }
 	    }
 
-		public Link ShiftTradeRequestsLink
-		{
-			get { return Document.Link(Find.By("href", s => s.EndsWith("#ShiftTradeRequestsTab"))); }
-		}
-
 		[FindBy(Id = "asm-link")]
 		public Link AsmButton { get; set; }
 

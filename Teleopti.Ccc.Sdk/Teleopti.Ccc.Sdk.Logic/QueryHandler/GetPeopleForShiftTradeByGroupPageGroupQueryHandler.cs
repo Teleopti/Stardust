@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
             {
                 var personFrom = _personRepository.Get(query.PersonId);
                 var people = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));
-                people.ForEach(p => { if (isAvailableForShiftTrade(new ShiftTradeAvailableCheckItem{DateOnly = queryDate,PersonFrom = personFrom,PersonTo = p})) peopleForShiftTrade.Add(p); });
+                people.ForEach(p => { if (isAvailableForShiftTrade(new ShiftTradeAvailableCheckItem(queryDate, personFrom, p))) peopleForShiftTrade.Add(p); });
                 return _personAssembler.DomainEntitiesToDtos(peopleForShiftTrade).ToList();
             }
         }

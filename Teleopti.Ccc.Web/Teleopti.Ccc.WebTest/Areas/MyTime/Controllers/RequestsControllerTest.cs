@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -12,6 +14,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -48,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 
 			var target = new RequestsController(viewModelFactory, null, null);
-			var model = new RequestViewModel[]{};
+			var model = new RequestViewModel[] { };
 			var paging = new Paging();
 
 			viewModelFactory.Stub(x => x.CreatePagingViewModel(paging)).Return(model);
@@ -177,8 +180,65 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				var result = target.RequestDetail(id);
 				var data = (RequestViewModel)result.Data;
 
-				assertRequestEqual(data, viewModel);	
+				assertRequestEqual(data, viewModel);
 			}
+		}
+
+		[Test]
+		public void ShouldGetShiftTradePeriodInformation()
+		{
+			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var model = new ShiftTradeRequestsPeriodViewModel
+			{
+				HasWorkflowControlSet = true,
+				OpenPeriodRelativeStart = 2,
+				OpenPeriodRelativeEnd = 30
+			};
+
+			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel()).Return(model);
+
+			var target = new RequestsController(modelFactory, null, null);
+			var result = target.ShiftTradeRequestPeriod();
+			var data = (ShiftTradeRequestsPeriodViewModel) result.Data;
+
+			data.HasWorkflowControlSet.Should().Be.EqualTo(model.HasWorkflowControlSet);
+			data.OpenPeriodRelativeStart.Should().Be.EqualTo(model.OpenPeriodRelativeStart);
+			data.OpenPeriodRelativeEnd.Should().Be.EqualTo(model.OpenPeriodRelativeEnd);
+		}
+
+		[Test]
+		public void ShouldGetLayersForMySchedule()
+		{
+			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var layer = new ShiftTradeScheduleLayerViewModel
+			            	{
+			            		Payload = "phone",
+			            		Color = "green",
+			            		StartTimeText = "9:00",
+			            		EndTimeText = "15:00",
+			            		LengthInMinutes = 360,
+			            		ElapsedMinutesSinceShiftStart = 30
+			            	};
+			var model = new ShiftTradeRequestsScheduleViewModel
+							{
+								MySchedule = new ShiftTradeScheduleViewModel { ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel> { layer } }
+							};
+
+			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<DateTime>.Is.Anything)).Return(model);
+
+			var target = new RequestsController(modelFactory, null, null);
+			
+			var result = target.ShiftTradeRequestSchedule(DateTime.Now);
+			var scheduleViewModel = (ShiftTradeRequestsScheduleViewModel) result.Data;
+
+			var createdLayer = scheduleViewModel.MySchedule.ScheduleLayers.FirstOrDefault();
+			createdLayer.Payload.Should().Be.EqualTo(layer.Payload);
+			createdLayer.Color.Should().Be.EqualTo(layer.Color);
+			createdLayer.StartTimeText.Should().Be.EqualTo(layer.StartTimeText);
+			createdLayer.EndTimeText.Should().Be.EqualTo(layer.EndTimeText);
+			createdLayer.LengthInMinutes.Should().Be.EqualTo(layer.LengthInMinutes);
+			createdLayer.ElapsedMinutesSinceShiftStart.Should().Be.EqualTo(layer.ElapsedMinutesSinceShiftStart);
+
 		}
 
 		private static void assertRequestEqual(RequestViewModel target, RequestViewModel expected)

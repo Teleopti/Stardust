@@ -11234,4 +11234,12 @@ These options are activated:
   <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
     <value>You have to select at least one workload</value>
   </data>
+  <data name="MySchedule" xml:space="preserve">
+    <value>My Schedule</value>
+    <comment>Used in creating Shift Trade on web</comment>
+  </data>
+  <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
+    <value>No agents available for shift trade</value>
+    <comment>Message in Shift Trade in MyTime Web</comment>
+  </data>
 </root>

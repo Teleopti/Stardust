@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string AvailableActivity { get; set; }
 		public bool PreferencePeriodIsClosed { get; set; }
 		public bool StudentAvailabilityPeriodIsClosed { get; set; }
+		public int ShiftTradeSlidingPeriodStart { get; set; }
+		public int ShiftTradeSlidingPeriodEnd { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
@@ -49,6 +51,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			{
 				var activity = new ActivityRepository(uow).LoadAll().Single(c => c.Description.Name == AvailableActivity);
 				workflowControlSet.AllowedPreferenceActivity = activity;
+			}
+
+			if (ShiftTradeSlidingPeriodStart != 0 || ShiftTradeSlidingPeriodEnd != 0)
+			{
+				workflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(ShiftTradeSlidingPeriodStart, ShiftTradeSlidingPeriodEnd);
 			}
 
 
