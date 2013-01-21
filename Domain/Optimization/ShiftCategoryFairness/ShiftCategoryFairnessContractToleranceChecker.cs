@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 			_schedulePeriodTargetTimeCalculator = schedulePeriodTargetTimeCalculator;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool IsOutsideTolerance(IEnumerable<IScheduleMatrixPro> matrixListForFairnessOptimization, IPerson person)
 		{
 			foreach (var scheduleMatrixPro in matrixListForFairnessOptimization)

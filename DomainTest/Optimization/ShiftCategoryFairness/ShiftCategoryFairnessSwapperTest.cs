@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
             _mocks.VerifyAll();
 			
 		}
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnTrueIfAllGoWell()
 		{
 			var dateOnly = new DateOnly(2012,10,1);
