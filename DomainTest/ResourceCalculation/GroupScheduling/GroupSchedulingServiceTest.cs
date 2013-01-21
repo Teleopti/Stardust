@@ -423,7 +423,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		{
 			var date = new DateOnly(2013, 1, 21);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2013, 1, 10), new DateOnly(2013, 1, 20));
-				var person = PersonFactory.CreatePerson();
+			var person = PersonFactory.CreatePerson();
 			var groupPerson = _mock.StrictMock<IGroupPerson>();
 			var allScheduleMatrixes = new List<IScheduleMatrixPro>();
             var activeScheduleMatrix = _mock.StrictMock<IScheduleMatrixPro>();
