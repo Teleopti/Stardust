@@ -42,7 +42,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			var trimmedUserName = userName.Trim('\'');
 			if (ScenarioContext.Current.Value<UserFactory>(trimmedUserName) == null)
-				ScenarioContext.Current.Value(trimmedUserName, new UserFactory());
+			{
+				ScenarioContext.Current.Value(trimmedUserName, new UserFactory());				
+			}
 			return ScenarioContext.Current.Value<UserFactory>(trimmedUserName);
 		}
 
@@ -51,6 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public void AddColleague(string userName)
 		{
 			var userFactory = new UserFactory();
+			userFactory.Setup(new SetName(userName));
 			_colleagues.Add(userFactory);
 			ScenarioContext.Current.Value(userName, userFactory);
 		}
