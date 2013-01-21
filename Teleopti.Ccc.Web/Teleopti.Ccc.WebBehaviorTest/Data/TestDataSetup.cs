@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var agentRoleWithoutAgentRoleWithoutResReportScheduledAndActualAgentsMatrixFunction =
 				from r in supervisorRoleApplicationFunctions
 				where
-					!(r.FunctionCode == "ResReportScheduledAndActualAgents" && r.ForeignSource == DefinedForeignSourceNames.SourceMatrix)
+					!(r.FunctionCode == "ResReportServiceLevelAndAgentsReady" && r.ForeignSource == DefinedForeignSourceNames.SourceMatrix)
 				select r;
 
 
