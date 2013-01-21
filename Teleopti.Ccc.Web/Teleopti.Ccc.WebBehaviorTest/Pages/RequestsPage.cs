@@ -118,7 +118,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			get { return Document.Div(QuicklyFind.ByClass("shift-trade-my-schedule")).Spans; }
 		}
 
-		[FindBy(Id = "Request-add-shift-trade-datepicker")]
 		public TextField AddShiftTradeDatePicker
 		{
 			get { return Document.TextField(QuicklyFind.ByClass("shift-trade-add-datepicker")); }

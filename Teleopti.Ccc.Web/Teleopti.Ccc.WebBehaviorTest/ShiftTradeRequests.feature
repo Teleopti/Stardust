@@ -119,12 +119,12 @@ Scenario: Time line should cover my scheduled shift
 Scenario: Show message when no agents are available for shift trade
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Current time is '2013-01-01'
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-02 06:00 |
 	| EndTime               | 2030-01-02 16:00 |
 	| Shift category		| Day	           |
+	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request for date '2030-01-02'
 	Then I should see a message text saying that no possible shift trades could be found
 
