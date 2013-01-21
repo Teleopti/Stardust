@@ -139,6 +139,14 @@ table tr:nth-child(2n)
 	background-color: #fff;
 }
 
+.ui-btn-up-b {
+	background: white;
+	color: black;
+	text-shadow: 0px 0px 0px;
+}
+.ui-btn-up-b:visited, .ui-btn-up-b a.ui-link-inherit {
+	color: black;
+}
 
 table thead th
 {
