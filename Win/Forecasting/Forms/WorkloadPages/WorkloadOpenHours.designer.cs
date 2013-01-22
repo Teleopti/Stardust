@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             this.Controls.Add(this.tableLayoutPanelOpenHoursRtl);
             this.Name = "WorkloadOpenHours";
             this.Padding = new System.Windows.Forms.Padding(10);
-            this.Size = new System.Drawing.Size(300, 200);
+            this.Size = new System.Drawing.Size(328, 200);
             ((System.ComponentModel.ISupportInitialize)(this.weekOpenHoursGridWorkload)).EndInit();
             this.tableLayoutPanelOpenHoursRtl.ResumeLayout(false);
             this.tableLayoutPanelOpenHoursRtl.PerformLayout();
