@@ -90,15 +90,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
             
             while (startDate != DateOnly.MinValue )
             {
-                
-                //split the teams if neede and then chk the min and max for each team
-                //with diff target time then split the team
-
                 //call class that return the teamblock dates for a given date (problem if team members don't have same days off)
                 var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(startDate);
 
                 //call class that finds a random team to schedule
                 var groupPerson = _teamExtractor.GetRamdomTeam(startDate);
+
+                //split the teams if needed and then chk the min and max for each team
+                //with diff target time then split the team
+
+                //var groupPersonList = 
 
                 //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
                 var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson,_schedulingOptions );
