@@ -278,11 +278,19 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 var ShiftTradeRequestDetailViewModel = function () {
 	var self = this;
-	
+
 	self.IsUpdate = ko.observable(true);
 	self.TypeEnum = ko.observable(2);
 	self.IsFullDay = ko.observable(true);
 	self.Template = ko.observable("shifttrade-request-detail-template");
+
+	self.Approve = function () {
+		alert('Shift trade request approved....(but not) henke');
+	};
+
+	self.Deny = function () {
+		alert('Shift trade request denied....(but not) henke');
+	};
 };
 
 Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {

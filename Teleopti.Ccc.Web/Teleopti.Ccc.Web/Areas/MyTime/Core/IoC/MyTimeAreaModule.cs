@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PersonRequestProvider>().As<IPersonRequestProvider>();
 			builder.RegisterType<TextRequestPersister>().As<ITextRequestPersister>();
 			builder.RegisterType<AbsenceRequestPersister>().As<IAbsenceRequestPersister>();
+			builder.RegisterType<ShiftTradeResponseService>().As<IShiftTradeResponseService>();
 		}
 
 		private void registerAutoMapperTypes(ContainerBuilder builder)
