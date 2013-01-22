@@ -105,8 +105,18 @@ namespace Teleopti.Ccc.Win.Meetings
 				start = (_currentView as MeetingSchedulesView).GetStartTimeText;
 				end = (_currentView as MeetingSchedulesView).GetEndTimeText;
 			}
-			var startTime = TimeSpan.Parse(start);
-        	var endTime = TimeSpan.Parse(end);
+			TimeSpan startTime;
+			TimeSpan endTime;
+			if (start.Contains("M"))
+			{
+				startTime = DateTime.ParseExact(start, "h:mm tt", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
+				endTime = DateTime.ParseExact(end, "h:mm tt", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
+			}
+			else
+			{
+				startTime = TimeSpan.Parse(start);
+				endTime = TimeSpan.Parse(end);
+			}
 			if (endTime < startTime)
 				_meetingComposerPresenter.InvalidTimeInfo();
 			else
