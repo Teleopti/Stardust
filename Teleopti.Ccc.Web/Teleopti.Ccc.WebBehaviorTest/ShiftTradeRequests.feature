@@ -19,9 +19,9 @@ Background:
 	#And there is a dayoff with
 	#| Field | Value  |
 	#| Name  | DayOff |
-	#And there is an absence with
-	#| Field | Value   |
-	#| Name  | Illness |
+	And there is an absence with
+	| Field | Value   |
+	| Name  | Vacation |
 	#And there is a skill with
 	#| Field | Value   |
 	#| Name  | Skill 1 |
@@ -29,7 +29,7 @@ Background:
 	| Field                            | Value                                     |
 	| Name                             | Trade from tomorrow until 30 days forward |
 	| Schedule published to date       | 2040-06-24                                |
-	| Shift Trade sliding period start | 2                                         |
+	| Shift Trade sliding period start | 1                                         |
 	| Shift Trade sliding period end   | 30                                        |
 	And I have a schedule period with 
 	| Field      | Value      |
@@ -80,7 +80,7 @@ Scenario: Default to first day of open shift trade period
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request
-	Then the selected date should be '2030-01-03'
+	Then the selected date should be '2030-01-02'
 
 Scenario: Trades can not be made outside the shift trade period
 	Given I have the role 'Full access to mytime'
@@ -128,6 +128,21 @@ Scenario: Show message when no agents are available for shift trade
 	When I view Add Shift Trade Request for date '2030-01-02'
 	Then I should see a message text saying that no possible shift trades could be found
 
+Scenario: Show my full day absence
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a absence with
+	| Field		| Value            |
+	| Absence   | Vacation         |
+	| StartTime | 2030-01-02 00:00 |
+	| EndTime   | 2030-01-02 23:59 |
+	And Current time is '2030-01-01'
+	When I view Add Shift Trade Request for date '2030-01-02'
+	Then I should see my schedule with
+	| Field			| Value |
+	| Start time	| 08:00 |
+	| End time		| 16:00 |
+
 Scenario: Show my scheduled day off
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -138,19 +153,6 @@ Scenario: Show my scheduled day off
 	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request for date '2030-01-04'
 	Then I should see my scheduled day off 'DayOff'
-	And I should see the time line hours span from '8' to '17'
-
-Scenario: Show my full-day absence
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I have absence with
-	| Field		| Value      |
-	| Date		| 2030-01-05 |
-	| Name		| Illness	 |
-	| Full Day  | True		 |
-	And Current time is '2030-01-01'
-	When I view Add Shift Trade Request for date '2030-01-05'
-	Then I should see my scheduled absence 'Illness'
 	And I should see the time line hours span from '8' to '17'
 
 @ignore

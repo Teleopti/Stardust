@@ -47,12 +47,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Current.Eval(script);
 		}
 
-
-		[Then(@"I should see a message text saying that no possible shift trades could be found")]
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
 		public void ThenIShouldSeeAMessageTextSayingIAmMissingAWorkflowControlSet()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.FriendlyMessage.DisplayVisible(), Is.True);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeMissingWorkflowControlsSetMessage.DisplayVisible(), Is.True);
+		}
+
+		[Then(@"I should see a message text saying that no possible shift trades could be found")]
+		public void ThenIShouldSeeAMessageTextSayingThatNoPossibleShiftTradesCouldBeFound()
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeNoPossibleShiftTradesMessage.DisplayVisible(), Is.True);
 		}
 
 		[Then(@"I should see my schedule with")]

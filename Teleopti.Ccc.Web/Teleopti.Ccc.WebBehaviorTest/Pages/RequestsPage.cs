@@ -108,10 +108,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-add-shift-trade-button")]
 		public Button ShiftTradeRequestsButton { get; set; }
 
-		public Div FriendlyMessage
-		{
-			get { return Document.Div(QuicklyFind.ByClass("friendly-message")); }
-		}
+		[FindBy(Id = "Request-add-shift-trade-missing-wcs-message")]
+		public Div AddShiftTradeMissingWorkflowControlsSetMessage { get; set; }
+
+		[FindBy(Id = "Request-add-shift-trade-no-possible-trades")]
+		public Div AddShiftTradeNoPossibleShiftTradesMessage { get; set; }
 
 		public SpanCollection MyScheduleLayers
 		{

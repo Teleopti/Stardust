@@ -101,7 +101,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self._createMySchedule(data.MySchedule);
 					self._createPossibleTradeSchedules(data.PossibleTradePersons);
 					self._createTimeLine(data.TimeLineHours);
-					//console.log(data);
+
 				},
 				error: function (err) {
 					alert("error!");
@@ -160,7 +160,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.hourText = hour.HourText;
 		self.lengthInMinutes = hour.LengthInMinutesToDisplay;
-		self.width = ko.computed(function () {
+		self.hourWidth = ko.computed(function () {
 			return self.lengthInMinutes * parentViewModel.pixelPerMinute() - borderSize + 'px';
 		});
 	}

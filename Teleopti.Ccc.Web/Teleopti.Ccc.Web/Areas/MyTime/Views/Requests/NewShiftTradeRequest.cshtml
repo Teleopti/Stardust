@@ -1,12 +1,7 @@
 ﻿@using Teleopti.Ccc.UserTexts
 <div id="Request-add-shift-trade" class="shift-trade-add-canvas ui-corner-all">
-	<div class="friendly-message ui-corner-all" data-bind="visible : missingWorkflowControlSet() || noPossibleShiftTrades()">
-		<span data-bind="visible : missingWorkflowControlSet">
-			@Resources.MissingWorkflowControlSet
-		</span>
-		<span data-bind="visible : noPossibleShiftTrades">
-			@Resources.NoAgentsAvailableForShiftTrade
-		</span>
+	<div id="Request-add-shift-trade-missing-wcs-message" class="friendly-message ui-corner-all" data-bind="visible : missingWorkflowControlSet">
+		@Resources.MissingWorkflowControlSet
 	</div>
 	<div data-bind="visible : !missingWorkflowControlSet()">
 		<button class="shift-trade-add-previous-date" data-bind="click : previousDate"></button>
@@ -15,7 +10,7 @@
 	</div>
 	<div class="shift-trade-add-schedule ui-corner-bottom">
 		<div class="shift-trade-timeline" data-bind="foreach: hours">
-			<span class="shift-trade-timeline-line" data-bind="style: { width : width }">
+			<span class="shift-trade-timeline-line" data-bind="style: { width : hourWidth }">
 				<span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText"></span>
 			</span>
 		</div>
@@ -33,5 +28,8 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<div id="Request-add-shift-trade-no-possible-trades" class="friendly-message ui-corner-all" data-bind="visible : noPossibleShiftTrades()">
+		@Resources.NoAgentsAvailableForShiftTrade
 	</div>
 </div>
