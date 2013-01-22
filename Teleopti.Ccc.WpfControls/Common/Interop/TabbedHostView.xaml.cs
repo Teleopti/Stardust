@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WpfControls.Common.Interop
                     if (wpfShiftEditor.SchedulePart != null)
                     {
                         agentName = wpfShiftEditor.SchedulePart.Person.Name + " " +
-                                    wpfShiftEditor.SchedulePart.Period.LocalStartDateTime.ToShortDateString();
+									wpfShiftEditor.SchedulePart.DateOnlyAsPeriod.DateOnly.ToShortDateString();
                         SplitAndUpdate(current, agentName);
                     }
                 }
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WpfControls.Common.Interop
                     if (restrictionEditor.SchedulePart != null)
                     {
                         agentName = restrictionEditor.SchedulePart.Person.Name + " " +
-                                    restrictionEditor.SchedulePart.Period.LocalStartDateTime.ToShortDateString();
+									restrictionEditor.SchedulePart.DateOnlyAsPeriod.DateOnly.ToShortDateString();
                         SplitAndUpdate(current, agentName);
                     }
                 }
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WpfControls.Common.Interop
                     if (notesEditor.SchedulePart != null)
                     {
                         agentName = notesEditor.SchedulePart.Person.Name + " " +
-                                    notesEditor.SchedulePart.Period.LocalStartDateTime.ToShortDateString();
+									notesEditor.SchedulePart.DateOnlyAsPeriod.DateOnly.ToShortDateString();
                         SplitAndUpdate(current, agentName);
                     }
                 }
