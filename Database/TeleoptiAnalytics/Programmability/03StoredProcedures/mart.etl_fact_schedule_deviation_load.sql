@@ -230,6 +230,7 @@ ON stat.date_id=shifts.date_id AND stat.person_id=shifts.person_id
 WHERE stat.shift_startdate_id IS NULL 
 AND stat.interval_id < shifts.shift_startinterval_id 
 AND stat.interval_id >= shifts.shift_startinterval_id - @intervals_outside_shift-- ONLY 2 Hours back
+AND stat.date_id <= shifts.shift_startdate_id
 
 --ALL ROWS AFTER SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
 UPDATE stat
@@ -240,6 +241,7 @@ ON stat.date_id=shifts.date_id AND stat.person_id=shifts.person_id
 WHERE stat.shift_startdate_id IS NULL 
 AND stat.interval_id > shifts.shift_endinterval_id
 AND stat.interval_id <= shifts.shift_endinterval_id + @intervals_outside_shift -- ONLY 2 Hours ahead
+AND stat.date_id >= shifts.shift_startdate_id
 
 DELETE FROM #fact_schedule_deviation WHERE shift_startdate_id IS NULL
 
