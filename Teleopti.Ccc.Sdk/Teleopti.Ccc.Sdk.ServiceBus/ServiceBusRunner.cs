@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Policy;
-using System.Threading;
 using log4net;
 using log4net.Config;
 
@@ -18,12 +17,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private readonly Action<Exception> _startupExceptionHandler;
 		private readonly Action<int> _requestExtraTimeHandler;
 		private static readonly ILog log = LogManager.GetLogger(typeof(ServiceBusRunner));
-
-		[NonSerialized]
-		private FileSystemWatcher _watcher;
-		[NonSerialized] 
-		private PayrollDllCopy _payrollDllCopy;
-
+		
 		[NonSerialized] 
 		private ConfigFileDefaultHost _requestBus;
 		[NonSerialized] 
@@ -41,15 +35,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private AppDomain _denormalizeDomain;
 		[NonSerialized]
 		private AppDomain _payrollDomain;
-
-		public ServiceBusRunner(Action<Exception> unhandledExceptionHandler, Action<Exception> startupExceptionHandler, Action<int> requestExtraTimeHandler, PayrollDllCopy payrollDllCopy)
+		
+		public ServiceBusRunner(Action<Exception> unhandledExceptionHandler, Action<Exception> startupExceptionHandler, Action<int> requestExtraTimeHandler)
 		{
 			_unhandledExceptionHandler = unhandledExceptionHandler;
 			_startupExceptionHandler = startupExceptionHandler;
 			_requestExtraTimeHandler = requestExtraTimeHandler;
-			_payrollDllCopy = payrollDllCopy;
-
-			payrollDllCopy.NewPayrollDll += OnChanged;
+			
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 		}
 
@@ -116,18 +108,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_denormalizeBus = (ConfigFileDefaultHost)_denormalizeDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
 			_denormalizeBus.UseFileBasedBusConfiguration("DenormalizeQueue.config");
 			_denormalizeBus.Start<DenormalizeBusBootStrapper>();
-
+			
 			PayrollDllCopy.CopyPayrollDll();
-			startPayrollQueue();
-
-			RunFileWatcher();
-		}
-
-		public void startPayrollQueue()
-		{
-			var e = new Evidence(AppDomain.CurrentDomain.Evidence);
-			var setup = AppDomain.CurrentDomain.SetupInformation;
-			setup.ShadowCopyFiles = "true";
 
 			_payrollDomain = AppDomain.CreateDomain("Pay", e, setup);
 			_payrollDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -135,73 +117,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_payrollBus.UseFileBasedBusConfiguration("PayrollQueue.config");
 			_payrollBus.Start<BusBootStrapper>();
 			AppDomain.MonitoringIsEnabled = true;
-			log.Info("Starting payroll queue");
 		}
 
 		private bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
 		{
 			return true;
 		}
-
-
-		private void RunFileWatcher()
-		{
-			try
-			{
-				var fileWatchFolder = Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll.DeployNew\\");
-				if (!Directory.Exists(fileWatchFolder))
-					Directory.CreateDirectory(fileWatchFolder);
-				_watcher = new FileSystemWatcher(fileWatchFolder);
-				_watcher.NotifyFilter = NotifyFilters.LastWrite;
-				_watcher.Created += OnChanged;
-				_watcher.Changed += OnChanged;
-				_watcher.EnableRaisingEvents = true;
-				_watcher.IncludeSubdirectories = true;
-			}
-			catch (IOException exception)
-			{
-				log.Error("An exception was encountered when configuring the custom payroll folder", exception);
-				throw;
-			}
-		}
-
-		private void OnChanged(object sender, FileSystemEventArgs e)
-		{
-			var ready = PayrollDllCopy.AreFilesUnlocked(sender, e);
-			if (!ready) return;
-			stopPayrollQueue();
-			PayrollDllCopy.CopyPayrollDll();
-			startPayrollQueue();
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		private void stopPayrollQueue()
-		{
-			if (_payrollBus != null)
-			{
-				try
-				{
-					_payrollDomain.UnhandledException -= CurrentDomain_UnhandledException;
-					_payrollBus.Dispose();
-					log.Info("Stopping payroll queue to load new dll-file");
-				}
-				catch (Exception)
-				{
-				}
-			}
-			if (_payrollDomain != null)
-			{
-				try
-				{
-					AppDomain.Unload(_payrollDomain);
-				}
-				catch (Exception e)
-				{
-					var a = e;
-				}
-			}
-		}
-
+		
 		public void Stop()
 		{
 			HostServiceStop();
@@ -219,11 +141,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void DisposeBusHosts()
 		{
-			
 			if (_requestBus != null)
 			{
 				try
 				{
+					_requestDomain.UnhandledException -= CurrentDomain_UnhandledException;
 					_requestBus.Dispose();
 				}
 				catch (Exception)
@@ -234,6 +156,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				try
 				{
+					_generalDomain.UnhandledException -= CurrentDomain_UnhandledException;
 					_generalBus.Dispose();
 				}
 				catch (Exception)
@@ -244,7 +167,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				try
 				{
+					_denormalizeDomain.UnhandledException -= CurrentDomain_UnhandledException;
 					_denormalizeBus.Dispose();
+				}
+				catch (Exception)
+				{
+				}
+			}
+			if (_payrollBus != null)
+			{
+				try
+				{
+					_payrollDomain.UnhandledException -= CurrentDomain_UnhandledException;
+					_payrollBus.Dispose();
 				}
 				catch (Exception)
 				{
@@ -263,8 +198,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				AppDomain.Unload(_denormalizeDomain);
 			}
-
-			stopPayrollQueue();
+			if (_payrollDomain != null)
+			{
+				AppDomain.Unload(_payrollDomain);
+			}
 		}
 	}
 }

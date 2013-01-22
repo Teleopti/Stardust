@@ -2,44 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-	[Serializable]
-	public class PayrollDllCopy
+	public static class PayrollDllCopy
 	{
-		public event EventHandler<FileSystemEventArgs> NewPayrollDll;
-		private static readonly Dictionary<string, DateTime> CopiedFiles = new Dictionary<string, DateTime>();
+		private static readonly Dictionary<string, DateTime> copiedFiles = new Dictionary<string, DateTime>();
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ServiceBusRunner));
 
-		public void RunFileWatcher()
+		public static Dictionary<string, DateTime> CopiedFiles
 		{
-			try
-			{
-				var fileWatchFolder = Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll.DeployNew\\");
-				if (!Directory.Exists(fileWatchFolder))
-					Directory.CreateDirectory(fileWatchFolder);
-				var watcher = new FileSystemWatcher(fileWatchFolder);
-				watcher.NotifyFilter = NotifyFilters.LastWrite;
-				watcher.Created += OnNewPayrollDll;
-				watcher.Changed += OnNewPayrollDll;
-				watcher.EnableRaisingEvents = true;
-				watcher.IncludeSubdirectories = true;
-			}
-			catch (IOException exception)
-			{
-				Log.Error("An exception was encountered when configuring the custom payroll folder", exception);
-				throw;
-			}
-		}
-
-		public void OnNewPayrollDll(object sender, FileSystemEventArgs e)
-		{
-			var handler = NewPayrollDll;
-			if (handler != null) handler(this, e);
+			get { return copiedFiles; }
 		}
 
 		public static void CopyPayrollDll()
@@ -54,52 +29,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			catch (Exception exception)
 			{
 				Log.Error("An exception was encountered when trying to load new payroll dll", exception);
+				throw;
 			}
 		}
-		
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		public static bool AreFilesUnlocked(object sender, FileSystemEventArgs e)
+
+		public static void CopyPayrollDllTest()
 		{
-			var totalSleepTime = 0;
-			var info = new FileInfo(e.FullPath);
-
-			if (!File.Exists(e.FullPath)
-				|| (CopiedFiles.ContainsKey(e.FullPath)
-				&& CopiedFiles[e.FullPath] == info.LastWriteTimeUtc
-				&& CopiedFiles[e.FullPath].Millisecond == info.LastWriteTimeUtc.Millisecond))
+			try
 			{
-				Log.Info(string.Format("File {0} is already loaded", info.FullName));
-				return false;
+				var destination = Path.GetFullPath(Environment.CurrentDirectory + "\\..\\" + "\\..\\" + "\\..\\"
+				                                   + "\\Teleopti.Ccc.Sdk.ServiceBus.Host\\bin\\Debug\\Payroll\\");
+				var source = Path.GetFullPath(Environment.CurrentDirectory + "\\..\\" + "\\..\\" + "\\..\\"
+				                              + "\\Teleopti.Ccc.Sdk.ServiceBus.Host\\bin\\Debug\\Payroll.DeployNew\\");
+				CopyFiles(source, destination);
 			}
-
-			while (IsFileLocked(info))
+			catch (Exception exception)
 			{
-				const int sleepTime = 20;
-				Thread.Sleep(sleepTime);
-				totalSleepTime += sleepTime;
-				if (totalSleepTime == 20)
-					Log.Info(string.Format("File {0} is in use by another process", info.FullName));
-				if (totalSleepTime == 500)
-				{
-					Log.Error(string.Format("File {0} is still in use after {1} seconds, aborting dll-change", info.FullName, totalSleepTime / 1000));
-					return false;
-				}
+				Log.Error("An exception was encountered when trying to load new payroll dll", exception);
+				throw;
 			}
-
-			while (PayrollExportConsumer.IsRunning)
-			{
-				const int sleepTime = 5000;
-				Thread.Sleep(sleepTime);
-				totalSleepTime += sleepTime;
-				if (totalSleepTime == 20)
-					Log.Info("Payroll export is running");
-				if (totalSleepTime == 7200000)
-				{
-					Log.Error(string.Format("Payroll export is still running after {0} hours, aborting dll-change", totalSleepTime / 3600000));
-					return false;
-				}
-			}
-			return true;
 		}
 
 		private static void CopyFiles(string source, string destination)
@@ -131,7 +79,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					continue;
 				}
 
-				if (file.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
+				if (file.EndsWith(".xml", StringComparison.OrdinalIgnoreCase) || file.EndsWith(".settings", StringComparison.OrdinalIgnoreCase))
 				{
 					var xmlFileDestination = destination;
 					while (!xmlFileDestination.EndsWith("\\Payroll", StringComparison.OrdinalIgnoreCase))
@@ -148,13 +96,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					File.Copy(file, fileDestination, true);
 				}
 
-				if (CopiedFiles.ContainsKey(fileInfo.FullName))
-					CopiedFiles[fileInfo.FullName] = fileInfo.LastWriteTimeUtc;
+				if (copiedFiles.ContainsKey(fileInfo.FullName))
+					copiedFiles[fileInfo.FullName] = fileInfo.LastWriteTimeUtc;
 				else
-					CopiedFiles.Add(fileInfo.FullName, fileInfo.LastWriteTimeUtc);
+					copiedFiles.Add(fileInfo.FullName, fileInfo.LastWriteTimeUtc);
 			}
 		}
-		
+
 		private static bool IsFileLocked(FileInfo file)
 		{
 			FileStream stream = null;

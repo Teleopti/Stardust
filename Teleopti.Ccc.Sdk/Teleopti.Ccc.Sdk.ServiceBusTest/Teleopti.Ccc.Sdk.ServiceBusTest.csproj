@@ -151,6 +151,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
     <Compile Include="Notification\ScheduleDayReadModelComparerTest.cs" />
+    <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />
     <Compile Include="Payroll\PayrollExportResolveTest.cs" />
     <Compile Include="Payroll\PayrollPeopleLoaderTest.cs" />

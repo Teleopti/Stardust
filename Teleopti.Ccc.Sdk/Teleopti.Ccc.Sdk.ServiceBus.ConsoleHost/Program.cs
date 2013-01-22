@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost
 	{
 		static void Main(string[] args)
 		{
-			var host = new ServiceBusRunner(null,null,null, new PayrollDllCopy());
+			var host = new ServiceBusRunner(null,null,null);
 			host.Start();
 
 			Console.WriteLine("Service bus is now running, press Enter to stop...");
