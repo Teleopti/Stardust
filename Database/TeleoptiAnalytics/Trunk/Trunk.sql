@@ -43,43 +43,8 @@ ALTER TABLE  mart.fact_schedule_deviation ADD shift_startdate_id int NULL
 ALTER TABLE  mart.fact_schedule_deviation ADD shift_startinterval_id smallint NULL
 GO
 
---ADD LOAD SP HERE--
---<
-
---/>
-
-
-GO
-PRINT 'Adherance data will now we re-loaded. This will take some time (DBManager time out = 15 min)'
-PRINT 'Please do not close this Windows!'
-GO
-
---reload data
-DECLARE @min_date smalldatetime
-DECLARE @max_date smalldatetime
-SET @min_date = (SELECT date_date from mart.dim_date where date_id in (Select MIN(date_id) from mart.fact_schedule_deviation))
-SET @max_date = (SELECT date_date from mart.dim_date where date_id in (Select MAX(date_id) from mart.fact_schedule_deviation))
-
-DECLARE @id uniqueidentifier
-DECLARE @business_unit_code uniqueidentifier 
-
-DECLARE business_unit_Cursor CURSOR FOR
-	SELECT business_unit_code
-	FROM mart.dim_business_unit
-	WHERE  business_unit_id<>-1
-	ORDER BY business_unit_id
-OPEN business_unit_Cursor;
-FETCH NEXT FROM business_unit_Cursor
-INTO @business_unit_code
-WHILE @@FETCH_STATUS = 0
-   BEGIN 
-		exec mart.etl_fact_schedule_deviation_load @min_date,@max_date,@business_unit_code
-		FETCH NEXT FROM business_unit_Cursor
-		INTO @business_unit_code
-   END;
-CLOSE business_unit_Cursor;
-DEALLOCATE business_unit_Cursor;
-
+--will be re-oladed from SP-code
+TRUNCATE TABLE mart.fact_schedule_deviation
 GO
 
 IF NOT EXISTS(SELECT 1 FROM mart.sys_configuration WHERE [key]='AdherenceMinutesOutsideShift')

@@ -349,3 +349,40 @@ SET 	deviation_contract_s = ABS(
 )
 WHERE mart.fact_schedule_deviation.date_id BETWEEN @start_date_id AND @end_date_id
 GO
+--================================
+--If empty try re-load
+--================================
+IF (select COUNT(*) from mart.fact_schedule_deviation) = 0
+	PRINT 'Adherance data will now we re-loaded. This will take some time (DBManager time out = 15 min). Please do not close this Windows!'
+GO
+
+IF (select COUNT(*) from mart.fact_schedule_deviation) = 0
+BEGIN
+	--reload data
+	DECLARE @min_date smalldatetime
+	DECLARE @max_date smalldatetime
+	SET @min_date = (SELECT date_date from mart.dim_date where date_id in (Select MIN(schedule_date_id) from mart.fact_schedule))
+	SET @max_date = (SELECT date_date from mart.dim_date where date_id in (Select MAX(schedule_date_id) from mart.fact_schedule))
+
+	DECLARE @id uniqueidentifier
+	DECLARE @business_unit_code uniqueidentifier 
+
+	DECLARE business_unit_Cursor CURSOR FOR
+		SELECT business_unit_code
+		FROM mart.dim_business_unit
+		WHERE  business_unit_id<>-1
+		ORDER BY business_unit_id
+	OPEN business_unit_Cursor;
+	FETCH NEXT FROM business_unit_Cursor
+	INTO @business_unit_code
+	WHILE @@FETCH_STATUS = 0
+	   BEGIN 
+			exec mart.etl_fact_schedule_deviation_load @min_date,@max_date,@business_unit_code
+			FETCH NEXT FROM business_unit_Cursor
+			INTO @business_unit_code
+	   END;
+	CLOSE business_unit_Cursor;
+	DEALLOCATE business_unit_Cursor;
+END
+
+GO
