@@ -34,14 +34,32 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			{
 				Expect.Call(_matrixData.Matrix).Return(_matrix);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
-				int x;
-				int y;
-				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(false);
+				int targetDaysOff;
+				int dayOffsNow;
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out targetDaysOff, out dayOffsNow)).Return(false).OutRef(3, 2);
 			}
 			using (_mocks.Playback())
 			{
 				IList<IMatrixData> result = _target.FindMatrixesWithToFewDaysOff(new List<IMatrixData> {_matrixData});
 				Assert.AreEqual(1, result.Count);
+			}
+		}
+
+		[Test]
+		public void ShouldNotReturnMatrixDataIfTooManyDaysOff()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrixData.Matrix).Return(_matrix);
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				int targetDaysOff;
+				int dayOffsNow;
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out targetDaysOff, out dayOffsNow)).Return(false).OutRef(2, 3);
+			}
+			using (_mocks.Playback())
+			{
+				IList<IMatrixData> result = _target.FindMatrixesWithToFewDaysOff(new List<IMatrixData> { _matrixData });
+				Assert.AreEqual(0, result.Count);
 			}
 		}
 	}
