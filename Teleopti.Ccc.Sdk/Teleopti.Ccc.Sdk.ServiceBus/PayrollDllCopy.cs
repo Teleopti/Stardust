@@ -33,14 +33,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 		}
 
-		public static void CopyPayrollDllTest()
+		public static void CopyPayrollDllTest(string source, string destination)
 		{
 			try
 			{
-				var destination = Path.GetFullPath(Environment.CurrentDirectory + "\\..\\" + "\\..\\" + "\\..\\"
-				                                   + "\\Teleopti.Ccc.Sdk.ServiceBus.Host\\bin\\Debug\\Payroll\\");
-				var source = Path.GetFullPath(Environment.CurrentDirectory + "\\..\\" + "\\..\\" + "\\..\\"
-				                              + "\\Teleopti.Ccc.Sdk.ServiceBus.Host\\bin\\Debug\\Payroll.DeployNew\\");
 				CopyFiles(source, destination);
 			}
 			catch (Exception exception)
