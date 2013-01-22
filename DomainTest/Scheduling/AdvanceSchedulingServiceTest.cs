@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private ITeamScheduling _teamScheduling;
         private ISchedulingOptions _schedulingOptions;
     	private IWorkShiftSelector _workShiftSelector;
+        private IGroupPersonBuilderBasedOnContractTime _groupPersonBuilderBasedOnContractTime;
 
         [SetUp]
         public void Setup()
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
             _teamScheduling = _mocks.StrictMock<ITeamScheduling>();
         	_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
+            _groupPersonBuilderBasedOnContractTime = _mocks.StrictMock<IGroupPersonBuilderBasedOnContractTime>();
             _target = new AdvanceSchedulingService(_skillDayPeriodIntervalData, 
                                                 _dynamicBlockFinder, 
                                                 _teamExtractor, 
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 												_workShiftFilterService,
 												_teamScheduling, 
 												_schedulingOptions,
-												_workShiftSelector);
+                                                _workShiftSelector, _groupPersonBuilderBasedOnContractTime);
         }
 
 		//[Test]
