@@ -3,9 +3,6 @@ Param(
   )
 [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
 
-
-
-$directory
 ## Name of the job, name of source in Windows Event Log
 $JOB = "Teleopti.Ccc.BlobStorageCopy"
 
@@ -34,7 +31,7 @@ if (-not(test-path -path $DESTINATION))
 }
 
 ## FileWatch destination directory
-$FILEWATCH = ".\..\Services\ServiceBus\Payroll.DeployNew"
+$FILEWATCH = $directory + "\..\Services\ServiceBus\Payroll.DeployNew"
 
 ## Path to AzCopy logfile
 $LOGFILE = "c:\temp\PayrollInbox"
@@ -57,10 +54,14 @@ $TIME = get-date -uformat "%T"
 ## Wrap all above arguments
 $cmdArgs = @("$BlobSource","$DESTINATION",$OPTIONS)
 
-$AzCopyExe = ".\ccc7_azure\AzCopy\AzCopy.exe"
+$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
+$AzCopyExe
 
 ## Start the azcopy with above parameters and log errors in Windows Eventlog.
 & $AzCopyExe @cmdArgs
+
+## Get LastExitCode and store in variable
+$ExitCode = $LastExitCode
 
 ## Wrap arguments for robocopy
 $roboArgs = @("$DESTINATION","$FILEWATCH",$ROBOOPTIONS)
@@ -69,7 +70,15 @@ $roboArgs = @("$DESTINATION","$FILEWATCH",$ROBOOPTIONS)
 & robocopy @roboArgs
 
 ## Get LastExitCode and store in variable
-$ExitCode = $LastExitCode
+$RoboExitCode = $LastExitCode
+
+##restart service if new file(s) arrived from BlobStorage into $FILEWATCH
+##Teleopti Service Bus will pick up new files on restart
+If ($RoboExitCode -eq 1) {
+Stop-Service -name "Teleopti Service Bus"
+write-host "-------------" -ForegroundColor blue
+Start-Service -name "Teleopti Service Bus"
+}
 
 $MSGType=@{
 "7"="Error"
