@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         [Test]
         public void VerifyCanRefreshAgentState()
         {
-            var now = DateTime.UtcNow;
             var dayLayerModel =
                 new DayLayerModel(
                     new Person(),

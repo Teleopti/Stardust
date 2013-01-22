@@ -1,5 +1,5 @@
 IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[ReadModel].[v_ScheduleProjectionReadOnlyRTA]'))
-DROP VIEW [mart].[[ReadModel].[v_ScheduleProjectionReadOnlyRTA]]
+DROP VIEW [ReadModel].[v_ScheduleProjectionReadOnlyRTA]
 GO
 CREATE VIEW [ReadModel].[v_ScheduleProjectionReadOnlyRTA]
 AS

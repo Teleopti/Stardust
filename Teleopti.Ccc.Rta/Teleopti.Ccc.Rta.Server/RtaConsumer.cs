@@ -21,12 +21,12 @@ namespace Teleopti.Ccc.Rta.Server
 			_actualAgentHandler = actualAgentHandler;
 		}
 
-		public IActualAgentState Consume(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timeStamp,
+		public IActualAgentState Consume(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timestamp,
             TimeSpan timeInState, AutoResetEvent waitHandle)
 		{
-			var scheduleLayers = _actualAgentStateDataHandler.CurrentLayerAndNext(timeStamp,personId);
+			var scheduleLayers = _actualAgentStateDataHandler.CurrentLayerAndNext(timestamp,personId);
 			var previousState = _actualAgentStateDataHandler.LoadOldState(personId);
-			return checkState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timeStamp, timeInState, businessUnitId, waitHandle);
+			return checkState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timestamp, timeInState, businessUnitId, waitHandle);
 		}
 
 		IActualAgentState checkState(IList<ScheduleLayer> scheduleLayers, IActualAgentState previousState, Guid personId, Guid platformTypeId,

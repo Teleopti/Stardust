@@ -10,8 +10,10 @@ namespace Teleopti.Ccc.WpfControls.Converters
     /// </summary>
     public class DateTimeToLocalAndNotMinValueConverter : IMultiValueConverter
     {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+			InParameter.NotNull("values", values);
             InParameter.MustBeTrue("values", values.Length == 2);
             InParameter.MustBeTrue("values", values[0] is DateTime);
             InParameter.MustBeTrue("values", values[1] is TimeZoneInfo);

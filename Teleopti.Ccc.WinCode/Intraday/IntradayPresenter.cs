@@ -150,7 +150,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
                                                      DateTime.UtcNow.AddDays(1));
         }
 
-        public void OnEventActualAgentStateMessageHandler(object sender, EventMessageArgs e)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public void OnEventActualAgentStateMessageHandler(object sender, EventMessageArgs e)
         {
             if (e.Message.ModuleId == _moduleId) return;
 
