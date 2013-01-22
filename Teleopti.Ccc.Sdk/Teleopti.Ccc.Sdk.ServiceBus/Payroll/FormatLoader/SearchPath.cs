@@ -8,5 +8,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
         {
             get { return AppDomain.CurrentDomain.BaseDirectory + "Payroll\\"; }
         }
+
+    	public string PayrollDeployNewPath
+    	{
+			get { return AppDomain.CurrentDomain.BaseDirectory + "Payroll.DeployNew\\"; }
+    	}
     }
 }

@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			try
 			{
 				var destination = new SearchPath().Path;
-				var source = new DirectoryInfo(Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll.DeployNew"));
-				CopyFiles(source.ToString(), destination);
+				var source = new SearchPath().PayrollDeployNewPath;
+				CopyFiles(source, destination);
 			}
 
 			catch (Exception exception)
