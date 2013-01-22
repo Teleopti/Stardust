@@ -6,12 +6,12 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Teleopti.Ccc.Web.Broker")]
+[assembly: AssemblyTitle("Teleopti.Ccc.Web.Broker.Backplane")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("Teleopti.Ccc.Web.Broker")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCompany("Teleopti")]
+[assembly: AssemblyProduct("Teleopti.Ccc.Web.Broker.Backplane")]
+[assembly: AssemblyCopyright("Copyright © Teleopti 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,7 +21,7 @@ using System.Resources;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("55b73e96-6105-45e6-b38a-08c6072c9617")]
+[assembly: Guid("631d37c7-66d0-48bd-a84d-e902706cc23d")]
 
 // Version information for an assembly consists of the following four values:
 //

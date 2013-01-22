@@ -2,9 +2,7 @@
 using System.Web;
 using System.Web.Routing;
 using Contrib.SignalR.SignalRMessageBus;
-using Contrib.SignalR.SignalRMessageBus.Backend;
 using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Messaging;
 
 namespace Teleopti.Ccc.Web.Broker
 {
@@ -16,12 +14,6 @@ namespace Teleopti.Ccc.Web.Broker
 			log4net.Config.XmlConfigurator.Configure();
 
 			var settingsFromParser = TimeoutSettings.Load();
-
-			if (settingsFromParser.BackendServerUrl != null)
-			{
-				GlobalHost.DependencyResolver = new TeleoptiDependencyResolver();
-				GlobalHost.DependencyResolver.UseSignalRServer(settingsFromParser.BackendServerUrl);
-			}
 
 			if (settingsFromParser.HeartbeatInterval.HasValue)
 				GlobalHost.Configuration.HeartbeatInterval = settingsFromParser.HeartbeatInterval.Value;
@@ -37,9 +29,12 @@ namespace Teleopti.Ccc.Web.Broker
 
 			GlobalHost.HubPipeline.EnableAutoRejoiningGroups();
 
-			RouteTable.Routes.MapConnection<SignalRBackplane>("backplane", "backplane"); 
-
 			RouteTable.Routes.MapHubs();
+
+			if (settingsFromParser.ScaleOutBackplaneUrl != null)
+			{
+				GlobalHost.DependencyResolver.UseSignalRServer(settingsFromParser.ScaleOutBackplaneUrl);
+			}
 		}
 
 		protected void Session_Start(object sender, EventArgs e)
@@ -70,29 +65,6 @@ namespace Teleopti.Ccc.Web.Broker
 		protected void Application_End(object sender, EventArgs e)
 		{
 
-		}
-	}
-
-	internal class TeleoptiDependencyResolver : DefaultDependencyResolver
-	{
-		private bool _resolveDefaultMessageBus;
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public override object GetService(Type serviceType)
-		{
-			if (serviceType == typeof(SignalRBackplane))
-			{
-				_resolveDefaultMessageBus = true;
-			}
-
-			if (_resolveDefaultMessageBus && serviceType == typeof(IMessageBus))
-			{
-				Register(typeof(MessageBus), () => new MessageBus(this));
-				_resolveDefaultMessageBus = false;
-				return base.GetService(typeof(MessageBus));
-			}
-
-			return base.GetService(serviceType);
 		}
 	}
 }
