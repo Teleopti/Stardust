@@ -22,9 +22,6 @@ Background:
 	And there is an absence with
 	| Field | Value   |
 	| Name  | Vacation |
-	#And there is a skill with
-	#| Field | Value   |
-	#| Name  | Skill 1 |
 	And there is a workflow control set with
 	| Field                            | Value                                     |
 	| Name                             | Trade from tomorrow until 30 days forward |
@@ -39,28 +36,6 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |	
-	#And I have a shift with
-	#| Field                 | Value            |
-	#| StartTime             | 2030-01-01 06:00 |
-	#| EndTime               | 2030-01-01 16:00 |
-	#| Shift category		| Day	           |
-	#| Lunch3HoursAfterStart | true             |
-	#And an agent has a workflow control set with
-	#| Field                      | Value              |
-	#| Agent name                 | Other agent 1      |
-	#| Name                       | Published schedule |
-	#| Schedule published to date | 2040-06-24         |
-	#And an agent has a schedule period with 
-	#| Field      | Value         |
-	#| Agent name | Other agent 1 |
-	#| Start date | 2012-06-18    |
-	#| Type       | Week          |
-	#| Length     | 1		     |
-	#And an agent has a person period with 
-	#| Field      | Value         |
-	#| Agent name | Other agent 1 |
-	#| Start date | 2012-06-18    |
-	#| Skill      | Skill 1       |
 	
 Scenario: No access to make shift trade reuquests
 	Given I have the role 'No access to Shift Trade'
