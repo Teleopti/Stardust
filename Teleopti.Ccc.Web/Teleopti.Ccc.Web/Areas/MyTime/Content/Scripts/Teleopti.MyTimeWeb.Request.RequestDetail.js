@@ -101,6 +101,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 		if (data.TypeEnum == 2) {
 			requestViewModel = new ShiftTradeRequestDetailViewModel();
+			requestViewModel.Initialize(data);
 		}
 		else {
 			requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
@@ -279,19 +280,45 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 var ShiftTradeRequestDetailViewModel = function () {
 	var self = this;
 
+	self.Id = ko.observable();
 	self.IsUpdate = ko.observable(true);
 	self.TypeEnum = ko.observable(2);
 	self.IsFullDay = ko.observable(true);
 	self.Template = ko.observable("shifttrade-request-detail-template");
 
+	self.ajax = new Teleopti.MyTimeWeb.Ajax();
+
 	self.Approve = function () {
-		alert('Shift trade request approved....(but not) henke');
+		self.respondToRequest("Requests/ApproveShiftTrade/" + self.Id());
 	};
 
 	self.Deny = function () {
-		alert('Shift trade request denied....(but not) henke');
+		self.respondToRequest("Requests/RejectShiftTrade/" + self.Id());
+	};
+
+	self.respondToRequest = function (url) {
+
+		self.ajax.Ajax({
+			url: url,
+			type: "POST",
+			success: function () {
+				//todo
+			},
+			error: function (error) {
+				//todo
+			}
+		});
 	};
 };
+
+ko.utils.extend(ShiftTradeRequestDetailViewModel.prototype, {
+	Initialize: function (data) {
+
+		var self = this;
+
+		self.Id(data.Id);
+	}
+});
 
 Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 
@@ -330,7 +357,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 
 	self.AddTextRequest = function () {
 		self._clearValidationError();
-		self.TypeEnum(0);		
+		self.TypeEnum(0);
 		if (!$('#Text-request-tab').hasClass('selected-tab')) {
 			self._selectTextRequestTab();
 			self.IsFullDay(false);

@@ -147,6 +147,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.ApproveShiftTradeButton.EventualClick();
 		}
 
+		[When(@"I click the Deny button on the shift request")]
+		public void WhenIClickTheDenyButtonOnTheShiftRequest()
+		{
+			_page.DenyShiftTradeButton.EventualClick();
+		}
+
+
 	}
 
 }
