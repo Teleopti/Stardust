@@ -26,16 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private ConfigFileDefaultHost _denormalizeBus;
 		[NonSerialized]
 		private ConfigFileDefaultHost _payrollBus;
-
-		[NonSerialized] 
-		private AppDomain _requestDomain;
-		[NonSerialized] 
-		private AppDomain _generalDomain;
-		[NonSerialized] 
-		private AppDomain _denormalizeDomain;
-		[NonSerialized]
-		private AppDomain _payrollDomain;
-		
+	
 		public ServiceBusRunner(Action<Exception> unhandledExceptionHandler, Action<Exception> startupExceptionHandler, Action<int> requestExtraTimeHandler)
 		{
 			_unhandledExceptionHandler = unhandledExceptionHandler;
@@ -85,35 +76,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
 
-			var e = new Evidence(AppDomain.CurrentDomain.Evidence);
-			var setup = AppDomain.CurrentDomain.SetupInformation;
-
-			_requestDomain = AppDomain.CreateDomain("Req", e, setup);
-			_requestDomain.UnhandledException += CurrentDomain_UnhandledException;
-			//_requestBus = new ConfigFileDefaultHost();
-			_requestBus = (ConfigFileDefaultHost)_requestDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
+			_requestBus = new ConfigFileDefaultHost();
 			_requestBus.UseFileBasedBusConfiguration("RequestQueue.config");
 			_requestBus.Start<BusBootStrapper>();
 
-			_generalDomain = AppDomain.CreateDomain("Gen", e, setup);
-			_generalDomain.UnhandledException += CurrentDomain_UnhandledException;
-			//_generalBus = new ConfigFileDefaultHost();
-			_generalBus = (ConfigFileDefaultHost)_generalDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
+			_generalBus = new ConfigFileDefaultHost();
 			_generalBus.UseFileBasedBusConfiguration("GeneralQueue.config");
 			_generalBus.Start<BusBootStrapper>();
 
-			_denormalizeDomain = AppDomain.CreateDomain("Den", e, setup);
-			_denormalizeDomain.UnhandledException += CurrentDomain_UnhandledException;
-			//_denormalizeBus = new ConfigFileDefaultHost();
-			_denormalizeBus = (ConfigFileDefaultHost)_denormalizeDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
+			_denormalizeBus = new ConfigFileDefaultHost();
 			_denormalizeBus.UseFileBasedBusConfiguration("DenormalizeQueue.config");
 			_denormalizeBus.Start<DenormalizeBusBootStrapper>();
 			
 			PayrollDllCopy.CopyPayrollDll();
 
-			_payrollDomain = AppDomain.CreateDomain("Pay", e, setup);
-			_payrollDomain.UnhandledException += CurrentDomain_UnhandledException;
-			_payrollBus = (ConfigFileDefaultHost)_payrollDomain.CreateInstanceFrom(typeof(ConfigFileDefaultHost).Assembly.Location, typeof(ConfigFileDefaultHost).FullName).Unwrap();
+			_payrollBus = new ConfigFileDefaultHost();
 			_payrollBus.UseFileBasedBusConfiguration("PayrollQueue.config");
 			_payrollBus.Start<BusBootStrapper>();
 			AppDomain.MonitoringIsEnabled = true;
@@ -145,7 +122,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				try
 				{
-					_requestDomain.UnhandledException -= CurrentDomain_UnhandledException;
 					_requestBus.Dispose();
 				}
 				catch (Exception)
@@ -156,7 +132,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				try
 				{
-					_generalDomain.UnhandledException -= CurrentDomain_UnhandledException;
 					_generalBus.Dispose();
 				}
 				catch (Exception)
@@ -167,7 +142,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				try
 				{
-					_denormalizeDomain.UnhandledException -= CurrentDomain_UnhandledException;
 					_denormalizeBus.Dispose();
 				}
 				catch (Exception)
@@ -178,7 +152,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				try
 				{
-					_payrollDomain.UnhandledException -= CurrentDomain_UnhandledException;
 					_payrollBus.Dispose();
 				}
 				catch (Exception)
@@ -186,22 +159,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				}
 			}
 			
-			if (_requestDomain != null)
-			{
-				AppDomain.Unload(_requestDomain);
-			}
-			if (_generalDomain != null)
-			{
-				AppDomain.Unload(_generalDomain);
-			}
-			if (_denormalizeDomain != null)
-			{
-				AppDomain.Unload(_denormalizeDomain);
-			}
-			if (_payrollDomain != null)
-			{
-				AppDomain.Unload(_payrollDomain);
-			}
 		}
 	}
 }

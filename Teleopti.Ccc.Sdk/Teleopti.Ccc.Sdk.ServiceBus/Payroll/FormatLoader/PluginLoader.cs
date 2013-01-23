@@ -69,6 +69,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 						var directory = strippedfile.Substring(0, strippedfile.IndexOf("\\", StringComparison.OrdinalIgnoreCase));
 						payrollFormats.Add(new PayrollFormatDto(t.PayrollFormat.FormatId, t.PayrollFormat.Name, directory));
 					}
+					else
+					{
+						payrollFormats.Add(new PayrollFormatDto(t.PayrollFormat.FormatId, t.PayrollFormat.Name, ""));
+					}
 				}
 			}
 			AppDomain.CurrentDomain.AssemblyResolve -= _domainAssemblyResolver.Resolve;
