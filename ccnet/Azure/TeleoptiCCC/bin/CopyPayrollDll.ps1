@@ -3,6 +3,34 @@ Param(
   )
 [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
 
+##===========
+## Functions
+##===========
+function Test-Administrator  
+{  
+    $user = [Security.Principal.WindowsIdentity]::GetCurrent();
+    (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)  
+}
+
+function ServiceCheckAndStart{
+    param($ServiceName)
+    $arrService = Get-Service -Name $ServiceName
+    if ($arrService.Status -ne "Running"){
+        Start-Service $ServiceName
+     }
+}
+
+##===========
+## Main
+##===========
+$TeleoptiServiceBus = "Teleopti Service Bus"
+
+##test if admin
+$isAdmin = Test-Administrator;
+If ($isAdmin -ne $True) {
+    throw "User is not Admin!"
+}
+
 ## Name of the job, name of source in Windows Event Log
 $JOB = "Teleopti.Ccc.BlobStorageCopy"
 
@@ -23,6 +51,7 @@ $DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetCo
 $BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
 $BlobSource
 
+
 ## Destination directory. Files in this directory will mirror the source directory. Extra files will be deleted!
 $DESTINATION = "c:\temp\PayrollInbox"
 if (-not(test-path -path $DESTINATION))
@@ -33,23 +62,11 @@ if (-not(test-path -path $DESTINATION))
 ## FileWatch destination directory
 $FILEWATCH = $directory + "\..\Services\ServiceBus\Payroll.DeployNew"
 
-## Path to AzCopy logfile
-$LOGFILE = "c:\temp\PayrollInbox"
-
-## Log events from the script to this location
-$SCRIPTLOG = "c:\temp\PayrollInbox\$JOB-scriptlog.log"
-
 ## Options to be added to AzCopy
 $OPTIONS = @("/S","/XO","/Y","/sourceKey:$AccountKey")
 
 ## Options to be added to RoboCopy
 $ROBOOPTIONS = @("/MIR")
-
-## This will create a timestamp like yyyy-mm-yy
-$TIMESTAMP = get-date -uformat "%Y-%m%-%d"
-
-## This will get the time like HH:MM:SS
-$TIME = get-date -uformat "%T"
 
 ## Wrap all above arguments
 $cmdArgs = @("$BlobSource","$DESTINATION",$OPTIONS)
@@ -57,84 +74,52 @@ $cmdArgs = @("$BlobSource","$DESTINATION",$OPTIONS)
 $AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
 $AzCopyExe
 
-## Start the azcopy with above parameters and log errors in Windows Eventlog.
-& $AzCopyExe @cmdArgs
-
-## Get LastExitCode and store in variable
-$ExitCode = $LastExitCode
-
-## Wrap arguments for robocopy
-$roboArgs = @("$DESTINATION","$FILEWATCH",$ROBOOPTIONS)
-
-## Run robocopy from Inbox to FileWatch
-& robocopy @roboArgs
-
-## Get LastExitCode and store in variable
-$RoboExitCode = $LastExitCode
-
-##restart service if new file(s) arrived from BlobStorage into $FILEWATCH
-##Teleopti Service Bus will pick up new files on restart
-If ($RoboExitCode -eq 1) {
-Stop-Service -name "Teleopti Service Bus"
-write-host "-------------" -ForegroundColor blue
-Start-Service -name "Teleopti Service Bus"
-}
-
-$MSGType=@{
-"7"="Error"
-"2"="Error"
-"0"="Information"
-}
-
-## Message descriptions for each ExitCode.
-$MSG=@{
-"7"="Server failed to authenticate the request. Make sure the value of Authorization header is formed correctly"
-"2"="The syntax of the command is incorrect"
-"0"="$BlobSource and $DESTINATION in sync."
-}
-
-## Function to see if running with administrator privileges
-function Test-Administrator  
-{  
-    $user = [Security.Principal.WindowsIdentity]::GetCurrent();
-    (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)  
-}
-
-## If running with administrator privileges
-If (Test-Administrator -eq $True) {
-	"Has administrator privileges"
-	
+Try
+{
+        
 	## Create EventLog Source if not already exists
 	if ([System.Diagnostics.EventLog]::SourceExists("$JOB") -eq $false) {
 	"Creating EventLog Source `"$JOB`""
-    [System.Diagnostics.EventLog]::CreateEventSource("$JOB", "Application")
+	[System.Diagnostics.EventLog]::CreateEventSource("$JOB", "Application")
 	}
-	
-	## Write known ExitCodes to EventLog
-	if ($MSG."$ExitCode" -gt $null) {
-		Write-EventLog -LogName Application -Source $JOB -EventID $ExitCode -EntryType $MSGType."$ExitCode" -Message $MSG."$ExitCode"
+    
+	## Start the azcopy with above parameters and log errors in Windows Eventlog.
+	& $AzCopyExe @cmdArgs
+    $AzExitCode = $LastExitCode
+    
+    if ($LastExitCode -ne 0) {
+        throw "AsCopy generated an error!"
+    }
+    
+	## Wrap arguments for robocopy
+	$roboArgs = @("$DESTINATION","$FILEWATCH",$ROBOOPTIONS)
+
+	## Run robocopy from Inbox to FileWatch
+	& robocopy @roboArgs
+    $RoboExitCode = $LastExitCode
+    
+    if ($RoboExitCode -ge 8) {
+        throw "RoboCopy generated an error!"
+    }
+
+	##one or more files are new, log info to Eventlog and restart serviceBus
+	If ($RoboExitCode -ge 1) {
+        Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$SOURCE and $DESTINATION in sync."
+    	Stop-Service -name $TeleoptiServiceBus
+    	write-host "-------------" -ForegroundColor blue
+    	Start-Service -name $TeleoptiServiceBus
 	}
-	## Write unknown ExitCodes to EventLog
-	else {
-		Write-EventLog -LogName Application -Source $JOB -EventID $ExitCode -EntryType Warning -Message "Unknown ExitCode. EventID equals ExitCode"
-	}
+    
+    ##safty, if the service is down for some reason, restart it
+    ServiceCheckAndStart $TeleoptiServiceBus;
 }
-## If not running with administrator privileges
-else {
-	## Write to screen and logfile
-	Add-content $SCRIPTLOG "$TIMESTAMP $TIME No administrator privileges" -PassThru
-	Add-content $SCRIPTLOG "$TIMESTAMP $TIME Cannot write to EventLog" -PassThru
-	
-	## Write known ExitCodes to screen and logfile
-	if ($MSG."$ExitCode" -gt $null) {
-		Add-content $SCRIPTLOG "$TIMESTAMP $TIME Printing message to logfile:" -PassThru
-		Add-content $SCRIPTLOG ($TIMESTAMP + ' ' + $TIME + ' ' + $MSG."$ExitCode") -PassThru
-		Add-content $SCRIPTLOG "$TIMESTAMP $TIME ExitCode`=$ExitCode" -PassThru
-	}
-	## Write unknown ExitCodes to screen and logfile
-	else {
-		Add-content $SCRIPTLOG "$TIMESTAMP $TIME ExitCode`=$ExitCode (UNKNOWN)" -PassThru
-	}
-	Add-content $SCRIPTLOG ""
-	Return
+Catch [Exception]
+{
+    $ErrorMessage = $_.Exception.Message
+    Write-EventLog -LogName Application -Source $JOB -EventID 1 -EntryType Error -Message "$ErrorMessage"
+    Break
+}
+Finally
+{
+    Write-Host "done"
 }

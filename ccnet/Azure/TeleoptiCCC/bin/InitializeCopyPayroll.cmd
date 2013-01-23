@@ -13,7 +13,7 @@ echo Temporary user is %admin% with password %pwd% >> "%FILE%.log"
 del %temp%\pwd.txt
 
 ::Add new local user to administrators group
-net user %admin% %pwd% /del
+net user %admin% /del
 net user %admin% %pwd% /add
 net localgroup Administrators %admin% /add
 
