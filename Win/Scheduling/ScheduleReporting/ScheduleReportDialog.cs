@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 _settings = new PersonalSettingDataRepository(uow).FindValueByKey(SettingName, new ScheduleReportDialogSettings());
+				if(_shiftsPerDay && _settings.DetailLevel == ScheduleReportDetail.All) _settings.DetailLevel = ScheduleReportDetail.Break;
             }
         }
 
@@ -97,6 +98,8 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
                 groupBox1.Enabled = false;
                 radioButtonTeamReport.Checked = false;
                 radioButtonIndividualReport.Checked = false;
+            	radioButtonAllDetails.Visible = false;
+            	radioButtonAllDetails.Checked = false;
             }
             else
             {
