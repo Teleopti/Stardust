@@ -19,19 +19,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public IList<IShiftCategory> ShiftCategories()
 		{
 			var shiftCategories = new List<IShiftCategory>();
-
-			foreach (var value in _agentValues)
+			if (_agentValues != null)
 			{
-				if(!shiftCategories.Contains(value.ShiftCategory))
-					shiftCategories.Add(value.ShiftCategory);
-			}
+				foreach (var value in _agentValues)
+				{
+					if(!shiftCategories.Contains(value.ShiftCategory))
+						shiftCategories.Add(value.ShiftCategory);
+				}
 
-			foreach (var value in _teamValues)
-			{
-				if(!shiftCategories.Contains(value.ShiftCategory))
-					shiftCategories.Add(value.ShiftCategory);
+				foreach (var value in _teamValues)
+				{
+					if(!shiftCategories.Contains(value.ShiftCategory))
+						shiftCategories.Add(value.ShiftCategory);
+				}
 			}
-
 			shiftCategories.Sort(new ShiftCategorySorter());
 
 			return shiftCategories;
