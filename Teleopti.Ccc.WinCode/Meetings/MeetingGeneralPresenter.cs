@@ -135,6 +135,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
 		public void UpdateView()
 		{
+			_view.DescriptionFocus();
 			_view.SetOrganizer(_model.Organizer);
 			_view.SetParticipants(_model.Participants);
 			
@@ -149,7 +150,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
 			_view.SetSubject(_model.GetSubject(new NoFormatting()));
 			_view.SetLocation(_model.GetLocation(new NoFormatting()));
 			_view.SetDescription(_model.GetDescription(new NoFormatting()));
-			_view.DescriptionFocus();
 		}
 
 	    public void CancelAllLoads()

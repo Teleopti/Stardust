@@ -20,7 +20,19 @@ BEGIN
 	 SET NOCOUNT ON;
 
 CREATE TABLE #ids(person uniqueidentifier)
-INSERT INTO #ids SELECT * FROM SplitStringString(@persons) 
+
+IF @persons = '00000000-0000-0000-0000-000000000000'  --"EveryBody"
+--Flush and re-load everybody
+BEGIN
+	TRUNCATE TABLE [ReadModel].[FindPerson]
+	INSERT INTO #ids SELECT Id FROM Person WHERE IsDeleted = 0
+END
+ELSE
+--Flush and re-load only PersonIds in string
+BEGIN
+	INSERT INTO #ids SELECT * FROM SplitStringString(@persons) 
+	DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
+END 
 
 DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
 
@@ -267,4 +279,11 @@ return
 	LEFT JOIN team t
 		ON t.id=pp.team
 END
+GO
+
+--=================
+--Finally, when DBManager applies this SP also execute the SP
+--=================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[UpdateGroupingReadModel]') AND type in (N'P', N'PC')) 
+EXEC [ReadModel].[UpdateGroupingReadModel] '00000000-0000-0000-0000-000000000000'
 GO

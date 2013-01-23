@@ -116,7 +116,9 @@ namespace Teleopti.Ccc.Win.Meetings
 			{
 				startTime = TimeSpan.Parse(start);
 				endTime = TimeSpan.Parse(end);
-			}
+			} 
+			_meetingComposerPresenter.Model.StartTime = startTime;
+			_meetingComposerPresenter.Model.EndTime = endTime;
 			if (endTime < startTime)
 				_meetingComposerPresenter.InvalidTimeInfo();
 			else
@@ -174,9 +176,9 @@ namespace Teleopti.Ccc.Win.Meetings
         {
             using (var meetingRecurrenceView = new MeetingRecurrenceView(_meetingComposerPresenter.Model, this))
             {
+                _currentView.Presenter.UpdateView();
                 if (meetingRecurrenceView.ShowDialog(this) != DialogResult.OK) return;
                 _meetingComposerPresenter.RecurrentMeetingUpdated();
-                _currentView.Presenter.UpdateView();
             }
         }
 
