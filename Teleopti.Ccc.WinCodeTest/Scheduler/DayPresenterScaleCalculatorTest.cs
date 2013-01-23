@@ -22,8 +22,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IScheduleDictionary _scheduleDictionary;
         private IScheduleRange _range;
         private IScheduleDay _scheduleDay1;
+    	private TimeZoneInfo _timeZone;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             _range = _mocks.StrictMock<IScheduleRange>();
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+        	_timeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
         }
 
         [Test]
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
+            	Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {ass1}));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
@@ -67,8 +70,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             DateTimePeriod expected =
                 new DateTimePeriod(new DateTime(2011, 1, 2, 7, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2011, 1, 2, 17, 0, 0, 0, DateTimeKind.Utc));
-            Assert.AreEqual(expected.LocalStartDateTime, result.StartDateTime);
-            Assert.AreEqual(expected.LocalEndDateTime, result.EndDateTime);
+            Assert.AreEqual(expected.StartDateTime, result.StartDateTime);
+            Assert.AreEqual(expected.EndDateTime, result.EndDateTime);
         }
 
         [Test]
@@ -84,6 +87,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { ass1 }));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
@@ -102,7 +106,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 new DateTimePeriod(new DateTime(2011, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2011, 1, 2, 17, 0, 0, 0, DateTimeKind.Utc));
             Assert.AreEqual(new DateTime(2011, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc), result.StartDateTime);
-            Assert.AreEqual(expected.LocalEndDateTime, result.EndDateTime);
+            Assert.AreEqual(expected.EndDateTime, result.EndDateTime);
         }
 
         [Test]
@@ -116,6 +120,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { ass1 }));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
@@ -148,6 +153,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { ass1 }));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
@@ -182,6 +188,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.TimeZone).Return(_timeZone);
                 Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(
                     new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { ass1 }));
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
@@ -197,10 +204,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
 
             DateTimePeriod expected =
-                new DateTimePeriod(new DateTime(2011, 1, 2, 7, 0, 0, 0, DateTimeKind.Utc),
+                new DateTimePeriod(new DateTime(2011, 1, 2, 8, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2011, 1, 3, 7, 0, 0, 0, DateTimeKind.Utc));
-            Assert.AreEqual(expected.LocalStartDateTime, result.StartDateTime);
-            Assert.AreEqual(expected.LocalEndDateTime, result.EndDateTime);
+            Assert.AreEqual(expected.StartDateTime, result.StartDateTime);
+            Assert.AreEqual(expected.EndDateTime, result.EndDateTime);
         }
     }
 }
