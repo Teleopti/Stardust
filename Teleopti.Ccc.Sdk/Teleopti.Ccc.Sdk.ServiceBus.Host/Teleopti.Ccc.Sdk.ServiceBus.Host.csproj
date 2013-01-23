@@ -242,7 +242,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Payroll.DeployNew\Teleopti CCC\ReadMe.txt">
+    <Content Include="Payroll.DeployNew\ReadMe.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Payroll\ReadMe.txt">
@@ -260,7 +260,7 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)..\..\nhibernateAddons\Cache_Providers\*.dll" "$(TargetDir)" /y
-copy "$(ProjectDir)..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(ConfigurationName)\Teleopti.Ccc.Payroll.dll"  "$(TargetDir)Payroll.DeployNew\Teleopti CCC\" /y
+copy "$(ProjectDir)..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(ConfigurationName)\Teleopti.Ccc.Payroll.dll"  "$(TargetDir)Payroll.DeployNew\" /y
 copy "$(ProjectDir)..\Teleopti.Ccc.Sdk.Notification\bin\$(ConfigurationName)\Teleopti.Ccc.Sdk.Notification.dll" "$(TargetDir)" /y</PostBuildEvent>
     <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBusHost.config" "$(ProjectDir)App.config"</PreBuildEvent>
   </PropertyGroup>
