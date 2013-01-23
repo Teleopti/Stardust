@@ -24,9 +24,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			_originalDeployFiles = Directory.GetFiles(_source, "*.*", SearchOption.AllDirectories);
 			_originalPayrollFiles = Directory.GetFiles(_destination, "*.*", SearchOption.AllDirectories);
-
-			RemoveAllFiles(_source);
-			RemoveAllFiles(_destination);
+			
+			Teardown();
 			
 			for (var i = 0; i <= 1; i++)
 			{
@@ -107,6 +106,44 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				.Select(file => new FileInfo(file))
 				.Select(fileInfo => fileInfo.Directory.Name + "\\" + fileInfo.Name))
 				Assert.That(File.Exists(Path.GetFullPath(_destination + path)), Is.True);
+		}
+
+		[Test, ExpectedException(typeof(DirectoryNotFoundException))]
+		public void ShouldThrowException()
+		{
+			// path gets messed up when running from testproj
+			PayrollDllCopy.CopyPayrollDll();
+		}
+
+		[Test, ExpectedException(typeof(DirectoryNotFoundException))]
+		public void ShouldThrowExceptionWithWrongPath()
+		{
+			PayrollDllCopy.CopyPayrollDllTest(_source + Guid.NewGuid(), _destination + Guid.NewGuid());
+		}
+
+		[Test]
+		public void ShouldSkipLockedFile()
+		{
+			var guid = Guid.NewGuid() + ".dll";
+			var file = File.Create(_source + guid);
+			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
+			file.Dispose();
+			Assert.That(!File.Exists(_destination + guid));
+		}
+
+		[Test]
+		public void ShouldNotCopyFileTwice()
+		{
+			Teardown();
+			var path = _source + Guid.NewGuid() + ".dll";
+			File.Create(path).Dispose();
+			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
+			var timeFirstFile = PayrollDllCopy.CopiedFiles[path];
+			File.Delete(path);
+			File.Create(path).Dispose();
+			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
+			var timeSecondFile = PayrollDllCopy.CopiedFiles[path];
+			Assert.That(timeFirstFile, Is.Not.EqualTo(timeSecondFile));
 		}
 	}
 }
