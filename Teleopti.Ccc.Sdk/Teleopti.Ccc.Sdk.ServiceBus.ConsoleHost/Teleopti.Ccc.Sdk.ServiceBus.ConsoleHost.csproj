@@ -108,11 +108,11 @@
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(TargetDir)Payroll" mkdir "$(TargetDir)Payroll"
-if not exist "$(TargetDir)Payroll.DeployNew\Teleopti CCC" mkdir "$(TargetDir)Payroll.DeployNew\Teleopti CCC"
+if not exist "$(TargetDir)Payroll.DeployNew" mkdir "$(TargetDir)Payroll.DeployNew"
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(ConfigurationName)\Teleopti.Ccc.Payroll.dll"  "$(TargetDir)Payroll.DeployNew\Teleopti CCC\" /y</PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(ConfigurationName)\Teleopti.Ccc.Payroll.dll"  "$(TargetDir)Payroll.DeployNew\" /y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
