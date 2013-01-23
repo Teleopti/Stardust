@@ -4,24 +4,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
 	public interface IWorkShiftPeriodValueCalculator
 	{
-		double PeriodValue(ISkillIntervalData skillIntervalData, int addedResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons, double overStaffingFactor, double priorityFactor);
+		double PeriodValue(ISkillIntervalData skillIntervalData, int addedResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons);
 	}
 
 	public class WorkShiftPeriodValueCalculator : IWorkShiftPeriodValueCalculator
 	{
 		const int theBigNumber = 100000;
 
-		public double PeriodValue(ISkillIntervalData skillIntervalData, int addedResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons, double overStaffingFactor, double priorityFactor)
+		public double PeriodValue(ISkillIntervalData skillIntervalData, int addedResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons)
 		{
 			double partOfResolution = addedResourceInMinutes / skillIntervalData.Period.ElapsedTime().TotalMinutes;
 
 			double intervalLengthInMinutes = skillIntervalData.Period.ElapsedTime().TotalMinutes;
 			double forecastedDemand = skillIntervalData.ForecastedDemand;
-			double tweakedCurrentDamand = getTweakedCurrentDemand(skillIntervalData.CurrentDemand, overStaffingFactor,
-			                                                      priorityFactor);
+			double currentDemand = skillIntervalData.CurrentDemand;
 			double calculatedValue =
 				calculateWorkShiftPeriodValue(forecastedDemand * intervalLengthInMinutes * partOfResolution,
-											  tweakedCurrentDamand * intervalLengthInMinutes * partOfResolution,
+											  currentDemand * intervalLengthInMinutes * partOfResolution,
 				                              addedResourceInMinutes);
 
 			//double assignedResourceInMinutes = (forecastedDemand - currentDemand) * intervalLengthInMinutes;
@@ -75,14 +74,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			}
 
 			return 0;
-		}
-
-		private double getTweakedCurrentDemand(double currentDemandInMinutes, double overStaffingFactor, double priorityFactor)
-		{
-			double overUnderStaffFaktor = overStaffingFactor;
-			if (currentDemandInMinutes < 0)
-				overUnderStaffFaktor = 1 - overStaffingFactor;
-			return priorityFactor * overUnderStaffFaktor * currentDemandInMinutes;
 		}
 	}
 }

@@ -109,10 +109,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     var skillInternalDataList = _skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList);
 
                     //temporary, now i think it should be activity ???+ consider activity
-                    ISkill skill =
-                        _matrixList.First().Person.PersonPeriodCollection.First().PersonSkillCollection.First().Skill;
-                    IDictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>> askMickeWhyDic = new Dictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>>();
-                    askMickeWhyDic.Add(skill, skillInternalDataList);
+                    IActivity activity =
+                        _matrixList.First().Person.PersonPeriodCollection.First().PersonSkillCollection.First().Skill.Activity;
+                    IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> askMickeWhyDic = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+                    askMickeWhyDic.Add(activity, skillInternalDataList);
 
                     //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
                     // (should we cover for max seats here?) ????

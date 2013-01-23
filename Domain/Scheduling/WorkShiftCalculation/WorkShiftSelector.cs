@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 	public interface IWorkShiftSelector
 	{
 		IShiftProjectionCache Select(IList<IShiftProjectionCache> shiftList,
-		                             IDictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDatas,
+		                             IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDatas,
 		                             WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons);
 	}
 
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			_equalWorkShiftValueDecider = equalWorkShiftValueDecider;
 		}
 
-		public IShiftProjectionCache Select(IList<IShiftProjectionCache> shiftList, IDictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDatas, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
+		public IShiftProjectionCache Select(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDatas, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
 		{
 			double? bestShiftValue = null;
 			IShiftProjectionCache bestShift = null;
@@ -59,43 +59,39 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			return bestShift;
 		}
 
-		private double? valueForSkill(KeyValuePair<ISkill, IDictionary<TimeSpan, ISkillIntervalData>> keyValuePair, IShiftProjectionCache shiftProjectionCache, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
+		private double? valueForActivity(KeyValuePair<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> keyValuePair, IShiftProjectionCache shiftProjectionCache, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
 		{
-			ISkill skill = keyValuePair.Key;
-			IActivity skillActivity = skill.Activity;
-			var priority = skill.PriorityValue;
-			var overstaffingFactor = skill.OverstaffingFactor;
+			IActivity skillActivity = keyValuePair.Key;
 			double? value = _workShiftValueCalculator.CalculateShiftValue(shiftProjectionCache.MainShiftProjection,
 																		  skillActivity, keyValuePair.Value, lengthFactor,
-																		  useMinimumPersons, useMaximumPersons,
-																		  overstaffingFactor.Value, priority);
+																		  useMinimumPersons, useMaximumPersons);
 			
 
 			return value;
 		}
 
-		private double? valueForShift(IDictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDatas, IShiftProjectionCache shiftProjectionCache, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
+		private double? valueForShift(IEnumerable<KeyValuePair<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>> skillIntervalDatas, IShiftProjectionCache shiftProjectionCache, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
 		{
-			double? totalForAllSkillValue = null;
+			double? totalForAllActivitesValue = null;
 			foreach (var keyValuePair in skillIntervalDatas)
 			{
-				double? skillValue = valueForSkill(keyValuePair, shiftProjectionCache, lengthFactor, useMinimumPersons,
+				double? skillValue = valueForActivity(keyValuePair, shiftProjectionCache, lengthFactor, useMinimumPersons,
 												   useMaximumPersons);
 				if (skillValue.HasValue)
 				{
-					if (totalForAllSkillValue.HasValue)
+					if (totalForAllActivitesValue.HasValue)
 					{
-						totalForAllSkillValue = totalForAllSkillValue + skillValue.Value;
+						totalForAllActivitesValue = totalForAllActivitesValue + skillValue.Value;
 					}
 					else
 					{
-						totalForAllSkillValue = skillValue.Value;
+						totalForAllActivitesValue = skillValue.Value;
 					}
 
 				}
 			}
 
-			return totalForAllSkillValue;
+			return totalForAllActivitesValue;
 		}
 	}
 }

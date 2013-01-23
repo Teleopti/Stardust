@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 	public interface IWorkShiftValueCalculator
 	{
 		double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity, IDictionary<TimeSpan, ISkillIntervalData> skillIntervalDatas,
-		                                            WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, double overStaffingFactor, double priorityFactor);
+		                                            WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons);
 	}
 
 	public class WorkShiftValueCalculator : IWorkShiftValueCalculator
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		}
 
 		public double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity, IDictionary<TimeSpan, ISkillIntervalData> skillIntervalDatas,
-		  WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, double overStaffingFactor, double priorityFactor)
+		  WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
 		{
 			if (skillIntervalDatas.Count == 0)
 				return null;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			DateTime shiftStartDate = mainShiftLayers.Period().Value.StartDateTime.Date;
 			foreach (IVisualLayer layer in mainShiftLayers)
 			{
-				IActivity activity = (IActivity) layer.Payload;
+				var activity = (IActivity) layer.Payload;
 				if (activity != skillActivity)
 					continue;
 
@@ -70,8 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 				while (currentResourceInMinutes > 0)
 				{
 					periodValue += _workShiftPeriodValueCalculator.PeriodValue(currentStaffPeriod, currentResourceInMinutes,
-					                                                           useMinimumPersons, useMaximumPersons, overStaffingFactor,
-					                                                           priorityFactor);
+					                                                           useMinimumPersons, useMaximumPersons);
 					resourceInMinutes += currentResourceInMinutes;
 
 					currentResourceInMinutes = resolution;
@@ -97,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			return _workShiftLengthValueCalculator.CalculateShiftValueForPeriod(periodValue, resourceInMinutes, lengthFactor);
 		}
 
-		private static int getResolution(IDictionary<TimeSpan, ISkillIntervalData> staffPeriods)
+		private static int getResolution(IEnumerable<KeyValuePair<TimeSpan, ISkillIntervalData>> staffPeriods)
 		{
 			int resolution = 15;
 			foreach (KeyValuePair<TimeSpan, ISkillIntervalData> pair in staffPeriods)

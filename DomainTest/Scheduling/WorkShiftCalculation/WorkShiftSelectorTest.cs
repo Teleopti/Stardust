@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		private IShiftProjectionCache _shiftProjectionCache1;
 		private IShiftProjectionCache _shiftProjectionCache2;
 		private IDictionary<TimeSpan, ISkillIntervalData> _skillIntervalDatas;
-		private ISkill _skill;
-		private IDictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>> _skillIntervalDataForSkill;
+		private IActivity _activity;
+		private IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> _skillIntervalDataForActivity;
 		private WorkShiftLengthHintOption _lengthHint;
 		private IVisualLayerCollection _visualLayerCollection;
 	    private IEqualWorkShiftValueDecider _equalWorkShiftValueDecider;
@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			_shiftProjectionCache2 = _mocks.StrictMock<IShiftProjectionCache>();
 			_shiftProjectionCaches = new List<IShiftProjectionCache> {_shiftProjectionCache1};
 			_skillIntervalDatas = new Dictionary<TimeSpan, ISkillIntervalData>();
-			_skill = SkillFactory.CreateSkill("skill");
-			_skillIntervalDataForSkill = new Dictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>>();
-			_skillIntervalDataForSkill.Add(_skill, _skillIntervalDatas);
+			_activity = new Activity("hej");
+			_skillIntervalDataForActivity = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+			_skillIntervalDataForActivity.Add(_activity, _skillIntervalDatas);
 			_lengthHint = WorkShiftLengthHintOption.AverageWorkTime;
 			_visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
 		}
@@ -50,16 +50,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			using (_mocks.Record())
 			{
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _skill.Activity,
-				                                                          _skillIntervalDatas, _lengthHint, true, true,
-				                                                          _skill.OverstaffingFactor.Value, _skill.PriorityValue)).Return(7);
+				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
+				                                                          _skillIntervalDatas, _lengthHint, true, true)).Return(7);
 			}
 
 			IShiftProjectionCache result;
 
 			using (_mocks.Playback())
 			{
-				result = _target.Select(_shiftProjectionCaches, _skillIntervalDataForSkill, _lengthHint, true, true);
+				result = _target.Select(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true);
 			}
 
 			Assert.IsNotNull(result);
@@ -73,55 +72,50 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			using (_mocks.Record())
 			{
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _skill.Activity,
-																		  _skillIntervalDatas, _lengthHint, true, true,
-																		  _skill.OverstaffingFactor.Value, _skill.PriorityValue)).Return(7);
+				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
+																		  _skillIntervalDatas, _lengthHint, true, true)).Return(7);
 
 				Expect.Call(_shiftProjectionCache2.MainShiftProjection).Return(_visualLayerCollection);
-				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _skill.Activity,
-																		  _skillIntervalDatas, _lengthHint, true, true,
-																		  _skill.OverstaffingFactor.Value, _skill.PriorityValue)).Return(8);
+				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
+																		  _skillIntervalDatas, _lengthHint, true, true)).Return(8);
 
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _skill.Activity,
-																		  _skillIntervalDatas, _lengthHint, true, true,
-																		  _skill.OverstaffingFactor.Value, _skill.PriorityValue)).Return(7);
+				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
+																		  _skillIntervalDatas, _lengthHint, true, true)).Return(7);
 			}
 
 			IShiftProjectionCache result;
 
 			using (_mocks.Playback())
 			{
-				result = _target.Select(_shiftProjectionCaches, _skillIntervalDataForSkill, _lengthHint, true, true);
+				result = _target.Select(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true);
 			}
 
 			Assert.AreSame(_shiftProjectionCache2, result);
 		}
 
 		[Test]
-		public void ShouldCheckAllSkills()
+		public void ShouldCheckAllActivites()
 		{
-			ISkill otherSkill = SkillFactory.CreateSkill("otherSkill");
-			_skillIntervalDataForSkill.Add(otherSkill, _skillIntervalDatas);
+			IActivity otherActivity = new Activity("other");
+			_skillIntervalDataForActivity.Add(otherActivity, _skillIntervalDatas);
 
 			using (_mocks.Record())
 			{
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _skill.Activity,
-																		  _skillIntervalDatas, _lengthHint, true, true,
-																		  _skill.OverstaffingFactor.Value, _skill.PriorityValue)).Return(2);
+				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
+																		  _skillIntervalDatas, _lengthHint, true, true)).Return(2);
 
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, otherSkill.Activity,
-																		  _skillIntervalDatas, _lengthHint, true, true,
-																		  otherSkill.OverstaffingFactor.Value, otherSkill.PriorityValue)).Return(3);
+				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, otherActivity,
+																		  _skillIntervalDatas, _lengthHint, true, true)).Return(3);
 			}
 
 			IShiftProjectionCache result;
 
 			using (_mocks.Playback())
 			{
-				result = _target.Select(_shiftProjectionCaches, _skillIntervalDataForSkill, _lengthHint, true, true);
+				result = _target.Select(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true);
 			}
 
 			Assert.IsNotNull(result);
@@ -130,27 +124,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		[Test]
 		public void ShouldReturnNullIfNoShiftValueOnAnySkill()
 		{
-			ISkill otherSkill = SkillFactory.CreateSkill("otherSkill");
-			_skillIntervalDataForSkill.Add(otherSkill, _skillIntervalDatas);
+			IActivity otherActivity = new Activity("other");
+			_skillIntervalDataForActivity.Add(otherActivity, _skillIntervalDatas);
 
 			using (_mocks.Record())
 			{
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _skill.Activity,
-																		  _skillIntervalDatas, _lengthHint, true, true,
-																		  _skill.OverstaffingFactor.Value, _skill.PriorityValue)).Return(null);
+				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
+																		  _skillIntervalDatas, _lengthHint, true, true)).Return(null);
 
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, otherSkill.Activity,
-																		  _skillIntervalDatas, _lengthHint, true, true,
-																		  otherSkill.OverstaffingFactor.Value, otherSkill.PriorityValue)).Return(null);
+				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, otherActivity,
+																		  _skillIntervalDatas, _lengthHint, true, true)).Return(null);
 			}
 
 			IShiftProjectionCache result;
 
 			using (_mocks.Playback())
 			{
-				result = _target.Select(_shiftProjectionCaches, _skillIntervalDataForSkill, _lengthHint, true, true);
+				result = _target.Select(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true);
 			}
 
 			Assert.IsNull(result);

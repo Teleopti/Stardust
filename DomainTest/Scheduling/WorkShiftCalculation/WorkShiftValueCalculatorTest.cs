@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			double? result =_target.CalculateShiftValue(visualLayerCollection, new Activity("phone"),
 										new Dictionary<TimeSpan, ISkillIntervalData>(), WorkShiftLengthHintOption.AverageWorkTime,
-			                            false, false, 0.5, 1);
+			                            false, false);
 			Assert.IsNull(result);
 		}
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 20, false, false, 0.5, 1)).Return(50);
+				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 20, false, false)).Return(50);
 				Expect.Call(_workShiftLengthValueCalculator.CalculateShiftValueForPeriod(50, 20,
 				                                                                         WorkShiftLengthHintOption.AverageWorkTime))
 					.Return(50);
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			{
 				double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
 										_dic, WorkShiftLengthHintOption.AverageWorkTime,
-										false, false, 0.5, 1);
+										false, false);
 				Assert.AreEqual(50, result);
 			}
 		}
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 30, false, false, 0.5, 1)).Return(50);
+				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 30, false, false)).Return(50);
 				Expect.Call(_workShiftLengthValueCalculator.CalculateShiftValueForPeriod(50, 30,
 																						 WorkShiftLengthHintOption.AverageWorkTime))
 					.Return(50);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			{
 				double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
 										_dic, WorkShiftLengthHintOption.AverageWorkTime,
-										false, false, 0.5, 1);
+										false, false);
 				Assert.AreEqual(50, result);
 			}
 		}
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			{
 				double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
 										_dic, WorkShiftLengthHintOption.AverageWorkTime,
-										false, false, 0.5, 1);
+										false, false);
 				Assert.IsNull(result);
 			}
 		}
@@ -131,14 +131,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 25, false, false, 0.5, 1)).Return(50);
+				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 25, false, false)).Return(50);
 			}
 
 			using (_mocks.Playback())
 			{
 				double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
 										_dic, WorkShiftLengthHintOption.AverageWorkTime,
-										false, false, 0.5, 1);
+										false, false);
 				Assert.IsNull(result);
 			}
 		}
@@ -155,8 +155,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 1, false, false, 0.5, 1)).Return(5);
-				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 2, false, false, 0.5, 1)).Return(7);
+				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 1, false, false)).Return(5);
+				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 2, false, false)).Return(7);
 				Expect.Call(_workShiftLengthValueCalculator.CalculateShiftValueForPeriod(12, 3,
 																						 WorkShiftLengthHintOption.AverageWorkTime))
 					.Return(50);
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			{
 				double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
 										_dic, WorkShiftLengthHintOption.AverageWorkTime,
-										false, false, 0.5, 1);
+										false, false);
 				Assert.AreEqual(50, result);
 			}
 		}
@@ -184,8 +184,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 15, false, false, 0.5, 1)).Return(50);
-				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(data2, 20, false, false, 0.5, 1)).Return(50);
+				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 15, false, false)).Return(50);
+				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(data2, 20, false, false)).Return(50);
 				Expect.Call(_workShiftLengthValueCalculator.CalculateShiftValueForPeriod(100, 35,
 																						 WorkShiftLengthHintOption.AverageWorkTime))
 					.Return(100);
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			{
 				double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
 										_dic, WorkShiftLengthHintOption.AverageWorkTime,
-										false, false, 0.5, 1);
+										false, false);
 				Assert.AreEqual(100, result);
 			}
 		}
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 10, false, false, 0.5, 1)).Return(50);
+				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 10, false, false)).Return(50);
 				Expect.Call(_workShiftLengthValueCalculator.CalculateShiftValueForPeriod(50, 10,
 																						 WorkShiftLengthHintOption.AverageWorkTime))
 					.Return(100);
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			{
 				double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
 										_dic, WorkShiftLengthHintOption.AverageWorkTime,
-										false, false, 0.5, 1);
+										false, false);
 				Assert.AreEqual(100, result);
 			}
 		}
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			{
 				double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
 										_dic, WorkShiftLengthHintOption.AverageWorkTime,
-										false, false, 0.5, 1);
+										false, false);
 				Assert.AreEqual(0, result);
 			}
 		}
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			{
 				double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
 										_dic, WorkShiftLengthHintOption.AverageWorkTime,
-										false, false, 0.5, 1);
+										false, false);
 				Assert.AreEqual(0, result);
 			}
 		}
@@ -298,8 +298,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(data1, 60, false, false, 0.5, 1)).Return(5);
-				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(data2, 60, false, false, 0.5, 1)).Return(7);
+				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(data1, 60, false, false)).Return(5);
+				Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(data2, 60, false, false)).Return(7);
 				Expect.Call(_workShiftLengthValueCalculator.CalculateShiftValueForPeriod(12, 120,
 																						 WorkShiftLengthHintOption.AverageWorkTime))
 					.Return(50);
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			{
 				double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
 										_dic, WorkShiftLengthHintOption.AverageWorkTime,
-										false, false, 0.5, 1);
+										false, false);
 				Assert.AreEqual(50, result);
 			}
 		}
