@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.Sdk.ServiceBus;
 
@@ -140,10 +141,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
 			var timeFirstFile = PayrollDllCopy.CopiedFiles[path];
 			File.Delete(path);
+			Thread.Sleep(500);
 			File.Create(path).Dispose();
 			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
 			var timeSecondFile = PayrollDllCopy.CopiedFiles[path];
-			Assert.That(timeFirstFile, Is.Not.EqualTo(timeSecondFile));
+			Assert.That(timeFirstFile.Ticks, Is.Not.EqualTo(timeSecondFile.Ticks));
 		}
 	}
 }
