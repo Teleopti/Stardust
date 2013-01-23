@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
@@ -9,14 +8,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 {
 	public static class PayrollDllCopy
 	{
-		private static readonly Dictionary<string, DateTime> copiedFiles = new Dictionary<string, DateTime>();
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ServiceBusRunner));
-
-		public static Dictionary<string, DateTime> CopiedFiles
-		{
-			get { return copiedFiles; }
-		}
-
+		
 		public static void CopyPayrollDll()
 		{
 			try
@@ -91,11 +84,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					Log.Info(string.Format("Copying {0} to {1}", file, fileDestination));
 					File.Copy(file, fileDestination, true);
 				}
-
-				if (copiedFiles.ContainsKey(fileInfo.FullName))
-					copiedFiles[fileInfo.FullName] = fileInfo.LastWriteTimeUtc;
-				else
-					copiedFiles.Add(fileInfo.FullName, fileInfo.LastWriteTimeUtc);
 			}
 		}
 
