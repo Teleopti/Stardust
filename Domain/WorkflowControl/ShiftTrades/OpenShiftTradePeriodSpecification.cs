@@ -5,11 +5,18 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
 	public class OpenShiftTradePeriodSpecification : Specification<ShiftTradeAvailableCheckItem>, IShiftTradeLightSpecification
 	{
+		private readonly INow _now;
+
+		public OpenShiftTradePeriodSpecification(INow now)
+		{
+			_now = now;
+		}
+
 		public override bool IsSatisfiedBy(ShiftTradeAvailableCheckItem obj)
 		{
 			if (obj.PersonFrom.WorkflowControlSet == null || obj.PersonTo.WorkflowControlSet == null)
 				return false;
-			var currentDate = DateOnly.Today;
+			var currentDate = _now.DateOnly();
 			var openPeriodFrom =
 				 new DateOnlyPeriod(
 					  currentDate.AddDays(obj.PersonFrom.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum),
