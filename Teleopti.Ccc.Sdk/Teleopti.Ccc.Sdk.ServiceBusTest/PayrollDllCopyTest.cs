@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -12,8 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 	{
 		private string _source;
 		private string _destination;
-		private string[] _originalDeployFiles;
-		private string[] _originalPayrollFiles;
+		private List<string> _originalFiles;
 		
 		[SetUp]
 		public void Setup()
@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			                           + "\\Teleopti.Ccc.Sdk.ServiceBus.Host\\bin\\Debug\\Payroll.DeployNew\\");
 			_destination = Path.GetFullPath(Environment.CurrentDirectory + "\\..\\" + "\\..\\" + "\\..\\"
 			                                + "\\Teleopti.Ccc.Sdk.ServiceBus.Host\\bin\\Debug\\Payroll\\");
-
-			_originalDeployFiles = Directory.GetFiles(_source, "*.*", SearchOption.AllDirectories);
-			_originalPayrollFiles = Directory.GetFiles(_destination, "*.*", SearchOption.AllDirectories);
+			_originalFiles = new List<string>();
+			_originalFiles.AddRange(Directory.GetFiles(_source, "*.*", SearchOption.AllDirectories));
+			_originalFiles.AddRange(Directory.GetFiles(_destination, "*.*", SearchOption.AllDirectories));
 			
 			Teardown();
 			
@@ -53,45 +53,45 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		{
 			RemoveAllFiles(_source);
 			RemoveAllFiles(_destination);
-			PayrollDllCopy.CopiedFiles.Clear();
 		}
 
 		private void RemoveAllFiles(string path)
 		{
-
-			foreach (var folder in Directory.GetDirectories(path).Where(f => !f.EndsWith("Teleopti CCC", StringComparison.OrdinalIgnoreCase)))
+			foreach (var folder in Directory.GetDirectories(path).Where(f => !_originalFiles.Contains(f)))
 			{
 				foreach (
 					var file in
-						Directory.GetFiles(folder).Where(file => !_originalDeployFiles.Contains(file)).Where(
-							file => !_originalPayrollFiles.Contains(file)))
+						Directory.GetFiles(folder).Where(f => !_originalFiles.Contains(f)))
 					File.Delete(file);
 				if (!Directory.GetFiles(folder).Any())
 					Directory.Delete(folder);
 			}
-			foreach (var file in Directory.GetFiles(path).Where(file => !_originalDeployFiles.Contains(file)).Where(
-				file => !_originalPayrollFiles.Contains(file)))
+			foreach (var file in Directory.GetFiles(path).Where(f => !_originalFiles.Contains(f)))
 				File.Delete(file);
 		}
 
-
-		[Test]
-		public void ShouldReturnList()
+		private IEnumerable<string> CopiedFiles()
 		{
-			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
-			Assert.That(PayrollDllCopy.CopiedFiles.Count, Is.EqualTo(6 + _originalDeployFiles.Count()));
+			var copiedFiles = new List<string>();
+			var filesInTopFolder = Directory.GetFiles(_destination).Where(f => !_originalFiles.Contains(f)).ToList();
+			if (filesInTopFolder.Any())
+				copiedFiles.AddRange(filesInTopFolder);
+
+			copiedFiles.AddRange(
+				Directory.GetDirectories(_destination)
+				.SelectMany(folder => Directory.GetFiles(folder)
+					.Where(f => !_originalFiles.Contains(f))));
+
+			return copiedFiles;
 		}
 
 		[Test]
 		public void ShouldCopyXmlAndSettingsFileToPayroll()
 		{
 			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
-			var copiedFilesWithoutOriginal =
-				PayrollDllCopy.CopiedFiles.Where(
-					file => !_originalPayrollFiles.Contains(file.Key) && !_originalDeployFiles.Contains(file.Key)).ToList();
-			var xmlFile = copiedFilesWithoutOriginal.Single(x => x.Key.EndsWith(".xml", StringComparison.OrdinalIgnoreCase)).Key;
+			var xmlFile = CopiedFiles().Single(x => x.EndsWith(".xml", StringComparison.OrdinalIgnoreCase));
 			var xmlFileInfo = new FileInfo(xmlFile);
-			var settingsFile = copiedFilesWithoutOriginal.Single(x => x.Key.EndsWith(".settings", StringComparison.OrdinalIgnoreCase)).Key;
+			var settingsFile = CopiedFiles().Single(x => x.EndsWith(".settings", StringComparison.OrdinalIgnoreCase));
 			var settingsFileInfo = new FileInfo(settingsFile);
 			Assert.That(File.Exists(Path.GetFullPath(_destination + xmlFileInfo.Name)), Is.True);
 			Assert.That(File.Exists(Path.GetFullPath(_destination + settingsFileInfo.Name)), Is.True);
@@ -101,11 +101,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		public void ShouldHaveSameDllFileStructure()
 		{
 			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
-			foreach (var path in PayrollDllCopy.CopiedFiles
-				.Where(x => x.Key.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
-				.Select(k => k.Key)
+			foreach (var path in CopiedFiles()
+				.Where(x => x.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
 				.Select(file => new FileInfo(file))
-				.Select(fileInfo => fileInfo.Directory.Name + "\\" + fileInfo.Name))
+				.Select(fileInfo => fileInfo.Directory != null ? fileInfo.Directory.Name + "\\" + fileInfo.Name : null))
 				Assert.That(File.Exists(Path.GetFullPath(_destination + path)), Is.True);
 		}
 
@@ -130,22 +129,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
 			file.Dispose();
 			Assert.That(!File.Exists(_destination + guid));
-		}
-
-		[Test]
-		public void ShouldNotCopyFileTwice()
-		{
-			Teardown();
-			var path = _source + Guid.NewGuid() + ".dll";
-			File.Create(path).Dispose();
-			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
-			var timeFirstFile = PayrollDllCopy.CopiedFiles[path];
-			File.Delete(path);
-			Thread.Sleep(500);
-			File.Create(path).Dispose();
-			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
-			var timeSecondFile = PayrollDllCopy.CopiedFiles[path];
-			Assert.That(timeFirstFile.Ticks, Is.Not.EqualTo(timeSecondFile.Ticks));
 		}
 	}
 }
