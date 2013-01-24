@@ -24,58 +24,59 @@ function ServiceCheckAndStart{
 ## Main
 ##===========
 $TeleoptiServiceBus = "Teleopti Service Bus"
-
-##test if admin
-$isAdmin = Test-Administrator;
-If ($isAdmin -ne $True) {
-    throw "User is not Admin!"
-}
-
-## Name of the job, name of source in Windows Event Log
-$JOB = "Teleopti.Ccc.BlobStorageCopy"
-
-## Local debug values
-<#
-$BlobPath = "http://teleopticcc7.blob.core.windows.net/"
-$ContainerName="teleopticcc/Payroll"
-$AccountKey = "IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ=="
-$DataSourceName = "teleopticcc-dev"
-#>
-
-## Get environment varaibles
-$BlobPath = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.BlobPath")
-$ContainerName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.ContainerName")
-$AccountKey = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.AccountKey")
-$DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
-
-$BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
-$BlobSource
-
-
-## Destination directory. Files in this directory will mirror the source directory. Extra files will be deleted!
-$DESTINATION = "c:\temp\PayrollInbox"
-if (-not(test-path -path $DESTINATION))
-{
-    mkdir $DESTINATION
-}
-
-## FileWatch destination directory
-$FILEWATCH = $directory + "\..\Services\ServiceBus\Payroll.DeployNew"
-
-## Options to be added to AzCopy
-$OPTIONS = @("/S","/XO","/Y","/sourceKey:$AccountKey")
-
-## Options to be added to RoboCopy
-$ROBOOPTIONS = @("/MIR")
-
-## Wrap all above arguments
-$cmdArgs = @("$BlobSource","$DESTINATION",$OPTIONS)
-
-$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
-$AzCopyExe
-
+$computer = gc env:computername
 Try
 {
+	##test if admin
+	$isAdmin = Test-Administrator;
+	If ($isAdmin -ne $True) {
+		throw "User is not Admin!"
+	}
+
+	## Name of the job, name of source in Windows Event Log
+	$JOB = "Teleopti.Ccc.BlobStorageCopy"
+
+	if ($computer.ToUpper().StartsWith("TELEOPTI")) {
+    ## Local debug values
+	$BlobPath = "http://teleopticcc7.blob.core.windows.net/"
+	$ContainerName="teleopticcc/Payroll"
+	$AccountKey = "IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ=="
+	$DataSourceName = "teleopticcc-dev"
+    }
+    else {
+    ## Get environment varaibles
+	$BlobPath = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.BlobPath")
+	$ContainerName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.ContainerName")
+	$AccountKey = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.AccountKey")
+	$DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
+    }
+
+	$BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
+	$BlobSource
+
+
+	## Destination directory. Files in this directory will mirror the source directory. Extra files will be deleted!
+	$DESTINATION = "c:\temp\PayrollInbox"
+	if (-not(test-path -path $DESTINATION))
+	{
+		mkdir $DESTINATION
+	}
+
+	## FileWatch destination directory
+	$FILEWATCH = $directory + "\..\Services\ServiceBus\Payroll.DeployNew"
+
+	## Options to be added to AzCopy
+	$OPTIONS = @("/S","/XO","/Y","/sourceKey:$AccountKey")
+
+	## Options to be added to RoboCopy
+	$ROBOOPTIONS = @("/MIR")
+
+	## Wrap all above arguments
+	$cmdArgs = @("$BlobSource","$DESTINATION",$OPTIONS)
+
+	$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
+	$AzCopyExe
+
         
 	## Create EventLog Source if not already exists
 	if ([System.Diagnostics.EventLog]::SourceExists("$JOB") -eq $false) {
@@ -117,7 +118,7 @@ Catch [Exception]
 {
     $ErrorMessage = $_.Exception.Message
     Write-EventLog -LogName Application -Source $JOB -EventID 1 -EntryType Error -Message "$ErrorMessage"
-    Break
+	Throw "Script failed, Check Windows event log for detils"
 }
 Finally
 {
