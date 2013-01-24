@@ -97,7 +97,25 @@ namespace Teleopti.Ccc.Win.Shifts
                         if (_navigationView.DefaultTreeView.SelectedNodes != null)
                             toolStripButtonAddRuleSet.Enabled = _navigationView.DefaultTreeView.SelectedNodes.Count > 0;
                     };
-        }
+			KeyDown += WorkShiftsExplorer_KeyDown;
+			KeyPress += WorkShiftsExplorer_KeyPress;
+		}
+
+		void WorkShiftsExplorer_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyValue.Equals(32))
+			{
+				e.Handled = true;
+			}
+		}
+
+		void WorkShiftsExplorer_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar.Equals((Char)Keys.Space))
+			{
+				e.Handled = true;
+			}
+		}
 
         private void createAndAddViews()
         {
@@ -129,6 +147,8 @@ namespace Teleopti.Ccc.Win.Shifts
             _editControl.NewSpecialItems.Clear();
             _editControl.Dispose();
             _editControl = null;
+			KeyDown -= WorkShiftsExplorer_KeyDown;
+			KeyPress -= WorkShiftsExplorer_KeyPress;
         }
 
         private void splitContainerAdvHorizontalPanel1Resize(object sender, EventArgs e)
