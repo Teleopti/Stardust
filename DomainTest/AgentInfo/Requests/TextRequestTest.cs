@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         {
             target.Deny(null);
             Assert.IsNotNull(target);
-            Assert.AreEqual("TextRequestHasBeenDeniedDot", target.TextForNotification);
+            Assert.AreEqual(UserTexts.Resources.TextRequestHasBeenDeniedDot, target.TextForNotification);
         }
 
         [Test]
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             PersonRequest personRequest = new PersonRequest(person, target);
             personRequest.Pending();
             personRequest.Approve(approvalService,authorization);
-            Assert.AreEqual("TextRequestHasBeenApprovedDot", target.TextForNotification);
+            Assert.AreEqual(UserTexts.Resources.TextRequestHasBeenApprovedDot, target.TextForNotification);
             mocks.VerifyAll();
         }
 
