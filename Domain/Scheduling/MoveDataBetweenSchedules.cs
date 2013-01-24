@@ -26,6 +26,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 sourceData.Clear<IExportToAnotherScenario>();
                 foreach (var dataToExport in part.PersistableScheduleDataCollection().OfType<IExportToAnotherScenario>())
                 {
+					// bug #22073, the part contains PersonsAbsence for the next day too, for some reason, so we skip them
+					if(dataToExport is PersonAbsence && !dataToExport.Period.Intersect(part.Period))
+						continue;
                     var clonedWithNewParameters = dataToExport.CloneAndChangeParameters(sourceData);
                     sourceData.Add(clonedWithNewParameters);                        
                 }
