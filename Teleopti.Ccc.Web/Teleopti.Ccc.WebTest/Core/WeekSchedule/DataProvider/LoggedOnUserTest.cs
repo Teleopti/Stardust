@@ -47,21 +47,5 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 
 			result.Should().Be.Null();
 		}
-
-		[Test]
-		public void ShouldGetMyTeam()
-		{
-			var person = PersonFactory.CreatePerson();
-			var team = new Team();
-			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, team));
-			FakeCurrentTeleoptiPrincipal(person);
-			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			personRepository.Stub(x => x.Get(Arg<Guid>.Is.NotNull)).Return(person);
-			var target = new LoggedOnUser(personRepository, FakeCurrentTeleoptiPrincipal(person));
-
-			var result = target.MyTeam(DateOnly.Today);
-
-			result.Should().Be.EqualTo(team);
-		}
 	}
 }

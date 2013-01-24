@@ -20,10 +20,5 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 			var pricipal = _currentTeleoptiPrincipal.Current();
 			return pricipal == null ? null : pricipal.GetPerson(_personRepository);
 		}
-
-		public ITeam MyTeam(DateOnly date)
-		{
-			return CurrentUser().MyTeam(date);
-		}
 	}
 }
