@@ -110,10 +110,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                 Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkillList);
                 Expect.Call(_personSkill.Skill).Return(_skill);
                 Expect.Call(_workShiftFilterService.Filter(dateOnly, _person, matrixList, _effectiveRestriction,
-                                                           _schedulingOptions, _possibleStartEndCategory)).
+                                                           _schedulingOptions)).
                     IgnoreArguments().Return(shiftProjectionCacheList);
-                Expect.Call(_workShiftSelector.Select(shiftProjectionCacheList,
-                                                      new Dictionary<ISkill, IDictionary<TimeSpan, ISkillIntervalData>>(),
+                Expect.Call(_workShiftSelector.Select(shiftProjectionCacheList, new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>(), 
                                                       _schedulingOptions.WorkShiftLengthHintOption,
                                                       _schedulingOptions.UseMinimumPersons,
                                                       _schedulingOptions.UseMaximumPersons)).IgnoreArguments().Return(_scheduleProjectionCache ) ;
