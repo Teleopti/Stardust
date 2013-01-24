@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule<ShiftTradeModule>();
+			containerBuilder.RegisterModule<DateAndTimeModule>();
+			containerBuilder.RegisterModule<AuthenticationModule>();
 			containerBuilder.RegisterType<SchedulingResultStateHolder>().As<ISchedulingResultStateHolder>();
 		}
 
