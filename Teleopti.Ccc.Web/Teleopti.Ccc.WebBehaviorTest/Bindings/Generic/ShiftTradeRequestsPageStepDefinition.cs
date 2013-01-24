@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
 			Pages.Pages.RequestsPage.ShiftTradeRequestsButton.EventualClick();
+			EventualAssert.That(() => Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text, Is.EqualTo("shift trade schedule loaded"));
 		}
 
 		[When(@"I view Add Shift Trade Request for date '(.*)'")]
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');",
 			                           date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE")));
 			Browser.Current.Eval(script);
+			EventualAssert.That(() => Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text, Is.EqualTo("shift trade schedule loaded"));
 		}
 
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
@@ -80,7 +82,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.Any(), Is.True);
 
 			Span firstHour = Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.First().EventualGet();
-			Span alternativeFirstHour = Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems[2].EventualGet();
+			Span alternativeFirstHour = Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems[1].EventualGet();
 			if (string.IsNullOrEmpty(firstHour.Text))
 				firstHour = alternativeFirstHour;
 
@@ -93,5 +95,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeDatePicker.Parent.DisplayVisible(), Is.False);
 		}
+
+		[Then(@"I should see my scheduled day off '(.*)'")]
+		public void ThenIShouldSeeMyScheduledDayOff(string dayOffName)
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.Count, Is.EqualTo(1));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.First().Span(Find.First()).Text, Is.EqualTo(dayOffName));
+		}
+
 	}
 }

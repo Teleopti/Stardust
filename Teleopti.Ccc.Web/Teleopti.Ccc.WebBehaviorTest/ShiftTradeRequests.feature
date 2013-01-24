@@ -16,15 +16,12 @@ Background:
 	| Name  |
 	| Day   |
 	| Late   |
-	#And there is a dayoff with
-	#| Field | Value  |
-	#| Name  | DayOff |
+	And there is a dayoff with
+	| Field | Value  |
+	| Name  | DayOff |
 	And there is an absence with
 	| Field | Value   |
 	| Name  | Vacation |
-	#And there is a skill with
-	#| Field | Value   |
-	#| Name  | Skill 1 |
 	And there is a workflow control set with
 	| Field                            | Value                                     |
 	| Name                             | Trade from tomorrow until 30 days forward |
@@ -39,28 +36,6 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |	
-	#And I have a shift with
-	#| Field                 | Value            |
-	#| StartTime             | 2030-01-01 06:00 |
-	#| EndTime               | 2030-01-01 16:00 |
-	#| Shift category		| Day	           |
-	#| Lunch3HoursAfterStart | true             |
-	#And an agent has a workflow control set with
-	#| Field                      | Value              |
-	#| Agent name                 | Other agent 1      |
-	#| Name                       | Published schedule |
-	#| Schedule published to date | 2040-06-24         |
-	#And an agent has a schedule period with 
-	#| Field      | Value         |
-	#| Agent name | Other agent 1 |
-	#| Start date | 2012-06-18    |
-	#| Type       | Week          |
-	#| Length     | 1		     |
-	#And an agent has a person period with 
-	#| Field      | Value         |
-	#| Agent name | Other agent 1 |
-	#| Start date | 2012-06-18    |
-	#| Skill      | Skill 1       |
 	
 Scenario: No access to make shift trade reuquests
 	Given I have the role 'No access to Shift Trade'
@@ -133,7 +108,7 @@ Scenario: Show my full day absence
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a absence with
 	| Field		| Value            |
-	| Absence   | Vacation         |
+	| Name      | Vacation         |
 	| StartTime | 2030-01-02 00:00 |
 	| EndTime   | 2030-01-02 23:59 |
 	And Current time is '2030-01-01'
@@ -146,75 +121,14 @@ Scenario: Show my full day absence
 Scenario: Show my scheduled day off
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I have a day off with
+	And 'I' have a day off with
 	| Field | Value      |
-	| Date  | 2030-01-04 |
 	| Name  | DayOff     |
+	| Date  | 2030-01-04 |
 	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request for date '2030-01-04'
 	Then I should see my scheduled day off 'DayOff'
 	And I should see the time line hours span from '8' to '17'
-
-@ignore
-Scenario: One possible shift to trade with because shift trade periods match
-	Given I have the role 'Full access to mytime'
-	And Current time is '2029-12-29'
-	And I can do shift trades between '2030-01-01' and '2030-01-17'
-	And another agent named 'Other agent 1' can do shift trades between '2030-01-01' and '2030-01-17'
-	And an agent has a shift with
-	| Field                 | Value            |
-	| Agent name            | Other agent 1    |
-	| StartTime             | 2030-01-01 10:00 |
-	| EndTime               | 2030-01-01 20:00 |
-	| Shift category		| Late	           |
-	| Lunch3HoursAfterStart | true             |
-	When I navigate to shift trade page
-	Then I should have one possible shift to trade with
-
-@ignore
-Scenario: Not possible to trade shift because no matching skills
-	Given I have the role 'Full access to mytime'
-	And Current time is '2029-12-29'
-	And I can do shift trades between '2030-01-01' and '2030-01-17'
-	And another agent named 'Other agent 1' can do shift trades between '2030-01-01' and '2030-01-17'
-	And an agent has a shift with
-	| Field                 | Value            |
-	| Agent name            | Other agent 1    |
-	| StartTime             | 2030-01-01 10:00 |
-	| EndTime               | 2030-01-01 20:00 |
-	| Shift category		| Late	           |
-	| Lunch3HoursAfterStart | true             |
-	And I have a updated workflow control set with
-	| Field                      | Value              |
-	| Name                       | Published schedule |
-	| Shift trade matching skill | Skill 1            |
-	When I navigate to shift trade page
-	Then I should see a user-friendly message explaining that shift trades cannot be made
-
-@ignore
-Scenario: One possible shift to trade with because shift trade periods and skills are matching
-	Given I have the role 'Full access to mytime'
-	And Current time is '2029-12-29'
-	And I can do shift trades between '2030-01-01' and '2030-01-17'
-	And another agent named 'Other agent 1' can do shift trades between '2030-01-01' and '2030-01-17'
-	And an agent has a shift with
-	| Field                 | Value            |
-	| Agent name            | Other agent 1    |
-	| StartTime             | 2030-01-01 10:00 |
-	| EndTime               | 2030-01-01 20:00 |
-	| Shift category		| Late	           |
-	| Lunch3HoursAfterStart | true             |
-	And I have a updated workflow control set with
-	| Field                      | Value              |
-	| Name                       | Published schedule |
-	| Shift trade matching skill | Skill 1            |
-	And an agent has a updated workflow control set with
-	| Field                      | Value              |
-	| Agent name                 | Other agent 1      |
-	| Name                       | Published schedule |
-	| Shift trade matching skill | Skill 1            |
-	When I navigate to shift trade page
-	Then I should have one possible shift to trade with
 
 @ignore
 Scenario: View shift trade request details

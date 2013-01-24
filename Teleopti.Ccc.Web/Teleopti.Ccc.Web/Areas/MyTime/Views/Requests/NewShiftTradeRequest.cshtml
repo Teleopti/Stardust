@@ -1,5 +1,6 @@
 ﻿@using Teleopti.Ccc.UserTexts
 <div id="Request-add-shift-trade" class="shift-trade-add-canvas ui-corner-all">
+	<span id="Request-add-loaded-date" style="display: none"></span>
 	<div id="Request-add-shift-trade-missing-wcs-message" class="friendly-message ui-corner-all" data-bind="visible : missingWorkflowControlSet">
 		@Resources.MissingWorkflowControlSet
 	</div>
@@ -17,7 +18,9 @@
 		<div class="shift-trade-my-schedule-row">
 			<span style="width: 150px; float: left" data-bind="text: mySchedule().agentName"></span>
 			<div class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
-				<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
+				<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}">
+					<span class="shift-trade-dayoff-name" data-bind="visible: isDayOff, text: dayOffName"></span>
+				</span>
 			</div>
 		</div>
 		<div data-bind="foreach: possibleTradeSchedules">

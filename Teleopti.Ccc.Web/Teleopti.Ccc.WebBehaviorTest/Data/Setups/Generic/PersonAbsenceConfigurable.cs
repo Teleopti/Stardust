@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 {
 	public class PersonAbsenceConfigurable : IUserDataSetup
 	{
-		public string Absence { get; set; }
+		public string Name { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var absence = new AbsenceRepository(uow).LoadAll().Single(abs => abs.Description.Name.Equals(Absence));
+			var absence = new AbsenceRepository(uow).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
 			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
 			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
 
