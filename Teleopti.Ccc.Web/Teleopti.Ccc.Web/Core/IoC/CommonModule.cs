@@ -44,8 +44,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerRequestContextTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>();
-			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>();
 			builder.RegisterType<SessionPrincipalFactory>().As<ISessionPrincipalFactory>();
 			builder.RegisterType<IdentityProvider>().As<IIdentityProvider>();
 			builder.RegisterType<RequestContextInitializer>().As<IRequestContextInitializer>();
