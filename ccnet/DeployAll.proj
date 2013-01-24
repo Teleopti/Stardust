@@ -282,7 +282,8 @@
 			Include=
 	"$(CCNetWorkingDirectory)\Cube\Xmla\**\*.*;
 	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Microsoft.AnalysisServices.AdomdClient.dll"
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Microsoft.AnalysisServices.AdomdClient.dll;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Microsoft.AnalysisServices.dll"
 	/>
 
 			<!-- Database -->
