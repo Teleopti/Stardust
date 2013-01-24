@@ -31,7 +31,7 @@ ECHO SVCLOGIN is: %SVCLOGIN%
 
 ECHO.
 ECHO Call was:
-ECHO EsentPermissions.bat "%WindowsNT%" "%SPLevel%" "%IISVersion%" "%SVCLOGIN%"
+ECHO Permissions.bat "%WindowsNT%" "%SPLevel%" "%IISVersion%" "%SVCLOGIN%"
 
 ::Get path to this batchfile
 SET SDKPath=%~dp0
