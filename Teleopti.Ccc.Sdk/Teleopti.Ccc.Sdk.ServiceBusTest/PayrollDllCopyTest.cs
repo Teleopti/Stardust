@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			foreach (var path in CopiedFiles()
 				.Where(x => x.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
 				.Select(file => new FileInfo(file))
-				.Select(fileInfo => fileInfo.Directory != null ? fileInfo.Directory.Name + "\\" + fileInfo.Name : null))
+				.Select(fileInfo => fileInfo.Directory != null ? fileInfo.Directory.Name + "\\" + fileInfo.Name : "\\"))
 				Assert.That(File.Exists(Path.GetFullPath(_destination + path)), Is.True);
 		}
 
