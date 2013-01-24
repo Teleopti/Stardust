@@ -68,7 +68,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                     setColor();
                 }
             }
-        }
+			KeyPreview = true;
+			KeyDown += Form_KeyDown;
+			KeyPress += Form_KeyPress;
+		}
+
+		void Form_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyValue.Equals(32))
+			{
+				e.Handled = true;
+			}
+		}
+
+		void Form_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar.Equals((Char)Keys.Space))
+			{
+				e.Handled = true;
+			}
+		}
 
     	static void ribbonControlAdv1BeforeContextMenuOpen(object sender, ContextMenuEventArgs e)
 		{
