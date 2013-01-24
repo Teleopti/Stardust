@@ -16,9 +16,9 @@ Background:
 	| Name  |
 	| Day   |
 	| Late   |
-	#And there is a dayoff with
-	#| Field | Value  |
-	#| Name  | DayOff |
+	And there is a dayoff with
+	| Field | Value  |
+	| Name  | DayOff |
 	And there is an absence with
 	| Field | Value   |
 	| Name  | Vacation |
@@ -108,7 +108,7 @@ Scenario: Show my full day absence
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a absence with
 	| Field		| Value            |
-	| Absence   | Vacation         |
+	| Name      | Vacation         |
 	| StartTime | 2030-01-02 00:00 |
 	| EndTime   | 2030-01-02 23:59 |
 	And Current time is '2030-01-01'
@@ -121,14 +121,14 @@ Scenario: Show my full day absence
 Scenario: Show my scheduled day off
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I have a day off with
+	And 'I' have a day off with
 	| Field | Value      |
-	| Date  | 2030-01-04 |
 	| Name  | DayOff     |
+	| Date  | 2030-01-04 |
 	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request for date '2030-01-04'
 	Then I should see my scheduled day off 'DayOff'
-	And I should see the time line hours span from '8' to '17'
+	And I should see the time line hours span from '8' to '16'
 
 @ignore
 Scenario: One possible shift to trade with because shift trade periods match

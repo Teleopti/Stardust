@@ -137,6 +137,10 @@ namespace Teleopti.Ccc.TestCommon
 				var personDayOffs = new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> {personDayOff});
 				scheduleDay.Stub(x => x.PersonDayOffCollection()).Return(personDayOffs);
 			}
+			else
+			{
+				scheduleDay.Stub(x => x.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+			}
 			if (personAssignment != null)
 			{
 				scheduleDay.Stub(x => scheduleDay.AssignmentHighZOrder()).Return(personAssignment);

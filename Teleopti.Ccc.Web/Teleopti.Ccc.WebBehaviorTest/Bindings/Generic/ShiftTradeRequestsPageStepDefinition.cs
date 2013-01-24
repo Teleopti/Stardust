@@ -93,5 +93,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeDatePicker.Parent.DisplayVisible(), Is.False);
 		}
+
+		[Then(@"I should see my scheduled day off '(.*)'")]
+		public void ThenIShouldSeeMyScheduledDayOff(string dayOffName)
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.Count, Is.EqualTo(1));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.First().Text, Is.EqualTo(dayOffName));
+		}
+
 	}
 }

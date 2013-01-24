@@ -142,6 +142,13 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.startTime = layer.StartTimeText;
 		self.endTime = layer.EndTimeText;
 		self.lengthInMinutes = layer.LengthInMinutes;
+		self.isDayOff = layer.IsDayOff;
+		self.dayOffName = ko.computed(function () {
+			if (self.isDayOff) {
+				return self.payload;
+			}
+			return '';
+		});
 		self.leftPx = ko.computed(function () {
 			var timeLineoffset = minutesSinceTimeLineStart;
 			return (layer.ElapsedMinutesSinceShiftStart + timeLineoffset) * pixelPerMinute + 'px';
@@ -150,6 +157,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			return self.lengthInMinutes * pixelPerMinute + 'px';
 		});
 		self.title = ko.computed(function () {
+			if (self.isDayOff) {
+				return self.payload;
+			}
 			return self.startTime + '-' + self.endTime + ' ' + self.payload;
 		});
 	}

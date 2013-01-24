@@ -220,3 +220,8 @@
 	width: 22px !important;
 	vertical-align: middle;
 }
+.shift-trade-dayoff-name 
+{
+	position: absolute;
+	left: 50%;
+}
