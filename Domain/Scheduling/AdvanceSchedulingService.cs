@@ -102,6 +102,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, startDate);
                 foreach(var groupPerson in groupPersonList )
                 {
+                	var person = groupPerson;
+                	var date = startDate;
+                	var groupMatrixList = _matrixList.Where(x => person.GroupMembers.Contains(x.Person) && x.SchedulePeriod.DateOnlyPeriod.Contains(date)).ToList();
                     //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
                     var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, _schedulingOptions);
 
@@ -116,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                     //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
                     // (should we cover for max seats here?) ????
-                    var shifts = _workShiftFilterService.Filter(startDate, groupPerson, _matrixList, restriction, _schedulingOptions);
+					var shifts = _workShiftFilterService.Filter(startDate, groupPerson, groupMatrixList, restriction, _schedulingOptions);
 
                     //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need ???
                     var bestShiftProjectionCache = _workShiftSelector.Select(shifts, askMickeWhyDic,
@@ -127,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                     //call class that schedules the unscheduled days for the teamblock using the same start time from the given shift, 
                     //this class will handle steady state as well as individual
-                    _teamScheduling.Execute(dateOnlyList, _matrixList, groupPerson, restriction, bestShiftProjectionCache);
+					_teamScheduling.Execute(dateOnlyList, groupMatrixList, groupPerson, restriction, bestShiftProjectionCache);
                 }
                 
                 //looping on the next block
