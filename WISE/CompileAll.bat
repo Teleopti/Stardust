@@ -174,6 +174,7 @@ MKDIR "%DYNAMICCONTENT%\ServiceBus"
 MKDIR "%DYNAMICCONTENT%\PMService"
 MKDIR "%DYNAMICCONTENT%\Web"
 MKDIR "%DYNAMICCONTENT%\Broker"
+MKDIR "%DYNAMICCONTENT%\BrokerBackplane"
 
 ::Del Checked In and Add corresponding Dynamic Artifacts
 DEL /F /Q "%WISESOURCEFILE%\ETL\Service\TeleoptiCCC7.nhib.xml"
