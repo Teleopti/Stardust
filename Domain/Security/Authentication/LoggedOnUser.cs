@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Core.RequestContext
+namespace Teleopti.Ccc.Domain.Security.Authentication
 {
 	public class LoggedOnUser : ILoggedOnUser
 	{

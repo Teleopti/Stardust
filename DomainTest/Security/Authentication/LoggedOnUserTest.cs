@@ -2,14 +2,14 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.TestCommon.Security;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
+namespace Teleopti.Ccc.DomainTest.Security.Authentication
 {
 	[TestFixture]
 	public class LoggedOnUserTest

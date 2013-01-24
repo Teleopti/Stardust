@@ -500,8 +500,6 @@
     <Compile Include="Areas\Start\Core\LayoutBase\ICultureSpecificViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\ViewModelFactory\IPortalViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\PortalHtmlHelper.cs" />
-    <Compile Include="Core\RequestContext\LoggedOnUser.cs" />
-    <Compile Include="Core\RequestContext\ILoggedOnUser.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\DefaultScenarioScheduleProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\HeaderViewModelFactory.cs" />

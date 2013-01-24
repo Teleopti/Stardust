@@ -264,7 +264,6 @@
     <Compile Include="Core\Requests\Mapping\RequestsViewModelMappingTest.cs" />
     <Compile Include="Core\Requests\Mapping\TextRequestFormMappingTest.cs" />
     <Compile Include="Core\Requests\ViewModelFactory\RequestsViewModelFactoryTest.cs" />
-    <Compile Include="Core\WeekSchedule\DataProvider\LoggedOnUserTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\LayoutBaseViewModelFactoryTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\CultureSpecificViewModelDataFactoryTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\ProjectionProviderTest.cs" />
