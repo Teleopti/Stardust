@@ -783,6 +783,7 @@
     <Compile Include="Intraday\IntradayViewContent.Designer.cs">
       <DependentUpon>IntradayViewContent.cs</DependentUpon>
     </Compile>
+    <Compile Include="Localizer.cs" />
     <Compile Include="Intraday\Reforecast\SelectSkills.cs">
       <SubType>UserControl</SubType>
     </Compile>
