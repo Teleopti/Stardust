@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			dayOffLayer.LengthInMinutes.Should().Be.EqualTo(TimeSpan.FromHours(9).TotalMinutes);
 		}
 
-		[Test]
+		//[Test]
 		//public void ShouldMapPossibleTradePersonsDayOff()
 		//{
 		//    var possibleTradePerson = new Person { Name = new Name("Trade", "Victim") };
