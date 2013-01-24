@@ -13,16 +13,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common
     [TestFixture]
     public class MoveableLayerViewModelTest : LayerViewModelTest
     {
-        TesterForCommandModels _models = new TesterForCommandModels();
-        MockRepository _mocks = new MockRepository();
-        private IEventAggregator _eventAggregator=new EventAggregator();
+    	private readonly TesterForCommandModels _models = new TesterForCommandModels();
+        private readonly MockRepository _mocks = new MockRepository();
+        private readonly IEventAggregator _eventAggregator=new EventAggregator();
 
         protected override string LayerModelDescription
         {
             get { return UserTexts.Resources.Activity; }
         }
 
-        protected override LayerViewModel CreateTestInstance(ILayer<IPayload> layer)
+        protected override LayerViewModel CreateTestInstance(ILayer layer)
         {
             return new MainShiftLayerViewModel(layer, null);
         }

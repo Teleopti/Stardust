@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
@@ -25,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             get { return UserTexts.Resources.Absence; }
         }
 
-        protected override LayerViewModel CreateTestInstance(ILayer<IPayload> layer)
+        protected override LayerViewModel CreateTestInstance(ILayer layer)
         {
             return new AbsenceLayerViewModel(layer, null);
         }

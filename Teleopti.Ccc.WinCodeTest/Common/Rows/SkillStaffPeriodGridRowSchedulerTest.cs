@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
@@ -25,14 +27,14 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Rows
             _baseDate = new DateTime(2008, 10, 23, 0, 0, 0, DateTimeKind.Utc);
             _rowManager = mocks.StrictMock<IRowManager<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod>>();
             _rowHeaderText = "RowHeader";
-            _target = new SkillStaffPeriodGridRowScheduler(_rowManager,"CellType","Id",_rowHeaderText);
+			_target = new SkillStaffPeriodGridRowScheduler(_rowManager, "CellType", "Payload.ManualAgents", _rowHeaderText);
         }
 
         [Test]
         public void VerifyProperties()
         {
             Assert.AreEqual("CellType", _target.CellType);
-            Assert.AreEqual("Id", _target.DisplayMember);
+			Assert.AreEqual("Payload.ManualAgents", _target.DisplayMember);
             Assert.AreEqual(_rowHeaderText, _target.RowHeaderText);
         }
 
@@ -110,14 +112,19 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Rows
         [Test]
         public void VerifyOnQueryCellInfoWithNoColSpan()
         {
-            Guid value = Guid.NewGuid();
+            var value = 2.4d;
             CellInfo cellInfo = new CellInfo
             {
                 ColIndex = 2,
                 RowHeaderCount = 1,
                 Style = new GridStyleInfo()
             };
-            ISkillStaffPeriod skillStaffPeriod1 = mocks.StrictMock<ISkillStaffPeriod>();
+
+			ISkillStaffPeriod skillStaffPeriod1 = new SkillStaffPeriod(
+					new DateTimePeriod(_baseDate, _baseDate).MovePeriod(TimeSpan.FromMinutes(15)).ChangeEndTime(
+						TimeSpan.FromMinutes(15)), new Task(), new ServiceAgreement(), new StaffingCalculatorService());
+        	skillStaffPeriod1.Payload.ManualAgents = value;
+
             using (mocks.Record())
             {
                 Expect.Call(_rowManager.DataSource).Return(new List<ISkillStaffPeriod>
@@ -131,10 +138,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Rows
                                                               }).
                     Repeat.AtLeastOnce();
                 Expect.Call(_rowManager.IntervalLength).Return(15).Repeat.AtLeastOnce();
-                Expect.Call(skillStaffPeriod1.Period).Return(
-                    new DateTimePeriod(_baseDate, _baseDate).MovePeriod(TimeSpan.FromMinutes(15)).ChangeEndTime(
-                        TimeSpan.FromMinutes(15))).Repeat.AtLeastOnce();
-                Expect.Call(skillStaffPeriod1.Id).Return(value).Repeat.Once();
             }
             using (mocks.Playback())
             {
@@ -146,14 +149,19 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Rows
         [Test]
         public void VerifyOnQueryCellInfoWithColSpan()
         {
-            Guid value = Guid.NewGuid();
+            var value = 2.4d;
             CellInfo cellInfo = new CellInfo
             {
                 ColIndex = 1,
                 RowHeaderCount = 1,
                 Style = new GridStyleInfo()
             };
-            ISkillStaffPeriod skillStaffPeriod1 = mocks.StrictMock<ISkillStaffPeriod>();
+			
+			ISkillStaffPeriod skillStaffPeriod1 = new SkillStaffPeriod(new DateTimePeriod(_baseDate, _baseDate).ChangeEndTime(
+						TimeSpan.FromMinutes(30)),new Task(), new ServiceAgreement(), new StaffingCalculatorService());
+        	skillStaffPeriod1.Payload.ManualAgents = value;
+
+
             ITeleoptiGridControl teleoptiGridControl = mocks.StrictMock<ITeleoptiGridControl>();
             using (mocks.Record())
             {
@@ -172,10 +180,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Rows
                 Expect.Call(teleoptiGridControl.ColCount).Return(4).Repeat.AtLeastOnce();
                 teleoptiGridControl.AddCoveredRange(GridRangeInfo.Empty);
                 LastCall.IgnoreArguments().Repeat.Once();
-                Expect.Call(skillStaffPeriod1.Period).Return(
-                    new DateTimePeriod(_baseDate, _baseDate).ChangeEndTime(
-                        TimeSpan.FromMinutes(30))).Repeat.AtLeastOnce();
-                Expect.Call(skillStaffPeriod1.Id).Return(value).Repeat.Once();
             }
             using (mocks.Playback())
             {

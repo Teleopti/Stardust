@@ -7,6 +7,7 @@ using System.Threading;
 using Rhino.ServiceBus.Config;
 using Rhino.ServiceBus.Hosting;
 using Rhino.ServiceBus.Internal;
+using Rhino.ServiceBus.SqlQueues.Config;
 using log4net;
 using log4net.Config;
 
@@ -31,14 +32,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		public void SetBootStrapperTypeName(string typeName)
 		{
 			bootStrapperName = typeName;
-		}
-
-		public void SetQueueConnectionString(string connectionString)
-		{
-			using (var host = new DefaultHost())
-			{
-				host.SetQueueConnectionString(connectionString);
-			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Strapper"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "BootStrapper")]
@@ -102,10 +95,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var queueConnection = ConfigurationManager.ConnectionStrings["Queue"];
 			if (queueConnection!=null)
 			{
-				using(var host = new DefaultHost())
-				{
-					host.SetQueueConnectionString(queueConnection.ConnectionString);
-				}
+				QueueConnectionStringContainer.ConnectionString = queueConnection.ConnectionString;
 			}
 
 			bootStrapperType = bootStrapperType ??
