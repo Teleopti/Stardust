@@ -183,16 +183,6 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2d9426d6649a275a, processorArchitecture=MSIL">
-      <HintPath>..\..\Teleopti.Ccc.SmartClientPortal.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common.Library, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2d9426d6649a275a, processorArchitecture=MSIL">
-      <HintPath>..\..\Teleopti.Ccc.SmartClientPortal.Common.Library.dll</HintPath>
-    </Reference>
-    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common.Module, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2d9426d6649a275a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Teleopti.Ccc.SmartClientPortal.Common.Module.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
