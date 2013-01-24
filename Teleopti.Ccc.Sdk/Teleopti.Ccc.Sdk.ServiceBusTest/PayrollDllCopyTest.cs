@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.Sdk.ServiceBus;
 
@@ -73,7 +72,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		private IEnumerable<string> CopiedFiles()
 		{
 			var copiedFiles = new List<string>();
-			var filesInTopFolder = Directory.GetFiles(_destination).Where(f => !_originalFiles.Contains(f)).ToList();
+			var filesInTopFolder = Directory.GetFiles(_destination)
+				.Where(f => !_originalFiles.Contains(f) && !f.EndsWith("Teleopti.Ccc.Payroll.dll", StringComparison.OrdinalIgnoreCase))
+				.ToList();
 			if (filesInTopFolder.Any())
 				copiedFiles.AddRange(filesInTopFolder);
 
@@ -104,7 +105,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			foreach (var path in CopiedFiles()
 				.Where(x => x.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
 				.Select(file => new FileInfo(file))
-				.Select(fileInfo => fileInfo.Directory != null ? fileInfo.Directory.Name + "\\" + fileInfo.Name : "\\"))
+				.Select(fileInfo => fileInfo.Directory != null ? fileInfo.Directory.Name + "\\" + fileInfo.Name : null))
 				Assert.That(File.Exists(Path.GetFullPath(_destination + path)), Is.True);
 		}
 
