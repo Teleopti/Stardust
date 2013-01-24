@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Linq;
-using log4net;
 
 namespace Teleopti.Ccc.Rta.Server
 {
+	public interface IActualAgentHandler
+	{
+		RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId);
+	}
+
 	public class ActualAgentHandler : IActualAgentHandler
 	{
 		private readonly IActualAgentStateDataHandler _actualAgentStateDataHandler;
-		//private static readonly ILog Logger = LogManager.GetLogger(typeof(ActualAgentHandler));
 
 		public ActualAgentHandler(IActualAgentStateDataHandler actualAgentStateDataHandler)
 		{
@@ -40,24 +43,6 @@ namespace Teleopti.Ccc.Rta.Server
 				return foundState.StateGroupId;
 			}
 			return Guid.Empty;
-			//return addNewState(platformTypeId, stateCode, stateGroups);
 		}
-
-		//private static Guid addNewState(Guid platformTypeId, string stateCode, IEnumerable<RtaStateGroupLight> stateGroups)
-		//{
-		//    var defaultGroup = stateGroups.FirstOrDefault(s => s.DefaultStateGroup);
-		//    if (defaultGroup != null)
-		//    {
-		//        return defaultGroup.AddState(stateCode,stateCode, platformTypeId);
-		//    }
-
-		//    Logger.WarnFormat(CultureInfo.CurrentCulture, "Could not find a default state group.");
-		//    return null;
-		//}
-	}
-
-	public interface IActualAgentHandler
-	{
-		RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId);
 	}
 }

@@ -121,6 +121,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActualAgentHandlerTest.cs" />
+    <Compile Include="ActualAgentStateDataHandlerTest.cs" />
+    <Compile Include="DatabaseConnectionStringHandlerTest.cs" />
     <Compile Include="DataSourceResolverTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
