@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
             using (_mocks.Playback())
             {
-                var retShift = _target.Filter(dateOnly, _person, new List<IScheduleMatrixPro>{_matrix}, effectiveRestriction, _schedulingOptions, null);
+                var retShift = _target.Filter(dateOnly, _person, new List<IScheduleMatrixPro>{_matrix}, effectiveRestriction, _schedulingOptions);
                 Assert.IsNotNull(retShift);
             }
         }
