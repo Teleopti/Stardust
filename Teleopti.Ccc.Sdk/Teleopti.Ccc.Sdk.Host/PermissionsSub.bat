@@ -31,7 +31,7 @@ ECHO SVCLOGIN is: %SVCLOGIN%
 
 ECHO.
 ECHO Call was:
-ECHO EsentPermissions.bat "%WindowsNT%" "%SPLevel%" "%IISVersion%" "%SVCLOGIN%"
+ECHO Permissions.bat "%WindowsNT%" "%SPLevel%" "%IISVersion%" "%SVCLOGIN%"
 
 ::Get path to this batchfile
 SET SDKPath=%~dp0
@@ -48,6 +48,11 @@ IF "%WindowsNT%"=="" GOTO desc
 ::Remove trailer slash
 SET SDKPath=%SDKPath:~0,-1%
 SET ServiceBusPath=%SDKPath%\..\ServiceBus
+
+::create if not exists
+IF NOT EXIST "%ServiceBusPath%\Payroll" MKDIR "%ServiceBusPath%\Payroll"
+IF NOT EXIST "%ServiceBusPath%\Payroll.DeployNew" MKDIR "%ServiceBusPath%\Payroll.DeployNew"
+IF NOT EXIST "%SDKPath%\Teleopti.Payroll" MKDIR "%SDKPath%\Teleopti.Payroll"
 
 ::remarked! This is a temp fix to get behavior tests running (in parallell)
 ::restart IIS
@@ -93,7 +98,7 @@ for %%a in (%SystemDrive%) do set mySystemDrive=%%~da
 ::Switch to drive letter
 %DRIVELETTER%
 
-::Fix read and write on different essent folders, clean out all essent files
+::Fix read and write on different payroll folders
 CALL :MAIN "%SDKPath%"
 CALL :MAIN "%ServiceBusPath%"
 
@@ -105,28 +110,32 @@ SET FolderPath=%~1
 ECHO FolderPath is %FolderPath%
 CD %FolderPath%
 
+::clean up old stuff
+FOR /D %%I IN (*.esent) DO RMDIR "%%I" /S /Q
+
 ::some output
-ECHO Adding file essent file permissions for %IISPoolUser%
+ECHO Adding file payroll file permissions for %IISPoolUser%
 ECHO.
 
 ::call correct permission style
 ECHO PermissionStyle is: %PermissionStyle%
-if "%PermissionStyle%"=="cacls" GOTO cacls
-if "%PermissionStyle%"=="icacls" GOTO icacls
+if "%PermissionStyle%"=="cacls" CALL :cacls
+if "%PermissionStyle%"=="icacls" CALL :icacls
+GOTO EOF
 
 ::---------------
 :cacls
 ECHO Setting permissions using cacls ...
 
 ::revoke all
-FOR /D %%I IN (*.esent) DO ECHO Y| CACLS "%%I" /E /R "%IISPoolUser%"
+FOR /D %%I IN (*Payroll*) DO ECHO Y| CACLS "%%I" /E /R "%IISPoolUser%"
 
 ::Add permissions again
-FOR /D %%I IN (*.esent) DO ECHO Y| CACLS "%%I" /E /G "%IISPoolUser%":C
+FOR /D %%I IN (*Payroll*) DO ECHO Y| CACLS "%%I" /E /G "%IISPoolUser%":C
 
 ECHO Done
 ping 127.0.0.1 -n 2 > NUL
-GOTO TruncateEsent
+GOTO EOF
 ::---------------
 
 ::---------------
@@ -134,27 +143,21 @@ GOTO TruncateEsent
 ECHO Setting permissions using icacls ...
 
 ::revoke all
-FOR /D %%I IN (*.esent) DO icacls "%%I" /remove:g "%IISPoolUser%"
+FOR /D %%I IN (*Payroll*) DO icacls "%%I" /remove:g "%IISPoolUser%"
 
 ::Add permissions again
-FOR /D %%I IN (*.esent) DO icacls "%%I" /grant "%IISPoolUser%":(OI)(CI)(M)
+FOR /D %%I IN (*Payroll*) DO icacls "%%I" /grant "%IISPoolUser%":(OI)(CI)(M)
 
 ECHO Done
 ping 127.0.0.1 -n 2 > NUL
-GOTO TruncateEsent
-::---------------
-
-::---------------
-:TruncateEsent
-FOR /D %%I IN (*.esent) DO DEL "%%I" /Q /S
-GOTO EOF 
+GOTO EOF
 ::---------------
 
 :desc
 CLS
 ECHO Need input parameters [VersionNt] [SPLevel] [IISVersion] [SVCLOGIN:optional]
 ECHO Example for Win2008 Server:
-ECHO EsentPermissions.bat 600 0 7
+ECHO Permissions.bat 600 0 7
 PAUSE
 CLS
 ECHO - VersionNT:

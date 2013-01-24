@@ -1,4 +1,4 @@
-# Ignore file for Visual Studio 2008/2010 
+# Ignore file for Visual Studio 2008/2010
 
 # use glob syntax
 syntax: glob
@@ -60,3 +60,4 @@ RaptorHgOla.gpState
 CruiseControl.gpState
 Logs/WebApps.log.1
 *.feature.cs
+Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.Host/Teleopti.Payroll/internal.storage.xml

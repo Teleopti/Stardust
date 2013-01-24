@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Ccc.Sdk.ServiceBus;
+
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost
 {
@@ -14,6 +14,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost
 			Console.ReadLine();
 
 			host.Stop();
+
+			Console.WriteLine("Service bus is stopped, press Enter to close...");
+			Console.ReadLine();
 		}
 	}
 }

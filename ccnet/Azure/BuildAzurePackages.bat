@@ -26,6 +26,7 @@ SET ContentSource=%AZUREDIR%\..
 SET msi=K:\Src\Wise\ccc7_azure\ccc7_azure.msi
 SET output=%AZUREOUTDIR%\%version%
 SET Dependencies=\\hebe\Installation\Dependencies\ccc7_server
+SET AzureDependencies=\\hebe\Installation\Dependencies\ccc7_azure
 
 IF NOT EXIST "%msi%" (
 SET ERRORLEV=101
@@ -64,6 +65,9 @@ XCOPY /d /y "%Dependencies%\ReportViewer2010.exe" "%ContentDest%\TeleoptiCCC\bin
 
 ::Get Eventlog register Source
 XCOPY /d /y "%Dependencies%\RegisterEventLogSource.exe" "%ContentDest%\TeleoptiCCC\bin"
+
+::Get Azure stuff
+robocopy %AzureDependencies% "%ContentDest%\TeleoptiCCC\bin\ccc7_azure" /mir
 
 ::update config and run scpack
 FOR /F %%G IN ('DIR /B Customer\*.txt') DO CALL :FuncDeployConfig %%G 
