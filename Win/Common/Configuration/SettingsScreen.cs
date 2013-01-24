@@ -32,7 +32,26 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // ReSharper restore DoNotCallOverridableMethodsInConstructor
             treeViewOptions.AfterSelect += TreeViewOptionsAfterSelect;
             Resize += SettingsScreenResize;
-        }
+        	KeyPreview = true;
+			KeyDown += Form_KeyDown;
+			KeyPress += Form_KeyPress;
+		}
+
+		void Form_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyValue.Equals(32))
+			{
+				e.Handled = true;
+			}
+		}
+
+		void Form_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar.Equals((Char)Keys.Space))
+			{
+				e.Handled = true;
+			}
+		}
 
         public SettingsScreen(OptionCore optionCore)
             : this()
@@ -167,6 +186,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private void CloseForm()
         {
             _core.UnloadPages();
+			KeyDown -= Form_KeyDown;
+			KeyPress -= Form_KeyPress;
             Close();
             Dispose();
         }
