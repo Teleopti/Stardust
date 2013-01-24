@@ -208,12 +208,6 @@ COPY "%ARTIFACTDIR%\AppMytime.config" "%DYNAMICCONTENT%\MyTime\ClickOnce\Teleopt
 DEL /F /Q "%WISESOURCEFILE%\SDK\TeleoptiCCC7.nhib.xml"
 COPY "%ARTIFACTDIR%\TeleoptiCCC7.nhib.xml" "%DYNAMICCONTENT%\SDK\TeleoptiCCC7.nhib.xml"
 
-DEL /F /Q "%WISESOURCEFILE%\MessageBroker\Teleopti.Messaging.Management.exe.config"
-COPY "%ARTIFACTDIR%\Teleopti.Messaging.Management.exe.config" "%DYNAMICCONTENT%\MessageBroker\Teleopti.Messaging.Management.exe.config"
-
-DEL /F /Q "%WISESOURCEFILE%\MessageBroker\Teleopti.Messaging.Svc.exe.config"
-COPY "%ARTIFACTDIR%\Teleopti.Messaging.Svc.exe.config" "%DYNAMICCONTENT%\MessageBroker\Teleopti.Messaging.Svc.exe.config"
-
 DEL /F /Q "%WISESOURCEFILE%\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config"
 COPY "%ARTIFACTDIR%\AppRTATestApplication.config" "%DYNAMICCONTENT%\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config"
 
@@ -256,8 +250,11 @@ COPY "%ARTIFACTDIR%\Web.ServiceBus.Client.config" "%DYNAMICCONTENT%\Web\Teleopti
 DEL /F /Q "%WISESOURCEFILE%\AgentPortalWeb\TeleoptiCCC7.nhib.xml"
 COPY "%ARTIFACTDIR%\TeleoptiCCC7.nhib.xml" "%DYNAMICCONTENT%\Web\TeleoptiCCC7.nhib.xml"
 
-DEL /F /Q "%WISESOURCEFILE%\Broker\web.config"
+DEL /F /Q "%WISESOURCEFILE%\Broker\web*config"
 COPY "%ARTIFACTDIR%\BrokerWeb.config" "%DYNAMICCONTENT%\Broker\web.config"
+
+DEL /F /Q "%WISESOURCEFILE%\BrokerBackplane\web*config"
+COPY "%ARTIFACTDIR%\BrokerBackplaneWeb.config" "%DYNAMICCONTENT%\BrokerBackplane\web.config"
 
 ::Non-Dynamic Artifacts
 COPY "%ARTIFACTDIR%\CccAppConfig.config" "%WISESOURCEFILE%\ApplicationConfiguration\CccAppConfig.exe.config"
