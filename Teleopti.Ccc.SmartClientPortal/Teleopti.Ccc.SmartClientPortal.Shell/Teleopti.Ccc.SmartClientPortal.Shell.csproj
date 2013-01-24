@@ -183,6 +183,15 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common">
+      <HintPath>..\..\Teleopti.Ccc.SmartClientPortal.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common.Library">
+      <HintPath>..\..\Teleopti.Ccc.SmartClientPortal.Common.Library.dll</HintPath>
+    </Reference>
+    <Reference Include="Teleopti.Ccc.SmartClientPortal.Common.Module">
+      <HintPath>..\..\Teleopti.Ccc.SmartClientPortal.Common.Module.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
