@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Core
+namespace Teleopti.Ccc.Domain.Security.Authentication
 {
 	public class UserTimeZone : IUserTimeZone
 	{

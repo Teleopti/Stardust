@@ -448,7 +448,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferenceViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferenceViewModelFactory.cs" />
-    <Compile Include="Core\UserTimeZone.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPersonRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PersonRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\DateTimeExtensions.cs" />

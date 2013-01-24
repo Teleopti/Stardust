@@ -760,6 +760,7 @@
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProviderTest.cs" />
     <Compile Include="Security\Authentication\FindApplicationUserTest.cs" />
     <Compile Include="Security\Authentication\LoggedOnUserTest.cs" />
+    <Compile Include="Security\Authentication\UserTimeZoneTest.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProviderTest.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettingsTest.cs" />
     <Compile Include="Security\AuthorizationData\DefaultAuthorizationSettingsTest.cs" />
