@@ -82,6 +82,7 @@ namespace Teleopti.Ccc.Rta.Server
 			if (previousState != null && newState.Equals(previousState))
 				return null;
 
+			// boxing??
 		    ThreadPool.QueueUserWorkItem(saveToDataStore, new object[] {newState, waitHandle});
 
 			return newState;
