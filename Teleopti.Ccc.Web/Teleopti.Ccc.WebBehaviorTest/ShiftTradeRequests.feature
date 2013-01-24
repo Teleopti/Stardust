@@ -128,68 +128,7 @@ Scenario: Show my scheduled day off
 	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request for date '2030-01-04'
 	Then I should see my scheduled day off 'DayOff'
-	And I should see the time line hours span from '8' to '16'
-
-@ignore
-Scenario: One possible shift to trade with because shift trade periods match
-	Given I have the role 'Full access to mytime'
-	And Current time is '2029-12-29'
-	And I can do shift trades between '2030-01-01' and '2030-01-17'
-	And another agent named 'Other agent 1' can do shift trades between '2030-01-01' and '2030-01-17'
-	And an agent has a shift with
-	| Field                 | Value            |
-	| Agent name            | Other agent 1    |
-	| StartTime             | 2030-01-01 10:00 |
-	| EndTime               | 2030-01-01 20:00 |
-	| Shift category		| Late	           |
-	| Lunch3HoursAfterStart | true             |
-	When I navigate to shift trade page
-	Then I should have one possible shift to trade with
-
-@ignore
-Scenario: Not possible to trade shift because no matching skills
-	Given I have the role 'Full access to mytime'
-	And Current time is '2029-12-29'
-	And I can do shift trades between '2030-01-01' and '2030-01-17'
-	And another agent named 'Other agent 1' can do shift trades between '2030-01-01' and '2030-01-17'
-	And an agent has a shift with
-	| Field                 | Value            |
-	| Agent name            | Other agent 1    |
-	| StartTime             | 2030-01-01 10:00 |
-	| EndTime               | 2030-01-01 20:00 |
-	| Shift category		| Late	           |
-	| Lunch3HoursAfterStart | true             |
-	And I have a updated workflow control set with
-	| Field                      | Value              |
-	| Name                       | Published schedule |
-	| Shift trade matching skill | Skill 1            |
-	When I navigate to shift trade page
-	Then I should see a user-friendly message explaining that shift trades cannot be made
-
-@ignore
-Scenario: One possible shift to trade with because shift trade periods and skills are matching
-	Given I have the role 'Full access to mytime'
-	And Current time is '2029-12-29'
-	And I can do shift trades between '2030-01-01' and '2030-01-17'
-	And another agent named 'Other agent 1' can do shift trades between '2030-01-01' and '2030-01-17'
-	And an agent has a shift with
-	| Field                 | Value            |
-	| Agent name            | Other agent 1    |
-	| StartTime             | 2030-01-01 10:00 |
-	| EndTime               | 2030-01-01 20:00 |
-	| Shift category		| Late	           |
-	| Lunch3HoursAfterStart | true             |
-	And I have a updated workflow control set with
-	| Field                      | Value              |
-	| Name                       | Published schedule |
-	| Shift trade matching skill | Skill 1            |
-	And an agent has a updated workflow control set with
-	| Field                      | Value              |
-	| Agent name                 | Other agent 1      |
-	| Name                       | Published schedule |
-	| Shift trade matching skill | Skill 1            |
-	When I navigate to shift trade page
-	Then I should have one possible shift to trade with
+	And I should see the time line hours span from '8' to '17'
 
 @ignore
 Scenario: View shift trade request details

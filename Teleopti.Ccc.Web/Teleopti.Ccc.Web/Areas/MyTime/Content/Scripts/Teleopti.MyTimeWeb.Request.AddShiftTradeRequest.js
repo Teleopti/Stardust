@@ -80,6 +80,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					if (data.HasWorkflowControlSet) {
 						setDatePickerRange(data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
 						self.selectedDate(moment(self.now).add('days', data.OpenPeriodRelativeStart));
+					} else {
+						self.setScheduleLoadedReady();
 					}
 				},
 				error: function (err) {
@@ -101,7 +103,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self._createMySchedule(data.MySchedule);
 					self._createPossibleTradeSchedules(data.PossibleTradePersons);
 					self._createTimeLine(data.TimeLineHours);
-
+					self.setScheduleLoadedReady();
 				},
 				error: function (err) {
 					alert("error!");
@@ -117,6 +119,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.previousDate = function () {
 			self.selectedDate(moment(self.selectedDate()).add('days', -1));
 		};
+
+		self.setScheduleLoadedReady = function () {
+			$('#Request-add-loaded-date').text('shift trade schedule loaded');
+		}
 	}
 
 	function scheduleViewModel(layers, scheduleObject) {
