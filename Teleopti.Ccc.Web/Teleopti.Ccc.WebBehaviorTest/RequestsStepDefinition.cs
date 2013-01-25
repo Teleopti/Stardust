@@ -140,6 +140,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => _page.MoreToLoadArrow.IsDisplayed(), Is.False);
 		}
+
+		[When(@"I click the Approve button on the shift request")]
+		public void WhenIClickTheApproveButtonOnTheShiftRequest()
+		{
+			_page.ApproveShiftTradeButton.EventualClick();
+		}
+
+		[When(@"I click the Deny button on the shift request")]
+		public void WhenIClickTheDenyButtonOnTheShiftRequest()
+		{
+			_page.DenyShiftTradeButton.EventualClick();
+		}
+
+
 	}
 
 }

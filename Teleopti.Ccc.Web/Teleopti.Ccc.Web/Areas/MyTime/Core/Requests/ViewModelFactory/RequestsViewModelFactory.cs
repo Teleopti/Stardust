@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 		public IEnumerable<RequestViewModel> CreatePagingViewModel(Paging paging)
 		{
-			var requests = _personRequestProvider.RetrieveTextAndAbsenceRequests(paging);
+			var requests = _personRequestProvider.RetrieveRequests(paging);
 			return _mapper.Map<IEnumerable<IPersonRequest>, IEnumerable<RequestViewModel>>(requests);
 		}
 

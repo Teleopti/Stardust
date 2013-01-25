@@ -77,15 +77,6 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=AgentPortalWeb
-  Variable Name2=_PROP_VAR_
-  Variable Value2=MyAgentPortalWeb
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
   Variable Value1=SDK
   Variable Name2=_PROP_VAR_
   Variable Value2=SDKDIR
@@ -105,7 +96,7 @@ item: Custom Script Item
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SDKDIR%EsentPermissions.bat" "%ONE%" "%TWO%" "%THREE%" "%FOUR%""
+  Command Line=/C ""%SDKDIR%Permissions.bat" "%ONE%" "%TWO%" "%THREE%" "%FOUR%""
   Flags=00000010
 end
 item: Else Statement
@@ -113,31 +104,6 @@ end
 item: Display Message
   Title=Folder missing!
   Text=The SDK folder should be installed but is missing! Cannot set permissions on Esent folders: %SDKDIR%\*.esent
-  Flags=00001000
-end
-item: End Block
-end
-item: Check if File/Dir Exists
-  Pathname=%MyAgentPortalWeb%
-  Flags=00000100
-end
-item: Custom Script Item
-  Filename=Pause.wse
-  Variable Name1=_PAUSE_TIME_
-  Variable Value1=10
-  Variable Name2=HELPFILE
-  Variable Value2=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Execute Program
-  Pathname=CMD
-  Command Line=/C ""%MyAgentPortalWeb%EsentPermissions.bat" "%ONE%" "%TWO%" "%THREE%" "%FOUR%""
-  Flags=00000010
-end
-item: Else Statement
-end
-item: Display Message
-  Title=Folder missing!
-  Text=The MyTime web folder should be installed but is missing! Cannot set permissions on Esent folders: %MyAgentPortalWeb%\*.esent
   Flags=00001000
 end
 item: End Block

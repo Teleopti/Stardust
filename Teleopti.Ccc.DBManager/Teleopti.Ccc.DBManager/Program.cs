@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DBManager
                         //Set permissions of the newly application user on db.
                         if (_commandLineArgument.PermissionMode && SafeMode)
                         {
-                            CreatePermissions(_commandLineArgument.appUserName, _commandLineArgument.isWindowsGroupName);
+                            CreatePermissions(_commandLineArgument.appUserName);
                         }
 
                         //Patch database
@@ -417,7 +417,7 @@ namespace Teleopti.Ccc.DBManager
 
 		private static bool VerifyWinGroup(string WinNTGroup)
 		{
-			const string sql = @"SELECT count(name) from sys.syslogins where isntgroup = 1 and name = '@WinNTGroup'";
+			const string sql = @"SELECT count(name) from sys.syslogins where isntgroup = 1 and name = @WinNTGroup";
 			using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
 			{
 				sqlCommand.Parameters.AddWithValue("@WinNTGroup", WinNTGroup);
@@ -521,7 +521,7 @@ namespace Teleopti.Ccc.DBManager
 
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-        private static void CreatePermissions(string user, bool iswingroup)
+        private static void CreatePermissions(string user)
         {
             string fileName;
             string sql;
@@ -531,14 +531,12 @@ namespace Teleopti.Ccc.DBManager
             //if appication login = sa then don't bother to do anything
             if (CompareStringLowerCase(user,string.Format(CultureInfo.CurrentCulture, @"sa")))
                 return;
-
-            sql = "";
 			
 			//Create or Re-link e.g Alter the DB-user from SQL-Login
 			createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
 			relinkSQLUser = string.Format(CultureInfo.CurrentCulture, @"ALTER USER [{0}] WITH LOGIN = [{0}]", user);
 
-			if (!iswingroup && (DBUserExist(user) == true))
+			if (DBUserExist(user))
 			{
 				logWrite("DB user already exist, re-link ...");
 				using (var cmd = new SqlCommand(relinkSQLUser, _sqlConnection))
@@ -558,7 +556,7 @@ namespace Teleopti.Ccc.DBManager
 			//Add permission
             fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\permissions - add.sql", _databaseFolder.Path());
 
-            sql = System.IO.File.ReadAllText(fileName);
+            sql = File.ReadAllText(fileName);
 
             sql = sql.Replace("$(LOGIN)", user);
 

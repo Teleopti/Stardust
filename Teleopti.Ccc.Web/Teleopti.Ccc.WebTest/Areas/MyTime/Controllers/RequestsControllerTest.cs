@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnRequestsPartialView()
 		{
-			var target = new RequestsController(MockRepository.GenerateMock<IRequestsViewModelFactory>(), null, null);
+			var target = new RequestsController(MockRepository.GenerateMock<IRequestsViewModelFactory>(), null, null, null);
 
 			var result = target.Index();
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnViewModelForIndex()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var target = new RequestsController(viewModelFactory, null, null);
+			var target = new RequestsController(viewModelFactory, null, null, null);
 
 			viewModelFactory.Stub(x => x.CreatePageViewModel()).Return(new RequestsViewModel());
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 
-			var target = new RequestsController(viewModelFactory, null, null);
+			var target = new RequestsController(viewModelFactory, null, null, null);
 			var model = new RequestViewModel[] { };
 			var paging = new Paging();
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var form = new TextRequestForm();
 			var resultData = new RequestViewModel();
 
-			var target = new RequestsController(null, textRequestPersister, null);
+			var target = new RequestsController(null, textRequestPersister, null, null);
 
 			textRequestPersister.Stub(x => x.Persist(form)).Return(resultData);
 
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var form = new AbsenceRequestForm();
 			var resultData = new RequestViewModel();
 
-			var target = new RequestsController(null, null, absenceRequestPersister);
+			var target = new RequestsController(null, null, absenceRequestPersister, null);
 
 			absenceRequestPersister.Stub(x => x.Persist(form)).Return(resultData);
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var response = MockRepository.GenerateStub<FakeHttpResponse>();
 			var form = new AbsenceRequestForm();
 
-			var target = new RequestsController(null, null, absenceRequestPersister);
+			var target = new RequestsController(null, null, absenceRequestPersister, null);
 			var context = new FakeHttpContext("/");
 			context.SetResponse(response);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var response = MockRepository.GenerateStub<FakeHttpResponse>();
 			var form = new AbsenceRequestForm();
 
-			var target = new RequestsController(null, null, absenceRequestPersister);
+			var target = new RequestsController(null, null, absenceRequestPersister, null);
 			var context = new FakeHttpContext("/");
 			context.SetResponse(response);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnErrorMessageOnInvalidModel()
 		{
-			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null);
+			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null,null);
 			const string message = "Test model validation error";
 			target.ModelState.AddModelError("Test", message);
 
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldDeleteTextRequest()
 		{
 			var textRequestPersister = MockRepository.GenerateMock<ITextRequestPersister>();
-			using (var target = new RequestsController(null, textRequestPersister, null))
+			using (var target = new RequestsController(null, textRequestPersister, null, null))
 			{
 				var id = Guid.NewGuid();
 
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetRequestById()
 		{
 			var modelFactory = MockRepository.GenerateStub<IRequestsViewModelFactory>();
-			using (var target = new RequestsController(modelFactory, null, null))
+			using (var target = new RequestsController(modelFactory, null, null, null))
 			{
 				var id = Guid.NewGuid();
 				var viewModel = new RequestViewModel { Dates = "a", Id = "b", Status = "c", Subject = "d", Text = "e", Type = "f", UpdatedOn = "g" };
@@ -240,6 +240,37 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			createdLayer.ElapsedMinutesSinceShiftStart.Should().Be.EqualTo(layer.ElapsedMinutesSinceShiftStart);
 
 		}
+		
+		[Test]
+		public void ApproveShiftTradeRequest()
+		{
+
+			var id = Guid.NewGuid();
+			var shiftTradePersister = MockRepository.GenerateStrictMock<IShiftTradeResponseService>();
+			shiftTradePersister.Expect(a => a.OkByMe(id)).Repeat.Once();
+
+			using (var target = new RequestsController(null, null, null, shiftTradePersister))
+			{
+				target.ApproveShiftTrade(id);
+			}
+
+			shiftTradePersister.VerifyAllExpectations();
+		}
+
+		[Test]
+		public void RejectShiftTradeRequest()
+		{
+			var id = Guid.NewGuid();
+			var shiftTradePersister = MockRepository.GenerateStrictMock<IShiftTradeResponseService>();
+			shiftTradePersister.Expect(a => a.Reject(id)).Repeat.Once();
+
+			using (var target = new RequestsController(null, null, null, shiftTradePersister))
+			{
+				target.RejectShiftTrade(id);
+			}
+
+			shiftTradePersister.VerifyAllExpectations();
+
 
 		private static void assertRequestEqual(RequestViewModel target, RequestViewModel expected)
 		{

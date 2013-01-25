@@ -63,6 +63,8 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
 
                 meeting.StartTime = meetingStartDateTime.TimeOfDay;
                 meeting.EndTime = meetingStartDateTime.TimeOfDay.Add(newDuration);
+				if (meeting.EndTime.Days > meeting.StartTime.Days)
+					meeting.EndTime = TimeSpan.Zero;
 
                 // change scenario if we paste it to another
                 meeting.SetScenario(_model.CurrentScenario);

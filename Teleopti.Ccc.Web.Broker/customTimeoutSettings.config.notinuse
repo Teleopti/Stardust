@@ -4,5 +4,5 @@
   <add key="KeepAlive" value="30"/>
   <add key="HeartbeatInterval" value="10"/>
   <add key="DisconnectTimeout" value="110"/>
-  <!--<add key="ScaleOutBackendUrl" value="http://backendserver/backend" />-->
+  <!--<add key="ScaleOutBackplaneUrl" value="http://backendserver/broker.backplane/backplane" />-->
 </appSettings>

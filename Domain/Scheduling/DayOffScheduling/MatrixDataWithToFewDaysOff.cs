@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			{
 				int targetDaysOff;
 				int daysOffNow;
-				if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(matrixData.Matrix.SchedulePeriod, out targetDaysOff, out daysOffNow))
+				if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(matrixData.Matrix.SchedulePeriod, out targetDaysOff, out daysOffNow) && daysOffNow < targetDaysOff)
 					result.Add(matrixData);
 			}
 

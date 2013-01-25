@@ -6,7 +6,7 @@
     public enum ShiftTradeStatus
     {
         /// <summary>
-        /// Ok ny initiating person
+        /// Ok by initiating person
         /// </summary>
         OkByMe,
         /// <summary>

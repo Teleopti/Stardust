@@ -21,7 +21,7 @@ define([
 				var start = undefined;
 				ko.utils.arrayForEach(self.Agents(), function (l) {
 					var startMinutes = l.FirstStartMinute();
-					if (!start)
+					if (start === undefined)
 						start = startMinutes;
 					if (startMinutes < start)
 						start = startMinutes;
@@ -33,7 +33,7 @@ define([
 				var end = undefined;
 				ko.utils.arrayForEach(self.Agents(), function (l) {
 					var endMinutes = l.LastEndMinute();
-					if (!end)
+					if (end === undefined)
 						end = endMinutes;
 					if (endMinutes > end)
 						end = endMinutes;
