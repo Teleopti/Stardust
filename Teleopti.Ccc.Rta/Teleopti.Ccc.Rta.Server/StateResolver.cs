@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Rta.Server
         {
         }
 
-        private StateResolver(IDatabaseConnectionFactory databaseConnectionFactory, string connectionStringDataStore, ILog loggingSvc)
+        protected StateResolver(IDatabaseConnectionFactory databaseConnectionFactory, string connectionStringDataStore, ILog loggingSvc)
         {
             _databaseConnectionFactory = databaseConnectionFactory;
             _connectionStringDataStore = connectionStringDataStore;
