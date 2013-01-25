@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
             Assert.AreEqual(2, resolvedId);
             mocks.VerifyAll();
         }
-		/*
+
         [Test]
         public void VerifySkipDataSourceWithNoSourceId()
         {
@@ -135,7 +135,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
             Assert.AreEqual(2,resolvedId);
             mocks.VerifyAll();
         }
-		 */
     }
 
     public class DataSourceResolverForTest : DataSourceResolver

@@ -122,10 +122,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActualAgentHandlerTest.cs" />
-    <Compile Include="ActualAgentStateDataHandlerTest.cs" />
     <Compile Include="DatabaseConnectionStringHandlerTest.cs" />
     <Compile Include="DataSourceResolverTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="PersonResolverTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RtaDataHandlerTest.cs" />
   </ItemGroup>
