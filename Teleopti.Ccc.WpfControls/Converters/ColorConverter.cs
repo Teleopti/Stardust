@@ -23,11 +23,8 @@ namespace Teleopti.Ccc.WpfControls.Converters
 
 
             }
-            else
-            {
-                //TODO: Change to use internaltexts:
-                throw new ArgumentException("The argument for this ColorConverter is not a System.Drawing.Color", "value");
-            }
+        	//TODO: Change to use internaltexts:
+        	throw new ArgumentException("The argument for this ColorConverter is not a System.Drawing.Color", "value");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
