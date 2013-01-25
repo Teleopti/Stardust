@@ -82,10 +82,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					} else {
 						self.setScheduleLoadedReady();
 					}
-				},
-				error: function (err) {
-					alert("error!");
-					//console.log(err);
 				}
 			});
 		};
@@ -95,7 +91,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				url: "Requests/ShiftTradeRequestSchedule",
 				dataType: "json",
 				type: 'GET',
-				//beforeSend: _loading,
 				data: { selectedDate: self.selectedDate().toDate().toJSON() },
 				success: function (data, textStatus, jqXHR) {
 					self.timeLineLengthInMinutes(data.TimeLineLengthInMinutes);
@@ -103,10 +98,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self._createPossibleTradeSchedules(data.PossibleTradePersons);
 					self._createTimeLine(data.TimeLineHours);
 					self.setScheduleLoadedReady();
-				},
-				error: function (err) {
-					alert("error!");
-					//console.log(err);
 				}
 			});
 		};
