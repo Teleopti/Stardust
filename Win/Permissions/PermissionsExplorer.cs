@@ -1770,6 +1770,8 @@ namespace Teleopti.Ccc.Win.Permissions
             // for the data view tree
             treeViewData.BeforeCheck += treeViewDataBeforeCheck;
             treeViewData.AfterCheck += treeViewDataAfterCheck;
+			if (listViewRoles.Items.Count > 0) listViewRoles.Items[0].Selected = true;
+			listViewRoles.Select();
         }
 
         private void removeDeletedRoleFromPeople(IApplicationRole deletedApplicationRole)
