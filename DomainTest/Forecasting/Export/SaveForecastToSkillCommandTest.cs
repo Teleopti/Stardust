@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 		private ISaveForecastToSkillCommand _target;
 		private MockRepository _mocks;
 		private ISkillDayLoadHelper _skillDayLoadHelper;
-		private IScenarioProvider _scenarioProvider;
+		private IScenarioRepository _scenarioRepository;
 		private ISkillDayRepository _skillDayRepository;
 
 		[SetUp]
@@ -33,10 +33,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 			_targetSkill = SkillFactory.CreateSkillWithWorkloadAndSources();
 
 			_skillDayRepository = _mocks.DynamicMock<ISkillDayRepository>();
-			_scenarioProvider = _mocks.DynamicMock<IScenarioProvider>();
+			_scenarioRepository = _mocks.DynamicMock<IScenarioRepository>();
 			_skillDayLoadHelper = _mocks.DynamicMock<ISkillDayLoadHelper>();
 
-			_target = new SaveForecastToSkillCommand(_skillDayLoadHelper, _skillDayRepository, _scenarioProvider);
+			_target = new SaveForecastToSkillCommand(_skillDayLoadHelper, _skillDayRepository, _scenarioRepository);
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_scenarioProvider.DefaultScenario(secondBusinessUnit)).Return(targetScenario);
+				Expect.Call(_scenarioRepository.LoadDefaultScenario(secondBusinessUnit)).Return(targetScenario);
 				Expect.Call(_skillDayLoadHelper.LoadSchedulerSkillDays(period, new[] { _targetSkill }, targetScenario)).Return(
 					new Dictionary<ISkill, IList<ISkillDay>> { { _targetSkill, new[] { skillDay } } });
 				Expect.Call(_skillDayRepository.GetAllSkillDays(period, new[] { skillDay }, _targetSkill, targetScenario, false)).

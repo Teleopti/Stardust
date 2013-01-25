@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 	public class DefaultScenarioScheduleProviderTest
 	{
 		private DefaultScenarioScheduleProvider _target;
-		private IScenarioProvider _scenarioProvider;
+		private IScenarioRepository _scenarioProvider;
 		private IScheduleRepository _scheduleRepository;
 		private ILoggedOnUser _loggedOnUser;
 		private IUserTimeZone _userTimeZone;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		[SetUp]
 		public void Setup()
 		{
-			_scenarioProvider = MockRepository.GenerateMock<IScenarioProvider>();
+			_scenarioProvider = MockRepository.GenerateMock<IScenarioRepository>();
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			_scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-			_scenarioProvider.Stub(x => x.DefaultScenario()).Return(scenario);
+			_scenarioProvider.Stub(x => x.LoadDefaultScenario()).Return(scenario);
 			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, true),
 																			period.ToDateTimePeriod(timeZone),
 																			scenario)).Return(scheduleDictionary).IgnoreArguments();
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var scheduleDays = new IScheduleDay[] {};
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(user);
-			_scenarioProvider.Stub(x => x.DefaultScenario()).Return(scenario);
+			_scenarioProvider.Stub(x => x.LoadDefaultScenario()).Return(scenario);
 			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(
 				Arg<IPersonProvider>.Matches(o => o.GetPersons().Single().Equals(user)),
 				Arg<IScheduleDictionaryLoadOptions>.Is.Anything,
@@ -214,7 +215,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-			_scenarioProvider.Stub(x => x.DefaultScenario()).Return(scenario);
+			_scenarioProvider.Stub(x => x.LoadDefaultScenario()).Return(scenario);
 			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, true),
 																			period.ToDateTimePeriod(timeZone),
 																			scenario)).Return(scheduleDictionary).IgnoreArguments();

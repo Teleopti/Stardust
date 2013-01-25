@@ -10,20 +10,20 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 {
 	public class OpenAndSplitSkillCommand : IOpenAndSplitSkillCommand
 	{
-		private readonly IScenarioProvider _scenarioProvider;
+		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly WorkloadDayHelper _workloadDayHelper;
 
-		public OpenAndSplitSkillCommand(IScenarioProvider scenarioProvider, ISkillDayRepository skillDayRepository, WorkloadDayHelper workloadDayHelper)
+		public OpenAndSplitSkillCommand(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository, WorkloadDayHelper workloadDayHelper)
 		{
-			_scenarioProvider = scenarioProvider;
+			_scenarioRepository = scenarioRepository;
 			_workloadDayHelper = workloadDayHelper;
 			_skillDayRepository = skillDayRepository;
 		}
 
 	    public void Execute(ISkill skill, DateOnlyPeriod period, IList<TimePeriod> openHoursList)
 	    {
-            var scenario = _scenarioProvider.DefaultScenario(skill.BusinessUnit);
+            var scenario = _scenarioRepository.LoadDefaultScenario(skill.BusinessUnit);
             var skillDays = _skillDayRepository.FindRange(period, skill, scenario);
             var allSkillDays = _skillDayRepository.GetAllSkillDays(period, skillDays, skill, scenario, true);
 

@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.Register(c => UnitOfWorkFactoryContainer.Current).As<IUnitOfWorkFactory>().ExternallyOwned();
 			builder.Register(getThreadJobResultFeedback).As<IJobResultFeedback>().ExternallyOwned();
 			builder.RegisterType<SendPushMessageWhenRootAlteredService>().As<ISendPushMessageWhenRootAlteredService>().InstancePerDependency();
-			builder.RegisterType<ScenarioProvider>().As<IScenarioProvider>().InstancePerDependency();
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().InstancePerDependency();
 			builder.RegisterType<ScheduleChangedInDefaultScenarioNotification>().As<IScheduleChangedNotification>().InstancePerDependency();
 		}

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
@@ -13,14 +14,14 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
     {
         private readonly IImportForecastToSkillCommand _importForecastToSkillCommand;
         private readonly ISkillDayLoadHelper _skillDayLoadHelper;
-        private readonly IScenarioProvider _scenarioProvider;
+        private readonly IScenarioRepository _scenarioRepository;
         private readonly IJobResultFeedback _feedback;
 
-        public MultisiteForecastToSkillCommand(IImportForecastToSkillCommand importForecastToSkillCommand, ISkillDayLoadHelper skillDayLoadHelper, IScenarioProvider scenarioProvider, IJobResultFeedback feedback)
+		  public MultisiteForecastToSkillCommand(IImportForecastToSkillCommand importForecastToSkillCommand, ISkillDayLoadHelper skillDayLoadHelper, IScenarioRepository scenarioRepository, IJobResultFeedback feedback)
         {
             _importForecastToSkillCommand = importForecastToSkillCommand;
             _skillDayLoadHelper = skillDayLoadHelper;
-            _scenarioProvider = scenarioProvider;
+            _scenarioRepository = scenarioRepository;
             _feedback = feedback;
         }
 
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 					string.Format(CultureInfo.InvariantCulture, "Starting export of {0}.", multisiteSkillForExport.MultisiteSkill.Name));
                 var skillDictionary = _skillDayLoadHelper.LoadSchedulerSkillDays(skillSelection.Period,
                                                                                  new[] { multisiteSkillForExport.MultisiteSkill },
-                                                                                 _scenarioProvider.DefaultScenario(multisiteSkillForExport.MultisiteSkill.BusinessUnit));
+                                                                                 _scenarioRepository.LoadDefaultScenario(multisiteSkillForExport.MultisiteSkill.BusinessUnit));
                 var skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDictionary);
 
 				_feedback.Info(string.Format(CultureInfo.InvariantCulture, "Number of subskill mappings: {0}.", multisiteSkillForExport.SubSkillMapping.Count()));

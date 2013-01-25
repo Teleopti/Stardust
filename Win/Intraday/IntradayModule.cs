@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Win.Intraday
         {
             groupMain(builder);
             commandWiring(builder);
-            providerWiring(builder);
             intradayGlobalWiring(builder);
         }
 
@@ -40,11 +39,6 @@ namespace Teleopti.Ccc.Win.Intraday
             builder.RegisterType<OnEventStatisticMessageCommand>().InstancePerLifetimeScope();
             builder.RegisterType<LoadStatisticsAndActualHeadsCommand>().InstancePerLifetimeScope();
             builder.RegisterType<LoadScheduleByPersonSpecification>().InstancePerLifetimeScope();
-        }
-
-        private static void providerWiring(ContainerBuilder builder)
-        {
-            builder.RegisterType<ScenarioProvider>().As<IScenarioProvider>();
         }
 
         private static void groupMain(ContainerBuilder builder)

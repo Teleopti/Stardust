@@ -138,7 +138,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<HeaderViewModelFactory>().As<IHeaderViewModelFactory>();
 			builder.RegisterType<PeriodViewModelFactory>().As<IPeriodViewModelFactory>();
 			builder.RegisterType<PeriodSelectionViewModelFactory>().As<IPeriodSelectionViewModelFactory>();
-			builder.RegisterType<ScenarioProvider>().As<IScenarioProvider>();
 			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>();
 		}
 
