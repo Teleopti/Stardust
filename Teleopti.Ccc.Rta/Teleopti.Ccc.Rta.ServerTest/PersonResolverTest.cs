@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 	{
 		private IPersonResolver _target;
 		private MockRepository _mock;
-		private ILog _loggingSvc;
 		private IDatabaseConnectionFactory _databaseConnectionFactory;
 		private string _connectionString;
 
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void Setup()
 		{
 			_mock = new MockRepository();
-			_loggingSvc = _mock.DynamicMock<ILog>();
 			_databaseConnectionFactory = _mock.StrictMock<IDatabaseConnectionFactory>();
 			_connectionString = "connection";
 
@@ -35,14 +33,14 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		}
 
 		[Test]
-		public void ShouldReturnEmtpyGuidWhenLogOnIsEmpty()
+		public void ShouldReturnEmptyGuidWhenLogOnIsEmpty()
 		{
 			IEnumerable<PersonWithBusinessUnit> resolvedList;
 			Assert.That(_target.TryResolveId(2, string.Empty, out resolvedList), Is.True);
 			Assert.That(resolvedList.Count(p => p.BusinessUnitId == Guid.Empty && p.PersonId == Guid.Empty), Is.EqualTo(1));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), Test]
 		public void ShouldAddPersonWithBusinessUnitToListWhenLoopedTwice()
 		{
 			var connection = _mock.StrictMock<IDbConnection>();
