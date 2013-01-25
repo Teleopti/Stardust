@@ -20,7 +20,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IAbsenceRequestPersister _absenceRequestPersister;
 		private readonly IShiftTradeResponseService _shiftTradeResponseService;
 
-		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, ITextRequestPersister textRequestPersister, IAbsenceRequestPersister absenceRequestPersister, IShiftTradeResponseService shiftTradeResponseService)
+		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
+								ITextRequestPersister textRequestPersister, 
+								IAbsenceRequestPersister absenceRequestPersister, 
+								IShiftTradeResponseService shiftTradeResponseService)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;

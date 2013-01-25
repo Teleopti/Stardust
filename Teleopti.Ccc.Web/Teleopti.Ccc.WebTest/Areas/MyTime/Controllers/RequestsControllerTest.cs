@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -14,7 +13,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -197,7 +195,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel()).Return(model);
 
-			var target = new RequestsController(modelFactory, null, null);
+			var target = new RequestsController(modelFactory, null, null, null);
 			var result = target.ShiftTradeRequestPeriod();
 			var data = (ShiftTradeRequestsPeriodViewModel) result.Data;
 
@@ -226,7 +224,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<DateTime>.Is.Anything)).Return(model);
 
-			var target = new RequestsController(modelFactory, null, null);
+			var target = new RequestsController(modelFactory, null, null, null);
 			
 			var result = target.ShiftTradeRequestSchedule(DateTime.Now);
 			var scheduleViewModel = (ShiftTradeRequestsScheduleViewModel) result.Data;
@@ -270,7 +268,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			}
 
 			shiftTradePersister.VerifyAllExpectations();
-
+		}
 
 		private static void assertRequestEqual(RequestViewModel target, RequestViewModel expected)
 		{
