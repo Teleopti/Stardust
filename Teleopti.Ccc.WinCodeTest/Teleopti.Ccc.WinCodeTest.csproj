@@ -400,6 +400,7 @@
     <Compile Include="Intraday\IntradayMessageBrokerRetryTest.cs" />
     <Compile Include="Intraday\OnEventForecastMessageCommandTest.cs" />
     <Compile Include="Intraday\OnEventStatisticMessageCommandTest.cs" />
+    <Compile Include="Intraday\OpenIntradayTodayCommandTest.cs" />
     <Compile Include="Intraday\ReforecastModelTest.cs" />
     <Compile Include="Intraday\ReforecastWizardPagesTest.cs" />
     <Compile Include="Matrix\MatrixNavigationModelTest.cs" />

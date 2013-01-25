@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Collections.Generic;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
@@ -13,30 +15,30 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
     public class StaffingEffectViewAdapterTest
     {
         private StaffingEffectViewAdapter _target;
-        private MockRepository mocks;
-        private IRtaStateHolder rtaStateHolder;
-        private IPerson person;
-        private DateTimePeriod period;
-        private ITeam team;
-        private IDayLayerViewModel dayLayerViewAdapter;
-        private DayLayerModel model;
+        private MockRepository _mocks;
+        private IRtaStateHolder _rtaStateHolder;
+        private IPerson _person;
+        private DateTimePeriod _period;
+        private ITeam _team;
+        private IDayLayerViewModel _dayLayerViewAdapter;
+        private DayLayerModel _model;
 
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
+            _mocks = new MockRepository();
 
-            rtaStateHolder = mocks.DynamicMock<IRtaStateHolder>();
-            person = mocks.DynamicMock<IPerson>();
-            period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 8, 0, 0, 0, DateTimeKind.Utc), 0);
-            team = mocks.DynamicMock<ITeam>();
+            _rtaStateHolder = _mocks.DynamicMock<IRtaStateHolder>();
+            _person = _mocks.DynamicMock<IPerson>();
+            _period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 8, 0, 0, 0, DateTimeKind.Utc), 0);
+            _team = _mocks.DynamicMock<ITeam>();
 
-            model = new DayLayerModel(person, period, team,
+            _model = new DayLayerModel(_person, _period, _team,
                                           new WinCode.Common.LayerViewModelCollection(), null);
-            dayLayerViewAdapter = new DayLayerViewModel(rtaStateHolder, null, null, null, new TestDispatcher());
-            dayLayerViewAdapter.Models.Add(model);
+            _dayLayerViewAdapter = new DayLayerViewModel(_rtaStateHolder, null, null, null, new TestDispatcher());
+            _dayLayerViewAdapter.Models.Add(_model);
 
-            _target = new StaffingEffectViewAdapter(dayLayerViewAdapter);
+            _target = new StaffingEffectViewAdapter(_dayLayerViewAdapter);
         }
 
         [Test]
@@ -48,7 +50,41 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             Assert.AreEqual(0, _target.PositiveEffectPercent);
             Assert.AreEqual(0, _target.Total);
             Assert.AreEqual(0, _target.TotalPercent);
+			
+			_target.NegativeEffect = 1;
+        	_target.Total = 1;
+        	_target.PositiveEffect = 1;
         }
+
+		[Test]
+		public void VerifyCalculateEffeccts()
+		{
+			_model.StaffingEffect = 10;
+			var target = new StaffingEffectViewAdapterForTest(_dayLayerViewAdapter);
+			target.CallPropertyChanged(this, new PropertyChangedEventArgs("AlarmDescription"));
+			_model.StaffingEffect = -10;
+			target = new StaffingEffectViewAdapterForTest(_dayLayerViewAdapter);
+			target.CallPropertyChanged(this, new PropertyChangedEventArgs("AlarmDescription"));
+		}
+		
+		[Test]
+		public void VerifyPropertyChangedWhenAdapterIsRemovedFromCollection()
+		{
+			Assert.AreEqual(1, _model.HookedEvents());
+			_dayLayerViewAdapter.Models.Remove(_model);
+			Assert.AreEqual(0, _model.HookedEvents());
+			_dayLayerViewAdapter.Models.Add(_model);
+			Assert.AreEqual(1, _model.HookedEvents());
+		}
+
+		//[Test]
+		//public void ShouldTriggerEvent()
+		//{
+		//    var total = _target.Total;
+		//    _dayLayerViewAdapter.Models.FirstOrDefault().StaffingEffect = 10;
+		//    _dayLayerViewAdapter.Models.FirstOrDefault().AlarmDescription = "NewAlarm";
+		//    Assert.That(_target.Total > total);
+		//}
 
         //[Test]
         //public void VerifyCanRefreshPositiveStaffingValuesAreUpdated()
@@ -84,15 +120,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         //    mocks.VerifyAll();
         //}
 
-        [Test]
-        public void VerifyPropertyChangedWhenAdapterIsRemovedFromCollection()
-        {
-            Assert.AreEqual(1, model.HookedEvents());
-            dayLayerViewAdapter.Models.Remove(model);
-            Assert.AreEqual(0, model.HookedEvents());
-            dayLayerViewAdapter.Models.Add(model);
-            Assert.AreEqual(1, model.HookedEvents());
-        }
 
         //[Test]
         //public void VerifyCanRefreshNegativeStaffingValuesAreUpdated()
@@ -130,4 +157,18 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         //    mocks.VerifyAll();
         //}
     }
+
+	public class StaffingEffectViewAdapterForTest : StaffingEffectViewAdapter
+	{
+		public StaffingEffectViewAdapterForTest(IDayLayerViewModel dayLayerViewModel)
+			: base(dayLayerViewModel)
+		{	
+		}
+
+		public void CallPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			AdapterPropertyChanged(sender, e);
+		}
+
+	}
 }

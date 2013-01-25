@@ -11,34 +11,34 @@ namespace Teleopti.Ccc.WinCode.Intraday
         public StaffingEffectViewAdapter(IDayLayerViewModel dayLayerViewModel)
         {
             _dayLayerViewModel = dayLayerViewModel;
-            ((ObservableCollection<DayLayerModel>)_dayLayerViewModel.Models).CollectionChanged += _layerViewAdapters_CollectionChanged;
+            ((ObservableCollection<DayLayerModel>)_dayLayerViewModel.Models).CollectionChanged += LayerViewAdaptersCollectionChanged;
             CalculateEffects();
             foreach (var model in _dayLayerViewModel.Models)
             {
-                model.PropertyChanged += adapter_PropertyChanged;
+                model.PropertyChanged += AdapterPropertyChanged;
             }
         }
 
-        void _layerViewAdapters_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void LayerViewAdaptersCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             CalculateEffects();
             if (e.OldItems != null)
             {
                 foreach (DayLayerModel model in e.OldItems)
                 {
-                    model.PropertyChanged -= adapter_PropertyChanged;
+                    model.PropertyChanged -= AdapterPropertyChanged;
                 }
             }
             if (e.NewItems != null)
             {
                 foreach (DayLayerModel model in e.NewItems)
                 {
-                    model.PropertyChanged += adapter_PropertyChanged;
+                    model.PropertyChanged += AdapterPropertyChanged;
                 }
             }
         }
 
-        void adapter_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected void AdapterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "AlarmDescription")
                 CalculateEffects();
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _negativeEffect; }
             set
             {
-                if (_negativeEffect != value)
+                if (_negativeEffect.Equals(value))
                 {
                     _negativeEffect = value;
                     NotifyPropertyChanged("NegativeEffect");
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _total; }
             set
             {
-                if (_total != value)
+				if (_total.Equals(value))
                 {
                     _total = value;
                     NotifyPropertyChanged("Total");
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _totalPercent; }
             set
             {
-                if (_totalPercent != value)
+				if (_totalPercent.Equals(value))
                 {
                     _totalPercent = value;
                     NotifyPropertyChanged("TotalPercent");
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _positiveEffectPercent; }
             set
             {
-                if (_positiveEffectPercent != value)
+				if (_positiveEffectPercent.Equals(value))
                 {
                     _positiveEffectPercent = value;
                     NotifyPropertyChanged("PositiveEffectPercent");
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _negativeEffectPercent; }
             set
             {
-                if (_negativeEffectPercent != value)
+				if (_negativeEffectPercent.Equals(value))
                 {
                     _negativeEffectPercent = value;
                     NotifyPropertyChanged("NegativeEffectPercent");
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _positiveEffect; }
             set
             {
-                if (_positiveEffect != value)
+				if (_positiveEffect.Equals(value))
                 {
                     _positiveEffect = value;
                     NotifyPropertyChanged("PositiveEffect");
