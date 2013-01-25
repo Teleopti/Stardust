@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
@@ -210,9 +211,27 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			_gridColumns = null;
 
-			gridControlAvailability.SaveCellInfo += new GridSaveCellInfoEventHandler(gridControlAvailability_SaveCellInfo);
+			gridControlAvailability.SaveCellInfo += gridControlAvailability_SaveCellInfo;
+			gridControlAvailability.PrepareViewStyleInfo += gridControlAvailabilityPrepareViewStyleInfo;
+			gridControlAvailability.MouseUp += gridControlAvailabilityMouseUp;
+			gridControlAvailability.KeyUp += gridControlAvailabilityKeyUp;
 		}
 
+		void gridControlAvailabilityPrepareViewStyleInfo(object sender, GridPrepareViewStyleInfoEventArgs e)
+		{
+			e.Style.BackColor = e.RowIndex == gridControlAvailability.CurrentCell.RowIndex ? Color.LightGoldenrodYellow : Color.White;
+		}
+
+		void gridControlAvailabilityKeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode.Equals(Keys.Down) || e.KeyCode.Equals(Keys.Up) || e.KeyCode.Equals(Keys.Enter))
+				gridControlAvailability.Invalidate();
+		}
+
+		void gridControlAvailabilityMouseUp(object sender, MouseEventArgs e)
+		{
+			gridControlAvailability.Invalidate();
+		}
 		void gridControlAvailability_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
 		{
 			gridControlAvailability.Invalidate();
