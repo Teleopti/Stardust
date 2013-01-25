@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
@@ -17,10 +17,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private MockRepository _mock;
         private ISkillDay _skillDay1;
         private ISkillDay _skillDay2;
-        private ISchedulingResultStateHolder _schedulingResultStateHolder  ;
+        private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private List<ISkillDay> _skillDayList;
+    	private ISkillIntervalDataSkillFactorApplyer _factorApplyer;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -28,7 +29,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _skillDay2 = _mock.StrictMock<ISkillDay>();
             _skillDayList = new List<ISkillDay>() {_skillDay1, _skillDay2};
             _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-            _target = new SkillDayPeriodIntervalData(new IntervalDataMedianCalculator(), _schedulingResultStateHolder);
+        	_factorApplyer = _mock.StrictMock<ISkillIntervalDataSkillFactorApplyer>();
+            _target = new SkillDayPeriodIntervalData(_factorApplyer, new IntervalDataMedianCalculator(), _schedulingResultStateHolder);
         }
 
 
@@ -36,138 +38,67 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         public void ShouldCreateIntervalsFromSkillDay()
         {
             var date = DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date, DateTimeKind.Utc);
-            var result = new Dictionary<TimeSpan, ISkillIntervalData>
+        	var skillIntervalData1 = new SkillIntervalData(new DateTimePeriod(date, date.AddMinutes(15)), 6.0, 0, 0, 0, 0);
+        	var skillIntervalData2 = new SkillIntervalData(new DateTimePeriod(date, date.AddMinutes(15)), 12.0, 0, 0, 0, 0);
+            var activity1 = ActivityFactory.CreateActivity("phone1");
+            var activity2 = ActivityFactory.CreateActivity("phone2");
+
+			var intervalData1 = new Dictionary<TimeSpan, ISkillIntervalData>
                              {
                                  {
                                      date.TimeOfDay,
-                                     new SkillIntervalData(new DateTimePeriod(date, date.AddMinutes(15)), 6.0, 0, 0, 0,0)
-                                     },
+                                     skillIntervalData1
+                                     }
+                             };	
+			var intervalData2 = new Dictionary<TimeSpan, ISkillIntervalData>
+                             {
                                  {
-                                     date.AddMinutes(15).TimeOfDay,
-                                     new SkillIntervalData(new DateTimePeriod(date.AddMinutes(15), date.AddMinutes(30)), 5.5, 0, 0, 0, 0)},
-                                 {
-                                     date.AddMinutes(30).TimeOfDay,
-                                     new SkillIntervalData(new DateTimePeriod(date.AddMinutes(30), date.AddMinutes(45)), 1.0, 0, 0, 0, 0)},
-                                 {
-                                     date.AddMinutes(45).TimeOfDay,
-                                     new SkillIntervalData(new DateTimePeriod(date.AddMinutes(45), date.AddMinutes(60)), 3.5, 0, 0, 0, 0)}
+                                     date.TimeOfDay,
+                                     skillIntervalData2
+                                     }
                              };
+        	var activityIntervalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>
+        	                           	{
+        	                           		{activity1, intervalData1},
+											{activity2, intervalData2}
+        	                           	};
 
             var skillstaffperiod1 = _mock.StrictMock<ISkillStaffPeriod>();
             var skillstaffperiod2 = _mock.StrictMock<ISkillStaffPeriod>();
-            var skillstaffperiod3 = _mock.StrictMock<ISkillStaffPeriod>();
-            var skillstaffperiod4 = _mock.StrictMock<ISkillStaffPeriod>();
-            var skillstaffperiod5 = _mock.StrictMock<ISkillStaffPeriod>();
-            var skillstaffperiod6 = _mock.StrictMock<ISkillStaffPeriod>();
-            var skillstaffperiod7 = _mock.StrictMock<ISkillStaffPeriod>();
-            var skillstaffperiod8 = _mock.StrictMock<ISkillStaffPeriod>();
 
-            var skill = _mock.StrictMock<ISkill>();
-
+        	var skill1 = SkillFactory.CreateSkill("skill1");
+        	skill1.Activity = activity1;
+        	skill1.DefaultResolution = 15;
+			var skill2 = SkillFactory.CreateSkill("skill2");
+        	skill2.Activity = activity2;
+        	skill2.DefaultResolution = 15;
+        	
             using (_mock.Record())
             {
                 Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
                     Return(_skillDayList);
-                Expect.Call(_skillDay1.Skill).Return(skill);
-                Expect.Call(skill.DefaultResolution).Return(15);
-                Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>() { skillstaffperiod1, skillstaffperiod2, skillstaffperiod3, skillstaffperiod4 }));
-                Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>() { skillstaffperiod5, skillstaffperiod6, skillstaffperiod7, skillstaffperiod8 }));
+                Expect.Call(_skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
+            	Expect.Call(_skillDay2.Skill).Return(skill2).Repeat.AtLeastOnce();
+            	Expect.Call(_factorApplyer.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
+            	                                        skill1)).IgnoreArguments().Return(skillIntervalData1).Repeat.Times(192);
+				Expect.Call(_factorApplyer.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
+            	                                        skill2)).IgnoreArguments().Return(skillIntervalData2).Repeat.Times(192);
+                Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillstaffperiod1})).Repeat.AtLeastOnce();
+                Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillstaffperiod2})).Repeat.AtLeastOnce();
 
                 Expect.Call(skillstaffperiod1.Period).Return(new DateTimePeriod(date.AddMinutes(0), date.AddMinutes(15))).Repeat.AtLeastOnce();
-                Expect.Call(skillstaffperiod1.AbsoluteDifference).Return(4);
+            	Expect.Call(skillstaffperiod1.AbsoluteDifference).Return(4);
 
-                Expect.Call(skillstaffperiod2.Period).Return(new DateTimePeriod(date.AddMinutes(15), date.AddMinutes(30))).Repeat.AtLeastOnce();
-                Expect.Call(skillstaffperiod2.AbsoluteDifference).Return(10);
-
-                Expect.Call(skillstaffperiod3.Period).Return(new DateTimePeriod(date.AddMinutes(30), date.AddMinutes(45))).Repeat.AtLeastOnce();
-                Expect.Call(skillstaffperiod3.AbsoluteDifference).Return(1);
-
-                Expect.Call(skillstaffperiod4.Period).Return(new DateTimePeriod(date.AddMinutes(45), date.AddMinutes(60))).Repeat.AtLeastOnce();
-                Expect.Call(skillstaffperiod4.AbsoluteDifference).Return(2);
-
-                var tomorrow = date.AddDays(1);
-
-                Expect.Call(skillstaffperiod5.Period).Return(new DateTimePeriod(tomorrow.AddMinutes(0), tomorrow.AddMinutes(15))).Repeat.AtLeastOnce();
-                Expect.Call(skillstaffperiod5.AbsoluteDifference).Return(8);
-
-                Expect.Call(skillstaffperiod6.Period).Return(new DateTimePeriod(tomorrow.AddMinutes(15), tomorrow.AddMinutes(30))).Repeat.AtLeastOnce();
-                Expect.Call(skillstaffperiod6.AbsoluteDifference).Return(1);
-
-                Expect.Call(skillstaffperiod7.Period).Return(new DateTimePeriod(tomorrow.AddMinutes(30), tomorrow.AddMinutes(45))).Repeat.AtLeastOnce();
-                Expect.Call(skillstaffperiod7.AbsoluteDifference).Return(1);
-
-                Expect.Call(skillstaffperiod8.Period).Return(new DateTimePeriod(tomorrow.AddMinutes(45), tomorrow.AddMinutes(60))).Repeat.AtLeastOnce();
-                Expect.Call(skillstaffperiod8.AbsoluteDifference).Return(5);
+				Expect.Call(skillstaffperiod2.Period).Return(new DateTimePeriod(date.AddMinutes(0), date.AddMinutes(15))).Repeat.AtLeastOnce();
+                Expect.Call(skillstaffperiod2.AbsoluteDifference).Return(8);
             }
             using(_mock.Playback())
             {
-                var calculatedResult = _target.GetIntervalDistribution(new List<DateOnly>( ));
-
-                Assert.AreEqual(result[date.TimeOfDay].ForecastedDemand, calculatedResult[date.TimeOfDay].ForecastedDemand);
-                Assert.AreEqual(result[date.AddMinutes(15).TimeOfDay].ForecastedDemand, calculatedResult[date.AddMinutes(15).TimeOfDay].ForecastedDemand);
-                Assert.AreEqual(result[date.AddMinutes(30).TimeOfDay].ForecastedDemand, calculatedResult[date.AddMinutes(30).TimeOfDay].ForecastedDemand);
-                Assert.AreEqual(result[date.AddMinutes(45).TimeOfDay].ForecastedDemand, calculatedResult[date.AddMinutes(45).TimeOfDay].ForecastedDemand);
+				var calculatedResult = _target.GetIntervalDistribution(new List<DateOnly> { new DateOnly(date),  new DateOnly(date.AddDays(1)) });
+            	Assert.That(activityIntervalData.Count, Is.EqualTo(2));
+				Assert.That(calculatedResult[activity1][date.TimeOfDay].ForecastedDemand, Is.EqualTo(activityIntervalData[activity1][date.TimeOfDay].ForecastedDemand));
+                Assert.That(calculatedResult[activity2][date.TimeOfDay].ForecastedDemand, Is.EqualTo(activityIntervalData[activity2][date.TimeOfDay].ForecastedDemand));
             }
         }
-
-		//[Test]
-		//public void ShouldCreateIntervalsFromSkillDayWithNullValues()
-		//{
-		//    var today = new DateTime(2012, 11, 28, 0, 0, 0, DateTimeKind.Utc);
-		//    var result = new Dictionary<TimeSpan, ISkillIntervalData>();
-		//    result.Add(today.AddMinutes(15).TimeOfDay, new SkillIntervalData(6.0, 0, 0, 0));
-		//    result.Add(today.AddMinutes(30).TimeOfDay, new SkillIntervalData(5.5, 0, 0, 0));
-		//    result.Add(today.AddMinutes(45).TimeOfDay, new SkillIntervalData(1.0, 0, 0, 0));
-		//    result.Add(today.AddMinutes(60).TimeOfDay, new SkillIntervalData(2, 0, 0, 0));
-
-		//    var skillstaffperiod1 = _mock.StrictMock<ISkillStaffPeriod>();
-		//    var skillstaffperiod2 = _mock.StrictMock<ISkillStaffPeriod>();
-		//    var skillstaffperiod3 = _mock.StrictMock<ISkillStaffPeriod>();
-		//    var skillstaffperiod4 = _mock.StrictMock<ISkillStaffPeriod>();
-		//    var skillstaffperiod5 = _mock.StrictMock<ISkillStaffPeriod>();
-		//    var skillstaffperiod6 = _mock.StrictMock<ISkillStaffPeriod>();
-		//    var skillstaffperiod7 = _mock.StrictMock<ISkillStaffPeriod>();
-
-		//    using (_mock.Record())
-		//    {
-		//        Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>() { skillstaffperiod1, skillstaffperiod2, skillstaffperiod3, skillstaffperiod4 }));
-		//        Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>() { skillstaffperiod5, skillstaffperiod6, skillstaffperiod7 }));
-
-		//        Expect.Call(skillstaffperiod1.Period).Return(new DateTimePeriod(today.AddMinutes(15), today.AddMinutes(30))).Repeat.AtLeastOnce();
-		//        Expect.Call(skillstaffperiod1.AbsoluteDifference).Return(4);
-
-		//        Expect.Call(skillstaffperiod2.Period).Return(new DateTimePeriod(today.AddMinutes(30), today.AddMinutes(45))).Repeat.AtLeastOnce();
-		//        Expect.Call(skillstaffperiod2.AbsoluteDifference).Return(10);
-
-		//        Expect.Call(skillstaffperiod3.Period).Return(new DateTimePeriod(today.AddMinutes(45), today.AddMinutes(60))).Repeat.AtLeastOnce();
-		//        Expect.Call(skillstaffperiod3.AbsoluteDifference).Return(1);
-
-		//        Expect.Call(skillstaffperiod4.Period).Return(new DateTimePeriod(today.AddMinutes(60), today.AddMinutes(75))).Repeat.AtLeastOnce();
-		//        Expect.Call(skillstaffperiod4.AbsoluteDifference).Return(2);
-
-		//        var tomorrow = today.AddDays(1);
-
-		//        Expect.Call(skillstaffperiod5.Period).Return(new DateTimePeriod(tomorrow.AddMinutes(15), tomorrow.AddMinutes(30))).Repeat.AtLeastOnce();
-		//        Expect.Call(skillstaffperiod5.AbsoluteDifference).Return(8);
-
-		//        Expect.Call(skillstaffperiod6.Period).Return(new DateTimePeriod(tomorrow.AddMinutes(30), tomorrow.AddMinutes(45))).Repeat.AtLeastOnce();
-		//        Expect.Call(skillstaffperiod6.AbsoluteDifference).Return(1);
-
-		//        Expect.Call(skillstaffperiod7.Period).Return(new DateTimePeriod(tomorrow.AddMinutes(45), tomorrow.AddMinutes(60))).Repeat.AtLeastOnce();
-		//        Expect.Call(skillstaffperiod7.AbsoluteDifference).Return(1);
-
-		//        //Expect.Call(skillstaffperiod8.Period).Return(new DateTimePeriod(tomorrow.AddMinutes(60), tomorrow.AddMinutes(75))).Repeat.AtLeastOnce();
-		//        //Expect.Call(skillstaffperiod8.AbsoluteDifference).Return(5);
-		//    }
-
-		//    var calculatedResult = _target.GetIntervalDistribution();
-		//    Assert.AreEqual(result[today.AddMinutes(15).TimeOfDay].CurrentDemand, calculatedResult[today.AddMinutes(15).TimeOfDay].CurrentDemand);
-		//    Assert.AreEqual(result[today.AddMinutes(30).TimeOfDay].CurrentDemand, calculatedResult[today.AddMinutes(30).TimeOfDay].CurrentDemand);
-		//    Assert.AreEqual(result[today.AddMinutes(45).TimeOfDay].CurrentDemand, calculatedResult[today.AddMinutes(45).TimeOfDay].CurrentDemand);
-		//    Assert.AreEqual(result[today.AddMinutes(60).TimeOfDay].CurrentDemand, calculatedResult[today.AddMinutes(60).TimeOfDay].CurrentDemand);
-		//}
-
     }
-
-    
 }

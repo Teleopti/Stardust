@@ -109,20 +109,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, _schedulingOptions);
 
                     //call class that returns the aggregated intraday dist based on teamblock dates ???? consider the priority and understaffing
-                    var skillInternalDataList = _skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList);
-
-                    //temporary, now i think it should be activity ???+ consider activity
-                    IActivity activity =
-                        _matrixList.First().Person.PersonPeriodCollection.First().PersonSkillCollection.First().Skill.Activity;
-                    IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> askMickeWhyDic = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
-                    askMickeWhyDic.Add(activity, skillInternalDataList);
+                    var activityInternalData = _skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList);
 
                     //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
                     // (should we cover for max seats here?) ????
 					var shifts = _workShiftFilterService.Filter(startDate, groupPerson, groupMatrixList, restriction, _schedulingOptions);
 
                     //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need ???
-                    var bestShiftProjectionCache = _workShiftSelector.Select(shifts, askMickeWhyDic,
+					var bestShiftProjectionCache = _workShiftSelector.Select(shifts, activityInternalData,
                                                                              _schedulingOptions.WorkShiftLengthHintOption,
                                                                              _schedulingOptions.UseMinimumPersons,
                                                                              _schedulingOptions.UseMaximumPersons);
