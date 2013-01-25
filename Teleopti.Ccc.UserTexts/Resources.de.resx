@@ -8384,7 +8384,7 @@ Periode: {3}</value>
     <value>Startdatum muss vor dem Enddatum liegen</value>
   </data>
   <data name="ShiftCategoriesAvailableForExtendedPreference" xml:space="preserve">
-    <value>Schichtkategorien verfügbar für erweiterte Präferenzen</value>
+    <value>Schichtkategorien verfügbar für Präferenzen</value>
   </data>
   <data name="ShiftTradeTargetTimeDenyReason" xml:space="preserve">
     <value>Schicht-Tausch abgelehnt, da die Toleranz für die Plan-Vertragszeit überschritten wurde.</value>
@@ -8408,7 +8408,7 @@ Periode: {3}</value>
     <value>+/-</value>
   </data>
   <data name="DaysOffAvailableForExtendedPreferences" xml:space="preserve">
-    <value>Freie Tage verfügbar für erweiterte Präferenzen.</value>
+    <value>Freie Tage verfügbar für Präferenzen.</value>
   </data>
   <data name="SorryForTheInconvenianceButSchedulerHasToCloseNowEtc" xml:space="preserve">
     <value>Der Scheduler muss jetzt geschlossen werden. Bitte entschuldigen Sie die Unannehmlichkeit. Sie können den Scheduler erneut öffnen und die Arbeit fortsetzen.</value>
