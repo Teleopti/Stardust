@@ -14,19 +14,13 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 	[TestFixture]
 	public class LoggedOnUserTest
 	{
-		private ICurrentTeleoptiPrincipal FakeCurrentTeleoptiPrincipal(IPerson person)
-		{
-			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null), person);
-			return new FakeCurrentTeleoptiPrincipal(principal);
-		}
-
 		[Test]
 		public void ShouldGetCurrentPersonFromPrincipal()
 		{
 			var person = PersonFactory.CreatePerson();
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(Arg<Guid>.Is.NotNull)).Return(person);
-			var target = new LoggedOnUser(personRepository, FakeCurrentTeleoptiPrincipal(person));
+			var target = new LoggedOnUser(personRepository, fakeCurrentTeleoptiPrincipal(person));
 
 			var result = target.CurrentUser();
 
@@ -34,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 		}
 
 		[Test]
-		public void ShouldReturnNullIfNoPricipal()
+		public void ShouldReturnNullIfNoPrincipal()
 		{
 			var principal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
 			principal.Stub(x => x.Current()).Return(null);
@@ -46,6 +40,12 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 			var result = target.CurrentUser();
 
 			result.Should().Be.Null();
+		}
+
+		private static ICurrentTeleoptiPrincipal fakeCurrentTeleoptiPrincipal(IPerson person)
+		{
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null), person);
+			return new FakeCurrentTeleoptiPrincipal(principal);
 		}
 	}
 }
