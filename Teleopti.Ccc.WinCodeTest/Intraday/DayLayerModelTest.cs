@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -12,110 +13,165 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
     [TestFixture]
     public class DayLayerModelTest
     {
-        private DateTimePeriod period;
-        private MockRepository mocks;
-        private IPerson person;
-        private ITeam team;
-        private DayLayerModel target;
+        private DateTimePeriod _period;
+        private MockRepository _mocks;
+        private IPerson _person;
+        private ITeam _team;
+        private DayLayerModel _target;
 
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
+            _mocks = new MockRepository();
 
-            period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 8, 0, 0, 0, DateTimeKind.Utc), 0);
-            person = PersonFactory.CreatePerson("Kalle", "Kula");
-            person.EmploymentNumber = "10";
-            team = mocks.StrictMock<ITeam>();
+            _period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 8, 0, 0, 0, DateTimeKind.Utc), 0);
+            _person = PersonFactory.CreatePerson("Kalle", "Kula");
+            _person.EmploymentNumber = "10";
+            _team = _mocks.StrictMock<ITeam>();
             var layerCollection = new LayerViewModelCollection();
             var commonAgentName = new CommonNameDescriptionSetting { AliasFormat = CommonNameDescriptionSetting.LastName };
-            target = new DayLayerModel(person, period, team, layerCollection, commonAgentName);
+            _target = new DayLayerModel(_person, _period, _team, layerCollection, commonAgentName);
         }
 
         [Test]
         public void APinnedAdapterIsPinned()
         {
             bool isPinnedSet = false;
-            target.PropertyChanged += (sender, e) => isPinnedSet = true;
-            target.IsPinned = true;
+            _target.PropertyChanged += (sender, e) => isPinnedSet = true;
+            _target.IsPinned = true;
+        	var targetPinned = _target.IsPinned;
             Assert.IsTrue(isPinnedSet);
+			Assert.IsTrue(targetPinned);
         }
 
-        [Test]
-        public void VerifyShowNextActivityLayer()
-        {
-            Assert.IsFalse(target.ShowNextActivity);
-        }
-
-        //[Test]
-        //public void ShouldGetAlarmDescription()
-        //{
-        //    target.AlarmLayer = new AlarmSituation(new AlarmType(new Description("Alarma!"), Color.DimGray, TimeSpan.Zero,
-        //                               AlarmTypeMode.UserDefined, 1), period, person);
-        //    Assert.AreEqual("Alarma!", target.AlarmDescription);
-        //}
-
-        [Test]
+		[Test]
         public void ShouldGetCommonNameDescription()
         {
-            Assert.AreEqual("Kula", target.CommonNameDescription);
+            Assert.AreEqual("Kula", _target.CommonNameDescription);
         }
 
-        //[Test]
-        //public void ShouldGetCurrentStateDescription()
-        //{
-        //    IRtaStateGroup g1 = new RtaStateGroup("sdf1", false, true);
-        //    g1.AddState("AUX1", "sdfsdf 1", Guid.NewGuid());
+		[Test]
+		public void ShouldGetTeam()
+		{
+			Assert.AreEqual(_team, _target.Team);
+		}
 
-        //    IRtaStateGroup g2 = new RtaStateGroup("sdf2", false, true);
-        //    g2.AddState("AUX2", "sdfsdf 2", Guid.NewGuid());
+		[Test]
+		public void ShouldReturnColorValue()
+		{
+			var eventIstriggered = false;
+			_target.PropertyChanged += (s, e) => eventIstriggered = true;
+			_target.ColorValue = 255;
+			_target.ColorValue = 255;
+			Assert.That(_target.ColorValue, Is.EqualTo(255));
+			Assert.That(_target.Color, Is.EqualTo(Color.FromArgb(255))); 
+			Assert.IsTrue(eventIstriggered);
+		}
 
-        //    IRtaVisualLayer newRtaVisualLayer = new RtaVisualLayer(g1.StateCollection[0],
-        //                                                        new DateTimePeriod(timeStamp, timeStamp.AddHours(5)),
-        //                                                        new Activity("Phone"), person);
-        //    target.CurrentState = newRtaVisualLayer;
-        //    Assert.AreEqual("sdf1", target.CurrentStateDescription);
-        //}
+		[Test]
+		public void ShouldReturnAlarmDescription()
+		{
+			var eventTrigger = false;
+			_target.PropertyChanged += (s, e) => eventTrigger = true;
+			_target.AlarmDescription = "alarm";
+			_target.AlarmDescription = "alarm";
+			Assert.That(_target.AlarmDescription, Is.EqualTo("alarm"));
+			Assert.IsTrue(eventTrigger);
+		}
 
-        //[Test]
-        //public void ShouldGetCurrentActivityDescription()
-        //{
-        //    var layerFactory = new VisualLayerFactory();
-        //    target.CurrentActivityLayer = layerFactory.CreateShiftSetupLayer(new Activity("Phone"), period,person);
-        //    Assert.AreEqual("Phone", target.CurrentActivityDescription);
-        //} 
+		[Test]
+		public void ShouldReturnAlarmStart()
+		{
+			var dateTime = DateTime.Now;
+			_target.AlarmStart = dateTime;
+			Assert.That(_target.AlarmStart, Is.EqualTo(dateTime));
+		}
 
-        //[Test]
-        //public void ShouldGetNextActivityDescription()
-        //{
-        //    var layerFactory = new VisualLayerFactory();
-        //    target.NextActivityLayer = layerFactory.CreateShiftSetupLayer(new Activity("Phone1"), period,person);
-        //    Assert.AreEqual("Phone1", target.NextActivityDescription);
-        //}
+		[Test]
+		public void ShouldReturnNextActivityDescription()
+		{
+			var eventTrigger = false;
+			_target.PropertyChanged += (s, e) => eventTrigger = true;
+			_target.NextActivityDescription = "nextActivity";
+			_target.NextActivityDescription = "nextActivity";
+			Assert.That(_target.NextActivityDescription, Is.EqualTo("nextActivity"));
+			Assert.IsTrue(eventTrigger);
+		}
 
-        //[Test]
-        //public void ShouldGetNextActivityStartTime()
-        //{
-        //    var layerFactory = new VisualLayerFactory();
-        //    target.NextActivityLayer = layerFactory.CreateShiftSetupLayer(new Activity("Phone1"), period, person);
-        //    Assert.AreEqual("00:00", target.NextActivityStartDateTime);
-        //}
+		[Test]
+		public void ShouldReturnNextActivityStartDate()
+		{
+			var dateTime = DateTime.Now;
+			var eventTrigger = false;
+			_target.PropertyChanged += (s, e) => eventTrigger = true;
+			_target.NextActivityStartDateTime = dateTime;
+			_target.NextActivityStartDateTime = dateTime;
+			Assert.That(_target.NextActivityStartDateTime, Is.EqualTo(dateTime));
+			Assert.IsTrue(eventTrigger);
+		}
 
-        //[Test]
-        //public void ShouldGetSortTime()
-        //{
-        //    Assert.AreEqual(TimeSpan.Zero, target.SortTime);
+		[Test]
+		public void ShouldReturnScheduleStartDateTime()
+		{
+			var dateTime = new DateTime(2013, 01, 25);
+			var evenTrigger = false;
+			_target.PropertyChanged += (s, e) => evenTrigger = true;
+			_target.ScheduleStartDateTime = dateTime;
+			_target.ScheduleStartDateTime = dateTime;
+			Assert.That(_target.ScheduleStartDateTime, Is.EqualTo(dateTime));
+			Assert.IsTrue(evenTrigger);
+		}
 
-        //    target.AlarmLayer =
-        //        new AlarmSituation(new AlarmType(new Description("Alarma!"), Color.DimGray, TimeSpan.Zero,
-        //                                         AlarmTypeMode.UserDefined, 1), period, person);
-        //    Assert.AreEqual(TimeSpan.FromDays(1), target.SortTime);
-        //}
+    	[Test]
+    	public void ShouldReturnCurrentActivityDescription()
+    	{
+    		var eventTrigger = false;
+    		_target.PropertyChanged += (s, e) => eventTrigger = true;
+    		_target.CurrentActivityDescription = "activity";
+    		_target.CurrentActivityDescription = "activity";
+			Assert.That(_target.CurrentActivityDescription, Is.EqualTo("activity"));
+			Assert.IsTrue(eventTrigger);
+    	}
 
-        [Test]
-        public void ShouldGetTeam()
-        {
-            Assert.AreEqual(team, target.Team);
-        }
-    }
+		[Test]
+		public void ShouldReturnCurrentStateDescription()
+		{
+			var eventTrigger = false;
+			_target.PropertyChanged += (s, e) => eventTrigger = true;
+			_target.CurrentStateDescription = "state";
+			_target.CurrentStateDescription = "state";
+			Assert.That(_target.CurrentStateDescription, Is.EqualTo("state"));
+			Assert.IsTrue(eventTrigger);
+		}
+
+		[Test]
+		public void ShouldReturnEnteredState()
+		{
+			var dateTime = DateTime.Now;
+			var eventTriggered = false;
+			_target.PropertyChanged += (s, e) => eventTriggered = true;
+			_target.EnteredCurrentState = dateTime;
+			_target.EnteredCurrentState = dateTime;
+			Assert.That(_target.EnteredCurrentState, Is.EqualTo(dateTime));
+			Assert.IsTrue(eventTriggered);
+		}
+
+		[Test]
+		public void ShouldReturnStaffingEffect()
+		{
+			var eventTriggered = false;
+			_target.PropertyChanged += (s, e) => eventTriggered = true;
+			_target.StaffingEffect = 10D;
+			_target.StaffingEffect = 10D;
+			Assert.That(_target.StaffingEffect, Is.EqualTo(10D));
+			Assert.IsTrue(eventTriggered);
+		}
+
+		[Test]
+		public void ShouldReturnShowNextActivityLayer()
+		{
+			_target.ShowNextActivity = false;
+			Assert.IsFalse(_target.ShowNextActivity);
+		}	
+	}
 }

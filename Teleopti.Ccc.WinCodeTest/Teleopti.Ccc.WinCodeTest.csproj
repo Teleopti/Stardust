@@ -392,6 +392,7 @@
     <Compile Include="Helpers\CollectionViewComparer.cs" />
     <Compile Include="Helpers\PropertyChangedListener.cs" />
     <Compile Include="Intraday\AgentStateViewAdapterTest.cs" />
+    <Compile Include="Intraday\IntradayMainModelTest.cs" />
     <Compile Include="Intraday\LoadStatisticsAndActualHeadsCommandTest.cs" />
     <Compile Include="Intraday\OnEventScheduleMessageCommandTest.cs" />
     <Compile Include="Intraday\DayLayerModelTest.cs" />

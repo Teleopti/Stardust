@@ -46,6 +46,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         [Test]
         public void VerifyCanRefreshAgentState()
         {
+        	var wasCalled = false;
+        	_target.PropertyChanged += (s, e) => wasCalled = true;
             var dayLayerModel =
                 new DayLayerModel(
                     new Person(),
@@ -59,12 +61,42 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
             var collection = new Collection<DayLayerModel> { dayLayerModel };
 
-            Expect.Call(_dayLayerViewModel.Models).Return(collection);
+        	_dayLayerViewModel.Expect(d => d.Models).Return(collection);
             _mocks.ReplayAll();
 
             _target.Refresh();
-            _mocks.VerifyAll();
-            Assert.AreEqual(1, _target.TotalPersons);
+            _mocks.VerifyAll();			
+            Assert.That(_target.TotalPersons, Is.EqualTo(1));
+			Assert.That(wasCalled, Is.True);
         }
+
+		[Test]
+		public void ShouldAddToTotalPersonsWhenStateGroupNotDefined()
+		{
+			var dayLayerModel =
+				new DayLayerModel(
+					new Person(),
+					new DateTimePeriod(new DateTime(2012, 11, 09, 20, 20, 00, DateTimeKind.Utc),
+					                   new DateTime(2012, 11, 10, 20, 20, 00, DateTimeKind.Utc)),
+					new Team(),
+					new LayerViewModelCollection(
+						new EventAggregator(),
+						new CreateLayerViewModelService()),
+					new CommonNameDescriptionSetting("test"))
+					{
+						CurrentStateDescription = null
+					};
+
+			var collection = new Collection<DayLayerModel> { dayLayerModel };
+
+			_dayLayerViewModel.Expect(d => d.Models).Return(collection);
+			_rtaStateGroup.Expect(r => r.Name).Return("Not defined");
+			_mocks.ReplayAll();
+
+			_target.Refresh();
+			_mocks.VerifyAll();
+			Assert.That(_target.TotalPersons, Is.EqualTo(1));
+
+		}
     }
 }
