@@ -11,13 +11,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
-	public class ShiftTradeRequestsScheduleMappingProfile : Profile
+	public class ShiftTradeScheduleViewModelMappingProfile : Profile
 	{
 		private readonly Func<IShiftTradeRequestProvider> _shiftTradeRequestProvider;
 		private readonly Func<IProjectionProvider> _projectionProvider;
-		private int _timeLineOffset = 15;
+		private const int TimeLineOffset = 15;
 
-		public ShiftTradeRequestsScheduleMappingProfile(Func<IShiftTradeRequestProvider> shiftTradeRequestProvider, Func<IProjectionProvider> projectionProvider)
+		public ShiftTradeScheduleViewModelMappingProfile(Func<IShiftTradeRequestProvider> shiftTradeRequestProvider, Func<IProjectionProvider> projectionProvider)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_projectionProvider = projectionProvider;
@@ -28,44 +28,36 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			base.Configure();
 
 
-			CreateMap<DateOnly, ShiftTradeRequestsScheduleViewModel>()
+			CreateMap<DateOnly, ShiftTradeScheduleViewModel>()
 				.ConvertUsing(s =>
 								{
-									var myScheduledDay = _shiftTradeRequestProvider.Invoke().RetrieveMyScheduledDay(s);
-									IEnumerable<IVisualLayer> myLayerCollection = _projectionProvider.Invoke().Projection(myScheduledDay);
-									var myDayOff = GetPotentialDayOff(myScheduledDay);
-
+									var myScheduleDay = CreatePersonDay(_shiftTradeRequestProvider.Invoke().RetrieveMyScheduledDay(s));
+									
 									var possibleTradePersonsSchedule = _shiftTradeRequestProvider.Invoke().RetrievePossibleTradePersonsScheduleDay(s);
-									IEnumerable<IEnumerable<IVisualLayer>> possibleTradePersonsLayerCollection = 
-										CreatePossibleTradePersonsLayerCollection(possibleTradePersonsSchedule);
+									IEnumerable<ShiftTradePersonDayData> possibleTradePersonDayCollection = CreatePossibleTradePersonsDayCollection(possibleTradePersonsSchedule);
 
-									var myScheduleViewModel = new ShiftTradeScheduleViewModel();
-									var possibleTradePersonsViewModel = new List<ShiftTradeScheduleViewModel>();
+									DateTimePeriod timeLineRangeTot = SetTimeLineRange(myScheduleDay.ScheduleLayers, possibleTradePersonDayCollection, myScheduleDay.PersonTimeZone);
 
-									var timeZone = myScheduledDay.Person.PermissionInformation.DefaultTimeZone();
-									DateTimePeriod timeLineRangeTot = SetTimeLineRange(myLayerCollection, possibleTradePersonsLayerCollection, timeZone);
+									var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
+																{
+																	Name = UserTexts.Resources.MySchedule,
+																	ScheduleLayers = CreateShiftTradeLayers(myScheduleDay.ScheduleLayers, myScheduleDay.PersonDayOff, myScheduleDay.PersonTimeZone, timeLineRangeTot),
+																	MinutesSinceTimeLineStart = myScheduleDay.ScheduleLayers.Any() ? (int)myScheduleDay.ScheduleLayers.First().Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes : TimeLineOffset
+																};
 
-									if (myLayerCollection.Any() || possibleTradePersonsLayerCollection.Any() || myDayOff != null)
-									{
-										myScheduleViewModel = new ShiftTradeScheduleViewModel
-																	{
-																		Name = UserTexts.Resources.MySchedule,
-																		ScheduleLayers = CreateShiftTradeLayers(myLayerCollection, myDayOff, timeZone, timeLineRangeTot),
-																		MinutesSinceTimeLineStart = myLayerCollection.Any() ? (int)myLayerCollection.First().Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes : _timeLineOffset
-																	};
-										possibleTradePersonsViewModel.AddRange(possibleTradePersonsLayerCollection
-																		.Select(layers => new ShiftTradeScheduleViewModel
-																								{
-																									Name = layers.First().Person.Name.ToString(),
-																									ScheduleLayers = CreateShiftTradeLayers(layers, null, timeZone, timeLineRangeTot), 
-																									MinutesSinceTimeLineStart = (int) layers.First().Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes
-																								}));
-									}
-									return new ShiftTradeRequestsScheduleViewModel
+									var possibleTradePersonViewModelCollection = new List<ShiftTradePersonScheduleViewModel>();
+									possibleTradePersonViewModelCollection.AddRange(possibleTradePersonDayCollection
+																.Select(personDay => new ShiftTradePersonScheduleViewModel
+										                                                {
+										                                                    Name = personDay.Name, 
+																							ScheduleLayers = CreateShiftTradeLayers(personDay.ScheduleLayers, personDay.PersonDayOff, myScheduleDay.PersonTimeZone, timeLineRangeTot), 
+																							MinutesSinceTimeLineStart = personDay.ScheduleLayers.Any() ? (int) personDay.ScheduleLayers.First().Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes : TimeLineOffset
+										                                                }));
+									return new ShiftTradeScheduleViewModel
 											{
 												MySchedule = myScheduleViewModel,
-												PossibleTradePersons = possibleTradePersonsViewModel,
-												TimeLineHours = CreateTimeLineHours(timeLineRangeTot, timeZone, myScheduledDay.Person.PermissionInformation.Culture()),
+												PossibleTradePersons = possibleTradePersonViewModelCollection,
+												TimeLineHours = CreateTimeLineHours(timeLineRangeTot, myScheduleDay.PersonTimeZone, myScheduleDay.PersonCulture),
 												TimeLineLengthInMinutes = (int)timeLineRangeTot.EndDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes
 											};
 								})
@@ -82,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return null;
 		}
 
-		private DateTimePeriod SetTimeLineRange(IEnumerable<IVisualLayer> myLayerCollection, IEnumerable<IEnumerable<IVisualLayer>> possibleTradePersonsLayerCollection, TimeZoneInfo timeZone)
+		private DateTimePeriod SetTimeLineRange(IEnumerable<IVisualLayer> myLayerCollection, IEnumerable<ShiftTradePersonDayData> possibleTradePersonDayCollection, TimeZoneInfo timeZone)
 		{
 			var timeLineRangeTot = new DateTimePeriod();
 
@@ -91,43 +83,48 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				timeLineRangeTot = new DateTimePeriod(myLayerCollection.Min(l => l.Period.StartDateTime), myLayerCollection.Max(l => l.Period.EndDateTime));
 			}
 
-			if (possibleTradePersonsLayerCollection.Any())
+			foreach (ShiftTradePersonDayData personDay in possibleTradePersonDayCollection)
 			{
-				foreach (IEnumerable<IVisualLayer> visualLayers in possibleTradePersonsLayerCollection)
+				if (personDay.ScheduleLayers.Any())
 				{
-					var timeRangeTemp = new DateTimePeriod(visualLayers.Min(l => l.Period.StartDateTime),
-															visualLayers.Max(l => l.Period.EndDateTime));
+					var timeRangeTemp = new DateTimePeriod(personDay.ScheduleLayers.Min(l => l.Period.StartDateTime),
+															personDay.ScheduleLayers.Max(l => l.Period.EndDateTime));
 					timeLineRangeTot = timeLineRangeTot.MaximumPeriod(timeRangeTemp);
 				}
 			}
 
-			if (!myLayerCollection.Any() && !possibleTradePersonsLayerCollection.Any())
+			if (timeLineRangeTot.Equals(new DateTimePeriod()))
 			{
 				var startTime = TimeZoneHelper.ConvertToUtc(DateTime.Now.Date.AddHours(8), timeZone);
-				DateTime endTime = TimeZoneHelper.ConvertToUtc(DateTime.Now.Date.AddHours(17), timeZone); ;
+				DateTime endTime = TimeZoneHelper.ConvertToUtc(DateTime.Now.Date.AddHours(17), timeZone);
 				timeLineRangeTot = new DateTimePeriod(startTime, endTime);
 			}
 
-			timeLineRangeTot = timeLineRangeTot.ChangeStartTime(TimeSpan.FromMinutes(-_timeLineOffset));
-			timeLineRangeTot = timeLineRangeTot.ChangeEndTime(TimeSpan.FromMinutes(_timeLineOffset));
+			timeLineRangeTot = timeLineRangeTot.ChangeStartTime(TimeSpan.FromMinutes(-TimeLineOffset));
+			timeLineRangeTot = timeLineRangeTot.ChangeEndTime(TimeSpan.FromMinutes(TimeLineOffset));
 
 			return timeLineRangeTot;
 		}
-
-		private IEnumerable<IEnumerable<IVisualLayer>> CreatePossibleTradePersonsLayerCollection(IEnumerable<IScheduleDay> possibleTradePersonsSchedule)
+		
+		private IEnumerable<ShiftTradePersonDayData> CreatePossibleTradePersonsDayCollection(IEnumerable<IScheduleDay> possibleTradePersonsSchedule)
 		{
-			var returnList = new List<List<IVisualLayer>>();
+			return possibleTradePersonsSchedule.Select(scheduleDay => CreatePersonDay(scheduleDay)).ToList();
+		}
 
-			foreach (var scheduleDay in possibleTradePersonsSchedule)
-			{
-				var layerCollection = _projectionProvider.Invoke().Projection(scheduleDay);
-				if (layerCollection.Any())
-				{
-					returnList.Add(layerCollection.ToList());
-				}
-			}
+		private ShiftTradePersonDayData CreatePersonDay(IScheduleDay scheduleDay)
+		{
+			var returnDay = new ShiftTradePersonDayData
+			                	{
+			                		Name = scheduleDay.Person.Name.ToString(),
+									PersonTimeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone(),
+									PersonCulture = scheduleDay.Person.PermissionInformation.Culture()
+			                	};
 
-			return returnList;
+			var layerCollection = _projectionProvider.Invoke().Projection(scheduleDay);
+			returnDay.ScheduleLayers = layerCollection.ToList();
+			returnDay.PersonDayOff = GetPotentialDayOff(scheduleDay);
+
+			return returnDay;
 		}
 
 		private IEnumerable<ShiftTradeTimeLineHoursViewModel> CreateTimeLineHours(DateTimePeriod timeLinePeriod, TimeZoneInfo timeZone, CultureInfo culture)
@@ -228,5 +225,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			       			}
 			       	};
 		}
+	}
+
+	internal class ShiftTradePersonDayData
+	{
+		public string Name { get; set; }
+
+		public IEnumerable<IVisualLayer> ScheduleLayers { get; set; }
+
+		public IPersonDayOff PersonDayOff { get; set; }
+
+		public TimeZoneInfo PersonTimeZone { get; set; }
+
+		public CultureInfo PersonCulture { get; set; }
 	}
 }

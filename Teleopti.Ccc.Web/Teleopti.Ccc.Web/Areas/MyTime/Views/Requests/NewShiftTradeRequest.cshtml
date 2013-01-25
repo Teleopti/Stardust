@@ -27,7 +27,9 @@
 			<div class="shift-trade-person-schedule-row">
 				<span data-bind="text: agentName" style="width: 150px; float: left"></span>
 				<div class="shift-trade-possible-trade-schedule" data-bind="foreach: $data.layers">
-					<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>					
+					<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}">
+						<span class="shift-trade-dayoff-name" data-bind="visible: isDayOff, text: dayOffName"></span>
+					</span>					
 				</div>
 			</div>
 		</div>

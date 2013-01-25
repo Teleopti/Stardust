@@ -217,9 +217,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			            		LengthInMinutes = 360,
 			            		ElapsedMinutesSinceShiftStart = 30
 			            	};
-			var model = new ShiftTradeRequestsScheduleViewModel
+			var model = new ShiftTradeScheduleViewModel
 							{
-								MySchedule = new ShiftTradeScheduleViewModel { ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel> { layer } }
+								MySchedule = new ShiftTradePersonScheduleViewModel { ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel> { layer } }
 							};
 
 			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<DateTime>.Is.Anything)).Return(model);
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var target = new RequestsController(modelFactory, null, null, null);
 			
 			var result = target.ShiftTradeRequestSchedule(DateTime.Now);
-			var scheduleViewModel = (ShiftTradeRequestsScheduleViewModel) result.Data;
+			var scheduleViewModel = (ShiftTradeScheduleViewModel) result.Data;
 
 			var createdLayer = scheduleViewModel.MySchedule.ScheduleLayers.FirstOrDefault();
 			createdLayer.Payload.Should().Be.EqualTo(layer.Payload);

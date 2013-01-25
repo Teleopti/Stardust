@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
-	public interface IShiftTradeRequestsPeriodViewModelMapper
+	public interface IShiftTradePeriodViewModelMapper
 	{
 		ShiftTradeRequestsPeriodViewModel Map(IWorkflowControlSet workflowControlSet);
 	}
