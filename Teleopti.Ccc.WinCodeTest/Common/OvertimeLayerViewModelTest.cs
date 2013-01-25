@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             get { return UserTexts.Resources.Overtime; }
         }
 
-        protected override LayerViewModel CreateTestInstance(ILayer<IPayload> layer)
+        protected override LayerViewModel CreateTestInstance(ILayer layer)
         {
             return new OvertimeLayerViewModel(layer,null);
         }

@@ -309,6 +309,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 			var meetingLayer = mocks.StrictMock<IVisualLayer>();
 			IVisualLayerCollection visualLayerCollection = new VisualLayerCollection(null, new List<IVisualLayer> {meetingLayer},
 			                                                                         new ProjectionPayloadMerger());
+			var meetingPeriod = new DateTimePeriod(timeStamp.AddMinutes(5), timeStamp.AddMinutes(60));
 
 			IScheduleDictionary scheduleDictionary = GetScheduleDictionary(visualLayerCollection);
 			IRtaState rtaState = mocks.StrictMock<IRtaState>();
@@ -317,7 +318,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 			Expect.Call(alarmType2.ThresholdTime).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
 			Expect.Call(alarmType1.Equals(alarmType2)).Return(false);
 			Expect.Call(rtaState.StateGroup).Return(stateGroup);
-			Expect.Call(meetingLayer.Period).Return(new DateTimePeriod(timeStamp.AddMinutes(5), timeStamp.AddMinutes(60))).Repeat
+			Expect.Call(meetingLayer.Period).Return(meetingPeriod).Repeat
 				.AtLeastOnce();
 			Expect.Call(meetingLayer.Payload).Return(meetingPayload);
 			Expect.Call(meetingLayer.EntityClone()).Return(meetingLayer);

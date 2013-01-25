@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Windows;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
     {
         private LayerViewModel target;
         private MockRepository mocks;
-        private ILayer<IPayload> layerWithPayload;
+        private ILayer layerWithPayload;
         private IPayload payload;
         private IScheduleDay scheduleDay;
         private CrossThreadTestRunner testRunner;
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         	person = PersonFactory.CreatePerson();
             Period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
             Expect.Call(layerWithPayload.Payload).Return(payload).Repeat.Any();
-            Expect.Call(((ILayer) layerWithPayload).Payload).Return(payload).Repeat.Any();
             Expect.Call(layerWithPayload.Period).PropertyBehavior().Return(Period).IgnoreArguments().Repeat.Any();
             Expect.Call(scheduleDay.Person).Return(person).Repeat.Any();
             Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008,12,5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         }
 
         protected abstract string LayerModelDescription { get; }
-        protected abstract LayerViewModel CreateTestInstance(ILayer<IPayload> layer);
+        protected abstract LayerViewModel CreateTestInstance(ILayer layer);
         protected abstract bool ExpectMovePermitted { get; }
         protected abstract bool ExpectIsPayloadChangePermitted { get; }
         protected virtual bool Opaque
@@ -77,8 +75,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             layerWithPayload.Period = Period;
             target = CreateTestInstance(layerWithPayload);
             target.SchedulePart = scheduleDay;
-            Assert.AreEqual(layerWithPayload.Payload.ConfidentialDisplayColor(person,new DateOnly(2008, 12, 5)), target.DisplayColor);
-			Assert.AreEqual(layerWithPayload.Payload.ConfidentialDescription(person, new DateOnly(2008, 12, 5)).Name, target.Description);
+
+        	var payloadFromLayer = (IPayload) layerWithPayload.Payload;
+
+			Assert.AreEqual(payloadFromLayer.ConfidentialDisplayColor(person, new DateOnly(2008, 12, 5)), target.DisplayColor);
+			Assert.AreEqual(payloadFromLayer.ConfidentialDescription(person, new DateOnly(2008, 12, 5)).Name, target.Description);
             Assert.AreEqual(layerWithPayload.Period, target.Period);
             Assert.AreEqual(TimeSpan.FromMinutes(15),target.Interval);
             Assert.IsNull(target.Parent);

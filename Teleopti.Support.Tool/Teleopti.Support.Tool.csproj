@@ -281,7 +281,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>COPY "$(ProjectDir)..\BuildArtifacts\TeleoptiCCC7.nhib.xml" "V7Config.nhib.xml" /Y
-COPY "$(ProjectDir)..\BuildArtifacts\Teleopti.Messaging.Svc.exe.config" "Teleopti.Messaging.Svc.exe.config" /Y</PostBuildEvent>
+</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

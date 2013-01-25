@@ -35,6 +35,12 @@ namespace Teleopti.Ccc.Web.Broker
 				settings.HeartbeatInterval = TimeSpan.FromSeconds(Convert.ToInt32(value));
 			}
 
+			value = ConfigurationManager.AppSettings["ScaleOutBackplaneUrl"];
+			Uri uri;
+			if (!string.IsNullOrEmpty(value) && Uri.TryCreate(value,UriKind.RelativeOrAbsolute, out uri))
+			{
+				settings.ScaleOutBackplaneUrl = uri;
+			}
 			return settings;
 		}
 
@@ -42,5 +48,6 @@ namespace Teleopti.Ccc.Web.Broker
 		public TimeSpan? ConnectionTimeout { get; set; }
 		public TimeSpan? DisconnectTimeout { get; set; }
 		public TimeSpan? HeartbeatInterval { get; set; }
+		public Uri ScaleOutBackplaneUrl { get; set; }
 	}
 }

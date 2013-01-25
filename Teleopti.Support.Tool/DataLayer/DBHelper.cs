@@ -307,16 +307,6 @@ namespace  Teleopti.Support.Tool.DataLayer
                     cmd.ExecuteNonQuery();
                     cmd.CommandType = CommandType.Text;
 
-                    //string msgBrokerConnectionString = "Data Source=" + sqlServer + ";User Id=" + user + ";Password=" + password + ";Initial Catalog=" + analyticDB;
-                    string msgBrokerServer = Environment.MachineName;
-                    cmd.CommandText = "UPDATE [" + analyticDB + "].[msg].[Configuration] SET [ConfigurationValue] = 8090 WHERE [ConfigurationId]=1";
-                    cmd.ExecuteNonQuery();
-                    cmd.CommandText = "UPDATE [" + analyticDB + "].[msg].[Configuration] SET [ConfigurationValue] ='" + msgBrokerServer + "' WHERE [ConfigurationId]=2";
-                    cmd.ExecuteNonQuery();
-                    //cmd.CommandText = "UPDATE [" + analyticDB + "].[msg].[Configuration] SET [ConfigurationValue] ='" + msgBrokerConnectionString + "' WHERE [ConfigurationId]=5";
-                    //cmd.ExecuteNonQuery();
-                    cmd.CommandText = "UPDATE [" + analyticDB + "].[msg].[Address] SET [Address]='" + msgBrokerServer + "',[Port]=9090  WHERE [AddressId]=1";
-                    cmd.ExecuteNonQuery();
                     tran.Commit();
                 }
             }

@@ -165,18 +165,6 @@ namespace Teleopti.Support.Tool.Controls
 
         private void copyNhibFiles()
         {
-            // This method will only be runned if in develop or debug mode. 
-            var messagingPath = _confFilesRoot + @"\Teleopti.Messaging\TeleOpti.Messaging.Bin";
-            const string messagingFile = @"\Teleopti.Messaging.Svc.exe.config";
-            
-            //if (!System.IO.File.Exists(messagingPath + messagingFile))
-            //{
-                if (!IOHelper.DirectoryExists(messagingPath))
-                    IOHelper.CreateDirectory(messagingPath);
-                IOHelper.Copy(System.IO.Directory.GetCurrentDirectory() + messagingFile,messagingPath + messagingFile, true);
-                IOHelper.WriteFile("Added " +  messagingPath + messagingFile + " as a new file.\r\n", _logFile, true);
-            //}
-
             string sdkNhibPath = _confFilesRoot + @"\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\bin\debug";
             string clientNhibPath = _confFilesRoot + @"\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\debug";
             const string nhibFile = @"\V7Config.nhib.xml";

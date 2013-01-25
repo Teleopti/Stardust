@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Routing;
+using Contrib.SignalR.SignalRMessageBus;
 using Microsoft.AspNet.SignalR;
 
 namespace Teleopti.Ccc.Web.Broker
@@ -26,7 +27,14 @@ namespace Teleopti.Ccc.Web.Broker
 			if (settingsFromParser.ConnectionTimeout.HasValue)
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
 
+			GlobalHost.HubPipeline.EnableAutoRejoiningGroups();
+
 			RouteTable.Routes.MapHubs();
+
+			if (settingsFromParser.ScaleOutBackplaneUrl != null)
+			{
+				GlobalHost.DependencyResolver.UseSignalRServer(settingsFromParser.ScaleOutBackplaneUrl);
+			}
 		}
 
 		protected void Session_Start(object sender, EventArgs e)

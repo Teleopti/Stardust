@@ -3,8 +3,8 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	var self = this;
 
 	this.DataSources = ko.observableArray();
-	this.UserName = ko.observable();
-	this.Password = ko.observable();
+	this.UserName = ko.observable('');
+	this.Password = ko.observable('');
 	this.ErrorMessage = ko.observable();
 	this.HasErrorMessage = ko.computed(function () {
 		var errorMessage = self.ErrorMessage();

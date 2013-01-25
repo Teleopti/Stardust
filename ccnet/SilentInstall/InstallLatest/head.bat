@@ -3,9 +3,8 @@ setlocal enabledelayedexpansion
 if "%1" == "" goto usage
 if "%2" == "" goto usage
 
-dir "%2" /b /AD /O-N > %temp%\dir.txt
+dir "%~2" /B /AD /O-D > %temp%\dir.txt
 set file=%temp%\dir.txt
-
 
 SET /a counter=0
 

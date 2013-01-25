@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 		private IShiftCategoryChecker _shiftCatChecker;
 		private IDeleteSchedulePartService _deleteService;
 		private IShiftCategoryFairnessPersonsSwappableChecker _swappableChecker;
-
+		private IShiftCategoryFairnessContractToleranceChecker _shiftCategoryFairnessContractToleranceChecker;
 		[SetUp]
 		public void Setup()
 		{
@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			_shiftCatChecker = _mocks.DynamicMock<IShiftCategoryChecker>();
 			_deleteService = _mocks.DynamicMock<IDeleteSchedulePartService>();
 			_swappableChecker = _mocks.DynamicMock<IShiftCategoryFairnessPersonsSwappableChecker>();
+			_shiftCategoryFairnessContractToleranceChecker = _mocks.DynamicMock<IShiftCategoryFairnessContractToleranceChecker>();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
@@ -64,8 +65,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			
 			
 			_mocks.ReplayAll();
-			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker);
-			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.False);
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker, _shiftCategoryFairnessContractToleranceChecker);
+			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker(), true), Is.False);
 			_mocks.VerifyAll();
 		}
 
@@ -96,8 +97,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(_shiftCatChecker.DayHasDayOff(part1)).Return(true);
 			
 			_mocks.ReplayAll();
-			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker);
-			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.False);
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker, _shiftCategoryFairnessContractToleranceChecker);
+			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker(), true), Is.False);
 			_mocks.VerifyAll();
 		}
 
@@ -135,8 +136,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
 
 			_mocks.ReplayAll();
-			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker);
-			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.False);
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker, _shiftCategoryFairnessContractToleranceChecker);
+			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker(), true), Is.False);
 			_mocks.VerifyAll();
 		}
 
@@ -172,11 +173,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(scheduleDay1.DaySchedulePart()).Return(part1);
 			Expect.Call(scheduleDay2.DaySchedulePart()).Return(part2);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
-			Expect.Call(_swappableChecker.PersonsAreSwappable(person1, person2, dateOnly, scheduleDays)).Return(false);
+			Expect.Call(_swappableChecker.PersonsAreSwappable(person1, person2, dateOnly, scheduleDays, true)).Return(false);
 
 			_mocks.ReplayAll();
-			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker);
-			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.False);
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker, _shiftCategoryFairnessContractToleranceChecker);
+			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker(), true), Is.False);
 			_mocks.VerifyAll();
 		}
 
@@ -212,12 +213,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(scheduleDay1.DaySchedulePart()).Return(part1);
 			Expect.Call(scheduleDay2.DaySchedulePart()).Return(part2);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
-            Expect.Call(_swappableChecker.PersonsAreSwappable(person1, person2, dateOnly, scheduleDays)).Return(true);
+            Expect.Call(_swappableChecker.PersonsAreSwappable(person1, person2, dateOnly, scheduleDays, true)).Return(true);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part2, cat2)).Return(false);
 			
 			_mocks.ReplayAll();
-			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker);
-			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService,new BackgroundWorker()), Is.False);
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker, _shiftCategoryFairnessContractToleranceChecker);
+			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService,new BackgroundWorker(), true), Is.False);
 			_mocks.VerifyAll();
 		}
 
@@ -254,17 +255,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(scheduleDay1.DaySchedulePart()).Return(part1);
 			Expect.Call(scheduleDay2.DaySchedulePart()).Return(part2);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
-			Expect.Call(_swappableChecker.PersonsAreSwappable(person2, person1, dateOnly, scheduleDays)).Return(true).IgnoreArguments();			
+			Expect.Call(_swappableChecker.PersonsAreSwappable(person2, person1, dateOnly, scheduleDays, true)).Return(true).IgnoreArguments();			
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part2, cat2)).Return(true);
 			Expect.Call(rollbackService.ModifyParts(null)).Return(new BindingList<IBusinessRuleResponse>());
 			Expect.Call(_fairnessReScheduler.Execute(new List<IPerson>(),dateOnly,matrixes )).IgnoreArguments().Return(true);
 			_mocks.ReplayAll();
-			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker);
-            Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.True);
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker, _shiftCategoryFairnessContractToleranceChecker);
+            Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker(), true), Is.True);
             _mocks.VerifyAll();
 			
 		}
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnTrueIfAllGoWell()
 		{
 			var dateOnly = new DateOnly(2012,10,1);
@@ -297,12 +298,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			Expect.Call(scheduleDay1.DaySchedulePart()).Return(part1);
 			Expect.Call(scheduleDay2.DaySchedulePart()).Return(part2);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part1, cat1)).Return(true);
-			Expect.Call(_swappableChecker.PersonsAreSwappable(person1, person2, dateOnly, scheduleDays)).Return(true);
+			Expect.Call(_swappableChecker.PersonsAreSwappable(person1, person2, dateOnly, scheduleDays, true)).Return(true);
 			Expect.Call(_shiftCatChecker.DayHasShiftCategory(part2, cat2)).Return(true);
 			Expect.Call(rollbackService.ModifyParts(null)).Return(new BindingList<IBusinessRuleResponse>());
 			_mocks.ReplayAll();
-			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker);
-			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker()), Is.True);
+			_target = new ShiftCategoryFairnessSwapper(_swapService, _resultState, _fairnessReScheduler, _shiftCatChecker, _deleteService, _swappableChecker, _shiftCategoryFairnessContractToleranceChecker);
+			Assert.That(_target.TrySwap(suggestion, dateOnly, matrixes, rollbackService, new BackgroundWorker(), true), Is.True);
 			_mocks.VerifyAll();
 		}
 	}

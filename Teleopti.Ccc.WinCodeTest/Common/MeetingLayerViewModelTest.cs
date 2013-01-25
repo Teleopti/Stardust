@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             get { return UserTexts.Resources.Meeting; }
         }
 
-        protected override LayerViewModel CreateTestInstance(ILayer<IPayload> layer)
+        protected override LayerViewModel CreateTestInstance(ILayer layer)
         {
             return new MeetingLayerViewModel(layer,null);
         }

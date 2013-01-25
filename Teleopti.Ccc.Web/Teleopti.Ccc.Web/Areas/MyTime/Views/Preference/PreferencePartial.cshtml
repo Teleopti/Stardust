@@ -113,13 +113,17 @@
 												<div class="meeting-tooltip" style="display: none">
 													<!-- ko if: Meetings().length > 0 -->
 													<table>
-														<thead>@Resources.Meeting</thead>
+														<thead>@Resources.Meetings</thead>
 														<tbody data-bind="foreach: Meetings">
 															<tr>
 																	<td data-bind="text: TimeSpan"></td>
 															</tr>
 															<tr>
-																<td data-bind="text: Subject"></td>
+																<td>
+																	<div class="preference-tooltip-subject">
+																		<label class="preference-tooltip-font" data-bind="text : Subject"></label>
+																	</div>
+																</td>
 																<!-- ko if: IsOptional -->
 																<td>(@Resources.Optional)</td>
 																<!-- /ko -->

@@ -35,11 +35,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         	var build = new ContainerBuilder();
         	build.RegisterGeneric(typeof (InMemorySagaPersister<>)).As(typeof (ISagaPersister<>));
             
-            bool enableErrorNotifier;
-
-            if (bool.TryParse(ConfigurationManager.AppSettings["EnableErrorNotifier"],out enableErrorNotifier) && enableErrorNotifier)
-                build.RegisterType<ErrorNotification>();
-
             build.RegisterModule<ShiftTradeModule>();
         	build.RegisterModule<RepositoryContainerInstaller>();
         	build.RegisterModule<AuthorizationContainerInstaller>();

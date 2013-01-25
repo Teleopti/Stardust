@@ -69,7 +69,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 
 
-
 		// the ones below here does not belong here!
 
 		[Given(@"I have a pre-scheduled meeting with")]
