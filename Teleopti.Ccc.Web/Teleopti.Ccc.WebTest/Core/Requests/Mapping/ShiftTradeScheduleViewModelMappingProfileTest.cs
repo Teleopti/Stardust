@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture]
-	public class ShiftTradeScheduleMappingProfileTest
+	public class ShiftTradeScheduleViewModelMappingProfileTest
 	{
 		private IShiftTradeRequestProvider _shiftTradeRequestProvider;
 		private IPerson _person;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_person.PermissionInformation.SetDefaultTimeZone(_timeZone);
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleMappingProfile(() => _shiftTradeRequestProvider, () => _projectionProvider)));
+			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(() => _shiftTradeRequestProvider, () => _projectionProvider)));
 		}
 
 		[Test]

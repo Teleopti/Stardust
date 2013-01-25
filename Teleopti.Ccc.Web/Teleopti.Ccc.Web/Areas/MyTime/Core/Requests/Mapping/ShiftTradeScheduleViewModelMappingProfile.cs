@@ -11,13 +11,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
-	public class ShiftTradeScheduleMappingProfile : Profile
+	public class ShiftTradeScheduleViewModelMappingProfile : Profile
 	{
 		private readonly Func<IShiftTradeRequestProvider> _shiftTradeRequestProvider;
 		private readonly Func<IProjectionProvider> _projectionProvider;
 		private const int TimeLineOffset = 15;
 
-		public ShiftTradeScheduleMappingProfile(Func<IShiftTradeRequestProvider> shiftTradeRequestProvider, Func<IProjectionProvider> projectionProvider)
+		public ShiftTradeScheduleViewModelMappingProfile(Func<IShiftTradeRequestProvider> shiftTradeRequestProvider, Func<IProjectionProvider> projectionProvider)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_projectionProvider = projectionProvider;
