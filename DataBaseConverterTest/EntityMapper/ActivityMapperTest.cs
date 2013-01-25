@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             global::Domain.Activity oldAct = new global::Domain.Activity(-1, "q",
                                                                           Color.Beige, true, true, true, true, false, false, false, false);
             IActivity newAct = _target.Map(oldAct);
-            Assert.AreEqual(true, ((IDeleteTag)newAct).IsDeleted);
+            Assert.AreEqual(true, newAct.IsDeleted);
         }
 
         [Test]

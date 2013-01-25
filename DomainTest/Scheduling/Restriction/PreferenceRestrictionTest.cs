@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
         public void VerifyEntityClone()
         {
             IAbsence absence = new Absence();
-            ((IPreferenceRestriction)_preferenceRestrictionNew).SetId(new Guid());
+            _preferenceRestrictionNew.SetId(new Guid());
             _preferenceRestrictionNew.Absence = absence;
             IPreferenceRestriction entityClone = _preferenceRestrictionNew.EntityClone();
             Assert.IsNotNull(entityClone.Id);

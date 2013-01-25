@@ -103,7 +103,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             IList<IPersonAbsence> personAbsenceList = new List<IPersonAbsence>();
             IAbsence absence = new Absence();
             absence.Description = new Description("Sick Leave");
-            ((IEntity) absence).SetId(Guid.NewGuid());
+            absence.SetId(Guid.NewGuid());
             DateTimePeriod absencePeriod = new DateTimePeriod(new DateTime(2007, 1, 1, 15, 0, 0, DateTimeKind.Utc),
                                                               new DateTime(2007, 1, 2, 1, 40, 0, DateTimeKind.Utc));
             IAbsenceLayer absenceLayer = new AbsenceLayer(absence, absencePeriod);

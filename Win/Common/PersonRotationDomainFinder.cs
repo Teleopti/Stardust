@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Win.Common
             IList<IPerson> collection = _filteredPeopleHolder.FilteredPersonCollection;
             IList<IPerson> sortedData = (from person in collection
                                          orderby person.Name.ToString() ascending
-                                         select (IPerson)person).ToList();
+                                         select person).ToList();
 
             return sortedData;
         }

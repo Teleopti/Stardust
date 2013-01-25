@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday
         public RealTimeScheduleControl()
         {
             InitializeComponent();
-            if (StateHolderReader.IsInitialized) VisualTreeTimeZoneInfo.SetTimeZoneInfo(this, (TimeZoneInfo)StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
+            if (StateHolderReader.IsInitialized) VisualTreeTimeZoneInfo.SetTimeZoneInfo(this, StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
             
         }
 

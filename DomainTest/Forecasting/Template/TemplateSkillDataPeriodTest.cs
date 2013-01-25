@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             Assert.AreEqual(_target.ManualAgents, taskPeriodClone.ManualAgents);
             Assert.AreEqual(_target.Period, taskPeriodClone.Period);
 
-            taskPeriodClone = (ITemplateSkillDataPeriod) _target.NoneEntityClone();
+            taskPeriodClone = _target.NoneEntityClone();
             Assert.IsFalse(taskPeriodClone.Id.HasValue);
             Assert.AreEqual(_target.Shrinkage, taskPeriodClone.Shrinkage);
             Assert.AreEqual(_target.ServiceAgreement, taskPeriodClone.ServiceAgreement);
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             Assert.AreEqual(_target.ManualAgents, taskPeriodClone.ManualAgents);
             Assert.AreEqual(_target.Period, taskPeriodClone.Period);
 
-            taskPeriodClone = (ITemplateSkillDataPeriod) _target.EntityClone();
+            taskPeriodClone = _target.EntityClone();
             Assert.AreEqual(_target.Id.Value, taskPeriodClone.Id.Value);
             Assert.AreEqual(_target.Shrinkage, taskPeriodClone.Shrinkage);
             Assert.AreEqual(_target.ServiceAgreement, taskPeriodClone.ServiceAgreement);
