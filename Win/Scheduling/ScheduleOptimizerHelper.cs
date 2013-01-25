@@ -1156,14 +1156,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 		        schedulingOptions.UseTwoDaysOffAsBlock = true;
 		        var skillDayPeriodIntervalData = _container.Resolve<ISkillDayPeriodIntervalData>();
 		        var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder);
-		        var teamExtractor = new TeamExtractor(matrixList, _groupPersonBuilderForOptimization);
+                var teamExtractor = new TeamExtractor(matrixList, _groupPersonBuilderForOptimization);
 		        var restrictionAggregator = _container.Resolve<IRestrictionAggregator>();
 		        var workShiftFilterService = _container.Resolve<IWorkShiftFilterService>();
 
 		        
                 var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
                                                                             schedulingOptions.ConsiderShortBreaks);
-                var teamScheduling = new TeamScheduling(resourceCalculateDelayer );
+                ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+                var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
                 
 				IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator = new WorkShiftPeriodValueCalculator();
 				IWorkShiftLengthValueCalculator workShiftLengthValueCalculator = new WorkShiftLengthValueCalculator();

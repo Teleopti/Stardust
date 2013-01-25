@@ -13,10 +13,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
     public  class TeamScheduling : ITeamScheduling
     {
         private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
+        private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 
-        public TeamScheduling(IResourceCalculateDelayer  resourceCalculateDelayer)
+        public TeamScheduling(IResourceCalculateDelayer  resourceCalculateDelayer,ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
             _resourceCalculateDelayer = resourceCalculateDelayer;
+            _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
         }
 
 
@@ -30,10 +32,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                 IScheduleDay  scheduleDay = null;
                 foreach(var person in groupPerson.GroupMembers  )
                 {
-                    var matrixPro =
-                        matrixList.First(scheduleMatrixPro => scheduleMatrixPro.Person == person);
-                    scheduleDay = matrixPro.GetScheduleDayByKey(day).DaySchedulePart();
-                    scheduleDay.AddMainShift(shiftProjectionCache.TheMainShift);
+                    IPerson tmpPerson = person;
+                    var tempMatrixList = matrixList.Where(scheduleMatrixPro => scheduleMatrixPro.Person == tmpPerson).ToList();
+                    if(tempMatrixList.Any())
+                    {
+                        IScheduleMatrixPro matrixPro = tempMatrixList[0];
+                        scheduleDay = matrixPro.GetScheduleDayByKey(day).DaySchedulePart();
+                        scheduleDay.AddMainShift((IMainShift) shiftProjectionCache.TheMainShift.EntityClone());
+                        _schedulePartModifyAndRollbackService.Modify(scheduleDay);
+
+                    }
                     
                 }
                 if(scheduleDay != null)

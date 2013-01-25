@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private IScheduleDayPro _scheduleDayPro;
         private IScheduleDay _scheduleDay;
         private IMainShift _mainShift;
+        private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 
         [SetUp ]
         public void Setup()
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _groupPerson = _mock.StrictMock<IGroupPerson>();
             _resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
-            _target = new TeamScheduling(_resourceCalculateDelayer);
+            _schedulePartModifyAndRollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
+            _target = new TeamScheduling(_resourceCalculateDelayer,_schedulePartModifyAndRollbackService);
             _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
             _mainShift = _mock.StrictMock<IMainShift>();

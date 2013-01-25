@@ -65,12 +65,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 
                 foreach (var scheduleDayPro in _matrixList[0].EffectivePeriodDays.OrderBy( x => x.Day))
                 {
-                    if (startDate == DateOnly.MinValue && scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.DayOff)
-                        startDate = scheduleDayPro.Day; 
-                    if(scheduleDayPro.DaySchedulePart().SignificantPart() == SchedulePartView.DayOff)
-                        _dayOff.Add(scheduleDayPro.Day);
-                    if (_matrixList[0].UnlockedDays.Contains(scheduleDayPro ))
+                    if (_matrixList[0].UnlockedDays.Contains(scheduleDayPro))
+                    {
+                        if (startDate == DateOnly.MinValue && scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.DayOff)
+                            startDate = scheduleDayPro.Day;
+                        if (scheduleDayPro.DaySchedulePart().SignificantPart() == SchedulePartView.DayOff)
+                            _dayOff.Add(scheduleDayPro.Day);
                         _unLockedDays.Add(scheduleDayPro.Day);
+                    }
+                    //if (_matrixList[0].UnlockedDays.Contains(scheduleDayPro ))
+                    //    _unLockedDays.Add(scheduleDayPro.Day);
                     _effectiveDays.Add(scheduleDayPro.Day);
 
                 }

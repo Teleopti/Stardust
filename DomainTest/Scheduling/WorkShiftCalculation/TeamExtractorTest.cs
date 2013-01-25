@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
              _matrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
              _groupPerson = _mocks.StrictMock<IGroupPerson>();
 
-             _target = new TeamExtractor(new List<IScheduleMatrixPro>( ){_matrixPro}, _groupPersonBuilderForOptimization);
+             _target = new TeamExtractor(new List<IScheduleMatrixPro>{_matrixPro}, _groupPersonBuilderForOptimization);
         }
 
         [Test]
