@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Rta.Interfaces;
@@ -21,6 +19,10 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		private IDatabaseConnectionFactory _databaseConnectionFactory;
 		private string _connectionString;
 
+		private readonly Guid _personId = Guid.NewGuid();
+		private readonly Guid _businessUnitId = Guid.NewGuid();
+		private readonly Guid _secondBusinessUnit = Guid.NewGuid();
+
 		[SetUp]
 		public void Setup()
 		{
@@ -28,17 +30,20 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_loggingSvc = _mock.DynamicMock<ILog>();
 			_databaseConnectionFactory = _mock.StrictMock<IDatabaseConnectionFactory>();
 			_connectionString = "connection";
-		}
 
-		[Test]
-		public void ShouldCreateNewInstace()
-		{
 			_target = new PersonResolver(_databaseConnectionFactory, _connectionString);
-			Assert.That(_target, Is.Not.Null);
 		}
 
 		[Test]
-		public void ShouldOnlyLoadDataOnce()
+		public void ShouldReturnEmtpyGuidWhenLogOnIsEmpty()
+		{
+			IEnumerable<PersonWithBusinessUnit> resolvedList;
+			Assert.That(_target.TryResolveId(2, string.Empty, out resolvedList), Is.True);
+			Assert.That(resolvedList.Count(p => p.BusinessUnitId == Guid.Empty && p.PersonId == Guid.Empty), Is.EqualTo(1));
+		}
+
+		[Test]
+		public void ShouldAddPersonWithBusinessUnitToListWhenLoopedTwice()
 		{
 			var connection = _mock.StrictMock<IDbConnection>();
 			var command = _mock.StrictMock<IDbCommand>();
@@ -53,31 +58,29 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			connection.Open();
 
 			command.Expect(c => c.ExecuteReader(CommandBehavior.CloseConnection)).Return(dataReader);
-			dataReader.Expect(d => d.Read()).Return(true);
-			
-			dataReader.Expect(d => d.GetOrdinal("datasource_id")).Return(0);
-			dataReader.Expect(d => d.GetInt16(0)).Return(2);
-			dataReader.Expect(d => d.GetOrdinal("acd_login_original_id")).Return(1);
-			dataReader.Expect(d => d.GetString(1)).Return("007");
-			dataReader.Expect(d => d.GetOrdinal("person_code")).Return(2);
-			dataReader.Expect(d => d.GetGuid(2)).Return(Guid.NewGuid());
-			dataReader.Expect(d => d.GetOrdinal("business_unit_code")).Return(3);
-			dataReader.Expect(d => d.GetGuid(3)).Return(Guid.NewGuid());
+			dataReader.Expect(d => d.Read()).Return(true).Repeat.Twice();
+
+			dataReader.Expect(d => d.GetOrdinal("datasource_id")).Return(0).Repeat.Twice();
+			dataReader.Expect(d => d.GetInt16(0)).Return(2).Repeat.Twice();
+			dataReader.Expect(d => d.GetOrdinal("acd_login_original_id")).Return(1).Repeat.Twice();
+			dataReader.Expect(d => d.GetString(1)).Return("0001").Repeat.Twice();
+			dataReader.Expect(d => d.GetOrdinal("person_code")).Return(2).Repeat.Twice();
+			dataReader.Expect(d => d.GetGuid(2)).Return(_personId).Repeat.Twice();
+			dataReader.Expect(d => d.GetOrdinal("business_unit_code")).Return(3).Repeat.Twice();
+			dataReader.Expect(d => d.GetGuid(3)).Return(_businessUnitId);
+			dataReader.Expect(d => d.GetGuid(3)).Return(_secondBusinessUnit);
 
 			dataReader.Expect(d => d.Read()).Return(false);
 			dataReader.Close();
 			_mock.ReplayAll();
 
-			_target = new PersonResolverForTest(_databaseConnectionFactory, _connectionString, _loggingSvc);
 			IEnumerable<PersonWithBusinessUnit> resolvedList;
-			Assert.That(_target.TryResolveId(2, "007", out resolvedList), Is.True);
-			Assert.That(resolvedList.Count(), Is.EqualTo(1));
-			Assert.That(_target.TryResolveId(2, "007", out resolvedList), Is.True);
-			Assert.That(resolvedList.Count(), Is.EqualTo(1));
+			Assert.That(_target.TryResolveId(2, "0001", out resolvedList), Is.True);
+			resolvedList = resolvedList.ToList();
+			Assert.That(resolvedList.Count(p => p.BusinessUnitId == _businessUnitId && p.PersonId == _personId), Is.EqualTo(1));
+			Assert.That(resolvedList.Count(p => p.BusinessUnitId == _secondBusinessUnit && p.PersonId == _personId), Is.EqualTo(1));
 			_mock.VerifyAll();
 		}
-
-
 
 		public class PersonResolverForTest : PersonResolver
 		{
@@ -85,7 +88,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			                             string connectionString, ILog loggingSvc)
 				: base(databaseConnectionFactory, connectionString, loggingSvc)
 			{
-				
 			}
 		}
 	}
