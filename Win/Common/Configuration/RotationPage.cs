@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
@@ -395,10 +396,30 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			_gridColumns = null;
 
-			gridControlRotation.SaveCellInfo += new GridSaveCellInfoEventHandler(gridControlRotation_SaveCellInfo);
+			gridControlRotation.SaveCellInfo += gridControlRotationSaveCellInfo;
+			
+			gridControlRotation.PrepareViewStyleInfo += gridControlRotationPrepareViewStyleInfo;
+			gridControlRotation.MouseUp += gridControlRotationMouseUp;
+			gridControlRotation.KeyUp += gridControlRotationKeyUp;
 		}
 
-		void gridControlRotation_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
+		void gridControlRotationPrepareViewStyleInfo(object sender, GridPrepareViewStyleInfoEventArgs e)
+		{
+			e.Style.BackColor = e.RowIndex == gridControlRotation.CurrentCell.RowIndex ? Color.LightGoldenrodYellow : Color.White;
+		}
+
+		void gridControlRotationKeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode.Equals(Keys.Down) || e.KeyCode.Equals(Keys.Up) || e.KeyCode.Equals(Keys.Enter))
+				gridControlRotation.Invalidate();
+		}
+
+		void gridControlRotationMouseUp(object sender, MouseEventArgs e)
+		{
+			gridControlRotation.Invalidate();
+		}
+
+		void gridControlRotationSaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
 		{
 			gridControlRotation.Invalidate();
 		}
