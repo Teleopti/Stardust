@@ -417,7 +417,7 @@ namespace Teleopti.Ccc.DBManager
 
 		private static bool VerifyWinGroup(string WinNTGroup)
 		{
-			const string sql = @"SELECT count(name) from sys.syslogins where isntgroup = 1 and name = '@WinNTGroup'";
+			const string sql = @"SELECT count(name) from sys.syslogins where isntgroup = 1 and name = @WinNTGroup";
 			using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
 			{
 				sqlCommand.Parameters.AddWithValue("@WinNTGroup", WinNTGroup);
@@ -538,7 +538,7 @@ namespace Teleopti.Ccc.DBManager
 			createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
 			relinkSQLUser = string.Format(CultureInfo.CurrentCulture, @"ALTER USER [{0}] WITH LOGIN = [{0}]", user);
 
-			if (!iswingroup && (DBUserExist(user) == true))
+			if (DBUserExist(user) == true)
 			{
 				logWrite("DB user already exist, re-link ...");
 				using (var cmd = new SqlCommand(relinkSQLUser, _sqlConnection))
