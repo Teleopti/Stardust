@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldRetrieveShiftTradePeriodViewModel()
 		{
-			var mapper = MockRepository.GenerateMock<IShiftTradeRequestsPeriodViewModelMapper>();
+			var mapper = MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>();
 			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
 			var target = new RequestsViewModelFactory(null, null, null, null, provider, mapper);
 			var shiftTradePeriodViewModel = new ShiftTradeRequestsPeriodViewModel();
@@ -144,9 +144,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var target = new RequestsViewModelFactory(null, mapper, null, null, null, null);
-			var viewModel = new ShiftTradeRequestsScheduleViewModel();
+			var viewModel = new ShiftTradeScheduleViewModel();
 
-			mapper.Stub(x => x.Map<DateOnly, ShiftTradeRequestsScheduleViewModel>(Arg<DateOnly>.Is.Anything)).Return(viewModel);
+			mapper.Stub(x => x.Map<DateOnly, ShiftTradeScheduleViewModel>(Arg<DateOnly>.Is.Anything)).Return(viewModel);
 
 			var result = target.CreateShiftTradeScheduleViewModel(DateTime.Now);
 			result.Should().Be.SameInstanceAs(viewModel);

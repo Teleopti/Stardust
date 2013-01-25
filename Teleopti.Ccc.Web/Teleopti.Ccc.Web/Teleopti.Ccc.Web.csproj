@@ -169,7 +169,7 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeResponseService.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeResponseService.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradePersonScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeTimeLineHoursViewModel.cs" />
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />
@@ -179,10 +179,10 @@
     <Compile Include="Areas\Team\Core\ScheduleHub.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeRequestProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeRequestsPeriodViewModelMapper.cs" />
-    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsScheduleViewModel.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestsScheduleMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestsPeriodViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradePeriodViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeScheduleViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradePeriodViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleLayerViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsPeriodViewModel.cs" />
     <Compile Include="Areas\Team\TeamAreaRegistration.cs" />

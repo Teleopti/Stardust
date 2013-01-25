@@ -21,11 +21,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IAbsenceTypesProvider _absenceTypesProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IShiftTradeRequestProvider _shiftTradeRequestprovider;
-		private readonly IShiftTradeRequestsPeriodViewModelMapper _shiftTradeRequestsPeriodViewModelMapper;
+		private readonly IShiftTradePeriodViewModelMapper _shiftTradeRequestsPeriodViewModelMapper;
 
 		public RequestsViewModelFactory(IPersonRequestProvider personRequestProvider, IMappingEngine mapper, IAbsenceTypesProvider absenceTypesProvider, 
 										IPermissionProvider permissionProvider, IShiftTradeRequestProvider shiftTradeRequestprovider, 
-										IShiftTradeRequestsPeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper)
+										IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper)
 		{
 			_personRequestProvider = personRequestProvider;
 			_mapper = mapper;
@@ -77,9 +77,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			return _shiftTradeRequestsPeriodViewModelMapper.Map(_shiftTradeRequestprovider.RetrieveUserWorkflowControlSet());
 		}
 
-		public ShiftTradeRequestsScheduleViewModel CreateShiftTradeScheduleViewModel(DateTime selectedDate)
+		public ShiftTradeScheduleViewModel CreateShiftTradeScheduleViewModel(DateTime selectedDate)
 		{
-			return _mapper.Map<DateOnly, ShiftTradeRequestsScheduleViewModel>(new DateOnly(selectedDate));
+			return _mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(selectedDate));
 		}
 	}
 }
