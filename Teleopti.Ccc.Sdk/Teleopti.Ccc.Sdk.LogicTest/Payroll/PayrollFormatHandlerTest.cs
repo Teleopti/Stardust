@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Payroll
         private PayrollFormatHandler _formatHandler;
         private string path;
         private string completePath;
-        private const string esentPath = "one_way.esent";
+        private const string esentPath = "Teleopti.Payroll";
         private const string fileName = "internal.storage.xml";
 
         [SetUp]
@@ -34,19 +34,19 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Payroll
             
             _formatHandler.Save(payrollFormatDtos);
             var bytes = File.ReadAllBytes(completePath);
-            const int byteLength = 156;
+            const int byteLength = 170;
             Assert.AreEqual(byteLength, bytes.Length);
         }
 
         [Test]
         public void ShouldReadPayrollFormatsFromXmlFile()
         {
-            var payrollFormatDtos = new List<PayrollFormatDto> { new PayrollFormatDto(new Guid("1E88583F-284C-4C17-BD07-B7AFA08D0BF4"), "Sweet Päjrållformat") };
+            var payrollFormatDtos = new List<PayrollFormatDto> { new PayrollFormatDto(new Guid("1E88583F-284C-4C17-BD07-B7AFA08D0BF4"), "Sweet Päjrållformat", "tjo") };
             //First Save a file
             _formatHandler = new PayrollFormatHandler(path);
             _formatHandler.Save(payrollFormatDtos);
 
-            var formats =  _formatHandler.Load();
+            var formats =  _formatHandler.Load("tjo");
             Assert.AreEqual("Sweet Päjrållformat", formats.First().Name);
             Assert.AreEqual(new Guid("1E88583F-284C-4C17-BD07-B7AFA08D0BF4"), formats.First().FormatId);
         }
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Payroll
         public void ShouldNotCrashIfFileNotExist()
         {
             CleanDefaults();
-            var formats = _formatHandler.Load();
+            var formats = _formatHandler.Load("");
             Assert.IsNotNull(formats);
         }
 

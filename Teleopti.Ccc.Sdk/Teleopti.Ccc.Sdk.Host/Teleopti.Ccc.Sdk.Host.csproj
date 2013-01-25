@@ -149,6 +149,9 @@
     </CodeAnalysisDictionary>
     <Content Include="GetPayrollResultById.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Teleopti.Payroll\ReadMe.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TeleoptiCccSdkService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

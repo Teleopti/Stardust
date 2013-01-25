@@ -327,8 +327,9 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <returns>A collection of <see cref="PayrollFormatDto"/>.</returns>
         public ICollection<PayrollFormatDto> GetPayrollFormats()
 		{
+			var dataSource = ((TeleoptiIdentity) TeleoptiPrincipal.Current.Identity).DataSource.DataSourceName;
             var formatter = new PayrollFormatHandler(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory));
-		    return formatter.Load();
+		    return formatter.Load(dataSource);
 		}
 
         //Added this for testing and separation of old stuff, dont know if the name 
