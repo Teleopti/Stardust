@@ -127,6 +127,24 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(Math.Round(537.8571,4), Math.Round(valueNew,4));
         }
 
+		public void VerifyNewCalculationPeriodValue1()
+		{
+			var valueNew = SkillStaffPeriodDataHolder.CalculateWorkShiftPeriodValue(200, -100, 15);
+			Assert.AreEqual(Math.Round(13.875, 4), Math.Round(valueNew, 4));
+		}
+
+		public void VerifyNewCalculationPeriodValue2()
+		{
+			var valueNew = SkillStaffPeriodDataHolder.CalculateWorkShiftPeriodValue(200, 100, 15);
+			Assert.AreEqual(Math.Round(-16.125, 4), Math.Round(valueNew, 4));
+		}
+
+		public void VerifyNewCalculationPeriodValue3()
+		{
+			var valueNew = SkillStaffPeriodDataHolder.CalculateWorkShiftPeriodValue(0, 1, 15);
+			Assert.AreEqual(0, valueNew);
+		}
+
         [Test]
         public void VerifyOriginalDemandReturnsOneMinuteAtLeast()
         {

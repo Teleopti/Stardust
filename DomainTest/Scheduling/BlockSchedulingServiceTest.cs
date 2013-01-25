@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private bool _eventFired;
     	private ISchedulingOptions _schedulingOptions;
 
+
         [SetUp]
         public void Setup()
         {
@@ -51,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         	_range = _mocks.StrictMock<IScheduleRange>();
 			_fairness = new FairnessValueResult { FairnessPoints = 5, TotalNumberOfShifts = 20 };
 			_schedulingOptions = new SchedulingOptions();
-        }
+         }
 
 		[Test]
 		public void ShouldGetBetweenDayOffFromFactory()
@@ -177,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_matrix0.UnlockedDays).Return(
 					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { scheduleDayPro })).Repeat.Any();
 			}
-			_instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
+            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
 			IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { new DateOnly(2010, 1, 1) }, _reportList);
 
 			using (_mocks.Playback())
@@ -211,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { scheduleDayPro })).Repeat.Any();
 				Expect.Call(_scheduleDayService.ScheduleDay(schedulePart, _schedulingOptions)).Return(false).Repeat.AtLeastOnce();
 			}
-			_instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
+            _instance = new BlockSchedulingService(_blockShiftCategoryFinder, _scheduleDayService, _blockFinderFactory);
 			IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { new DateOnly(2010, 1, 1) }, _reportList);
 
 			using (_mocks.Playback())

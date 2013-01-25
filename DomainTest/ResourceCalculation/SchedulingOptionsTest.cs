@@ -65,6 +65,18 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsFalse(_target.UseSameDayOffs);
             _target.UseSameDayOffs = true;
             Assert.IsTrue(_target.UseSameDayOffs);
+            
+        }
+
+        [Test]
+        public void VerifyBlockOptions()
+        {
+            _target.UsePeriodAsBlock = true;
+            Assert.IsTrue(_target.UsePeriodAsBlock);
+            _target.UseTwoDaysOffAsBlock = true;
+            Assert.IsTrue(_target.UseTwoDaysOffAsBlock);
+            _target.UseCalenderWeekAsBlock = true;
+            Assert.IsTrue(_target.UseCalenderWeekAsBlock);
         }
 
         [Test]
