@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
-		public void ShouldHaveMinutesSinceTimeLineStartSetWhenOnlyMySchedule()
+		public void ShouldMapMinutesSinceTimeLineStartSetWhenOnlyMySchedule()
 		{
 			var startDate = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(startDate, _person);
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
-		public void ShouldHaveMinutesSinceTimeLineStartSetWhenBothScheduleForMeAndTradeBuddy()
+		public void ShouldMapMinutesSinceTimeLineStartSetWhenBothScheduleForMeAndTradeBuddy()
 		{
 			var buddy = new Person {Name = new Name("Buddy", "Bob")};
 			var myStartDate = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
@@ -96,21 +96,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(myStartDate));
 			result.MySchedule.MinutesSinceTimeLineStart.Should().Be.EqualTo(45);
 			result.PossibleTradePersons.First().MinutesSinceTimeLineStart.Should().Be.EqualTo(15);
-		}
-
-		[Test]
-		public void ShouldHaveZeroMinutesSinceTimeLineStartWhenIhaveNoSchedule()
-		{
-			var day = _scheduleFactory.ScheduleDayStub();
-
-			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(Arg<DateOnly>.Is.Anything)).Return(day);
-			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything)).Return(new List<IScheduleDay>());
-
-			_projectionProvider.Stub(p => p.Projection(day)).Return(_scheduleFactory.ProjectionStub());
-
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(DateOnly.Today);
-
-			result.MySchedule.MinutesSinceTimeLineStart.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -334,32 +319,32 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			dayOffLayer.LengthInMinutes.Should().Be.EqualTo(TimeSpan.FromHours(9).TotalMinutes);
 		}
 
-		//[Test]
-		//public void ShouldMapPossibleTradePersonsDayOff()
-		//{
-		//    var possibleTradePerson = new Person { Name = new Name("Trade", "Victim") };
-		//    var theDayOff = new DayOffTemplate(new Description("a day off")) { DisplayColor = Color.Gray };
-		//    var myDayOff = new PersonDayOff(_person, new Scenario("scenario"), theDayOff, DateOnly.Today);
-		//    var tradeVictimDayOff = new PersonDayOff(possibleTradePerson, new Scenario("scenario"), theDayOff, DateOnly.Today);
-		//    var myDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, _person, SchedulePartView.DayOff, myDayOff);
-		//    var tradeVictimDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, possibleTradePerson, SchedulePartView.DayOff, tradeVictimDayOff);
+		[Test]
+		public void ShouldMapPossibleTradePersonsDayOff()
+		{
+			var possibleTradePerson = new Person { Name = new Name("Trade", "Victim") };
+			var theDayOff = new DayOffTemplate(new Description("a day off")) { DisplayColor = Color.Gray };
+			var myDayOff = new PersonDayOff(_person, new Scenario("scenario"), theDayOff, DateOnly.Today);
+			var tradeVictimDayOff = new PersonDayOff(possibleTradePerson, new Scenario("scenario"), theDayOff, DateOnly.Today);
+			var myDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, _person, SchedulePartView.DayOff, myDayOff);
+			var tradeVictimDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, possibleTradePerson, SchedulePartView.DayOff, tradeVictimDayOff);
 
-		//    _shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(Arg<DateOnly>.Is.Anything)).Return(myDay);
-		//    _shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything)).Return(new List<IScheduleDay> {tradeVictimDay});
-		//    _projectionProvider.Expect(p => p.Projection(myDay)).Return(_scheduleFactory.ProjectionStub());
-		//    _projectionProvider.Expect(p => p.Projection(tradeVictimDay)).Return(_scheduleFactory.ProjectionStub());
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(Arg<DateOnly>.Is.Anything)).Return(myDay);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything)).Return(new List<IScheduleDay> { tradeVictimDay });
+			_projectionProvider.Expect(p => p.Projection(myDay)).Return(_scheduleFactory.ProjectionStub());
+			_projectionProvider.Expect(p => p.Projection(tradeVictimDay)).Return(_scheduleFactory.ProjectionStub());
 
-		//    var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(DateOnly.Today);
+			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(DateOnly.Today);
 
-		//    result.PossibleTradePersons.Count().Should().Be.EqualTo(1);
-		//    result.PossibleTradePersons.First().MinutesSinceTimeLineStart.Should().Be.EqualTo(15);
+			result.PossibleTradePersons.Count().Should().Be.EqualTo(1);
+			result.PossibleTradePersons.First().MinutesSinceTimeLineStart.Should().Be.EqualTo(15);
 
-		//    var dayOffLayer = result.PossibleTradePersons.First().ScheduleLayers.First();
-		//    dayOffLayer.IsDayOff.Should().Be.True();
-		//    dayOffLayer.Payload.Should().Be.EqualTo(theDayOff.Description.Name);
-		//    dayOffLayer.Color.Should().Be.EqualTo(ColorTranslator.ToHtml(theDayOff.DisplayColor));
-		//    dayOffLayer.ElapsedMinutesSinceShiftStart.Should().Be.EqualTo(0);
-		//    dayOffLayer.LengthInMinutes.Should().Be.EqualTo(TimeSpan.FromHours(9).TotalMinutes);
-		//}
+			var dayOffLayer = result.PossibleTradePersons.First().ScheduleLayers.First();
+			dayOffLayer.IsDayOff.Should().Be.True();
+			dayOffLayer.Payload.Should().Be.EqualTo(theDayOff.Description.Name);
+			dayOffLayer.Color.Should().Be.EqualTo(ColorTranslator.ToHtml(theDayOff.DisplayColor));
+			dayOffLayer.ElapsedMinutesSinceShiftStart.Should().Be.EqualTo(0);
+			dayOffLayer.LengthInMinutes.Should().Be.EqualTo(TimeSpan.FromHours(9).TotalMinutes);
+		}
 	}
 }
