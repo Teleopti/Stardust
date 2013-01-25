@@ -56,7 +56,30 @@ namespace Teleopti.Ccc.Win.Shifts
             Text = UserTexts.Resources.SelectBags;
             if (_explorerPresenter.Model.SelectedView != ShiftCreatorViewType.RuleSet)
                 Text = UserTexts.Resources.SelectRuleSets;
-        }
+			//to handle bug? in syncfusion when Space is pressed
+			KeyDown += formKeyDown;
+			KeyPress += formKeyPress;
+		}
+
+		void formKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyValue.Equals(32))
+			{
+				foreach (TreeNodeAdv selectedNode in treeViewAdvLoV.SelectedNodes)
+				{
+					selectedNode.Checked = !selectedNode.Checked;
+				}
+				e.Handled = true;
+			}
+		}
+
+		void formKeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar.Equals((Char)Keys.Space))
+			{
+				e.Handled = true;
+			}
+		}
 
         private void createRuleSetBagNodes(IEnumerable<IRuleSetBag> ruleSetBags)
         {
@@ -148,5 +171,11 @@ namespace Teleopti.Ccc.Win.Shifts
             _explorerPresenter.View.RefreshChildViews();
             Close();
         }
+
+		private void promptDialogFormClosed(object sender, FormClosedEventArgs e)
+		{
+			KeyDown -= formKeyDown;
+			KeyPress -= formKeyPress;
+		}
     }
 }
