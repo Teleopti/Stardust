@@ -11,6 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		IEnumerable<RequestViewModel> CreatePagingViewModel(Paging paging);
 		RequestViewModel CreateRequestViewModel(Guid id);
 		ShiftTradeRequestsPeriodViewModel CreateShiftTradePeriodViewModel();
-		ShiftTradeRequestsScheduleViewModel CreateShiftTradeScheduleViewModel(DateTime selectedDate);
+		ShiftTradeScheduleViewModel CreateShiftTradeScheduleViewModel(DateTime selectedDate);
 	}
 }

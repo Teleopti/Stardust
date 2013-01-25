@@ -11,13 +11,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
-	public class ShiftTradeRequestsScheduleMappingProfile : Profile
+	public class ShiftTradeScheduleViewModelMappingProfile : Profile
 	{
 		private readonly Func<IShiftTradeRequestProvider> _shiftTradeRequestProvider;
 		private readonly Func<IProjectionProvider> _projectionProvider;
-		private int _timeLineOffset = 15;
+		private const int TimeLineOffset = 15;
 
-		public ShiftTradeRequestsScheduleMappingProfile(Func<IShiftTradeRequestProvider> shiftTradeRequestProvider, Func<IProjectionProvider> projectionProvider)
+		public ShiftTradeScheduleViewModelMappingProfile(Func<IShiftTradeRequestProvider> shiftTradeRequestProvider, Func<IProjectionProvider> projectionProvider)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_projectionProvider = projectionProvider;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			base.Configure();
 
 
-			CreateMap<DateOnly, ShiftTradeRequestsScheduleViewModel>()
+			CreateMap<DateOnly, ShiftTradeScheduleViewModel>()
 				.ConvertUsing(s =>
 								{
 									var myScheduledDay = _shiftTradeRequestProvider.Invoke().RetrieveMyScheduledDay(s);
@@ -39,29 +39,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 									IEnumerable<IEnumerable<IVisualLayer>> possibleTradePersonsLayerCollection = 
 										CreatePossibleTradePersonsLayerCollection(possibleTradePersonsSchedule);
 
-									var myScheduleViewModel = new ShiftTradeScheduleViewModel();
-									var possibleTradePersonsViewModel = new List<ShiftTradeScheduleViewModel>();
+									var myScheduleViewModel = new ShiftTradePersonScheduleViewModel();
+									var possibleTradePersonsViewModel = new List<ShiftTradePersonScheduleViewModel>();
 
 									var timeZone = myScheduledDay.Person.PermissionInformation.DefaultTimeZone();
 									DateTimePeriod timeLineRangeTot = SetTimeLineRange(myLayerCollection, possibleTradePersonsLayerCollection, timeZone);
 
 									if (myLayerCollection.Any() || possibleTradePersonsLayerCollection.Any() || myDayOff != null)
 									{
-										myScheduleViewModel = new ShiftTradeScheduleViewModel
+										myScheduleViewModel = new ShiftTradePersonScheduleViewModel
 																	{
 																		Name = UserTexts.Resources.MySchedule,
 																		ScheduleLayers = CreateShiftTradeLayers(myLayerCollection, myDayOff, timeZone, timeLineRangeTot),
-																		MinutesSinceTimeLineStart = myLayerCollection.Any() ? (int)myLayerCollection.First().Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes : _timeLineOffset
+																		MinutesSinceTimeLineStart = myLayerCollection.Any() ? (int)myLayerCollection.First().Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes : TimeLineOffset
 																	};
 										possibleTradePersonsViewModel.AddRange(possibleTradePersonsLayerCollection
-																		.Select(layers => new ShiftTradeScheduleViewModel
+																		.Select(layers => new ShiftTradePersonScheduleViewModel
 																								{
 																									Name = layers.First().Person.Name.ToString(),
 																									ScheduleLayers = CreateShiftTradeLayers(layers, null, timeZone, timeLineRangeTot), 
 																									MinutesSinceTimeLineStart = (int) layers.First().Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes
 																								}));
 									}
-									return new ShiftTradeRequestsScheduleViewModel
+									return new ShiftTradeScheduleViewModel
 											{
 												MySchedule = myScheduleViewModel,
 												PossibleTradePersons = possibleTradePersonsViewModel,
@@ -108,8 +108,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				timeLineRangeTot = new DateTimePeriod(startTime, endTime);
 			}
 
-			timeLineRangeTot = timeLineRangeTot.ChangeStartTime(TimeSpan.FromMinutes(-_timeLineOffset));
-			timeLineRangeTot = timeLineRangeTot.ChangeEndTime(TimeSpan.FromMinutes(_timeLineOffset));
+			timeLineRangeTot = timeLineRangeTot.ChangeStartTime(TimeSpan.FromMinutes(-TimeLineOffset));
+			timeLineRangeTot = timeLineRangeTot.ChangeEndTime(TimeSpan.FromMinutes(TimeLineOffset));
 
 			return timeLineRangeTot;
 		}
