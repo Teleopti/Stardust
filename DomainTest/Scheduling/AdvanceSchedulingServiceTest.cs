@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
@@ -15,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
     {
         private MockRepository _mocks;
         private IAdvanceSchedulingService _target;
-        private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private ISkillDayPeriodIntervalData _skillDayPeriodIntervalData;
         private IDynamicBlockFinder _dynamicBlockFinder;
         private ITeamExtractor _teamExtractor;
@@ -35,7 +33,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private IPersonSkill _personSkill;
         private ISkill _skill;
         private IShiftProjectionCache _scheduleProjectionCache;
-        private IPossibleStartEndCategory _possibleStartEndCategory;
+        private IVirtualSchedulePeriod _virtualSchedulePeriod;
+        private IActivity _activity;
 
 
         [SetUp]
@@ -43,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             _mocks = new MockRepository();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
-            _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _skillDayPeriodIntervalData =  _mocks.StrictMock<ISkillDayPeriodIntervalData>();
             _dynamicBlockFinder = _mocks.StrictMock<IDynamicBlockFinder>();
             _teamExtractor = _mocks.StrictMock<ITeamExtractor>();
@@ -62,8 +60,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _personPeriod = _mocks.StrictMock<IPersonPeriod>();
             _personSkill = _mocks.StrictMock<IPersonSkill>();
             _skill = _mocks.StrictMock<ISkill>();
+            _virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _scheduleProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
-            _possibleStartEndCategory = _mocks.StrictMock<IPossibleStartEndCategory>();
+            _activity = _mocks.StrictMock<IActivity>();
             _target = new AdvanceSchedulingService(_skillDayPeriodIntervalData, 
                                                 _dynamicBlockFinder, 
                                                 _teamExtractor, 
@@ -88,6 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             var personSkillList = new List<IPersonSkill> {_personSkill};
             var matrixList = new List<IScheduleMatrixPro> {_scheduleMatrixPro};
             var shiftProjectionCacheList = new List<IShiftProjectionCache> {_scheduleProjectionCache};
+            var dateOnlyPeriod = new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1));
             using(_mocks.Record())
             {
                 //first sub method
@@ -99,23 +99,31 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
                 Expect.Call(_dynamicBlockFinder.ExtractBlockDays(dateOnly)).IgnoreArguments().Return(dateOnlyList);
                 Expect.Call(_teamExtractor.GetRamdomTeam(dateOnly)).IgnoreArguments().Return(_grouPerson);
+                Expect.Call(_grouPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person}));
+                Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
+                
+                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
                 Expect.Call(_groupPersonBuilderBasedOnContractTime.SplitTeams(_grouPerson, dateOnly)).IgnoreArguments().
                     Return(groupPersonList);
                 Expect.Call(_restrictionAggregator.Aggregate(dateOnlyList, _grouPerson, _schedulingOptions)).
                     IgnoreArguments().Return(_effectiveRestriction);
                 Expect.Call(_skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList)).IgnoreArguments().Return(
                     skillInternalDataList);
-                Expect.Call(_scheduleMatrixPro.Person).Return(_person);
+                Expect.Call(_scheduleMatrixPro.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_person.PersonPeriodCollection).Return(personPeriodList);
                 Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkillList);
                 Expect.Call(_personSkill.Skill).Return(_skill);
+                Expect.Call(_skill.Activity).Return(_activity);
                 Expect.Call(_workShiftFilterService.Filter(dateOnly, _person, matrixList, _effectiveRestriction,
                                                            _schedulingOptions)).
                     IgnoreArguments().Return(shiftProjectionCacheList);
+                Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).Return(new WorkShiftLengthHintOption());
+                Expect.Call(_schedulingOptions.UseMinimumPersons).Return(false);
+                Expect.Call(_schedulingOptions.UseMaximumPersons).Return(false);
                 Expect.Call(_workShiftSelector.Select(shiftProjectionCacheList, new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>(), 
-                                                      _schedulingOptions.WorkShiftLengthHintOption,
-                                                      _schedulingOptions.UseMinimumPersons,
-                                                      _schedulingOptions.UseMaximumPersons)).IgnoreArguments().Return(_scheduleProjectionCache ) ;
+                                                      new WorkShiftLengthHintOption(), 
+                                                      true,
+                                                      true)).IgnoreArguments().Return(_scheduleProjectionCache ) ;
                 Expect.Call(() => _teamScheduling.Execute(dateOnlyList, matrixList, _grouPerson, _effectiveRestriction,
                                                     _scheduleProjectionCache)).IgnoreArguments();
             }
