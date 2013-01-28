@@ -133,6 +133,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             target.LoadFactQueues();
         }
 
+
+		[Test]
+		public void VerifyLoadActualAgentState()
+		{
+			var person = PersonFactory.CreatePerson("Ashlee", "Andeen");
+			person.SetId(Guid.NewGuid());
+			var result = target.LoadActualAgentState(new List<IPerson> {person});
+			Assert.IsNotNull(result);
+		}
+
+		[Test]
+		public void VerifyLoadOneActualAgentState()
+		{
+			VerifyAddOrUpdateActualAgentState();
+			Assert.IsNotNull(target.LoadOneActualAgentState(Guid.Empty));
+		}
+
+		[Test]
+		public void VerifyAddOrUpdateActualAgentState()
+		{
+			var agentState = new ActualAgentState();
+			target.AddOrUpdateActualAgentState(agentState);
+		}
+
+		[Test]
+		public void VerifyPersonIdsWithExternalLogOn()
+		{
+			target.PersonIdsWithExternalLogOn(Guid.NewGuid());
+		}
+
         protected override void SetupForRepositoryTest()
         {
             target = StatisticRepositoryFactory.Create();
