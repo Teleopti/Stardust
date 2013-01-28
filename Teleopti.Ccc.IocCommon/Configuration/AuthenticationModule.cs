@@ -70,7 +70,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             builder.RegisterType<CheckBruteForce>()
                 .As<ICheckBruteForce>()
                 .SingleInstance();
-            builder.Register(c => new PasswordPolicy(c.Resolve<ILoadPasswordPolicyService>()))
+				builder.Register<IPasswordPolicy>(c =>
+                             	{
+											if(c.Resolve<IApplicationData>().LoadPasswordPolicyService==null)
+												return new DummyPasswordPolicy();
+                             		return new PasswordPolicy(c.Resolve<ILoadPasswordPolicyService>());
+                             	})
                 .As<IPasswordPolicy>()
                 .SingleInstance();
             builder.RegisterType<SystemUserSpecification>()
