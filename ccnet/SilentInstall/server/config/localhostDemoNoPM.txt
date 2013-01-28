@@ -1,4 +1,4 @@
-ADDLOCAL="Database,RestoreDemo,AgentPortalWeb,Analytics,ClickOnce,AgentPortal,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker,ContextHelp"
+ADDLOCAL="Database,RestoreDemo,AgentPortalWeb,Analytics,ClickOnce,AgentPortal,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker"
 CLICKONCE_CLIENT_URL="http://%COMPUTERNAME%/TeleoptiCCC/Client/"
 CLICKONCE_MYTIME_URL="http://%COMPUTERNAME%/TeleoptiCCC/MyTime/"
 CLICKONCE_SIGN_METHOD="TEMP"
