@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.AgentPortal.Reports
 
         public TimePeriod? Period()
         {
+			return _visualProjection.Period();
+			/**
             TimeSpan min = TimeSpan.MaxValue;
             TimeSpan max = TimeSpan.MinValue;
             TimePeriod? thisPeriod = null;
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.AgentPortal.Reports
                 return _visualProjection.Period();
 
             }
-            return thisPeriod;
+            return thisPeriod;*/
         }
     }
 }

@@ -30,3 +30,38 @@ IF  EXISTS (SELECT * FROM sys.schemas WHERE name = N'msg')
 DROP SCHEMA [msg]
 GO
 
+
+
+
+----------------  
+--Name: Karin and David
+--Date: 2013-01-09
+--Desc: PBI21633
+----------------  
+ALTER TABLE mart.fact_schedule_deviation DROP COLUMN datasource_update_date
+ALTER TABLE  mart.fact_schedule_deviation ADD shift_startdate_id int NULL
+ALTER TABLE  mart.fact_schedule_deviation ADD shift_startinterval_id smallint NULL
+GO
+
+--will be re-oladed from SP-code
+TRUNCATE TABLE mart.fact_schedule_deviation
+GO
+
+IF NOT EXISTS(SELECT 1 FROM mart.sys_configuration WHERE [key]='AdherenceMinutesOutsideShift')
+	INSERT INTO mart.sys_configuration([key], value, insert_date)
+	SELECT 'AdherenceMinutesOutsideShift', 120, GETDATE()
+
+UPDATE mart.report_control_collection
+SET control_name_resource_key = 'ResShiftStartDateColon'
+WHERE collection_id=37 AND control_id =6
+AND control_name_resource_key ='ResDateColon'
+
+UPDATE mart.report_control_collection
+SET control_name_resource_key = 'ResShiftStartDateFromColon'
+WHERE collection_id=42 AND control_id =1
+AND control_name_resource_key ='ResDateFromColon'
+
+UPDATE mart.report_control_collection
+SET control_name_resource_key = 'ResShiftStartDateToColon'
+WHERE collection_id=42 AND control_id =2
+AND control_name_resource_key ='ResDateToColon'
