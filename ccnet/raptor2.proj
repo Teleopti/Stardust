@@ -102,13 +102,6 @@
 		<Message Importance="high" Text="Installing solution wide nuget packages (packages.config)"/>
 		<Exec Command=".nuget\nuget.exe install .nuget\packages.config -o packages"
 				WorkingDirectory="$(CCNetWorkingDirectory)"/>
-
-		<Message Importance="high" Text="Pre-build DBmanager for DB setup and test"/>
-		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj"
-				Properties="Configuration=Release;Platform=Any CPU;"
-				BuildInParallel = "true"
-				Targets="Build">
-		</MSBuild>
 	</Target>
 	
     <Target Name="BuildSSASXmla" Condition="Exists('$(vs2008ide)') And Exists('$(AsDBDeploy)')">
