@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                 Expect.Call(_restrictionAggregator.Aggregate(dateOnlyList, _grouPerson, _schedulingOptions)).
                     IgnoreArguments().Return(_effectiveRestriction);
                 Expect.Call(_skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList)).IgnoreArguments().Return(
-                    skillInternalDataList);
+                    new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>());
                 Expect.Call(_scheduleMatrixPro.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_person.PersonPeriodCollection).Return(personPeriodList);
                 Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkillList);
