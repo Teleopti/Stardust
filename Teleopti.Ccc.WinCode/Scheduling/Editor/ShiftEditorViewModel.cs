@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 
         private bool CanMoveDownLayer()
         {
-          return   SelectedLayer != null && SelectedLayer.CanMoveDown;;
+          return SelectedLayer != null && SelectedLayer.CanMoveDown;
         }
 
         private void DeleteLayer()

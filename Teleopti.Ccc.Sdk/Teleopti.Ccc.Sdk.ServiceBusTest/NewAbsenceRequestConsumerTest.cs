@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         private IRequestFactory _factory;
         private IScheduleDictionarySaver _scheduleDictionarySaver;
         private IPersonRequestCheckAuthorization _authorization;
-        private IScenarioProvider _scenarioProvider;
+        private IScenarioRepository _scenarioRepository;
         private IScheduleIsInvalidSpecification _scheduleIsInvalidSpecification;
         private IScheduleDictionaryModifiedCallback _scheduleDictionaryModifiedCallback;
         private IAlreadyAbsentSpecification _alreadyAbsentSpecification;
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             CreatePersonAndRequest();
             CreateRepositories();
             
-            _scenarioProvider = _mockRepository.StrictMock<IScenarioProvider>();
+            _scenarioRepository = _mockRepository.StrictMock<IScenarioRepository>();
             _scheduleIsInvalidSpecification = _mockRepository.DynamicMock<IScheduleIsInvalidSpecification>();
             _scheduleDictionaryModifiedCallback = _mockRepository.DynamicMock<IScheduleDictionaryModifiedCallback>();
             
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
             Expect.Call(_absenceRequest.Person).Return(_person).Repeat.Any();
             _target = new NewAbsenceRequestConsumer(_scheduleRepository, _personAbsenceAccountProvider,
-                                                    _scenarioProvider, _personRequestRepository,
+                                                    _scenarioRepository, _personRequestRepository,
                                                     _schedulingResultStateHolder, _merger,
                                                     _factory, _scheduleDictionarySaver,
                                                     _scheduleIsInvalidSpecification, _authorization,
@@ -683,7 +683,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
         private void PrepareAbsenceRequest()
         {
-            Expect.Call(_scenarioProvider.DefaultScenario()).Return(_scenario).Repeat.AtLeastOnce();
+            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario).Repeat.AtLeastOnce();
             Expect.Call(_personRequestRepository.Get(_message.PersonRequestId)).Return(_personRequest).Repeat.AtLeastOnce();
             Expect.Call(_personRequest.IsNew).Return(true);
             Expect.Call(_personRequest.Request).Return(_absenceRequest).Repeat.Any();

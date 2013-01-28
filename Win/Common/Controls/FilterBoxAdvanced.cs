@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
                             var filterOn = (FilterAdvancedTupleItem)(reqItem.FilterOn);
 
                             if (filterOn.Text == "Seniority")
-                                initalizeFiltersWithDefaultValue(filterOn.Text, "", ((FilterAdvancedTupleItem)(reqItem.FilterOperand)).Text);
+                                initalizeFiltersWithDefaultValue(filterOn.Text, "", reqItem.FilterOperand.Text);
                             else
                                 initalizeFiltersWithDefaultValue(filterOn.Text, ((FilterAdvancedTupleItem)(reqItem.FilterValue)).Text, "=");
 

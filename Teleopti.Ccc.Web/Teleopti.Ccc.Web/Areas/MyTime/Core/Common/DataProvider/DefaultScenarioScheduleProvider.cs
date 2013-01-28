@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
@@ -11,21 +12,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IScheduleRepository _scheduleRepository;
-		private readonly IScenarioProvider _scenarioProvider;
+		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IUserTimeZone _userTimeZone;
 
-		public DefaultScenarioScheduleProvider(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, IScenarioProvider scenarioProvider, IUserTimeZone userTimeZone)
+		public DefaultScenarioScheduleProvider(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, IScenarioRepository scenarioRepository, IUserTimeZone userTimeZone)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleRepository = scheduleRepository;
-			_scenarioProvider = scenarioProvider;
+			_scenarioRepository = scenarioRepository;
 			_userTimeZone = userTimeZone;
 		}
 
 		public IEnumerable<IScheduleDay> GetScheduleForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var defaultScenario = _scenarioProvider.DefaultScenario();
+			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 			var dateTimePeriod = period.ToDateTimePeriod(_userTimeZone.TimeZone());
 
 			var dictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, true), dateTimePeriod,
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var dateTimePeriod = new DateOnlyPeriod(date, date).ToDateTimePeriod(timeZone);
 
-			var defaultScenario = _scenarioProvider.DefaultScenario();
+			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 
 			var dictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
 				new PersonProvider(persons), 

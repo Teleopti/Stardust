@@ -157,7 +157,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterType<WebWindowsUserProvider>()
                 .As<IWindowsUserProvider>()
                 .InstancePerDependency();
-        	builder.RegisterType<ScenarioProvider>().As<IScenarioProvider>();
             builder.RegisterType<ScheduleDictionarySaver>().As<IScheduleDictionarySaver>();
 
             registerSdkFactories(builder);

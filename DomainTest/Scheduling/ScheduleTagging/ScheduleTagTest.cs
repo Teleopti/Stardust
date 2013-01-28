@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ScheduleTagging
         [Test]
         public void VerifyProperties()
         {
-            Assert.IsFalse(((IDeleteTag)_target).IsDeleted);
-            ((IDeleteTag)_target).SetDeleted();
-            Assert.IsTrue(((IDeleteTag)_target).IsDeleted);
+            Assert.IsFalse(_target.IsDeleted);
+            _target.SetDeleted();
+            Assert.IsTrue(_target.IsDeleted);
             Assert.IsNullOrEmpty(_target.Description);
             _target.Description = "012345678912345";
             Assert.AreEqual("012345678912345", _target.Description);

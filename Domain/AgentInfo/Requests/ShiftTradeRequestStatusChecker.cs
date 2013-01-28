@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
     public class ShiftTradeRequestStatusChecker : IBatchShiftTradeRequestStatusChecker
     {
-        private readonly IScenarioProvider _scenarioProvider;
+        private readonly IScenarioRepository _scenarioRepository;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonRequestCheckAuthorization _authorization;
         private IList<IPerson> _persons;
@@ -23,9 +24,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         private IScheduleDictionary _scheduleDictionary;
         private bool _isInBatchMode;
 
-        public ShiftTradeRequestStatusChecker(IScenarioProvider scenarioProvider, IScheduleRepository scheduleRepository, IPersonRequestCheckAuthorization authorization)
+		  public ShiftTradeRequestStatusChecker(IScenarioRepository scenarioRepository, IScheduleRepository scheduleRepository, IPersonRequestCheckAuthorization authorization)
         {
-            _scenarioProvider = scenarioProvider;
+            _scenarioRepository = scenarioRepository;
             _scheduleRepository = scheduleRepository;
             _authorization = authorization;
         }
@@ -48,11 +49,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         {
             _scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(_persons),new ScheduleDictionaryLoadOptions(false, false),
                                                            _period.GetValueOrDefault(new DateTimePeriod()).ChangeEndTime
-                                                               (TimeSpan.FromHours(25)), _scenarioProvider.DefaultScenario());
-
-            //_scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(_persons) { LoadNotes = false, LoadRestrictions = false },
-            //                                               _period.GetValueOrDefault(new DateTimePeriod()).ChangeEndTime
-            //                                                   (TimeSpan.FromHours(25)), _scenarioProvider.DefaultScenario());
+                                                               (TimeSpan.FromHours(25)), _scenarioRepository.LoadDefaultScenario());
         }
 
         public void EndBatch()

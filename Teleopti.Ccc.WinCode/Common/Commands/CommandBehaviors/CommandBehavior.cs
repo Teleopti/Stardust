@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WinCode.Common.Commands.CommandBehaviors
         /// </summary>
         public static readonly DependencyProperty ActionProperty =
             DependencyProperty.RegisterAttached("Action", typeof(Action<object>), typeof(CommandBehavior),
-                new FrameworkPropertyMetadata((Action<object>)null,
+                new FrameworkPropertyMetadata(null,
                     new PropertyChangedCallback(OnActionChanged)));
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WinCode.Common.Commands.CommandBehaviors
         /// </summary>
         public static object GetCommandParameter(DependencyObject source)
         {
-            return (object)source.GetValue(CommandParameterProperty);
+            return source.GetValue(CommandParameterProperty);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WinCode.Common.Commands.CommandBehaviors
         /// </summary>
         public static readonly DependencyProperty EventProperty =
             DependencyProperty.RegisterAttached("Event", typeof(string), typeof(CommandBehavior),
-                new FrameworkPropertyMetadata((string)String.Empty,
+                new FrameworkPropertyMetadata(String.Empty,
                     new PropertyChangedCallback(OnEventChanged)));
 
         /// <summary>

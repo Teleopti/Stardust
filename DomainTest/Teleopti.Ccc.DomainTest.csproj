@@ -162,7 +162,6 @@
     <Compile Include="Common\PersonProviderTest.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriodTest.cs" />
     <Compile Include="Common\PersonsInOrganizationProviderTest.cs" />
-    <Compile Include="Common\ScenarioProviderTest.cs" />
     <Compile Include="Forecasting\DaylightSavingTimeHelperTest.cs" />
     <Compile Include="Forecasting\Export\ExportForecastDataToFileSerializerTest.cs" />
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModelTest.cs" />

@@ -17,7 +17,7 @@ namespace Teleopti.Common.UI.OutlookControls.Workspaces
             _clientPortalCallback = clientPortalCallback;
             _presenter = new OutlookBarWorkspacePresenter(this, model);
             InitializeComponent();
-			groupBarModules.Font = new Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			groupBarModules.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
 			groupBarModules.ForeColor = Color.Black;
         }
 

@@ -33,6 +33,7 @@ ELSE
 		default_zone AS default_value
 	FROM mart.dim_time_zone tz
 	WHERE tz.time_zone_code<>'UTC' --ta inte med UTC
+	AND to_be_deleted <> 1
 	ORDER BY name
 
 GO

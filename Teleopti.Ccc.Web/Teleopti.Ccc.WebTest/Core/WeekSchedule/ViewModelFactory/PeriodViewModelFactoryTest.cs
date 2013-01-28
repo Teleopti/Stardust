@@ -120,8 +120,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
                 layerDetails.TimeSpan.Should().Be.EqualTo("20:00 - 04:00");
                 layerDetails.Meeting.Should().Be.Null();
                 layerDetails.Color.Should().Be.EqualTo("0,128,0");
-                layerDetails.StartPositionPercentage.Should().Be.EqualTo((decimal)(visualShiftStart - TimeSpan.Zero).Ticks / (decimal)(endTimeLine - TimeSpan.Zero).Ticks);
-                layerDetails.EndPositionPercentage.Should().Be.EqualTo((decimal)(shiftEnd - TimeSpan.Zero).Ticks / (decimal)(endTimeLine - TimeSpan.Zero).Ticks);
+                layerDetails.StartPositionPercentage.Should().Be.EqualTo((visualShiftStart - TimeSpan.Zero).Ticks / (decimal)(endTimeLine - TimeSpan.Zero).Ticks);
+                layerDetails.EndPositionPercentage.Should().Be.EqualTo((shiftEnd - TimeSpan.Zero).Ticks / (decimal)(endTimeLine - TimeSpan.Zero).Ticks);
             }
         }
 

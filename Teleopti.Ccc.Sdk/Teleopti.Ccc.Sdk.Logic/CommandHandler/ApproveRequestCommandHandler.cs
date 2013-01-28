@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     {
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
-        private readonly IScenarioProvider _scenarioProvider;
+        private readonly IScenarioRepository _scenarioRepository;
         private readonly IPersonRequestCheckAuthorization _authorization;
         private readonly ISwapAndModifyService _swapAndModifyService;
         private readonly IPersonRequestRepository _personRequestRepository;
@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private readonly IScheduleDictionaryModifiedCallback _scheduleDictionaryModifiedCallback;
 
-        public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, IScenarioProvider scenarioProvider, IPersonRequestCheckAuthorization authorization, ISwapAndModifyService swapAndModifyService, IPersonRequestRepository personRequestRepository, IUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback)
+		  public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, IScenarioRepository scenarioRepository, IPersonRequestCheckAuthorization authorization, ISwapAndModifyService swapAndModifyService, IPersonRequestRepository personRequestRepository, IUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback)
         {
             _scheduleRepository = scheduleRepository;
             _scheduleDictionarySaver = scheduleDictionarySaver;
-            _scenarioProvider = scenarioProvider;
+            _scenarioRepository = scenarioRepository;
             _authorization = authorization;
             _swapAndModifyService = swapAndModifyService;
             _personRequestRepository = personRequestRepository;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var scheduleDictionary = getSchedules(personRequest);
 
                 var approvalService = GetRequestApprovalServiceScheduler(scheduleDictionary,
-                                                                          _scenarioProvider.DefaultScenario(),
+                                                                          _scenarioRepository.LoadDefaultScenario(),
                                                                           _swapAndModifyService, allNewRules);
                 try
                 {
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             var timePeriod = personRequest.Request.Period;
             var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                 new PersonProvider(personList), new ScheduleDictionaryLoadOptions(true, false), timePeriod,
-                _scenarioProvider.DefaultScenario());
+                _scenarioRepository.LoadDefaultScenario());
             ((ReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
             return scheduleDictionary;
         }
