@@ -141,8 +141,8 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>if "$(Configuration)"=="Release" COPY "$(TargetDir)DBManager.exe" "$(TargetDir)..\..\..\..\Database\"
-if "$(Configuration)"=="Release" COPY "$(TargetDir)Teleopti.Ccc.DBManager.Library.dll" "$(TargetDir)..\..\..\..\Database\"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
