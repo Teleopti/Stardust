@@ -11237,9 +11237,19 @@ These options are activated:
   <data name="MySchedule" xml:space="preserve">
     <value>My Schedule</value>
     <comment>Used in creating Shift Trade on web</comment>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Date (shifts starting):</value>
+    <comment>Date (shifts starting):</comment>
   </data>
   <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
     <value>No agents available for shift trade</value>
     <comment>Message in Shift Trade in MyTime Web</comment>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Date From (shifts starting):</value>
+    <comment>Date From (shifts starting):</comment>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Date To (shifts starting):</value>
+    <comment>Date To (shifts starting):</comment>
   </data>
 </root>
