@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Assert.That(target.Models.First().AlarmDescription, Is.EqualTo(agentState.AlarmName));
 		}
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyCanRefreshProjection()
         {
             var scheduleRange = mocks.DynamicMock<IScheduleRange>();

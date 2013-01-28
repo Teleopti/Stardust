@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		{
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void VerifyOnLoadWithoutRtaEnabled()
 		{
 			_mocks.BackToRecord(_schedulingResultLoader);
