@@ -153,6 +153,10 @@
     <Compile Include="Core\Message\ViewModelFactory\MessageViewModelFactoryTest.cs" />
     <Compile Include="Core\Message\DataProvider\PushMessageProviderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryRequestsTest.cs" />
+    <Compile Include="Core\Requests\DataProvider\PossibleShiftTradePersonsProviderTest.cs" />
+    <Compile Include="Core\Requests\DataProvider\ShiftTradeRequestProviderTest.cs" />
+    <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleViewModelMappingProfileTest.cs" />
+    <Compile Include="Core\Requests\Mapping\ShiftTradePeriodViewModelMapperTest.cs" />
     <Compile Include="Core\TimeSpanModelBinderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryScheduleTest.cs" />
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
@@ -252,12 +256,10 @@
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayInputMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferenceViewModelFactoryTest.cs" />
     <Compile Include="Core\Requests\DataProvider\PersonRequestProviderTest.cs" />
-    <Compile Include="Core\UserTimeZoneTest.cs" />
     <Compile Include="Core\Requests\DataProvider\TextRequestPersisterTest.cs" />
     <Compile Include="Core\Requests\Mapping\RequestsViewModelMappingTest.cs" />
     <Compile Include="Core\Requests\Mapping\TextRequestFormMappingTest.cs" />
     <Compile Include="Core\Requests\ViewModelFactory\RequestsViewModelFactoryTest.cs" />
-    <Compile Include="Core\WeekSchedule\DataProvider\LoggedOnUserTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\LayoutBaseViewModelFactoryTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\CultureSpecificViewModelDataFactoryTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\ProjectionProviderTest.cs" />

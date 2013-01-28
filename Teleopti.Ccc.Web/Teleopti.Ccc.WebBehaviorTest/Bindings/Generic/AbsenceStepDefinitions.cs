@@ -14,5 +14,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var absence = table.CreateInstance<AbsenceConfigurable>();
 			UserFactory.User().Setup(absence);
 		}
+
+		[Given(@"(.*) have a absence with")]
+		public void GivenHaveAAbsenceWith(string userName, Table table)
+		{
+			var personAbsence = table.CreateInstance<PersonAbsenceConfigurable>();
+			UserFactory.User(userName).Setup(personAbsence);
+		}
 	}
 }

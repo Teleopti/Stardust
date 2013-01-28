@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     public class SchedulePartAssemblerTest
     {
         private SchedulePartAssembler target;
-        private IScenarioProvider scenarioProvider;
+        private IScenarioRepository scenarioRepository;
         private MockRepository mocks;
         private IScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto> assignmentAssembler;
         private IScheduleDataAssembler<IPersonAbsence, PersonAbsenceDto> absenceAssembler;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             person.SetId(Guid.NewGuid());
 
             mocks = new MockRepository();
-            scenarioProvider = mocks.StrictMock<IScenarioProvider>();
+            scenarioRepository = mocks.StrictMock<IScenarioRepository>();
             assignmentAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto>>();
             absenceAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonAbsence, PersonAbsenceDto>>();
             dayOffAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonDayOff, PersonDayOffDto>>();
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             personRepository = mocks.StrictMock<IPersonRepository>();
         	sdkProjectionServiceFactory = mocks.DynamicMock<ISdkProjectionServiceFactory>();
             dateTimePeriodAssembler = new DateTimePeriodAssembler();
-            target = new SchedulePartAssembler(scenarioProvider, assignmentAssembler, absenceAssembler, dayOffAssembler,
+            target = new SchedulePartAssembler(scenarioRepository, assignmentAssembler, absenceAssembler, dayOffAssembler,
                                                personMeetingAssembler, _preferenceRestrictionAssembler,
                                                _studentDayAssembler,
                                                new ProjectedLayerAssembler(dateTimePeriodAssembler),
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void PayrollSpecialProjection()
 		{
-			target = new SchedulePartAssembler(scenarioProvider, assignmentAssembler, absenceAssembler, dayOffAssembler,
+			target = new SchedulePartAssembler(scenarioRepository, assignmentAssembler, absenceAssembler, dayOffAssembler,
 											  personMeetingAssembler, _preferenceRestrictionAssembler,
 											  _studentDayAssembler,
 											  new ProjectedLayerAssembler(dateTimePeriodAssembler),
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                 //part.Add(prefDay);
                 part.Add(studentDay);
 
-                Expect.Call(scenarioProvider.DefaultScenario()).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(scenarioRepository.LoadDefaultScenario()).Return(null).Repeat.AtLeastOnce();
             }
             using(mocks.Playback())
             {
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                 
                 part.Add(absResult);
 
-                Expect.Call(scenarioProvider.DefaultScenario()).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(scenarioRepository.LoadDefaultScenario()).Return(null).Repeat.AtLeastOnce();
             }
             using (mocks.Playback())
             {
@@ -451,7 +451,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         [Test]
         public void ShouldNotUseAbsencesInSpecialProjectionExcludeAbsences()
         {
-			  target = new SchedulePartAssembler(scenarioProvider, assignmentAssembler, absenceAssembler, dayOffAssembler,
+			  target = new SchedulePartAssembler(scenarioRepository, assignmentAssembler, absenceAssembler, dayOffAssembler,
 									 personMeetingAssembler, _preferenceRestrictionAssembler,
 									 _studentDayAssembler,
 									 new ProjectedLayerAssembler(dateTimePeriodAssembler),

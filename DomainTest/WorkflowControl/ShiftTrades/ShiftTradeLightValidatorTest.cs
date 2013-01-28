@@ -1,7 +1,9 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 {
@@ -11,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[Test]
 		public void ShouldReturnTrueIfAllIsSatisfied()
 		{
-			var checkItem = new ShiftTradeAvailableCheckItem();
+			var checkItem = new ShiftTradeAvailableCheckItem(new DateOnly(2000, 1, 1), new Person(), new Person());
 			var spec1 = MockRepository.GenerateMock<IShiftTradeLightSpecification>();
 			var spec2 = MockRepository.GenerateMock<IShiftTradeLightSpecification>();
 			spec1.Expect(m => m.IsSatisfiedBy(checkItem)).Return(true);
@@ -23,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[Test]
 		public void ShouldReturnFalseIfAnyIsNonSatisfied()
 		{
-			var checkItem = new ShiftTradeAvailableCheckItem();
+			var checkItem = new ShiftTradeAvailableCheckItem(new DateOnly(2000,1,1), new Person(), new Person());
 			var spec1 = MockRepository.GenerateMock<IShiftTradeLightSpecification>();
 			var spec2 = MockRepository.GenerateMock<IShiftTradeLightSpecification>();
 			spec1.Expect(m => m.IsSatisfiedBy(checkItem)).Return(true);
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		public void ShouldSetDenyReason()
 		{
 			const string denyReason = "Deny reason";
-			var checkItem = new ShiftTradeAvailableCheckItem();
+			var checkItem = new ShiftTradeAvailableCheckItem(new DateOnly(2000, 1, 1), new Person(), new Person());
 			var spec = MockRepository.GenerateMock<IShiftTradeLightSpecification>();
 			spec.Expect(m => m.IsSatisfiedBy(checkItem)).Return(false);
 			spec.Expect(m => m.DenyReason).Return(denyReason);

@@ -18,15 +18,15 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         private readonly IAssembler<IPublicNote, PublicNoteDto> _publicNoteAssembler;
         private readonly IAssembler<IPerson, PersonDto> _personAssembler;
         private readonly IPublicNoteRepository _publicNoteRepository;
-        private readonly IScenarioProvider _scenarioProvider;
+        private readonly IScenarioRepository _scenarioRepository;
         private readonly PersonsFromLoadOptionFactory _personsFromLoadOptionFactory;
 
-        public PublicNoteTypeFactory(IAssembler<IPublicNote,PublicNoteDto> publicNoteAssembler, IAssembler<IPerson,PersonDto> personAssembler, IPublicNoteRepository publicNoteRepository, IScenarioProvider scenarioProvider, PersonsFromLoadOptionFactory personsFromLoadOptionFactory)
+		  public PublicNoteTypeFactory(IAssembler<IPublicNote, PublicNoteDto> publicNoteAssembler, IAssembler<IPerson, PersonDto> personAssembler, IPublicNoteRepository publicNoteRepository, IScenarioRepository scenarioRepository, PersonsFromLoadOptionFactory personsFromLoadOptionFactory)
         {
             _publicNoteAssembler = publicNoteAssembler;
             _personAssembler = personAssembler;
             _publicNoteRepository = publicNoteRepository;
-            _scenarioProvider = scenarioProvider;
+            _scenarioRepository = scenarioRepository;
             _personsFromLoadOptionFactory = personsFromLoadOptionFactory;
         }
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 var publicNoteRepository = new PublicNoteRepository(unitOfWork);
                 ICollection<IPerson> personDomainCollection = _personAssembler.DtosToDomainEntities(personDtoCollection).ToList();
                 
-                ICollection<IPublicNote> publicNotes = publicNoteRepository.Find(period, personDomainCollection, _scenarioProvider.DefaultScenario());
+                ICollection<IPublicNote> publicNotes = publicNoteRepository.Find(period, personDomainCollection, _scenarioRepository.LoadDefaultScenario());
                 publicNoteDtosToReturn = _publicNoteAssembler.DomainEntitiesToDtos(publicNotes).ToList();
             }
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 {
                     IPublicNote publicNote = new PublicNote(_personAssembler.DtoToDomainEntity(publicNoteDto.Person),
                                                             new DateOnly(publicNoteDto.Date.DateTime),
-                                                            _scenarioProvider.DefaultScenario(),
+                                                            _scenarioRepository.LoadDefaultScenario(),
                                                             publicNoteDto.ScheduleNote);
                     _publicNoteRepository.Add(publicNote);
                     uow.PersistAll();
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 {
                     IPublicNote publicNote = _publicNoteRepository.Find(new DateOnly(publicNoteDto.Date.DateTime),
                                                              _personAssembler.DtoToDomainEntity(publicNoteDto.Person),
-                                                             _scenarioProvider.DefaultScenario());
+                                                             _scenarioRepository.LoadDefaultScenario());
                     if (publicNote == null)
                         return;
 

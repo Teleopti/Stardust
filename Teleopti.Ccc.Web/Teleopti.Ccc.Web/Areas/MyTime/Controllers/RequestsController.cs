@@ -18,12 +18,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly ITextRequestPersister _textRequestPersister;
 		private readonly IAbsenceRequestPersister _absenceRequestPersister;
+		private readonly IShiftTradeResponseService _shiftTradeResponseService;
 
-		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, ITextRequestPersister textRequestPersister, IAbsenceRequestPersister absenceRequestPersister)
+		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
+								ITextRequestPersister textRequestPersister, 
+								IAbsenceRequestPersister absenceRequestPersister, 
+								IShiftTradeResponseService shiftTradeResponseService)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;
 			_absenceRequestPersister = absenceRequestPersister;
+			_shiftTradeResponseService = shiftTradeResponseService;
 		}
 
 		[EnsureInPortal]
@@ -62,6 +67,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
+		public void ApproveShiftTrade(Guid id)
+		{
+			_shiftTradeResponseService.OkByMe(id);
+		}
+
+		[UnitOfWorkAction]
+		[HttpPostOrPut]
+		public void RejectShiftTrade(Guid id)
+		{
+			_shiftTradeResponseService.Reject(id);
+		}
+
+		[UnitOfWorkAction]
+		[HttpPostOrPut]
 		public JsonResult AbsenceRequest(AbsenceRequestForm form)
 		{
 			if (!ModelState.IsValid)
@@ -89,6 +108,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			_textRequestPersister.Delete(id);
 			return new EmptyResult();
+		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult ShiftTradeRequestSchedule(DateTime selectedDate)
+		{
+			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(selectedDate), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult ShiftTradeRequestPeriod()
+		{
+			return Json(_requestsViewModelFactory.CreateShiftTradePeriodViewModel(), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(workflowControlSet);
 		}
 
-		[Given(@"I have the workflow control set '(.*)'")]
-		public void GivenIHaveTheWorkflowControlSetPublishedSchedule(string name)
+		[Given(@"(.*) have the workflow control set '(.*)'")]
+		public void GivenIHaveTheWorkflowControlSetPublishedSchedule(string userName, string name)
 		{
 			var userWorkflowControlSet = new WorkflowControlSetForUser { Name = name };
-			UserFactory.User().Setup(userWorkflowControlSet);
+			UserFactory.User(userName).Setup(userWorkflowControlSet);
 		}
 
 		[Given(@"I have a workflow control set with")]

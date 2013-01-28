@@ -30,8 +30,9 @@ namespace Teleopti.Ccc.WinCode.Meetings
         private bool _canClose = true;
         private bool _isDirty;
         private bool _disposed;
+    	private bool _trySave;
 
-        public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model)
+    	public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model)
         {
             _view = view;
             _model = model;
@@ -353,22 +354,30 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 if (result == DialogResult.Cancel)
                 {
                     _canClose = false;
+					_trySave = false;
                 }
                 else if (result == DialogResult.Yes)
                 {
                     _canClose = false;
-                    SaveMeeting();
+					_trySave = true;
                 }
                 else
                 {
                     _canClose = true;
+					_trySave = false;
                 }
             }
             else
             {
                 _canClose = true;
+				_trySave = false;
             }
         }
+
+		public bool TrySave()
+		{
+			return _trySave;
+		}
 
         public bool CanClose()
         {

@@ -41,19 +41,19 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             
             if (oldEntity.ForecastedServicePercent() == 0)
                 newServiceAgreement.ServiceLevel = new ServiceLevel(new Percent(1),
-                                            (double)oldEntity.ForecastedServiceLevel());
+                                            oldEntity.ForecastedServiceLevel());
             else
-                newServiceAgreement.ServiceLevel= new ServiceLevel(new Percent((double)oldEntity.ForecastedServicePercent() / 100d), 
-                                            (double)oldEntity.ForecastedServiceLevel());
+                newServiceAgreement.ServiceLevel= new ServiceLevel(new Percent(oldEntity.ForecastedServicePercent() / 100d), 
+                                            oldEntity.ForecastedServiceLevel());
 
-            newServiceAgreement.MinOccupancy = new Percent((double)oldEntity.MinOCC / 100d);
+            newServiceAgreement.MinOccupancy = new Percent(oldEntity.MinOCC / 100d);
             if (oldEntity.MaxOCC == 0)
             {
                 newServiceAgreement.MaxOccupancy = new Percent(1.0d);
             }
             else
             {
-                newServiceAgreement.MaxOccupancy = new Percent((double)oldEntity.MaxOCC / 100d);
+                newServiceAgreement.MaxOccupancy = new Percent(oldEntity.MaxOCC / 100d);
             }
 
             return newServiceAgreement;

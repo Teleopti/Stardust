@@ -101,6 +101,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IPrincipalAuthorization>()
 				.SingleInstance();
 			builder.RegisterType<UserCulture>().As<IUserCulture>();
+			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>();
+			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>();
+			builder.RegisterType<ApplicationDataSourceProvider>().As<IApplicationDataSourceProvider>().SingleInstance();
+			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 		}
     }
 }

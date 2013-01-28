@@ -90,12 +90,12 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         public void VerifyFindByApplicationRole()
         {
             IAvailableData availableData1 = new AvailableData();
-            ((IAggregateRoot)availableData1).SetId(new Guid());
+            availableData1.SetId(new Guid());
             IApplicationRole applicationRole1 = new ApplicationRole();
             availableData1.ApplicationRole = applicationRole1;
             
             IAvailableData availableData2 = new AvailableData();
-            ((IAggregateRoot)availableData2).SetId(new Guid());
+            availableData2.SetId(new Guid());
             IApplicationRole applicationRole2 = new ApplicationRole();
             availableData2.ApplicationRole = applicationRole2;
 

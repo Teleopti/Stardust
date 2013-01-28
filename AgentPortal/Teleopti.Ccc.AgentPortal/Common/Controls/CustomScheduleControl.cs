@@ -177,8 +177,8 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
 			int rest = e.RowIndex % rowsPerCal;
 			if ((e.ColIndex > 0) && (rest == 1))
 			{
-				var weekdays = DateHelper.GetDaysOfWeek(CultureInfo.CurrentCulture);
-				e.Style.CellValue = CultureInfo.CurrentCulture.DateTimeFormat.GetShortestDayName(weekdays[e.ColIndex-1])[0];
+				var weekdays = DateHelper.GetDaysOfWeek(CultureInfo.CurrentUICulture);
+				e.Style.CellValue = CultureInfo.CurrentUICulture.DateTimeFormat.GetShortestDayName(weekdays[e.ColIndex - 1])[0];
 			}
 	    }
 

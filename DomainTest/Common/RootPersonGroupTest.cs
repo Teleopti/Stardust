@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(1, _root.ChildGroupCollection.Count);
             Assert.AreEqual(_child1, _root.ChildGroupCollection[0]);
 
-            IChildPersonGroup groupUnit = _root.ChildGroupCollection[0] as IChildPersonGroup;
+            IChildPersonGroup groupUnit = _root.ChildGroupCollection[0];
             
             Assert.IsNotNull(groupUnit);
             Assert.AreEqual(1, groupUnit.ChildGroupCollection.Count);

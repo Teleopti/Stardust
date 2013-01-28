@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WinCode.Common
             get { return _interval; }
             set
             {
-                InParameter.ValueMustBePositive("Interval",((TimeSpan)value).Minutes);
+                InParameter.ValueMustBePositive("Interval",value.Minutes);
                 _interval = value;
                 NotifyPropertyChanged("Interval");
                 if (StartDateTime.Add(Interval) > EndDateTime)

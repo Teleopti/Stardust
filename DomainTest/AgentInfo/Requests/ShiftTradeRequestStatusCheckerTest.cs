@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
     {
         private ShiftTradeRequestStatusChecker _target;
         private MockRepository _mockRepository;
-        private IScenarioProvider _scenarioProvider;
+        private IScenarioRepository _scenarioRepository;
         private IScheduleRepository _scheduleRepository;
         private IScheduleDictionary _scheduleDictionary;
         private IScheduleRange _scheduleRangePerson1;
@@ -37,11 +38,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         public void Setup()
         {
             _mockRepository = new MockRepository();
-            _scenarioProvider = _mockRepository.StrictMock<IScenarioProvider>();
+            _scenarioRepository = _mockRepository.StrictMock<IScenarioRepository>();
             _scheduleRepository = _mockRepository.StrictMock<IScheduleRepository>();
             _authorization = new PersonRequestAuthorizationCheckerForTest();
             _scenario = ScenarioFactory.CreateScenarioAggregate();
-            _target = new ShiftTradeRequestStatusChecker(_scenarioProvider, _scheduleRepository, _authorization);
+            _target = new ShiftTradeRequestStatusChecker(_scenarioRepository, _scheduleRepository, _authorization);
 
             _scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
             _scheduleRangePerson1 = _mockRepository.StrictMock<IScheduleRange>();
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void VerifyBatchWithDateOutsideBoundaryForOtherRequest()
         {
-            Expect.Call(_scenarioProvider.DefaultScenario()).Return(_scenario);
+            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
             Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true), _personRequest2.Request.Period.ChangeEndTime(TimeSpan.FromHours(25)), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
             SetupSchedule();
 
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void VerifyChangedScheduleForOwnerRefersRequest()
         {
-            Expect.Call(_scenarioProvider.DefaultScenario()).Return(_scenario);
+            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
             Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true), _personRequest2.Request.Period.ChangeEndTime(TimeSpan.FromHours(25)), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
             SetupSchedule();
 
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void VerifyChangedScheduleForRequestedRefersRequest()
         {
-            Expect.Call(_scenarioProvider.DefaultScenario()).Return(_scenario);
+            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
             Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true), _personRequest2.Request.Period.ChangeEndTime(TimeSpan.FromHours(25)), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
             SetupSchedule();
 
@@ -144,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void VerifyNotChangedScheduleMakesNoStatusChange()
         {
-            Expect.Call(_scenarioProvider.DefaultScenario()).Return(_scenario);
+            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
             Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true),
                                      _personRequest2.Request.Period.ChangeEndTime(TimeSpan.FromHours(25)),
                                      _scenario)).Return(_scheduleDictionary).IgnoreArguments();

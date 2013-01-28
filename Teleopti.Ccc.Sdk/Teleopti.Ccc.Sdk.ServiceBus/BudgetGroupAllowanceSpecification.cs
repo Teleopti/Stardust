@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private static readonly ILog Logger = LogManager.GetLogger(typeof(BudgetGroupAllowanceSpecification));
 
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-        private readonly IScenarioProvider _scenarioProvider;
+        private readonly IScenarioRepository _scenarioRepository;
         private readonly IBudgetDayRepository _budgetDayRepository;
         private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 
-        public BudgetGroupAllowanceSpecification(ISchedulingResultStateHolder schedulingResultStateHolder, IScenarioProvider scenarioProvider, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+		  public BudgetGroupAllowanceSpecification(ISchedulingResultStateHolder schedulingResultStateHolder, IScenarioRepository scenarioRepository, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
-            _scenarioProvider = scenarioProvider;
+            _scenarioRepository = scenarioRepository;
             _budgetDayRepository = budgetDayRepository;
             _scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
         }
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             }
 
 			var budgetGroup = personPeriod.BudgetGroup;
-            var defaultScenario = _scenarioProvider.DefaultScenario();
+            var defaultScenario = _scenarioRepository.LoadDefaultScenario();
             var budgetDays = _budgetDayRepository.Find(defaultScenario, budgetGroup, requestedPeriod);
             if (budgetDays == null)
             {

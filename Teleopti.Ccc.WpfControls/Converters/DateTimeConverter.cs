@@ -21,17 +21,15 @@ namespace Teleopti.Ccc.WpfControls.Converters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value is DateTime && value != null)
+        	if (value is DateTime && value != null)
             {
                 DateTime dateTime = (DateTime) value;
                 return dateTime.ToShortTimeString();
             }
-            else
-                return null;
-          
+        	return null;
         }
 
-        /// <summary>
+    	/// <summary>
         /// </summary>
         /// <remarks>
         /// Created by: henrika

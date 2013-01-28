@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
                                                                                                     scenario);
 
                 var raptorTransformer = new ForecastWorkloadTransformer(_jobParameters.IntervalsPerDay, DateTime.Now);
-                raptorTransformer.Transform((IList<ISkillDay>) rootList, BulkInsertDataTable1);
+                raptorTransformer.Transform(rootList, BulkInsertDataTable1);
             }
 
             //Truncate staging table & Bulk insert data to staging database

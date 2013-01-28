@@ -31,8 +31,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
         {
             get
             {
-                if (_saveCellInfoEventArgs != null) return _saveCellInfoEventArgs;
-                else return null;
+            	if (_saveCellInfoEventArgs != null) 
+						 return _saveCellInfoEventArgs;
+            	return null;
             }
         }
 

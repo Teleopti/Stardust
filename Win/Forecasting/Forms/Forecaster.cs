@@ -797,14 +797,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             toolStripProgressBarMain.Value = 0;
             int daysToSave = 0;
-            daysToSave += _skillDayCalculator.VisibleSkillDays.ToList().Count;
+            daysToSave += _skillDayCalculator.VisibleSkillDays.Count();
             var skillDayCalculator = _skillDayCalculator as MultisiteSkillDayCalculator;
             if (skillDayCalculator != null)
             {
-                daysToSave += skillDayCalculator.MultisiteDays.ToList().Count;
+                daysToSave += skillDayCalculator.MultisiteDays.Count();
                 foreach (var childSkill in _multisiteSkill.ChildSkills)
                 {
-                    daysToSave += skillDayCalculator.GetVisibleChildSkillDays(childSkill).ToList().Count;
+                    daysToSave += skillDayCalculator.GetVisibleChildSkillDays(childSkill).Count();
                 }
             }
             toolStripProgressBarMain.Maximum = daysToSave;

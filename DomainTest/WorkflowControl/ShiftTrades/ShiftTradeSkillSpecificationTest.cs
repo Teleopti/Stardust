@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 	{
 		private ShiftTradeSkillSpecification _target;
 		private MockRepository _mocks;
-		private ShiftTradeAvailableCheckItem _checkItem;
 		private IPerson _personFrom;
 		private IPerson _personTo;
 		private IWorkflowControlSet _workflowControlSetFrom;
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			_workflowControlSetTo = _mocks.StrictMock<IWorkflowControlSet>();
 			_periodFrom = _mocks.StrictMock<IPersonPeriod>();
 			_periodTo = _mocks.StrictMock<IPersonPeriod>();
-			_checkItem = new ShiftTradeAvailableCheckItem{PersonFrom = _personFrom, PersonTo = _personTo};
 
 			_skill1 = _mocks.StrictMock<ISkill>();
 			_skill2 = _mocks.StrictMock<ISkill>();
@@ -59,6 +57,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[Test]
 		public void NoWorkflowControlSetReturnsFalse()
 		{
+			var checkItem = new ShiftTradeAvailableCheckItem(new DateOnly(), _personFrom, _personTo);
+
 			using (_mocks.Record())
 			{
 				Expect.Call(_personFrom.WorkflowControlSet).Return(null).Repeat.AtLeastOnce();
@@ -67,13 +67,15 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
 			using (_mocks.Playback())
 			{
-				Assert.IsFalse(_target.IsSatisfiedBy(_checkItem));
+				Assert.IsFalse(_target.IsSatisfiedBy(checkItem));
 			}
 		}
 
 		[Test]
 		public void ShouldPassIfNoMatchingSkillSetup()
 		{
+			var checkItem = new ShiftTradeAvailableCheckItem(new DateOnly(), _personFrom, _personTo);
+
 			using (_mocks.Record())
 			{
 				Expect.Call(_workflowControlSetFrom.MustMatchSkills).Return(
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			}
 			using (_mocks.Playback())
 			{
-				Assert.That(_target.IsSatisfiedBy(_checkItem), Is.True);
+				Assert.That(_target.IsSatisfiedBy(checkItem), Is.True);
 			}
 		}
 
@@ -93,7 +95,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		public void ShouldHaveAllMatchingSkills()
 		{
 			var dateOnly = DateOnly.Today.AddDays(1);
-			_checkItem.DateOnly = dateOnly;
+			var checkItem = new ShiftTradeAvailableCheckItem(dateOnly, _personFrom, _personTo);
+
 			using (_mocks.Record())
 			{
 				Expect.Call(_workflowControlSetFrom.MustMatchSkills).Return(
@@ -109,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			}
 			using (_mocks.Playback())
 			{
-				Assert.That(_target.IsSatisfiedBy(_checkItem), Is.True);
+				Assert.That(_target.IsSatisfiedBy(checkItem), Is.True);
 			}
 		}
 
@@ -117,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		public void ShouldNoticeMissingSkill()
 		{
 			var dateOnly = DateOnly.Today.AddDays(1);
-			_checkItem.DateOnly = dateOnly;
+			var checkItem = new ShiftTradeAvailableCheckItem(dateOnly, _personFrom, _personTo);
 			using (_mocks.Record())
 			{
 				Expect.Call(_workflowControlSetFrom.MustMatchSkills).Return(
@@ -133,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			}
 			using (_mocks.Playback())
 			{
-				Assert.That(_target.IsSatisfiedBy(_checkItem), Is.False);
+				Assert.That(_target.IsSatisfiedBy(checkItem), Is.False);
 			}
 		}
 
@@ -141,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		public void ShouldFailIfNoPersonPeriodAvailable()
 		{
 			var dateOnly = DateOnly.Today.AddDays(1);
-			_checkItem.DateOnly = dateOnly;
+			var checkItem = new ShiftTradeAvailableCheckItem(dateOnly, _personFrom, _personTo);
 			using (_mocks.Record())
 			{
 				Expect.Call(_workflowControlSetFrom.MustMatchSkills).Return(
@@ -155,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			}
 			using (_mocks.Playback())
 			{
-				Assert.That(_target.IsSatisfiedBy(_checkItem), Is.False);
+				Assert.That(_target.IsSatisfiedBy(checkItem), Is.False);
 			}
 		}
 	}

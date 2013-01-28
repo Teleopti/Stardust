@@ -1,14 +1,10 @@
-﻿#region Imports
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Collections;
 using Syncfusion.Windows.Forms.Tools;
-
-#endregion
 
 namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
 {
@@ -38,9 +34,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
 
         #endregion
 
-        #region Fields - Instance Member
-
-        /// <summary>
+    	/// <summary>
         /// Item click event handler
         /// </summary>
         public event EventHandler<ToolStripItemClickedEventArgs> ItemClicked;
@@ -75,13 +69,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
 
         private readonly ObservableList<ToolStripGalleryItemEx> customItems = new ObservableList<ToolStripGalleryItemEx>();
 
-        #endregion
-
-        #region Properties - Instance Member
-
-        #region Properties - Instance Member - TeleoptiToolStripGallery Members
-
-        public ObservableList<ToolStripGalleryItemEx> GalleryItems
+    	public ObservableList<ToolStripGalleryItemEx> GalleryItems
         {
             get { return customItems; }
         }
@@ -93,13 +81,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
             set;
         }
 
-        #endregion
-
-        #endregion
-
-        #region Events - Instance Member
-
-        private void CustomItems_ItemRemoved(object sender, ListItemEventArgs<ToolStripGalleryItemEx> e)
+    	private void CustomItems_ItemRemoved(object sender, ListItemEventArgs<ToolStripGalleryItemEx> e)
         {
             Items.Remove(e.Item);
         }
@@ -250,13 +232,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
             contextMenuMode = 2;
         }
 
-        #endregion
-
-        #region Methods - Instance Member
-
-        #region Methods - Instance Member - TeleoptiToolStripGallery Members
-
-        private int GetScrollOffset()
+    	private int GetScrollOffset()
         {
             return (int)scrollOffsetProperty.GetValue(this, null);
         }
@@ -281,8 +257,9 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
 
         private void OnItemClicked(ToolStripItemClickedEventArgs e)
         {
-            if (ItemClicked != null)
-                ItemClicked(this, e);
+        	var handler = ItemClicked;
+            if (handler != null)
+                handler(this, e);
         }
 
         private void OnContextMenuClicked(ToolStripGalleryItem item)
@@ -293,12 +270,9 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
 
         private void OnContextMenuClicked(ToolStripGalleryItemContextMenuClickEventArgs e)
         {
-            if (ContextMenuClicked != null)
-                ContextMenuClicked(this, e);
+        	var handler = ContextMenuClicked;
+            if (handler != null)
+                handler(this, e);
         }
-
-        #endregion
-
-        #endregion
     }
 }

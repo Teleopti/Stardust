@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private IActivityRepository activityRepository;
 		private IPersonRepository personRepository;
 		private IScheduleRepository scheduleRepository;
-		private IScenarioProvider scenarioProvider;
+		private IScenarioRepository scenarioRepository;
 		private IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler;
 		private IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studentAvailabilityDayAssembler;
 		private IWorkShiftWorkTime workShiftWorkTime;
@@ -41,13 +41,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			activityRepository = mocks.DynamicMock<IActivityRepository>();
 			personRepository = mocks.DynamicMock<IPersonRepository>();
 			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
-			scenarioProvider = mocks.DynamicMock<IScenarioProvider>();
+			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 			preferenceDayAssembler = mocks.DynamicMock<IAssembler<IPreferenceDay, PreferenceRestrictionDto>>();
 			studentAvailabilityDayAssembler = mocks.DynamicMock<IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto>>();
 			workShiftWorkTime = mocks.DynamicMock<IWorkShiftWorkTime>();
 
-			target = new GetValidatedSchedulePartsForPreferenceQueryHandler(unitOfWorkFactory,shiftCategoryRepository,activityRepository,personRepository,scheduleRepository,scenarioProvider,preferenceDayAssembler,studentAvailabilityDayAssembler,workShiftWorkTime);
+			target = new GetValidatedSchedulePartsForPreferenceQueryHandler(unitOfWorkFactory,shiftCategoryRepository,activityRepository,personRepository,scheduleRepository,scenarioRepository,preferenceDayAssembler,studentAvailabilityDayAssembler,workShiftWorkTime);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]

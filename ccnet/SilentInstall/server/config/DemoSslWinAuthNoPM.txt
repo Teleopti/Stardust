@@ -1,4 +1,4 @@
-ADDLOCAL="Database,AgentPortalWeb,Analytics,ClickOnce,AgentPortal,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker,ContextHelp"
+ADDLOCAL="Database,AgentPortalWeb,Analytics,ClickOnce,AgentPortal,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker"
 CLICKONCE_CLIENT_URL="https://MyHostNameInSslCert.MyDomain.com/TeleoptiCCC/Client/"
 CLICKONCE_MYTIME_URL="https://MyHostNameInSslCert.MyDomain.com/TeleoptiCCC/MyTime/"
 CLICKONCE_SIGN_METHOD="TEMP"
@@ -24,6 +24,7 @@ DB_ANALYTICS_STAGE="TeleoptiAnalytics_Demo"
 DB_CCC7="TeleoptiCCC7_Demo"
 DB_CCCAGG="TeleoptiCCC7Agg_Demo"
 DB_MESSAGING="TeleoptiAnalytics_Demo"
+DB_WINGROUP="DBServerName\SomeLocalGroupHoldingCccEndUsers"
 
 DNS_ALIAS="https://MyHostNameInSslCert.MyDomain.com/"
 AGENT_SERVICE="https://MyHostNameInSslCert.MyDomain.com/TeleoptiCCC/SDK/TeleoptiCccSdkService.svc"

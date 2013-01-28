@@ -17,11 +17,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(schedulePeriod);
 		}
 
-		[Given(@"I have a person period with")]
-		public void GivenIHaveAPersonPeriodWith(Table table)
+		[Given(@"(.*) have a person period with")]
+		public void GivenIHaveAPersonPeriodWith(string userName, Table table)
 		{
 			var personPeriod = table.CreateInstance<PersonPeriodConfigurable>();
-			UserFactory.User().Setup(personPeriod);
+			UserFactory.User(userName).Setup(personPeriod);
 		}
 
 		[Given(@"I have a person period that starts on '(.*)'")]

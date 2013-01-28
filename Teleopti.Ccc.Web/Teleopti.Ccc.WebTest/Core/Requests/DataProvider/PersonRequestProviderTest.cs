@@ -96,11 +96,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var personRequests = new IPersonRequest[] { MockRepository.GenerateStub<IPersonRequest>(), MockRepository.GenerateStub<IPersonRequest>() };
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			repository.Stub(x => x.FindAllRequestsForAgent(person, paging)).Return(personRequests);
+			repository.Stub(x => x.FindTextAndAbsenceRequestsForAgent(person, paging)).Return(personRequests);
 
 			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequests(paging).Count()));
 
-			repository.AssertWasCalled(x => x.FindAllRequestsForAgent(person, paging));
+			repository.AssertWasCalled(x => x.FindTextAndAbsenceRequestsForAgent(person, paging));
 		}
 	}
 }

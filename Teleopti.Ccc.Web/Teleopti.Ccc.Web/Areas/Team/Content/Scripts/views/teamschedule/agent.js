@@ -47,7 +47,7 @@ define([
 				var start = undefined;
 				ko.utils.arrayForEach(self.Layers(), function (l) {
 					var startMinutes = l.StartMinutes();
-					if (!start)
+					if (start === undefined)
 						start = startMinutes;
 					if (startMinutes < start)
 						start = startMinutes;
@@ -59,7 +59,7 @@ define([
 				var end = undefined;
 				ko.utils.arrayForEach(self.Layers(), function (l) {
 					var endMinutes = l.EndMinutes();
-					if (!end)
+					if (end === undefined)
 						end = endMinutes;
 					if (endMinutes > end)
 						end = endMinutes;

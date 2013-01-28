@@ -2,31 +2,25 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.TestCommon.Security;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
+namespace Teleopti.Ccc.DomainTest.Security.Authentication
 {
 	[TestFixture]
 	public class LoggedOnUserTest
 	{
-		private ICurrentTeleoptiPrincipal FakeCurrentTeleoptiPrincipal(IPerson person)
-		{
-			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null), person);
-			return new FakeCurrentTeleoptiPrincipal(principal);
-		}
-
 		[Test]
 		public void ShouldGetCurrentPersonFromPrincipal()
 		{
 			var person = PersonFactory.CreatePerson();
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(Arg<Guid>.Is.NotNull)).Return(person);
-			var target = new LoggedOnUser(personRepository, FakeCurrentTeleoptiPrincipal(person));
+			var target = new LoggedOnUser(personRepository, fakeCurrentTeleoptiPrincipal(person));
 
 			var result = target.CurrentUser();
 
@@ -34,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		}
 
 		[Test]
-		public void ShouldReturnNullIfNoPricipal()
+		public void ShouldReturnNullIfNoPrincipal()
 		{
 			var principal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
 			principal.Stub(x => x.Current()).Return(null);
@@ -48,20 +42,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			result.Should().Be.Null();
 		}
 
-		[Test]
-		public void ShouldGetMyTeam()
+		private static ICurrentTeleoptiPrincipal fakeCurrentTeleoptiPrincipal(IPerson person)
 		{
-			var person = PersonFactory.CreatePerson();
-			var team = new Team();
-			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, team));
-			FakeCurrentTeleoptiPrincipal(person);
-			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			personRepository.Stub(x => x.Get(Arg<Guid>.Is.NotNull)).Return(person);
-			var target = new LoggedOnUser(personRepository, FakeCurrentTeleoptiPrincipal(person));
-
-			var result = target.MyTeam(DateOnly.Today);
-
-			result.Should().Be.EqualTo(team);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null), person);
+			return new FakeCurrentTeleoptiPrincipal(principal);
 		}
 	}
 }
