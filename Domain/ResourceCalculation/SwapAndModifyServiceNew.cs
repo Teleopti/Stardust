@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var part1 = scheduleDictionary[person1].ScheduledDay(dateOnly);
 				var part2 = scheduleDictionary[person2].ScheduledDay(dateOnly);
 
-				if(part1.PersonAbsenceCollection().Any() || part2.PersonAbsenceCollection().Any())
-					continue;
+				//if(part1.PersonAbsenceCollection().Any() || part2.PersonAbsenceCollection().Any())
+				//    continue;
 
 				if(lockedDates.Contains(dateOnly))
 					continue;

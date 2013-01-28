@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     public interface IAddScheduleLayers
     {
  
-        IAddLayerViewModel<IAbsence> CreateAddAbsenceViewModel(IList<IAbsence> bindingList, ISetupDateTimePeriod period);
+        IAddLayerViewModel<IAbsence> CreateAddAbsenceViewModel(IList<IAbsence> bindingList, ISetupDateTimePeriod period, TimeZoneInfo timeZoneInfo);
 
         IAddActivityViewModel CreateAddActivityViewModel(IList<IActivity> activities,IList<IShiftCategory> shiftCategories,DateTimePeriod period, TimeZoneInfo timeZoneInfo);
 
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         IAddOvertimeViewModel CreateAddOvertimeViewModel(IScheduleDay selectedSchedule,IList<IActivity> activities,
                                                          IList<IMultiplicatorDefinitionSet> definitionSets,
-                                                         IActivity defaultActivity, DateTimePeriod period);
+                                                         IActivity defaultActivity, DateTimePeriod period, TimeZoneInfo timeZoneInfo);
 
         IAddLayerViewModel<IDayOffTemplate> CreateAddDayOffViewModel(IList<IDayOffTemplate> dayOffTemplates, TimeZoneInfo timeZoneInfo, DateTimePeriod period);
     }
