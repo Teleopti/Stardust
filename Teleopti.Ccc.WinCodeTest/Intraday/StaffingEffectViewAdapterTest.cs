@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         }
 
 		[Test]
-		public void VerifyCalculateEffeccts()
+		public void VerifyCalculateEffects()
 		{
 			_model.StaffingEffect = 10;
 			var target = new StaffingEffectViewAdapterForTest(_dayLayerViewAdapter);

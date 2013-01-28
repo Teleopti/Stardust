@@ -334,13 +334,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 {
                     _rtaStateHolder.SetActualAgentState(actualAgentState);
                 }
-                //_rtaStateHolder.CollectAgentStates(
-                //    statisticRepository.LoadRtaAgentStates(SchedulerStateHolder.RequestedPeriod.Period(),_rtaStateHolder.ExternalLogOnPersons));
             }
-            //using (PerformanceOutput.ForOperation("Analyzing alarms for initial states"))
-            //{
-            //    _rtaStateHolder.AnalyzeAlarmSituations(DateTime.UtcNow);
-            //}
         }
 
         private void initializeRtaStateHolder()

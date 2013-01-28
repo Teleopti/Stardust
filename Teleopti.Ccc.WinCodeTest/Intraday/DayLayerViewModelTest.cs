@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
@@ -11,13 +13,11 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Ccc.WinCodeTest.Helpers;
 
 namespace Teleopti.Ccc.WinCodeTest.Intraday
 {
@@ -90,6 +90,15 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             }
         }
 
+		[Test]
+		public void ShouldReturnNullWhenNoModel()
+		{
+			mocks.ReplayAll();
+			target.Models.Clear();
+			target.RefreshProjection(person);
+			rtaStateHolder.AssertWasNotCalled(r => r.ActualAgentStates);
+		}
+
         private void expectLoadOfSettings()
         {
             var unitOfWork = mocks.DynamicMock<IUnitOfWork>();
@@ -102,41 +111,27 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
                 Return(new CommonNameDescriptionSetting());
         }
 
-        //[Test]
-        //public void VerifyCanRefreshAgentState()
-        //{
-        //    DateTime now = DateTime.UtcNow;
+		[Test]
+		public void VerifyCanRefreshAgentState()
+		{
+			IActualAgentState agentState = new ActualAgentState();
+			agentState.AlarmStart = DateTime.UtcNow.AddMinutes(-45);
+			agentState.State = "MyCurrentStateDescription";
+			agentState.AlarmName = "MyAlarmName";
+			var dictionary = new Dictionary<IPerson, IActualAgentState> { { person, agentState } };
 
-        //    IAgentState agentState = mocks.StrictMock<IAgentState>();
-        //    IVisualLayer alarmLayer = mocks.StrictMock<IVisualLayer>();
-        //    IRtaVisualLayer stateLayer = mocks.StrictMock<IRtaVisualLayer>();
-        //    IDictionary<IPerson, IAgentState> agentStates = new Dictionary<IPerson, IAgentState>();
-        //    agentStates.Add(person, agentState);
+			target.Models.Add(new DayLayerModel(person, new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date),
+			                                    new Team(), new LayerViewModelCollection(), new CommonNameDescriptionSetting()));
+			rtaStateHolder.Expect(r => r.ActualAgentStates).IgnoreArguments().Return(dictionary);
+			mocks.ReplayAll();
 
-        //    Expect.Call(rtaStateHolder.AgentStates).Return(agentStates);
-        //    Expect.Call(agentState.FindCurrentAlarm(now)).Return(alarmLayer);
-        //    Expect.Call(agentState.FindCurrentState(now)).Return(stateLayer);
-        //    Expect.Call(agentState.FindCurrentSchedule(now)).Return(null);
-        //    Expect.Call(agentState.FindNextSchedule(now)).Return(null);
-        //    mocks.ReplayAll();
+			target.Refresh(DateTime.UtcNow);
+			mocks.VerifyAll();
 
-        //    var model = new DayLayerModel(person, period, team, null, null);
-
-        //    PropertyChangedListener listener = new PropertyChangedListener();
-        //    listener.ListenTo(model);
-
-        //    target.Models.Add(model);
-        //    target.Refresh(now);
-
-        //    Assert.IsTrue(listener.HasFired("AlarmLayer"));
-        //    Assert.IsTrue(listener.HasFired("CurrentState"));
-
-        //    Assert.IsNull(model.NextActivityLayer);
-        //    Assert.IsNull(model.CurrentActivityLayer);
-        //    Assert.AreEqual(alarmLayer, model.AlarmLayer);
-        //    Assert.AreEqual(stateLayer, model.CurrentState);
-        //    mocks.VerifyAll();
-        //}
+			Assert.That(target.Models.First().Person.Id, Is.EqualTo(person.Id));
+			Assert.That(target.Models.First().CurrentStateDescription, Is.EqualTo(agentState.State));
+			Assert.That(target.Models.First().AlarmDescription, Is.EqualTo(agentState.AlarmName));
+		}
 
         [Test]
         public void VerifyCanRefreshProjection()
@@ -144,20 +139,23 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             var scheduleRange = mocks.DynamicMock<IScheduleRange>();
             var createLayerViewModelService = mocks.DynamicMock<ICreateLayerViewModelService>();
             var agentState = mocks.StrictMock<IAgentState>();
+        	var layerModel = new AbsenceLayerViewModel(new AbsenceLayer(new Absence(), period),
+        	                                    new MainShift(new ShiftCategory("MainShift")), eventAggregator);
 
             Expect.Call(rtaStateHolder.SchedulingResultStateHolder).Return(schedulingResultStateHolder).Repeat.AtLeastOnce();
             Expect.Call(schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.Twice();
             Expect.Call(scheduleDictionary[person]).Return(scheduleRange).Repeat.AtLeastOnce();
-            Expect.Call(createLayerViewModelService.CreateProjectionViewModelsFromSchedule(scheduleRange, period,
-                                                                                           eventAggregator,
-                                                                                           TimeSpan.FromMinutes(15))).Return(
-                                                                                               new List<ILayerViewModel>());
+        	Expect.Call(createLayerViewModelService.CreateProjectionViewModelsFromSchedule(scheduleRange, period,
+        	                                                                               eventAggregator,
+        	                                                                               TimeSpan.FromMinutes(15))).
+        		Return(
+        			new List<ILayerViewModel> {layerModel});
 
             IDictionary<IPerson, IAgentState> agentStates = new Dictionary<IPerson, IAgentState>();
             agentStates.Add(person, agentState);
             Expect.Call(rtaStateHolder.AgentStates).Return(agentStates);
             Expect.Call(() => agentState.SetSchedule(scheduleDictionary));
-
+			
             mocks.ReplayAll();
             target.Models.Add(new DayLayerModel(person, period, team, new LayerViewModelCollection(eventAggregator, createLayerViewModelService), null));
             target.RefreshProjection(person);
@@ -168,7 +166,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         //public void VerifyCanRefreshScheduleData()
         //{
         //    DateTime now = DateTime.UtcNow;
-
         //    IActivity activity1 = new Activity("act1");
         //    IActivity activity2 = new Activity("act2");
         //    IVisualLayer activityLayer1 = layerFactory.CreateShiftSetupLayer(activity1, new DateTimePeriod(now.AddMinutes(-30), now.AddMinutes(1)),person);

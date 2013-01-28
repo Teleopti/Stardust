@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		}
 
 		[Test]
-		public void ShoudlReturnEquals()
+		public void ShouldReturnEquals()
 		{
 			// ReSharper disable ExpressionIsAlwaysNull
 			IActualAgentState other = null;

@@ -107,27 +107,14 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 dayLayerModel.NextActivityDescription = agentState.ScheduledNext;
                 dayLayerModel.NextActivityStartDateTime = agentState.NextStart;
                 dayLayerModel.CurrentStateDescription = agentState.State;
-
                 dayLayerModel.AlarmStart = agentState.AlarmStart;
-                if (DateTime.UtcNow > dayLayerModel.AlarmStart)
-                {
-                    //var model = dayLayerModel;
-                    //foreach (var alarm in _rtaStateHolder.StateGroupActivityAlarms
-                    //    .Where(a => a.Activity != null
-                    //                && a.Activity.Description.Name == model.CurrentActivityDescription
-                    //                && a.StateGroup.Name == model.CurrentStateDescription))
-                    //{
-                    dayLayerModel.AlarmDescription = agentState.AlarmName;
-                    dayLayerModel.ColorValue = agentState.Color;
-                    dayLayerModel.StaffingEffect = agentState.StaffingEffect;
-                    // }
-                }
-                //else
-                //{
-                //    dayLayerModel.AlarmDescription = agentState.AlarmName;
-                //    dayLayerModel.ColorValue = agentState.Color;
-                //    dayLayerModel.StaffingEffect = agentState.StaffingEffect;
-                //}
+
+            	if (DateTime.UtcNow > dayLayerModel.AlarmStart)
+            	{
+            		dayLayerModel.AlarmDescription = agentState.AlarmName;
+            		dayLayerModel.ColorValue = agentState.Color;
+            		dayLayerModel.StaffingEffect = agentState.StaffingEffect;
+            	}
             }
         }
 
