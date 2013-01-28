@@ -3625,7 +3625,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                             var periodFinder = new ScheduleMatrixListPeriodFinder(matrixList);
                             var period = periodFinder.FindOuterWeekPeriod();
                             if (period.StartDate == DateOnly.MinValue) break;
-							_scheduleOptimizerHelper.BlockSchedule(scheduleDays, matrixList, matrixListAll, _backgroundWorkerScheduling, schedulingOptions);
+                            if(StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+                                _groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
+							
+                            _scheduleOptimizerHelper.BlockSchedule(scheduleDays, matrixList, matrixListAll, _backgroundWorkerScheduling, schedulingOptions);
                             break;
                         }
                 }
