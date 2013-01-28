@@ -16,14 +16,18 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         private decimal _adherence;
         private decimal _readyTimeMinutes;
         private decimal _dayAdherence;
+    	private DateTime _calendarDate;
+    	private DateTime _shiftBelongsToDate;
 
-        public AdherenceDataDto(long localStartTime, long localEndTime, decimal readyTimeMinutes, decimal deviationMinutes, decimal adherence)
+        public AdherenceDataDto(long localStartTime, long localEndTime, decimal readyTimeMinutes, decimal deviationMinutes, decimal adherence, DateTime calendarDate, DateTime shiftBelongsToDate)
         {
             _localStartTime = localStartTime;
             _localEndTime = localEndTime;
             _readyTimeMinutes = readyTimeMinutes;
             _deviationMinutes = deviationMinutes;
             _adherence = adherence;
+        	_calendarDate = calendarDate;
+        	_shiftBelongsToDate = shiftBelongsToDate;
         }
 
         [DataMember]
@@ -71,5 +75,19 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
             get { return _dayAdherence; }
             set { _dayAdherence = value; }
         }
+
+		[DataMember]
+		public DateTime CalendarDate
+		{
+			get { return _calendarDate; }
+			set { _calendarDate = value; }
+		}
+
+		[DataMember]
+		public DateTime ShiftBelongsToDate
+		{
+			get { return _shiftBelongsToDate; }
+			set { _shiftBelongsToDate = value; }
+		}
     }
 }

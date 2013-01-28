@@ -18264,6 +18264,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date (shifts starting):.
+        /// </summary>
+        public static string ResShiftStartDateColon {
+            get {
+                return ResourceManager.GetString("ResShiftStartDateColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date From (shifts starting):.
+        /// </summary>
+        public static string ResShiftStartDateFromColon {
+            get {
+                return ResourceManager.GetString("ResShiftStartDateFromColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date To (shifts starting):.
+        /// </summary>
+        public static string ResShiftStartDateToColon {
+            get {
+                return ResourceManager.GetString("ResShiftStartDateToColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restore.
         /// </summary>
         public static string Restore {
