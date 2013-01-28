@@ -381,9 +381,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             if (SelectableStartTimes.CurrentItem != null)
             {
-                TimeSpan timeOfDay;
-                if (TimeHelper.TryParse(SelectableStartTimes.CurrentItem.ToString(), out timeOfDay))
-                    StartTimeAsLocalTimeSpan = timeOfDay;
+                //TimeSpan timeOfDay;
+				//if (TimeHelper.TryParse(SelectableStartTimes.CurrentItem.ToString(), out timeOfDay))
+				//    //StartTimeAsLocalTimeSpan = timeOfDay;
             }
         }
 
@@ -391,9 +391,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             if (SelectableEndTimes.CurrentItem != null)
             {
-                TimeSpan timeOfDay;
-                if (TimeHelper.TryParse(SelectableEndTimes.CurrentItem.ToString(), out timeOfDay)) 
-                    EndTimeAsLocalTimeSpan = timeOfDay;
+                //TimeSpan timeOfDay;
+				//if (TimeHelper.TryParse(SelectableEndTimes.CurrentItem.ToString(), out timeOfDay)) 
+				//   // EndTimeAsLocalTimeSpan = timeOfDay;
             }
         }
 
