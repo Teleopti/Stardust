@@ -57,6 +57,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public bool UseCalenderWeekAsBlock{get;set;}
 
+        private BlockFinderType _blockFinderTypeForAdvanceScheduling;
+        public BlockFinderType BlockFinderTypeForAdvanceScheduling
+        {
+            get { return _blockFinderTypeForAdvanceScheduling; }
+            set
+            {
+                _blockFinderTypeForAdvanceScheduling = value;
+                if (_blockFinderTypeForAdvanceScheduling != BlockFinderType.None)
+                    ShiftCategory = null;
+            }
+        }
+
         public ISpecification<IMainShift> MainShiftOptimizeActivitySpecification
     	{
     		get

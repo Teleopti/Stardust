@@ -133,6 +133,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             schedulingSessionPreferencesTabPanel1.ScheduleOnlyRotationDaysVisible = true;
             if (_schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff)
             {
+                _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.None; 
+
                 _schedulingOptions.UseBlockScheduling = BlockFinderType.None;
                 _schedulingOptions.UseGroupScheduling = false;
 

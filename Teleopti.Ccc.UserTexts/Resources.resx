@@ -11242,4 +11242,8 @@ These options are activated:
     <value>No agents available for shift trade</value>
     <comment>Message in Shift Trade in MyTime Web</comment>
   </data>
+  <data name="LevellingPer" xml:space="preserve">
+    <value>Levelling Per</value>
+    <comment>Levelling per Block Scheduling</comment>
+  </data>
 </root>
