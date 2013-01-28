@@ -36,34 +36,35 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |	
-	
+
+@ignore	
 Scenario: No access to make shift trade reuquests
 	Given I have the role 'No access to Shift Trade'
 	When I view requests
 	Then I should not see the Create Shift Trade Request button
 	And I should not see the Requests button
-
+@ignore
 Scenario: No workflow control set
 	Given I have the role 'Full access to mytime'
 	And I do not have a workflow control set
 	When I view Add Shift Trade Request
 	Then I should see a message text saying I am missing a workflow control set
 	And I should not see the datepicker
-
+@ignore
 Scenario: Default to first day of open shift trade period
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request
 	Then the selected date should be '2030-01-02'
-
+@ignore
 Scenario: Trades can not be made outside the shift trade period
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request for date '2030-02-15'
 	Then the selected date should be '2030-01-31'
-
+@ignore
 Scenario: Show my scheduled shift
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -78,7 +79,7 @@ Scenario: Show my scheduled shift
 	| Field			| Value |
 	| Start time	| 06:00 |
 	| End time		| 16:00 |
-
+@ignore
 Scenario: Time line should cover my scheduled shift
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -103,7 +104,7 @@ Scenario: Show message when no agents are available for shift trade
 	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request for date '2030-01-02'
 	Then I should see a message text saying that no possible shift trades could be found
-
+@ignore
 Scenario: Show my full day absence
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -118,7 +119,7 @@ Scenario: Show my full day absence
 	| Field			| Value |
 	| Start time	| 08:00 |
 	| End time		| 16:00 |
-
+@ignore
 Scenario: Show my scheduled day off
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -130,7 +131,7 @@ Scenario: Show my scheduled day off
 	When I view Add Shift Trade Request for date '2030-01-04'
 	Then I should see my scheduled day off 'DayOff'
 	And I should see the time line hours span from '8' to '17'
-
+@ignore
 Scenario: View shift trade request details
 	Given I have the role 'Full access to mytime'
 	And I have created a shift trade request with subject 'swap with me'
