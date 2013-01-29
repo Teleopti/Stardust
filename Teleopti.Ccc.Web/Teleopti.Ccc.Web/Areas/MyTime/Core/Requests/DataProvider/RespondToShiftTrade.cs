@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			var request = _personRequestRepository.Find(requestId);
 			var shiftTrade = request.Request as IShiftTradeRequest;
 			shiftTrade.Accept(_loggedOnUser.CurrentUser(), _shiftTradeRequestCheckSum, _personRequextCheckAuthorization);
-			_personRequestRepository.Add(request);
 		}
 
 		public void Reject(Guid id)

@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 
 			//verify expectation:
 			shiftTrade.AssertWasCalled(s => s.Accept(loggedOnPerson, shiftTradeRequestCheckSum, personRequextCheckAuthorization));
-			personRequestRepository.AssertWasCalled(p => p.Add(personrequest));
 		}
 
 	}
