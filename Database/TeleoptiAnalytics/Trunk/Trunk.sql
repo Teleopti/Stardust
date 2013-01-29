@@ -43,7 +43,7 @@ ALTER TABLE  mart.fact_schedule_deviation ADD shift_startdate_id int NULL
 ALTER TABLE  mart.fact_schedule_deviation ADD shift_startinterval_id smallint NULL
 GO
 
---will be re-oladed from SP-code
+--will be re-loaded from SP-code
 TRUNCATE TABLE mart.fact_schedule_deviation
 GO
 
