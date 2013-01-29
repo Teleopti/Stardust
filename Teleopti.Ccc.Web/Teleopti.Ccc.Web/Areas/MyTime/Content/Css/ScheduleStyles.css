@@ -47,6 +47,7 @@
 .request-body-inner .dayoff
 {
 	background-color: beige;
+	border: 1px solid rgba(0, 0, 0, 0.15);
 }
 .request-body-inner .striped
 {
