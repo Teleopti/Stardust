@@ -43,6 +43,11 @@
 			transparent 60%, 
 			transparent 100%)*/
 }
+
+.request-body-inner .dayoff
+{
+	background-color: beige;
+}
 .request-body-inner .striped
 {
 	background-image: url(../Images/stripe.png);

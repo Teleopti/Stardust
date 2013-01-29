@@ -24,7 +24,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.noPossibleShiftTrades = ko.observable(false);
 		self.timeLineLengthInMinutes = ko.observable(0);
 		self.hours = ko.observableArray();
-		self.mySchedule = ko.observable(new scheduleViewModel());
+		self.mySchedule = ko.observable(new personScheduleViewModel());
 		self.possibleTradeSchedules = ko.observableArray();
 		self.pixelPerMinute = ko.computed(function () {
 			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
@@ -34,7 +34,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
 				return new layerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
 			});
-			self.mySchedule(new scheduleViewModel(mappedlayers, myScheduleObject));
+			self.mySchedule(new personScheduleViewModel(mappedlayers, myScheduleObject));
 		};
 
 		self._createPossibleTradeSchedules = function (possibleTradePersons) {
@@ -44,7 +44,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					return new layerViewModel(layer, personSchedule.MinutesSinceTimeLineStart, self.pixelPerMinute());
 				});
 
-				return new scheduleViewModel(mappedLayers, personSchedule);
+				return new personScheduleViewModel(mappedLayers, personSchedule);
 			});
 
 			self.noPossibleShiftTrades(mappedPersonsSchedule.length == 0 ? true : false);
@@ -117,18 +117,28 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 	}
 
-	function scheduleViewModel(layers, scheduleObject) {
+	function personScheduleViewModel(layers, scheduleObject) {
 		var self = this;
 		var minutesSinceTimeLineStart = 0;
 		var agentName = '';
+		var dayOffText = '';
 		if (scheduleObject) {
 			agentName = scheduleObject.Name;
 			minutesSinceTimeLineStart = scheduleObject.MinutesSinceTimeLineStart;
+			dayOffText = scheduleObject.DayOffText;
 		}
 
 		self.agentName = agentName;
 		self.layers = layers;
 		self.minutesSinceTimeLineStart = minutesSinceTimeLineStart;
+		self.dayOffText = dayOffText;
+		self.underlyingDayOffExists = false;
+		self.showDayOffStyle = ko.computed(function () {
+			if (self.underlyingDayOffExists || self.dayOffText.length > 0) {
+				return true;
+			}
+			return false;
+		});
 
 	}
 
@@ -140,13 +150,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.startTime = layer.StartTimeText;
 		self.endTime = layer.EndTimeText;
 		self.lengthInMinutes = layer.LengthInMinutes;
-		self.isDayOff = layer.IsDayOff;
-		self.dayOffName = ko.computed(function () {
-			if (self.isDayOff) {
-				return self.payload;
-			}
-			return '';
-		});
 		self.leftPx = ko.computed(function () {
 			var timeLineoffset = minutesSinceTimeLineStart;
 			return (layer.ElapsedMinutesSinceShiftStart + timeLineoffset) * pixelPerMinute + 'px';
@@ -155,10 +158,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			return self.lengthInMinutes * pixelPerMinute + 'px';
 		});
 		self.title = ko.computed(function () {
-			if (self.isDayOff) {
-				return self.payload;
+			if (self.payload) {
+				return self.startTime + '-' + self.endTime + ' ' + self.payload;
 			}
-			return self.startTime + '-' + self.endTime + ' ' + self.payload;
+			return '';
 		});
 	}
 
