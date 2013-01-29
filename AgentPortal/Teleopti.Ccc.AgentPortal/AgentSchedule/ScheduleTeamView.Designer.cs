@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			this.splitContainerAdvTeamView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainerAdvTeamView.FixedPanel = Syncfusion.Windows.Forms.Tools.Enums.FixedPanel.Panel1;
 			this.splitContainerAdvTeamView.Location = new System.Drawing.Point(0, 0);
-			this.splitContainerAdvTeamView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.splitContainerAdvTeamView.Name = "splitContainerAdvTeamView";
 			// 
 			// splitContainerAdvTeamView.Panel1
@@ -75,7 +74,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			this.splitContainerAdvTeamView.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
 			this.splitContainerAdvTeamView.Panel1.Controls.Add(this.navigationMonthCalendarTeamView);
 			this.splitContainerAdvTeamView.Panel1.Controls.Add(this.panelBetseenCalendarAndRibbon);
-			this.splitContainerAdvTeamView.Panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			// 
 			// splitContainerAdvTeamView.Panel2
 			// 
@@ -84,9 +82,8 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			this.splitContainerAdvTeamView.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
 			this.splitContainerAdvTeamView.Panel2.Controls.Add(this.gridControlTeamSchedules);
 			this.splitContainerAdvTeamView.Panel2.Controls.Add(this.panelBetweenRibbonAndGridRight);
-			this.splitContainerAdvTeamView.Panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.splitContainerAdvTeamView.Panel2MinSize = 175;
-			this.splitContainerAdvTeamView.Size = new System.Drawing.Size(1955, 672);
+			this.splitContainerAdvTeamView.Size = new System.Drawing.Size(1466, 546);
 			this.splitContainerAdvTeamView.SplitterDistance = 175;
 			this.splitContainerAdvTeamView.SplitterWidth = 4;
 			this.splitContainerAdvTeamView.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
@@ -101,12 +98,12 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			this.navigationMonthCalendarTeamView.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
 			this.navigationMonthCalendarTeamView.DateValue = new System.DateTime(2008, 3, 28, 0, 0, 0, 0);
 			this.navigationMonthCalendarTeamView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.navigationMonthCalendarTeamView.Location = new System.Drawing.Point(0, 39);
+			this.navigationMonthCalendarTeamView.Location = new System.Drawing.Point(0, 32);
 			this.navigationMonthCalendarTeamView.Margin = new System.Windows.Forms.Padding(0);
 			this.navigationMonthCalendarTeamView.Name = "navigationMonthCalendarTeamView";
-			this.navigationMonthCalendarTeamView.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.navigationMonthCalendarTeamView.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
 			this.navigationMonthCalendarTeamView.ScheduleType = Syncfusion.Windows.Forms.Schedule.ScheduleViewType.Day;
-			this.navigationMonthCalendarTeamView.Size = new System.Drawing.Size(175, 633);
+			this.navigationMonthCalendarTeamView.Size = new System.Drawing.Size(175, 514);
 			this.navigationMonthCalendarTeamView.TabIndex = 2;
 			// 
 			// panelBetseenCalendarAndRibbon
@@ -114,19 +111,17 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			this.panelBetseenCalendarAndRibbon.Controls.Add(this.panel1);
 			this.panelBetseenCalendarAndRibbon.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panelBetseenCalendarAndRibbon.Location = new System.Drawing.Point(0, 0);
-			this.panelBetseenCalendarAndRibbon.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.panelBetseenCalendarAndRibbon.Name = "panelBetseenCalendarAndRibbon";
-			this.panelBetseenCalendarAndRibbon.Size = new System.Drawing.Size(175, 39);
+			this.panelBetseenCalendarAndRibbon.Size = new System.Drawing.Size(175, 32);
 			this.panelBetseenCalendarAndRibbon.TabIndex = 2;
 			// 
 			// panel1
 			// 
 			this.panel1.BackColor = System.Drawing.Color.White;
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel1.Location = new System.Drawing.Point(0, 35);
-			this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.panel1.Location = new System.Drawing.Point(0, 29);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(175, 4);
+			this.panel1.Size = new System.Drawing.Size(175, 3);
 			this.panel1.TabIndex = 1;
 			// 
 			// gridControlTeamSchedules
@@ -165,8 +160,8 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			this.gridControlTeamSchedules.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.gridControlTeamSchedules.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
 			this.gridControlTeamSchedules.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
-			this.gridControlTeamSchedules.Location = new System.Drawing.Point(0, 34);
-			this.gridControlTeamSchedules.Margin = new System.Windows.Forms.Padding(13, 12, 13, 12);
+			this.gridControlTeamSchedules.Location = new System.Drawing.Point(0, 28);
+			this.gridControlTeamSchedules.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
 			this.gridControlTeamSchedules.Name = "gridControlTeamSchedules";
 			this.gridControlTeamSchedules.NumberedColHeaders = false;
 			this.gridControlTeamSchedules.NumberedRowHeaders = false;
@@ -177,7 +172,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			this.gridControlTeamSchedules.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
 			this.gridControlTeamSchedules.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlTeamSchedules.Size = new System.Drawing.Size(1776, 638);
+			this.gridControlTeamSchedules.Size = new System.Drawing.Size(1287, 518);
 			this.gridControlTeamSchedules.SmartSizeBox = false;
 			this.gridControlTeamSchedules.TabIndex = 0;
 			this.gridControlTeamSchedules.ThemesEnabled = true;
@@ -199,9 +194,8 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			this.panelBetweenRibbonAndGridRight.Controls.Add(this.autoLabelSelectedDate);
 			this.panelBetweenRibbonAndGridRight.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panelBetweenRibbonAndGridRight.Location = new System.Drawing.Point(0, 0);
-			this.panelBetweenRibbonAndGridRight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.panelBetweenRibbonAndGridRight.Name = "panelBetweenRibbonAndGridRight";
-			this.panelBetweenRibbonAndGridRight.Size = new System.Drawing.Size(1776, 34);
+			this.panelBetweenRibbonAndGridRight.Size = new System.Drawing.Size(1287, 28);
 			this.panelBetweenRibbonAndGridRight.TabIndex = 1;
 			this.panelBetweenRibbonAndGridRight.Resize += new System.EventHandler(this.panelBetweenRibbonAndGridRightResize);
 			// 
@@ -209,10 +203,9 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			// 
 			this.comboBoxAdvGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.comboBoxAdvGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvGroup.Location = new System.Drawing.Point(59, 4);
-			this.comboBoxAdvGroup.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.comboBoxAdvGroup.Location = new System.Drawing.Point(44, 3);
 			this.comboBoxAdvGroup.Name = "comboBoxAdvGroup";
-			this.comboBoxAdvGroup.Size = new System.Drawing.Size(298, 24);
+			this.comboBoxAdvGroup.Size = new System.Drawing.Size(224, 21);
 			this.comboBoxAdvGroup.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvGroup.TabIndex = 2;
 			this.comboBoxAdvGroup.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvGroup_SelectedIndexChanged);
@@ -221,10 +214,9 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			// 
 			this.comboSiteAndTeam.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.comboSiteAndTeam.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSiteAndTeam.Location = new System.Drawing.Point(365, 4);
-			this.comboSiteAndTeam.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.comboSiteAndTeam.Location = new System.Drawing.Point(274, 3);
 			this.comboSiteAndTeam.Name = "comboSiteAndTeam";
-			this.comboSiteAndTeam.Size = new System.Drawing.Size(298, 24);
+			this.comboSiteAndTeam.Size = new System.Drawing.Size(224, 21);
 			this.comboSiteAndTeam.Sorted = true;
 			this.comboSiteAndTeam.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboSiteAndTeam.TabIndex = 2;
@@ -232,14 +224,13 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			// 
 			// buttonNextDate
 			// 
-			this.buttonNextDate.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonNextDate.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonNextDate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(209)))), ((int)(((byte)(255)))));
-			this.buttonNextDate.Location = new System.Drawing.Point(1717, 0);
-			this.buttonNextDate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.buttonNextDate.Dock = System.Windows.Forms.DockStyle.Right;
+			this.buttonNextDate.Location = new System.Drawing.Point(1252, 0);
 			this.buttonNextDate.Name = "buttonNextDate";
 			this.buttonNextDate.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.buttonNextDate.Size = new System.Drawing.Size(47, 32);
+			this.buttonNextDate.Size = new System.Drawing.Size(35, 28);
 			this.buttonNextDate.TabIndex = 1;
 			this.buttonNextDate.Text = ">";
 			this.buttonNextDate.UseVisualStyle = true;
@@ -250,11 +241,10 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			this.buttonPreviousDate.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.buttonPreviousDate.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonPreviousDate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(209)))), ((int)(((byte)(255)))));
-			this.buttonPreviousDate.Location = new System.Drawing.Point(4, 0);
-			this.buttonPreviousDate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.buttonPreviousDate.Location = new System.Drawing.Point(3, 0);
 			this.buttonPreviousDate.Name = "buttonPreviousDate";
 			this.buttonPreviousDate.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.buttonPreviousDate.Size = new System.Drawing.Size(47, 32);
+			this.buttonPreviousDate.Size = new System.Drawing.Size(35, 26);
 			this.buttonPreviousDate.TabIndex = 0;
 			this.buttonPreviousDate.Text = "<";
 			this.buttonPreviousDate.UseVisualStyle = true;
@@ -265,21 +255,19 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			this.autoLabelSelectedDate.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.autoLabelSelectedDate.AutoSize = false;
 			this.autoLabelSelectedDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.autoLabelSelectedDate.Location = new System.Drawing.Point(690, 0);
-			this.autoLabelSelectedDate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.autoLabelSelectedDate.Location = new System.Drawing.Point(495, 0);
 			this.autoLabelSelectedDate.Name = "autoLabelSelectedDate";
-			this.autoLabelSelectedDate.Size = new System.Drawing.Size(989, 34);
+			this.autoLabelSelectedDate.Size = new System.Drawing.Size(742, 28);
 			this.autoLabelSelectedDate.TabIndex = 2;
 			this.autoLabelSelectedDate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// ScheduleTeamView
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.splitContainerAdvTeamView);
-			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.Name = "ScheduleTeamView";
-			this.Size = new System.Drawing.Size(1955, 672);
+			this.Size = new System.Drawing.Size(1466, 546);
 			this.splitContainerAdvTeamView.Panel1.ResumeLayout(false);
 			this.splitContainerAdvTeamView.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerAdvTeamView)).EndInit();
