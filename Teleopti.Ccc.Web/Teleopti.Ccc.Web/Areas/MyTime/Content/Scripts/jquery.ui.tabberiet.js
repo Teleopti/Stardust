@@ -41,6 +41,7 @@
 					.removeClass("ui-tabs-active")
 					;
 			} else {
+				this._element.tabs("option", "active", false);
 				tab.triggerHandler('change');
 			}
 
