@@ -346,5 +346,29 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			dayOffLayer.ElapsedMinutesSinceShiftStart.Should().Be.EqualTo(0);
 			dayOffLayer.LengthInMinutes.Should().Be.EqualTo(TimeSpan.FromHours(9).TotalMinutes);
 		}
+
+		[Test]
+		public void ShouldMapTimeLineWhenIHaveDayOffAndTradeVictimSchedule()
+		{
+			var myDayOff = new PersonDayOff(_person, new Scenario("scenario"), new DayOffTemplate(new Description("a day off")), DateOnly.Today);
+			var myDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, _person, SchedulePartView.DayOff, myDayOff);
+			var tradeVictimDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, new Person());
+			var possibleTradePersonLayerPeriod = new DateTimePeriod(new DateTime(2013, 1, 1, 8, 0, 0, DateTimeKind.Utc),
+																	new DateTime(2013, 1, 1, 12, 0, 0, DateTimeKind.Utc));
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(Arg<DateOnly>.Is.Anything)).Return(myDay);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything)).Return(new List<IScheduleDay> { tradeVictimDay });
+			_projectionProvider.Expect(p => p.Projection(myDay)).Return(_scheduleFactory.ProjectionStub());
+			_projectionProvider.Stub(p => p.Projection(tradeVictimDay)).Return(_scheduleFactory.ProjectionStub(new[]
+		                                                {
+		                                                    _scheduleFactory.VisualLayerStub(possibleTradePersonLayerPeriod, tradeVictimDay.Person)
+		                                                }));
+
+			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(DateOnly.Today);
+
+			var expectedTimeLineLingth = possibleTradePersonLayerPeriod.EndDateTime.Subtract(possibleTradePersonLayerPeriod.StartDateTime).TotalMinutes;
+			expectedTimeLineLingth += 30;
+			result.TimeLineLengthInMinutes.Should().Be.EqualTo(expectedTimeLineLingth);
+		}
 	}
 }

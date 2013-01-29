@@ -43,3 +43,7 @@
 			transparent 60%, 
 			transparent 100%)*/
 }
+.request-body-inner .striped
+{
+	background-image: url(../Images/stripe.png);
+}

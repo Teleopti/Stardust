@@ -89,6 +89,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				{
 					var timeRangeTemp = new DateTimePeriod(personDay.ScheduleLayers.Min(l => l.Period.StartDateTime),
 															personDay.ScheduleLayers.Max(l => l.Period.EndDateTime));
+					if (timeLineRangeTot.Equals(new DateTimePeriod()))
+					{
+						timeLineRangeTot = timeRangeTemp;
+						continue;
+					}
 					timeLineRangeTot = timeLineRangeTot.MaximumPeriod(timeRangeTemp);
 				}
 			}
