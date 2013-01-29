@@ -1,5 +1,4 @@
-﻿
-Feature: Shift Trade Requests
+﻿Feature: Shift Trade Requests
 	In order to avoid unwanted scheduled shifts
 	As an agent
 	I want to be able to trade shifts with other agents
@@ -92,7 +91,6 @@ Scenario: Time line should cover my scheduled shift
 	When I view Add Shift Trade Request for date '2030-01-03'
 	Then I should see the time line hours span from '6' to '16'
 
-@Ignore
 Scenario: Show message when no agents are available for shift trade
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
