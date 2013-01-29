@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         {
             _startTime = new TimeSpan(0, 10, 15, 0);
             _endTime = new TimeSpan(0, 10, 30, 0);
-            _target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherence);
+            _target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherence, DateTime.Now,DateTime.Now );
         }
 
         [Test]
