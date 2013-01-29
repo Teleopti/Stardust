@@ -1199,6 +1199,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 schedulingOptions.UseTwoDaysOffAsBlock = true;
                 var skillDayPeriodIntervalData = _container.Resolve<ISkillDayPeriodIntervalData>();
+            //var skillDayPeriodIntervalData = new SkillDayPeriodIntervalData(skillIntervalDataSkillFactorApplyer,
+            //                                                                intervalDataMedianCalculator,
+            //                                                                schedulingResultStateHolder);
                 var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder);
                 var teamExtractor = new TeamExtractor(matrixList, _groupPersonBuilderForOptimization);
                 var restrictionAggregator = _container.Resolve<IRestrictionAggregator>();

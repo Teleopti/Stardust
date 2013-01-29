@@ -11,7 +11,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 	public class SkillIntervalDataSkillFactorApplyer : ISkillIntervalDataSkillFactorApplyer
 	{
-		public ISkillIntervalData ApplyFactors(ISkillIntervalData skillIntervalData, ISkill skill)
+        public SkillIntervalDataSkillFactorApplyer(){}
+
+	    public ISkillIntervalData ApplyFactors(ISkillIntervalData skillIntervalData, ISkill skill)
 		{
 			double currentDemand = skillIntervalData.CurrentDemand * skill.PriorityValue;
 			if(currentDemand > 0 && skill.OverstaffingFactor.Value < 0.5)
