@@ -944,7 +944,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -991,7 +990,7 @@
                     <Textbox Name="textbox19">
                       <CanGrow>true</CanGrow>
                       <UserSort>
-                        <SortExpression>=FormatPercent(iif(sum(Fields!scheduled_ready_time.Value)&gt;0,sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0),1)</SortExpression>
+                        <SortExpression>=CInt(1000*FormatNumber(iif(sum(Fields!scheduled_ready_time.Value)&gt;0,sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0),3))</SortExpression>
                         <SortExpressionScope>table2_Group1</SortExpressionScope>
                         <SortTarget>table2</SortTarget>
                       </UserSort>
@@ -1023,6 +1022,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1069,7 +1069,7 @@
                     <Textbox Name="textbox22">
                       <CanGrow>true</CanGrow>
                       <UserSort>
-                        <SortExpression>=FormatNumber(iif((sum(Fields!scheduled_ready_time.Value)/3600.0)&gt;0,sum(Fields!answered_calls.Value)/(sum(Fields!scheduled_ready_time.Value)/3600.0),0),1)</SortExpression>
+                        <SortExpression>=Cint(10*FormatNumber(iif((sum(Fields!scheduled_ready_time.Value)/3600.0)&gt;0,sum(Fields!answered_calls.Value)/(sum(Fields!scheduled_ready_time.Value)/3600.0),0),1))</SortExpression>
                         <SortExpressionScope>table2_Group1</SortExpressionScope>
                         <SortTarget>table2</SortTarget>
                       </UserSort>
@@ -1108,7 +1108,7 @@
                     <Textbox Name="textbox54">
                       <CanGrow>true</CanGrow>
                       <UserSort>
-                        <SortExpression>=FormatNumber(iif((sum(Fields!ready_time_s.Value)/3600.0)&gt;0,sum(Fields!answered_calls.Value)/(sum(Fields!ready_time_s.Value)/3600.0),0),1)</SortExpression>
+                        <SortExpression>=CInt(10*FormatNumber(iif((sum(Fields!ready_time_s.Value)/3600.0)&gt;0,sum(Fields!answered_calls.Value)/(sum(Fields!ready_time_s.Value)/3600.0),0),1))</SortExpression>
                         <SortExpressionScope>table2_Group1</SortExpressionScope>
                         <SortTarget>table2</SortTarget>
                       </UserSort>
@@ -1147,7 +1147,7 @@
                     <Textbox Name="textbox48">
                       <CanGrow>true</CanGrow>
                       <UserSort>
-                        <SortExpression>=FormatPercent(iif(sum(Fields!ready_time_s.Value)&gt;0,sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</SortExpression>
+                        <SortExpression>=CInt(1000*FormatNumber(iif(sum(Fields!ready_time_s.Value)&gt;0,sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),3))</SortExpression>
                         <SortExpressionScope>table2_Group1</SortExpressionScope>
                         <SortTarget>table2</SortTarget>
                       </UserSort>
@@ -1186,7 +1186,7 @@
                     <Textbox Name="textbox18">
                       <CanGrow>true</CanGrow>
                       <UserSort>
-                        <SortExpression>=FormatPercent(Code.AdheranceCalc(sum(Fields!adherence_calc_s.Value), sum(Fields!deviation_s.Value)),1)</SortExpression>
+                        <SortExpression>=CInt(1000*FormatNumber(Code.AdheranceCalc(sum(Fields!adherence_calc_s.Value), sum(Fields!deviation_s.Value)),3))</SortExpression>
                         <SortExpressionScope>table2_Group1</SortExpressionScope>
                         <SortTarget>table2</SortTarget>
                       </UserSort>
