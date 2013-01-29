@@ -76,5 +76,55 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_mock.VerifyAll();
 			resetEvent.Dispose();
 		}
+
+		[Test]
+		public void VerifyConsumeNextAndCurrentAreEqual()
+		{
+			var currentLayer = new ScheduleLayer
+			{
+				Name = "",
+				PayloadId = _guid,
+				StartDateTime = _dateTime,
+				EndDateTime = _dateTime
+			};
+			var nextLayer = new ScheduleLayer
+			{
+				Name = "",
+				PayloadId = _guid,
+				StartDateTime = _dateTime,
+				EndDateTime = _dateTime,
+			};
+
+			var previousState = new ActualAgentState
+			{
+				ScheduledId = _guid,
+				ScheduledNextId = _guid,
+				AlarmId = _guid,
+				StateId = _guid,
+				ScheduledNext = "",
+				NextStart = _dateTime
+			};
+
+			var alarmLight = new RtaAlarmLight
+			                 	{
+			                 		Name = "AlarmName",
+			                 		AlarmTypeId = _guid,
+									StateGroupId = _guid
+			                 	};
+
+			var resetEvent = new AutoResetEvent(false);
+
+			_stateHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid)).Return(new List<ScheduleLayer>
+			                                                                          	{currentLayer, nextLayer});
+			_stateHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
+			_agentHandler.Expect(a => a.GetAlarm(_guid, _stateCode, currentLayer, _guid)).Return(alarmLight);			
+			_mock.ReplayAll();
+
+			var result = _target.Consume(_guid, _guid, _guid, _stateCode, _dateTime, _timeSpan, resetEvent);
+			Assert.IsNull(result);
+			_mock.VerifyAll();
+			resetEvent.Dispose();
+		}
+
 	}
 }
