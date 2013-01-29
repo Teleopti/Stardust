@@ -290,10 +290,12 @@ var ShiftTradeRequestDetailViewModel = function () {
 
 	self.Approve = function () {
 		self.respondToRequest("Requests/ApproveShiftTrade/" + self.Id());
+		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
 
 	self.Deny = function () {
 		self.respondToRequest("Requests/RejectShiftTrade/" + self.Id());
+		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
 
 	self.respondToRequest = function (url) {

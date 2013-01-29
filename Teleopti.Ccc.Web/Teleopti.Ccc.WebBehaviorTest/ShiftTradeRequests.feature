@@ -139,25 +139,22 @@ Scenario: View shift trade request details
 	When I click on the request
 	Then I should see the shift trade request form  with subject 'swap with me'
 
-@ignore	
 Scenario: Approve shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have created a shift trade request with subject 'swap with me'
 	And I am viewing requests
 	When I click on the request
 	And I click the Approve button on the shift request
-	Then Shift trade request with subject 'swap with me' should be ok by both parts
+	Then  Details should be closed
 
-@ignore	
 Scenario: Deny shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have created a shift trade request with subject 'some shifttrade'
 	And I am viewing requests
 	When I click on the request
 	And I click the Deny button on the shift request
-	Then Shift trade request with subject 'some shifttrade' should be rejected
+	Then Details should be closed
 
-@ignore
 Scenario: Delete created shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have created a shift trade request
