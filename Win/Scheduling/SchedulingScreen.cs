@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 Icon = Properties.Resources.scheduler;
 
             // this timer is just for fixing bug 17948 regarding dateNavigationControl
-            _tmpTimer.Interval = 100;
+            _tmpTimer.Interval = 50;
             _tmpTimer.Enabled = false;
             _tmpTimer.Tick += _tmpTimer_Tick;
         }
@@ -272,6 +272,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void _tmpTimer_Tick(object sender, EventArgs e)
         {
             _tmpTimer.Enabled = false;
+			updateShiftEditor();
             _grid.Focus();
         }
 
@@ -287,6 +288,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
 
             _tmpTimer.Enabled = true;
+			
         }
 
         private void formatRibbonControls()
@@ -2632,7 +2634,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (scheduleDay != null)
                 {
                     schedulerSplitters1.MultipleHostControl3.UpdateItems();
-                    _scheduleView.SetSelectedDateLocal(scheduleDay.DateOnlyAsPeriod.DateOnly);
+                	if (!(_scheduleView is DayViewNew))
+                	{
+						_scheduleView.SetSelectedDateLocal(scheduleDay.DateOnlyAsPeriod.DateOnly);
+                	}
+                    
                 }
             }
         }
