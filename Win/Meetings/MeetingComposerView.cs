@@ -117,16 +117,10 @@ namespace Teleopti.Ccc.Win.Meetings
 			TimeSpan endTime;
 			try
 			{
-				if (start.Contains("M"))
-				{
-					startTime = DateTime.ParseExact(start, "h:mm tt", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
-					endTime = DateTime.ParseExact(end, "h:mm tt", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
-				}
-				else
-				{
-					startTime = TimeSpan.Parse(start, System.Globalization.CultureInfo.CurrentCulture);
-					endTime = TimeSpan.Parse(end, System.Globalization.CultureInfo.CurrentCulture);
-				}
+				var shortTimePattern = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
+
+				startTime = DateTime.ParseExact(start, shortTimePattern, System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
+				endTime = DateTime.ParseExact(end, shortTimePattern, System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
 			}
 			catch (FormatException error)
 			{

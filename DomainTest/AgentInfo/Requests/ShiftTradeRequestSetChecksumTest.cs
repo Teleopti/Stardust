@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -34,9 +35,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         {
             _mockRepository = new MockRepository();
             _scenario = _mockRepository.StrictMock<IScenario>();
+				var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
+				scenarioRepository.Expect(s => s.LoadDefaultScenario()).Return(_scenario).Repeat.Any();
             _scheduleRepository = _mockRepository.StrictMock<IScheduleRepository>();
             _mockRepository.StrictMock<IAuthorizationService>();
-            _target = new ShiftTradeRequestSetChecksum(_scenario, _scheduleRepository);
+				_target = new ShiftTradeRequestSetChecksum(scenarioRepository, _scheduleRepository);
 
             _scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
             _scheduleRangePerson1 = _mockRepository.StrictMock<IScheduleRange>();

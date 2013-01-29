@@ -12,9 +12,9 @@
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd6" namespace="http://schemas.ccc.teleopti.com/sdk/2010/08/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd7" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd8" namespace="http://schemas.ccc.teleopti.com/sdk/2011/07/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd9" namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd10" namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd11" namespace="http://schemas.ccc.teleopti.com/sdk/2012/04/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd9" namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd10" namespace="http://schemas.ccc.teleopti.com/sdk/2012/04/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd11" namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd12" namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd13" namespace="http://schemas.ccc.teleopti.com/sdk/2011/01/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd14" namespace="http://schemas.ccc.teleopti.com/sdk/2010/10/" />
@@ -156,12 +156,6 @@
   </wsdl:message>
   <wsdl:message name="TeleoptiForecastingService_GetSkills_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetSkillsResponse" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_SavePreference_InputMessage">
-    <wsdl:part name="parameters" element="tns:SavePreference" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_SavePreference_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SavePreferenceResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_DeletePreference_InputMessage">
     <wsdl:part name="parameters" element="tns:DeletePreference" />
@@ -445,12 +439,6 @@
   <wsdl:message name="TeleoptiSchedulingService_GetAdherenceData_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetAdherenceDataResponse" />
   </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetAdherenceDataBasedOnShiftDate_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetAdherenceDataBasedOnShiftDate" />
-  </wsdl:message>
-  <wsdl:message name="TeleoptiSchedulingService_GetAdherenceDataBasedOnShiftDate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetAdherenceDataBasedOnShiftDateResponse" />
-  </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetAgentQueueStatDetails_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAgentQueueStatDetails" />
   </wsdl:message>
@@ -462,6 +450,12 @@
   </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetAdherenceInfo_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetAdherenceInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_SavePreference_InputMessage">
+    <wsdl:part name="parameters" element="tns:SavePreference" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_SavePreference_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SavePreferenceResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiOrganizationService_UpdatePerson_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdatePerson" />
@@ -856,10 +850,6 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="TeleoptiSchedulingService">
-    <wsdl:operation name="SavePreference">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePreference" message="tns:TeleoptiSchedulingService_SavePreference_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePreferenceResponse" message="tns:TeleoptiSchedulingService_SavePreference_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="DeletePreference">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeletePreference" message="tns:TeleoptiSchedulingService_DeletePreference_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeletePreferenceResponse" message="tns:TeleoptiSchedulingService_DeletePreference_OutputMessage" />
@@ -1036,10 +1026,6 @@
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAdherenceData" message="tns:TeleoptiSchedulingService_GetAdherenceData_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAdherenceDataResponse" message="tns:TeleoptiSchedulingService_GetAdherenceData_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetAdherenceDataBasedOnShiftDate">
-      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAdherenceDataBasedOnShiftDate" message="tns:TeleoptiSchedulingService_GetAdherenceDataBasedOnShiftDate_InputMessage" />
-      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAdherenceDataBasedOnShiftDateResponse" message="tns:TeleoptiSchedulingService_GetAdherenceDataBasedOnShiftDate_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetAgentQueueStatDetails">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAgentQueueStatDetails" message="tns:TeleoptiSchedulingService_GetAgentQueueStatDetails_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAgentQueueStatDetailsResponse" message="tns:TeleoptiSchedulingService_GetAgentQueueStatDetails_OutputMessage" />
@@ -1047,6 +1033,10 @@
     <wsdl:operation name="GetAdherenceInfo">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAdherenceInfo" message="tns:TeleoptiSchedulingService_GetAdherenceInfo_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAdherenceInfoResponse" message="tns:TeleoptiSchedulingService_GetAdherenceInfo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SavePreference">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePreference" message="tns:TeleoptiSchedulingService_SavePreference_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePreferenceResponse" message="tns:TeleoptiSchedulingService_SavePreference_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="TeleoptiOrganizationService">

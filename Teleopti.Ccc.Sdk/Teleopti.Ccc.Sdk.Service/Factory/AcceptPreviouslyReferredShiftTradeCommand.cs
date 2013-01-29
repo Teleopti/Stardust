@@ -36,9 +36,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 {
                     IPersonRequestRepository personRequestRepository =
                         _repositoryFactory.CreatePersonRequestRepository(uow);
-                    IScenario scenario = _repositoryFactory.CreateScenarioRepository(uow).LoadDefaultScenario();
                     ShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
-                        new ShiftTradeRequestSetChecksum(scenario, _repositoryFactory.CreateScheduleRepository(uow));
+                        new ShiftTradeRequestSetChecksum( _repositoryFactory.CreateScenarioRepository(uow), _repositoryFactory.CreateScheduleRepository(uow));
 
                     domainPersonRequest =
                         personRequestRepository.Load(_personRequestDto.Id.GetValueOrDefault(Guid.Empty));
