@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Messages.General;
 
@@ -24,16 +25,17 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				throw new FaultException("The outgoing queue for the service bus is not available. Cannot continue with the forecast.");
 			}
 
-			//todo create correct message
-			
-
+        	var principal = TeleoptiPrincipal.Current;
+			var person = ((IUnsafePerson)principal).Person;
+			var identity = (ITeleoptiIdentity)principal.Identity;
             var message = new RecalculateForecastOnSkillMessageCollection
                 {	
 					MessageCollection = new Collection<RecalculateForecastOnSkillMessage>(),
-					BusinessUnitId = command.BusinessUnitId,
-					Datasource = command.DataSource,
+					BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
+					Datasource = identity.DataSource.Application.Name,
 					Timestamp = DateTime.UtcNow,
-					ScenarioId = command.ScenarioId
+					ScenarioId = command.ScenarioId,
+					OwnerPersonId = person.Id.GetValueOrDefault()
 				};
             foreach (var model in command.WorkloadOnSkillSelectionDtos)
             {

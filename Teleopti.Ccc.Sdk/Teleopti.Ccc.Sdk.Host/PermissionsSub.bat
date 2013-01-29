@@ -59,7 +59,7 @@ SET WinXP=501
 SET Win2003=502
 SET IIS6=6
 SET IIS7=7
-SET IIS7PoolUser=IIS APPPOOL\Teleopti ASP.NET v4.0
+SET IIS7PoolUser=IIS APPPOOL\Teleopti ASP.NET v4.0 SDK
 SET IIS6PoolUser=NT AUTHORITY\Network Service
 SET IIS5PoolUser=IUSR_%COMPUTERNAME%
 
@@ -70,7 +70,7 @@ SET IISVersion=%IISVersion:~0,1%
 SET IISPoolUser=%IIS6PoolUser%
 
 ::If iis 7 update PoolUser
-IF %IISVersion% EQU %IIS7% SET IISPoolUser=%IIS7PoolUser%
+IF %IISVersion% GEQ %IIS7% SET IISPoolUser=%IIS7PoolUser%
 
 ::But, if User choosed Windows Authetication during CCC installation
 IF NOT "%SVCLOGIN%"=="" (

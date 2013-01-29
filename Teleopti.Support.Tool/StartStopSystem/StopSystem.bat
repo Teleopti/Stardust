@@ -1,4 +1,6 @@
 @echo off
+::ToDo:
+::Find a better way to handle our AppPool names and folder permissions
 ECHO Stopping all local Teleopti CCC 7 services
 ECHO Start mode will be set to "Manual"
 PING -n 4 127.0.0.1>nul
@@ -21,11 +23,17 @@ echo trying to stop iis 7.0 or 7.5 App Pools ...
 "%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 Web" /autoStart:false
 "%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti ASP.NET v4.0 Broker"
 "%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 Broker" /autoStart:false
+"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti ASP.NET v4.0 SDK"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 SDK" /autoStart:false
+"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti ASP.NET v4.0 RTA"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 RTA" /autoStart:false
 ) else (
 echo trying to stop iis 5.1 or 6.0 App Pools ...
 CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0"
 CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 Web"
 CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 Broker"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 SDK"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 RTA"
 )
 
 echo stopping App Pools. Done

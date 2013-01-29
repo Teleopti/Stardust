@@ -38,17 +38,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		[Test]
 		public void ShouldSendMessageToBus()
 		{
-			var buId = Guid.NewGuid();
 			var scenarioId = Guid.NewGuid();
-			var ownerId = Guid.NewGuid();
 			var skillId = Guid.NewGuid();
 			var workloadId = Guid.NewGuid();
 			var command = new WorkloadOnSkillSelectionDto{SkillId = skillId, WorkloadId = new List<Guid>{workloadId}};
 			var commands = new RecalculateForecastOnSkillCollectionCommandDto
 			               	{
-			               		BusinessUnitId = buId,
-			               		DataSource = "datasource",
-			               		OwnerPersonId = ownerId,
 			               		ScenarioId = scenarioId,
 			               		WorkloadOnSkillSelectionDtos = new List<WorkloadOnSkillSelectionDto> {command}
 			               	};
