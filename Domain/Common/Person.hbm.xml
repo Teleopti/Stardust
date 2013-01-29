@@ -253,6 +253,7 @@
 		<![CDATA[
 		select p from Person p
 		where p<>:loggedOnUser
+		order by newid()
 		]]>
 	</query>
   <database-object>

@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override void SetupForRepositoryTest()
 		{
 			target = new PersonRepository(UnitOfWork);
-			myself = new Person();
-			addValidPersonStuff(myself);
+			myself = createValidPerson();
 			PersistAndRemoveFromUnitOfWork(myself);
 		}
 
@@ -33,17 +32,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFetchValidPerson()
 		{
-			var valid = new Person();
-			addValidPersonStuff(valid);
+			var valid = createValidPerson();
 			PersistAndRemoveFromUnitOfWork(valid);
 
 			target.FindPossibleShiftTrades(myself)
 				.Should().Contain(valid);
 		}
 
-		private static void addValidPersonStuff(IPerson person)
+		[Test]
+		public void ShouldFetchInRandomOrder()
 		{
+			const int noOfPersons = 10;
+			for (var i = 0; i < noOfPersons; i++)
+			{
+				PersistAndRemoveFromUnitOfWork(createValidPerson());
+			}
+
+			var firstFetch = target.FindPossibleShiftTrades(myself);
+
+			const int retries = 5;
+			for (var i = 0; i < retries; i++)
+			{
+				var possible = target.FindPossibleShiftTrades(myself);
+				if (possible.PositionOfFirstDifference(firstFetch) != -1)
+					return;
+			}
+			Assert.Fail("No randomness of possible shift trades");
+		}
+
+		private static IPerson createValidPerson()
+		{
+			var person = new Person();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
+			return person;
 		}
 
 	}
