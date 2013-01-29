@@ -97,6 +97,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self._createMySchedule(data.MySchedule);
 					self._createPossibleTradeSchedules(data.PossibleTradePersons);
 					self._createTimeLine(data.TimeLineHours);
+					bindClickToOpenShiftTrade();
 					self.setScheduleLoadedReady();
 				}
 			});
@@ -177,6 +178,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		vm = new shiftTradeViewModel();
 		var elementToBind = $('#Request-add-shift-trade').get(0);
 		ko.applyBindings(vm, elementToBind);
+		vm.loadPeriod();
 		bindClickToOpenShiftTrade();
 	}
 	function _initDatePicker() {
@@ -206,11 +208,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	function bindClickToOpenShiftTrade() {
 		$('#Request-add-shift-trade-button')
 			.click(function () {
-				$('#Request-add-shift-trade')
-					.show();
-
 				_initDatePicker();
-				vm.loadPeriod();
+				$('#Request-add-shift-trade').show();
 			});
 	}
 
