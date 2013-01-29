@@ -121,7 +121,6 @@ namespace Teleopti.Interfaces.Domain
         public override int GetHashCode()
         {
             return FirstName.GetHashCode() ^ LastName.GetHashCode();
-            ;
         }
 
         /// <summary>

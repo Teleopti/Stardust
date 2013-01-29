@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsFalse(target.Equals(null));
             Assert.IsFalse(target.Equals(new TemplateReference(id, versionNumber + 1, name, DayOfWeek.Wednesday)));
             Assert.IsFalse(target.Equals(new TemplateReference(id, versionNumber, string.Empty, null)));
-            Assert.IsFalse(target.Equals((object)new TemplateReference(id, versionNumber, "T3",null)));
+            Assert.IsFalse(target.Equals(new TemplateReference(id, versionNumber, "T3",null)));
             Assert.IsFalse(new TemplateReference(Guid.NewGuid(), versionNumber, "T1",null).Equals(target));
         }
 

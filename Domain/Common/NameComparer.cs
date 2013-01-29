@@ -24,12 +24,11 @@ namespace Teleopti.Ccc.Domain.Common
 
         public int Compare(Name x, Name y)
         {
-            if (x.LastName == y.LastName)
+        	if (x.LastName == y.LastName)
                 return string.Compare(x.FirstName, y.FirstName, true, _cultureInfo);
-            else
-                return string.Compare(x.LastName, y.LastName, true, _cultureInfo);
+        	return string.Compare(x.LastName, y.LastName, true, _cultureInfo);
         }
 
-        #endregion
+    	#endregion
     }
 }

@@ -1,6 +1,5 @@
-﻿#region Imports
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
@@ -8,23 +7,44 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Collections;
 using Syncfusion.Windows.Forms.Tools;
 
-#endregion
-
 namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
 {
     /// <summary>
     /// Represents a ToolStripGallery instance
     /// </summary>
     public class TeleoptiToolStripGallery : Syncfusion.Windows.Forms.Tools.ToolStripGallery
-    {
-        #region Constructors
+	{
+		/// <summary>
+		/// Reference to the scroll offset property
+		/// </summary>
+		private readonly PropertyInfo scrollOffsetProperty;
 
-        /// <summary>
+		/// <summary>
+		/// Default ToolStripDropDown
+		/// </summary>
+		private ToolStripDropDown toolStripDropDown;
+
+		/// <summary>
+		/// Status flag of the default ContextMenuStrip
+		/// </summary>
+		private int contextMenuMode;
+		/// <summary>
+		/// Status flag to determine whether the context menu is opened for the first time
+		/// </summary>
+		private bool isFirstTime = true;
+
+		private bool isOpening;
+		private ToolStripGalleryItem selectedGalleryItem;
+
+		private readonly IList<IDisposable> _itemsToDispose = new List<IDisposable>();
+
+    	/// <summary>
         /// Default constructor of the TeleoptiToolStripGallery
         /// </summary>
         public TeleoptiToolStripGallery()
         {
-            MouseDown += TeliOptiToolStripGallery_MouseDown;
+    		GalleryItems = new ObservableList<ToolStripGalleryItemEx>();
+    		MouseDown += TeliOptiToolStripGallery_MouseDown;
             DropDownOpening += TeleoptiToolStripGallery_DropDownOpening;
 
             scrollOffsetProperty = GetType().GetProperty("ScrollOffset",
@@ -32,15 +52,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
                                                                 BindingFlags.Instance |
                                                                 BindingFlags.FlattenHierarchy);
 
-            customItems.ItemAdded += CustomItems_ItemAdded;
-            customItems.ItemRemoved += CustomItems_ItemRemoved;
+            GalleryItems.ItemAdded += CustomItems_ItemAdded;
+            GalleryItems.ItemRemoved += CustomItems_ItemRemoved;
         }
 
-        #endregion
-
-        #region Fields - Instance Member
-
-        /// <summary>
+    	/// <summary>
         /// Item click event handler
         /// </summary>
         public event EventHandler<ToolStripItemClickedEventArgs> ItemClicked;
@@ -50,56 +66,16 @@ namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
         /// </summary>
         public event EventHandler<ToolStripGalleryItemContextMenuClickEventArgs> ContextMenuClicked;
 
-        /// <summary>
-        /// Reference to the scroll offset property
-        /// </summary>
-        private readonly PropertyInfo scrollOffsetProperty;
+    	public ObservableList<ToolStripGalleryItemEx> GalleryItems { get; private set; }
 
-        /// <summary>
-        /// Default ToolStripDropDown
-        /// </summary>
-        private ToolStripDropDown toolStripDropDown;
-
-        /// <summary>
-        /// Status flag of the default ContextMenuStrip
-        /// </summary>
-        private int contextMenuMode;
-        /// <summary>
-        /// Status flag to determine whether the context menu is opened for the first time
-        /// </summary>
-        private bool isFirstTime = true;
-
-        private bool isOpening;
-
-        private ToolStripGalleryItem selectedGalleryItem;
-
-        private readonly ObservableList<ToolStripGalleryItemEx> customItems = new ObservableList<ToolStripGalleryItemEx>();
-
-        #endregion
-
-        #region Properties - Instance Member
-
-        #region Properties - Instance Member - TeleoptiToolStripGallery Members
-
-        public ObservableList<ToolStripGalleryItemEx> GalleryItems
-        {
-            get { return customItems; }
-        }
-
-        [Browsable(true), Category("Teleopti")]
+    	[Browsable(true), Category("Teleopti")]
         public ToolStripTabItem ParentRibbonTab
         {
             get;
             set;
         }
 
-        #endregion
-
-        #endregion
-
-        #region Events - Instance Member
-
-        private void CustomItems_ItemRemoved(object sender, ListItemEventArgs<ToolStripGalleryItemEx> e)
+    	private void CustomItems_ItemRemoved(object sender, ListItemEventArgs<ToolStripGalleryItemEx> e)
         {
             Items.Remove(e.Item);
         }
@@ -138,9 +114,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
             toolStripDropDown.Closing += ToolStripDropDown_Closing;
 
             if (Parent.ContextMenuStrip == null)
-                Parent.ContextMenuStrip = new ContextMenuStrip();
+            {
+            	Parent.ContextMenuStrip = new ContextMenuStrip();
+            }
+            else
+            {
+				Parent.ContextMenuStrip.Closing -= ContextMenuStrip_Closing;
+            }
 
-            Parent.ContextMenuStrip.Closing -= ContextMenuStrip_Closing;
             Parent.ContextMenuStrip.Closing += ContextMenuStrip_Closing;
 
             Parent.ContextMenuStrip.Click += ContextMenuStrip_Click;
@@ -211,6 +192,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
             {
                 cancel = true;
             }
+            else
+            {
+            	((Control) sender).Visible = false;
+            }
             e.Cancel = cancel;
         }
 
@@ -220,7 +205,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
             {
                 isFirstTime = false;
                 e.Cancel = true;
-            }
+			}
+			else
+			{
+				((Control)sender).Visible = false;
+			}
             contextMenuMode = 2;
         }
 
@@ -230,33 +219,34 @@ namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
             {
                 ToolStripGalleryItem toolStripGalleryItem = GetClickedToolStripGalleryItem(e);
 
-                Parent.ContextMenuStrip.Click -= ContextMenuStrip_Click;
-                Parent.ContextMenuStrip.Click += ContextMenuStrip_Click;
+				var menuStrip = Parent.ContextMenuStrip;
+				menuStrip.Click -= ContextMenuStrip_Click;
+				menuStrip.Click += ContextMenuStrip_Click;
 
-                Parent.ContextMenuStrip.Closing += delegate
-                {
-                    Parent.ContextMenuStrip.Items.Clear();
-                    Parent.ContextMenuStrip = new ContextMenuStrip();
-                };
+				menuStrip.Closed += ContextMenuStripOnClosed;
 
                 isOpening = true;
                 OnItemClicked(e, toolStripGalleryItem, Parent.ContextMenuStrip);
             }
         }
 
-        private void ContextMenuStrip_Click(object sender, EventArgs e)
+    	private void ContextMenuStripOnClosed(object sender, EventArgs eventArgs)
+		{
+			var menuStrip = Parent.ContextMenuStrip;
+			menuStrip.Items.Clear();
+			menuStrip.Click -= ContextMenuStrip_Click;
+			menuStrip.Closed -= ContextMenuStripOnClosed;
+			_itemsToDispose.Add(menuStrip);
+			Parent.ContextMenuStrip = new ContextMenuStrip();
+    	}
+
+    	private void ContextMenuStrip_Click(object sender, EventArgs e)
         {
             OnContextMenuClicked(selectedGalleryItem);
             contextMenuMode = 2;
         }
 
-        #endregion
-
-        #region Methods - Instance Member
-
-        #region Methods - Instance Member - TeleoptiToolStripGallery Members
-
-        private int GetScrollOffset()
+    	private int GetScrollOffset()
         {
             return (int)scrollOffsetProperty.GetValue(this, null);
         }
@@ -298,8 +288,33 @@ namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
                 handler(this, e);
         }
 
-        #endregion
+		protected override void Dispose(bool disposing)
+		{
+			base.Dispose(disposing);
 
-        #endregion
+			if (toolStripDropDown != null)
+			{
+				toolStripDropDown.MouseClick -= ToolStripDropDown_MouseDown;
+				toolStripDropDown.MouseUp -= ToolStripDropDown_MouseUp;
+				toolStripDropDown.Closing -= ToolStripDropDown_Closing;
+				toolStripDropDown.Dispose();
+			}
+			if (Parent != null && Parent.ContextMenuStrip != null)
+			{
+				Parent.ContextMenuStrip.Closing -= ContextMenuStrip_Closing;
+				Parent.ContextMenuStrip.Click -= ContextMenuStrip_Click;
+				Parent.ContextMenuStrip.Closed -= ContextMenuStripOnClosed;
+				Parent.ContextMenuStrip.Dispose();
+			}
+			foreach (var disposable in _itemsToDispose)
+			{
+				if (disposable!=null)
+				{
+					disposable.Dispose();
+				}
+			}
+			_itemsToDispose.Clear();
+			ParentRibbonTab = null;
+		}
     }
 }

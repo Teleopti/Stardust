@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private readonly static ILog Logger = LogManager.GetLogger(typeof(NewAbsenceRequestConsumer));
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
-        private readonly IScenarioProvider _scenarioProvider;
+        private readonly IScenarioRepository _scenarioRepository;
         private readonly IPersonRequestRepository _personRequestRepository;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IAbsenceRequestOpenPeriodMerger _absenceRequestOpenPeriodMerger;
@@ -48,13 +48,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     	private IProcessAbsenceRequest _process;
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
-    	public NewAbsenceRequestConsumer(IScheduleRepository scheduleRepository, IPersonAbsenceAccountProvider personAbsenceAccountProvider, IScenarioProvider scenarioProvider, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
+    	public NewAbsenceRequestConsumer(IScheduleRepository scheduleRepository, IPersonAbsenceAccountProvider personAbsenceAccountProvider, IScenarioRepository scenarioRepository, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
                                          IAbsenceRequestOpenPeriodMerger absenceRequestOpenPeriodMerger, IRequestFactory factory,
                                          IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification)
         {
             _scheduleRepository = scheduleRepository;
             _personAbsenceAccountProvider = personAbsenceAccountProvider;
-            _scenarioProvider = scenarioProvider;
+            _scenarioRepository = scenarioRepository;
             _personRequestRepository = personRequestRepository;
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _absenceRequestOpenPeriodMerger = absenceRequestOpenPeriodMerger;
@@ -159,8 +159,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 	var alreadyAbsent = personAlreadyAbsentDuringRequestPeriod();
                 	var allNewRules = NewBusinessRuleCollection.Minimum();
                 	var requestApprovalServiceScheduler = _factory.GetRequestApprovalService(allNewRules,
-                	                                                                         _scenarioProvider.
-                	                                                                         	DefaultScenario());
+                	                                                                         _scenarioRepository.
+                	                                                                         	LoadDefaultScenario());
                 	var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(_absenceRequest.Absence,
                 	                                                                         _absenceRequest.Period,
                 	                                                                         _absenceRequest.Person);
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private bool LoadDataForResourceCalculation(NewAbsenceRequestCreated message)
         {
             DateTimePeriod periodForResourceCalc = _absenceRequest.Period.ChangeStartTime(TimeSpan.FromDays(-1));
-        	_loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioProvider.DefaultScenario(),
+        	_loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.LoadDefaultScenario(),
         	                                                         periodForResourceCalc,
         	                                                         new List<IPerson> {_absenceRequest.Person});
             if (Logger.IsDebugEnabled)
@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
         private bool LoadDefaultScenario(NewAbsenceRequestCreated message)
         {
-            var defaultScenario = _scenarioProvider.DefaultScenario();
+            var defaultScenario = _scenarioRepository.LoadDefaultScenario();
             if (Logger.IsDebugEnabled)
             {
                 Logger.DebugFormat("Using the default scenario named {0}. (Id = {1})", defaultScenario.Description,

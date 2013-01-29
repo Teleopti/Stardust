@@ -285,8 +285,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target.SkillType = skillType;
             target.Activity = activity;
             target.MidnightBreakOffset = midnightBreakOffset;
-            ((IAggregateSkill) target).IsVirtual = true;
-            ((IAggregateSkill) target).AddAggregateSkill(new Skill("EttSkill", "Summa", Color.DodgerBlue, 15, skillType));
+            target.IsVirtual = true;
+            target.AddAggregateSkill(new Skill("EttSkill", "Summa", Color.DodgerBlue, 15, skillType));
 
             Assert.AreEqual(defaultResolution,target.DefaultResolution);
             Assert.AreEqual(skillName, target.Name);
@@ -295,18 +295,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(skillType, target.SkillType);
             Assert.AreEqual(target.Activity,activity);
             Assert.AreEqual(target.MidnightBreakOffset,midnightBreakOffset);
-            Assert.AreEqual(true, ((IAggregateSkill)target).IsVirtual);
-            Assert.AreEqual(1, ((IAggregateSkill)target).AggregateSkills.Count);
+            Assert.AreEqual(true, target.IsVirtual);
+            Assert.AreEqual(1, target.AggregateSkills.Count);
         }
         [Test]
         public void CanAddAndRemoveAggregateSkill()
         {
             ISkillType type = SkillTypeFactory.CreateSkillType();
             ISkill skill = new Skill("EttSkill", "Summa", Color.DodgerBlue, 15, type);
-            ((IAggregateSkill)target).AddAggregateSkill(skill);
-            Assert.AreEqual(1, ((IAggregateSkill)target).AggregateSkills.Count);
-            ((IAggregateSkill)target).RemoveAggregateSkill(skill);
-            Assert.AreEqual(0, ((IAggregateSkill)target).AggregateSkills.Count);
+            target.AddAggregateSkill(skill);
+            Assert.AreEqual(1, target.AggregateSkills.Count);
+            target.RemoveAggregateSkill(skill);
+            Assert.AreEqual(0, target.AggregateSkills.Count);
         }
         [Test]
         public void CanClearAggregatedSkills()
@@ -314,11 +314,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ISkillType type = SkillTypeFactory.CreateSkillType();
             ISkill skill = new Skill("EttSkill", "Summa", Color.DodgerBlue, 15, type);
             ISkill skill2 = new Skill("EttSkillTill", "SummaSumma", Color.DodgerBlue, 15, type);
-            ((IAggregateSkill)target).AddAggregateSkill(skill);
-            ((IAggregateSkill)target).AddAggregateSkill(skill2);
-            Assert.AreEqual(2,((IAggregateSkill)target).AggregateSkills.Count);
-            ((IAggregateSkill)target).ClearAggregateSkill();
-            Assert.AreEqual(0,((IAggregateSkill)target).AggregateSkills.Count);
+            target.AddAggregateSkill(skill);
+            target.AddAggregateSkill(skill2);
+            Assert.AreEqual(2,target.AggregateSkills.Count);
+            target.ClearAggregateSkill();
+            Assert.AreEqual(0,target.AggregateSkills.Count);
         }
 
         [Test]

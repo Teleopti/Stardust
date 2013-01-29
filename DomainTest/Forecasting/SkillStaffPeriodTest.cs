@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _target.SetCalculatedResource65(123);
             _target.Payload.CalculatedLoggedOn = 321;
             mocks = new MockRepository();
-            _aggregateSkillStaffPeriod = (IAggregateSkillStaffPeriod)_target;
+            _aggregateSkillStaffPeriod = _target;
             _populationStatisticsCalculator = new PopulationStatisticsCalculator();
         }
 

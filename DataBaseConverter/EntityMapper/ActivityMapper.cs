@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                 newAct.ReportLevelDetail = ReportLevelDetail.Lunch;
 
             if (oldEntity.Deleted)
-                ((IDeleteTag) newAct).SetDeleted();
+                newAct.SetDeleted();
             return newAct;
         }
 

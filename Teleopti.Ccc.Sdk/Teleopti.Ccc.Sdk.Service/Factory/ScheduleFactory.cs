@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Time;
@@ -21,9 +22,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     	private readonly IAssembler<IPerson, PersonDto> _personAssembler;
         private readonly IAssembler<IScheduleDay, SchedulePartDto> _scheduleDayAssembler;
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
-        private readonly IScenarioProvider _scenarioProvider;
+        private readonly IScenarioRepository _scenarioRepository;
 
-        public ScheduleFactory(IScheduleRepository scheduleRepository, ISaveSchedulePartService saveSchedulePartService, IUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScenarioProvider scenarioProvider)
+		  public ScheduleFactory(IScheduleRepository scheduleRepository, ISaveSchedulePartService saveSchedulePartService, IUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScenarioRepository scenarioRepository)
         {
             _scheduleRepository = scheduleRepository;
         	_saveSchedulePartService = saveSchedulePartService;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         	_personAssembler = personAssembler;
             _scheduleDayAssembler = scheduleDayAssembler;
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
-            _scenarioProvider = scenarioProvider;
+            _scenarioRepository = scenarioRepository;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 IList<IPerson> personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
-                IScheduleDictionary scheduleDictonary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(false, false), period, _scenarioProvider.DefaultScenario());
+                IScheduleDictionary scheduleDictonary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(false, false), period, _scenarioRepository.LoadDefaultScenario());
 
                 //rk don't know if I break stuff here...
                 //scheduleDictonary.SetTimeZone(timeZone);
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             {
                 IList<IPerson> personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
 
-                IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(true, false), period, _scenarioProvider.DefaultScenario());
+                IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(true, false), period, _scenarioRepository.LoadDefaultScenario());
                 foreach (IPerson person in personList)
                 {
                     IScheduleRange scheduleRange = scheduleDictionary[person];

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCodeTest.ShiftCreator
         [SetUp]
         public void TestInit()
         {
-            this._defaultActivity = ActivityFactory.CreateActivity("Test");
+            _defaultActivity = ActivityFactory.CreateActivity("Test");
             
             _activities = new List<IActivity>();
             IActivity activityOne = ActivityFactory.CreateActivity("Test");
@@ -56,9 +56,9 @@ namespace Teleopti.Ccc.WinCodeTest.ShiftCreator
             AutoPositionedActivityExtender _autoPositionedActivityExtender = new AutoPositionedActivityExtender(this._defaultActivity,
                                                                                                          _timePeriodWithSegment,
                                                                                                          _timeSpan);
-            this._base = (IWorkShiftExtender) _autoPositionedActivityExtender;
+            _base = _autoPositionedActivityExtender;
 
-            _target = new AutoPositionView(this._base, _activities);
+            _target = new AutoPositionView(_base, _activities);
             
         }
 

@@ -60,15 +60,12 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is Clip<T>))
+        	if (obj == null || !(obj is Clip<T>))
                 return false;
-            else
-            {
-                return Equals((Clip<T>)obj);
-            }
+        	return Equals((Clip<T>)obj);
         }
 
-        /// <summary>
+    	/// <summary>
         /// Equals
         /// </summary>
         /// <param name="other"></param>

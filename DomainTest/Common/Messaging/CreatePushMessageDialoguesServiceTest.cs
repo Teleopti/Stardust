@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
         [Test]
         public void VerifyReceiptContainsAllAddedRoots()
         {
-            Assert.IsTrue(_receipt.AddedRoots().OfType<IPushMessage>().ToList().Count == 1);
-            Assert.IsTrue(_receipt.AddedRoots().OfType<IPushMessageDialogue>().ToList().Count == _receivers.Count);
+            Assert.IsTrue(_receipt.AddedRoots().OfType<IPushMessage>().Count() == 1);
+            Assert.IsTrue(_receipt.AddedRoots().OfType<IPushMessageDialogue>().Count() == _receivers.Count);
         }
 
     }

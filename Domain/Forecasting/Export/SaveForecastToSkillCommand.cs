@@ -12,19 +12,19 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 	{
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly ISkillDayRepository _skillDayRepository;
-		private readonly IScenarioProvider _scenarioProvider;
+		private readonly IScenarioRepository _scenarioRepository;
 		private readonly WorkloadDayHelper _workloadDayHelper = new WorkloadDayHelper();
 
-		public SaveForecastToSkillCommand(ISkillDayLoadHelper skillDayLoadHelper, ISkillDayRepository skillDayRepository, IScenarioProvider scenarioProvider)
+		public SaveForecastToSkillCommand(ISkillDayLoadHelper skillDayLoadHelper, ISkillDayRepository skillDayRepository, IScenarioRepository scenarioRepository)
 		{
 			_skillDayLoadHelper = skillDayLoadHelper;
 			_skillDayRepository = skillDayRepository;
-			_scenarioProvider = scenarioProvider;
+			_scenarioRepository = scenarioRepository;
 		}
 
         public void Execute(DateOnly dateOnly, ISkill targetSkill, ICollection<IForecastsRow> forecasts, ImportForecastsMode importMode)
         {
-            var defaultScenario = _scenarioProvider.DefaultScenario(targetSkill.BusinessUnit);
+            var defaultScenario = _scenarioRepository.LoadDefaultScenario(targetSkill.BusinessUnit);
             var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
             var skillDayDictionary =
                 _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod,

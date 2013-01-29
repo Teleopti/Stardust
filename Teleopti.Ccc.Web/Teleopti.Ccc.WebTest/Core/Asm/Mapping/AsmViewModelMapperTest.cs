@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			scheduleFactory = new StubFactory();
-			timeZone = ((TimeZoneInfo) TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person()); 
 			target = new AsmViewModelMapper(projectionProvider, userTimeZone, loggedOnUser);

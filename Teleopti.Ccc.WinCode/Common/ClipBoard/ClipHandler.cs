@@ -150,48 +150,42 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
         /// <returns></returns>
         private int TopRow()
         {
-            if (_clipList.Count == 0)
+        	if (_clipList.Count == 0)
                 return 0;
-            else
-                return _clipList.Min(c => c.RowOffset);
+        	return _clipList.Min(c => c.RowOffset);
         }
 
-        /// <summary>
+    	/// <summary>
         /// get top left column in clip list
         /// </summary>
         /// <returns></returns>
         private int TopCol()
         {
-            if (_clipList.Count == 0)
+        	if (_clipList.Count == 0)
                 return 0;
-            else
-                return _clipList.Min(c => c.ColOffset);
+        	return _clipList.Min(c => c.ColOffset);
         }
 
-        /// <summary>
+    	/// <summary>
         /// get bottom row in cliplist
         /// </summary>
         /// <returns></returns>
         private int BottomRow()
         {
-            if (_clipList.Count == 0)
+        	if (_clipList.Count == 0)
                 return 0;
-            else
-                return _clipList.Max(c => c.RowOffset);
+        	return _clipList.Max(c => c.RowOffset);
         }
 
-        /// <summary>
+    	/// <summary>
         /// get bottom right column in clip list
         /// </summary>
         /// <returns></returns>
         private int BottomCol()
-        {
-            if (_clipList.Count == 0)
+    	{
+    		if (_clipList.Count == 0)
                 return 0;
-            else
-                return _clipList.Max(c => c.ColOffset);
-        }
-
-        
+    		return _clipList.Max(c => c.ColOffset);
+    	}
     }
 }

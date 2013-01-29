@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private MockRepository _mock;
         private IScheduleRepository _scheduleRepository;
         private IScheduleDictionarySaver _scheduleDictionarySaver;
-        private IScenarioProvider _scenarioProvider;
+        private IScenarioRepository _scenarioRepository;
         private IPersonRequestCheckAuthorization _authorization;
         private ISwapAndModifyService _swapAndModifyService;
         private IPersonRequestRepository _personRequestRepository;
@@ -49,14 +49,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _mock = new MockRepository();
             _scheduleRepository = _mock.StrictMock<IScheduleRepository>();
             _scheduleDictionarySaver = _mock.StrictMock<IScheduleDictionarySaver>();
-            _scenarioProvider = _mock.StrictMock<IScenarioProvider>();
+            _scenarioRepository = _mock.StrictMock<IScenarioRepository>();
             _authorization = _mock.StrictMock<IPersonRequestCheckAuthorization>();
             _swapAndModifyService = _mock.StrictMock<ISwapAndModifyService>();
             _personRequestRepository = _mock.StrictMock<IPersonRequestRepository>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
             _scheduleDictionaryModifiedCallback = _mock.StrictMock<IScheduleDictionaryModifiedCallback>();
-            _target = new ApproveRequestCommandHandler(_scheduleRepository, _scheduleDictionarySaver, _scenarioProvider,
+            _target = new ApproveRequestCommandHandler(_scheduleRepository, _scheduleDictionarySaver, _scenarioRepository,
                                                        _authorization, _swapAndModifyService, _personRequestRepository,
                                                        _unitOfWorkFactory, _messageBrokerEnablerFactory,
                                                        _scheduleDictionaryModifiedCallback);
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
-                Expect.Call(_scenarioProvider.DefaultScenario()).Return(_scenario).Repeat.Twice();
+                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario).Repeat.Twice();
                 Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                     new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), _period, null)).
                     IgnoreArguments().Return(dictionary);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(request.Request).Return(_shiftTradeRequest).Repeat.Times(3);
-                Expect.Call(_scenarioProvider.DefaultScenario()).Return(_scenario).Repeat.Twice();
+                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario).Repeat.Twice();
                 Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                     new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), _period, null)).
                     IgnoreArguments().Return(dictionary);
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
-                Expect.Call(_scenarioProvider.DefaultScenario()).Return(_scenario).Repeat.Twice();
+                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario).Repeat.Twice();
                 Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                     new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), _period, null)).
                     IgnoreArguments().Return(dictionary);

@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Export;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
         private IJobResultFeedback jobResultFeedback;
         private IImportForecastToSkillCommand importForecastToSkillCommand;
         private ISkillDayLoadHelper skillDayLoadHelper;
-        private IScenarioProvider scenarioProvider;
+        private IScenarioRepository scenarioRepository;
 
         [SetUp]
         public void Setup()
@@ -35,9 +36,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
             jobResultFeedback = mocks.DynamicMock<IJobResultFeedback>();
             importForecastToSkillCommand = mocks.DynamicMock<IImportForecastToSkillCommand>();
             skillDayLoadHelper = mocks.DynamicMock<ISkillDayLoadHelper>();
-            scenarioProvider = mocks.DynamicMock<IScenarioProvider>();
+            scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
 
-            target = new MultisiteForecastToSkillCommand(importForecastToSkillCommand, skillDayLoadHelper, scenarioProvider, jobResultFeedback);
+            target = new MultisiteForecastToSkillCommand(importForecastToSkillCommand, skillDayLoadHelper, scenarioRepository, jobResultFeedback);
         }
 
         [Test]
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 
             using (mocks.Record())
             {
-                Expect.Call(scenarioProvider.DefaultScenario(multisiteSkill.BusinessUnit)).Return(sourceScenario);
+                Expect.Call(scenarioRepository.LoadDefaultScenario(multisiteSkill.BusinessUnit)).Return(sourceScenario);
                 Expect.Call(skillDayLoadHelper.LoadSchedulerSkillDays(selection.Period, new[] {multisiteSkill},
                                                                       sourceScenario)).Return(
                                                                           new Dictionary<ISkill, IList<ISkillDay>> { { childSkill, new [] { childSkillDay } } });
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 
 			using (mocks.Record())
 			{
-				Expect.Call(scenarioProvider.DefaultScenario(multisiteSkill.BusinessUnit)).Return(sourceScenario);
+				Expect.Call(scenarioRepository.LoadDefaultScenario(multisiteSkill.BusinessUnit)).Return(sourceScenario);
 				Expect.Call(skillDayLoadHelper.LoadSchedulerSkillDays(selection.Period, new[] { multisiteSkill },
 																	  sourceScenario)).Return(
 																		  new Dictionary<ISkill, IList<ISkillDay>> { { childSkill, new[] { childSkillDay } } });

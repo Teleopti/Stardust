@@ -36,6 +36,11 @@ namespace Teleopti.Ccc.Win.Intraday
 					_gridrowInChartSetting.LineInChartEnabledChanged -= gridrowInChartSetting_LineInChartEnabledChanged;
 					_gridrowInChartSetting.LineInChartSettingsChanged -= gridlinesInChartSettings_LineInChartSettingsChanged;
 				}
+				if (teleoptiToolStripGalleryViews != null)
+				{
+					teleoptiToolStripGalleryViews.ItemClicked -= teleoptiToolStripGalleryViews_ItemClicked;
+					teleoptiToolStripGalleryViews.GalleryItemClicked -= teleoptiToolStripGalleryViews_GalleryItemClicked;
+				}
             }
             base.Dispose(disposing);
         }
