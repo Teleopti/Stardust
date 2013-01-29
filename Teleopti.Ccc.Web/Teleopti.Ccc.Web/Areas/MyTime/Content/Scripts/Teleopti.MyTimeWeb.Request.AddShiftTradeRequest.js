@@ -249,7 +249,7 @@ ko.bindingHandlers.datepicker = {
 	},
 	update: function (element, valueAccessor) {
 		var value = ko.utils.unwrapObservable(valueAccessor()),
-            current = $(element).datepicker("getDate");
+				current = $(element).datepicker("getDate");
 		if (value - current !== 0) {
 			$(element).datepicker("setDate", new Date(value));
 		}
