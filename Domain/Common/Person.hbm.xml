@@ -249,6 +249,12 @@
                                 :StartDateTime)
     ]]>
   </query>
+	<query name="FindPossibleShiftTrades">
+		<![CDATA[
+		select p from Person p
+		where p<>:loggedOnUser
+		]]>
+	</query>
   <database-object>
     <create>SELECT 1</create>
     <drop>

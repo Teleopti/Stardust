@@ -240,6 +240,7 @@
     <Compile Include="Repositories\Audit\RevisionListenerTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleHistoryReportTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleHistoryRepositoryTest.cs" />
+    <Compile Include="Repositories\PersonRepositoryPossibleShiftTradeTest.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelRepositoryTest.cs" />
     <Compile Include="Repositories\LicenseStatusRepositoryTest.cs" />
     <Compile Include="Repositories\DenormalizationQueueRepositoryTest.cs" />
