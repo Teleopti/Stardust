@@ -2344,7 +2344,7 @@ veckodag</value>
     <comment>Grouping activity</comment>
   </data>
   <data name="IsContractTime" xml:space="preserve">
-    <value>Kontraktstid</value>
+    <value>Är kontraktstid</value>
     <comment>Is contract time</comment>
   </data>
   <data name="Message" xml:space="preserve">
@@ -2388,7 +2388,7 @@ veckodag</value>
     <comment>Request date</comment>
   </data>
   <data name="RequestStatus" xml:space="preserve">
-    <value>Förfrågningar</value>
+    <value>Status</value>
     <comment>Request status</comment>
   </data>
   <data name="RolesAvailable" xml:space="preserve">
@@ -4562,11 +4562,11 @@ standard</value>
     <comment>Part-Time Percentage name part time percentage combo</comment>
   </data>
   <data name="PleaseSelectAnEmploymentType" xml:space="preserve">
-    <value>Välj en anställningstyp</value>
+    <value>Välj en anställningsform</value>
     <comment>Please select an employment type.</comment>
   </data>
   <data name="SelectEmploymentType" xml:space="preserve">
-    <value>Välj anställningstyp</value>
+    <value>Välj anställningsform</value>
     <comment>Select Employement type contract combo</comment>
   </data>
   <data name="TheProvidedStringCouldNotBeFormattedToAValidTime" xml:space="preserve">
@@ -10814,5 +10814,11 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   </data>
   <data name="NotReadyTime" xml:space="preserve">
     <value>Paustid</value>
+  </data>
+  <data name="MySchedule" xml:space="preserve">
+    <value>Mitt schema</value>
+  </data>
+  <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
+    <value>Inga agenter är tillgängliga för skiftbyte</value>
   </data>
 </root>

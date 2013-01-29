@@ -1,0 +1,39 @@
+﻿using System;
+using NUnit.Framework;
+using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.WebTest.Core.Requests
+{
+	[TestFixture]
+	public class RespondToShiftTradeTest
+	{
+		[Test]
+		public void OkByMe_WhenCalled_ShouldLoadTheShiftTradeFromTheRepositoryAndAcceptIt()
+		{
+			//setup
+			var shiftTradeId = Guid.NewGuid();
+			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var loggedOnPerson = MockRepository.GenerateStub<IPerson>();
+			var personrequest = MockRepository.GenerateMock<IPersonRequest>();
+			var shiftTrade = MockRepository.GenerateMock<IShiftTradeRequest>();
+			var shiftTradeRequestCheckSum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
+			var personRequextCheckAuthorization = MockRepository.GenerateMock<IPersonRequestCheckAuthorization>();
+			var target = new RespondToShiftTrade(personRequestRepository,shiftTradeRequestCheckSum,personRequextCheckAuthorization,loggedOnUser);
+
+			personRequestRepository.Expect(p => p.Find(shiftTradeId)).Return(personrequest);
+			personrequest.Expect(p => p.Request).Return(shiftTrade);
+			loggedOnUser.Expect(l => l.CurrentUser()).Return(loggedOnPerson);
+
+			//execute
+			target.OkByMe(shiftTradeId);
+
+			//verify expectation:
+			shiftTrade.AssertWasCalled(s => s.Accept(loggedOnPerson, shiftTradeRequestCheckSum, personRequextCheckAuthorization));
+		}
+
+	}
+}

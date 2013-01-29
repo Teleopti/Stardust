@@ -18,17 +18,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly ITextRequestPersister _textRequestPersister;
 		private readonly IAbsenceRequestPersister _absenceRequestPersister;
-		private readonly IShiftTradeResponseService _shiftTradeResponseService;
+		private readonly IRespondToShiftTrade _respondToShiftTrade;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
 								ITextRequestPersister textRequestPersister, 
 								IAbsenceRequestPersister absenceRequestPersister, 
-								IShiftTradeResponseService shiftTradeResponseService)
+								IRespondToShiftTrade respondToShiftTrade)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;
 			_absenceRequestPersister = absenceRequestPersister;
-			_shiftTradeResponseService = shiftTradeResponseService;
+			_respondToShiftTrade = respondToShiftTrade;
 		}
 
 		[EnsureInPortal]
@@ -69,14 +69,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpPostOrPut]
 		public void ApproveShiftTrade(Guid id)
 		{
-			_shiftTradeResponseService.OkByMe(id);
+			_respondToShiftTrade.OkByMe(id);
 		}
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
 		public void RejectShiftTrade(Guid id)
 		{
-			_shiftTradeResponseService.Reject(id);
+			_respondToShiftTrade.Reject(id);
 		}
 
 		[UnitOfWorkAction]

@@ -20,9 +20,6 @@ GO
 --				2010-11-01 #11055 Refact of mart.fact_schedule_deviation, measures in seconds instead of minutes. KJ
 --				2012-10-08 #20924 Fix Contract Deviation
 --
---ToDo: --More robust calc of Adherance 
---		ALTER TABLE mart.fact_schedule_deviation ADD
---			scheduled_time_s int NULL
 -- =============================================
 
 --exec mart.etl_fact_schedule_deviation_load '2009-02-01 23:00:00','2009-02-03 23:00:00','928DD0BC-BF40-412E-B970-9B5E015AADEA' --Demo
@@ -38,13 +35,18 @@ DECLARE @max_date_id int
 DECLARE @min_date_id int
 DECLARE @business_unit_id int
 DECLARE @scenario_id int
+DECLARE @date_min smalldatetime = '1900-01-01'
+DECLARE @intervals_outside_shift int
+declare @interval_length_minutes int 
 
 CREATE TABLE #fact_schedule_deviation(
 	date_id int,
+	shift_startdate_id int ,
 	interval_id smallint,
+	shift_startinterval_id smallint, 
+	shift_endinterval_id smallint,
 	person_id int,
 	scheduled_ready_time_s int default 0,
---	scheduled_time_s int default 0,
 	ready_time_s int default 0,
 	is_logged_in int default 0, 
 	contract_time_s int default 0,
@@ -53,13 +55,21 @@ CREATE TABLE #fact_schedule_deviation(
 
 CREATE TABLE #fact_schedule (
 	[schedule_date_id] [int] NOT NULL,
+	[shift_startdate_id] [int] NOT NULL,
+	[shift_startinterval_id] smallint, 
+	[shift_endtime] smalldatetime,
 	[interval_id] [smallint] NOT NULL,
 	[person_id] [int] NOT NULL,
 	[scheduled_ready_time_m] [int] NULL,
 	[scheduled_contract_time_m] [int] NULL,
+	[scheduled_time_m][int] NULL,
 	[business_unit_id] [int] NULL
 )
 
+--get the number of intervals outside shift to consider for adherence calc
+SELECT @interval_length_minutes = 1440/COUNT(*) from mart.dim_interval 
+
+SELECT @intervals_outside_shift = value/@interval_length_minutes FROM mart.sys_configuration WHERE [KEY]='AdherenceMinutesOutsideShift'  
 
 /*Remove timestamp from datetime*/
 SET	@start_date = convert(smalldatetime,floor(convert(decimal(18,8),@start_date )))
@@ -95,10 +105,13 @@ WHERE date_id between @start_date_id AND @end_date_id
 INSERT INTO #fact_schedule
 SELECT
 	 fs.schedule_date_id, 
+	 fs.shift_startdate_id,
+	 fs.shift_startinterval_id,
+	 fs.shift_endtime,
 	 fs.interval_id,
 	 fs.person_id, 
 	sum(isnull(fs.scheduled_ready_time_m,0)) 'scheduled_ready_time_m',
---	sum(isnull(fs.scheduled_time_m,0))'scheduled_time_m',
+	sum(isnull(fs.scheduled_time_m,0))'scheduled_time_m',
 	sum(isnull(fs.scheduled_contract_time_m,0))'scheduled_contract_time_m',
 	fs.business_unit_id
 FROM 
@@ -108,6 +121,9 @@ WHERE fs.schedule_date_id BETWEEN @start_date_id AND @end_date_id
 	AND fs.scenario_id = @scenario_id
 GROUP BY 
 	fs.schedule_date_id, 
+	fs.shift_startdate_id,
+	fs.shift_startinterval_id,
+	fs.shift_endtime,
 	fs.interval_id,
 	fs.person_id,
 	fs.business_unit_id
@@ -156,21 +172,25 @@ WHERE
 INSERT INTO #fact_schedule_deviation
 	(
 	date_id, 
+	shift_startdate_id,
+	shift_startinterval_id,
+	shift_endinterval_id,
 	interval_id,
 	person_id,
 	is_logged_in, 
 	scheduled_ready_time_s,
---	scheduled_time_s,
 	contract_time_s,
 	business_unit_id
 	)
 SELECT
 	date_id					= fs.schedule_date_id, 
+	shift_startdate_id		= fs.shift_startdate_id,
+	shift_startinterval_id	= fs.shift_startinterval_id,
+	shift_endinterval_id	= di.interval_id,
 	interval_id				= fs.interval_id,
 	person_id				= fs.person_id,
 	is_logged_in			= 0, --Mark schedule rows as Not loggged in 
 	scheduled_ready_time_s	= fs.scheduled_ready_time_m*60,
---	scheduled_time_s		= fs.scheduled_time_m*60,
 	contract_time_s			= fs.scheduled_contract_time_m*60,
 	business_unit_id		= fs.business_unit_id
 FROM 
@@ -185,18 +205,56 @@ ON
 				OR (fs.schedule_date_id = p.valid_from_date_id AND fs.interval_id >= p.valid_from_interval_id)
 				OR (fs.schedule_date_id = p.valid_to_date_id AND fs.interval_id <= p.valid_to_interval_id)
 		)
+INNER JOIN 
+	mart.dim_interval di
+ON 
+	dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) = di.interval_end
 WHERE
 	fs.schedule_date_id BETWEEN @start_date_id AND @end_date_id
 	AND fs.business_unit_id = @business_unit_id
+	
+	
+--UPDATE ALL ROWS WITH KNOWN SHIFT_STARTDATE_ID
+UPDATE stat
+SET shift_startdate_id = shifts.shift_startdate_id, shift_startinterval_id=shifts.shift_startinterval_id
+FROM #fact_schedule_deviation shifts
+INNER JOIN #fact_schedule_deviation stat
+ON stat.date_id=shifts.date_id AND stat.interval_id=shifts.interval_id AND stat.person_id=shifts.person_id
+
+--ALL ROWS BEFORE SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
+UPDATE stat
+SET shift_startdate_id = shifts.shift_startdate_id, shift_startinterval_id=shifts.shift_startinterval_id
+FROM #fact_schedule_deviation shifts
+INNER JOIN #fact_schedule_deviation stat
+ON stat.date_id=shifts.date_id AND stat.person_id=shifts.person_id
+WHERE stat.shift_startdate_id IS NULL 
+AND stat.interval_id < shifts.shift_startinterval_id 
+AND stat.interval_id >= shifts.shift_startinterval_id - @intervals_outside_shift-- ONLY 2 Hours back
+AND stat.date_id <= shifts.shift_startdate_id
+
+--ALL ROWS AFTER SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
+UPDATE stat
+SET shift_startdate_id = shifts.shift_startdate_id,shift_startinterval_id=shifts.shift_startinterval_id
+FROM #fact_schedule_deviation shifts
+INNER JOIN #fact_schedule_deviation stat
+ON stat.date_id=shifts.date_id AND stat.person_id=shifts.person_id
+WHERE stat.shift_startdate_id IS NULL 
+AND stat.interval_id > shifts.shift_endinterval_id
+AND stat.interval_id <= shifts.shift_endinterval_id + @intervals_outside_shift -- ONLY 2 Hours ahead
+AND stat.date_id >= shifts.shift_startdate_id
+
+DELETE FROM #fact_schedule_deviation WHERE shift_startdate_id IS NULL
+
 
 /* Insert of new data */
 INSERT INTO mart.fact_schedule_deviation
 	(
 	date_id, 
+	shift_startdate_id,
+	shift_startinterval_id,
 	interval_id,
 	person_id, 
 	scheduled_ready_time_s,
---	scheduled_time_s,
 	ready_time_s,
 	is_logged_in,
 	contract_time_s,
@@ -207,10 +265,11 @@ INSERT INTO mart.fact_schedule_deviation
 	)
 SELECT
 	date_id					= date_id, 
+	shift_startdate_id		= MAX(shift_startdate_id),
+	shift_startinterval_id	= max(shift_startinterval_id),
 	interval_id				= interval_id,
 	person_id				= person_id, 
 	scheduled_ready_time_s	= sum(isnull(scheduled_ready_time_s,0)),
---	scheduled_time_s		= sum(isnull(scheduled_time_s,0)),
 	ready_time_s			= sum(isnull(ready_time_s,0)),
 	is_logged_in			= sum(is_logged_in), --Calculated bit value
 	contract_time_s			= sum(isnull(contract_time_s,0)),
@@ -289,4 +348,41 @@ SET 	deviation_contract_s = ABS(
 	)
 )
 WHERE mart.fact_schedule_deviation.date_id BETWEEN @start_date_id AND @end_date_id
+GO
+--================================
+--If empty try re-load
+--================================
+IF (select COUNT(*) from mart.fact_schedule_deviation) = 0
+	PRINT 'Adherance data will now we re-loaded. This will take some time (DBManager time out = 15 min). Please do not close this Windows!'
+GO
+
+IF (select COUNT(*) from mart.fact_schedule_deviation) = 0
+BEGIN
+	--reload data
+	DECLARE @min_date smalldatetime
+	DECLARE @max_date smalldatetime
+	SET @min_date = (SELECT date_date from mart.dim_date where date_id in (Select MIN(schedule_date_id) from mart.fact_schedule))
+	SET @max_date = (SELECT date_date from mart.dim_date where date_id in (Select MAX(schedule_date_id) from mart.fact_schedule))
+
+	DECLARE @id uniqueidentifier
+	DECLARE @business_unit_code uniqueidentifier 
+
+	DECLARE business_unit_Cursor CURSOR FOR
+		SELECT business_unit_code
+		FROM mart.dim_business_unit
+		WHERE  business_unit_id<>-1
+		ORDER BY business_unit_id
+	OPEN business_unit_Cursor;
+	FETCH NEXT FROM business_unit_Cursor
+	INTO @business_unit_code
+	WHILE @@FETCH_STATUS = 0
+	   BEGIN 
+			exec mart.etl_fact_schedule_deviation_load @min_date,@max_date,@business_unit_code
+			FETCH NEXT FROM business_unit_Cursor
+			INTO @business_unit_code
+	   END;
+	CLOSE business_unit_Cursor;
+	DEALLOCATE business_unit_Cursor;
+END
+
 GO
