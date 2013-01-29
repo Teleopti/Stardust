@@ -14,7 +14,7 @@
 			// that the tabs aren't changed on click, and any custom event name can be
 			// specified. Note that if you define a callback for the 'select' event, it
 			// will be executed for the selected tab whenever the hash changes.
-			element.tabs({ event: 'change' });
+			element.tabs({ collapsible: true, event: 'change', active: false });
 
 			var tabs = element.find('ul.ui-tabs-nav a');
 			tabs.click(self.options.click);
@@ -34,13 +34,14 @@
 
 			// if no tab was found, select no tab
 			if (tab.length == 0) {
-				this._element.tabs("select", -1);
+				this._element.tabs("option", "active", false);
 				// seems to be the only way to "unselect" the selected tab
-				this._element.find(".ui-tabs-selected")
+				this._element.find(".ui-tabs-active")
 					.removeClass("ui-state-active")
-					.removeClass("ui-tabs-selected")
+					.removeClass("ui-tabs-active")
 					;
 			} else {
+				this._element.tabs("option", "active", false);
 				tab.triggerHandler('change');
 			}
 
