@@ -76,14 +76,22 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
             set { _dayAdherence = value; }
         }
 
-		[DataMember]
+		/// <summary>
+		/// Gets or sets the calendar date.
+		/// </summary>
+		/// <value>The calendar date.</value>
+		[DataMember(Order = 1, IsRequired = false)]
 		public DateTime CalendarDate
 		{
 			get { return _calendarDate; }
 			set { _calendarDate = value; }
 		}
 
-		[DataMember]
+		/// <summary>
+		/// Gets or sets the shift start date, This can be different from calendar date in case if the shift is over midnight.
+		/// </summary>
+		/// <value>The shift start date.</value>
+		[DataMember(Order = 1, IsRequired = false)]
 		public DateTime ShiftBelongsToDate
 		{
 			get { return _shiftBelongsToDate; }

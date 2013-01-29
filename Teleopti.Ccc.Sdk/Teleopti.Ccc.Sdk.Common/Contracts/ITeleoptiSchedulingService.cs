@@ -227,19 +227,6 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
                                  PersonDto agentPersonDto, int languageId);
 
 		/// <summary>
-		/// Gets the adherence data for the given day and person.
-		/// </summary>
-		/// <param name="dateTime">The date.</param>
-		/// <param name="timeZoneId">The time zone.</param>
-		/// <param name="personDto">The SDK user.</param>
-		/// <param name="agentPersonDto">The person.</param>
-		/// <param name="languageId">The language id. (LCID)</param>
-		/// <returns></returns>
-		[OperationContract]
-		AdherenceDto GetAdherenceDataBasedOnShiftDate(DateTime dateTime, string timeZoneId, PersonDto personDto,
-								 PersonDto agentPersonDto, int languageId);
-
-        /// <summary>
         /// Gets the queue details between the start and end date for the given person.
         /// </summary>
         /// <param name="startDate">The start date.</param>

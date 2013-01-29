@@ -831,67 +831,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return AdherenceReportSetting.MapToMatrix(adherenceReportSetting.CalculationMethod);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToInt32(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToDateTime(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-		public AdherenceDto GetAdherenceDataBasedOnShiftDate(DateTime dateTime, string timeZoneId, PersonDto personDto,
-										PersonDto agentPersonDto, int languageId)
-		{
-			
-			AdherenceDto adherenceDto = new AdherenceDto();
-			if (!personDto.Id.HasValue || !agentPersonDto.Id.HasValue)
-				return adherenceDto;
-
-			IRepositoryFactory repositoryFactory = new RepositoryFactory();
-			IStatisticRepository repository = repositoryFactory.CreateStatisticRepository();
-			int adherenceCalculationId = GetMatrixReportSetting();
-
-			IList returnValues = repository.LoadAdherenceData(dateTime, timeZoneId, personDto.Id.Value, agentPersonDto.Id.Value, languageId, adherenceCalculationId);
-			if (returnValues.Count == 0)
-				return adherenceDto;
-			foreach (object[] data in returnValues)
-			{
-				string temp = data[2].ToString();
-				int startHour = Convert.ToInt32(temp.Substring(0, 2));
-				int startMinutes = Convert.ToInt32(temp.Substring(3, 2));
-				int endHour = Convert.ToInt32(temp.Substring(6, 2));
-				int endMinutes = Convert.ToInt32(temp.Substring(9, 2));
-				DateTime calendarDateTime = Convert.ToDateTime(data[0].ToString());
-				DateTime shiftBelongsToDateTime = Convert.ToDateTime(data[29].ToString());
-				int day = 0;
-
-				if (calendarDateTime != shiftBelongsToDateTime)
-					day = 1;
-
-				TimeSpan startTime = new TimeSpan(day, startHour, startMinutes, 0);
-				TimeSpan endTime = new TimeSpan(day, endHour, endMinutes, 0);
-				
-				decimal deviation;
-				decimal dayAdherence;
-				decimal readyTime;
-				decimal adherence;
-				if (data[16] == null)
-					deviation = 0;
-				else
-					deviation = (decimal)data[16];
-				if (data[13] == null)
-					dayAdherence = 0;
-				else
-					dayAdherence = (decimal)data[13];
-				if (data[17] == null)
-					readyTime = 0;
-				else
-					readyTime = (decimal)data[17];
-				if (data[12] == null)
-					adherence = 0;
-				else
-					adherence = (decimal)data[12];
-				AdherenceDataDto adherenceDataDto = new AdherenceDataDto(startTime.Ticks, endTime.Ticks, readyTime, deviation, adherence, calendarDateTime, shiftBelongsToDateTime);
-				adherenceDataDto.DayAdherence = dayAdherence;
-				adherenceDto.AdherenceDataDtos.Add(adherenceDataDto);
-			}
-			return adherenceDto;
-		}
-
-
 		[SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToInt32(System.String)")]
 		public AdherenceDto GetAdherenceData(DateTime dateTime, string timeZoneId, PersonDto personDto,
 										PersonDto agentPersonDto, int languageId)
