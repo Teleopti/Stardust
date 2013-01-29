@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Grouping;
@@ -152,6 +153,7 @@ namespace Teleopti.Ccc.Win.Optimization
         {
 			new ExtraPreferencesPanelUseBlockScheduling { Use = checkBoxBlock.Checked }.PublishEvent("ExtraPreferencesPanelUseBlockScheduling", _eventAggregator);
         	checkBoxTeams.Enabled = !checkBoxBlock.Checked;
+            checkBoxLevellingPerBlockScheduling.Enabled = !checkBoxBlock.Checked;
             setRadioButtonsStatus();
         }
 
@@ -175,6 +177,7 @@ namespace Teleopti.Ccc.Win.Optimization
         private void checkBoxTeams_CheckedChanged(object sender, System.EventArgs e)
         {
         	checkBoxBlock.Enabled = !checkBoxTeams.Checked;
+            checkBoxLevellingPerBlockScheduling.Enabled = !checkBoxTeams.Checked;
             setSubItemsOnTeamOptimizationStatus();
         }
 
@@ -199,6 +202,36 @@ namespace Teleopti.Ccc.Win.Optimization
         private void checkBoxCommonActivity_CheckedChanged(object sender, System.EventArgs e)
         {
             comboBoxActivity.Enabled = checkBoxCommonActivity.Checked;
+        }
+
+        private void checkBoxLevellingPerBlockScheduling_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBoxTeams.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
+            checkBoxBlock.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
+            radioButtonSchedulePeriodAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            radioButtonBetweenDaysOffAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            if (checkBoxLevellingPerBlockScheduling.Checked)
+            {
+                radioButtonSchedulePeriodAdvScheduling.Checked = true;
+                radioButtonBetweenDaysOffAdvScheduling.Checked = false;
+                checkBoxTeams.Checked = false ;
+                checkBoxBlock.Checked = false;
+            }
+            else
+            {
+                radioButtonSchedulePeriodAdvScheduling.Checked = false;
+                radioButtonBetweenDaysOffAdvScheduling.Checked = false;
+            }
+            //radioButtonSchedulePeriodAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            //radioButtonBetweenDaysOffAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            //checkBoxUseGroupScheduling.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
+            //checkBoxUseBlockScheduling.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
+            ////checkBoxUseShiftCategory.Enabled = !checkBoxUseBlockScheduling.Checked;
+            ////comboBoxAdvShiftCategory.Enabled = !checkBoxUseBlockScheduling.Checked;
+            ////radioButtonSchedulePeriod.Enabled = checkBoxUseBlockScheduling.Checked;
+            ////radioButtonBetweenDayOff.Enabled = checkBoxUseBlockScheduling.Checked;
+            ////checkBoxUseGroupScheduling.Enabled = !checkBoxUseBlockScheduling.Checked;
+
         }
     }
     public class ExtraPreferencesPanelUseBlockScheduling

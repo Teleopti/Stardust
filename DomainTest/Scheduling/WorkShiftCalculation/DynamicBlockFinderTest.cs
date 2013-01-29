@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         [Test]
         public void FindSkillDayFromBlockUsingPeriod()
         {
-            _schedulingOptions.UsePeriodAsBlock = true;
+            _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod ;
             _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
             var date = new DateOnly(  DateTime.UtcNow );
             
@@ -53,9 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         [Test]
         public void FindSkillDayFromBlockUsingTwoDaysOff()
         {
-            _schedulingOptions.UseCalenderWeekAsBlock = false;
-            _schedulingOptions.UsePeriodAsBlock = false;
-            _schedulingOptions.UseTwoDaysOffAsBlock = true;
+            _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff ;
             _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
             var date = new DateOnly(DateTime.UtcNow);
             
@@ -88,9 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         [Test]
         public void FindSkillDayFromBlockUsingCalenderWeek()
         {
-            _schedulingOptions.UseCalenderWeekAsBlock  = true;
-            _schedulingOptions.UsePeriodAsBlock = false;
-            _schedulingOptions.UseTwoDaysOffAsBlock = false;
+            _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.Weeks ;
             _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
             var startDate = new  DateOnly( new DateTime(2012, 11, 1, 0, 0, 0, DateTimeKind.Utc));
 

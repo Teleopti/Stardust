@@ -28,11 +28,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             var selectedPeriod = SchedulingResultStateHolder.Schedules.Period.LoadedPeriod();
             var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
             var retList = new List<DateOnly>();
-            if(_schedulingOptions.UsePeriodAsBlock )
+            if(_schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.SchedulePeriod  )
             {
                 retList = selectedPeriod.ToDateOnlyPeriod(timeZone).DayCollection().ToList() ;
             }
-            else if (_schedulingOptions.UseCalenderWeekAsBlock)
+            else if (_schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.Weeks )
             {
                 var scheduleList = selectedPeriod.ToDateOnlyPeriod(timeZone).DayCollection();
                 var dateOnlyList = new List<DateOnly >();
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
                 retList = dateOnlyList.ToList();
             }
-            else if(_schedulingOptions.UseTwoDaysOffAsBlock )
+            else if (_schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.BetweenDayOff)
             {
                 var dateOnlyList =
                     selectedPeriod.ToDateOnlyPeriod(timeZone).DayCollection().Where(day => day >= startDateOnly)
