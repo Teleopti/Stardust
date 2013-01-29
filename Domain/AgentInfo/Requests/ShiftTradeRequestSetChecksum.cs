@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -7,18 +8,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
     public class ShiftTradeRequestSetChecksum : IShiftTradeRequestSetChecksum
     {
-        private readonly IScenario _defaultScenario;
-        private readonly IScheduleRepository _scheduleRepository;
+	    private readonly IScenarioRepository _scenarioRepository;
+	    private readonly IScheduleRepository _scheduleRepository;
         private IScheduleDictionary _scheduleDictionary;
 
-        public ShiftTradeRequestSetChecksum(IScenario defaultScenario, IScheduleRepository scheduleRepository)
+        public ShiftTradeRequestSetChecksum(IScenarioRepository scenarioRepository, IScheduleRepository scheduleRepository)
         {
-            _defaultScenario = defaultScenario;
-            _scheduleRepository = scheduleRepository;
+	        _scenarioRepository = scenarioRepository;
+	        _scheduleRepository = scheduleRepository;
         }
 
         public void SetChecksum(IRequest request)
         {
+			  var defaultScenario = _scenarioRepository.LoadDefaultScenario();
             IShiftTradeRequest shiftTradeRequest = request as IShiftTradeRequest;
             if (shiftTradeRequest == null) return;
 
@@ -27,7 +29,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             _scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(shiftTradeRequestPersonExtractor.Persons), new ScheduleDictionaryLoadOptions(false,false),
                                                           shiftTradeRequest.Period.ChangeEndTime(
                                                               TimeSpan.FromHours(25)).ChangeStartTime(TimeSpan.FromHours(-25)),
-                                                          _defaultScenario);
+                                                          defaultScenario);
             SetChecksumToShiftTradeRequest(shiftTradeRequest);
         }
 
