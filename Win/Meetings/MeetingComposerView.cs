@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			SaveValidMeeting();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
 		private void SaveValidMeeting()
 		{
 			var start = String.Empty;
@@ -117,15 +117,33 @@ namespace Teleopti.Ccc.Win.Meetings
 			TimeSpan endTime;
 			try
 			{
-				if (start.Contains("M"))
+				var first = start.Substring(0, 1);
+				var maybeNotAnInt = -1;
+				try
 				{
-					startTime = DateTime.ParseExact(start, "h:mm tt", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
-					endTime = DateTime.ParseExact(end, "h:mm tt", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
+					maybeNotAnInt = Convert.ToInt16(first, System.Globalization.CultureInfo.CurrentCulture);
+				}
+				catch (Exception)
+				{ }
+
+				if (maybeNotAnInt == -1)
+				{
+					startTime = DateTime.ParseExact(start, "tt h:mm", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
+					endTime = DateTime.ParseExact(end, "tt h:mm", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
 				}
 				else
 				{
-					startTime = TimeSpan.Parse(start, System.Globalization.CultureInfo.CurrentCulture);
-					endTime = TimeSpan.Parse(end, System.Globalization.CultureInfo.CurrentCulture);
+					if (start.Contains("M"))
+					{
+						startTime = DateTime.ParseExact(start, "h:mm tt", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
+						endTime = DateTime.ParseExact(end, "h:mm tt", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
+
+					}
+					else
+					{
+						startTime = TimeSpan.Parse(start, System.Globalization.CultureInfo.CurrentCulture);
+						endTime = TimeSpan.Parse(end, System.Globalization.CultureInfo.CurrentCulture);
+					}
 				}
 			}
 			catch (FormatException error)
