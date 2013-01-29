@@ -1,6 +1,12 @@
 @echo off
+SET action=delayed-auto
 ECHO Starting all local Teleopti CCC 7 services and MsDtc
-ECHO Start mode will be set to "Automatic"
+::WinXp and 2003 can't handle start mode: "delayed-auto"
+cscript OsMajorVersionGet.vbs //NoLogo
+SET /a OsMajorVersion = %ERRORLEVEL%
+IF %OsMajorVersion% LEQ 5 SET action=auto
+
+ECHO Start mode will be set to "%action%"
 PING -n 4 127.0.0.1>nul
 
 IF "%ROOTDIR%"=="" SET ROOTDIR=%~dp0
@@ -59,7 +65,7 @@ exit /b 0
 
 :processServiceList
 for /f "tokens=1* delims=;" %%a in ("%serviceList%") do (
-call :SetSvcModeAndAction "%%a" Start delayed-auto
+call :SetSvcModeAndAction "%%a" Start %action%
 set serviceList=%%b
 )
 if not "%serviceList%" == "" goto :processServiceList
