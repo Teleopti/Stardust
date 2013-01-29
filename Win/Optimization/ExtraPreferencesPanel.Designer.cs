@@ -43,8 +43,8 @@
             this.checkBoxCommonStart = new System.Windows.Forms.CheckBox();
             this.checkBoxCommonCategory = new System.Windows.Forms.CheckBox();
             this.comboBoxGroupPageOnTeams = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-            this.radioButtonSchedulePeriodAdvScheduling = new System.Windows.Forms.RadioButton();
-            this.radioButtonBetweenDaysOffAdvScheduling = new System.Windows.Forms.RadioButton();
+            this.radioButtonSchedulePeriodAdvOptimization = new System.Windows.Forms.RadioButton();
+            this.radioButtonBetweenDaysOffAdvOptimization = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
@@ -98,8 +98,8 @@
             this.tableLayoutPanel5.Controls.Add(this.checkBoxCommonStart, 1, 7);
             this.tableLayoutPanel5.Controls.Add(this.checkBoxCommonCategory, 1, 6);
             this.tableLayoutPanel5.Controls.Add(this.comboBoxGroupPageOnTeams, 2, 5);
-            this.tableLayoutPanel5.Controls.Add(this.radioButtonSchedulePeriodAdvScheduling, 1, 4);
-            this.tableLayoutPanel5.Controls.Add(this.radioButtonBetweenDaysOffAdvScheduling, 2, 4);
+            this.tableLayoutPanel5.Controls.Add(this.radioButtonSchedulePeriodAdvOptimization, 1, 4);
+            this.tableLayoutPanel5.Controls.Add(this.radioButtonBetweenDaysOffAdvOptimization, 2, 4);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -252,27 +252,27 @@
             this.comboBoxGroupPageOnTeams.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGroupPageOnTeams.TabIndex = 5;
             // 
-            // radioButtonSchedulePeriodAdvScheduling
+            // radioButtonSchedulePeriodAdvOptimization
             // 
-            this.radioButtonSchedulePeriodAdvScheduling.AutoSize = true;
-            this.radioButtonSchedulePeriodAdvScheduling.Location = new System.Drawing.Point(33, 107);
-            this.radioButtonSchedulePeriodAdvScheduling.Name = "radioButtonSchedulePeriodAdvScheduling";
-            this.radioButtonSchedulePeriodAdvScheduling.Size = new System.Drawing.Size(110, 17);
-            this.radioButtonSchedulePeriodAdvScheduling.TabIndex = 43;
-            this.radioButtonSchedulePeriodAdvScheduling.TabStop = true;
-            this.radioButtonSchedulePeriodAdvScheduling.Text = "xxSchedulePeriod";
-            this.radioButtonSchedulePeriodAdvScheduling.UseVisualStyleBackColor = true;
+            this.radioButtonSchedulePeriodAdvOptimization.AutoSize = true;
+            this.radioButtonSchedulePeriodAdvOptimization.Location = new System.Drawing.Point(33, 107);
+            this.radioButtonSchedulePeriodAdvOptimization.Name = "radioButtonSchedulePeriodAdvOptimization";
+            this.radioButtonSchedulePeriodAdvOptimization.Size = new System.Drawing.Size(110, 17);
+            this.radioButtonSchedulePeriodAdvOptimization.TabIndex = 43;
+            this.radioButtonSchedulePeriodAdvOptimization.TabStop = true;
+            this.radioButtonSchedulePeriodAdvOptimization.Text = "xxSchedulePeriod";
+            this.radioButtonSchedulePeriodAdvOptimization.UseVisualStyleBackColor = true;
             // 
-            // radioButtonBetweenDaysOffAdvScheduling
+            // radioButtonBetweenDaysOffAdvOptimization
             // 
-            this.radioButtonBetweenDaysOffAdvScheduling.AutoSize = true;
-            this.radioButtonBetweenDaysOffAdvScheduling.Location = new System.Drawing.Point(216, 107);
-            this.radioButtonBetweenDaysOffAdvScheduling.Name = "radioButtonBetweenDaysOffAdvScheduling";
-            this.radioButtonBetweenDaysOffAdvScheduling.Size = new System.Drawing.Size(110, 17);
-            this.radioButtonBetweenDaysOffAdvScheduling.TabIndex = 44;
-            this.radioButtonBetweenDaysOffAdvScheduling.TabStop = true;
-            this.radioButtonBetweenDaysOffAdvScheduling.Text = "xxBetweenDayOff";
-            this.radioButtonBetweenDaysOffAdvScheduling.UseVisualStyleBackColor = true;
+            this.radioButtonBetweenDaysOffAdvOptimization.AutoSize = true;
+            this.radioButtonBetweenDaysOffAdvOptimization.Location = new System.Drawing.Point(216, 107);
+            this.radioButtonBetweenDaysOffAdvOptimization.Name = "radioButtonBetweenDaysOffAdvOptimization";
+            this.radioButtonBetweenDaysOffAdvOptimization.Size = new System.Drawing.Size(110, 17);
+            this.radioButtonBetweenDaysOffAdvOptimization.TabIndex = 44;
+            this.radioButtonBetweenDaysOffAdvOptimization.TabStop = true;
+            this.radioButtonBetweenDaysOffAdvOptimization.Text = "xxBetweenDayOff";
+            this.radioButtonBetweenDaysOffAdvOptimization.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel6
             // 
@@ -422,7 +422,7 @@
         private System.Windows.Forms.CheckBox checkBoxCommonActivity;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxActivity;
         private System.Windows.Forms.CheckBox checkBoxLevellingPerBlockScheduling;
-        private System.Windows.Forms.RadioButton radioButtonSchedulePeriodAdvScheduling;
-        private System.Windows.Forms.RadioButton radioButtonBetweenDaysOffAdvScheduling;
+        private System.Windows.Forms.RadioButton radioButtonSchedulePeriodAdvOptimization;
+        private System.Windows.Forms.RadioButton radioButtonBetweenDaysOffAdvOptimization;
     }
 }

@@ -108,7 +108,13 @@ namespace Teleopti.Ccc.Win.Optimization
 
             Preferences.GroupPageOnCompareWith = (IGroupPageLight)comboBoxGroupPageOnCompareWith.SelectedItem;
 
-            
+            if(checkBoxLevellingPerBlockScheduling.Checked )
+                Preferences.BlockFinderTypeForAdvanceOptimization = radioButtonBetweenDaysOffAdvOptimization .Checked
+                    ? BlockFinderType.BetweenDayOff
+                    : BlockFinderType.SchedulePeriod;
+            else
+                Preferences.BlockFinderTypeForAdvanceOptimization = BlockFinderType.None;
+
         }
 
         private void setDataToControls()
@@ -147,6 +153,22 @@ namespace Teleopti.Ccc.Win.Optimization
                 comboBoxGroupPageOnCompareWith.SelectedValue = Preferences.GroupPageOnCompareWith.Key;
             if (comboBoxGroupPageOnCompareWith.SelectedValue == null)
                 comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
+
+            switch (Preferences.BlockFinderTypeForAdvanceOptimization)
+            {
+                case BlockFinderType.BetweenDayOff:
+                    radioButtonBetweenDaysOffAdvOptimization.Checked = true;
+                    checkBoxLevellingPerBlockScheduling.Checked = true;
+                    break;
+                case BlockFinderType.SchedulePeriod:
+                    radioButtonSchedulePeriodAdvOptimization.Checked = true;
+                    checkBoxLevellingPerBlockScheduling.Checked = true;
+                    break;
+                case BlockFinderType.None:
+                    checkBoxLevellingPerBlockScheduling.Checked = false;
+                    checkBoxLevellingPerBlockScheduling.Enabled = false;
+                    break;
+            }
         }
 
         private void checkBoxBlock_CheckedChanged(object sender, System.EventArgs e)
@@ -208,30 +230,21 @@ namespace Teleopti.Ccc.Win.Optimization
         {
             checkBoxTeams.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
             checkBoxBlock.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
-            radioButtonSchedulePeriodAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
-            radioButtonBetweenDaysOffAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            radioButtonSchedulePeriodAdvOptimization.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            radioButtonBetweenDaysOffAdvOptimization.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             if (checkBoxLevellingPerBlockScheduling.Checked)
             {
-                radioButtonSchedulePeriodAdvScheduling.Checked = true;
-                radioButtonBetweenDaysOffAdvScheduling.Checked = false;
+                if(Preferences.BlockFinderTypeForAdvanceOptimization != BlockFinderType.BetweenDayOff )
+                    radioButtonBetweenDaysOffAdvOptimization.Checked = false;
                 checkBoxTeams.Checked = false ;
                 checkBoxBlock.Checked = false;
             }
             else
             {
-                radioButtonSchedulePeriodAdvScheduling.Checked = false;
-                radioButtonBetweenDaysOffAdvScheduling.Checked = false;
+                radioButtonSchedulePeriodAdvOptimization.Checked = false;
+                radioButtonBetweenDaysOffAdvOptimization.Checked = false;
             }
-            //radioButtonSchedulePeriodAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
-            //radioButtonBetweenDaysOffAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
-            //checkBoxUseGroupScheduling.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
-            //checkBoxUseBlockScheduling.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
-            ////checkBoxUseShiftCategory.Enabled = !checkBoxUseBlockScheduling.Checked;
-            ////comboBoxAdvShiftCategory.Enabled = !checkBoxUseBlockScheduling.Checked;
-            ////radioButtonSchedulePeriod.Enabled = checkBoxUseBlockScheduling.Checked;
-            ////radioButtonBetweenDayOff.Enabled = checkBoxUseBlockScheduling.Checked;
-            ////checkBoxUseGroupScheduling.Enabled = !checkBoxUseBlockScheduling.Checked;
-
+            
         }
     }
     public class ExtraPreferencesPanelUseBlockScheduling
