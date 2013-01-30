@@ -1203,7 +1203,20 @@ namespace Teleopti.Ccc.Win.Scheduling
             //                                                                intervalDataMedianCalculator,
             //                                                                schedulingResultStateHolder);
                 var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder,matrixList );
-                var teamExtractor = new TeamExtractor(matrixList, _groupPersonBuilderForOptimization);
+			
+	
+			IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
+            var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+	        IList<DateOnly> dates =
+		        _schedulerStateHolder.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).DayCollection();
+            groupPagePerDateHolder.GroupPersonGroupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
+                                                                                          groupPageDataProvider,
+																						  schedulingOptions.GroupOnGroupPage, true);
+			IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();
+	        IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+		        new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, groupPersonFactory,
+		                                              groupPagePerDateHolder);
+                var teamExtractor = new TeamExtractor(matrixList, groupPersonBuilderForOptimization);
                 var restrictionAggregator = _container.Resolve<IRestrictionAggregator>();
                 var workShiftFilterService = _container.Resolve<IWorkShiftFilterService>();
 
