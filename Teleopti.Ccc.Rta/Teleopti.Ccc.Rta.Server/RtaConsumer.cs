@@ -84,6 +84,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			// boxing??
 		    ThreadPool.QueueUserWorkItem(saveToDataStore, new object[] {newState, waitHandle});
+			//_actualAgentStateDataHandler.AddOrUpdate(newState);
 
 			return newState;
 		}

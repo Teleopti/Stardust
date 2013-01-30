@@ -39,12 +39,20 @@ namespace Teleopti.Ccc.Rta.Server
         {
             var dictionary = (ConcurrentDictionary<Guid, string>) _cache.Get(CacheKey) ?? Initialize();
             string result;
-            if (!dictionary.TryGetValue(personId, out result))
+			
+			if (!dictionary.TryGetValue(personId, out result))
             {
                 dictionary.Add(personId, newStateCode);
                 return true;
             }
-            return result != newStateCode;
+
+			if (result != newStateCode)
+			{
+				dictionary[personId] = newStateCode;
+				return true;
+			}
+
+        	return false;
         }
 
         private IDictionary<Guid, string> Initialize()
