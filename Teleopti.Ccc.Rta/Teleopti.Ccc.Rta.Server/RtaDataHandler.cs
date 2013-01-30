@@ -113,6 +113,14 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			int dataSourceId;
 			var waitHandle = new AutoResetEvent(false);
+
+			if (string.IsNullOrEmpty(_connectionStringDataStore))
+			{
+				_loggingSvc.Warn("No connection information available in configuration file.");
+				waitHandle.Set();
+				return waitHandle;
+			}
+
 			if (!_dataSourceResolver.TryResolveId(sourceId, out dataSourceId))
 			{
 				_loggingSvc.ErrorFormat(
@@ -121,17 +129,17 @@ namespace Teleopti.Ccc.Rta.Server
 				return waitHandle;
 			}
 
-			bool sendWithBroker = true;
 			IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
 			if (!_personResolver.TryResolveId(dataSourceId, logOn, out personWithBusinessUnits))
 			{
 				_loggingSvc.WarnFormat(
 					"No person available for datasource id = {0} and log on {1}. Event will not be sent through message broker before person is set up.",
 					dataSourceId, logOn);
-				sendWithBroker = false;
+				waitHandle.Set();
+				return waitHandle;
 			}
 
-			if (_messageSender.IsAlive && sendWithBroker)
+			if (_messageSender.IsAlive)
 			{
 				try
 				{
@@ -159,12 +167,6 @@ namespace Teleopti.Ccc.Rta.Server
 				{
 					_loggingSvc.Error("The message broker seems to be down.", exception);
 				}
-			}
-			if (string.IsNullOrEmpty(_connectionStringDataStore))
-			{
-				_loggingSvc.Warn("No connection information available in configuration file.");
-				waitHandle.Set();
-				return waitHandle;
 			}
 			return waitHandle;
 		}
