@@ -353,12 +353,7 @@ Scenario: Show white activity text when activity background color is black
 Scenario: Show white absence text when absence background color is black
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
-	And I have absence with
-	| Field					| Value			   |
-	| StartTime             | 2013-01-30 08:00 |
-	| EndTime               | 2013-01-30 18:00 |
-	| Name					| Illness		   |
-	| Absence color			| Black			   |
+	And I have a full-day absence today
 	When I view my week schedule for date '2013-01-30'
 	Then I should see the absence text for date '2013-01-30' in 'white'
 

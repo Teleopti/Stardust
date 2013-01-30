@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			DivCollection layers = _page.DayLayers(date);
 
-			EventualAssert.That(() => layers[0].Style.GetAttributeValue("backgroundColor").ToLower(), Is.StringContaining(color));
+			EventualAssert.That(() => layers[0].Style.GetAttributeValue("color").ToLower(), Is.StringContaining(color));
 		}
 
 

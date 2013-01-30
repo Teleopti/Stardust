@@ -108,6 +108,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}, 1000);
 	}
 
+	function getTextColorBasedOnBackgroundColor(backgroundColor) {
+		backgroundColor = backgroundColor.slice(backgroundColor.indexOf('(') + 1, backgroundColor.indexOf(')'));
+
+		var backgroundColorArr = backgroundColor.split(',');
+
+		var brightness = backgroundColorArr[0] * 0.299 + backgroundColorArr[1] * 0.587 + backgroundColorArr[2] * 0.114;
+
+		return brightness < 100 ? 'white' : 'black';
+	}
+
 	var WeekScheduleViewModel = function (userTexts) {
 		var self = this;
 
@@ -194,14 +204,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			var backgroundColor = parent.styles()[self.summaryStyleClassName()];
 			if (backgroundColor != null && backgroundColor != 'undefined') {
-
-				backgroundColor = backgroundColor.slice(backgroundColor.indexOf('(') + 1, backgroundColor.indexOf(')'));
-
-				var backgroundColorArr = backgroundColor.split(',');
-
-				var brightness = backgroundColorArr[0] * 0.299 + backgroundColorArr[1] * 0.587 + backgroundColorArr[2] * 0.114;
-
-				return brightness < 100 ? 'white' : 'black';
+				return getTextColorBasedOnBackgroundColor(backgroundColor);
 			}
 			return 'black';
 		});
@@ -239,6 +242,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 		self.timeSpan = ko.observable(layer.TimeSpan);
 		self.color = ko.observable('rgb(' + layer.Color + ')');
+		self.textColor = ko.computed(function () {
+			if (layer.Color != null && layer.Color != 'undefined') {
+				var backgroundColor = 'rgb(' + layer.Color + ')';
+				return getTextColorBasedOnBackgroundColor(backgroundColor);
+			}
+			return 'black';
+		});
 		self.tooltipText = ko.computed(function () {
 			//not nice! rewrite tooltips in the future!
 			if (self.hasMeeting()) {
