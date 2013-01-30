@@ -1,15 +1,17 @@
 @echo off
-SET action=delayed-auto
 ECHO Starting all local Teleopti CCC 7 services and MsDtc
-::WinXp and 2003 can't handle start mode: "delayed-auto"
-cscript OsMajorVersionGet.vbs //NoLogo
-SET /a OsMajorVersion = %ERRORLEVEL%
-IF %OsMajorVersion% LEQ 5 SET action=auto
-
-ECHO Start mode will be set to "%action%"
-PING -n 4 127.0.0.1>nul
+PING -n 1 127.0.0.1>nul
 
 IF "%ROOTDIR%"=="" SET ROOTDIR=%~dp0
+
+::WinXp and 2003 can't handle start mode: "delayed-auto"
+SET action=delayed-auto
+cscript "%ROOTDIR%OsMajorVersionGet.vbs" //NoLogo
+SET /a OsMajorVersion = %ERRORLEVEL%
+IF %OsMajorVersion% LEQ 5 SET action=auto
+ECHO OsMajorVersion is: %OsMajorVersion%
+ECHO Start mode will be set to "%action%"
+ECHO.
 
 ::Set the list of services to manuipulate
 ::note: Order matters!!
