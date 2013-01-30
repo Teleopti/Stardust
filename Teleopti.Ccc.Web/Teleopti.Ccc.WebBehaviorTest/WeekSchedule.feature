@@ -335,7 +335,7 @@ Scenario: Show black activity text when activity background color is white
 	| Shift category        | Day              |
 	| All activity color    | White            |
 	When I view my week schedule for date '2013-01-30'
-	Then I should see the activity text for date '2013-01-30' in 'black'
+	Then I should see the text for date '2013-01-30' in 'black'
 
 Scenario: Show white activity text when activity background color is black
 	Given I have the role 'Full access to mytime'
@@ -348,14 +348,25 @@ Scenario: Show white activity text when activity background color is black
 	| Shift category        | Day              |
 	| All activity color    | Black            |
 	When I view my week schedule for date '2013-01-30'
-	Then I should see the activity text for date '2013-01-30' in 'white'
+	Then I should see the text for date '2013-01-30' in 'white'
 
 Scenario: Show white absence text when absence background color is black
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
-	And I have a full-day absence today
+	And I have a full-day absence today with
+	| Field                 | Value            |
+	| Absence color         | Black			   |
 	When I view my week schedule for date '2013-01-30'
-	Then I should see the absence text for date '2013-01-30' in 'white'
+	Then I should see the text for date '2013-01-30' in 'white'
+
+Scenario: Show black absence text when absence background color is white
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a full-day absence today with
+	| Field                 | Value            |
+	| Absence color         | White			   |
+	When I view my week schedule for date '2013-01-30'
+	Then I should see the text for date '2013-01-30' in 'black'
 
 
 	 

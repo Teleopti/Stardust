@@ -194,8 +194,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				color);
 		}
 
-		[Then(@"I should see the activity text for date '(.*)' in '(.*)'")]
-		public void ThenIShouldSeeTheActivityTextForDateIn(DateTime date, string color)
+		[Then(@"I should see the text for date '(.*)' in '(.*)'")]
+		public void ThenIShouldSeeTheTextForDateIn(DateTime date, string color)
 		{
 			DivCollection layers = _page.DayLayers(date);
 
