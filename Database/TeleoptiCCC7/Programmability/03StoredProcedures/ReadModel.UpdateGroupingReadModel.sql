@@ -24,7 +24,7 @@ CREATE TABLE #ids(person uniqueidentifier)
 IF @persons = '00000000-0000-0000-0000-000000000000'  --"EveryBody"
 --Flush and re-load everybody
 BEGIN
-	TRUNCATE TABLE [ReadModel].[FindPerson]
+	TRUNCATE TABLE [ReadModel].[GroupingReadOnly]
 	INSERT INTO #ids SELECT Id FROM Person WHERE IsDeleted = 0
 END
 ELSE

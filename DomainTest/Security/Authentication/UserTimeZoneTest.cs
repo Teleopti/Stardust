@@ -3,10 +3,10 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Core
+namespace Teleopti.Ccc.DomainTest.Security.Authentication
 {
 	[TestFixture]
 	public class UserTimeZoneTest

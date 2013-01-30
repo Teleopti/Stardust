@@ -758,6 +758,8 @@
     <Compile Include="Security\Authentication\DataSourceContainerLogOnTest.cs" />
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProviderTest.cs" />
     <Compile Include="Security\Authentication\FindApplicationUserTest.cs" />
+    <Compile Include="Security\Authentication\LoggedOnUserTest.cs" />
+    <Compile Include="Security\Authentication\UserTimeZoneTest.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProviderTest.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettingsTest.cs" />
     <Compile Include="Security\AuthorizationData\DefaultAuthorizationSettingsTest.cs" />
@@ -1048,6 +1050,7 @@
     <Compile Include="WorkflowControl\ShiftTrades\IsShiftTradeRequestNotNullSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\OpenShiftTradePeriodSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAbsenceSpecificationTest.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAvailableCheckItemTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeLightValidatorTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMeetingSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradePersonalActivitySpecificationTest.cs" />

@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
                     
                     var folder = AppDomain.CurrentDomain.BaseDirectory;
                     Logger.InfoFormat("Loading plugins in folder {0}", folder);
-                    var payrollExportProcessors = _plugInLoader.Load();
-                    var allPayrollFormats = payrollExportProcessors.Select(p => p.PayrollFormat);
+					var allPayrollFormats = _plugInLoader.LoadDtos();
                     Logger.InfoFormat(CultureInfo.CurrentCulture, "Sending formats to SDK");
                     proxy.InitializePayrollFormats(allPayrollFormats.ToList());
                 }

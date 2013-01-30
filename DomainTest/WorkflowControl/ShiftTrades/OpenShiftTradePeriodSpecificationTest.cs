@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[SetUp]
 		public void Setup()
 		{
-			_target = new OpenShiftTradePeriodSpecification();
+			_target = new OpenShiftTradePeriodSpecification(new Now(null));
 			var wcs = new WorkflowControlSet("wcs") { ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 99) };
 			_personFrom = PersonFactory.CreatePerson("test person from");
 			_personFrom.WorkflowControlSet = wcs;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[Test]
 		public void ShouldBeWrongIfOutsideOfOpenPeriod()
 		{
-			var checkItem = new ShiftTradeAvailableCheckItem { DateOnly = DateOnly.Today, PersonFrom = _personFrom, PersonTo = _personTo };
+			var checkItem = new ShiftTradeAvailableCheckItem(DateOnly.Today, _personFrom, _personTo);
 			Assert.That(_target.IsSatisfiedBy(checkItem), Is.False);
 		}
 
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[Test]
 		public void ShouldBeRightIfInsideOfOpenPeriod()
 		{
-			var checkItem = new ShiftTradeAvailableCheckItem { DateOnly = DateOnly.Today.AddDays(1), PersonFrom = _personFrom, PersonTo = _personTo };
+			var checkItem = new ShiftTradeAvailableCheckItem(DateOnly.Today.AddDays(1), _personFrom, _personTo);
 			Assert.That(_target.IsSatisfiedBy(checkItem), Is.True);
 		}
 
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		{
 			_personFrom.WorkflowControlSet = null;
 			_personTo.WorkflowControlSet = new WorkflowControlSet();
-			var checkItem = new ShiftTradeAvailableCheckItem { DateOnly = DateOnly.Today, PersonFrom = _personFrom, PersonTo = _personTo };
+			var checkItem = new ShiftTradeAvailableCheckItem(DateOnly.Today, _personFrom, _personTo);
 			Assert.That(_target.IsSatisfiedBy(checkItem), Is.False);
 		}
 	}

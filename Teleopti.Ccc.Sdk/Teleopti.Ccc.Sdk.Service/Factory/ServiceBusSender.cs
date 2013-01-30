@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                         	builder.RegisterType<LargeGuidCollectionSerializer>().As<ICustomElementSerializer>();
                         	_customHost = builder.Build();
 
-                        	
+                        	Rhino.ServiceBus.SqlQueues.Config.QueueConnectionStringContainer.ConnectionString = ConfigurationManager.ConnectionStrings["Queue"].ConnectionString;
 
                         	new OnewayRhinoServiceBusConfiguration()
 								.UseAutofac(_customHost)

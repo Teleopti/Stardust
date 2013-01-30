@@ -260,6 +260,78 @@
   <wsdl:binding name="TeleoptiSchedulingService" type="i0:TeleoptiSchedulingService">
     <wsp:PolicyReference URI="#TeleoptiSchedulingService_policy" />
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DeletePreference">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeletePreference" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveStudentAvailabilityDay">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SaveStudentAvailabilityDay" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteStudentAvailabilityDay">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeleteStudentAvailabilityDay" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveExtendedPreferenceTemplate">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SaveExtendedPreferenceTemplate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteExtendedPreferenceTemplate">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeleteExtendedPreferenceTemplate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetExtendedPreferenceTemplates">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetExtendedPreferenceTemplates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetValidatedSchedulePartsOnSchedulePeriod">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetValidatedSchedulePartsOnSchedulePeriod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetValidatedSchedulePartsOnSchedulePeriodByQuery">
       <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetValidatedSchedulePartsOnSchedulePeriodByQuery" style="document" />
       <wsdl:input>
@@ -349,6 +421,24 @@
     </wsdl:operation>
     <wsdl:operation name="GetSchedulesByQuery">
       <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetSchedulesByQuery" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMultiplicatorsByQuery">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetMultiplicatorsByQuery" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMultiplicatorDefinitionSetByQuery">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetMultiplicatorDefinitionSetByQuery" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -602,82 +692,82 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="DeletePreference">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeletePreference" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SaveStudentAvailabilityDay">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SaveStudentAvailabilityDay" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="DeleteStudentAvailabilityDay">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeleteStudentAvailabilityDay" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SaveExtendedPreferenceTemplate">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SaveExtendedPreferenceTemplate" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="FaultExceptionFault">
-        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="DeleteExtendedPreferenceTemplate">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeleteExtendedPreferenceTemplate" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="FaultExceptionFault">
-        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetExtendedPreferenceTemplates">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetExtendedPreferenceTemplates" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="FaultExceptionFault">
-        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetValidatedSchedulePartsOnSchedulePeriod">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetValidatedSchedulePartsOnSchedulePeriod" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="TeleoptiOrganizationService" type="i0:TeleoptiOrganizationService">
     <wsp:PolicyReference URI="#TeleoptiOrganizationService_policy" />
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="UpdatePerson">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/UpdatePerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="AddPersonPeriod">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/AddPersonPeriod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetSitesOnBusinessUnit">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetSitesOnBusinessUnit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTeamsOnSite">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetTeamsOnSite" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetWriteProtectionDateOnPerson">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/SetWriteProtectionDateOnPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="FaultExceptionFault">
+        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetWriteProtectionDateOnPerson">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetWriteProtectionDateOnPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayrollExportByQuery">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPayrollExportByQuery" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetPayrollResultStatusByQuery">
       <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPayrollResultStatusByQuery" style="document" />
       <wsdl:input>
@@ -941,78 +1031,6 @@
     </wsdl:operation>
     <wsdl:operation name="AddPerson">
       <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/AddPerson" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UpdatePerson">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/UpdatePerson" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="FaultExceptionFault">
-        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="AddPersonPeriod">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/AddPersonPeriod" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="FaultExceptionFault">
-        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetSitesOnBusinessUnit">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetSitesOnBusinessUnit" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetTeamsOnSite">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetTeamsOnSite" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SetWriteProtectionDateOnPerson">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/SetWriteProtectionDateOnPerson" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="FaultExceptionFault">
-        <soap:fault use="literal" name="FaultExceptionFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetWriteProtectionDateOnPerson">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetWriteProtectionDateOnPerson" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetPayrollExportByQuery">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetPayrollExportByQuery" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

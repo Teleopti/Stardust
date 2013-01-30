@@ -8,13 +8,19 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.Repositories
 {
     public class AbsenceRepository
     {
-        private Dictionary<Guid, AbsenceDto> _absenceDictionary;
+    	private readonly ITeleoptiSchedulingService _teleoptiSchedulingService;
+    	private Dictionary<Guid, AbsenceDto> _absenceDictionary;
 
-        public void Initialize(ITeleoptiSchedulingService teleoptiSchedulingService)
-        {
-            var absences = teleoptiSchedulingService.GetAbsences(new AbsenceLoadOptionDto { LoadDeleted = true });
-            _absenceDictionary = absences.ToDictionary(k => k.Id.GetValueOrDefault(), v => v);
-        }
+		public AbsenceRepository(ITeleoptiSchedulingService teleoptiSchedulingService)
+		{
+			_teleoptiSchedulingService = teleoptiSchedulingService;
+		}
+
+    	public void Initialize()
+		{
+			var absences = _teleoptiSchedulingService.GetAbsences(new AbsenceLoadOptionDto { LoadDeleted = true });
+			_absenceDictionary = absences.ToDictionary(k => k.Id.GetValueOrDefault(), v => v);
+		}
 
         public AbsenceDto GetById(Guid id)
         {

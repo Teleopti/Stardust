@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IShiftTradeValidator _validator;
         private readonly IRequestFactory _requestFactory;
-        private readonly IScenarioRepository _scenarioReposiotory;
+        private readonly IScenarioRepository _scenarioRepository;
         private readonly IPersonRequestRepository _personRequestRepository;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonRepository _personRepository;
@@ -44,18 +44,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private IPersonRequestCheckAuthorization _authorization;
     	private IScenario _defaultScenario;
 
-    	public ShiftTradeRequestSaga(ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, IScenarioRepository scenarioReposiotory, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDictionarySaver scheduleDictionarySaver, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation)
+    	public ShiftTradeRequestSaga(ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, IScenarioRepository scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDictionarySaver scheduleDictionarySaver, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _validator = validator;
             _authorization = personRequestCheckAuthorization;
             _requestFactory = requestFactory;
-            _scenarioReposiotory = scenarioReposiotory;
+            _scenarioRepository = scenarioRepository;
             _personRequestRepository = personRequestRepository;
             _scheduleRepository = scheduleRepository;
             _personRepository = personRepository;
             _scheduleDictionarySaver = scheduleDictionarySaver;
-    		_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
+    			_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
 
     		Logger.Info("New instance of Shift Trade saga was created");
         }
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
                 {
                     Logger.Debug("Loading Accepting person");
                     var acceptingPerson = loadPersonAcceptingPerson(message);
-                    var checkSum = new ShiftTradeRequestSetChecksum(_defaultScenario, _scheduleRepository);
+						  var checkSum = new ShiftTradeRequestSetChecksum(_scenarioRepository, _scheduleRepository);
 
                     try
                     {
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 
         private void loadDefaultScenario()
         {
-            _defaultScenario = _scenarioReposiotory.LoadDefaultScenario();
+            _defaultScenario = _scenarioRepository.LoadDefaultScenario();
             Logger.DebugFormat("Using the default scenario named {0}. (Id = {1})", _defaultScenario.Description, _defaultScenario.Id);
         }
 

@@ -1,6 +1,12 @@
 @echo off
+SET action=delayed-auto
 ECHO Starting all local Teleopti CCC 7 services and MsDtc
-ECHO Start mode will be set to "Automatic"
+::WinXp and 2003 can't handle start mode: "delayed-auto"
+cscript OsMajorVersionGet.vbs //NoLogo
+SET /a OsMajorVersion = %ERRORLEVEL%
+IF %OsMajorVersion% LEQ 5 SET action=auto
+
+ECHO Start mode will be set to "%action%"
 PING -n 4 127.0.0.1>nul
 
 IF "%ROOTDIR%"=="" SET ROOTDIR=%~dp0
@@ -18,11 +24,17 @@ echo trying to start iis 7.0 or 7.5 App Pools ...
 "%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 Web" /autoStart:true
 "%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti ASP.NET v4.0 Broker"
 "%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 Broker" /autoStart:true
+"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti ASP.NET v4.0 SDK"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 SDK" /autoStart:true
+"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti ASP.NET v4.0 RTA"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 RTA" /autoStart:true
 ) else (
 echo trying to start iis 5.1 or 6.0 App Pools ...
 CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0"
 CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 Web"
 CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 Broker"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 SDK"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 RTA"
 )
 
 echo Start App Pools. Done
@@ -59,7 +71,7 @@ exit /b 0
 
 :processServiceList
 for /f "tokens=1* delims=;" %%a in ("%serviceList%") do (
-call :SetSvcModeAndAction "%%a" Start delayed-auto
+call :SetSvcModeAndAction "%%a" Start %action%
 set serviceList=%%b
 )
 if not "%serviceList%" == "" goto :processServiceList

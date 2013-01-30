@@ -3,29 +3,36 @@ using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Policy;
 using log4net;
 using log4net.Config;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
+	[Serializable]
 	public class ServiceBusRunner
 	{
 		private readonly Action<Exception> _unhandledExceptionHandler;
 		private readonly Action<Exception> _startupExceptionHandler;
 		private readonly Action<int> _requestExtraTimeHandler;
 		private static readonly ILog log = LogManager.GetLogger(typeof(ServiceBusRunner));
-
+		
+		[NonSerialized] 
 		private ConfigFileDefaultHost _requestBus;
+		[NonSerialized] 
 		private ConfigFileDefaultHost _generalBus;
+		[NonSerialized] 
 		private ConfigFileDefaultHost _denormalizeBus;
-
+		[NonSerialized]
+		private ConfigFileDefaultHost _payrollBus;
+	
 		public ServiceBusRunner(Action<Exception> unhandledExceptionHandler, Action<Exception> startupExceptionHandler, Action<int> requestExtraTimeHandler)
 		{
 			_unhandledExceptionHandler = unhandledExceptionHandler;
 			_startupExceptionHandler = startupExceptionHandler;
 			_requestExtraTimeHandler = requestExtraTimeHandler;
-
+			
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 		}
 
@@ -57,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				throw;
 			}
 		}
-
+		
 		private void HostServiceStart()
 		{
 			if (_requestExtraTimeHandler!=null)
@@ -80,13 +87,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_denormalizeBus = new ConfigFileDefaultHost();
 			_denormalizeBus.UseFileBasedBusConfiguration("DenormalizeQueue.config");
 			_denormalizeBus.Start<DenormalizeBusBootStrapper>();
+			
+			PayrollDllCopy.CopyPayrollDll();
+
+			_payrollBus = new ConfigFileDefaultHost();
+			_payrollBus.UseFileBasedBusConfiguration("PayrollQueue.config");
+			_payrollBus.Start<BusBootStrapper>();
+			AppDomain.MonitoringIsEnabled = true;
 		}
 
 		private bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
 		{
 			return true;
 		}
-
+		
 		public void Stop()
 		{
 			HostServiceStop();
@@ -134,6 +148,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				{
 				}
 			}
+			if (_payrollBus != null)
+			{
+				try
+				{
+					_payrollBus.Dispose();
+				}
+				catch (Exception)
+				{
+				}
+			}
+			
 		}
 	}
 }

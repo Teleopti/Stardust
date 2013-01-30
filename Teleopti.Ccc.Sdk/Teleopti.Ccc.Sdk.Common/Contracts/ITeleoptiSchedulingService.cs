@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         AdherenceDto GetAdherenceData(DateTime dateTime, string timeZoneId, PersonDto personDto,
                                  PersonDto agentPersonDto, int languageId);
 
-        /// <summary>
+		/// <summary>
         /// Gets the queue details between the start and end date for the given person.
         /// </summary>
         /// <param name="startDate">The start date.</param>

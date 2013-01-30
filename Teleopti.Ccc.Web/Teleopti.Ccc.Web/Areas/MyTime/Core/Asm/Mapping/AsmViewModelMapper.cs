@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			          	};
 		}
 		
-		private IEnumerable<string> createHours(DateTime asmZero, TimeZoneInfo timeZone, CultureInfo culture)
+		private static IEnumerable<string> createHours(DateTime asmZero, TimeZoneInfo timeZone, CultureInfo culture)
 		{
 			const int numberOfHoursToShow = 24*3;
 			var hoursAsInts = new List<string>();

@@ -46,6 +46,8 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
             }
 
             _simpleSampleViewModel.EnableFunctions = result.Successful;
+			if (_simpleSampleViewModel.AfterSuccessfulLogOnCommand.CanExecute(null))
+				_simpleSampleViewModel.AfterSuccessfulLogOnCommand.Execute(null);
         }
 
         public bool CanExecute(object parameter)

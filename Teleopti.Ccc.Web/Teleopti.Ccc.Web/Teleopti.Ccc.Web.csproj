@@ -164,15 +164,27 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeResponseService.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeResponseService.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradePersonScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeTimeLineHoursViewModel.cs" />
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />
     <Compile Include="Areas\Start\Models\Authentication\PasswordWarningViewModel.cs" />
     <Compile Include="Areas\Team\Controllers\PersonController.cs" />
     <Compile Include="Areas\Team\Core\AutofacDependencyResolver.cs" />
     <Compile Include="Areas\Team\Core\ScheduleHub.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeRequestProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradePeriodViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeScheduleViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradePeriodViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleLayerViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsPeriodViewModel.cs" />
     <Compile Include="Areas\Team\TeamAreaRegistration.cs" />
     <Compile Include="Areas\Team\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MobileReports\Controllers\ReportController.cs" />
@@ -428,7 +440,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\IPreferenceViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferenceViewModelFactory.cs" />
-    <Compile Include="Core\UserTimeZone.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPersonRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PersonRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\DateTimeExtensions.cs" />
@@ -480,8 +491,6 @@
     <Compile Include="Areas\Start\Core\LayoutBase\ICultureSpecificViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\ViewModelFactory\IPortalViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\PortalHtmlHelper.cs" />
-    <Compile Include="Core\RequestContext\LoggedOnUser.cs" />
-    <Compile Include="Core\RequestContext\ILoggedOnUser.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\WeekScheduleViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\DefaultScenarioScheduleProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\HeaderViewModelFactory.cs" />
@@ -522,6 +531,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8.gif" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />

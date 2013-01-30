@@ -8,6 +8,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 {
@@ -103,35 +104,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		{
 			var toolbarItems = new List<ToolBarItemBase>();
 
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
-			{
-				toolbarItems.AddRange(new ToolBarItemBase[]
-			                        {
-												 //new ToolBarButtonItem
-												 //    {
-												 //        Title = Resources.Requests,
-												 //        ButtonType = "showRequests"
-												 //    },
-												 //new ToolBarButtonItem
-												 //    {
-												 //        Title = "xxAdd Shift Trade Requests",
-												 //        ButtonType = "addShiftTradeRequest"
-												 //    },
-			                            //new ToolBarSeparatorItem(),
-			                            new ToolBarDatePicker
-			                                {
-			                                    NextTitle = Resources.NextPeriod,
-			                                    PrevTitle = Resources.PreviousPeriod,
-			                                    IsHhidden = true
-			                                }
-			                        });
-			}
+			//if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
+			//{
+				
+			//}
+
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests) ||
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb))
 			{
 				toolbarItems.AddRange(new ToolBarItemBase[]
 									{
-										new ToolBarSeparatorItem(),
 										new ToolBarButtonItem
 											{
 												Title = Resources.NewRequest,

@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Core.RequestContext
+namespace Teleopti.Ccc.Domain.Security.Authentication
 {
 	public class LoggedOnUser : ILoggedOnUser
 	{
@@ -19,11 +19,6 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 		{
 			var pricipal = _currentTeleoptiPrincipal.Current();
 			return pricipal == null ? null : pricipal.GetPerson(_personRepository);
-		}
-
-		public ITeam MyTeam(DateOnly date)
-		{
-			return CurrentUser().MyTeam(date);
 		}
 	}
 }

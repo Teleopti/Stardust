@@ -111,5 +111,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Requests-no-requests-found")]
 		public Div NoRequestsFound { get; set; }
+		
+		[FindBy(Id = "Request-add-shift-trade-button")]
+		public Button ShiftTradeRequestsButton { get; set; }
+
+		[FindBy(Id = "Request-add-shift-trade-missing-wcs-message")]
+		public Div AddShiftTradeMissingWorkflowControlsSetMessage { get; set; }
+
+		[FindBy(Id = "Request-add-shift-trade-no-possible-trades")]
+		public Div AddShiftTradeNoPossibleShiftTradesMessage { get; set; }
+
+		public SpanCollection MyScheduleLayers
+		{
+			get { return Document.Div(QuicklyFind.ByClass("shift-trade-my-schedule")).Spans.Filter(QuicklyFind.ByClass("shift-trade-layer")); }
+		}
+
+		public TextField AddShiftTradeDatePicker
+		{
+			get { return Document.TextField(QuicklyFind.ByClass("shift-trade-add-datepicker")); }
+		}
+
+		public SpanCollection AddShiftTradeTimeLineItems
+		{
+			get { return Document.Div(QuicklyFind.ByClass("shift-trade-timeline")).Spans.Filter(QuicklyFind.ByClass("shift-trade-timeline-line")); }
+		}
 	}
 }

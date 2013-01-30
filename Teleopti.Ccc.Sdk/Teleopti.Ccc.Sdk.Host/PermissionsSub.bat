@@ -18,6 +18,7 @@
 :: 2012-02-16	DJ		#18290 - Adding some EHCO fro output from batch file
 :: 2012-05-14	DJ		possible bug where we now use quotes as input from Wise
 :: 2012-10-23	DJ		Change AppPool name as part of .net
+:: 2013-01-05	DJ		Drop esent stuff, go for payroll instead
 :: =============================================
 SET WindowsNT=%~1
 SET SPLevel=%~2
@@ -49,17 +50,13 @@ IF "%WindowsNT%"=="" GOTO desc
 SET SDKPath=%SDKPath:~0,-1%
 SET ServiceBusPath=%SDKPath%\..\ServiceBus
 
-::remarked! This is a temp fix to get behavior tests running (in parallell)
-::restart IIS
-::IISRESET /RESTART
-
 ::Statics
 SET PermissionStyle=""
 SET WinXP=501
 SET Win2003=502
 SET IIS6=6
 SET IIS7=7
-SET IIS7PoolUser=IIS APPPOOL\Teleopti ASP.NET v4.0
+SET IIS7PoolUser=IIS APPPOOL\Teleopti ASP.NET v4.0 SDK
 SET IIS6PoolUser=NT AUTHORITY\Network Service
 SET IIS5PoolUser=IUSR_%COMPUTERNAME%
 
@@ -70,7 +67,7 @@ SET IISVersion=%IISVersion:~0,1%
 SET IISPoolUser=%IIS6PoolUser%
 
 ::If iis 7 update PoolUser
-IF %IISVersion% EQU %IIS7% SET IISPoolUser=%IIS7PoolUser%
+IF %IISVersion% GEQ %IIS7% SET IISPoolUser=%IIS7PoolUser%
 
 ::But, if User choosed Windows Authetication during CCC installation
 IF NOT "%SVCLOGIN%"=="" (
@@ -93,7 +90,7 @@ for %%a in (%SystemDrive%) do set mySystemDrive=%%~da
 ::Switch to drive letter
 %DRIVELETTER%
 
-::Fix read and write on different essent folders, clean out all essent files
+::Fix read and write on different payroll folders, clean out all essent files
 CALL :MAIN "%SDKPath%"
 CALL :MAIN "%ServiceBusPath%"
 
@@ -105,10 +102,6 @@ SET FolderPath=%~1
 ECHO FolderPath is %FolderPath%
 CD %FolderPath%
 
-::some output
-ECHO Adding file essent file permissions for %IISPoolUser%
-ECHO.
-
 ::call correct permission style
 ECHO PermissionStyle is: %PermissionStyle%
 if "%PermissionStyle%"=="cacls" GOTO cacls
@@ -116,45 +109,45 @@ if "%PermissionStyle%"=="icacls" GOTO icacls
 
 ::---------------
 :cacls
-ECHO Setting permissions using cacls ...
+ECHO Setting folder permissions on payroll using cacls ...
+ECHO.
 
 ::revoke all
-FOR /D %%I IN (*.esent) DO ECHO Y| CACLS "%%I" /E /R "%IISPoolUser%"
+ECHO FOR /D %%I IN (*payroll*) DO ECHO Y| CACLS "%%I" /E /R "%IISPoolUser%"
+FOR /D %%I IN (*payroll*) DO ECHO Y| CACLS "%%I" /E /R "%IISPoolUser%"
 
 ::Add permissions again
-FOR /D %%I IN (*.esent) DO ECHO Y| CACLS "%%I" /E /G "%IISPoolUser%":C
+ECHO FOR /D %%I IN (*payroll*) DO ECHO Y| CACLS "%%I" /E /G "%IISPoolUser%":C
+FOR /D %%I IN (*payroll*) DO ECHO Y| CACLS "%%I" /E /G "%IISPoolUser%":C
 
 ECHO Done
 ping 127.0.0.1 -n 2 > NUL
-GOTO TruncateEsent
+GOTO EOF
 ::---------------
 
 ::---------------
 :icacls
 ECHO Setting permissions using icacls ...
+ECHO.
 
 ::revoke all
-FOR /D %%I IN (*.esent) DO icacls "%%I" /remove:g "%IISPoolUser%"
+ECHO FOR /D %%I IN (*payroll*) DO icacls "%%I" /remove:g "%IISPoolUser%"
+FOR /D %%I IN (*payroll*) DO icacls "%%I" /remove:g "%IISPoolUser%"
 
 ::Add permissions again
-FOR /D %%I IN (*.esent) DO icacls "%%I" /grant "%IISPoolUser%":(OI)(CI)(M)
+ECHO FOR /D %%I IN (*payroll*) DO icacls "%%I" /grant "%IISPoolUser%":(OI)(CI)(M)
+FOR /D %%I IN (*payroll*) DO icacls "%%I" /grant "%IISPoolUser%":(OI)(CI)(M)
 
 ECHO Done
 ping 127.0.0.1 -n 2 > NUL
-GOTO TruncateEsent
-::---------------
-
-::---------------
-:TruncateEsent
-FOR /D %%I IN (*.esent) DO DEL "%%I" /Q /S
-GOTO EOF 
+GOTO EOF
 ::---------------
 
 :desc
 CLS
 ECHO Need input parameters [VersionNt] [SPLevel] [IISVersion] [SVCLOGIN:optional]
 ECHO Example for Win2008 Server:
-ECHO EsentPermissions.bat 600 0 7
+ECHO Permissions.bat 600 0 7
 PAUSE
 CLS
 ECHO - VersionNT:

@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CommonCollapse" xml:space="preserve">
     <value>Collapse</value>
@@ -1204,5 +1204,17 @@ Schedule</value>
   <data name="ResSignOut" xml:space="preserve">
     <value>Sign Out</value>
     <comment>Sign out from analytics</comment>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Date (shifts starting):</value>
+    <comment>Date (shifts starting):</comment>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Date From (shifts starting):</value>
+    <comment>Date From (shifts starting):</comment>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Date To (shifts starting):</value>
+    <comment>Date To (shifts starting):</comment>
   </data>
 </root>

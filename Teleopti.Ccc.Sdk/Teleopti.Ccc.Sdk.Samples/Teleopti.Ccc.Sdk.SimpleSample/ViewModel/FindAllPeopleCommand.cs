@@ -1,10 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.ServiceModel;
 using System.Windows;
 using System.Windows.Input;
-using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.SimpleSample.Model;
 using Teleopti.Ccc.Sdk.SimpleSample.Repositories;
@@ -51,15 +49,18 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
             var endDate = new DateOnlyDto(_peopleViewModel.EndDate.Year, _peopleViewModel.EndDate.Month,
                                             _peopleViewModel.EndDate.Day);
 
-            ITeleoptiOrganizationService organisationService = initializeRepositories(startDate, endDate);
+            initializeRepositories(startDate, endDate);
 
-            var periods = _personPeriodRepository.AllPersonPeriodDetails();
-            var personDetailContainers = periods.Select(p => new PersonDetailContainer { PersonPeriod = p }).ToList();
+			_peopleViewModel.FoundPeople.Clear();
 
+        	var businessUnit = _businessHierarchyRepository.GetBusinessUnit();
+			var personDetailContainers = _personPeriodRepository.GetPersonPeriods();
             foreach (var personDetailContainer in personDetailContainers)
             {
                 var personId = personDetailContainer.PersonPeriod.PersonId;
                 personDetailContainer.Person = _personRepository.GetById(personId);
+
+				if (personDetailContainer.Person == null) continue;
 
                 personDetailContainer.Contract = _contractRepository.GetById(personDetailContainer.PersonPeriod.ContractId).Description;
                 personDetailContainer.ContractSchedule = _contractScheduleRepository.GetById(personDetailContainer.PersonPeriod.ContractScheduleId).Description;
@@ -73,86 +74,52 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
 
                 var site = _businessHierarchyRepository.GetSiteByTeam(personDetailContainer.PersonPeriod.Team.Id.GetValueOrDefault());
                 personDetailContainer.Site = site.Site;
-            }
 
-            var skillPeriods =
-                organisationService.GetPersonSkillPeriodsForPersons(
-                    personDetailContainers.Select(p => p.Person).Where(p => p != null).ToArray(), startDate, endDate);
-            foreach (var personDetailContainer in personDetailContainers)
-            {
-                var personId = personDetailContainer.PersonPeriod.PersonId;
-                var periodStartDate = personDetailContainer.PersonPeriod.StartDate.DateTime;
-                personDetailContainer.PersonSkillPeriod =
-                    skillPeriods.FirstOrDefault(
-                        s => personId.Equals(s.PersonId) && s.DateFrom.DateTime == periodStartDate);
-            }
-
-            _peopleViewModel.FoundPeople.Clear();
-
-            foreach (var personDetailContainer in personDetailContainers.Where(p => p.Person!=null))
-            {
-                _peopleViewModel.FoundPeople.Add(new PersonDetailModel
-                                                     {
-                                                         Team = personDetailContainer.PersonPeriod.Team.Description,
-                                                         StartPeriod =
-                                                             personDetailContainer.PersonPeriod.StartDate.DateTime,
-                                                         EndPeriod =
-                                                             personDetailContainer.PersonSkillPeriod.DateTo.DateTime,
-                                                         FirstName = personDetailContainer.Person.FirstName,
-                                                         LastName = personDetailContainer.Person.LastName,
-                                                         Skills =
-                                                             string.Join(", ",
-                                                                         personDetailContainer.PersonSkillPeriod.
-                                                                             SkillCollection.Select(
-                                                                                 s => _skillRepository.GetById(s).Name)),
-                                                         ExternalLogOns =
-                                                             string.Join(", ",
-                                                                         personDetailContainer.PersonPeriod.
-                                                                             ExternalLogOn.Select(
-                                                                                 e => e.AcdLogOnOriginalId)),
-                                                         Note = personDetailContainer.PersonPeriod.Note,
-                                                         Contract = personDetailContainer.Contract,
-                                                         ContractSchedule = personDetailContainer.ContractSchedule,
-                                                         PartTimePercentageName =
-                                                             personDetailContainer.PartTimePercentageName,
-                                                         PartTimePercentageValue =
-                                                             personDetailContainer.PartTimePercentageValue,
-                                                         Site = personDetailContainer.Site.Name,
-                                                         IsDeleted = personDetailContainer.Person.IsDeleted,
-                                                         LeavingDate = (personDetailContainer.Person.TerminationDate!=null) ? personDetailContainer.Person.TerminationDate.DateTime : (DateTime?)null,
-                                                     });
+				_peopleViewModel.FoundPeople.Add(new PersonDetailModel
+				{
+					Team = personDetailContainer.PersonPeriod.Team.Description,
+					StartPeriod =
+						personDetailContainer.PersonPeriod.StartDate.DateTime,
+					EndPeriod =
+						personDetailContainer.PersonSkillPeriod.DateTo.DateTime,
+					FirstName = personDetailContainer.Person.FirstName,
+					LastName = personDetailContainer.Person.LastName,
+					Skills =
+						string.Join(", ",
+									personDetailContainer.PersonSkillPeriod.
+										SkillCollection.Select(
+											s => _skillRepository.GetById(s).Name)),
+					ExternalLogOns =
+						string.Join(", ",
+									personDetailContainer.PersonPeriod.
+										ExternalLogOn.Select(
+											e => e.AcdLogOnOriginalId)),
+					Note = personDetailContainer.PersonPeriod.Note,
+					Contract = personDetailContainer.Contract,
+					ContractSchedule = personDetailContainer.ContractSchedule,
+					PartTimePercentageName =
+						personDetailContainer.PartTimePercentageName,
+					PartTimePercentageValue =
+						personDetailContainer.PartTimePercentageValue,
+					Site = personDetailContainer.Site.Name,
+					BusinessUnit = businessUnit.Name,
+					IsDeleted = personDetailContainer.Person.IsDeleted,
+					LeavingDate = (personDetailContainer.Person.TerminationDate != null) ? personDetailContainer.Person.TerminationDate.DateTime : (DateTime?)null,
+				});
             }
 
             _peopleViewModel.ResultCountVisible = Visibility.Visible;
         }
 
-        private ITeleoptiOrganizationService initializeRepositories(DateOnlyDto startDate, DateOnlyDto endDate)
+        private void initializeRepositories(DateOnlyDto startDate, DateOnlyDto endDate)
         {
-            var organisationService = new ChannelFactory<ITeleoptiOrganizationService>(typeof(ITeleoptiOrganizationService).Name).CreateChannel();
-            var forecastingService = new ChannelFactory<ITeleoptiForecastingService>(typeof(ITeleoptiForecastingService).Name).CreateChannel();
-            
-            _contractRepository.Initialize(organisationService);
-            _personRepository.Initialize(organisationService);
-            _contractScheduleRepository.Initialize(organisationService);
-            _partTimePercentageRepository.Initialize(organisationService);
-            _skillRepository.Initialize(forecastingService);
-            _personPeriodRepository.Initialize(organisationService,startDate,endDate);
-            _businessHierarchyRepository.Initialize(organisationService);
-
-            return organisationService;
-        }
-
-        private class PersonDetailContainer
-        {
-            public PersonDto Person { get; set; }
-            public PersonPeriodDetailDto PersonPeriod { get; set; }
-            public PersonSkillPeriodDto PersonSkillPeriod { get; set; }
-            public string Contract { get; set; }
-            public string ContractSchedule { get; set; }
-            public string PartTimePercentageName { get; set; }
-            public string PartTimePercentageValue { get; set; }
-
-            public SiteModel Site { get; set; }
+            _contractRepository.Initialize();
+            _personRepository.Initialize();
+            _contractScheduleRepository.Initialize();
+            _partTimePercentageRepository.Initialize();
+            _skillRepository.Initialize();
+            _personPeriodRepository.Initialize(startDate,endDate);
+            _businessHierarchyRepository.Initialize();
         }
 
         public bool CanExecute(object parameter)

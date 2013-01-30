@@ -8,11 +8,17 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.Repositories
 {
     public class ContractScheduleRepository
     {
-        private Dictionary<Guid, ContractScheduleDto> _contractScheduleDictionary;
+    	private readonly ITeleoptiOrganizationService _teleoptiOrganizationService;
+    	private Dictionary<Guid, ContractScheduleDto> _contractScheduleDictionary;
 
-        public void Initialize(ITeleoptiOrganizationService teleoptiOrganizationService)
+    	public ContractScheduleRepository(ITeleoptiOrganizationService teleoptiOrganizationService)
+    	{
+    		_teleoptiOrganizationService = teleoptiOrganizationService;
+    	}
+
+    	public void Initialize()
         {
-            var contractSchedules = teleoptiOrganizationService.GetContractSchedules(new LoadOptionDto { LoadDeleted = true });
+            var contractSchedules = _teleoptiOrganizationService.GetContractSchedules(new LoadOptionDto { LoadDeleted = true });
             _contractScheduleDictionary = contractSchedules.ToDictionary(k => k.Id.GetValueOrDefault(), v => v);
         }
 
