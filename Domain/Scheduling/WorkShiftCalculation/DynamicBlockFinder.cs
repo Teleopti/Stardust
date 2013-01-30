@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                     if (schdaypro.Day == startDateOnly)
                     {
                         selectedPeriod = new List<IScheduleDayPro>(matrix.EffectivePeriodDays);
+                        break;
                     }
                 }
             }

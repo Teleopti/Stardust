@@ -90,7 +90,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<StudentSchedulingService>().As<IStudentSchedulingService>().InstancePerLifetimeScope();
 
             builder.RegisterType<ShiftProjectionCacheFilter>().As<IShiftProjectionCacheFilter>().InstancePerLifetimeScope();
-            
+
+            builder.RegisterType<SkillResolutionProvider>().As<ISkillResolutionProvider>().InstancePerLifetimeScope();
+            builder.RegisterType<SkillIntervalDataDivider>().As<ISkillIntervalDataDivider>().InstancePerLifetimeScope();
             builder.RegisterType<BlockSchedulingService>().As<IBlockSchedulingService>().InstancePerLifetimeScope();
             builder.RegisterType<SkillDayPeriodIntervalDataGenerator>().As<ISkillDayPeriodIntervalDataGenerator>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillStaffPeriodToSkillIntervalDataMapper>().As<ISkillStaffPeriodToSkillIntervalDataMapper>().InstancePerLifetimeScope();

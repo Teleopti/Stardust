@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                                                       true,
                                                       true)).IgnoreArguments().Return(_scheduleProjectionCache ) ;
                 Expect.Call(() => _teamScheduling.Execute(dateOnlyList, matrixList, _grouPerson, _effectiveRestriction,
-                                                    _scheduleProjectionCache)).IgnoreArguments();
+                                                    _scheduleProjectionCache,new List<DateOnly>())).IgnoreArguments();
             }
             using(_mocks.Playback() )
             {
