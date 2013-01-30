@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
             using(_mock.Playback()   )
             {
-                _target.Execute(selectedDays,matrixList,_groupPerson ,_effectiveRestriction ,_shiftProjectionCache)  ;
+                _target.Execute(selectedDays,matrixList,_groupPerson ,_effectiveRestriction ,_shiftProjectionCache,new List<DateOnly>())  ;
             }
         }
     }

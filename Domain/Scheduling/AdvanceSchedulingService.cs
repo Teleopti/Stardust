@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                     //call class that schedules the unscheduled days for the teamblock using the same start time from the given shift, 
                     //this class will handle steady state as well as individual
-					_teamScheduling.Execute(dateOnlyList, groupMatrixList, groupPerson, restriction, bestShiftProjectionCache);
+                    _teamScheduling.Execute(dateOnlyList, groupMatrixList, groupPerson, restriction, bestShiftProjectionCache, _unLockedDays);
                 }
                 
                 //looping on the next block
