@@ -37,8 +37,19 @@ define([
 				}
 
 				setMomentLangWithFallback(translations.LanguageCode);
-				var timeLine = new timeLineViewModel(translations.ShortTimePattern);
-				var teamSchedule = new teamScheduleViewModel(timeLine, date);
+				var agentsViewModel = function () {
+					var self = this;
+
+					this.Agents = ko.observableArray();
+
+					this.AddAgents = function (agentsToAdd) {
+						self.Agents.push.apply(self.Agents, agentsToAdd);
+					};
+				};
+
+				var agents = new agentsViewModel();
+				var timeLine = new timeLineViewModel(agents, translations.ShortTimePattern);
+				var teamSchedule = new teamScheduleViewModel(date);
 
 				var previousOffset;
 				var teamScheduleContainer = $('.team-schedule');
@@ -55,44 +66,45 @@ define([
 					.ready(resize);
 
 				var initialLoad = true;
-				var loadSchedules = function() {
+				var loadSchedules = function () {
 					var queryDate = teamSchedule.SelectedDate().clone();
 					queryDate.utc();
 
 					teamSchedule.isLoading(true);
-					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, queryDate.toDate()).fail(function() {
+					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, queryDate.toDate()).fail(function () {
 						window.location.href = 'authentication/signout';
-					}).done(function(schedules) {
-						var agents = teamSchedule.Agents();
+					}).done(function (schedules) {
+						var currentAgents = agents.Agents();
 
 						var dateClone = teamSchedule.SelectedDate().clone();
 						for (var i = 0; i < schedules.length; i++) {
-							for (var j = 0; j < agents.length; j++) {
-								if (agents[j].Id == schedules[i].Id) {
-									agents[j].AddLayers(schedules[i].Projection, dateClone);
-									agents[j].AddContractTime(schedules[i].ContractTimeMinutes);
-									agents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
+							for (var j = 0; j < currentAgents.length; j++) {
+								if (currentAgents[j].Id == schedules[i].Id) {
+									currentAgents[j].AddLayers(schedules[i].Projection, timeLine, dateClone);
+									currentAgents[j].AddContractTime(schedules[i].ContractTimeMinutes);
+									currentAgents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
 									break;
 								}
 							}
 						}
 
-						agents.sort(function(a, b) {
+						currentAgents.sort(function (a, b) {
 							var firstStartMinutes = a.FirstStartMinute();
 							var secondStartMinutes = b.FirstStartMinute();
 							return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
 						});
 
-						teamSchedule.Agents.valueHasMutated();
+						agents.Agents.valueHasMutated();
+						timeLine.CalculateTimes();
 
 						teamSchedule.isLoading(false);
 
 						if (initialLoad) {
-							teamSchedule.SelectedTeam.subscribe(function() {
+							teamSchedule.SelectedTeam.subscribe(function () {
 								loadPeople();
 							});
 
-							teamSchedule.SelectedDate.subscribe(function() {
+							teamSchedule.SelectedDate.subscribe(function () {
 								loadAvailableTeams();
 							});
 							initialLoad = false;
@@ -148,13 +160,12 @@ define([
 
 				var loadPeople = function () {
 					$.getJSON('Person/PeopleInTeam?' + $.now(), { date: teamSchedule.SelectedDate().toDate().toJSON(), teamId: teamSchedule.SelectedTeam().Id }).success(function (people, textStatus, jqXHR) {
-						timeLine.Agents.removeAll();
-						teamSchedule.Agents.removeAll();
+						agents.Agents([]);
 
 						var newItems = ko.utils.arrayMap(people, function (s) {
-							return new agentViewModel(timeLine, s);
+							return new agentViewModel(s);
 						});
-						teamSchedule.AddAgents(newItems);
+						agents.AddAgents(newItems);
 
 						loadSchedules();
 					}).error(function () {
@@ -170,7 +181,9 @@ define([
 						$(window).ready(function () {
 							ko.applyBindings({
 								TeamSchedule: teamSchedule,
-								Translations: translations
+								Translations: translations,
+								Timeline: timeLine,
+								Agents: agents
 							}, $('body > section')[0]);
 						});
 					})
