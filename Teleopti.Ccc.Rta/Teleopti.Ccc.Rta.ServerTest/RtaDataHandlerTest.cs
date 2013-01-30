@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			_messageSender.Expect(e => e.InstantiateBrokerService());
 			_mocks.ReplayAll();
-			new RtaDataHandlerForTest(_loggingSvc, _messageSender, string.Empty, _databaseConnectionFactory, _dataSourceResolver,
+			new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory, _dataSourceResolver,
 			                          _personResolver, _stateResolver);
 			_mocks.VerifyAll();
 		}
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_messageSender.Expect(e => e.InstantiateBrokerService()).Throw(new BrokerNotInstantiatedException());
 			_loggingSvc.Expect(l => l.Error("", new BrokerNotInstantiatedException())).IgnoreArguments();
 			_mocks.ReplayAll();
-			new RtaDataHandlerForTest(_loggingSvc, _messageSender, string.Empty, _databaseConnectionFactory, _dataSourceResolver,
+			new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory, _dataSourceResolver,
 			                          _personResolver, _stateResolver);
 			_mocks.VerifyAll();
 		}
@@ -113,34 +113,17 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_mocks.VerifyAll();
 		}
 
-		// needed?
 		[Test]
-		public void VerifyWarningWithNoConnectionString()
+		public void	VerifyWarningWithNoConnectionString()
 		{
-			var autoreset = new AutoResetEvent(false);
-			int dataSourceAfterResolve;
-			Expect.Call(_dataSourceResolver.TryResolveId("1",
-			                                             out dataSourceAfterResolve)).Return(true).OutRef(1);
-			IEnumerable<PersonWithBusinessUnit> personListAfterResolve;
-			Expect.Call(_personResolver.TryResolveId(1, "002", out personListAfterResolve)).Return(true).
-				OutRef(new List<PersonWithBusinessUnit> {new PersonWithBusinessUnit()});
-			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, "002")).IgnoreArguments().Return(true);
-			_rtaConsumer.Expect(
-				r =>
-				r.Consume(Guid.Empty, Guid.Empty, Guid.Empty, "002", DateTime.Now, TimeSpan.FromMinutes(1),
-				          autoreset)).IgnoreArguments().Return(new ActualAgentState());
-
 			_messageSender.InstantiateBrokerService();
-			_messageSender.SendRtaData(Guid.Empty, Guid.Empty, null);
-			LastCall.IgnoreArguments();
-			Expect.Call(_messageSender.IsAlive).Return(true);
-			_loggingSvc.Warn("No connection information available in configuration file.");
-
+			_loggingSvc.Expect(l => l.Warn("No connection information available in configuration file."));
 			_mocks.ReplayAll();
-			AssignTargetAndRun();
+
+			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, string.Empty, _databaseConnectionFactory, _dataSourceResolver, _personResolver, _stateResolver, _rtaConsumer);
+			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
+			                       _isSnapshot);
 			_mocks.VerifyAll();
-			
-			autoreset.Dispose();
 		}
 		
 		[Test]
@@ -164,7 +147,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_messageSender.InstantiateBrokerService();
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(false).OutRef(new object[1]);
-			_messageSender.Expect(m => m.IsAlive).Return(true);
 			
 			_mocks.ReplayAll();
 			AssignTargetAndRun();
@@ -341,7 +323,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 		private void AssignTargetAndRun()
 		{
-			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, string.Empty, _databaseConnectionFactory,
+			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
 			                                    _dataSourceResolver, _personResolver, _stateResolver, _rtaConsumer);
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 			                       _isSnapshot);
