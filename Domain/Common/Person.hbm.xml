@@ -252,7 +252,7 @@
 	<query name="FindPossibleShiftTrades">
 		<![CDATA[
 		select p from Person p
-		where p<>:loggedOnUser
+		where p<>:loggedOnUser and p.WorkflowControlSet is not null
 		order by newid()
 		]]>
 	</query>
