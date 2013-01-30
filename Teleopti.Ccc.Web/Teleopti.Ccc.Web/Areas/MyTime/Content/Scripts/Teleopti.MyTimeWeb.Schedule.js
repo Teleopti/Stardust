@@ -149,9 +149,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.days(days);
 			var minDateArr = data.PeriodSelection.SelectedDateRange.MinDate.split('-');
 			var maxDateArr = data.PeriodSelection.SelectedDateRange.MaxDate.split('-');
-			
+
 			self.minDate = moment(new Date(minDateArr[0], minDateArr[1] - 1, minDateArr[2])).add('days', -1).toDate();
-			self.maxDate = moment(new Date(maxDateArr[0], maxDateArr[1] - 1, maxDateArr[2])).add('days',1).toDate();
+			self.maxDate = moment(new Date(maxDateArr[0], maxDateArr[1] - 1, maxDateArr[2])).add('days', 1).toDate();
 		}
 	});
 
@@ -188,6 +188,22 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 		self.colorForDaySummary = ko.computed(function () {
 			return parent.styles()[self.summaryStyleClassName()];
+		});
+
+		self.textColor = ko.computed(function () {
+
+			var backgroundColor = parent.styles()[self.summaryStyleClassName()];
+			if (backgroundColor != null && backgroundColor != 'undefined') {
+
+				backgroundColor = backgroundColor.slice(backgroundColor.indexOf('(') + 1, backgroundColor.indexOf(')'));
+
+				var backgroundColorArr = backgroundColor.split(',');
+
+				var brightness = backgroundColorArr[0] * 0.299 + backgroundColorArr[1] * 0.587 + backgroundColorArr[2] * 0.114;
+
+				return brightness < 100 ? 'white' : 'black';
+			}
+			return 'black';
 		});
 		self.layers = ko.utils.arrayMap(day.Periods, function (item) {
 			return new LayerViewModel(item, parent);

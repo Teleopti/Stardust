@@ -299,4 +299,69 @@ Scenario: Keep user request input when schedules are refreshed
 	And My schedule between '2013-10-03 08:00' to '2013-10-03 18:00' reloads
 	Then I should see the add text request form
 	And Subject should not be empty
+
+Scenario: Show black day summary text when background color is white 
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2013-01-30 08:00 |
+	| EndTime               | 2013-01-30 18:00 |
+	| Shift category        | Day              |
+	| Shift color           | White            |
+	When I view my week schedule for date '2013-01-30'
+	Then I should see the day summary text for date '2013-01-30' in 'black'
+
+Scenario: Show white day summary text when background color is black 
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2013-01-30 08:00 |
+	| EndTime               | 2013-01-30 18:00 |
+	| Shift category		| Day	           |
+	| Shift color           | Black            |
+	When I view my week schedule for date '2013-01-30'
+	Then I should see the day summary text for date '2013-01-30' in 'white'
+
+Scenario: Show black activity text when activity background color is white
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a shift with
+    | Field                 | Value            |
+	| StartTime             | 2013-01-30 08:00 |
+	| EndTime               | 2013-01-30 18:00 |
+	| Lunch3HoursAfterStart | true             |
+	| Shift category        | Day              |
+	| All activity color    | White            |
+	When I view my week schedule for date '2013-01-30'
+	Then I should see the activity text for date '2013-01-30' in 'black'
+
+Scenario: Show white activity text when activity background color is black
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a shift with
+    | Field                 | Value            |
+	| StartTime             | 2013-01-30 08:00 |
+	| EndTime               | 2013-01-30 18:00 |
+	| Lunch3HoursAfterStart | true             |
+	| Shift category        | Day              |
+	| All activity color    | Black            |
+	When I view my week schedule for date '2013-01-30'
+	Then I should see the activity text for date '2013-01-30' in 'white'
+
+Scenario: Show white absence text when absence background color is black
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have absence with
+	| Field					| Value			   |
+	| StartTime             | 2013-01-30 08:00 |
+	| EndTime               | 2013-01-30 18:00 |
+	| Name					| Illness		   |
+	| Absence color			| Black			   |
+	When I view my week schedule for date '2013-01-30'
+	Then I should see the absence text for date '2013-01-30' in 'white'
+
+
+	 
 	 

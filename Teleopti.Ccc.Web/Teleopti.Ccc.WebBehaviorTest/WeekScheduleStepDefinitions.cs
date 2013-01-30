@@ -187,6 +187,22 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Current.Eval(formattedJs);
 		}
 
+		[Then(@"I should see the day summary text for date '(.*)' in '(.*)'")]
+		public void ThenIShouldSeeTheDaySummaryTextForDateIn(DateTime date, string color)
+		{
+			_page.DayElementForDate(date).ListItems.First(Find.ById("day-summary")).Style.Color.ToString().ToLower().Should().Contain(
+				color);
+		}
+
+		[Then(@"I should see the activity text for date '(.*)' in '(.*)'")]
+		public void ThenIShouldSeeTheActivityTextForDateIn(DateTime date, string color)
+		{
+			DivCollection layers = _page.DayLayers(date);
+
+			EventualAssert.That(() => layers[0].Style.GetAttributeValue("backgroundColor").ToLower(), Is.StringContaining(color));
+		}
+
+
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{
 			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, UserFactory.User().Culture);
