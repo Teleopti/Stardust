@@ -9,6 +9,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -366,6 +367,47 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var expectedTimeLineLingth = possibleTradePersonLayerPeriod.EndDateTime.Subtract(possibleTradePersonLayerPeriod.StartDateTime).TotalMinutes;
 			expectedTimeLineLingth += 30;
 			result.TimeLineLengthInMinutes.Should().Be.EqualTo(expectedTimeLineLingth);
+		}
+
+		[Test]
+		public void ShouldMapMyAbsenceWithUnderlyingDayOff()
+		{
+			var period = new DateTimePeriod(new DateTime(2013, 1, 1, 8, 0, 0, DateTimeKind.Utc),
+											new DateTime(2013, 1, 1, 17, 0, 0, DateTimeKind.Utc));
+			var myDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, _person, SchedulePartView.ContractDayOff,
+			                                             PersonAbsenceFactory.CreatePersonAbsence(_person, new Scenario("sc"),period));
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(Arg<DateOnly>.Is.Anything)).Return(myDay);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything)).Return(new List<IScheduleDay>());
+			_projectionProvider.Stub(p => p.Projection(myDay)).Return(_scheduleFactory.ProjectionStub(new[]
+		                                                {
+		                                                    _scheduleFactory.VisualLayerStub(period, _person)
+		                                                }));
+
+			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(DateOnly.Today);
+
+			result.MySchedule.HasUnderlyingDayOff.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapTradeVictimAbsenceWithUnderlyingDayOff()
+		{
+			var tradeVictim = new Person { Name = new Name("Trade", "Victim") };
+			var period = new DateTimePeriod(new DateTime(2013, 1, 1, 8, 0, 0, DateTimeKind.Utc),
+											new DateTime(2013, 1, 1, 17, 0, 0, DateTimeKind.Utc));
+			var myDay = _scheduleFactory.ScheduleDayStub();
+			var victimDay = _scheduleFactory.ScheduleDayStub(DateTime.Now, tradeVictim, SchedulePartView.ContractDayOff,
+														 PersonAbsenceFactory.CreatePersonAbsence(tradeVictim, new Scenario("sc"), period));
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(Arg<DateOnly>.Is.Anything)).Return(myDay);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything)).Return(new List<IScheduleDay> {victimDay});
+			_projectionProvider.Stub(p => p.Projection(myDay)).Return(_scheduleFactory.ProjectionStub());
+			_projectionProvider.Stub(p => p.Projection(victimDay)).Return(_scheduleFactory.ProjectionStub(new[]
+		                                                {
+		                                                    _scheduleFactory.VisualLayerStub(period, tradeVictim)
+		                                                }));
+
+			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(DateOnly.Today);
+
+			result.PossibleTradePersons.First().HasUnderlyingDayOff.Should().Be.True();
 		}
 	}
 }
