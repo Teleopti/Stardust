@@ -1202,7 +1202,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             //var skillDayPeriodIntervalData = new SkillDayPeriodIntervalData(skillIntervalDataSkillFactorApplyer,
             //                                                                intervalDataMedianCalculator,
             //                                                                schedulingResultStateHolder);
-                var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder);
+                var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder,matrixList );
                 var teamExtractor = new TeamExtractor(matrixList, _groupPersonBuilderForOptimization);
                 var restrictionAggregator = _container.Resolve<IRestrictionAggregator>();
                 var workShiftFilterService = _container.Resolve<IWorkShiftFilterService>();

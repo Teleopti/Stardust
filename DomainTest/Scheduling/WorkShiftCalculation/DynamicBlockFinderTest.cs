@@ -15,6 +15,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private SchedulingOptions  _schedulingOptions;
         private MockRepository _mock;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
+        private IScheduleMatrixPro _matrixPro;
+        private IList<IScheduleMatrixPro> _matrixList;
 
         [SetUp]
         public void Setup()
@@ -22,15 +24,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _mock = new MockRepository();
             _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
             _schedulingOptions = new SchedulingOptions();
-            
-            
+            _matrixPro = _mock.StrictMock<IScheduleMatrixPro>();
+            _matrixList = new List<IScheduleMatrixPro> {_matrixPro};
+
         }
 
         [Test]
         public void FindSkillDayFromBlockUsingPeriod()
         {
             _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod ;
-            _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
+            _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder,_matrixList);
             var date = new DateOnly(  DateTime.UtcNow );
             
             var scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
@@ -54,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         public void FindSkillDayFromBlockUsingTwoDaysOff()
         {
             _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff ;
-            _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
+            _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder,_matrixList );
             var date = new DateOnly(DateTime.UtcNow);
             
             var scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
@@ -87,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         public void FindSkillDayFromBlockUsingCalenderWeek()
         {
             _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.Weeks ;
-            _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder);
+            _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder,_matrixList );
             var startDate = new  DateOnly( new DateTime(2012, 11, 1, 0, 0, 0, DateTimeKind.Utc));
 
             var scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();

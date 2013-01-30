@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                 return new SkillIntervalData(new DateTimePeriod(skillIntervalData1.Period.StartDateTime, skillIntervalData1.Period.EndDateTime.AddMinutes(15)),
                                              skillIntervalData1.ForecastedDemand ,
                                              skillIntervalData1.CurrentDemand ,
-                                             skillIntervalData1.CurrentHeads , null , null );
+                                             skillIntervalData1.CurrentHeads , skillIntervalData1.MinimumHeads  , skillIntervalData1.MaximumHeads );
             }
             int? minHead1 = skillIntervalData1.MinimumHeads.HasValue ? skillIntervalData1.MinimumHeads.Value : (int?)null;
             int? maxHead1 = skillIntervalData1.MaximumHeads.HasValue ? skillIntervalData1.MaximumHeads.Value : (int?)null;
