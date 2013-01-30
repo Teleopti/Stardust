@@ -44,13 +44,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			double weightedCurrentDemand = tweakedCurrentDemandInMinutes * tweakedCurrentDemandInMinutes;
 
 			double oldValue = (weightedCurrentDemand / forecastedDemandInMinutes) * logicalSign;
-			double afterAddingCurrent = tweakedCurrentDemandInMinutes + currentResourceInMinutes;
+			double afterAddingCurrent = tweakedCurrentDemandInMinutes - currentResourceInMinutes;
 
 			int nextLogicalSign = Math.Sign(afterAddingCurrent);
 			weightedCurrentDemand = afterAddingCurrent * afterAddingCurrent;
 			double newValue = (weightedCurrentDemand / forecastedDemandInMinutes) * nextLogicalSign;
 
-			return (oldValue - newValue) * logicalSign;
+			return (oldValue - newValue) * nextLogicalSign;
 		}
 
 		private static double getCorrectionFactor(bool useMinimumPersons, bool useMaximumPersons, ISkillIntervalData skillIntervalData)
