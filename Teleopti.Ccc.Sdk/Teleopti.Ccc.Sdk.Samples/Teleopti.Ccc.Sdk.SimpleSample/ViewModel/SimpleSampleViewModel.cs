@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
             PeopleViewModel = new PeopleViewModel();
             ScheduleViewModel = new ScheduleViewModel();
             LogOnCommand = new LogOnCommand(this);
+            AfterSuccessfulLogOnCommand = new AfterSuccessfulLogOnCommand(this);
         }
 
         public bool EnableFunctions
@@ -47,6 +48,8 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
         }
 
         public ICommand LogOnCommand { get; private set; }
+
+        public ICommand AfterSuccessfulLogOnCommand { get; private set; }
 
         public PeopleViewModel PeopleViewModel { get; private set; }
 
