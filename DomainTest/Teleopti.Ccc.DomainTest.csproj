@@ -748,6 +748,7 @@
     <Compile Include="Scheduling\WorkShiftCalculation\DynamicBlockFinderTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\RestrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillDayPeriodIntervalDataTest.cs" />
+    <Compile Include="Scheduling\WorkShiftCalculation\SkillIntervalDataAggregatorTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillIntervalDataDividerTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillIntervalDataSkillFactorApplyerTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
