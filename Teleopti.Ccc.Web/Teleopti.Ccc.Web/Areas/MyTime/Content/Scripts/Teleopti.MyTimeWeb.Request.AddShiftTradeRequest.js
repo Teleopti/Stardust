@@ -136,12 +136,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.minutesSinceTimeLineStart = minutesSinceTimeLineStart;
 		self.dayOffText = dayOffText;
 		self.hasUnderlyingDayOff = ko.observable(hasUnderlyingDayOff);
-		self.showDayOffStyle = ko.computed(function () {
+		self.showDayOffStyle = function () {
 			if (self.hasUnderlyingDayOff() == true | self.dayOffText.length > 0) {
 				return true;
 			}
 			return false;
-		});
+		};
 
 	}
 
