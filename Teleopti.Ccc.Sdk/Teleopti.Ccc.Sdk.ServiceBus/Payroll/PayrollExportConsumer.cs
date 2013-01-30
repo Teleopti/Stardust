@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using Teleopti.Interfaces.Messages.Payroll;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
@@ -16,7 +16,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
         private readonly IPayrollPeopleLoader _payrollPeopleLoader;
         private readonly static ILog Logger = LogManager.GetLogger(typeof(PayrollExportConsumer));
 
-        public PayrollExportConsumer(IRepositoryFactory repositoryFactory, IPayrollDataExtractor payrollDataExtractor, IPersonBusAssembler personBusAssembler, IServiceBusPayrollExportFeedback serviceBusPayrollExportFeedback, IPayrollPeopleLoader payrollPeopleLoader)
+    	public static bool IsRunning { get; private set; }
+
+    	public PayrollExportConsumer(IRepositoryFactory repositoryFactory, IPayrollDataExtractor payrollDataExtractor, IPersonBusAssembler personBusAssembler, IServiceBusPayrollExportFeedback serviceBusPayrollExportFeedback, IPayrollPeopleLoader payrollPeopleLoader)
         {
             _repositoryFactory = repositoryFactory;
             _payrollDataExtractor = payrollDataExtractor;
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
         public void Consume(RunPayrollExport message)
         {
             if(MessageIsNull(message)) return;
-
+        	IsRunning = true;
             Logger.DebugFormat("Consuming message for Payroll Export with Id = {0}. (Message timestamp = {1})", message.PayrollExportId, message.Timestamp);
             Logger.DebugFormat("Payroll Export period = {0})", message.ExportPeriod);
 
@@ -53,6 +55,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
                 {
                     Logger.Error("An error occurred while running the payroll export.",exception);
                     _serviceBusPayrollExportFeedback.Error(@"An error occurred while running the payroll export.", exception);
+                	IsRunning = false;
                 }
                 
                 using (new MessageBrokerSendEnabler())
@@ -63,6 +66,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
                 _serviceBusPayrollExportFeedback.ReportProgress(100, "Payroll export finished.");
                 _serviceBusPayrollExportFeedback.Dispose();
                 _serviceBusPayrollExportFeedback = null;
+            	IsRunning = false;
             }
         }
     

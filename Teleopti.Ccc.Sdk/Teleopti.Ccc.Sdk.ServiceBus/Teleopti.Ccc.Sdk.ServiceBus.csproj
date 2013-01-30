@@ -209,6 +209,7 @@
     <Compile Include="IScheduleIsInvalidSpecification.cs" />
     <Compile Include="LargeGuidCollectionSerializer.cs" />
     <Compile Include="PayrollContainerInstaller.cs" />
+    <Compile Include="PayrollDllCopy.cs" />
     <Compile Include="Payroll\ChannelCreator.cs" />
     <Compile Include="Payroll\FormatLoader\AssemblyFileLoader.cs" />
     <Compile Include="Payroll\FormatLoader\DomainAssemblyResolver.cs" />

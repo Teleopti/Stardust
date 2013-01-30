@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
             _scheduleRepository = scheduleRepository;
             _personRepository = personRepository;
             _scheduleDictionarySaver = scheduleDictionarySaver;
-    		_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
+    			_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
 
     		Logger.Info("New instance of Shift Trade saga was created");
         }
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
                 {
                     Logger.Debug("Loading Accepting person");
                     var acceptingPerson = loadPersonAcceptingPerson(message);
-                    var checkSum = new ShiftTradeRequestSetChecksum(_defaultScenario, _scheduleRepository);
+						  var checkSum = new ShiftTradeRequestSetChecksum(_scenarioRepository, _scheduleRepository);
 
                     try
                     {
