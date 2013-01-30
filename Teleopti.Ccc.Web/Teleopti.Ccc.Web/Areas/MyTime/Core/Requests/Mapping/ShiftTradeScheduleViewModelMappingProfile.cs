@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 																	Name = UserTexts.Resources.MySchedule,
 																	ScheduleLayers = CreateShiftTradeLayers(myScheduleDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
 																	MinutesSinceTimeLineStart = myScheduleDay.ScheduleLayers.Any() ? (int)myScheduleDay.ScheduleLayers.First().Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes : TimeLineOffset,
-																	DayOffText = myScheduleDay.DayOffText
+																	DayOffText = myScheduleDay.DayOffText,
+																	HasUnderlyingDayOff = myScheduleDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff
 																};
 
 									var possibleTradePersonViewModelCollection = new List<ShiftTradePersonScheduleViewModel>();
@@ -53,7 +54,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 										                                                    Name = personDay.Name, 
 																							ScheduleLayers = CreateShiftTradeLayers(personDay, myScheduleDay.PersonTimeZone, timeLineRangeTot), 
 																							MinutesSinceTimeLineStart = personDay.ScheduleLayers.Any() ? (int) personDay.ScheduleLayers.First().Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes : TimeLineOffset,
-																							DayOffText = personDay.DayOffText
+																							DayOffText = personDay.DayOffText,
+																							HasUnderlyingDayOff = personDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff
 										                                                }));
 									return new ShiftTradeScheduleViewModel
 											{

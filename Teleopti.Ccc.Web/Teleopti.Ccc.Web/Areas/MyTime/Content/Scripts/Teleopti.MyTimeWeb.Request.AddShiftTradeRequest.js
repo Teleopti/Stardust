@@ -123,23 +123,25 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		var minutesSinceTimeLineStart = 0;
 		var agentName = '';
 		var dayOffText = '';
+		var hasUnderlyingDayOff = false;
 		if (scheduleObject) {
 			agentName = scheduleObject.Name;
 			minutesSinceTimeLineStart = scheduleObject.MinutesSinceTimeLineStart;
 			dayOffText = scheduleObject.DayOffText;
+			hasUnderlyingDayOff = scheduleObject.HasUnderlyingDayOff;
 		}
 
 		self.agentName = agentName;
 		self.layers = layers;
 		self.minutesSinceTimeLineStart = minutesSinceTimeLineStart;
 		self.dayOffText = dayOffText;
-		self.underlyingDayOffExists = false;
-		self.showDayOffStyle = ko.computed(function () {
-			if (self.underlyingDayOffExists || self.dayOffText.length > 0) {
+		self.hasUnderlyingDayOff = ko.observable(hasUnderlyingDayOff);
+		self.showDayOffStyle = function () {
+			if (self.hasUnderlyingDayOff() == true | self.dayOffText.length > 0) {
 				return true;
 			}
 			return false;
-		});
+		};
 
 	}
 
