@@ -1198,7 +1198,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             //schedulingOptions.UseGroupSchedulingCommonStart = false;
 
                 schedulingOptions.UseTwoDaysOffAsBlock = true;
-                var skillDayPeriodIntervalData = _container.Resolve<ISkillDayPeriodIntervalData>();
+                var skillDayPeriodIntervalData = _container.Resolve<ISkillDayPeriodIntervalDataGenerator>();
             //var skillDayPeriodIntervalData = new SkillDayPeriodIntervalData(skillIntervalDataSkillFactorApplyer,
             //                                                                intervalDataMedianCalculator,
             //                                                                schedulingResultStateHolder);

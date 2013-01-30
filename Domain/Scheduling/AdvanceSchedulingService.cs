@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly ISchedulingOptions _schedulingOptions;
     	private readonly IWorkShiftSelector _workShiftSelector;
         private readonly IGroupPersonBuilderBasedOnContractTime _groupPersonBuilderBasedOnContractTime;
-        private readonly ISkillDayPeriodIntervalData _skillDayPeriodIntervalData;
+        private readonly ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
         private readonly IList<DateOnly> _effectiveDays;
         private readonly IList<DateOnly> _dayOff;
         private IList<DateOnly> _unLockedDays;
 
-        public AdvanceSchedulingService(ISkillDayPeriodIntervalData skillDayPeriodIntervalData,
+        public AdvanceSchedulingService(ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
             IDynamicBlockFinder dynamicBlockFinder, 
             ITeamExtractor teamExtractor,
             IRestrictionAggregator restrictionAggregator,
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _schedulingOptions = schedulingOptions;
         	_workShiftSelector = workShiftSelector;
             _groupPersonBuilderBasedOnContractTime = groupPersonBuilderBasedOnContractTime;
-            _skillDayPeriodIntervalData = skillDayPeriodIntervalData;
+            _skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
             _effectiveDays = new List<DateOnly>();
             _dayOff = new List<DateOnly>();
             _unLockedDays = new List<DateOnly>();
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, _schedulingOptions);
 
                     //call class that returns the aggregated intraday dist based on teamblock dates ???? consider the priority and understaffing
-                    var activityInternalData = _skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList);
+                    var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(dateOnlyList);
 
                     //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
                     // (should we cover for max seats here?) ????

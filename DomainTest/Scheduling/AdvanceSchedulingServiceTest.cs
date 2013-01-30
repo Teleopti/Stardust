@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
     {
         private MockRepository _mocks;
         private IAdvanceSchedulingService _target;
-        private ISkillDayPeriodIntervalData _skillDayPeriodIntervalData;
+        private ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
         private IDynamicBlockFinder _dynamicBlockFinder;
         private ITeamExtractor _teamExtractor;
         private IRestrictionAggregator _restrictionAggregator;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             _mocks = new MockRepository();
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
-            _skillDayPeriodIntervalData =  _mocks.StrictMock<ISkillDayPeriodIntervalData>();
+            _skillDayPeriodIntervalDataGenerator =  _mocks.StrictMock<ISkillDayPeriodIntervalDataGenerator>();
             _dynamicBlockFinder = _mocks.StrictMock<IDynamicBlockFinder>();
             _teamExtractor = _mocks.StrictMock<ITeamExtractor>();
             _restrictionAggregator = _mocks.StrictMock<IRestrictionAggregator>();
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _scheduleProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
             _activity = _mocks.StrictMock<IActivity>();
-            _target = new AdvanceSchedulingService(_skillDayPeriodIntervalData, 
+            _target = new AdvanceSchedulingService(_skillDayPeriodIntervalDataGenerator, 
                                                 _dynamicBlockFinder, 
                                                 _teamExtractor, 
                                                 _restrictionAggregator,
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                     Return(groupPersonList);
                 Expect.Call(_restrictionAggregator.Aggregate(dateOnlyList, _grouPerson, _schedulingOptions)).
                     IgnoreArguments().Return(_effectiveRestriction);
-                Expect.Call(_skillDayPeriodIntervalData.GetIntervalDistribution(dateOnlyList)).IgnoreArguments().Return(
+                Expect.Call(_skillDayPeriodIntervalDataGenerator.Generate(dateOnlyList)).IgnoreArguments().Return(
                     new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>());
                 Expect.Call(_scheduleMatrixPro.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_person.PersonPeriodCollection).Return(personPeriodList);
