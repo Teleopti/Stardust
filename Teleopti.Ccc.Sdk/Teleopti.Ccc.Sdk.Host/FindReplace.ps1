@@ -3,7 +3,7 @@ function FindAndReplace ([string]$FileName, [string]$searchText, [string]$replac
 	$file = Get-ChildItem $FileName
 	foreach ($str in $file) 
 	{
-	$content = Get-Content -path $str
-	$content | foreach {$_ -replace $searchText, $replaceText} | Set-Content $str
+    	$content = Get-Content -path $str
+    	$content | foreach {$_ -replace $searchText, $replaceText} | Set-Content $str
 	}
 }
