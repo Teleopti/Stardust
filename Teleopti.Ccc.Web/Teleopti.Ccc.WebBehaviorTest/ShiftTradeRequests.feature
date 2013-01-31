@@ -139,13 +139,28 @@ Scenario: View shift trade request details
 	When I click on the request
 	Then I should see the shift trade request form  with subject 'swap with me'
 
-Scenario: Approve shift trade request
+Scenario: Close details when approving shift trade request
 	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request with subject 'swap with me'
+	And I have received a shift trade request from 'Some Person'
 	And I am viewing requests
 	When I click on the request
 	And I click the Approve button on the shift request
 	Then  Details should be closed
+
+Scenario: Can not approve or deny shift trade request created by me
+	Given I have the role 'Full access to mytime'
+	And I have created a shift trade request with subject 'swap with me'
+	And I am viewing requests
+	When I click on the request
+	And I should not see an approve button
+	And I should not see the deny button
+	Then  Details should be closed
+
+Scenario: Cannot delete recieved shift trade requests
+	Given I have the role 'Full access to mytime'
+	And I have received a shift trade request from 'Some Person'
+	And I am viewing requests
+	Then  I should not see a delete button on the request
 
 Scenario: Deny shift trade request
 	Given I have the role 'Full access to mytime'
@@ -155,41 +170,8 @@ Scenario: Deny shift trade request
 	And I click the Deny button on the shift request
 	Then Details should be closed
 
-Scenario: Delete created shift trade request
-	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request
-	And I am viewing requests
-	When I click the shift trade request's delete button
-	Then I should not see the shift trade request in the list
-
-@ignore
 Scenario: Should not be able to delete received shift trade request
 	Given I am an agent
 	And I have received a shift trade request from 'Ashley'
 	When I view requests
 	Then I should not see any delete button on my existing shift trade request
-
-@ignore
-Scenario: Approve shift trade on same day request should update shift in schedule
-	Given I have the role 'Full access to mytime'
-	And Current time is '2012-01-14'
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2012-01-15 10:00 |
-	| EndTime               | 2012-01-15 15:00 |
-	| Shift category			| Night	          |
-	And an agent has a shift with
-	| Field                 | Value            |
-	| Agent name            | Other agent 1    |
-	| StartTime             | 2012-01-15 11:00 |
-	| EndTime               | 2012-01-15 16:00 |
-	| Shift category        | Late             |
-	And I have an existing shift trade request for '2012-01-15' with 'Other agent 1'
-	And I am viewing requests
-	When I click on the request
-	And I click the Approve button on the shift request
-	And I navigate to week schedule page for date '2012-01-15'
-	When I view my week schedule for date '2012-01-15'
-	Then I should see activities on date '2012-01-15' with:
-	| Field                 | Value         |
-	| First activity times  | 11:00 - 16:00 |
