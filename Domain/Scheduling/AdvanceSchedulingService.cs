@@ -65,14 +65,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 
                 foreach (var scheduleDayPro in _matrixList[0].EffectivePeriodDays.OrderBy( x => x.Day))
                 {
-                    //if (_matrixList[0].UnlockedDays.Contains(scheduleDayPro))
-                    //{
-                        if (startDate == DateOnly.MinValue && scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.DayOff)
-                            startDate = scheduleDayPro.Day;
-                        if (scheduleDayPro.DaySchedulePart().SignificantPart() == SchedulePartView.DayOff)
-                            _dayOff.Add(scheduleDayPro.Day);
-                        //_unLockedDays.Add(scheduleDayPro.Day);
-                    //}
+                    if (startDate == DateOnly.MinValue && scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.DayOff)
+                        startDate = scheduleDayPro.Day;
+                    if (scheduleDayPro.DaySchedulePart().SignificantPart() == SchedulePartView.DayOff)
+                        _dayOff.Add(scheduleDayPro.Day);
                     if (_matrixList[0].UnlockedDays.Contains(scheduleDayPro ))
                         _unLockedDays.Add(scheduleDayPro.Day);
                     _effectiveDays.Add(scheduleDayPro.Day);
@@ -99,10 +95,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
             {
                 //call class that return the teamblock dates for a given date (problem if team members don't have same days off)
                 var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays( startDate );
-
-                //call class that finds a random team to schedule
+                
                 var fullGroupPerson = _teamExtractor.GetRamdomTeam(startDate);
-
                 var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, startDate);
                 foreach(var groupPerson in groupPersonList )
                 {
@@ -119,19 +113,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     // (should we cover for max seats here?) ????
 					var shifts = _workShiftFilterService.Filter(startDate, groupPerson, groupMatrixList, restriction, _schedulingOptions);
 
-                    //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need ???
-					var bestShiftProjectionCache = _workShiftSelector.Select(shifts, activityInternalData,
-                                                                             _schedulingOptions.WorkShiftLengthHintOption,
-                                                                             _schedulingOptions.UseMinimumPersons,
-                                                                             _schedulingOptions.UseMaximumPersons);
-                    //call class that schedules given date with given workshift on the complete team
-
-                    //call class that schedules the unscheduled days for the teamblock using the same start time from the given shift, 
-                    //this class will handle steady state as well as individual
-                    _teamScheduling.Execute(dateOnlyList, groupMatrixList, groupPerson, restriction, bestShiftProjectionCache, _unLockedDays);
+                    if(shifts!=null && shifts.Count>0)
+                    {
+                        //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need ???
+                        var bestShiftProjectionCache = _workShiftSelector.Select(shifts, activityInternalData,
+                                                                                 _schedulingOptions.WorkShiftLengthHintOption,
+                                                                                 _schedulingOptions.UseMinimumPersons,
+                                                                                 _schedulingOptions.UseMaximumPersons);
+                        
+                        //call class that schedules given date with given workshift on the complete team
+                        //call class that schedules the unscheduled days for the teamblock using the same start time from the given shift, 
+                        //this class will handle steady state as well as individual
+                        _teamScheduling.Execute(dateOnlyList, groupMatrixList, groupPerson, restriction, bestShiftProjectionCache, _unLockedDays);
+                    }
+                    
                 }
-                
-                //looping on the next block
                 startDate = GetNextDate(dateOnlyList.OrderByDescending(x => x.Date).First());
             }
 

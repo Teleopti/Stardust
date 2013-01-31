@@ -685,6 +685,7 @@
             this.radioButtonBetweenDaysOffAdvScheduling.TabStop = true;
             this.radioButtonBetweenDaysOffAdvScheduling.Text = "xxBetweenDayOff";
             this.radioButtonBetweenDaysOffAdvScheduling.UseVisualStyleBackColor = true;
+            this.radioButtonBetweenDaysOffAdvScheduling.Visible = false;
             // 
             // tabPageAdvance
             // 
