@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Interfaces.Domain;
@@ -14,12 +15,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	{
 		private IPersonRepository target;
 		private IPerson myself;
+		private IWorkflowControlSet wcs;
 
 		protected override void SetupForRepositoryTest()
 		{
 			target = new PersonRepository(UnitOfWork);
-			myself = new Person();
-			addValidPersonStuff(myself);
+			wcs = new WorkflowControlSet("hej");
+			PersistAndRemoveFromUnitOfWork(wcs);
+			myself = createValidPerson();
 			PersistAndRemoveFromUnitOfWork(myself);
 		}
 
@@ -31,20 +34,53 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldNotFetchPersonWithNoWorkflowControlSet()
+		{
+			var p = createValidPerson();
+			p.WorkflowControlSet = null;
+			PersistAndRemoveFromUnitOfWork(p);
+
+			target.FindPossibleShiftTrades(myself)
+				.Should().Not.Contain(p);
+		}
+
+		[Test]
 		public void ShouldFetchValidPerson()
 		{
-			var valid = new Person();
-			addValidPersonStuff(valid);
+			var valid = createValidPerson();
 			PersistAndRemoveFromUnitOfWork(valid);
 
 			target.FindPossibleShiftTrades(myself)
 				.Should().Contain(valid);
 		}
 
-		private static void addValidPersonStuff(IPerson person)
+		[Test]
+		public void ShouldFetchInRandomOrder()
 		{
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
+			const int noOfPersons = 10;
+			for (var i = 0; i < noOfPersons; i++)
+			{
+				PersistAndRemoveFromUnitOfWork(createValidPerson());
+			}
+
+			var firstFetch = target.FindPossibleShiftTrades(myself);
+
+			const int retries = 5;
+			for (var i = 0; i < retries; i++)
+			{
+				var possible = target.FindPossibleShiftTrades(myself);
+				if (possible.PositionOfFirstDifference(firstFetch) != -1)
+					return;
+			}
+			Assert.Fail("No randomness of possible shift trades");
 		}
 
+		private IPerson createValidPerson()
+		{
+			var person = new Person();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
+			person.WorkflowControlSet = wcs;
+			return person;
+		}
 	}
 }
