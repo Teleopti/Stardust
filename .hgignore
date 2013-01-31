@@ -61,3 +61,4 @@ CruiseControl.gpState
 Logs/WebApps.log.1
 *.feature.cs
 Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.Host/Teleopti.Payroll/internal.storage.xml
+Teleopti.Scripting.Powershell/Pester.1.1.1
