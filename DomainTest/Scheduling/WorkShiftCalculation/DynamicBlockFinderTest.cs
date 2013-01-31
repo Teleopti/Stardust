@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -17,6 +19,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IScheduleMatrixPro _matrixPro;
         private IList<IScheduleMatrixPro> _matrixList;
+        private IScheduleDayPro _scheduleDayPro;
+        private IList<IScheduleDayPro> _scheduleDayProList; 
 
         [SetUp]
         public void Setup()
@@ -26,7 +30,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _schedulingOptions = new SchedulingOptions();
             _matrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _matrixList = new List<IScheduleMatrixPro> {_matrixPro};
-
+            _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
+            _scheduleDayProList = new List<IScheduleDayPro>();
+            _scheduleDayProList.Add(_scheduleDayPro);
         }
 
         [Test]
@@ -45,7 +51,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
                 Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
                 Expect.Call(scheduleDictionary.Period).Return(scheduleDateTimePeriod);
                 Expect.Call(scheduleDateTimePeriod.LoadedPeriod()).Return(dateTimePeriod);
-                
+                Expect.Call(_matrixPro.EffectivePeriodDays).Return(_scheduleDayProList as ReadOnlyCollection<IScheduleDayPro>);
+
             }
             using (_mock.Playback())
             {
