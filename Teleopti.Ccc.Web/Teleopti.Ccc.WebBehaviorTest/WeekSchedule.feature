@@ -356,8 +356,8 @@ Scenario: Show white absence text when absence background color is black
 	And I have a full-day absence today with
 	| Field                 | Value            |
 	| Absence color         | Black			   |
-	When I view my week schedule for date '2013-01-30'
-	Then I should see the text for date '2013-01-30' in 'white'
+	When I view my week schedule
+	Then I should see the text for today in 'white'
 
 Scenario: Show black absence text when absence background color is white
 	Given I have the role 'Full access to mytime'
@@ -365,8 +365,8 @@ Scenario: Show black absence text when absence background color is white
 	And I have a full-day absence today with
 	| Field                 | Value            |
 	| Absence color         | White			   |
-	When I view my week schedule for date '2013-01-30'
-	Then I should see the text for date '2013-01-30' in 'black'
+	When I view my week schedule
+	Then I should see the text for today in 'black'
 
 
 	 

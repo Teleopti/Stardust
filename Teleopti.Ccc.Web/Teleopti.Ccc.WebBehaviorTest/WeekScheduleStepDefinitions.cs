@@ -202,6 +202,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => layers[0].Style.GetAttributeValue("color").ToLower(), Is.StringContaining(color));
 		}
 
+		[Then(@"I should see the text for today in '(.*)'")]
+		public void ThenIShouldSeeTheTextForTodayIn(string color)
+		{
+			DivCollection layers = _page.DayLayers(DateTime.Today.Date);
+
+			EventualAssert.That(() => layers[0].Style.GetAttributeValue("color").ToLower(), Is.StringContaining(color));
+		}
+
 
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{
