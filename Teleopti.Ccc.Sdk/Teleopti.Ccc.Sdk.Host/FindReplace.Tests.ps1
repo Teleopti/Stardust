@@ -34,7 +34,6 @@ Describe "Find a string in a file and replace it with another string" {
         Setup -File "forTest.txt" "gurka"
         FindAndReplace "$TestDrive\forTest.txt" "GzRkA" "banan"
         [string] $testValue = Get-Content "$TestDrive\forTest.txt"
-        write-host "testValue is: $testValue"
         $testValue.should.be("gurka")
 	}    
 
