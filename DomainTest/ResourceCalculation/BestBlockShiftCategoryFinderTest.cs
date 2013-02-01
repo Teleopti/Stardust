@@ -244,6 +244,36 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mocks.VerifyAll();
 		}
 
+		[Test]
+		public void ShouldFailWhenShiftBagIsNull()
+		{
+			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+			var personPeriod = _mocks.StrictMock<IPersonPeriod>();
+			var persons = new List<IPerson> { _person };
+			var result = new BlockFinderResult(null, new List<DateOnly> { _dateOnly1 }, new Dictionary<string, IWorkShiftFinderResult>());
+			var scheduleDateTimePeriod = _mocks.StrictMock<IScheduleDateTimePeriod>();
+			var startDateTime = new DateTime(2009, 2, 1, 11, 0, 0, 0, DateTimeKind.Utc);
+			var dateTimePeriod = new DateTimePeriod(startDateTime.AddDays(-1), startDateTime.AddDays(1));
+
+			Expect.Call(_stateHolder.Schedules).Return(scheduleDictionary).Repeat.Any();
+			Expect.Call(scheduleDictionary.Period).Return(scheduleDateTimePeriod).Repeat.Times(1);
+			Expect.Call(scheduleDateTimePeriod.VisiblePeriod).Return(dateTimePeriod).Repeat.Times(1);
+
+			Expect.Call(_person.PermissionInformation).Return(_permissionInformation);
+			Expect.Call(_person.VirtualSchedulePeriod(_dateOnly1)).Return(_schedulePeriod).IgnoreArguments();
+			Expect.Call(_schedulePeriod.IsValid).Return(true);
+			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(persons, _dateOnly1, _options, scheduleDictionary)).Return(_effectiveRestriction).Repeat.AtLeastOnce();
+
+			Expect.Call(_schedulePeriod.Person).Return(_person).Repeat.AtLeastOnce();
+			Expect.Call(_person.Period(_dateOnly1)).Return(personPeriod).Repeat.AtLeastOnce();
+			Expect.Call(personPeriod.RuleSetBag).Return(null);
+
+			_mocks.ReplayAll();
+			var ret = _target.BestShiftCategoryForDays(result, _person, _options, null);
+			Assert.IsNull(ret.BestPossible);
+			_mocks.VerifyAll();
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldFailIfAllMembersInGroupPersonIsScheduled()
 		{
