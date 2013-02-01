@@ -89,7 +89,7 @@
 	<Target Name="ScriptTest">
 		<Message Importance="high" Text="Running pester tests ..." />
 			
-		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\pester\runAllTests.bat&quot; silent" />
+		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\pester\runAllTests.bat&quot;" />
 	
 	</Target>
 
