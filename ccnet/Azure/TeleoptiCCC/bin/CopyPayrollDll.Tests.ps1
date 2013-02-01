@@ -35,14 +35,14 @@ Describe "Azure, copy from BlobStorage, use Robocopy for internal copy" {
         $testValue.should.be($fileContent)
 	}
     
-    <#
+    
 Describe "We should be able to init event log, twice" {
     
 	It "Log Once" {
 		EventlogSource-Create "test"
         EventlogSource-Create "test"
 	}
-    #>
+    
 }
     
 	
