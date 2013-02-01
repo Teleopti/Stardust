@@ -38,7 +38,7 @@ Describe "Azure, copy from BlobStorage, use Robocopy for internal copy" {
     
 Describe "We should be able to init event log, twice" {
     
-	It "Log Once" {
+	It "create same event log source twice" {
 		EventlogSource-Create "test"
         EventlogSource-Create "test"
 	}

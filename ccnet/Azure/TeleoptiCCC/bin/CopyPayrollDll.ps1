@@ -72,10 +72,9 @@ function EventlogSource-Create {
     param([string]$EventSourceName)
     $type = "Application"
     #create event log source
-        #if ([System.Diagnostics.EventLog]::SourceExists("$JOB") -eq $false) {
-        #
-        }
-        [System.Diagnostics.EventLog]::CreateEventSource("$EventSourceName", $type)
+        if ([System.Diagnostics.EventLog]::SourceExists("$EventSourceName") -eq $false) {
+         [System.Diagnostics.EventLog]::CreateEventSource("$EventSourceName", $type)
+         }
 	}
 
 
