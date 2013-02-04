@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private static DateTimePeriod setTimeLineRange(IEnumerable<IVisualLayer> myLayerCollection, IEnumerable<ShiftTradePersonDayData> possibleTradePersonDayCollection, TimeZoneInfo timeZone)
 		{
+			//IVisualLayerCollection has "Period" - use that instead of looping twice to get period?
 			DateTimePeriod? timeLineRangeTot = null;
 
 			if (myLayerCollection.Any())
@@ -177,6 +178,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private static string createHourText(DateTime time, TimeZoneInfo timeZone, CultureInfo culture)
 		{
+			//rk - make a seperate service/interface for this?
 			var localTime = TimeZoneHelper.ConvertFromUtc(time, timeZone);
 			var hourString = string.Format(culture, localTime.ToShortTimeString());
 
@@ -188,7 +190,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return output;
 		}
 
-		private IEnumerable<ShiftTradeScheduleLayerViewModel> createShiftTradeLayers(ShiftTradePersonDayData personDay, TimeZoneInfo timeZone, DateTimePeriod timeLineRange)
+		private static IEnumerable<ShiftTradeScheduleLayerViewModel> createShiftTradeLayers(ShiftTradePersonDayData personDay, TimeZoneInfo timeZone, DateTimePeriod timeLineRange)
 		{
 			if (personDay.SignificantPartForDisplay == SchedulePartView.DayOff)
 				return createShiftTradeDayOffLayer(timeLineRange, timeZone);
