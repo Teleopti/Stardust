@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IPerson _person;
 		private IProjectionProvider _projectionProvider;
 		private StubFactory _scheduleFactory;
-		private TimeZoneInfo _timeZone;
 
 		[SetUp]
 		public void Setup()
@@ -31,9 +30,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_shiftTradeRequestProvider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			_scheduleFactory = new StubFactory();
-			_timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			_person = new Person {Name = new Name("John", "Doe")};
-			_person.PermissionInformation.SetDefaultTimeZone(_timeZone);
+			_person.PermissionInformation.SetDefaultTimeZone(timeZone);
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(() => _shiftTradeRequestProvider, () => _projectionProvider)));
@@ -112,7 +111,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                }));
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(startDate));
 
-			result.MySchedule.ScheduleLayers.First().StartTimeText.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(startDate, _timeZone).ToString("HH:mm"));
+			var expectedDate = TimeZoneHelper.ConvertFromUtc(startDate, _person.PermissionInformation.DefaultTimeZone());
+			result.MySchedule.ScheduleLayers.First().StartTimeText.Should().Be.EqualTo(expectedDate.ToString("HH:mm"));
 		}
 
 		[Test]
@@ -130,7 +130,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(endDate));
 
-			result.MySchedule.ScheduleLayers.First().EndTimeText.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(endDate, _timeZone).ToString("HH:mm"));
+			var expectedDate = TimeZoneHelper.ConvertFromUtc(endDate, _person.PermissionInformation.DefaultTimeZone());
+			result.MySchedule.ScheduleLayers.First().EndTimeText.Should().Be.EqualTo(expectedDate.ToString("HH:mm"));
 		}
 
 		[Test]
