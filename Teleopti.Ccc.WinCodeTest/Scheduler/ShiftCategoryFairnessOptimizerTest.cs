@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_target.Execute(_bgWorker, persons, days, matrixes, _optimizationPreferences, _rollbackService,true);
 			_mocks.VerifyAll();
 		}
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldRunForEachGroupPersonWhenPersonal()
 		{
 			var persons = new List<IPerson>{new Person()};
