@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 	public interface IShiftCategoryFairnessSwapper
 	{
 		bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, ISchedulePartModifyAndRollbackService rollbackService, BackgroundWorker backgroundWorker, bool useAverageShiftLengths);
+					IOptimizationPreferences optimizationPreferences);
 	}
 
 	public class ShiftCategoryFairnessSwapper: IShiftCategoryFairnessSwapper
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IShiftCategoryFairnessPersonsSwappableChecker _swappableChecker;
 		private readonly IShiftCategoryFairnessContractToleranceChecker _shiftCategoryFairnessContractToleranceChecker;
+		private readonly IOptimizationOverLimitByRestrictionDeciderCreator _optimizationOverLimitByRestrictionDeciderCreator;
 		private readonly IScheduleDictionary _dic;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -27,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 			IShiftCategoryFairnessReScheduler shiftCategoryFairnessReScheduler, IShiftCategoryChecker shiftCategoryChecker, 
 			IDeleteSchedulePartService deleteSchedulePartService, IShiftCategoryFairnessPersonsSwappableChecker swappableChecker,
 			IShiftCategoryFairnessContractToleranceChecker shiftCategoryFairnessContractToleranceChecker)
+			IOptimizationOverLimitByRestrictionDeciderCreator optimizationOverLimitByRestrictionDeciderCreator)
 		{
 			_swapService = swapService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
@@ -35,6 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 			_deleteSchedulePartService = deleteSchedulePartService;
 			_swappableChecker = swappableChecker;
 			_shiftCategoryFairnessContractToleranceChecker = shiftCategoryFairnessContractToleranceChecker;
+			_optimizationOverLimitByRestrictionDeciderCreator = optimizationOverLimitByRestrictionDeciderCreator;
 			_dic = _schedulingResultStateHolder.Schedules;
 		}
 
@@ -87,6 +91,16 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 								return false;
 						}
 						
+						var matrix =  getMatrixForPersonOnDay(dateOnly, matrixListForFairnessOptimization, groupOneMember);
+						var restrictionCheck = _optimizationOverLimitByRestrictionDeciderCreator.GetDecider(dateOnly, matrix,
+						                                                                                    optimizationPreferences);
+						if (restrictionCheck.OverLimit().Any()) return false;
+
+						matrix = getMatrixForPersonOnDay(dateOnly, matrixListForFairnessOptimization, groupTwoMember);
+						restrictionCheck = _optimizationOverLimitByRestrictionDeciderCreator.GetDecider(dateOnly, matrix,
+																											optimizationPreferences);
+						if (restrictionCheck.OverLimit().Any()) return false;
+
 						swappedInGroupTwo.Add(groupTwoMember);
 						swappedInGroupOne.Add(groupOneMember);
 						foundSwap = true;
@@ -141,7 +155,10 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 			return day;
 		}
 
-
+		private static IScheduleMatrixPro getMatrixForPersonOnDay(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixListForFairnessOptimization, IPerson person)
+		{
+			return (from scheduleMatrixPro in matrixListForFairnessOptimization where scheduleMatrixPro.Person.Equals(person) let tmpDay = scheduleMatrixPro.GetScheduleDayByKey(dateOnly) where tmpDay != null && scheduleMatrixPro.UnlockedDays.Contains(tmpDay) select scheduleMatrixPro).FirstOrDefault();
+		}
 	}
 
 	public interface IShiftCategoryChecker
