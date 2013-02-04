@@ -97,7 +97,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self._createMySchedule(data.MySchedule);
 					self._createPossibleTradeSchedules(data.PossibleTradePersons);
 					self._createTimeLine(data.TimeLineHours);
-					bindClickToOpenShiftTrade();
 					self.setScheduleLoadedReady();
 				}
 			});
@@ -184,7 +183,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		var elementToBind = $('#Request-add-shift-trade').get(0);
 		ko.applyBindings(vm, elementToBind);
 		vm.loadPeriod();
-		bindClickToOpenShiftTrade();
 	}
 	function _initDatePicker() {
 		$('.shift-trade-add-previous-date').button({
@@ -210,12 +208,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		element.datepicker("option", "maxDate", vm.openPeriodEndDate.toDate());
 	}
 
-	function bindClickToOpenShiftTrade() {
-		$('#Request-add-shift-trade-button')
-			.click(function () {
-				_initDatePicker();
-				$('#Request-add-shift-trade').show();
-			});
+	function _openAddShiftTradeWindow() {
+		_initDatePicker();
+		$('#Request-add-shift-trade').show();
 	}
 
 	function setShiftTradeRequestDate(date) {
@@ -228,6 +223,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		},
 		SetShiftTradeRequestDate: function (date) {
 			setShiftTradeRequestDate(date);
+		},
+		OpenAddShiftTradeWindow: function () {
+			_openAddShiftTradeWindow();
 		}
 	};
 

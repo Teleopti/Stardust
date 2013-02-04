@@ -44,6 +44,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	{
 	}
 
+	public class ToolBarDropDown : ToolBarItemBase
+	{
+		public string Icon { get; set; }
+		public IEnumerable<ToolBarDropDownMenuItem> MenuItems { get; set; }
+	}
+
+	public class ToolBarDropDownMenuItem : ToolBarItemBase
+	{
+		public string MenyType { get; set; }
+	}
+
 	public class ToolBarButtonItem : ToolBarItemBase
 	{
 		public string ButtonType { get; set; }
