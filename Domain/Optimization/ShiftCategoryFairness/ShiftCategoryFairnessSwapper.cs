@@ -8,8 +8,8 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 {
 	public interface IShiftCategoryFairnessSwapper
 	{
-		bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, ISchedulePartModifyAndRollbackService rollbackService, BackgroundWorker backgroundWorker, bool useAverageShiftLengths);
-					IOptimizationPreferences optimizationPreferences);
+		bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
+			ISchedulePartModifyAndRollbackService rollbackService, BackgroundWorker backgroundWorker, bool useAverageShiftLengths, IOptimizationPreferences optimizationPreferences);
 	}
 
 	public class ShiftCategoryFairnessSwapper: IShiftCategoryFairnessSwapper
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 		public ShiftCategoryFairnessSwapper(ISwapServiceNew swapService, ISchedulingResultStateHolder schedulingResultStateHolder, 
 			IShiftCategoryFairnessReScheduler shiftCategoryFairnessReScheduler, IShiftCategoryChecker shiftCategoryChecker, 
 			IDeleteSchedulePartService deleteSchedulePartService, IShiftCategoryFairnessPersonsSwappableChecker swappableChecker,
-			IShiftCategoryFairnessContractToleranceChecker shiftCategoryFairnessContractToleranceChecker)
+			IShiftCategoryFairnessContractToleranceChecker shiftCategoryFairnessContractToleranceChecker,
 			IOptimizationOverLimitByRestrictionDeciderCreator optimizationOverLimitByRestrictionDeciderCreator)
 		{
 			_swapService = swapService;
@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 			_dic = _schedulingResultStateHolder.Schedules;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "originalMember"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "responses")]
-		public bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, 
-			ISchedulePartModifyAndRollbackService rollbackService, BackgroundWorker backgroundWorker, bool useAverageShiftLengths)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "originalMember"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "responses")]
+		public bool TrySwap(IShiftCategoryFairnessSwap suggestion, DateOnly dateOnly, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
+			ISchedulePartModifyAndRollbackService rollbackService, BackgroundWorker backgroundWorker, bool useAverageShiftLengths, IOptimizationPreferences optimizationPreferences)
 		{
 			// start with group with less members and if there are more in the other reschedule them
         	var groupOne = suggestion.Group1;

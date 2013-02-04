@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	public class OptimizationOverLimitByRestrictionDeciderCreator : IOptimizationOverLimitByRestrictionDeciderCreator
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IOptimizationOverLimitByRestrictionDecider GetDecider(DateOnly dateOnly, IScheduleMatrixPro scheduleMatrixPro,
 			IOptimizationPreferences optimizationPreferences)
 		{

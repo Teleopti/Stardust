@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	public interface IShiftCategoryFairnessOptimizer
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService, bool useAverageShiftLengths);
-			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService);
-			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService);
+		bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, 
+			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, bool useAverageShiftLengths);
+			
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
 
@@ -52,8 +52,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public bool ExecutePersonal(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
-			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService)
+		public bool ExecutePersonal(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, 
+			IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
+			bool useAverageShiftLength)
 		{
 			// as we do this from left to right we don't need a list of days that we should not try again
 			foreach (var selectedDay in selectedDays)
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				foreach (var groupPerson in groupPersons)
 				{
 					// run that day
-					runDay(backgroundWorker, groupPerson.GroupMembers, selectedDays, selectedDay, matrixListForFairnessOptimization, optimizationPreferences, rollbackService, true);	
+					runDay(backgroundWorker, groupPerson.GroupMembers, selectedDays, selectedDay, matrixListForFairnessOptimization, optimizationPreferences, rollbackService, true, useAverageShiftLength);	
 				}
 				
 			}
@@ -70,13 +71,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService, bool useAverageShiftLengths)
-			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService)
+		public bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, 
+			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, bool useAverageShiftLengths)
 		{
 			foreach (var selectedDay in selectedDays)
 			{
 				// run that day
-				runDay(backgroundWorker, persons, selectedDays, selectedDay, matrixListForFairnessOptimization, optimizationPreferences, rollbackService, false);
+				runDay(backgroundWorker, persons, selectedDays, selectedDay, matrixListForFairnessOptimization, optimizationPreferences, rollbackService, false, useAverageShiftLengths);
 			}
 			return true;
 		}
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (backgroundWorker.CancellationPending)
                     return;
 
-                var success = _shiftCategoryFairnessSwapper.TrySwap(swap, dateOnly, matrixListForFairnessOptimization, rollbackService, backgroundWorker,optimizationPreferences);
+				var success = _shiftCategoryFairnessSwapper.TrySwap(swap, dateOnly, matrixListForFairnessOptimization, rollbackService, backgroundWorker, useAverageShiftLengths, optimizationPreferences);
                 if (!success)
                 {
                     blackList.Add(swap);
