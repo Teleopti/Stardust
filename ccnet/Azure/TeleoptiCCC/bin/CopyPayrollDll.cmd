@@ -6,5 +6,4 @@ SET DIRECTORY=%DIRECTORY:~0,-1%
 powershell set-executionpolicy unrestricted
 ::execute
 powershell ". %DIRECTORY%\CopyPayrollDll.ps1; Main -directory \"%DIRECTORY%\""
-PAUSE
 exit %ERRORLEVEL%
