@@ -135,5 +135,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get { return Document.Div(QuicklyFind.ByClass("shift-trade-timeline")).Spans.Filter(QuicklyFind.ByClass("shift-trade-timeline-line")); }
 		}
+
+		[FindBy(Id = "Request-shift-trade-sender")]
+		public Span ShiftTradeSender { get; set; }
+
+		[FindBy(Id = "Request-shift-trade-reciever")]
+		public Span ShiftTradeReciever { get; set; }
 	}
 }

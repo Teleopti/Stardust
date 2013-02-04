@@ -171,6 +171,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
 			EventualAssert.That(()=>_page.RequestDeleteButtonById(requestId).IsDisplayed(),Is.False);
 		}
+
+		[Then(@"I should see '(.*)' as the sender of the request")]
+		public void ThenIShouldSeeAsTheSenderOfTheRequest(string name)
+		{
+			EventualAssert.That(() => _page.ShiftTradeSender.Text, Is.EqualTo(name));
+		}
+
+		[Then(@"I should see '(.*)' as the receiver of the request")]
+		public void ThenIShouldSeeAsTheReceiverOfTheRequest(string name)
+		{
+			EventualAssert.That(() => _page.ShiftTradeReciever.Text, Is.EqualTo(name));
+		}
+
 	}
 
 }

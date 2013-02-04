@@ -130,8 +130,6 @@ Scenario: Show my scheduled day off
 	Then I should see my scheduled day off 'DayOff'
 	And I should see the time line hours span from '8' to '17'
 
-
-@ignore
 Scenario: View shift trade request details
 	Given I have the role 'Full access to mytime'
 	And I have created a shift trade request with subject 'swap with me'
@@ -168,4 +166,20 @@ Scenario: Should not be able to delete received shift trade request
 	And I have received a shift trade request from 'Ashley'
 	When I view requests
 	Then I should not see a delete button on the request
+
+Scenario: Show name of the person that created the shift trade request
+	Given I have the role 'Full access to mytime'
+	And I have received a shift trade request from 'Keil Randor'
+	And I am viewing requests
+	When I click on the request
+	Then I should see 'Keil Randor' as the sender of the request
+
+Scenario: Show name of the person that recieved the shift trade request
+	Given I have the role 'Full access to mytime'
+	And I have created a shift trade request to 'Ashley Andeen'
+	And I am viewing requests
+	When I click on the request
+	Then I should see 'Ashley Andeen' as the receiver of the request
+
+	
 

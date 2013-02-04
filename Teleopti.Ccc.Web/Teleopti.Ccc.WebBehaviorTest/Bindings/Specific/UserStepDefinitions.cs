@@ -499,10 +499,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIHaveReceivedAShiftTradeRequestFrom(string from)
 		{
 			var person = PersonFactory.CreatePerson(from);
-			var uf = new  UserFactory();
-			uf.MakePerson(person);
+			var userFactory = new  UserFactory();
+			userFactory.MakePerson(person);
 			UserFactory.User().Setup(new ExistingShiftTradeRequest() {From = person});
 		}
+
+		[Given(@"I have created a shift trade request to '(.*)'")]
+		public void GivenIHaveCreatedAShiftTradeRequestTo(string to)
+		{
+			var person = PersonFactory.CreatePerson(to);
+			var userFactory = new UserFactory();
+			userFactory.MakePerson(person);
+			UserFactory.User().Setup(new ExistingShiftTradeRequest() { To = person });
+		}
+
 
 		[Given(@"the site has another team")]
 		public void GivenTheSiteHasAnotherTeam()
