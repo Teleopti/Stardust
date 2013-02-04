@@ -169,8 +169,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				}
 			});
 		};
+
+		self.CanDelete = ko.observable(true);
 	}
-	
+
 	ko.utils.extend(RequestItemViewModel.prototype, {
 		Initialize: function (data) {
 			var self = this;
@@ -183,7 +185,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			self.Link(data.Link.href);
 			self.Id(data.Id);
 			self.RequestPayload(data.Payload);
-			self.CanDelete(data.Link.Methods.indexOf("DELETE") != -1);
+			self.CanDelete((data.Link.Methods.indexOf("DELETE") != -1) && data.IsCreatedByUser);
+
 		}
 	});
 

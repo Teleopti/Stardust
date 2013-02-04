@@ -21,13 +21,13 @@ Scenario: See absence request
 	When I view requests
 	Then I should see my existing absence request
 
-Scenario: Show created shift trade request because its not implemented yet
+Scenario: Show created shift trade request
 	Given I am an agent
 	And I have created a shift trade request
 	When I view requests
 	Then I should see my existing shift trade request
 
-Scenario: Show received shift trade request because its not implemented yet
+Scenario: Show received shift trade request
 	Given I am an agent
 	And I have received a shift trade request from 'Ashley'
 	When I view requests
