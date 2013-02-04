@@ -7,20 +7,6 @@ Background:
 	Given there is a role with
 	| Field                    | Value                 |
 	| Name                     | Full access to mytime |
-	And there is a role with
-	| Field								| Value						|
-	| Name								| No access to Shift Trade	|
-	| Access To Shift Trade Requests	| False						|
-	And there are shift categories
-	| Name  |
-	| Day   |
-	| Late   |
-	And there is a dayoff with
-	| Field | Value  |
-	| Name  | DayOff |
-	And there is an absence with
-	| Field | Value   |
-	| Name  | Vacation |
 	And there is a workflow control set with
 	| Field                            | Value                                     |
 	| Name                             | Trade from tomorrow until 30 days forward |
@@ -35,10 +21,18 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |	
+	And there are shift categories
+	| Name  |
+	| Day   |
+	| Late   |
 
 
 Scenario: No access to make shift trade reuquests
-	Given I have the role 'No access to Shift Trade'
+	Given there is a role with
+	| Field								| Value						|
+	| Name								| No access to Shift Trade	|
+	| Access To Shift Trade Requests	| False						|
+	And I have the role 'No access to Shift Trade'
 	When I view requests
 	Then I should not see the Create Shift Trade Request button
 	And I should not see the Requests button
@@ -105,6 +99,9 @@ Scenario: Show message when no agents are available for shift trade
 
 Scenario: Show my full day absence
 	Given I have the role 'Full access to mytime'
+	And there is an absence with
+	| Field | Value   |
+	| Name  | Vacation |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a absence with
 	| Field		| Value            |
@@ -120,6 +117,9 @@ Scenario: Show my full day absence
 
 Scenario: Show my scheduled day off
 	Given I have the role 'Full access to mytime'
+	And there is a dayoff with
+	| Field | Value  |
+	| Name  | DayOff |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And 'I' have a day off with
 	| Field | Value      |
