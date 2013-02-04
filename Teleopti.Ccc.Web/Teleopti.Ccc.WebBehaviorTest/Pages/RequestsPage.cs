@@ -34,11 +34,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Requests-showRequests-button")]
 		public Button ShowRequestsButton { get; set; }
 
-		[FindBy(Id = "Requests-addShiftTradeRequest-button")]
-		public Button AddShiftTradeRequestButton { get; set; }
+		public Span AddRequestDropDown
+		{
+			get { return Document.Span(QuicklyFind.ByClass("toolbar-addRequest")); }
+		}
 
-		[FindBy(Id = "Requests-addRequest-button")]
-		public Button AddRequestButton { get; set; }
+		[FindBy(Id = "Requests-addTextRequest-menuItem")]
+		public Link AddTextRequestMenuItem { get; set; }
+
+		[FindBy(Id = "Requests-addAbsenceRequest-menuItem")]
+		public Link AddAbsenceRequestMenuItem { get; set; }
+
+		[FindBy(Id = "Requests-addShiftTradeRequest-menuItem")]
+		public Link AddShiftTradeRequestMenuItem { get; set; }
 
 		[FindBy(Id = "Request-detail-section")]
 		public Div RequestDetailSection { get; set; }
@@ -112,9 +120,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Requests-no-requests-found")]
 		public Div NoRequestsFound { get; set; }
 		
-		[FindBy(Id = "Request-add-shift-trade-button")]
-		public Button ShiftTradeRequestsButton { get; set; }
-
 		[FindBy(Id = "Request-add-shift-trade-missing-wcs-message")]
 		public Div AddShiftTradeMissingWorkflowControlsSetMessage { get; set; }
 

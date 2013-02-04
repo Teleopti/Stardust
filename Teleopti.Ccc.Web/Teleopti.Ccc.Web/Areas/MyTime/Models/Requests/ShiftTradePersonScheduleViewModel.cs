@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public string Name { get; set; }
 		public int MinutesSinceTimeLineStart { get; set; }
 		public string DayOffText { get; set; }
+		public bool HasUnderlyingDayOff { get; set; }
 	}
 }

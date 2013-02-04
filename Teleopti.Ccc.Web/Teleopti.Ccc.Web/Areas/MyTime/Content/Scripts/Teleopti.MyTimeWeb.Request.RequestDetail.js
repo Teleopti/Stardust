@@ -2,7 +2,6 @@
 /// <reference path="~/Content/jqueryui/jquery-ui-1.9.1.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.8.3-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
-/// <reference path="~/Content/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
@@ -12,27 +11,22 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var requestViewModel = null;
 
-	function _initToolbarButtons() {
-		$('#Requests-addRequest-button')
-			.click(function () {
-				requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
-				requestViewModel.TypeEnum(3);
-				_clearFormData();
-				requestViewModel.TextRequestTabVisible(true);
-				requestViewModel.AbsenceRequestTabVisible(true);
-				requestViewModel.IsUpdate(false);
-				_initEditSection(requestViewModel);
-				_hideEditSection();
-				_showEditSection();
+	function _addTextAndAbsenceRequestClick() {
+		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+		requestViewModel.TypeEnum(3);
+		_clearFormData();
+		requestViewModel.TextRequestTabVisible(true);
+		requestViewModel.AbsenceRequestTabVisible(true);
+		requestViewModel.IsUpdate(false);
+		_initEditSection(requestViewModel);
+		_hideEditSection();
+		_showEditSection();
 
-				$('#Text-request-tab').click();
-			})
-			.removeAttr('disabled');
+		$('#Text-request-tab').click();
 	}
-
+	
 	function _initTemporary() {
 		_initEditSection(requestViewModel);
-		_initToolbarButtons();
 	}
 
 	function _initEditSection(requestDetailViewModel) {
@@ -254,7 +248,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	return {
 		Init: function () {
-			_initToolbarButtons();
 			_initEditSection(new Teleopti.MyTimeWeb.Request.RequestViewModel());
 		},
 		HideEditSection: function () {
@@ -271,6 +264,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		},
 		EnableTimeinput: function () {
 			_enableTimeinput();
+		},
+		AddTextAndAbsenceRequestClick: function () {
+			_addTextAndAbsenceRequestClick();
 		}
 	};
 

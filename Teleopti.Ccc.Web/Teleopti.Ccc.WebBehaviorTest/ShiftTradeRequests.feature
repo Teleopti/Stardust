@@ -34,7 +34,7 @@ Scenario: No access to make shift trade reuquests
 	| Access To Shift Trade Requests	| False						|
 	And I have the role 'No access to Shift Trade'
 	When I view requests
-	Then I should not see the Create Shift Trade Request button
+	Then I should not see the New Shift Trade Request menu item
 	And I should not see the Requests button
 
 Scenario: No workflow control set

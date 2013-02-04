@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -16,7 +15,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click add request button in the toolbar")]
 		public void WhenIClickAddRequestButtonInTheToolbar()
 		{
-			Pages.Pages.CurrentEditRequestPage.AddRequestButton.EventualClick();
+			Pages.Pages.CurrentEditRequestPage.AddRequestDropDown.EventualClick();
+			Pages.Pages.CurrentEditRequestPage.AddTextRequestMenuItem.EventualClick();
 			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
 		}
 

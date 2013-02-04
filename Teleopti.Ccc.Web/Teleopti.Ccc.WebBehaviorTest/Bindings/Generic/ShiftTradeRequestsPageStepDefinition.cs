@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class ShiftTradeRequestsPageStepDefinition
 	{
-		[Then(@"I should not see the Create Shift Trade Request button")]
-		public void ThenIShouldNotSeeTheCreateShiftTradeRequestButton()
+		[Then(@"I should not see the New Shift Trade Request menu item")]
+		public void ThenIShouldNotSeeTheNewShiftTradeRequestMenuItem()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeRequestButton.SafeExists(), Is.False);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.SafeExists(), Is.False);
 		}
 
 		[Then(@"I should not see the Requests button")]
@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
-			Pages.Pages.RequestsPage.ShiftTradeRequestsButton.EventualClick();
+			Pages.Pages.RequestsPage.AddRequestDropDown.EventualClick();
+			Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.EventualClick();
 		}
 
 		[When(@"I view Add Shift Trade Request for date '(.*)'")]
@@ -41,7 +42,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
-			Pages.Pages.RequestsPage.ShiftTradeRequestsButton.EventualClick();
+			Pages.Pages.RequestsPage.AddRequestDropDown.EventualClick();
+			Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.EventualClick();
 			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
 			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
 			Browser.Current.Eval(script);
