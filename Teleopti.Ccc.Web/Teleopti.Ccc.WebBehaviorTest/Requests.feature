@@ -50,7 +50,6 @@ Scenario: No access to requests page
 	And I am signed in
 	When I navigate to the requests page
 	Then I should see an error message
-
 Scenario: No requests
 	Given I am an agent
 	And I have no existing requests

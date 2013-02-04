@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheShiftTradeRequestFormWithSubject(string subject)
 		{
 			EventualAssert.That(() => _page.RequestDetailSection.IsDisplayed(),Is.True, "The detailsection should be visible");
-			EventualAssert.That(() => _page.IamAShiftTrade.IsDisplayed(), Is.True, "It should show a shifttrade");
+			EventualAssert.That(() => _page.ShiftTradeSender.IsDisplayed(), Is.True, "It should show a shifttrade");
 			EventualAssert.That(()=>_page.RequestDetailSubjectInput.Text, Is.EqualTo(subject),"The subject should match the specific shifttrade-request");
 		}
 
