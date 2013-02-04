@@ -210,8 +210,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	return {
 		Init: function (readyForInteractionCallback, completelyLoadedCallback) {
-			Teleopti.MyTimeWeb.Request.InitRequestToolbar();
-
 			pageViewModel = new RequestPageViewModel(readyForInteractionCallback, completelyLoadedCallback);
 
 			_initScrollPaging();
