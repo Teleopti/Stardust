@@ -498,7 +498,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I have received a shift trade request from '(.*)'")]
 		public void GivenIHaveReceivedAShiftTradeRequestFrom(string from)
 		{
-			var person = PersonFactory.CreatePerson(from);
+			var person = CreatePerson(from);
 			var userFactory = new  UserFactory();
 			userFactory.MakePerson(person);
 			UserFactory.User().Setup(new ExistingShiftTradeRequest() {From = person});
@@ -507,7 +507,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I have created a shift trade request to '(.*)'")]
 		public void GivenIHaveCreatedAShiftTradeRequestTo(string to)
 		{
-			var person = PersonFactory.CreatePerson(to);
+			var person = CreatePerson(to);
 			var userFactory = new UserFactory();
 			userFactory.MakePerson(person);
 			UserFactory.User().Setup(new ExistingShiftTradeRequest() { To = person });
@@ -607,6 +607,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(contractSchedule);
 			UserFactory.User().UserData<PersonPeriod>().Contract = contract;
 			UserFactory.User().UserData<PersonPeriod>().ContractSchedule = contractSchedule;
+		}
+
+		private static IPerson CreatePerson(string name)
+		{
+			var names = name.Split(' ');
+			return names.Length > 1 ? PersonFactory.CreatePerson(names[0], names[1]) : PersonFactory.CreatePerson(name);
 		}
 
 	}
