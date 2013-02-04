@@ -15,7 +15,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, 
 			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, bool useAverageShiftLengths);
-			
+
+		bool ExecutePersonal(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays,
+		                     IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
+		                     IOptimizationPreferences optimizationPreferences,
+		                     ISchedulePartModifyAndRollbackService rollbackService,
+		                     bool useAverageShiftLength);	
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
 

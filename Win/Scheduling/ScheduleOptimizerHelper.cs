@@ -652,7 +652,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new EmptyScheduleDayChangeCallback(), tagSetter);
 			fairnessOpt.ReportProgress += resourceOptimizerPersonOptimized;
 			fairnessOpt.ExecutePersonal(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness,
-										optimizerPreferences.Extra.GroupPageOnCompareWith, rollbackService, optimizerPreferences.Advanced.UseAverageShiftLengths);
+										optimizerPreferences, rollbackService, optimizerPreferences.Advanced.UseAverageShiftLengths);
 			fairnessOpt.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
