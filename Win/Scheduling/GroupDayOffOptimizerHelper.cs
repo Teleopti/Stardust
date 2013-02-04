@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var selectedDates = OptimizerHelperHelper.GetSelectedPeriod(selectedDays).DayCollection();
 
 			fairnessOpt.ReportProgress += resourceOptimizerPersonOptimized;
-			fairnessOpt.Execute(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness, optimizationPreferences.Extra.GroupPageOnTeam, rollbackService);
+			fairnessOpt.Execute(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness, optimizationPreferences, rollbackService);
 			fairnessOpt.ReportProgress -= resourceOptimizerPersonOptimized;
 			
 		}
