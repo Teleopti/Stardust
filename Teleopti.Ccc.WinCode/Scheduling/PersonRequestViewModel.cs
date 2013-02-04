@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             else
             {
                 var span = ((AccountTime)account).Remaining;
-                balance = string.Format(CultureInfo.CurrentCulture, "{0} {1}", span.TotalHours, Resources.Hours);
+                balance = string.Format(CultureInfo.CurrentCulture, "{0} {1}", Math.Round(span.TotalHours,1), Resources.Hours);
             }
 
             return balance;
