@@ -153,6 +153,7 @@ Scenario: Can not approve or deny shift trade request created by me
 	Then I should not see the approve button
 	And I should not see the deny button
 
+@ignore
 Scenario: Deny shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have created a shift trade request with subject 'some shifttrade'
