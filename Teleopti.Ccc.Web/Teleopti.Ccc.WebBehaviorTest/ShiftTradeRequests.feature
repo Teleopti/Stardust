@@ -152,15 +152,8 @@ Scenario: Can not approve or deny shift trade request created by me
 	And I have created a shift trade request with subject 'swap with me'
 	And I am viewing requests
 	When I click on the request
-	And I should not see an approve button
+	Then I should not see the approve button
 	And I should not see the deny button
-	Then  Details should be closed
-
-Scenario: Cannot delete recieved shift trade requests
-	Given I have the role 'Full access to mytime'
-	And I have received a shift trade request from 'Some Person'
-	And I am viewing requests
-	Then  I should not see a delete button on the request
 
 Scenario: Deny shift trade request
 	Given I have the role 'Full access to mytime'
@@ -174,4 +167,5 @@ Scenario: Should not be able to delete received shift trade request
 	Given I am an agent
 	And I have received a shift trade request from 'Ashley'
 	When I view requests
-	Then I should not see any delete button on my existing shift trade request
+	Then I should not see a delete button on the request
+

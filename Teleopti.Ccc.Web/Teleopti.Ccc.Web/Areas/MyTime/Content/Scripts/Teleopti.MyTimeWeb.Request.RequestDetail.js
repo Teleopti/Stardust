@@ -285,7 +285,7 @@ var ShiftTradeRequestDetailViewModel = function () {
 	self.TypeEnum = ko.observable(2);
 	self.IsFullDay = ko.observable(true);
 	self.Template = ko.observable("shifttrade-request-detail-template");
-
+	self.CanApprove = ko.observable(true);
 	self.ajax = new Teleopti.MyTimeWeb.Ajax();
 
 	self.Approve = function () {
@@ -319,6 +319,7 @@ ko.utils.extend(ShiftTradeRequestDetailViewModel.prototype, {
 		var self = this;
 
 		self.Id(data.Id);
+		self.CanApprove(!data.IsCreatedByUser);
 	}
 });
 

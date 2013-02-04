@@ -35,13 +35,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.RequestsPage.Requests.Count(), Is.EqualTo(0));
 		}
 
-		[Then(@"I should not see any delete button on my existing shift trade request")]
-		public void ThenIShouldNotSeeAnyDeleteButtonOnMyExistingShiftTradeRequest()
-		{
-			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
-			EventualAssert.That(() => Pages.Pages.RequestsPage.RequestDeleteButtonById(requestId).IsDisplayed(), Is.False);
-		}
-
 		[Then(@"Details should be closed")]
 		public void ThenDetailsShouldBeClosed()
 		{

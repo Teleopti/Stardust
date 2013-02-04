@@ -147,13 +147,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.ApproveShiftTradeButton.EventualClick();
 		}
 
-		[When(@"I should not see the approve button")]
+		[Then(@"I should not see the approve button")]
 		public void WhenIShouldNotSeeTheApproveButton()
 		{
 			EventualAssert.That(()=>_page.ApproveShiftTradeButton.IsDisplayed(),Is.False);
 		}
 
-		[When(@"I should not see the deny button")]
+		[Then(@"I should not see the deny button")]
 		public void WhenIShouldNotSeeTheDenyButton()
 		{
 			EventualAssert.That(() => _page.DenyShiftTradeButton.IsDisplayed(), Is.False);
