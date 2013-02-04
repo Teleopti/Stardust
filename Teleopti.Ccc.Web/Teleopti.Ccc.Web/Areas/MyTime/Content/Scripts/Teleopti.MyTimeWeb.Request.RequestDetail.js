@@ -287,7 +287,8 @@ var ShiftTradeRequestDetailViewModel = function () {
 	self.Template = ko.observable("shifttrade-request-detail-template");
 	self.CanApprove = ko.observable(true);
 	self.ajax = new Teleopti.MyTimeWeb.Ajax();
-
+	self.From = ko.observable("");
+	self.To = ko.observable("");
 	self.Approve = function () {
 		self.respondToRequest("Requests/ApproveShiftTrade/" + self.Id());
 		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
@@ -317,9 +318,10 @@ ko.utils.extend(ShiftTradeRequestDetailViewModel.prototype, {
 	Initialize: function (data) {
 
 		var self = this;
-
 		self.Id(data.Id);
 		self.CanApprove(!data.IsCreatedByUser);
+		self.From(data.From);
+		self.To(data.To);
 	}
 });
 
