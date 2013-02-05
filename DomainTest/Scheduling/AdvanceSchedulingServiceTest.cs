@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -77,6 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             var matrixList = new List<IScheduleMatrixPro> {_scheduleMatrixPro};
             var shiftProjectionCacheList = new List<IShiftProjectionCache> {_scheduleProjectionCache};
             var dateOnlyPeriod = new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1));
+            var person = new Person();
             using(_mocks.Record())
             {
                 //first sub method
@@ -85,6 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.Twice() ;
                 Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProCollection);
+                Expect.Call(_scheduleMatrixPro.Person.Equals(person)).IgnoreArguments().Return((bool)true) ;
 
                 Expect.Call(_dynamicBlockFinder.ExtractBlockDays(dateOnly)).IgnoreArguments().Return(dateOnlyList);
                 Expect.Call(_teamExtractor.GetRamdomTeam(dateOnly)).IgnoreArguments().Return(_grouPerson);

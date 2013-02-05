@@ -61,8 +61,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
                 Expect.Call(_scheduleDayPro.DaySchedulePart() ).Return(_scheduleDay);
                 Expect.Call(() => _scheduleDay.AddMainShift(_mainShift)).IgnoreArguments();
                 Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
+                Expect.Call(_mainShift.EntityClone()).Return(_mainShift);
                 Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(dateTime);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
+                Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay)).IgnoreArguments();
                 Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(dateOnlyAsDateTimePeriod.DateOnly ,
                                                                         dateTime,
                                                                         new List<IScheduleDay> {_scheduleDay})).
@@ -71,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
             using(_mock.Playback()   )
             {
-                _target.Execute(selectedDays,matrixList,_groupPerson ,_effectiveRestriction ,_shiftProjectionCache,new List<DateOnly>())  ;
+                _target.Execute(selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { today });
             }
         }
     }

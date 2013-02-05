@@ -26,8 +26,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
     	private ISkillStaffPeriodToSkillIntervalDataMapper _intervalMapper;
     	private ISkillResolutionProvider _resolutionProvider;
     	private ISkillIntervalDataDivider _intervalDivider;
+        private ReadOnlyCollection<ISkillStaffPeriod> _skillStaffPeriodCollection;
+        private ISkillStaffPeriod _skillStaffPeriod;
 
-    	[SetUp]
+        [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -41,6 +43,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
     		_intervalMapper = _mock.StrictMock<ISkillStaffPeriodToSkillIntervalDataMapper>();
     		_resolutionProvider =  _mock.StrictMock<ISkillResolutionProvider>();
     		_intervalDivider = _mock.StrictMock<ISkillIntervalDataDivider>();
+            _skillStaffPeriod = _mock.StrictMock<ISkillStaffPeriod>();
+            _skillStaffPeriodCollection = new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>{_skillStaffPeriod});
     		_target = new SkillDayPeriodIntervalDataGenerator(_factorApplyer, _resolutionProvider, _intervalDivider,
     		                                                  _intervalDataAggregator,
     		                                                  _dayIntervalDataCalculator, _intervalMapper,
@@ -91,10 +95,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
                     Return(_skillDayList);
                 Expect.Call(_skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
             	Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly());
-            	Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(null);
+            	Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
             	Expect.Call(_skillDay2.Skill).Return(skill2).Repeat.AtLeastOnce();
 				Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly());
-				Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(null);
+                Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
             	Expect.Call(_resolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
             	Expect.Call(_intervalMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
 					skillIntervalDataList).Repeat.AtLeastOnce();
