@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
 		void WorkShiftsExplorer_KeyDown(object sender, KeyEventArgs e)
 		{
+			if(_navigationView.DefaultTreeView.IsEditing) return;
 			if (e.KeyValue.Equals(32))
 			{
 				e.Handled = true;
@@ -111,6 +112,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
 		void WorkShiftsExplorer_KeyPress(object sender, KeyPressEventArgs e)
 		{
+			if (_navigationView.DefaultTreeView.IsEditing) return;
 			if (e.KeyChar.Equals((Char)Keys.Space))
 			{
 				e.Handled = true;
