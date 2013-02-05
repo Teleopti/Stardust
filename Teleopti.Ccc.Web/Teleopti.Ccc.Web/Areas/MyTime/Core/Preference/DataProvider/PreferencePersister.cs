@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		public PreferenceDayViewModel Delete(DateOnly date)
 		{
-			var preferences = _preferenceDayRepository.Find(date, _loggedOnUser.CurrentUser());
+			var preferences = _preferenceDayRepository.FindAndLock(date, _loggedOnUser.CurrentUser());
 			if (preferences.IsEmpty())
 				throw new HttpException(404, "Preference not found");
 
