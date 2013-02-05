@@ -108,7 +108,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             Presenter.SetStatisticPeriod(dateSelectionFromToStatistics.GetSelectedDates()[0]);
             Presenter.SetTargetPeriod(dateSelectionFromToTarget.GetSelectedDates()[0]);
 
-            backgroundWorkerAutoForecast.RunWorkerAsync();
+            //backgroundWorkerAutoForecast.RunWorkerAsync();
+			Presenter.ExecuteAutoForecast();
         }
 
         private void DisableInterface()

@@ -864,6 +864,8 @@
     <Compile Include="Messages\Denormalize\PersonPeriodChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\ProcessDenormalizeQueue.cs" />
     <Compile Include="Messages\General\ChildSkillSelection.cs" />
+    <Compile Include="Messages\General\QuickForecastWorkloadsMessage.cs" />
+    <Compile Include="Messages\General\QuickForecastWorkloadMessage.cs" />
     <Compile Include="Messages\General\RecalculateForecastOnSkillMessage.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillsToSkill.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillToSkill.cs" />

@@ -67,11 +67,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
         public void ExecuteAutoForecast()
         {
-            _quickForecastCommand.WorkloadForecasted += QuickForecastCommandWorkloadForecasted;
-            _quickForecastCommand.WorkloadForecasting += QuickForecastCommandWorkloadForecasting;
+            //_quickForecastCommand.WorkloadForecasted += QuickForecastCommandWorkloadForecasted;
+            //_quickForecastCommand.WorkloadForecasting += QuickForecastCommandWorkloadForecasting;
             _quickForecastCommand.Execute();
-            _quickForecastCommand.WorkloadForecasted -= QuickForecastCommandWorkloadForecasted;
-            _quickForecastCommand.WorkloadForecasting -= QuickForecastCommandWorkloadForecasting;
+            //_quickForecastCommand.WorkloadForecasted -= QuickForecastCommandWorkloadForecasted;
+            //_quickForecastCommand.WorkloadForecasting -= QuickForecastCommandWorkloadForecasting;
         }
 
         private void QuickForecastCommandWorkloadForecasting(object sender, CustomEventArgs<WorkloadModel> e)

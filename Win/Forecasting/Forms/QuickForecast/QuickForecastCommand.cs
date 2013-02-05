@@ -4,6 +4,9 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
+using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -16,24 +19,45 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
         private readonly IOutlierRepository _outlierRepository;
         private readonly IRepositoryFactory _repositoryFactory;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly WorkloadDayHelper _workloadDayHelper = new WorkloadDayHelper();
+	    private readonly ISendCommandToSdk _sendCommandToSdk;
+	    private readonly WorkloadDayHelper _workloadDayHelper = new WorkloadDayHelper();
 
         public event EventHandler<CustomEventArgs<WorkloadModel>> WorkloadForecasting;
         public event EventHandler<CustomEventArgs<WorkloadModel>> WorkloadForecasted;
 
-        public QuickForecastCommand(QuickForecastModel quickForecastModel, ISkillDayRepository skillDayRepository, IOutlierRepository outlierRepository, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
+        public QuickForecastCommand(QuickForecastModel quickForecastModel, ISkillDayRepository skillDayRepository,
+			IOutlierRepository outlierRepository, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, ISendCommandToSdk sendCommandToSdk)
         {
             _quickForecastModel = quickForecastModel;
             _skillDayRepository = skillDayRepository;
             _outlierRepository = outlierRepository;
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
+	        _sendCommandToSdk = sendCommandToSdk;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void Execute()
         {
-            foreach (var selectedWorkload in _quickForecastModel.SelectedWorkloads)
+	        var workloads = _quickForecastModel.SelectedWorkloads.Select(selectedWorkload => selectedWorkload.Workload.Id.GetValueOrDefault()).ToList();
+	        var command = new QuickForecastCommandDto
+		        {
+			        ScenarioId = _quickForecastModel.Scenario.Id.GetValueOrDefault(),
+					StatisticPeriod = new DateOnlyPeriodDto { 
+						StartDate = new DateOnlyDto(_quickForecastModel.StatisticPeriod.StartDate.Year, _quickForecastModel.StatisticPeriod.StartDate.Month, _quickForecastModel.StatisticPeriod.StartDate.Day), 
+						EndDate = new DateOnlyDto(_quickForecastModel.StatisticPeriod.EndDate.Year, _quickForecastModel.StatisticPeriod.EndDate.Month, _quickForecastModel.StatisticPeriod.EndDate.Day) },
+			        TargetPeriod = new DateOnlyPeriodDto {
+						StartDate = new DateOnlyDto(_quickForecastModel.TargetPeriod.StartDate.Year, _quickForecastModel.TargetPeriod.StartDate.Month, _quickForecastModel.TargetPeriod.StartDate.Day),
+						EndDate = new DateOnlyDto(_quickForecastModel.TargetPeriod.EndDate.Year, _quickForecastModel.TargetPeriod.EndDate.Month, _quickForecastModel.TargetPeriod.EndDate.Day)
+					},
+			        UpdateStandardTemplates = _quickForecastModel.UpdateStandardTemplates,
+			        WorkloadIds = workloads
+		        };
+
+	        _sendCommandToSdk.ExecuteCommand(command);
+			return;
+            
+			foreach (var selectedWorkload in _quickForecastModel.SelectedWorkloads)
             {
                 using (IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
