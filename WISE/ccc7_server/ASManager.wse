@@ -177,7 +177,7 @@ item: If/While Statement
 end
 item: Set Variable
   Variable=FP
-  Value=%DIR%ProcessDatabase.xmla
+  Value=ProcessDatabase.xmla
 end
 item: Execute Program
   Pathname=.\AnalysisServicesManager.exe
