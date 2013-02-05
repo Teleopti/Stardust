@@ -12,6 +12,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	var requestViewModel = null;
 
 	function _addTextAndAbsenceRequestClick() {
+		Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
 		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 		requestViewModel.TypeEnum(3);
 		_clearFormData();
@@ -24,7 +25,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 		$('#Text-request-tab').click();
 	}
-	
+
 	function _initTemporary() {
 		_initEditSection(requestViewModel);
 	}
