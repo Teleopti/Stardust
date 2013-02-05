@@ -65,12 +65,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingAbsenceRequest>().PersonRequest.GetSubject(new NoFormatting())));
 		}
 
-		[Then(@"I should see my existing shift trade request")]
-		public void ThenIShouldSeeMyExistingShiftTradeRequest()
+
+		[Then(@"I should see my existing shift trade request with subject '(.*)'")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(string subject)
 		{
 			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
-			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.GetSubject(new NoFormatting())));
+			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(subject));
 		}
+
 
 		[Then(@"I should not see my existing shift trade request")]
 		public void ThenIShouldNotSeeMyExistingShiftTradeRequest()

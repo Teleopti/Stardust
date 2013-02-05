@@ -153,7 +153,9 @@ Scenario: Show my scheduled day off
 
 Scenario: View shift trade request details
 	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request with subject 'swap with me'
+	And I have created a shift trade request
+	| Field			| Value				|
+	| Subject		| swap with me		|
 	And I am viewing requests
 	When I click on the request
 	Then I should see the shift trade request form  with subject 'swap with me'
@@ -168,7 +170,7 @@ Scenario: Close details when approving shift trade request
 
 Scenario: Can not approve or deny shift trade request created by me
 	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request with subject 'swap with me'
+	And I have created a shift trade request to 'Some Person'
 	And I am viewing requests
 	When I click on the request
 	Then I should not see the approve button
@@ -177,7 +179,7 @@ Scenario: Can not approve or deny shift trade request created by me
 @ignore
 Scenario: Deny shift trade request
 	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request with subject 'some shifttrade'
+	And I have received a shift trade request
 	And I am viewing requests
 	When I click on the request
 	And I click the Deny button on the shift request
@@ -185,23 +187,30 @@ Scenario: Deny shift trade request
 
 Scenario: Should not be able to delete received shift trade request
 	Given I am an agent
-	And I have received a shift trade request from 'Ashley'
+	And I have received a shift trade request
+	| Field		| Value			|
+	| From		| Ashley			|
 	When I view requests
 	Then I should not see a delete button on the request
 
 Scenario: Show name of the person that created the shift trade request
 	Given I have the role 'Full access to mytime'
-	And I have received a shift trade request from 'Keil Randor'
+	And I have received a shift trade request
+	| Field		| Value					|
+	| From		| Keil Randor			|
 	And I am viewing requests
 	When I click on the request
 	Then I should see 'Keil Randor' as the sender of the request
 
 Scenario: Show name of the person that recieved the shift trade request
 	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request to 'Ashley Andeen'
+	And I have created a shift trade request
+	| Field	| Value					|
+	| To		| Ashley Andeen		|
 	And I am viewing requests
 	When I click on the request
 	Then I should see 'Ashley Andeen' as the receiver of the request
+
 
 	
 
