@@ -483,36 +483,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new ExistingAbsenceRequest());
 		}
 
+		[Given(@"I have received a shift trade request")]
 		[Given(@"I have created a shift trade request")]
-		public void GivenIHaveCreatedAShiftTradeRequest()
+		public void GivenIHaveCreatedAShiftTradeRequest(Table table)
 		{
-			UserFactory.User().Setup(new ExistingShiftTradeRequest());
-		}
-
-		[Given(@"I have created a shift trade request with subject '(.*)'")]
-		public void GivenIHaveCreatedAShiftTradeRequestWithSubject(string subject)
-		{
-			UserFactory.User().Setup(new ExistingShiftTradeRequest(subject));
+			var existingShiftTrade = table.CreateInstance<ExistingShiftTradeRequest>();
+			UserFactory.User().Setup(existingShiftTrade);
 		}
 
 		[Given(@"I have received a shift trade request from '(.*)'")]
-		public void GivenIHaveReceivedAShiftTradeRequestFrom(string from)
+		public void GivenIHaveReceivedAShiftTradeRequestFrom(string name)
 		{
-			var person = CreatePerson(from);
-			var userFactory = new  UserFactory();
-			userFactory.MakePerson(person);
-			UserFactory.User().Setup(new ExistingShiftTradeRequest() {From = person});
+			var existingShiftTrade = new ExistingShiftTradeRequest() {From = name};
+			UserFactory.User().Setup(existingShiftTrade);
 		}
 
 		[Given(@"I have created a shift trade request to '(.*)'")]
-		public void GivenIHaveCreatedAShiftTradeRequestTo(string to)
+		public void GivenIHaveCreatedAShiftTradeRequestTo(string name)
 		{
-			var person = CreatePerson(to);
-			var userFactory = new UserFactory();
-			userFactory.MakePerson(person);
-			UserFactory.User().Setup(new ExistingShiftTradeRequest() { To = person });
+			var existingShiftTrade = new ExistingShiftTradeRequest() { To = name };
+			UserFactory.User().Setup(existingShiftTrade);
 		}
-
 
 		[Given(@"the site has another team")]
 		public void GivenTheSiteHasAnotherTeam()

@@ -24,14 +24,19 @@ Scenario: See absence request
 Scenario: Show created shift trade request
 	Given I am an agent
 	And I have created a shift trade request
+	| Field			| Value				|
+	| Subject		| swap with me		|
 	When I view requests
-	Then I should see my existing shift trade request
+	Then I should see my existing shift trade request with subject 'swap with me'
 
 Scenario: Show received shift trade request
 	Given I am an agent
-	And I have received a shift trade request from 'Ashley'
+	And I have received a shift trade request
+	| Field   | Value         |
+	| Subject | swap with me  |
+	| From    | Ashley Andeen |
 	When I view requests
-	Then I should see my existing shift trade request
+		Then I should see my existing shift trade request with subject 'swap with me'
 
 Scenario: Requests tab
 	Given I am an agent
