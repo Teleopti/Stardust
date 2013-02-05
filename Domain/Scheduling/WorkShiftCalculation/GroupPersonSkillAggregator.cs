@@ -16,19 +16,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		public IEnumerable<ISkill> AggregatedSkills(GroupPerson groupPerson, DateOnly minValue)
 		{
 			var ret = new HashSet<ISkill>();
-			foreach (var person in groupPerson.GroupMembers)
-			{
-				IPersonPeriod personPeriod = person.Period(minValue);
-				if(personPeriod != null)
-				{
-					foreach (var personSkill in personPeriod.PersonSkillCollection)
-					{
-						ret.Add(personSkill.Skill);
-					}
-				}
-			}
+		    if (groupPerson != null)
+		        foreach (var person in groupPerson.GroupMembers)
+		        {
+		            IPersonPeriod personPeriod = person.Period(minValue);
+		            if(personPeriod != null)
+		            {
+		                foreach (var personSkill in personPeriod.PersonSkillCollection)
+		                {
+		                    ret.Add(personSkill.Skill);
+		                }
+		            }
+		        }
 
-			return ret;
+		    return ret;
 		}
 	}
 }

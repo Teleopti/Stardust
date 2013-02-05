@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
             using (_mocks.Playback())
             {
-                Assert.AreEqual(_target.GetRamdomTeam(new DateOnly( )), _groupPerson );
+                Assert.AreEqual(_target.GetRandomTeam(new DateOnly( )), _groupPerson );
             }
         }
     }

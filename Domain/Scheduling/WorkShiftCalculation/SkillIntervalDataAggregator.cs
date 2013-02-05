@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
     public interface ISkillIntervalDataAggregator
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         IList<ISkillIntervalData> AggregateSkillIntervalData(IList<IList<ISkillIntervalData>> multipleSkillIntervalDataList);
     }
 
@@ -15,23 +16,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
         public IList<ISkillIntervalData> AggregateSkillIntervalData(IList<IList<ISkillIntervalData>> multipleSkillIntervalDataList)
         {
             var tempPeriodToSkillIntervalData = new Dictionary<DateTimePeriod, ISkillIntervalData>();
-            foreach(var skillIntervalList in multipleSkillIntervalDataList )
-            {
-                foreach(var skillIntervalData in skillIntervalList )
+            if (multipleSkillIntervalDataList != null)
+                foreach(var skillIntervalList in multipleSkillIntervalDataList )
                 {
-                    if(!tempPeriodToSkillIntervalData.ContainsKey(skillIntervalData.Period ))
-                        tempPeriodToSkillIntervalData.Add(skillIntervalData.Period, AggregateTwoIntervals(skillIntervalData,null));
-                    else
-                        tempPeriodToSkillIntervalData[skillIntervalData.Period] = AggregateTwoIntervals(tempPeriodToSkillIntervalData[skillIntervalData.Period], skillIntervalData);
+                    foreach(var skillIntervalData in skillIntervalList )
+                    {
+                        if(!tempPeriodToSkillIntervalData.ContainsKey(skillIntervalData.Period ))
+                            tempPeriodToSkillIntervalData.Add(skillIntervalData.Period, AggregateTwoIntervals(skillIntervalData,null));
+                        else
+                            tempPeriodToSkillIntervalData[skillIntervalData.Period] = AggregateTwoIntervals(tempPeriodToSkillIntervalData[skillIntervalData.Period], skillIntervalData);
                     
-                }
+                    }
                 
-            }
+                }
 
             return tempPeriodToSkillIntervalData.Values.ToList();
         }
 
-        private ISkillIntervalData AggregateTwoIntervals(ISkillIntervalData skillIntervalData1, ISkillIntervalData skillIntervalData2)
+        private static ISkillIntervalData AggregateTwoIntervals(ISkillIntervalData skillIntervalData1, ISkillIntervalData skillIntervalData2)
         {
             if (skillIntervalData2 == null)
             {

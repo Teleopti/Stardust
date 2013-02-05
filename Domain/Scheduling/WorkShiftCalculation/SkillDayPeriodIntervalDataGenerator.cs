@@ -7,12 +7,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
 	public interface ISkillDayPeriodIntervalDataGenerator
 	{
-		IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(IList<DateOnly> dateOnlyList);
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(IList<DateOnly> dateOnlyList);
 	}
 
 	public class SkillDayPeriodIntervalDataGenerator : ISkillDayPeriodIntervalDataGenerator
 	{
-		private readonly ISkillIntervalDataSkillFactorApplyer _skillIntervalDataSkillFactorApplyer;
+		private readonly ISkillIntervalDataSkillFactorApplier _skillIntervalDataSkillFactorApplier;
 		private readonly ISkillResolutionProvider _resolutionProvider;
 		private readonly ISkillIntervalDataDivider _intervalDataDivider;
 		private readonly ISkillIntervalDataAggregator _intervalDataAggregator;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 
-		public SkillDayPeriodIntervalDataGenerator(ISkillIntervalDataSkillFactorApplyer skillIntervalDataSkillFactorApplyer,
+		public SkillDayPeriodIntervalDataGenerator(ISkillIntervalDataSkillFactorApplier skillIntervalDataSkillFactorApplier,
 			ISkillResolutionProvider resolutionProvider,
 			ISkillIntervalDataDivider intervalDataDivider,
 			ISkillIntervalDataAggregator intervalDataAggregator,
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			_skillIntervalDataSkillFactorApplyer = skillIntervalDataSkillFactorApplyer;
+			_skillIntervalDataSkillFactorApplier = skillIntervalDataSkillFactorApplier;
 			_resolutionProvider = resolutionProvider;
 			_intervalDataDivider = intervalDataDivider;
 			_intervalDataAggregator = intervalDataAggregator;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 				var adjustedMapedData = new List<ISkillIntervalData>();
 				foreach (var data in mappedData)
 				{
-					var appliedData = _skillIntervalDataSkillFactorApplyer.ApplyFactors(data, skill);
+					var appliedData = _skillIntervalDataSkillFactorApplier.ApplyFactors(data, skill);
 					adjustedMapedData.Add(appliedData);
 				}
 				IDictionary<DateOnly, IList<ISkillIntervalData>> intervalData;

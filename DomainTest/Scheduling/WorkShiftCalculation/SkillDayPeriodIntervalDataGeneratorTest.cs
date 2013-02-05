@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private ISkillDay _skillDay2;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private List<ISkillDay> _skillDayList;
-    	private ISkillIntervalDataSkillFactorApplyer _factorApplyer;
+    	private ISkillIntervalDataSkillFactorApplier _factorApplier;
     	private ISkillIntervalDataAggregator _intervalDataAggregator;
     	private IDayIntervalDataCalculator _dayIntervalDataCalculator;
     	private ISkillStaffPeriodToSkillIntervalDataMapper _intervalMapper;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _skillDay2 = _mock.StrictMock<ISkillDay>();
             _skillDayList = new List<ISkillDay> {_skillDay1, _skillDay2};
             _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-        	_factorApplyer = _mock.StrictMock<ISkillIntervalDataSkillFactorApplyer>();
+        	_factorApplier = _mock.StrictMock<ISkillIntervalDataSkillFactorApplier>();
     		_intervalDataAggregator = _mock.StrictMock<ISkillIntervalDataAggregator>();
     		_dayIntervalDataCalculator = _mock.StrictMock<IDayIntervalDataCalculator>();
     		_intervalMapper = _mock.StrictMock<ISkillStaffPeriodToSkillIntervalDataMapper>();
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
     		_intervalDivider = _mock.StrictMock<ISkillIntervalDataDivider>();
             _skillStaffPeriod = _mock.StrictMock<ISkillStaffPeriod>();
             _skillStaffPeriodCollection = new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>{_skillStaffPeriod});
-    		_target = new SkillDayPeriodIntervalDataGenerator(_factorApplyer, _resolutionProvider, _intervalDivider,
+    		_target = new SkillDayPeriodIntervalDataGenerator(_factorApplier, _resolutionProvider, _intervalDivider,
     		                                                  _intervalDataAggregator,
     		                                                  _dayIntervalDataCalculator, _intervalMapper,
     		                                                  _schedulingResultStateHolder);
@@ -105,9 +105,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             	Expect.Call(_intervalDivider.SplitSkillIntervalData(new List<ISkillIntervalData>(), 15)).IgnoreArguments().
             		Return(skillIntervalDataList).Repeat.AtLeastOnce();
 
-            	Expect.Call(_factorApplyer.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
+            	Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
             	                                        skill1)).IgnoreArguments().Return(skillIntervalData1).Repeat.Times(2);
-				Expect.Call(_factorApplyer.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
+				Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
             	                                        skill2)).IgnoreArguments().Return(skillIntervalData2).Repeat.Times(2);
             
             	Expect.Call(_dayIntervalDataCalculator.Calculate(15,new Dictionary<DateOnly, IList<ISkillIntervalData>>())).IgnoreArguments().Return(intervalData1);

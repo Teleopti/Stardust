@@ -7,9 +7,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 {
 	[TestFixture]
-	public class SkillIntervalDataSkillFactorApplyerTest
+	public class SkillIntervalDataSkillFactorApplierTest
 	{
-		private ISkillIntervalDataSkillFactorApplyer _target;
+		private ISkillIntervalDataSkillFactorApplier _target;
 		private ISkillIntervalData _skillIntervalData;
 		private DateTimePeriod _dp;
 		private ISkill _skill;
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		[SetUp]
 		public void Setup()
 		{
-			_target = new SkillIntervalDataSkillFactorApplyer();
+			_target = new SkillIntervalDataSkillFactorApplier();
 			_dp = new DateTimePeriod(2013, 1, 23, 2013, 1, 23);
 			_skill = SkillFactory.CreateSkill("hej");
 

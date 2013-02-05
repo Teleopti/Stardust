@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
     public interface IDynamicBlockFinder
     {
-        List<DateOnly> ExtractBlockDays(DateOnly startDateOnly);
+        IList<DateOnly> ExtractBlockDays(DateOnly startDateOnly);
 
     }
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             _matrixList = matrixList;
         }
 
-        public List<DateOnly> ExtractBlockDays(DateOnly startDateOnly)
+        public IList<DateOnly> ExtractBlockDays(DateOnly startDateOnly)
         {
             var selectedPeriod = new List<IScheduleDayPro>();
             foreach (var matrix in _matrixList)

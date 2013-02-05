@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             _processedIndex = new List<int>();
         }
 
-        public IGroupPerson GetRamdomTeam(DateOnly dateOnly )
+        public IGroupPerson GetRandomTeam(DateOnly dateOnly )
         {
             var selectedPersonList = _matrixLit.Select(scheduleMatrixPro => scheduleMatrixPro.Person).ToList();
             int randomeNum;
@@ -45,6 +45,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
     public interface ITeamExtractor
     {
-        IGroupPerson GetRamdomTeam(DateOnly dateOnly);
+        IGroupPerson GetRandomTeam(DateOnly dateOnly);
     }
 }

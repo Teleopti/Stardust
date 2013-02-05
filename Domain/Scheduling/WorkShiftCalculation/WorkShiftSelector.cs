@@ -6,8 +6,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
 	public interface IWorkShiftSelector
 	{
-		IShiftProjectionCache Select(IList<IShiftProjectionCache> shiftList,
-		                             IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDatas,
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList,
+		                             IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDataDictionary,
 		                             WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons);
 	}
 
@@ -22,41 +23,42 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			_equalWorkShiftValueDecider = equalWorkShiftValueDecider;
 		}
 
-		public IShiftProjectionCache Select(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDatas, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
+        public IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDataDictionary, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
 		{
 			double? bestShiftValue = null;
 			IShiftProjectionCache bestShift = null;
-			foreach (var shiftProjectionCache in shiftList)
-			{
-				double? valueForShift = this.valueForShift(skillIntervalDatas, shiftProjectionCache, lengthFactor, useMinimumPersons,
-				                                           useMaximumPersons);
-				if (valueForShift.HasValue)
-				{
-					if (!bestShiftValue.HasValue)
-					{
-						bestShiftValue = valueForShift.Value;
-						bestShift = shiftProjectionCache;
-					}
-					else
-					{
-						if (valueForShift.Value == bestShiftValue)
-						{
-							bestShiftValue = valueForShift.Value;
-							bestShift = _equalWorkShiftValueDecider.Decide(bestShift, shiftProjectionCache);
-						}
+            if (shiftList != null)
+                foreach (var shiftProjectionCache in shiftList)
+                {
+                    double? valueForShift = this.valueForShift(skillIntervalDataDictionary, shiftProjectionCache, lengthFactor, useMinimumPersons,
+                                                               useMaximumPersons);
+                    if (valueForShift.HasValue)
+                    {
+                        if (!bestShiftValue.HasValue)
+                        {
+                            bestShiftValue = valueForShift.Value;
+                            bestShift = shiftProjectionCache;
+                        }
+                        else
+                        {
+                            if (valueForShift.Value == bestShiftValue)
+                            {
+                                bestShiftValue = valueForShift.Value;
+                                bestShift = _equalWorkShiftValueDecider.Decide(bestShift, shiftProjectionCache);
+                            }
 
-						if(valueForShift.Value > bestShiftValue)
-						{
-							bestShiftValue = valueForShift.Value;
-							bestShift = shiftProjectionCache;
-						}
+                            if(valueForShift.Value > bestShiftValue)
+                            {
+                                bestShiftValue = valueForShift.Value;
+                                bestShift = shiftProjectionCache;
+                            }
 							
-					}
+                        }
 
-				}
-			}
+                    }
+                }
 
-			return bestShift;
+            return bestShift;
 		}
 
 		private double? valueForActivity(KeyValuePair<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> keyValuePair, IShiftProjectionCache shiftProjectionCache, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)

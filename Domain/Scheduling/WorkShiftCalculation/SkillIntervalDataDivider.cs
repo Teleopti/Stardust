@@ -14,48 +14,51 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
         public IList<ISkillIntervalData> SplitSkillIntervalData(IList<ISkillIntervalData> skillIntervalDataList, int resolution)
         {
             var resultingskillIntervalDataList = new List<ISkillIntervalData>();
-            var modDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
-                                skillIntervalDataList[0].Period.StartDateTime.Minute) % resolution;
-
-            int totallDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
-                                   skillIntervalDataList[0].Period.StartDateTime.Minute)/resolution;
-            if (modDiffInMin!= 0)
+            if (skillIntervalDataList != null)
             {
-                //split the interval into to 30 min as the interval length is 15 and the resolution is 10
-                var sortedSkillList =
-                    skillIntervalDataList.OrderBy(s => s.Period.StartDateTime).ThenBy(s => s.Period.EndDateTime).ToList() ;
-                var aggregatedList = new List<ISkillIntervalData>();
-                for (var j = 0; j < sortedSkillList.Count( ); j++)
+                var modDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
+                                    skillIntervalDataList[0].Period.StartDateTime.Minute) % resolution;
+
+                int totallDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
+                                       skillIntervalDataList[0].Period.StartDateTime.Minute)/resolution;
+                if (modDiffInMin!= 0)
                 {
-                    if(j+1<skillIntervalDataList.Count)
+                    //split the interval into to 30 min as the interval length is 15 and the resolution is 10
+                    var sortedSkillList =
+                        skillIntervalDataList.OrderBy(s => s.Period.StartDateTime).ThenBy(s => s.Period.EndDateTime).ToList() ;
+                    var aggregatedList = new List<ISkillIntervalData>();
+                    for (var j = 0; j < sortedSkillList.Count( ); j++)
                     {
-                        aggregatedList.Add(AggregateTwoIntervals(sortedSkillList[j], sortedSkillList[j + 1]));
-                        j++;
-                    }else
-                        aggregatedList.Add(AggregateTwoIntervals(sortedSkillList[j], null));
+                        if(j+1<skillIntervalDataList.Count)
+                        {
+                            aggregatedList.Add(AggregateTwoIntervals(sortedSkillList[j], sortedSkillList[j + 1]));
+                            j++;
+                        }else
+                            aggregatedList.Add(AggregateTwoIntervals(sortedSkillList[j], null));
                     
+                    }
+                    skillIntervalDataList = aggregatedList;
+                    totallDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
+                                       skillIntervalDataList[0].Period.StartDateTime.Minute) / resolution;
                 }
-                skillIntervalDataList = aggregatedList;
-                totallDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
-                                   skillIntervalDataList[0].Period.StartDateTime.Minute) / resolution;
-            }
-            foreach(var skillIntervalItem in skillIntervalDataList )
-            {
-                var startPeriod = skillIntervalItem.Period.StartDateTime ;
-                for (int j = 0; j < totallDiffInMin; j++)
+                foreach(var skillIntervalItem in skillIntervalDataList )
                 {
-                    int? minHead = null;
-                    int? maxHead = null;
-                    if (skillIntervalItem.MinimumHeads.HasValue)
-                        minHead = skillIntervalItem.MinimumHeads.Value;
-                    if (skillIntervalItem.MaximumHeads.HasValue)
-                        maxHead = skillIntervalItem.MaximumHeads.Value;
+                    var startPeriod = skillIntervalItem.Period.StartDateTime ;
+                    for (int j = 0; j < totallDiffInMin; j++)
+                    {
+                        int? minHead = null;
+                        int? maxHead = null;
+                        if (skillIntervalItem.MinimumHeads.HasValue)
+                            minHead = skillIntervalItem.MinimumHeads.Value;
+                        if (skillIntervalItem.MaximumHeads.HasValue)
+                            maxHead = skillIntervalItem.MaximumHeads.Value;
 
-                    resultingskillIntervalDataList.Add(
-                        new SkillIntervalData(new DateTimePeriod(startPeriod, startPeriod.AddMinutes(resolution)),
-                                              skillIntervalItem.ForecastedDemand, skillIntervalItem.CurrentDemand,
-                                              skillIntervalItem.CurrentHeads, minHead, maxHead));
-                    startPeriod = startPeriod.AddMinutes(resolution);
+                        resultingskillIntervalDataList.Add(
+                            new SkillIntervalData(new DateTimePeriod(startPeriod, startPeriod.AddMinutes(resolution)),
+                                                  skillIntervalItem.ForecastedDemand, skillIntervalItem.CurrentDemand,
+                                                  skillIntervalItem.CurrentHeads, minHead, maxHead));
+                        startPeriod = startPeriod.AddMinutes(resolution);
+                    }
                 }
             }
 
@@ -63,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             return resultingskillIntervalDataList;
         }
 
-        private ISkillIntervalData AggregateTwoIntervals(ISkillIntervalData skillIntervalData1,ISkillIntervalData skillIntervalData2  )
+        private static ISkillIntervalData AggregateTwoIntervals(ISkillIntervalData skillIntervalData1,ISkillIntervalData skillIntervalData2  )
         {
             if(skillIntervalData2 == null )
             {

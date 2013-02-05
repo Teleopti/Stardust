@@ -13,13 +13,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		public int MinimumResolution(IList<ISkill> skills)
 		{
 			var minimumResolution = int.MaxValue;
-			foreach (var skill in skills)
-			{
-				var resolution = skill.DefaultResolution;
-				if (resolution < minimumResolution)
-					minimumResolution = resolution;
-			}
-			return minimumResolution;
+		    if (skills != null)
+		        foreach (var skill in skills)
+		        {
+		            var resolution = skill.DefaultResolution;
+		            if (resolution < minimumResolution)
+		                minimumResolution = resolution;
+		        }
+		    return minimumResolution;
 		}
 	}
 }

@@ -8,7 +8,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
 	public interface IDayIntervalDataCalculator
 	{
-		Dictionary<TimeSpan, ISkillIntervalData> Calculate(int resolution, IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData);
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        IDictionary<TimeSpan, ISkillIntervalData> Calculate(int resolution, IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData);
 	}
 
 	public class DayIntervalDataCalculator : IDayIntervalDataCalculator
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			_intervalDataCalculator = intervalDataCalculator;
 		}
 
-		public Dictionary<TimeSpan, ISkillIntervalData> Calculate(int resolution, IDictionary<DateOnly,
+		public IDictionary<TimeSpan, ISkillIntervalData> Calculate(int resolution, IDictionary<DateOnly,
 			IList<ISkillIntervalData>> dayIntervalData)
 		{
 			InParameter.NotNull("dayIntervalData", dayIntervalData);
@@ -37,13 +38,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			{
 				var intervalTimeSpan = intervalData.Key;
 				var intervals = new List<double>();
-				foreach (var keyValuePair in dayIntervalData)
-				{
-					var oneInterval = keyValuePair.Value.FirstOrDefault(x => x.Period.StartDateTime.TimeOfDay == intervalTimeSpan);
-					if (oneInterval != null)
-						intervals.Add(oneInterval.ForecastedDemand - oneInterval.CurrentDemand);
-				}
-				var calculatedDemand = _intervalDataCalculator.Calculate(intervals);
+			    if (dayIntervalData != null)
+			        foreach (var keyValuePair in dayIntervalData)
+			        {
+			            var oneInterval = keyValuePair.Value.FirstOrDefault(x => x.Period.StartDateTime.TimeOfDay == intervalTimeSpan);
+			            if (oneInterval != null)
+			                intervals.Add(oneInterval.ForecastedDemand - oneInterval.CurrentDemand);
+			        }
+			    var calculatedDemand = _intervalDataCalculator.Calculate(intervals);
 				var startTime = baseDate.Date.Add(intervalTimeSpan);
 				var endTime = startTime.AddMinutes(resolution);
 				ISkillIntervalData skillIntervalData = new SkillIntervalData(new DateTimePeriod(startTime, endTime),

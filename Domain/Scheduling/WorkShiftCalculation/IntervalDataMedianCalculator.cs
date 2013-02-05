@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
     {
         public double Calculate(IList<double> intervalValue)
         {
-            if (intervalValue.Count == 0) return 0f;
+            if (intervalValue != null && intervalValue.Count == 0) return 0f;
             var sortedPNumbers = intervalValue.ToArray() ;
-            intervalValue.CopyTo(sortedPNumbers, 0);
+            if (intervalValue != null) intervalValue.CopyTo(sortedPNumbers, 0);
             Array.Sort(sortedPNumbers);
             var size = sortedPNumbers.Length;
             var mid = size / 2;

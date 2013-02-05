@@ -68,29 +68,32 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 {
                     var clonedRuleSet = (IWorkShiftRuleSet)ruleSet.Clone();
 
-                    var start = resolveTime(clonedRuleSet.TemplateGenerator.StartPeriod.Period.StartTime, restriction.StartTimeLimitation.StartTime, false);
-                    var end = resolveTime(clonedRuleSet.TemplateGenerator.StartPeriod.Period.EndTime, restriction.StartTimeLimitation.EndTime, true);
-                    if (start > end)
-                        continue;
-                    var startTimePeriod = new TimePeriod(start, end);
+                    if (restriction != null)
+                    {
+                        var start = resolveTime(clonedRuleSet.TemplateGenerator.StartPeriod.Period.StartTime, restriction.StartTimeLimitation.StartTime, false);
+                        var end = resolveTime(clonedRuleSet.TemplateGenerator.StartPeriod.Period.EndTime, restriction.StartTimeLimitation.EndTime, true);
+                        if (start > end)
+                            continue;
+                        var startTimePeriod = new TimePeriod(start, end);
 
-                    start = resolveTime(clonedRuleSet.TemplateGenerator.EndPeriod.Period.StartTime, restriction.EndTimeLimitation.StartTime, false);
-                    end = resolveTime(clonedRuleSet.TemplateGenerator.EndPeriod.Period.EndTime, restriction.EndTimeLimitation.EndTime, true);
-                    if (start > end)
-                        continue;
-                    var endTimePeriod = new TimePeriod(start, end);
+                        start = resolveTime(clonedRuleSet.TemplateGenerator.EndPeriod.Period.StartTime, restriction.EndTimeLimitation.StartTime, false);
+                        end = resolveTime(clonedRuleSet.TemplateGenerator.EndPeriod.Period.EndTime, restriction.EndTimeLimitation.EndTime, true);
+                        if (start > end)
+                            continue;
+                        var endTimePeriod = new TimePeriod(start, end);
 
-                    if (endTimePeriod.EndTime < startTimePeriod.StartTime)
-                        continue;
+                        if (endTimePeriod.EndTime < startTimePeriod.StartTime)
+                            continue;
 
-                    if (startTimePeriod.EndTime > endTimePeriod.EndTime)
-                        startTimePeriod = new TimePeriod(startTimePeriod.StartTime, endTimePeriod.EndTime);
+                        if (startTimePeriod.EndTime > endTimePeriod.EndTime)
+                            startTimePeriod = new TimePeriod(startTimePeriod.StartTime, endTimePeriod.EndTime);
 
-                    if (endTimePeriod.StartTime < startTimePeriod.StartTime)
-                        endTimePeriod = new TimePeriod(startTimePeriod.StartTime, endTimePeriod.EndTime);
+                        if (endTimePeriod.StartTime < startTimePeriod.StartTime)
+                            endTimePeriod = new TimePeriod(startTimePeriod.StartTime, endTimePeriod.EndTime);
 
-                    clonedRuleSet.TemplateGenerator.StartPeriod = new TimePeriodWithSegment(startTimePeriod, clonedRuleSet.TemplateGenerator.StartPeriod.Segment);
-                    clonedRuleSet.TemplateGenerator.EndPeriod = new TimePeriodWithSegment(endTimePeriod, clonedRuleSet.TemplateGenerator.EndPeriod.Segment);
+                        clonedRuleSet.TemplateGenerator.StartPeriod = new TimePeriodWithSegment(startTimePeriod, clonedRuleSet.TemplateGenerator.StartPeriod.Segment);
+                        clonedRuleSet.TemplateGenerator.EndPeriod = new TimePeriodWithSegment(endTimePeriod, clonedRuleSet.TemplateGenerator.EndPeriod.Segment);
+                    }
 
                     if (!_ruleSetDeletedActivityChecker.ContainsDeletedActivity(clonedRuleSet) && !_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(clonedRuleSet))
                     {

@@ -75,6 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
         public void RaiseEventForTest(object sender, SchedulingServiceBaseEventArgs e)
         {
             dayScheduled(sender, e);

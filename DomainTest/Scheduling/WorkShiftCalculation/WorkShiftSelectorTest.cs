@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Playback())
 			{
-				result = _target.Select(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true);
+                result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true);
 			}
 
 			Assert.IsNotNull(result);
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Playback())
 			{
-				result = _target.Select(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true);
+                result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true);
 			}
 
 			Assert.AreSame(_shiftProjectionCache2, result);
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Playback())
 			{
-				result = _target.Select(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true);
+                result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true);
 			}
 
 			Assert.IsNotNull(result);
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Playback())
 			{
-				result = _target.Select(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true);
+                result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true);
 			}
 
 			Assert.IsNull(result);

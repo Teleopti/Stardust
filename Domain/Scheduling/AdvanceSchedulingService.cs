@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         public bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList)
         {
-            bool success = true;
             var startDate = StartDate();
             
             while (startDate != DateOnly.MinValue )
@@ -94,27 +93,25 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 //call class that return the teamblock dates for a given date (problem if team members don't have same days off)
                 var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays( startDate );
                 
-                var fullGroupPerson = _teamExtractor.GetRamdomTeam(startDate);
+                var fullGroupPerson = _teamExtractor.GetRandomTeam(startDate);
                 var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, startDate);
                 foreach(var groupPerson in groupPersonList )
                 {
-                	var person = groupPerson;
-                	var date = startDate;
-                	var groupMatrixList = _matrixList.Where(x => person.GroupMembers.Contains(x.Person) && x.SchedulePeriod.DateOnlyPeriod.Contains(date)).ToList();
+                	var groupMatrixList = GetScheduleMatrixProList(groupPerson, startDate);
                     //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
-                    var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, _schedulingOptions);
+                    var restriction = GetEffectiveRestriction(groupPerson, dateOnlyList);
 
                     //call class that returns the aggregated intraday dist based on teamblock dates ???? consider the priority and understaffing
                     var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(dateOnlyList);
 
                     //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
                     // (should we cover for max seats here?) ????
-					var shifts = _workShiftFilterService.Filter(startDate, groupPerson, groupMatrixList, restriction, _schedulingOptions);
+					var shifts = GetShiftProjectionCaches(restriction, groupMatrixList, groupPerson, startDate);
 
                     if(shifts!=null && shifts.Count>0)
                     {
                         //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need ???
-                        var bestShiftProjectionCache = _workShiftSelector.Select(shifts, activityInternalData,
+                        var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
                                                                                  _schedulingOptions.WorkShiftLengthHintOption,
                                                                                  _schedulingOptions.UseMinimumPersons,
                                                                                  _schedulingOptions.UseMaximumPersons);
@@ -129,7 +126,30 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 startDate = GetNextDate(dateOnlyList.OrderByDescending(x => x.Date).First());
             }
 
-            return success;
+            return true;
+        }
+
+        private IList<IShiftProjectionCache> GetShiftProjectionCaches(IEffectiveRestriction restriction, List<IScheduleMatrixPro> groupMatrixList, IGroupPerson groupPerson,
+                                               DateOnly startDate)
+        {
+            var shifts = _workShiftFilterService.Filter(startDate, groupPerson, groupMatrixList, restriction, _schedulingOptions);
+            return shifts;
+        }
+
+        private List<IScheduleMatrixPro> GetScheduleMatrixProList(IGroupPerson groupPerson, DateOnly startDate)
+        {
+            var person = groupPerson;
+            var date = startDate;
+            var groupMatrixList =
+                _matrixList.Where(x => person.GroupMembers.Contains(x.Person) && x.SchedulePeriod.DateOnlyPeriod.Contains(date))
+                    .ToList();
+            return groupMatrixList;
+        }
+
+        private IEffectiveRestriction GetEffectiveRestriction(IGroupPerson groupPerson, IList<DateOnly> dateOnlyList)
+        {
+            var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, _schedulingOptions);
+            return restriction;
         }
     }
 }

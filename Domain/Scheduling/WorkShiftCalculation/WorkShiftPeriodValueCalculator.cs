@@ -13,26 +13,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 		public double PeriodValue(ISkillIntervalData skillIntervalData, int addedResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons)
 		{
-			double partOfResolution = addedResourceInMinutes / skillIntervalData.Period.ElapsedTime().TotalMinutes;
+		    if (skillIntervalData != null)
+		    {
+		        double partOfResolution = addedResourceInMinutes / skillIntervalData.Period.ElapsedTime().TotalMinutes;
 
-			double intervalLengthInMinutes = skillIntervalData.Period.ElapsedTime().TotalMinutes;
-			double forecastedDemand = skillIntervalData.ForecastedDemand;
-			double currentDemand = skillIntervalData.CurrentDemand;
-			double calculatedValue =
-				calculateWorkShiftPeriodValue(forecastedDemand * intervalLengthInMinutes * partOfResolution,
-											  currentDemand * intervalLengthInMinutes * partOfResolution,
-				                              addedResourceInMinutes);
+		        double intervalLengthInMinutes = skillIntervalData.Period.ElapsedTime().TotalMinutes;
+		        double forecastedDemand = skillIntervalData.ForecastedDemand;
+		        double currentDemand = skillIntervalData.CurrentDemand;
+		        double calculatedValue =
+		            calculateWorkShiftPeriodValue(forecastedDemand * intervalLengthInMinutes * partOfResolution,
+		                                          currentDemand * intervalLengthInMinutes * partOfResolution,
+		                                          addedResourceInMinutes);
 
-			//double assignedResourceInMinutes = (forecastedDemand - currentDemand) * intervalLengthInMinutes;
-			double corrFactor;
-			//if (assignedResourceInMinutes == 0)  //eller ska man bara boosta första och sista intervall=
-			//    corrFactor = TheBigNumber;
-			//else
-			corrFactor = getCorrectionFactor(useMinimumPersons, useMaximumPersons, skillIntervalData);
+		        //double assignedResourceInMinutes = (forecastedDemand - currentDemand) * intervalLengthInMinutes;
+		        double corrFactor;
+		        //if (assignedResourceInMinutes == 0)  //eller ska man bara boosta första och sista intervall=
+		        //    corrFactor = TheBigNumber;
+		        //else
+		        corrFactor = getCorrectionFactor(useMinimumPersons, useMaximumPersons, skillIntervalData);
 
-			calculatedValue += corrFactor;
+		        calculatedValue += corrFactor;
 
-			return calculatedValue;
+		        return calculatedValue;
+		    }
+		    return 0;
 		}
 
 

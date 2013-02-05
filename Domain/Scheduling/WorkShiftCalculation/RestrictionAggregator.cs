@@ -30,25 +30,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             if (groupPerson == null)
                 return null;
             IEffectiveRestriction effectiveRestriction = null;
-            foreach (var dateOnly in dateOnlyList)
+            if (dateOnlyList != null)
             {
-                var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
-                                                                                       dateOnly, schedulingOptions,
-                                                                                       scheduleDictionary);
-                if (restriction == null)
-                    return null;
-                if (effectiveRestriction != null)
-                    effectiveRestriction = effectiveRestriction.Combine(restriction);
-                else
-                    effectiveRestriction = restriction;
-                if (effectiveRestriction == null)
-                    return null;
-            }
+                foreach (var dateOnly in dateOnlyList)
+                {
+                    var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
+                                                                                           dateOnly, schedulingOptions,
+                                                                                           scheduleDictionary);
+                    if (restriction == null)
+                        return null;
+                    if (effectiveRestriction != null)
+                        effectiveRestriction = effectiveRestriction.Combine(restriction);
+                    else
+                        effectiveRestriction = restriction;
+                    if (effectiveRestriction == null)
+                        return null;
+                }
 
-            var openHoursRestriction = openHoursToEfffectiveRestriction(dateOnlyList);
+                var openHoursRestriction = openHoursToEfffectiveRestriction(dateOnlyList);
+            
             if (effectiveRestriction != null)
                 effectiveRestriction = effectiveRestriction.Combine(openHoursRestriction);
             return effectiveRestriction;
+           }
+            return null;
         }
 
         private IEffectiveRestriction openHoursToEfffectiveRestriction(IList<DateOnly> dateOnlyList)

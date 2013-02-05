@@ -753,7 +753,7 @@
     <Compile Include="Scheduling\WorkShiftCalculation\SkillDayPeriodIntervalDataGeneratorTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillIntervalDataAggregatorTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillIntervalDataDividerTest.cs" />
-    <Compile Include="Scheduling\WorkShiftCalculation\SkillIntervalDataSkillFactorApplyerTest.cs" />
+    <Compile Include="Scheduling\WorkShiftCalculation\SkillIntervalDataSkillFactorApplierTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillResolutionProviderTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\TeamExtractorTest.cs" />

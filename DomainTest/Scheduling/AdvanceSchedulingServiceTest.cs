@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                 Expect.Call(_scheduleMatrixPro.Person.Equals(person)).IgnoreArguments().Return((bool)true) ;
 
                 Expect.Call(_dynamicBlockFinder.ExtractBlockDays(dateOnly)).IgnoreArguments().Return(dateOnlyList);
-                Expect.Call(_teamExtractor.GetRamdomTeam(dateOnly)).IgnoreArguments().Return(_grouPerson);
+                Expect.Call(_teamExtractor.GetRandomTeam(dateOnly)).IgnoreArguments().Return(_grouPerson);
                 Expect.Call(_grouPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person}));
                 Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
                 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                 Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).Return(new WorkShiftLengthHintOption()).Repeat.AtLeastOnce() ;
                 Expect.Call(_schedulingOptions.UseMinimumPersons).Return(false).Repeat.AtLeastOnce() ;
                 Expect.Call(_schedulingOptions.UseMaximumPersons).Return(false).Repeat.AtLeastOnce() ;
-                Expect.Call(_workShiftSelector.Select(shiftProjectionCacheList, new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>(), 
+                Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shiftProjectionCacheList, new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>(), 
                                                       new WorkShiftLengthHintOption(), 
                                                       true,
                                                       true)).IgnoreArguments().Return(_scheduleProjectionCache ) ;

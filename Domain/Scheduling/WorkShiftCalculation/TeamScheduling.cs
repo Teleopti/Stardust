@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
     {
         void Execute(IList<DateOnly> daysInBlock, IList<IScheduleMatrixPro> matrixList, IGroupPerson groupPerson,
                      IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache,
-                     IList<DateOnly> unLockedDays);
+                     IList<DateOnly> unlockedDays);
     }
 
     public  class TeamScheduling : ITeamScheduling
@@ -25,36 +25,39 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 
         public void  Execute(IList<DateOnly  > daysInBlock, IList<IScheduleMatrixPro> matrixList,
-                IGroupPerson groupPerson,IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache, IList<DateOnly>  unLockedDays)
+                IGroupPerson groupPerson,IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache, IList<DateOnly>  unlockedDays)
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
 
-            foreach(var day in daysInBlock )
-            {
-                if(unLockedDays.Contains(day ))
+            if (daysInBlock != null)
+                foreach(var day in daysInBlock )
                 {
-                    IScheduleDay scheduleDay = null;
-                    foreach (var person in groupPerson.GroupMembers)
+                    if(unlockedDays != null && unlockedDays.Contains(day ))
                     {
-                        IPerson tmpPerson = person;
-                        var tempMatrixList = matrixList.Where(scheduleMatrixPro => scheduleMatrixPro.Person == tmpPerson).ToList();
-                        if (tempMatrixList.Any())
-                        {
-                            IScheduleMatrixPro matrixPro = tempMatrixList[0];
-                            scheduleDay = matrixPro.GetScheduleDayByKey(day).DaySchedulePart();
-                            scheduleDay.AddMainShift((IMainShift)shiftProjectionCache.TheMainShift.EntityClone());
-                            _schedulePartModifyAndRollbackService.Modify(scheduleDay);
+                        IScheduleDay scheduleDay = null;
+                        if (groupPerson != null)
+                            foreach (var person in groupPerson.GroupMembers)
+                            {
+                                IPerson tmpPerson = person;
+                                var tempMatrixList = matrixList.Where(scheduleMatrixPro => scheduleMatrixPro.Person == tmpPerson).ToList();
+                                if (tempMatrixList.Any())
+                                {
+                                    IScheduleMatrixPro matrixPro = tempMatrixList[0];
+                                    scheduleDay = matrixPro.GetScheduleDayByKey(day).DaySchedulePart();
+                                    if (shiftProjectionCache != null)
+                                        scheduleDay.AddMainShift((IMainShift)shiftProjectionCache.TheMainShift.EntityClone());
+                                    _schedulePartModifyAndRollbackService.Modify(scheduleDay);
 
-                        }
+                                }
 
+                            }
+                        if (scheduleDay != null)
+                            if (shiftProjectionCache != null)
+                                _resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
+                                                                            shiftProjectionCache.WorkShiftProjectionPeriod, new List<IScheduleDay> { scheduleDay });
                     }
-                    if (scheduleDay != null)
-                        _resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
-                                                                       shiftProjectionCache.WorkShiftProjectionPeriod, new List<IScheduleDay> { scheduleDay });
-                }
                 
-            }
-            
+                }
         }
     }
 }
