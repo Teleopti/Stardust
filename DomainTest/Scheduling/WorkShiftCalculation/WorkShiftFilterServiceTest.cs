@@ -68,37 +68,48 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _schedulingOptions.ShiftCategory = _category;
             using (_mocks.Record())
             {
-                Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
-                Expect.Call(_stateHolder.Schedules).Return(dictionary);
-                Expect.Call(_person.VirtualSchedulePeriod(dateOnly)).Return(_schedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
-                Expect.Call(_person.Period(dateOnly)).Return(_personPeriod);
-                Expect.Call(_personPeriod.RuleSetBag).Return(bag);
-                Expect.Call(dictionary[_person]).Return(range).Repeat.AtLeastOnce();
-                Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromAdjustedRuleSetBag(dateOnly, _timeZoneInfo, bag, false, effectiveRestriction)).Return(caches);
-                Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(caches, new Domain.Specification.All<IMainShift>())).
-                    IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
-                //Expect.Call(_shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(caches, null, _schedulingOptions, null)).
-                //    IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
-                //Expect.Call(_shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonActivity(caches, _schedulingOptions, null, null)).
-                //    IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
-                effectiveRestriction.ShiftCategory = _category;
-                Expect.Call(_shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(new DateOnly(), null, null, null, null, null)).
-                    IgnoreArguments().Return(caches);
-                Expect.Call(_shiftProjectionCacheFilter.CheckRestrictions(_schedulingOptions, effectiveRestriction, null)).IgnoreArguments().Return(
-                    true);
-                Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, _matrix, _schedulingOptions)).Return(
-                    new MinMax<TimeSpan>(new TimeSpan(0, 6, 0, 0), new TimeSpan(0, 12, 0, 0)));
-                Expect.Call(_shiftProjectionCacheFilter.Filter(new MinMax<TimeSpan>(), caches, dateOnly,
-                                                               range, null)).IgnoreArguments().Return(caches);
-                Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_person.PermissionInformation).Return(_info).Repeat.AtLeastOnce();
-                Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions)).Return(caches);
+                ExpectCodeForShouldFilterWorkShifts(range, effectiveRestriction, caches, dictionary, dateOnly, bag);
             }
             using (_mocks.Playback())
             {
                 var retShift = _target.Filter(dateOnly, _person, new List<IScheduleMatrixPro>{_matrix}, effectiveRestriction, _schedulingOptions);
                 Assert.IsNotNull(retShift);
             }
+        }
+
+        private void ExpectCodeForShouldFilterWorkShifts(IScheduleRange range, IEffectiveRestriction effectiveRestriction,
+                                                         IList<IShiftProjectionCache> caches, IScheduleDictionary dictionary, DateOnly dateOnly,
+                                                         IRuleSetBag bag)
+        {
+            Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
+            Expect.Call(_stateHolder.Schedules).Return(dictionary);
+            Expect.Call(_person.VirtualSchedulePeriod(dateOnly)).Return(_schedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
+            Expect.Call(_person.Period(dateOnly)).Return(_personPeriod);
+            Expect.Call(_personPeriod.RuleSetBag).Return(bag);
+            Expect.Call(dictionary[_person]).Return(range).Repeat.AtLeastOnce();
+            Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromAdjustedRuleSetBag(dateOnly, _timeZoneInfo, bag,
+                                                                                                 false, effectiveRestriction)).
+                Return(caches);
+            Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(caches,
+                                                                                                     new Domain.Specification.
+                                                                                                         All<IMainShift>())).
+                IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
+            effectiveRestriction.ShiftCategory = _category;
+            Expect.Call(_shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(new DateOnly(), null, null,
+                                                                                                    null, null, null)).
+                IgnoreArguments().Return(caches);
+            Expect.Call(_shiftProjectionCacheFilter.CheckRestrictions(_schedulingOptions, effectiveRestriction, null)).
+                IgnoreArguments().Return(
+                    true);
+            Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, _matrix, _schedulingOptions)).Return
+                (
+                    new MinMax<TimeSpan>(new TimeSpan(0, 6, 0, 0), new TimeSpan(0, 12, 0, 0)));
+            Expect.Call(_shiftProjectionCacheFilter.Filter(new MinMax<TimeSpan>(), caches, dateOnly,
+                                                           range, null)).IgnoreArguments().Return(caches);
+            Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_person.PermissionInformation).Return(_info).Repeat.AtLeastOnce();
+            Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions)).Return(
+                caches);
         }
 
         private IList<IShiftProjectionCache> getCashes()

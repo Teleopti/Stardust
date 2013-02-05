@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 		[Test]
-		public void ShortBreaksShouldBeEqualyDistributed()
+		public void ShortBreaksShouldBeEquallyDistributed()
 		{
 
 			using (_mocks.Record())

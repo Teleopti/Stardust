@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 		[Test]
-		public void LayerThatIsNotSkillActivtyShouldCalculateAsZero()
+		public void LayerThatIsNotSkillActivityShouldCalculateAsZero()
 		{
 			IActivity otherActivity = new Activity("other");
 			otherActivity.RequiresSkill = true;
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 		[Test]
-		public void LayerThatIsNotSkillActivtyShouldCalculateAsZeroEvenIfItIsOutSideOpenHours()
+		public void LayerThatIsNotSkillActivityShouldCalculateAsZeroEvenIfItIsOutsideOpenHours()
 		{
 			IActivity otherActivity = new Activity("other");
 			otherActivity.RequiresSkill = true;

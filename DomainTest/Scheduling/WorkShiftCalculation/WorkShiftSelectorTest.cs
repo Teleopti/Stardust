@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 		[Test]
-		public void ShouldCheckAllActivites()
+		public void ShouldCheckAllActivities()
 		{
 			IActivity otherActivity = new Activity("other");
 			_skillIntervalDataForActivity.Add(otherActivity, _skillIntervalDatas);

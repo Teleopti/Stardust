@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
         private bool _cancelTarget;
 
         [SetUp]
-        public void SetUp()
+        public void Setup()
         {
             _mock = new MockRepository();
             _absencePreferenceScheduler = _mock.StrictMock<IAbsencePreferenceScheduler>();

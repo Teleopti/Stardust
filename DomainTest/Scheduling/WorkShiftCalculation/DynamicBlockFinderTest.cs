@@ -78,8 +78,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             var date = new DateOnly(DateTime.UtcNow);
 
             var scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
-            var scheduleDateTimePeriod = _mock.StrictMock<IScheduleDateTimePeriod>();
-            var dateTimePeriod = new DateTimePeriod(date, date.AddDays(4));
             var scheduleDay1 = _mock.StrictMock<IScheduleDay>();
             var scheduleDayList1 = new List<IScheduleDay>() { scheduleDay1 };
             var scheduleDay2 = _mock.StrictMock<IScheduleDay>();
@@ -106,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         }
 
         [Test]
-        public void FindSkillDayFromBlockUsingCalenderWeek()
+        public void FindSkillDayFromBlockUsingCalendarWeek()
         {
             _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.Weeks ;
             _target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder,_matrixList );

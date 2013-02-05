@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private ISkillIntervalData _skillBIntervalData4;
 
         [SetUp ]
-        public void SetUp()
+        public void Setup()
         {
             _mock = new MockRepository();
             _target = new SkillIntervalDataAggregator();

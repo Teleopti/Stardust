@@ -127,19 +127,22 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(Math.Round(537.8571,4), Math.Round(valueNew,4));
         }
 
-		public void VerifyNewCalculationPeriodValue1()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        public void VerifyNewCalculationPeriodValue1()
 		{
 			var valueNew = SkillStaffPeriodDataHolder.CalculateWorkShiftPeriodValue(200, -100, 15);
 			Assert.AreEqual(Math.Round(13.875, 4), Math.Round(valueNew, 4));
 		}
 
-		public void VerifyNewCalculationPeriodValue2()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        public void VerifyNewCalculationPeriodValue2()
 		{
 			var valueNew = SkillStaffPeriodDataHolder.CalculateWorkShiftPeriodValue(200, 100, 15);
 			Assert.AreEqual(Math.Round(-16.125, 4), Math.Round(valueNew, 4));
 		}
 
-		public void VerifyNewCalculationPeriodValue3()
+        [Test]
+        public void VerifyNewCalculationPeriodValue3()
 		{
 			var valueNew = SkillStaffPeriodDataHolder.CalculateWorkShiftPeriodValue(0, 1, 15);
 			Assert.AreEqual(0, valueNew);

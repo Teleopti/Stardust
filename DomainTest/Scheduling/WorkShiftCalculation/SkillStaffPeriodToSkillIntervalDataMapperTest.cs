@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         }
 
         [Test]
-        public void ShouldTestSKillStaffToSkillIntervalMapper()
+        public void ShouldTestSkillStaffToSkillIntervalMapper()
         {
             _skillStaffPeriodList = new List<ISkillStaffPeriod>
                                         {_skillStaffPeriod1, _skillStaffPeriod2, _skillStaffPeriod3};

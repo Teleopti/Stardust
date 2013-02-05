@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 		[Test]
-		public void ShouldCalculateAsBeforeWhenUnderStaffed()
+		public void ShouldCalculateAsBeforeWhenUnderstaffed()
 		{
 			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 10.80, 10.80, 0, null, null);
 			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 		[Test]
-		public void ShouldCalculateAsBeforeWhenUnderStaffed1()
+		public void ShouldCalculateAsBeforeWhenUnderstaffed1()
 		{
 			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 13.33, 13.33, 0, null, null);
 			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 		[Test]
-		public void ShouldCalculateAsBeforeWhenOverStaffed()
+		public void ShouldCalculateAsBeforeWhenOverstaffed()
 		{
 			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 13.33, -13.33, 0, null, null);
 			double result = _target.PeriodValue(skillIntervalData, 15, false, false);

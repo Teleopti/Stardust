@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 		[Test]
-		public void ShouldIncreaseUnderstaffingIfDoNotUnderstaff()
+		public void ShouldIncreaseUnderstaffingIfDoNotUnderStaff()
 		{
 			_skillIntervalData = new SkillIntervalData(_dp, 10, 10, 0, null, null);
 			_skill.OverstaffingFactor = new Percent(0);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 		[Test]
-		public void ShouldLeaveOverstaffingIfDoNotUnderstaff()
+		public void ShouldLeaveOverstaffingIfDoNotUnderStaff()
 		{
 			_skillIntervalData = new SkillIntervalData(_dp, 10, -10, 0, null, null);
 			_skill.OverstaffingFactor = new Percent(0);

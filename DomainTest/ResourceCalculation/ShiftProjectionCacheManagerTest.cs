@@ -96,32 +96,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                       new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
             using (_mocks.Record())
             {
-                Expect.Call(_ruleSetBag.RuleSetCollection).Return(readOnlyRuleSets);
-                Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
-                Expect.Call(ruleSet2.OnlyForRestrictions).Return(false);
-                Expect.Call(ruleSet3.OnlyForRestrictions).Return(false);
-                Expect.Call(ruleSet1.IsValidDate(dateOnly)).Return(true);
-                Expect.Call(ruleSet2.IsValidDate(dateOnly)).Return(true);
-                Expect.Call(ruleSet3.IsValidDate(dateOnly)).Return(true);
-                Expect.Call(ruleSet1.Clone()).Return(ruleSet1);
-                Expect.Call(ruleSet2.Clone()).Return(ruleSet2);
-                Expect.Call(ruleSet3.Clone()).Return(ruleSet3);
-                Expect.Call(ruleSet1.TemplateGenerator).Return(templateGenerator1).Repeat.AtLeastOnce();
-                Expect.Call(ruleSet2.TemplateGenerator).Return(templateGenerator2).Repeat.AtLeastOnce();
-                Expect.Call(ruleSet3.TemplateGenerator).Return(templateGenerator3).Repeat.AtLeastOnce();
-                Expect.Call(templateGenerator1.StartPeriod).Return(startPeriod1).Repeat.AtLeastOnce();
-                Expect.Call(templateGenerator2.StartPeriod).Return(startPeriod2).Repeat.AtLeastOnce();
-                Expect.Call(templateGenerator2.StartPeriod = new TimePeriodWithSegment(9, 0, 10, 0, 15));
-                Expect.Call(templateGenerator2.EndPeriod).Return(endPeriod2).Repeat.AtLeastOnce();
-                Expect.Call(templateGenerator2.EndPeriod = new TimePeriodWithSegment(17, 0, 18, 0, 15));
-                Expect.Call(templateGenerator3.StartPeriod).Return(startPeriod3).Repeat.AtLeastOnce();
-                Expect.Call(templateGenerator3.EndPeriod).Return(endPeriod3).Repeat.AtLeastOnce();
-                Expect.Call(_activityChecker.ContainsDeletedActivity(ruleSet2)).Return(false);
-                Expect.Call(_shiftCategoryChecker.ContainsDeletedActivity(ruleSet2)).Return(false);
-                Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(ruleSet2)).Return(GetWorkShiftsInfo());
-                Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());
-                Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(GetWorkShifts());
-                Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());
+                ExpectCodeCanAdjustWorkShiftsFromRuleSetBag(startPeriod2, startPeriod1, templateGenerator3, endPeriod3,
+                                                            startPeriod3, endPeriod2, templateGenerator2, ruleSet2,
+                                                            ruleSet1, readOnlyRuleSets, templateGenerator1, dateOnly,
+                                                            ruleSet3);
             }
 
             using (_mocks.Playback())
@@ -131,7 +109,49 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
-		[Test]
+        private void ExpectCodeCanAdjustWorkShiftsFromRuleSetBag(TimePeriodWithSegment startPeriod2,
+                                                                 TimePeriodWithSegment startPeriod1,
+                                                                 IWorkShiftTemplateGenerator templateGenerator3,
+                                                                 TimePeriodWithSegment endPeriod3,
+                                                                 TimePeriodWithSegment startPeriod3,
+                                                                 TimePeriodWithSegment endPeriod2,
+                                                                 IWorkShiftTemplateGenerator templateGenerator2,
+                                                                 IWorkShiftRuleSet ruleSet2, IWorkShiftRuleSet ruleSet1,
+                                                                 ReadOnlyCollection<IWorkShiftRuleSet> readOnlyRuleSets,
+                                                                 IWorkShiftTemplateGenerator templateGenerator1,
+                                                                 DateOnly dateOnly, IWorkShiftRuleSet ruleSet3)
+        {
+            Expect.Call(_ruleSetBag.RuleSetCollection).Return(readOnlyRuleSets);
+            Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
+            Expect.Call(ruleSet2.OnlyForRestrictions).Return(false);
+            Expect.Call(ruleSet3.OnlyForRestrictions).Return(false);
+            Expect.Call(ruleSet1.IsValidDate(dateOnly)).Return(true);
+            Expect.Call(ruleSet2.IsValidDate(dateOnly)).Return(true);
+            Expect.Call(ruleSet3.IsValidDate(dateOnly)).Return(true);
+            Expect.Call(ruleSet1.Clone()).Return(ruleSet1);
+            Expect.Call(ruleSet2.Clone()).Return(ruleSet2);
+            Expect.Call(ruleSet3.Clone()).Return(ruleSet3);
+            Expect.Call(ruleSet1.TemplateGenerator).Return(templateGenerator1).Repeat.AtLeastOnce();
+            Expect.Call(ruleSet2.TemplateGenerator).Return(templateGenerator2).Repeat.AtLeastOnce();
+            Expect.Call(ruleSet3.TemplateGenerator).Return(templateGenerator3).Repeat.AtLeastOnce();
+            Expect.Call(templateGenerator1.StartPeriod).Return(startPeriod1).Repeat.AtLeastOnce();
+            Expect.Call(templateGenerator2.StartPeriod).Return(startPeriod2).Repeat.AtLeastOnce();
+            Expect.Call(templateGenerator2.StartPeriod = new TimePeriodWithSegment(9, 0, 10, 0, 15));
+            Expect.Call(templateGenerator2.EndPeriod).Return(endPeriod2).Repeat.AtLeastOnce();
+            Expect.Call(templateGenerator2.EndPeriod = new TimePeriodWithSegment(17, 0, 18, 0, 15));
+            Expect.Call(templateGenerator3.StartPeriod).Return(startPeriod3).Repeat.AtLeastOnce();
+            Expect.Call(templateGenerator3.EndPeriod).Return(endPeriod3).Repeat.AtLeastOnce();
+            Expect.Call(_activityChecker.ContainsDeletedActivity(ruleSet2)).Return(false);
+            Expect.Call(_shiftCategoryChecker.ContainsDeletedActivity(ruleSet2)).Return(false);
+            Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(ruleSet2)).Return(GetWorkShiftsInfo());
+            Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(
+                new List<IWorkShift>());
+            Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(GetWorkShifts());
+            Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(
+                new List<IWorkShift>());
+        }
+
+        [Test]
 		public void ShouldNotGetAnyWorkShiftsWhenDeletedShiftCategoryInRuleSetBag()
 		{
 			var ruleSets = new List<IWorkShiftRuleSet> { _ruleSet };
