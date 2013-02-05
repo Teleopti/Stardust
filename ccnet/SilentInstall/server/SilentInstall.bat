@@ -75,12 +75,6 @@ SET /A ERRORLEV=2
 GOTO :error
 )
 
-::work around for bug #22203 - ETL Service account can't be set from command line
-net stop %EtlSrvname%
-sc.exe config %EtlSrvname% obj= "%SvcAccount%" password= "%SvcAccountPwd%"
-net start %EtlSrvname%
-
-
 ::save value of AGENT_SERVICE
 set BaseRegKey=HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC
 set SDKUrl=
