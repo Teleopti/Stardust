@@ -11254,4 +11254,8 @@ These options are activated:
     <value>Date To (shifts starting):</value>
     <comment>Date To (shifts starting):</comment>
   </data>
+  <data name="LevellingPer" xml:space="preserve">
+    <value>Levelling Per</value>
+    <comment>Levelling per Block Scheduling</comment>
+  </data>
 </root>

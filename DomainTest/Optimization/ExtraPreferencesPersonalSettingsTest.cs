@@ -48,14 +48,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _extraPreferencesSource.FairnessValue = 102d;
 
+		    _extraPreferencesSource.BlockFinderTypeForAdvanceOptimization = BlockFinderType.BetweenDayOff;
+
 			_target.MapFrom(_extraPreferencesSource);
 			_target.MapTo(_extraPreferencesTarget, _groupPages);
 
 			Assert.AreEqual(_extraPreferencesSource.BlockFinderTypeValue, _extraPreferencesTarget.BlockFinderTypeValue);
 			Assert.AreEqual(_extraPreferencesSource.UseBlockScheduling, _extraPreferencesTarget.UseBlockScheduling);
 			Assert.AreEqual(_extraPreferencesSource.UseTeams, _extraPreferencesTarget.UseTeams);
-
+            
             Assert.AreEqual(_extraPreferencesSource.FairnessValue, _extraPreferencesTarget.FairnessValue);
+
+            Assert.AreEqual(_extraPreferencesSource.BlockFinderTypeForAdvanceOptimization,_extraPreferencesTarget.BlockFinderTypeForAdvanceOptimization  );
 		}
 
 		[Test]

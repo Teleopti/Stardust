@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private bool _useGroupSchedulingCommonEnd;
 	    private bool _useGroupSchedulingCommonCategory;
 
+	    private BlockFinderType _blockFinderTypeForAdvanceOptimization;
+
 		public ExtraPreferencesPersonalSettings()
 		{
 			SetDefaultValues();
@@ -44,13 +46,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 			target.UseBlockScheduling = _useBlockScheduling;
 			target.UseTeams = _useTeams;
 			target.KeepSameDaysOffInTeam = _useSameDaysOffForTeams;
-
+            
            
 			target.FairnessValue = _fairnessValue;
 
 		    target.UseGroupSchedulingCommonCategory = _useGroupSchedulingCommonCategory;
 		    target.UseGroupSchedulingCommonEnd = _useGroupSchedulingCommonEnd;
 		    target.UseGroupSchedulingCommonStart = _useGroupSchedulingCommonStart;
+
+		    target.BlockFinderTypeForAdvanceOptimization = _blockFinderTypeForAdvanceOptimization;
 		}
 
 		public void MapFrom(IExtraPreferences source)
@@ -70,6 +74,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    _useGroupSchedulingCommonCategory = source.UseGroupSchedulingCommonCategory;
 		    _useGroupSchedulingCommonEnd = source.UseGroupSchedulingCommonEnd;
 		    _useGroupSchedulingCommonStart = source.UseGroupSchedulingCommonStart;
+
+		    _blockFinderTypeForAdvanceOptimization = source.BlockFinderTypeForAdvanceOptimization;
 		}
 
 		/// <summary>

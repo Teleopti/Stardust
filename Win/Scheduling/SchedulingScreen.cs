@@ -3612,29 +3612,39 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-                switch (schedulingOptions.UseBlockScheduling)
+                if(schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.None )
                 {
-                    case BlockFinderType.None:
-                        {
-							if (schedulingOptions.UseGroupScheduling)
-							{
-								var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
-								_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixList, matrixListAll, schedulingOptions, _container.Resolve<IGroupPageHelper>(), allMatrixes);
-							}
-							else
-								_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixList, matrixListAll, true, _backgroundWorkerScheduling, schedulingOptions);                                  
-                            break;
-                        }
-                    case BlockFinderType.BetweenDayOff:
-                    case BlockFinderType.SchedulePeriod:
-                        {
-                            var periodFinder = new ScheduleMatrixListPeriodFinder(matrixList);
-                            var period = periodFinder.FindOuterWeekPeriod();
-                            if (period.StartDate == DateOnly.MinValue) break;
-							_scheduleOptimizerHelper.BlockSchedule(scheduleDays, matrixList, matrixListAll, _backgroundWorkerScheduling, schedulingOptions);
-                            break;
-                        }
+                    switch (schedulingOptions.UseBlockScheduling)
+                    {
+                        case BlockFinderType.None:
+                            {
+                                if (schedulingOptions.UseGroupScheduling)
+                                {
+                                    var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
+                                    _scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixList, matrixListAll, schedulingOptions, _container.Resolve<IGroupPageHelper>(), allMatrixes);
+                                }
+                                else
+                                    _scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixList, matrixListAll, true, _backgroundWorkerScheduling, schedulingOptions);
+                                break;
+                            }
+                        case BlockFinderType.BetweenDayOff:
+                        case BlockFinderType.SchedulePeriod:
+                            {
+                                var periodFinder = new ScheduleMatrixListPeriodFinder(matrixList);
+                                var period = periodFinder.FindOuterWeekPeriod();
+                                if (period.StartDate == DateOnly.MinValue) break;
+                                _scheduleOptimizerHelper.BlockSchedule(scheduleDays, matrixList, matrixListAll, _backgroundWorkerScheduling, schedulingOptions);
+                                break;
+                            }
+                    }
                 }
+                else
+                {
+                    //when the advance scheduling is required
+                    _groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
+                    _scheduleOptimizerHelper.BlockScheduleForAdvanceScheduling( scheduleDays, matrixList, matrixListAll, _backgroundWorkerScheduling, schedulingOptions);
+                }
+                
             }
             else
             {

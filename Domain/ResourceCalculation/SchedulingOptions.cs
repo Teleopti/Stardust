@@ -50,7 +50,25 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IActivity CommonActivity { get; set; }
         public bool UseCommonActivity { get; set; }
 		public bool UseAverageShiftLengths { get; set; }
-        
+
+        public bool UsePeriodAsBlock { get; set; }
+
+        public bool UseTwoDaysOffAsBlock{get;set;}
+
+        public bool UseCalenderWeekAsBlock{get;set;}
+
+        private BlockFinderType _blockFinderTypeForAdvanceScheduling;
+        public BlockFinderType BlockFinderTypeForAdvanceScheduling
+        {
+            get { return _blockFinderTypeForAdvanceScheduling; }
+            set
+            {
+                _blockFinderTypeForAdvanceScheduling = value;
+                if (_blockFinderTypeForAdvanceScheduling != BlockFinderType.None)
+                    ShiftCategory = null;
+            }
+        }
+
         public ISpecification<IMainShift> MainShiftOptimizeActivitySpecification
     	{
     		get

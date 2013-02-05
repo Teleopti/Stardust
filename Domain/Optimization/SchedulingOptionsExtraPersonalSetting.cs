@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private bool _useGroupSchedulingCommonCategory;
         private bool _useCommmonActivity;
         private Guid?  _commonActivtyId;
-
+        private BlockFinderType _blockFinderTypeForAdvanceScheduling = BlockFinderType.None;
 
         private double _fairnessValue;
         private string _fairnessGroupPageKey;
@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 schedulingOptions.TagToUseOnScheduling = NullScheduleTag.Instance;
 
            schedulingOptions.UseBlockScheduling = _blockFinderType;
+            schedulingOptions.BlockFinderTypeForAdvanceScheduling = _blockFinderTypeForAdvanceScheduling;
             schedulingOptions.UseGroupScheduling = _useGroupScheduling;
 
             foreach (var groupPage in groupPages)
@@ -76,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             _scheduleTagId = schedulingOptions.TagToUseOnScheduling.Id;
              _blockFinderType = schedulingOptions.UseBlockScheduling;
+            _blockFinderTypeForAdvanceScheduling = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
             _useGroupScheduling = schedulingOptions.UseGroupScheduling;
             _groupSchedulingGroupPageKey = schedulingOptions.GroupOnGroupPage.Key;
            _useGroupSchedulingCommonStart = schedulingOptions.UseGroupSchedulingCommonStart;

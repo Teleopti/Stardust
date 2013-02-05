@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Grouping;
@@ -107,7 +108,13 @@ namespace Teleopti.Ccc.Win.Optimization
 
             Preferences.GroupPageOnCompareWith = (IGroupPageLight)comboBoxGroupPageOnCompareWith.SelectedItem;
 
-            
+            if(checkBoxLevellingPerBlockScheduling.Checked )
+                Preferences.BlockFinderTypeForAdvanceOptimization = radioButtonBetweenDaysOffAdvOptimization .Checked
+                    ? BlockFinderType.BetweenDayOff
+                    : BlockFinderType.SchedulePeriod;
+            else
+                Preferences.BlockFinderTypeForAdvanceOptimization = BlockFinderType.None;
+
         }
 
         private void setDataToControls()
@@ -146,12 +153,29 @@ namespace Teleopti.Ccc.Win.Optimization
                 comboBoxGroupPageOnCompareWith.SelectedValue = Preferences.GroupPageOnCompareWith.Key;
             if (comboBoxGroupPageOnCompareWith.SelectedValue == null)
                 comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
+
+            switch (Preferences.BlockFinderTypeForAdvanceOptimization)
+            {
+                case BlockFinderType.BetweenDayOff:
+                    radioButtonBetweenDaysOffAdvOptimization.Checked = true;
+                    checkBoxLevellingPerBlockScheduling.Checked = true;
+                    break;
+                case BlockFinderType.SchedulePeriod:
+                    radioButtonSchedulePeriodAdvOptimization.Checked = true;
+                    checkBoxLevellingPerBlockScheduling.Checked = true;
+                    break;
+                case BlockFinderType.None:
+                    checkBoxLevellingPerBlockScheduling.Checked = false;
+                    checkBoxLevellingPerBlockScheduling.Enabled = false;
+                    break;
+            }
         }
 
         private void checkBoxBlock_CheckedChanged(object sender, System.EventArgs e)
         {
 			new ExtraPreferencesPanelUseBlockScheduling { Use = checkBoxBlock.Checked }.PublishEvent("ExtraPreferencesPanelUseBlockScheduling", _eventAggregator);
         	checkBoxTeams.Enabled = !checkBoxBlock.Checked;
+            checkBoxLevellingPerBlockScheduling.Enabled = !checkBoxBlock.Checked;
             setRadioButtonsStatus();
         }
 
@@ -175,6 +199,7 @@ namespace Teleopti.Ccc.Win.Optimization
         private void checkBoxTeams_CheckedChanged(object sender, System.EventArgs e)
         {
         	checkBoxBlock.Enabled = !checkBoxTeams.Checked;
+            checkBoxLevellingPerBlockScheduling.Enabled = !checkBoxTeams.Checked;
             setSubItemsOnTeamOptimizationStatus();
         }
 
@@ -199,6 +224,27 @@ namespace Teleopti.Ccc.Win.Optimization
         private void checkBoxCommonActivity_CheckedChanged(object sender, System.EventArgs e)
         {
             comboBoxActivity.Enabled = checkBoxCommonActivity.Checked;
+        }
+
+        private void checkBoxLevellingPerBlockScheduling_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBoxTeams.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
+            checkBoxBlock.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
+            radioButtonSchedulePeriodAdvOptimization.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            radioButtonBetweenDaysOffAdvOptimization.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            if (checkBoxLevellingPerBlockScheduling.Checked)
+            {
+                if(Preferences.BlockFinderTypeForAdvanceOptimization != BlockFinderType.BetweenDayOff )
+                    radioButtonBetweenDaysOffAdvOptimization.Checked = false;
+                checkBoxTeams.Checked = false ;
+                checkBoxBlock.Checked = false;
+            }
+            else
+            {
+                radioButtonSchedulePeriodAdvOptimization.Checked = false;
+                radioButtonBetweenDaysOffAdvOptimization.Checked = false;
+            }
+            
         }
     }
     public class ExtraPreferencesPanelUseBlockScheduling
