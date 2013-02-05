@@ -58,18 +58,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
             DateOnly startDate = DateOnly.MinValue ;
             if(_matrixList!= null )
             {
-                
-                foreach (var scheduleDayPro in _matrixList[0].EffectivePeriodDays.OrderBy( x => x.Day))
-                {
-                    if (startDate == DateOnly.MinValue && scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.DayOff)
-                        startDate = scheduleDayPro.Day;
-                    if (scheduleDayPro.DaySchedulePart().SignificantPart() == SchedulePartView.DayOff)
-                        _dayOff.Add(scheduleDayPro.Day);
-                    if (_matrixList[0].UnlockedDays.Contains(scheduleDayPro ))
-                        _unLockedDays.Add(scheduleDayPro.Day);
-                    _effectiveDays.Add(scheduleDayPro.Day);
-
-                }
+            	var openMatrixList = _matrixList.Where(x => x.Person.Equals(_matrixList[0].Person));
+            	foreach (var scheduleMatrixPro in openMatrixList)
+            	{
+					foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
+					{
+						if (startDate == DateOnly.MinValue && scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.DayOff)
+							startDate = scheduleDayPro.Day;
+						if (scheduleDayPro.DaySchedulePart().SignificantPart() == SchedulePartView.DayOff)
+							_dayOff.Add(scheduleDayPro.Day);
+						if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
+							_unLockedDays.Add(scheduleDayPro.Day);
+						_effectiveDays.Add(scheduleDayPro.Day);
+					}
+            	}
             }
             return startDate;
         }

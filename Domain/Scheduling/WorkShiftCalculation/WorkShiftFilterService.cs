@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                 foreach (var matrix in matrixList)
                 {
 					var minMax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);
-                    if (!minMax.HasValue) break;
+                    if (!minMax.HasValue) continue;
                     if (!allowedMinMax.HasValue)
                         allowedMinMax = minMax;
                     else

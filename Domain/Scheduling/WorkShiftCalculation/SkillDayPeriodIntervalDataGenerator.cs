@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 				var currentDate = skillDay.CurrentDate;
 				var skill = skillDay.Skill;
 				var activity = skill.Activity;
+				if (skillDay.SkillStaffPeriodCollection.Count == 0) continue;
 				var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection);
 				mappedData = _intervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
 				var adjustedMapedData = new List<ISkillIntervalData>();
