@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
     public class AdvanceDaysOffSchedulingService : IAdvanceDaysOffSchedulingService
     {
+        private readonly IAbsencePreferenceScheduler _absencePreferenceScheduler;
         private readonly IMissingDaysOffScheduler _missingDaysOffScheduler;
         private bool _cancelMe;
 
@@ -26,15 +28,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
         //    _missingDaysOffScheduler = missingDaysOffScheduler;
         //}
 
-        public AdvanceDaysOffSchedulingService(
+        public AdvanceDaysOffSchedulingService(IAbsencePreferenceScheduler absencePreferenceScheduler,
             IMissingDaysOffScheduler missingDaysOffScheduler)
         {
-            //_absencePreferenceScheduler = absencePreferenceScheduler;
             //_dayOffScheduler = dayOffScheduler;
+            _absencePreferenceScheduler = absencePreferenceScheduler;
             _missingDaysOffScheduler = missingDaysOffScheduler;
         }
 
-       
 
         void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
         {
@@ -48,11 +49,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
         public void Execute(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> allMatrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
         {
-            //_absencePreferenceScheduler.DayScheduled += dayScheduled;
-            //_absencePreferenceScheduler.AddPreferredAbsence(matrixList, schedulingOptions);
-            //_absencePreferenceScheduler.DayScheduled -= dayScheduled;
-            //if (_cancelMe)
-            //    return;
+            _absencePreferenceScheduler.DayScheduled += dayScheduled;
+            _absencePreferenceScheduler.AddPreferredAbsence(matrixList, schedulingOptions);
+            _absencePreferenceScheduler.DayScheduled -= dayScheduled;
+            if (_cancelMe)
+                return;
 
             //_dayOffScheduler.DayScheduled += dayScheduled;
             //_dayOffScheduler.DayOffScheduling(matrixList, allMatrixList, rollbackService, schedulingOptions);

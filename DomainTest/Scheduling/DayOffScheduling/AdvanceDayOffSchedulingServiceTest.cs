@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
     public class AdvanceDayOffSchedulingServiceTest
     {
         private MockRepository _mock;
-        private IAdvanceDaysOffSchedulingService _target;
-        //private IAbsencePreferenceScheduler _absencePreferenceScheduler;
+        private AdvanceDaysOffSchedulingService _target;
+        private IAbsencePreferenceScheduler _absencePreferenceScheduler;
         //private IDayOffScheduler _dayOffScheduler;
         private IMissingDaysOffScheduler _missingDaysOffScheduler;
         private ISchedulePartModifyAndRollbackService _rollbackService;
@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
         public void SetUp()
         {
             _mock = new MockRepository();
-            //_absencePreferenceScheduler = _mock.StrictMock<IAbsencePreferenceScheduler>();
+            _absencePreferenceScheduler = _mock.StrictMock<IAbsencePreferenceScheduler>();
             //_dayOffScheduler = _mock.StrictMock<IDayOffScheduler>();
             _missingDaysOffScheduler = _mock.StrictMock<IMissingDaysOffScheduler>();
-            _target = new AdvanceDaysOffSchedulingService(_missingDaysOffScheduler);
+            _target = new AdvanceDaysOffSchedulingService(_absencePreferenceScheduler,_missingDaysOffScheduler);
             _rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
             _matrixList = new List<IScheduleMatrixPro>();
             _schedulingOptions = new SchedulingOptions();
@@ -42,6 +42,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
         {
             using (_mock.Record())
             {
+                Expect.Call(() => _absencePreferenceScheduler.DayScheduled += null).IgnoreArguments();
+                Expect.Call(() => _absencePreferenceScheduler.AddPreferredAbsence(_matrixList, _schedulingOptions));
+                Expect.Call(() => _absencePreferenceScheduler.DayScheduled -= null).IgnoreArguments();
+
                 Expect.Call(() => _missingDaysOffScheduler.DayScheduled += null).IgnoreArguments();
                 Expect.Call(_missingDaysOffScheduler.Execute(_matrixList, _schedulingOptions, _rollbackService)).Return(true);
                 Expect.Call(() => _missingDaysOffScheduler.DayScheduled -= null).IgnoreArguments();
@@ -61,10 +65,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
             args.Cancel = true;
             using (_mock.Record())
             {
-                //Expect.Call(() => _absencePreferenceScheduler.DayScheduled += null).IgnoreArguments();
-                //Expect.Call(() => _absencePreferenceScheduler.AddPreferredAbsence(_matrixList, _schedulingOptions));
-                //Expect.Call(() => _absencePreferenceScheduler.Raise(x => x.DayScheduled += _target.RaiseEventForTest, this, args));
-                //Expect.Call(() => _absencePreferenceScheduler.DayScheduled -= null).IgnoreArguments();
+                Expect.Call(() => _absencePreferenceScheduler.DayScheduled += null).IgnoreArguments();
+                Expect.Call(() => _absencePreferenceScheduler.AddPreferredAbsence(_matrixList, _schedulingOptions));
+                Expect.Call(() => _absencePreferenceScheduler.Raise(x => x.DayScheduled += _target.RaiseEventForTest, this, args));
+                Expect.Call(() => _absencePreferenceScheduler.DayScheduled -= null).IgnoreArguments();
             }
             using (_mock.Playback())
             {
@@ -82,14 +86,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
             { }
             using (_mock.Playback())
             {
-                //_absencePreferenceScheduler.Raise(x => x.DayScheduled += targetDayScheduled, this, args);
-                //Assert.IsTrue(_cancelTarget);
-                //_cancelTarget = false;
+                _absencePreferenceScheduler.Raise(x => x.DayScheduled += targetDayScheduled, this, args);
+                Assert.IsTrue(_cancelTarget);
+                _cancelTarget = false;
                 //_dayOffScheduler.Raise(x => x.DayScheduled += targetDayScheduled, this, args);
                 //Assert.IsTrue(_cancelTarget);
                 //_cancelTarget = false;
-                //_missingDaysOffScheduler.Raise(x => x.DayScheduled += targetDayScheduled, this, args);
-                //Assert.IsTrue(_cancelTarget);
+                _missingDaysOffScheduler.Raise(x => x.DayScheduled += targetDayScheduled, this, args);
+                Assert.IsTrue(_cancelTarget);
             }
         }
 
