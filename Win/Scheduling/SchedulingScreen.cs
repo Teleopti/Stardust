@@ -3642,7 +3642,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
                     //when the advance scheduling is required
                     _groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
-                    _scheduleOptimizerHelper.BlockScheduleForAdvanceScheduling( scheduleDays, matrixList, matrixListAll, _backgroundWorkerScheduling, schedulingOptions);
+                    _scheduleOptimizerHelper.BlockScheduleForAdvanceScheduling(  matrixList, matrixListAll, _backgroundWorkerScheduling, schedulingOptions);
                 }
                 
             }

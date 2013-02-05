@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
            
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private void ExpectCodeShouldVerifyExecution(List<IGroupPerson> groupPersonList, DateOnlyPeriod dateOnlyPeriod,
                                                      List<IShiftProjectionCache> shiftProjectionCacheList, List<IScheduleMatrixPro> matrixList, DateOnly dateOnly,
                                                      ReadOnlyCollection<IScheduleDayPro> scheduleDayProCollection, List<DateOnly> dateOnlyList,

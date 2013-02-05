@@ -1159,7 +1159,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);
         }
 
-        public void BlockScheduleForAdvanceScheduling(IList<IScheduleDay> allScheduleDays, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
+        public void BlockScheduleForAdvanceScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
         {
             var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
             fixedStaffSchedulingService.ClearFinderResults();
@@ -1179,22 +1179,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 schedulingOptions.UseTwoDaysOffAsBlock = true;
                 var skillDayPeriodIntervalData = _container.Resolve<ISkillDayPeriodIntervalDataGenerator>();
                 var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder,matrixList );
-                IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
-                var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
-                if (_schedulerStateHolder.LoadedPeriod != null)
-                {
-                    IList<DateOnly> dates =
-                        _schedulerStateHolder.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).DayCollection();
-                    groupPagePerDateHolder.GroupPersonGroupPagePerDate =
-                        _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
-                                                                                       groupPageDataProvider,
-                                                                                       schedulingOptions.GroupOnGroupPage,
-                                                                                       true);
-                }
-                IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();
-                IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-                    new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, groupPersonFactory,
-                                                          groupPagePerDateHolder);
+                var groupPersonBuilderForOptimization = CallGroupPage(schedulingOptions);
                 var advanceSchedulingService = CallAdvanceSchedulingService(matrixList, schedulingOptions, skillDayPeriodIntervalData, dynamicBlockFinder, groupPersonBuilderForOptimization);
                 advanceSchedulingService.Execute(schedulingResults);
                 if (schedulingOptions.RotationDaysOnly)
@@ -1204,6 +1189,28 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _allResults.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
             }
             _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);
+        }
+
+        private IGroupPersonBuilderForOptimization CallGroupPage(ISchedulingOptions schedulingOptions)
+        {
+            IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
+            var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+            if (_schedulerStateHolder.LoadedPeriod != null)
+            {
+                IList<DateOnly> dates =
+                    _schedulerStateHolder.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
+                        DayCollection();
+                groupPagePerDateHolder.GroupPersonGroupPagePerDate =
+                    _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
+                                                                                   groupPageDataProvider,
+                                                                                   schedulingOptions.GroupOnGroupPage,
+                                                                                   true);
+            }
+            IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();
+            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+                new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, groupPersonFactory,
+                                                      groupPagePerDateHolder);
+            return groupPersonBuilderForOptimization;
         }
 
         private AdvanceSchedulingService CallAdvanceSchedulingService(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
@@ -1223,13 +1230,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                          new ScheduleTagSetter(
                                                              schedulingOptions.TagToUseOnScheduling));
             var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
-            IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator = new WorkShiftPeriodValueCalculator();
-            IWorkShiftLengthValueCalculator workShiftLengthValueCalculator = new WorkShiftLengthValueCalculator();
-            IWorkShiftValueCalculator workShiftValueCalculator =
-                new WorkShiftValueCalculator(workShiftPeriodValueCalculator, workShiftLengthValueCalculator);
-            IEqualWorkShiftValueDecider equalWorkShiftValueDecider = new EqualWorkShiftValueDecider();
-            IWorkShiftSelector workShiftSelector = new WorkShiftSelector(workShiftValueCalculator,
-                                                                         equalWorkShiftValueDecider);
+            var workShiftSelector = InitializeWorkShiftRelatedClasses();
             IGroupPersonBuilderBasedOnContractTime groupPersonBuilderBasedOnContractTime =
                 new GroupPersonBuilderBasedOnContractTime(_container.Resolve<IGroupPersonFactory>());
             var advanceSchedulingService = new AdvanceSchedulingService(skillDayPeriodIntervalData,
@@ -1239,6 +1240,18 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                         schedulingOptions, workShiftSelector,
                                                                         groupPersonBuilderBasedOnContractTime);
             return advanceSchedulingService;
+        }
+
+        private static IWorkShiftSelector InitializeWorkShiftRelatedClasses()
+        {
+            IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator = new WorkShiftPeriodValueCalculator();
+            IWorkShiftLengthValueCalculator workShiftLengthValueCalculator = new WorkShiftLengthValueCalculator();
+            IWorkShiftValueCalculator workShiftValueCalculator =
+                new WorkShiftValueCalculator(workShiftPeriodValueCalculator, workShiftLengthValueCalculator);
+            IEqualWorkShiftValueDecider equalWorkShiftValueDecider = new EqualWorkShiftValueDecider();
+            IWorkShiftSelector workShiftSelector = new WorkShiftSelector(workShiftValueCalculator,
+                                                                         equalWorkShiftValueDecider);
+            return workShiftSelector;
         }
 
         void blockSchedulingServiceBlockScheduled(object sender, BlockSchedulingServiceEventArgs e)
