@@ -58,7 +58,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private void AddColleague(string userName)
 		{
+			//move this away! just here as a start! A configurable?
 			var userFactory = new UserFactory();
+			userFactory.Setup(new PersonPeriod());
 			userFactory.Setup(new SetName(userName));
 			_colleagues.Add(userFactory);
 			ScenarioContext.Current.Value(userName, userFactory);

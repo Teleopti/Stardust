@@ -71,6 +71,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers[0].Title, Contains.Substring(expectedTimes));
 		}
 
+		[Then(@"I should see a possible schedule trade with")]
+		public void ThenIShouldSeeAPossibleScheduleTradeWith(Table table)
+		{
+			var expectedTimes = table.Rows[0][1] + "-" + table.Rows[1][1];
+
+
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers.Any(), Is.True);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers[0].Title, Contains.Substring(expectedTimes));
+		}
+
 		[Then(@"the selected date should be '(.*)'")]
 		public void ThenTheSelectedDateShouldBe(DateTime date)
 		{
