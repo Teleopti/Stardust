@@ -224,3 +224,7 @@
 	position: absolute;
 	left: 50%;
 }
+.shift-trade-no-possible-trades 
+{
+	margin-top: 10px;
+}
