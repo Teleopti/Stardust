@@ -23,7 +23,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Finds block between ConSecutive Shifts
         /// </summary>
-        ConSecutiveShifts,
+        ConsecutiveShifts,
 
         /// <summary>
         /// Finds block between calender week

@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public bool UseTwoDaysOffAsBlock{get;set;}
 
-        public bool UseCalenderWeekAsBlock{get;set;}
+        public bool UseCalendarWeekAsBlock{get;set;}
 
         private BlockFinderType _blockFinderTypeForAdvanceScheduling;
         public BlockFinderType BlockFinderTypeForAdvanceScheduling

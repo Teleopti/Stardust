@@ -1163,36 +1163,56 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
             fixedStaffSchedulingService.ClearFinderResults();
-
-            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff =
-                new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback,
-                                                         new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-            var advancedaysOffSchedulingService = _container.Resolve<IAdvanceDaysOffSchedulingService>();
-            advancedaysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
-            IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
-            var blockSchedulingService = _container.Resolve<IBlockSchedulingService>();
-            var refreshRate = schedulingOptions.RefreshRate;
-            schedulingOptions.RefreshRate = 1;
-            blockSchedulingService.BlockScheduled += blockSchedulingServiceBlockScheduled;
-            schedulingOptions.UseTwoDaysOffAsBlock = true;
-                var skillDayPeriodIntervalData = _container.Resolve<ISkillDayPeriodIntervalDataGenerator>();
-            var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder,matrixList );
-			IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
-            var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
-            if (_schedulerStateHolder.LoadedPeriod != null)
+            _backgroundWorker = backgroundWorker;
+            if (schedulingOptions != null)
             {
-                IList<DateOnly> dates =
-                    _schedulerStateHolder.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).DayCollection();
-                groupPagePerDateHolder.GroupPersonGroupPagePerDate =
-                    _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
-                                                                                   groupPageDataProvider,
-                                                                                   schedulingOptions.GroupOnGroupPage,
-                                                                                   true);
+                ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff =
+                    new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback,
+                                                             new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+                var advancedaysOffSchedulingService = _container.Resolve<IAdvanceDaysOffSchedulingService>();
+                advancedaysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
+                IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
+                var blockSchedulingService = _container.Resolve<IBlockSchedulingService>();
+                var refreshRate = schedulingOptions.RefreshRate;
+                schedulingOptions.RefreshRate = 1;
+                blockSchedulingService.BlockScheduled += blockSchedulingServiceBlockScheduled;
+                schedulingOptions.UseTwoDaysOffAsBlock = true;
+                var skillDayPeriodIntervalData = _container.Resolve<ISkillDayPeriodIntervalDataGenerator>();
+                var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder,matrixList );
+                IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
+                var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+                if (_schedulerStateHolder.LoadedPeriod != null)
+                {
+                    IList<DateOnly> dates =
+                        _schedulerStateHolder.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).DayCollection();
+                    groupPagePerDateHolder.GroupPersonGroupPagePerDate =
+                        _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
+                                                                                       groupPageDataProvider,
+                                                                                       schedulingOptions.GroupOnGroupPage,
+                                                                                       true);
+                }
+                IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();
+                IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+                    new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, groupPersonFactory,
+                                                          groupPagePerDateHolder);
+                var advanceSchedulingService = CallAdvanceSchedulingService(matrixList, schedulingOptions, skillDayPeriodIntervalData, dynamicBlockFinder, groupPersonBuilderForOptimization);
+                advanceSchedulingService.Execute(schedulingResults);
+                if (schedulingOptions.RotationDaysOnly)
+                    schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
+                blockSchedulingService.BlockScheduled -= blockSchedulingServiceBlockScheduled;
+                schedulingOptions.RefreshRate = refreshRate;
+                _allResults.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
             }
-            IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();
-	        IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-		        new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, groupPersonFactory,
-		                                              groupPagePerDateHolder);
+            _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);
+        }
+
+        private AdvanceSchedulingService CallAdvanceSchedulingService(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
+                                                                      ISkillDayPeriodIntervalDataGenerator
+                                                                          skillDayPeriodIntervalData,
+                                                                      DynamicBlockFinder dynamicBlockFinder,
+                                                                      IGroupPersonBuilderForOptimization
+                                                                          groupPersonBuilderForOptimization)
+        {
             var teamExtractor = new TeamExtractor(matrixList, groupPersonBuilderForOptimization);
             var restrictionAggregator = _container.Resolve<IRestrictionAggregator>();
             var workShiftFilterService = _container.Resolve<IWorkShiftFilterService>();
@@ -1200,8 +1220,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                         schedulingOptions.ConsiderShortBreaks);
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
                 new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback,
-                                                            new ScheduleTagSetter(
-                                                                schedulingOptions.TagToUseOnScheduling));
+                                                         new ScheduleTagSetter(
+                                                             schedulingOptions.TagToUseOnScheduling));
             var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
             IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator = new WorkShiftPeriodValueCalculator();
             IWorkShiftLengthValueCalculator workShiftLengthValueCalculator = new WorkShiftLengthValueCalculator();
@@ -1209,7 +1229,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 new WorkShiftValueCalculator(workShiftPeriodValueCalculator, workShiftLengthValueCalculator);
             IEqualWorkShiftValueDecider equalWorkShiftValueDecider = new EqualWorkShiftValueDecider();
             IWorkShiftSelector workShiftSelector = new WorkShiftSelector(workShiftValueCalculator,
-                                                                            equalWorkShiftValueDecider);
+                                                                         equalWorkShiftValueDecider);
             IGroupPersonBuilderBasedOnContractTime groupPersonBuilderBasedOnContractTime =
                 new GroupPersonBuilderBasedOnContractTime(_container.Resolve<IGroupPersonFactory>());
             var advanceSchedulingService = new AdvanceSchedulingService(skillDayPeriodIntervalData,
@@ -1218,13 +1238,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                         workShiftFilterService, teamScheduling,
                                                                         schedulingOptions, workShiftSelector,
                                                                         groupPersonBuilderBasedOnContractTime);
-            advanceSchedulingService.Execute(schedulingResults);
-            if (schedulingOptions.RotationDaysOnly)
-                schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
-            blockSchedulingService.BlockScheduled -= blockSchedulingServiceBlockScheduled;
-            schedulingOptions.RefreshRate = refreshRate;
-            _allResults.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
-            _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);
+            return advanceSchedulingService;
         }
 
         void blockSchedulingServiceBlockScheduled(object sender, BlockSchedulingServiceEventArgs e)

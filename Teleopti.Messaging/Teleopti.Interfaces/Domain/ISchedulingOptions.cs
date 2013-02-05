@@ -339,7 +339,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Gets or sets a value indicating whether [use calender as block].
         /// </summary>
-        bool UseCalenderWeekAsBlock { get; set; }
+        bool UseCalendarWeekAsBlock { get; set; }
 
         /// <summary>
         /// Block finder service for advance scheduling service
