@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         private readonly IPersonRepository _personRepository;
         private readonly IPairMatrixService<Guid> _matrixService;
         private double _percentageOfPeopleFiltererd;
-	    protected DateTimePeriod Period;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		protected DateTimePeriod Period;
 
 	    public PeopleAndSkillLoaderDecider(IPersonRepository personRepository)
         {
