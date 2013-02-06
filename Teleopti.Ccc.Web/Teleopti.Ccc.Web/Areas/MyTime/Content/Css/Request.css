@@ -144,7 +144,8 @@
 }
 .shift-trade-my-schedule-row 
 {
-	height: 30px;
+	top: 4px;
+	height: 34px;
 	position: relative;
 	font-style: italic;
 }

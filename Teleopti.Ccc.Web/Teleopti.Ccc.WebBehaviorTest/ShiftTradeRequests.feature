@@ -24,7 +24,7 @@ Background:
 	And there are shift categories
 	| Name  |
 	| Day   |
-	| Late   |
+	| Night |
 
 
 Scenario: No access to make shift trade reuquests
@@ -122,6 +122,18 @@ Scenario: Time line should cover all scheduled shifts
 	And Current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see the time line hours span from '6' to '18'
+
+Scenario: Time line should cover scheduled night shift
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-03 22:00 |
+	| EndTime               | 2030-01-04 07:00 |
+	| Shift category		| Night	           |
+	And Current time is '2030-01-01'
+	When I view Add Shift Trade Request for date '2030-01-03'
+	Then I should see the time line hours span from '22' to '7'
 
 Scenario: Show message when no agents are available for shift trade
 	Given I have the role 'Full access to mytime'
