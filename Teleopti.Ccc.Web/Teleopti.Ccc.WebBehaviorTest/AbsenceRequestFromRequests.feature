@@ -7,8 +7,9 @@ Scenario: Add absence request
 	Given I am an agent
 	And I have a requestable absence called Vacation
 	And I am viewing requests
-	When I click add request button in the toolbar
-	And I click absence request tab
+	When I click new text request menu item in the toolbar
+	#When I click add request button in the toolbar
+	#And I click absence request tab
 	And I input absence request values with Vacation
 	And I click the OK button
 	Then I should see the absence request in the list

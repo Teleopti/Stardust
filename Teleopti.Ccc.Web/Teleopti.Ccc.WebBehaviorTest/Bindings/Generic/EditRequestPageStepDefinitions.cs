@@ -12,6 +12,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class EditRequestPageStepDefinitions
 	{
+		[When(@"I click new text request menu item in the toolbar")]
+		public void WhenIClickNewTextRequestMenuItemInTheToolbar()
+		{
+			Pages.Pages.CurrentEditRequestPage.AddRequestDropDown.EventualClick();
+			Pages.Pages.CurrentEditRequestPage.AddAbsenceRequestMenuItem.EventualClick();
+			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
+		}
+
 		[When(@"I click add request button in the toolbar")]
 		public void WhenIClickAddRequestButtonInTheToolbar()
 		{
