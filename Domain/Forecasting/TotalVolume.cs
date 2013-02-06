@@ -7,15 +7,37 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-    /// <summary>
+	public interface ITotalVolume
+	{
+		/// <summary>
+		/// Creates a TotalVolume object
+		/// </summary>
+		/// <param name="historicalDepth">The historical depth.</param>
+		/// <param name="workloadDays">The workload days.</param>
+		/// <param name="volumes">The volumes.</param>
+		/// <param name="outliers">The outliers.</param>
+		/// <param name="startDayTrendFactor">The start day trend factor.</param>
+		/// <param name="dayTrendFactor">The day trend factor.</param>
+		/// <param name="useTrend">if set to <c>true</c> [use trend].</param>
+		/// <param name="workload">The Workload.</param>
+		/// <remarks>
+		/// Created by: peterwe
+		/// Created date: 2008-04-01
+		/// </remarks>
+		void Create(TaskOwnerPeriod historicalDepth, IList<ITaskOwner> workloadDays, 
+		                            IList<IVolumeYear> volumes, IList<IOutlier> outliers, 
+		                            double startDayTrendFactor, double dayTrendFactor, bool useTrend, IWorkload workload);
+	}
+
+	/// <summary>
     /// Holds the total volumes for the specified period of skillDays
     /// </summary>
     /// <remarks>
     /// Created by: peterwe
     /// Created date: 2008-04-01
     /// </remarks>
-    public class TotalVolume
-    {
+    public class TotalVolume : ITotalVolume
+	{
         private IList<TotalDayItem> _totalDayItemCollection;
         private double _averageTasks;
         private TimeSpan _talkTime;
@@ -52,6 +74,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             InitializeOutlierData(outliers);
 
             var sortedWorkloadDays = _workloadDayPeriod.TaskOwnerDays.OrderBy(w => w.CurrentDate).ToList();
+			if(!sortedWorkloadDays.Any()) return;
 
             //Create historical task owner period 
             historicalDepth = new TaskOwnerPeriod(historicalDepth.CurrentDate,
