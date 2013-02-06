@@ -17,18 +17,18 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 
 	function _initRequestToolbar() {
 		_activateAddRequestMenu();
-		_initAddtextAndAbsenceRequestMenuItems();
-		_initAddShiftTradeRequestMenuItem();
+		_initAddRequestMenuItems();
 	}
 
-	function _initAddtextAndAbsenceRequestMenuItems() {
-		$('#Requests-addTextRequest-menuItem').add('#Requests-addAbsenceRequest-menuItem')
+	function _initAddRequestMenuItems() {
+		$('#Requests-addTextRequest-menuItem')
 			.click(function () {
-				Teleopti.MyTimeWeb.Request.RequestDetail.AddTextAndAbsenceRequestClick();
+				Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick();
 			});
-	}
-
-	function _initAddShiftTradeRequestMenuItem() {
+		$('#Requests-addAbsenceRequest-menuItem')
+			.click(function () {
+				Teleopti.MyTimeWeb.Request.RequestDetail.AddAbsenceRequestClick();
+			});
 		$('#Requests-addShiftTradeRequest-menuItem')
 			.click(function () {
 				Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow();

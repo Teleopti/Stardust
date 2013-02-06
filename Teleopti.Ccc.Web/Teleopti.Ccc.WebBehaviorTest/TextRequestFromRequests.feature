@@ -6,7 +6,7 @@
 Scenario: Add text request
 	Given I am an agent
 	And I am viewing requests
-	When I click add request button in the toolbar
+	When I click new text request menu item in the toolbar
 	And I input text request values
 	And I click the OK button
 	Then I should see the text request in the list
@@ -14,7 +14,7 @@ Scenario: Add text request
 Scenario: Adding invalid text request values
 	Given I am an agent
 	And I am viewing requests
-	When I click add request button in the toolbar
+	When I click new text request menu item in the toolbar
 	And I input empty subject
 	And I input later start time than end time
 	And I click the OK button
@@ -24,7 +24,7 @@ Scenario: Adding invalid text request values
 Scenario: Adding too long text request
 	Given I am an agent
 	And I am viewing requests
-	When I click add request button in the toolbar
+	When I click new text request menu item in the toolbar
 	And I input too long text request values
 	And I click the OK button
 	Then I should see texts describing too long text error
@@ -33,7 +33,7 @@ Scenario: Adding too long text request
 Scenario: Adding too long subject request
 	Given I am an agent
 	And I am viewing requests
-	When I click add request button in the toolbar
+	When I click new text request menu item in the toolbar
 	And I input too long subject request values
 	And I click the OK button
 	Then I should see texts describing too long subject error
@@ -92,13 +92,3 @@ Scenario: Can not delete denied text request
 	And I have a denied text request
 	When I am viewing requests
 	Then I should not see a delete button
-
-
-Scenario: Hide absence request tab when view a text request
-	Given I am an agent
-	And I have an existing text request
-	And I am viewing requests
-	When I click on the request
-	Then I should see the edit text request form
-	And I should see the request's values
-	And I should not see the add absence request tab
