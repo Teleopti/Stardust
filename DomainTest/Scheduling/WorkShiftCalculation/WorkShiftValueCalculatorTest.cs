@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			_phoneActivity = new Activity("phone");
 			_phoneActivity.RequiresSkill = true;
 			_period1 = new DateTimePeriod(_start, _end);
-			_data = new SkillIntervalData(_period1, 5, -5, 0, null, null);
+			_data = new SkillIntervalData(toBasePeriod(_period1), 5, -5, 0, null, null);
 			_dic = new Dictionary<TimeSpan, ISkillIntervalData>();
 			_dic.Add(_start.TimeOfDay, _data);
 		}
@@ -175,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		public void ShouldHandleLayerStartingInOneIntervalAndEndingInAnother()
 		{
 			var period1 = new DateTimePeriod(_start.AddMinutes(30), _end.AddMinutes(30));
-			ISkillIntervalData data2 = new SkillIntervalData(period1, 5, -5, 0, null, null);
+			ISkillIntervalData data2 = new SkillIntervalData(toBasePeriod(period1), 5, -5, 0, null, null);
 			_dic.Add(period1.StartDateTime.TimeOfDay, data2);
 
 			DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(15), _end.AddMinutes(20));
@@ -290,8 +291,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			IMainShiftActivityLayer mainShiftActivityLayer = new MainShiftActivityLayer(_phoneActivity, period2);
 			mainShift.LayerCollection.Add(mainShiftActivityLayer);
 			IVisualLayerCollection visualLayerCollection = mainShift.ProjectionService().CreateProjection();
-			var data1 = new SkillIntervalData(period1, 5, -5, 0, null, null);
-			var data2 = new SkillIntervalData(period2, 5, -5, 0, null, null);
+			var data1 = new SkillIntervalData(toBasePeriod(period1), 5, -5, 0, null, null);
+			var data2 = new SkillIntervalData(toBasePeriod(period2), 5, -5, 0, null, null);
 			_dic.Clear();
 			_dic.Add(new TimeSpan(23, 0 , 0), data1);
 			_dic.Add(new TimeSpan(1, 0, 0, 0), data2);
@@ -312,6 +313,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 										false, false);
 				Assert.AreEqual(50, result);
 			}
+		}
+
+		private static DateTimePeriod toBasePeriod(DateTimePeriod period)
+		{
+			var movedStart =
+				new DateTime(SkillDayTemplate.BaseDate.Date.Ticks, DateTimeKind.Utc).Add(period.StartDateTime.TimeOfDay);
+			var movedEnd =
+				new DateTime(SkillDayTemplate.BaseDate.Date.Ticks, DateTimeKind.Utc).Add(period.EndDateTime.TimeOfDay);
+			if (movedStart > movedEnd)
+				movedEnd = movedEnd.AddDays(1);
+
+			return new DateTimePeriod(movedStart, movedEnd);
 		}
 	}
 }
