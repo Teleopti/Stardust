@@ -390,6 +390,7 @@
     <Compile Include="ResourceCalculation\ISwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferences.cs" />
     <Compile Include="Optimization\SkillExtractorForGroupOfPeople.cs" />
+    <Compile Include="ResourceCalculation\PersonalShiftMeetingTimeChecker.cs" />
     <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryRunner.cs" />
     <Compile Include="ResourceCalculation\PossibleStartEndCategory.cs" />
     <Compile Include="ResourceCalculation\ShiftCategoryPeriodValueExtractorThread.cs" />
