@@ -1169,8 +1169,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff =
                     new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback,
                                                              new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-                var advancedaysOffSchedulingService = _container.Resolve<IAdvanceDaysOffSchedulingService>();
-                advancedaysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
                 var blockSchedulingService = _container.Resolve<IBlockSchedulingService>();
                 var refreshRate = schedulingOptions.RefreshRate;
@@ -1180,6 +1178,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var skillDayPeriodIntervalData = _container.Resolve<ISkillDayPeriodIntervalDataGenerator>();
                 var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder,matrixList );
                 var groupPersonBuilderForOptimization = CallGroupPage(schedulingOptions);
+                var advancedaysOffSchedulingService = _container.Resolve<IAdvanceDaysOffSchedulingService>();
+                advancedaysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
                 var advanceSchedulingService = CallAdvanceSchedulingService(matrixList, schedulingOptions, skillDayPeriodIntervalData, dynamicBlockFinder, groupPersonBuilderForOptimization);
                 advanceSchedulingService.Execute(schedulingResults);
                 if (schedulingOptions.RotationDaysOnly)
