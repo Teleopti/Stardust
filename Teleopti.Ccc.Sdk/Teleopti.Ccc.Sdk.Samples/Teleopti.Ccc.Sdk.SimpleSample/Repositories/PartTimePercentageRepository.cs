@@ -8,11 +8,17 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.Repositories
 {
     public class PartTimePercentageRepository
     {
-        private Dictionary<Guid, PartTimePercentageDto> _partTimePercentageDictionary;
+    	private readonly ITeleoptiOrganizationService _teleoptiOrganizationService;
+    	private Dictionary<Guid, PartTimePercentageDto> _partTimePercentageDictionary;
 
-        public void Initialize(ITeleoptiOrganizationService teleoptiOrganizationService)
+    	public PartTimePercentageRepository(ITeleoptiOrganizationService teleoptiOrganizationService)
+    	{
+    		_teleoptiOrganizationService = teleoptiOrganizationService;
+    	}
+
+    	public void Initialize()
         {
-            var partTimePercentages = teleoptiOrganizationService.GetPartTimePercentages(new LoadOptionDto { LoadDeleted = true });
+            var partTimePercentages = _teleoptiOrganizationService.GetPartTimePercentages(new LoadOptionDto { LoadDeleted = true });
             _partTimePercentageDictionary = partTimePercentages.ToDictionary(k => k.Id.GetValueOrDefault(), v => v);
         }
 

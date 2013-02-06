@@ -55,7 +55,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		$("#Request-detail-section .combobox.absence-input").combobox();
 		$("#Absence-type-input").prop('readonly', true);
 
-		$('#Request-detail-ok-button')
+		$('#Request-detail-ok-button').button()
 			.click(function () {
 				$(this).prop('disabled', true);
 				if ($('#Text-request-tab').hasClass('selected-tab') || requestViewModel.TypeEnum() == 0) {
@@ -248,8 +248,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _enableTimeinput() {
 		$('#Request-detail-fromTime button, #Request-detail-fromTime-input-input, #Request-detail-toTime button, #Request-detail-toTime-input-input')
 			.removeAttr("disabled");
-		$('#Request-detail-fromTime-input-input').css("color", "black");
-		$('#Request-detail-toTime-input-input').css("color", "black");
+		$('#Request-detail-fromTime-input-input').css("color", "");
+		$('#Request-detail-toTime-input-input').css("color", "");
 	}
 
 	return {

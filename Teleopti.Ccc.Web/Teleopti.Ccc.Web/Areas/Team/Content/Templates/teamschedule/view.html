@@ -18,7 +18,7 @@
     			
                 <div class="time-line absolute">
                     <div class="relative">
-                        <div data-bind="foreach: TeamSchedule.TimeLine.Times">
+                        <div data-bind="foreach: Timeline.Times">
                             <div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
                             <div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
                         </div>
@@ -33,16 +33,14 @@
                             <th class="contract-time"><span data-bind="text: Translations.ContractTime"></span></th>
                         </tr>
                     </thead>
-                    <tbody data-bind="foreach: TeamSchedule.Agents">
+                    <tbody data-bind="foreach: Agents.Agents">
                         <tr class="agent" data-bind="attr: { 'data-agent-id': Id }">
                             <td class="agent-name">
                                 <!-- Must do it this way to get correct overflow: hidden in IE -->
                                 <div class="agent-name nowrap" data-bind="text: Name"></div>
                             </td>
                             <td class="shift">
-                                <ul class="relative unstyled" data-bind="foreach: Layers">
-                                    <li class="layer absolute floatleft" data-bind="if: IsVisible, style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', backgroundColor: Color}" ></li>
-                                </ul>
+                                <ul class="relative unstyled" data-bind="template: { name: 'layerTemplate', foreach: Layers }"></ul>
                             </td>
                             <td class="contract-time" data-bind="text: ContractTime"></td>
                         </tr>
@@ -52,3 +50,7 @@
         </div>
     </div>
 </div>
+
+<script id="layerTemplate" type="text/html">
+    <li class="layer absolute floatleft" data-bind="if: IsVisible, style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', backgroundColor: Color}" ></li>
+</script>

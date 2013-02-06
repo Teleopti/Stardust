@@ -6,20 +6,17 @@ define([
 
 		var minutes = helpers.Minutes;
 
-		return function (shortTimePattern) {
+		return function (agents, shortTimePattern) {
 
 			var self = this;
 
+			this.Agents = agents;
 			this.WidthPixels = ko.observable();
-			this.Agents = ko.observableArray();
-			
-			this.AddAgents = function (agents) {
-				self.Agents.push.apply(self.Agents, agents);
-			};
+			this.Times = ko.observableArray();
 
 			this.StartMinutes = ko.computed(function () {
 				var start = undefined;
-				ko.utils.arrayForEach(self.Agents(), function (l) {
+				ko.utils.arrayForEach(self.Agents.Agents(), function (l) {
 					var startMinutes = l.FirstStartMinute();
 					if (start === undefined)
 						start = startMinutes;
@@ -31,7 +28,7 @@ define([
 
 			this.EndMinutes = ko.computed(function () {
 				var end = undefined;
-				ko.utils.arrayForEach(self.Agents(), function (l) {
+				ko.utils.arrayForEach(self.Agents.Agents(), function (l) {
 					var endMinutes = l.LastEndMinute();
 					if (end === undefined)
 						end = endMinutes;
@@ -41,16 +38,17 @@ define([
 				return minutes.EndOfHour(end);
 			});
 
-			this.Times = ko.computed(function () {
-				var times = new Array();
+			this.CalculateTimes = function () {
+				self.Times([]);
+				var times = self.Times();
 				var time = self.StartMinutes();
 				var end = self.EndMinutes();
 				while (time < end + 1) {
 					times.push(new timeViewModel(self, time, shortTimePattern));
 					time = minutes.AddHours(time, 1);
 				}
-				return times;
-			});
+				self.Times.valueHasMutated();
+			};
 
 			this.Minutes = ko.computed(function () {
 				return self.EndMinutes() - self.StartMinutes();

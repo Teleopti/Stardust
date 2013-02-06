@@ -8,11 +8,17 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.Repositories
 {
     public class ActivityRepository
     {
-        private Dictionary<Guid, ActivityDto> _activityDictionary;
+    	private readonly ITeleoptiSchedulingService _teleoptiSchedulingService;
+    	private Dictionary<Guid, ActivityDto> _activityDictionary;
 
-        public void Initialize(ITeleoptiSchedulingService teleoptiSchedulingService)
+		public ActivityRepository(ITeleoptiSchedulingService teleoptiSchedulingService)
+		{
+			_teleoptiSchedulingService = teleoptiSchedulingService;
+		}
+
+    	public void Initialize()
         {
-            var activities = teleoptiSchedulingService.GetActivities(new LoadOptionDto { LoadDeleted = true });
+            var activities = _teleoptiSchedulingService.GetActivities(new LoadOptionDto { LoadDeleted = true });
             _activityDictionary = activities.ToDictionary(k => k.Id.GetValueOrDefault(), v => v);
         }
 

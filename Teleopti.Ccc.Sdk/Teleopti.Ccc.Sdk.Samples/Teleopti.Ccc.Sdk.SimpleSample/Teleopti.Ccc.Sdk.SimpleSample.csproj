@@ -55,8 +55,12 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Sdk.Common">
-      <HintPath>..\..\Teleopti.Ccc.Sdk.Common\bin\Release\Teleopti.Ccc.Sdk.Common.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Sdk.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Teleopti.Ccc.Sdk.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Teleopti.Ccc.UserTexts">
+      <HintPath>..\Lib\Teleopti.Ccc.UserTexts.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -67,6 +71,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="TextConverter.cs" />
     <Compile Include="Model\BusinessHierarchyModel.cs" />
     <Compile Include="Model\PersonDetailModel.cs" />
     <Compile Include="Model\ScheduleDayDetailModel.cs" />
@@ -76,6 +81,7 @@
     <Compile Include="Repositories\BusinessHierarchyRepository.cs" />
     <Compile Include="Repositories\ContractRepository.cs" />
     <Compile Include="Repositories\ContractScheduleRepository.cs" />
+    <Compile Include="Repositories\GuidDateKey.cs" />
     <Compile Include="Repositories\OvertimeDefinitionSetRepository.cs" />
     <Compile Include="Repositories\PartTimePercentageRepository.cs" />
     <Compile Include="Repositories\PeriodScheduleLoadOptions.cs" />
@@ -84,7 +90,11 @@
     <Compile Include="Repositories\ScheduleLoadOptions.cs" />
     <Compile Include="Repositories\ScheduleRepository.cs" />
     <Compile Include="Repositories\SkillRepository.cs" />
+    <Compile Include="ViewModel\AfterSuccessfulLogOnCommand.cs" />
+    <Compile Include="ViewModel\FindAllGroupPagesCommand.cs" />
     <Compile Include="ViewModel\FindAllScheduleCommand.cs" />
+    <Compile Include="ViewModel\FindAvailableGroupPageGroupsCommand.cs" />
+    <Compile Include="ViewModel\PersonDetailContainer.cs" />
     <Compile Include="ViewModel\ScheduleViewModel.cs" />
     <Compile Include="ViewModel\FindAllPeopleCommand.cs" />
     <Compile Include="ViewModel\LogOnCommand.cs" />

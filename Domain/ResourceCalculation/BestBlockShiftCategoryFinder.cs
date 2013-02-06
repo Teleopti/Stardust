@@ -132,6 +132,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
                 var personPeriod = currentSchedulePeriod.Person.Period(dateOnly);
                 var bag = personPeriod.RuleSetBag;
+				if (bag == null)
+					continue;
                 var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, agentTimeZone, bag, false);
 
                 if (shiftList == null)

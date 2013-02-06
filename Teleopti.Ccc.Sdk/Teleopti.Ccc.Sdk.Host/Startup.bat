@@ -87,8 +87,8 @@ ECHO 7z.exe x -y %1 -o%2
 exit /b
 
 :FindReplace
-ECHO powershell -File "%ROOTDIR%\FindReplace.ps1" %1 %2 %3
-powershell -File "%ROOTDIR%\FindReplace.ps1" %1 %2 %3
+ECHO powershell ". %ROOTDIR%\FindReplace.ps1; FindAndReplace -FileName \"%1\" -searchText \"%2\" -replaceText \"%3\""
+powershell ". %ROOTDIR%\FindReplace.ps1; FindAndReplace -FileName \"%1\" -searchText \"%2\" -replaceText \"%3\""
 exit /b
 
 :eof

@@ -1,15 +1,40 @@
-Param(
-  [string]$directory
-  )
-[Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
-
 ##===========
 ## Functions
 ##===========
-function Test-Administrator  
-{  
-    $user = [Security.Principal.WindowsIdentity]::GetCurrent();
-    (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)  
+function Test-Administrator
+{
+	[CmdletBinding()]
+	param($currentUser)
+	$myWindowsPrincipal=new-object System.Security.Principal.WindowsPrincipal($myWindowsID)
+
+	# Get the security principal for the Administrator role
+	$adminRole=[System.Security.Principal.WindowsBuiltInRole]::Administrator
+
+	# Check to see if we are currently running "as Administrator"
+	return ($myWindowsPrincipal.IsInRole($adminRole))
+}
+
+function Roby-Copy
+{
+    Param(
+      [string]$scrFolder,
+      [string]$destFolder
+      )
+      
+	## Options to be added to RoboCopy
+	$ROBOOPTIONS = @("/MIR")
+
+	## Wrap arguments for robocopy
+	$roboArgs = @("$scrFolder","$destFolder",$ROBOOPTIONS)
+
+	## Run robocopy from Inbox to FileWatch
+	& robocopy @roboArgs  | out-null
+    $RoboExitCode = $LastExitCode
+    
+    if ($RoboExitCode -ge 8) {
+        throw "RoboCopy generated an error!"
+    }
+    return $RoboExitCode
 }
 
 function ServiceCheckAndStart{
@@ -20,40 +45,79 @@ function ServiceCheckAndStart{
      }
 }
 
-##===========
-## Main
-##===========
-$TeleoptiServiceBus = "Teleopti Service Bus"
-$computer = gc env:computername
-Try
-{
-	##test if admin
-	$isAdmin = Test-Administrator;
-	If ($isAdmin -ne $True) {
-		throw "User is not Admin!"
-	}
-
-	## Name of the job, name of source in Windows Event Log
-	$JOB = "Teleopti.Ccc.BlobStorageCopy"
-
-	if ($computer.ToUpper().StartsWith("TELEOPTI")) {
-    ## Local debug values
+function Blobsource-get {
+    $computer = gc env:computername
+    
+	## Local debug values
+    if ($computer.ToUpper().StartsWith("TELEOPTI")) {
 	$BlobPath = "http://teleopticcc7.blob.core.windows.net/"
 	$ContainerName="teleopticcc/Payroll"
 	$AccountKey = "IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ=="
 	$DataSourceName = "teleopticcc-dev"
     }
-    else {
     ## Get environment varaibles
+    else {
+    [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
 	$BlobPath = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.BlobPath")
 	$ContainerName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.ContainerName")
 	$AccountKey = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.AccountKey")
 	$DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
     }
 
-	$BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
-	$BlobSource
+	[string]$returnValue = $BlobPath + $ContainerName + "/" + $DataSourceName
+	return $returnValue
+}
 
+function EventlogSource-Create {
+    param([string]$EventSourceName)
+    $type = "Application"
+    #create event log source
+        if ([System.Diagnostics.EventLog]::SourceExists("$EventSourceName") -eq $false) {
+         [System.Diagnostics.EventLog]::CreateEventSource("$EventSourceName", $type)
+         }
+	}
+
+
+##===========
+## Main
+##===========
+function main {
+Param(
+  [string]$directory
+  )
+$TeleoptiServiceBus = "Teleopti Service Bus"
+$computer = gc env:computername
+
+## Name of the job, name of source in Windows Event Log
+$JOB = "Teleopti.Ccc.BlobStorageCopy"
+
+Try
+{
+	##test if admin
+	If (!(Test-Administrator($myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()))) {
+		throw "User is not Admin!"
+	}
+
+    #create event log source
+    EventlogSource-Create "$JOB"
+   
+	## Local debug values
+    if ($computer.ToUpper().StartsWith("TELEOPTI")) {
+	$BlobPath = "http://teleopticcc7.blob.core.windows.net/"
+	$ContainerName="teleopticcc/Payroll"
+	$AccountKey = "IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ=="
+	$DataSourceName = "teleopticcc-dev"
+    }
+    ## Get environment varaibles
+    else {
+    [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
+	$BlobPath = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.BlobPath")
+	$ContainerName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.ContainerName")
+	$AccountKey = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.AccountKey")
+	$DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
+    }
+   
+    $BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
 
 	## Destination directory. Files in this directory will mirror the source directory. Extra files will be deleted!
 	$DESTINATION = "c:\temp\PayrollInbox"
@@ -68,22 +132,12 @@ Try
 	## Options to be added to AzCopy
 	$OPTIONS = @("/S","/XO","/Y","/sourceKey:$AccountKey")
 
-	## Options to be added to RoboCopy
-	$ROBOOPTIONS = @("/MIR")
-
 	## Wrap all above arguments
 	$cmdArgs = @("$BlobSource","$DESTINATION",$OPTIONS)
 
 	$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
 	$AzCopyExe
 
-        
-	## Create EventLog Source if not already exists
-	if ([System.Diagnostics.EventLog]::SourceExists("$JOB") -eq $false) {
-	"Creating EventLog Source `"$JOB`""
-	[System.Diagnostics.EventLog]::CreateEventSource("$JOB", "Application")
-	}
-    
 	## Start the azcopy with above parameters and log errors in Windows Eventlog.
 	& $AzCopyExe @cmdArgs
     $AzExitCode = $LastExitCode
@@ -92,17 +146,8 @@ Try
         throw "AsCopy generated an error!"
     }
     
-	## Wrap arguments for robocopy
-	$roboArgs = @("$DESTINATION","$FILEWATCH",$ROBOOPTIONS)
-
-	## Run robocopy from Inbox to FileWatch
-	& robocopy @roboArgs
-    $RoboExitCode = $LastExitCode
+    Roby-Copy $DESTINATION $FILEWATCH
     
-    if ($RoboExitCode -ge 8) {
-        throw "RoboCopy generated an error!"
-    }
-
 	##one or more files are new, log info to Eventlog and restart serviceBus
 	If ($RoboExitCode -ge 1) {
         Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$SOURCE and $DESTINATION in sync."
@@ -123,4 +168,5 @@ Catch [Exception]
 Finally
 {
     Write-Host "done"
+}
 }

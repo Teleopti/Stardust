@@ -14,8 +14,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         private readonly IPersonRepository _personRepository;
         private readonly IPairMatrixService<Guid> _matrixService;
         private double _percentageOfPeopleFiltererd;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		protected DateTimePeriod Period;
 
-        public PeopleAndSkillLoaderDecider(IPersonRepository personRepository)
+	    public PeopleAndSkillLoaderDecider(IPersonRepository personRepository)
         {
             _personRepository = personRepository;
             _matrixService = new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>());
@@ -52,6 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             PeopleGuidDependencies = MatrixService.FirstDependencies;
             SkillGuidDependencies = MatrixService.SecondDependencies;
             SiteGuidDependencies = _personRepository.PeopleSiteMatrix(period);
+	        Period = period;
         }
 
         public int FilterPeople(ICollection<IPerson> people)
@@ -74,11 +77,51 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 people.Remove(personToRemove);
             }
 
+			HashSet<ISite> siteList = new HashSet<ISite>();
+	        foreach (var person in people)
+	        {
+				//person.
+		        var personPeriods = person.PersonPeriods(Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
+		        foreach (var personPeriod in personPeriods)
+		        {
+			        ISite site = personPeriod.Team.Site;
+					if (site.MaxSeats.HasValue)
+			        {
+						siteList.Add(site);
+			        }
+		        }
+	        }
+
             //Lägg på alla personer som är på samma site om siten har maxseats
             foreach (IPerson personToAdd in peopleToAdd)
             {
-                if (!people.Contains(personToAdd))
-                    people.Add(personToAdd);
+                if (people.Contains(personToAdd))
+					continue;
+
+				HashSet<ISite> personSiteList = new HashSet<ISite>();
+				var personPeriods = personToAdd.PersonPeriods(Period.ToDateOnlyPeriod(personToAdd.PermissionInformation.DefaultTimeZone()));
+				foreach (var personPeriod in personPeriods)
+				{
+					ISite site = personPeriod.Team.Site;
+					if (site.MaxSeats.HasValue)
+					{
+						personSiteList.Add(site);
+					}
+				}
+
+	            bool found = false;
+	            foreach (var site in personSiteList)
+	            {
+		            if (siteList.Contains(site))
+		            {
+			            found = true;
+		            }
+	            }
+
+	            if (found)
+                {
+					people.Add(personToAdd);
+                }
             }
 
             _percentageOfPeopleFiltererd = (people.Count / (double)origCount);
