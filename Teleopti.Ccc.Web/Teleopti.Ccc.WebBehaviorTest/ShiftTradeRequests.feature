@@ -121,7 +121,7 @@ Scenario: Time line should cover all scheduled shifts
 	| Shift category		| Day	           |
 	And Current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
-	Then I should see the time line hours span from '6' to '19'
+	Then I should see the time line hours span from '6' to '18'
 
 Scenario: Show message when no agents are available for shift trade
 	Given I have the role 'Full access to mytime'
