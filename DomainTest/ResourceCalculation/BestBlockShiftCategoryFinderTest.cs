@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     	private IShiftCategoryFairnessCalculator _fairnessCalculator;
 		private IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
 		private IGroupShiftLengthDecider _groupShiftLengthDecider;
+    	private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
 
         [SetUp]
@@ -84,6 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     		_fairnessCalculator = _mocks.StrictMock<IShiftCategoryFairnessCalculator>();
     		_groupShiftCategoryFairnessCreator = _mocks.StrictMock<IGroupShiftCategoryFairnessCreator>();
     		_groupShiftLengthDecider = _mocks.DynamicMock<IGroupShiftLengthDecider>();
+			_personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
     		_target = new BestBlockShiftCategoryFinder(_workShiftWorkTime, _shiftProjectionCacheManager, _stateHolder,
     		                                           _effectiveRestrictionCreator,
     		                                           _possibleCombinationsOfStartEndCategoryRunner,
@@ -339,7 +341,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IList<IShiftProjectionCache> getCashes()
         {
             var tmpList = getWorkShifts();
-        	return tmpList.Select(shift => new ShiftProjectionCache(shift)).Cast<IShiftProjectionCache>().ToList();
+        	return tmpList.Select(shift => new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker)).Cast<IShiftProjectionCache>().ToList();
         }
         private IEnumerable<IWorkShift> getWorkShifts()
         {
