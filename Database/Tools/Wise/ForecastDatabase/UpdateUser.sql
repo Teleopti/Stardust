@@ -1,6 +1,8 @@
 --Note: This script is executed via SQLCMD using variables:
 --please uncomment to execute via SSMS.
---:SETVAR TIMEZONE 
+--:SETVAR TIMEZONE "GMT Standard Time"
+--:SETVAR USERDOMAIN "devDomain"
+--:SETVAR USERNAME "devUsername"
 
 DECLARE @FreemiumGUID		AS uniqueidentifier
 DECLARE @newid				AS uniqueidentifier
@@ -51,7 +53,12 @@ SELECT @version = MAX(version)
 FROM person
 WHERE Id = @FreemiumGUID
 
-UPDATE Person
+----------------
+--Name: DavidJ
+--Date: 2013-02-06
+--Desc: #22260 - Fix Person re-factor in Freemium deploy
+----------------
+UPDATE dbo.Person
 SET	Version					= @version+1,
 	UpdatedBy				= @FreemiumGUID,
 	UpdatedOn				= @now,
@@ -60,13 +67,33 @@ SET	Version					= @version+1,
 	LastName				= @FreemiumLastName,
 	DefaultTimeZone			= '$(TIMEZONE)',
 	Culture					= @Culture,
-	UiCulture				= @UICulture,
-	ApplicationLogOnName	= @FreemiumAppUser,
-	Password				= @FreemiumPwd,
-	DomainName				= '$(USERDOMAIN)',
-	WindowsLogOnName		= '$(USERNAME)'
+	UiCulture				= @UICulture
 WHERE Id = @FreemiumGUID
 AND Version = @version
+
+UPDATE dbo.ApplicationAuthenticationInfo
+SET ApplicationLogOnName	= @FreemiumAppUser,
+	Password				= @FreemiumPwd
+FROM dbo.Person p
+WHERE p.Id = dbo.ApplicationAuthenticationInfo.person
+AND p.Id = @FreemiumGUID
+
+--add if not already exist
+INSERT INTO dbo.WindowsAuthenticationInfo (person,DomainName,WindowsLogOnName)
+SELECT p.Id,'$(USERDOMAIN)','$(USERNAME)'
+FROM dbo.person p
+WHERE
+   NOT EXISTS (SELECT * FROM dbo.WindowsAuthenticationInfo win
+              WHERE win.person = p.Id)
+AND p.Id = @FreemiumGUID
+
+--if exist, update to current Windows user
+UPDATE dbo.WindowsAuthenticationInfo
+SET 	DomainName			= '$(USERDOMAIN)',
+	WindowsLogOnName		= '$(USERNAME)'
+FROM dbo.Person p
+WHERE p.Id = dbo.WindowsAuthenticationInfo.person
+AND p.Id = @FreemiumGUID
 
 --Add temporary license
 DELETE FROM License
