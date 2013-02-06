@@ -23,6 +23,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _addAbsenceRequestClick() {
+		Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
 		requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 		_clearFormData();
 		_initEditSection(requestViewModel);
