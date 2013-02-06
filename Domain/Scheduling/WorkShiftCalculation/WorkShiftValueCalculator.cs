@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
@@ -40,9 +42,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                         var activity = (IActivity) layer.Payload;
                         if (activity != skillActivity)
                             continue;
-
-                        DateTime layerStart = layer.Period.StartDateTime;
-                        DateTime layerEnd = layer.Period.EndDateTime;
+	                    var baseLayer = layerToBaseDate(layer, shiftStartDate);
+                        DateTime layerStart = baseLayer.Period.StartDateTime;
+                        DateTime layerEnd = baseLayer.Period.EndDateTime;
 
                         int resolution = GetResolution(skillIntervalDataList);
                         int currentResourceInMinutes = resolution;
@@ -64,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                         ISkillIntervalData currentStaffPeriod;
                         if (skillIntervalDataList!=null)
                         {
-                            if (!skillIntervalDataList.TryGetValue(TimeOfDay(shiftStartDate, currentStart), out currentStaffPeriod))
+                            if (!skillIntervalDataList.TryGetValue(TimeOfDay(SkillDayTemplate.BaseDate, currentStart), out currentStaffPeriod))
                             {
                                 if (activity.RequiresSkill)
                                     return null;
@@ -83,12 +85,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                                 currentResourceInMinutes = resolution;
                                 currentStart = currentStart.AddMinutes(resolution);
 
-                                if (currentStart >= layer.Period.EndDateTime)
+                                if (currentStart >= baseLayer.Period.EndDateTime)
                                 {
                                     break;
                                 }
 
-                                if (!skillIntervalDataList.TryGetValue(TimeOfDay(shiftStartDate, currentStart), out currentStaffPeriod))
+								if (!skillIntervalDataList.TryGetValue(TimeOfDay(SkillDayTemplate.BaseDate, currentStart), out currentStaffPeriod))
                                 {
                                     if (activity.RequiresSkill)
                                         return null;
@@ -124,6 +126,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 				return currentStart.TimeOfDay;
 
 			return currentStart.TimeOfDay.Add(TimeSpan.FromDays(1));
+		}
+
+		private static IVisualLayer layerToBaseDate(IVisualLayer layer, DateTime shiftStartDate)
+		{
+			var movedStart =
+				new DateTime(SkillDayTemplate.BaseDate.Date.Ticks, DateTimeKind.Utc).Add(TimeOfDay(shiftStartDate,
+				                                                                                   layer.Period.StartDateTime));
+			var movedEnd =
+				new DateTime(SkillDayTemplate.BaseDate.Date.Ticks, DateTimeKind.Utc).Add(TimeOfDay(shiftStartDate,
+				                                                                                   layer.Period.EndDateTime));
+			var
+			movedPeriod = new DateTimePeriod(movedStart, movedEnd);
+			var retLayer = new VisualLayer(layer.Payload, movedPeriod, ((VisualLayer) layer).HighestPriorityActivity,
+			                               layer.Person);
+			return retLayer;
 		}
 	}
 }
