@@ -24,22 +24,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private  IVisualLayerCollection _mainshiftProjection;
         private TimeZoneInfo _localTimeZoneInfo;
         private DayOfWeek _dayOfWeek;
+    	private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
         protected ShiftProjectionCache()
         { }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ShiftProjectionCache"/> class.
-        /// </summary>
-        /// <param name="workShift">The work shift.</param>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-09-16    
-        /// /// </remarks>
-        public ShiftProjectionCache(IWorkShift workShift)
+     
+        public ShiftProjectionCache(IWorkShift workShift, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker)
         { 
             _workShift = workShift;
+        	_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
         }
 
         public void SetDate(DateOnly schedulingDate, TimeZoneInfo localTimeZoneInfo)
@@ -130,22 +124,29 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
                 return true;
             }
-            IVisualLayerCollection mainShiftProjection = MainShiftProjection;
 
-            foreach (IPersonMeeting personMeeting in meetings)
-            {
-                if (!PeriodIsWorkTimeInProjection(mainShiftProjection, personMeeting.Period))
-                    return false;
-            }
-            foreach (IPersonAssignment personAssignment in personAssignments)
-            {
-                foreach (IPersonalShift personalShift in personAssignment.PersonalShiftCollection)
-                {
-                    if (personalShift.LayerCollection.Period().HasValue)
-                        if(!PeriodIsWorkTimeInProjection(mainShiftProjection, personalShift.LayerCollection.Period().Value))
-                            return false;
-                }
-            }
+            var mainShiftProjection = MainShiftProjection;
+
+			if (meetings.Count > 0 && !_personalShiftMeetingTimeChecker.CheckTimeMeeting(_mainShift, mainShiftProjection, meetings))
+				return false;
+
+			if (personAssignments.Count > 0 && !_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(_mainShift, mainShiftProjection, personAssignments))
+				return false;
+
+			//foreach (IPersonMeeting personMeeting in meetings)
+			//{
+			//    if (!PeriodIsWorkTimeInProjection(mainShiftProjection, personMeeting.Period))
+			//        return false;
+			//}
+			//foreach (IPersonAssignment personAssignment in personAssignments)
+			//{
+			//    foreach (IPersonalShift personalShift in personAssignment.PersonalShiftCollection)
+			//    {
+			//        if (personalShift.LayerCollection.Period().HasValue)
+			//            if(!PeriodIsWorkTimeInProjection(mainShiftProjection, personalShift.LayerCollection.Period().Value))
+			//                return false;
+			//    }
+			//}
             return true;
         }
 
@@ -169,17 +170,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
     	}
 
-    	private static bool PeriodIsWorkTimeInProjection(IVisualLayerCollection mainShiftProjection, DateTimePeriod period)
-        {
-            foreach (VisualLayer visualLayer in mainShiftProjection)
-            {
-                if (visualLayer.Period.Intersect(period))
-                {
-                    if (visualLayer.HighestPriorityActivity != null && !visualLayer.HighestPriorityActivity.InWorkTime)
-                        return false;
-                }
-            }
-            return true;
-        }
+		//private static bool PeriodIsWorkTimeInProjection(IVisualLayerCollection mainShiftProjection, DateTimePeriod period)
+		//{
+		//    foreach (VisualLayer visualLayer in mainShiftProjection)
+		//    {
+		//        if (visualLayer.Period.Intersect(period))
+		//        {
+		//            if (visualLayer.HighestPriorityActivity != null && !visualLayer.HighestPriorityActivity.InWorkTime)
+		//                return false;
+		//        }
+		//    }
+		//    return true;
+		//}
     }
 }

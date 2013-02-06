@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
         private ISchedulingOptions _schedulingOptions;
     	private IPossibleStartEndCategory _possibleStartEndCategory;
+    	private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
         [SetUp]
 		public void Setup()
@@ -78,6 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                _shiftProjectionCacheManager, _calculatorManager, _workShiftMinMaxCalculator, _fairnessAndMaxSeatCalculatorsManager,
 			   _shiftLengthDecider);
 			_possibleStartEndCategory =new PossibleStartEndCategory();
+        	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -538,7 +540,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var retList = new List<IShiftProjectionCache>();
 			foreach (IWorkShift shift in tmpList)
 			{
-				var cache = new ShiftProjectionCache(shift);
+				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
 				cache.SetDate(dateOnly, _timeZoneInfo);
 				retList.Add(cache);
 			}
