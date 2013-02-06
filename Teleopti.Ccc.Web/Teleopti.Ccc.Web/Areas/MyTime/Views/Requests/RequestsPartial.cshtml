@@ -186,14 +186,10 @@
 </script>
 
 <script type="text/Html" id="add-new-request-detail-template">
-		<div id="Schedule-addRequest-title" class="pdb5">
+		<div id="Schedule-addRequest-title" class="pdb5 request-detail-title">
 			
-			<span id="Text-request-tab" class="selectable-tab selected-tab" data-bind="visible: TextRequestTabVisible, click: AddTextRequest">@Resources.TextRequest</span>
-			@if (Model.RequestPermission.AbsenceRequestPermission)
-			{
-				<span data-bind="visible: TabSeparatorVisible">|</span>
-				<span id="Absence-request-tab" class="selectable-tab" data-bind="visible: AbsenceRequestTabVisible, click: AddAbsenceRequest">@Resources.AbsenceRequest</span>
-			}
+			<span id="Text-request-tab" data-bind="visible: TextRequestHeaderVisible">@Resources.TextRequest</span>
+			<span id="Absence-request-tab" data-bind="visible: AbsenceRequestHeaderVisible">@Resources.AbsenceRequest</span>
 		</div>
 				<input type="hidden" id="Request-detail-entityid" />
 
@@ -208,7 +204,7 @@
 			<label class="displayblock" for="Request-detail-message-input">@Resources.Message</label>
 			<textarea id="Request-detail-message-input" />
 		</div>
-		<div id="Absence-type-element" class="floatleft displaynone">
+		<div id="Absence-type-element" class="floatleft" data-bind="visible: AbsenceRequestHeaderVisible">
 			<div class="edit-module-element floatleft">
 				<div class="floatleft absence-type-input-label">@Resources.AbsenceType</div>
 			</div>
@@ -300,7 +296,7 @@
 			</div>
 		</div>
 
-		<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all request-selected" data-bind=" css: { 'request-selected': IsUpdate() == true , 'request-not-selected': IsUpdate() == false}">
+		<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all" data-bind=" css: { 'request-selected': IsUpdate() == true , 'request-not-selected': IsUpdate() == false}">
 			<div data-bind="template : Template">
 			</div>
 		</div>
