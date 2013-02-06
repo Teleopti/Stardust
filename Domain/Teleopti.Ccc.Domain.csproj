@@ -817,6 +817,7 @@
     <Compile Include="Scheduling\WorkShiftCalculation\SkillIntervalDataSkillFactorApplyer.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillResolutionProvider.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
+    <Compile Include="Scheduling\WorkShiftCalculation\TeamDayOffScheduler.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\TeamExtractor.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\TeamScheduling.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\WorkShiftFilterService.cs" />

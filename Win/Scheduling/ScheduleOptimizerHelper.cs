@@ -1167,8 +1167,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff =
                 new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback,
                                                          new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-            var advancedaysOffSchedulingService = _container.Resolve<IAdvanceDaysOffSchedulingService>();
-            advancedaysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
+           
             IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
             var blockSchedulingService = _container.Resolve<IBlockSchedulingService>();
             var refreshRate = schedulingOptions.RefreshRate;
@@ -1193,6 +1192,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 	        IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
 		        new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, groupPersonFactory,
 		                                              groupPagePerDateHolder);
+
+			var advancedaysOffSchedulingService = _container.Resolve<IAdvanceDaysOffSchedulingService>();
+			advancedaysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
+
             var teamExtractor = new TeamExtractor(matrixList, groupPersonBuilderForOptimization);
             var restrictionAggregator = _container.Resolve<IRestrictionAggregator>();
             var workShiftFilterService = _container.Resolve<IWorkShiftFilterService>();
