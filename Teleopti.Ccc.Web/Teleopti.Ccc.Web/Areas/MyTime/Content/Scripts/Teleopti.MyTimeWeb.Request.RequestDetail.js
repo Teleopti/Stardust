@@ -343,6 +343,24 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 		return self.IsUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";
 	});
 
+	self.IsFullDay.subscribe(function (newValue) {
+		if (newValue) {
+			$('#Request-detail-fromTime-input-input').val($('#Request-detail-default-start-time').text());
+			$('#Request-detail-toTime-input-input').val($('#Request-detail-default-end-time').text());
+			_disableTimeinput();
+		} else {
+			$('#Request-detail-fromTime-input-input').reset();
+			$('#Request-detail-toTime-input-input').reset();
+			Teleopti.MyTimeWeb.Request.RequestDetail.EnableTimeinput();
+		}
+	});
+
+	function _disableTimeinput() {
+		$('#Request-detail-fromTime button, #Request-detail-fromTime-input-input, #Request-detail-toTime button, #Request-detail-toTime-input-input')
+			.attr("disabled", "disabled");
+		$('#Request-detail-fromTime-input-input').css("color", "grey");
+		$('#Request-detail-toTime-input-input').css("color", "grey");
+	}
 	
 	self.AddTextRequest = function () {
 		self._clearValidationError();
