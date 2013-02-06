@@ -23,90 +23,93 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			_workShiftLengthValueCalculator = workShiftLengthValueCalculator;
 		}
 
-        public double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity, IDictionary<TimeSpan, ISkillIntervalData> skillIntervalDataList,
-		  WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
+		public double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity,
+		                                   IDictionary<TimeSpan, ISkillIntervalData> skillIntervalDataList,
+		                                   WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons,
+		                                   bool useMaximumPersons)
 		{
-            if (skillIntervalDataList != null && skillIntervalDataList.Count == 0)
+			if (skillIntervalDataList != null && skillIntervalDataList.Count == 0)
 				return null;
 
 			double periodValue = 0;
 			int resourceInMinutes = 0;
-            if (mainShiftLayers != null)
-            {
-                var dateTimePeriod = mainShiftLayers.Period();
-                if (dateTimePeriod != null)
-                {
-                    DateTime shiftStartDate = dateTimePeriod.Value.StartDateTime.Date;
-                    foreach (IVisualLayer layer in mainShiftLayers)
-                    {
-                        var activity = (IActivity) layer.Payload;
-                        if (activity != skillActivity)
-                            continue;
-	                    var baseLayer = layerToBaseDate(layer, shiftStartDate);
-                        DateTime layerStart = baseLayer.Period.StartDateTime;
-                        DateTime layerEnd = baseLayer.Period.EndDateTime;
+			if (mainShiftLayers == null)
+				return 0;
 
-                        int resolution = GetResolution(skillIntervalDataList);
-                        int currentResourceInMinutes = resolution;
+			var dateTimePeriod = mainShiftLayers.Period();
+			if (dateTimePeriod == null)
+				return 0;
 
-                        DateTime currentStart =
-                            layerStart.Date.Add(
-                                TimeHelper.FitToDefaultResolution(layerStart.TimeOfDay, resolution));
-                        if (currentStart > layerStart)
-                        {
-                            currentStart = currentStart.AddMinutes(-resolution);
-                        }
-                        // If the layer doesn't fit to the resolution (maybe a short break of 5 minutes in the start)
-                        if (currentStart < layerStart)
-                        {
-                            currentResourceInMinutes = currentResourceInMinutes - (layerStart - currentStart).Minutes;
-                        }
+			DateTime shiftStartDate = dateTimePeriod.Value.StartDateTime.Date;
+			foreach (IVisualLayer layer in mainShiftLayers)
+			{
+				var activity = (IActivity) layer.Payload;
+				if (activity != skillActivity)
+					continue;
+				var baseLayer = layerToBaseDate(layer, shiftStartDate);
+				DateTime layerStart = baseLayer.Period.StartDateTime;
+				DateTime layerEnd = baseLayer.Period.EndDateTime;
 
-                        // IF the shift is outside opening hours and Activity needs skill dont't use it (otherwise it could be outside opening hours).
-                        ISkillIntervalData currentStaffPeriod;
-                        if (skillIntervalDataList!=null)
-                        {
-                            if (!skillIntervalDataList.TryGetValue(TimeOfDay(SkillDayTemplate.BaseDate, currentStart), out currentStaffPeriod))
-                            {
-                                if (activity.RequiresSkill)
-                                    return null;
-                            }
+				int resolution = GetResolution(skillIntervalDataList);
+				int currentResourceInMinutes = resolution;
 
-                            // only part of the period should count
-                            if (currentResourceInMinutes > 0 && currentStaffPeriod.Period.EndDateTime > layerEnd)
-                                currentResourceInMinutes = currentResourceInMinutes - (currentStaffPeriod.Period.EndDateTime - layerEnd).Minutes;
+				DateTime currentStart =
+					layerStart.Date.Add(
+						TimeHelper.FitToDefaultResolution(layerStart.TimeOfDay, resolution));
+				if (currentStart > layerStart)
+				{
+					currentStart = currentStart.AddMinutes(-resolution);
+				}
 
-                            while (currentResourceInMinutes > 0)
-                            {
-                                periodValue += _workShiftPeriodValueCalculator.PeriodValue(currentStaffPeriod, currentResourceInMinutes,
-                                                                                           useMinimumPersons, useMaximumPersons);
-                                resourceInMinutes += currentResourceInMinutes;
+				// If the layer doesn't fit to the resolution (maybe a short break of 5 minutes in the start)
+				if (currentStart < layerStart)
+				{
+					currentResourceInMinutes = currentResourceInMinutes - (layerStart - currentStart).Minutes;
+				}
 
-                                currentResourceInMinutes = resolution;
-                                currentStart = currentStart.AddMinutes(resolution);
+				// IF the shift is outside opening hours and Activity needs skill dont't use it (otherwise it could be outside opening hours).
+				if (skillIntervalDataList != null)
+				{
+					ISkillIntervalData currentStaffPeriod;
+					if (!skillIntervalDataList.TryGetValue(TimeOfDay(SkillDayTemplate.BaseDate, currentStart), out currentStaffPeriod))
+					{
+						if (activity.RequiresSkill)
+							return null;
+					}
 
-                                if (currentStart >= baseLayer.Period.EndDateTime)
-                                {
-                                    break;
-                                }
+					// only part of the period should count
+					if (currentResourceInMinutes > 0 && currentStaffPeriod.Period.EndDateTime > layerEnd)
+						currentResourceInMinutes = currentResourceInMinutes - (currentStaffPeriod.Period.EndDateTime - layerEnd).Minutes;
 
-								if (!skillIntervalDataList.TryGetValue(TimeOfDay(SkillDayTemplate.BaseDate, currentStart), out currentStaffPeriod))
-                                {
-                                    if (activity.RequiresSkill)
-                                        return null;
-                                }
+					while (currentResourceInMinutes > 0)
+					{
+						periodValue += _workShiftPeriodValueCalculator.PeriodValue(currentStaffPeriod, currentResourceInMinutes,
+						                                                           useMinimumPersons, useMaximumPersons);
+						resourceInMinutes += currentResourceInMinutes;
 
-                                // only part of the period should count
-                                if (currentResourceInMinutes > 0 && currentStaffPeriod.Period.EndDateTime > layerEnd)
-                                    currentResourceInMinutes = currentResourceInMinutes - (currentStaffPeriod.Period.EndDateTime - layerEnd).Minutes;
-                            }
-                        }
-                        
-                    }
-                }
-            }
+						currentResourceInMinutes = resolution;
+						currentStart = currentStart.AddMinutes(resolution);
 
-            return _workShiftLengthValueCalculator.CalculateShiftValueForPeriod(periodValue, resourceInMinutes, lengthFactor);
+						if (currentStart >= baseLayer.Period.EndDateTime)
+						{
+							break;
+						}
+
+						if (
+							!skillIntervalDataList.TryGetValue(TimeOfDay(SkillDayTemplate.BaseDate, currentStart), out currentStaffPeriod))
+						{
+							if (activity.RequiresSkill)
+								return null;
+						}
+
+						// only part of the period should count
+						if (currentResourceInMinutes > 0 && currentStaffPeriod.Period.EndDateTime > layerEnd)
+							currentResourceInMinutes = currentResourceInMinutes - (currentStaffPeriod.Period.EndDateTime - layerEnd).Minutes;
+					}
+				}
+			}
+
+			return _workShiftLengthValueCalculator.CalculateShiftValueForPeriod(periodValue, resourceInMinutes, lengthFactor);
 		}
 
 		private static int GetResolution(IEnumerable<KeyValuePair<TimeSpan, ISkillIntervalData>> staffPeriods)
