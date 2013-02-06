@@ -78,6 +78,16 @@ FROM dbo.Person p
 WHERE p.Id = dbo.ApplicationAuthenticationInfo.person
 AND p.Id = @FreemiumGUID
 
+--add if not already exist
+INSERT INTO dbo.WindowsAuthenticationInfo (person,DomainName,WindowsLogOnName)
+SELECT p.Id,'$(USERDOMAIN)','$(USERNAME)'
+FROM dbo.person p
+WHERE
+   NOT EXISTS (SELECT * FROM dbo.WindowsAuthenticationInfo win
+              WHERE win.person = p.Id)
+AND p.Id = @FreemiumGUID
+
+--if exist, update to current Windows user
 UPDATE dbo.WindowsAuthenticationInfo
 SET 	DomainName			= '$(USERDOMAIN)',
 	WindowsLogOnName		= '$(USERNAME)'
