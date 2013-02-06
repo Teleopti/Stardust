@@ -175,6 +175,7 @@
 			this.grid.ExcelLikeCurrentCell = true;
 			this.grid.ExcelLikeSelectionFrame = true;
 			this.grid.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.grid.GridLineColor = System.Drawing.SystemColors.GrayText;
 			this.grid.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
 			this.grid.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
 			this.grid.Location = new System.Drawing.Point(3, 3);
@@ -222,10 +223,8 @@
 			// 
 			this.ribbonControlHeader.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlHeader.Location = new System.Drawing.Point(1, 0);
-			this.ribbonControlHeader.MaximizeToolTip = "Maximize Ribbon";
 			this.ribbonControlHeader.MenuButtonText = "";
 			this.ribbonControlHeader.MenuButtonVisible = false;
-			this.ribbonControlHeader.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlHeader.Name = "ribbonControlHeader";
 			// 
 			// ribbonControlHeader.OfficeMenu
@@ -234,6 +233,7 @@
 			this.ribbonControlHeader.OfficeMenu.Size = new System.Drawing.Size(12, 65);
 			this.ribbonControlHeader.QuickPanelVisible = false;
 			this.ribbonControlHeader.SelectedTab = null;
+			this.ribbonControlHeader.ShowMinimizeButton = false;
 			this.ribbonControlHeader.Size = new System.Drawing.Size(798, 33);
 			this.ribbonControlHeader.SystemText.QuickAccessDialogDropDownName = "Start menu";
 			this.ribbonControlHeader.TabIndex = 4;
@@ -274,6 +274,7 @@
             Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cells(0, 9, 0, 12)});
 			this.restrictionSummaryGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.restrictionSummaryGrid1.ExcelLikeCurrentCell = true;
+			this.restrictionSummaryGrid1.GridLineColor = System.Drawing.SystemColors.GrayText;
 			this.restrictionSummaryGrid1.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
 			this.restrictionSummaryGrid1.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
 			this.restrictionSummaryGrid1.HeaderCount = 0;

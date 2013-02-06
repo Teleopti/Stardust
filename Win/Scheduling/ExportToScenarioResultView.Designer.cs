@@ -61,10 +61,8 @@
 			// 
 			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
-			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
 			this.ribbonControlAdv1.MenuButtonText = "";
 			this.ribbonControlAdv1.MenuButtonVisible = false;
-			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
 			// 
 			// ribbonControlAdv1.OfficeMenu
@@ -73,6 +71,7 @@
 			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
 			this.ribbonControlAdv1.QuickPanelVisible = false;
 			this.ribbonControlAdv1.SelectedTab = null;
+			this.ribbonControlAdv1.ShowMinimizeButton = false;
 			this.ribbonControlAdv1.Size = new System.Drawing.Size(648, 33);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Start menu";
 			this.ribbonControlAdv1.TabIndex = 1;
@@ -233,8 +232,11 @@
 			this.gridControl1.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
 			this.gridControl1.DefaultColWidth = 80;
+			this.gridControl1.DisplayHorizontalLines = false;
+			this.gridControl1.DisplayVerticalLines = false;
 			this.gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gridControl1.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.gridControl1.GridLineColor = System.Drawing.SystemColors.GrayText;
 			this.gridControl1.HScrollPixel = true;
 			this.gridControl1.Location = new System.Drawing.Point(3, 3);
 			this.gridControl1.Name = "gridControl1";
@@ -248,6 +250,8 @@
 			this.gridControl1.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
 			this.gridControl1.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
+			this.gridControl1.ShowColumnHeaders = false;
+			this.gridControl1.ShowRowHeaders = false;
 			this.gridControl1.Size = new System.Drawing.Size(592, 270);
 			this.gridControl1.SmartSizeBox = false;
 			this.gridControl1.TabIndex = 0;
