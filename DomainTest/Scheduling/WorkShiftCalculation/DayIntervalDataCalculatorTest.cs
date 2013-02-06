@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -49,6 +50,79 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 				Assert.That(result[TimeSpan.Zero].CurrentDemand, Is.EqualTo(0));
 				Assert.That(result[TimeSpan.FromMinutes(15)].ForecastedDemand, Is.EqualTo(4));
 				Assert.That(result[TimeSpan.FromMinutes(15)].CurrentDemand, Is.EqualTo(0));
+			}
+		}
+
+		[Test]
+		public void ShouldCalculateForOpenIntervalsOnly()
+		{
+			//we have a blocklenght of one day (2013-01-01), and only one open interval (01:00 - 01:15)
+			var dayIntervalData = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
+			var baseDate = DateTime.SpecifyKind(SkillDayTemplate.BaseDate, DateTimeKind.Utc);
+
+			var skillIntervalDataForDay1 = new SkillIntervalData(new DateTimePeriod(baseDate.AddHours(1), baseDate.AddHours(1).AddMinutes(15)), 10, 5, 0, 0, 0);
+			dayIntervalData.Add(new DateOnly(2013, 1, 1), new List<ISkillIntervalData> { skillIntervalDataForDay1 });
+
+			using (_mocks.Record())
+			{
+
+			}
+
+			using (_mocks.Playback())
+			{
+				IDictionary<TimeSpan, ISkillIntervalData> result = _target.Calculate(15, dayIntervalData);
+				Assert.That(result.Count, Is.EqualTo(1));  //No need to calculate closed intervals
+				Assert.That(result.Keys.FirstOrDefault(), Is.EqualTo(new TimeSpan(0, 1, 0)));
+			}
+		}
+
+		[Test]
+		public void ShouldReturnCorrectValuesForForecastedDemand()
+		{
+			//we have a blocklenght of two days (2013-01-01 and 2013-01-02), and only one open interval (01:00 - 01:15)
+			var dayIntervalData = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
+			var baseDate = DateTime.SpecifyKind(SkillDayTemplate.BaseDate, DateTimeKind.Utc);
+
+			var skillIntervalDataForDay1 = new SkillIntervalData(new DateTimePeriod(baseDate.AddHours(1), baseDate.AddHours(1).AddMinutes(15)), 10, 5, 0, 0, 0);
+			dayIntervalData.Add(new DateOnly(2013, 1, 1), new List<ISkillIntervalData> { skillIntervalDataForDay1 });
+
+			var skillIntervalDataForDay2 = new SkillIntervalData(new DateTimePeriod(baseDate.AddHours(1), baseDate.AddHours(1).AddMinutes(15)), 10, 5, 0, 0, 0);
+			dayIntervalData.Add(new DateOnly(2013, 1, 2), new List<ISkillIntervalData> { skillIntervalDataForDay2 });
+
+			using (_mocks.Record())
+			{
+
+			}
+
+			using (_mocks.Playback())
+			{
+				IDictionary<TimeSpan, ISkillIntervalData> result = _target.Calculate(15, dayIntervalData);
+				Assert.That(result[TimeSpan.FromHours(1)].ForecastedDemand, Is.EqualTo(10)); //median of 10 and 10
+			}
+		}
+
+		[Test]
+		public void ShouldReturnCorrectValuesForCurrentDemand()
+		{
+			//we have a blocklenght of two days (2013-01-01 and 2013-01-02), and only one open interval (01:00 - 01:15)
+			var dayIntervalData = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
+			var baseDate = DateTime.SpecifyKind(SkillDayTemplate.BaseDate, DateTimeKind.Utc);
+
+			var skillIntervalDataForDay1 = new SkillIntervalData(new DateTimePeriod(baseDate.AddHours(1), baseDate.AddHours(1).AddMinutes(15)), 10, 5, 0, 0, 0);
+			dayIntervalData.Add(new DateOnly(2013, 1, 1), new List<ISkillIntervalData> { skillIntervalDataForDay1 });
+
+			var skillIntervalDataForDay2 = new SkillIntervalData(new DateTimePeriod(baseDate.AddHours(1), baseDate.AddHours(1).AddMinutes(15)), 10, 5, 0, 0, 0);
+			dayIntervalData.Add(new DateOnly(2013, 1, 2), new List<ISkillIntervalData> { skillIntervalDataForDay2 });
+
+			using (_mocks.Record())
+			{
+
+			}
+
+			using (_mocks.Playback())
+			{
+				IDictionary<TimeSpan, ISkillIntervalData> result = _target.Calculate(15, dayIntervalData);
+				Assert.That(result[TimeSpan.FromHours(1)].CurrentDemand, Is.EqualTo(5)); //median of 5 and 5
 			}
 		}
 	}
