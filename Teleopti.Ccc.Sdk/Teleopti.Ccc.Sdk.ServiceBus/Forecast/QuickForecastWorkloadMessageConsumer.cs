@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBroker _messageBroker;
 		private readonly IWorkloadDayHelper _workloadDayHelper;
-		private readonly IStatisticHelper _statisticHelper;
 		private readonly IForecastClassesCreator _forecastClassesCreator;
 
 		public QuickForecastWorkloadMessageConsumer(ISkillDayRepository skillDayRepository,
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 													IJobResultFeedback feedback,
 													IMessageBroker messageBroker,
 													IWorkloadDayHelper workloadDayHelper,
-													IStatisticHelper statisticHelper,
 													IForecastClassesCreator forecastClassesCreator)
 		{
 			_skillDayRepository = skillDayRepository;
@@ -49,9 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			_jobResultRepository = jobResultRepository;
 			_feedback = feedback;
 			_messageBroker = messageBroker;
-			// måste reggas i autofac???
 			_workloadDayHelper = workloadDayHelper;
-			_statisticHelper = statisticHelper;
 			_forecastClassesCreator = forecastClassesCreator;
 		}
 
@@ -71,9 +67,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				var skill = workload.Skill;
 				var scenario = _scenarioRepository.Get(message.ScenarioId);
 				//Load statistic data
-				
+				var statisticHelper = _forecastClassesCreator.CreateStatisticHelper(_repositoryFactory, unitOfWork);
 				var daysWithValidatedStatistics =
-					_statisticHelper.GetWorkloadDaysWithValidatedStatistics(message.StatisticPeriod,
+					statisticHelper.GetWorkloadDaysWithValidatedStatistics(message.StatisticPeriod,
 																			workload, scenario,
 																			new List<IValidatedVolumeDay>());
 
@@ -95,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
 				//(Update templates for workload)
 				if (message.UpdateStandardTemplates)
-					updateStandardTemplates(workload, _statisticHelper, message.StatisticPeriod);
+					updateStandardTemplates(workload, statisticHelper, message.StatisticPeriod);
 
 				//Create budget forecast (apply standard templates for all days in target)
 				workload.SetDefaultTemplates(workloadDays);
@@ -138,6 +134,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
 		ISkillDayCalculator CreateSkillDayCalculator(ISkill skill, IList<ISkillDay> skillDays,
 		                                                            DateOnlyPeriod visiblePeriod);
+
+		IStatisticHelper CreateStatisticHelper(IRepositoryFactory repositoryFactory, IUnitOfWork unitOfWork);
+
 	}
 
 	public class ForecastClassesCreator : IForecastClassesCreator
@@ -157,6 +156,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		                                                   DateOnlyPeriod visiblePeriod)
 		{
 			return new SkillDayCalculator(skill,skillDays,visiblePeriod);
+		}
+
+		public IStatisticHelper CreateStatisticHelper(IRepositoryFactory repositoryFactory, IUnitOfWork unitOfWork)
+		{
+			return new StatisticHelper(repositoryFactory,unitOfWork);
 		}
 	}
 }

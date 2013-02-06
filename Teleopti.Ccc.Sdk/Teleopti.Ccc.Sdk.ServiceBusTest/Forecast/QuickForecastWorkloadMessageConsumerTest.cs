@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_forecastClassesCreator = _mocks.DynamicMock<IForecastClassesCreator>();
 			_target = new QuickForecastWorkloadMessageConsumer(_skillDayRep, _outlierRep, _workloadRep, _scenarioRep, _repFactory,
 			                                                   _unitOfWorkFactory, _jobResultRep, _jobResultFeedback, _messBroker,
-															   _workloadDayHelper, _statisticHelper, _forecastClassesCreator);
+															   _workloadDayHelper, _forecastClassesCreator);
 			_unitOfWork =  _mocks.DynamicMock<IUnitOfWork>();
 
 			_jobId = Guid.NewGuid();
@@ -84,12 +84,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var totalVolume = _mocks.DynamicMock<ITotalVolume>();
 			var workloadDayTemplateCalculator = _mocks.DynamicMock<IWorkloadDayTemplateCalculator>();
 
-			var template = _mocks.DynamicMock<IWorkloadDayTemplate>();
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(_jobResultRep.Get(_jobId)).Return(jobResult);
 			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
 			Expect.Call(() =>_jobResultFeedback.SetJobResult(jobResult, _messBroker));
 			Expect.Call(_scenarioRep.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
+			Expect.Call(_forecastClassesCreator.CreateStatisticHelper(_repFactory, _unitOfWork)).Return(_statisticHelper);
 			Expect.Call(_statisticHelper.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario,
 			                                                                    new List<IValidatedVolumeDay>()))
 			      .Return(new List<ITaskOwner>());
@@ -121,9 +121,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		public void ShouldUseCreator()
 		{
 			var creator = new ForecastClassesCreator();
+			var statRep = _mocks.DynamicMock<IStatisticRepository>();
 			Assert.That(creator.CreateTotalVolume(), Is.Not.Null);
 			Assert.That(creator.CreateSkillDayCalculator(null, new List<ISkillDay>(),new DateOnlyPeriod() ), Is.Not.Null);
 			Assert.That(creator.CreateWorkloadDayTemplateCalculator(_statisticHelper,_outlierRep),Is.Not.Null);
+			Expect.Call(_repFactory.CreateStatisticRepository()).Return(statRep);
+			_mocks.ReplayAll();
+			Assert.That(creator.CreateStatisticHelper(_repFactory,_unitOfWork),Is.Not.Null);
+			_mocks.VerifyAll();
 		}
 
 		[Test]
