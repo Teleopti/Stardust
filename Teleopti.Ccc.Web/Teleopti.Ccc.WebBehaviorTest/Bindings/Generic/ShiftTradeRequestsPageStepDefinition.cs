@@ -16,18 +16,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class ShiftTradeRequestsPageStepDefinition
 	{
-		[Then(@"I should not see the New Shift Trade Request menu item")]
-		public void ThenIShouldNotSeeTheNewShiftTradeRequestMenuItem()
-		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.SafeExists(), Is.False);
-		}
-
-		[Then(@"I should not see the Requests button")]
-		public void ThenIShouldNotSeeTheRequestsButton()
-		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShowRequestsButton.SafeExists(), Is.False);
-		}
-
 		[When(@"I view Add Shift Trade Request")]
 		public void WhenIViewAddShiftTradeRequest()
 		{
