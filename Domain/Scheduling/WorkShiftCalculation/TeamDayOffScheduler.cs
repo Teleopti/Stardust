@@ -80,6 +80,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 																								   scheduleDate, schedulingOptions,
 																								   scheduleDictionary);
 							addDaysOffForTeam(matrixListInOneSchedulePeriod, schedulingOptions, scheduleDate, restriction);
+						}
+						foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
+						{
+							var scheduleDate = scheduleDayPro.Day;
+							var groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, scheduleDate);
+							var scheduleDictionary = _schedulingResultStateHolder.Schedules;
+							var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
+																								   scheduleDate, schedulingOptions,
+																								   scheduleDictionary);
 							addContractDaysOffForTeam(matrixListInOneSchedulePeriod, schedulingOptions, rollbackService, scheduleDate, restriction);
 						}
 					}
