@@ -39,7 +39,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		});
 
 		self.ShowDetails = function (viewmodel, event) {
-			var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
 			ajax.Ajax({
 				url: self.Link(),
 				dataType: "json",
@@ -51,6 +50,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 					self.IsLoading(false);
 				},
 				success: function (data) {
+					Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
+					var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
 					Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, distanceFromTop);
 				}
 			});
