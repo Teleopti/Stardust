@@ -56,6 +56,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				return new timeLineHourViewModel(hour, self);
 			});
 			self.hours(arrayMap);
+			_positionTimeLineHourTexts();
 		};
 
 		self.requestedDate.subscribe(function (newValue) {
@@ -173,6 +174,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.hourText = hour.HourText;
 		self.lengthInMinutes = hour.LengthInMinutesToDisplay;
+		self.leftPx = ko.observable('-8px');
 		self.hourWidth = ko.computed(function () {
 			return self.lengthInMinutes * parentViewModel.pixelPerMinute() - borderSize + 'px';
 		});
@@ -212,15 +214,25 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
 		_initDatePicker();
 		$('#Request-add-shift-trade').show();
+		_positionTimeLineHourTexts();
 	}
 
 	function _hideShiftTradeWindow() {
 		$('#Request-add-shift-trade').hide();
 	}
-
+	
 	function setShiftTradeRequestDate(date) {
 		vm.loadedDateSwedishFormat(null); //make sure scenarios wait until requested date is bound
 		vm.requestedDate(moment(date));
+	}
+
+	function _positionTimeLineHourTexts() {
+		$('.shift-trade-timeline-number').each(function () {
+			var leftPx = Math.round(this.offsetWidth / 2);
+			if (leftPx > 0) {
+				ko.dataFor(this).leftPx(-leftPx + 'px');
+			}
+		});
 	}
 
 	return {
