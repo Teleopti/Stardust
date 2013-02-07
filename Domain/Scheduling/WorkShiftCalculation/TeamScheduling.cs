@@ -30,10 +30,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             if (matrixList == null) throw new ArgumentNullException("matrixList");
 	        if (daysInBlock == null) 
 				return;
+            if (shiftProjectionCache == null) return;
+            if (unlockedDays == null) return;
 
 	        foreach(var day in daysInBlock )
 	        {
-		        if(unlockedDays != null && unlockedDays.Contains(day ))
+		        if(unlockedDays.Contains(day ))
 		        {
 			        IScheduleDay destinationScheduleDay = null;
 		            var listOfDestinationScheduleDays = new List<IScheduleDay>();
@@ -51,13 +53,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                                         matrix = scheduleMatrixPro;
 
 					            }
-						        
+						        if(matrix==null) continue;
+
                                 destinationScheduleDay = matrix.GetScheduleDayByKey(day).DaySchedulePart();
-                                listOfDestinationScheduleDays.Add(destinationScheduleDay );
-                                destinationScheduleDay.Merge(matrix.GetScheduleDayByKey(startDateOfBlock).DaySchedulePart(),false );
-                                if (shiftProjectionCache != null)
-                                    destinationScheduleDay.AddMainShift((IMainShift)shiftProjectionCache.TheMainShift.EntityClone());
-						        _schedulePartModifyAndRollbackService.Modify(destinationScheduleDay);
+					            var destinationSignificanceType = destinationScheduleDay.SignificantPart();
+                                if (destinationSignificanceType == SchedulePartView.DayOff || destinationSignificanceType == SchedulePartView.ContractDayOff  || destinationSignificanceType == SchedulePartView.FullDayAbsence )
+                                    continue;
+                                listOfDestinationScheduleDays.Add(destinationScheduleDay);
+                                var sourceScheduleDay = matrix.GetScheduleDayByKey(startDateOfBlock).DaySchedulePart();
+                                sourceScheduleDay.AddMainShift((IMainShift)shiftProjectionCache.TheMainShift.EntityClone());
+                                destinationScheduleDay.Merge(sourceScheduleDay, false);
+
+                                _schedulePartModifyAndRollbackService.Modify(destinationScheduleDay);
                                 
 					        }
 
