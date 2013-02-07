@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
@@ -28,8 +27,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
     	private ISkillIntervalDataDivider _intervalDivider;
         private ReadOnlyCollection<ISkillStaffPeriod> _skillStaffPeriodCollection;
         private ISkillStaffPeriod _skillStaffPeriod;
+	    private IGroupPersonSkillAggregator _groupPersonSkillAggregator;
+	    private IGroupPerson _groupPerson;
+	    private DateTime _date;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -44,33 +46,36 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
     		_resolutionProvider =  _mock.StrictMock<ISkillResolutionProvider>();
     		_intervalDivider = _mock.StrictMock<ISkillIntervalDataDivider>();
             _skillStaffPeriod = _mock.StrictMock<ISkillStaffPeriod>();
+			_groupPersonSkillAggregator =  _mock.StrictMock<IGroupPersonSkillAggregator>();
+			_groupPerson = _mock.StrictMock<IGroupPerson>();
+			_date = DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date, DateTimeKind.Utc);
             _skillStaffPeriodCollection = new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>{_skillStaffPeriod});
-    		_target = new SkillDayPeriodIntervalDataGenerator(_factorApplier, _resolutionProvider, _intervalDivider,
-    		                                                  _intervalDataAggregator,
-    		                                                  _dayIntervalDataCalculator, _intervalMapper,
-    		                                                  _schedulingResultStateHolder);
+		    _target = new SkillDayPeriodIntervalDataGenerator(_factorApplier, _resolutionProvider, _intervalDivider,
+		                                                      _intervalDataAggregator,
+		                                                      _dayIntervalDataCalculator, _intervalMapper,
+		                                                      _schedulingResultStateHolder, _groupPersonSkillAggregator);
         }
 
 		[Test]
         public void ShouldCreateIntervalsFromSkillDay()
         {
-            var date = DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date, DateTimeKind.Utc);
-        	var skillIntervalData1 = new SkillIntervalData(new DateTimePeriod(date, date.AddMinutes(15)), 6.0, 0, 0, 0, 0);
-        	var skillIntervalData2 = new SkillIntervalData(new DateTimePeriod(date, date.AddMinutes(15)), 12.0, 0, 0, 0, 0);
+
+			var skillIntervalData1 = new SkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), 6.0, 0, 0, 0, 0);
+			var skillIntervalData2 = new SkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), 12.0, 0, 0, 0, 0);
             var activity1 = ActivityFactory.CreateActivity("phone1");
             var activity2 = ActivityFactory.CreateActivity("phone2");
 
 			var intervalData1 = new Dictionary<TimeSpan, ISkillIntervalData>
                              {
                                  {
-                                     date.TimeOfDay,
+                                     _date.TimeOfDay,
                                      skillIntervalData1
                                      }
                              };	
 			var intervalData2 = new Dictionary<TimeSpan, ISkillIntervalData>
                              {
                                  {
-                                     date.TimeOfDay,
+                                     _date.TimeOfDay,
                                      skillIntervalData2
                                      }
                              };
@@ -88,27 +93,31 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         	skill2.DefaultResolution = 15;
 
 			var skillIntervalDataList = new[] { skillIntervalData1, skillIntervalData2 };
-
+			
             using (_mock.Record())
             {
-                ExpectCodeForShouldCreateIntervalsFromSkillDay(skillIntervalData2, intervalData1, intervalData2, skillIntervalData1, skill1, skill2, skillIntervalDataList);
+                expectCodeForShouldCreateIntervalsFromSkillDay(skillIntervalData2, intervalData1, intervalData2, skillIntervalData1, skill1, skill2, skillIntervalDataList);
             }
             using(_mock.Playback())
             {
-				var calculatedResult = _target.Generate(new List<DateOnly> { new DateOnly(date) });
+				var calculatedResult = _target.Generate(_groupPerson, new List<DateOnly> { new DateOnly(_date) });
 				Assert.That(calculatedResult.Count, Is.EqualTo(2));
-				Assert.That(calculatedResult[activity1][date.TimeOfDay].ForecastedDemand, Is.EqualTo(activityIntervalData[activity1][date.TimeOfDay].ForecastedDemand));
-                Assert.That(calculatedResult[activity2][date.TimeOfDay].ForecastedDemand, Is.EqualTo(activityIntervalData[activity2][date.TimeOfDay].ForecastedDemand));
+				Assert.That(calculatedResult[activity1][_date.TimeOfDay].ForecastedDemand, Is.EqualTo(activityIntervalData[activity1][_date.TimeOfDay].ForecastedDemand));
+				Assert.That(calculatedResult[activity2][_date.TimeOfDay].ForecastedDemand, Is.EqualTo(activityIntervalData[activity2][_date.TimeOfDay].ForecastedDemand));
             }
         }
 
-        private void ExpectCodeForShouldCreateIntervalsFromSkillDay(SkillIntervalData skillIntervalData2,
+        private void expectCodeForShouldCreateIntervalsFromSkillDay(SkillIntervalData skillIntervalData2,
                                                                     Dictionary<TimeSpan, ISkillIntervalData> intervalData1, Dictionary<TimeSpan, ISkillIntervalData> intervalData2,
                                                                     SkillIntervalData skillIntervalData1, ISkill skill1,
                                                                     ISkill skill2, SkillIntervalData[] skillIntervalDataList)
         {
             Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
                 Return(_skillDayList);
+	        Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_groupPerson,
+	                                                                 new DateOnlyPeriod(new DateOnly(_date),
+	                                                                                    new DateOnly(_date))))
+	              .Return(new List<ISkill> {skill1, skill2});
             Expect.Call(_skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
             Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly());
             Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();

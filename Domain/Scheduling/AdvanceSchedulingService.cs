@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     var restriction = GetEffectiveRestriction(groupPerson, dateOnlyList);
 
                     //call class that returns the aggregated intraday dist based on teamblock dates ???? consider the priority and understaffing
-                    var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(dateOnlyList);
+                    var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
 
                     //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
                     // (should we cover for max seats here?) ????

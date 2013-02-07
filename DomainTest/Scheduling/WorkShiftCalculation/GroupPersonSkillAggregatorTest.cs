@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		[Test]
 		public void ShouldReturnUnionOfAllSkills()
 		{
-			IList<ISkill> result = new List<ISkill>(_target.AggregatedSkills(_groupPerson, DateOnly.MinValue));
+			IList<ISkill> result = new List<ISkill>(_target.AggregatedSkills(_groupPerson, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
 			Assert.IsTrue(result.Contains(_skill1));
 			Assert.IsTrue(result.Contains(_skill2));
 			Assert.IsTrue(result.Contains(_skill3));

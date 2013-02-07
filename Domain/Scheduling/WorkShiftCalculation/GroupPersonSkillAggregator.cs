@@ -1,32 +1,29 @@
-﻿
-
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
 	public interface IGroupPersonSkillAggregator
 	{
-		IEnumerable<ISkill> AggregatedSkills(GroupPerson groupPerson, DateOnly minValue);
+		IEnumerable<ISkill> AggregatedSkills(IGroupPerson groupPerson, DateOnlyPeriod dateOnlyPeriod);
 	}
 
 	public class GroupPersonSkillAggregator : IGroupPersonSkillAggregator
 	{
-		public IEnumerable<ISkill> AggregatedSkills(GroupPerson groupPerson, DateOnly minValue)
+		public IEnumerable<ISkill> AggregatedSkills(IGroupPerson groupPerson, DateOnlyPeriod dateOnlyPeriod)
 		{
 			var ret = new HashSet<ISkill>();
 		    if (groupPerson != null)
 		        foreach (var person in groupPerson.GroupMembers)
 		        {
-		            IPersonPeriod personPeriod = person.Period(minValue);
-		            if(personPeriod != null)
-		            {
-		                foreach (var personSkill in personPeriod.PersonSkillCollection)
-		                {
-		                    ret.Add(personSkill.Skill);
-		                }
-		            }
+					var personPeriods = person.PersonPeriods(dateOnlyPeriod);
+			        foreach (var personPeriod in personPeriods)
+			        {
+						foreach (var personSkill in personPeriod.PersonSkillCollection)
+						{
+							ret.Add(personSkill.Skill);
+						}
+			        }
 		        }
 
 		    return ret;

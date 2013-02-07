@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 	public interface ISkillDayPeriodIntervalDataGenerator
 	{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(IList<DateOnly> dateOnlyList);
+		IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(IGroupPerson groupPerson, IList<DateOnly> dateOnlyList);
 	}
 
 	public class SkillDayPeriodIntervalDataGenerator : ISkillDayPeriodIntervalDataGenerator
@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		private readonly IDayIntervalDataCalculator _dayIntervalDataCalculator;
 		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public SkillDayPeriodIntervalDataGenerator(ISkillIntervalDataSkillFactorApplier skillIntervalDataSkillFactorApplier,
 			ISkillResolutionProvider resolutionProvider,
@@ -27,7 +28,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			ISkillIntervalDataAggregator intervalDataAggregator,
 			IDayIntervalDataCalculator dayIntervalDataCalculator,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_skillIntervalDataSkillFactorApplier = skillIntervalDataSkillFactorApplier;
 			_resolutionProvider = resolutionProvider;
@@ -36,13 +38,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			_dayIntervalDataCalculator = dayIntervalDataCalculator;
 			_skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
-		public IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(IList<DateOnly> dateOnlyList)
+		public IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(IGroupPerson groupPerson, IList<DateOnly> dateOnlyList)
 		{
 			var activityIntervalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
 			var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
-			var skills = skillDays.Select(x => x.Skill).Distinct().ToList();
+			var dateOnlyPeriod = new DateOnlyPeriod(dateOnlyList.Min(), dateOnlyList.Max());
+			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupPerson, dateOnlyPeriod).ToList();
+			
 			var minimumResolution = _resolutionProvider.MinimumResolution(skills);
 			var activityData = new Dictionary<IActivity, IDictionary<DateOnly, IList<ISkillIntervalData>>>();
 

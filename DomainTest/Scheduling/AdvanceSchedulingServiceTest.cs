@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private IScheduleMatrixPro _scheduleMatrixPro;
         private IScheduleDayPro _scheduleDayPro;
         private IScheduleDay _scheduleDay;
-        private IGroupPerson _grouPerson;
+        private IGroupPerson _groupPerson;
         private IEffectiveRestriction _effectiveRestriction;
         private IPerson _person;
         private IShiftProjectionCache _scheduleProjectionCache;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _scheduleDay = _mocks.StrictMock<IScheduleDay>();
             var matrixList = new List<IScheduleMatrixPro>{_scheduleMatrixPro};
             _effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-            _grouPerson = _mocks.StrictMock<IGroupPerson>();
+            _groupPerson = _mocks.StrictMock<IGroupPerson>();
             _person = _mocks.StrictMock<IPerson>();
             _virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _scheduleProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             var scheduleDayProCollection = new ReadOnlyCollection<IScheduleDayPro>(scheduleDayProList);
             var dateOnly = new DateOnly();
             var dateOnlyList = new List<DateOnly> {dateOnly};
-            var groupPersonList = new List<IGroupPerson> {_grouPerson};
+            var groupPersonList = new List<IGroupPerson> {_groupPerson};
             var matrixList = new List<IScheduleMatrixPro> {_scheduleMatrixPro};
             var shiftProjectionCacheList = new List<IShiftProjectionCache> {_scheduleProjectionCache};
             var dateOnlyPeriod = new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1));
@@ -105,16 +105,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Expect.Call(_scheduleMatrixPro.Person.Equals(person)).IgnoreArguments().Return((bool) true);
 
             Expect.Call(_dynamicBlockFinder.ExtractBlockDays(dateOnly)).IgnoreArguments().Return(dateOnlyList);
-            Expect.Call(_teamExtractor.GetRandomTeam(dateOnly)).IgnoreArguments().Return(_grouPerson);
-            Expect.Call(_grouPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person}));
+            Expect.Call(_teamExtractor.GetRandomTeam(dateOnly)).IgnoreArguments().Return(_groupPerson);
+            Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person}));
             Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
 
             Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
-            Expect.Call(_groupPersonBuilderBasedOnContractTime.SplitTeams(_grouPerson, dateOnly)).IgnoreArguments().
+            Expect.Call(_groupPersonBuilderBasedOnContractTime.SplitTeams(_groupPerson, dateOnly)).IgnoreArguments().
                 Return(groupPersonList);
-            Expect.Call(_restrictionAggregator.Aggregate(dateOnlyList, _grouPerson, _schedulingOptions)).
+            Expect.Call(_restrictionAggregator.Aggregate(dateOnlyList, _groupPerson, _schedulingOptions)).
                 IgnoreArguments().Return(_effectiveRestriction);
-            Expect.Call(_skillDayPeriodIntervalDataGenerator.Generate(dateOnlyList)).IgnoreArguments().Return(
+            Expect.Call(_skillDayPeriodIntervalDataGenerator.Generate(_groupPerson, dateOnlyList)).IgnoreArguments().Return(
                 new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>());
             Expect.Call(_scheduleMatrixPro.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_workShiftFilterService.Filter(dateOnly, _person, matrixList, _effectiveRestriction,
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                                                                       new WorkShiftLengthHintOption(),
                                                                       true,
                                                                       true)).IgnoreArguments().Return(_scheduleProjectionCache);
-            Expect.Call(() => _teamScheduling.Execute(dateOnlyList, matrixList, _grouPerson, _effectiveRestriction,
+            Expect.Call(() => _teamScheduling.Execute(dateOnlyList, matrixList, _groupPerson, _effectiveRestriction,
                                                       _scheduleProjectionCache, new List<DateOnly>())).IgnoreArguments();
         }
     }
