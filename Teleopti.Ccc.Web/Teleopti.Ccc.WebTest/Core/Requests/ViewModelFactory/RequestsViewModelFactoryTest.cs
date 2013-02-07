@@ -151,5 +151,26 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = target.CreateShiftTradeScheduleViewModel(DateTime.Now);
 			result.Should().Be.SameInstanceAs(viewModel);
 		}
+
+		[Test]
+		public void ShouldRetriveShiftTradeSwapDetailsViewModel()
+		{
+			var personRequestId = new Guid();
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
+			var shiftTrade = MockRepository.GenerateStub<IShiftTradeRequest>();
+			var personRequest = MockRepository.GenerateStub<IPersonRequest>(); personRequest.Request = shiftTrade;
+			var shiftTradeSwapDetailsViewModel = new ShiftTradeSwapDetailsViewModel();
+			
+			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null);
+
+			personRequestProvider.Expect(p => p.RetrieveRequest(personRequestId)).Return(personRequest);
+			mapper.Expect(m => m.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(Arg<IShiftTradeRequest>.Is.Equal(shiftTrade)))
+			      .Return(shiftTradeSwapDetailsViewModel);
+
+			var result = target.CreateShiftTradeRequestSwapDetails(personRequestId);
+			Assert.That(result,Is.SameAs(shiftTradeSwapDetailsViewModel));
+
+		}
 	}
 }

@@ -84,7 +84,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 		public ShiftTradeSwapDetailsViewModel CreateShiftTradeRequestSwapDetails(Guid id)
 		{
-			throw new NotImplementedException();
+			var personRequest =  _personRequestProvider.RetrieveRequest(id);
+			var shiftTradeSwapDetails = _mapper.Map<IShiftTradeRequest,ShiftTradeSwapDetailsViewModel>(personRequest.Request as IShiftTradeRequest);
+			return shiftTradeSwapDetails;
 		}
 	}
 }
