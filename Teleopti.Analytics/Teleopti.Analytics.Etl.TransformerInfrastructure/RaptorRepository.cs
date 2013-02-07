@@ -1224,11 +1224,13 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
-		public int FillPermissionDataMart(IBusinessUnit businessUnit)
+		public int FillPermissionDataMart(IBusinessUnit businessUnit, bool isFirstBusinessUnit, bool isLastBusinessUnit)
 		{
 			//Prepare sql parameters
 			List<SqlParameter> parameterList = new List<SqlParameter>();
 			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+			parameterList.Add(new SqlParameter("isFirstBusinessUnit", isFirstBusinessUnit));
+			parameterList.Add(new SqlParameter("isLastBusinessUnit", isLastBusinessUnit));
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_permission_report_load", parameterList,
