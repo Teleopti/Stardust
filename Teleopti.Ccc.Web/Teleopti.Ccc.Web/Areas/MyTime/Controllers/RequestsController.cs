@@ -123,5 +123,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			return Json(_requestsViewModelFactory.CreateShiftTradePeriodViewModel(), JsonRequestBehavior.AllowGet);
 		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult ShiftTradeRequestSwapDetails(Guid id)
+		{
+			return Json(_requestsViewModelFactory.CreateShiftTradeRequestSwapDetails(id));
+		}
 	}
 }

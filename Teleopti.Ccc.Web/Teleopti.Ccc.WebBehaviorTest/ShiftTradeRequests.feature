@@ -240,6 +240,21 @@ Scenario: Show name of the person that recieved the shift trade request
 	When I click on the request
 	Then I should see 'Ashley Andeen' as the receiver of the request
 
+Scenario: Show dates of the shift trade
+Given I have the role 'Full access to mytime'
+	And I have created a shift trade request
+	| Field		| Value         |
+	| To			| Ashley Andeen |
+	| DateTo		| 2010-12-24    |
+	| DateFrom	| 2010-12-28    |
+	And I am viewing requests
+	When I click on the request
+	Then I should see '2010-12-24' as the date of the request target
+	And I should see '2010-12-28' as the date of the request source
+	
+
+
+
 
 	
 

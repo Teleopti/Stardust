@@ -13,6 +13,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -268,6 +269,33 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			}
 
 			shiftTradePersister.VerifyAllExpectations();
+		}
+
+		[Test]
+		public void ShouldGetShiftTradeDetails()
+		{
+
+			var id = Guid.NewGuid();
+			var dateFrom = new DateOnly(2001, 1, 1);
+			var dateTo = new DateOnly(2001, 1, 3);
+			var requestViewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var shiftTradeSwapDetails = new ShiftTradeSwapDetailsViewModel()
+				                            {
+					                            DateFrom = dateFrom,
+					                            DateTo = dateTo
+				                            };
+
+			requestViewModelFactory.Expect(r => r.CreateShiftTradeRequestSwapDetails(id)).Return(shiftTradeSwapDetails);
+
+			using (var target = new RequestsController(requestViewModelFactory, null, null, null))
+			{
+				var result = target.ShiftTradeRequestSwapDetails(id);
+				var scheduleViewModel = (ShiftTradeSwapDetailsViewModel) result.Data;
+				Assert.That(scheduleViewModel.DateFrom,Is.EqualTo(dateFrom));
+				Assert.That(scheduleViewModel.DateTo,Is.EqualTo(dateTo));
+			}
+
+			requestViewModelFactory.VerifyAllExpectations();
 		}
 
 		private static void assertRequestEqual(RequestViewModel target, RequestViewModel expected)
