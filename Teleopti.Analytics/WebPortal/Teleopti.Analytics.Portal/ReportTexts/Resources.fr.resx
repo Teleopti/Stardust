@@ -978,4 +978,13 @@
   <data name="ResSignOut" xml:space="preserve">
     <value>Déconnexion</value>
   </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Date (horaires débutant):</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Date De (horaires débutant):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Date À (horaires débutant):</value>
+  </data>
 </root>
