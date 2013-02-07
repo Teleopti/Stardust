@@ -1765,7 +1765,7 @@
     <value>Actualisation automatique</value>
   </data>
   <data name="Approved" xml:space="preserve">
-    <value>Approuvé</value>
+    <value>Approuvée</value>
   </data>
   <data name="Created" xml:space="preserve">
     <value>Créé</value>
@@ -2998,7 +2998,7 @@
     <value>Ancienneté</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Etat</value>
+    <value>Statut</value>
   </data>
   <data name="RequestTypeShiftTrade" xml:space="preserve">
     <value>Echange d'horaires</value>
@@ -3079,7 +3079,7 @@
     <value>(agents sont disponibles pour prendre les appels)</value>
   </data>
   <data name="RequestStatusColon" xml:space="preserve">
-    <value>Etat demande:</value>
+    <value>Statut demande:</value>
   </data>
   <data name="ShiftTradeRequest" xml:space="preserve">
     <value>Demande d'échange d'horaires</value>
@@ -3226,7 +3226,7 @@
     <value>Ajouter nouvelle équipe</value>
   </data>
   <data name="AdminStatus" xml:space="preserve">
-    <value>Etat Admin</value>
+    <value>Statut Admin</value>
   </data>
   <data name="MessageTooLong" xml:space="preserve">
     <value>Message trop long</value>
@@ -4087,7 +4087,7 @@
     <value>Date Sélectionnée:</value>
   </data>
   <data name="StatusColon" xml:space="preserve">
-    <value>Etat:</value>
+    <value>Statut:</value>
   </data>
   <data name="YouDoNotHavePermissionsToViewTeamSchedules" xml:space="preserve">
     <value>Vous n'avez pas les droits de regarder les horaires d'équipes</value>
@@ -4234,7 +4234,7 @@
     <value>Refusé par superviseur</value>
   </data>
   <data name="GrantedBySupervisor" xml:space="preserve">
-    <value>Approuvé par superviseur</value>
+    <value>Approuvée par superviseur</value>
   </data>
   <data name="WaitingForOtherPart" xml:space="preserve">
     <value>En attente </value>
@@ -4324,13 +4324,13 @@
     <value>Êtes-vous sûr de supprimer la réunion {0}?</value>
   </data>
   <data name="RequestStatusApproved" xml:space="preserve">
-    <value>Approuvé</value>
+    <value>Approuvée</value>
   </data>
   <data name="RequestStatusDenied" xml:space="preserve">
     <value>Refusé</value>
   </data>
   <data name="RequestStatusDtoApproved" xml:space="preserve">
-    <value>Approuvé</value>
+    <value>Approuvée</value>
   </data>
   <data name="RequestStatusDtoDenied" xml:space="preserve">
     <value>Refusé</value>
@@ -8628,5 +8628,35 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   </data>
   <data name="WarningWithExclamatory" xml:space="preserve">
     <value>Avertissement!</value>
+  </data>
+  <data name="Reforecast" xml:space="preserve">
+    <value>Re-prévoir</value>
+  </data>
+  <data name="PeopleCap" xml:space="preserve">
+    <value>Personnes</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Retirer</value>
+  </data>
+  <data name="SelectWorkload" xml:space="preserve">
+    <value>Sélectionner Volume</value>
+  </data>
+  <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
+    <value>Vous devez sélectionner au moins un volume</value>
+  </data>
+  <data name="MySchedule" xml:space="preserve">
+    <value>Mon Planning</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Date (horaires débutant):</value>
+  </data>
+  <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
+    <value>Pas d'agents disponibles pour échange d'horaires</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Date De (shifts débutant)</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Date À (shifts débutant)</value>
   </data>
 </root>
