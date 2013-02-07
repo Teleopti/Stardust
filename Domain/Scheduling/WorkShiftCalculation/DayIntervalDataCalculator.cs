@@ -29,28 +29,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 			var baseDate = DateTime.SpecifyKind(SkillDayTemplate.BaseDate, DateTimeKind.Utc);
 			var result = new Dictionary<TimeSpan, ISkillIntervalData>();
-			var intervalBasedData = new Dictionary<TimeSpan, List<double>>();
+			var intervalsOfTwoDays = new List<TimeSpan>();
 			for (var i = 0; i < TimeSpan.FromDays(2).TotalMinutes / resolution; i++)
 			{
-				intervalBasedData.Add(TimeSpan.FromMinutes(i * resolution), new List<double>());
+				intervalsOfTwoDays.Add(TimeSpan.FromMinutes(i * resolution));
 			}
-			foreach (var intervalData in intervalBasedData)
+			
+			foreach (var interval in intervalsOfTwoDays)
 			{
-				var intervalTimeSpan = intervalData.Key;
-				var intervals = new List<double>();
-			    if (dayIntervalData != null)
-			        foreach (var keyValuePair in dayIntervalData)
-			        {
-			            var oneInterval = keyValuePair.Value.FirstOrDefault(x => x.Period.StartDateTime.TimeOfDay == intervalTimeSpan);
-			            if (oneInterval != null)
-			                intervals.Add(oneInterval.ForecastedDemand - oneInterval.CurrentDemand);
-			        }
-			    var calculatedDemand = _intervalDataCalculator.Calculate(intervals);
-				var startTime = baseDate.Date.Add(intervalTimeSpan);
+				var forecastedDemands = new List<double>();
+				var currentDemands = new List<double>();
+				foreach (var dayIntervalPair in dayIntervalData)
+				{
+					TimeSpan interval1 = interval;
+					var dataInInteral = dayIntervalPair.Value.FirstOrDefault(x => x.Period.StartDateTime.TimeOfDay == interval1);
+					if (dataInInteral != null)
+					{
+						forecastedDemands.Add(dataInInteral.ForecastedDemand);
+						currentDemands.Add(dataInInteral.CurrentDemand);
+					}
+				}
+				if(forecastedDemands.Count == 0) continue;
+			    var calculatedFDemand = _intervalDataCalculator.Calculate(forecastedDemands);
+				var calculatedCDemand = _intervalDataCalculator.Calculate(currentDemands);
+				var startTime = baseDate.Date.Add(interval);
 				var endTime = startTime.AddMinutes(resolution);
-				ISkillIntervalData skillIntervalData = new SkillIntervalData(new DateTimePeriod(startTime, endTime),
-																			 calculatedDemand, 0, 0, 0, 0);
-				result.Add(intervalTimeSpan, skillIntervalData);
+				ISkillIntervalData skillIntervalData = new SkillIntervalData(new DateTimePeriod(startTime, endTime), calculatedFDemand, calculatedCDemand, 0, 0, 0);
+				result.Add(interval, skillIntervalData);
 			}
 			return result;
 		}
