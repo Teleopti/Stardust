@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using AutoMapper;
@@ -411,4 +412,63 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.PossibleTradePersons.First().HasUnderlyingDayOff.Should().Be.True();
 		}
 	}
+
+	[TestFixture]
+	public class ShiftTradeSwapDetailsViewModelMappingProfileTest
+	{
+
+		[SetUp]
+		public void Setup()
+		{
+			Mapper.Reset();
+			Mapper.Initialize(c => c.AddProfile(new ShiftTradeSwapDetailsViewModelMappingProfile()));
+		}
+
+		[Test]
+		public void SetsThedatesFromTheFirstShiftTradeSwapDetail()
+		{
+			var dateFrom = new DateOnly(2001, 12, 12);
+			var dateTo = new DateOnly(2002, 12, 12);
+
+			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(CreateStub(dateFrom, dateTo));
+			Assert.That(result.DateFrom, Is.EqualTo(dateFrom));
+			Assert.That(result.DateTo, Is.EqualTo(dateTo));
+		}
+
+		[Test]
+		public void CreatesShiftTradePersonScheduleFromBasedOnTheFirstSwapdetail()
+		{
+			var dateFrom = new DateOnly(2001, 12, 12);
+			var dateTo = new DateOnly(2002, 12, 12);
+
+			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(CreateStub(dateFrom, dateTo));
+			Assert.That(result.DateFrom, Is.EqualTo(dateFrom));
+			Assert.That(result.DateTo, Is.EqualTo(dateTo));
+		}
+
+		[Test]
+		public void CreatesShiftTradePersonScheduleToBasedOnTheFirstSwapDetail()
+		{
+			var dateFrom = new DateOnly(2001, 12, 12);
+			var dateTo = new DateOnly(2002, 12, 12);
+
+			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(CreateStub(dateFrom,dateTo));
+			Assert.That(result.DateFrom, Is.EqualTo(dateFrom));
+			Assert.That(result.DateTo, Is.EqualTo(dateTo));
+		}
+
+		private static IShiftTradeRequest CreateStub(DateOnly dateFrom, DateOnly dateTo)
+		{
+			var shiftTrade = MockRepository.GenerateMock<IShiftTradeRequest>();
+			var swapDetail = MockRepository.GenerateMock<IShiftTradeSwapDetail>();
+			var swapDetails = new ReadOnlyCollection<IShiftTradeSwapDetail>(new List<IShiftTradeSwapDetail>() { swapDetail });
+			
+
+			swapDetail.Expect(s => s.DateFrom).Return(dateFrom).Repeat.Any();
+			swapDetail.Expect(s => s.DateTo).Return(dateTo).Repeat.Any();
+			shiftTrade.Expect(s => s.ShiftTradeSwapDetails).Return(swapDetails).Repeat.Any();
+			return shiftTrade;
+		}
+	}
+
 }
