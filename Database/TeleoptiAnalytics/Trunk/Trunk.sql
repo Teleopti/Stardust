@@ -183,3 +183,8 @@ BEGIN
 	DROP TABLE [mart].[permission_report]
 END	
 GO
+
+--Drop obsolete SP
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_permission_data_check_test]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[report_permission_data_check_test]
+GO
