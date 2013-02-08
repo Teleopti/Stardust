@@ -10,18 +10,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		protected override void Configure()
 		{
 			CreateMap<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>()
-				.ConvertUsing(s =>
-					              {
-						              var details = s.ShiftTradeSwapDetails.First();
-
-
-						              var viewModel = new ShiftTradeSwapDetailsViewModel()
-							                              {
-								                              DateFrom = details.DateFrom,
-								                              DateTo = details.DateTo
-							                              };
-						              return viewModel;
-					              });
+				.ForMember(d => d.To, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().SchedulePartTo))
+				.ForMember(d => d.From, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().SchedulePartFrom))
+				.ForMember(d => d.DateFrom, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().DateFrom))
+				.ForMember(d => d.DateTo, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().DateTo));
 		}
 	}
 }
