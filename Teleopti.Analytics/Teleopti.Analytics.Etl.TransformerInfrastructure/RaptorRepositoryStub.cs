@@ -407,7 +407,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         {
         }
 
-		public int FillPermissionDataMart(IBusinessUnit businessUnit, bool isFirstBusinessUnitbool,bool isFirstBusinessUnit)
+		public int FillPermissionDataMart(IBusinessUnit businessUnit, bool isFirstBusinessUnit, bool isLastBusinessUnit)
         {
             return 0;
         }

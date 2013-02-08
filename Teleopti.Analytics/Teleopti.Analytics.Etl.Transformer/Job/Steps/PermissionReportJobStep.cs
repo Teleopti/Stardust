@@ -18,13 +18,16 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
         {
 			//ToDo: get this in some objects instead
 			bool isFirstBusinessUnit;
-			if (jobResultCollection.Count == 0)
+			if (jobResultCollection != null)
 			{
-				isFirstBusinessUnit = true;
-			}
-			else
-			{
-				isFirstBusinessUnit = false;
+				if (jobResultCollection.Count == 0)
+				{
+					isFirstBusinessUnit = true;
+				}
+				else
+				{
+					isFirstBusinessUnit = false;
+				}
 			}
 
 			return _jobParameters.Helper.Repository.FillPermissionDataMart(RaptorTransformerHelper.CurrentBusinessUnit, isFirstBusinessUnit, isLastBusinessUnit);
