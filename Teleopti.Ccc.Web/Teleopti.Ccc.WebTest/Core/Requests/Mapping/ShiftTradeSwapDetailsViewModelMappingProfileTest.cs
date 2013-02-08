@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Assert.That(result.DateTo, Is.EqualTo(_dateTo));
 		}
 
-
 		[Test]
 		public void CreateScheduleViewModelsFromMapper()
 		{
@@ -73,56 +72,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Assert.That(result.To, Is.EqualTo(shiftTradePersonScheduleViewModelStub),"Should have been set from the mapper (we are using the same result for To and For");
 		}
 
-
 		private static IShiftTradeRequest CreateStub(DateOnly dateFrom, DateOnly dateTo, IScheduleDay scheduleDayFrom = null, IScheduleDay scheduleDayTo = null)
 		{
 			var shiftTrade = MockRepository.GenerateMock<IShiftTradeRequest>();
 			var swapDetail = MockRepository.GenerateMock<IShiftTradeSwapDetail>();
 			var swapDetails = new ReadOnlyCollection<IShiftTradeSwapDetail>(new List<IShiftTradeSwapDetail>() { swapDetail });
 			
-
 			swapDetail.Expect(s => s.DateFrom).Return(dateFrom).Repeat.Any();
 			swapDetail.Expect(s => s.DateTo).Return(dateTo).Repeat.Any();
 			swapDetail.Expect(s => s.SchedulePartFrom).Return(scheduleDayFrom).Repeat.Any();
 			swapDetail.Expect(s => s.SchedulePartTo).Return(scheduleDayTo).Repeat.Any();
 			shiftTrade.Expect(s => s.ShiftTradeSwapDetails).Return(swapDetails).Repeat.Any();
 			return shiftTrade;
-		}
-
-		/// <summary>
-		/// Used for creating simple mappers for testing
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <typeparam name="TU"></typeparam>
-		public class MappingProfileForProbing<T,TU> : Profile
-		{
-			private readonly IList<T> _from = new List<T>();
-
-			/// <summary>
-			/// The result thats returned from the mapper
-			/// </summary>
-			public TU Result { get; set; }
-
-			/// <summary>
-			/// Verifies if the source has been mapped
-			/// </summary>
-			/// <param name="source"></param>
-			/// <returns></returns>
-			public bool HasBeenMappedFrom(T source)
-			{
-				return _from.Contains(source);
-			}
-
-			protected override void Configure()
-			{
-				CreateMap<T, TU>()
-					.ConvertUsing(t =>
-						              {
-											  _from.Add(t);
-							              return Result;
-						              });
-			}
-
 		}
 	}
 }

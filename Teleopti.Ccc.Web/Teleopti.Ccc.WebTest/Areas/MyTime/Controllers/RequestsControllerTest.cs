@@ -274,7 +274,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetShiftTradeDetails()
 		{
-
 			var id = Guid.NewGuid();
 			var dateFrom = new DateOnly(2001, 1, 1);
 			var dateTo = new DateOnly(2001, 1, 3);

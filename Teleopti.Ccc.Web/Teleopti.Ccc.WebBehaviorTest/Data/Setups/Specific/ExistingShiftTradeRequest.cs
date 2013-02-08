@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		public string From { get; set; }
 		public string To { get; set; }
 		public string Subject { get; set; }
+		public DateOnly DateTo { get; set; }
+		public DateOnly DateFrom { get; set; }
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			var names = name.Split(' ');
 			var person = names.Length > 1 ? PersonFactory.CreatePerson(names[0], names[1]) : PersonFactory.CreatePerson(name);
 			var userFactory = new UserFactory();
-			userFactory.MakePerson(person);
+			//userFactory.MakePerson(person);
 			return person;
 		}
 	}
