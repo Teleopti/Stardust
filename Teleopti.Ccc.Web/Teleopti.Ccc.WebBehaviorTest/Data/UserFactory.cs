@@ -236,7 +236,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _userDataSetups.ForEach(s => s.Apply(uow, person, culture) ));
 
-			_postSetups.ForEach(s => s.Apply(person));
 
 			_analyticsDataFactory.Persist(culture);
 		}

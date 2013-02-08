@@ -240,6 +240,7 @@ Scenario: Show name of the person that recieved the shift trade request
 	When I click on the request
 	Then I should see 'Ashley Andeen' as the receiver of the request
 
+@ignore
 Scenario: Show dates of the shift trade
 Given I have the role 'Full access to mytime'
 	And I have created a shift trade request
