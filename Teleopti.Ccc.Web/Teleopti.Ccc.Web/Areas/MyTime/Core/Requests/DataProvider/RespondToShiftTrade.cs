@@ -26,10 +26,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			shiftTrade.Accept(_loggedOnUser.CurrentUser(), _shiftTradeRequestCheckSum, _personRequextCheckAuthorization);
 		}
 
-		public void Reject(Guid id)
+		public void Reject(Guid requestId)
 		{
-			//Henke 2013-01-29 Do not know what is going to happen here..?
-			throw new NotImplementedException();
+			var request = _personRequestRepository.Find(requestId);
+			var shiftTrade = request.Request as IShiftTradeRequest;
+			shiftTrade.Deny(_loggedOnUser.CurrentUser());
 		}
 	}
 }
