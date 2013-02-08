@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 		
 		[Test]
-		public void ApproveShiftTradeRequest()
+		public void ShouldApproveShiftTradeRequest()
 		{
 
 			var id = Guid.NewGuid();
@@ -256,15 +256,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void RejectShiftTradeRequest()
+		public void ShouldDenyShiftTradeRequest()
 		{
 			var id = Guid.NewGuid();
 			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();
-			shiftTradePersister.Expect(a => a.Reject(id)).Repeat.Once();
+			shiftTradePersister.Expect(a => a.Deny(id)).Repeat.Once();
 
 			using (var target = new RequestsController(null, null, null, shiftTradePersister))
 			{
-				target.RejectShiftTrade(id);
+				target.DenyShiftTrade(id);
 			}
 
 			shiftTradePersister.VerifyAllExpectations();

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			loggedOnUser.Expect(l => l.CurrentUser()).Return(loggedOnPerson);
 
 			//execute
-			target.Reject(shiftTradeId);
+			target.Deny(shiftTradeId);
 
 			//verify expectation:
 			shiftTrade.AssertWasCalled(s => s.Deny(loggedOnPerson));
