@@ -39,6 +39,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		void Form_KeyDown(object sender, KeyEventArgs e)
 		{
+			if(ActiveControl != treeViewOptions) return;
+			
 			if (e.KeyValue.Equals(32))
 			{
 				e.Handled = true;
@@ -47,6 +49,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		void Form_KeyPress(object sender, KeyPressEventArgs e)
 		{
+			if (ActiveControl != treeViewOptions) return;
+
 			if (e.KeyChar.Equals((Char)Keys.Space))
 			{
 				e.Handled = true;
