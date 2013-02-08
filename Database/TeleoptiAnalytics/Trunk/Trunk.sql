@@ -134,7 +134,7 @@ BEGIN
 		[is_active] [char](1) NOT NULL
 	)
 	
-	ALTER TABLE [mart].[permission_report_active] ADD PRIMARY KEY CLUSTERED 
+	ALTER TABLE [mart].[permission_report_active] ADD CONSTRAINT PK_permission_report_active PRIMARY KEY CLUSTERED 
 	(
 		[lock] ASC
 	)
@@ -144,7 +144,7 @@ BEGIN
 	--only accept one single row
 	ALTER TABLE [mart].[permission_report_active]  WITH CHECK ADD CONSTRAINT [CK_OnlyOneRow] CHECK  (([lock]='x'))
 	--default to 'x' for any new row
-	ALTER TABLE [mart].[permission_report_active] ADD  DEFAULT ('x') FOR [lock]
+	ALTER TABLE [mart].[permission_report_active] ADD CONSTRAINT [DF_permission_report_active_lock] DEFAULT ('x') FOR [lock]
 		
 	INSERT INTO [mart].[permission_report_A]
 		(person_code, team_id, my_own, business_unit_id, datasource_id, ReportId, datasource_update_date, table_name)
