@@ -1226,15 +1226,35 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public int FillPermissionDataMart(IBusinessUnit businessUnit, bool isFirstBusinessUnit, bool isLastBusinessUnit)
 		{
+			int numberOfRows;
+
 			//Prepare sql parameters
 			List<SqlParameter> parameterList = new List<SqlParameter>();
 			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
 			parameterList.Add(new SqlParameter("isFirstBusinessUnit", isFirstBusinessUnit));
 			parameterList.Add(new SqlParameter("isLastBusinessUnit", isLastBusinessUnit));
 
-			return
+			//truncate, if first BU
+			if (isFirstBusinessUnit)
+			{
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_permission_report_truncate_nonactive", parameterList,
+											  _dataMartConnectionString);
+			}
+
+			//fill data and return effected rows
+			numberOfRows =
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_permission_report_load", parameterList,
 											  _dataMartConnectionString);
+
+			//swap tables, if last BU
+			if (isLastBusinessUnit)
+			{
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_permission_report_switch_active", parameterList,
+											  _dataMartConnectionString);
+			}
+
+
+			return numberOfRows;
 		}
 
 		public IList<MatrixPermissionHolder> LoadReportPermissions()

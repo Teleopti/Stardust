@@ -19,7 +19,6 @@ CREATE PROCEDURE [mart].[etl_permission_report_load]
 @business_unit_code uniqueidentifier,
 @isFirstBusinessUnit bit,
 @isLastBusinessUnit bit
-WITH EXECUTE AS OWNER
 AS
 DECLARE @is_active char(1)
 DECLARE @non_active char(1)
@@ -30,51 +29,56 @@ IF @is_active = 'A'
 ELSE
 	SET @non_active = 'A'
 	
---If "FirstBU", then truncate the non-active table
-IF @isFirstBusinessUnit = 1
-BEGIN
-	IF @is_active = 'A'
-		TRUNCATE TABLE [mart].[permission_report_B]
-	ELSE
-		TRUNCATE TABLE [mart].[permission_report_A]
-END
-
 --SAVE NEW PERMISSIONS
-INSERT INTO mart.v_permission_report
-	(ReportId, person_code, team_id, my_own, business_unit_id, datasource_id, datasource_update_date, table_name)
-SELECT	ReportId				= pr.ReportId,
-		person_code				= pr.person_code,
-		team_id					= dt.team_id,
-		my_own					= pr.my_own,
-		business_unit_id		= bu.business_unit_id,
-		datasource_id			= pr.datasource_id, 
-		datasource_update_date	= pr.datasource_update_date,
-		table_name				= @non_active
-FROM 
-	Stage.stg_permission_report pr
-INNER JOIN 
-	mart.dim_team dt 
-ON 
-	dt.team_code = pr.team_id
-INNER JOIN
-	mart.dim_business_unit bu
-ON
-	pr.business_unit_code = bu.business_unit_code
-INNER JOIN 
-	mart.v_report r
-ON
-	pr.ReportId= r.Id
+BEGIN TRY
+	INSERT INTO mart.v_permission_report
+		(ReportId, person_code, team_id, my_own, business_unit_id, datasource_id, datasource_update_date, table_name)
+	SELECT	ReportId				= pr.ReportId,
+			person_code				= pr.person_code,
+			team_id					= dt.team_id,
+			my_own					= pr.my_own,
+			business_unit_id		= bu.business_unit_id,
+			datasource_id			= pr.datasource_id, 
+			datasource_update_date	= pr.datasource_update_date,
+			table_name				= @non_active
+	FROM 
+		Stage.stg_permission_report pr
+	INNER JOIN 
+		mart.dim_team dt 
+	ON 
+		dt.team_code = pr.team_id
+	INNER JOIN
+		mart.dim_business_unit bu
+	ON
+		pr.business_unit_code = bu.business_unit_code
+	INNER JOIN 
+		mart.v_report r
+	ON
+		pr.ReportId= r.Id
+END TRY
+BEGIN CATCH
+	DECLARE @ErrorMessage NVARCHAR(4000);
+	DECLARE @ErrorSeverity INT;
+	DECLARE @ErrorState INT;
 
---If "LastBU", then switch active table
-IF @isLastBusinessUnit = 1
-BEGIN
-	IF @is_active = 'A'
-		UPDATE [mart].[permission_report_active]
-		SET is_active = 'B'
+	SELECT @ErrorMessage = ERROR_MESSAGE(), @ErrorSeverity = ERROR_SEVERITY(),@ErrorState = ERROR_STATE();
+	
+	--Try save the previous data from the active permission table
+	IF @non_active = 'A'
+		insert into [mart].[permission_report_A] (person_code, team_id, my_own, business_unit_id, datasource_id, ReportId, datasource_update_date, table_name)
+		select person_code, team_id, my_own, business_unit_id, datasource_id, ReportId, datasource_update_date, 'A' from [mart].[permission_report_B]
 	ELSE
-		UPDATE [mart].[permission_report_active]
-		SET is_active = 'A'
-END
+		insert into [mart].[permission_report_B] (person_code, team_id, my_own, business_unit_id, datasource_id, ReportId, datasource_update_date, table_name)
+		select person_code, team_id, my_own, business_unit_id, datasource_id, ReportId, datasource_update_date, 'B' from [mart].[permission_report_A]
+
+	--return error to ETL
+	IF @ErrorState < 1
+	SET @ErrorState = 1
+
+	SET @ErrorMessage = 'Procedure [mart].[etl_permission_report_load] failed: ' + @ErrorMessage
+	RAISERROR (@ErrorMessage,@ErrorSeverity,@ErrorState);
+	
+END CATCH
 
 GO
 
