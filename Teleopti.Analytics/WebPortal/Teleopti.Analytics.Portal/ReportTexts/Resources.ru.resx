@@ -142,7 +142,7 @@
     <value>Оператор</value>
   </data>
   <data name="ResAnsweredCalls" xml:space="preserve">
-    <value>Принятые звонки</value>
+    <value>Отвеченные звонки</value>
   </data>
   <data name="ResAnsweredCallsAfterSL" xml:space="preserve">
     <value>Звонки, принятые с уровнем сервиса ниже требуемого</value>
@@ -178,7 +178,7 @@
     <value>Уровень Сервиса (%)</value>
   </data>
   <data name="ResSiteNameColon" xml:space="preserve">
-    <value>Узел:</value>
+    <value>Сайт:</value>
   </data>
   <data name="ResSkillColon" xml:space="preserve">
     <value>Навык:</value>
@@ -199,16 +199,16 @@
     <value>Интервал до:</value>
   </data>
   <data name="ResIntervalType" xml:space="preserve">
-    <value>Тип Периода:</value>
+    <value>Тип периода:</value>
   </data>
   <data name="KpiAbsenteeism" xml:space="preserve">
-    <value>Невыход на работу (%)</value>
+    <value>Отсутствие (%)</value>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
     <value>Соблюдение графика (%)</value>
   </data>
   <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
-    <value>Принятые звонки за час телефонного времени по графику</value>
+    <value>Отвеченные звонки за час телефонного времени по графику</value>
   </data>
   <data name="KpiAverageAfterCallWork" xml:space="preserve">
     <value>Среднее время работы после звонка (с)</value>
@@ -235,7 +235,7 @@
     <value>Цель</value>
   </data>
   <data name="ResTeamActual" xml:space="preserve">
-    <value>Актуальная Группа</value>
+    <value>Актуальная группа</value>
   </data>
   <data name="ResTrend" xml:space="preserve">
     <value>Тенденция</value>
@@ -247,7 +247,7 @@
     <value>Ваша попытка войти в систему не удалась. Пожалуйста, попробуйте еще раз.</value>
   </data>
   <data name="LogInName" xml:space="preserve">
-    <value>Имя Пользователя:</value>
+    <value>Имя пользователя:</value>
   </data>
   <data name="LogInNewPasswordLabelText" xml:space="preserve">
     <value>Новый пароль</value>
@@ -265,7 +265,7 @@
     <value>Вход</value>
   </data>
   <data name="LogInUserRequired" xml:space="preserve">
-    <value>Требуется Имя Пользователя.</value>
+    <value>Требуется имя пользователя.</value>
   </data>
   <data name="ShowReportTooltip" xml:space="preserve">
     <value>Показать отчет</value>
@@ -274,13 +274,13 @@
     <value>Сценарий:</value>
   </data>
   <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
-    <value>Доля несостоявшихся звонков без учета коротких вызывов (%)</value>
+    <value>Доля несостоявшихся звонков без учета кратковременных вызывов (%)</value>
   </data>
   <data name="ResAbandonRatePercent" xml:space="preserve">
     <value>Доля несостоявшихся вызовов (%)</value>
   </data>
   <data name="ResAnswerRatePercent" xml:space="preserve">
-    <value>Доля принятых вызывов (%)</value>
+    <value>Доля отвеченных вызывов (%)</value>
   </data>
   <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
     <value>Средняя скорость ответа (с)</value>
@@ -337,13 +337,13 @@
     <value>Спрогнозированное  время работы после звонка</value>
   </data>
   <data name="ResForecastedATT" xml:space="preserve">
-    <value>Спрогнозированные среднее время разговора</value>
+    <value>Спрогнозированное среднее время разговора</value>
   </data>
   <data name="ResForecastedCalls" xml:space="preserve">
     <value>Спрогнозированные звонки</value>
   </data>
   <data name="ResNumberOf" xml:space="preserve">
-    <value>Число</value>
+    <value>Количество</value>
   </data>
   <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
     <value>Прогноз VS Фактическая рабочая нагрузка</value>
@@ -373,7 +373,7 @@
     <value>Прогноз VS Запланированные часы по графику</value>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Уровень Сервиса и готовые к работе операторы</value>
+    <value>Уровень сервиса и готовые к работе операторы</value>
   </data>
   <data name="ResScheduledReadyTime" xml:space="preserve">
     <value>Запланированное время готовности к работе</value>
@@ -397,7 +397,7 @@
     <value>Операторы:</value>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
-    <value>Метрики оператора:</value>
+    <value>Метрики оператора</value>
   </data>
   <data name="ResAdherencePercent" xml:space="preserve">
     <value>Соблюдение графика (%)</value>
@@ -424,10 +424,10 @@
     <value>Поступившие звонки / Операторы</value>
   </data>
   <data name="ResServiceLevel" xml:space="preserve">
-    <value>Уровень Сервиса</value>
+    <value>Уровень сервиса</value>
   </data>
   <data name="ResServiceLevelCalcColon" xml:space="preserve">
-    <value>Расчет Уровня Сервиса:</value>
+    <value>Расчет уровня сервиса:</value>
   </data>
   <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
     <value>Оператор - Соблюдение графика</value>
@@ -445,10 +445,10 @@
     <value>Отклонение (м)</value>
   </data>
   <data name="ResNext" xml:space="preserve">
-    <value>Следующие</value>
+    <value>Следующий</value>
   </data>
   <data name="ResPrevious" xml:space="preserve">
-    <value>Предыдущие</value>
+    <value>Предыдущий</value>
   </data>
   <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
     <value>Соблюдение графика / Интервал (%)</value>
@@ -508,7 +508,7 @@
     <value>Статистика оператора</value>
   </data>
   <data name="ResAdminTime" xml:space="preserve">
-    <value>Время Администрации </value>
+    <value>Время администрации </value>
   </data>
   <data name="ResDirectIncomingCalls" xml:space="preserve">
     <value>Прямые входящие звонки</value>
@@ -520,7 +520,7 @@
     <value>Прямые исходящие звонки</value>
   </data>
   <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
-    <value>Прямые исходящие звонки, Время Разговора</value>
+    <value>Прямые исходящие звонки, Время разговора</value>
   </data>
   <data name="ResIdleTime" xml:space="preserve">
     <value>Время ожидания</value>
@@ -535,7 +535,7 @@
     <value>Дата / Интервал</value>
   </data>
   <data name="ResPermissionDenied" xml:space="preserve">
-    <value>Доступ Закрыт</value>
+    <value>Доступ запрещен</value>
   </data>
   <data name="ResOverflowInCalls" xml:space="preserve">
     <value>Звонки, переведенные В</value>
@@ -709,7 +709,7 @@
     <value>Сентябрь</value>
   </data>
   <data name="ResReportAgentScorecard" xml:space="preserve">
-    <value>Показатели оператора</value>
+    <value>Оценочный лист оператора</value>
   </data>
   <data name="ResAbsencePaidTimeH" xml:space="preserve">
     <value>Оплачиваемое время (чч:мм)</value>
@@ -721,31 +721,31 @@
     <value>Время отсутствия на оператора</value>
   </data>
   <data name="ResAbsenceDayCount" xml:space="preserve">
-    <value>Полный День</value>
+    <value>Полный день</value>
   </data>
   <data name="ResAbsencePartDayCount" xml:space="preserve">
-    <value>Часть Дня</value>
+    <value>Часть дня</value>
   </data>
   <data name="AuthenticationFailedForUser" xml:space="preserve">
     <value>Идентификация пользователя отклонена</value>
   </data>
   <data name="AuthenticationMixedFailure" xml:space="preserve">
-    <value>При использовании Windows идентификации в веб-портале клиентская установка не может одновременно использовать пароль идентификации, созданный в системе.</value>
+    <value>При использовании Windows идентификации в веб-приложении невозможно использование идентификации приложения в клиенте.</value>
   </data>
   <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
-    <value>Вместо этого, введите, пожалуйста, пароль, созданный в системе</value>
+    <value>Вместо этого, введите, пожалуйста, имя входа в приложение.</value>
   </data>
   <data name="PossibleSolution" xml:space="preserve">
     <value>Возможное решение</value>
   </data>
   <data name="PossibleSolution1" xml:space="preserve">
-    <value>Убедитесь, что права совпадают с сервисом ETL.</value>
+    <value>Убедитесь, что права доступа корректно синхронизированы с сервисом ETL.</value>
   </data>
   <data name="PossibleSolution2" xml:space="preserve">
     <value>Выйдите из системы и войдите с Windows паролем, или войдите с правами системного администратора и измените веб-идентификацию на Forms.</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
-    <value>Неизвестная Ошибка</value>
+    <value>Неизвестная ошибка</value>
   </data>
   <data name="ResAbsence" xml:space="preserve">
     <value>Отсутствие</value>
@@ -841,13 +841,13 @@
     <value>Оператор:</value>
   </data>
   <data name="ResNoScorecardAvailable" xml:space="preserve">
-    <value>Нет доступных показателей</value>
+    <value>Нет доступного оценочного листа</value>
   </data>
   <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
     <value>Время отсутствия по отсутствию</value>
   </data>
   <data name="Main" xml:space="preserve">
-    <value>Бизнес Иерархия</value>
+    <value>Бизнес-иерархия</value>
   </data>
   <data name="Contracts" xml:space="preserve">
     <value>Контракты</value>
@@ -920,7 +920,7 @@
     <value>Запросы на оператора</value>
   </data>
   <data name="ResRequestStatusApproved" xml:space="preserve">
-    <value>Одобрен</value>
+    <value>Утвержден</value>
   </data>
   <data name="ResRequestStatusDenied" xml:space="preserve">
     <value>Отклонен</value>
@@ -960,5 +960,29 @@
   </data>
   <data name="SessionExpiredText" xml:space="preserve">
     <value>Время сессии истекло по причине бездействия. Вы будете перенаправлены на страницу аутентификации.</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Соблюдение графика на оператора</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Соблюдение графика за день</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Запланированные операторы на активность</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Итого</value>
+  </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Дата (начало смен):</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Дата с (начало смен):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Дата по (начало смен):</value>
   </data>
 </root>
