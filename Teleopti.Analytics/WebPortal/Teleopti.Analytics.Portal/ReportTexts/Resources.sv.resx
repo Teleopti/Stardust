@@ -1191,4 +1191,13 @@
   <data name="ResSignOut" xml:space="preserve">
     <value>Logga ut</value>
   </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Datum (då skiften påbörjas):</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Från datum (då skiften påbörjas):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Till datum (då skiften påbörjas):</value>
+  </data>
 </root>

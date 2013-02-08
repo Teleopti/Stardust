@@ -11,12 +11,20 @@
 SET customerFile=%1
 SET customer=%customerFile:~0,-4%
 SET customerSSLCertConfig=%customer%.SSLcert
-::SET customerRDPCertConfig=%customer%.RDPcert
+SET customerBlobStorageConfig=%customer%.BlobStorage
+
+SET DataSourceName=
+SET baseurl=
+
+::Get data Soruce name
+DIR
+ECHO for /f "tokens=1,2 delims=," %%g IN ('findstr /C:"DataSourceName" /I .\Customer\%customer%.BlobStorage') do CALL SetDataSource %%h
+for /f "tokens=1,2 delims=," %%g IN ('findstr /C:"DataSourceName" /I .\Customer\%customer%.BlobStorage') do CALL :SetDataSource %%h
+SET baseurl=%DataSourceName%.teleopticloud.com
 
 ECHO customerFile is: %customerFile%
+ECHO DataSourceName is: %DataSourceName%
 
-::Get base url into variable
-SET /P baseurl=< Customer\%customer%.BaseUrl
 
 ::Replace tempoprary txt-file for Msi configuration
 COPY Customer\%customerFile% MSIInput.txt /Y
@@ -45,6 +53,12 @@ GOTO Error
 ::AzureConfig is added by WISE
 SET ConfigPath=%ConfigPath%\AzureConfig
 IF NOT EXIST "%ConfigPath%\DummyFolder" mkdir "%ConfigPath%\DummyFolder"
+
+::Replace dataSouceName in nhib
+cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\SDK\TeleoptiCCC7.nhib.xml"
+cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\ETL\Tool\TeleoptiCCC7.nhib.xml"
+cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\ETL\Service\TeleoptiCCC7.nhib.xml"
+cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\Web\TeleoptiCCC7.nhib.xml"
 
 ::Copy Config (3) to Content foler (2)
 for /f "tokens=2,3 delims=," %%g in (contentMapping.txt) do xcopy /e /d /y "%ConfigPath%\%%h" "%ContentDest%\%%g\" 
@@ -79,6 +93,11 @@ COPY ServiceConfig.cscfg.BuildTemplate ServiceConfig.cscfg /Y
 for /f "tokens=1,2 delims=," %%g in (Customer\%customerSSLCertConfig%) do cscript replace.vbs %%g %%h ServiceDefinition.csdef
 for /f "tokens=1,2 delims=," %%g in (Customer\%customerSSLCertConfig%) do cscript replace.vbs %%g %%h ServiceConfig.cscfg
 
+::BlobStorage config for each customer
+for /f "tokens=1,2 delims=," %%g in (Customer\%customerBlobStorageConfig%) do cscript replace.vbs %%g %%h ServiceConfig.cscfg
+
+::DataSourceName
+
 ::Deploy the customer .cscfg-file
 ECHO COPY "ServiceConfig.cscfg" "%output%\%customer%.cscfg" /Y
 COPY "ServiceConfig.cscfg" "%output%\%customer%.cscfg" /Y
@@ -95,6 +114,10 @@ GOTO :Error
 echo building cspack. done!
 
 GOTO :EOF
+:SetDataSource
+::Get base url into variable
+SET DataSourceName=%~1
+Exit /b
 
 :Error
 COLOR C

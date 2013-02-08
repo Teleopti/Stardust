@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 {
@@ -27,7 +28,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
                 string[] files = Directory.GetFiles(_searchPath.Path, "*Payroll*.dll", SearchOption.AllDirectories);
 
                 AppDomain.CurrentDomain.AssemblyResolve += _domainAssemblyResolver.Resolve;
-                foreach (string file in files)
+				foreach (var file in files)
+				{
+					Assembly.LoadFile(file);
+				}
+				foreach (string file in files)
                 {
                     var assembly = Assembly.LoadFile(file);
                     foreach (Type type in assembly.GetTypes())
@@ -44,5 +49,43 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
             }
             return _availablePayrollExportProcessors;
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods", MessageId = "System.Reflection.Assembly.LoadFile")]
+		public IList<PayrollFormatDto> LoadDtos()
+		{
+			var payrollFormats = new List<PayrollFormatDto>();
+			var files = Directory.GetFiles(_searchPath.Path, "*Payroll*.dll", SearchOption.AllDirectories);
+
+			AppDomain.CurrentDomain.AssemblyResolve += _domainAssemblyResolver.Resolve;
+			foreach (var file in files)
+			{
+				Assembly.LoadFile(file);
+			}
+			foreach (var file in files)
+			{
+				var assembly = Assembly.LoadFile(file);
+				foreach (var type in assembly.GetTypes())
+				{
+					if (!type.IsClass || type.IsNotPublic) continue;
+					var interfaces = type.GetInterfaces();
+					if (!interfaces.Contains(typeof(IPayrollExportProcessor))) continue;
+					var obj = Activator.CreateInstance(type);
+					var t = (IPayrollExportProcessor)obj;
+					var strippedfile = file.Replace(_searchPath.Path, "");
+					if (strippedfile.IndexOf("\\", StringComparison.OrdinalIgnoreCase) > 0)
+					{
+						var directory = strippedfile.Substring(0, strippedfile.IndexOf("\\", StringComparison.OrdinalIgnoreCase));
+						payrollFormats.Add(new PayrollFormatDto(t.PayrollFormat.FormatId, t.PayrollFormat.Name, directory));
+					}
+					else
+					{
+						payrollFormats.Add(new PayrollFormatDto(t.PayrollFormat.FormatId, t.PayrollFormat.Name, ""));
+					}
+				}
+			}
+			AppDomain.CurrentDomain.AssemblyResolve -= _domainAssemblyResolver.Resolve;
+
+			return payrollFormats;
+		}
     }
 }

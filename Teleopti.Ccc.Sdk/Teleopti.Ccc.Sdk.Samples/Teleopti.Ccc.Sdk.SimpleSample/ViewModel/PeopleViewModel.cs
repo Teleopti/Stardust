@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Input;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.SimpleSample.Model;
 using Teleopti.Ccc.Sdk.SimpleSample.Repositories;
 
@@ -16,9 +18,13 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
         private Visibility _resultCountVisible = Visibility.Hidden;
 
         public PeopleViewModel()
-        {
+		{
+			var organizationService = new ChannelFactory<ITeleoptiOrganizationService>(typeof(ITeleoptiOrganizationService).Name).CreateChannel();
+			var forecastingService = new ChannelFactory<ITeleoptiForecastingService>(typeof(ITeleoptiForecastingService).Name).CreateChannel();
+            
+
             FoundPeople = new ObservableCollection<PersonDetailModel>();
-            FindAll = new FindAllPeopleCommand(this,new PersonRepository(), new ContractRepository(), new PartTimePercentageRepository(), new ContractScheduleRepository(), new SkillRepository(), new BusinessHierarchyRepository(), new PersonPeriodRepository());
+			FindAll = new FindAllPeopleCommand(this, new PersonRepository(organizationService), new ContractRepository(organizationService), new PartTimePercentageRepository(organizationService), new ContractScheduleRepository(organizationService), new SkillRepository(forecastingService), new BusinessHierarchyRepository(organizationService), new PersonPeriodRepository(organizationService));
             StartDate = DateTime.Today;
             EndDate = DateTime.Today;
         }

@@ -10,10 +10,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
+using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.General;
+using Teleopti.Interfaces.Messages.Payroll;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 {
@@ -32,8 +33,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
         private IPersonBusAssembler personBusAssembler;
         private IPayrollResultRepository payrollResultRepository;
         private IServiceBusPayrollExportFeedback serviceBusReportProgress;
+    	private IDomainAssemblyResolver _resolver;
 
-        [SetUp]
+    	[SetUp]
         public void Setup()
         {
             repositoryFactory = mock.StrictMock<IRepositoryFactory>();
@@ -45,9 +47,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
             payrollDataExtractor = mock.StrictMock<IPayrollDataExtractor>();
             personBusAssembler = mock.StrictMock<IPersonBusAssembler>();
             serviceBusReportProgress = mock.StrictMock<IServiceBusPayrollExportFeedback>();
-
+        	_resolver = mock.DynamicMock<IDomainAssemblyResolver>();
             exportingPerson = new Person{Name = new Name("Ex", "Porter")};
-            target = new PayrollExportConsumer(repositoryFactory, payrollDataExtractor, personBusAssembler, serviceBusReportProgress, payrollPeopleLoader);
+			target = new PayrollExportConsumer(repositoryFactory, payrollDataExtractor, personBusAssembler, serviceBusReportProgress, payrollPeopleLoader, _resolver);
         }
 
         [Test] //Dont know what I am testing here anymore

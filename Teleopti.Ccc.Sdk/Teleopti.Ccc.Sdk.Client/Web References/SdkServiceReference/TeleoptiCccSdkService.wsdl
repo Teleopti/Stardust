@@ -260,15 +260,6 @@
   <wsdl:binding name="TeleoptiSchedulingService" type="i0:TeleoptiSchedulingService">
     <wsp:PolicyReference URI="#TeleoptiSchedulingService_policy" />
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="SavePreference">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePreference" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="DeletePreference">
       <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/DeletePreference" style="document" />
       <wsdl:input>
@@ -674,15 +665,6 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetAdherenceDataBasedOnShiftDate">
-      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAdherenceDataBasedOnShiftDate" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GetAgentQueueStatDetails">
       <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAgentQueueStatDetails" style="document" />
       <wsdl:input>
@@ -694,6 +676,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetAdherenceInfo">
       <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetAdherenceInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SavePreference">
+      <soap:operation soapAction="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/SavePreference" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
