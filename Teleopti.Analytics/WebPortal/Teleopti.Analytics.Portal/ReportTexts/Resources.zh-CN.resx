@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ResPreferencesRequested" xml:space="preserve">
-    <value>要求的偏好　</value>
+    <value>要求的偏好</value>
   </data>
   <data name="CommonCollapse" xml:space="preserve">
-    <value>崩溃</value>
+    <value>折叠</value>
   </data>
   <data name="CommonExpand" xml:space="preserve">
-    <value>扩展</value>
+    <value>展开</value>
   </data>
   <data name="InvalidValueErrorMessage" xml:space="preserve">
     <value>你在此输入的值无效：</value>
@@ -175,7 +175,7 @@
     <value>计划时间</value>
   </data>
   <data name="ResServiceLevelPercent" xml:space="preserve">
-    <value>服务水平（％）</value>
+    <value>服务水平 (%)</value>
   </data>
   <data name="ResSiteNameColon" xml:space="preserve">
     <value>运营点：</value>
@@ -199,25 +199,25 @@
     <value>间隔结束时间：</value>
   </data>
   <data name="KpiAbsenteeism" xml:space="preserve">
-    <value>缺勤率（％）</value>
+    <value>缺勤率 (%)</value>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
-    <value>遵时率（％）　</value>
+    <value>遵时率 (%)</value>
   </data>
   <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
     <value>排班电话时段每小时应答电话数</value>
   </data>
   <data name="KpiAverageAfterCallWork" xml:space="preserve">
-    <value>平均应答电话后工作时间（秒）</value>
+    <value>平均应答电话后工作时间 (秒)</value>
   </data>
   <data name="KpiAverageHandleTime" xml:space="preserve">
-    <value>平均处理时间（秒）　　</value>
+    <value>平均处理时间 (秒)</value>
   </data>
   <data name="KpiAverageTalkTime" xml:space="preserve">
-    <value>平均通话时间（秒）</value>
+    <value>平均通话时间 (秒)</value>
   </data>
   <data name="KpiReadiness" xml:space="preserve">
-    <value>状态就绪比率（％）</value>
+    <value>状态就绪比率 (%)</value>
   </data>
   <data name="ResActual" xml:space="preserve">
     <value>实际</value>
@@ -259,28 +259,28 @@
     <value>显示报告</value>
   </data>
   <data name="ResScenarioColon" xml:space="preserve">
-    <value>情形：</value>
+    <value>情景：</value>
   </data>
   <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
-    <value>除去短时呼叫的放弃应答比例（％）</value>
+    <value>除去短时呼叫的放弃应答比例 (%)</value>
   </data>
   <data name="ResAbandonRatePercent" xml:space="preserve">
-    <value>放弃应答的比例（％）　</value>
+    <value>放弃应答的比例 (%)</value>
   </data>
   <data name="ResAnswerRatePercent" xml:space="preserve">
-    <value>应答比例（％）　</value>
+    <value>应答比例 (%)</value>
   </data>
   <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
-    <value>平均应答所需时间（秒）</value>
+    <value>平均应答所需时间 (秒)</value>
   </data>
   <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
-    <value>平均放弃时间（秒）</value>
+    <value>平均放弃时间 (秒)</value>
   </data>
   <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
-    <value>最长列队等待时间，放弃（秒）</value>
+    <value>最长队列等待时间，放弃 (秒)</value>
   </data>
   <data name="ResLongestTimeToAnswerSec" xml:space="preserve">
-    <value>最长列队等待时间，应答（秒）　</value>
+    <value>最长队列等待时间，应答 (秒)</value>
   </data>
   <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
     <value>放弃与应答速度</value>
@@ -304,13 +304,13 @@
     <value>实际平均通话时间</value>
   </data>
   <data name="ResACW" xml:space="preserve">
-    <value>电话后工作(ACW) </value>
+    <value>电话后工作 (ACW)</value>
   </data>
   <data name="ResATT" xml:space="preserve">
-    <value>平均通话时间(ATT) </value>
+    <value>平均通话时间 (ATT)</value>
   </data>
   <data name="ResCalculatedCalls" xml:space="preserve">
-    <value>统计的电话量　</value>
+    <value>统计的电话量</value>
   </data>
   <data name="ResCalls" xml:space="preserve">
     <value>电话量</value>
@@ -331,7 +331,7 @@
     <value>排班的座席代表</value>
   </data>
   <data name="ResForecastedTimeH" xml:space="preserve">
-    <value>预测的时间（小时：分钟）</value>
+    <value>预测的时间 (小时:分钟 )</value>
   </data>
   <data name="ResDayOffColon" xml:space="preserve">
     <value>休息日：</value>
@@ -346,28 +346,28 @@
     <value>小组数据</value>
   </data>
   <data name="ResTeamDate" xml:space="preserve">
-    <value>小组／日期</value>
+    <value>小组 / 日期</value>
   </data>
   <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
-    <value>应答电话量／状态就绪小时</value>
+    <value>应答电话量 / 状态就绪小时</value>
   </data>
   <data name="ResContractAbsenceTimeH" xml:space="preserve">
-    <value>合同内缺勤时间（小时：分钟）</value>
+    <value>合同内缺勤时间 (小时:分钟 )</value>
   </data>
   <data name="ResContractTimeH" xml:space="preserve">
-    <value>合同时间（小时：分钟）</value>
+    <value>合同时间 (小时:分钟 )</value>
   </data>
   <data name="ResPaidTimeH" xml:space="preserve">
-    <value>付薪时间（小时：分钟）</value>
+    <value>付薪时间 (小时:分钟 )</value>
   </data>
   <data name="ResWorkTimeH" xml:space="preserve">
-    <value>工作时间（小时：分钟）　</value>
+    <value>工作时间 (小时:分钟 )</value>
   </data>
   <data name="ResPreferencesAccepted" xml:space="preserve">
     <value>接受的偏好</value>
   </data>
   <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
-    <value>接受的偏好比例（％）</value>
+    <value>接受的偏好比例 (%)</value>
   </data>
   <data name="ResPreferencesDeclined" xml:space="preserve">
     <value>未接受的偏好</value>
@@ -385,7 +385,7 @@
     <value>改进</value>
   </data>
   <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
-    <value>处理时间/付薪时间（％）　</value>
+    <value>处理时间/付薪时间 (%)</value>
   </data>
   <data name="ResDayOfWeekFriday" xml:space="preserve">
     <value>星期五</value>
@@ -469,7 +469,7 @@
     <value>预测的平均通话时间</value>
   </data>
   <data name="ResRelativeDifferencePercent" xml:space="preserve">
-    <value>相对差异（％）</value>
+    <value>相对差异 (%)</value>
   </data>
   <data name="ResOfferedCalls" xml:space="preserve">
     <value>呼叫的电话</value>
@@ -493,10 +493,10 @@
     <value>排班的座席代表与状态就绪的座席代表的对比</value>
   </data>
   <data name="ResSmoothnessPercent" xml:space="preserve">
-    <value>平稳率（％）</value>
+    <value>平稳率 (%)</value>
   </data>
   <data name="ResWeekdayAndSkill" xml:space="preserve">
-    <value>工作日／技能</value>
+    <value>工作日 / 技能</value>
   </data>
   <data name="ResAgentCategoryColon" xml:space="preserve">
     <value>座席代表的类别：</value>
@@ -511,7 +511,7 @@
     <value>座席统计</value>
   </data>
   <data name="ResAdherencePercent" xml:space="preserve">
-    <value>遵时率（％）</value>
+    <value>遵时率 (%)</value>
   </data>
   <data name="ResAgentDate" xml:space="preserve">
     <value>座席代表/日期</value>
@@ -520,10 +520,10 @@
     <value>应答电话/排班的状态就绪的小时数</value>
   </data>
   <data name="ResOccupancyPercent" xml:space="preserve">
-    <value>占用率（％）</value>
+    <value>占用率 (%)</value>
   </data>
   <data name="ResReadinessPercent" xml:space="preserve">
-    <value>状态就绪（％）</value>
+    <value>状态就绪 (%)</value>
   </data>
   <data name="ResReadyTime" xml:space="preserve">
     <value>就绪时间</value>
@@ -532,7 +532,7 @@
     <value>遵时率统计：</value>
   </data>
   <data name="ResOfferedCallsPerAgent" xml:space="preserve">
-    <value>呼叫通话／座席代表</value>
+    <value>呼叫通话 / 座席代表</value>
   </data>
   <data name="ResServiceLevel" xml:space="preserve">
     <value>服务水平</value>
@@ -547,13 +547,13 @@
     <value>排序：</value>
   </data>
   <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
-    <value>准备时间/排班的准备时间（％）</value>
+    <value>准备时间/排班的准备时间 (%)</value>
   </data>
   <data name="ResScheduledAgentsReady" xml:space="preserve">
     <value>排班的状态就绪的座席代表</value>
   </data>
   <data name="ResDeviationMinute" xml:space="preserve">
-    <value>偏差（秒）</value>
+    <value>偏差 (秒)</value>
   </data>
   <data name="ResNext" xml:space="preserve">
     <value>下一步</value>
@@ -562,16 +562,16 @@
     <value>前一步</value>
   </data>
   <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
-    <value>遵时率/间隔（％）</value>
+    <value>遵时率/间隔 (%)</value>
   </data>
   <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
-    <value>偏差/间隔（秒）</value>
+    <value>偏差/间隔 (秒)</value>
   </data>
   <data name="ResQueueColon" xml:space="preserve">
-    <value>列队：</value>
+    <value>队列：</value>
   </data>
   <data name="ResReportQueueStatistics" xml:space="preserve">
-    <value>列队统计数据</value>
+    <value>队列统计数据</value>
   </data>
   <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
     <value>服务水平内的未应答电话</value>
@@ -592,19 +592,19 @@
     <value>转接的电话</value>
   </data>
   <data name="ResQueue" xml:space="preserve">
-    <value>列队</value>
+    <value>队列</value>
   </data>
   <data name="ResTimeZoneColon" xml:space="preserve">
     <value>时区：</value>
   </data>
   <data name="ResLongestTimeToAbandon" xml:space="preserve">
-    <value>列队呼叫中的最长等待时间，挂断</value>
+    <value>呼叫队列中的最长等待时间，挂断</value>
   </data>
   <data name="ResLongestTimeToAnswer" xml:space="preserve">
-    <value>列队呼叫中的最长等待时间，应答</value>
+    <value>呼叫队列中的最长等待时间，应答</value>
   </data>
   <data name="ResTimeToAbandonSec" xml:space="preserve">
-    <value>挂断前的等待时间（秒）</value>
+    <value>挂断前的等待时间 (秒)</value>
   </data>
   <data name="ResHelp" xml:space="preserve">
     <value>帮助</value>
@@ -613,7 +613,7 @@
     <value>Acd 登录</value>
   </data>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
-    <value>座席代表列队统计数字</value>
+    <value>座席代表队列统计数字</value>
   </data>
   <data name="ResReportAgentStatistics" xml:space="preserve">
     <value>座席代表统计数字</value>
@@ -637,13 +637,13 @@
     <value>空闲时间</value>
   </data>
   <data name="ResLoggedInTime" xml:space="preserve">
-    <value>登录所用时间　</value>
+    <value>登录所用时间</value>
   </data>
   <data name="ResNotReadyTime" xml:space="preserve">
     <value>状态未就绪时间</value>
   </data>
   <data name="ResDateInterval" xml:space="preserve">
-    <value>日期／间隔</value>
+    <value>日期 / 间隔</value>
   </data>
   <data name="ResPermissionDenied" xml:space="preserve">
     <value>未被许可</value>
@@ -655,10 +655,10 @@
     <value>超量呼出电话</value>
   </data>
   <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
-    <value>预测的时间包括损耗时间（小时：分钟）</value>
+    <value>预测的时间包括损耗时间 (小时:分钟 )</value>
   </data>
   <data name="ResScheduledTimeH" xml:space="preserve">
-    <value>排班的时间（小时：分钟）</value>
+    <value>排班的时间 (小时:分钟 )</value>
   </data>
   <data name="ResStandardDeviation" xml:space="preserve">
     <value>标准偏差</value>
@@ -670,10 +670,10 @@
     <value>每个座席代表的排班时间</value>
   </data>
   <data name="ResScheduledAbsenceTime" xml:space="preserve">
-    <value>排班内的缺勤时间（小时：分钟）</value>
+    <value>排班内的缺勤时间 (小时:分钟 )</value>
   </data>
   <data name="ResScheduledOverTime" xml:space="preserve">
-    <value>排班的超时工作时间（小时：分钟）</value>
+    <value>排班的超时工作时间 (小时:分钟 )</value>
   </data>
   <data name="ResAbsenceColon" xml:space="preserve">
     <value>缺勤：</value>
@@ -682,25 +682,25 @@
     <value>活动：</value>
   </data>
   <data name="ResForecastedHoursH" xml:space="preserve">
-    <value>预测的小时数（小时：分钟）</value>
+    <value>预测的小时数 (小时:分钟 )</value>
   </data>
   <data name="ResScheduledHoursH" xml:space="preserve">
-    <value>排班的小时数（小时：分钟）</value>
+    <value>排班的小时数 (小时:分钟 )</value>
   </data>
   <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
-    <value>预测的小时数（损耗）（小时：分钟）</value>
+    <value>预测的小时数 (损耗 ) (小时:分钟 )</value>
   </data>
   <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
-    <value>包括损耗的相对区别（％）</value>
+    <value>包括损耗的相对区别 (%)</value>
   </data>
   <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
-    <value>每天的班次分类</value>
+    <value>每天的班次类别</value>
   </data>
   <data name="ResShiftCategoryColon" xml:space="preserve">
-    <value>班次分类：</value>
+    <value>班次类别：</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
-    <value>每个座席代表的班次分类与整天缺勤</value>
+    <value>每个座席代表的班次类别与整天缺勤</value>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
     <value>每个间隔与小组排班的座席代表</value>
@@ -730,10 +730,10 @@
     <value>用户认证失败</value>
   </data>
   <data name="AuthenticationMixedFailure" xml:space="preserve">
-    <value>当Web程序应用Windows认证时，客户端不能使用应用程序认证．</value>
+    <value>当Web程序使用Windows认证时，客户端不能使用应用程序认证．</value>
   </data>
   <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
-    <value>请采用应用程序认证登录</value>
+    <value>请使用应用程序认证登录</value>
   </data>
   <data name="PossibleSolution" xml:space="preserve">
     <value>可能的解决办法</value>
@@ -742,7 +742,7 @@
     <value>确认权限设置与ETL服务同步</value>
   </data>
   <data name="PossibleSolution2" xml:space="preserve">
-    <value>关闭程序并用Windows认证重新登录；或者由系统管理员将认证修改为应用程序登录．</value>
+    <value>关闭程序并使用Windows认证重新登录；或者由系统管理员将认证修改为应用程序登录。</value>
   </data>
   <data name="TechnicalInformation" xml:space="preserve">
     <value>技术信息</value>
@@ -763,13 +763,13 @@
     <value>所有</value>
   </data>
   <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
-    <value>服务水平目标时间内应答电话数／应答电话总数</value>
+    <value>服务水平目标时间内应答电话数 / 应答电话总数</value>
   </data>
   <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
-    <value>服务水平目标时间内应答及放弃电话数／呼入电话数</value>
+    <value>服务水平目标时间内应答及放弃电话数 / 呼入电话数</value>
   </data>
   <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
-    <value>服务水平目标时间内应答电话数／呼入电话总数</value>
+    <value>服务水平目标时间内应答电话数 / 呼入电话总数</value>
   </data>
   <data name="ResDay" xml:space="preserve">
     <value>日</value>
@@ -811,7 +811,7 @@
     <value>可用时长vs排班可用时长</value>
   </data>
   <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
-    <value>可用时长vs排班时长（包含班次开始时前后时长）</value>
+    <value>可用时长vs排班时长 (包含班次开始时前后时长)</value>
   </data>
   <data name="ResSaturday" xml:space="preserve">
     <value>星期六</value>
@@ -868,7 +868,7 @@
     <value>班次包</value>
   </data>
   <data name="ResGroupPageColon" xml:space="preserve">
-    <value>组:</value>
+    <value>组：</value>
   </data>
   <data name="ResGroupPageGroupColon" xml:space="preserve">
     <value>组</value>
@@ -880,19 +880,19 @@
     <value>每个座席加班的排班</value>
   </data>
   <data name="ResOvertimeColon" xml:space="preserve">
-    <value>加班:</value>
+    <value>加班：</value>
   </data>
   <data name="ResOvertimeTypeColon" xml:space="preserve">
-    <value>加班类别:</value>
+    <value>加班类别：</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>平均ACW (s)</value>
+    <value>平均电话后处理时间 (秒)</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>平均处理时间 (s)</value>
+    <value>平均处理时间 (秒)</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>平均交谈时间 (s)</value>
+    <value>平均交谈时间 (秒)</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>座席队列度量</value>
@@ -901,7 +901,7 @@
     <value>每个座席的活动时间</value>
   </data>
   <data name="ResOvertimeH" xml:space="preserve">
-    <value>加班 (hh:mm)</value>
+    <value>加班 (小时:分钟)</value>
   </data>
   <data name="ResShiftEndTime" xml:space="preserve">
     <value>班次结束时间</value>
@@ -919,7 +919,7 @@
     <value>文字</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>按每个坐席分类的申请</value>
+    <value>按每个座席分类的申请</value>
   </data>
   <data name="ResRequestStatusApproved" xml:space="preserve">
     <value>已批准</value>
@@ -961,6 +961,30 @@
     <value>会话过期</value>
   </data>
   <data name="SessionExpiredText" xml:space="preserve">
-    <value>您的会话由于未活动超时已经过期. 您会马上被再次重定向至登录页面.</value>
+    <value>您的会话由于未活动超时已经过期，您会马上被再次重定向至登录页面。</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>按活动的已计划座席数</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>合计</value>
+  </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>注销</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>日期(班次开始)：</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>开始日期(班次开始)：</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>截止日期(班次开始)：</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>按座席的遵时率</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>按天的遵时率</value>
   </data>
 </root>
