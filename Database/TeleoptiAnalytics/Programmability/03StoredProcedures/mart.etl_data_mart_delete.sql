@@ -27,7 +27,7 @@ BEGIN
 	-- Delete data from bridge and other tables
 	DELETE FROM mart.bridge_queue_workload
 	DELETE FROM mart.bridge_skillset_skill
-	DELETE FROM mart.permission_report
+	DELETE FROM mart.v_permission_report
 	DELETE FROM mart.scorecard_kpi
 	DELETE FROM dbo.aspnet_Membership
 	DELETE FROM dbo.aspnet_Users
