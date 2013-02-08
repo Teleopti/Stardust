@@ -909,7 +909,7 @@
                     <Textbox Name="textbox36">
                       <CanGrow>true</CanGrow>
                       <UserSort>
-                        <SortExpression>=Fields!scheduled_ready_time.Value</SortExpression>
+                        <SortExpression>=Code.TimeString(sum(Fields!scheduled_ready_time.Value))</SortExpression>
                         <SortExpressionScope>table2_Group1</SortExpressionScope>
                         <SortTarget>table2</SortTarget>
                       </UserSort>
@@ -933,6 +933,7 @@
                       <rd:DefaultName>textbox36</rd:DefaultName>
                       <ZIndex>43</ZIndex>
                       <Style>
+                        <Border />
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -940,6 +941,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -947,7 +949,7 @@
                     <Textbox Name="textbox8">
                       <CanGrow>true</CanGrow>
                       <UserSort>
-                        <SortExpression>=Fields!ready_time_s.Value</SortExpression>
+                        <SortExpression>=Code.TimeString(Sum(Fields!ready_time_s.Value))</SortExpression>
                         <SortExpressionScope>table2_Group1</SortExpressionScope>
                         <SortTarget>table2</SortTarget>
                       </UserSort>
@@ -971,6 +973,7 @@
                       <rd:DefaultName>textbox8</rd:DefaultName>
                       <ZIndex>42</ZIndex>
                       <Style>
+                        <Border />
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -985,7 +988,7 @@
                     <Textbox Name="textbox19">
                       <CanGrow>true</CanGrow>
                       <UserSort>
-                        <SortExpression>=Fields!ready_time_per_scheduled_ready_time.Value</SortExpression>
+                        <SortExpression>=CInt(1000*FormatNumber(iif(sum(Fields!scheduled_ready_time.Value)&gt;0,sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0),3))</SortExpression>
                         <SortExpressionScope>table2_Group1</SortExpressionScope>
                         <SortTarget>table2</SortTarget>
                       </UserSort>
@@ -1009,6 +1012,7 @@
                       <rd:DefaultName>textbox19</rd:DefaultName>
                       <ZIndex>41</ZIndex>
                       <Style>
+                        <Border />
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1023,7 +1027,7 @@
                     <Textbox Name="textbox20">
                       <CanGrow>true</CanGrow>
                       <UserSort>
-                        <SortExpression>=Fields!answered_calls.Value</SortExpression>
+                        <SortExpression>=FormatNumber(iif(IsNothing(sum(Fields!answered_calls.Value)),0,sum(Fields!answered_calls.Value)),0)</SortExpression>
                         <SortExpressionScope>table2_Group1</SortExpressionScope>
                         <SortTarget>table2</SortTarget>
                       </UserSort>
@@ -1047,6 +1051,7 @@
                       <rd:DefaultName>textbox20</rd:DefaultName>
                       <ZIndex>40</ZIndex>
                       <Style>
+                        <Border />
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1061,7 +1066,7 @@
                     <Textbox Name="textbox22">
                       <CanGrow>true</CanGrow>
                       <UserSort>
-                        <SortExpression>=Fields!avg_answered_calls.Value</SortExpression>
+                        <SortExpression>=Cint(10*FormatNumber(iif((sum(Fields!scheduled_ready_time.Value)/3600.0)&gt;0,sum(Fields!answered_calls.Value)/(sum(Fields!scheduled_ready_time.Value)/3600.0),0),1))</SortExpression>
                         <SortExpressionScope>table2_Group1</SortExpressionScope>
                         <SortTarget>table2</SortTarget>
                       </UserSort>
@@ -1085,6 +1090,7 @@
                       <rd:DefaultName>textbox22</rd:DefaultName>
                       <ZIndex>39</ZIndex>
                       <Style>
+                        <Border />
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1099,7 +1105,7 @@
                     <Textbox Name="textbox61">
                       <CanGrow>true</CanGrow>
                       <UserSort>
-                        <SortExpression>=Fields!avg_answered_calls_ready_hour.Value</SortExpression>
+                        <SortExpression>=CInt(10*FormatNumber(iif((sum(Fields!ready_time_s.Value)/3600.0)&gt;0,sum(Fields!answered_calls.Value)/(sum(Fields!ready_time_s.Value)/3600.0),0),1))</SortExpression>
                         <SortExpressionScope>table2_Group1</SortExpressionScope>
                         <SortTarget>table2</SortTarget>
                       </UserSort>
@@ -1122,6 +1128,7 @@
                       </Paragraphs>
                       <ZIndex>38</ZIndex>
                       <Style>
+                        <Border />
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1136,7 +1143,7 @@
                     <Textbox Name="textbox48">
                       <CanGrow>true</CanGrow>
                       <UserSort>
-                        <SortExpression>=Fields!occupancy.Value</SortExpression>
+                        <SortExpression>=CInt(1000*FormatNumber(iif(sum(Fields!ready_time_s.Value)&gt;0,sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),3))</SortExpression>
                         <SortExpressionScope>table2_Group1</SortExpressionScope>
                         <SortTarget>table2</SortTarget>
                       </UserSort>
@@ -1160,6 +1167,7 @@
                       <rd:DefaultName>textbox48</rd:DefaultName>
                       <ZIndex>37</ZIndex>
                       <Style>
+                        <Border />
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1174,7 +1182,7 @@
                     <Textbox Name="textbox18">
                       <CanGrow>true</CanGrow>
                       <UserSort>
-                        <SortExpression>=Fields!adherence.Value</SortExpression>
+                        <SortExpression>=CInt(1000*FormatNumber(Code.AdheranceCalc(sum(Fields!adherence_calc_s.Value), sum(Fields!deviation_s.Value)),3))</SortExpression>
                         <SortExpressionScope>table2_Group1</SortExpressionScope>
                         <SortTarget>table2</SortTarget>
                       </UserSort>
@@ -1198,6 +1206,7 @@
                       <rd:DefaultName>textbox18</rd:DefaultName>
                       <ZIndex>36</ZIndex>
                       <Style>
+                        <Border />
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>

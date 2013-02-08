@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Win
         {
             _presenter.SelectDate(dateOnly);
             _presenter.SortCommand.Execute(dateOnly);
-            TheGrid.CurrentCell.MoveTo(TheGrid.CurrentCell.RowIndex, 1);
+			base.SetSelectedDateLocal(dateOnly);
         }
 
         internal override void CellDrawn(object sender, GridDrawCellEventArgs e)

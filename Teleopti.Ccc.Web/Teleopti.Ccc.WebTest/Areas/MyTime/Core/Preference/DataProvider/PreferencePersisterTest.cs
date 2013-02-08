@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
 			var target = new PreferencePersister(preferenceDayRepository, null, mustHaveRestrictionSetter, MockRepository.GenerateMock<ILoggedOnUser>());
 
-			preferenceDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IPreferenceDay> { preferenceDay1, preferenceDay2 });
+			preferenceDayRepository.Stub(x => x.FindAndLock(DateOnly.Today, null)).Return(new List<IPreferenceDay> { preferenceDay1, preferenceDay2 });
 
 			target.Delete(DateOnly.Today);
 
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
 			var target = new PreferencePersister(preferenceDayRepository, null, mustHaveRestrictionSetter, MockRepository.GenerateMock<ILoggedOnUser>());
 
-			preferenceDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IPreferenceDay> { preferenceDay });
+			preferenceDayRepository.Stub(x => x.FindAndLock(DateOnly.Today, null)).Return(new List<IPreferenceDay> { preferenceDay });
 
 			var result = target.Delete(DateOnly.Today);
 
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
 			var target = new PreferencePersister(preferenceDayRepository, null, mustHaveRestrictionSetter, MockRepository.GenerateMock<ILoggedOnUser>());
 
-			preferenceDayRepository.Stub(x => x.Find(DateOnly.Today, null)).Return(new List<IPreferenceDay>());
+			preferenceDayRepository.Stub(x => x.FindAndLock(DateOnly.Today, null)).Return(new List<IPreferenceDay>());
 
 			var exception = Assert.Throws<HttpException>(() => target.Delete(DateOnly.Today));
 			exception.GetHttpCode().Should().Be(404);

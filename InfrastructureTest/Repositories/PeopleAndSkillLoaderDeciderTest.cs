@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -77,11 +78,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             Guid valid = Guid.NewGuid();
             target.SetPeopleGuids(new List<Guid> { valid });
-            IPerson validPerson = new Person();
+	        ISkill skill = SkillFactory.CreateSkill("skill");
+	        ISite site = SiteFactory.CreateSiteWithOneTeam();
+	        site.MaxSeats = 1;
+	        ITeam team = site.TeamCollection[0];
+	        IPerson validPerson = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> {skill});
+	        validPerson.PersonPeriodCollection[0].Team = team;
+	        validPerson.PersonPeriodCollection[0].StartDate = DateOnly.MinValue;
             validPerson.SetId(valid);
             IPerson nonValidPerson = new Person();
             nonValidPerson.SetId(Guid.NewGuid());
-            IPerson personToAdd = new Person();
+            IPerson personToAdd = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> {skill});
+			personToAdd.PersonPeriodCollection[0].Team = team;
+			personToAdd.PersonPeriodCollection[0].StartDate = DateOnly.MinValue;
             Guid guidToAdd = Guid.NewGuid();
             personToAdd.SetId(guidToAdd);
             target.SetSiteGuids(new List<Guid> { guidToAdd });
@@ -254,6 +263,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 : base(personRepository)
             {
                 _matrixService = matrixService;
+	            Period = new DateTimePeriod(1, 1, 12, 1, 1, 13);
             }
 
             public override IPairMatrixService<Guid> MatrixService

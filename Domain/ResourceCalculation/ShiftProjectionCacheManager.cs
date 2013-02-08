@@ -73,12 +73,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     IEnumerable<IWorkShift> shiftsFromMasterActivity = GetShiftFromMasterActivity(shift);
 
                     if (shiftsFromMasterActivity == null)
-                        retList.Add(new ShiftProjectionCache(shift));
+                        retList.Add(new ShiftProjectionCache(shift, new PersonalShiftMeetingTimeChecker()));
                     else
                     {
                         foreach (IWorkShift workShift in shiftsFromMasterActivity)
                         {
-                            retList.Add(new ShiftProjectionCache(workShift));
+                            retList.Add(new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker()));
                         }
                     }
                 }

@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IPersonAssignment _personAssignment;
         private IList<IPersonAssignment> _personAssignments;
         private IScheduleDictionary _scheduleDictionary;
+		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
         [SetUp]
         public void Setup()
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _personAssignments = new List<IPersonAssignment>();
 
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+        	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
         }
 
         [Test]
@@ -197,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var casheList = new List<IShiftProjectionCache>();
             foreach (IWorkShift shift in listOfWorkShifts)
             {
-                var cache = new ShiftProjectionCache(shift);
+                var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
                 cache.SetDate(_dateOnly, _TimeZoneInfo);
                 casheList.Add(cache);
             }
@@ -309,10 +311,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                c1 = new ShiftProjectionCache(_workShift1);
+                c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
                 c1.SetDate(new DateOnly(2009, 1, 1), _TimeZoneInfo);
                 shifts.Add(c1);
-                c2 = new ShiftProjectionCache(_workShift2);
+                c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
                 c2.SetDate(new DateOnly(2009, 1, 1), _TimeZoneInfo);
                 shifts.Add(c2);
                 retShifts = _target.FilterOnRestrictionMinMaxWorkTime(shifts, _effectiveRestriction, new WorkShiftFinderResultForTest());
@@ -355,10 +357,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                c1 = new ShiftProjectionCache(_workShift1);
+                c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
                 c1.SetDate(new DateOnly(2009, 1, 1), _TimeZoneInfo);
                 shifts.Add(c1);
-                c2 = new ShiftProjectionCache(_workShift2);
+                c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
                 c2.SetDate(new DateOnly(2009, 1, 1), _TimeZoneInfo);
                 shifts.Add(c2);
                 retShifts = _target.FilterOnContractTime(minMaxcontractTime, shifts, new WorkShiftFinderResultForTest());
@@ -534,10 +536,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                c1 = new ShiftProjectionCache(_workShift1);
+                c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
                 c1.SetDate(new DateOnly(2009, 1, 1), _TimeZoneInfo);
                 shifts.Add(c1);
-                c2 = new ShiftProjectionCache(_workShift2);
+                c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
                 c2.SetDate(new DateOnly(2009, 1, 1), _TimeZoneInfo);
                 shifts.Add(c2);
                 retShifts = _target.FilterOnStartAndEndTime(scheduleDayPeriod, shifts, new WorkShiftFinderResultForTest());
@@ -726,7 +728,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var retList = new List<IShiftProjectionCache>();
             foreach (IWorkShift shift in tmpList)
             {
-                var cache = new ShiftProjectionCache(shift);
+                var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
                 cache.SetDate(_dateOnly, _TimeZoneInfo);
                 retList.Add(cache);
             }

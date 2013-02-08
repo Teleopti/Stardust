@@ -8,11 +8,17 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.Repositories
 {
     public class SkillRepository
     {
-        private Dictionary<Guid, SkillDto> _skillDictionary;
+    	private readonly ITeleoptiForecastingService _teleoptiForecastingService;
+    	private Dictionary<Guid, SkillDto> _skillDictionary;
 
-        public void Initialize(ITeleoptiForecastingService teleoptiForecastingService)
+    	public SkillRepository(ITeleoptiForecastingService teleoptiForecastingService)
+    	{
+    		_teleoptiForecastingService = teleoptiForecastingService;
+    	}
+
+    	public void Initialize()
         {
-            var skills = teleoptiForecastingService.GetSkills();
+            var skills = _teleoptiForecastingService.GetSkills();
             _skillDictionary = skills.ToDictionary(k => k.Id.GetValueOrDefault(), v => v);
         }
 

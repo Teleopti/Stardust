@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			SaveValidMeeting();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
 		private void SaveValidMeeting()
 		{
 			var start = String.Empty;
@@ -113,38 +113,24 @@ namespace Teleopti.Ccc.Win.Meetings
 				start = (_currentView as MeetingSchedulesView).GetStartTimeText;
 				end = (_currentView as MeetingSchedulesView).GetEndTimeText;
 			}
+			if (_currentView is MeetingImpactView)
+			{
+				var meetingGeneralView = _meetingDetailViews[0] as MeetingGeneralView;
+				if (meetingGeneralView != null)
+				{
+					start = meetingGeneralView.GetStartTimeText;
+					end = meetingGeneralView.GetEndTimeText;
+				}
+				
+			}
 			TimeSpan startTime;
 			TimeSpan endTime;
 			try
 			{
-				var first = start.Substring(0, 1);
-				var maybeNotAnInt = -1;
-				try
-				{
-					maybeNotAnInt = Convert.ToInt16(first, System.Globalization.CultureInfo.CurrentCulture);
-				}
-				catch (Exception)
-				{ }
+				var shortTimePattern = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
 
-				if (maybeNotAnInt == -1)
-				{
-					startTime = DateTime.ParseExact(start, "tt h:mm", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
-					endTime = DateTime.ParseExact(end, "tt h:mm", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
-				}
-				else
-				{
-					if (start.Contains("M"))
-					{
-						startTime = DateTime.ParseExact(start, "h:mm tt", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
-						endTime = DateTime.ParseExact(end, "h:mm tt", System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
-
-					}
-					else
-					{
-						startTime = TimeSpan.Parse(start, System.Globalization.CultureInfo.CurrentCulture);
-						endTime = TimeSpan.Parse(end, System.Globalization.CultureInfo.CurrentCulture);
-					}
-				}
+				startTime = DateTime.ParseExact(start, shortTimePattern, System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
+				endTime = DateTime.ParseExact(end, shortTimePattern, System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
 			}
 			catch (FormatException error)
 			{

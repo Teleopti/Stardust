@@ -1,0 +1,2 @@
+﻿NOTE: Don't try to change or add and change any payroll dll-files in this folder(s) directly!
+Instead read this file "C:\Program Files (x86)\Teleopti\TeleoptiCCC\ServiceBus\Payroll.DeployNew\ReadMe.txt"

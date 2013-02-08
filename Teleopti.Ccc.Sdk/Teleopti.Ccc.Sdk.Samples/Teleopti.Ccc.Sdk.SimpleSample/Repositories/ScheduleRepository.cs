@@ -4,11 +4,39 @@ using System.Linq;
 using System.Windows.Media;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.SimpleSample.Model;
 
 namespace Teleopti.Ccc.Sdk.SimpleSample.Repositories
 {
-    public class ScheduleRepository
+	public class GroupPageRepository
+	{
+		private readonly ITeleoptiOrganizationService _teleoptiOrganizationService;
+
+		public GroupPageRepository(ITeleoptiOrganizationService teleoptiOrganizationService)
+		{
+			_teleoptiOrganizationService = teleoptiOrganizationService;
+		}
+
+		public IEnumerable<GroupPageDto> GetGroupPages()
+		{
+			return _teleoptiOrganizationService.GroupPagesByQuery(new GetAvailableCustomGroupPagesQueryDto());
+		}
+
+		public IEnumerable<GroupPageGroupDto> GetGroupPageGroups(DateTime startDate, GroupPageDto selectedGroupPage)
+		{
+			return
+				_teleoptiOrganizationService.GroupPageGroupsByQuery(new GetGroupsForGroupPageAtDateQueryDto
+				                                                    	{
+				                                                    		PageId = selectedGroupPage.Id.GetValueOrDefault(),
+				                                                    		QueryDate =
+				                                                    			new DateOnlyDto(startDate.Year, startDate.Month,
+				                                                    			                startDate.Day)
+				                                                    	});
+		}
+	}
+
+	public class ScheduleRepository
     {
         private readonly ITeleoptiSchedulingService _teleoptiSchedulingService;
 

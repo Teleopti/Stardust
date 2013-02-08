@@ -21,9 +21,6 @@ SET /a ActiveBranchVersion=%ActiveBranchVersion%
 ::2 - Remove empty dirs
 for /f "delims=" %%i in ('dir "%DestShare%" /s /b /ad ^| sort /r') do rd "%%i" > NUL
 
-::uninstall current server MSI
-Call "%DestShare%\SilentInstall\server\UnInstall.bat"
-
 ::Get latest version figure
 CALL %ROOTDIR%\head.bat 1 %SrcShare%\%ActiveMajorVersion%.%ActiveBranchVersion%.* > %temp%\Version.txt
 SET /p version= < %temp%\Version.txt
@@ -37,7 +34,7 @@ ROBOCOPY "%SrcShare%\%version%" "%DestShare%\%version%" "*.msi"
 ROBOCOPY "%SrcCode%\ccnet\SilentInstall" "%DestShare%\SilentInstall" /MIR
 
 ::installation
-Call "%DestShare%\SilentInstall\server\SilentInstall.bat" "%CCCEXE%" "localhostDemoNoPM" install
+Call "%DestShare%\SilentInstall\server\SilentInstall.bat" "%CCCEXE%" "Neptune" "toptinet\tfsintegration" "m8kemew0rk"
 
 ::Add Lic
 SQLCMD -S. -E -d"TeleoptiCCC7_Demo" -i"%SrcCode%\Database\Tools\Restore\tsql\AddLic.sql" -v LicFile="%SrcCode%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"

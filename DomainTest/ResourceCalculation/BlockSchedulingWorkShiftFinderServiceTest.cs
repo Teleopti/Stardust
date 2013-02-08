@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IShiftCategory _category;
     	private ISchedulingOptions _schedulingOptions;
     	private IShiftCategoryFairnessShiftValueCalculator _shiftCategoryFairnessShiftValueCalculator;
+    	private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
         [SetUp]
         public void Setup()
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _fairnessValueCalculator = _mocks.StrictMock<IFairnessValueCalculator>();
 			_schedulingOptions = new SchedulingOptions();
         	_shiftCategoryFairnessShiftValueCalculator = _mocks.StrictMock<IShiftCategoryFairnessShiftValueCalculator>();
+        	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_target = new BlockSchedulingWorkShiftFinderService(_calculator, _fairnessValueCalculator, _shiftCategoryFairnessShiftValueCalculator);
         }
 
@@ -109,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var retList = new List<IShiftProjectionCache>();
             foreach (IWorkShift shift in tmpList)
             {
-                retList.Add(new ShiftProjectionCache(shift));
+                retList.Add(new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker));
             }
             return retList;
         }

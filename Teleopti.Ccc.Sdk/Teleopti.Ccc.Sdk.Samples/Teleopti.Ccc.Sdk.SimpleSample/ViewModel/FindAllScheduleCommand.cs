@@ -1,9 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using System.ServiceModel;
 using System.Windows;
 using System.Windows.Input;
-using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.SimpleSample.Repositories;
 
@@ -31,27 +29,31 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
 
         private void _scheduleViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var handler = CanExecuteChanged;
-            if (handler != null)
-            {
-                handler.Invoke(this, EventArgs.Empty);
-            }
+        	if (e.PropertyName != "SelectedGroupPageGroup") return;
+
+        	var handler = CanExecuteChanged;
+        	if (handler != null)
+        	{
+        		handler.Invoke(this, EventArgs.Empty);
+        	}
+
+			if (CanExecute(null))
+			{
+				Execute(null);
+			}
         }
 
-        public void Execute(object parameter)
+    	public void Execute(object parameter)
         {
-            var organisationService = new ChannelFactory<ITeleoptiOrganizationService>(typeof(ITeleoptiOrganizationService).Name).CreateChannel();
-            var schedulingService = new ChannelFactory<ITeleoptiSchedulingService>(typeof(ITeleoptiSchedulingService).Name).CreateChannel();
-            _personRepository.Initialize(organisationService);
-            _absenceRepository.Initialize(schedulingService);
-            _activityRepository.Initialize(schedulingService);
-            _overtimeDefinitionSetRepository.Initialize(organisationService);
+            _personRepository.Initialize();
+            _absenceRepository.Initialize();
+            _activityRepository.Initialize();
+            _overtimeDefinitionSetRepository.Initialize();
 
-            var result =
-                _scheduleRepository.GetScheduleModels(
-                    new PeriodScheduleLoadOptions(new DateOnlyDto {DateTime = _scheduleViewModel.StartDate.Date},
-                                                  new DateOnlyDto {DateTime = _scheduleViewModel.EndDate.Date},
-                                                  TimeZoneInfo.Local));
+        	var result =
+        		_scheduleRepository.GetScheduleModels(
+        			new PeriodScheduleLoadOptions(new DateOnlyDto {DateTime = _scheduleViewModel.StartDate.Date}, _scheduleViewModel.SelectedGroupPageGroup.Id.GetValueOrDefault(),
+        			                              TimeZoneInfo.Local));
 
             _scheduleViewModel.FoundSchedules.Clear();
             foreach (var scheduleModel in result)
@@ -100,7 +102,7 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
 
         public bool CanExecute(object parameter)
         {
-            return _scheduleViewModel.StartDate <= _scheduleViewModel.EndDate;
+            return _scheduleViewModel.SelectedGroupPageGroup!=null;
         }
 
         public event EventHandler CanExecuteChanged;

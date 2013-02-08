@@ -82,8 +82,15 @@
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 	</ItemGroup>
 
-	<Target Name="BuildAndTest" DependsOnTargets="FxCop">
+	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;FxCop">
 		<Message Importance="high" Text="BuildAndTest finished" />
+	</Target>
+	
+	<Target Name="ScriptTest">
+		<Message Importance="high" Text="Running pester tests ..." />
+			
+		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\pester\runAllTests.bat&quot;" />
+	
 	</Target>
 
 	<Target Name="Compile" DependsOnTargets="PreCompile;CreateAnalyticsDb;CreateTrunkDb;CreateNHibDb;BuildSSASXmla">

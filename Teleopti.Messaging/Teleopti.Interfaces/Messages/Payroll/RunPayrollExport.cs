@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Messages.General
+namespace Teleopti.Interfaces.Messages.Payroll
 {
     /// <summary>
     /// Message to inform consumers that a payroll export shoud be run
