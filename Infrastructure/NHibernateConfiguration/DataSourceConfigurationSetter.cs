@@ -1,5 +1,7 @@
 ﻿using System.Data.SqlClient;
 using NHibernate.Cfg;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Interfaces.Infrastructure;
 using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
@@ -8,35 +10,35 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	{
 		public static IDataSourceConfigurationSetter ForTest()
 		{
-			return new DataSourceConfigurationSetter(false, false, "call", "unit tests");
+			return new DataSourceConfigurationSetter(false, false, "call", "unit tests", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForTestWithCache()
 		{
-			return new DataSourceConfigurationSetter(true, false, "call", "unit tests");
+			return new DataSourceConfigurationSetter(true, false, "call", "unit tests", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForEtl()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Analytics.ETL.nhib");
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Analytics.ETL.nhib", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForApplicationConfig()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.ApplicationConfiguration");
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.ApplicationConfiguration", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForSdk()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Ccc.Sdk.Host");
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Ccc.Sdk.Host", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForServiceBus()
 		{
-			return new DataSourceConfigurationSetter(false, true, "thread_static", "Teleopti.Ccc.ServiceBus.Host");
+			return new DataSourceConfigurationSetter(false, true, "thread_static", "Teleopti.Ccc.ServiceBus.Host", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForWeb()
 		{
-			return new DataSourceConfigurationSetter(true, false, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure", "Teleopti.Ccc.Web");
+			return new DataSourceConfigurationSetter(true, false, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure", "Teleopti.Ccc.Web", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForDesktop()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Ccc.SmartClientPortal.Shell");
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Ccc.SmartClientPortal.Shell", new ConfigReader());
 		}
 
 		private const string noDataSourceName = "[not set]";
@@ -44,18 +46,22 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		protected DataSourceConfigurationSetter(bool useSecondLevelCache,
 															bool useDistributedTransactionFactory,
 															string sessionContext,
-															string applicationName)
+															string applicationName,
+															IConfigReader configReader)
 		{
 			UseSecondLevelCache = useSecondLevelCache;
 			UseDistributedTransactionFactory = useDistributedTransactionFactory;
 			SessionContext = sessionContext;
 			ApplicationName = applicationName ?? string.Empty;
+			if (!string.IsNullOrEmpty(configReader.AppSettings["latency"]))
+				UseLatency = true;
 		}
 
 		public bool UseSecondLevelCache { get; private set; }
 		public bool UseDistributedTransactionFactory { get; private set; }
 		public string SessionContext { get; private set; }
 		public string ApplicationName { get; private set; }
+		private bool UseLatency { get; set; }
 
 		public void AddDefaultSettingsTo(Configuration nhConfiguration)
 		{
@@ -76,6 +82,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			else
 			{
 				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.UseSecondLevelCache, "false");
+			}
+			if (UseLatency)
+			{
+				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionDriver, typeof(TeleoptiLatencySqlDriver).AssemblyQualifiedName);
 			}
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.TransactionStrategy,
 												 UseDistributedTransactionFactory ?
