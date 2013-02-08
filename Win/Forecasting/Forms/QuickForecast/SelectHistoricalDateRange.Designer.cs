@@ -1,6 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
+﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 {
-    partial class SelectDateRange
+    partial class SelectHistoricalDateRange
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QuickForecast.SelectHistoricalDateRange));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectHistoricalDateRange));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.reportDateFromToSelector1 = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
             this.label1 = new System.Windows.Forms.Label();
@@ -83,7 +83,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Name = "SelectDateRange";
+            this.Name = "SelectHistoricalDateRange";
             this.Size = new System.Drawing.Size(489, 338);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);

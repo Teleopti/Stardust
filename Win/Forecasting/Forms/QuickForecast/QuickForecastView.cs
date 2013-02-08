@@ -74,11 +74,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             var currentWorkload = (WorkloadModel) checkedListBoxWorkloads.Items[e.Index];
             if (e.NewValue==CheckState.Checked)
             {
-                Presenter.AddWorkload(currentWorkload);
+                Presenter.AddWorkload(currentWorkload.Workload.Id.GetValueOrDefault());
             }
             else
             {
-                Presenter.RemoveWorkload(currentWorkload);
+                Presenter.RemoveWorkload(currentWorkload.Workload.Id.GetValueOrDefault());
             }
         }
 

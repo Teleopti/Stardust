@@ -396,6 +396,8 @@
     <Compile Include="Forecasting\JobResultProvider.cs" />
     <Compile Include="Forecasting\JobResultModel.cs" />
     <Compile Include="Forecasting\OpenHourHelper.cs" />
+    <Compile Include="Forecasting\QuickForecastPages\QuickForecastModel.cs" />
+    <Compile Include="Forecasting\QuickForecastPages\QuickForecastWizardPages.cs" />
     <Compile Include="Forecasting\SkillPages\MultisiteSkillPropertiesPages.cs" />
     <Compile Include="Forecasting\SkillPages\SkillGeneralPresenter.cs" />
     <Compile Include="Forecasting\SkillPages\SkillPropertiesPages.cs" />

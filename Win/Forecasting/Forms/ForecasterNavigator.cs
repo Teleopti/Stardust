@@ -28,6 +28,7 @@ using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
+using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 using Teleopti.Ccc.WinCode.Forecasting.SkillPages;
 using Teleopti.Ccc.WinCode.Forecasting.WorkloadPages;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
@@ -41,7 +42,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private TreeNode _lastActionNode;
 		private TreeNode _lastContextMenuNode;
 		private readonly PortalSettings _portalSettings;
-		private readonly IQuickForecastViewFactory _quickForecastViewFactory;
 	    private readonly IJobHistoryViewFactory _jobHistoryViewFactory;
 	    private readonly IImportForecastViewFactory _importForecastViewFactory;
 	    private readonly ISendCommandToSdk _sendCommandToSdk;
@@ -90,14 +90,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 	    public ForecasterNavigator(PortalSettings portalSettings, 
             IRepositoryFactory repositoryFactory, 
             IUnitOfWorkFactory unitOfWorkFactory, 
-            IQuickForecastViewFactory quickForecastViewFactory, 
             IJobHistoryViewFactory jobHistoryViewFactory,
             IImportForecastViewFactory importForecastViewFactory,
             ISendCommandToSdk sendCommandToSdk)
             : this()
         {
             _portalSettings = portalSettings;
-            _quickForecastViewFactory = quickForecastViewFactory;
             _jobHistoryViewFactory = jobHistoryViewFactory;
             _importForecastViewFactory = importForecastViewFactory;
             _sendCommandToSdk = sendCommandToSdk;
@@ -1206,10 +1204,42 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toolStripMenuItemQuickForecast_Click(object sender, EventArgs e)
 		{
-			var view = _quickForecastViewFactory.Create();
-			((Control) view).Show();
+			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				var skillRep = _repositoryFactory.CreateSkillRepository(uow);
+				var skills = skillRep.FindAllWithWorkloadAndQueues();
+				skills = skills.Except(skills.OfType<IChildSkill>()).ToList();
+				var quickForecastPages = PropertyPagesHelper.GetQuickForecastPages(skills);
+				var model = new QuickForecastModel();
+				model.SelectedWorkloads.AddRange(getWorkloadIds(treeViewSkills.SelectedNode));
+				using (var wwp = new QuickForecastWizardPages(model))
+				{
+					wwp.Initialize(quickForecastPages);
+					using (var wizard = new WizardNoRoot<QuickForecastModel>(wwp))
+					{
+						if (wizard.ShowDialog(this) == DialogResult.Cancel)
+						{
+						}
+					}
+				}
+			}
 		}
 
+		private IEnumerable<Guid> getWorkloadIds(TreeNode treeNode)
+		{
+			var retList = new List<Guid>();
+			if (treeNode != null)
+			{
+				var workload = treeNode.Tag as WorkloadModel;
+				if (workload != null) retList.Add(workload.Id);
+				foreach (TreeNode node in treeNode.Nodes)
+				{
+					retList.AddRange(getWorkloadIds(node));
+				}
+			}
+			
+			return retList;
+		}
 		private void toolStripMenuItemCopyTo_Click(object sender, EventArgs e)
 		{
 			var workloadModel = _lastActionNode.Tag as WorkloadModel;

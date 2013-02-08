@@ -1,6 +1,8 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
@@ -35,12 +37,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             _view.SetTargetPeriod(_quickForecastPeriodProvider.DefaultTargetPeriod);
         }
 
-        public void AddWorkload(WorkloadModel workload)
+        public void AddWorkload(Guid workload)
         {
             _model.SelectedWorkloads.Add(workload);
         }
 
-        public void RemoveWorkload(WorkloadModel workload)
+        public void RemoveWorkload(Guid workload)
         {
             _model.SelectedWorkloads.Remove(workload);
         }
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
         public void SetScenario(ScenarioModel scenarioModel)
         {
-            _model.Scenario = scenarioModel.Scenario;
+            _model.ScenarioId = scenarioModel.Scenario.Id.GetValueOrDefault();
         }
     }
 }

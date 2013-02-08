@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 {
