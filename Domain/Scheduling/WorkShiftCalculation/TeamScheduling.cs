@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 				        }
                     if (destinationScheduleDay != null)
-                        if (shiftProjectionCache != null)
                             _resourceCalculateDelayer.CalculateIfNeeded(destinationScheduleDay.DateOnlyAsPeriod.DateOnly,
                                                                         shiftProjectionCache.WorkShiftProjectionPeriod, listOfDestinationScheduleDays) ;
 		        }

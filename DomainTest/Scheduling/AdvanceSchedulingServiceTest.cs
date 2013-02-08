@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                                                                       new WorkShiftLengthHintOption(),
                                                                       true,
                                                                       true)).IgnoreArguments().Return(_scheduleProjectionCache);
-            Expect.Call(() => _teamScheduling.Execute(dateOnlyList, matrixList, _groupPerson, _effectiveRestriction,
+            Expect.Call(() => _teamScheduling.Execute(dateOnly,dateOnlyList, matrixList, _groupPerson, _effectiveRestriction,
                                                       _scheduleProjectionCache, new List<DateOnly>())).IgnoreArguments();
         }
     }

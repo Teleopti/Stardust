@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private IScheduleDay _scheduleDay;
         private IMainShift _mainShift;
         private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
+        private IVirtualSchedulePeriod _virtualSchedulePeriod;
 
         [SetUp ]
         public void Setup()
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _mock = new MockRepository();
             _effectiveRestriction = _mock.StrictMock<IEffectiveRestriction>();
             _shiftProjectionCache = _mock.StrictMock<IShiftProjectionCache>();
+            _virtualSchedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _groupPerson = _mock.StrictMock<IGroupPerson>();
             _resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
@@ -42,38 +44,124 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         }
 
         [Test]
-        public void ShouldExecute()
+        public void ShouldExecuteWithMainShift()
         {
-            var today = DateOnly.Today;
-            IList<DateOnly  > selectedDays = new List<DateOnly>{today};
+            DateOnly startDateOfBlock = DateOnly.Today;
+            IList<DateOnly> selectedDays = new List<DateOnly> { startDateOfBlock };
             IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> {_scheduleMatrixPro };
-            var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(today, TimeZoneInfo.Local);
-
+            var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(startDateOfBlock, TimeZoneInfo.Local);
             var person = new Person();
             var personList  = new ReadOnlyCollection<IPerson>(new List<IPerson>{person});
             var dateTime = new DateTimePeriod();
+            var dateOnlyPeriod = new DateOnlyPeriod(startDateOfBlock,startDateOfBlock.AddDays(2));
+            
             using (_mock.Record())
             {
-                Expect.Call(_groupPerson.GroupMembers).Return(personList);
-                Expect.Call(_scheduleMatrixPro.Person).Return(person);
-                Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(new DateOnly())).IgnoreArguments().Return(
-                    _scheduleDayPro);
-                Expect.Call(_scheduleDayPro.DaySchedulePart() ).Return(_scheduleDay);
-                Expect.Call(() => _scheduleDay.AddMainShift(_mainShift)).IgnoreArguments();
+                ExpectCalls(dateOnlyAsDateTimePeriod, dateOnlyPeriod, dateTime, personList, person);
+
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
                 Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
+                Expect.Call(() => _scheduleDay.AddMainShift(_mainShift)).IgnoreArguments();
                 Expect.Call(_mainShift.EntityClone()).Return(_mainShift);
-                Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(dateTime);
-                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
                 Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay)).IgnoreArguments();
-                Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(dateOnlyAsDateTimePeriod.DateOnly ,
-                                                                        dateTime,
-                                                                        new List<IScheduleDay> {_scheduleDay})).
-                    IgnoreArguments().Return(true);
+                Expect.Call(() => _scheduleDay.Merge(_scheduleDay, false));
             }
 
             using(_mock.Playback()   )
             {
-                _target.Execute(selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { today });
+
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock });
+            }
+        }
+
+        private void ExpectCalls(DateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, DateOnlyPeriod dateOnlyPeriod,
+                                 DateTimePeriod dateTime, ReadOnlyCollection<IPerson> personList, Person person)
+        {
+            Expect.Call(_groupPerson.GroupMembers).Return(personList);
+            Expect.Call(_scheduleMatrixPro.Person).Return(person);
+            Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(new DateOnly())).IgnoreArguments().Return(
+                _scheduleDayPro).Repeat.AtLeastOnce();
+            Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
+            Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(dateTime);
+            Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
+            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(dateOnlyAsDateTimePeriod.DateOnly,
+                                                                    dateTime,
+                                                                    new List<IScheduleDay> {_scheduleDay})).
+                IgnoreArguments().Return(true);
+            Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
+            Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
+            
+        }
+
+        [Test]
+        public void ShouldNotContinueWithDayOff()
+        {
+            DateOnly startDateOfBlock = DateOnly.Today;
+            IList<DateOnly> selectedDays = new List<DateOnly> { startDateOfBlock };
+            IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+            var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(startDateOfBlock, TimeZoneInfo.Local);
+
+            var person = new Person();
+            var personList = new ReadOnlyCollection<IPerson>(new List<IPerson> { person });
+            var dateTime = new DateTimePeriod();
+            var dateOnlyPeriod = new DateOnlyPeriod(startDateOfBlock, startDateOfBlock.AddDays(2));
+            using (_mock.Record())
+            {
+                ExpectCalls(dateOnlyAsDateTimePeriod, dateOnlyPeriod, dateTime, personList, person);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff );
+                
+            }
+            using (_mock.Playback())
+            {
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock });
+            }
+        }
+
+        [Test]
+        public void ShouldNotContinueWithContractDayOff()
+        {
+            DateOnly startDateOfBlock = DateOnly.Today;
+            IList<DateOnly> selectedDays = new List<DateOnly> { startDateOfBlock };
+            IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+            var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(startDateOfBlock, TimeZoneInfo.Local);
+
+            var person = new Person();
+            var personList = new ReadOnlyCollection<IPerson>(new List<IPerson> { person });
+            var dateTime = new DateTimePeriod();
+            var dateOnlyPeriod = new DateOnlyPeriod(startDateOfBlock, startDateOfBlock.AddDays(2));
+            using (_mock.Record())
+            {
+                ExpectCalls(dateOnlyAsDateTimePeriod, dateOnlyPeriod, dateTime, personList, person);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.ContractDayOff );
+
+            }
+            using (_mock.Playback())
+            {
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock });
+            }
+        }
+
+        [Test]
+        public void ShouldNotContinueWithFullDayAbsence()
+        {
+            DateOnly startDateOfBlock = DateOnly.Today;
+            IList<DateOnly> selectedDays = new List<DateOnly> { startDateOfBlock };
+            IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+            var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(startDateOfBlock, TimeZoneInfo.Local);
+
+            var person = new Person();
+            var personList = new ReadOnlyCollection<IPerson>(new List<IPerson> { person });
+            var dateTime = new DateTimePeriod();
+            var dateOnlyPeriod = new DateOnlyPeriod(startDateOfBlock, startDateOfBlock.AddDays(2));
+            using (_mock.Record())
+            {
+                ExpectCalls(dateOnlyAsDateTimePeriod, dateOnlyPeriod, dateTime, personList, person);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.FullDayAbsence );
+
+            }
+            using (_mock.Playback())
+            {
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock });
             }
         }
     }
