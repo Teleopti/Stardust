@@ -185,33 +185,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Log.Write("Making user " + Person.Name);
 
 			SetupAndPersistPerson(Person);
+			DoPostSetup(Person);
 
 			CreateAndPersistColleagueList();
 
 			Resources.Culture = Culture;
 
 			return logonName;
-		}
-
-		public void MakePerson(IPerson person)
-		{
-			CultureInfo culture = null;
-
-			_dataFactory.Apply();
-
-			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
-			{
-				_cultureSetup.Apply(uow, person, null);
-				culture = person.PermissionInformation.Culture();
-				_userSetups.ForEach(s => s.Apply(uow, person, culture));
-				new PersonRepository(uow).Add(person);
-			});
-
-			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _userDataSetups.ForEach(s => s.Apply(uow, person, culture)));
-
-			_postSetups.ForEach(s => s.Apply(person, culture));
-
-			_analyticsDataFactory.Persist(culture);
 		}
 
 		private void CreatePersonWithPermissions(string logonName, string lastName, string password)
@@ -231,7 +211,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			                    		colleague.Person = PersonFactory.CreatePerson();
 			                    		colleague.Person.Name = new Name("Colleague", colleagueName.LastName);
 			                    		colleague.SetupAndPersistPerson(colleague.Person);
+			                    		colleague.DoPostSetup(colleague.Person);
 			                    	});
+		}
+
+		private void DoPostSetup(IPerson person)
+		{
+			_postSetups.ForEach(s => s.Apply(person));
 		}
 
 		private void SetupAndPersistPerson(IPerson person)
@@ -250,7 +236,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _userDataSetups.ForEach(s => s.Apply(uow, person, culture) ));
 
-			_postSetups.ForEach(s => s.Apply(person, culture));
 
 			_analyticsDataFactory.Persist(culture);
 		}

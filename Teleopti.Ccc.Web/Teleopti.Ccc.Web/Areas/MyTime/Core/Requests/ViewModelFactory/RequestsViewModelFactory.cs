@@ -81,5 +81,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		{
 			return _mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(selectedDate));
 		}
+
+		public ShiftTradeSwapDetailsViewModel CreateShiftTradeRequestSwapDetails(Guid id)
+		{
+			var personRequest =  _personRequestProvider.RetrieveRequest(id);
+			var shiftTradeSwapDetails = _mapper.Map<IShiftTradeRequest,ShiftTradeSwapDetailsViewModel>(personRequest.Request as IShiftTradeRequest);
+			return shiftTradeSwapDetails;
+		}
 	}
 }

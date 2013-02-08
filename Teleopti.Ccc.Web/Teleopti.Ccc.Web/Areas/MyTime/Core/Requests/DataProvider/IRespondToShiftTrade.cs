@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		/// <summary>
 		/// Rejects the shifttrade request
 		/// </summary>
-		/// <param name="id">The id of the shifttrade</param>
-		void Reject(Guid id);
+		/// <param name="requestId">The id of the request</param>
+		void Deny(Guid requestId);
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -185,6 +187,23 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => _page.ShiftTradeReciever.Text, Is.EqualTo(name));
 		}
+
+		[Then(@"I should see '(.*)' as the date of the request target")]
+		public void ThenIShouldSeeAsTheDateOfTheRequestTarget(string date)
+		{
+			var dateOfTheTrade = DateTime.Parse(date);
+			EventualAssert.That(() => DateTime.Parse(_page.ShiftTradeDateFrom.Text), Is.EqualTo(dateOfTheTrade));
+		}
+
+		[Then(@"I should see '(.*)' as the date of the request source")]
+		public void ThenIShouldSeeAsTheDateOfTheRequestSource(string date)
+		{
+			var dateOfTheTrade = DateTime.Parse(date);
+			EventualAssert.That(() => DateTime.Parse(_page.ShiftTradeDateTo.Text), Is.EqualTo(dateOfTheTrade));
+		}
+
+
+
 
 	}
 

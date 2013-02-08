@@ -168,8 +168,10 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IRespondToShiftTrade.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\RespondToShiftTrade.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailsViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradePersonScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeSwapDetailsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeTimeLineHoursViewModel.cs" />
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />

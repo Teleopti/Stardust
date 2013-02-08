@@ -25,9 +25,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		protected override void Configure()
 		{
+			//henke refact move out, this should be a separate mapper....
+			CreateMap<IScheduleDay, ShiftTradePersonScheduleViewModel>()
+				.ConvertUsing(o =>
+					                {
+											 var myScheduleDay = createPersonDay(o);
+											 var timeLineRangeTot = setTimeLineRange(myScheduleDay.ScheduleLayers, new List<ShiftTradePersonDayData>(), myScheduleDay.PersonTimeZone);
+											 var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
+											 {
+												 Name = o.Person.Name.ToString(),
+												 ScheduleLayers = createShiftTradeLayers(myScheduleDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
+												 MinutesSinceTimeLineStart =
+													 myScheduleDay.ScheduleLayers.Any() ?
+														 (int)myScheduleDay.ScheduleLayers.First()
+																			 .Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime)
+																			 .TotalMinutes :
+														 TimeLineOffset,
+												 DayOffText = myScheduleDay.DayOffText,
+												 HasUnderlyingDayOff = myScheduleDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff,
+											 };
+											 return myScheduleViewModel;
+					                });
+				
+			
 			CreateMap<DateOnly, ShiftTradeScheduleViewModel>()
 				.ConvertUsing(s =>
 					{
+						
 						var myScheduleDay = createPersonDay(_shiftTradeRequestProvider.Invoke().RetrieveMyScheduledDay(s));
 
 						var possibleTradePersonsSchedule = _shiftTradeRequestProvider.Invoke().RetrievePossibleTradePersonsScheduleDay(s);

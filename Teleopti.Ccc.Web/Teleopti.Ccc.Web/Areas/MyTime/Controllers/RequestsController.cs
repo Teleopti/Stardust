@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public void RejectShiftTrade(Guid id)
+		public void DenyShiftTrade(Guid id)
 		{
-			_respondToShiftTrade.Reject(id);
+			_respondToShiftTrade.Deny(id);
 		}
 
 		[UnitOfWorkAction]
@@ -122,6 +122,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public JsonResult ShiftTradeRequestPeriod()
 		{
 			return Json(_requestsViewModelFactory.CreateShiftTradePeriodViewModel(), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult ShiftTradeRequestSwapDetails(Guid id)
+		{
+			return Json(_requestsViewModelFactory.CreateShiftTradeRequestSwapDetails(id));
 		}
 	}
 }

@@ -32,11 +32,12 @@ Scenario: Show created shift trade request
 Scenario: Show received shift trade request
 	Given I am an agent
 	And I have received a shift trade request
-	| Field   | Value         |
-	| Subject | swap with me  |
-	| From    | Ashley Andeen |
+	| Field			| Value         |
+	| Subject		| swap with me  |
+	| From			| Ashley Andeen |
+	| TestName		| Henke Andersson|
 	When I view requests
-		Then I should see my existing shift trade request with subject 'swap with me'
+	Then I should see my existing shift trade request with subject 'swap with me'
 
 Scenario: Requests tab
 	Given I am an agent

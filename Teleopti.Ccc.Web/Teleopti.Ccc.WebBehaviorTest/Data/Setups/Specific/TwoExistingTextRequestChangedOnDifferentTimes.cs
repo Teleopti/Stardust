@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		public PersonRequest PersonRequest1;
 		public PersonRequest PersonRequest2;
 
-		public void Apply(IPerson user, CultureInfo cultureInfo)
+		public void Apply(IPerson user)
 		{
 
 			ScenarioUnitOfWorkState.UnitOfWorkAction(
