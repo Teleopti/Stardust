@@ -325,5 +325,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Assert.That(result.To, Is.EqualTo(_loggedOnPerson.Name.ToString()));
 		}
 
+		[Test]
+		public void ShouldMapFromAndToToEmptyStringIfNotShiftTradeRequest()
+		{
+			var personRequest = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			result.From.Should().Be.Empty();
+			result.To.Should().Be.Empty();
+		}
 	}
 }
