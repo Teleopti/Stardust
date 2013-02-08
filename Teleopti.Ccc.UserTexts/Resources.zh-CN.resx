@@ -138,11 +138,11 @@
     <comment>Absence</comment>
   </data>
   <data name="AbsenceRequest" xml:space="preserve">
-    <value>缺勤请求</value>
+    <value>缺勤申请</value>
     <comment>AbsenceRequest</comment>
   </data>
   <data name="AbsenceRequestEmptyAbsenceTypeError" xml:space="preserve">
-    <value>没有选择缺勤</value>
+    <value>未选中缺勤</value>
     <comment>Error message given when absence type isnot selected in the Absence Reuest</comment>
   </data>
   <data name="Absences" xml:space="preserve">
@@ -150,7 +150,7 @@
     <comment>Absences</comment>
   </data>
   <data name="AbsencesColon" xml:space="preserve">
-    <value>缺勤: </value>
+    <value>缺勤：</value>
     <comment>Absences:</comment>
   </data>
   <data name="AbsoluteDifference" xml:space="preserve">
@@ -229,7 +229,7 @@
     <comment>Actual</comment>
   </data>
   <data name="ActualAgents" xml:space="preserve">
-    <value>实际坐席代表数量</value>
+    <value>实际座席代表数量</value>
     <comment>Actual agents</comment>
   </data>
   <data name="ActualHandlingTime" xml:space="preserve">
@@ -241,7 +241,7 @@
     <comment>Actual talk time</comment>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>增加　</value>
+    <value>增加</value>
     <comment>Add</comment>
   </data>
   <data name="AddAbsence" xml:space="preserve">
@@ -265,7 +265,7 @@
     <comment>AddAnotherLevel</comment>
   </data>
   <data name="AddArrows" xml:space="preserve">
-    <value>&amp;增加&gt;&gt;</value>
+    <value>增加(&amp;A)&gt;&gt;</value>
     <comment>&amp;Add&gt;&gt;</comment>
   </data>
   <data name="AddDayOff" xml:space="preserve">
@@ -305,7 +305,7 @@
     <comment>Add New Optional Column</comment>
   </data>
   <data name="AddNewScenario" xml:space="preserve">
-    <value>增加情形</value>
+    <value>增加情景</value>
     <comment>New Scenario</comment>
   </data>
   <data name="AddNewScorecard" xml:space="preserve">
@@ -360,7 +360,7 @@
     <comment>Add Personal Activity...</comment>
   </data>
   <data name="AddPersonalLayer" xml:space="preserve">
-    <value>增加个人专用层 </value>
+    <value>增加个人专用层</value>
     <comment>Add Personal Layer menu item</comment>
   </data>
   <data name="AddPersonTimeActivity" xml:space="preserve">
@@ -391,7 +391,7 @@
     <comment>Add shift category text in the shit category settings page</comment>
   </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
-    <value>&amp;增加快捷工具条</value>
+    <value>增加快捷工具条(&amp;A)</value>
     <comment>&amp;Add to Quick Access ToolBar</comment>
   </data>
   <data name="Adherence" xml:space="preserve">
@@ -419,67 +419,67 @@
     <comment>AP:Queue grid columns (My Report)</comment>
   </data>
   <data name="Agent" xml:space="preserve">
-    <value>坐席代表</value>
+    <value>座席代表</value>
     <comment>Agent</comment>
   </data>
   <data name="AgentInfo" xml:space="preserve">
-    <value>坐席代表信息</value>
+    <value>座席代表信息</value>
     <comment>Agent Info</comment>
   </data>
   <data name="AgentInformation" xml:space="preserve">
-    <value>坐席代表信息</value>
+    <value>座席代表信息</value>
     <comment>Agent information</comment>
   </data>
   <data name="AgentInfoThreeDots" xml:space="preserve">
-    <value>坐席代表信息…</value>
+    <value>座席代表信息…</value>
     <comment>Agent info...</comment>
   </data>
   <data name="AgentName" xml:space="preserve">
-    <value>坐席代表姓名</value>
+    <value>座席代表姓名</value>
     <comment>Agent Name</comment>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>我的时间</value>
+    <value>Teleopti CCC MyTime</value>
     <comment>MyTime</comment>
   </data>
   <data name="AgentPortalOptions" xml:space="preserve">
-    <value>坐席代表主界面选项</value>
+    <value>座席代表主界面选项</value>
     <comment>Open the Agent Portal Settings form</comment>
   </data>
   <data name="Agents" xml:space="preserve">
-    <value>坐席代表</value>
+    <value>座席代表</value>
     <comment>Agents</comment>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>坐席代表排班消息工具栏</value>
+    <value>座席代表排班消息工具栏</value>
     <comment>Agent Schedule Messenger</comment>
   </data>
   <data name="AgentSelectDialog" xml:space="preserve">
-    <value>坐席代表选择</value>
+    <value>座席代表选择</value>
     <comment>Agent Select</comment>
   </data>
   <data name="AgentSettings" xml:space="preserve">
-    <value>坐席代表设置</value>
+    <value>座席代表设置</value>
     <comment>Agent settings</comment>
   </data>
   <data name="AgentsInc" xml:space="preserve">
-    <value>坐席代表包括</value>
+    <value>座席代表包括</value>
     <comment>Agents inc</comment>
   </data>
   <data name="AgentsIncWithShrinkage" xml:space="preserve">
-    <value>考虑到损耗的坐席代表</value>
+    <value>考虑到损耗的座席代表</value>
     <comment>Agents inc with shrinkage</comment>
   </data>
   <data name="AgentState" xml:space="preserve">
-    <value>坐席代表状态</value>
+    <value>座席代表状态</value>
     <comment>Used in column header tooltip</comment>
   </data>
   <data name="AgentsWithShrinkage" xml:space="preserve">
-    <value>考虑到损耗的坐席代表数量</value>
+    <value>考虑到损耗的座席代表数量</value>
     <comment>Agents with shrinkage</comment>
   </data>
   <data name="AgentTeam" xml:space="preserve">
-    <value>坐席代表小组</value>
+    <value>座席代表小组</value>
     <comment>Used in column header tooltip</comment>
   </data>
   <data name="Alarm" xml:space="preserve">
@@ -507,35 +507,35 @@
     <comment>All day event</comment>
   </data>
   <data name="AllSelection" xml:space="preserve">
-    <value>&lt;全部的&gt;</value>
+    <value>&lt;全部&gt;</value>
     <comment>&lt; All &gt;</comment>
   </data>
   <data name="AmpersandEmployeeNumber" xml:space="preserve">
-    <value>&amp;雇员编号</value>
+    <value>员工编号(&amp;E)</value>
     <comment>Ampersand Employee Number</comment>
   </data>
   <data name="AmpersandFindNext" xml:space="preserve">
-    <value>&amp;查找下一个</value>
+    <value>查找下一个(&amp;F)</value>
     <comment>Find next</comment>
   </data>
   <data name="AmpersandFirstName" xml:space="preserve">
-    <value>&amp;名</value>
+    <value>名(&amp;F)</value>
     <comment>Ampersand First Name</comment>
   </data>
   <data name="AmpersandLastName" xml:space="preserve">
-    <value>&amp;姓氏</value>
+    <value>姓氏(&amp;L)</value>
     <comment>Ampersand Last Name</comment>
   </data>
   <data name="AmpersandNameColon" xml:space="preserve">
-    <value>&amp;名称: </value>
+    <value>名称(&amp;N)：</value>
     <comment>&amp;Name:</comment>
   </data>
   <data name="AmpersandPeriodColon" xml:space="preserve">
-    <value>&amp;阶段: </value>
+    <value>阶段(&amp;P)：</value>
     <comment>&amp;Period:</comment>
   </data>
   <data name="AmpersandReplace" xml:space="preserve">
-    <value>&amp;取代</value>
+    <value>替换(&amp;R)</value>
     <comment>Replace</comment>
   </data>
   <data name="AndThenOn" xml:space="preserve">
@@ -563,15 +563,15 @@
     <comment>Answered tasks</comment>
   </data>
   <data name="AnUnHandledExceptionOccured" xml:space="preserve">
-    <value>无法处理的例外发生，应用程序正在终止。</value>
+    <value>发生无法处理的异常，应用程序即将终止。</value>
     <comment>An unhandled exception occurred, and the application is terminating.</comment>
   </data>
   <data name="ApplicationLogInName" xml:space="preserve">
-    <value>应用程序 登录名称</value>
+    <value>应用程序登录名</value>
     <comment>Appl. login name</comment>
   </data>
   <data name="ApplicationLogon" xml:space="preserve">
-    <value>应用登录 </value>
+    <value>应用登录</value>
     <comment>Application logon</comment>
   </data>
   <data name="Apply" xml:space="preserve">
@@ -587,19 +587,19 @@
     <comment>Approve</comment>
   </data>
   <data name="Approved" xml:space="preserve">
-    <value>批准的</value>
+    <value>已批准</value>
     <comment>Approved</comment>
   </data>
   <data name="AreYouSureYouWantToDelete" xml:space="preserve">
-    <value>您确定删除吗? </value>
+    <value>您确定要删除吗？</value>
     <comment>Are you sure you want to delete?</comment>
   </data>
   <data name="AreYouSureYouWantToDeleteGrouping" xml:space="preserve">
-    <value>您确定想要删除 '{0}' 分组吗?</value>
+    <value>您确定想要删除 '{0}' 分组吗？</value>
     <comment>Are you sure you want to delete '{0}' grouping?</comment>
   </data>
   <data name="ArrowsRemove" xml:space="preserve">
-    <value>&lt;&lt;&amp;删除</value>
+    <value>&lt;&lt;删除(&amp;D)</value>
     <comment>&lt;&lt;&amp;Delete</comment>
   </data>
   <data name="AtoZ" xml:space="preserve">
@@ -615,15 +615,15 @@
     <comment>Audit Trail</comment>
   </data>
   <data name="AuditTrailColon" xml:space="preserve">
-    <value>审计跟踪: </value>
+    <value>审计跟踪：</value>
     <comment>Audit Trail Colon</comment>
   </data>
   <data name="AuthenticationError" xml:space="preserve">
-    <value>验证错误.</value>
+    <value>验证错误。</value>
     <comment>Authentication error.</comment>
   </data>
   <data name="AuthenticationFailed" xml:space="preserve">
-    <value>认证失败.请再尝试一次</value>
+    <value>认证失败，请重试。</value>
     <comment>Authentication failed. Please try again.</comment>
   </data>
   <data name="AutomaticScheduling" xml:space="preserve">
@@ -643,7 +643,7 @@
     <comment>Availabilities</comment>
   </data>
   <data name="AvailabilitiesCouldNotBeLoaded" xml:space="preserve">
-    <value>可用性不能加载。 数据库中可能没有可用性。</value>
+    <value>无法加载可用性，数据库中可能没有可用性。</value>
     <comment>Error availability not in system</comment>
   </data>
   <data name="Availability" xml:space="preserve">
@@ -703,7 +703,7 @@
     <comment>Average handling time</comment>
   </data>
   <data name="AverageSpeedOfAnswer" xml:space="preserve">
-    <value>平均应答速度 </value>
+    <value>平均应答速度</value>
     <comment>Average speed of answer</comment>
   </data>
   <data name="AverageTalkTime" xml:space="preserve">
@@ -723,7 +723,7 @@
     <comment>Contract setting page average work time field shouldnt be containing values more than 24 hours</comment>
   </data>
   <data name="AverageWorkTimePerDayColon" xml:space="preserve">
-    <value>每天平均工作时间: </value>
+    <value>每天平均工作时间：</value>
     <comment>Average Work Time Per Day:</comment>
   </data>
   <data name="Back" xml:space="preserve">
@@ -749,7 +749,7 @@
     <value>平衡输出</value>
   </data>
   <data name="BallonTipScheduleChange" xml:space="preserve">
-    <value>你的排班已经改动。 点击这里查看更新的排班。</value>
+    <value>你的排班已经改动。点击这里查看更新的排班。</value>
     <comment>ballon tool tip text</comment>
   </data>
   <data name="Bar" xml:space="preserve">
@@ -761,7 +761,7 @@
     <comment>Base activity</comment>
   </data>
   <data name="BetweenColon" xml:space="preserve">
-    <value>之间: </value>
+    <value>范围：</value>
     <comment>Between:</comment>
   </data>
   <data name="BlankDescription" xml:space="preserve">
@@ -773,23 +773,23 @@
     <comment>Header title for Budget Forecasting Smart part</comment>
   </data>
   <data name="BusinessRuleDayOffErrorMessage1" xml:space="preserve">
-    <value>{0}处的休息日与之前和之后的活动冲突。</value>
+    <value>{0} 处的休息日与之前和之后的活动冲突。</value>
     <comment>The Day Off at {0} conflicts with activity before and after the Day Off.</comment>
   </data>
   <data name="BusinessRuleDayOffErrorMessage2" xml:space="preserve">
-    <value>{0}处的休息日与之前的活动冲突，并且不允许机动提前。</value>
+    <value>{0} 处的休息日与之前的活动冲突，并且不允许机动提前。</value>
     <comment>The Day Off at {0} conflicts with activity before and the flexibility does not allow a move forward.</comment>
   </data>
   <data name="BusinessRuleDayOffErrorMessage3" xml:space="preserve">
-    <value>{0}处的休息日与之前的活动冲突，并且不能提前。</value>
+    <value>{0} 处的休息日与之前的活动冲突，并且不能提前。</value>
     <comment>The Day Off at {0} conflicts with activity before and can not be moved forward.</comment>
   </data>
   <data name="BusinessRuleDayOffErrorMessage4" xml:space="preserve">
-    <value>{0}处的休息日与之后的活动冲突，并且不允许机动推迟。</value>
+    <value>{0} 处的休息日与之后的活动冲突，并且不允许机动推迟。</value>
     <comment>The Day Off at {0} conflicts with activity after and the flexibility does not allow a move backward.</comment>
   </data>
   <data name="BusinessRuleDayOffErrorMessage5" xml:space="preserve">
-    <value>{0}处的休息日与之后的活动冲突，并且不能推迟。</value>
+    <value>{0} 处的休息日与之后的活动冲突，并且不能推迟。</value>
     <comment>The Day Off at {0} conflicts with activity after and can not be moved backward.</comment>
   </data>
   <data name="BusinessRuleMaxWeekWorkTimeErrorMessage" xml:space="preserve">
@@ -801,7 +801,7 @@
     <comment>There must be a daily rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours.</comment>
   </data>
   <data name="BusinessRuleNoContractErrorMessage" xml:space="preserve">
-    <value>人员 {0}没有合同设定到当前日期 {1}。</value>
+    <value>人员 {0} 没有设定到当前日期 {1} 的合同。</value>
     <comment>Person {0} has no contract defined for the current date {1}.</comment>
   </data>
   <data name="BusinessRuleOverlappingErrorMessage1" xml:space="preserve">
@@ -833,7 +833,7 @@
     <comment>Calculated facsimiles</comment>
   </data>
   <data name="CalculatedOccupancyPercentSign" xml:space="preserve">
-    <value>统计的占用率％</value>
+    <value>统计的占用率 (%)</value>
     <comment>Calculated occupancy %</comment>
   </data>
   <data name="CalculatedTasks" xml:space="preserve">
@@ -845,27 +845,27 @@
     <comment>Calls</comment>
   </data>
   <data name="CampaignACWPercentSign" xml:space="preserve">
-    <value>活动的平均话后处理时长％</value>
+    <value>活动的平均话后处理时长 (%)</value>
     <comment>Campaign ACW %</comment>
   </data>
   <data name="CampaignAEWPercent" xml:space="preserve">
-    <value>活动的AEW％</value>
+    <value>活动的AEW (%)</value>
     <comment>Campaign AEW %</comment>
   </data>
   <data name="CampaignAfterWorkPercentSign" xml:space="preserve">
-    <value>活动后的工作％</value>
+    <value>活动后的工作 (%)</value>
     <comment>Campaign after work %</comment>
   </data>
   <data name="CampaignAFWPercent" xml:space="preserve">
-    <value>活动的AFW％</value>
+    <value>活动的AFW (%)</value>
     <comment>Campaign AFW%</comment>
   </data>
   <data name="CampaignATWPercent" xml:space="preserve">
-    <value>活动的ATW％</value>
+    <value>活动的ATW (%)</value>
     <comment>Campaign ATW %</comment>
   </data>
   <data name="CampaignCallsPercentSign" xml:space="preserve">
-    <value>活动的电话量％</value>
+    <value>活动的电话量 (%)</value>
     <comment>Campaign calls %</comment>
   </data>
   <data name="CampaignEmailsHandlingtime" xml:space="preserve">
@@ -873,7 +873,7 @@
     <comment>Campaign emails handling time</comment>
   </data>
   <data name="CampaignEmailsPercent" xml:space="preserve">
-    <value>活动的电子邮件 ％</value>
+    <value>活动的电子邮件 (%)</value>
     <comment>Campaign emails %</comment>
   </data>
   <data name="CampaignFacsimilesHandlingtime" xml:space="preserve">
@@ -881,15 +881,15 @@
     <comment>Campaign facsimiles handling time</comment>
   </data>
   <data name="CampaignFacsimilesPercent" xml:space="preserve">
-    <value>活动的传真％</value>
+    <value>活动的传真 (%)</value>
     <comment>Campaign facsimiles %</comment>
   </data>
   <data name="CampaignTalkTimePercentSign" xml:space="preserve">
-    <value>活动的通话时间％</value>
+    <value>活动的通话时间 (%)</value>
     <comment>Campaign talk time %</comment>
   </data>
   <data name="CampaignTaskPercent" xml:space="preserve">
-    <value>活动的任务％</value>
+    <value>活动的任务 (%)</value>
     <comment>Campaign tasks%</comment>
   </data>
   <data name="CampaignTasksHandlingtime" xml:space="preserve">
@@ -905,15 +905,15 @@
     <comment>cancel loading</comment>
   </data>
   <data name="CannotDeleteSiteColon" xml:space="preserve">
-    <value>不能删除运营点:</value>
+    <value>不能删除运营点：</value>
     <comment>Error message when deleteing site. The sites comes afterwards</comment>
   </data>
   <data name="CannotDeleteTeamColon" xml:space="preserve">
-    <value>不能删除小组:</value>
+    <value>不能删除小组：</value>
     <comment>Error message when deleteing team. The sites comes afterwards</comment>
   </data>
   <data name="CanNotFindTheServiceEndPoint" xml:space="preserve">
-    <value>不能找到服务结束点</value>
+    <value>无法找到服务端点</value>
     <comment>Can not find the service end point</comment>
   </data>
   <data name="CanNotLoadSmartPartModule" xml:space="preserve">
@@ -929,19 +929,19 @@
     <comment>Category</comment>
   </data>
   <data name="ChangedBy" xml:space="preserve">
-    <value>改动人</value>
+    <value>更改人</value>
     <comment>Changed By</comment>
   </data>
   <data name="ChangeInterval" xml:space="preserve">
-    <value>改动间隔</value>
+    <value>更改间隔</value>
     <comment>Change Interval menu item</comment>
   </data>
   <data name="ChangeOptionalColumn" xml:space="preserve">
-    <value>改变可选栏目</value>
+    <value>更改可选栏目</value>
     <comment>Change Optional Column</comment>
   </data>
   <data name="ChangeYourAvailabilities" xml:space="preserve">
-    <value>改动你的可用的</value>
+    <value>更改你的可用性</value>
     <comment>Availability settings form header</comment>
   </data>
   <data name="ChangeYourCultureSettings" xml:space="preserve">
@@ -949,7 +949,7 @@
     <comment>Computer default culture settings</comment>
   </data>
   <data name="ChangeYourOrganizationTree" xml:space="preserve">
-    <value>改动你的组织结构 </value>
+    <value>更改你的组织结构</value>
     <comment>Change your organisation structure</comment>
   </data>
   <data name="ChangeYourPassword" xml:space="preserve">
@@ -957,7 +957,7 @@
     <comment>Change your password</comment>
   </data>
   <data name="ChangeYourRotations" xml:space="preserve">
-    <value>改动你的循环</value>
+    <value>更改你的循环</value>
     <comment>Form Header</comment>
   </data>
   <data name="Chart" xml:space="preserve">
@@ -973,7 +973,7 @@
     <comment>Chart settings</comment>
   </data>
   <data name="ChartViews" xml:space="preserve">
-    <value>图表浏览</value>
+    <value>图表视图</value>
     <comment>Chart views ribbon grouping</comment>
   </data>
   <data name="CheckAll" xml:space="preserve">
@@ -981,11 +981,11 @@
     <comment>Check all</comment>
   </data>
   <data name="ChooseCancelIfYouWouldLikeToCorrectTheErrorsOrCheckEachErrorToOverrideTheBusinessRules" xml:space="preserve">
-    <value>按下OK键，忽略规则。 按下取消键，首先纠正错误。</value>
+    <value>按确认键忽略规则，按取消键返回纠正错误。</value>
     <comment>Press OK to override the Rules. Press cancel to correct the errors first.</comment>
   </data>
   <data name="ChooseCommandsFromColon" xml:space="preserve">
-    <value>&amp;选择起始命令: </value>
+    <value>选择起始命令(&amp;C)：</value>
     <comment>&amp;Choose commands from:</comment>
   </data>
   <data name="ChooseContractScheduleToChange" xml:space="preserve">
@@ -1005,7 +1005,7 @@
     <comment>Choose grouping to change</comment>
   </data>
   <data name="ChooseOptionalColumnToChange" xml:space="preserve">
-    <value>选择可选栏目进行改动</value>
+    <value>选择可选栏目进行修改</value>
     <comment>Choose Optional Column To Change</comment>
   </data>
   <data name="ChoosePartTimePercentageDefinitionToChange" xml:space="preserve">
@@ -1013,7 +1013,7 @@
     <comment>Choose part-time percentage definition to change</comment>
   </data>
   <data name="ChooseScenarioToChange" xml:space="preserve">
-    <value>选择情形进行编辑</value>
+    <value>选择情景进行编辑</value>
     <comment>Choose Scenario To Change</comment>
   </data>
   <data name="ChooseScorecardToEdit" xml:space="preserve">
@@ -1021,7 +1021,7 @@
     <comment>ChooseScorecardToEdit</comment>
   </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
-    <value>选择班次类型，进行改动</value>
+    <value>选择班次类型进行修改</value>
     <comment>ChooseSShiftCategoryToChange text in shift categories setting page</comment>
   </data>
   <data name="Clear" xml:space="preserve">
@@ -1045,7 +1045,7 @@
     <comment>Closed</comment>
   </data>
   <data name="Colon" xml:space="preserve">
-    <value>: </value>
+    <value>：</value>
     <comment>:</comment>
   </data>
   <data name="Color" xml:space="preserve">
@@ -1053,7 +1053,7 @@
     <comment>Color</comment>
   </data>
   <data name="ColorColon" xml:space="preserve">
-    <value>颜色: </value>
+    <value>颜色：</value>
     <comment>Color</comment>
   </data>
   <data name="Column" xml:space="preserve">
@@ -1069,11 +1069,11 @@
     <comment>Auto Position</comment>
   </data>
   <data name="CommonAgentDescription" xml:space="preserve">
-    <value>普通坐席代表描述</value>
+    <value>普通座席代表描述</value>
     <comment>CommonAgentDescription</comment>
   </data>
   <data name="CommunicationErrorEndPoint" xml:space="preserve">
-    <value>通信结束点错误</value>
+    <value>通信端点错误</value>
     <comment>Communication end point error</comment>
   </data>
   <data name="CompareWith" xml:space="preserve">
@@ -1081,7 +1081,7 @@
     <comment>Compare with</comment>
   </data>
   <data name="CompTime" xml:space="preserve">
-    <value>补偿时间 </value>
+    <value>补偿时间</value>
     <comment>Compensation time for trackingdescription</comment>
   </data>
   <data name="ConfirmGroupingDeletion" xml:space="preserve">
@@ -1105,7 +1105,7 @@
     <comment>Conflicts</comment>
   </data>
   <data name="ConnectedToColon" xml:space="preserve">
-    <value>链接到: </value>
+    <value>连接到：</value>
     <comment>Connected to:</comment>
   </data>
   <data name="Contract" xml:space="preserve">
@@ -1113,7 +1113,7 @@
     <comment>Contract</comment>
   </data>
   <data name="ContractColon" xml:space="preserve">
-    <value>合同: </value>
+    <value>合同：</value>
     <comment>Contract:</comment>
   </data>
   <data name="Contracts" xml:space="preserve">
@@ -1161,7 +1161,7 @@
     <comment>Copy Rule Set Bag</comment>
   </data>
   <data name="CopySpecial" xml:space="preserve">
-    <value>特别的拷贝</value>
+    <value>特殊拷贝</value>
     <comment>Copy special MENU ITEM</comment>
   </data>
   <data name="Count" xml:space="preserve">
@@ -1201,7 +1201,7 @@
     <comment>Function CreateShiftTradeRequest</comment>
   </data>
   <data name="CreateTextRequest" xml:space="preserve">
-    <value>改动申请</value>
+    <value>更改申请</value>
     <comment>Function CreateTextRequest</comment>
   </data>
   <data name="CreateWorkloadThreeDots" xml:space="preserve">
@@ -1233,7 +1233,7 @@
     <comment>Customize Quick Access Toolbar</comment>
   </data>
   <data name="CustomizeQuickAccessToolbarDots" xml:space="preserve">
-    <value>&amp;客户化设定快捷工具栏…</value>
+    <value>客户化设定快捷工具栏 (&amp;C)…</value>
     <comment>&amp;Customize Quick Access Toolbar...</comment>
   </data>
   <data name="Cut" xml:space="preserve">
@@ -1241,7 +1241,7 @@
     <comment>Cut menu item</comment>
   </data>
   <data name="CutAbsence" xml:space="preserve">
-    <value>剪切缺勤 </value>
+    <value>剪切缺勤</value>
     <comment>Cut absence menu item</comment>
   </data>
   <data name="CutActivity" xml:space="preserve">
@@ -1273,11 +1273,11 @@
     <comment>Cut Rule Set Bag</comment>
   </data>
   <data name="CutShift" xml:space="preserve">
-    <value>剪切换班</value>
+    <value>剪切调班</value>
     <comment>Cut shift menu item</comment>
   </data>
   <data name="CutSpecial" xml:space="preserve">
-    <value>特别剪切 </value>
+    <value>特别剪切</value>
     <comment>Cut special menu item</comment>
   </data>
   <data name="CutSpecialThreeDots" xml:space="preserve">
@@ -1285,7 +1285,7 @@
     <comment>Cut special... menu item</comment>
   </data>
   <data name="DailyView" xml:space="preserve">
-    <value>日常浏览</value>
+    <value>日常视图</value>
     <comment>Daily view</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -1345,7 +1345,7 @@
     <comment>Day Off Reoptimizer options</comment>
   </data>
   <data name="DayOffShortName" xml:space="preserve">
-    <value>操作</value>
+    <value>DO</value>
     <comment>DO</comment>
   </data>
   <data name="DayOfWeek" xml:space="preserve">
@@ -1361,7 +1361,7 @@
     <comment>Days off</comment>
   </data>
   <data name="DaysOffColon" xml:space="preserve">
-    <value>休息日:</value>
+    <value>休息日：</value>
     <comment>Caption of the "Day Off" field of the Day off setting page</comment>
   </data>
   <data name="DaysOfWeekGrid" xml:space="preserve">
@@ -1369,7 +1369,7 @@
     <comment>Help-QS parameter for the days of week grid view</comment>
   </data>
   <data name="DayView" xml:space="preserve">
-    <value>一天的浏览</value>
+    <value>日视图</value>
     <comment>Day view</comment>
   </data>
   <data name="DecreaseDecimals" xml:space="preserve">
@@ -1389,15 +1389,15 @@
     <comment>Default color</comment>
   </data>
   <data name="DefaultRuleSetBagName" xml:space="preserve">
-    <value>&lt;规则设置包名称&gt;</value>
+    <value>&lt;规则集包名称&gt;</value>
     <comment>Default name to be appeared in the tree in the shift creator module</comment>
   </data>
   <data name="DefaultScenario" xml:space="preserve">
-    <value>缺省情形</value>
+    <value>缺省情景</value>
     <comment>Default Scenario</comment>
   </data>
   <data name="DefaultScenarioColon" xml:space="preserve">
-    <value>缺省情形:</value>
+    <value>缺省情景：</value>
     <comment>Default Scenario Colon</comment>
   </data>
   <data name="DefaultStateGroup" xml:space="preserve">
@@ -1472,11 +1472,11 @@
     <comment>Delete Rule Set Bag</comment>
   </data>
   <data name="DeleteScenario" xml:space="preserve">
-    <value>删除情形</value>
+    <value>删除情景</value>
     <comment>Delete scenario</comment>
   </data>
   <data name="DeleteSelectedRowsQuestionmark" xml:space="preserve">
-    <value>删除被选列? </value>
+    <value>删除被选列？</value>
     <comment>Delete selected rows?</comment>
   </data>
   <data name="DeleteShift" xml:space="preserve">
@@ -1488,11 +1488,11 @@
     <comment>Delete Skill...</comment>
   </data>
   <data name="DeleteSpecial" xml:space="preserve">
-    <value>特别的删除 </value>
+    <value>特别的删除</value>
     <comment>Delete Special</comment>
   </data>
   <data name="DeleteSpecialThreeDots" xml:space="preserve">
-    <value>删除特别的…</value>
+    <value>特殊删除…</value>
     <comment>Delete Special...</comment>
   </data>
   <data name="DeleteStateGroup" xml:space="preserve">
@@ -1512,7 +1512,7 @@
     <comment>Description</comment>
   </data>
   <data name="DescriptionColon" xml:space="preserve">
-    <value>描述: </value>
+    <value>描述：</value>
     <comment>Description</comment>
   </data>
   <data name="DescriptionDayTracker" xml:space="preserve">
@@ -1535,11 +1535,11 @@
     <comment>Detail view</comment>
   </data>
   <data name="DeviationACWColon" xml:space="preserve">
-    <value>平均话后处理时长的偏差: </value>
+    <value>平均话后处理时长的偏差：</value>
     <comment>Deviation ACW:</comment>
   </data>
   <data name="DeviationCallsColon" xml:space="preserve">
-    <value>话务量的偏差: </value>
+    <value>话务量的偏差：</value>
     <comment>Deviation calls:</comment>
   </data>
   <data name="Deviations" xml:space="preserve">
@@ -1547,11 +1547,11 @@
     <comment>Deviations</comment>
   </data>
   <data name="DeviationTalkTimeColon" xml:space="preserve">
-    <value>通话时间偏差:</value>
+    <value>通话时间偏差：</value>
     <comment>Deviation talk time:</comment>
   </data>
   <data name="DomainName" xml:space="preserve">
-    <value>Windows域</value>
+    <value>Windows 域</value>
     <comment>Windows domain</comment>
   </data>
   <data name="Done" xml:space="preserve">
@@ -1575,7 +1575,7 @@
     <comment>Down</comment>
   </data>
   <data name="DoYouWantToSaveChangesYouMade" xml:space="preserve">
-    <value>你希望保存所做的改动吗?</value>
+    <value>你希望保存所做的改动吗？</value>
     <comment>Do you want to save changes you made?</comment>
   </data>
   <data name="DuplicatePersonAccountMessage" xml:space="preserve">
@@ -1626,7 +1626,7 @@
     <comment>Edit</comment>
   </data>
   <data name="EditCommonAgentNameDescription" xml:space="preserve">
-    <value>编辑普通坐席代表姓名的描述格式</value>
+    <value>编辑普通座席代表姓名的描述格式</value>
     <comment>Edit Common Agent Name Description</comment>
   </data>
   <data name="EditForecast" xml:space="preserve">
@@ -1674,11 +1674,11 @@
     <comment>Employee number</comment>
   </data>
   <data name="EmploymentTypeColon" xml:space="preserve">
-    <value>雇用类型:</value>
+    <value>员工类型：</value>
     <comment>Employment Type:</comment>
   </data>
   <data name="EmploymentTypeFixedStaff" xml:space="preserve">
-    <value>固定工</value>
+    <value>固定员工</value>
     <comment>Fixed staff</comment>
   </data>
   <data name="EmploymentTypeHourlyStaff" xml:space="preserve">
@@ -1690,11 +1690,11 @@
     <comment>The empty string to be shown in the drop down of the rotation settions grid</comment>
   </data>
   <data name="EmptyRequest" xml:space="preserve">
-    <value>请求为空 </value>
+    <value>空申请</value>
     <comment>Empty request</comment>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>恢复操作</value>
+    <value>启用</value>
     <comment>Enabled</comment>
   </data>
   <data name="EndDate" xml:space="preserve">
@@ -1714,10 +1714,10 @@
     <comment>End time</comment>
   </data>
   <data name="EndTimeColon" xml:space="preserve">
-    <value>结束时间: </value>
+    <value>结束时间：</value>
   </data>
   <data name="EnterANameForTheGrouping" xml:space="preserve">
-    <value>为分组输入名称! </value>
+    <value>为分组输入名称！</value>
     <comment>Enter a name for the grouping</comment>
   </data>
   <data name="EnterContractDetails" xml:space="preserve">
@@ -1729,7 +1729,7 @@
     <comment>The error message to be shown when the any of the time span fields in the contract setting page is zero or invalid</comment>
   </data>
   <data name="EnterNameHere" xml:space="preserve">
-    <value>在此输入名字</value>
+    <value>在此输入名称</value>
     <comment>Enter name here</comment>
   </data>
   <data name="EnterNewGroupName" xml:space="preserve">
@@ -1753,11 +1753,11 @@
     <comment>Enter property values for grouping absences</comment>
   </data>
   <data name="EnterPropertyValuesForGroupingActivities" xml:space="preserve">
-    <value>输入活动分组属性数值 </value>
+    <value>输入活动分组属性数值</value>
     <comment>Enter property values for grouping activities</comment>
   </data>
   <data name="EnterPublishingDates" xml:space="preserve">
-    <value>为每个小组输入公布的日期 </value>
+    <value>为每个小组输入公布的日期</value>
     <comment>Enter Publishing Dates for each Team</comment>
   </data>
   <data name="EnterReply" xml:space="preserve">
@@ -1765,23 +1765,23 @@
     <comment>Title request reply form</comment>
   </data>
   <data name="EnterSettingsForDaysOff" xml:space="preserve">
-    <value>输入休息日设置 </value>
+    <value>输入休息日设置</value>
     <comment>Enter Settings For Days Off title in the day off setting page</comment>
   </data>
   <data name="EnterSettingsForScenario" xml:space="preserve">
-    <value>输入情形设置 </value>
+    <value>输入情景设置</value>
     <comment>Enter Settings For Scenario</comment>
   </data>
   <data name="EnterSettingsForShiftCategory" xml:space="preserve">
-    <value>输入班次类型设置 </value>
+    <value>输入班次类型设置</value>
     <comment>EnterSettingsForShiftCategory in shift category settings page</comment>
   </data>
   <data name="EnterSettingsForThisScorecard" xml:space="preserve">
-    <value>输入该得分卡设置 </value>
+    <value>输入该得分卡设置</value>
     <comment>EnterSettingsForThisScorecard</comment>
   </data>
   <data name="EnterTargetValuesForEachTeam" xml:space="preserve">
-    <value>输入每个小组的目标数值 </value>
+    <value>输入每个小组的目标数值</value>
     <comment>EnterTargetValuesForEachTeam</comment>
   </data>
   <data name="ErrorMessage" xml:space="preserve">
@@ -1793,19 +1793,19 @@
     <comment>Preferred date or dates not selected before set the preference by clicking Gallery item.</comment>
   </data>
   <data name="ErrorMessagePreferredDatesNotValid" xml:space="preserve">
-    <value>无效偏好日期(s)。 排班已经定义了选择的日期(s)。</value>
+    <value>无效偏好日期。排班已经定义了选择的日期。</value>
     <comment>Error message to show when user try to set preferences for date(s) with schedule or requests.</comment>
   </data>
   <data name="ErrorMsgCaptionDuplicateUserCredentials" xml:space="preserve">
-    <value>常规浏览: 用户详情</value>
+    <value>常规视图：用户详情</value>
     <comment>Caption: Error message after validating user credentials.</comment>
   </data>
   <data name="ErrorMsgDuplicateUserCredentials" xml:space="preserve">
-    <value>发现重复的用户证书! </value>
+    <value>发现重复的用户证书！</value>
     <comment>Error message after validating user credentials.</comment>
   </data>
   <data name="ErrorOccuredWhenAccessingTheDataSource" xml:space="preserve">
-    <value>访问原始文件数据时出错</value>
+    <value>访问数据源时发生错误</value>
     <comment>Error occurred when accessing the data source</comment>
   </data>
   <data name="EstimatedOccupancy" xml:space="preserve">
@@ -1817,7 +1817,7 @@
     <comment>Example</comment>
   </data>
   <data name="ExampleColon" xml:space="preserve">
-    <value>举例: </value>
+    <value>举例：</value>
     <comment>Caption of the example field of the Common agent description</comment>
   </data>
   <data name="Exit" xml:space="preserve">
@@ -1825,7 +1825,7 @@
     <comment>Exit</comment>
   </data>
   <data name="ExitAgentPortal" xml:space="preserve">
-    <value>退出坐席代表主界面</value>
+    <value>退出座席代表主界面</value>
     <comment>Exit from Agent Portal</comment>
   </data>
   <data name="ExitOrClose" xml:space="preserve">
@@ -1845,7 +1845,7 @@
     <comment>External LogOn</comment>
   </data>
   <data name="ExternalLogOnView" xml:space="preserve">
-    <value>外部登录浏览</value>
+    <value>外部登录视图</value>
     <comment>ExternalLogOnView</comment>
   </data>
   <data name="ExternalSystemError" xml:space="preserve">
@@ -1860,11 +1860,11 @@
     <comment>Facsimiles</comment>
   </data>
   <data name="FAmpersandindAll" xml:space="preserve">
-    <value>全部查找</value>
+    <value>全部查找(&amp;I)</value>
     <comment>Find all</comment>
   </data>
   <data name="FiAmpersandndWhatColon" xml:space="preserve">
-    <value>查找内容: </value>
+    <value>查找内容(&amp;N)：</value>
     <comment>Find what:</comment>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
@@ -1884,7 +1884,7 @@
     <comment>Filter on</comment>
   </data>
   <data name="FilterPeopleColon" xml:space="preserve">
-    <value>过滤人员: </value>
+    <value>过滤人员：</value>
     <comment>Filter people meeting</comment>
   </data>
   <data name="Filters" xml:space="preserve">
@@ -1896,7 +1896,7 @@
     <comment>Filter Teams</comment>
   </data>
   <data name="FinAmpersandd" xml:space="preserve">
-    <value>查找</value>
+    <value>查找(&amp;D)</value>
     <comment>Find</comment>
   </data>
   <data name="Find" xml:space="preserve">
@@ -1924,11 +1924,11 @@
     <comment>5 Minutes</comment>
   </data>
   <data name="FixedStaff" xml:space="preserve">
-    <value>固定工</value>
+    <value>固定员工</value>
     <comment>a value in the employment type dropdown in contract setting page</comment>
   </data>
   <data name="FlexibilityColon" xml:space="preserve">
-    <value>灵活性: </value>
+    <value>灵活性：</value>
     <comment>Caption of the "Flexibility" field of the Day off setting page</comment>
   </data>
   <data name="Forecasted" xml:space="preserve">
@@ -1936,19 +1936,19 @@
     <comment>Forecasted</comment>
   </data>
   <data name="ForecastedACW" xml:space="preserve">
-    <value>预测的平均话后处理时长</value>
+    <value>预测的话后处理时长</value>
     <comment>Forecasted ACW</comment>
   </data>
   <data name="ForecastedACWColon" xml:space="preserve">
-    <value>预测的ACW: </value>
+    <value>预测的话后处理时长：</value>
     <comment>Forecasted ACW</comment>
   </data>
   <data name="ForecastedAgents" xml:space="preserve">
-    <value>预测的坐席代表</value>
+    <value>预测的座席代表</value>
     <comment>Forecasted agents</comment>
   </data>
   <data name="ForecastedAgentsWithShrinkage" xml:space="preserve">
-    <value>预测的坐席代表，包括损耗</value>
+    <value>预测的座席代表，包括损耗</value>
     <comment>Forecasted agents with shrinkage</comment>
   </data>
   <data name="ForecastedAverageAfterCallWork" xml:space="preserve">
@@ -1964,7 +1964,7 @@
     <comment>Forecasted calls</comment>
   </data>
   <data name="ForecastedCallsColon" xml:space="preserve">
-    <value>预测的话务量:</value>
+    <value>预测的话务量：</value>
     <comment>Forecasted calls</comment>
   </data>
   <data name="ForecastedDistributedDemand" xml:space="preserve">
@@ -1988,7 +1988,7 @@
     <comment>Forecasted talk time</comment>
   </data>
   <data name="ForecastedTalkTimeColon" xml:space="preserve">
-    <value>预测的通话时间: </value>
+    <value>预测的通话时间：</value>
     <comment>Forecasted talk time</comment>
   </data>
   <data name="ForecastedTasks" xml:space="preserve">
@@ -2000,7 +2000,7 @@
     <comment>ForecastMethod</comment>
   </data>
   <data name="ForecastMethodColon" xml:space="preserve">
-    <value>预测方法:</value>
+    <value>预测方法：</value>
     <comment>ForecastMethod</comment>
   </data>
   <data name="Forecasts" xml:space="preserve">
@@ -2012,7 +2012,7 @@
     <comment>Format</comment>
   </data>
   <data name="FormatColon" xml:space="preserve">
-    <value>格式: </value>
+    <value>格式：</value>
     <comment>Caption of the format field of the Common agent description</comment>
   </data>
   <data name="Forward" xml:space="preserve">
@@ -2020,7 +2020,7 @@
     <comment>Forward</comment>
   </data>
   <data name="ForwardAmpersandArrow" xml:space="preserve">
-    <value>&amp;向前&gt;</value>
+    <value>向前(&amp;F)&gt;</value>
     <comment>&amp;Forward &gt;</comment>
   </data>
   <data name="Friday" xml:space="preserve">
@@ -2032,7 +2032,7 @@
     <comment>From</comment>
   </data>
   <data name="FromColon" xml:space="preserve">
-    <value>开始: </value>
+    <value>开始：</value>
     <comment>From:</comment>
   </data>
   <data name="FromDate" xml:space="preserve">
@@ -2052,7 +2052,7 @@
     <comment>Functions available</comment>
   </data>
   <data name="GapExists" xml:space="preserve">
-    <value> {0}处存在差距。全部的层面必须是邻近的, 或同另外一层交叉。</value>
+    <value> {0} 处存在差距。全部的层面必须是邻近的，或同另外一层交叉。</value>
     <comment>GapExists</comment>
   </data>
   <data name="General" xml:space="preserve">
@@ -2064,7 +2064,7 @@
     <comment>Help-QS parameter for the general grid view</comment>
   </data>
   <data name="GeneralView" xml:space="preserve">
-    <value>常规浏览</value>
+    <value>常规视图</value>
     <comment>GeneralView</comment>
   </data>
   <data name="GridActions" xml:space="preserve">
@@ -2072,7 +2072,7 @@
     <comment>Grid actions</comment>
   </data>
   <data name="GridInChart" xml:space="preserve">
-    <value>图表网格 </value>
+    <value>图表网格</value>
     <comment>Grid In Chart</comment>
   </data>
   <data name="GridRowsInChart" xml:space="preserve">
@@ -2144,15 +2144,15 @@
     <comment>Group states</comment>
   </data>
   <data name="HandledWithin" xml:space="preserve">
-    <value>其间处理 </value>
+    <value>其间处理</value>
     <comment>Handled within</comment>
   </data>
   <data name="HandledWithinColon" xml:space="preserve">
-    <value>其间操作: </value>
+    <value>其间操作：</value>
     <comment>Handled within</comment>
   </data>
   <data name="HandledWithinHMMColon" xml:space="preserve">
-    <value>处理时间(小时:分钟):</value>
+    <value>处理时间(小时:分钟)：</value>
     <comment>Handled within (h:mm):</comment>
   </data>
   <data name="HandleRequests" xml:space="preserve">
@@ -2168,7 +2168,7 @@
     <comment>Header</comment>
   </data>
   <data name="HHcolonMM" xml:space="preserve">
-    <value>hh:mm</value>
+    <value>小时:分钟</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>隐藏</value>
@@ -2231,7 +2231,8 @@
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
   <data name="IncludeExclude" xml:space="preserve">
-    <value>包括排除</value>
+    <value>包括
+排除</value>
     <comment>Include Exclude</comment>
   </data>
   <data name="IncreaseDecimals" xml:space="preserve">
@@ -2303,7 +2304,7 @@
     <comment>Insert New Person</comment>
   </data>
   <data name="InsertNewPersonFromClipboard" xml:space="preserve">
-    <value>从写字板插入新的人员 </value>
+    <value>从剪贴板插入新的人员</value>
     <comment>Insert New Person From Clipboard</comment>
   </data>
   <data name="InsufficientPermission" xml:space="preserve">
@@ -2315,11 +2316,11 @@
     <comment>Interval length</comment>
   </data>
   <data name="IntervalLengthColon" xml:space="preserve">
-    <value>间隔长度: </value>
+    <value>间隔长度：</value>
     <comment>Interval length:</comment>
   </data>
   <data name="IntervalLengthHMMColon" xml:space="preserve">
-    <value>间隔长度(小时:分钟): </value>
+    <value>间隔长度(小时:分钟)：</value>
     <comment>Interval length (h:mm):</comment>
   </data>
   <data name="Intraday" xml:space="preserve">
@@ -2331,7 +2332,7 @@
     <comment>Invalid Name</comment>
   </data>
   <data name="InvalidCredential" xml:space="preserve">
-    <value>无效证书。请再次尝试.</value>
+    <value>无效凭证，请重试。</value>
     <comment>error message shows when user failed to login in to agent portal</comment>
   </data>
   <data name="InvalidMultisiteDistribution" xml:space="preserve">
@@ -2339,7 +2340,7 @@
     <comment>Invalid multisite distribution</comment>
   </data>
   <data name="InvalidRecepient" xml:space="preserve">
-    <value>无效接受人, 请选择一个存在的坐席代表</value>
+    <value>无效接收人，请选择一个存在的座席代表</value>
     <comment>Invalid Recepient</comment>
   </data>
   <data name="InvalidRequest" xml:space="preserve">
@@ -2357,7 +2358,7 @@
     <value>有</value>
   </data>
   <data name="ItemsSelectedParameter" xml:space="preserve">
-    <value>{0}被选择的项目。</value>
+    <value>选择了 {0} 个项目。</value>
     <comment>{0} items selected.</comment>
   </data>
   <data name="KeepFreeWeekEndDays" xml:space="preserve">
@@ -2393,11 +2394,11 @@
     <comment>Average after call work (s)</comment>
   </data>
   <data name="KpiAverageHandleTime" xml:space="preserve">
-    <value>平均处理时间 (s)</value>
+    <value>平均处理时间 (秒)</value>
     <comment>Average handle time (s)</comment>
   </data>
   <data name="KpiAverageTalkTime" xml:space="preserve">
-    <value>平均通话时间 (s)</value>
+    <value>平均通话时间 (秒)</value>
     <comment>Average talk time (s)</comment>
   </data>
   <data name="KpiReadiness" xml:space="preserve">
@@ -2405,7 +2406,7 @@
     <comment>Readiness (%)</comment>
   </data>
   <data name="KPIsIncludedInScorecardColon" xml:space="preserve">
-    <value>得分卡的KPI: </value>
+    <value>得分卡的KPI：</value>
     <comment>KPI's in scorecard:</comment>
   </data>
   <data name="Language" xml:space="preserve">
@@ -2461,11 +2462,11 @@
     <comment>Less &lt;&lt;</comment>
   </data>
   <data name="LessThanColon" xml:space="preserve">
-    <value>&amp;小于: </value>
+    <value>小于(&amp;)：</value>
     <comment>&amp;Less than:</comment>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
-    <value>&lt;规则设置名称&gt;</value>
+    <value>&lt;规则集名称&gt;</value>
     <comment>&lt;Rule set name&gt;</comment>
   </data>
   <data name="LessThanSkillNameGreaterThan" xml:space="preserve">
@@ -2477,7 +2478,7 @@
     <comment>Default workload name when creating a new workload</comment>
   </data>
   <data name="Limit" xml:space="preserve">
-    <value>极限</value>
+    <value>限制</value>
     <comment>Limit</comment>
   </data>
   <data name="Limitations" xml:space="preserve">
@@ -2485,7 +2486,7 @@
     <comment>Limitations</comment>
   </data>
   <data name="Line" xml:space="preserve">
-    <value>线路</value>
+    <value>行</value>
     <comment>Line</comment>
   </data>
   <data name="ListOfValues" xml:space="preserve">
@@ -2508,7 +2509,7 @@
     <value>位置</value>
   </data>
   <data name="LocationColon" xml:space="preserve">
-    <value>位置:</value>
+    <value>位置：</value>
   </data>
   <data name="Lock" xml:space="preserve">
     <value>锁定</value>
@@ -2559,7 +2560,7 @@
     <comment>Logging on...</comment>
   </data>
   <data name="LoginNameColon" xml:space="preserve">
-    <value>登录名称: </value>
+    <value>登录名称：</value>
     <comment>Login name:</comment>
   </data>
   <data name="LogObject" xml:space="preserve">
@@ -2571,7 +2572,7 @@
     <comment>Log on</comment>
   </data>
   <data name="LogOnFailed" xml:space="preserve">
-    <value>登录失败! </value>
+    <value>登录失败！</value>
     <comment>Log on failed!</comment>
   </data>
   <data name="Longterm" xml:space="preserve">
@@ -2639,7 +2640,7 @@
     <comment>Application function description</comment>
   </data>
   <data name="ManageScenarios" xml:space="preserve">
-    <value>管理情形</value>
+    <value>管理情景</value>
     <comment>Manage your scenarios</comment>
   </data>
   <data name="ManageScorecards" xml:space="preserve">
@@ -2659,11 +2660,11 @@
     <comment>Manage workload Ribbon button</comment>
   </data>
   <data name="MaskedEditBox" xml:space="preserve">
-    <value>隐藏编辑框</value>
+    <value>掩码编辑框</value>
     <comment>Masked Edit Box</comment>
   </data>
   <data name="MaskedEditTextBox" xml:space="preserve">
-    <value>隐藏编辑文本框</value>
+    <value>掩码编辑文本框</value>
     <comment>Masked EditText Box</comment>
   </data>
   <data name="MatchCase" xml:space="preserve">
@@ -2679,7 +2680,7 @@
     <comment>Max</comment>
   </data>
   <data name="MaximumAgents" xml:space="preserve">
-    <value>最多坐席代表</value>
+    <value>最多座席代表</value>
     <comment>Maximum agents</comment>
   </data>
   <data name="MaximumOccupancy" xml:space="preserve">
@@ -2687,15 +2688,15 @@
     <comment>Maximum occupancy</comment>
   </data>
   <data name="MaximumOccupancyColon" xml:space="preserve">
-    <value>最高占用率: </value>
+    <value>最高占用率：</value>
     <comment>Maximum occupancy:</comment>
   </data>
   <data name="MaximumOccupancyPercentSignColon" xml:space="preserve">
-    <value>最高占用率％: </value>
+    <value>最高占用率 (%)：</value>
     <comment>Maximum occupancy %:</comment>
   </data>
   <data name="MaximumTimePerWeekColon" xml:space="preserve">
-    <value>每周最大时间量: </value>
+    <value>每周最大时间量：</value>
     <comment>Maximum Time Per Week:</comment>
   </data>
   <data name="MaxTime" xml:space="preserve">
@@ -2713,14 +2714,14 @@
     <value>综合编写</value>
   </data>
   <data name="MeetingLocationRequired" xml:space="preserve">
-    <value>填写您的位置! </value>
+    <value>填写您的位置！</value>
     <comment>Meeting Location validation message</comment>
   </data>
   <data name="MeetingOrganizer" xml:space="preserve">
     <value>会议</value>
   </data>
   <data name="MeetingParticipantsRequired" xml:space="preserve">
-    <value>选择您的参加人!</value>
+    <value>选择您的参加人！</value>
     <comment>Meeting Participnat validation message</comment>
   </data>
   <data name="MeetingPicker" xml:space="preserve">
@@ -2731,7 +2732,7 @@
     <value>会议</value>
   </data>
   <data name="MeetingSubjectRequired" xml:space="preserve">
-    <value>填写你的主题!</value>
+    <value>填写你的主题！</value>
     <comment>Meeting Subject validation message</comment>
   </data>
   <data name="Merge" xml:space="preserve">
@@ -2747,7 +2748,7 @@
     <comment>Information</comment>
   </data>
   <data name="MidnightBreakOffsetColon" xml:space="preserve">
-    <value>午夜分界点: </value>
+    <value>午夜分界点：</value>
     <comment>Describes a Midnight break e.g 00:00 - 00:00</comment>
   </data>
   <data name="Min" xml:space="preserve">
@@ -2755,11 +2756,11 @@
     <comment>Min</comment>
   </data>
   <data name="MinimizeTheRibbon" xml:space="preserve">
-    <value>最小化工具栏</value>
+    <value>最小化工具栏(&amp;N)</value>
     <comment>Mi&amp;nimize ribbon</comment>
   </data>
   <data name="MinimumAgents" xml:space="preserve">
-    <value>最少坐席代表</value>
+    <value>最少座席代表</value>
     <comment>Minimum agents</comment>
   </data>
   <data name="MinimumOccupancy" xml:space="preserve">
@@ -2767,11 +2768,11 @@
     <comment>Minimum occupancy</comment>
   </data>
   <data name="MinimumOccupancyColon" xml:space="preserve">
-    <value>最低占用率: </value>
+    <value>最低占用率：</value>
     <comment>Minimum occupancy:</comment>
   </data>
   <data name="MinimumOccupancyPercentSignColon" xml:space="preserve">
-    <value>最低占有率％: </value>
+    <value>最低占有率％：</value>
     <comment>Minimum occupancy %:</comment>
   </data>
   <data name="MinMaxStaffing" xml:space="preserve">
@@ -2787,7 +2788,7 @@
     <comment>Rotation Setting Grid Column header</comment>
   </data>
   <data name="ModifyAbsence" xml:space="preserve">
-    <value>修改缺勤 </value>
+    <value>修改缺勤</value>
     <comment>Modify absence</comment>
   </data>
   <data name="ModifyAssignment" xml:space="preserve">
@@ -2807,7 +2808,7 @@
     <comment>Modify personal shift</comment>
   </data>
   <data name="ModifyPersonNameAndPassword" xml:space="preserve">
-    <value>修改名字和密码</value>
+    <value>修改名称和密码</value>
     <comment>Modify name and password</comment>
   </data>
   <data name="ModifyPersonTimeActivity" xml:space="preserve">
@@ -2835,7 +2836,7 @@
     <comment>Months</comment>
   </data>
   <data name="MonthView" xml:space="preserve">
-    <value>月浏览</value>
+    <value>月视图</value>
     <comment>Month view</comment>
   </data>
   <data name="MoreDoubleArrow" xml:space="preserve">
@@ -2843,7 +2844,7 @@
     <comment>More &gt;&gt;</comment>
   </data>
   <data name="MoreThanColon" xml:space="preserve">
-    <value>&amp;多于: </value>
+    <value>多于(&amp;M)：</value>
     <comment>&amp;More than:</comment>
   </data>
   <data name="MoreToComeThreeDots" xml:space="preserve">
@@ -2863,7 +2864,7 @@
     <comment>Move left</comment>
   </data>
   <data name="MoveMaxDays" xml:space="preserve">
-    <value>移动最多天数 </value>
+    <value>移动最多天数</value>
     <comment>Move Max Days</comment>
   </data>
   <data name="MoveRight" xml:space="preserve">
@@ -2887,7 +2888,7 @@
     <comment>Multisite day template</comment>
   </data>
   <data name="MultisiteDayTemplatesInvalidOneParameter" xml:space="preserve">
-    <value>验证错误，不能保存模板。请检查所有间隔至100%。 错误信息: {0}</value>
+    <value>验证错误，不能保存模板。请检查所有间隔之和为100%。错误信息：{0}</value>
     <comment>The templates cannot be saved because of an error in validation. Check that each interval sums up to 100%.\n\nError information: {0}</comment>
   </data>
   <data name="MultisiteSkill" xml:space="preserve">
@@ -2903,7 +2904,7 @@
     <comment>Multisite skill wizard</comment>
   </data>
   <data name="MultisiteTemplate" xml:space="preserve">
-    <value>多运营点模块</value>
+    <value>多运营点模板</value>
     <comment>Multisite template</comment>
   </data>
   <data name="MustSpecifyValidTime" xml:space="preserve">
@@ -2923,11 +2924,11 @@
     <comment>My Report</comment>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>名字</value>
+    <value>名称</value>
     <comment>Name</comment>
   </data>
   <data name="NameColon" xml:space="preserve">
-    <value>名称: </value>
+    <value>名称：</value>
     <comment>Name:</comment>
   </data>
   <data name="NameType" xml:space="preserve">
@@ -2935,7 +2936,7 @@
     <comment>Title of the editviewbox</comment>
   </data>
   <data name="NameYourTypeColon" xml:space="preserve">
-    <value>你的名称{0}: </value>
+    <value>你的名称{0}：</value>
     <comment>prompt to name in editviewbox</comment>
   </data>
   <data name="New" xml:space="preserve">
@@ -2943,7 +2944,7 @@
     <comment>New</comment>
   </data>
   <data name="NewAbsenceRequest" xml:space="preserve">
-    <value>新建缺勤请求</value>
+    <value>新建缺勤申请</value>
     <comment>New Absence Request </comment>
   </data>
   <data name="NewActivity" xml:space="preserve">
@@ -3035,7 +3036,7 @@
     <comment>Clipboard New Items</comment>
   </data>
   <data name="NewRequest" xml:space="preserve">
-    <value>新建请求</value>
+    <value>新建申请</value>
     <comment>Add new request</comment>
   </data>
   <data name="NewRole" xml:space="preserve">
@@ -3062,7 +3063,7 @@
     <comment>New Rule Set Bag</comment>
   </data>
   <data name="NewScenario" xml:space="preserve">
-    <value>新建情形</value>
+    <value>新建情景</value>
     <comment>&lt; New Scenario &gt;</comment>
   </data>
   <data name="NewScenarioSequal" xml:space="preserve">
@@ -3086,7 +3087,7 @@
     <comment>New Shift Category text to be placed in the Shift Category settings page</comment>
   </data>
   <data name="NewShiftTradeRequest" xml:space="preserve">
-    <value>新建调班请求</value>
+    <value>新建调班申请</value>
     <comment>text of context menu item "New Shift trade request"in Agent portal Schedule</comment>
   </data>
   <data name="NewSkillThreeDots" xml:space="preserve">
@@ -3138,7 +3139,7 @@
     <comment>page</comment>
   </data>
   <data name="NightlyRestTimeColon" xml:space="preserve">
-    <value>夜间休息时间: </value>
+    <value>夜间休息时间：</value>
     <comment>Nightly Rest Time</comment>
   </data>
   <data name="No" xml:space="preserve">
@@ -3150,7 +3151,7 @@
     <comment>No allowed business unit found in current database</comment>
   </data>
   <data name="NoAvailableDataSourcesHasBeenFound" xml:space="preserve">
-    <value>没有找到可用数据源.</value>
+    <value>没有找到可用数据源。</value>
     <comment>No available datasource has been found.</comment>
   </data>
   <data name="NoChartDataRowsEnabled" xml:space="preserve">
@@ -3166,11 +3167,11 @@
     <comment>No date is selected</comment>
   </data>
   <data name="NodeTextCantBeNull" xml:space="preserve">
-    <value>结点文本不能为空! </value>
+    <value>节点文本不能为空！</value>
     <comment>Setting pages : Tree node text cant be null.</comment>
   </data>
   <data name="NodeTextCantBeNulls" xml:space="preserve">
-    <value>运营点/小组名称不能为空!</value>
+    <value>运营点/小组名称不能为空！</value>
     <comment>Setting form: Hierarchical tree - nodes cant be null for site / team names</comment>
   </data>
   <data name="NoFunctionsAvailable" xml:space="preserve">
@@ -3182,7 +3183,7 @@
     <comment>None</comment>
   </data>
   <data name="NoOptionalColumnIsSelected" xml:space="preserve">
-    <value>没有选择可选栏目! </value>
+    <value>没有选择可选栏目！</value>
     <comment>No optional column is selected</comment>
   </data>
   <data name="NoPeopleAvailable" xml:space="preserve">
@@ -3202,7 +3203,7 @@
     <comment>Note</comment>
   </data>
   <data name="NotValidOpenHoursForMidnightBreak" xml:space="preserve">
-    <value>开放时间与当前午夜分界点不匹配。\n 当前午夜短休技能</value>
+    <value>开放时间与当前午夜分界点不匹配。</value>
     <comment>Open hour not within midnight break</comment>
   </data>
   <data name="NoValueInNameField" xml:space="preserve">
@@ -3210,7 +3211,7 @@
     <comment>No Value In Name Field</comment>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>数量　</value>
+    <value>数量</value>
     <comment>Number</comment>
   </data>
   <data name="OccupancyAdjustment" xml:space="preserve">
@@ -3246,15 +3247,15 @@
     <comment>Template prefix</comment>
   </data>
   <data name="OneFunctionAvailable" xml:space="preserve">
-    <value>一个功能可用 </value>
+    <value>一个功能可用</value>
     <comment>One function available</comment>
   </data>
   <data name="OneOrMoreMessagesWereTooLongPleaseTryAShorterMessage" xml:space="preserve">
-    <value>一个或更多信息太长。 请尝试更短的信息。</value>
+    <value>一个或更多信息太长。请尝试更短的信息。</value>
     <comment>Error message in reply forms for person requests</comment>
   </data>
   <data name="OnePersonAvailable" xml:space="preserve">
-    <value>一个人员可用 </value>
+    <value>一个人员可用</value>
     <comment>One person available</comment>
   </data>
   <data name="OneRoleAvailable" xml:space="preserve">
@@ -3262,7 +3263,7 @@
     <comment>One role available</comment>
   </data>
   <data name="OpAmpersandtionsGreaterThanGreaterThan" xml:space="preserve">
-    <value>选项 &gt;&gt;</value>
+    <value>选项 (&amp;T)&gt;&gt;</value>
     <comment>Options &gt;&gt;</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -3270,11 +3271,11 @@
     <comment>Open</comment>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
-    <value>坐席代表主界面</value>
+    <value>座席代表主界面</value>
     <comment>Function name Agent Portal</comment>
   </data>
   <data name="OpenASM" xml:space="preserve">
-    <value>坐席代表排班信息工具栏</value>
+    <value>座席代表排班信息工具栏</value>
     <comment>Function name ASM</comment>
   </data>
   <data name="OpenForecaster" xml:space="preserve">
@@ -3290,7 +3291,7 @@
     <comment>Open hours</comment>
   </data>
   <data name="OpenHoursColon" xml:space="preserve">
-    <value>开放时间: </value>
+    <value>开放时间：</value>
     <comment>Open hours</comment>
   </data>
   <data name="OpenMyReport" xml:space="preserve">
@@ -3326,7 +3327,7 @@
     <comment>Function OpenScorecard</comment>
   </data>
   <data name="OperationCanNotProceedWithTheExternalMatrixSystem" xml:space="preserve">
-    <value>不能处理外部矩阵系统，理由如下：{0}。 没有外部系统继续加载。</value>
+    <value>不能处理外部矩阵系统，理由如下：{0}。</value>
     <comment>Operation can not proceed with the external Matrix system for the following reason: {0}. Loading continues without the external system.</comment>
   </data>
   <data name="OperatorLimiterEquals" xml:space="preserve">
@@ -3362,7 +3363,7 @@
     <comment>Optional column</comment>
   </data>
   <data name="OptionalColumnColon" xml:space="preserve">
-    <value>可选栏目: </value>
+    <value>可选栏目：</value>
     <comment>Caption of the optiona column field of the Optional column setting page</comment>
   </data>
   <data name="OptionalColumnName" xml:space="preserve">
@@ -3370,7 +3371,8 @@
     <comment>Optional column name optional columns settings</comment>
   </data>
   <data name="OptionalColumns" xml:space="preserve">
-    <value>可选栏目</value>
+    <value>可选
+栏目</value>
     <comment>OptionalColumns ribbon item</comment>
   </data>
   <data name="Options" xml:space="preserve">
@@ -3473,11 +3475,12 @@
     <value>参加人</value>
   </data>
   <data name="PartTimePercentage" xml:space="preserve">
-    <value>兼职时间百分比</value>
+    <value>兼职时间
+百分比</value>
     <comment>Part time percentage ribbon item</comment>
   </data>
   <data name="PartTimePercentageColon" xml:space="preserve">
-    <value>兼职时间百分比: </value>
+    <value>兼职时间百分比：</value>
     <comment>Parttime Percentage Colon</comment>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
@@ -3497,7 +3500,7 @@
     <comment>Password</comment>
   </data>
   <data name="PasswordColon" xml:space="preserve">
-    <value>密码: </value>
+    <value>密码：</value>
     <comment>Password:</comment>
   </data>
   <data name="PasswordsDoNotMatch" xml:space="preserve">
@@ -3513,7 +3516,7 @@
     <comment>Paste menu item</comment>
   </data>
   <data name="PasteAbsence" xml:space="preserve">
-    <value>粘贴缺勤 </value>
+    <value>粘贴缺勤</value>
     <comment>Paste Absence menu item</comment>
   </data>
   <data name="PasteActivity" xml:space="preserve">
@@ -3537,7 +3540,7 @@
     <comment>Paste Limitation</comment>
   </data>
   <data name="PasteNew" xml:space="preserve">
-    <value>新建粘贴 </value>
+    <value>新建粘贴</value>
     <comment>Paste New menu item</comment>
   </data>
   <data name="PastePersonalShift" xml:space="preserve">
@@ -3585,7 +3588,8 @@
     <comment>People Insert Screen</comment>
   </data>
   <data name="PeoplePeriods" xml:space="preserve">
-    <value>人员阶段</value>
+    <value>人员
+阶段</value>
     <comment>Person
 Periods</comment>
   </data>
@@ -3598,7 +3602,7 @@ Periods</comment>
     <comment>Percentage</comment>
   </data>
   <data name="PercentageColon" xml:space="preserve">
-    <value>百分比: </value>
+    <value>百分比：</value>
     <comment>Percentage Colon</comment>
   </data>
   <data name="Period" xml:space="preserve">
@@ -3606,7 +3610,7 @@ Periods</comment>
     <comment>Period</comment>
   </data>
   <data name="PeriodColon" xml:space="preserve">
-    <value>阶段: </value>
+    <value>阶段：</value>
     <comment>PeriodColon</comment>
   </data>
   <data name="PeriodHours" xml:space="preserve">
@@ -3680,19 +3684,20 @@ Periods</comment>
     <comment>Person assignment is not valid.</comment>
   </data>
   <data name="PersonAvailability" xml:space="preserve">
-    <value>人员可用性</value>
+    <value>人员
+可用性</value>
     <comment>Person Availability </comment>
   </data>
   <data name="PersonAvailabilityError" xml:space="preserve">
-    <value>人员可用性错误 </value>
+    <value>人员可用性错误</value>
     <comment>Person Availability error</comment>
   </data>
   <data name="PersonAvailabilityView" xml:space="preserve">
-    <value>可用的人员浏览</value>
+    <value>可用的人员视图</value>
     <comment>PersonAvailabilityView</comment>
   </data>
   <data name="PersonPeriodCouldNotLoad" xml:space="preserve">
-    <value>请增加合同、合同排班、兼职时间百分比、小组，从起始设置页面到加载人员阶段浏览浏览。</value>
+    <value>请从起始设置页面到加载人员阶段视图增加合同、合同排班、兼职时间百分比、小组。</value>
     <comment>Person Period couldn't load error</comment>
   </data>
   <data name="PersonPeriodError" xml:space="preserve">
@@ -3720,7 +3725,7 @@ Periods</comment>
     <comment>Person skill</comment>
   </data>
   <data name="PlaceHolder" xml:space="preserve">
-    <value>[安放夹具]</value>
+    <value>[占位符]</value>
     <comment>[Place holder]</comment>
   </data>
   <data name="PlaceHolderForSmartPart" xml:space="preserve">
@@ -3728,11 +3733,11 @@ Periods</comment>
     <comment>Place holder for smart part</comment>
   </data>
   <data name="PlaceQuickAccessToolbarAboveTheRibbon" xml:space="preserve">
-    <value>&amp;工具条上安置快捷栏目</value>
+    <value>工具条上安置快捷栏目(&amp;P)</value>
     <comment>&amp;Place Quick Access Toolbar above the Ribbon</comment>
   </data>
   <data name="PlaceQuickAccessToolbarBelowTheRibbon" xml:space="preserve">
-    <value>&amp;工具条下安置快捷栏目</value>
+    <value>工具条下安置快捷栏目(&amp;P)</value>
     <comment>&amp;Place Quick Access Toolbar below the Ribbon</comment>
   </data>
   <data name="PlanDayOffs" xml:space="preserve">
@@ -3748,11 +3753,11 @@ Periods</comment>
     <comment>Please choose a datasource</comment>
   </data>
   <data name="PleaseEnterYourLogonCredentials" xml:space="preserve">
-    <value>请输入你的注册证书 </value>
+    <value>请输入你的登录凭证</value>
     <comment>Please enter your logon credentials</comment>
   </data>
   <data name="PleaseSelectAnEmploymentType" xml:space="preserve">
-    <value>请选择雇用类型。</value>
+    <value>请选择员工类型。</value>
     <comment>Please select an employment type.</comment>
   </data>
   <data name="PleaseTryAgainLater" xml:space="preserve">
@@ -3812,35 +3817,35 @@ Periods</comment>
     <comment>Kvartal</comment>
   </data>
   <data name="QuestionCreateAnotherSubSkill" xml:space="preserve">
-    <value>您希望创建另外一个附属技能吗?</value>
+    <value>您希望创建另外一个子技能吗？</value>
     <comment>Do you want to create another sub skill?</comment>
   </data>
   <data name="QuestionCreateAnotherWorkload" xml:space="preserve">
-    <value>您希望创建另外一个工作量吗?</value>
+    <value>您希望创建另外一个工作量吗？</value>
     <comment>Do you want to create another workload?</comment>
   </data>
   <data name="QuestionCreateSubSkill" xml:space="preserve">
-    <value>多运营点技能不包含任何附属技能。您愿意创建一个吗?</value>
+    <value>多运营点技能不包含任何子技能。要创建一个吗？</value>
     <comment>The multi-site skill does not contain any sub skills. Would you like to create one?</comment>
   </data>
   <data name="QuestionDeleteTheSkillTwoParameters" xml:space="preserve">
-    <value>您肯定希望删除此技能{0}{1}{0}吗? </value>
+    <value>您确定要删除此技能{0}{1}{0}吗？</value>
     <comment>Are you sure that you want to delete the skill {0}{1}{0}?</comment>
   </data>
   <data name="QuestionDeleteTheWorkloadTwoParameters" xml:space="preserve">
-    <value>您肯定希望删除工作量{0}{1}{0}吗? </value>
+    <value>您确定要删除工作量{0}{1}{0}吗？</value>
     <comment>Are you sure that you want to delete the workload {0}{1}{0}?</comment>
   </data>
   <data name="QuestionSaveChanges" xml:space="preserve">
-    <value>保存改动? </value>
+    <value>保存改动？</value>
     <comment>Save changes?</comment>
   </data>
   <data name="QuestionSkillDoesNotContainWorkload" xml:space="preserve">
-    <value>您的技能不包含任何工作量，您现在希望创建工作任务量吗?</value>
+    <value>您的技能不包含任何工作量，您现在希望创建工作任务量吗？</value>
     <comment>Your skill does not contain any workloads, do you want to create a workload now?</comment>
   </data>
   <data name="QuestionWouldYouLikeToCreateWorkloadQuestionMark" xml:space="preserve">
-    <value>您愿意创建工作量吗?</value>
+    <value>您愿意创建工作量吗？</value>
     <comment>Would you like to create a workload?</comment>
   </data>
   <data name="Queue" xml:space="preserve">
@@ -3860,7 +3865,7 @@ Periods</comment>
     <comment>Quick Access</comment>
   </data>
   <data name="RAmpesandeplaceWithColon" xml:space="preserve">
-    <value>替代为: </value>
+    <value>替换为(&amp;P)：</value>
     <comment>Replace with:</comment>
   </data>
   <data name="Ready" xml:space="preserve">
@@ -3868,7 +3873,7 @@ Periods</comment>
     <comment>Ready</comment>
   </data>
   <data name="ReadyThreeDots" xml:space="preserve">
-    <value>就绪..</value>
+    <value>就绪...</value>
     <comment>Ready... </comment>
   </data>
   <data name="RealTimeAdherence" xml:space="preserve">
@@ -3876,7 +3881,7 @@ Periods</comment>
     <comment>Real Time Adherence</comment>
   </data>
   <data name="ReAmpersandplace" xml:space="preserve">
-    <value>替代</value>
+    <value>替代(&amp;P)</value>
     <comment>Replace</comment>
   </data>
   <data name="Redo" xml:space="preserve">
@@ -3904,7 +3909,7 @@ Periods</comment>
     <comment>Reloading done</comment>
   </data>
   <data name="RemoveFromQuickAccessToolbar" xml:space="preserve">
-    <value>&amp;从快速访问工具栏中移除 </value>
+    <value>从快速访问工具栏中移除(&amp;R)</value>
     <comment>&amp;Remove from Quick Access Toolbar</comment>
   </data>
   <data name="RemoveParticipant" xml:space="preserve">
@@ -3927,7 +3932,7 @@ Periods</comment>
     <comment>Reoptimize</comment>
   </data>
   <data name="ReplaceAmpersandAll" xml:space="preserve">
-    <value>全部替代&amp; </value>
+    <value>全部替代(&amp;A)</value>
     <comment>Replace &amp;All find and replace form</comment>
   </data>
   <data name="Reply" xml:space="preserve">
@@ -3951,15 +3956,15 @@ Periods</comment>
     <comment>Request</comment>
   </data>
   <data name="RequestDate" xml:space="preserve">
-    <value>请求日期</value>
+    <value>申请日期</value>
     <comment>Request date</comment>
   </data>
   <data name="RequestDateColon" xml:space="preserve">
-    <value>请求日期: </value>
+    <value>申请日期：</value>
     <comment>Request date</comment>
   </data>
   <data name="Requests" xml:space="preserve">
-    <value>请求</value>
+    <value>申请</value>
     <comment>Requests</comment>
   </data>
   <data name="RequestScreen" xml:space="preserve">
@@ -3967,19 +3972,19 @@ Periods</comment>
     <comment>Request Screen</comment>
   </data>
   <data name="RequestsSummary" xml:space="preserve">
-    <value>请求总览</value>
+    <value>申请总览</value>
     <comment>Requests Summary</comment>
   </data>
   <data name="RequestStatus" xml:space="preserve">
-    <value>请求的状况</value>
+    <value>申请的状况</value>
     <comment>Request status</comment>
   </data>
   <data name="RequestStatusColon" xml:space="preserve">
-    <value>请求状况: </value>
+    <value>申请状况：</value>
     <comment>Request status</comment>
   </data>
   <data name="RequestType" xml:space="preserve">
-    <value>请求类型</value>
+    <value>申请类型</value>
     <comment>RequestType</comment>
   </data>
   <data name="RequestTypeAbsence" xml:space="preserve">
@@ -4019,11 +4024,11 @@ Periods</comment>
     <comment>Groupname given to Approval actions in ribbon bar inRequest screen</comment>
   </data>
   <data name="RestoreAgentPortal" xml:space="preserve">
-    <value>恢复坐席代表主界面</value>
+    <value>恢复座席代表主界面</value>
     <comment>Restore Agent Portal fromSystem Tray</comment>
   </data>
   <data name="RestoreASM" xml:space="preserve">
-    <value>恢复坐席代表排班信息栏</value>
+    <value>恢复座席代表排班信息栏</value>
     <comment>Restore Agent Schedule Messenger from System tray.</comment>
   </data>
   <data name="Restrictions" xml:space="preserve">
@@ -4087,7 +4092,7 @@ Periods</comment>
     <comment>Rule Set</comment>
   </data>
   <data name="Rulesetavailable" xml:space="preserve">
-    <value>规则可用</value>
+    <value>1个规则集可用</value>
     <comment>1 rule set available</comment>
   </data>
   <data name="RuleSetBag" xml:space="preserve">
@@ -4115,7 +4120,7 @@ Periods</comment>
     <comment>Save as</comment>
   </data>
   <data name="SaveClose" xml:space="preserve">
-    <value>保存&amp;关闭</value>
+    <value>保存并关闭</value>
     <comment>Save &amp; Close</comment>
   </data>
   <data name="SaveError" xml:space="preserve">
@@ -4127,7 +4132,7 @@ Periods</comment>
     <comment>Scenario</comment>
   </data>
   <data name="ScenarioColon" xml:space="preserve">
-    <value>情景: </value>
+    <value>情景：</value>
     <comment>Scenario:</comment>
   </data>
   <data name="Schedule" xml:space="preserve">
@@ -4135,7 +4140,7 @@ Periods</comment>
     <comment>Schedule</comment>
   </data>
   <data name="ScheduleColon" xml:space="preserve">
-    <value>排班: </value>
+    <value>排班：</value>
     <comment>Schedule:</comment>
   </data>
   <data name="ScheduledDaysOff" xml:space="preserve">
@@ -4155,7 +4160,7 @@ Periods</comment>
     <comment>Scheduled hours</comment>
   </data>
   <data name="ScheduledStaff" xml:space="preserve">
-    <value>排班的坐席代表</value>
+    <value>排班的座席代表</value>
     <comment>Scheduled staff</comment>
   </data>
   <data name="ScheduledTime" xml:space="preserve">
@@ -4228,7 +4233,7 @@ Periods</comment>
     <comment>Scorecard</comment>
   </data>
   <data name="ScorecardColon" xml:space="preserve">
-    <value>记分卡: </value>
+    <value>记分卡：</value>
     <comment>Scorecard</comment>
   </data>
   <data name="ScoreCardPreview" xml:space="preserve">
@@ -4248,7 +4253,7 @@ Periods</comment>
     <comment>Search all</comment>
   </data>
   <data name="Searchcl" xml:space="preserve">
-    <value>搜索: </value>
+    <value>搜索：</value>
     <comment>Search agent names</comment>
   </data>
   <data name="SearchingForDataSourcesTreeDots" xml:space="preserve">
@@ -4268,7 +4273,7 @@ Periods</comment>
     <comment>&lt;Select&gt;</comment>
   </data>
   <data name="SelectAGroupByOption" xml:space="preserve">
-    <value>通过选项选择一个分组!</value>
+    <value>通过选项选择一个分组！</value>
     <comment>Select a group by option</comment>
   </data>
   <data name="SelectAvailability" xml:space="preserve">
@@ -4276,11 +4281,11 @@ Periods</comment>
     <comment>Select Availability Label</comment>
   </data>
   <data name="SelectAvailabilityColon" xml:space="preserve">
-    <value>选择可用性:</value>
+    <value>选择可用性：</value>
     <comment>Select availability:</comment>
   </data>
   <data name="SelectColor" xml:space="preserve">
-    <value>选择颜色 </value>
+    <value>选择颜色</value>
     <comment>Select color</comment>
   </data>
   <data name="SelectedDate" xml:space="preserve">
@@ -4292,7 +4297,7 @@ Periods</comment>
     <comment>Selected exceptions</comment>
   </data>
   <data name="SelectEmploymentType" xml:space="preserve">
-    <value>选择雇佣类型</value>
+    <value>选择员工类型</value>
     <comment>Select Employment type contract combo</comment>
   </data>
   <data name="SelectHistoricalData" xml:space="preserve">
@@ -4300,7 +4305,7 @@ Periods</comment>
     <comment>Select historical data</comment>
   </data>
   <data name="SelectKPIToHandleColon" xml:space="preserve">
-    <value>选择KPI进行操作: </value>
+    <value>选择KPI进行操作：</value>
     <comment>SelectKPItohandleColon</comment>
   </data>
   <data name="SelectNames" xml:space="preserve">
@@ -4324,7 +4329,7 @@ Periods</comment>
     <comment>Select Rule Set Message</comment>
   </data>
   <data name="SelectScenario" xml:space="preserve">
-    <value>选择情形</value>
+    <value>选择情景</value>
     <comment>Select Scenario</comment>
   </data>
   <data name="SelectShiftCategory" xml:space="preserve">
@@ -4332,7 +4337,7 @@ Periods</comment>
     <comment>Select shift category</comment>
   </data>
   <data name="SelectSiteColon" xml:space="preserve">
-    <value>选择运营点: </value>
+    <value>选择运营点：</value>
     <comment>Välj site:</comment>
   </data>
   <data name="SelectWorkingdaysForThisContractSchedule" xml:space="preserve">
@@ -4348,19 +4353,19 @@ Periods</comment>
     <comment>Critical understaffing</comment>
   </data>
   <data name="ServiceLevelParenthesisPercentSign" xml:space="preserve">
-    <value>服务水平(％)</value>
+    <value>服务水平 (%)</value>
     <comment>Service level (%)</comment>
   </data>
   <data name="ServiceLevelPercentageMustBeBetween1And100" xml:space="preserve">
-    <value>输入服务水平的百分数必须在1％和100％之间。</value>
+    <value>输入的服务水平百分比必须在1%和100%之间。</value>
     <comment>The entered service level percentage must be between 1 and 100 %.</comment>
   </data>
   <data name="ServiceLevelPercentSign" xml:space="preserve">
-    <value>服务水平％</value>
+    <value>服务水平 (%)</value>
     <comment>Service level %</comment>
   </data>
   <data name="ServiceLevelPercentSignColon" xml:space="preserve">
-    <value>服务水平％: </value>
+    <value>服务水平 (%)：</value>
     <comment>Service level %:</comment>
   </data>
   <data name="ServiceLevelSeconds" xml:space="preserve">
@@ -4368,15 +4373,15 @@ Periods</comment>
     <comment>Service Level Seconds</comment>
   </data>
   <data name="ServiceLevelSecondsColon" xml:space="preserve">
-    <value>服务水平(秒): </value>
+    <value>服务水平(秒)：</value>
     <comment>Service Level Seconds:</comment>
   </data>
   <data name="ServiceLevelSParenthesis" xml:space="preserve">
-    <value>服务水平(s)</value>
+    <value>服务水平 (秒)</value>
     <comment>Service level (s)</comment>
   </data>
   <data name="ServiceLevelSParenthesisColon" xml:space="preserve">
-    <value>服务水平(s):</value>
+    <value>服务水平 (秒)：</value>
     <comment>Service level target (s)</comment>
   </data>
   <data name="SetAsDefaultStateGroup" xml:space="preserve">
@@ -4420,11 +4425,11 @@ Periods</comment>
     <comment>Rotation Setting Grid Column header</comment>
   </data>
   <data name="ShiftCategoryColon" xml:space="preserve">
-    <value>班次类型:</value>
+    <value>班次类型：</value>
     <comment>Shift category:</comment>
   </data>
   <data name="ShiftCreator" xml:space="preserve">
-    <value>换班</value>
+    <value>调班</value>
     <comment>Shifts</comment>
   </data>
   <data name="ShiftCreatorValidationErrorMessage" xml:space="preserve">
@@ -4440,7 +4445,7 @@ Periods</comment>
     <comment>Shifts</comment>
   </data>
   <data name="ShiftTradeRequest" xml:space="preserve">
-    <value>调班请求</value>
+    <value>调班申请</value>
     <comment>Shift Trade Request text in Agent portal</comment>
   </data>
   <data name="ShortName" xml:space="preserve">
@@ -4496,7 +4501,7 @@ Periods</comment>
     <comment>Show previous shift</comment>
   </data>
   <data name="ShowRequests" xml:space="preserve">
-    <value>显示请求</value>
+    <value>显示申请</value>
     <comment>toggle the Requests visiblity in Scheduler</comment>
   </data>
   <data name="Shrinkage" xml:space="preserve">
@@ -4504,11 +4509,11 @@ Periods</comment>
     <comment>Shrinkage</comment>
   </data>
   <data name="ShrinkageColon" xml:space="preserve">
-    <value>缩减: </value>
+    <value>缩减：</value>
     <comment>Shrinkage:</comment>
   </data>
   <data name="ShrinkagePercentSignColon" xml:space="preserve">
-    <value>缩减％: </value>
+    <value>缩减 (%)：</value>
     <comment>Shrinkage %:</comment>
   </data>
   <data name="Site" xml:space="preserve">
@@ -4532,11 +4537,11 @@ Periods</comment>
     <comment>Skill</comment>
   </data>
   <data name="SkillColon" xml:space="preserve">
-    <value>技能: </value>
+    <value>技能：</value>
     <comment>Skill</comment>
   </data>
   <data name="SkillData" xml:space="preserve">
-    <value>技能数据 </value>
+    <value>技能数据</value>
     <comment>Skill data </comment>
   </data>
   <data name="SkillDataGrids" xml:space="preserve">
@@ -4544,7 +4549,7 @@ Periods</comment>
     <comment>Skill data grids</comment>
   </data>
   <data name="SkillDayIsInvalidOneParameter" xml:space="preserve">
-    <value>错误信息: {0} 检查最大坐席代表数量为0或高于最少坐席代表， 或在附属技能之间分布，总计数值达到100％。</value>
+    <value>错误信息：{0} 检查最大座席代表数量为0或高于最少座席代表，或子技能的分布总和达到100％。</value>
     <comment>Error information: {0} Check that max agents are 0 or higher than min agents, or that the distribution between the sub skills adds to 100%.</comment>
   </data>
   <data name="SkillDaysLoaded" xml:space="preserve">
@@ -4556,7 +4561,7 @@ Periods</comment>
     <comment>Skill day template</comment>
   </data>
   <data name="SkillDayTemplateIsInvalidOneParameter" xml:space="preserve">
-    <value>因为正误检测查出错误，所以不能保存模版。检查的最大坐席代表是否高于最少最小坐席代表或0。 错误信息：{0}</value>
+    <value>因为正误检测查出错误，所以不能保存模版。请检查最大座席代表数是否高于最少最小座席代表数或为0。错误信息：{0}</value>
     <comment>The templates cannot be saved because of an error in validation. Check that max agents are higher than min agents or 0. Error information: {0}</comment>
   </data>
   <data name="SkillDayTemplates" xml:space="preserve">
@@ -4568,7 +4573,7 @@ Periods</comment>
     <comment>Skill loaded</comment>
   </data>
   <data name="SkillNameIsInvalid" xml:space="preserve">
-    <value>输入技能名称无效，名称不能为空白或大于50个字符。</value>
+    <value>输入技能名称无效，名称不能为空或大于50个字符。</value>
     <comment>The entered skill name is invalid, the name must not be empty or longer than 50 characters.</comment>
   </data>
   <data name="SkillsTotal" xml:space="preserve">
@@ -4612,7 +4617,7 @@ Periods</comment>
     <comment>Header title of Skill validation Smart part</comment>
   </data>
   <data name="SkillViews" xml:space="preserve">
-    <value>技能浏览　</value>
+    <value>技能浏览</value>
     <comment>Skill views ribbon group</comment>
   </data>
   <data name="SkillWizard" xml:space="preserve">
@@ -4656,7 +4661,7 @@ Periods</comment>
     <comment>SortOrder</comment>
   </data>
   <data name="SortRequests" xml:space="preserve">
-    <value>分类请求</value>
+    <value>分类申请</value>
     <comment>SortRequests</comment>
   </data>
   <data name="SortZtoA" xml:space="preserve">
@@ -4692,7 +4697,7 @@ Periods</comment>
     <comment>Standard deviation row header</comment>
   </data>
   <data name="StartDate" xml:space="preserve">
-    <value>开始日期: </value>
+    <value>开始日期：</value>
     <comment>Start date</comment>
   </data>
   <data name="StartMenu" xml:space="preserve">
@@ -4712,7 +4717,7 @@ Periods</comment>
     <comment>Start time</comment>
   </data>
   <data name="StartTimeColon" xml:space="preserve">
-    <value>开始时间: </value>
+    <value>开始时间：</value>
   </data>
   <data name="StartWeek" xml:space="preserve">
     <value>开始的星期</value>
@@ -4723,7 +4728,7 @@ Periods</comment>
     <comment>Used in column header</comment>
   </data>
   <data name="StateGroupAvailableDescription" xml:space="preserve">
-    <value>(可接听电话的坐席代表)</value>
+    <value>(可接听电话的座席代表)</value>
     <comment>(agents are available for taking calls)</comment>
   </data>
   <data name="Status" xml:space="preserve">
@@ -4738,30 +4743,30 @@ Periods</comment>
     <value>主题</value>
   </data>
   <data name="SubjectColon" xml:space="preserve">
-    <value>主题: </value>
+    <value>主题：</value>
   </data>
   <data name="SubSkill" xml:space="preserve">
-    <value>附属技能</value>
+    <value>子技能</value>
     <comment>Sub skill</comment>
   </data>
   <data name="SubSkillDistributions" xml:space="preserve">
-    <value>附属技能分布</value>
+    <value>子技能分布</value>
     <comment>Sub skills distributions</comment>
   </data>
   <data name="SubSkillDistributionsColon" xml:space="preserve">
-    <value>附属技能分布: </value>
+    <value>子技能分布：</value>
     <comment>Sub skills distributions</comment>
   </data>
   <data name="SubSkillHasValueInTemplate" xml:space="preserve">
-    <value>不能删除附属技能。 分布模板中有数值。 请先移除后再次尝试。</value>
+    <value>不能删除子技能。分布模板中有数值。请先移除后再次尝试。</value>
     <comment>The sub skill cannot be deleted. It has values in distribution templates. Remove them first and try again.</comment>
   </data>
   <data name="SubSkills" xml:space="preserve">
-    <value>附属技能</value>
+    <value>子技能</value>
     <comment>Sub skills</comment>
   </data>
   <data name="SuggestedTimesColon" xml:space="preserve">
-    <value>建议的时间: </value>
+    <value>建议的时间：</value>
     <comment>Suggested meeting times</comment>
   </data>
   <data name="Summary" xml:space="preserve">
@@ -4777,7 +4782,7 @@ Periods</comment>
     <comment>Sunday</comment>
   </data>
   <data name="Swap" xml:space="preserve">
-    <value>交换 </value>
+    <value>交换</value>
     <comment>Swap</comment>
   </data>
   <data name="SwapCannotBePerformed" xml:space="preserve">
@@ -4805,7 +4810,7 @@ Periods</comment>
     <comment>Target</comment>
   </data>
   <data name="TargetColon" xml:space="preserve">
-    <value>&amp;目标: </value>
+    <value>目标(&amp;T)：</value>
     <comment>&amp;Target:</comment>
   </data>
   <data name="TargetDaysOff" xml:space="preserve">
@@ -4813,11 +4818,11 @@ Periods</comment>
     <comment>Used in grid target daysOff</comment>
   </data>
   <data name="TargetLengthColon" xml:space="preserve">
-    <value>目标长度: </value>
+    <value>目标长度：</value>
     <comment>Caption of the "Target Length" field of the Day off setting page</comment>
   </data>
   <data name="TargetPeriod" xml:space="preserve">
-    <value>目标阶段 </value>
+    <value>目标阶段</value>
     <comment>Target period</comment>
   </data>
   <data name="TargetPeriodFrom" xml:space="preserve">
@@ -4841,11 +4846,11 @@ Periods</comment>
     <comment>Team members</comment>
   </data>
   <data name="TeamView" xml:space="preserve">
-    <value>小组浏览</value>
+    <value>小组视图</value>
     <comment>Team view</comment>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Teleopti CCC：预测</value>
+    <value>预测 - Teleopti CCC</value>
     <comment>Teleopti CCC : Forecasts</comment>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
@@ -4857,7 +4862,7 @@ Periods</comment>
     <comment>Teleopti CCC : Schedules</comment>
   </data>
   <data name="Template" xml:space="preserve">
-    <value>模板　</value>
+    <value>模板</value>
     <comment>Template</comment>
   </data>
   <data name="Templates" xml:space="preserve">
@@ -4921,7 +4926,7 @@ Periods</comment>
     <comment>The provided string could not be formatted to a valid time error message</comment>
   </data>
   <data name="ThereAreAgentsAssignedToTheTeam" xml:space="preserve">
-    <value>有坐席代表分配给小组</value>
+    <value>有座席代表分配给小组</value>
     <comment>There are agents assigned to the team</comment>
   </data>
   <data name="ThereAreTeamsAssignedUnderneath" xml:space="preserve">
@@ -4933,7 +4938,7 @@ Periods</comment>
     <comment>30 Minutes</comment>
   </data>
   <data name="ThreeDots" xml:space="preserve">
-    <value>…</value>
+    <value>...</value>
     <comment>...</comment>
   </data>
   <data name="Thursday" xml:space="preserve">
@@ -4953,7 +4958,7 @@ Periods</comment>
     <comment>Time zone</comment>
   </data>
   <data name="TimeZoneColon" xml:space="preserve">
-    <value>时区: </value>
+    <value>时区：</value>
     <comment>Time zone</comment>
   </data>
   <data name="To" xml:space="preserve">
@@ -4961,7 +4966,7 @@ Periods</comment>
     <comment>to</comment>
   </data>
   <data name="ToColon" xml:space="preserve">
-    <value>到: </value>
+    <value>到：</value>
     <comment>To:</comment>
   </data>
   <data name="Today" xml:space="preserve">
@@ -5060,7 +5065,7 @@ Periods</comment>
     <comment>UI-Culture</comment>
   </data>
   <data name="UnableToConnectRemoteService" xml:space="preserve">
-    <value>不能连接远端服务</value>
+    <value>不能连接远程服务</value>
     <comment>Unable to connect the the remote service</comment>
   </data>
   <data name="Understaffing" xml:space="preserve">
@@ -5139,7 +5144,7 @@ Periods</comment>
     <value>使用的</value>
   </data>
   <data name="UseDaysOffPerWeek" xml:space="preserve">
-    <value>使用每周的休息日 </value>
+    <value>使用每周的休息日</value>
     <comment>Use Day Off Per Week</comment>
   </data>
   <data name="UseForRequests" xml:space="preserve">
@@ -5295,7 +5300,7 @@ Periods</comment>
     <comment>Week</comment>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>w.</value>
+    <value>周</value>
     <comment>Abbreviation for week</comment>
   </data>
   <data name="WeekDay" xml:space="preserve">
@@ -5307,7 +5312,7 @@ Periods</comment>
     <comment>Weekday exclusion ribbon item</comment>
   </data>
   <data name="WeeklyRestTimeColon" xml:space="preserve">
-    <value>每周的休息时间: </value>
+    <value>每周的休息时间：</value>
     <comment>Weekly Rest Time</comment>
   </data>
   <data name="WeeklyView" xml:space="preserve">
@@ -5323,7 +5328,7 @@ Periods</comment>
     <comment>Weeks</comment>
   </data>
   <data name="WeeksColon" xml:space="preserve">
-    <value>星期: </value>
+    <value>星期：</value>
     <comment>Weeks:</comment>
   </data>
   <data name="WeekView" xml:space="preserve">
@@ -5347,7 +5352,7 @@ Periods</comment>
     <comment>Windows login</comment>
   </data>
   <data name="WitAmpersandhinColon" xml:space="preserve">
-    <value>之内: </value>
+    <value>之内(&amp;I)：</value>
     <comment>Within:</comment>
   </data>
   <data name="Wizard" xml:space="preserve">
@@ -5391,7 +5396,7 @@ Periods</comment>
     <comment>Workload</comment>
   </data>
   <data name="WorkloadCreatedDotParameter0" xml:space="preserve">
-    <value>创建工作量 {0}。</value>
+    <value>已创建工作量 {0}。</value>
     <comment>Workload created {0}.</comment>
   </data>
   <data name="WorkloadDaysLoaded" xml:space="preserve">
@@ -5459,7 +5464,7 @@ Periods</comment>
     <comment>Yes To All</comment>
   </data>
   <data name="YouAreNotAuthorizedToRunTheApplication" xml:space="preserve">
-    <value>您没有被授权运行应用程序! 该应用程序将关闭。</value>
+    <value>您没有被授权运行应用程序！该应用程序将关闭。</value>
     <comment>You are not authorized to run the application! The application will be closed.</comment>
   </data>
   <data name="YouCannotHaveABlankDescription" xml:space="preserve">
@@ -5467,25 +5472,25 @@ Periods</comment>
     <comment>You cannot have a blank description error message</comment>
   </data>
   <data name="YouHaveToHaveAtLeastOneScoreCard" xml:space="preserve">
-    <value>您至少必须有一个记分卡。请点击+按钮，获得一个记分卡 </value>
+    <value>您至少必须有一个记分卡。请点击+按钮，获得一个记分卡</value>
   </data>
   <data name="YouHaveUnsavedDataDoYouWantToCloseAnyWay" xml:space="preserve">
-    <value>您希望保存排班的改动吗?</value>
+    <value>您希望保存排班的改动吗？</value>
     <comment>Vill du spara ändringar gjorda i schemat?</comment>
   </data>
   <data name="YourChangesWillBeDiscardedReloading" xml:space="preserve">
-    <value>您的改动将被放弃。 重新加载…</value>
+    <value>您的改动将被放弃。重新加载中…</value>
     <comment>Your changes will be discarded. Reloading...</comment>
   </data>
   <data name="ZeroOneFoundDot" xml:space="preserve">
-    <value>{0} {1} 找到了。</value>
+    <value>{0} {1} 找到。</value>
   </data>
   <data name="ZeroZeroColonZeroZero" xml:space="preserve">
     <value>00:00</value>
     <comment>00:00</comment>
   </data>
   <data name="ZtoA" xml:space="preserve">
-    <value>Z到A</value>
+    <value>Z 到 A</value>
     <comment>sorting in Z to A order</comment>
   </data>
   <data name="NewReport" xml:space="preserve">
@@ -5500,7 +5505,7 @@ Periods</comment>
     <value>您的改变会被放弃。</value>
   </data>
   <data name="SelectRotationColon" xml:space="preserve">
-    <value>选择轮班: </value>
+    <value>选择轮班：</value>
   </data>
   <data name="EmployeeNumber" xml:space="preserve">
     <value>员工编号</value>
@@ -5512,13 +5517,13 @@ Periods</comment>
     <value>现有警报类型</value>
   </data>
   <data name="GiveAlarmAName" xml:space="preserve">
-    <value>给警报类型一个详细描述的名字</value>
+    <value>给警报类型一个详细描述的名称</value>
   </data>
   <data name="NewAlarm" xml:space="preserve">
     <value>创建新的警报</value>
   </data>
   <data name="SkillCreatedDotParameter0" xml:space="preserve">
-    <value>技能已经创建{0}</value>
+    <value>技能已经创建 {0}</value>
   </data>
   <data name="ViewUnpublishedSchedules" xml:space="preserve">
     <value>显示没有公布的排班</value>
@@ -5530,10 +5535,10 @@ Periods</comment>
     <value>请输入每周的设置</value>
   </data>
   <data name="AlwaysOverrideTheseErrors" xml:space="preserve">
-    <value>总是撤销这些错误</value>
+    <value>总是忽略这些错误</value>
   </data>
   <data name="ChangeToOverMidnight" xml:space="preserve">
-    <value>改为超过半夜</value>
+    <value>更改超过半夜</value>
   </data>
   <data name="InvalidPercentageValue" xml:space="preserve">
     <value>无效的百分比值</value>
@@ -5542,7 +5547,7 @@ Periods</comment>
     <value>百分比值必须在1到100之间</value>
   </data>
   <data name="YouCannotHaveABlankName" xml:space="preserve">
-    <value>您不能有空白名字</value>
+    <value>您不能有空白名称</value>
   </data>
   <data name="ManageAlarmSituations" xml:space="preserve">
     <value>管理警报状况</value>
@@ -5560,28 +5565,28 @@ Periods</comment>
     <value>取消加载并关闭应用程序…</value>
   </data>
   <data name="IsPaidTime" xml:space="preserve">
-    <value>是支付时间</value>
+    <value>是付薪时间</value>
   </data>
   <data name="IsWorkTime" xml:space="preserve">
     <value>是工作时间</value>
   </data>
   <data name="ErrorMessageFromToTimeIsInvalidParameter" xml:space="preserve">
-    <value>错误! 从{0}到{1}不是一个有效范围。</value>
+    <value>错误！从{0}到{1}不是一个有效范围。</value>
   </data>
   <data name="ToggleLogOutState" xml:space="preserve">
-    <value>切换到登出状态</value>
+    <value>切换到注销状态</value>
   </data>
   <data name="UseForLogOut" xml:space="preserve">
-    <value>用于登出</value>
+    <value>用于注销</value>
   </data>
   <data name="AreYouSureYouWantToDeleteAvailability" xml:space="preserve">
-    <value>您确定想要删除'{0}'可用性?</value>
+    <value>您确定要删除 '{0}' 可用性？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteRotation" xml:space="preserve">
-    <value>您确定想要删除'{0}'轮班?</value>
+    <value>您确定想要删除 ‘{0}’ 轮班？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteScenario" xml:space="preserve">
-    <value>您确定想要删除'{0}'情形?</value>
+    <value>您确定想要删除 '{0}' 情景？</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
     <value>确认删除</value>
@@ -5590,7 +5595,7 @@ Periods</comment>
     <value>授权失败</value>
   </data>
   <data name="CannotDeleteDefaultScenario" xml:space="preserve">
-    <value>不能删除默认的情形'{0}'。</value>
+    <value>不能删除默认的情景 '{0}'。</value>
   </data>
   <data name="ScoreCardPreviewHeaderToolTip" xml:space="preserve">
     <value>请双击这里在主浏览页面打开</value>
@@ -5602,16 +5607,16 @@ Periods</comment>
     <value>处理时间(小时:分钟)</value>
   </data>
   <data name="MaximumOccupancyParenthesisPercentSign" xml:space="preserve">
-    <value>最高占有率（％）</value>
+    <value>最高占有率 (%)</value>
   </data>
   <data name="MinimumOccupancyParenthesisPercentSign" xml:space="preserve">
     <value>最低占有率(％)</value>
   </data>
   <data name="ShrinkageParenthesisPercentSign" xml:space="preserve">
-    <value>缩减(％)</value>
+    <value>缩减 (%)</value>
   </data>
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
-    <value>RTA状态组必须首先配置</value>
+    <value>必须先配置RTA状态组。</value>
   </data>
   <data name="ApplyLicense" xml:space="preserve">
     <value>应用授权证书</value>
@@ -5621,7 +5626,7 @@ Periods</comment>
 * 购买一个授权证书(联系信息www.teleopti.com)
 * 收到授权证书(例如通过邮件)
 * 把授权证书保存到磁盘
-* 如果有任何工作需要临时保存，请在应用授权证书之前保存
+* 如果在程序中有任何工作需要保存，请在应用授权证书之前保存
 * 请按浏览键浏览证书文件
 * 应用授权证书
 * 应用程序将被关闭
@@ -5629,16 +5634,21 @@ Periods</comment>
 * 重新启动应用</value>
   </data>
   <data name="CannotReadLicenseFile" xml:space="preserve">
-    <value>授权证书文件"{0}"不能读取，错误详情为: {1}</value>
+    <value>无法读取授权证书文件"{0}"
+详细错误：
+{1}</value>
   </data>
   <data name="DatabaseProblem" xml:space="preserve">
-    <value>有一个错误将要把授权证书存入到数据库。错误详情为: {0}</value>
+    <value>把授权证书存入到数据库时发生错误。错误详情为：{0}</value>
   </data>
   <data name="EnterValidFile" xml:space="preserve">
     <value>请输入一个有效的文件名，包括路径</value>
   </data>
   <data name="LicenseApplicationSuccess" xml:space="preserve">
-    <value>使用授权证书成功。恭喜！现在你是屡获殊荣的人力资源管理系统的授权用户。该应用即将退出。你可以重新启动它。你也可以重新启动My Time来进入到新的授权许可选项。</value>
+    <value>授权证书应用成功。
+恭喜！现在你是这个屡获殊荣的人力资源管理系统的授权用户了。
+本程序即将退出。
+你可以重新启动本程序，也可以重新启动My Time来进入到新的授权许可选项。</value>
   </data>
   <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>您的授权许可已经过期，请使用新的授权许可。</value>
@@ -5647,13 +5657,15 @@ Periods</comment>
     <value>您的授权许可是无效的，可能是因为非法修改，请申请新的授权许可。</value>
   </data>
   <data name="NewLicenseAlreadyExpired" xml:space="preserve">
-    <value>你正在使用的授权证书"{0}"是旧的，它已经过期。</value>
+    <value>你正在使用的授权证书 "{0}"是旧的，它已经过期。</value>
   </data>
   <data name="NewLicenseCorrupted" xml:space="preserve">
-    <value>该授权证书文件"{0}"是无效的。它可能是伪造的。</value>
+    <value>该授权证书文件"{0}"是无效的。它可能是伪造的</value>
   </data>
   <data name="NewLicenseNotValidFile" xml:space="preserve">
-    <value>该授权证书文件"{0}"是无效的格式(xml)。错误详情为: {1}</value>
+    <value>该授权证书文件"{0}"不是有效的XML格式
+错误详细信息：
+{1}</value>
   </data>
   <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
     <value>你还没有使用授权证书，请使用授权证书。</value>
@@ -5668,13 +5680,13 @@ Periods</comment>
     <value>授权证书使用失败</value>
   </data>
   <data name="YourLicensWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
-    <value>你的授权证书一直有效到{0}。请不要忘记及时更新。</value>
+    <value>你的授权证书一直有效到{0}，请不要忘记及时更新。</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>&amp;浏览</value>
+    <value>浏览(&amp;B)</value>
   </data>
   <data name="NameAlreadyExists" xml:space="preserve">
-    <value>该名字已经存在</value>
+    <value>该名称已经存在</value>
   </data>
   <data name="About" xml:space="preserve">
     <value>关于</value>
@@ -5686,10 +5698,10 @@ Periods</comment>
     <value>每周休息时间不能长于168个小时</value>
   </data>
   <data name="LastUpdateColonParameter0" xml:space="preserve">
-    <value>上次更新: {0}</value>
+    <value>上次更新：{0}</value>
   </data>
   <data name="LicensedToColon" xml:space="preserve">
-    <value>授权给:</value>
+    <value>授权给：</value>
   </data>
   <data name="MainPortal" xml:space="preserve">
     <value>主界面</value>
@@ -5707,13 +5719,12 @@ Periods</comment>
     <value>有人在你之前更改了该数据。</value>
   </data>
   <data name="License" xml:space="preserve">
-    <value>这个产品的授权从"{0}"到"{1}"。
+    <value>根据条款和许可证合约条件系统授权给“{0}”，授权许可证将在 {1} 过期。
 
-这个授权证书最多可用于{2}激活状态的坐席代表。
+当前授权许可证最多可用于{2} 个激活状态的座席代表。
 
-该授权方案的计划为"{3}"。
-
-这些选项已被激活:
+该授权方案的概要为“{3}”。
+以下选项已被激活:
 {4}</value>
   </data>
   <data name="DayOffTemplateDefaultDescription" xml:space="preserve">
@@ -5723,13 +5734,13 @@ Periods</comment>
     <value>撤销所有</value>
   </data>
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>您拥有{0}激活的坐席代表但您的授权证书指定的坐席代表数量只有{1}。请尽快升级您的授权证书。</value>
+    <value>您有 {0} 个激活的座席代表但您的授权证书指定的座席代表数量只允许有 {1}。请尽快升级您的授权证书。</value>
   </data>
   <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>您拥有{0}激活的坐席代表但您的授权证书许可的坐席代表数量只有{1}。请在您继续使用之前升级您的授权证书。</value>
+    <value>您拥有 {0} 个激活的座席代表但您的授权证书许可的座席代表数量只有{1}。请在您继续使用之前升级您的授权证书。</value>
   </data>
   <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>这个授权证书只包含{0}个激活的座席代表，但你使用的座席代表为{1}。你需要得到一个授权证书能支持足够多的坐席代表使用。</value>
+    <value>这个授权证书只包含 {0} 个激活的座席代表，但你使用的座席代表为{1}。你需要一个能支持足够多的座席代表使用的授权证书。</value>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
     <value>天数</value>
@@ -5777,7 +5788,7 @@ Periods</comment>
     <value>计划的分组</value>
   </data>
   <data name="ErrorMessagePreferenceDateLimit" xml:space="preserve">
-    <value>你不能在{0}之前输入偏好</value>
+    <value>你不能在 {0} 之前输入偏好</value>
   </data>
   <data name="Budgeting" xml:space="preserve">
     <value>做预算</value>
@@ -5801,16 +5812,13 @@ Periods</comment>
     <value>增加休息日…</value>
   </data>
   <data name="DayOffColon" xml:space="preserve">
-    <value>休息日: </value>
+    <value>休息日：</value>
   </data>
   <data name="QuestionDeleteThePlanningGroupTwoParameters" xml:space="preserve">
-    <value>您确信是否需要删除计划分组{0}{1}{0}? </value>
-  </data>
-  <data name="PinnedUpWindow" xml:space="preserve">
-    <value>创建快捷窗口</value>
+    <value>您确定要删除计划分组 {0}{1}{0}吗？</value>
   </data>
   <data name="AreYouSureYouWantToDeletePartTimePercentage" xml:space="preserve">
-    <value>您确定要删除'{0}'兼职百分比吗?</value>
+    <value>您确定要删除 '{0}' 兼职百分比吗？</value>
   </data>
   <data name="StaffingEffect" xml:space="preserve">
     <value>人员配备结果</value>
@@ -5819,25 +5827,25 @@ Periods</comment>
     <value>打开预算…</value>
   </data>
   <data name="NegativeEffectColon" xml:space="preserve">
-    <value>负面结果: </value>
+    <value>负面结果：</value>
   </data>
   <data name="PositiveEffectColon" xml:space="preserve">
-    <value>正面结果: </value>
+    <value>正面结果：</value>
   </data>
   <data name="TotalColon" xml:space="preserve">
-    <value>总计: </value>
+    <value>总计：</value>
   </data>
   <data name="TotalOutOfAdherenceColon" xml:space="preserve">
-    <value>总的不遵时: </value>
+    <value>总的不遵时：</value>
   </data>
   <data name="SaveAsScenario" xml:space="preserve">
-    <value>保存为情形</value>
+    <value>保存为情景</value>
   </data>
   <data name="MeetingCanNotCreate" xml:space="preserve">
     <value>不能创建会议。系统可能不包含活动。</value>
   </data>
   <data name="MeetingCanNotLoadWithoutScenarios" xml:space="preserve">
-    <value>会议不能加载。系统可能不包含方案。</value>
+    <value>会议不能加载。系统可能不包含情景。</value>
   </data>
   <data name="label7" xml:space="preserve">
     <value>标签7</value>
@@ -5852,7 +5860,7 @@ Periods</comment>
     <value>绩效选项</value>
   </data>
   <data name="ResourceReReoptimizerOptions" xml:space="preserve">
-    <value>资源再次优化选项　</value>
+    <value>资源再次优化选项</value>
   </data>
   <data name="StartWithDayOffOptimization" xml:space="preserve">
     <value>从休息日优化开始</value>
@@ -5873,7 +5881,7 @@ Periods</comment>
     <value>分钟</value>
   </data>
   <data name="NowColon" xml:space="preserve">
-    <value>现在: </value>
+    <value>现在：</value>
   </data>
   <data name="MaxMoveDayPerPersonPerIteration" xml:space="preserve">
     <value>每个人每个重复的最多移动的天数</value>
@@ -5888,7 +5896,7 @@ Periods</comment>
     <value>计算背景资源</value>
   </data>
   <data name="DeletingSchedules" xml:space="preserve">
-    <value>正在删除{0}排班　</value>
+    <value>正在删除 {0} 排班</value>
   </data>
   <data name="ValidatingPersons" xml:space="preserve">
     <value>正在验证{0}人数</value>
@@ -5939,13 +5947,13 @@ Periods</comment>
     <value>约会的重复</value>
   </data>
   <data name="DurationColon" xml:space="preserve">
-    <value>持续时间:</value>
+    <value>持续时间：</value>
   </data>
   <data name="EndByColon" xml:space="preserve">
-    <value>结束于: </value>
+    <value>结束于：</value>
   </data>
   <data name="EndColon" xml:space="preserve">
-    <value>结束: </value>
+    <value>结束：</value>
   </data>
   <data name="Monthly" xml:space="preserve">
     <value>每月的</value>
@@ -5954,7 +5962,7 @@ Periods</comment>
     <value>每个</value>
   </data>
   <data name="RangeOfRecurrence" xml:space="preserve">
-    <value>重复的范围　</value>
+    <value>重复的范围</value>
   </data>
   <data name="RecurEvery" xml:space="preserve">
     <value>重复每个</value>
@@ -5969,7 +5977,7 @@ Periods</comment>
     <value>去掉重复</value>
   </data>
   <data name="StartColon" xml:space="preserve">
-    <value>开始: </value>
+    <value>开始：</value>
   </data>
   <data name="The" xml:space="preserve">
     <value>这个</value>
@@ -5978,10 +5986,10 @@ Periods</comment>
     <value>每周的</value>
   </data>
   <data name="WeeksOnColon" xml:space="preserve">
-    <value>周: </value>
+    <value>周：</value>
   </data>
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
-    <value>您确定想要删除'{0}'合同吗?</value>
+    <value>您确定要删除 '{0}' 合同吗？</value>
   </data>
   <data name="NewStudentAvailability" xml:space="preserve">
     <value>新建学生可用性</value>
@@ -6038,13 +6046,13 @@ Periods</comment>
     <value>小组测量指标</value>
   </data>
   <data name="AreYouSureYouWantToDeleteDayOff" xml:space="preserve">
-    <value>您确定想要删除'{0}'休息日吗?</value>
+    <value>您确定想要删除 '{0}' 休息日吗？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteOptionalColumn" xml:space="preserve">
-    <value>您确定想要删除'{0}'可选栏吗?</value>
+    <value>您确定想要删除 ‘{0}’ 可选栏吗？</value>
   </data>
   <data name="ShortNameColon" xml:space="preserve">
-    <value>缩写: </value>
+    <value>缩写：</value>
   </data>
   <data name="MultiplicatorTypeOBTime" xml:space="preserve">
     <value>OB时间</value>
@@ -6056,7 +6064,7 @@ Periods</comment>
     <value>超时工作</value>
   </data>
   <data name="RecurrenceColon" xml:space="preserve">
-    <value>重复: </value>
+    <value>重复：</value>
   </data>
   <data name="And" xml:space="preserve">
     <value>和</value>
@@ -6077,10 +6085,10 @@ Periods</comment>
     <value>根据个人时间段的限制筛选</value>
   </data>
   <data name="NoShiftsThatMatchesTheContractTimeCouldBeFound" xml:space="preserve">
-    <value>没有班次能够满足合同时间　</value>
+    <value>没有班次能够满足合同时间</value>
   </data>
   <data name="ShiftsInsideThePeriodColon" xml:space="preserve">
-    <value>这个时间段内的班次: </value>
+    <value>这个时间段内的班次：</value>
   </data>
   <data name="ShiftWithContractTimeBetweeen" xml:space="preserve">
     <value>在合同时间之间的班次</value>
@@ -6098,7 +6106,7 @@ Periods</comment>
     <value>获得从这个时间开始的班次列表</value>
   </data>
   <data name="NoAvailabilityDefinedFor" xml:space="preserve">
-    <value>为{0}未定义可用性</value>
+    <value>没有为 {0} 定义可用性</value>
   </data>
   <data name="NoPersonPeriodIsDefinedForTheDate" xml:space="preserve">
     <value>没有个人的时间段定义给日期</value>
@@ -6122,16 +6130,16 @@ Periods</comment>
     <value>个人姓名</value>
   </data>
   <data name="RulesetIsNotValidThisDate" xml:space="preserve">
-    <value>规则集{0}在这个日期无效</value>
+    <value>规则集 {0} 在这个日期无效</value>
   </data>
   <data name="ScheduleDate" xml:space="preserve">
     <value>排班日期</value>
   </data>
   <data name="TheEmploymentTypeIsNotFixedStaff" xml:space="preserve">
-    <value>雇佣类型不是固定员工</value>
+    <value>员工类型不是固定员工</value>
   </data>
   <data name="TheEmploymentTypeIsNotHourlyStaff" xml:space="preserve">
-    <value>雇佣类型为非小时制员工</value>
+    <value>员工类型为非小时制员工</value>
   </data>
   <data name="ThereIsAlreadyADayOff" xml:space="preserve">
     <value>已经存在一个休息日</value>
@@ -6164,7 +6172,7 @@ Periods</comment>
     <value>管理乘数</value>
   </data>
   <data name="MultiplicatorDeleteConfirmation" xml:space="preserve">
-    <value>删除选择的乘数? </value>
+    <value>删除选择的乘数？</value>
   </data>
   <data name="MultiplicatorType" xml:space="preserve">
     <value>乘数类型</value>
@@ -6188,7 +6196,7 @@ Periods</comment>
     <value>排班{0}天数</value>
   </data>
   <data name="CancellingThreeDots" xml:space="preserve">
-    <value>取消…</value>
+    <value>正在取消…</value>
   </data>
   <data name="For" xml:space="preserve">
     <value>为了</value>
@@ -6209,7 +6217,7 @@ Periods</comment>
     <value>向上看</value>
   </data>
   <data name="RefreshScreenEveryColon" xml:space="preserve">
-    <value>重新刷屏每一项: </value>
+    <value>重新刷屏每一项：</value>
   </data>
   <data name="ScheduleOrSchedules" xml:space="preserve">
     <value>排班</value>
@@ -6242,19 +6250,19 @@ Periods</comment>
     <value>没有输入名称</value>
   </data>
   <data name="FilterOnContractTimeLimitationsWithParams" xml:space="preserve">
-    <value>根据合同时间限制筛选（班次在合同时间{0}和{1}之间）</value>
+    <value>根据合同时间限制筛选 (班次在合同时间{0}和{1}之间 )</value>
   </data>
   <data name="ACW" xml:space="preserve">
     <value>电话后工作时间</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC　</value>
+    <value>Teleopti CCC</value>
   </data>
   <data name="LogOnFailedInvalidUserNameOrPassword" xml:space="preserve">
-    <value>登录失败! 无效的用户名或密码。</value>
+    <value>登录失败！无效的用户名或密码。</value>
   </data>
   <data name="FilterOnPersonalPeriodLimitationsWithParams" xml:space="preserve">
-    <value>根据个人时间段限制筛选（班次在时间段：{0}－{1}）</value>
+    <value>根据个人时间段限制筛选 (班次在时间段：{0}－{1} )</value>
   </data>
   <data name="DefaultDefinitionSetName" xml:space="preserve">
     <value>定义集</value>
@@ -6284,7 +6292,7 @@ Periods</comment>
     <value>合同时间</value>
   </data>
   <data name="FairnessValue" xml:space="preserve">
-    <value>公平数值</value>
+    <value>公平值</value>
   </data>
   <data name="FreeSlots" xml:space="preserve">
     <value>自由的时间间隙</value>
@@ -6296,7 +6304,7 @@ Periods</comment>
     <value>要求的技能</value>
   </data>
   <data name="MultiplicatorDefinitionDeleteConfirmation" xml:space="preserve">
-    <value>删除已选的乘数定义? </value>
+    <value>删除已选的乘数定义？</value>
   </data>
   <data name="NoMultiplicators" xml:space="preserve">
     <value>没有这个乘数类型{0}。</value>
@@ -6344,7 +6352,7 @@ Periods</comment>
     <value>乘数定义集</value>
   </data>
   <data name="EmploymentType" xml:space="preserve">
-    <value>雇佣类型</value>
+    <value>员工类型</value>
   </data>
   <data name="EndTimeLimitation" xml:space="preserve">
     <value>结束时间限制</value>
@@ -6386,7 +6394,7 @@ Periods</comment>
     <value>定义集名称</value>
   </data>
   <data name="MultiplicatorDefinitionSetColon" xml:space="preserve">
-    <value>乘数定义集: </value>
+    <value>乘数定义集：</value>
   </data>
   <data name="ModifyMeetings" xml:space="preserve">
     <value>修改会议</value>
@@ -6398,7 +6406,7 @@ Periods</comment>
     <value>规划</value>
   </data>
   <data name="ConnectedDefinitionSets" xml:space="preserve">
-    <value>联系的定义集: </value>
+    <value>联系的定义集：</value>
   </data>
   <data name="ShowLessPanels" xml:space="preserve">
     <value>显示更少的控制面板</value>
@@ -6407,7 +6415,7 @@ Periods</comment>
     <value>显示更多的控制面板</value>
   </data>
   <data name="OvertimeColon" xml:space="preserve">
-    <value>加班: </value>
+    <value>加班：</value>
   </data>
   <data name="MeetingErrorMessageA" xml:space="preserve">
     <value>请去掉</value>
@@ -6428,7 +6436,7 @@ Periods</comment>
     <value>预测的小时数</value>
   </data>
   <data name="ForecastedHoursIncoming" xml:space="preserve">
-    <value>忽如的预测小时数</value>
+    <value>呼入的预测小时数</value>
   </data>
   <data name="RelativeDifferenceIncoming" xml:space="preserve">
     <value>呼入的相对差异</value>
@@ -6461,10 +6469,11 @@ Periods</comment>
     <value>更新于</value>
   </data>
   <data name="CreateInfo" xml:space="preserve">
-    <value>创建人: {0} 创建于: {1}</value>
+    <value>创建人：{0}
+创建于：{1}</value>
   </data>
   <data name="UpdateInfo" xml:space="preserve">
-    <value>更新人: {0} 更新于: {1}</value>
+    <value>更新人：{0} 更新于：{1}</value>
   </data>
   <data name="AddToBags" xml:space="preserve">
     <value>增加到班次规则包</value>
@@ -6479,10 +6488,10 @@ Periods</comment>
     <value>工作时间限制</value>
   </data>
   <data name="NoScenario" xml:space="preserve">
-    <value>没有场景</value>
+    <value>没有情景</value>
   </data>
   <data name="ScenarioMustBeCreated" xml:space="preserve">
-    <value>必选先创建一个方案</value>
+    <value>至少需要先创建一个情景</value>
   </data>
   <data name="EarliestEndTime" xml:space="preserve">
     <value>最早的结束时间</value>
@@ -6509,7 +6518,7 @@ Periods</comment>
     <value>选择输出文件类型</value>
   </data>
   <data name="ESL" xml:space="preserve">
-    <value>估计的服务水平</value>
+    <value>预估的服务水平</value>
   </data>
   <data name="BusinessRulePersonAccountError1" xml:space="preserve">
     <value>个人帐户为{0}，从{1}开始超过了增加值</value>
@@ -6518,7 +6527,7 @@ Periods</comment>
     <value>小组设定</value>
   </data>
   <data name="TeamWriteProtection" xml:space="preserve">
-    <value>书写保护（天数）</value>
+    <value>写保护 (天数 )</value>
   </data>
   <data name="PayrollCode" xml:space="preserve">
     <value>工资表系统代码</value>
@@ -6542,13 +6551,13 @@ Periods</comment>
     <value>人员选择</value>
   </data>
   <data name="ChangeInfoColon" xml:space="preserve">
-    <value>改变信息:</value>
+    <value>更改信息：</value>
   </data>
   <data name="CreatedByColon" xml:space="preserve">
-    <value>创建人: </value>
+    <value>创建人：</value>
   </data>
   <data name="UpdatedByColon" xml:space="preserve">
-    <value>更新人: </value>
+    <value>更新人：</value>
   </data>
   <data name="WriteProtectSchedule" xml:space="preserve">
     <value>班表写保护</value>
@@ -6572,7 +6581,7 @@ Periods</comment>
     <value>超级管理员角色</value>
   </data>
   <data name="QuestionDelete" xml:space="preserve">
-    <value>您确定想要删除{0}{1}{0}? </value>
+    <value>您确定想要删除 {0}{1}{0}？</value>
   </data>
   <data name="PayrollExport" xml:space="preserve">
     <value>工资表输出</value>
@@ -6584,16 +6593,16 @@ Periods</comment>
     <value>每周最长工作时间不能超过168小时</value>
   </data>
   <data name="RunExport" xml:space="preserve">
-    <value>运行选定的输出</value>
+    <value>运行选定的导出</value>
   </data>
   <data name="CopyrightColon" xml:space="preserve">
-    <value>版权: </value>
+    <value>版权：</value>
   </data>
   <data name="ProductNameColon" xml:space="preserve">
-    <value>产品名称: </value>
+    <value>产品名称：</value>
   </data>
   <data name="ProductVersionColon" xml:space="preserve">
-    <value>产品版本: </value>
+    <value>产品版本：</value>
   </data>
   <data name="Configuration" xml:space="preserve">
     <value>配置</value>
@@ -6638,7 +6647,7 @@ Periods</comment>
     <value>座席代表记分卡</value>
   </data>
   <data name="FilterOnWorkTimeLimitationsWithParams" xml:space="preserve">
-    <value>根据工作时间的限制筛选（班次在合同时间{0}和{1}之间）</value>
+    <value>根据工作时间的限制筛选 (班次在合同时间{0}和{1}之间 )</value>
   </data>
   <data name="Excluded" xml:space="preserve">
     <value>不包括</value>
@@ -6653,7 +6662,7 @@ Periods</comment>
     <value>粘贴</value>
   </data>
   <data name="UndoRedoPersonRequest" xml:space="preserve">
-    <value>承诺请求为{0}</value>
+    <value>承诺申请为{0}</value>
   </data>
   <data name="UndoRedoReOptimize" xml:space="preserve">
     <value>再次优化</value>
@@ -6662,13 +6671,13 @@ Periods</comment>
     <value>正在排班</value>
   </data>
   <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>正在修改个人请求为{0}</value>
+    <value>正在修改个人申请为{0}</value>
   </data>
   <data name="UndoRedoModifySchedule" xml:space="preserve">
     <value>正在修改排班为{0}，日期{1}</value>
   </data>
   <data name="ASM" xml:space="preserve">
-    <value>坐席代表排班消息工具栏</value>
+    <value>打开座席代表排班消息工具栏</value>
   </data>
   <data name="AddNewGroupPage" xml:space="preserve">
     <value>增加新的分组页面</value>
@@ -6743,13 +6752,13 @@ Periods</comment>
     <value>可用日期</value>
   </data>
   <data name="RiLe" xml:space="preserve">
-    <value>RiLe</value>
+    <value>Ri Le</value>
   </data>
   <data name="EnterNameOnNewGroup" xml:space="preserve">
-    <value>在新组输入名字</value>
+    <value>在新组输入名称</value>
   </data>
   <data name="ToThreeDots" xml:space="preserve">
-    <value>参与人员…</value>
+    <value>到…</value>
   </data>
   <data name="EmploymentTypeFixedStaffNormalWorkTime" xml:space="preserve">
     <value>固定员工正常工作时间</value>
@@ -6758,7 +6767,7 @@ Periods</comment>
     <value>仅列</value>
   </data>
   <data name="AnchorColon" xml:space="preserve">
-    <value>基准点</value>
+    <value>基准点：</value>
   </data>
   <data name="PreferenceStartDate" xml:space="preserve">
     <value>偏好开始日期</value>
@@ -6767,7 +6776,7 @@ Periods</comment>
     <value>输出到PDF</value>
   </data>
   <data name="PoweredByTeleoptCCC" xml:space="preserve">
-    <value>Teleopti CCC支持</value>
+    <value>Teleopti CCC 支持</value>
   </data>
   <data name="ReportLevelDetailLunch" xml:space="preserve">
     <value>午餐</value>
@@ -6869,34 +6878,34 @@ Periods</comment>
     <value>接受</value>
   </data>
   <data name="MessageColon" xml:space="preserve">
-    <value>消息:</value>
+    <value>消息：</value>
   </data>
   <data name="RequestedByColon" xml:space="preserve">
-    <value>请求发起人: </value>
+    <value>申请发起人：</value>
   </data>
   <data name="RequestForm" xml:space="preserve">
-    <value>请求</value>
+    <value>申请</value>
   </data>
   <data name="RequestResponseAction" xml:space="preserve">
     <value>回应操作</value>
   </data>
   <data name="SelectedDateColon" xml:space="preserve">
-    <value>选定日期: </value>
+    <value>选定日期：</value>
   </data>
   <data name="StatusColon" xml:space="preserve">
-    <value>状态: </value>
+    <value>状态：</value>
   </data>
   <data name="TradeWithColon" xml:space="preserve">
-    <value>交换者: </value>
+    <value>交换者：</value>
   </data>
   <data name="YouDoNotHavePermissionsToViewTeamSchedules" xml:space="preserve">
     <value>您没有权限察看组班表</value>
   </data>
   <data name="FileImport" xml:space="preserve">
-    <value>文件输出</value>
+    <value>文件导入</value>
   </data>
   <data name="TheFileIsLockedByAnotherProgram" xml:space="preserve">
-    <value>文件被其他程序所定，请关闭并重试。</value>
+    <value>文件被其他程序锁定，请关闭并重试。</value>
   </data>
   <data name="Keep" xml:space="preserve">
     <value>保持</value>
@@ -6911,7 +6920,7 @@ Periods</comment>
     <value>保持开始结束时间</value>
   </data>
   <data name="SelectOptionalColumn" xml:space="preserve">
-    <value>&lt;选择选项列&gt;</value>
+    <value>&lt;选择可选列&gt;</value>
   </data>
   <data name="BuildInStandardAgentRole" xml:space="preserve">
     <value>座席</value>
@@ -6920,7 +6929,7 @@ Periods</comment>
     <value>管理员</value>
   </data>
   <data name="BuiltInBusinessUnitAdministratorRole" xml:space="preserve">
-    <value>业务单元管理员</value>
+    <value>业务单位管理员</value>
   </data>
   <data name="BuiltInSiteManagerRole" xml:space="preserve">
     <value>站点管理员</value>
@@ -6932,7 +6941,7 @@ Periods</comment>
     <value>确认分组页删除</value>
   </data>
   <data name="ChangeNameonGroup" xml:space="preserve">
-    <value>改变组名</value>
+    <value>更改组名</value>
   </data>
   <data name="ConfirmDeletion" xml:space="preserve">
     <value>确认删除</value>
@@ -6989,7 +6998,7 @@ Periods</comment>
     <value>已排班</value>
   </data>
   <data name="InvalidDataOnFollowingPage" xml:space="preserve">
-    <value>不能保存。数据在下列页无效:</value>
+    <value>不能保存数据。数据在下列页无效：</value>
   </data>
   <data name="NewReplyOption" xml:space="preserve">
     <value>新回复选项</value>
@@ -6998,7 +7007,7 @@ Periods</comment>
     <value>工资导出生成程序将在服务器端运行。您可以在系统中继续其他工作。</value>
   </data>
   <data name="SystemIsBusyWithBackgroundRequest" xml:space="preserve">
-    <value>系统正在处理另外的后台请求。请稍候再试</value>
+    <value>系统正在处理另外的后台申请。请稍候再试</value>
   </data>
   <data name="ReportLevel" xml:space="preserve">
     <value>生成报表AS</value>
@@ -7028,10 +7037,10 @@ Periods</comment>
     <value>增加天</value>
   </data>
   <data name="DateFromColon" xml:space="preserve">
-    <value>开始日期: </value>
+    <value>开始日期：</value>
   </data>
   <data name="DateToColon" xml:space="preserve">
-    <value>结束日期:</value>
+    <value>结束日期：</value>
   </data>
   <data name="DeleteDateParenthesisS" xml:space="preserve">
     <value>删除日期</value>
@@ -7055,7 +7064,7 @@ Periods</comment>
     <value>参考</value>
   </data>
   <data name="TheScheduleHasChanged" xml:space="preserve">
-    <value>班表已修改，本请求必须重新确认。</value>
+    <value>班表已修改，本申请必须重新确认。</value>
   </data>
   <data name="SelectMultipleDates" xml:space="preserve">
     <value>选择多日</value>
@@ -7076,7 +7085,18 @@ Periods</comment>
     <value>支持的电子邮件地址</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC遇到问题需要关闭。对此造成的不便深表歉意。如果您正进行某项操作，中间的信息可能丢失。为给我们提供关于本错误有用的信息，我们希望您，点击下面的“发送电子邮件报告”按钮，这将打开您的默认电邮程序，并请您：1. 重现错误的每步操作。2. 关于您发生错误当时工作相关的数据信息。3. Teleopti CCC背景错误的截屏。您还可以拷贝错误信息到剪贴板并粘贴在邮件正文中。　谢谢　Teleopti R&amp;D</value>
+    <value>Teleopti CCC 遇到问题需要关闭。我们对因此造成的不便深表歉意。如果您正进行某项操作，您的工作信息可能会丢失。
+
+为给我们提供关于本错误有用的信息，我们希望您，点击下面的“发送电子邮件报告”按钮，这将打开您的默认电子邮件程序，并请您在邮件内容中包括以下内容：
+
+1. 重现错误的每步操作
+2. 关于您发生错误当时工作相关的数据信息。
+3. Teleopti CCC 背景错误的截屏。
+
+您还可以复制错误信息到剪贴板并粘贴在邮件正文中。
+
+谢谢
+Teleopti R&amp;D</value>
   </data>
   <data name="CopyErrorMessageToClipboard" xml:space="preserve">
     <value>拷贝错误信息到剪贴板</value>
@@ -7088,10 +7108,17 @@ Periods</comment>
     <value>发送电子邮件报告</value>
   </data>
   <data name="UnhandledExceptionEmailBody" xml:space="preserve">
-    <value>为帮助我们改进产品，请协助提供以下信息。1. 重现错误的每步操作。2. 关于您发生错误当时工作相关的数据信息。3. Teleopti CCC背景错误的截屏。您还可以拷贝错误信息到剪贴板并粘贴在邮件正文中。　谢谢　Teleopti R&amp;D</value>
+    <value>为帮助我们改进产品，请协助提供以下信息：
+
+1. 重现错误的每步操作
+2. 关于您发生错误当时工作相关的数据信息
+3. Teleopti CCC背景错误的截屏
+
+非常感谢
+Teleopti R&amp;D</value>
   </data>
   <data name="AFileContainingTheErrorMessageCouldNotBeCreated" xml:space="preserve">
-    <value>不能创建包含错误信息的文件。请将错误信息拷贝到剪贴板并粘贴在电子邮件中。</value>
+    <value>无法创建包含错误信息的文件，请将错误信息复制到剪贴板并粘贴在电子邮件中。</value>
   </data>
   <data name="AuthorizingFunctionsThreeDots" xml:space="preserve">
     <value>认证功能...</value>
@@ -7166,13 +7193,13 @@ Periods</comment>
     <value>缺省视图</value>
   </data>
   <data name="ReplyColon" xml:space="preserve">
-    <value>回复: </value>
+    <value>回复：</value>
   </data>
   <data name="ExportTo" xml:space="preserve">
     <value>导出</value>
   </data>
   <data name="ExportToScenario" xml:space="preserve">
-    <value>导出到场景</value>
+    <value>导出到情景</value>
   </data>
   <data name="EmploymentTypeFixedStaffDayWorkTime" xml:space="preserve">
     <value>固定员工日工作时间</value>
@@ -7187,7 +7214,7 @@ Periods</comment>
     <value>未定义限制</value>
   </data>
   <data name="ExportToAnotherScenario" xml:space="preserve">
-    <value>导出到另一场景</value>
+    <value>导出到另一情景</value>
   </data>
   <data name="ExportValidationWarnings" xml:space="preserve">
     <value>验证告警</value>
@@ -7208,16 +7235,16 @@ Periods</comment>
     <value>从文件导入队列</value>
   </data>
   <data name="NoNodeSelectedExclamation" xml:space="preserve">
-    <value>未选择节点! </value>
+    <value>未选择节点！</value>
   </data>
   <data name="PleaseSelectANodeExclamation" xml:space="preserve">
-    <value>请选择一个节点! </value>
+    <value>请选择一个节点！</value>
   </data>
   <data name="EnableReportingColon" xml:space="preserve">
-    <value>允许报告:</value>
+    <value>允许报告：</value>
   </data>
   <data name="Maximum5Scenarios" xml:space="preserve">
-    <value>＊最多只能为报告应用５种场景</value>
+    <value>*最多只能在报告中使用 5 种情景</value>
   </data>
   <data name="Daily" xml:space="preserve">
     <value>每日</value>
@@ -7235,34 +7262,34 @@ Periods</comment>
     <value>可用周工作日</value>
   </data>
   <data name="DeviationAEWColon" xml:space="preserve">
-    <value>AEW偏差: </value>
+    <value>AEW偏差：</value>
   </data>
   <data name="DeviationAFWColon" xml:space="preserve">
-    <value>AFW偏差: </value>
+    <value>AFW偏差：</value>
   </data>
   <data name="DeviationATWColon" xml:space="preserve">
-    <value>ATW偏差: </value>
+    <value>ATW偏差：</value>
   </data>
   <data name="DeviationEmailsColon" xml:space="preserve">
-    <value>电子邮件偏差: </value>
+    <value>电子邮件偏差：</value>
   </data>
   <data name="DeviationFacsimilesColon" xml:space="preserve">
-    <value>传真偏差: </value>
+    <value>传真偏差：</value>
   </data>
   <data name="DeviationHandlingTimeColon" xml:space="preserve">
-    <value>处理时间偏差:</value>
+    <value>处理时间偏差：</value>
   </data>
   <data name="DeviationTasksColon" xml:space="preserve">
-    <value>工作量偏差:</value>
+    <value>工作量偏差：</value>
   </data>
   <data name="DataColon" xml:space="preserve">
-    <value>数据:</value>
+    <value>数据：</value>
   </data>
   <data name="ExportToOtherScenario" xml:space="preserve">
-    <value>导出到其它场景</value>
+    <value>导出到其它情景</value>
   </data>
   <data name="FilterAgents" xml:space="preserve">
-    <value>座席员过滤</value>
+    <value>座席代表过滤</value>
   </data>
   <data name="Info" xml:space="preserve">
     <value>信息</value>
@@ -7274,49 +7301,49 @@ Periods</comment>
     <value>初始来电数量</value>
   </data>
   <data name="AreYouSureYouWantToDeleteTheRotationQuestion" xml:space="preserve">
-    <value>您确定要删除该循环吗?</value>
+    <value>您确定要删除该循环吗？</value>
   </data>
   <data name="AbsenceRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>一条缺勤请求被批准。</value>
+    <value>缺勤申请 {0} - {1}被批准。</value>
   </data>
   <data name="AbsenceRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>一条却请请求被拒绝。</value>
+    <value>缺勤申请从 {0} 到 {1} 被拒绝。</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>详情</value>
   </data>
   <data name="ShiftTradeRequestHasBeenAcceptedDot" xml:space="preserve">
-    <value>一条换班请求被另一方认可。</value>
+    <value>调班申请 {0} - {1} 被另一方认可。</value>
   </data>
   <data name="ShiftTradeRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>一条换班请求被批准。</value>
+    <value>调班申请 {0} - {1} 被批准。</value>
   </data>
   <data name="ShiftTradeRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>一条换班请求被拒绝。</value>
+    <value>调班申请 {0} - {1} 被拒绝。</value>
   </data>
   <data name="ShiftTradeRequestHasBeenReferredDot" xml:space="preserve">
-    <value>一条换班请求由于班表修改必须重新确认。</value>
+    <value>调班申请 {0} - {1} 由于班表修改必须重新确认。</value>
   </data>
   <data name="TextRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>一条文字请求被批准。</value>
+    <value>一条文字申请被批准。</value>
   </data>
   <data name="TextRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>一条文字请求被拒绝。</value>
+    <value>一条文字申请被拒绝。</value>
   </data>
   <data name="DeleteMeeting" xml:space="preserve">
     <value>删除会议</value>
   </data>
   <data name="ANewShiftTradeHasBeenCreatedDot" xml:space="preserve">
-    <value>一条新换班请求被创建。</value>
+    <value>在您的请求列表中有新的调班申请 {0} - {1}，请批准或拒绝。</value>
   </data>
   <data name="RequestStatusApproved" xml:space="preserve">
-    <value>批准</value>
+    <value>已批准</value>
   </data>
   <data name="RequestStatusDenied" xml:space="preserve">
     <value>拒绝</value>
   </data>
   <data name="RequestStatusDtoApproved" xml:space="preserve">
-    <value>批准</value>
+    <value>已批准</value>
   </data>
   <data name="RequestStatusDtoDenied" xml:space="preserve">
     <value>拒绝</value>
@@ -7334,10 +7361,10 @@ Periods</comment>
     <value>我</value>
   </data>
   <data name="MaxColon" xml:space="preserve">
-    <value>最大: </value>
+    <value>最大：</value>
   </data>
   <data name="MinColon" xml:space="preserve">
-    <value>最小: </value>
+    <value>最小：</value>
   </data>
   <data name="WeeklyWorkTime" xml:space="preserve">
     <value>周工作时间</value>
@@ -7352,19 +7379,21 @@ Periods</comment>
     <value>删除日</value>
   </data>
   <data name="YouMustHaveAtLeastOneDateInShiftTradeRequest" xml:space="preserve">
-    <value>换班请求中至少包含１天。</value>
+    <value>调班申请中至少包含１天。</value>
   </data>
   <data name="FilterDays" xml:space="preserve">
     <value>日期过滤</value>
   </data>
   <data name="NextPeriod" xml:space="preserve">
-    <value>下一时段</value>
+    <value>下一
+时段</value>
   </data>
   <data name="PreviousPeriod" xml:space="preserve">
-    <value>前一时段</value>
+    <value>前一
+时段</value>
   </data>
   <data name="ShowLastNumberOfDaysColon" xml:space="preserve">
-    <value>显示最后几天: </value>
+    <value>显示最后几天：</value>
   </data>
   <data name="TargetToleranceMinus" xml:space="preserve">
     <value>目标差异-</value>
@@ -7379,7 +7408,7 @@ Periods</comment>
     <value>冲突</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>另一用户修改了这些记录。继续进行前必须明确如何操作。点击确认接受其他用户的修改。请注意，您所作的修改将丢失。点击取消将不保存并继续。当保存时将重新提示本条告警信息。点击重写将把您的修改进行保存而删除其他用户所作的修改。</value>
+    <value>其他用户已经修改了这些记录。在继续进行操作之前，你必须决定如何处理。点击“确定”接受其他用户的修改；请注意，您所作的修改将丢失。点击“取消”将不保存并继续；当保存时将重新提示本条告警信息。点击覆写将把您的修改进行保存而删除其他用户所作的修改。</value>
   </data>
   <data name="NotSaved" xml:space="preserve">
     <value>未保存</value>
@@ -7388,7 +7417,7 @@ Periods</comment>
     <value>重写</value>
   </data>
   <data name="PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges" xml:space="preserve">
-    <value>对修改进行确认后请在此进行保存! </value>
+    <value>对修改进行确认后请在此进行保存！</value>
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>未知</value>
@@ -7412,13 +7441,13 @@ Periods</comment>
     <value>打开文件</value>
   </data>
   <data name="TheFileCouldNotBeOpenedPleaseCheckIfPdfFilesAreAssociatedWithAProgram" xml:space="preserve">
-    <value>文件打开失败。请确认PDF文件有相关的阅读程序。</value>
+    <value>文件打开失败。请确认PDF文件有关联的阅读程序。</value>
   </data>
   <data name="LayerInformationColon" xml:space="preserve">
-    <value>层次信息:</value>
+    <value>层次信息：</value>
   </data>
   <data name="SnapToIntervalColon" xml:space="preserve">
-    <value>切换到间隔: </value>
+    <value>切换到间隔：</value>
   </data>
   <data name="Business" xml:space="preserve">
     <value>业务</value>
@@ -7457,19 +7486,19 @@ Periods</comment>
     <value>与消息代理服务器无连接</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC－系统正常</value>
+    <value>Teleopti CCC - 系统正常</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC－系统告警</value>
+    <value>Teleopti CCC - 系统告警</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
-    <value>报表+限制</value>
+    <value>报表 + 限制</value>
   </data>
   <data name="DayOfWeekCapital" xml:space="preserve">
-    <value>周中日</value>
+    <value>每周日期</value>
   </data>
   <data name="FromTo" xml:space="preserve">
-    <value>从－到</value>
+    <value>从 - 到</value>
   </data>
   <data name="ExtendedPreferences" xml:space="preserve">
     <value>扩展偏好</value>
@@ -7520,7 +7549,7 @@ Periods</comment>
     <value>结束时间不能早于开始时间。</value>
   </data>
   <data name="MaxWorkTimeMustBeGreaterOrEqualToMinWorkTime" xml:space="preserve">
-    <value>最大工作时间不能小于最小功罪时间。</value>
+    <value>最大工作时间不能小于最小工作时间。</value>
   </data>
   <data name="ShiftsPerDayHeader" xml:space="preserve">
     <value>班次按天</value>
@@ -7550,7 +7579,7 @@ Periods</comment>
     <value>新缺勤</value>
   </data>
   <data name="TheNameIsTooLong" xml:space="preserve">
-    <value>名字太长</value>
+    <value>名称太长</value>
   </data>
   <data name="ConsiderWeekAfter" xml:space="preserve">
     <value>考虑后续周</value>
@@ -7568,7 +7597,7 @@ Periods</comment>
     <value>保密</value>
   </data>
   <data name="ModifyRequest" xml:space="preserve">
-    <value>修改请求</value>
+    <value>修改申请</value>
   </data>
   <data name="Remaining" xml:space="preserve">
     <value>剩余</value>
@@ -7583,19 +7612,19 @@ Periods</comment>
     <value>查看保密</value>
   </data>
   <data name="RequestDenyReasonOtherPart" xml:space="preserve">
-    <value>您的换班请求被另一方拒绝。</value>
+    <value>您的调班申请被另一方拒绝。</value>
   </data>
   <data name="RequestDenyReasonPersonAccount" xml:space="preserve">
-    <value>您的换班请求由于个人帐户检查拒绝。</value>
+    <value>您的调班申请由于个人帐户检查拒绝。</value>
   </data>
   <data name="RequestDenyReasonSkillThreshold" xml:space="preserve">
-    <value>您的缺勤请求由于技能需求人数被拒绝。</value>
+    <value>您的缺勤申请由于必需资源需求人数低于阈值被自动拒绝。</value>
   </data>
   <data name="RequestDenyReasonSupervisor" xml:space="preserve">
-    <value>您的请求被管理员拒绝。</value>
+    <value>您的申请被管理员拒绝。</value>
   </data>
   <data name="RequestStatusDtoNew" xml:space="preserve">
-    <value>新建 </value>
+    <value>新建</value>
   </data>
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>未选定班次</value>
@@ -7628,7 +7657,7 @@ Periods</comment>
     <value>实际人员数</value>
   </data>
   <data name="ApplyNewTemplateQuestion" xml:space="preserve">
-    <value>您要为选定日期应用新的模板吗? </value>
+    <value>您要为选定日期应用新的模板吗？</value>
   </data>
   <data name="YouHaveToHaveAtLeastOnActivityAndShiftCategoryBeforeCreatingARuleset" xml:space="preserve">
     <value>创建规则之前必须有至少一个活动及班次类型。</value>
@@ -7652,19 +7681,19 @@ Periods</comment>
     <value>验证</value>
   </data>
   <data name="EmployeeNoDot" xml:space="preserve">
-    <value>雇员</value>
+    <value>员工</value>
   </data>
   <data name="NotInHierarchy" xml:space="preserve">
     <value>用户</value>
   </data>
   <data name="CampaignEmailsHandlingtimePercent" xml:space="preserve">
-    <value>活动邮件处理时长％</value>
+    <value>活动邮件处理时长 (%)</value>
   </data>
   <data name="DescriptionTimeTracker" xml:space="preserve">
     <value>Comp</value>
   </data>
   <data name="Thresholds" xml:space="preserve">
-    <value>阀值</value>
+    <value>阈值</value>
   </data>
   <data name="ManageStateGroupsAndStates" xml:space="preserve">
     <value>管理状态组及状态</value>
@@ -7688,61 +7717,61 @@ Periods</comment>
     <value>状态组及状态</value>
   </data>
   <data name="RecurrentTextMonthly" xml:space="preserve">
-    <value>发生于{0}{1}每{2}月有效{3}直到{4}{7}{5}{8}{6}</value>
+    <value>发生于 {0} {1} 每{2}月，有效 {3} 直到 {4} {7} {5} {8} {6}。</value>
   </data>
   <data name="RecurrentTextWeekly" xml:space="preserve">
-    <value>每{0}发生，有效{1}直到{2}{5}{3}{6}{4}</value>
+    <value>每 {0} 发生，有效 {1} 直到 {2} {5} {3} {6} {4}</value>
   </data>
   <data name="MeetingErrorMessageWithOneParameter" xml:space="preserve">
-    <value>请从会议中删除{0}，因为您没有足够权限对此人进行操作</value>
+    <value>请从会议中删除 {0}，因为您没有足够权限对此人进行操作</value>
   </data>
   <data name="PageOf" xml:space="preserve">
     <value>第{0}页，共{1}页</value>
   </data>
   <data name="ThePreferenceForDateCoudNotBeEntered" xml:space="preserve">
-    <value>不能输入偏好{0}，本日可能已经排班</value>
+    <value>不能输入偏好 {0}，这一天可能已经排班</value>
   </data>
   <data name="GroupPageDeleteQuestion" xml:space="preserve">
-    <value>您确认要删除分组也{0}吗? </value>
+    <value>您确定要删除分组页{0}吗？</value>
   </data>
   <data name="PersonFromGroupingDeletionQuestion" xml:space="preserve">
-    <value>您确认要从组中删除{0}吗? </value>
+    <value>您确认要从组中删除 {0} 吗？</value>
   </data>
   <data name="TheSpecialEventParameterContainsThisDate" xml:space="preserve">
-    <value>本日包含在特殊事件{0}中．从特殊事件中删除本日或选择其他日期．</value>
+    <value>这一天包含在特殊事件 {0} 中。从特殊事件中删除这一天或选择其他日期。</value>
   </data>
   <data name="YouCanOnlyEnterPreferencesFromDateAccordingToThePreferenceDate" xml:space="preserve">
-    <value>按照偏好日期，您仅能输入{0}后的偏好</value>
+    <value>按照偏好日期，您仅能输入 {0} 后的偏好</value>
   </data>
   <data name="ExportFromAndToScenario" xml:space="preserve">
     <value>{0} -&gt; {1}</value>
   </data>
   <data name="ExportValidationLine" xml:space="preserve">
-    <value>{0}:{1}</value>
+    <value>{0}：{1}</value>
   </data>
   <data name="ExportNoOfAgentInfo" xml:space="preserve">
-    <value>选择{0}座席区域</value>
+    <value>选择 {0} 座席区域</value>
   </data>
   <data name="MeetingLastAttendeeQuestionRemoveOneParameter" xml:space="preserve">
-    <value>这是会议的唯一参与者．您确认要删除会议{0}吗？</value>
+    <value>这是会议的唯一参与者。您确认要删除会议{0}吗？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteDefinitionSet" xml:space="preserve">
-    <value>您确认要删除{0}吗?</value>
+    <value>您确认要删除 ‘{0}’吗？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteMeeting" xml:space="preserve">
-    <value>您确定要删除会议{0}吗?</value>
+    <value>您确定要删除会议 {0} 吗？</value>
   </data>
   <data name="YouShouldWorkParameterHDotYourPreferencesCanNowResultInParameterHToParameterHDot" xml:space="preserve">
-    <value>您应该工作{0}小时．您的偏好为{1}到{2}小时．</value>
+    <value>您应该工作 {0} 小时，您的偏好为{1}到{2}小时。</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>TeleoptiCCC：{0}{1}－{2}场景{3}</value>
+    <value>TeleoptiCCC：{0}{1}－{2}情景{3}</value>
   </data>
   <data name="TheAttachedFileContainsScheduleForDateParameters" xml:space="preserve">
-    <value>附件PDF包含{0}－{1}的班表。</value>
+    <value>附件的PDF包含 {0} - {1} 的班表。</value>
   </data>
   <data name="YourScheduleForDateParameters" xml:space="preserve">
-    <value>您的{0}－{1}的班表</value>
+    <value>您的 {0} - {1} 的班表</value>
   </data>
   <data name="ExtDot" xml:space="preserve">
     <value>Ext.</value>
@@ -7760,7 +7789,7 @@ Periods</comment>
     <value>数据冲突</value>
   </data>
   <data name="OptimisticLockText" xml:space="preserve">
-    <value>其他用户修改了相关数据。请重试。</value>
+    <value>其他用户已修改了相关数据，请重试。</value>
   </data>
   <data name="NoRuleSetSelected" xml:space="preserve">
     <value>未选择规则集</value>
@@ -7787,7 +7816,7 @@ Periods</comment>
     <value>每排班时段最短时段</value>
   </data>
   <data name="DoNotColon" xml:space="preserve">
-    <value>不: </value>
+    <value>不要：</value>
   </data>
   <data name="High" xml:space="preserve">
     <value>高</value>
@@ -7802,7 +7831,7 @@ Periods</comment>
     <value>超员</value>
   </data>
   <data name="PriorityColon" xml:space="preserve">
-    <value>优先级: </value>
+    <value>优先级：</value>
   </data>
   <data name="UnderStaff" xml:space="preserve">
     <value>缺员</value>
@@ -7850,7 +7879,7 @@ Periods</comment>
     <value>修改标准差</value>
   </data>
   <data name="AbsenceRequests" xml:space="preserve">
-    <value>缺勤请求</value>
+    <value>缺勤申请</value>
   </data>
   <data name="AutoGrant" xml:space="preserve">
     <value>自动批准</value>
@@ -7883,7 +7912,10 @@ Periods</comment>
     <value>工作流控制集</value>
   </data>
   <data name="WorkflowControlSetToolTip" xml:space="preserve">
-    <value>检查个人帐户: {0}检查员工{1}自动批准{2}时段{3}</value>
+    <value>检查个人帐户：{0}
+检查员工：{1}
+自动批准：{2}
+时段：{3}</value>
   </data>
   <data name="End" xml:space="preserve">
     <value>结束</value>
@@ -7973,19 +8005,19 @@ Periods</comment>
     <value>座席</value>
   </data>
   <data name="DateColon" xml:space="preserve">
-    <value>日期:</value>
+    <value>日期：</value>
   </data>
   <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>您的缺勤请求被系统自动拒绝</value>
+    <value>您的缺勤申请由于管理员设置的一条规则，被系统自动拒绝。</value>
   </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
-    <value>您的缺勤请求被系统自动拒绝。某些日期未开放申请。</value>
+    <value>您的缺勤申请被系统自动拒绝。某些日期未开放申请。</value>
   </data>
   <data name="RequestDenyReasonNoWorkflow" xml:space="preserve">
-    <value>您的缺勤请求被系统自动拒绝。帐户未关联工作流。</value>
+    <value>您的缺勤申请被系统自动拒绝。帐户未关联工作流。</value>
   </data>
   <data name="ActivityAvailableForExtendedPreference" xml:space="preserve">
-    <value>扩展的可用活动</value>
+    <value>扩展偏好可用活动</value>
   </data>
   <data name="Basic" xml:space="preserve">
     <value>基础</value>
@@ -8000,13 +8032,13 @@ Periods</comment>
     <value>未发布</value>
   </data>
   <data name="PublishSchedulesToColon" xml:space="preserve">
-    <value>发布班表到: </value>
+    <value>发布班表到：</value>
   </data>
   <data name="WriteProtectScheduledOlderThanDaysColon" xml:space="preserve">
-    <value>写保护多与（天）前的班表</value>
+    <value>写保护早于几天)前的班表：</value>
   </data>
   <data name="BusinessRuleNoSkillsOpenErrorMessage" xml:space="preserve">
-    <value>没有带开放时间的技能关联到活动：{0}在{1}-{2}</value>
+    <value>在带开放时间段 {1}-{2} 没有找到关联到活动 {0} 的技能</value>
   </data>
   <data name="IsOpen" xml:space="preserve">
     <value>打开</value>
@@ -8021,22 +8053,22 @@ Periods</comment>
     <value>开始日期必须小于结束日期</value>
   </data>
   <data name="OpenShiftTradePeriodDenyReason" xml:space="preserve">
-    <value>由于选定日期不允许请求，换班请求被拒绝</value>
+    <value>由于选定日期不允许申请，调班申请被拒绝</value>
   </data>
   <data name="ShiftTradeSkillDenyReason" xml:space="preserve">
-    <value>由于技能不匹配，换班请求被拒绝。</value>
+    <value>由于技能不匹配，调班申请被拒绝。</value>
   </data>
   <data name="WorkflowControlSetEqualsDenyReason" xml:space="preserve">
-    <value>由于工作流控制集不匹配，换班请求被拒绝。</value>
+    <value>由于工作流控制集不匹配，调班申请被拒绝。</value>
   </data>
   <data name="ShiftTradeTargetTimeDenyReason" xml:space="preserve">
-    <value>由于班次合同时间差异超限，换班请求被拒绝。</value>
+    <value>由于班次合同时间差异超限，调班申请被拒绝。</value>
   </data>
   <data name="WorkflowControlSetNotSetDenyReason" xml:space="preserve">
-    <value>由于未定义工作流控制集，换班请求被拒绝。</value>
+    <value>由于未定义工作流控制集，调班申请被拒绝。</value>
   </data>
   <data name="ShiftTradeRequests" xml:space="preserve">
-    <value>换班请求</value>
+    <value>调班申请</value>
   </data>
   <data name="ShiftCategoriesAvailableForExtendedPreference" xml:space="preserve">
     <value>偏好的可用班次类型</value>
@@ -8054,7 +8086,7 @@ Periods</comment>
     <value>小时:分钟</value>
   </data>
   <data name="OpenForShiftTradeRequests" xml:space="preserve">
-    <value>打开换班申请</value>
+    <value>打开调班申请</value>
   </data>
   <data name="PosNeg" xml:space="preserve">
     <value>+/-</value>
@@ -8072,10 +8104,10 @@ Periods</comment>
     <value>偏好</value>
   </data>
   <data name="PublishedColon" xml:space="preserve">
-    <value>发布: </value>
+    <value>发布：</value>
   </data>
   <data name="WriteProtectionColon" xml:space="preserve">
-    <value>写保护: </value>
+    <value>写保护：</value>
   </data>
   <data name="MatchingSkills" xml:space="preserve">
     <value>匹配技能</value>
@@ -8096,16 +8128,16 @@ Periods</comment>
     <value>分钟</value>
   </data>
   <data name="SuggestTimesBetweenColon" xml:space="preserve">
-    <value>建议时间介于: </value>
+    <value>建议时间介于：</value>
   </data>
   <data name="BusinessRuleShiftCategoryLimitationErrorMessage" xml:space="preserve">
     <value>本周包含太多的班次类型{0}</value>
   </data>
   <data name="BusinessRuleShiftCategoryLimitationErrorMessage2" xml:space="preserve">
-    <value>本时段包含太多的班次类型{0}</value>
+    <value>本时段包含太多的班次类型 {0}</value>
   </data>
   <data name="AvoidColon" xml:space="preserve">
-    <value>避免: </value>
+    <value>避免：</value>
   </data>
   <data name="AddNote" xml:space="preserve">
     <value>增加备注</value>
@@ -8138,7 +8170,7 @@ Periods</comment>
     <value>无工作流控制集</value>
   </data>
   <data name="CheckPermissionsForCastle" xml:space="preserve">
-    <value>本地权限不足。缓存将被关闭。请联系系统管理员。</value>
+    <value>本地权限不足。缓存将被关闭。请联系您的系统管理员。</value>
   </data>
   <data name="ModifySchedule" xml:space="preserve">
     <value>修改班表</value>
@@ -8207,7 +8239,7 @@ Periods</comment>
     <value>导入错误</value>
   </data>
   <data name="InvalidDateTimeExceptionText" xml:space="preserve">
-    <value>在 {1}处发现无效时间{0}。请移除所有无效时间后重试。</value>
+    <value>在第 {1} 行发现无效时间{0}，请移除所有无效时间后重试；这个错误可能是由于日光节约时间过渡期造成的。</value>
   </data>
   <data name="CalculatingResourcesDotDotDot" xml:space="preserve">
     <value>计算资源…</value>
@@ -8225,13 +8257,15 @@ Periods</comment>
     <value>我的帐户</value>
   </data>
   <data name="ChangePasswordValidationError" xml:space="preserve">
-    <value>密码无法更改。请核实当前密码输入正确，新密码两次输入一致。验证错误重复出现，请核实新密码是否符合长度及字符限制规则。</value>
+    <value>密码无法更改。
+请检查当前密码输入正确，新密码两次输入一致。
+如果继续出现验证错误，请检查新密码是否符合长度及字符限制规则。</value>
   </data>
   <data name="PasswordPolicyWarning" xml:space="preserve">
     <value>新密码不符合密码策略。</value>
   </data>
   <data name="WrongNumberOfDayOffsInSchedulePeriod" xml:space="preserve">
-    <value>排班阶段内目标休息日为{0}，实际为{1}，无法安排。</value>
+    <value>排班阶段内目标休息日为 {0}，实际为{1}，无法安排。</value>
   </data>
   <data name="ExtendedPreferencesTemplate" xml:space="preserve">
     <value>扩展偏好模板</value>
@@ -8261,28 +8295,29 @@ Periods</comment>
     <value>开始时间后移一个间隔</value>
   </data>
   <data name="CannotAddPreferenceSelectedItemNotAvailableParameter0" xml:space="preserve">
-    <value>不能添加该偏好，因选择项{0}已不再可用</value>
+    <value>不能添加该偏好，因选择项 {0} 已不再可用</value>
   </data>
   <data name="CanNotOvertimeWithoutMultiplicatorDefinitionSets" xml:space="preserve">
-    <value>由于无乘数定以集，不能添加加班。</value>
+    <value>由于无乘数定义集，不能添加加班。</value>
   </data>
   <data name="LogOnWarningPasswordWillSoonExpire" xml:space="preserve">
-    <value>密码将于{0}天后过期，请修改。</value>
+    <value>密码将于 {0} 天后过期，请修改。</value>
   </data>
   <data name="BusinessRuleWeeklyRestErrorMessage" xml:space="preserve">
     <value>该周违反约定的周{0}休息日。</value>
   </data>
   <data name="ActiveAgentsInUseColon" xml:space="preserve">
-    <value>在用活动座席数</value>
+    <value>活动座席数：</value>
   </data>
   <data name="OptimizingShiftLengths" xml:space="preserve">
     <value>班次长度优化</value>
   </data>
   <data name="ShiftTradeRequestCouldNotBeAcceptedParameter0" xml:space="preserve">
-    <value>换班请求未被接受。错误信息: {0}。</value>
+    <value>发生错误，调班申请未被接受。
+错误信息：{0}。</value>
   </data>
   <data name="SaveOrCancel" xml:space="preserve">
-    <value>你希望保存还是取消? </value>
+    <value>你希望保存还是取消？</value>
   </data>
   <data name="ApplyLongterm" xml:space="preserve">
     <value>应用长期模板</value>
@@ -8294,7 +8329,7 @@ Periods</comment>
     <value>主活动</value>
   </data>
   <data name="MasterActivityCanResultInColon" xml:space="preserve">
-    <value>可导致下列活动: </value>
+    <value>可导致下列活动：</value>
   </data>
   <data name="MasterActivityColon" xml:space="preserve">
     <value>主活动</value>
@@ -8324,7 +8359,7 @@ Periods</comment>
     <value>审计跟踪设定</value>
   </data>
   <data name="AuditTrailSettingOffQuestion" xml:space="preserve">
-    <value>关闭审计跟踪将删除所有现存的审计跟踪记录,您确定要继续吗?</value>
+    <value>关闭审计跟踪将删除所有现存的审计跟踪记录，您确定要继续吗？</value>
   </data>
   <data name="EnableScheduleAuditTrail" xml:space="preserve">
     <value>允许班表审计跟踪</value>
@@ -8339,10 +8374,10 @@ Periods</comment>
     <value>班表审计跟踪运行</value>
   </data>
   <data name="AreYouSureYouWantToDeleteMasterActivity" xml:space="preserve">
-    <value>您确定要删除{0}主活动吗?</value>
+    <value>您确定要删除 ‘{0}’ 主活动吗？</value>
   </data>
   <data name="RequestHasBeenDeleted" xml:space="preserve">
-    <value>该请求已由提请者删除，不能修改。</value>
+    <value>该申请已由提请者删除，不能修改。</value>
   </data>
   <data name="CreatedPageOf" xml:space="preserve">
     <value>创建{0}。页{1}/{2}</value>
@@ -8351,7 +8386,7 @@ Periods</comment>
     <value>过滤个人帐户</value>
   </data>
   <data name="SchedulingProgress" xml:space="preserve">
-    <value>排班: {1}天中{0}天被安排。</value>
+    <value>排班：{1}天中{0}天被安排。</value>
   </data>
   <data name="DaysPerYearColon" xml:space="preserve">
     <value>天数每年</value>
@@ -8369,7 +8404,7 @@ Periods</comment>
     <value>打开预算…</value>
   </data>
   <data name="AddedSkillsColon" xml:space="preserve">
-    <value>添加技能: </value>
+    <value>添加技能：</value>
   </data>
   <data name="AttritionRate" xml:space="preserve">
     <value>离职率</value>
@@ -8387,7 +8422,7 @@ Periods</comment>
     <value>差异</value>
   </data>
   <data name="DifferencePercent" xml:space="preserve">
-    <value>差异(％)</value>
+    <value>差异 (%)</value>
   </data>
   <data name="ForecastedStaff" xml:space="preserve">
     <value>预测人数</value>
@@ -8444,7 +8479,7 @@ Periods</comment>
     <value>客户化缩减</value>
   </data>
   <data name="LoadStaffEmployed" xml:space="preserve">
-    <value>载入员工人数</value>
+    <value>加载员工人数</value>
   </data>
   <data name="BudgetGroup" xml:space="preserve">
     <value>预算组</value>
@@ -8459,13 +8494,13 @@ Periods</comment>
     <value>净座席数</value>
   </data>
   <data name="AgentsColon" xml:space="preserve">
-    <value>座席</value>
+    <value>座席：</value>
   </data>
   <data name="ChangeDateFromUtcColon" xml:space="preserve">
-    <value>从(UTC)更改日期</value>
+    <value>变更日期从(UTC)：</value>
   </data>
   <data name="ChangeDateToUtcColon" xml:space="preserve">
-    <value>更改日期到(UTC)</value>
+    <value>更改日期到(UTC)：</value>
   </data>
   <data name="ScheduleDateFromUtcColon" xml:space="preserve">
     <value>从(UTC)安排日期</value>
@@ -8474,7 +8509,7 @@ Periods</comment>
     <value>安排日期到(UTC)</value>
   </data>
   <data name="UserColon" xml:space="preserve">
-    <value>用户</value>
+    <value>用户：</value>
   </data>
   <data name="CouldNotAddOverTimeNoPersonPeriods" xml:space="preserve">
     <value>选择范围内无可用人员时段，不能增加加班。</value>
@@ -8483,16 +8518,16 @@ Periods</comment>
     <value>修改日期</value>
   </data>
   <data name="ChangeDateColon" xml:space="preserve">
-    <value>修改日期:</value>
+    <value>更改日期：</value>
   </data>
   <data name="InUTC" xml:space="preserve">
-    <value>(In UTC）</value>
+    <value>(In UTC )</value>
   </data>
   <data name="ObjectType" xml:space="preserve">
     <value>对象类型</value>
   </data>
   <data name="ScheduleDateColon" xml:space="preserve">
-    <value>排班日期: </value>
+    <value>排班日期：</value>
   </data>
   <data name="ScheduleDateFrom" xml:space="preserve">
     <value>排班开始日期</value>
@@ -8528,13 +8563,13 @@ Periods</comment>
     <value>站点</value>
   </data>
   <data name="ForMax" xml:space="preserve">
-    <value>最大: </value>
+    <value>最大：</value>
   </data>
   <data name="PayrollCodeColon" xml:space="preserve">
-    <value>工资支付码: </value>
+    <value>工资支付码：</value>
   </data>
   <data name="RequestDetails" xml:space="preserve">
-    <value>请求的详细信息</value>
+    <value>申请的详细信息</value>
   </data>
   <data name="ViewDetails" xml:space="preserve">
     <value>查看详细信息</value>
@@ -8551,15 +8586,15 @@ Periods</comment>
     <comment>The service level for specified interval length is too long.</comment>
   </data>
   <data name="AvailabilityColon" xml:space="preserve">
-    <value>可工作: </value>
+    <value>可工作：</value>
     <comment>Availability:</comment>
   </data>
   <data name="NextDayColon" xml:space="preserve">
-    <value>下一天:</value>
+    <value>下一天：</value>
     <comment>Next day:</comment>
   </data>
   <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>您所设置的学生可工作时段没有匹配的班次.</value>
+    <value>您所设置的学生可工作时段没有匹配的班次。</value>
     <comment>No shifts available for this student availability.</comment>
   </data>
   <data name="StudentAvailabilityPeriod" xml:space="preserve">
@@ -8567,7 +8602,7 @@ Periods</comment>
     <comment>Student availability period</comment>
   </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
-    <value>您至少需要工作 {0}小时. 您现在的可工作时间在 {1}到{2}小时之间.</value>
+    <value>您至少需要工作 {0} 小时。您现在的可工作时间在 {1} 到 {2} 小时之间。</value>
     <comment>You should work at least 30:00h. You are now available for between 20:00h and 40:00h.</comment>
   </data>
   <data name="OpenStudentAvailability" xml:space="preserve">
@@ -8628,7 +8663,7 @@ Periods</comment>
     <comment>total allowance</comment>
   </data>
   <data name="NoGoodSlotsFound" xml:space="preserve">
-    <value>没有找到适合会议的座位!</value>
+    <value>没有找到适合会议的座位！</value>
   </data>
   <data name="PickBestMeetingSlot" xml:space="preserve">
     <value>挑选会议最佳座位</value>
@@ -8637,46 +8672,46 @@ Periods</comment>
     <value>座位已找到</value>
   </data>
   <data name="MaxUsedSeats" xml:space="preserve">
-    <value>最大使用的坐席数</value>
+    <value>最大使用的座席数</value>
   </data>
   <data name="UsedSeats" xml:space="preserve">
-    <value>使用的坐席数</value>
+    <value>使用的座席数</value>
   </data>
   <data name="DoNotBreakMaxSeats" xml:space="preserve">
     <value>不要超过最大座席数</value>
   </data>
   <data name="MaxSeatLimitBroken" xml:space="preserve">
-    <value>最大坐席极限已超过</value>
+    <value>最大座席极限已超过</value>
   </data>
   <data name="UsePreferenceMustHavesOnly1" xml:space="preserve">
     <value>只适用必须拥有偏好</value>
   </data>
   <data name="UseMaxSeats" xml:space="preserve">
-    <value>使用最大坐席</value>
+    <value>使用最大座席</value>
   </data>
   <data name="HighestPossibleWorkTimeIsTooLow" xml:space="preserve">
-    <value>最高可能工作时间太低!</value>
+    <value>最高可能工作时间太低！</value>
   </data>
   <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
-    <value>最低可能工作时间太高!</value>
+    <value>最低可能工作时间太高！</value>
   </data>
   <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>无法删除已选择的活动</value>
+    <value>无法删除选中的活动</value>
   </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
-    <value>已选择的活动不能被删除因为有如下技能在使用这些活动:</value>
+    <value>已选择的活动不能被删除因为有如下技能在使用这些活动：</value>
   </data>
   <data name="DoNotBreakMaxStaffing" xml:space="preserve">
     <value>不要超过最大人员</value>
   </data>
   <data name="InternalNoteColon" xml:space="preserve">
-    <value>内部备注:</value>
+    <value>内部备注：</value>
   </data>
   <data name="PublicNoteColon" xml:space="preserve">
-    <value>公开备注:</value>
+    <value>公开备注：</value>
   </data>
   <data name="AreYouSureYouWantToDeleteContractSchedule" xml:space="preserve">
-    <value>你确定要删除'{0}'合同排班么?</value>
+    <value>你确定要删除 '{0}' 合同排班么？</value>
   </data>
   <data name="EqualOfEachShiftCategory" xml:space="preserve">
     <value>每个班次种类均等</value>
@@ -8715,7 +8750,7 @@ Periods</comment>
     <value>修改受限的情景</value>
   </data>
   <data name="PlanningTimeBankMinMaxInfo" xml:space="preserve">
-    <value>({0} to {1})</value>
+    <value>({0} 到 {1})</value>
   </data>
   <data name="ExportToPDFGraphical" xml:space="preserve">
     <value>导出到图形化PDF文件</value>
@@ -8739,16 +8774,16 @@ Periods</comment>
     <value>无效的输入</value>
   </data>
   <data name="FilterColon" xml:space="preserve">
-    <value>过滤:</value>
+    <value>过滤：</value>
   </data>
   <data name="MeetingDeleteConfirmationQuestion" xml:space="preserve">
-    <value>您想 删除{0}会议么?</value>
+    <value>您想删除{0}会议么？</value>
   </data>
   <data name="MeetingOverview" xml:space="preserve">
     <value>会议概观</value>
   </data>
   <data name="NoMeetingIsSelected" xml:space="preserve">
-    <value>未选择会议!</value>
+    <value>未选择会议！</value>
   </data>
   <data name="CopyToThreeDots" xml:space="preserve">
     <value>拷贝至...</value>
@@ -8766,7 +8801,7 @@ Periods</comment>
     <value>座席队列度量</value>
   </data>
   <data name="DatabaseConnectionLostFormClose" xml:space="preserve">
-    <value>数据库连接已丢失. 为了保存数据一致性, 表单将被关闭. 很抱歉, 您所做的变更没有被保存.</value>
+    <value>数据库连接已丢失。为了保存数据一致性，表单将被关闭。很抱歉，您所做的变更已丢失。</value>
   </data>
   <data name="UseOnlyForRestrictions" xml:space="preserve">
     <value>只用于限制</value>
@@ -8814,7 +8849,7 @@ Periods</comment>
     <value>锁定轮班</value>
   </data>
   <data name="BusinessUnitRequired" xml:space="preserve">
-    <value>需要的商业单元</value>
+    <value>需要的业务单位</value>
   </data>
   <data name="PasswordRequired" xml:space="preserve">
     <value>需要密码</value>
@@ -8829,7 +8864,7 @@ Periods</comment>
     <value>为排班导出的一般座席描述</value>
   </data>
   <data name="EditCommonAgentDescriptionForScheduleExportsFormat" xml:space="preserve">
-    <value>为排班输出格式编辑一般座席描述.</value>
+    <value>为排班输出格式编辑一般座席描述</value>
   </data>
   <data name="AdjustedDifference" xml:space="preserve">
     <value>被调整的差值</value>
@@ -8844,7 +8879,7 @@ Periods</comment>
     <value>每个座席活动时间</value>
   </data>
   <data name="InterruptedShutDown" xml:space="preserve">
-    <value>{0}已经阻止程序关闭. 你希望强制关闭程序么?</value>
+    <value>{0}已经阻止程序关闭，你希望强制关闭程序么？</value>
   </data>
   <data name="SeveralValues" xml:space="preserve">
     <value>&lt;一些数值&gt;</value>
@@ -8856,7 +8891,7 @@ Periods</comment>
     <value>MyTimeWeb</value>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>登出</value>
+    <value>注销</value>
   </data>
   <data name="LicenseAgreement" xml:space="preserve">
     <value>合约许可证</value>
@@ -8868,7 +8903,7 @@ Periods</comment>
     <value>未发现这个用户的排班周期</value>
   </data>
   <data name="AlsoShowsMeetingsCreatedByMe" xml:space="preserve">
-    <value>同样展示我创建的但是我没参加的会议.</value>
+    <value>同时展示我创建的但是我没参加的会议。</value>
   </data>
   <data name="MeetingsCreatedByMe" xml:space="preserve">
     <value>由我创建的会议</value>
@@ -8895,7 +8930,7 @@ Periods</comment>
     <value>所有者</value>
   </data>
   <data name="BusinessUnit" xml:space="preserve">
-    <value>商业单元</value>
+    <value>业务单位</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>错误</value>
@@ -8907,16 +8942,16 @@ Periods</comment>
     <value>新建导出...</value>
   </data>
   <data name="AbsencesAvailableForExtendedPreference" xml:space="preserve">
-    <value>缺勤　可用于偏好</value>
+    <value>可用于偏好的缺勤</value>
   </data>
   <data name="CannotDisplayAllMeetings" xml:space="preserve">
-    <value>不能在此时显示所有会议!</value>
+    <value>不能在此时显示所有会议！</value>
   </data>
   <data name="InvalidTimeValue" xml:space="preserve">
-    <value>无效的时间值'{0}'</value>
+    <value>无效的时间值 '{0}'</value>
   </data>
   <data name="ChildSkillWithSameNameAsParentSkillWarning" xml:space="preserve">
-    <value>一个子技能看起来可以和一个或两个父技能重名或者多个子技能可以有同样的名字.请检查多站点技能的属性. 预测模块会关闭.</value>
+    <value>可能有一个子技能和一个或两个父技能重名，或者多个子技能有同样的名称；请检查多站点技能的属性。预测模块会关闭。</value>
   </data>
   <data name="AuditingPageName" xml:space="preserve">
     <value>审查中</value>
@@ -8937,10 +8972,10 @@ Periods</comment>
     <value>修改过的</value>
   </data>
   <data name="ChangeDateFromColon" xml:space="preserve">
-    <value>变更日期从:</value>
+    <value>变更日期从：</value>
   </data>
   <data name="ChangeDateToColon" xml:space="preserve">
-    <value>变更日期到:</value>
+    <value>变更日期到：</value>
   </data>
   <data name="AdjustTimeBankWithPartTimePercentage" xml:space="preserve">
     <value>使用兼职百分比调整时间储备</value>
@@ -8952,10 +8987,10 @@ Periods</comment>
     <value>未发现需求</value>
   </data>
   <data name="MoveColon" xml:space="preserve">
-    <value>移动</value>
+    <value>优化：</value>
   </data>
   <data name="AreYouSureYouWantToDeleteItem" xml:space="preserve">
-    <value>您确定要删除 '{0}'?</value>
+    <value>您确定要删除 '{0}'？</value>
   </data>
   <data name="MissingSubject" xml:space="preserve">
     <value>缺少主题</value>
@@ -8967,7 +9002,7 @@ Periods</comment>
     <value>删除标签</value>
   </data>
   <data name="DoYouWantToDeleteTag" xml:space="preserve">
-    <value>您想删除{0}标签么?</value>
+    <value>您想删除{0}标签么？</value>
   </data>
   <data name="ManageScheduleTags" xml:space="preserve">
     <value>管理排班标签</value>
@@ -8982,7 +9017,7 @@ Periods</comment>
     <value>自动标签</value>
   </data>
   <data name="DefaultTag" xml:space="preserve">
-    <value>默认标签</value>
+    <value>&lt;无&gt;</value>
   </data>
   <data name="LockTags" xml:space="preserve">
     <value>锁定标签</value>
@@ -8991,16 +9026,16 @@ Periods</comment>
     <value>可以变更并保存</value>
   </data>
   <data name="UserNameRequired" xml:space="preserve">
-    <value>需要用户名字</value>
+    <value>需要用户名称</value>
   </data>
   <data name="SelectPeriodAndScenarioToExportTo" xml:space="preserve">
-    <value>选择时间段找到会议和情景来导出.</value>
+    <value>选择时间段找到会议和情景来导出。</value>
   </data>
   <data name="SuccessfullyExportedMeetings" xml:space="preserve">
-    <value>成功导出 {0} 会议到另一个情景.</value>
+    <value>成功导出 {0} 会议到另一个情景。</value>
   </data>
   <data name="NoAllowedScenarios" xml:space="preserve">
-    <value>没有情景您可以查看!</value>
+    <value>没有情景您可以查看！</value>
   </data>
   <data name="ProficiencyPercent" xml:space="preserve">
     <value>精通 (%)</value>
@@ -9012,22 +9047,22 @@ Periods</comment>
     <value>发送ASM</value>
   </data>
   <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
-    <value>这个许可证只允许 {0} 座席. 您必须有允许充足座席数量的许可证.</value>
+    <value>这个许可证只允许 {0} 座席。您必须有允许充足座席数量的许可证。</value>
   </data>
   <data name="SeatLicense" xml:space="preserve">
-    <value>根据条款和许可证合约条件系统授权于 "{0}" 并且许可证key将在{1}过期.
+    <value>根据条款和许可证合约条件系统授权给“{0}”，授权许可证将在 {1} 过期。
 
-许可证包含最大 {2} 座席.
+许可证包含最大 {2} 座席。
 
-许可证概要是 "{3}".
-如下选项已经激活:
+该授权方案的概要为“{3}”。
+以下选项已被激活:
 {4}</value>
   </data>
   <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
-    <value>您已经达到了您许可证极限{0}座席数. 请尽快升级您的许可证key.</value>
+    <value>您已经达到了您许可证极限 {0} 个座席数。请尽快升级您的许可证key。</value>
   </data>
   <data name="YouHaveTooManySeats" xml:space="preserve">
-    <value>您正在使用过多的座席. 您授权可以只有{0}. 在您继续之前您必须升级你的许可证key.</value>
+    <value>您正在使用过多的座席，您的授权许可证只允许使用 {0} 个座席。在您继续之前您必须升级你的许可证。</value>
   </data>
   <data name="Timestamp" xml:space="preserve">
     <value>时间戳</value>
@@ -9048,16 +9083,16 @@ Periods</comment>
     <value>目标技能</value>
   </data>
   <data name="TheExportWillStartInBackgroundMessage" xml:space="preserve">
-    <value>导出功能将在向导结束时作为后台任务开始执行. 请检查任务历史中的状态.</value>
+    <value>导出功能将在向导结束时作为后台任务开始执行。请检查任务历史中的状态。</value>
   </data>
   <data name="WorkingThreeDots" xml:space="preserve">
     <value>工作中...</value>
   </data>
   <data name="YouHaveToMapAtLeastOneSubSkill" xml:space="preserve">
-    <value>您必须映射至少一个子技能.</value>
+    <value>您必须映射至少一个子技能。</value>
   </data>
   <data name="YouHaveToSelectAtLeastOneSkill" xml:space="preserve">
-    <value>您必须选择至少一个技能.</value>
+    <value>您必须选择至少一个技能。</value>
   </data>
   <data name="UseStandardDeviation" xml:space="preserve">
     <value>使用标准误差</value>
@@ -9084,16 +9119,16 @@ Periods</comment>
     <value>班次</value>
   </data>
   <data name="AuditingTurnOnLong" xml:space="preserve">
-    <value>审查触发器初始化? 可能需要几分钟.</value>
+    <value>审查触发器初始化？可能需要几分钟。</value>
   </data>
   <data name="AuditingTurnOnShort" xml:space="preserve">
-    <value>打开?</value>
+    <value>打开？</value>
   </data>
   <data name="ScheduleDateFromColon" xml:space="preserve">
-    <value>排班日期开始:</value>
+    <value>排班日期开始：</value>
   </data>
   <data name="ScheduleDateToColon" xml:space="preserve">
-    <value>排班日期至:</value>
+    <value>排班日期至：</value>
   </data>
   <data name="Previous" xml:space="preserve">
     <value>以前的</value>
@@ -9111,10 +9146,10 @@ Periods</comment>
     <value>每天间的时间间隔</value>
   </data>
   <data name="ScheduleTagColon" xml:space="preserve">
-    <value>排班标签:</value>
+    <value>排班标签：</value>
   </data>
   <data name="TagChangesWithColon" xml:space="preserve">
-    <value>标签变化:</value>
+    <value>标签变化：</value>
   </data>
   <data name="ScheduleTags" xml:space="preserve">
     <value>排班标签</value>
@@ -9132,13 +9167,13 @@ Periods</comment>
     <value>查看排班周期的计算</value>
   </data>
   <data name="TimedOutWhileWaitingforProcessing" xml:space="preserve">
-    <value>等待处理超时.</value>
+    <value>等待处理超时。</value>
   </data>
   <data name="WaitingThreeDots" xml:space="preserve">
     <value>等待中...</value>
   </data>
   <data name="SwapRaw" xml:space="preserve">
-    <value>原始交换班</value>
+    <value>原始交调班</value>
   </data>
   <data name="Restricted" xml:space="preserve">
     <value>受限的</value>
@@ -9150,13 +9185,13 @@ Periods</comment>
     <value>计划时间储备</value>
   </data>
   <data name="PlanningTimeBankLimitError" xml:space="preserve">
-    <value>平衡超出极限!</value>
+    <value>平衡输出超出限制！</value>
   </data>
   <data name="PlanningTimeBankMax" xml:space="preserve">
-    <value>最大计划时间储备:</value>
+    <value>最大计划时间储备：</value>
   </data>
   <data name="PlanningTimeBankMin" xml:space="preserve">
-    <value>最小计划时间储备:</value>
+    <value>最小计划时间储备：</value>
   </data>
   <data name="SetBalanceOut" xml:space="preserve">
     <value>设置平衡</value>
@@ -9165,7 +9200,7 @@ Periods</comment>
     <value>设置计划时间储备</value>
   </data>
   <data name="ServerUnavailable" xml:space="preserve">
-    <value>服务器暂时不可用, 请稍候再试.</value>
+    <value>服务器暂时不可用，请稍候再试。</value>
   </data>
   <data name="ReportScheduledOvertimePerAgent" xml:space="preserve">
     <value>每个座席加班的排班时间</value>
@@ -9174,40 +9209,40 @@ Periods</comment>
     <value>每个座席加班的排班时间</value>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
-    <value>输入{0} 无效.</value>
+    <value>输入 {0} 无效。</value>
   </data>
   <data name="IllegalTimeInput" xml:space="preserve">
-    <value>输入不是一个有效的时间值</value>
+    <value>输入内容不是一个有效的时间值</value>
   </data>
   <data name="ScheduledTimeVsTarget" xml:space="preserve">
     <value>排班时间对比目标</value>
   </data>
   <data name="SourceColon" xml:space="preserve">
-    <value>源:</value>
+    <value>源：</value>
   </data>
   <data name="TargetSkillColon" xml:space="preserve">
-    <value>目标技能:</value>
+    <value>目标技能：</value>
   </data>
   <data name="BusinessRuleErrorAssignmentLength" xml:space="preserve">
-    <value>分配的最大长度是{0}小时. 当前分配长度是 {1} 小时.</value>
+    <value>分配的最大长度是 {0} 小时。当前分配长度是 {1} 小时。</value>
   </data>
   <data name="ShiftTradeAbsenceDenyReason" xml:space="preserve">
-    <value>由于班次中存在缺勤导致无法换班.</value>
+    <value>由于班次中存在缺勤导致无法调班。</value>
   </data>
   <data name="ShiftTradePersonalActivityDenyReason" xml:space="preserve">
-    <value>由于个人活动结束于班次之外使得换班被拒绝.</value>
+    <value>由于个人活动结束于班次之外使得调班被拒绝。</value>
   </data>
   <data name="ShiftTradeMeetingSpecificationDenyReason" xml:space="preserve">
-    <value>由于某个会议在班次外结束使得换班被拒绝.</value>
+    <value>由于某个会议在班次外结束使得调班被拒绝。</value>
   </data>
   <data name="ConflictingShiftCategories" xml:space="preserve">
-    <value>在限制中的班次类别和选项中的班次类别冲突.</value>
+    <value>在限制中的班次类别和选项中的班次类别冲突。</value>
   </data>
   <data name="ViewAllowance" xml:space="preserve">
     <value>查看缺勤配额</value>
   </data>
   <data name="RequestDenyReasonBudgetGroupAllowance" xml:space="preserve">
-    <value>您的请求由于超出预算配额而被系统自动拒绝。</value>
+    <value>您的申请由于超出预算配额而被系统自动拒绝。</value>
   </data>
   <data name="MaximumIsParameterHoursDot" xml:space="preserve">
     <value>最多为{0}小时。</value>
@@ -9227,10 +9262,10 @@ Periods</comment>
     <comment>import forecast from file</comment>
   </data>
   <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
-    <value>只显示可替换班的人</value>
+    <value>只显示可替调班的人</value>
   </data>
   <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
-    <value>起始时间{0}必须早于结束时间{1}.</value>
+    <value>开始时间 {0} 必须早于结束时间 {1}。</value>
     <comment>Start time 19:00 should be earlier than end time 18:00.</comment>
   </data>
   <data name="IncludeTroubleshootingInformation" xml:space="preserve">
@@ -9240,13 +9275,13 @@ Periods</comment>
     <value>除去写保护</value>
   </data>
   <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
-    <value>{0} 不能被排班的坐席天数.</value>
+    <value>不能被排班的座席天数 {0} 天。</value>
   </data>
   <data name="PreferenceFulfillment" xml:space="preserve">
     <value>完成的偏好</value>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
-    <value>缺席申请 {0} 被批准了.</value>
+    <value>缺席申请 {0} 已被申请。</value>
   </data>
   <data name="Import" xml:space="preserve">
     <value>导入</value>
@@ -9255,7 +9290,7 @@ Periods</comment>
     <value>按合同时间倒序排列</value>
   </data>
   <data name="YourPreferencesCanResultXDaysOff" xml:space="preserve">
-    <value>您的偏好共有 {0} 休息日.</value>
+    <value>您的偏好共有 {0} 个休息日。</value>
   </data>
   <data name="RotationFulfillment" xml:space="preserve">
     <value>完成的轮转</value>
@@ -9264,7 +9299,7 @@ Periods</comment>
     <value>申请历史记录</value>
   </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
-    <value>您应该有 {0} 和 {1} 休息日.</value>
+    <value>您应该有 {0} 和 {1} 休息日。</value>
   </data>
   <data name="CouldNotReachTeleoptiCustomerWebAtTheMoment" xml:space="preserve">
     <value>目前无法访问Teleopti客户页面！</value>
@@ -9330,25 +9365,25 @@ Periods</comment>
     <value>已经履行的必须拥有班次</value>
   </data>
   <data name="YourPreferencesCanResultXHours" xml:space="preserve">
-    <value>您的偏好一共是 {0} 小时.</value>
+    <value>您的偏好一共是 {0} 个小时。</value>
   </data>
   <data name="ImportWorkloadAndStaffing" xml:space="preserve">
     <value>导入工作量和人员</value>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
-    <value>新的换班申请 {0}, 请在您的申请列表里面批准或拒绝.</value>
+    <value>在您的申请列表里有新的调班申请 {0}，请批准或拒绝。</value>
   </data>
   <data name="ResourceCalculateEveryColon" xml:space="preserve">
-    <value>计量每个资源:</value>
+    <value>计量每个资源：</value>
   </data>
   <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
-    <value>您的偏好从 {0} 到 {1} 小时.</value>
+    <value>您的偏好从 {0} 到 {1} 个小时。</value>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
-    <value>缺席申请 {0} 已被拒绝.</value>
+    <value>缺席申请 {0} 已被拒绝。</value>
   </data>
   <data name="YouShouldWorkXHours" xml:space="preserve">
-    <value>您应该工作 {0} 小时.</value>
+    <value>您应该工作 {0} 小时。</value>
   </data>
   <data name="SkillNameColon" xml:space="preserve">
     <value>技能名称：</value>
@@ -9360,7 +9395,7 @@ Periods</comment>
     <value>优化步骤</value>
   </data>
   <data name="XRequests" xml:space="preserve">
-    <value>{0} 申请(s)</value>
+    <value>{0} 申请</value>
   </data>
   <data name="PersonFinderFieldSkill" xml:space="preserve">
     <value>技能</value>
@@ -9399,16 +9434,16 @@ Periods</comment>
     <value>锁定到最前端</value>
   </data>
   <data name="ExtendingAndReducingTime" xml:space="preserve">
-    <value>为灵活时间坐席增减工作时间</value>
+    <value>为灵活时间座席增减工作时间</value>
   </data>
   <data name="ExtendReduceTimeForFlexibleAgents" xml:space="preserve">
     <value>调整灵活工作时间</value>
   </data>
   <data name="MaximumSeats" xml:space="preserve">
-    <value>最大坐席</value>
+    <value>最大座席</value>
   </data>
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
-    <value>您应该有 {0} 休息日.</value>
+    <value>您应该有 {0} 个休息日。</value>
   </data>
   <data name="KeepStartEndTimes" xml:space="preserve">
     <value>保持开始和结束时间</value>
@@ -9417,16 +9452,16 @@ Periods</comment>
     <value>选择一个活动！</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
-    <value>换班申请 {0} 对方已接受.</value>
+    <value>调班申请 {0} 已被对方接受。</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
-    <value>换班申请 {0} 已被批准.</value>
+    <value>调班申请 {0} 已被批准。</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
-    <value>换班申请 {0} 已被拒绝.</value>
+    <value>调班申请 {0} 已被拒绝。</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenReferredDot" xml:space="preserve">
-    <value>换班申请 {0} 由于排班变更必须再次被接受.</value>
+    <value>调班申请 {0} 由于排班变更必须再次被接受。</value>
   </data>
   <data name="ExternalResourceInUse" xml:space="preserve">
     <value>在使用外部资源</value>
@@ -9441,7 +9476,7 @@ Periods</comment>
     <value>保持班次类型</value>
   </data>
   <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
-    <value>另一个程序正在使用外部资源,请稍候再试.</value>
+    <value>另一个程序正在使用外部资源，请稍后再试。</value>
   </data>
   <data name="NoShiftsFound" xml:space="preserve">
     <value>找不到班次</value>
@@ -9450,13 +9485,13 @@ Periods</comment>
     <value>没有合适的班次</value>
   </data>
   <data name="FindThreeDots" xml:space="preserve">
-    <value>发现...</value>
+    <value>查找...</value>
   </data>
   <data name="ErrorOccuredWhenSavingSettings" xml:space="preserve">
-    <value>保存设置时出错.</value>
+    <value>保存设置时出错。</value>
   </data>
   <data name="HavePermissionToRestrictedScenariosButNotForSelectedTeams" xml:space="preserve">
-    <value>您拥有一般权限可以查看限制场景，但不适用于选中的组和日期.</value>
+    <value>您拥有一般权限可以查看限制情景，但不适用于选中的组和日期。</value>
   </data>
   <data name="ShowPublicNote" xml:space="preserve">
     <value>显示公开注释</value>
@@ -9468,7 +9503,7 @@ Periods</comment>
     <value>工作量名称：</value>
   </data>
   <data name="NoPermissionToViewRestrictedScenarios" xml:space="preserve">
-    <value>您没有权限查看限制场景，所有场景多已经被限制</value>
+    <value>您没有权限查看限制情景，所有情景多已经被限制</value>
   </data>
   <data name="RequestAllowances" xml:space="preserve">
     <value>申请津贴</value>
@@ -9480,7 +9515,7 @@ Periods</comment>
     <value>在 {0} 有重复休息日</value>
   </data>
   <data name="ExportForecastToOtherBusinessUnit" xml:space="preserve">
-    <value>导出预测到其它业务单元</value>
+    <value>导出预测到其它业务单位</value>
   </data>
   <data name="NoAbsenceDefined" xml:space="preserve">
     <value>您必须创建至少一个缺席来完成它</value>
@@ -9510,7 +9545,7 @@ Periods</comment>
     <value>默认浏览器</value>
   </data>
   <data name="TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot" xml:space="preserve">
-    <value>子技能的间隔长度应该和父技能的一样, 是 {0} 分钟.</value>
+    <value>子技能的间隔长度应该和父技能的一样，是 {0} 分钟。</value>
   </data>
   <data name="AbsenceType" xml:space="preserve">
     <value>缺席类型：</value>
@@ -9525,7 +9560,7 @@ Periods</comment>
     <value>四十</value>
   </data>
   <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
-    <value>您应该工作 {0} 到 {1} 小时.</value>
+    <value>您应该工作 {0} 到 {1} 小时。</value>
   </data>
   <data name="ConsecutiveWorkDays" xml:space="preserve">
     <value>连续工作日</value>
@@ -9537,7 +9572,7 @@ Periods</comment>
     <value>自定义报表</value>
   </data>
   <data name="DoNotBreakMaximumSeats" xml:space="preserve">
-    <value>不要打破最大坐席数</value>
+    <value>不要打破最大座席数</value>
   </data>
   <data name="RequestDenyReasonAlreadyAbsent" xml:space="preserve">
     <value>在制定的排班周期中已经有了缺席</value>
@@ -9546,7 +9581,7 @@ Periods</comment>
     <value>班次集合</value>
   </data>
   <data name="ThisIsTheDefaultScenario" xml:space="preserve">
-    <value>这是默认场景</value>
+    <value>这是默认情景</value>
   </data>
   <data name="FulfillRestrictions" xml:space="preserve">
     <value>实现限制条件</value>
@@ -9585,16 +9620,16 @@ Periods</comment>
     <value>发送</value>
   </data>
   <data name="DayOffTolerancMinus" xml:space="preserve">
-    <value>允许的休息日</value>
+    <value>允许的休息日 -</value>
   </data>
   <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
     <value>未发现人员周期</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>按每个坐席分类的申请</value>
+    <value>按每个座席分类的申请</value>
   </data>
   <data name="ExtendingAndReducingDaysoff" xml:space="preserve">
-    <value>为灵活坐席增减休息日</value>
+    <value>为灵活座席增减休息日</value>
   </data>
   <data name="DayOffTolerancePlus" xml:space="preserve">
     <value>允许的休息日 +</value>
@@ -9603,9 +9638,417 @@ Periods</comment>
     <value>目标值</value>
   </data>
   <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>您正在使用更多坐席 ({0}) 已经大于了您的许可证允许值 ({1}). 您现在有 {2} 天减少坐席数或者应用新的覆盖更多坐席的许可证</value>
+    <value>您正在使用的座席数 ({0}) 已经大于了您的许可证允许值 ({1})，您现在剩余 {2} 天来减少座席数，或者应用新的许可证以允许使用更多座席。</value>
   </data>
   <data name="Teleopti" xml:space="preserve">
     <value>Teleopti</value>
+  </data>
+  <data name="SubmitRequest" xml:space="preserve">
+    <value>提交</value>
+  </data>
+  <data name="WorkloadWindowAlreadyOpen" xml:space="preserve">
+    <value>已打开的工作量窗口{0}已不再有效，请先关闭。</value>
+  </data>
+  <data name="LongtermForecast" xml:space="preserve">
+    <value>长期预测</value>
+  </data>
+  <data name="ManageRuleSets" xml:space="preserve">
+    <value>管理规则集</value>
+  </data>
+  <data name="RequestCannotUpdateDelete" xml:space="preserve">
+    <value>您的申请状态已被更改，不能更改或删除。</value>
+  </data>
+  <data name="SkillTypeRetail" xml:space="preserve">
+    <value>零售</value>
+  </data>
+  <data name="ActualEmployees" xml:space="preserve">
+    <value>实际员工</value>
+  </data>
+  <data name="ExportToBU" xml:space="preserve">
+    <value>导出到业务单位</value>
+  </data>
+  <data name="ExportToFile" xml:space="preserve">
+    <value>导出到文件</value>
+  </data>
+  <data name="FileExportDone" xml:space="preserve">
+    <value>文件导出已完成</value>
+  </data>
+  <data name="SelectDateAndScenario" xml:space="preserve">
+    <value>选择日期和情景</value>
+  </data>
+  <data name="SelectFileDestination" xml:space="preserve">
+    <value>选择目标文件</value>
+  </data>
+  <data name="SelectSkill" xml:space="preserve">
+    <value>选择技能</value>
+  </data>
+  <data name="CSVFile" xml:space="preserve">
+    <value>CSV 文件 (*.csv)|*.csv</value>
+  </data>
+  <data name="ExportStaffing" xml:space="preserve">
+    <value>导出员工</value>
+  </data>
+  <data name="ExportWorkload" xml:space="preserve">
+    <value>导出工作量</value>
+  </data>
+  <data name="ExportWorkloadAndStaffing" xml:space="preserve">
+    <value>到处工作量和员工</value>
+  </data>
+  <data name="AverageCustomers" xml:space="preserve">
+    <value>平均顾客数</value>
+  </data>
+  <data name="CalculatedCustomers" xml:space="preserve">
+    <value>计算顾客书</value>
+  </data>
+  <data name="SameEndTime" xml:space="preserve">
+    <value>相同的结束时间</value>
+  </data>
+  <data name="SameShiftCategory" xml:space="preserve">
+    <value>相同的班次类别</value>
+  </data>
+  <data name="SameStartTime" xml:space="preserve">
+    <value>相同的开始时间</value>
+  </data>
+  <data name="UseRestriction" xml:space="preserve">
+    <value>使用限制条件</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>顾客</value>
+  </data>
+  <data name="DeviationCustomersColon" xml:space="preserve">
+    <value>顾客数差异</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>员工</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>员工</value>
+  </data>
+  <data name="ForecastedAverageAfterCustomerWork" xml:space="preserve">
+    <value>预测平均电话后工作时间</value>
+  </data>
+  <data name="ForecastedCustomers" xml:space="preserve">
+    <value>预测顾客数</value>
+  </data>
+  <data name="ForecastedCustomersColon" xml:space="preserve">
+    <value>预测顾客数：</value>
+  </data>
+  <data name="ForecastedEmployees" xml:space="preserve">
+    <value>预测员工数</value>
+  </data>
+  <data name="OfferedCustomers" xml:space="preserve">
+    <value>顾客</value>
+  </data>
+  <data name="ScheduledEmployees" xml:space="preserve">
+    <value>排班的员工数</value>
+  </data>
+  <data name="TotalCustomers" xml:space="preserve">
+    <value>合计顾客数</value>
+  </data>
+  <data name="ValidatedCustomers" xml:space="preserve">
+    <value>校验后顾客数</value>
+  </data>
+  <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
+    <value>您的偏好超出范围。</value>
+  </data>
+  <data name="FileExportFailed" xml:space="preserve">
+    <value>文件导出失败</value>
+  </data>
+  <data name="FileExportFinished" xml:space="preserve">
+    <value>文件导出结束</value>
+  </data>
+  <data name="OptimizationOptionMessageBox" xml:space="preserve">
+    <value>优化选项</value>
+  </data>
+  <data name="NoActivity" xml:space="preserve">
+    <value>无活动</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
+    <value>请在团队优化中从以下三个选项中至少选择一项：”班次类别“，”开始时间“和”结束时间“。</value>
+  </data>
+  <data name="SchedulingOptionMessageBox" xml:space="preserve">
+    <value>计划选项</value>
+  </data>
+  <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
+    <value>请在团队计划中从以下三个选项中至少选择一项：”班次类别“，”开始时间“和”结束时间“。</value>
+  </data>
+  <data name="ManageSmsSettings" xml:space="preserve">
+    <value>管理短信息设置</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
+    <value>设置从那个字段获取短信息的电话号码</value>
+  </data>
+  <data name="SmsSettings" xml:space="preserve">
+    <value>SMS设置</value>
+  </data>
+  <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
+    <value>您的工作小时数已经改变：</value>
+  </data>
+  <data name="FullDayAbsence" xml:space="preserve">
+    <value>全天请假</value>
+  </data>
+  <data name="InsufficientPermissionForWeb" xml:space="preserve">
+    <value>您没有权限访问Web门户网站。</value>
+  </data>
+  <data name="NotWorking" xml:space="preserve">
+    <value>不工作。</value>
+  </data>
+  <data name="MobileReports" xml:space="preserve">
+    <value>手机报告</value>
+  </data>
+  <data name="SchedulePeriodTypeDay" xml:space="preserve">
+    <value>天</value>
+  </data>
+  <data name="SchedulePeriodTypeMonth" xml:space="preserve">
+    <value>月</value>
+  </data>
+  <data name="SchedulePeriodTypeWeek" xml:space="preserve">
+    <value>周</value>
+  </data>
+  <data name="PleaseChooseAReportType" xml:space="preserve">
+    <value>请选择报告类别。</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>按座席的遵时率</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>按天的遵时率</value>
+  </data>
+  <data name="PleaseChooseSkillSet" xml:space="preserve">
+    <value>请选择技能集。</value>
+  </data>
+  <data name="AllowMeetings" xml:space="preserve">
+    <value>允许会议</value>
+  </data>
+  <data name="ShiftCategories" xml:space="preserve">
+    <value>班次类别</value>
+  </data>
+  <data name="AddExtendedPreference" xml:space="preserve">
+    <value>添加扩展偏好</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>其他</value>
+  </data>
+  <data name="MyTime" xml:space="preserve">
+    <value>MyTime</value>
+  </data>
+  <data name="ExtendedPreferencesWeb" xml:space="preserve">
+    <value>扩展偏好</value>
+  </data>
+  <data name="DistributionBetweenSubskillsMustbeEqualToOneHundredPercent" xml:space="preserve">
+    <value>分派的子技能之和必须是100%</value>
+  </data>
+  <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
+    <value>最多座席数必须大于或等于最少座席数</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>按活动计划的座席数</value>
+  </data>
+  <data name="NotReadyTime" xml:space="preserve">
+    <value>未准备就绪时间</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>合计</value>
+  </data>
+  <data name="NoMessagesFound" xml:space="preserve">
+    <value>未找到消息</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>发送人</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>发送时间</value>
+  </data>
+  <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
+    <value>选择的文件目标不存在，请输入有效的文件路径。</value>
+  </data>
+  <data name="CouldNotExportForecastToFile" xml:space="preserve">
+    <value>导出文件时发生错误，请尝试导出到其他位置。</value>
+  </data>
+  <data name="SelectedFileDestinationIsTooLong" xml:space="preserve">
+    <value>选择的文件目标太长，请输入有效的文件路径。</value>
+  </data>
+  <data name="SameActivity" xml:space="preserve">
+    <value>相同的活动</value>
+  </data>
+  <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
+    <value>您的计划 {0} 已修改！</value>
+  </data>
+  <data name="WindowsLogonWithBrackets" xml:space="preserve">
+    <value>(Windows)</value>
+  </data>
+  <data name="UseAverageShiftLengths" xml:space="preserve">
+    <value>使用平均班次长度</value>
+  </data>
+  <data name="LogOnFailedAccountIsLocked" xml:space="preserve">
+    <value>登录失败！账号已被锁定。</value>
+  </data>
+  <data name="LogOnFailedPasswordExpired" xml:space="preserve">
+    <value>登录失败！密码已过期</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>跳过</value>
+  </data>
+  <data name="InvalidUserNameOrPassword" xml:space="preserve">
+    <value>错误的用户名或密码。</value>
+  </data>
+  <data name="YourPasswordHasAlreadyExpired" xml:space="preserve">
+    <value>您的密码已经过期。</value>
+  </data>
+  <data name="YourPasswordWillExpireSoon" xml:space="preserve">
+    <value>您的密码即将过期。</value>
+  </data>
+  <data name="WarningWithExclamatory" xml:space="preserve">
+    <value>警告！</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="SelectWorkload" xml:space="preserve">
+    <value>选择工作量</value>
+  </data>
+  <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
+    <value>您至少要选择一个工作量</value>
+  </data>
+  <data name="MySchedule" xml:space="preserve">
+    <value>我的计划</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>日期 (班次开始)：</value>
+  </data>
+  <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
+    <value>没有对调班申请有效的座席</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>开始日期 (班次开始)：</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>终止日期 (班次开始)：</value>
+  </data>
+  <data name="FromSchedulePeriod" xml:space="preserve">
+    <value>来自计划时段</value>
+  </data>
+  <data name="FairnessOptimizationValueBefore" xml:space="preserve">
+    <value> - 未优化值 =</value>
+  </data>
+  <data name="FairnessOptimizationValueAfter" xml:space="preserve">
+    <value> - 优化后值 =</value>
+  </data>
+  <data name="FairnessOptimizationRollingBack" xml:space="preserve">
+    <value> - 优化后值没有变好，正在回滚。</value>
+  </data>
+  <data name="ManualAgents" xml:space="preserve">
+    <value>座席代表数 (手工输入)</value>
+  </data>
+  <data name="CampaignCustomersPercent" xml:space="preserve">
+    <value>活动的顾客 (%)</value>
+  </data>
+  <data name="EmployeesIncWithShrinkage" xml:space="preserve">
+    <value>考虑到损耗的员工数</value>
+  </data>
+  <data name="ForecastedEmployeesIncoming" xml:space="preserve">
+    <value>预测的呼入员工数</value>
+  </data>
+  <data name="FromContract" xml:space="preserve">
+    <value>从合同</value>
+  </data>
+  <data name="IndexCustomers" xml:space="preserve">
+    <value>顾客索引</value>
+  </data>
+  <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
+    <value>最高座席占用率必须大于或等于最低座席占用率</value>
+  </data>
+  <data name="MaximumEmployees" xml:space="preserve">
+    <value>最多员工数</value>
+  </data>
+  <data name="MinimumEmployees" xml:space="preserve">
+    <value>最少员工数</value>
+  </data>
+  <data name="FairnessOptimizationOn" xml:space="preserve">
+    <value>优化公平</value>
+  </data>
+  <data name="OriginalOfferedCustomers" xml:space="preserve">
+    <value>原始的顾客数</value>
+  </data>
+  <data name="OriginalCustomers" xml:space="preserve">
+    <value>原始的顾客数</value>
+  </data>
+  <data name="OverrideDaysOff" xml:space="preserve">
+    <value>重设缺勤</value>
+  </data>
+  <data name="OverrideHoursPerDay" xml:space="preserve">
+    <value>重设每日工作时间</value>
+  </data>
+  <data name="OverridePeriod" xml:space="preserve">
+    <value>重设时间段</value>
+  </data>
+  <data name="PeopleCap" xml:space="preserve">
+    <value>人员</value>
+  </data>
+  <data name="Reforecast" xml:space="preserve">
+    <value>重新预测</value>
+  </data>
+  <data name="SameDaysOff" xml:space="preserve">
+    <value>相同的请假</value>
+  </data>
+  <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
+    <value>仅仅排班必须有的偏好</value>
+  </data>
+  <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
+    <value>排班的和实际的座席数</value>
+  </data>
+  <data name="ScheduledEmployeesIncoming" xml:space="preserve">
+    <value>排班的用于呼入的员工数</value>
+  </data>
+  <data name="ServedCustomers" xml:space="preserve">
+    <value>服务的顾客数</value>
+  </data>
+  <data name="AfterCustomerWorkTime" xml:space="preserve">
+    <value>为顾客服务后处理工作时间</value>
+  </data>
+  <data name="AgentScheduleMessengerPermission" xml:space="preserve">
+    <value>座席代表排班信息工具栏</value>
+  </data>
+  <data name="AverageAfterCustomerWork" xml:space="preserve">
+    <value>为顾客服务后处理工作时间平均值</value>
+  </data>
+  <data name="EmployeesWithShrinkage" xml:space="preserve">
+    <value>损耗员工</value>
+  </data>
+  <data name="IndexAfterCustomerWork" xml:space="preserve">
+    <value>为顾客服务后处理工作时间索引</value>
+  </data>
+  <data name="OriginalAfterCustomerWork" xml:space="preserve">
+    <value>原始的为顾客服务后处理工作时间</value>
+  </data>
+  <data name="ValidatedAfterCustomerWork" xml:space="preserve">
+    <value>经验证的为顾客服务后处理时长</value>
+  </data>
+  <data name="WalkAways" xml:space="preserve">
+    <value>离开</value>
+  </data>
+  <data name="PinnedUpWindow" xml:space="preserve">
+    <value>处于观察之下</value>
+  </data>
+  <data name="GraphLOC" xml:space="preserve">
+    <value>图形 (loc)</value>
+  </data>
+  <data name="TableLOC" xml:space="preserve">
+    <value>表格 (loc)</value>
+  </data>
+  <data name="IntervalLOC" xml:space="preserve">
+    <value>时间段 (loc)</value>
+  </data>
+  <data name="TypeLOC" xml:space="preserve">
+    <value>类型 (loc)</value>
+  </data>
+  <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
+    <value>每月7-8天假期</value>
+  </data>
+  <data name="AfterCheckingAgainstActivities" xml:space="preserve">
+    <value>检查完活动类型</value>
+  </data>
+  <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
+    <value>检查完共同活动类型</value>
   </data>
 </root>
