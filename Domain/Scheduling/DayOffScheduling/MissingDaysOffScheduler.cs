@@ -80,14 +80,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 		private bool assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService)
 		{
-			IScheduleDay scheduleDay = matrixData.Matrix.GetScheduleDayByKey(date).DaySchedulePart();
-			scheduleDay.CreateAndAddDayOff(dayOffTemplate);
-			rollbackService.Modify(scheduleDay); var eventArgs = new SchedulingServiceBaseEventArgs(scheduleDay);
-			OnDayScheduled(eventArgs);
-			if (eventArgs.Cancel)
-				return false;
+            var scheduleDayPro = matrixData.Matrix.GetScheduleDayByKey(date);
+            if (!matrixData.Matrix.UnlockedDays.Contains(scheduleDayPro)) return false;
+            IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
+            scheduleDay.CreateAndAddDayOff(dayOffTemplate);
+            rollbackService.Modify(scheduleDay); var eventArgs = new SchedulingServiceBaseEventArgs(scheduleDay);
+            OnDayScheduled(eventArgs);
+            if (eventArgs.Cancel)
+                return false;
 
-			return true;
+            return true;
 		}
 
 		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
