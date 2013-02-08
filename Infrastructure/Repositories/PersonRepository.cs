@@ -154,8 +154,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return res != null;
 		}
 
+    	public IEnumerable<IPerson> FindPossibleShiftTrades(IPerson loggedOnUser)
+    	{
+    		return Session.GetNamedQuery("FindPossibleShiftTrades")
+				.SetEntity("loggedOnUser", loggedOnUser)
+				.List<IPerson>();
+    	}
 
-        private ICriteria createWindowsLogonNameCriteria(string domainName, string logOnName)
+
+    	private ICriteria createWindowsLogonNameCriteria(string domainName, string logOnName)
         {
 
             //todo

@@ -12,14 +12,14 @@
 	<div class="shift-trade-add-schedule ui-corner-bottom">
 		<div class="shift-trade-timeline" data-bind="foreach: hours">
 			<span class="shift-trade-timeline-line" data-bind="style: { width : hourWidth }">
-				<span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText"></span>
+				<span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText, style: {left: leftPx}"></span>
 			</span>
 		</div>
 		<div class="shift-trade-my-schedule-row">
 			<span style="width: 150px; float: left" data-bind="text: mySchedule().agentName"></span>
 			<div class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
-				<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}">
-					<span class="shift-trade-dayoff-name" data-bind="visible: isDayOff, text: dayOffName"></span>
+				<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}, css:{ striped : $parent.mySchedule().showDayOffStyle(), dayoff : $parent.mySchedule().showDayOffStyle() }">
+					<span class="shift-trade-dayoff-name" data-bind="text: $parent.mySchedule().dayOffText"></span>
 				</span>
 			</div>
 		</div>
@@ -27,14 +27,14 @@
 			<div class="shift-trade-person-schedule-row">
 				<span data-bind="text: agentName" style="width: 150px; float: left"></span>
 				<div class="shift-trade-possible-trade-schedule" data-bind="foreach: $data.layers">
-					<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}">
-						<span class="shift-trade-dayoff-name" data-bind="visible: isDayOff, text: dayOffName"></span>
+					<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}, css:{ striped : $parent.showDayOffStyle(), dayoff : $parent.showDayOffStyle() }">
+						<span class="shift-trade-dayoff-name" data-bind="text: $parent.dayOffText"></span>
 					</span>					
 				</div>
 			</div>
 		</div>
 	</div>
-	<div id="Request-add-shift-trade-no-possible-trades" class="friendly-message ui-corner-all" data-bind="visible : noPossibleShiftTrades()">
+	<div id="Request-add-shift-trade-no-possible-trades" class="shift-trade-no-possible-trades" data-bind="visible : noPossibleShiftTrades()">
 		@Resources.NoAgentsAvailableForShiftTrade
 	</div>
 </div>

@@ -65,12 +65,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingAbsenceRequest>().PersonRequest.GetSubject(new NoFormatting())));
 		}
 
-		[Then(@"I should see my existing shift trade request")]
-		public void ThenIShouldSeeMyExistingShiftTradeRequest()
+
+		[Then(@"I should see my existing shift trade request with subject '(.*)'")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(string subject)
 		{
 			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
-			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.GetSubject(new NoFormatting())));
+			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(subject));
 		}
+
 
 		[Then(@"I should not see my existing shift trade request")]
 		public void ThenIShouldNotSeeMyExistingShiftTradeRequest()
@@ -131,7 +133,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheShiftTradeRequestFormWithSubject(string subject)
 		{
 			EventualAssert.That(() => _page.RequestDetailSection.IsDisplayed(),Is.True, "The detailsection should be visible");
-			EventualAssert.That(() => _page.IamAShiftTrade.IsDisplayed(), Is.True, "It should show a shifttrade");
+			EventualAssert.That(() => _page.ShiftTradeSender.IsDisplayed(), Is.True, "It should show a shifttrade");
 			EventualAssert.That(()=>_page.RequestDetailSubjectInput.Text, Is.EqualTo(subject),"The subject should match the specific shifttrade-request");
 		}
 
@@ -147,12 +149,42 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.ApproveShiftTradeButton.EventualClick();
 		}
 
+		[Then(@"I should not see the approve button")]
+		public void WhenIShouldNotSeeTheApproveButton()
+		{
+			EventualAssert.That(()=>_page.ApproveShiftTradeButton.IsDisplayed(),Is.False);
+		}
+
+		[Then(@"I should not see the deny button")]
+		public void WhenIShouldNotSeeTheDenyButton()
+		{
+			EventualAssert.That(() => _page.DenyShiftTradeButton.IsDisplayed(), Is.False);
+		}
+
 		[When(@"I click the Deny button on the shift request")]
 		public void WhenIClickTheDenyButtonOnTheShiftRequest()
 		{
 			_page.DenyShiftTradeButton.EventualClick();
 		}
 
+		[Then(@"I should not see a delete button on the request")]
+		public void ThenIShouldNotSeeADeletebuttonOnTheRequest()
+		{
+			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
+			EventualAssert.That(()=>_page.RequestDeleteButtonById(requestId).IsDisplayed(),Is.False);
+		}
+
+		[Then(@"I should see '(.*)' as the sender of the request")]
+		public void ThenIShouldSeeAsTheSenderOfTheRequest(string name)
+		{
+			EventualAssert.That(() => _page.ShiftTradeSender.Text, Is.EqualTo(name));
+		}
+
+		[Then(@"I should see '(.*)' as the receiver of the request")]
+		public void ThenIShouldSeeAsTheReceiverOfTheRequest(string name)
+		{
+			EventualAssert.That(() => _page.ShiftTradeReciever.Text, Is.EqualTo(name));
+		}
 
 	}
 

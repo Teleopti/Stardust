@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var validAgent = new Person();
 			var invalidAgent = new Person();
 			var date = new DateOnly(2000, 1, 1);
-			personRepository.Expect(rep => rep.LoadAll()).Return(new List<IPerson>{validAgent, invalidAgent});
+			personRepository.Expect(rep => rep.FindPossibleShiftTrades(currentUser)).Return(new List<IPerson>{validAgent, invalidAgent});
 
 			var resultPersonValid = new ShiftTradeAvailableCheckItem(date, currentUser, validAgent);
 			var resultPersonInvalid = new ShiftTradeAvailableCheckItem(date, currentUser, invalidAgent);

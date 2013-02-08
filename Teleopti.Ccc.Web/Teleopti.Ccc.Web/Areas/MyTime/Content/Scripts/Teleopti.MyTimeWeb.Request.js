@@ -2,8 +2,9 @@
 /// <reference path="~/Content/jqueryui/jquery-ui-1.9.1.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.8.3-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
-/// <reference path="~/Content/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js"/>
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -14,8 +15,56 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Request = (function ($) {
 
+	function _initRequestToolbar() {
+		_activateAddRequestMenu();
+		_initAddRequestMenuItems();
+	}
+
+	function _initAddRequestMenuItems() {
+		$('#Requests-addTextRequest-menuItem')
+			.click(function () {
+				Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick();
+			});
+		$('#Requests-addAbsenceRequest-menuItem')
+			.click(function () {
+				Teleopti.MyTimeWeb.Request.RequestDetail.AddAbsenceRequestClick();
+			});
+		$('#Requests-addShiftTradeRequest-menuItem')
+			.click(function () {
+				Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow();
+			});
+	}
+
+	function _hideAddRequestMenu() {
+		$("#Requests-addRequest-dropdown dd ul").hide();
+	}
+
+	function _activateAddRequestMenu() {
+		$("#Requests-addRequest-dropdown dt span").live("click", function () {
+			$("#Requests-addRequest-dropdown dd ul").toggle();
+		});
+
+		$("#Requests-addRequest-dropdown dd ul").live("click", function () {
+			_hideAddRequestMenu();
+		});
+
+
+		$(document).bind('click', function (e) {
+			var $clicked = $(e.target);
+			if (!$clicked.parents('#Requests-addRequest-dropdown').length > 0)
+				_hideAddRequestMenu();
+		});
+
+		$("#Requests-addRequest-dropdown a").hover(function () {
+			$(this).addClass('ui-state-hover');
+		}, function () {
+			$(this).removeClass('ui-state-hover');
+		});
+	}
+
 	return {
 		Init: function () {
+			_initRequestToolbar();
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Requests/Index', Teleopti.MyTimeWeb.Request.RequestPartialInit);
 		},
 		RequestPartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			var me = _loggedOnUser.CurrentUser();
 			var possibleTradePersons = new List<IPerson>();
 
-			foreach (var person in _personRepository.LoadAll())
+			foreach (var person in _personRepository.FindPossibleShiftTrades(me))
 			{
 				var result = _shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(dateOnly, me, person));
 				if (result.Value)

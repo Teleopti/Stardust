@@ -122,7 +122,7 @@
 	border: 1px solid rgb(216, 216, 216);
 	display: none;
 	height: 100%;
-	padding: 3px;
+	padding: 10px;
 }
 .shift-trade-layer
 {
@@ -144,7 +144,8 @@
 }
 .shift-trade-my-schedule-row 
 {
-	height: 30px;
+	top: 4px;
+	height: 34px;
 	position: relative;
 	font-style: italic;
 }
@@ -191,7 +192,6 @@
 	padding-right: 3px;
 	position: relative;
 	top: -19px;
-	left: -8px;
 	font-family: verdana;
 	font-size: 8px;
 	white-space: nowrap;
@@ -201,7 +201,6 @@
 .shift-trade-add-datepicker
 {
 	position:relative;
-	z-index: 9999999;
 	width: 100px;
 	text-align: center;
 }
@@ -224,4 +223,8 @@
 {
 	position: absolute;
 	left: 50%;
+}
+.shift-trade-no-possible-trades 
+{
+	margin-top: 10px;
 }

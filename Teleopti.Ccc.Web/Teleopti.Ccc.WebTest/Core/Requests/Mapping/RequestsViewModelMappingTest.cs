@@ -297,5 +297,34 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			
 			Assert.That(result.IsCreatedByUser,Is.False);
 		}
+
+		[Test]
+		public void ShouldMapFrom()
+		{
+			var sender = PersonFactory.CreatePerson("Sender");
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(result.From, Is.EqualTo(sender.Name.ToString()));
+		}
+
+		[Test]
+		public void ShouldMapTo()
+		{
+			var sender = PersonFactory.CreatePerson("Sender");
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(result.To, Is.EqualTo(_loggedOnPerson.Name.ToString()));
+		}
+
 	}
 }

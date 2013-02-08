@@ -4534,7 +4534,7 @@ deny</value>
     <comment>Group  name given to Approval actions in ribbon bar in   Request screen</comment>
   </data>
   <data name="NewShiftTradeRequest" xml:space="preserve">
-    <value>New shift trade request</value>
+    <value>New Shift Trade Request</value>
     <comment>text of context menu item "New Shift trade request"  in Agent portal Schedule</comment>
   </data>
   <data name="EarlyStart" xml:space="preserve">
@@ -11237,7 +11237,7 @@ These options are activated:
   <data name="MySchedule" xml:space="preserve">
     <value>My Schedule</value>
     <comment>Used in creating Shift Trade on web</comment>
-	</data>
+  </data>
   <data name="ResShiftStartDateColon" xml:space="preserve">
     <value>Date (shifts starting):</value>
     <comment>Date (shifts starting):</comment>

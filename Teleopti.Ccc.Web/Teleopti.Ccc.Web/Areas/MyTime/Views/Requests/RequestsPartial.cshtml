@@ -9,10 +9,19 @@
 	<div>apa</div>
 </script>
 <script type="text/Html" id="shifttrade-request-detail-template">
-	<div id="I-am-a-shifttrade">xxx</div>
 	<div class="pdb5 request-detail-title">@Resources.ShiftTradeRequest</div>
+	<div class="edit-module-element">
+		<label class="displayblock" for="Request-detail-subject-input">@Resources.Subject</label>
+		<input id="Request-detail-subject-input" type="text" />
+	</div>
+
 	<br/>
 	<br/>
+	<div>
+		<span>xxFrom: 
+		</span>
+		<span id="Request-shift-trade-sender" data-bind="text: From"></span>
+	</div>
 	<div>| 08:00 | 09:00 | 10:00 | 11:00 | 12:00 | 13:00 | 14:00 | 15:00 | 16:00 | 17:00 | </div>
 	<span style="background: green; width: 50px; position: relative; display:inline-block; float: left; margin-left: 80px;" >Phone</span>
 	<span style="background: red; width: 20px; position: relative; display:inline-block; float: left" >SB</span>
@@ -24,7 +33,11 @@
 	<br/>
 	<br/>
 	<div class="arrow-down"></div>
-	
+		<div>
+		<span>xxTo: 
+		</span>
+		<span id="Request-shift-trade-reciever" data-bind="text: To"></span>
+	</div>
 	<div>| 08:00 | 09:00 | 10:00 | 11:00 | 12:00 | 13:00 | 14:00 | 15:00 | 16:00 | 17:00 |</div>
 	<span style="background: green; width: 100px; position: relative; display:inline-block; float: left; margin-left: 30px;" >Phone</span>	
 	<span style="background: yellow; width: 80px; position: relative; display:inline-block; float: left" >Lunch</span>
@@ -34,17 +47,12 @@
 	<br/>
 	<br/>
 	<br/>
-	<div class="edit-module-element">
-		<label class="displayblock" for="Request-detail-subject-input">@Resources.Subject</label>
-		<input id="Request-detail-subject-input" type="text" />
-	</div>
 	
-	
-	<div  class="floatright">
+	<div  class="floatright" data-bind="visible: CanApprove" >
 		<input type="button" id="Approve-shift-trade" value="@Resources.Approve" data-bind="click: Approve" class="button mb5"></input>
 		<input type="button" id="Deny-shift-trade" value="@Resources.Deny" data-bind="click: Deny" class="button mb5"></input>
 	</div>
-
+	
 </script>
 
 <script type="text/Html" id="text-request-detail-template">
@@ -107,7 +115,7 @@
 		<label class="floatleft" for="Fullday-check">
 			@Resources.FullDay
 		</label>
-		<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
+		<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)" />
 		<div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat">
 		</div>
 </script>
@@ -178,14 +186,10 @@
 </script>
 
 <script type="text/Html" id="add-new-request-detail-template">
-		<div id="Schedule-addRequest-title" class="pdb5">
+		<div id="Schedule-addRequest-title" class="pdb5 request-detail-title">
 			
-			<span id="Text-request-tab" class="selectable-tab selected-tab" data-bind="visible: TextRequestTabVisible, click: AddTextRequest">@Resources.TextRequest</span>
-			@if (Model.RequestPermission.AbsenceRequestPermission)
-			{
-				<span data-bind="visible: TabSeparatorVisible">|</span>
-				<span id="Absence-request-tab" class="selectable-tab" data-bind="visible: AbsenceRequestTabVisible, click: AddAbsenceRequest">@Resources.AbsenceRequest</span>
-			}
+			<span id="Text-request-tab" data-bind="visible: TextRequestHeaderVisible">@Resources.TextRequest</span>
+			<span id="Absence-request-tab" data-bind="visible: AbsenceRequestHeaderVisible">@Resources.AbsenceRequest</span>
 		</div>
 				<input type="hidden" id="Request-detail-entityid" />
 
@@ -200,7 +204,7 @@
 			<label class="displayblock" for="Request-detail-message-input">@Resources.Message</label>
 			<textarea id="Request-detail-message-input" />
 		</div>
-		<div id="Absence-type-element" class="floatleft displaynone">
+		<div id="Absence-type-element" class="floatleft" data-bind="visible: AbsenceRequestHeaderVisible">
 			<div class="edit-module-element floatleft">
 				<div class="floatleft absence-type-input-label">@Resources.AbsenceType</div>
 			</div>
@@ -254,7 +258,6 @@
 <div class="displaynone" id="Request-detail-default-end-time" >@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
 
 <div id="Requests-body-inner" class="request-body-inner relative">
-	<button id="Request-add-shift-trade-button" class="ui-button" style="display: none">xxxLägg till shift trade request</button>
 	@Html.Partial("NewShiftTradeRequest")
 	<div id="Requests-data-binding-area">
 		<div class="ui-corner-all friendly-message ui-corner-all floatleft" data-bind="visible: Requests().length == 0" id="Requests-no-requests-found">
@@ -293,7 +296,7 @@
 			</div>
 		</div>
 
-		<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all request-selected" data-bind=" css: { 'request-selected': IsUpdate() == true , 'request-not-selected': IsUpdate() == false}">
+		<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all" data-bind=" css: { 'request-selected': IsUpdate() == true , 'request-not-selected': IsUpdate() == false}">
 			<div data-bind="template : Template">
 			</div>
 		</div>

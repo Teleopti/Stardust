@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 
 			var id = Guid.NewGuid();
-			var shiftTradePersister = MockRepository.GenerateStrictMock<IShiftTradeResponseService>();
+			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();
 			shiftTradePersister.Expect(a => a.OkByMe(id)).Repeat.Once();
 
 			using (var target = new RequestsController(null, null, null, shiftTradePersister))
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void RejectShiftTradeRequest()
 		{
 			var id = Guid.NewGuid();
-			var shiftTradePersister = MockRepository.GenerateStrictMock<IShiftTradeResponseService>();
+			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();
 			shiftTradePersister.Expect(a => a.Reject(id)).Repeat.Once();
 
 			using (var target = new RequestsController(null, null, null, shiftTradePersister))

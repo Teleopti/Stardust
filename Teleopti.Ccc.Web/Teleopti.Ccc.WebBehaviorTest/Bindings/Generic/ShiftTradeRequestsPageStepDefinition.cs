@@ -16,24 +16,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class ShiftTradeRequestsPageStepDefinition
 	{
-		[Then(@"I should not see the Create Shift Trade Request button")]
-		public void ThenIShouldNotSeeTheCreateShiftTradeRequestButton()
-		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeRequestButton.SafeExists(), Is.False);
-		}
-
-		[Then(@"I should not see the Requests button")]
-		public void ThenIShouldNotSeeTheRequestsButton()
-		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShowRequestsButton.SafeExists(), Is.False);
-		}
-
 		[When(@"I view Add Shift Trade Request")]
 		public void WhenIViewAddShiftTradeRequest()
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
-			Pages.Pages.RequestsPage.ShiftTradeRequestsButton.EventualClick();
+			Pages.Pages.RequestsPage.AddRequestDropDown.EventualClick();
+			Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.EventualClick();
 		}
 
 		[When(@"I view Add Shift Trade Request for date '(.*)'")]
@@ -41,7 +30,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
-			Pages.Pages.RequestsPage.ShiftTradeRequestsButton.EventualClick();
+			Pages.Pages.RequestsPage.AddRequestDropDown.EventualClick();
+			Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.EventualClick();
 			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
 			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
 			Browser.Current.Eval(script);
@@ -67,6 +57,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.Any(), Is.True);
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers[0].Title, Contains.Substring(expectedTimes));
+		}
+
+		[Then(@"I should see a possible schedule trade with")]
+		public void ThenIShouldSeeAPossibleScheduleTradeWith(Table table)
+		{
+			var expectedTimes = table.Rows[0][1] + "-" + table.Rows[1][1];
+
+
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers.Any(), Is.True);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers[0].Title, Contains.Substring(expectedTimes));
 		}
 
 		[Then(@"the selected date should be '(.*)'")]
