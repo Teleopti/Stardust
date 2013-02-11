@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -10,14 +11,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 {
 	public class AbsenceToday : IUserDataSetup
 	{
-		public DateOnly Date = DateOnly.Today;
+		public AbsenceToday()
+		{
+			Date = DateOnly.Today.ToShortDateString(CultureInfo.CurrentUICulture);
+		}
+
+		public string Date { get; set; }
 		public IAbsence Absence = TestData.Absence;
 		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 		public string AbsenceColor { get; set; }
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var startTime = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(Date);
+			var date = new DateOnly(DateTime.Parse(Date, CultureInfo.CurrentUICulture));
+			var startTime = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(date);
 			var endTime = startTime.AddHours(24);
 			var period = new DateTimePeriod(startTime, endTime);
 

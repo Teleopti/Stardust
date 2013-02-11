@@ -354,19 +354,21 @@ Scenario: Show white absence text when absence background color is black
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
 	And I have a full-day absence today with
-	| Field                 | Value            |
-	| Absence color         | Black			   |
-	When I view my week schedule
-	Then I should see the text for today in 'white'
+	| Field         | Value      |
+	| Absence color | Black      |
+	| Date          | 2013-01-01 |
+	When I view my week schedule for date '2013-01-01'
+	Then I should see the text for date '2013-01-01' in 'white'
 
 Scenario: Show black absence text when absence background color is white
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
 	And I have a full-day absence today with
-	| Field                 | Value            |
-	| Absence color         | White			   |
-	When I view my week schedule
-	Then I should see the text for today in 'black'
+	| Field         | Value      |
+	| Absence color | White      |
+	| Date          | 2013-01-01 |
+	When I view my week schedule for date '2013-01-01'
+	Then I should see the text for date '2013-01-01' in 'black'
 
 
 	 

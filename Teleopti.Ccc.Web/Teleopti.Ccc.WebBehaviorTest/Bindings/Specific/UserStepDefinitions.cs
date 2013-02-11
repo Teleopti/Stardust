@@ -406,6 +406,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		}
 
 		[Given(@"I have a full-day absence today with")]
+		[Given(@"I have a full-day absence with")]
 		public void GivenIHaveAFull_DayAbsenceTodayWith(Table table)
 		{
 			var absence = table.CreateInstance<AbsenceToday>();
