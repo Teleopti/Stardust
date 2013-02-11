@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         private void aggregateTaskPeriods()
         {
-            if (_skill is IChildSkill) return;
+            if (isChildSkill()) return;
 
             var taskPeriodCollection = skillTaskPeriodCollection();
             SkillDayStaffHelper.CombineTaskPeriodsAndServiceLevelPeriods(taskPeriodCollection,
@@ -1109,15 +1109,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-                //return _workloadDayCollection.All(wd => wd.IsClosed) &&
-                  //     SkillStaffPeriodCollection.Count == 0;
-                return new OpenForWork()
+                var isOpen = SkillStaffPeriodCollection.Count > 0;
+                return new OpenForWork
                 {
-                    IsOpenForIncomingWork = _workloadDayCollection.Any(wd => wd.OpenForWork.IsOpenForIncomingWork),
-                    IsOpen =  !(_workloadDayCollection.All(wd => !wd.OpenForWork.IsOpen) && SkillStaffPeriodCollection.Count == 0)
-                    //IsOpen = _workloadDayCollection.Any(wd => wd.IsClosed.IsOpen) || SkillStaffPeriodCollection.Count > 0
+                    IsOpenForIncomingWork = isOpen,
+                    IsOpen =  isOpen
                 };
-
             }
         }
 
@@ -1514,7 +1511,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public virtual void ResetSkillStaffPeriods(ISkillDataPeriod skillDataPeriod)
         {
-            if (_skill is IChildSkill) return;
+            if (isChildSkill()) return;
             var skillStaffPeriods = SkillStaffPeriodCollection.Where(s => skillDataPeriod.Period.Contains(s.Period.StartDateTime));
             foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriods)
             {
@@ -1526,6 +1523,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 payload.SkillPersonData = (SkillPersonData) skillDataPeriod.SkillPersonData.Clone();
                 payload.IsCalculated = false;
             }
+        }
+
+        private bool isChildSkill()
+        {
+            return _skill is IChildSkill;
         }
 
         public virtual ISkillDay EntityClone()
