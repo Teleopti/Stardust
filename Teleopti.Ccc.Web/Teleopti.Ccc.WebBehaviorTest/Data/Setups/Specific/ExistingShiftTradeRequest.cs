@@ -45,8 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 		private static IPerson GetOrCreatePerson(string name, IUnitOfWork uow)
 		{
-			var names = name.Split(' ');
-			var personName = names.Length > 1 ? new Name(names[0], names[1]) : new Name(name, name);
+			var personName = new CreateName().FromString(name);
 			var personRepository = new PersonRepository(uow);
 			var people = personRepository.LoadAll();
 			var person = people.FirstOrDefault(p => p.Name == personName);

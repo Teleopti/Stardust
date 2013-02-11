@@ -202,8 +202,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => DateTime.Parse(_page.ShiftTradeDateTo.Text), Is.EqualTo(dateOfTheTrade));
 		}
 
-
-
+		[Then(@"I should see a schedule that starts at '(.*)' and ends at '(.*)'")]
+		public void ThenIShouldSeeAScheduleThatStartsAtAndEndsAt(TimeSpan start, TimeSpan end)
+		{
+			ScenarioContext.Current.Pending();
+		}
 
 	}
 

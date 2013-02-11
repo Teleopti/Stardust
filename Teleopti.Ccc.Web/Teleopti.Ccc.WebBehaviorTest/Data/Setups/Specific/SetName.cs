@@ -6,19 +6,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 {
 	public class SetName : IUserSetup
 	{
-		private Name _name;
+		private readonly Name _name;
 
 		public SetName(string userName)
 		{
-			if (userName.Contains(" "))
-			{
-				var splitted = userName.Split(' ');
-				_name = new Name(splitted[0], splitted[1]);
-			}
-			else
-			{
-				_name = new Name("", userName);
-			}
+			_name = new CreateName().FromString(userName);
 		}
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
