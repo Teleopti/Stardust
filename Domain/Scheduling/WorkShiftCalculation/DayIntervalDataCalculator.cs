@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		public IDictionary<TimeSpan, ISkillIntervalData> Calculate(int resolution, IDictionary<DateOnly,
 			IList<ISkillIntervalData>> dayIntervalData)
 		{
-			InParameter.NotNull("dayIntervalData", dayIntervalData);
+			if (dayIntervalData == null) return null;
 			InParameter.ValueMustBeLargerThanZero("resolution", resolution);
 
 			var baseDate = DateTime.SpecifyKind(SkillDayTemplate.BaseDate, DateTimeKind.Utc);

@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
 		{
-			var person = matrixListAll[0].Person;
+            if (matrixListAll == null) return;
+            var person = matrixListAll[0].Person;
 			var matrixesOfOnePerson = matrixListAll.Where(x => x.Person == person);
 			var listOfMatrixes = new List<List<IScheduleMatrixPro>>();
 			foreach (var scheduleMatrixPro in matrixesOfOnePerson)
