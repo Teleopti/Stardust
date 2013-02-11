@@ -11,9 +11,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 {
 	public class AbsenceToday : IUserDataSetup
 	{
+		private static readonly CultureInfo swedishCulture = new CultureInfo("sv-SE");
+
 		public AbsenceToday()
 		{
-			Date = DateOnly.Today.ToShortDateString(CultureInfo.CurrentUICulture);
+			Date = DateOnly.Today.ToShortDateString(swedishCulture);
 		}
 
 		public string Date { get; set; }
@@ -23,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var date = new DateOnly(DateTime.Parse(Date, CultureInfo.CurrentUICulture));
+			var date = new DateOnly(DateTime.Parse(Date, swedishCulture));
 			var startTime = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(date);
 			var endTime = startTime.AddHours(24);
 			var period = new DateTimePeriod(startTime, endTime);
