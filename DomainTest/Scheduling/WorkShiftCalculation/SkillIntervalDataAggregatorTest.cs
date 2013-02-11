@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         }
 
         [Test]
-        public void ShouldAggregateSkillIntervalDataWithHeadCount()
+        public void ShouldAggregateSkillIntervalDataWithHeadcount()
         {
             var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
             //for skill A

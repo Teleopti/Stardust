@@ -55,17 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 					            }
 						        if(matrix==null) continue;
 
-                                destinationScheduleDay = matrix.GetScheduleDayByKey(day).DaySchedulePart();
-					            var destinationSignificanceType = destinationScheduleDay.SignificantPart();
-                                if (destinationSignificanceType == SchedulePartView.DayOff || destinationSignificanceType == SchedulePartView.ContractDayOff  || destinationSignificanceType == SchedulePartView.FullDayAbsence )
-                                    continue;
-                                listOfDestinationScheduleDays.Add(destinationScheduleDay);
-                                var sourceScheduleDay = matrix.GetScheduleDayByKey(startDateOfBlock).DaySchedulePart();
-                                sourceScheduleDay.AddMainShift((IMainShift)shiftProjectionCache.TheMainShift.EntityClone());
-                                destinationScheduleDay.Merge(sourceScheduleDay, false);
-
-                                _schedulePartModifyAndRollbackService.Modify(destinationScheduleDay);
-                                
+                                destinationScheduleDay = AssignShiftProjection(startDateOfBlock, shiftProjectionCache, listOfDestinationScheduleDays, matrix, day);
 					        }
 
 				        }
@@ -75,6 +65,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		        }
                 
 	        }
+        }
+
+        private IScheduleDay AssignShiftProjection(DateOnly startDateOfBlock, IShiftProjectionCache shiftProjectionCache,
+                                                    List<IScheduleDay> listOfDestinationScheduleDays, IScheduleMatrixPro matrix, DateOnly day)
+        {
+            IScheduleDay destinationScheduleDay;
+            destinationScheduleDay = matrix.GetScheduleDayByKey(day).DaySchedulePart();
+            var destinationSignificanceType = destinationScheduleDay.SignificantPart();
+            if (destinationSignificanceType == SchedulePartView.DayOff ||
+                destinationSignificanceType == SchedulePartView.ContractDayOff ||
+                destinationSignificanceType == SchedulePartView.FullDayAbsence)
+                return destinationScheduleDay;
+            listOfDestinationScheduleDays.Add(destinationScheduleDay);
+            var sourceScheduleDay = matrix.GetScheduleDayByKey(startDateOfBlock).DaySchedulePart();
+            sourceScheduleDay.AddMainShift((IMainShift) shiftProjectionCache.TheMainShift.EntityClone());
+            destinationScheduleDay.Merge(sourceScheduleDay, false);
+
+            _schedulePartModifyAndRollbackService.Modify(destinationScheduleDay);
+            return destinationScheduleDay;
         }
     }
 }
