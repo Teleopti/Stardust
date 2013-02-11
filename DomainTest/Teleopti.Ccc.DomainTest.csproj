@@ -258,6 +258,7 @@
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
+    <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderCreatorTest.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderTest.cs" />
     <Compile Include="Optimization\OptimizationPreferencesTest.cs" />
     <Compile Include="Optimization\PeriodValueCalculatorProviderTest.cs" />
@@ -340,6 +341,7 @@
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPersonTest.cs" />
     <Compile Include="ResourceCalculation\LegalStateCheckerOptionsTest.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferencesTest.cs" />
+    <Compile Include="ResourceCalculation\PersonalShiftMeetingTimeCheckerTest.cs" />
     <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryCreatorTest.cs" />
     <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryRunnerTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculateDaysDeciderTest.cs" />

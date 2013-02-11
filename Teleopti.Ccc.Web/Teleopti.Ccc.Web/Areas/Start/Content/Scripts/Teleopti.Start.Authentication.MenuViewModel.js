@@ -6,12 +6,12 @@ Teleopti.Start.Authentication.MenuViewModel = function(data) {
 	this.LoadApplications = function() {
 		data.authenticationState.GetDataForMenu({
 			applications: function(applications) {
-				self.Applications.removeAll();
-				ko.utils.arrayForEach(applications, function(a) {
+				self.Applications([]);
+				var map = ko.utils.arrayMap(applications, function(a) {
 					$.extend(a, data);
-					var application = new Teleopti.Start.Authentication.ApplicationViewModel(a);
-					self.Applications.push(application);
+					return new Teleopti.Start.Authentication.ApplicationViewModel(a);
 				});
+				self.Applications.push.apply(self.Applications, map);
 			}
 		});
 	};

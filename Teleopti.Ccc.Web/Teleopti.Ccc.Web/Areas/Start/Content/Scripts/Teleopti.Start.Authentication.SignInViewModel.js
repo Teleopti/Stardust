@@ -39,7 +39,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 			type: 'GET',
 			cache: false,
 			success: function (data, textStatus, jqXHR) {
-				self.DataSources.removeAll();
+				self.DataSources([]);
 
 				var map = ko.utils.arrayMap(data, function (d) {
 					return new Teleopti.Start.Authentication.DataSourceViewModel(d.Name, d.Type);

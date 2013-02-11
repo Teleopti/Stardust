@@ -10,12 +10,12 @@ Teleopti.Start.Authentication.BusinessUnitSelectionViewModel = function (data) {
 				datasource: data.dataSourceName
 			},
 			businessunits: function (businessunits) {
-				self.BusinessUnits.removeAll();
-				ko.utils.arrayForEach(businessunits, function (bu) {
+				self.BusinessUnits([]);
+				var map = ko.utils.arrayMap(businessunits, function (bu) {
 					$.extend(bu, data);
-					var businessUnit = new Teleopti.Start.Authentication.BusinessUnitViewModel(bu);
-					self.BusinessUnits.push(businessUnit);
+					return new Teleopti.Start.Authentication.BusinessUnitViewModel(bu);
 				});
+				self.BusinessUnits.push.apply(self.BusinessUnits, map);
 			}
 		});
 	};

@@ -28,7 +28,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
                 string[] files = Directory.GetFiles(_searchPath.Path, "*Payroll*.dll", SearchOption.AllDirectories);
 
                 AppDomain.CurrentDomain.AssemblyResolve += _domainAssemblyResolver.Resolve;
-                foreach (string file in files)
+				foreach (var file in files)
+				{
+					Assembly.LoadFile(file);
+				}
+				foreach (string file in files)
                 {
                     var assembly = Assembly.LoadFile(file);
                     foreach (Type type in assembly.GetTypes())
@@ -53,6 +57,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			var files = Directory.GetFiles(_searchPath.Path, "*Payroll*.dll", SearchOption.AllDirectories);
 
 			AppDomain.CurrentDomain.AssemblyResolve += _domainAssemblyResolver.Resolve;
+			foreach (var file in files)
+			{
+				Assembly.LoadFile(file);
+			}
 			foreach (var file in files)
 			{
 				var assembly = Assembly.LoadFile(file);
