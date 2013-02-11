@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -13,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
     public class AdvanceSchedulingService : IAdvanceSchedulingService
     {
         private readonly IDynamicBlockFinder _dynamicBlockFinder;
-        private readonly ITeamExtractor _teamExtractor;
         private readonly IRestrictionAggregator _restrictionAggregator;
         private readonly IList<IScheduleMatrixPro> _matrixList;
         private readonly IWorkShiftFilterService _workShiftFilterService;
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly ISchedulingOptions _schedulingOptions;
     	private readonly IWorkShiftSelector _workShiftSelector;
         private readonly IGroupPersonBuilderBasedOnContractTime _groupPersonBuilderBasedOnContractTime;
+        private readonly IGroupPersonsBuilder _groupPersonsBuilder;
         private readonly ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
         private readonly IList<DateOnly> _effectiveDays;
         private readonly IList<DateOnly> _dayOff;
@@ -28,18 +30,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         public AdvanceSchedulingService(ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
             IDynamicBlockFinder dynamicBlockFinder, 
-            ITeamExtractor teamExtractor,
             IRestrictionAggregator restrictionAggregator,
             IList<IScheduleMatrixPro> matrixList, 
             IWorkShiftFilterService workShiftFilterService,
             ITeamScheduling teamScheduling,
             ISchedulingOptions schedulingOptions,
 			IWorkShiftSelector workShiftSelector,
-            IGroupPersonBuilderBasedOnContractTime groupPersonBuilderBasedOnContractTime 
+            IGroupPersonBuilderBasedOnContractTime groupPersonBuilderBasedOnContractTime ,
+            IGroupPersonsBuilder groupPersonsBuilder 
             )
         {
             _dynamicBlockFinder = dynamicBlockFinder;
-            _teamExtractor = teamExtractor;
             _restrictionAggregator = restrictionAggregator;
             _matrixList = matrixList;
             _workShiftFilterService = workShiftFilterService;
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _schedulingOptions = schedulingOptions;
         	_workShiftSelector = workShiftSelector;
             _groupPersonBuilderBasedOnContractTime = groupPersonBuilderBasedOnContractTime;
+            _groupPersonsBuilder = groupPersonsBuilder;
             _skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
             _effectiveDays = new List<DateOnly>();
             _dayOff = new List<DateOnly>();
@@ -87,49 +89,54 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList)
         {
             var startDate = StartDate();
-            
+            var selectedPersons = _matrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).ToList();
             while (startDate != DateOnly.MinValue )
             {
                 //call class that return the teamblock dates for a given date (problem if team members don't have same days off)
                 var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays( startDate );
-                
-                var fullGroupPerson = _teamExtractor.GetRandomTeam(startDate);
-                var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, startDate);
-                foreach(var groupPerson in groupPersonList )
+                var allGrouPersonListOnStartDate = _groupPersonsBuilder.BuildListOfGroupPersons(startDate,
+                                                                                                selectedPersons, false,
+                                                                                                _schedulingOptions);
+                foreach (var fullGroupPerson in allGrouPersonListOnStartDate.GetRandom(allGrouPersonListOnStartDate.Count, true))
                 {
-                	var groupMatrixList = GetScheduleMatrixProList(groupPerson, startDate);
-                    //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
-                    var restriction = GetEffectiveRestriction(groupPerson, dateOnlyList);
-
-                    //call class that returns the aggregated intraday dist based on teamblock dates ???? consider the priority and understaffing
-                    var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
-
-                    //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
-                    // (should we cover for max seats here?) ????
-					var shifts = GetShiftProjectionCaches(restriction, groupMatrixList, groupPerson, startDate);
-
-                    if(shifts!=null && shifts.Count>0)
+                    var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, startDate);
+                    foreach (var groupPerson in groupPersonList)
                     {
-                        //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need ???
-                        var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
-                                                                                 _schedulingOptions.WorkShiftLengthHintOption,
-                                                                                 _schedulingOptions.UseMinimumPersons,
-                                                                                 _schedulingOptions.UseMaximumPersons);
-                        
-                        //call class that schedules given date with given workshift on the complete team
-                        //call class that schedules the unscheduled days for the teamblock using the same start time from the given shift, 
-                        //this class will handle steady state as well as individual
-                        _teamScheduling.Execute(startDate,dateOnlyList, groupMatrixList, groupPerson, restriction, bestShiftProjectionCache, _unLockedDays);
+                        var groupMatrixList = GetScheduleMatrixProList(groupPerson, startDate);
+                        //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
+                        var restriction = GetEffectiveRestriction(groupPerson, dateOnlyList);
+
+                        //call class that returns the aggregated intraday dist based on teamblock dates ???? consider the priority and understaffing
+                        var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
+
+                        //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
+                        // (should we cover for max seats here?) ????
+                        var shifts = GetShiftProjectionCaches(restriction, _matrixList, groupPerson, startDate);
+
+                        if (shifts != null && shifts.Count > 0)
+                        {
+                            //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need ???
+                            var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
+                                                                                        _schedulingOptions.WorkShiftLengthHintOption,
+                                                                                        _schedulingOptions.UseMinimumPersons,
+                                                                                        _schedulingOptions.UseMaximumPersons);
+
+                            //call class that schedules given date with given workshift on the complete team
+                            //call class that schedules the unscheduled days for the teamblock using the same start time from the given shift, 
+                            //this class will handle steady state as well as individual
+                            _teamScheduling.Execute(startDate, dateOnlyList, groupMatrixList, groupPerson, restriction, bestShiftProjectionCache, _unLockedDays);
+                        }
+
                     }
-                    
                 }
                 startDate = GetNextDate(dateOnlyList.OrderByDescending(x => x.Date).First());
+                
             }
 
             return true;
         }
 
-        private IList<IShiftProjectionCache> GetShiftProjectionCaches(IEffectiveRestriction restriction, List<IScheduleMatrixPro> groupMatrixList, IGroupPerson groupPerson,
+        private IList<IShiftProjectionCache> GetShiftProjectionCaches(IEffectiveRestriction restriction, IList<IScheduleMatrixPro> groupMatrixList, IGroupPerson groupPerson,
                                                DateOnly startDate)
         {
             var shifts = _workShiftFilterService.Filter(startDate, groupPerson, groupMatrixList, restriction, _schedulingOptions);

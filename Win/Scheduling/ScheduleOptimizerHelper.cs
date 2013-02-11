@@ -1233,12 +1233,13 @@ namespace Teleopti.Ccc.Win.Scheduling
             var workShiftSelector = InitializeWorkShiftRelatedClasses();
             IGroupPersonBuilderBasedOnContractTime groupPersonBuilderBasedOnContractTime =
                 new GroupPersonBuilderBasedOnContractTime(_container.Resolve<IGroupPersonFactory>());
+            var grouPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
             var advanceSchedulingService = new AdvanceSchedulingService(skillDayPeriodIntervalData,
-                                                                        dynamicBlockFinder, teamExtractor,
+                                                                        dynamicBlockFinder,
                                                                         restrictionAggregator, matrixList,
                                                                         workShiftFilterService, teamScheduling,
                                                                         schedulingOptions, workShiftSelector,
-                                                                        groupPersonBuilderBasedOnContractTime);
+                                                                        groupPersonBuilderBasedOnContractTime,grouPersonsBuilder );
             return advanceSchedulingService;
         }
 
