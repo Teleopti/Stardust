@@ -1,6 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
+﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 {
-    partial class SelectDateAndScenario
+    partial class SelectTargetDatesAndScenario
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QuickForecast.SelectDateAndScenario));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectTargetDatesAndScenario));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.reportDateFromToSelector1 = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();

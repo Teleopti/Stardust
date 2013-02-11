@@ -8,12 +8,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 {
-	public partial class SelectHistoricalDateRange : BaseUserControl, IPropertyPageNoRoot<QuickForecastModel>
+	public partial class SelectHistoricalDateRangeForTemplates : BaseUserControl, IPropertyPageNoRoot<QuickForecastModel>
     {
 		private QuickForecastModel _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
 
-        public SelectHistoricalDateRange()
+		public SelectHistoricalDateRangeForTemplates()
         {
             InitializeComponent();
             if (!DesignMode) SetTexts();
@@ -36,13 +36,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             base.OnLoad(e);
 
            // var exportModel = _stateObj.ExportMultisiteSkillToSkillCommandModel;
-			reportDateFromToSelector1.WorkPeriodStart = new DateOnly(_stateObj.StatisticPeriod.StartDate.DateTime);
-			reportDateFromToSelector1.WorkPeriodEnd = new DateOnly(_stateObj.StatisticPeriod.EndDate.DateTime);
+			reportDateFromToSelector1.WorkPeriodStart = new DateOnly(_stateObj.TemplatePeriod.StartDate.DateTime);
+			reportDateFromToSelector1.WorkPeriodEnd = new DateOnly(_stateObj.TemplatePeriod.EndDate.DateTime);
         }
 
 		public bool Depopulate(QuickForecastModel stateObj)
         {
-	        stateObj.StatisticPeriod = new DateOnlyPeriodDto
+	        stateObj.TemplatePeriod = new DateOnlyPeriodDto
 		        {
 			        StartDate = new DateOnlyDto {DateTime = reportDateFromToSelector1.WorkPeriodStart},
 			        EndDate = new DateOnlyDto {DateTime = reportDateFromToSelector1.WorkPeriodEnd}
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
         public string PageName
         {
-            get { return  "Seasonality and trends data range"; }
+            get { return  "xxTemplates historical data range"; }
         }
 
         public ICollection<string> ErrorMessages

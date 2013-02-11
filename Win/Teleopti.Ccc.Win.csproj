@@ -639,11 +639,11 @@
     <Compile Include="Forecasting\Forms\ExportPages\SelectExportType.Designer.cs">
       <DependentUpon>SelectExportType.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\ExportPages\SelectTargetDatesAndScenario.cs">
+    <Compile Include="Forecasting\Forms\ExportPages\SelectDateAndScenario.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forecasting\Forms\ExportPages\SelectTargetDatesAndScenario.Designer.cs">
-      <DependentUpon>SelectTargetDatesAndScenario.cs</DependentUpon>
+    <Compile Include="Forecasting\Forms\ExportPages\SelectDateAndScenario.Designer.cs">
+      <DependentUpon>SelectDateAndScenario.cs</DependentUpon>
     </Compile>
     <Compile Include="Forecasting\Forms\ExportPages\JobStatusView.cs">
       <SubType>Form</SubType>
@@ -694,14 +694,13 @@
     <Compile Include="Forecasting\Forms\JobHistory\JobHistoryDetailedView.Designer.cs">
       <DependentUpon>JobHistoryDetailedView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastPresenter.cs" />
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRangeForTemplates.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRangeForTemplates.Designer.cs">
+      <DependentUpon>SelectHistoricalDateRangeForTemplates.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastPeriodProvider.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastView.Designer.cs">
-      <DependentUpon>QuickForecastView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastModule.cs" />
     <Compile Include="Forecasting\Forms\QuickForecast\IQuickForecastPeriodProvider.cs" />
     <Compile Include="Forecasting\Forms\QuickForecast\IQuickForecastView.cs" />
@@ -710,11 +709,11 @@
     <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastCommand.cs" />
     <Compile Include="Forecasting\Forms\QuickForecast\ScenarioModel.cs" />
     <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastScenarioProvider.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\SelectDateAndScenario.cs">
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectTargetDatesAndScenario.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forecasting\Forms\QuickForecast\SelectDateAndScenario.Designer.cs">
-      <DependentUpon>SelectDateAndScenario.cs</DependentUpon>
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectTargetDatesAndScenario.Designer.cs">
+      <DependentUpon>SelectTargetDatesAndScenario.cs</DependentUpon>
     </Compile>
     <Compile Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRange.cs">
       <SubType>UserControl</SubType>
@@ -2554,8 +2553,8 @@
       <DependentUpon>SelectExportType.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectTargetDatesAndScenario.resx">
-      <DependentUpon>SelectTargetDatesAndScenario.cs</DependentUpon>
+    <EmbeddedResource Include="Forecasting\Forms\ExportPages\SelectDateAndScenario.resx">
+      <DependentUpon>SelectDateAndScenario.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\ExportPages\JobStatusView.resx">
       <DependentUpon>JobStatusView.cs</DependentUpon>
@@ -2585,8 +2584,12 @@
     <EmbeddedResource Include="Forecasting\Forms\MultiSiteDistributionGrid.resx">
       <DependentUpon>MultiSiteDistributionGrid.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forecasting\Forms\QuickForecast\SelectDateAndScenario.resx">
-      <DependentUpon>SelectDateAndScenario.cs</DependentUpon>
+    <EmbeddedResource Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRangeForTemplates.resx">
+      <DependentUpon>SelectHistoricalDateRangeForTemplates.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\QuickForecast\SelectTargetDatesAndScenario.resx">
+      <DependentUpon>SelectTargetDatesAndScenario.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRange.resx">
       <DependentUpon>SelectHistoricalDateRange.cs</DependentUpon>
@@ -2608,9 +2611,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ExceptionHandling\SimpleExceptionHandlerView.resx">
       <DependentUpon>SimpleExceptionHandlerView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forecasting\Forms\QuickForecast\QuickForecastView.resx">
-      <DependentUpon>QuickForecastView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Grouping\FindPersonsView.resx">
       <DependentUpon>FindPersonsView.cs</DependentUpon>

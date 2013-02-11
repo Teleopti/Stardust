@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -13,13 +14,13 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 {
-    public partial class SelectDateAndScenario : BaseUserControl, IPropertyPageNoRoot<QuickForecastModel>
+    public partial class SelectTargetDatesAndScenario : BaseUserControl, IPropertyPageNoRoot<QuickForecastModel>
     {
 		private QuickForecastModel _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
         private IList<IScenario> _scenarios;
 
-        public SelectDateAndScenario()
+        public SelectTargetDatesAndScenario()
         {
             InitializeComponent();
             if (!DesignMode)
@@ -44,15 +45,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 		public void Populate(QuickForecastModel stateObj)
         {
             _stateObj = stateObj;
+			reportDateFromToSelector1.WorkPeriodStart = new DateOnly(_stateObj.TargetPeriod.StartDate.DateTime);
+			reportDateFromToSelector1.WorkPeriodEnd = new DateOnly(_stateObj.TargetPeriod.EndDate.DateTime);
         }
         
         protected override void OnLoad(System.EventArgs e)
         {
             base.OnLoad(e);
-            
-            var exportModel = _stateObj.ExportSkillToFileCommandModel;
-            reportDateFromToSelector1.WorkPeriodStart = exportModel.Period.StartDate == new DateOnly() ? DateOnly.Today : exportModel.Period.StartDate;
-            reportDateFromToSelector1.WorkPeriodEnd = exportModel.Period.EndDate == new DateOnly() ? DateOnly.Today.AddDays(7) : exportModel.Period.EndDate;
 
             loadScenarios();
 
@@ -64,9 +63,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
 		public bool Depopulate(QuickForecastModel stateObj)
         {
-            //stateObj.ExportSkillToFileCommandModel.Period = new DateOnlyPeriod(reportDateFromToSelector1.WorkPeriodStart, reportDateFromToSelector1.WorkPeriodEnd);
-            //stateObj.ExportSkillToFileCommandModel.Scenario = (IScenario)comboBoxScenario.SelectedItem;
-            return true;
+			stateObj.TargetPeriod = new DateOnlyPeriodDto
+			{
+				StartDate = new DateOnlyDto { DateTime = reportDateFromToSelector1.WorkPeriodStart },
+				EndDate = new DateOnlyDto { DateTime = reportDateFromToSelector1.WorkPeriodEnd }
+			};
+			stateObj.ScenarioId = ((IScenario)comboBoxScenario.SelectedItem).Id.GetValueOrDefault();
+			return true;
         }
 
         public void SetEditMode()

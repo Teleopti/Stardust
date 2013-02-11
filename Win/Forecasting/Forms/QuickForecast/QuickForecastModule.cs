@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
 		private static void commandWiring(ContainerBuilder builder)
 		{
-			builder.RegisterType<QuickForecastCommand>();
+			//builder.RegisterType<QuickForecastCommand>();
         }
 
 		private static void providerWiring(ContainerBuilder builder)
@@ -36,13 +36,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
 		private static void groupMain(ContainerBuilder builder)
 		{
-			builder.RegisterType<QuickForecastView>()
-				.As<IQuickForecastView>()
-				.OnActivated(e => e.Instance.Presenter = e.Context.Resolve<QuickForecastPresenter>())
-				.InstancePerLifetimeScope();
-			builder.RegisterType<QuickForecastModel>().InstancePerLifetimeScope();
-			builder.RegisterType<QuickForecastPresenter>().InstancePerLifetimeScope();
-            builder.RegisterType<HandleQuickForecastScope>().As<IQuickForecastViewFactory>();
+			//builder.RegisterType<QuickForecastView>()
+			//    .As<IQuickForecastView>()
+			//    .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<QuickForecastPresenter>())
+			//    .InstancePerLifetimeScope();
+			//builder.RegisterType<QuickForecastModel>().InstancePerLifetimeScope();
+			//builder.RegisterType<QuickForecastPresenter>().InstancePerLifetimeScope();
+			//builder.RegisterType<HandleQuickForecastScope>().As<IQuickForecastViewFactory>();
 		}
 
 		private class HandleQuickForecastScope : IQuickForecastViewFactory

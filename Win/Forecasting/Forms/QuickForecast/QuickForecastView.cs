@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
             if (DesignMode) return;
 
-            Presenter.Initialize();
+            //Presenter.Initialize();
         }
 
-        public QuickForecastPresenter Presenter { get; set; }
+       // public QuickForecastPresenter Presenter { get; set; }
 
         public void SetWorkloadCollection(IEnumerable<WorkloadModel> workloadModels)
         {
