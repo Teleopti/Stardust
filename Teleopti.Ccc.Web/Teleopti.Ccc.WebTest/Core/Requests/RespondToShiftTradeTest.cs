@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var shiftTrade = MockRepository.GenerateMock<IShiftTradeRequest>();
 			var shiftTradeRequestCheckSum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
 			var personRequestCheckAuthorization = MockRepository.GenerateMock<IPersonRequestCheckAuthorization>();
-			var target = new RespondToShiftTrade(personRequestRepository,shiftTradeRequestCheckSum,personRequestCheckAuthorization,loggedOnUser);
+			var target = new RespondToShiftTrade(personRequestRepository, shiftTradeRequestCheckSum, personRequestCheckAuthorization, loggedOnUser);
 
 			personRequestRepository.Expect(p => p.Find(shiftTradeId)).Return(personrequest);
 			personrequest.Expect(p => p.Request).Return(shiftTrade);
@@ -42,19 +43,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var loggedOnPerson = MockRepository.GenerateStub<IPerson>();
-			var personrequest = MockRepository.GenerateMock<IPersonRequest>();
+			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
 			var shiftTrade = MockRepository.GenerateMock<IShiftTradeRequest>();
-			var target = new RespondToShiftTrade(personRequestRepository, null, null, loggedOnUser);
+			var personRequestCheckAuthorization = MockRepository.GenerateMock<IPersonRequestCheckAuthorization>();
+			var target = new RespondToShiftTrade(personRequestRepository, null, personRequestCheckAuthorization, loggedOnUser);
 
-			personRequestRepository.Expect(p => p.Find(shiftTradeId)).Return(personrequest);
-			personrequest.Expect(p => p.Request).Return(shiftTrade);
+			personRequestRepository.Expect(p => p.Find(shiftTradeId)).Return(personRequest);
+			personRequest.Expect(p => p.GetMessage(new NoFormatting())).Return("message");
+			personRequest.Expect(p => p.TrySetMessage("message")).Return(true);
 			loggedOnUser.Expect(l => l.CurrentUser()).Return(loggedOnPerson);
+			personRequest.Expect(p => p.TrySetMessage("message"));
 
 			//execute
 			target.Deny(shiftTradeId);
 
 			//verify expectation:
-			shiftTrade.AssertWasCalled(s => s.Deny(loggedOnPerson));
+			personRequest.AssertWasCalled(s => s.Deny(loggedOnPerson, "RequestDenyReasonOtherPart", personRequestCheckAuthorization));
 		}
 	}
 }
