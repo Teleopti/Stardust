@@ -331,7 +331,6 @@ Scenario: Show black activity text when activity background color is white
     | Field                 | Value            |
 	| StartTime             | 2013-01-30 08:00 |
 	| EndTime               | 2013-01-30 18:00 |
-	| Lunch3HoursAfterStart | true             |
 	| Shift category        | Day              |
 	| All activity color    | White            |
 	When I view my week schedule for date '2013-01-30'
@@ -344,7 +343,6 @@ Scenario: Show white activity text when activity background color is black
     | Field                 | Value            |
 	| StartTime             | 2013-01-30 08:00 |
 	| EndTime               | 2013-01-30 18:00 |
-	| Lunch3HoursAfterStart | true             |
 	| Shift category        | Day              |
 	| All activity color    | Black            |
 	When I view my week schedule for date '2013-01-30'
