@@ -20,7 +20,6 @@ using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
-using Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -1202,7 +1201,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void toolStripMenuItemQuickForecast_Click(object sender, EventArgs e)
+		private void toolStripMenuItemQuickForecastClick(object sender, EventArgs e)
 		{
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
@@ -1217,8 +1216,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					wwp.Initialize(quickForecastPages);
 					using (var wizard = new WizardNoRoot<QuickForecastModel>(wwp))
 					{
-						if (wizard.ShowDialog(this) == DialogResult.Cancel)
+						if (wizard.ShowDialog(this) == DialogResult.OK)
 						{
+							_sendCommandToSdk.ExecuteCommand(wwp.GetCommand());
 						}
 					}
 				}

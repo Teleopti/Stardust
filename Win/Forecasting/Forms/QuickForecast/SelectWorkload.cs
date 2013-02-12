@@ -6,7 +6,6 @@ using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common.Filter;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
@@ -17,8 +16,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 	public partial class SelectWorkload : BaseUserControl, IPropertyPageNoRoot<QuickForecastModel>
     {
 		private readonly ICollection<ISkill> _skills;
-		private IList<ListViewItem> _filteredItems;
-        private IList<ListViewItem> _allItems;
         private readonly ICollection<string> _errorMessages = new List<string>();
  
 		public SelectWorkload()
@@ -89,26 +86,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 	        }
 			root.Expand();
         }
-
-		//private void textBoxExFilter_TextChanged(object sender, EventArgs e)
-		//{
-		//    Filter(textBoxExFilter.Text);
-		//}
-
-		//private void Filter(string filter)
-		//{
-		//    listViewWorkloads.BeginUpdate();
-		//    listViewWorkloads.Items.Clear();
-
-		//    var filterItems = new FilterListViewItems(_allItems);
-		//    _filteredItems = filterItems.Filter(filter);
-
-		//    foreach (var s in _filteredItems)
-		//    {
-		//        listViewWorkloads.Items.Add(s);
-		//    }
-		//    listViewWorkloads.EndUpdate();
-		//}
 
         private bool validated()
         {

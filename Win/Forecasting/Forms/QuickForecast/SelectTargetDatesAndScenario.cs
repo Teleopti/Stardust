@@ -7,10 +7,8 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
 using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 {
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 			reportDateFromToSelector1.WorkPeriodEnd = new DateOnly(_stateObj.TargetPeriod.EndDate.DateTime);
         }
         
-        protected override void OnLoad(System.EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
@@ -93,7 +91,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
         private void loadScenarios()
         {
-            using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 _scenarios = new ScenarioRepository(uow).FindAllSorted();
             }

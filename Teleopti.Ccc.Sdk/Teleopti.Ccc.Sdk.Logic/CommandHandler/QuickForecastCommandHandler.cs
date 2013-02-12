@@ -6,7 +6,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
@@ -27,10 +26,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public CommandResultDto Handle(QuickForecastCommandDto command)
 		{
-			if (!_busSender.EnsureBus())
-			{
-				throw new FaultException("The outgoing queue for the service bus is not available. Cannot continue with the denormalizer.");
-			}
+			if (command == null)
+				throw new FaultException("Command is null.");
+
 
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
@@ -41,7 +39,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                                               ((IUnsafePerson) TeleoptiPrincipal.Current).Person, DateTime.UtcNow);
                 _jobResultRepository.Add(jobResult);
                 var jobId = jobResult.Id.GetValueOrDefault();
-                unitOfWork.PersistAll();
+                
+				unitOfWork.PersistAll();
+				if (!_busSender.EnsureBus())
+				{
+					throw new FaultException("The outgoing queue for the service bus is not available. Cannot continue with the denormalizer.");
+				}
 
 				var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
 				var message = new QuickForecastWorkloadsMessage
@@ -54,6 +57,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			              		ScenarioId = command.ScenarioId,
 								JobId = jobId,
 								UpdateStandardTemplates = command.UpdateStandardTemplates,
+								SmoothingStyle = command.SmoothingStyle,
+								TemplatePeriod = new DateOnlyPeriod(new DateOnly(command.TemplatePeriod.StartDate.DateTime), new DateOnly(command.TemplatePeriod.EndDate.DateTime)),
 								WorkloadIds = command.WorkloadIds
 			              	};
 

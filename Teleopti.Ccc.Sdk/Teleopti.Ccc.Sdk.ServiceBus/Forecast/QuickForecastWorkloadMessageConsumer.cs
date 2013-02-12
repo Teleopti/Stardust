@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
 				//(Update templates for workload)
 				if (message.UpdateStandardTemplates)
-					updateStandardTemplates(workload, statisticHelper, message.StatisticPeriod);
+					updateStandardTemplates(workload, statisticHelper, message.StatisticPeriod, message.SmoothingStyle);
 
 				//Create budget forecast (apply standard templates for all days in target)
 				workload.SetDefaultTemplates(workloadDays);
@@ -118,10 +118,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 							   0, 0, false, workload);
 		}
 
-		private void updateStandardTemplates(IWorkload workload, IStatisticHelper statisticsHelper, DateOnlyPeriod statisticPeriod)
+		private void updateStandardTemplates(IWorkload workload, IStatisticHelper statisticsHelper, DateOnlyPeriod statisticPeriod, int smoothing)
 		{
 			var workloadDayTemplateCalculator = _forecastClassesCreator.CreateWorkloadDayTemplateCalculator(statisticsHelper, _outlierRepository);
 			workloadDayTemplateCalculator.LoadWorkloadDayTemplates(new[] { statisticPeriod }, workload);
+
+			if (smoothing > 1) //mer än None
+			{
+				for (var i = 0; i < 7; i++)
+				{
+					var template = (WorkloadDayTemplate)workload.GetTemplateAt(TemplateTarget.Workload, i);
+					template.SnapshotTemplateTaskPeriodList(TaskPeriodType.Tasks);
+					template.DoRunningSmoothing(smoothing, TaskPeriodType.Tasks);
+					template.SnapshotTemplateTaskPeriodList(TaskPeriodType.AverageTaskTime);
+					template.DoRunningSmoothing(smoothing, TaskPeriodType.AverageTaskTime);
+					template.SnapshotTemplateTaskPeriodList(TaskPeriodType.AverageAfterTaskTime);
+					template.DoRunningSmoothing(smoothing, TaskPeriodType.AverageAfterTaskTime);
+				}
+				
+			}
+
 		}
 	}
 

@@ -378,6 +378,7 @@
     <Compile Include="Forecasting\ImportForecast\ValidateImportForecastFileCommandTest.cs" />
     <Compile Include="Forecasting\JobHistoryPresenterTest.cs" />
     <Compile Include="Forecasting\JobResultProviderTest.cs" />
+    <Compile Include="Forecasting\QuickForecast\QuickForecastModelTest.cs" />
     <Compile Include="Forecasting\QuickForecast\QuickForecastWizardPagesTest.cs" />
     <Compile Include="Forecasting\SkillPages\SkillGeneralPresenterTest.cs" />
     <Compile Include="Grouping\CommandProviderTest.cs" />

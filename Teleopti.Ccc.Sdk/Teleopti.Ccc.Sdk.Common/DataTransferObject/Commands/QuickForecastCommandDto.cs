@@ -35,6 +35,18 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 		public bool UpdateStandardTemplates { get; set; }
 
 		/// <summary>
+		/// The smoothing style of the templates
+		/// </summary>
+		[DataMember]
+		public int SmoothingStyle { get; set; }
+
+		/// <summary>
+		/// The period to get the temlplates from
+		/// </summary>
+		[DataMember]
+		public DateOnlyPeriodDto TemplatePeriod { get; set; }
+
+		/// <summary>
 		/// The workloads to forecast
 		/// </summary>
 		[DataMember]

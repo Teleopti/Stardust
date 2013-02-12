@@ -694,21 +694,18 @@
     <Compile Include="Forecasting\Forms\JobHistory\JobHistoryDetailedView.Designer.cs">
       <DependentUpon>JobHistoryDetailedView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectTemplateSmoothing.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectTemplateSmoothing.Designer.cs">
+      <DependentUpon>SelectTemplateSmoothing.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRangeForTemplates.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRangeForTemplates.Designer.cs">
       <DependentUpon>SelectHistoricalDateRangeForTemplates.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastPeriodProvider.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastModule.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\IQuickForecastPeriodProvider.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\IQuickForecastView.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\IQuickForecastScenarioProvider.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\IWorkloadProvider.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastCommand.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\ScenarioModel.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastScenarioProvider.cs" />
     <Compile Include="Forecasting\Forms\QuickForecast\SelectTargetDatesAndScenario.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -727,8 +724,6 @@
     <Compile Include="Forecasting\Forms\QuickForecast\SelectWorkload.Designer.cs">
       <DependentUpon>SelectWorkload.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\QuickForecast\WorkloadModel.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\WorkloadProvider.cs" />
     <Compile Include="Forecasting\Forms\ForecasterChartSetting.cs" />
     <Compile Include="Forecasting\Forms\ForecastWorkflowDataService.cs" />
     <Compile Include="Forecasting\Forms\ForecastWorkflowModel.cs" />
@@ -2583,6 +2578,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\MultiSiteDistributionGrid.resx">
       <DependentUpon>MultiSiteDistributionGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\QuickForecast\SelectTemplateSmoothing.resx">
+      <DependentUpon>SelectTemplateSmoothing.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRangeForTemplates.resx">
       <DependentUpon>SelectHistoricalDateRangeForTemplates.cs</DependentUpon>

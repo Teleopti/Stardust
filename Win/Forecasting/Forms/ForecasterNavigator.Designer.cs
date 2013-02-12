@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripMenuItemQuickForecast.Name = "toolStripMenuItemQuickForecast";
 			this.toolStripMenuItemQuickForecast.Size = new System.Drawing.Size(229, 22);
 			this.toolStripMenuItemQuickForecast.Text = "xxQuickForecast";
-			this.toolStripMenuItemQuickForecast.Click += new System.EventHandler(this.toolStripMenuItemQuickForecast_Click);
+			this.toolStripMenuItemQuickForecast.Click += new System.EventHandler(this.toolStripMenuItemQuickForecastClick);
 			// 
 			// toolStripSeparatorExport
 			// 

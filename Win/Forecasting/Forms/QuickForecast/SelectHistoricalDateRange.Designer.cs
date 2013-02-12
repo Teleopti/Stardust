@@ -37,10 +37,9 @@
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.ColumnCount = 3;
+			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 147F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.reportDateFromToSelector1, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -74,7 +73,7 @@
 			this.label1.Location = new System.Drawing.Point(10, 69);
 			this.label1.Margin = new System.Windows.Forms.Padding(10);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(311, 146);
+			this.label1.Size = new System.Drawing.Size(469, 146);
 			this.label1.TabIndex = 1;
 			this.label1.Text = "xxThis is the dates from where the historical data is fetched. It is used for sea" +
     "sonality and trends.";

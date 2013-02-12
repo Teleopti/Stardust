@@ -42,6 +42,16 @@ namespace Teleopti.Interfaces.Messages.General
 		public DateOnlyPeriod TargetPeriod { get; set; }
 
 		/// <summary>
+		/// The smoothing style of the templates
+		/// </summary>
+		public int SmoothingStyle { get; set; }
+
+		/// <summary>
+		/// The period to get the temlplates from
+		/// </summary>
+		public DateOnlyPeriod TemplatePeriod { get; set; }
+
+		/// <summary>
 		/// If the standard templates should be updated
 		/// </summary>
 		public bool UpdateStandardTemplates { get; set; }

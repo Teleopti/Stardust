@@ -41,6 +41,8 @@ namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 		public DateOnlyPeriodDto TemplatePeriod { get; set; }
 
 		public bool UpdateStandardTemplates { get; set; }
+
+		public int SmoothingStyle { get; set; }
     }
 
 }

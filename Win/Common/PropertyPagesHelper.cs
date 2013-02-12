@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Win.Common
                            new SelectWorkload(skills),
 						   new SelectHistoricalDateRange(),
 						   new SelectHistoricalDateRangeForTemplates(),
-						   //smoothing
+						   new SelectTemplateSmoothing(),
 						   new SelectTargetDatesAndScenario()
                        };
 		}
