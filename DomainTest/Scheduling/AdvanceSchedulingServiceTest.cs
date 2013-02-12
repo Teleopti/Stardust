@@ -99,16 +99,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             //first sub method
             Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(scheduleDayProCollection);
             Expect.Call(_scheduleDayPro.Day).Return(dateOnly).Repeat.AtLeastOnce();
-            Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.Twice();
-            Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
+            Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+            Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
             Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProCollection);
-            Expect.Call(_scheduleMatrixPro.Person.Equals(person)).IgnoreArguments().Return((bool) true);
+            Expect.Call(_scheduleMatrixPro.Person.Equals(person)).IgnoreArguments().Return((bool)true).Repeat.AtLeastOnce();
+
 
             Expect.Call(_dynamicBlockFinder.ExtractBlockDays(dateOnly)).IgnoreArguments().Return(dateOnlyList);
             //Expect.Call(_teamExtractor.GetRandomTeam(dateOnly)).IgnoreArguments().Return(_groupPerson);
-            Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person}));
+            Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { _person }));
             Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-            Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(dateOnly, new List<IPerson> {person}, false,
+            Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(dateOnly, new List<IPerson> { person }, false,
                                                                     _schedulingOptions)).IgnoreArguments().Return(
                                                                         groupPersonList);
 
@@ -134,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                                                                       new WorkShiftLengthHintOption(),
                                                                       true,
                                                                       true)).IgnoreArguments().Return(_scheduleProjectionCache);
-            Expect.Call(() => _teamScheduling.Execute(dateOnly,dateOnlyList, matrixList, _groupPerson, _effectiveRestriction,
+            Expect.Call(() => _teamScheduling.Execute(dateOnly, dateOnlyList, matrixList, _groupPerson, _effectiveRestriction,
                                                       _scheduleProjectionCache, new List<DateOnly>())).IgnoreArguments();
         }
     }

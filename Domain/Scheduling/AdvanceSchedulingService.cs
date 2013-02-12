@@ -60,20 +60,26 @@ namespace Teleopti.Ccc.Domain.Scheduling
             DateOnly startDate = DateOnly.MinValue ;
             if(_matrixList!= null )
             {
-            	var openMatrixList = _matrixList.Where(x => x.Person.Equals(_matrixList[0].Person));
-            	foreach (var scheduleMatrixPro in openMatrixList)
-            	{
-					foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
-					{
-						if (startDate == DateOnly.MinValue && scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.DayOff)
-							startDate = scheduleDayPro.Day;
-						if (scheduleDayPro.DaySchedulePart().SignificantPart() == SchedulePartView.DayOff)
-							_dayOff.Add(scheduleDayPro.Day);
-						if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
-							_unLockedDays.Add(scheduleDayPro.Day);
-						_effectiveDays.Add(scheduleDayPro.Day);
-					}
-            	}
+                for (var i = 0; i < _matrixList.Count; i++)
+                {
+                    var openMatrixList = _matrixList.Where(x => x.Person.Equals(_matrixList[i].Person));
+                    foreach (var scheduleMatrixPro in openMatrixList)
+                    {
+                        foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
+                        {
+                            var daySignificantPart = scheduleDayPro.DaySchedulePart().SignificantPart();
+                            if (startDate == DateOnly.MinValue && (daySignificantPart != SchedulePartView.DayOff || daySignificantPart != SchedulePartView.ContractDayOff || daySignificantPart != SchedulePartView.FullDayAbsence))
+                                startDate = scheduleDayPro.Day;
+                            if (daySignificantPart == SchedulePartView.DayOff)
+                                _dayOff.Add(scheduleDayPro.Day);
+                            _effectiveDays.Add(scheduleDayPro.Day);
+                            if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
+                                _unLockedDays.Add(scheduleDayPro.Day);
+                        }
+                    }
+                }
+                
+
             }
             return startDate;
         }

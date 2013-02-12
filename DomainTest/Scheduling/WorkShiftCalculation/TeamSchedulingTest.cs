@@ -90,7 +90,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
                 IgnoreArguments().Return(true);
             Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
             Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
-            
+            Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(
+                new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
+
         }
 
         [Test]

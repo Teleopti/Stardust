@@ -70,7 +70,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
         private IScheduleDay AssignShiftProjection(DateOnly startDateOfBlock, IShiftProjectionCache shiftProjectionCache,
                                                     List<IScheduleDay> listOfDestinationScheduleDays, IScheduleMatrixPro matrix, DateOnly day)
         {
-            IScheduleDay destinationScheduleDay;
+            var scheduleDayPro = matrix.GetScheduleDayByKey(day);
+            if (!matrix.UnlockedDays.Contains(scheduleDayPro)) return null;
+            IScheduleDay destinationScheduleDay ;
             destinationScheduleDay = matrix.GetScheduleDayByKey(day).DaySchedulePart();
             var destinationSignificanceType = destinationScheduleDay.SignificantPart();
             if (destinationSignificanceType == SchedulePartView.DayOff ||
