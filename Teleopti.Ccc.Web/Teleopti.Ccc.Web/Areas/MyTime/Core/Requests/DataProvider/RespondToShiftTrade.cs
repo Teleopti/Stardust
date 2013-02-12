@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -8,14 +9,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestCheckSum;
-		private readonly IPersonRequestCheckAuthorization _personRequextCheckAuthorization;
+		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public RespondToShiftTrade(IPersonRequestRepository personRequestRepository, IShiftTradeRequestSetChecksum shiftTradeRequestCheckSum, IPersonRequestCheckAuthorization personRequextCheckAuthorization, ILoggedOnUser loggedOnUser)
+		public RespondToShiftTrade(IPersonRequestRepository personRequestRepository, IShiftTradeRequestSetChecksum shiftTradeRequestCheckSum, IPersonRequestCheckAuthorization personRequestCheckAuthorization, ILoggedOnUser loggedOnUser)
 		{
 			_personRequestRepository = personRequestRepository;
 			_shiftTradeRequestCheckSum = shiftTradeRequestCheckSum;
-			_personRequextCheckAuthorization = personRequextCheckAuthorization;
+			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_loggedOnUser = loggedOnUser;
 		}
 
@@ -23,14 +24,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			var request = _personRequestRepository.Find(requestId);
 			var shiftTrade = request.Request as IShiftTradeRequest;
-			shiftTrade.Accept(_loggedOnUser.CurrentUser(), _shiftTradeRequestCheckSum, _personRequextCheckAuthorization);
+			shiftTrade.Accept(_loggedOnUser.CurrentUser(), _shiftTradeRequestCheckSum, _personRequestCheckAuthorization);
 		}
 
 		public void Deny(Guid requestId)
 		{
-			var request = _personRequestRepository.Find(requestId);
-			var shiftTrade = request.Request as IShiftTradeRequest;
-			shiftTrade.Deny(_loggedOnUser.CurrentUser());
+			var personRequest = _personRequestRepository.Find(requestId);
+			personRequest.TrySetMessage(personRequest.GetMessage(new NoFormatting()));
+			personRequest.Deny(_loggedOnUser.CurrentUser(), "RequestDenyReasonOtherPart", _personRequestCheckAuthorization);
+
 		}
 	}
 }

@@ -165,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\MyTimeWebPersonRequestCheckAuthorization.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IRespondToShiftTrade.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\RespondToShiftTrade.cs" />
