@@ -1,4 +1,4 @@
-﻿-- =============================================
+-- =============================================
 -- Author:		DJ
 -- Create date: 2008-08-09
 -- Description:	Add needed SQL Logins (Needs Mixed Mode!)
