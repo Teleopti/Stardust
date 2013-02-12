@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Grouping;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
     	private IList<IGroupPageLight> _groupPages;
         private IList<IActivity> _availableActivity;
 		private IList<IGroupPageLight> _groupPagesFairness;
+        private IList<IGroupPageLight> _groupPagesLevelingPer;
         private IList<IScheduleTag> _scheduleTags;
     	private ISchedulerGroupPagesProvider _groupPagesProvider;
 
@@ -67,6 +69,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			// inga skill
 			_groupPages = _groupPagesProvider.GetGroups(false);
 			_groupPagesFairness = _groupPages.ToList();
+		    //adding an extra entry for single Agent
+            _groupPagesLevelingPer = _groupPages.ToList();
+		    var singleAgentEntry = new GroupPageLight();
+		    singleAgentEntry.Key = "SingleAgentTeam";
+		    singleAgentEntry.Name = "Single Agent Team";
+            _groupPagesLevelingPer.Add(singleAgentEntry );
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             _dataLoaded = true;
         }
@@ -199,6 +207,17 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			{
                 comboBoxGrouping.SelectedValue  = _localSchedulingOptions.GroupOnGroupPage.Key ;
 			}
+
+            comboBoxGroupingLevelingPer.DataSource = _groupPagesLevelingPer;
+            comboBoxGroupingLevelingPer.DisplayMember = "Name";
+            comboBoxGroupingLevelingPer.ValueMember = "Key";
+            if (_localSchedulingOptions.GroupOnGroupPageForLevelingPer != null)
+                comboBoxGroupingLevelingPer.SelectedValue = _localSchedulingOptions.GroupOnGroupPageForLevelingPer.Key;
+            else
+            {
+                comboBoxGroupingLevelingPer.SelectedValue = "SingleAgentTeam";
+            }
+
 		}
         private void initCommonActivity()
 		{
@@ -256,6 +275,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling;
         	_schedulingOptions.UseGroupScheduling = _localSchedulingOptions.UseGroupScheduling;
         	_schedulingOptions.GroupOnGroupPage = _localSchedulingOptions.GroupOnGroupPage;
+            _schedulingOptions.GroupOnGroupPageForLevelingPer = _localSchedulingOptions.GroupOnGroupPageForLevelingPer;
             _schedulingOptions.DoNotBreakMaxStaffing = _localSchedulingOptions.DoNotBreakMaxStaffing;
 			_schedulingOptions.GroupPageForShiftCategoryFairness = _localSchedulingOptions.GroupPageForShiftCategoryFairness;
         	_schedulingOptions.UseMaxSeats = _localSchedulingOptions.UseMaxSeats;
@@ -320,6 +340,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
 			_localSchedulingOptions.UseGroupScheduling = checkBoxUseGroupScheduling.Checked;
         	_localSchedulingOptions.GroupOnGroupPage = (IGroupPageLight)comboBoxGrouping.SelectedItem;
+            _localSchedulingOptions.GroupOnGroupPageForLevelingPer  = (IGroupPageLight)comboBoxGroupingLevelingPer .SelectedItem;
 			_localSchedulingOptions.GroupPageForShiftCategoryFairness = (IGroupPageLight)comboBoxGroupingFairness.SelectedItem;
 			_localSchedulingOptions.DoNotBreakMaxStaffing = checkBoxDoNotBreakMaxSeats.Checked;
         	_localSchedulingOptions.UseMaxSeats = checkBoxUseMaxSeats.Checked;

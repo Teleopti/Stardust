@@ -108,6 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulingOptions.UseGroupSchedulingCommonCategory).Return(false);
             Expect.Call(_schedulingOptions.UseCommonActivity ).Return(false);
             Expect.Call(_schedulingOptions.BlockFinderTypeForAdvanceScheduling ).Return(BlockFinderType.BetweenDayOff);
+            Expect.Call(_schedulingOptions.GroupOnGroupPageForLevelingPer ).Return(_groupPageLight);
         }
 
 
@@ -126,6 +127,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(() => _schedulingOptions.UseGroupSchedulingCommonCategory = false);
             Expect.Call(() => _schedulingOptions.UseCommonActivity  = false);
             Expect.Call(() => _schedulingOptions.Fairness = _fairnessValue);
+
+            Expect.Call(() => _schedulingOptions.GroupOnGroupPageForLevelingPer  = _groupPageLight);
 
             Expect.Call(() => _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff);
         }

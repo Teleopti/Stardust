@@ -345,5 +345,10 @@ namespace Teleopti.Interfaces.Domain
         /// Block finder service for advance scheduling service
         /// </summary>
         BlockFinderType BlockFinderTypeForAdvanceScheduling { get; set; }
+
+        /// <summary>
+        /// Group page to be used for leveling oer
+        /// </summary>
+        IGroupPageLight GroupOnGroupPageForLevelingPer { get; set; }
     }
 }

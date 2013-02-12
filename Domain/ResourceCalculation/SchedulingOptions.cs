@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool UseStudentAvailability { get; set; }
 		public bool UseGroupScheduling { get; set; }
 		public IGroupPageLight GroupOnGroupPage { get; set; }
+        public IGroupPageLight GroupOnGroupPageForLevelingPer { get; set; }
         public bool DoNotBreakMaxStaffing { get; set; }
         public IGroupPageLight GroupPageForShiftCategoryFairness { get; set; }
         public int RefreshRate { get; set; }
@@ -58,6 +59,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool UseCalendarWeekAsBlock{get;set;}
 
         private BlockFinderType _blockFinderTypeForAdvanceScheduling;
+        
         public BlockFinderType BlockFinderTypeForAdvanceScheduling
         {
             get { return _blockFinderTypeForAdvanceScheduling; }
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			new SchedulingOptionsGeneralPersonalSetting().MapTo(this, new List<IScheduleTag>());
 			new SchedulingOptionsAdvancedPersonalSetting().MapTo(this, new List<IShiftCategory>());
-            new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>(),new List<IActivity>( ));
+            new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>(), new List<IActivity>());
 		}
 
     	public BlockFinderType UseBlockScheduling

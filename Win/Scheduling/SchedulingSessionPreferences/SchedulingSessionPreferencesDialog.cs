@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private readonly bool _backToLegal;
     	private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
     	private readonly IList<IGroupPageLight> _groupPages;
+        private readonly IList<IGroupPageLight> _groupPagesForLevelingPer;
         private readonly IList<IScheduleTag> _scheduleTags;
         private readonly string _settingValue;
         private readonly IList<IActivity> _availableActivity;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _backToLegal = backToLegal;
         	_groupPagesProvider = groupPagesProvider;
         	_groupPages = groupPagesProvider.GetGroups(true);
+            _groupPagesForLevelingPer = groupPagesProvider.GetGroups(true);
             _scheduleTags = scheduleTags;
             _settingValue = settingValue;
 		    _availableActivity = availableActivity;

@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private BlockFinderType _blockFinderType = BlockFinderType.None;
         private bool _useGroupScheduling;
         private string _groupSchedulingGroupPageKey;
+        private string _groupSchedlingForLevelingPerKey;
         private Guid? _scheduleTagId;
         private bool _useGroupSchedulingCommonStart;
         private bool _useGroupSchedulingCommonEnd;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private int _screenRefreshRate = 10;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags, IList<IGroupPageLight> groupPages, IList<IActivity > activityList )
+        public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags, IList<IGroupPageLight> groupPages, IList<IActivity> activityList)
         {
             foreach (var scheduleTag in scheduleTags)
             {
@@ -45,6 +46,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 if (_groupSchedulingGroupPageKey == groupPage.Key)
                     schedulingOptions.GroupOnGroupPage = groupPage;
+            }
+
+            //for leve per
+            foreach (var groupPage in groupPages)
+            {
+                if (_groupSchedlingForLevelingPerKey  == groupPage.Key)
+                    schedulingOptions.GroupOnGroupPageForLevelingPer = groupPage;
             }
             
             schedulingOptions.UseGroupSchedulingCommonStart = _useGroupSchedulingCommonStart;
@@ -90,6 +98,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _resourceCalculateFrequency = schedulingOptions.ResourceCalculateFrequency;
             _screenRefreshRate = schedulingOptions.RefreshRate;
             _commonActivtyId = schedulingOptions.CommonActivity != null ? schedulingOptions.CommonActivity.Id : null;
+            _groupSchedlingForLevelingPerKey = schedulingOptions.GroupOnGroupPageForLevelingPer.Key;
         }
     }
 }
