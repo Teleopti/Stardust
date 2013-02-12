@@ -92,6 +92,7 @@
             this.checkBoxUseMinimumPersons = new System.Windows.Forms.CheckBox();
             this.checkBoxDoNotBreakMaxSeats = new System.Windows.Forms.CheckBox();
             this.checkBoxUseAverageShiftLengths = new System.Windows.Forms.CheckBox();
+            this.comboBoxGroupingLevelingPer = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.tabControl1.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -117,6 +118,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupingLevelingPer)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -511,6 +513,7 @@
             this.tableLayoutPanel4.Controls.Add(this.comboBoxGrouping, 2, 5);
             this.tableLayoutPanel4.Controls.Add(this.radioButtonSchedulePeriodAdvScheduling, 1, 4);
             this.tableLayoutPanel4.Controls.Add(this.radioButtonBetweenDaysOffAdvScheduling, 2, 4);
+            this.tableLayoutPanel4.Controls.Add(this.comboBoxGroupingLevelingPer, 2, 3);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -965,6 +968,18 @@
             this.checkBoxUseAverageShiftLengths.Text = "xxUseAverageShiftLengths";
             this.checkBoxUseAverageShiftLengths.UseVisualStyleBackColor = true;
             // 
+            // comboBoxGroupingLevelingPer
+            // 
+            this.comboBoxGroupingLevelingPer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            this.comboBoxGroupingLevelingPer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxGroupingLevelingPer.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
+            this.comboBoxGroupingLevelingPer.Location = new System.Drawing.Point(165, 78);
+            this.comboBoxGroupingLevelingPer.Name = "comboBoxGroupingLevelingPer";
+            this.comboBoxGroupingLevelingPer.Size = new System.Drawing.Size(173, 21);
+            this.comboBoxGroupingLevelingPer.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.comboBoxGroupingLevelingPer.TabIndex = 44;
+            this.comboBoxGroupingLevelingPer.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingLevelingPer_SelectedIndexChanged);
+            // 
             // SchedulingSessionPreferencesTabPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1008,6 +1023,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).EndInit();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupingLevelingPer)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1077,5 +1093,6 @@
         private System.Windows.Forms.CheckBox checkBoxLevellingPerBlockScheduling;
         private System.Windows.Forms.RadioButton radioButtonSchedulePeriodAdvScheduling;
         private System.Windows.Forms.RadioButton radioButtonBetweenDaysOffAdvScheduling;
+        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGroupingLevelingPer;
     }
 }

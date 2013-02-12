@@ -700,15 +700,20 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             }
             radioButtonSchedulePeriodAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             radioButtonBetweenDaysOffAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            comboBoxGroupingLevelingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             checkBoxUseGroupScheduling.Enabled  = !checkBoxLevellingPerBlockScheduling.Checked;
             checkBoxUseBlockScheduling.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
-            //checkBoxUseShiftCategory.Enabled = !checkBoxUseBlockScheduling.Checked;
-            //comboBoxAdvShiftCategory.Enabled = !checkBoxUseBlockScheduling.Checked;
-            //radioButtonSchedulePeriod.Enabled = checkBoxUseBlockScheduling.Checked;
-            //radioButtonBetweenDayOff.Enabled = checkBoxUseBlockScheduling.Checked;
-            //checkBoxUseGroupScheduling.Enabled = !checkBoxUseBlockScheduling.Checked;
-            
+           
                 
+        }
+
+        private void comboBoxGroupingLevelingPer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_dataLoaded)
+            {
+                getDataFromControls();
+                setDataInControls();
+            }
         }
     }
     
