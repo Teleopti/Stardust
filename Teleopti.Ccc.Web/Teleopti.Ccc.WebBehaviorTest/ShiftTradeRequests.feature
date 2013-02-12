@@ -252,33 +252,3 @@ Given I have the role 'Full access to mytime'
 	When I click on the request
 	Then I should see '2010-12-24' as the date of the request target
 	And I should see '2010-12-28' as the date of the request source
-
-
-Scenario: Show schedules for the shift trade
-Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category		| Day	           |
-	And OtherAgent have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 08:00 |
-	| EndTime               | 2030-01-01 18:00 |
-	| Shift category		| Day	           |
-	And I have created a shift trade request
-	| Field		| Value         |
-	| To			| OtherAgent	 |
-	| DateTo		| 2030-01-01    |
-	| DateFrom	| 2030-01-01    |
-	And I am viewing requests
-	When I click on the request
-	Then I should see a schedule that starts at '06:00' and ends at '16:00'
-
-
-
-
-	
-

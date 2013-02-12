@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private void DoPostSetup(IPerson person)
 		{
-			_postSetups.ForEach(s => s.Apply(person));
+			GlobalUnitOfWorkState.UnitOfWorkAction(uow => _postSetups.ForEach(s => s.Apply(person, uow)));
 		}
 
 		private void SetupAndPersistPerson(IPerson person)
