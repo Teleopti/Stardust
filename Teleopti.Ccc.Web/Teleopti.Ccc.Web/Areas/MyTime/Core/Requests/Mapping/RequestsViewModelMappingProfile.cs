@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				                                            		return start.TimeOfDay == TimeSpan.Zero &&
 				                                            		       end.TimeOfDay == allDayEndDateTime.TimeOfDay;
 				                                            	}))
-				.ForMember(d => d.IsCreatedByUser, o => o.MapFrom(s => s.Request.PersonFrom==_loggedOnUser.Invoke().CurrentUser()))
-				.ForMember(d=> d.From, o=>o.MapFrom(s=>s.Request.PersonFrom.Name))
-				.ForMember(d=> d.To, o=>o.MapFrom(s=>s.Request.PersonTo.Name))
+				.ForMember(d => d.IsCreatedByUser, o => o.MapFrom(s => s.Request.PersonFrom == _loggedOnUser.Invoke().CurrentUser()))
+				.ForMember(d => d.From, o => o.MapFrom(s => s.Request.PersonFrom == null ? string.Empty : s.Request.PersonFrom.Name.ToString()))
+				.ForMember(d => d.To, o => o.MapFrom(s => s.Request.PersonTo == null ? string.Empty : s.Request.PersonTo.Name.ToString()))
 				.ForMember(d => d.DenyReason, o => o.MapFrom(s =>
 				                                             	{
 				                                             		UserTexts.Resources.ResourceManager.IgnoreCase = true;
