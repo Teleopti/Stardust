@@ -4,7 +4,7 @@
 
 Describe "Find a string in a file and replace it with another string" {
 
-	It "should fail throw exeption if file not exists" {
+	It "should throw exeption if file not exists" {
 		[bool] $isOk = $false;
 		try {
 		  FindAndReplace "dontexist.dontexist" "searchstring" "replacestring"
@@ -13,28 +13,34 @@ Describe "Find a string in a file and replace it with another string" {
 		{
             $isOk = $true;
 		}
-		$isOk.should.be($true)
+		$isOk | Should Be $true
 	}
     
 	It "should replace string" {
-        Setup -File "forTest.txt" "gurka"
-        FindAndReplace "$TestDrive\forTest.txt" "gurka" "banan"
-        [string] $testValue = Get-Content "$TestDrive\forTest.txt"
-        $testValue.should.be("banan")
+	    $testPath="TestDrive:\test.txt"
+		Set-Content $testPath -value "gurka"
+
+        FindAndReplace $testPath "gurka" "banan"
+        [string] $testValue = Get-Content $testPath
+        $testValue | Should Be "banan"
 	}
     
 	It "should replace some CApITaL letters in string" {
-        Setup -File "forTest.txt" "gurka"
-        FindAndReplace "$TestDrive\forTest.txt" "GuRkA" "banan"
-        [string] $testValue = Get-Content "$TestDrive\forTest.txt"
-        $testValue.should.be("banan")
+	    $testPath="TestDrive:\test.txt"
+		Set-Content $testPath -value "gurka"
+		
+        FindAndReplace "$testPath" "GuRkA" "banan"
+        [string] $testValue = Get-Content "$testPath"
+        $testValue | Should Be "banan"
 	}
     
-	It "should not replace text fi not present" {
-        Setup -File "forTest.txt" "gurka"
-        FindAndReplace "$TestDrive\forTest.txt" "GzRkA" "banan"
-        [string] $testValue = Get-Content "$TestDrive\forTest.txt"
-        $testValue.should.be("gurka")
+	It "should not replace text if not present" {
+	    $testPath="TestDrive:\test.txt"
+		Set-Content $testPath -value "gurka"
+		
+        FindAndReplace "$testPath" "GzRkA" "banan"
+        [string] $testValue = Get-Content "$testPath"
+        $testValue | Should Be "gurka"
 	}    
 
 }
