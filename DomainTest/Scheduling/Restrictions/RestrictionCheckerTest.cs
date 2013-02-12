@@ -959,7 +959,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
 
-			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -974,12 +974,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 
 				Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-            	Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
+            	//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1015,7 +1015,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
 			
-			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1029,12 +1029,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-            	Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
+            	//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1069,7 +1069,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1083,12 +1083,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
 					_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-				Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
+				//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1125,7 +1125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1139,12 +1139,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(period);
-                Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     period.EndDateTime.Subtract(period.StartDateTime));
-				Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
+				//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1181,7 +1181,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1195,12 +1195,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(period);
-                Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     period.EndDateTime.Subtract(period.StartDateTime));
-            	Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
+            	//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1236,7 +1236,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1250,12 +1250,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-            	Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
+            	//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1292,7 +1292,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1306,12 +1306,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-				Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
+				//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1326,14 +1326,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using (_mockRepository.Record())
             {
-				var layerCollection = CreateLayerCollection();
+				//var layerCollection = CreateLayerCollection();
 				var assignment = CreatePersonAssignment();
 				var dayRestriction = CreatePreferenceRestriction();
 
 				IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
 				IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
 				var dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-				var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+				//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
 				Expect.Call(_schedulePartMock.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment }));
 				Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
@@ -1346,13 +1346,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 				Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
 				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-				Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+				//Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
 
 				Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
 					new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>())).Repeat.AtLeastOnce();
 				Expect.Call(_visualLayerCollection.ContractTime()).Return(
 					_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-				Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator()).Repeat.Any();
+				//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator()).Repeat.Any();
             }
 
             using (_mockRepository.Playback())
@@ -1392,13 +1392,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         }
 
 
-        private IList<IVisualLayer> CreateLayerCollection()
-        {
-            IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
-            layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
+		//private IList<IVisualLayer> CreateLayerCollection()
+		//{
+		//    IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
+		//    layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
 
-            return layerCollection;
-        }
+		//    return layerCollection;
+		//}
 
         [Test]
         public void VerifyCanCalculateIllegalShiftCategoryPreferencePermissionState()
@@ -1427,7 +1427,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1442,12 +1442,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-            	Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
+            	//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1482,7 +1482,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1496,12 +1496,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
                     new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
                     _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-            	Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
+            	//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
             }
 
             using (_mockRepository.Playback())
@@ -1511,118 +1511,262 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
         }
 
-        [Test]
-        public void VerifyCanCalculateLegalActivityPreferencePermissionState()
-        {
-            IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
-            layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldGetPermissionStateSatisfiedOnActivity()
+		{
+			var start = new DateTime(2006, 12, 23, 12, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2006, 12, 23, 13, 0, 0, DateTimeKind.Utc);
+			var layerPeriod = new DateTimePeriod(start, end);
+			var scheduleDay = _mockRepository.StrictMock<IScheduleDay>();
+			var layer = _mockRepository.StrictMock<IVisualLayer>();
+			var layerCollection = new List<IVisualLayer> {layer};
+			IMainShift mainShift = new MainShift(_shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
+			assignment.SetMainShift(mainShift);
+			var preferenceRestriction = new PreferenceRestriction();
+			var activityRestriction = new ActivityRestriction(_activity);
+			activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(12, 0, 0), new TimeSpan(13, 0, 0));
+			activityRestriction.EndTimeLimitation = new EndTimeLimitation(new TimeSpan(13, 0, 0), new TimeSpan(14, 0, 0));
+			activityRestriction.WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(1, 0, 0), new TimeSpan(1, 0, 0));
+			preferenceRestriction.AddActivityRestriction(activityRestriction);
+			var preferenceDay = new PreferenceDay(_person, new DateOnly(_dateTime), preferenceRestriction);
+			IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { preferenceDay };
+			var restrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
+			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+
+			using(_mockRepository.Record())
+			{
+				Expect.Call(scheduleDay.PersistableScheduleDataCollection()).Return(restrictions).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call((scheduleDay.IsScheduled())).Return(true);
+				Expect.Call(scheduleDay.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+				Expect.Call(scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.HasLayers).Return(true);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(scheduleDay.Person).Return(_person);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
+				Expect.Call(scheduleDay.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment }));
+				Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+				Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator()).Repeat.AtLeastOnce();
+				Expect.Call(filteredVisualLayers.Count()).Return(1);
+				Expect.Call(layer.Period).Return(layerPeriod).Repeat.AtLeastOnce();
+			}
+
+			using(_mockRepository.Playback())
+			{
+				_target = new RestrictionChecker(scheduleDay);
+				var result = _target.CheckPreference();
+				Assert.AreEqual(PermissionState.Satisfied, result);
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldGetPermissionStateBrokenOnActivity()
+		{
+			var start = new DateTime(2006, 12, 23, 12, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2006, 12, 23, 13, 0, 0, DateTimeKind.Utc);
+			var layerPeriod = new DateTimePeriod(start, end);
+			var scheduleDay = _mockRepository.StrictMock<IScheduleDay>();
+			var layer = _mockRepository.StrictMock<IVisualLayer>();
+			var layerCollection = new List<IVisualLayer> { layer };
+			IMainShift mainShift = new MainShift(_shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
+			assignment.SetMainShift(mainShift);
+			var preferenceRestriction = new PreferenceRestriction();
+			var activityRestriction = new ActivityRestriction(_activity);
+			activityRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(11, 0, 0), new TimeSpan(11, 30, 0));
+			activityRestriction.EndTimeLimitation = new EndTimeLimitation(new TimeSpan(14, 0, 0), new TimeSpan(14, 30, 0));
+			activityRestriction.WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(1, 0, 0), new TimeSpan(1, 30, 0));
+			preferenceRestriction.AddActivityRestriction(activityRestriction);
+			var preferenceDay = new PreferenceDay(_person, new DateOnly(_dateTime), preferenceRestriction);
+			IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { preferenceDay };
+			var restrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
+			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+
+			using (_mockRepository.Record())
+			{
+				Expect.Call(scheduleDay.PersistableScheduleDataCollection()).Return(restrictions).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call((scheduleDay.IsScheduled())).Return(true);
+				Expect.Call(scheduleDay.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+				Expect.Call(scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.HasLayers).Return(true);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(scheduleDay.Person).Return(_person);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
+				Expect.Call(scheduleDay.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment }));
+				Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+				Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator()).Repeat.AtLeastOnce();
+				Expect.Call(layer.Period).Return(layerPeriod).Repeat.AtLeastOnce();
+				Expect.Call(filteredVisualLayers.Count()).Return(1);
+			}
+
+			using (_mockRepository.Playback())
+			{
+				_target = new RestrictionChecker(scheduleDay);
+				var result = _target.CheckPreference();
+				Assert.AreEqual(PermissionState.Broken, result);
+			}
+
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldGetPermissionStateBrokenOnActivityWhenNoPreferredActivityInShift()
+		{
+			var scheduleDay = _mockRepository.StrictMock<IScheduleDay>();
+			var layerCollection = new List<IVisualLayer>();
+			IMainShift mainShift = new MainShift(_shiftCategory);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
+			assignment.SetMainShift(mainShift);
+			var preferenceRestriction = new PreferenceRestriction();
+			var activityRestriction = new ActivityRestriction(_activity);
+			preferenceRestriction.AddActivityRestriction(activityRestriction);
+			var preferenceDay = new PreferenceDay(_person, new DateOnly(_dateTime), preferenceRestriction);
+			IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { preferenceDay };
+			var restrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
+			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+
+			using (_mockRepository.Record())
+			{
+				Expect.Call(scheduleDay.PersistableScheduleDataCollection()).Return(restrictions).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call((scheduleDay.IsScheduled())).Return(true);
+				Expect.Call(scheduleDay.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+				Expect.Call(scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.HasLayers).Return(true);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(scheduleDay.Person).Return(_person);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
+				Expect.Call(scheduleDay.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment }));
+				Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+				Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator()).Repeat.AtLeastOnce();
+				Expect.Call(filteredVisualLayers.Count()).Return(0);
+			}
+
+			using (_mockRepository.Playback())
+			{
+				_target = new RestrictionChecker(scheduleDay);
+				var result = _target.CheckPreference();
+				Assert.AreEqual(PermissionState.Broken, result);
+			}
+
+		}
+
+		//[Test]
+		//public void VerifyCanCalculateLegalActivityPreferencePermissionState()
+		//{
+		//    IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
+		//    layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
             
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+		//    IMainShift mainShift = new MainShift(_shiftCategory);
+		//    IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
+		//    assignment.SetMainShift(mainShift);
 
 
-            PreferenceRestriction dayRestriction = new PreferenceRestriction
-            {
-                StartTimeLimitation =
-                    new StartTimeLimitation(
-                    new TimeSpan(6, 0, 0),
-                    new TimeSpan(20, 0, 0)),
-                EndTimeLimitation =
-                new EndTimeLimitation(
-                    new TimeSpan(6, 0, 0),
-                    new TimeSpan(20, 0, 0)), 
-                ShiftCategory = _shiftCategory
-            };
-            dayRestriction.AddActivityRestriction(new ActivityRestriction(_activity));
-            IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
-            IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
-            ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+		//    PreferenceRestriction dayRestriction = new PreferenceRestriction
+		//    {
+		//        StartTimeLimitation =
+		//            new StartTimeLimitation(
+		//            new TimeSpan(6, 0, 0),
+		//            new TimeSpan(20, 0, 0)),
+		//        EndTimeLimitation =
+		//        new EndTimeLimitation(
+		//            new TimeSpan(6, 0, 0),
+		//            new TimeSpan(20, 0, 0)), 
+		//        ShiftCategory = _shiftCategory
+		//    };
+		//    dayRestriction.AddActivityRestriction(new ActivityRestriction(_activity));
+		//    IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
+		//    IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
+		//    ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
+		//    var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
-            using (_mockRepository.Record())
-            {
-                Expect.Call(_schedulePartMock.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment }));
-                Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
-                Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
-				Expect.Call(_schedulePartMock.SignificantPart()).Return(SchedulePartView.None);
-				Expect.Call((_schedulePartMock.IsScheduled())).Return(false);
+		//    using (_mockRepository.Record())
+		//    {
+		//        Expect.Call(_schedulePartMock.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment }));
+		//        Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
+		//        Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
+		//        Expect.Call(_schedulePartMock.SignificantPart()).Return(SchedulePartView.None);
+		//        Expect.Call((_schedulePartMock.IsScheduled())).Return(false);
 
-                Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-                Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
-                Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
-                Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
-                    new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-                Expect.Call(_visualLayerCollection.ContractTime()).Return(
-                    _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-				Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
-            }
+		//        Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+		//        Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
+		//        Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
+		//        Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+		//        Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+		//        Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
+		//            new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+		//        Expect.Call(_visualLayerCollection.ContractTime()).Return(
+		//            _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
+		//        Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
+		//    }
 
-            using (_mockRepository.Playback())
-            {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckPreference());
-            }
-        }
+		//    using (_mockRepository.Playback())
+		//    {
+		//        _target = new RestrictionChecker(_schedulePartMock);
+		//        Assert.AreEqual(PermissionState.Satisfied, _target.CheckPreference());
+		//    }
+		//}
 
-        [Test]
-        public void VerifyCanCalculateIllegalActivityPreferencePermissionState()
-        {
-            IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
-            layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
+		//[Test]
+		//public void VerifyCanCalculateIllegalActivityPreferencePermissionState()
+		//{
+		//    IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
+		//    layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
 
-            IMainShift mainShift = new MainShift(_shiftCategory);
-            IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
-            assignment.SetMainShift(mainShift);
+		//    IMainShift mainShift = new MainShift(_shiftCategory);
+		//    IPersonAssignment assignment = PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario);
+		//    assignment.SetMainShift(mainShift);
 
-            IPreferenceRestriction dayRestriction = new PreferenceRestriction
-            {
-                StartTimeLimitation =
-                    new StartTimeLimitation(
-                    new TimeSpan(6, 0, 0),
-                    new TimeSpan(20, 0, 0)),
-                EndTimeLimitation =
-                new EndTimeLimitation(
-                    new TimeSpan(6, 0, 0),
-                    new TimeSpan(20, 0, 0)),
-                ShiftCategory = _shiftCategory
+		//    IPreferenceRestriction dayRestriction = new PreferenceRestriction
+		//    {
+		//        StartTimeLimitation =
+		//            new StartTimeLimitation(
+		//            new TimeSpan(6, 0, 0),
+		//            new TimeSpan(20, 0, 0)),
+		//        EndTimeLimitation =
+		//        new EndTimeLimitation(
+		//            new TimeSpan(6, 0, 0),
+		//            new TimeSpan(20, 0, 0)),
+		//        ShiftCategory = _shiftCategory
 
-            };
-            dayRestriction.AddActivityRestriction(new ActivityRestriction(ActivityFactory.CreateActivity("WrongActivity")));
+		//    };
+		//    dayRestriction.AddActivityRestriction(new ActivityRestriction(ActivityFactory.CreateActivity("WrongActivity")));
 
-            IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
-            IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
-            ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+		//    IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
+		//    IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
+		//    ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
+		//    var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
-            using (_mockRepository.Record())
-            {
-                Expect.Call(_schedulePartMock.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment }));
-                Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
-                Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
-                Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
-				Expect.Call(_schedulePartMock.SignificantPart()).Return(SchedulePartView.None);
-				Expect.Call((_schedulePartMock.IsScheduled())).Return(false);
+		//    using (_mockRepository.Record())
+		//    {
+		//        Expect.Call(_schedulePartMock.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { assignment }));
+		//        Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
+		//        Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
+		//        Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
+		//        Expect.Call(_schedulePartMock.SignificantPart()).Return(SchedulePartView.None);
+		//        Expect.Call((_schedulePartMock.IsScheduled())).Return(false);
 
-                Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-                Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
-                Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
-                    new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>())).Repeat.AtLeastOnce();
-                Expect.Call(_visualLayerCollection.ContractTime()).Return(
-                    _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-            	Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
-            }
+		//        Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+		//        Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
+		//        Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+		//        Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+		//        Expect.Call(_schedulePartMock.PersonDayOffCollection()).Return(
+		//            new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>())).Repeat.AtLeastOnce();
+		//        Expect.Call(_visualLayerCollection.ContractTime()).Return(
+		//            _dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
+		//        Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
+		//    }
 
-            using (_mockRepository.Playback())
-            {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference());
-            }
-        }
+		//    using (_mockRepository.Playback())
+		//    {
+		//        _target = new RestrictionChecker(_schedulePartMock);
+		//        Assert.AreEqual(PermissionState.Broken, _target.CheckPreference());
+		//    }
+		//}
 
         [Test]
         public void VerifyCanCalculateLegalDayOffPreferencePermissionState()
@@ -1651,12 +1795,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 ShiftCategory = _shiftCategory, DayOffTemplate = dayOffTemplate
 
             };
-            dayRestriction.AddActivityRestriction(new ActivityRestriction(_activity));
+            //dayRestriction.AddActivityRestriction(new ActivityRestriction(_activity));
 
             IPreferenceDay personRestriction = new PreferenceDay(_person, new DateOnly(_dateTime), dayRestriction);
             IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
             ReadOnlyCollection<IPersistableScheduleData> dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
-			var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
+			//var filteredVisualLayers = _mockRepository.StrictMock<IFilteredVisualLayerCollection>();
 
             using (_mockRepository.Record())
             {
@@ -1670,10 +1814,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
+                //Expect.Call(_visualLayerCollection.FilterLayers(null)).Return(filteredVisualLayers).IgnoreArguments();
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(
 					_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
-				Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator());
+				//Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator()).Repeat.AtLeastOnce();
             }
 
             using (_mockRepository.Playback())
