@@ -57,8 +57,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             // ribbonControlAdvFixed1
             // 
             this.ribbonControlAdvFixed1.Location = new System.Drawing.Point(1, 0);
+            this.ribbonControlAdvFixed1.MaximizeToolTip = "Maximize Ribbon";
             this.ribbonControlAdvFixed1.MenuButtonText = "";
             this.ribbonControlAdvFixed1.MenuButtonVisible = false;
+            this.ribbonControlAdvFixed1.MinimizeToolTip = "Minimize Ribbon";
             this.ribbonControlAdvFixed1.Name = "ribbonControlAdvFixed1";
             // 
             // ribbonControlAdvFixed1.OfficeMenu
@@ -67,8 +69,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             this.ribbonControlAdvFixed1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
             this.ribbonControlAdvFixed1.QuickPanelVisible = false;
             this.ribbonControlAdvFixed1.SelectedTab = null;
-            this.ribbonControlAdvFixed1.ShowMinimizeButton = false;
-            this.ribbonControlAdvFixed1.Size = new System.Drawing.Size(497, 33);
+            this.ribbonControlAdvFixed1.Size = new System.Drawing.Size(665, 33);
             this.ribbonControlAdvFixed1.SystemText.QuickAccessDialogDropDownName = "Start menu";
             this.ribbonControlAdvFixed1.TabIndex = 0;
             this.ribbonControlAdvFixed1.Text = "xxImportForecast";
@@ -76,9 +77,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.03279F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 61.96721F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 189F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 191F));
             this.tableLayoutPanel1.Controls.Add(this.radioButtonImportStaffing, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblSkillNameColon, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.txtSkillName, 1, 0);
@@ -100,19 +101,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(487, 143);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(655, 143);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // radioButtonImportStaffing
             // 
             this.radioButtonImportStaffing.AutoSize = true;
-            this.radioButtonImportStaffing.Location = new System.Drawing.Point(300, 28);
+            this.radioButtonImportStaffing.Location = new System.Drawing.Point(466, 28);
             this.radioButtonImportStaffing.Name = "radioButtonImportStaffing";
             this.radioButtonImportStaffing.Size = new System.Drawing.Size(100, 17);
             this.radioButtonImportStaffing.TabIndex = 1;
             this.radioButtonImportStaffing.Text = "xxImportStaffing";
             this.radioButtonImportStaffing.UseVisualStyleBackColor = true;
-            this.radioButtonImportStaffing.CheckedChanged += new System.EventHandler(radioButtonImportStaffing_CheckedChanged);
+            this.radioButtonImportStaffing.CheckedChanged += new System.EventHandler(this.radioButtonImportStaffing_CheckedChanged);
             // 
             // lblSkillNameColon
             // 
@@ -134,7 +135,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             this.txtSkillName.BackColor = System.Drawing.Color.Transparent;
             this.txtSkillName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSkillName.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtSkillName.Location = new System.Drawing.Point(116, 6);
+            this.txtSkillName.Location = new System.Drawing.Point(142, 6);
             this.txtSkillName.Name = "txtSkillName";
             this.txtSkillName.Size = new System.Drawing.Size(0, 13);
             this.txtSkillName.TabIndex = 1;
@@ -154,14 +155,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             this.gradientPanelImportForecast.Location = new System.Drawing.Point(0, 106);
             this.gradientPanelImportForecast.Margin = new System.Windows.Forms.Padding(0);
             this.gradientPanelImportForecast.Name = "gradientPanelImportForecast";
-            this.gradientPanelImportForecast.Size = new System.Drawing.Size(487, 36);
+            this.gradientPanelImportForecast.Size = new System.Drawing.Size(655, 36);
             this.gradientPanelImportForecast.TabIndex = 1;
             // 
             // buttonAdvClose
             // 
             this.buttonAdvClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.buttonAdvClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonAdvClose.Location = new System.Drawing.Point(375, 7);
+            this.buttonAdvClose.Location = new System.Drawing.Point(539, 7);
             this.buttonAdvClose.Name = "buttonAdvClose";
             this.buttonAdvClose.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
             this.buttonAdvClose.Size = new System.Drawing.Size(87, 23);
@@ -174,7 +175,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             this.buttonAdvImport.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.buttonAdvImport.BackColor = System.Drawing.Color.Transparent;
             this.buttonAdvImport.Enabled = false;
-            this.buttonAdvImport.Location = new System.Drawing.Point(282, 7);
+            this.buttonAdvImport.Location = new System.Drawing.Point(446, 7);
             this.buttonAdvImport.Name = "buttonAdvImport";
             this.buttonAdvImport.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
             this.buttonAdvImport.Size = new System.Drawing.Size(87, 23);
@@ -189,9 +190,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             this.lblImportFileName.AutoSize = true;
             this.lblImportFileName.BackColor = System.Drawing.Color.Transparent;
             this.lblImportFileName.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lblImportFileName.Location = new System.Drawing.Point(3, 77);
+            this.lblImportFileName.Location = new System.Drawing.Point(3, 83);
             this.lblImportFileName.Name = "lblImportFileName";
-            this.lblImportFileName.Size = new System.Drawing.Size(105, 26);
+            this.lblImportFileName.Size = new System.Drawing.Size(117, 13);
             this.lblImportFileName.TabIndex = 4;
             this.lblImportFileName.Text = "xxImportFileNameColon";
             this.lblImportFileName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -200,9 +201,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             // 
             this.textBoxImportFileName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxImportFileName.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.textBoxImportFileName.Location = new System.Drawing.Point(116, 80);
+            this.textBoxImportFileName.Location = new System.Drawing.Point(142, 80);
             this.textBoxImportFileName.Name = "textBoxImportFileName";
-            this.textBoxImportFileName.Size = new System.Drawing.Size(178, 20);
+            this.textBoxImportFileName.Size = new System.Drawing.Size(318, 20);
             this.textBoxImportFileName.TabIndex = 3;
             this.textBoxImportFileName.TextChanged += new System.EventHandler(this.textBoxImportFileNameTextChanged);
             // 
@@ -212,7 +213,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             this.buttonAdvBrowseFile.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.buttonAdvBrowseFile.BackColor = System.Drawing.Color.Transparent;
             this.buttonAdvBrowseFile.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonAdvBrowseFile.Location = new System.Drawing.Point(300, 80);
+            this.buttonAdvBrowseFile.Location = new System.Drawing.Point(466, 80);
             this.buttonAdvBrowseFile.Name = "buttonAdvBrowseFile";
             this.buttonAdvBrowseFile.Size = new System.Drawing.Size(87, 19);
             this.buttonAdvBrowseFile.TabIndex = 4;
@@ -223,32 +224,32 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             // radioButtonImportWLAndStaffing
             // 
             this.radioButtonImportWLAndStaffing.AutoSize = true;
-            this.radioButtonImportWLAndStaffing.Location = new System.Drawing.Point(300, 53);
+            this.radioButtonImportWLAndStaffing.Location = new System.Drawing.Point(466, 53);
             this.radioButtonImportWLAndStaffing.Name = "radioButtonImportWLAndStaffing";
             this.radioButtonImportWLAndStaffing.Size = new System.Drawing.Size(165, 17);
             this.radioButtonImportWLAndStaffing.TabIndex = 2;
             this.radioButtonImportWLAndStaffing.Text = "xxImportWorkloadAndStaffing";
             this.radioButtonImportWLAndStaffing.UseVisualStyleBackColor = true;
-            this.radioButtonImportWLAndStaffing.CheckedChanged += new System.EventHandler(radioButtonImportWLAndStaffing_CheckedChanged);
+            this.radioButtonImportWLAndStaffing.CheckedChanged += new System.EventHandler(this.radioButtonImportWLAndStaffing_CheckedChanged);
             // 
             // radioButtonImportWorkload
             // 
             this.radioButtonImportWorkload.AutoSize = true;
             this.radioButtonImportWorkload.Checked = true;
-            this.radioButtonImportWorkload.Location = new System.Drawing.Point(300, 3);
+            this.radioButtonImportWorkload.Location = new System.Drawing.Point(466, 3);
             this.radioButtonImportWorkload.Name = "radioButtonImportWorkload";
             this.radioButtonImportWorkload.Size = new System.Drawing.Size(110, 17);
             this.radioButtonImportWorkload.TabIndex = 0;
             this.radioButtonImportWorkload.TabStop = true;
             this.radioButtonImportWorkload.Text = "xxImportWorkload";
             this.radioButtonImportWorkload.UseVisualStyleBackColor = true;
-            this.radioButtonImportWorkload.CheckedChanged += new System.EventHandler(radioButtonImportWorkload_CheckedChanged);
+            this.radioButtonImportWorkload.CheckedChanged += new System.EventHandler(this.radioButtonImportWorkload_CheckedChanged);
             // 
             // labelWorkloadName
             // 
             this.labelWorkloadName.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelWorkloadName.AutoSize = true;
-            this.labelWorkloadName.Location = new System.Drawing.Point(116, 31);
+            this.labelWorkloadName.Location = new System.Drawing.Point(142, 31);
             this.labelWorkloadName.Name = "labelWorkloadName";
             this.labelWorkloadName.Size = new System.Drawing.Size(0, 13);
             this.labelWorkloadName.TabIndex = 10;
@@ -259,16 +260,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             this.lblWorkloadNameColon.AutoSize = true;
             this.lblWorkloadNameColon.BackColor = System.Drawing.Color.Transparent;
             this.lblWorkloadNameColon.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lblWorkloadNameColon.Location = new System.Drawing.Point(3, 25);
+            this.lblWorkloadNameColon.Location = new System.Drawing.Point(3, 31);
             this.lblWorkloadNameColon.Name = "lblWorkloadNameColon";
-            this.lblWorkloadNameColon.Size = new System.Drawing.Size(106, 25);
+            this.lblWorkloadNameColon.Size = new System.Drawing.Size(118, 13);
             this.lblWorkloadNameColon.TabIndex = 2;
             this.lblWorkloadNameColon.Text = "xxWorkloadNameColon";
             this.lblWorkloadNameColon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // openFileDialog
-            // 
-            this.openFileDialog.FileName = "";
             // 
             // ImportForecastView
             // 
@@ -276,7 +273,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.buttonAdvClose;
-            this.ClientSize = new System.Drawing.Size(499, 183);
+            this.ClientSize = new System.Drawing.Size(667, 183);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.ribbonControlAdvFixed1);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
