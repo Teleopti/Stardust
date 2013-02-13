@@ -102,5 +102,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.First().Span(Find.First()).Text, Is.EqualTo(dayOffName));
 		}
 
+		[Then(@"I should see details with a schedule")]
+		public void ThenIShouldSeeDetailsWithASchedule(Table table)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+
 	}
 }
