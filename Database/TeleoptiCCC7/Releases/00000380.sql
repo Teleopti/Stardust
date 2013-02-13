@@ -1,7 +1,7 @@
 ----------------  
 --Name: Robin K
 --Date: 2012-12-07
---Desc: Adding read model table for schedules. Not the final model...
+--Desc: Adding read model table for schedules.
 -----------------  
 CREATE TABLE [ReadModel].[PersonScheduleDay](
 	[Id] [uniqueidentifier] NOT NULL,
@@ -25,7 +25,13 @@ GO
 ALTER TABLE [ReadModel].[PersonScheduleDay] ADD  CONSTRAINT [DF_PersonScheduleDay_InsertedOn]  DEFAULT (getutcdate()) FOR [InsertedOn]
 GO
 
-
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-02-13
+--Desc: Bug #22194. Constraint violation error in PersonSkill
+----------------  
+IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonSkill]') AND name = N'UC_Parent_Skill')
+	EXEC('ALTER TABLE [dbo].[PersonSkill] DROP CONSTRAINT [UC_Parent_Skill]')
 GO
 
 PRINT 'Adding build number to database' 

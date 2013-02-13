@@ -460,9 +460,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         		if (currentPeriod != null)
         		{
-        			IPersonSkill personSkillFromCollection = currentPeriod.PersonSkillCollection.FirstOrDefault(s => s.Skill.Equals(personSkill.Skill));
+        			var personSkillCollection = currentPeriod.PersonSkillCollection.Where(s => s.Skill.Equals(personSkill.Skill));
 
-        			if (personSkillFromCollection != null)
+        			foreach (var personSkillFromCollection in personSkillCollection)
         			{
         				currentPeriod.DeletePersonSkill(personSkillFromCollection);
         				personPeriodModel.CanBold = true;
