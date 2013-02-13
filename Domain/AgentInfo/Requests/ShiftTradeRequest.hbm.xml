@@ -10,8 +10,7 @@
 
     <property name="shiftTradeStatus"
          not-null="true"
-              access="field"
-         type="int"/>
+              access="field"/>
 
     <bag name="ShiftTradeSwapDetails" table="ShiftTradeSwapDetail" cascade="all-delete-orphan"
             inverse="true">
