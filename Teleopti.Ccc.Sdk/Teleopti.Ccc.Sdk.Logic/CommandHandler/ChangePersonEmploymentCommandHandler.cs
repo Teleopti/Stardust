@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         {
             personPeriod.ResetPersonSkill();
             foreach (var personSkills in from personSkillPeriodDto in personSkillPeriodDtos
-                                         select personSkillPeriodDto.SkillCollection)
+                                         select personSkillPeriodDto.SkillCollection.Distinct())
                 personSkills.ForEach(
                     s => personPeriod.AddPersonSkill(new PersonSkill(_skillRepository.Load(s), new Percent(1))));
         }
