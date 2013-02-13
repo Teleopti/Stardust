@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Controllers
 					 return Util.ProcessAuthenticationChallenge(idrequest);
 				}
 
-				return View();
+				return new EmptyResult();
 		  }
 
 		  public ActionResult AskUser()
