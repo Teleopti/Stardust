@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                         //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
                         // (should we cover for max seats here?) ????
-                        var shifts = GetShiftProjectionCaches(restriction, _matrixList, groupPerson, startDate);
+						var shifts = GetShiftProjectionCaches(restriction, groupMatrixList, groupPerson, startDate);
 
                         if (shifts != null && shifts.Count > 0)
                         {
