@@ -356,6 +356,11 @@ namespace Teleopti.Interfaces.Domain
         /// Block finder service for advance optimization service
         /// </summary>
         BlockFinderType BlockFinderTypeForAdvanceOptimization { get; set; }
+
+        /// <summary>
+        /// Group page for Leveling property used for block optimization
+        /// </summary>
+        IGroupPageLight GroupPageOnTeamLevelingPer { get; set; }
     }
 
     /// <summary>

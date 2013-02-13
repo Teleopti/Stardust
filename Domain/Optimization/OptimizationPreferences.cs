@@ -98,6 +98,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         public IActivity CommonActivity { get; set; }
 
         public BlockFinderType BlockFinderTypeForAdvanceOptimization { get; set; }
+
+	    public IGroupPageLight GroupPageOnTeamLevelingPer{get ; set; }
 	}
 
     public class ShiftPreferences : IShiftPreferences
