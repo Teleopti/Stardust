@@ -260,12 +260,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldDenyShiftTradeRequest()
 		{
 			var id = Guid.NewGuid();
+			var resultData = new RequestViewModel();
 			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();
-			shiftTradePersister.Expect(a => a.Deny(id)).Repeat.Once();
+			shiftTradePersister.Expect(a => a.Deny(id)).Return(resultData);
 
 			using (var target = new RequestsController(null, null, null, shiftTradePersister))
 			{
-				target.DenyShiftTrade(id);
+				var result = target.DenyShiftTrade(id);
+				var data = result.Data as RequestViewModel;
+				data.Should().Be.SameInstanceAs(resultData);
 			}
 
 			shiftTradePersister.VerifyAllExpectations();

@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public void DenyShiftTrade(Guid id)
+		public JsonResult DenyShiftTrade(Guid id)
 		{
-			_respondToShiftTrade.Deny(id);
+			return Json(_respondToShiftTrade.Deny(id));
 		}
 
 		[UnitOfWorkAction]
