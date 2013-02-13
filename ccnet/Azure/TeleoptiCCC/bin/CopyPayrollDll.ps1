@@ -146,7 +146,7 @@ Try
         throw "AsCopy generated an error!"
     }
     
-    Roby-Copy $DESTINATION $FILEWATCH
+    $RoboExitCode = Roby-Copy $DESTINATION $FILEWATCH
     
 	##one or more files are new, log info to Eventlog and restart serviceBus
 	If ($RoboExitCode -ge 1) {
