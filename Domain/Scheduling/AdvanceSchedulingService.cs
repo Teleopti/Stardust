@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
     }
     public class AdvanceSchedulingService : IAdvanceSchedulingService
     {
+        private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
         private readonly IDynamicBlockFinder _dynamicBlockFinder;
         private readonly IRestrictionAggregator _restrictionAggregator;
         private readonly IList<IScheduleMatrixPro> _matrixList;
@@ -22,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly ISchedulingOptions _schedulingOptions;
     	private readonly IWorkShiftSelector _workShiftSelector;
         private readonly IGroupPersonBuilderBasedOnContractTime _groupPersonBuilderBasedOnContractTime;
-        private readonly IGroupPersonsBuilder _groupPersonsBuilder;
         private readonly ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
         private readonly IList<DateOnly> _effectiveDays;
         private readonly IList<DateOnly> _dayOff;
@@ -37,9 +38,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
             ISchedulingOptions schedulingOptions,
 			IWorkShiftSelector workShiftSelector,
             IGroupPersonBuilderBasedOnContractTime groupPersonBuilderBasedOnContractTime ,
-            IGroupPersonsBuilder groupPersonsBuilder 
+            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization 
             )
         {
+            _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
             _dynamicBlockFinder = dynamicBlockFinder;
             _restrictionAggregator = restrictionAggregator;
             _matrixList = matrixList;
@@ -48,7 +50,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _schedulingOptions = schedulingOptions;
         	_workShiftSelector = workShiftSelector;
             _groupPersonBuilderBasedOnContractTime = groupPersonBuilderBasedOnContractTime;
-            _groupPersonsBuilder = groupPersonsBuilder;
             _skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
             _effectiveDays = new List<DateOnly>();
             _dayOff = new List<DateOnly>();
@@ -105,10 +106,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
             {
                 //call class that return the teamblock dates for a given date (problem if team members don't have same days off)
                 var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays( startDate );
-                var allGrouPersonListOnStartDate = _groupPersonsBuilder.BuildListOfGroupPersons(startDate,
-                                                                                                selectedPersons, false,
-                                                                                                _schedulingOptions);
-                foreach (var fullGroupPerson in allGrouPersonListOnStartDate.GetRandom(allGrouPersonListOnStartDate.Count, true))
+                var allGroupPersonListOnStartDate = new List<IGroupPerson>();
+                foreach(var person in selectedPersons )
+                {
+                    allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person,startDate ));
+                }
+                foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
                 {
                     var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, startDate);
                     foreach (var groupPerson in groupPersonList)
