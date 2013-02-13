@@ -28,14 +28,27 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
 
         internal ImportForecastPresenter Presenter { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         public void SetWorkloadName(string name)
         {
+            var workloadToolTip = new ToolTip { ShowAlways = true };
+            workloadToolTip.SetToolTip(labelWorkloadName, name);
+
+            if (name.Length >= 40)
+                name = name.Substring(0, 37) + "...";
+
             labelWorkloadName.Text = name;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void SetSkillName(string name)
         {
+            var skillToolTip = new ToolTip {ShowAlways = true};
+            skillToolTip.SetToolTip(txtSkillName, name);
+
+            if (name.Length >= 40)
+                name = name.Substring(0, 37) + "...";
+
             txtSkillName.Text = name;
         }
 
