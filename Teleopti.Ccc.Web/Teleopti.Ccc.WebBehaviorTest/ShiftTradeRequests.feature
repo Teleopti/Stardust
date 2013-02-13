@@ -205,10 +205,11 @@ Scenario: Can not approve or deny shift trade request created by me
 	Then I should not see the approve button
 	And I should not see the deny button
 
-@ignore
 Scenario: Deny shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have received a shift trade request
+	| Field		| Value		|
+	| From		| Ashley	|
 	And I am viewing requests
 	When I click on the request
 	And I click the Deny button on the shift request
@@ -217,8 +218,8 @@ Scenario: Deny shift trade request
 Scenario: Should not be able to delete received shift trade request
 	Given I am an agent
 	And I have received a shift trade request
-	| Field		| Value			|
-	| From		| Ashley			|
+	| Field		| Value		|
+	| From		| Ashley	|
 	When I view requests
 	Then I should not see a delete button on the request
 
