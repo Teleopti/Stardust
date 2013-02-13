@@ -77,14 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 												new ShiftTradeSwapDetail(SetupFixtureForAssembly.loggedOnPerson, tradeWithPerson, new DateOnly(2008, 7, 16),
 																								 new DateOnly(2008, 7, 16)),
 										});
-			//foreach (IShiftTradeSwapDetail shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
-			//{
-			//  shiftTradeSwapDetail.ChecksumFrom = 50;
-			//  shiftTradeSwapDetail.ChecksumTo = 57;
-			//}
 			request.Request = shiftTradeRequest;
-			//request.Pending();
-
 			return request;
 		}
 	}
