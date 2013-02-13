@@ -211,13 +211,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             comboBoxGroupingLevelingPer.DataSource = _groupPagesLevelingPer;
             comboBoxGroupingLevelingPer.DisplayMember = "Name";
             comboBoxGroupingLevelingPer.ValueMember = "Key";
+            comboBoxGroupingLevelingPer.SelectedValue = "SingleAgentTeam";
             if (_localSchedulingOptions.GroupOnGroupPageForLevelingPer != null)
                 comboBoxGroupingLevelingPer.SelectedValue = _localSchedulingOptions.GroupOnGroupPageForLevelingPer.Key;
-            else
-            {
-                comboBoxGroupingLevelingPer.SelectedValue = "SingleAgentTeam";
-            }
-
+            
 		}
         private void initCommonActivity()
 		{

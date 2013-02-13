@@ -45,6 +45,7 @@
             this.comboBoxGroupPageOnTeams = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.radioButtonSchedulePeriodAdvOptimization = new System.Windows.Forms.RadioButton();
             this.radioButtonBetweenDaysOffAdvOptimization = new System.Windows.Forms.RadioButton();
+            this.comboBoxGroupPageOnTeamsLevelingPer = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
@@ -57,6 +58,7 @@
             this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxActivity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupPageOnTeams)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupPageOnTeamsLevelingPer)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -100,6 +102,7 @@
             this.tableLayoutPanel5.Controls.Add(this.comboBoxGroupPageOnTeams, 2, 5);
             this.tableLayoutPanel5.Controls.Add(this.radioButtonSchedulePeriodAdvOptimization, 1, 4);
             this.tableLayoutPanel5.Controls.Add(this.radioButtonBetweenDaysOffAdvOptimization, 2, 4);
+            this.tableLayoutPanel5.Controls.Add(this.comboBoxGroupPageOnTeamsLevelingPer, 2, 3);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -273,6 +276,18 @@
             this.radioButtonBetweenDaysOffAdvOptimization.TabStop = true;
             this.radioButtonBetweenDaysOffAdvOptimization.Text = "xxBetweenDayOff";
             this.radioButtonBetweenDaysOffAdvOptimization.UseVisualStyleBackColor = true;
+            this.radioButtonBetweenDaysOffAdvOptimization.Visible = false;
+            // 
+            // comboBoxGroupPageOnTeamsLevelingPer
+            // 
+            this.comboBoxGroupPageOnTeamsLevelingPer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxGroupPageOnTeamsLevelingPer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            this.comboBoxGroupPageOnTeamsLevelingPer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxGroupPageOnTeamsLevelingPer.Location = new System.Drawing.Point(216, 82);
+            this.comboBoxGroupPageOnTeamsLevelingPer.Name = "comboBoxGroupPageOnTeamsLevelingPer";
+            this.comboBoxGroupPageOnTeamsLevelingPer.Size = new System.Drawing.Size(179, 21);
+            this.comboBoxGroupPageOnTeamsLevelingPer.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.comboBoxGroupPageOnTeamsLevelingPer.TabIndex = 45;
             // 
             // tableLayoutPanel6
             // 
@@ -388,6 +403,7 @@
             this.tableLayoutPanel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxActivity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupPageOnTeams)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupPageOnTeamsLevelingPer)).EndInit();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -424,5 +440,6 @@
         private System.Windows.Forms.CheckBox checkBoxLevellingPerBlockScheduling;
         private System.Windows.Forms.RadioButton radioButtonSchedulePeriodAdvOptimization;
         private System.Windows.Forms.RadioButton radioButtonBetweenDaysOffAdvOptimization;
+        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGroupPageOnTeamsLevelingPer;
     }
 }
