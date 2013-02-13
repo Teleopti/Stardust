@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		/// Respond OK to a shifttraderequest
 		/// </summary>
 		/// <param name="requestId">The id of the request</param>
-		void OkByMe(Guid requestId);
+		/// <returns>An updated view model</returns>
+		RequestViewModel OkByMe(Guid requestId);
 
 		/// <summary>
 		/// Rejects the shifttrade request

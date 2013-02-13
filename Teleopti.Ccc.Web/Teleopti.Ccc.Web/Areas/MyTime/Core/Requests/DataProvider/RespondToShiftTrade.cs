@@ -24,11 +24,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_mapper = mapper;
 		}
 
-		public void OkByMe(Guid requestId)
+		public RequestViewModel OkByMe(Guid requestId)
 		{
-			var request = _personRequestRepository.Find(requestId);
-			var shiftTrade = request.Request as IShiftTradeRequest;
+			var personRequest = _personRequestRepository.Find(requestId);
+			var shiftTrade = personRequest.Request as IShiftTradeRequest;
 			shiftTrade.Accept(_loggedOnUser.CurrentUser(), _shiftTradeRequestCheckSum, _personRequestCheckAuthorization);
+
+			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
 
 		public RequestViewModel Deny(Guid requestId)

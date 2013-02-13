@@ -245,12 +245,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 
 			var id = Guid.NewGuid();
+			var resultData = new RequestViewModel();
 			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();
-			shiftTradePersister.Expect(a => a.OkByMe(id)).Repeat.Once();
+			shiftTradePersister.Expect(a => a.OkByMe(id)).Return(resultData);
 
 			using (var target = new RequestsController(null, null, null, shiftTradePersister))
 			{
-				target.ApproveShiftTrade(id);
+				var result = target.ApproveShiftTrade(id);
+				var data = result.Data as RequestViewModel;
+				data.Should().Be.SameInstanceAs(resultData);
 			}
 
 			shiftTradePersister.VerifyAllExpectations();

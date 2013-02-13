@@ -22,21 +22,25 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var loggedOnPerson = MockRepository.GenerateStub<IPerson>();
-			var personrequest = MockRepository.GenerateMock<IPersonRequest>();
+			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
 			var shiftTrade = MockRepository.GenerateMock<IShiftTradeRequest>();
 			var shiftTradeRequestCheckSum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestCheckAuthorization = MockRepository.GenerateMock<IPersonRequestCheckAuthorization>();
-			var target = new RespondToShiftTrade(personRequestRepository, shiftTradeRequestCheckSum, personRequestCheckAuthorization, loggedOnUser, null);
+			var target = new RespondToShiftTrade(personRequestRepository, shiftTradeRequestCheckSum, personRequestCheckAuthorization, loggedOnUser, mapper);
+			var requestViewModel = new RequestViewModel();
 
-			personRequestRepository.Expect(p => p.Find(shiftTradeId)).Return(personrequest);
-			personrequest.Expect(p => p.Request).Return(shiftTrade);
+			personRequestRepository.Expect(p => p.Find(shiftTradeId)).Return(personRequest);
+			personRequest.Expect(p => p.Request).Return(shiftTrade);
 			loggedOnUser.Expect(l => l.CurrentUser()).Return(loggedOnPerson);
+			mapper.Expect(m => m.Map<IPersonRequest, RequestViewModel>(personRequest)).Return(requestViewModel);
 
 			//execute
-			target.OkByMe(shiftTradeId);
+			var result = target.OkByMe(shiftTradeId);
 
 			//verify expectation:
 			shiftTrade.AssertWasCalled(s => s.Accept(loggedOnPerson, shiftTradeRequestCheckSum, personRequestCheckAuthorization));
+			result.Should().Be.SameInstanceAs(requestViewModel);
 		}
 
 		[Test]

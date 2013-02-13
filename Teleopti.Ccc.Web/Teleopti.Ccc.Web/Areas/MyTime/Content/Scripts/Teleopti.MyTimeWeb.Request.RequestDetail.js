@@ -300,11 +300,11 @@ var ShiftTradeRequestDetailViewModel = function () {
 	};
 
 	self.Deny = function () {
-		self.respondToRequestTemp("Requests/DenyShiftTrade/" + self.Id());
+		self.respondToRequest("Requests/DenyShiftTrade/" + self.Id());
 		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
 
-	self.respondToRequestTemp = function (url) {
+	self.respondToRequest = function (url) {
 
 		self.ajax.Ajax({
 			url: url,
@@ -312,20 +312,6 @@ var ShiftTradeRequestDetailViewModel = function () {
 			type: "POST",
 			success: function (data) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
-			},
-			error: function (error) {
-				//todo
-			}
-		});
-	};
-
-	self.respondToRequest = function (url) {
-
-		self.ajax.Ajax({
-			url: url,
-			type: "POST",
-			success: function () {
-				//todo
 			},
 			error: function (error) {
 				//todo
