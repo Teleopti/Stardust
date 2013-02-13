@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bugs\Bug11558.cs" />
+    <Compile Include="Bugs\Bug22329.cs" />
     <Compile Include="Bugs\Bug7871.cs" />
     <Compile Include="Config\LoadPasswordPolicyServiceTest.cs" />
     <Compile Include="Config\XmlDefaultsTest.cs" />
