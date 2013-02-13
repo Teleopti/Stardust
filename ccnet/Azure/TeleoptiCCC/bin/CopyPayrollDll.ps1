@@ -22,7 +22,7 @@ function Roby-Copy
       )
       
 	## Options to be added to RoboCopy
-	$ROBOOPTIONS = @("/MIR")
+	$ROBOOPTIONS = @("/E")
 
 	## Wrap arguments for robocopy
 	$roboArgs = @("$scrFolder","$destFolder",$ROBOOPTIONS)
