@@ -118,6 +118,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public virtual void AddPersonSkill(IPersonSkill personSkill)
 		{
 			InParameter.NotNull("personSkill", personSkill);
+
+			if (_personSkillCollection.Any(p => p.Skill.Equals(personSkill.Skill)))
+			{
+				throw new ArgumentException("There is already an instance of the skill connected to this person period.");
+			}
+
 			personSkill.SetParent(this);
 			_personSkillCollection.Add(personSkill);
 		}
