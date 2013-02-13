@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
@@ -15,11 +16,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		/// </summary>
 		/// <param name="requestId">The id of the request</param>
 		void OkByMe(Guid requestId);
-		
+
 		/// <summary>
 		/// Rejects the shifttrade request
 		/// </summary>
 		/// <param name="requestId">The id of the request</param>
-		void Deny(Guid requestId);
+		/// <returns>An updated view model</returns>
+		RequestViewModel Deny(Guid requestId);
 	}
 }
