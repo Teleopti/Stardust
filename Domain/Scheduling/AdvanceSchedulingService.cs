@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         private DateOnly StartDate()
         {
-            DateOnly startDate = DateOnly.MinValue ;
+            var startDate = DateOnly.MinValue;
             if(_matrixList!= null )
             {
                 for (var i = 0; i < _matrixList.Count; i++)
@@ -68,8 +68,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
                         foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
                         {
                             var daySignificantPart = scheduleDayPro.DaySchedulePart().SignificantPart();
-                            if (startDate == DateOnly.MinValue && (daySignificantPart != SchedulePartView.DayOff || daySignificantPart != SchedulePartView.ContractDayOff || daySignificantPart != SchedulePartView.FullDayAbsence))
-                                startDate = scheduleDayPro.Day;
+							if (startDate == DateOnly.MinValue &&
+                                (daySignificantPart != SchedulePartView.DayOff &&
+                                 daySignificantPart != SchedulePartView.ContractDayOff &&
+                                 daySignificantPart != SchedulePartView.FullDayAbsence))
+                            {
+	                            startDate = scheduleDayPro.Day;
+                            }
                             if (daySignificantPart == SchedulePartView.DayOff)
                                 _dayOff.Add(scheduleDayPro.Day);
                             _effectiveDays.Add(scheduleDayPro.Day);
