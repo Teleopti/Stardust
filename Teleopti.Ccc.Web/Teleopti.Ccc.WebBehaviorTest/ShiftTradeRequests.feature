@@ -255,9 +255,9 @@ Given I have the role 'Full access to mytime'
 	And I should see '2010-12-28' as the date of the request source
 
 @ignore
-Scenario: Show schedules of the shift trade
+Scenario: Show my schedule of the shift trade
 Given I have the role 'Full access to mytime'
-And I have a shift with
+	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
@@ -273,6 +273,26 @@ And I have a shift with
 	| Field			| Value |
 	| Start time	| 06:00 |
 	| End time		| 16:00 |
+
+@ignore
+Scenario: Show other schedule of the shift trade
+Given I have the role 'Full access to mytime'
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 10:00 |
+	| EndTime               | 2030-01-01 17:00 |
+	| Shift category		| Day	           |
+	And I have created a shift trade request
+	| Field		| Value         |
+	| To			| Ashley  Andeen|
+	| DateTo		| 2030-01-01    |
+	| DateFrom	| 2030-01-01    |
+	And I am viewing requests
+	When I click on the request
+	Then I should see details with a schedule
+	| Field			| Value |
+	| Start time	| 10:00 |
+	| End time		| 17:00 |
 
 
 

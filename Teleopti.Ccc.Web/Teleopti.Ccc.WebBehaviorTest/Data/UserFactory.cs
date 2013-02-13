@@ -185,9 +185,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Log.Write("Making user " + Person.Name);
 
 			SetupAndPersistPerson(Person);
-			DoPostSetup(Person);
 
 			CreateAndPersistColleagueList();
+			DoPostSetup(Person);
 
 			Resources.Culture = Culture;
 
