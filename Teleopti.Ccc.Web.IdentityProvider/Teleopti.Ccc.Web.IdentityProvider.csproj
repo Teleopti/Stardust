@@ -82,7 +82,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -97,7 +96,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\ReadOnlyXmlMembershipProvider.cs" />
     <Compile Include="Code\TransferResult.cs" />
     <Compile Include="Code\Util.cs" />
     <Compile Include="Controllers\AccountController.cs" />
