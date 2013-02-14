@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
     {
         void Execute(DateOnly startDateOfBlock, IList<DateOnly> daysInBlock, IList<IScheduleMatrixPro> matrixList, IGroupPerson groupPerson,
                      IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache,
-                     IList<DateOnly> unlockedDays);
+                     IList<DateOnly> unlockedDays, IList<IPerson> selectedPerson);
     }
 
     public  class TeamScheduling : ITeamScheduling
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 
         public void  Execute(DateOnly startDateOfBlock, IList<DateOnly  > daysInBlock, IList<IScheduleMatrixPro> matrixList,
-                IGroupPerson groupPerson,IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache, IList<DateOnly>  unlockedDays)
+                IGroupPerson groupPerson,IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache, IList<DateOnly>  unlockedDays, IList<IPerson> selectedPerson )
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
 	        if (daysInBlock == null) 
@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                     if (groupPerson != null)
 				        foreach (var person in groupPerson.GroupMembers)
 				        {
-					        IPerson tmpPerson = person;
+                            if (!selectedPerson.Contains(person)) continue;
+                            IPerson tmpPerson = person;
 					        var tempMatrixList = matrixList.Where(scheduleMatrixPro => scheduleMatrixPro.Person == tmpPerson).ToList();
 					        if (tempMatrixList.Any())
 					        {

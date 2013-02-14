@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private IPerson _person;
         private IShiftProjectionCache _scheduleProjectionCache;
         private IVirtualSchedulePeriod _virtualSchedulePeriod;
-        private IGroupPersonsBuilder _groupPersonBuilder;
+        private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
 
         [SetUp]
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _person = _mocks.StrictMock<IPerson>();
             _virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _scheduleProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
-            _groupPersonBuilder = _mocks.StrictMock<IGroupPersonsBuilder>();
+            _groupPersonBuilderForOptimization = _mocks.StrictMock<IGroupPersonBuilderForOptimization>();
             _target = new AdvanceSchedulingService(_skillDayPeriodIntervalDataGenerator, 
                                                 _dynamicBlockFinder,  
                                                 _restrictionAggregator,
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 												_workShiftFilterService,
 												_teamScheduling, 
 												_schedulingOptions,
-                                                _workShiftSelector, _groupPersonBuilderBasedOnContractTime,_groupPersonBuilder);
+                                                _workShiftSelector, _groupPersonBuilderBasedOnContractTime,_groupPersonBuilderForOptimization);
         }
 
         [Test]
@@ -109,9 +110,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             //Expect.Call(_teamExtractor.GetRandomTeam(dateOnly)).IgnoreArguments().Return(_groupPerson);
             Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { _person }));
             Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-            Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(dateOnly, new List<IPerson> { person }, false,
-                                                                    _schedulingOptions)).IgnoreArguments().Return(
-                                                                        groupPersonList);
+            //Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(dateOnly, new List<IPerson> { person }, false,
+            //                                                        _schedulingOptions)).IgnoreArguments().Return(
+            //                                                            groupPersonList);
 
             Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
             Expect.Call(_groupPersonBuilderBasedOnContractTime.SplitTeams(_groupPerson, dateOnly)).IgnoreArguments().

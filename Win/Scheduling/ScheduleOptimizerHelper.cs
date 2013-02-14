@@ -1057,13 +1057,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         #region Advance Block Scheduling
 
-        private AdvanceSchedulingService CallAdvanceSchedulingService(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
-                                                                      ISkillDayPeriodIntervalDataGenerator
-                                                                          skillDayPeriodIntervalData,
-                                                                      DynamicBlockFinder dynamicBlockFinder,
-                                                                      IGroupPersonBuilderForOptimization
-                                                                          groupPersonBuilderForOptimization)
+        private AdvanceSchedulingService CallAdvanceSchedulingService( ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> selectedPersonMatrixList)
         {
+            var groupPersonBuilderForOptimization = CallGroupPage(schedulingOptions);
+            var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder, selectedPersonMatrixList);
             var restrictionAggregator = _container.Resolve<IRestrictionAggregator>();
             var workShiftFilterService = _container.Resolve<IWorkShiftFilterService>();
             var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
@@ -1076,9 +1073,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             var workShiftSelector = InitializeWorkShiftRelatedClasses();
             IGroupPersonBuilderBasedOnContractTime groupPersonBuilderBasedOnContractTime =
                 new GroupPersonBuilderBasedOnContractTime(_container.Resolve<IGroupPersonFactory>());
-            var advanceSchedulingService = new AdvanceSchedulingService(skillDayPeriodIntervalData,
+            var advanceSchedulingService = new AdvanceSchedulingService(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
                                                                         dynamicBlockFinder,
-                                                                        restrictionAggregator, matrixList,
+                                                                        restrictionAggregator,
                                                                         workShiftFilterService, teamScheduling,
                                                                         schedulingOptions, workShiftSelector,
                                                                         groupPersonBuilderBasedOnContractTime, groupPersonBuilderForOptimization);
@@ -1108,7 +1105,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return groupPersonBuilderForOptimization;
         }
 
-        public void BlockScheduleForAdvanceScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
+        public void BlockScheduleForAdvanceScheduling(IList<IScheduleMatrixPro> selectedPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonAllMatrixList, IList<IScheduleMatrixPro> AllPersonMatrixList, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
         {
             var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
             fixedStaffSchedulingService.ClearFinderResults();
@@ -1118,22 +1115,19 @@ namespace Teleopti.Ccc.Win.Scheduling
                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff =
                     new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback,
                                                              new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-                IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
+               
                 var blockSchedulingService = _container.Resolve<IBlockSchedulingService>();
                 var refreshRate = schedulingOptions.RefreshRate;
                 schedulingOptions.RefreshRate = 1;
                 blockSchedulingService.BlockScheduled += blockSchedulingServiceBlockScheduled;
-                schedulingOptions.UseTwoDaysOffAsBlock = true;
-                var skillDayPeriodIntervalData = _container.Resolve<ISkillDayPeriodIntervalDataGenerator>();
-                var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder, matrixList);
-                
-                var groupPersonBuilderForOptimization = CallGroupPage(schedulingOptions);
+                //schedulingOptions.UseTwoDaysOffAsBlock = true;
                 
                 var advancedaysOffSchedulingService = _container.Resolve<IAdvanceDaysOffSchedulingService>();
-                advancedaysOffSchedulingService.Execute(matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
+                advancedaysOffSchedulingService.Execute(selectedPersonAllMatrixList, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
                 
-                var advanceSchedulingService = CallAdvanceSchedulingService(matrixList, schedulingOptions, skillDayPeriodIntervalData, dynamicBlockFinder, groupPersonBuilderForOptimization);
-                advanceSchedulingService.Execute(schedulingResults);
+                var advanceSchedulingService = CallAdvanceSchedulingService(schedulingOptions,selectedPersonMatrixList );
+                IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
+                advanceSchedulingService.Execute(schedulingResults, AllPersonMatrixList, selectedPersonMatrixList);
                 if (schedulingOptions.RotationDaysOnly)
                     schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
                 blockSchedulingService.BlockScheduled -= blockSchedulingServiceBlockScheduled;

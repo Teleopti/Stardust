@@ -11,28 +11,24 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
     public interface IAdvanceSchedulingService
     {
-        bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList);
+        bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList, IList<IScheduleMatrixPro> allPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonMatrixList);
     }
     public class AdvanceSchedulingService : IAdvanceSchedulingService
     {
-        private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+        private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
         private readonly IDynamicBlockFinder _dynamicBlockFinder;
         private readonly IRestrictionAggregator _restrictionAggregator;
-        private readonly IList<IScheduleMatrixPro> _matrixList;
         private readonly IWorkShiftFilterService _workShiftFilterService;
         private readonly ITeamScheduling _teamScheduling;
         private readonly ISchedulingOptions _schedulingOptions;
     	private readonly IWorkShiftSelector _workShiftSelector;
         private readonly IGroupPersonBuilderBasedOnContractTime _groupPersonBuilderBasedOnContractTime;
         private readonly ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
-        private readonly IList<DateOnly> _effectiveDays;
-        private readonly IList<DateOnly> _dayOff;
-        private IList<DateOnly> _unLockedDays;
+
 
         public AdvanceSchedulingService(ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
             IDynamicBlockFinder dynamicBlockFinder, 
             IRestrictionAggregator restrictionAggregator,
-            IList<IScheduleMatrixPro> matrixList, 
             IWorkShiftFilterService workShiftFilterService,
             ITeamScheduling teamScheduling,
             ISchedulingOptions schedulingOptions,
@@ -44,79 +40,122 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
             _dynamicBlockFinder = dynamicBlockFinder;
             _restrictionAggregator = restrictionAggregator;
-            _matrixList = matrixList;
             _workShiftFilterService = workShiftFilterService;
             _teamScheduling = teamScheduling;
             _schedulingOptions = schedulingOptions;
         	_workShiftSelector = workShiftSelector;
             _groupPersonBuilderBasedOnContractTime = groupPersonBuilderBasedOnContractTime;
             _skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
-            _effectiveDays = new List<DateOnly>();
-            _dayOff = new List<DateOnly>();
-            _unLockedDays = new List<DateOnly>();
         }
 
-        private DateOnly StartDate()
+        //private DateOnly StartDate()
+        //{
+        //    var startDate = DateOnly.MinValue;
+        //    if(_matrixList!= null )
+        //    {
+        //        for (var i = 0; i < _matrixList.Count; i++)
+        //        {
+        //            var openMatrixList = _matrixList.Where(x => x.Person.Equals(_matrixList[i].Person));
+        //            foreach (var scheduleMatrixPro in openMatrixList)
+        //            {
+        //                foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
+        //                {
+        //                    var daySignificantPart = scheduleDayPro.DaySchedulePart().SignificantPart();
+        //                    if (startDate == DateOnly.MinValue &&
+        //                        (daySignificantPart != SchedulePartView.DayOff &&
+        //                         daySignificantPart != SchedulePartView.ContractDayOff &&
+        //                         daySignificantPart != SchedulePartView.FullDayAbsence))
+        //                    {
+        //                        startDate = scheduleDayPro.Day;
+        //                    }
+        //                    if (daySignificantPart == SchedulePartView.DayOff)
+        //                        _dayOff.Add(scheduleDayPro.Day);
+        //                    _effectiveDays.Add(scheduleDayPro.Day);
+        //                    if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
+        //                        _unLockedDays.Add(scheduleDayPro.Day);
+        //                }
+        //            }
+        //        }
+                
+
+        //    }
+        //    return startDate;
+        //}
+
+        private DateOnly StartDate(IList<IScheduleMatrixPro> matrixList, out  List<DateOnly> dayOff, out  List<DateOnly> effectiveDays, out  List<DateOnly> unLockedDays)
         {
             var startDate = DateOnly.MinValue;
-            if(_matrixList!= null )
+            dayOff = new List<DateOnly>();
+            effectiveDays = new List<DateOnly>();
+            unLockedDays = new List<DateOnly>();
+            
+            if (matrixList != null)
             {
-                for (var i = 0; i < _matrixList.Count; i++)
+                for (var i = 0; i < matrixList.Count; i++)
                 {
-                    var openMatrixList = _matrixList.Where(x => x.Person.Equals(_matrixList[i].Person));
+                    var openMatrixList = matrixList.Where(x => x.Person.Equals(matrixList[i].Person));
                     foreach (var scheduleMatrixPro in openMatrixList)
                     {
                         foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
                         {
                             var daySignificantPart = scheduleDayPro.DaySchedulePart().SignificantPart();
-							if (startDate == DateOnly.MinValue &&
+                            
+                            if (startDate == DateOnly.MinValue &&
                                 (daySignificantPart != SchedulePartView.DayOff &&
                                  daySignificantPart != SchedulePartView.ContractDayOff &&
                                  daySignificantPart != SchedulePartView.FullDayAbsence))
                             {
-	                            startDate = scheduleDayPro.Day;
+                                startDate = scheduleDayPro.Day;
                             }
+                            
                             if (daySignificantPart == SchedulePartView.DayOff)
-                                _dayOff.Add(scheduleDayPro.Day);
-                            _effectiveDays.Add(scheduleDayPro.Day);
+                                dayOff.Add(scheduleDayPro.Day);
+                            effectiveDays.Add(scheduleDayPro.Day);
+                            
                             if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
-                                _unLockedDays.Add(scheduleDayPro.Day);
+                                unLockedDays.Add(scheduleDayPro.Day);
                         }
                     }
                 }
-                
+
 
             }
             return startDate;
         }
 
-        private DateOnly GetNextDate(DateOnly dateOnly )
+        private DateOnly GetNextDate(DateOnly dateOnly, List<DateOnly> effectiveDays, List<DateOnly> daysOff, List<DateOnly> unLockedDays)
         {
             dateOnly = dateOnly.AddDays(1);
-            while( _dayOff.Contains(dateOnly ))
+            while (daysOff.Contains(dateOnly))
                dateOnly = dateOnly.AddDays(1);
-            return _effectiveDays.Contains(dateOnly) && _unLockedDays.Contains(dateOnly) ? dateOnly : DateOnly.MinValue;
+            return effectiveDays.Contains(dateOnly) && unLockedDays.Contains(dateOnly) ? dateOnly : DateOnly.MinValue;
         }
 
-        public bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList)
+        public bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList, IList<IScheduleMatrixPro> allPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonMatrixList)
         {
-            var startDate = StartDate();
-            var selectedPersons = _matrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).ToList();
+            List<DateOnly> dayOff,effectiveDays,unLockedDays;
+
+            var startDate = StartDate(selectedPersonMatrixList, out dayOff, out effectiveDays, out unLockedDays);
+
+            var selectedPerson = selectedPersonMatrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).ToList();
+            
             while (startDate != DateOnly.MinValue )
             {
                 //call class that return the teamblock dates for a given date (problem if team members don't have same days off)
                 var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays( startDate );
                 var allGroupPersonListOnStartDate = new List<IGroupPerson>();
-                foreach(var person in selectedPersons )
+                
+                foreach (var person in selectedPerson)
                 {
                     allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person,startDate ));
                 }
+                
                 foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
                 {
                     var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, startDate);
                     foreach (var groupPerson in groupPersonList)
                     {
-                        var groupMatrixList = GetScheduleMatrixProList(groupPerson, startDate);
+                        var groupMatrixList = GetScheduleMatrixProList(groupPerson, startDate, allPersonMatrixList);
                         //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
                         var restriction = GetEffectiveRestriction(groupPerson, dateOnlyList);
 
@@ -138,12 +177,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
                             //call class that schedules given date with given workshift on the complete team
                             //call class that schedules the unscheduled days for the teamblock using the same start time from the given shift, 
                             //this class will handle steady state as well as individual
-                            _teamScheduling.Execute(startDate, dateOnlyList, groupMatrixList, groupPerson, restriction, bestShiftProjectionCache, _unLockedDays);
+                            _teamScheduling.Execute(startDate, dateOnlyList, groupMatrixList, groupPerson, restriction, bestShiftProjectionCache, unLockedDays,selectedPerson );
                         }
 
                     }
                 }
-                startDate = GetNextDate(dateOnlyList.OrderByDescending(x => x.Date).First());
+                startDate = GetNextDate(dateOnlyList.OrderByDescending(x => x.Date).First(), effectiveDays,dayOff,unLockedDays );
                 
             }
 
@@ -157,12 +196,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return shifts;
         }
 
-        private List<IScheduleMatrixPro> GetScheduleMatrixProList(IGroupPerson groupPerson, DateOnly startDate)
+        private List<IScheduleMatrixPro> GetScheduleMatrixProList(IGroupPerson groupPerson, DateOnly startDate, IEnumerable<IScheduleMatrixPro> matrixList)
         {
             var person = groupPerson;
             var date = startDate;
             var groupMatrixList =
-                _matrixList.Where(x => person.GroupMembers.Contains(x.Person) && x.SchedulePeriod.DateOnlyPeriod.Contains(date))
+                matrixList.Where(x => person.GroupMembers.Contains(x.Person) && x.SchedulePeriod.DateOnlyPeriod.Contains(date))
                     .ToList();
             return groupMatrixList;
         }
