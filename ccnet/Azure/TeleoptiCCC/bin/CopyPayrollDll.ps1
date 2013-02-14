@@ -150,7 +150,7 @@ Try
     
 	##one or more files are new, log info to Eventlog and restart serviceBus
 	If ($RoboExitCode -ge 1) {
-        Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$SOURCE and $DESTINATION in sync."
+        Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$BlobSource and $FILEWATCH in sync."
     	Stop-Service -name $TeleoptiServiceBus
     	write-host "-------------" -ForegroundColor blue
     	Start-Service -name $TeleoptiServiceBus
