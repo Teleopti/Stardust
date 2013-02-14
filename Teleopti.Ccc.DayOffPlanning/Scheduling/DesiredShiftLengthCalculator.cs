@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanning.Scheduling
@@ -24,12 +25,12 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 		{
 			var lengths = workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions);
 			var currentAverage = matrix.SchedulePeriod.AverageWorkTimePerDay;
-		    var oldCurrentAverage = currentAverage;
 			var targetTime = _schedulePeriodTargetTimeCalculator.TargetTime(matrix);
 			if (schedulingOptions.UseCustomTargetTime.HasValue)
 				targetTime = schedulingOptions.UseCustomTargetTime.Value;
 			var newAverage = TimeSpan.Zero;
 			var exit = false;
+			var candidateAverages = new HashSet<TimeSpan>();
 			while (!exit)
 			{
 				var fixedTime = TimeSpan.Zero;
@@ -67,13 +68,14 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 
 				var diff = targetTime.TotalSeconds - fixedTime.TotalSeconds;
 				newAverage = TimeSpan.FromSeconds(diff / freeSlots);
+				candidateAverages.Add(newAverage);
 				if (newAverage == currentAverage)
 					exit = true;
 				else
 				{
-                    if (newAverage == oldCurrentAverage)
-                        exit = true;
-				    oldCurrentAverage = currentAverage;
+					if (candidateAverages.Contains(currentAverage))
+						exit = true;
+
 					currentAverage = newAverage;
 				}
 			}
