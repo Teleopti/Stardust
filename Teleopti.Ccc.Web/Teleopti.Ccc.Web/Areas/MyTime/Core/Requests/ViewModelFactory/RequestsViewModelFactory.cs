@@ -22,10 +22,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IShiftTradeRequestProvider _shiftTradeRequestprovider;
 		private readonly IShiftTradePeriodViewModelMapper _shiftTradeRequestsPeriodViewModelMapper;
+		private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestSetChecksum;
 
 		public RequestsViewModelFactory(IPersonRequestProvider personRequestProvider, IMappingEngine mapper, IAbsenceTypesProvider absenceTypesProvider, 
 										IPermissionProvider permissionProvider, IShiftTradeRequestProvider shiftTradeRequestprovider, 
-										IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper)
+										IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum)
 		{
 			_personRequestProvider = personRequestProvider;
 			_mapper = mapper;
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_permissionProvider = permissionProvider;
 			_shiftTradeRequestprovider = shiftTradeRequestprovider;
 			_shiftTradeRequestsPeriodViewModelMapper = shiftTradeRequestsPeriodViewModelMapper;
+			_shiftTradeRequestSetChecksum = shiftTradeRequestSetChecksum;
 		}
 
 		public RequestsViewModel CreatePageViewModel()
@@ -85,6 +87,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		public ShiftTradeSwapDetailsViewModel CreateShiftTradeRequestSwapDetails(Guid id)
 		{
 			var personRequest =  _personRequestProvider.RetrieveRequest(id);
+			
+			//Henke 20130214: We probably should check the checksum, I just want the /&¤%! schedules to be there....
+			_shiftTradeRequestSetChecksum.SetChecksum(personRequest.Request);
+
 			var shiftTradeSwapDetails = _mapper.Map<IShiftTradeRequest,ShiftTradeSwapDetailsViewModel>(personRequest.Request as IShiftTradeRequest);
 			return shiftTradeSwapDetails;
 		}

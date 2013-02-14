@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
 			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(absences);
 
-			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null);
+			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null,null);
 
 			var result = target.CreatePageViewModel();
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).
 				Return(true);
 
-			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null);
+			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null,null);
 			var result = target.CreatePageViewModel();
 
 			result.RequestPermission.TextRequestPermission.Should().Be.True();
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).
 				Return(true);
 
-			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null);
+			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null,null);
 			var result = target.CreatePageViewModel();
 
 			result.RequestPermission.AbsenceRequestPermission.Should().Be.True();
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public void ShouldRetrievePersonRequestsForPagingViewModel()
 		{
 			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
-			var target = new RequestsViewModelFactory(personRequestProvider, MockRepository.GenerateMock<IMappingEngine>(), null, null, null, null);
+			var target = new RequestsViewModelFactory(personRequestProvider, MockRepository.GenerateMock<IMappingEngine>(), null, null, null, null,null);
 			var paging = new Paging();
 			personRequestProvider.Stub(x => x.RetrieveRequests(paging)).Return(new IPersonRequest[] { });
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public void ShouldMapToViewModelForPagingViewModel()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new RequestsViewModelFactory(MockRepository.GenerateMock<IPersonRequestProvider>(), mapper, null, null, null, null);
+			var target = new RequestsViewModelFactory(MockRepository.GenerateMock<IPersonRequestProvider>(), mapper, null, null, null, null,null);
 			var requests = new RequestViewModel[] {};
 
 			mapper.Stub(x => x.Map<IEnumerable<IPersonRequest>, IEnumerable<RequestViewModel>>(null)).Return(requests);
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var provider = MockRepository.GenerateMock<IPersonRequestProvider>();
-			var target = new RequestsViewModelFactory(provider, mapper, null, null, null, null);
+			var target = new RequestsViewModelFactory(provider, mapper, null, null, null, null,null);
 			var personRequest = new PersonRequest(new Person());
 			var id = Guid.NewGuid();
 			var requestViewModel = new RequestViewModel();
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			var mapper = MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>();
 			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
-			var target = new RequestsViewModelFactory(null, null, null, null, provider, mapper);
+			var target = new RequestsViewModelFactory(null, null, null, null, provider, mapper,null);
 			var shiftTradePeriodViewModel = new ShiftTradeRequestsPeriodViewModel();
 			var workflowControlSet = new WorkflowControlSet();
 
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public void ShouldRetrieveShiftTradeScheduleViewModel()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new RequestsViewModelFactory(null, mapper, null, null, null, null);
+			var target = new RequestsViewModelFactory(null, mapper, null, null, null, null,null);
 			var viewModel = new ShiftTradeScheduleViewModel();
 
 			mapper.Stub(x => x.Map<DateOnly, ShiftTradeScheduleViewModel>(Arg<DateOnly>.Is.Anything)).Return(viewModel);
@@ -156,15 +156,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public void ShouldRetriveShiftTradeSwapDetailsViewModel()
 		{
 			var personRequestId = new Guid();
+			var setCheckSum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
 			var shiftTrade = MockRepository.GenerateStub<IShiftTradeRequest>();
 			var personRequest = MockRepository.GenerateStub<IPersonRequest>(); personRequest.Request = shiftTrade;
 			var shiftTradeSwapDetailsViewModel = new ShiftTradeSwapDetailsViewModel();
-			
-			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null);
+
+			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, setCheckSum);
 
 			personRequestProvider.Expect(p => p.RetrieveRequest(personRequestId)).Return(personRequest);
+			setCheckSum.Expect(s => s.SetChecksum(shiftTrade));		
 			mapper.Expect(m => m.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(Arg<IShiftTradeRequest>.Is.Equal(shiftTrade)))
 			      .Return(shiftTradeSwapDetailsViewModel);
 
