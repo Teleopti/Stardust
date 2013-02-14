@@ -1022,17 +1022,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         
 
-        private static IWorkShiftSelector InitializeWorkShiftRelatedClasses()
-        {
-            IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator = new WorkShiftPeriodValueCalculator();
-            IWorkShiftLengthValueCalculator workShiftLengthValueCalculator = new WorkShiftLengthValueCalculator();
-            IWorkShiftValueCalculator workShiftValueCalculator =
-                new WorkShiftValueCalculator(workShiftPeriodValueCalculator, workShiftLengthValueCalculator);
-            IEqualWorkShiftValueDecider equalWorkShiftValueDecider = new EqualWorkShiftValueDecider();
-            IWorkShiftSelector workShiftSelector = new WorkShiftSelector(workShiftValueCalculator,
-                                                                         equalWorkShiftValueDecider);
-            return workShiftSelector;
-        }
+        
 
         void blockSchedulingServiceBlockScheduled(object sender, BlockSchedulingServiceEventArgs e)
         {
@@ -1057,12 +1047,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         #region Advance Block Scheduling
 
+        private static IWorkShiftSelector InitializeWorkShiftRelatedClasses()
+        {
+            IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator = new WorkShiftPeriodValueCalculator();
+            IWorkShiftLengthValueCalculator workShiftLengthValueCalculator = new WorkShiftLengthValueCalculator();
+            IWorkShiftValueCalculator workShiftValueCalculator =
+                new WorkShiftValueCalculator(workShiftPeriodValueCalculator, workShiftLengthValueCalculator);
+            IEqualWorkShiftValueDecider equalWorkShiftValueDecider = new EqualWorkShiftValueDecider();
+            IWorkShiftSelector workShiftSelector = new WorkShiftSelector(workShiftValueCalculator,
+                                                                         equalWorkShiftValueDecider);
+            return workShiftSelector;
+        }
+
         private AdvanceSchedulingService CallAdvanceSchedulingService( ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> selectedPersonMatrixList)
         {
             var groupPersonBuilderForOptimization = CallGroupPage(schedulingOptions);
             var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder, selectedPersonMatrixList);
-            var restrictionAggregator = _container.Resolve<IRestrictionAggregator>();
-            var workShiftFilterService = _container.Resolve<IWorkShiftFilterService>();
             var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
                                                                         schedulingOptions.ConsiderShortBreaks);
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
@@ -1075,8 +1075,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 new GroupPersonBuilderBasedOnContractTime(_container.Resolve<IGroupPersonFactory>());
             var advanceSchedulingService = new AdvanceSchedulingService(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
                                                                         dynamicBlockFinder,
-                                                                        restrictionAggregator,
-                                                                        workShiftFilterService, teamScheduling,
+                                                                        _container.Resolve<IRestrictionAggregator>(),
+                                                                        _container.Resolve<IWorkShiftFilterService>(),
+                                                                        teamScheduling,
                                                                         schedulingOptions, workShiftSelector,
                                                                         groupPersonBuilderBasedOnContractTime, groupPersonBuilderForOptimization);
             return advanceSchedulingService;

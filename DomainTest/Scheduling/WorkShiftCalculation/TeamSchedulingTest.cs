@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             using(_mock.Playback()   )
             {
 
-                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock });
+                _target.Execute( startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock },new List<IPerson>());
             }
         }
 
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
             using (_mock.Playback())
             {
-                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock });
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock }, new List<IPerson>());
             }
         }
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
             using (_mock.Playback())
             {
-                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock });
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock }, new List<IPerson>());
             }
         }
 
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
             using (_mock.Playback())
             {
-                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock });
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock }, new List<IPerson>());
             }
         }
     }

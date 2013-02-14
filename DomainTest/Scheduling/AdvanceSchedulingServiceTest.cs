@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            var matrixList = new List<IScheduleMatrixPro>{_scheduleMatrixPro};
             _effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
             _groupPerson = _mocks.StrictMock<IGroupPerson>();
             _person = _mocks.StrictMock<IPerson>();
@@ -61,7 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _target = new AdvanceSchedulingService(_skillDayPeriodIntervalDataGenerator, 
                                                 _dynamicBlockFinder,  
                                                 _restrictionAggregator,
-                                                matrixList, 
 												_workShiftFilterService,
 												_teamScheduling, 
 												_schedulingOptions,
@@ -86,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             }
             using(_mocks.Playback() )
             {
-                Assert.That(_target.Execute(new Dictionary<string, IWorkShiftFinderResult>()), Is.True);
+                Assert.That(_target.Execute(new Dictionary<string, IWorkShiftFinderResult>(),new List<IScheduleMatrixPro>(),new List<IScheduleMatrixPro>()), Is.True);
             }
            
         }
@@ -137,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                                                                       true,
                                                                       true)).IgnoreArguments().Return(_scheduleProjectionCache);
             Expect.Call(() => _teamScheduling.Execute(dateOnly, dateOnlyList, matrixList, _groupPerson, _effectiveRestriction,
-                                                      _scheduleProjectionCache, new List<DateOnly>())).IgnoreArguments();
+                                                      _scheduleProjectionCache, new List<DateOnly>(), new List<IPerson>())).IgnoreArguments();
         }
     }
 

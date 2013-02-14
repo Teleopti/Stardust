@@ -48,40 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
         }
 
-        //private DateOnly StartDate()
-        //{
-        //    var startDate = DateOnly.MinValue;
-        //    if(_matrixList!= null )
-        //    {
-        //        for (var i = 0; i < _matrixList.Count; i++)
-        //        {
-        //            var openMatrixList = _matrixList.Where(x => x.Person.Equals(_matrixList[i].Person));
-        //            foreach (var scheduleMatrixPro in openMatrixList)
-        //            {
-        //                foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
-        //                {
-        //                    var daySignificantPart = scheduleDayPro.DaySchedulePart().SignificantPart();
-        //                    if (startDate == DateOnly.MinValue &&
-        //                        (daySignificantPart != SchedulePartView.DayOff &&
-        //                         daySignificantPart != SchedulePartView.ContractDayOff &&
-        //                         daySignificantPart != SchedulePartView.FullDayAbsence))
-        //                    {
-        //                        startDate = scheduleDayPro.Day;
-        //                    }
-        //                    if (daySignificantPart == SchedulePartView.DayOff)
-        //                        _dayOff.Add(scheduleDayPro.Day);
-        //                    _effectiveDays.Add(scheduleDayPro.Day);
-        //                    if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
-        //                        _unLockedDays.Add(scheduleDayPro.Day);
-        //                }
-        //            }
-        //        }
-                
-
-        //    }
-        //    return startDate;
-        //}
-
+        
         private DateOnly StartDate(IList<IScheduleMatrixPro> matrixList, out  List<DateOnly> dayOff, out  List<DateOnly> effectiveDays, out  List<DateOnly> unLockedDays)
         {
             var startDate = DateOnly.MinValue;
@@ -157,14 +124,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     {
                         var groupMatrixList = GetScheduleMatrixProList(groupPerson, startDate, allPersonMatrixList);
                         //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
-                        var restriction = GetEffectiveRestriction(groupPerson, dateOnlyList);
+                        var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, _schedulingOptions);
 
                         //call class that returns the aggregated intraday dist based on teamblock dates ???? consider the priority and understaffing
                         var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
 
                         //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
                         // (should we cover for max seats here?) ????
-						var shifts = GetShiftProjectionCaches(restriction, groupMatrixList, groupPerson, startDate);
+                        var shifts = _workShiftFilterService.Filter(startDate, groupPerson, groupMatrixList, restriction, _schedulingOptions);
 
                         if (shifts != null && shifts.Count > 0)
                         {
@@ -189,13 +156,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return true;
         }
 
-        private IList<IShiftProjectionCache> GetShiftProjectionCaches(IEffectiveRestriction restriction, IList<IScheduleMatrixPro> groupMatrixList, IGroupPerson groupPerson,
-                                               DateOnly startDate)
-        {
-            var shifts = _workShiftFilterService.Filter(startDate, groupPerson, groupMatrixList, restriction, _schedulingOptions);
-            return shifts;
-        }
-
         private List<IScheduleMatrixPro> GetScheduleMatrixProList(IGroupPerson groupPerson, DateOnly startDate, IEnumerable<IScheduleMatrixPro> matrixList)
         {
             var person = groupPerson;
@@ -206,10 +166,5 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return groupMatrixList;
         }
 
-        private IEffectiveRestriction GetEffectiveRestriction(IGroupPerson groupPerson, IList<DateOnly> dateOnlyList)
-        {
-            var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, _schedulingOptions);
-            return restriction;
-        }
     }
 }
