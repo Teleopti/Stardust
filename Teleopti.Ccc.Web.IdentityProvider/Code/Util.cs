@@ -32,17 +32,17 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Code
 			}
 		}
 
-		public static string ExtractUserName(Uri url)
+		private static string extractUserName(Uri url)
 		{
 			return url.Segments[url.Segments.Length - 1];
 		}
 
-		public static string ExtractUserName(Identifier identifier)
+		private static string extractUserName(Identifier identifier)
 		{
-			return ExtractUserName(new Uri(identifier.ToString()));
+			return extractUserName(new Uri(identifier.ToString()));
 		}
 
-		public static Identifier BuildIdentityUrl()
+		private static Identifier buildIdentityUrl()
 		{
 			string username = HttpContext.Current.User.Identity.Name;
 			int slash = username.IndexOf('\\');
@@ -50,10 +50,10 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Code
 			{
 				username = username.Substring(slash + 1);
 			}
-			return BuildIdentityUrl(username);
+			return buildIdentityUrl(username);
 		}
 
-		public static Identifier BuildIdentityUrl(string username)
+		private static Identifier buildIdentityUrl(string username)
 		{
 			// This sample Provider has a custom policy for normalizing URIs, which is that the whole
 			// path of the URI be lowercase except for the first letter of the username.
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Code
 			return new Uri(HttpContext.Current.Request.Url, HttpContext.Current.Response.ApplyAppPathModifier("~/OpenId/AskUser/" + username));
 		}
 
-		public static ActionResult ProcessAuthenticationChallenge(DotNetOpenAuth.OpenId.Provider.IAuthenticationRequest idrequest)
+		public static ActionResult ProcessAuthenticationChallenge(IAuthenticationRequest idrequest)
 		{
 			// Verify that RP discovery is successful.
 			if (idrequest.IsReturnUrlDiscoverable(ProviderEndpoint.Provider.Channel.WebRequestHandler) != RelyingPartyDiscoveryResult.Success)
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Code
 			{
 				if (HttpContext.Current.User.Identity.IsAuthenticated)
 				{
-					idrequest.LocalIdentifier = Util.BuildIdentityUrl();
+					idrequest.LocalIdentifier = buildIdentityUrl();
 					idrequest.IsAuthenticated = true;
 				}
 				else
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Code
 			}
 			else
 			{
-				string userOwningOpenIdUrl = Util.ExtractUserName(idrequest.LocalIdentifier);
+				string userOwningOpenIdUrl = extractUserName(idrequest.LocalIdentifier);
 
 				// NOTE: in a production provider site, you may want to only 
 				// respond affirmatively if the user has already authorized this consumer
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Code
 				}
 			}
 
-			if (idrequest.IsAuthenticated.Value)
+			if (idrequest.IsAuthenticated != null && idrequest.IsAuthenticated.Value)
 			{
 				// add extension responses here.
 				var fetchRequest = idrequest.GetExtension<FetchRequest>();
