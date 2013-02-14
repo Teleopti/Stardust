@@ -58,21 +58,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenIViewSchedules(string date)
 		{
 			TestControllerMethods.LogonForExistingUser(UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName);
-			Navigation.GotoAdminWebSchedule(date);
+			Navigation.GotoAnywhereSchedule(date);
 		}
 
 		[Then(@"I should see schedule for '(.*)'")]
 		public void ThenIShouldSeeScheduleFor(string personName)
 		{
-			EventualAssert.That(() => Pages.Pages.AdminWebPage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).Text.Contains(personName), Is.True);
-			EventualAssert.That(() => Pages.Pages.AdminWebPage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).TableCell(QuicklyFind.ByClass("shift")).ChildrenOfType<WatiN.Core.List>().First().OwnListItems.Count, Is.GreaterThan(0));
+			EventualAssert.That(() => Pages.Pages.AnywherePage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).Text.Contains(personName), Is.True);
+            EventualAssert.That(() => Pages.Pages.AnywherePage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).TableCell(QuicklyFind.ByClass("shift")).ChildrenOfType<WatiN.Core.List>().First().OwnListItems.Count, Is.GreaterThan(0));
 		}
 
 		[Then(@"I should see no schedule for '(.*)'")]
 		public void ThenIShouldSeeNoScheduleFor(string personName)
 		{
-			EventualAssert.That(() => Pages.Pages.AdminWebPage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).Text.Contains(personName), Is.True);
-			EventualAssert.That(() => Pages.Pages.AdminWebPage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).TableCell(QuicklyFind.ByClass("shift")).ChildrenOfType<WatiN.Core.List>().First().OwnListItems.Count, Is.EqualTo(0));
+            EventualAssert.That(() => Pages.Pages.AnywherePage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).Text.Contains(personName), Is.True);
+            EventualAssert.That(() => Pages.Pages.AnywherePage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).TableCell(QuicklyFind.ByClass("shift")).ChildrenOfType<WatiN.Core.List>().First().OwnListItems.Count, Is.EqualTo(0));
 		}
 	}
 }

@@ -8,9 +8,9 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Web.Areas.Team.Controllers;
+using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 
-namespace Teleopti.Ccc.WebTest.Areas.Team.Controllers
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), TestFixture]
 	public class ApplicationControllerTest
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Team.Controllers
 		public void ShouldReturnDefaultViewInDefaultAction()
 		{
 			var result = target.Index();
-			result.FileName.Should().Be("~/Areas/Team/Content/Templates/index.html");
+			result.FileName.Should().Be("~/Areas/Anywhere/Content/Templates/index.html");
 			result.ContentType.Should().Be("text/html");
 		}
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Team.Controllers
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
 
 			request.Stub(x => x.MapPath("")).IgnoreArguments().Return(
-				Path.GetFullPath(@"..\..\..\Teleopti.Ccc.Web\Areas\Team\Content\Translation\TranslationTemplate.txt"));
+                Path.GetFullPath(@"..\..\..\Teleopti.Ccc.Web\Areas\Anywhere\Content\Translation\TranslationTemplate.txt"));
 
 			target.Resources().Should().Not.Be.Null();
 		}

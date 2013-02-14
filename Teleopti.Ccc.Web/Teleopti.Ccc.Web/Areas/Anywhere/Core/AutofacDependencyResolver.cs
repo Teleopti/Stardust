@@ -6,7 +6,7 @@ using Autofac.Builder;
 using Autofac.Core;
 using Microsoft.AspNet.SignalR;
 
-namespace Teleopti.Ccc.Web.Areas.Team.Core
+namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	/// <summary>
 	/// SignalR dependency resolver using Autofac container as backend.

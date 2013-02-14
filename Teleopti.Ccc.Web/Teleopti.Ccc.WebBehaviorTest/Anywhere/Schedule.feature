@@ -6,8 +6,8 @@
 Background:
 	Given there is a role with
 	| Field                      | Value                    |
-	| Name                       | Full access to Admin web |
-	| Access to Admin web        | true                     |
+	| Name                       | Full access to Anywhere |
+	| Access to Anywhere        | true                     |
 	| View unpublished schedules | true                     |
 	And there is a team with
 	| Field | Value            |
@@ -28,7 +28,7 @@ Background:
 	| Name  | Phone |
 
 Scenario: View team schedule
-	Given I am a team leader for 'Team green' with role 'Full access to Admin web'
+	Given I am a team leader for 'Team green' with role 'Full access to Anywhere'
 	And there is a shift with
 	| Field          | Value        |
 	| Person         | Pierre Baldi |
@@ -43,7 +43,7 @@ Scenario: View team schedule
 	Then I should see schedule for 'Pierre Baldi'
 	
 Scenario: View team schedule with night shift from yesterday
-	Given I am a team leader for 'Team green' with role 'Full access to Admin web'
+	Given I am a team leader for 'Team green' with role 'Full access to Anywhere'
 	And there is a shift with
 	| Field          | Value        |
 	| Person         | Pierre Baldi |
@@ -58,6 +58,6 @@ Scenario: View team schedule with night shift from yesterday
 	Then I should see schedule for 'Pierre Baldi'
 
 Scenario: View team schedule, no shift
-	Given I am a team leader for 'Team green' with role 'Full access to Admin web'
+	Given I am a team leader for 'Team green' with role 'Full access to Anywhere'
 	When I view schedules for '2012-12-03'
 	Then I should see no schedule for 'Pierre Baldi'

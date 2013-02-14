@@ -7,7 +7,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Team.Controllers
+namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
 	public class PersonController : Controller
 	{
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Team.Controllers
 		{
 			var people = _schedulePersonProvider.GetPermittedPersonsForTeam(new DateOnly(date), teamId,
 			                                                                DefinedRaptorApplicationFunctionPaths.
-			                                                                	SchedulesAdminWeb);
+			                                                                	SchedulesAnywhere);
 			return Json(people.Select(p => new {p.Id, p.Name.FirstName, p.Name.LastName, p.EmploymentNumber}).ToList(),
 			            JsonRequestBehavior.AllowGet);
 		}
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Team.Controllers
 		public JsonResult AvailableTeams(DateTime date)
 		{
 			var teams =
-				_teamProvider.GetPermittedTeams(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.SchedulesAdminWeb).Select(
+				_teamProvider.GetPermittedTeams(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere).Select(
 					t => new {t.Id, t.SiteAndTeam}).OrderBy(t => t.SiteAndTeam).ToList();
 			return Json(new
 			            	{

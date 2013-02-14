@@ -5,25 +5,25 @@ using System.Web.Routing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.Team;
+using Teleopti.Ccc.Web.Areas.Anywhere;
 
-namespace Teleopti.Ccc.WebTest.Areas.Team
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 {
 	[TestFixture]
-	public class TeamAreaRegistrationTest
+	public class AnywhereAreaRegistrationTest
 	{
 
 		[Test]
 		public void ShouldRouteMobileReportsArea()
 		{
 			var routes = new RouteCollection();
-			var target = new TeamAreaRegistration();
+			var target = new AnywhereAreaRegistration();
 			var areaRegistrationContext = new AreaRegistrationContext(target.AreaName, routes);
 
 			target.RegisterArea(areaRegistrationContext);
 
 			var httpContext = MockRepository.GenerateMock<HttpContextBase>();
-			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/Team/Controller/Action");
+			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/Anywhere/Controller/Action");
 			var routeData = routes.GetRouteData(httpContext);
 
 			routeData.Values["controller"].Should().Be("Controller");
@@ -34,18 +34,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Team
 		public void ShouldRouteMyTimeAuthenticationToStartArea()
 		{
 			var routes = new RouteCollection();
-			var target = new TeamAreaRegistration();
+			var target = new AnywhereAreaRegistration();
 			var areaRegistrationContext = new AreaRegistrationContext(target.AreaName, routes);
 
 			target.RegisterArea(areaRegistrationContext);
 
 			var httpContext = MockRepository.GenerateMock<HttpContextBase>();
-			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/Team/Authentication/SignIn");
+			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/Anywhere/Authentication/SignIn");
 			var routeData = routes.GetRouteData(httpContext);
 
 			var namespaces = routeData.DataTokens["namespaces"] as IEnumerable<string>;
 			namespaces.Should().Have.SameValuesAs("Teleopti.Ccc.Web.Areas.Start.*");
-			routeData.Values["origin"].Should().Be("Team");
+			routeData.Values["origin"].Should().Be("Anywhere");
 			routeData.DataTokens["area"].Should().Be("Start");
 		}
 	}

@@ -8,7 +8,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Team.Core
+namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	[HubName("scheduleHub")]
 	public class ScheduleHub : Hub

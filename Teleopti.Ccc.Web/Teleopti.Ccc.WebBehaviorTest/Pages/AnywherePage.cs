@@ -3,7 +3,7 @@ using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class AdminWebPage : Page
+	public class AnywherePage : Page
 	{
 		[FindBy(Id = "content-placeholder")] public Element Placeholder;
 

@@ -65,9 +65,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
-		public static void GotoAdminWeb()
+		public static void GotoAnywhere()
 		{
-			GoTo("Team", new ApplicationStartupTimeout());
+			GoTo("Anywhere", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
@@ -197,15 +197,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
             Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
 
-		public static void GotoAdminWebSchedule(string date = null)
+		public static void GotoAnywhereSchedule(string date = null)
 		{
 			string hash = string.Empty;
 			if (!string.IsNullOrEmpty(date))
 			{
 				hash = string.Format(CultureInfo.InvariantCulture, "#teamschedule/{0}", date.Replace("-",""));
 			}
-			GoTo("Team" + hash, new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<AdminWebPage>());
+			GoTo("Anywhere" + hash, new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 	}
 

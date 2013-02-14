@@ -5,7 +5,7 @@ using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 
-namespace Teleopti.Ccc.Web.Areas.Team.Controllers
+namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
 	public class ApplicationController : Controller
 	{
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Team.Controllers
 
 		public FilePathResult Index()
 		{
-			return new FilePathResult("~/Areas/Team/Content/Templates/index.html", "text/html");
+            return new FilePathResult("~/Areas/Anywhere/Content/Templates/index.html", "text/html");
 		}
 
 		[HttpGet,OutputCache(NoStore = true,Duration = 0)]
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Team.Controllers
 		[HttpGet,OutputCache(Duration = 0,NoStore = true)]
 		public ActionResult Resources()
 		{
-			var path = Request.MapPath("~/Areas/Team/Content/Translation/TranslationTemplate.txt");
+            var path = Request.MapPath("~/Areas/Anywhere/Content/Translation/TranslationTemplate.txt");
 			var template = System.IO.File.ReadAllText(path);
 			const string itemFormat = "{0}: '{1}'";
 

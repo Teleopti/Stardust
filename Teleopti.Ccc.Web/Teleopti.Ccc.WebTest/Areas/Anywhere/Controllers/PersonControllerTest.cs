@@ -9,10 +9,10 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
-using Teleopti.Ccc.Web.Areas.Team.Controllers;
+using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Team.Controllers
+namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), TestFixture]
 	public class PersonControllerTest
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Team.Controllers
 			var team = TeamFactory.CreateTeam("Team", "Site");
 			team.SetId(Guid.NewGuid());
 
-			teamProvider.Stub(x => x.GetPermittedTeams(date, DefinedRaptorApplicationFunctionPaths.SchedulesAdminWeb)).Return(
+			teamProvider.Stub(x => x.GetPermittedTeams(date, DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere)).Return(
 				new[] {team});
 			target.ControllerContext = new ControllerContext(new FakeHttpContext("/"), new RouteData(), target);
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Team.Controllers
 			schedulePersonProvider.Stub(
 				x =>
 				x.GetPermittedPersonsForTeam(date, team.Id.GetValueOrDefault(),
-				                             DefinedRaptorApplicationFunctionPaths.SchedulesAdminWeb)).Return(new[] {person});
+				                             DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere)).Return(new[] {person});
 			target.ControllerContext = new ControllerContext(new FakeHttpContext("/"), new RouteData(), target);
 
 			dynamic result = target.PeopleInTeam(date.Date,team.Id.GetValueOrDefault()).Data;
