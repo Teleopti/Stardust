@@ -334,10 +334,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldThrowIfTwoPeriodsWithSameSkill()
 		{
-			//currently only fails at persist time
-			//might change later
-			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
-
 			var groupActivity = new GroupingActivity("dummy group activity");
 			PersistAndRemoveFromUnitOfWork(groupActivity);
 			var activity = ActivityFactory.CreateActivity("dummy activity");
@@ -356,14 +352,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var personContract = PersonContractFactory.CreatePersonContract();
 			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
 			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
-			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.54)));
-
-			PersistAndRemoveFromUnitOfWork(personContract.Contract);
-			PersistAndRemoveFromUnitOfWork(personContract.PartTimePercentage);
-			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
-			personToTest.AddPersonPeriod(personPeriod);
-
-			Assert.Throws<ConstraintViolationException>(() => PersistAndRemoveFromUnitOfWork(personToTest));
+			Assert.Throws<ArgumentException>(() => personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.54))));
 		}
 
 		[Test]
