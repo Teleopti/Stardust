@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using AutoMapper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -159,61 +158,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return returnDay;
 		}
 
-		private IEnumerable<ShiftTradeTimeLineHoursViewModel> createTimeLineHours(DateTimePeriod timeLinePeriod, TimeZoneInfo timeZone, CultureInfo culture)
+		private static IEnumerable<ShiftTradeTimeLineHoursViewModel> createTimeLineHours(DateTimePeriod timeLinePeriod, TimeZoneInfo timeZone, CultureInfo culture)
 		{
-			var hourList = new List<ShiftTradeTimeLineHoursViewModel>();
-			ShiftTradeTimeLineHoursViewModel lastHour = null;
-			var shiftStartRounded = timeLinePeriod.StartDateTime;
-			var shiftEndRounded = timeLinePeriod.EndDateTime;
-
-			if (timeLinePeriod.StartDateTime.Minute != 0)
-			{
-				var lengthInMinutes = 60 - timeLinePeriod.StartDateTime.Minute;
-				hourList.Add(new ShiftTradeTimeLineHoursViewModel
-								{
-									HourText = string.Empty,
-									LengthInMinutesToDisplay = lengthInMinutes
-								});
-				shiftStartRounded = timeLinePeriod.StartDateTime.AddMinutes(lengthInMinutes);
-			}
-			if (timeLinePeriod.EndDateTime.Minute != 0)
-			{
-				lastHour = new ShiftTradeTimeLineHoursViewModel
-							{
-								HourText = createHourText(timeLinePeriod.EndDateTime, timeZone, culture),
-								LengthInMinutesToDisplay = timeLinePeriod.EndDateTime.Minute
-							};
-				shiftEndRounded = timeLinePeriod.EndDateTime.AddMinutes(-timeLinePeriod.EndDateTime.Minute);
-			}
-
-			for (var time = shiftStartRounded; time < shiftEndRounded; time = time.AddHours(1))
-			{
-				hourList.Add(new ShiftTradeTimeLineHoursViewModel
-								{
-									HourText = createHourText(time, timeZone, culture),
-									LengthInMinutesToDisplay = 60
-								});
-			}
-
-			if (lastHour != null)
-				hourList.Add(lastHour);
-
-			return hourList;
+			return new ShiftTradeTimeLineHoursViewModelFactory(timeZone, culture).CreateTimeLineHours(timeLinePeriod);
 		}
 
-		private static string createHourText(DateTime time, TimeZoneInfo timeZone, CultureInfo culture)
-		{
-			//rk - make a seperate service/interface for this?
-			var localTime = TimeZoneHelper.ConvertFromUtc(time, timeZone);
-			var hourString = string.Format(culture, localTime.ToShortTimeString());
-
-			const string regex = "(\\:.*\\ )";
-			var output = Regex.Replace(hourString, regex, " ");
-			if (output.Contains(":"))
-				output = localTime.Hour.ToString();
-
-			return output;
-		}
 
 		private static IEnumerable<ShiftTradeScheduleLayerViewModel> createShiftTradeLayers(ShiftTradePersonDayData personDay, TimeZoneInfo timeZone, DateTimePeriod timeLineRange)
 		{
