@@ -64,11 +64,15 @@ namespace Teleopti.Interfaces.Domain
         bool? IsPermitted { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is preliminary.
+        /// Gets or sets a value indicating whether this instance is preliminary. 
         /// </summary>
         /// <value>
         /// 	<c>true</c> if this instance is preliminary; otherwise, <c>false</c>.
         /// </value>
+        /// <remarks>
+		/// By design intention, a preliminary function does not checked against licence and not 
+		/// appear on the permitted application list
+        /// </remarks>
         bool IsPreliminary { get; set; }
 
         /// <summary>
