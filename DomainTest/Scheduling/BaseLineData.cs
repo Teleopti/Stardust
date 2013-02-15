@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
         public IGroupPerson GroupPerson { get; set; }
 
-
         public ISchedulingOptions SchedulingOptions { get; set; }
 
         public DateOnly BaseDateOnly { get; set; }  
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             ReadOnlyCollectionPersonList = new ReadOnlyCollection<IPerson>(PersonList );
 
             BaseDateOnly = DateOnly.Today;
-
+            
             var groupPersonFactory = new GroupPersonFactory();
             GroupPerson = groupPersonFactory.CreateGroupPerson(PersonList, BaseDateOnly, "GroupPerson", new Guid());
             

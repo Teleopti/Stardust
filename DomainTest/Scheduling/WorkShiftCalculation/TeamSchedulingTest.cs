@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             
             using (_mock.Record())
             {
-                ExpectCalls(dateOnlyAsDateTimePeriod, dateOnlyPeriod, dateTime, _baseLineData.ReadOnlyCollectionPersonList, (Person)_baseLineData.Person1);
+                ExpectCalls(dateOnlyAsDateTimePeriod, dateOnlyPeriod, dateTime);
 
                 Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
                 Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
@@ -70,15 +70,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             using(_mock.Playback()   )
             {
 
-                _target.Execute( startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock },new List<IPerson>());
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction,
+                                _shiftProjectionCache, new List<DateOnly> {startDateOfBlock}, _baseLineData.PersonList);
             }
         }
 
         private void ExpectCalls(DateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, DateOnlyPeriod dateOnlyPeriod,
-                                 DateTimePeriod dateTime, ReadOnlyCollection<IPerson> personList, Person person)
+                                 DateTimePeriod dateTime)
         {
-            Expect.Call(_groupPerson.GroupMembers).Return(personList);
-            Expect.Call(_scheduleMatrixPro.Person).Return(person);
+            Expect.Call(_groupPerson.GroupMembers).Return(_baseLineData.ReadOnlyCollectionPersonList ).Repeat.AtLeastOnce();
+            Expect.Call(_scheduleMatrixPro.Person).Return(_baseLineData.Person1 ).Repeat.AtLeastOnce() ;
             Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(new DateOnly())).IgnoreArguments().Return(
                 _scheduleDayPro).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
@@ -107,13 +108,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             var dateOnlyPeriod = new DateOnlyPeriod(startDateOfBlock, startDateOfBlock.AddDays(2));
             using (_mock.Record())
             {
-                ExpectCalls(dateOnlyAsDateTimePeriod, dateOnlyPeriod, dateTime, _baseLineData.ReadOnlyCollectionPersonList, (Person)_baseLineData.Person1);
+                ExpectCalls(dateOnlyAsDateTimePeriod, dateOnlyPeriod, dateTime);
                 Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff );
                 
             }
             using (_mock.Playback())
             {
-                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock }, _baseLineData.PersonList );
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction,
+                                _shiftProjectionCache, new List<DateOnly> {startDateOfBlock}, _baseLineData.PersonList);
             }
         }
 
@@ -125,19 +127,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(startDateOfBlock, TimeZoneInfo.Local);
 
-            var person = new Person();
-            var personList = new ReadOnlyCollection<IPerson>(new List<IPerson> { person });
             var dateTime = new DateTimePeriod();
             var dateOnlyPeriod = new DateOnlyPeriod(startDateOfBlock, startDateOfBlock.AddDays(2));
             using (_mock.Record())
             {
-                ExpectCalls(dateOnlyAsDateTimePeriod, dateOnlyPeriod, dateTime, personList, person);
+                ExpectCalls(dateOnlyAsDateTimePeriod, dateOnlyPeriod, dateTime);
                 Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.ContractDayOff );
+                
 
             }
             using (_mock.Playback())
             {
-                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock }, _baseLineData.PersonList);
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction,
+                                _shiftProjectionCache, new List<DateOnly> {startDateOfBlock}, _baseLineData.PersonList);
             }
         }
 
@@ -149,19 +151,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(startDateOfBlock, TimeZoneInfo.Local);
 
-            var person = new Person();
-            var personList = new ReadOnlyCollection<IPerson>(new List<IPerson> { person });
             var dateTime = new DateTimePeriod();
             var dateOnlyPeriod = new DateOnlyPeriod(startDateOfBlock, startDateOfBlock.AddDays(2));
             using (_mock.Record())
             {
-                ExpectCalls(dateOnlyAsDateTimePeriod, dateOnlyPeriod, dateTime, personList, person);
+                ExpectCalls(dateOnlyAsDateTimePeriod, dateOnlyPeriod, dateTime);
+
                 Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.FullDayAbsence );
 
             }
             using (_mock.Playback())
             {
-                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction, _shiftProjectionCache, new List<DateOnly> { startDateOfBlock }, _baseLineData.PersonList);
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction,
+                                _shiftProjectionCache, new List<DateOnly> {startDateOfBlock}, _baseLineData.PersonList);
             }
         }
     }
