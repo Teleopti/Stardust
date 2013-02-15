@@ -8,7 +8,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
+namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 {
 	[Binding]
 	public class WeekScheduleTimeIndicatorStepDefinitions

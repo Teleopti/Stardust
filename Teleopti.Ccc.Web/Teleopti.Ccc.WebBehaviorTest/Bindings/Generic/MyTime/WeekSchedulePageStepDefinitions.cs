@@ -1,10 +1,9 @@
 using System;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
+namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 {
 	[Binding]
 	public class WeekSchedulePageStepDefinitions

@@ -507,7 +507,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIHaveReceivedAShiftTradeRequestFrom(string from)
 		{
 			var person = PersonFactory.CreatePerson(from);
-			UserFactory.User().MakePerson(person);
+			UserFactory.User().MakeOtherPerson(person);
 			UserFactory.User().Setup(new ExistingShiftTradeRequest() {From = person});
 		}
 

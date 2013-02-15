@@ -7,7 +7,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
+namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 {
 	[Binding]
 	public class SignInPageStepDefinitions

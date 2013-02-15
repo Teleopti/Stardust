@@ -6,14 +6,12 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
-using WatiN.Core;
 using Table = TechTalk.SpecFlow.Table;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
+namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 {
 	
 	[Binding]

@@ -11,7 +11,7 @@ using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
+namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 {
 	[Binding]
 	public class ShiftTradeRequestsPageStepDefinition

@@ -115,17 +115,16 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\TeamStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftTradeRequestFromRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\SignInPageStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\BasicPersonConfigurable.cs" />
+    <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonDayOffConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ReadModelShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\TeamConfigurable.cs" />
-    <Compile Include="Bindings\Generic\StudentAvailabilityPageStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Specific\SetName.cs" />
+    <Compile Include="Bindings\Generic\MyTime\StudentAvailabilityPageStepDefinitions.cs" />
     <Compile Include="StudentAvailabilityMultidays.feature.cs">
       <DependentUpon>StudentAvailabilityMultidays.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -135,8 +134,8 @@
     <Compile Include="Bindings\Generic\ScenarioStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
-    <Compile Include="Bindings\Generic\ShiftTradeRequestsPageStepDefinition.cs" />
-    <Compile Include="Bindings\Generic\WeekSchedulePageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\ShiftTradeRequestsPageStepDefinition.cs" />
+    <Compile Include="Bindings\Generic\MyTime\WeekSchedulePageStepDefinitions.cs" />
     <Compile Include="Core\Robustness\EventualAssert.cs" />
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\Robustness\Timeouts.cs" />
@@ -177,7 +176,7 @@
     <Compile Include="Data\Setups\Generic\RuleSetBagConfigurable.cs" />
     <Compile Include="Bindings\Generic\RuleSetBagStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\WorkShiftRuleSetConfigurable.cs" />
-    <Compile Include="Bindings\Generic\WeekScheduleTimeIndicatorStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\WeekScheduleTimeIndicatorStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\DayOffStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftCategoryStepDefinitions.cs" />
@@ -186,7 +185,7 @@
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
     <Compile Include="ConfigSanityCheck.cs" />
-    <Compile Include="Bindings\Generic\PortalPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\PortalPageStepDefinitions.cs" />
     <Compile Include="PreferencesFeedbackRefact.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -212,7 +211,7 @@
     <Compile Include="Data\Setups\Generic\MeetingConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\DayOffTemplateConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ShiftCategoryConfigurable.cs" />
-    <Compile Include="Bindings\Generic\PreferencesPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\PreferencesPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
     <Compile Include="Data\Setups\Specific\StockholmTimeZone.cs" />
     <Compile Include="Pages\Common\ComboBox.cs" />
@@ -517,7 +516,7 @@
       <DependentUpon>TextRequestFromSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="TextRequestStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\EditRequestPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\EditRequestPageStepDefinitions.cs" />
     <Compile Include="WeekSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

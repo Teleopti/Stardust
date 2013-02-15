@@ -31,15 +31,15 @@ Background:
 Scenario: Open add absence form from tab add absence
 	Given I am a team leader for 'Team green' with role 'Full access to Anywhere'
 	And there is a shift with
-	| Field          | Value        |
-	| Person         | Pierre Baldi |
-	| Date           | 2012-12-02   |
-	| StartTime      | 08:00        |
-	| EndTime        | 17:00        |
-	| Activity       | Phone        |
-	| LunchStartTime | 11:30        |
-	| LunchEndTime   | 12:15        |
-	| LunchActivity  | Lunch        |
+	| Field            | Value        |
+	| Person           | Pierre Baldi |
+	| Date             | 2012-12-02   |
+	| Start time       | 08:00        |
+	| End time         | 17:00        |
+	| Activity         | Phone        |
+	| Lunch start time | 11:30        |
+	| Lunch end time   | 12:15        |
+	| Lunch activity   | Lunch        |
 	And I view agent schedule for 'Pierre Baldi' for date '2012-12-02'
 	When I click on the add absence tab
 	Then I should see the add absence form
@@ -47,15 +47,15 @@ Scenario: Open add absence form from tab add absence
 Scenario: Default absence start and end time values from agents schedule
 	Given I am a team leader for 'Team green' with role 'Full access to Anywhere'
 	And there is a shift with
-	| Field          | Value        |
-	| Person         | Pierre Baldi |
-	| Date           | 2012-12-02   |
-	| StartTime      | 08:00        |
-	| EndTime        | 17:00        |
-	| Activity       | Phone        |
-	| LunchStartTime | 11:30        |
-	| LunchEndTime   | 12:15        |
-	| LunchActivity  | Lunch        |
+	| Field            | Value        |
+	| Person           | Pierre Baldi |
+	| Date             | 2012-12-02   |
+	| Start time       | 08:00        |
+	| End time         | 17:00        |
+	| Activity         | Phone        |
+	| Lunch start time | 11:30        |
+	| Lunch end time   | 12:15        |
+	| Lunch activity   | Lunch        |
 	And I view agent schedule for 'Pierre Baldi' for date '2012-12-02'
 	When I click on the add absence tab
 	Then I should see the add absence form with 08:00 - 17:00 as the default times

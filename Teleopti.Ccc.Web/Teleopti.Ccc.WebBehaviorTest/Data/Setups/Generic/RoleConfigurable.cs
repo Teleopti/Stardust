@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public string Name { get; set; }
 		public string BusinessUnit { get; set; }
+		public string Team { get; set; }
+
 		public bool ViewUnpublishedSchedules { get; set; }
 		public bool ViewConfidential { get; set; }
 		public bool AccessToMobileReports { get; set; }
@@ -57,6 +59,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			                    		AvailableDataRange = AvailableDataRangeOption.MyTeam
 			                    	};
 			role.AvailableData = availableData;
+
+			if (!string.IsNullOrEmpty(Team))
+			{
+				var teamRepository = new TeamRepository(uow);
+				var team = teamRepository.FindTeamByDescriptionName(Team).Single();
+				role.AvailableData.AddAvailableTeam(team);
+			}
 
 			var businessUnitRepository = new BusinessUnitRepository(uow);
 			var businessUnit = businessUnitRepository.LoadAllBusinessUnitSortedByName().Single(b => b.Name == BusinessUnit);

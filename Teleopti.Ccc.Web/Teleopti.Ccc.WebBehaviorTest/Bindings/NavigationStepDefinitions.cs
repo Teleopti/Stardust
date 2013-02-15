@@ -131,6 +131,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoSiteHomePage();
 		}
 
+		[When(@"I view schedules for '(.*)'")]
+		public void WhenIViewSchedules(string date)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAnywhereSchedule(date);
+		}
+
 
 
 
