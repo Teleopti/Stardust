@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                                   PrevoiousSchedule = (IScheduleDay) scheduleDay.Clone()
                               };
             
-            _deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService);
+            _deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks);
 
             changed.CurrentSchedule = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateToBeRemoved).DaySchedulePart();
             

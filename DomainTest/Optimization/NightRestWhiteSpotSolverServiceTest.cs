@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _scheduleService = _mocks.StrictMock<IScheduleService>();
             _person = PersonFactory.CreatePerson();
-            _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
+            _schedulingOptions = new SchedulingOptions();
         	_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 			_target = new NightRestWhiteSpotSolverService(_solver, _deleteAndResourceCalculateService, _scheduleService, new WorkShiftFinderResultHolder(), _resourceCalculateDelayer);
         }
@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_solver.Resolve(_matrix)).Return(nightRestWhiteSpotSolverResult);
                 Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToDelete[0])).Return(day1).Repeat.Twice();
                 Expect.Call(day1.DaySchedulePart()).Return(scheduleDayToDelete).Repeat.Twice();
-				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { scheduleDayToDelete }, 
-                                                              _schedulePartModifyAndRollbackService));
+				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { scheduleDayToDelete },
+															  _schedulePartModifyAndRollbackService, true));
 
                 Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule()[0])).Return(day2);
                 Expect.Call(_matrix.Person).Return(_person);
@@ -95,8 +95,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_solver.Resolve(_matrix)).Return(nightRestWhiteSpotSolverResult);
                 Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToDelete[0])).Return(day1);
                 Expect.Call(day1.DaySchedulePart()).Return(scheduleDayToDelete);
-				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { scheduleDayToDelete }, 
-                                                              _schedulePartModifyAndRollbackService));
+				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { scheduleDayToDelete },
+															  _schedulePartModifyAndRollbackService, true));
 
                 Expect.Call(_matrix.GetScheduleDayByKey(nightRestWhiteSpotSolverResult.DaysToReschedule()[0])).Return(day2);
                 Expect.Call(_matrix.Person).Return(_person);
