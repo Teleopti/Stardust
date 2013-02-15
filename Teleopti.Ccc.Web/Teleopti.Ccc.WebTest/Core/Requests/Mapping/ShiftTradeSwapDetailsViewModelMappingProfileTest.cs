@@ -25,13 +25,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
-		public void SetsThedatesFromTheFirstShiftTradeSwapDetail()
+		public void SetsTheDatesFromTheFirstShiftTradeSwapDetail()
 		{
-		
-
 			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(CreateStub(_dateFrom, _dateTo));
-			Assert.That(result.DateFrom, Is.EqualTo(_dateFrom));
-			Assert.That(result.DateTo, Is.EqualTo(_dateTo));
+			Assert.That(result.DateFrom, Is.EqualTo(_dateFrom.Date));
+			Assert.That(result.DateTo, Is.EqualTo(_dateTo.Date));
 		}
 
 		[Test]
@@ -41,16 +39,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var dateTo = new DateOnly(2002, 12, 12);
 
 			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(CreateStub(dateFrom, dateTo));
-			Assert.That(result.DateFrom, Is.EqualTo(dateFrom));
-			Assert.That(result.DateTo, Is.EqualTo(dateTo));
+			Assert.That(result.DateFrom, Is.EqualTo(dateFrom.Date));
+			Assert.That(result.DateTo, Is.EqualTo(dateTo.Date));
 		}
 
 		[Test]
 		public void CreatesShiftTradePersonScheduleToBasedOnTheFirstSwapDetail()
 		{
 			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(CreateStub(_dateFrom,_dateTo));
-			Assert.That(result.DateFrom, Is.EqualTo(_dateFrom));
-			Assert.That(result.DateTo, Is.EqualTo(_dateTo));
+			Assert.That(result.DateFrom, Is.EqualTo(_dateFrom.Date));
+			Assert.That(result.DateTo, Is.EqualTo(_dateTo.Date));
 		}
 
 		[Test]
