@@ -169,6 +169,9 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IRespondToShiftTrade.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\RespondToShiftTrade.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\CreateHourText.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ICreateHourText.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeTimeLineHoursViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailsViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingProfile.cs" />

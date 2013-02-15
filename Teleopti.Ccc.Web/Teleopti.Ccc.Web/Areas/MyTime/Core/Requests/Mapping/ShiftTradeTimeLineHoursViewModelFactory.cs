@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text.RegularExpressions;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
-	public class ShiftTradeTimeLineHoursViewModelFactory
+	public class ShiftTradeTimeLineHoursViewModelFactory : IShiftTradeTimeLineHoursViewModelFactory
 	{
 		private readonly TimeZoneInfo _timeZone;
 		private readonly CultureInfo _culture;
+		private readonly ICreateHourText _createHourText;
 
-		public ShiftTradeTimeLineHoursViewModelFactory(TimeZoneInfo timeZone, CultureInfo culture)
+		public ShiftTradeTimeLineHoursViewModelFactory(TimeZoneInfo timeZone, CultureInfo culture, ICreateHourText createHourText)
 		{
 			_timeZone = timeZone;
 			_culture = culture;
+			_createHourText = createHourText;
 		}
 
 		public  IEnumerable<ShiftTradeTimeLineHoursViewModel> CreateTimeLineHours(DateTimePeriod timeLinePeriod)
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				lastHour = new ShiftTradeTimeLineHoursViewModel
 					           {
-						           HourText = createHourText(timeLinePeriod.EndDateTime, _timeZone, _culture),
+						           HourText = _createHourText.CreateText(timeLinePeriod.EndDateTime, _timeZone, _culture),
 						           LengthInMinutesToDisplay = timeLinePeriod.EndDateTime.Minute
 					           };
 				shiftEndRounded = timeLinePeriod.EndDateTime.AddMinutes(-timeLinePeriod.EndDateTime.Minute);
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				hourList.Add(new ShiftTradeTimeLineHoursViewModel
 					             {
-						             HourText = createHourText(time, _timeZone, _culture),
+										 HourText = _createHourText.CreateText(time, _timeZone, _culture),
 						             LengthInMinutesToDisplay = 60
 					             });
 			}
@@ -60,18 +61,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return hourList;
 		}
 
-		private static string createHourText(DateTime time, TimeZoneInfo timeZone, CultureInfo culture)
-		{
-			//rk - make a seperate service/interface for this?
-			var localTime = TimeZoneHelper.ConvertFromUtc(time, timeZone);
-			var hourString = string.Format(culture, localTime.ToShortTimeString());
-
-			const string regex = "(\\:.*\\ )";
-			var output = Regex.Replace(hourString, regex, " ");
-			if (output.Contains(":"))
-				output = localTime.Hour.ToString();
-
-			return output;
-		}
 	}
 }

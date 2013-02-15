@@ -160,7 +160,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private static IEnumerable<ShiftTradeTimeLineHoursViewModel> createTimeLineHours(DateTimePeriod timeLinePeriod, TimeZoneInfo timeZone, CultureInfo culture)
 		{
-			return new ShiftTradeTimeLineHoursViewModelFactory(timeZone, culture).CreateTimeLineHours(timeLinePeriod);
+			//Henke move to ctor...
+			return new ShiftTradeTimeLineHoursViewModelFactory(timeZone, culture,new CreateHourText()).CreateTimeLineHours(timeLinePeriod);
 		}
 
 
