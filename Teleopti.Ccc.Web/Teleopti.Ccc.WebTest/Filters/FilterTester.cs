@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading;
@@ -28,6 +29,11 @@ namespace Teleopti.Ccc.WebTest.Filters
 		public ActionResult InvokeFilter(IResultFilter resultFilter) { return InvokeFilter(new FilterTestActionInvoker(resultFilter)); }
 		public ActionResult InvokeFilter(IActionFilter actionFilter) { return InvokeFilter(new FilterTestActionInvoker(actionFilter)); }
 		public ActionResult InvokeFilter(ActionFilterAttribute actionFilter) { return InvokeFilter(new FilterTestActionInvoker(actionFilter)); }
+
+		public FilterTester()
+		{
+			HttpContext.Current = new HttpContext(new HttpRequest("foo", "http://tempuri.org/foo", ""), new HttpResponse(new StringWriter()));
+		}
 
 		private ActionResult InvokeFilter(FilterTestActionInvoker invoker)
 		{
