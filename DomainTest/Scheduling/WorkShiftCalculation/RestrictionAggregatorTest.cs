@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IRestrictionAggregator _target;
 	    private IOpenHoursToEffectiveRestrictionConverter _openHoursToRestrictionConverter;
+	    private IScheduleRestrictionExtractor _scheduleRestrictionExtractor;
 
 	    [SetUp]
         public void Setup()
@@ -28,9 +29,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_openHoursToRestrictionConverter = _mocks.StrictMock<IOpenHoursToEffectiveRestrictionConverter>();
-            _target = new RestrictionAggregator(_effectiveRestrictionCreator,
+			_scheduleRestrictionExtractor = _mocks.StrictMock<IScheduleRestrictionExtractor>();
+			_target = new RestrictionAggregator(_effectiveRestrictionCreator,
                                                 _schedulingResultStateHolder,
-												_openHoursToRestrictionConverter);
+												_openHoursToRestrictionConverter,
+												_scheduleRestrictionExtractor);
         }
 
 	    [Test]
@@ -41,7 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		    var person1 = PersonFactory.CreatePerson("bill");
 		    var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 		    var groupPerson = _mocks.StrictMock<IGroupPerson>();
-
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
 		    var firstDay =
 			    new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(12)),
 			                             new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(18)),
@@ -53,6 +57,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		    var openHoursRestriction =
 			    new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11),null),
 			                             new EndTimeLimitation(null, TimeSpan.FromHours(17.5)),
+			                             new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			var scheduleRestriction =
+			    new EffectiveRestriction(new StartTimeLimitation(),
+			                             new EndTimeLimitation(),
 			                             new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 		    using (_mocks.Record())
 		    {
@@ -72,6 +80,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			          .Return(secondDay);
 			    Expect.Call(_openHoursToRestrictionConverter.Convert(groupPerson, dateList))
 			          .Return(openHoursRestriction);
+			    Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions))
+			          .Return(scheduleRestriction);
 		    }
 
 		    using (_mocks.Playback())
@@ -81,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			                                          new WorkTimeLimitation(), null, null, null,
 			                                          new List<IActivityRestriction>());
 
-			    var restriction = _target.Aggregate(dateList, groupPerson, _schedulingOptions);
+			    var restriction = _target.Aggregate(dateList, groupPerson, matrixList, _schedulingOptions);
 			    Assert.That(restriction, Is.EqualTo(result));
 		    }
 	    }
@@ -91,8 +101,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         {
             var dateOnly = new DateOnly(2012, 12, 7);
             var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
-
-            Assert.That(_target.Aggregate(dateList, null, _schedulingOptions), Is.Null);
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+            Assert.That(_target.Aggregate(dateList, null, matrixList, _schedulingOptions), Is.Null);
         }
 
     }

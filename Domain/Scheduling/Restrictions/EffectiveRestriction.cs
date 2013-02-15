@@ -422,5 +422,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		}
 
 		public bool NotAllowedForDayOffs { get; set; }
+	    public IMainShift CommonMainShift { get; set; }
     }
 }

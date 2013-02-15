@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -17,18 +19,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly ISchedulingResultStateHolder _resultStateHolder;
         private readonly IShiftLengthDecider _shiftLengthDecider;
+	    private readonly IScheduleDayEquator _scheduleDayEquator;
 
-        public WorkShiftFilterService(IShiftProjectionCacheManager shiftProjectionCacheManager,
+	    public WorkShiftFilterService(IShiftProjectionCacheManager shiftProjectionCacheManager,
                                       IShiftProjectionCacheFilter shiftProjectionCacheFilter,
                                       IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
                                       ISchedulingResultStateHolder resultStateHolder,
-                                      IShiftLengthDecider shiftLengthDecider)
+                                      IShiftLengthDecider shiftLengthDecider,
+									  IScheduleDayEquator scheduleDayEquator)
         {
             _shiftProjectionCacheManager = shiftProjectionCacheManager;
             _shiftProjectionCacheFilter = shiftProjectionCacheFilter;
             _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
             _resultStateHolder = resultStateHolder;
             _shiftLengthDecider = shiftLengthDecider;
+	        _scheduleDayEquator = scheduleDayEquator;
         }
 
         public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions)
@@ -61,6 +66,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                                                                                                          effectiveRestriction);
                 if (shiftList.Count > 0)
                 {
+					if (effectiveRestriction.CommonMainShift != null)
+					{
+						var shift = shiftList.FirstOrDefault(x => _scheduleDayEquator.AreMainShiftEqual(x.TheMainShift, effectiveRestriction.CommonMainShift));
+						if (shift != null)
+							return new List<IShiftProjectionCache> {shift};
+					}
                     if (schedulingOptions.ShiftCategory != null)
                     {
                         // override the one in Effective
