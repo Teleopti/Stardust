@@ -20,6 +20,7 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -58,6 +59,15 @@ namespace Teleopti.Ccc.Win.Scheduling
             grid.HideCols.ResetRange(0, 300);
         }
 
+		public void Sort(IScheduleSortCommand command)
+		{
+			var selectedSchedulePart = SelectedSchedules().FirstOrDefault();
+			if (selectedSchedulePart == null) return;
+			Presenter.SortCommand = command;
+			Presenter.SortCommand.Execute(selectedSchedulePart.DateOnlyAsPeriod.DateOnly);
+			SetSelectionFromParts(new List<IScheduleDay> { selectedSchedulePart });
+			ViewGrid.Refresh();
+		}
     	
     	public bool IsOverviewColumnsHidden	
     	{
