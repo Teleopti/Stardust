@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             //Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
             Expect.Call(_groupPersonBuilderBasedOnContractTime.SplitTeams(_baseLineData.GroupPerson , dateOnly)).IgnoreArguments().
                 Return(groupPersonList);
-            Expect.Call(_restrictionAggregator.Aggregate(dateOnlyList, _baseLineData.GroupPerson, _schedulingOptions)).
+            Expect.Call(_restrictionAggregator.Aggregate(dateOnlyList, _baseLineData.GroupPerson, matrixList, _schedulingOptions)).
                 IgnoreArguments().Return(_effectiveRestriction);
             Expect.Call(_skillDayPeriodIntervalDataGenerator.Generate(_baseLineData.GroupPerson, dateOnlyList)).IgnoreArguments().Return(
                 new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>());

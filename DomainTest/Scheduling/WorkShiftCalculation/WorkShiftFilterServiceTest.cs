@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -33,8 +34,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private IWorkShift _workShift3;
         private IShiftCategory _category;
         private IActivity _activity;
+	    private IScheduleDayEquator _mainShiftEquator;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _workShiftMinMaxCalculator = _mocks.StrictMock<IWorkShiftMinMaxCalculator>();
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _shiftLengthDecider = _mocks.StrictMock<IShiftLengthDecider>();
+	        _mainShiftEquator = _mocks.StrictMock<IScheduleDayEquator>();
             _schedulingOptions = new SchedulingOptions();
             var zone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
             _timeZoneInfo = (zone);
@@ -52,8 +55,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _info = new PermissionInformation(_person);
             _info.SetDefaultTimeZone(_timeZoneInfo);
-            _target = new WorkShiftFilterService(_shiftProjectionCacheManager, _shiftProjectionCacheFilter,
-                                                 _workShiftMinMaxCalculator, _stateHolder, _shiftLengthDecider);
+		    _target = new WorkShiftFilterService(_shiftProjectionCacheManager, _shiftProjectionCacheFilter,
+		                                         _workShiftMinMaxCalculator, _stateHolder, _shiftLengthDecider,
+		                                         _mainShiftEquator);
         }
 
         [Test]

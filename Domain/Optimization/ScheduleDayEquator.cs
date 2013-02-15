@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -8,6 +6,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         bool MainShiftEquals(IScheduleDay original, IScheduleDay current);
         bool DayOffEquals(IScheduleDay original, IScheduleDay current);
+	    bool AreMainShiftEqual(IMainShift original, IMainShift current);
     }
 
     public class ScheduleDayEquator : IScheduleDayEquator
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return checkDayOffEqual(original, current);
         }
 
-        private static bool checkMainShiftEqual(IScheduleDay original, IScheduleDay current)
+        private bool checkMainShiftEqual(IScheduleDay original, IScheduleDay current)
         {
             if (original.PersonDayOffCollection().Count > 0 && current.PersonDayOffCollection().Count == 0)
                 return true;
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                     if (originalMainShift == null || currentMainShift == null)
                         return false;
 
-                    if (!mainShiftEquals(originalMainShift, currentMainShift))
+					if (!AreMainShiftEqual(originalMainShift, currentMainShift))
                         return false;
                 }
                 
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-        private static bool mainShiftEquals(IMainShift original, IMainShift current)
+		public bool AreMainShiftEqual(IMainShift original, IMainShift current)
         {
             if(original.ShiftCategory.Id != current.ShiftCategory.Id)
                 return false;

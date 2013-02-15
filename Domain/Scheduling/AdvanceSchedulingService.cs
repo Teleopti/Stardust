@@ -104,17 +104,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
             var startDate = StartDate(selectedPersonMatrixList, out dayOff, out effectiveDays, out unLockedDays);
 
-            var selectedPerson = selectedPersonMatrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).ToList();
+            var selectedPerson = selectedPersonMatrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).Distinct().ToList();
             
             while (startDate != DateOnly.MinValue )
             {
                 //call class that return the teamblock dates for a given date (problem if team members don't have same days off)
                 var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays( startDate );
-                var allGroupPersonListOnStartDate = new List<IGroupPerson>();
+                var allGroupPersonListOnStartDate = new HashSet<IGroupPerson>();
                 
                 foreach (var person in selectedPerson)
                 {
-                    allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person,startDate ));
+					allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person, startDate));
                 }
                 
                 foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
@@ -124,7 +124,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     {
                         var groupMatrixList = GetScheduleMatrixProList(groupPerson, startDate, allPersonMatrixList);
                         //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
-                        var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, _schedulingOptions);
+                        var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson,groupMatrixList, _schedulingOptions);
+						if (restriction == null) continue;
 
                         //call class that returns the aggregated intraday dist based on teamblock dates ???? consider the priority and understaffing
                         var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
@@ -136,7 +137,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
                         if (shifts != null && shifts.Count > 0)
                         {
                             //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need ???
-                            var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
+	                        IShiftProjectionCache bestShiftProjectionCache;
+	                        if (shifts.Count == 1)
+		                        bestShiftProjectionCache = shifts.First();
+							else
+								bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
                                                                                         _schedulingOptions.WorkShiftLengthHintOption,
                                                                                         _schedulingOptions.UseMinimumPersons,
                                                                                         _schedulingOptions.UseMaximumPersons);
