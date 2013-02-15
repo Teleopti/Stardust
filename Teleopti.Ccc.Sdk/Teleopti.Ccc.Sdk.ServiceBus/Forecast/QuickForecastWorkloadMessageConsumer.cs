@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -55,15 +56,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		{
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
+				var jobResult = _jobResultRepository.Get(message.JobId);
+				if(jobResult == null) return;
+				_feedback.SetJobResult(jobResult, _messageBroker);
+
+				_feedback.ReportProgress(2, string.Format(CultureInfo.InvariantCulture, "Loading workload...."));
+
 				var workload = _workloadRepository.Get(message.WorkloadId);
 				if (workload == null) return;
 
-				var jobResult = _jobResultRepository.Get(message.JobId);
-
-				_feedback.SetJobResult(jobResult, _messageBroker);
-
 				//TriggerWorkloadStart();
-
+				
 				var skill = workload.Skill;
 				var scenario = _scenarioRepository.Get(message.ScenarioId);
 				//Load statistic data
@@ -81,17 +84,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.Today, taskOwnerDaysWithoutOutliers, TaskOwnerPeriodType.Other);
 
 				//Load (or create) workload days
-				var skillDays = _skillDayRepository.FindRange(message.StatisticPeriod, skill, scenario);
-				skillDays = _skillDayRepository.GetAllSkillDays(message.StatisticPeriod, skillDays, skill, scenario, false);
-				var calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), message.StatisticPeriod);
+				var skillDays = _skillDayRepository.FindRange(message.TargetPeriod, skill, scenario);
+				skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario, false);
+				var calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), message.TargetPeriod);
 
 				var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(calculator.SkillDays, workload).OfType<ITaskOwner>().ToList();
 
 				applyVolumes(workload, taskOwnerPeriod, workloadDays);
 
 				//(Update templates for workload)
-				if (message.UpdateStandardTemplates)
-					updateStandardTemplates(workload, statisticHelper, message.StatisticPeriod, message.SmoothingStyle);
+				updateStandardTemplates(workload, statisticHelper, message.TemplatePeriod, message.SmoothingStyle);
 
 				//Create budget forecast (apply standard templates for all days in target)
 				workload.SetDefaultTemplates(workloadDays);
@@ -118,10 +120,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 							   0, 0, false, workload);
 		}
 
-		private void updateStandardTemplates(IWorkload workload, IStatisticHelper statisticsHelper, DateOnlyPeriod statisticPeriod, int smoothing)
+		private void updateStandardTemplates(IWorkload workload, IStatisticHelper statisticsHelper, DateOnlyPeriod templatePeriod, int smoothing)
 		{
 			var workloadDayTemplateCalculator = _forecastClassesCreator.CreateWorkloadDayTemplateCalculator(statisticsHelper, _outlierRepository);
-			workloadDayTemplateCalculator.LoadWorkloadDayTemplates(new[] { statisticPeriod }, workload);
+			workloadDayTemplateCalculator.LoadWorkloadDayTemplates(new[] { templatePeriod }, workload);
 
 			if (smoothing > 1) //mer än None
 			{

@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 								TargetPeriod = new DateOnlyPeriod(new DateOnly(command.TargetPeriod.StartDate.DateTime), new DateOnly(command.TargetPeriod.EndDate.DateTime)),
 			              		ScenarioId = command.ScenarioId,
 								JobId = jobId,
-								UpdateStandardTemplates = command.UpdateStandardTemplates,
 								SmoothingStyle = command.SmoothingStyle,
 								TemplatePeriod = new DateOnlyPeriod(new DateOnly(command.TemplatePeriod.StartDate.DateTime), new DateOnly(command.TemplatePeriod.EndDate.DateTime)),
 								WorkloadIds = command.WorkloadIds

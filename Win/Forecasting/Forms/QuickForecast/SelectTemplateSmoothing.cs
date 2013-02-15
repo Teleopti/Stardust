@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
 		public bool Depopulate(QuickForecastModel stateObj)
 		{
-			stateObj.UpdateStandardTemplates = checkBoxAdv1.Checked;
 			stateObj.SmoothingStyle = (int)comboBoxSmoothing.SelectedValue;
             return true;	
         }
@@ -79,11 +78,5 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 			public string Text { get; set; }
 		}
 
-		private void checkBoxAdv1CheckStateChanged(object sender, System.EventArgs e)
-		{
-			comboBoxSmoothing.Enabled = checkBoxAdv1.Checked;
-		}
 	}
-
-	
 }

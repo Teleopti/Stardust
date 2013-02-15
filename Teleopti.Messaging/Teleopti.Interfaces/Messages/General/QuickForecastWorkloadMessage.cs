@@ -50,10 +50,5 @@ namespace Teleopti.Interfaces.Messages.General
 		/// The period to get the temlplates from
 		/// </summary>
 		public DateOnlyPeriod TemplatePeriod { get; set; }
-
-		/// <summary>
-		/// If the standard templates should be updated
-		/// </summary>
-		public bool UpdateStandardTemplates { get; set; }
 	}
 }

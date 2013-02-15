@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 		public QuickForecastModel()
 		{
 			SelectedWorkloads = new List<Guid>();
+			SmoothingStyle = 5;
 			StatisticPeriod = new DateOnlyPeriodDto
 				{
 					StartDate = new DateOnlyDto {DateTime = DateTime.Today.AddYears(-2)},
@@ -39,8 +40,6 @@ namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 		public DateOnlyPeriodDto TargetPeriod { get; set; }
 
 		public DateOnlyPeriodDto TemplatePeriod { get; set; }
-
-		public bool UpdateStandardTemplates { get; set; }
 
 		public int SmoothingStyle { get; set; }
     }

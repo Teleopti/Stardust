@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
                     ScenarioId = _stateObj.ScenarioId,
                     StatisticPeriod = _stateObj.StatisticPeriod ,
                     TargetPeriod = _stateObj.TargetPeriod,
-                    UpdateStandardTemplates = _stateObj.UpdateStandardTemplates,
-					TemplatePeriod = _stateObj.TemplatePeriod,
+                    TemplatePeriod = _stateObj.TemplatePeriod,
 					SmoothingStyle = _stateObj.SmoothingStyle,
 					WorkloadIds = _stateObj.SelectedWorkloads
                 };
