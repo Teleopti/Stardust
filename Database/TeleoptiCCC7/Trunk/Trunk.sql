@@ -10,6 +10,7 @@ UPDATE [ApplicationFunction]
 SET [ForeignId] = '0083'
 WHERE [FunctionCode] = 'ShiftTradeRequests'
 AND [ForeignId] = '0080'
+GO
 
 ----------------  
 --Name: tamasb
