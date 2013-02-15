@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.SystemSetting;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -13,7 +15,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		Day,
 		Intraday
 	}
-    
     [Serializable]
     public class SchedulingScreenSettings : SettingValue, ISchedulingScreenSettings
     {
@@ -26,9 +27,15 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _hideRibbonTexts;
         private Guid? _defaultScheduleTag;
 		private SkillResultViewSetting _skillResultViewSetting = SkillResultViewSetting.Day;
-        
+		private SchedulerSortCommandSetting _sortCommandSetting = SchedulerSortCommandSetting.NoSortCommand;
 
         private IList<Guid> _pinnedSkills;
+
+		public SchedulerSortCommandSetting SortCommandSetting
+    	{
+			get { return _sortCommandSetting; }
+			set { _sortCommandSetting = value; }
+    	}
 
         public Guid? DefaultScheduleTag
         {
