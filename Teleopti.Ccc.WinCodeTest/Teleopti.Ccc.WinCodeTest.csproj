@@ -598,6 +598,7 @@
     <Compile Include="Scheduler\Restriction\WorkTimeLimitationAdapterTest.cs" />
     <Compile Include="Scheduler\ScheduleNavigatorPresenterTest.cs" />
     <Compile Include="Scheduler\SchedulerStateLoaderTest.cs" />
+    <Compile Include="Scheduler\ScheduleSortingCommands\SchedulerSortCommandMapperTest.cs" />
     <Compile Include="Scheduler\ScheduleSortingCommands\ScheduleSortingCommandsTest.cs" />
     <Compile Include="Scheduler\SetTagCommandTest.cs" />
     <Compile Include="Scheduler\SmartDayOffBackToLegalStateSolverContainerTest.cs" />
