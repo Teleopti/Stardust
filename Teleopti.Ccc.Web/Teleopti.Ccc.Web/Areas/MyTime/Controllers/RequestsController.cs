@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -125,10 +127,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		[HttpGet]
+		[HttpPost]
 		public JsonResult ShiftTradeRequestSwapDetails(Guid id)
 		{
-			return Json(_requestsViewModelFactory.CreateShiftTradeRequestSwapDetails(id));
+			var viewmodel = _requestsViewModelFactory.CreateShiftTradeRequestSwapDetails(id);
+			viewmodel.To.ScheduleLayers = null;
+			var jsonViewModel = Json(viewmodel, JsonRequestBehavior.AllowGet);
+			return Json(jsonViewModel);
 		}
 	}
 }

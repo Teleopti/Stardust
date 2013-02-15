@@ -92,6 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_shiftTradeRequestSetChecksum.SetChecksum(personRequest.Request);
 
 			var shiftTradeSwapDetails = _mapper.Map<IShiftTradeRequest,ShiftTradeSwapDetailsViewModel>(personRequest.Request as IShiftTradeRequest);
+			
 			return shiftTradeSwapDetails;
 		}
 	}

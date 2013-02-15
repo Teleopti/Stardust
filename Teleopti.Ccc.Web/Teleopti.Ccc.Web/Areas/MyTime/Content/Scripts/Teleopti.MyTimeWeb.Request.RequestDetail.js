@@ -304,6 +304,23 @@ var ShiftTradeRequestDetailViewModel = function () {
 		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
 
+
+	self.henkeTest = function () {
+		self.ajax.Ajax({
+			url: "Requests/ShiftTradeRequestSwapDetails/" + self.Id(),
+			dataType: "json",
+			type: "POST",
+			success: function (data) {
+				console.log('Henke... det fungerar');
+				console.log(data);
+			},
+			error: function (error) {
+				console.log('henke det fungerar inte......');
+				console.log(error);
+			}
+		});
+	};
+
 	self.respondToRequest = function (url) {
 
 		self.ajax.Ajax({

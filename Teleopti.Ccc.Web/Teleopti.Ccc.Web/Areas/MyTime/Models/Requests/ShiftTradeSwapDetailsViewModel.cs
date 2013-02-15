@@ -1,4 +1,4 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
@@ -8,8 +8,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 
 		public ShiftTradePersonScheduleViewModel To { get; set; }
 
-		public DateOnly DateFrom { get; set; }
+		public DateTime DateFrom { get; set; }
 
-		public DateOnly DateTo { get; set; }
+		public DateTime DateTo { get; set; }
 	}
 }

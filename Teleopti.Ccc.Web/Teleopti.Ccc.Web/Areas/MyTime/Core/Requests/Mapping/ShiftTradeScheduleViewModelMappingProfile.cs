@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		protected override void Configure()
 		{
-			//henke refact move out, this should be a separate mapper....
 			CreateMap<IScheduleDay, ShiftTradePersonScheduleViewModel>()
 				.ConvertUsing(o =>
 					                {

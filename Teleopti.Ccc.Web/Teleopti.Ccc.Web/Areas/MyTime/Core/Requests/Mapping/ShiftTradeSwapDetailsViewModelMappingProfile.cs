@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			CreateMap<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>()
 				.ForMember(d => d.To, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().SchedulePartTo))
 				.ForMember(d => d.From, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().SchedulePartFrom))
-				.ForMember(d => d.DateFrom, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().DateFrom))
-				.ForMember(d => d.DateTo, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().DateTo));
+			   .ForMember(d => d.DateFrom, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().DateFrom.Date))
+				.ForMember(d => d.DateTo, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().DateTo.Date));
 		}
 	}
 }
