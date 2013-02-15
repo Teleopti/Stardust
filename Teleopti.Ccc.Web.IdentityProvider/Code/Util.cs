@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Code
 {
 	public class Util
 	{
-		private const string RolesAttribute = "http://samples.dotnetopenauth.net/sso/roles";
-
 		/// <summary>
 		/// Gets a value indicating whether the authentication system used by the OP requires
 		/// no user interaction (an HTTP header based authentication protocol).
@@ -131,13 +129,13 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Code
 				if (fetchRequest != null)
 				{
 					var fetchResponse = new FetchResponse();
-					if (fetchRequest.Attributes.Contains(RolesAttribute))
-					{
-						// Inform the RP what roles this user should fill
-						// These roles would normally come out of the user database
-						// or Windows security groups.
-						fetchResponse.Attributes.Add(RolesAttribute, "Member", "Admin");
-					}
+					//if (fetchRequest.Attributes.Contains(RolesAttribute))
+					//{
+					//    // Inform the RP what roles this user should fill
+					//    // These roles would normally come out of the user database
+					//    // or Windows security groups.
+					//    fetchResponse.Attributes.Add(RolesAttribute, "Member", "Admin");
+					//}
 					idrequest.AddResponseExtension(fetchResponse);
 				}
 			}
