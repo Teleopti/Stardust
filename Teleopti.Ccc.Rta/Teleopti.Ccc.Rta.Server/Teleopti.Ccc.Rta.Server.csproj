@@ -112,10 +112,10 @@
       <HintPath>..\..\packages\log4net.2.0.0\lib\net35-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="MbCache">
-      <HintPath>..\..\packages\MbCache.2.0\lib\net40\MbCache.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.2.1\lib\net40\MbCache.dll</HintPath>
     </Reference>
     <Reference Include="MbCache.ProxyImpl.LinFu">
-      <HintPath>..\..\packages\MbCache.2.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.2.1\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.PersistentHashTable">
       <HintPath>..\..\packages\Rhino.PersistentHashTable.1.7.0.0\lib\3.5\Rhino.PersistentHashTable.dll</HintPath>
