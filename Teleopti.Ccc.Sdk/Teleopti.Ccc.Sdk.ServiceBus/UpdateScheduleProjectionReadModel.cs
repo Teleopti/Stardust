@@ -44,13 +44,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, message.ScenarioId, message.PersonId, layer);
 			}
+
+            //_serviceBus.Send(new RTAUpdatedScheduleDayMessage()
+            //{
+            //    ActivityStartDateTime = period.StartDateTime,
+            //    ActivityEndDateTime = period.EndDateTime,
+            //    PersonId = personId
+            //});
 		}
 
-            _serviceBus.Send(new RTAUpdatedScheduleDayMessage()
-                                                                {
-                                                                    ActivityStartDateTime = period.StartDateTime,
-                                                                    ActivityEndDateTime = period.EndDateTime,
-                                                                    PersonId = personId
-                                                                });
+           
 	}
 }
