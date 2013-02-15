@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				.Return(_effectiveRestriction);
 
 			//delete
-			Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(null, null)).IgnoreArguments()
+			Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(null, null, true)).IgnoreArguments()
 				.Return(null);
 		}
 

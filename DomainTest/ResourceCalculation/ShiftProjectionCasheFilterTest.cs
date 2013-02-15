@@ -869,6 +869,28 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks.VerifyAll();
         }
 
+		[Test]
+		public void ShouldNotFilterIfNoMeetingOrPersonAssignment()
+		{
+			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
+			_personAssignments = new List<IPersonAssignment>();
+
+			var lunch = ActivityFactory.CreateActivity("lunch");
+			lunch.AllowOverwrite = false;
+			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+			var readOnlymeetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>());
+			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
+			shifts.Add(c1);
+			
+			Expect.Call(_part.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments)).Repeat.AtLeastOnce();
+			Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
+			
+			_mocks.ReplayAll();
+			var retShifts = _target.FilterOnNotOverWritableActivities(shifts, _part, _finderResult);
+			retShifts.Count.Should().Be.EqualTo(1);
+			_mocks.VerifyAll();
+		}
+
         private static LayerCollection<IActivity> GetPersonalLayers(DateTime currentDate)
         {
             var personalLayers = new LayerCollection<IActivity>
