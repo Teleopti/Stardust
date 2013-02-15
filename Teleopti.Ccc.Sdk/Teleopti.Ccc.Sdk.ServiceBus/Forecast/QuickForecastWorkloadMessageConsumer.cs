@@ -84,9 +84,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.Today, taskOwnerDaysWithoutOutliers, TaskOwnerPeriodType.Other);
 
 				//Load (or create) workload days
-				var skillDays = _skillDayRepository.FindRange(message.TargetPeriod, skill, scenario);
-				skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario, false);
-				var calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), message.TargetPeriod);
+				var skillDays = _skillDayRepository.FindRange(message.StatisticPeriod, skill, scenario);
+				skillDays = _skillDayRepository.GetAllSkillDays(message.StatisticPeriod, skillDays, skill, scenario, false);
+				var calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), message.StatisticPeriod);
 
 				var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(calculator.SkillDays, workload).OfType<ITaskOwner>().ToList();
 
