@@ -1059,9 +1059,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             return workShiftSelector;
         }
 
-        private AdvanceSchedulingService CallAdvanceSchedulingService( ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> selectedPersonMatrixList)
+		private AdvanceSchedulingService CallAdvanceSchedulingService(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> selectedPersonMatrixList,
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
-            var groupPersonBuilderForOptimization = CallGroupPage(schedulingOptions);
             var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder, selectedPersonMatrixList);
             var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
                                                                         schedulingOptions.ConsiderShortBreaks);
@@ -1122,11 +1122,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                 schedulingOptions.RefreshRate = 1;
                 blockSchedulingService.BlockScheduled += blockSchedulingServiceBlockScheduled;
                 //schedulingOptions.UseTwoDaysOffAsBlock = true;
-                
+				var groupPersonBuilderForOptimization = CallGroupPage(schedulingOptions);
+            
                 var advancedaysOffSchedulingService = _container.Resolve<IAdvanceDaysOffSchedulingService>();
-                advancedaysOffSchedulingService.Execute(selectedPersonAllMatrixList, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
+                advancedaysOffSchedulingService.Execute(selectedPersonAllMatrixList, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions, groupPersonBuilderForOptimization);
                 
-                var advanceSchedulingService = CallAdvanceSchedulingService(schedulingOptions,selectedPersonMatrixList );
+                var advanceSchedulingService = CallAdvanceSchedulingService(schedulingOptions,selectedPersonMatrixList, groupPersonBuilderForOptimization);
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
                 advanceSchedulingService.Execute(schedulingResults, AllPersonMatrixList, selectedPersonMatrixList);
                 if (schedulingOptions.RotationDaysOnly)

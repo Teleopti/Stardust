@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			_target = new TeamDayOffScheduler(_dayOffsInPeriodCalculator, _effectiveRestrictionCreator,
 											  _schedulePartModifyAndRollbackService, _scheduleDayAvailableForDayOffSpecification,
 											  _hasContractDayOffDefinition, _matrixDataListInSteadyState, _matrixDataListCreator,
-											  _groupPersonBuilderForOptimization, _schedulingResultStateHolder);
+											  _schedulingResultStateHolder);
 		}
 
 		[Test]
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions);
+				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
 			}
 		}
 
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions);
+				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
 			}
 		}
 
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions);
+				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
 			}
 		}
 
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions);
+				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
 			}
 		}
 
@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			using (_mocks.Playback())
 			{
 				_target.DayScheduled += targetDayScheduled;
-				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions);
+				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
 				_target.DayScheduled -= targetDayScheduled;
 			}
 		}

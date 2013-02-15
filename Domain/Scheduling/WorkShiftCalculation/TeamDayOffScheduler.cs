@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 	public interface ITeamDayOffScheduler
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions);
+		void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
 	}
 
 	public class TeamDayOffScheduler : ITeamDayOffScheduler
@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		private readonly IHasContractDayOffDefinition _hasContractDayOffDefinition;
 		private readonly IMatrixDataListInSteadyState _matrixDataListInSteadyState;
 		private readonly IMatrixDataListCreator _matrixDataListCreator;
-		private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			IHasContractDayOffDefinition hasContractDayOffDefinition,
 			IMatrixDataListInSteadyState matrixDataListInSteadyState,
 			 IMatrixDataListCreator matrixDataListCreator,
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
 			 ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
@@ -47,11 +45,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			_hasContractDayOffDefinition = hasContractDayOffDefinition;
 			_matrixDataListInSteadyState = matrixDataListInSteadyState;
 			_matrixDataListCreator = matrixDataListCreator;
-			_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
-		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
+		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
 		{
             if (matrixListAll == null) return;
             var person = matrixListAll[0].Person;
@@ -75,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 						foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
 						{
 							var scheduleDate = scheduleDayPro.Day;
-							var groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, scheduleDate);
+							var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(person, scheduleDate);
 							var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 							var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
 																								   scheduleDate, schedulingOptions,
@@ -85,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 						foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
 						{
 							var scheduleDate = scheduleDayPro.Day;
-							var groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, scheduleDate);
+							var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(person, scheduleDate);
 							var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 							var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
 																								   scheduleDate, schedulingOptions,

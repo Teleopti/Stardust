@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -9,7 +10,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
     public interface IAdvanceDaysOffSchedulingService
     {
         event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        void Execute(IList<IScheduleMatrixPro> allMatrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions);
+		void Execute(IList<IScheduleMatrixPro> allMatrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, 
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization);
     }
 
     public class AdvanceDaysOffSchedulingService : IAdvanceDaysOffSchedulingService
@@ -41,7 +43,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
                 _cancelMe = true;
         }
 
-        public void Execute(IList<IScheduleMatrixPro> allMatrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
+		public void Execute(IList<IScheduleMatrixPro> allMatrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
             _absencePreferenceScheduler.DayScheduled += dayScheduled;
             _absencePreferenceScheduler.AddPreferredAbsence(allMatrixList, schedulingOptions);
@@ -50,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
                 return;
 
 			_teamDayOffScheduler.DayScheduled += dayScheduled;
-			_teamDayOffScheduler.DayOffScheduling(allMatrixList, rollbackService, schedulingOptions);
+			_teamDayOffScheduler.DayOffScheduling(allMatrixList, rollbackService, schedulingOptions, groupPersonBuilderForOptimization);
 			_teamDayOffScheduler.DayScheduled -= dayScheduled;
             if (_cancelMe)
                 return;
