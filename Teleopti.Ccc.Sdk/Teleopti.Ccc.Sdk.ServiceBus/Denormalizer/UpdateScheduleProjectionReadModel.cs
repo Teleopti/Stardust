@@ -1,6 +1,9 @@
-﻿using Teleopti.Ccc.Domain.Common;
+﻿using System;
+using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
@@ -9,13 +12,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IScheduleChangedNotification _scheduleChangedNotification;
-		private bool _initialLoad;
+	    private readonly IServiceBus _serviceBus;
+	    private bool _initialLoad;
 
-		public UpdateScheduleProjectionReadModel(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IScheduleRepository scheduleRepository, IScheduleChangedNotification scheduleChangedNotification)
+		public UpdateScheduleProjectionReadModel(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IScheduleRepository scheduleRepository, IScheduleChangedNotification scheduleChangedNotification, IServiceBus serviceBus)
 		{
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
 			_scheduleRepository = scheduleRepository;
 			_scheduleChangedNotification = scheduleChangedNotification;
+		    _serviceBus = serviceBus;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -59,6 +64,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, scenario, personId, layer, projection);
 				}
 			}
+
+            _serviceBus.Send(new RTAUpdatedScheduleDayMessage()
+                                                                {
+                                                                    ActivityStartDateTime = period.StartDateTime,
+                                                                    ActivityEndDateTime = period.EndDateTime,
+                                                                    PersonId = personId
+                                                                });
 		}
 
 		public void SetInitialLoad(bool initialLoad)

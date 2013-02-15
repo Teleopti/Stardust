@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		private IPersonResolver _personResolver;
 		private IStateResolver _stateResolver;
 		private IRtaConsumer _rtaConsumer;
-
+	    
 		private string _logOn;
 		private string _stateCode;
 		private TimeSpan _timeInState;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_personResolver = _mocks.DynamicMock<IPersonResolver>();
 			_stateResolver = _mocks.DynamicMock<IStateResolver>();
 			_rtaConsumer = _mocks.StrictMock<IRtaConsumer>();
-
+		    
 			_logOn = "002";
 			_stateCode = "AUX2";
 			_timeInState = TimeSpan.FromSeconds(45);
@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		private void AssignTargetAndRun()
 		{
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
-			                                    _dataSourceResolver, _personResolver, _stateResolver, _rtaConsumer);
+                                                _dataSourceResolver, _personResolver, _stateResolver, _rtaConsumer);
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 			                       _isSnapshot);
 		}
@@ -337,7 +337,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			                             IStateResolver stateResolver, IRtaConsumer rtaConsumer)
 				: base(
 					loggingSvc, messageSender, connectionStringDataStore, databaseConnectionFactory, dataSourceResolver, personResolver,
-					stateResolver, rtaConsumer)
+                    stateResolver, rtaConsumer)
 			{
 			}
 

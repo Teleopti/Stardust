@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private IPersonRepository personRepository;
 		private IUnitOfWork unitOfWork;
+	    private IServiceBus serviceBus;
 
 		[SetUp]
 		public void Setup()
@@ -30,7 +32,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 			personRepository = mocks.DynamicMock<IPersonRepository>();
-			target = new DenormalizeScheduleProjectionConsumer(unitOfWorkFactory,scenarioRepository,personRepository,updateScheduleProjectionReadModel);
+		    serviceBus = mocks.DynamicMock<IServiceBus>();
+			target = new DenormalizeScheduleProjectionConsumer(unitOfWorkFactory,scenarioRepository,personRepository,updateScheduleProjectionReadModel, serviceBus);
 		}
 
 		[Test]

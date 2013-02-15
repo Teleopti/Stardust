@@ -1,6 +1,7 @@
 ﻿using System;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Sdk.ServiceBus.RTA;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
@@ -13,13 +14,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
+	    private readonly IServiceBus _serviceBus;
 
-		public DenormalizeScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel)
+	    public DenormalizeScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IServiceBus serviceBus)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
 			_updateScheduleProjectionReadModel = updateScheduleProjectionReadModel;
+		    _serviceBus = serviceBus;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
