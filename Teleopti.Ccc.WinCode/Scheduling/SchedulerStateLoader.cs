@@ -20,227 +20,227 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		void LoadOrganization();
 		void LoadSchedules(IScheduleDateTimePeriod scheduleDateTimePeriod);
-        void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills);
+		void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills);
 		void EnsureSkillsLoaded(DateOnlyPeriod period);
 	}
 
-    public class SchedulerStateLoader : ISchedulerStateLoader
+	public class SchedulerStateLoader : ISchedulerStateLoader
 	{
-        private readonly ISchedulerStateHolder _schedulerState;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-    	private readonly ILazyLoadingManager _lazyManager;
-    	private readonly IRepositoryFactory _repositoryFactory;
-	    private BackgroundWorker _backgroundWorker;
+		private readonly ISchedulerStateHolder _schedulerState;
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ILazyLoadingManager _lazyManager;
+		private readonly IRepositoryFactory _repositoryFactory;
+		private BackgroundWorker _backgroundWorker;
 
-	    public SchedulerStateLoader(ISchedulerStateHolder stateHolder)
-            : this(stateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper())
-        {
-        }
+		public SchedulerStateLoader(ISchedulerStateHolder stateHolder)
+			: this(stateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper())
+		{
+		}
 
-        public SchedulerStateLoader(ISchedulerStateHolder stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory uowFactory, ILazyLoadingManager lazyManager)
-            : this()
-        {
-            _unitOfWorkFactory = uowFactory;
-        	_lazyManager = lazyManager;
-        	_repositoryFactory = repositoryFactory;
-            _schedulerState = stateHolder;
-        }
+		public SchedulerStateLoader(ISchedulerStateHolder stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory uowFactory, ILazyLoadingManager lazyManager)
+			: this()
+		{
+			_unitOfWorkFactory = uowFactory;
+			_lazyManager = lazyManager;
+			_repositoryFactory = repositoryFactory;
+			_schedulerState = stateHolder;
+		}
 
-        protected SchedulerStateLoader() {}
+		protected SchedulerStateLoader() { }
 
-        public void LoadOrganization()
-        {
-            using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-            {
-                initializeCommonState(uow);
+		public void LoadOrganization()
+		{
+			using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				initializeCommonState(uow);
 				uow.DisableFilter(QueryFilter.Deleted);
-                initializePeople(uow);
-            }
-        }
+				initializePeople(uow);
+			}
+		}
 
-        public void LoadSchedules(IScheduleDateTimePeriod scheduleDateTimePeriod)
-        {
-            if (_schedulerState.Schedules != null && _schedulerState.RequestedPeriod.Period().Contains(scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod))
-                return;
-            using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-            {
-                if (_schedulerState.RequestedPeriod.Period() != scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
-                {
-                	((SchedulerStateHolder) _schedulerState).RequestedPeriod =
-                		new DateOnlyPeriodAsDateTimePeriod(
-                			scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(
-                				_schedulerState.TimeZoneInfo), _schedulerState.TimeZoneInfo);
-                }
-                _schedulerState.SchedulingResultState.SkillDays = null;
-                reassociateCommonData(uow);
-                reassociatePeople(uow);
+		public void LoadSchedules(IScheduleDateTimePeriod scheduleDateTimePeriod)
+		{
+			if (_schedulerState.Schedules != null && _schedulerState.RequestedPeriod.Period().Contains(scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod))
+				return;
+			using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				if (_schedulerState.RequestedPeriod.Period() != scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
+				{
+					((SchedulerStateHolder)_schedulerState).RequestedPeriod =
+						new DateOnlyPeriodAsDateTimePeriod(
+							scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(
+								_schedulerState.TimeZoneInfo), _schedulerState.TimeZoneInfo);
+				}
+				_schedulerState.SchedulingResultState.SkillDays = null;
+				reassociateCommonData(uow);
+				reassociatePeople(uow);
 
-                initializeSchedules(uow, scheduleDateTimePeriod);
-            }
-        }
+				initializeSchedules(uow, scheduleDateTimePeriod);
+			}
+		}
 
-        public void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills)
-        {
-            _backgroundWorker = backgroundWorker;
-            
-            reassociateCommonData(uow);
-            if (_backgroundWorker.CancellationPending)
-                return;
+		public void LoadSchedulingResultAsync(IScheduleDateTimePeriod scheduleDateTimePeriod, IUnitOfWork uow, BackgroundWorker backgroundWorker, IEnumerable<ISkill> skills)
+		{
+			_backgroundWorker = backgroundWorker;
 
-            reassociatePeople(uow);
-            if (_backgroundWorker.CancellationPending)
-                return;
+			reassociateCommonData(uow);
+			if (_backgroundWorker.CancellationPending)
+				return;
 
-            if (_schedulerState.Schedules == null || _schedulerState.RequestedPeriod.Period() != scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
-            {
-            	((SchedulerStateHolder) _schedulerState).RequestedPeriod =
-            		new DateOnlyPeriodAsDateTimePeriod(
-            			scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(
-            				_schedulerState.TimeZoneInfo), _schedulerState.TimeZoneInfo);
-                initializeSchedules(uow, scheduleDateTimePeriod);
-            }
-            if (_backgroundWorker.CancellationPending)
-                return;
-            initializeSkills(uow);
-            if (_backgroundWorker.CancellationPending)
-                return;
-            initializeSkillDays(uow, skills);
-            if (_backgroundWorker.CancellationPending)
-                return;
-            initializeScheduleData();
-        }
+			reassociatePeople(uow);
+			if (_backgroundWorker.CancellationPending)
+				return;
 
-        public void EnsureSkillsLoaded(DateOnlyPeriod period)
-	    {
-            if (!_schedulerState.SchedulingResultState.Skills.IsEmpty())
-                return;
+			if (_schedulerState.Schedules == null || _schedulerState.RequestedPeriod.Period() != scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
+			{
+				((SchedulerStateHolder)_schedulerState).RequestedPeriod =
+					new DateOnlyPeriodAsDateTimePeriod(
+						scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(
+							_schedulerState.TimeZoneInfo), _schedulerState.TimeZoneInfo);
+				initializeSchedules(uow, scheduleDateTimePeriod);
+			}
+			if (_backgroundWorker.CancellationPending)
+				return;
+			initializeSkills(uow);
+			if (_backgroundWorker.CancellationPending)
+				return;
+			initializeSkillDays(uow, skills);
+			if (_backgroundWorker.CancellationPending)
+				return;
+			initializeScheduleData();
+		}
 
-            using (PerformanceOutput.ForOperation("Loading skills"))
-            {
-                using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-                {
-                    var service = _repositoryFactory.CreateSkillRepository(uow);
+		public void EnsureSkillsLoaded(DateOnlyPeriod period)
+		{
+			if (!_schedulerState.SchedulingResultState.Skills.IsEmpty())
+				return;
+
+			using (PerformanceOutput.ForOperation("Loading skills"))
+			{
+				using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+				{
+					var service = _repositoryFactory.CreateSkillRepository(uow);
 					var skills = service.FindAllWithSkillDays(period);
 
-                    foreach (var skill in skills)
-                    {
-                        LazyLoadingManager.Initialize(skill.SkillType);
-                        _schedulerState.SchedulingResultState.Skills.Add(skill);
-                    }
-                }
-            }
-	    }
+					foreach (var skill in skills)
+					{
+						LazyLoadingManager.Initialize(skill.SkillType);
+						_schedulerState.SchedulingResultState.Skills.Add(skill);
+					}
+				}
+			}
+		}
 
-	    private void initializeCommonState(IUnitOfWork uow)
-        {
-            using (PerformanceOutput.ForOperation("Loading common data"))
-            {
-                _schedulerState.CommonStateHolder.LoadCommonStateHolder(_repositoryFactory,uow);
-            }
-        }
+		private void initializeCommonState(IUnitOfWork uow)
+		{
+			using (PerformanceOutput.ForOperation("Loading common data"))
+			{
+				_schedulerState.CommonStateHolder.LoadCommonStateHolder(_repositoryFactory, uow);
+			}
+		}
 
-        private void initializePeople(IUnitOfWork uow)
-        {
-            using (PerformanceOutput.ForOperation("Loading people"))
-            {
-                IBusinessUnitRepository businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
-                businessUnitRepository.LoadAllBusinessUnitSortedByName(); //Load the business units into this uow
+		private void initializePeople(IUnitOfWork uow)
+		{
+			using (PerformanceOutput.ForOperation("Loading people"))
+			{
+				IBusinessUnitRepository businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
+				businessUnitRepository.LoadAllBusinessUnitSortedByName(); //Load the business units into this uow
 				IPersonRepository service = _repositoryFactory.CreatePersonRepository(uow);
-				
-                _schedulerState.SchedulingResultState.PersonsInOrganization =
-                    service.FindPeopleInOrganization(_schedulerState.RequestedPeriod.DateOnlyPeriod, true);
 
-                foreach (IPerson person in _schedulerState.SchedulingResultState.PersonsInOrganization)
-                {
-                    if (!_schedulerState.AllPermittedPersons.Contains(person))
-                    {
-                        _schedulerState.AllPermittedPersons.Add(person);
-                    }
-                }
-                _schedulerState.ResetFilteredPersons();
-            }
-        }
+				_schedulerState.SchedulingResultState.PersonsInOrganization =
+					service.FindPeopleInOrganization(_schedulerState.RequestedPeriod.DateOnlyPeriod, true);
 
-        private void reassociateCommonData(IUnitOfWork uow)
-        {
-            using (PerformanceOutput.ForOperation("Reassociating common data"))
-            {
-                uow.Reassociate(_schedulerState.CommonStateHolder.Absences);
-                if (_backgroundWorker != null && _backgroundWorker.CancellationPending)
-                    return;
-                uow.Reassociate(_schedulerState.CommonStateHolder.Activities);
-                if (_backgroundWorker != null && _backgroundWorker.CancellationPending)
-                    return;
-                uow.Reassociate(_schedulerState.CommonStateHolder.DayOffs);
-                if (_backgroundWorker != null && _backgroundWorker.CancellationPending)
-                    return;
-                uow.Reassociate(_schedulerState.CommonStateHolder.ShiftCategories);
-                if (_backgroundWorker != null && _backgroundWorker.CancellationPending)
-                    return;
-                uow.Reassociate(_schedulerState.RequestedScenario);
-            }
-        }
+				foreach (IPerson person in _schedulerState.SchedulingResultState.PersonsInOrganization)
+				{
+					if (!_schedulerState.AllPermittedPersons.Contains(person))
+					{
+						_schedulerState.AllPermittedPersons.Add(person);
+					}
+				}
+				_schedulerState.ResetFilteredPersons();
+			}
+		}
 
-        private void reassociatePeople(IUnitOfWork uow)
-        {
-            using (PerformanceOutput.ForOperation("Reassociating people"))
-            {
-                uow.Reassociate(_schedulerState.AllPermittedPersons);
-            }
-        }
+		private void reassociateCommonData(IUnitOfWork uow)
+		{
+			using (PerformanceOutput.ForOperation("Reassociating common data"))
+			{
+				uow.Reassociate(_schedulerState.CommonStateHolder.Absences);
+				if (_backgroundWorker != null && _backgroundWorker.CancellationPending)
+					return;
+				uow.Reassociate(_schedulerState.CommonStateHolder.Activities);
+				if (_backgroundWorker != null && _backgroundWorker.CancellationPending)
+					return;
+				uow.Reassociate(_schedulerState.CommonStateHolder.DayOffs);
+				if (_backgroundWorker != null && _backgroundWorker.CancellationPending)
+					return;
+				uow.Reassociate(_schedulerState.CommonStateHolder.ShiftCategories);
+				if (_backgroundWorker != null && _backgroundWorker.CancellationPending)
+					return;
+				uow.Reassociate(_schedulerState.RequestedScenario);
+			}
+		}
 
-        private void initializeSkills(IUnitOfWork uow)
-        {
-            using (PerformanceOutput.ForOperation("Loading skills"))
-            {
-                ISkillRepository service = _repositoryFactory.CreateSkillRepository(uow);
-                ICollection<ISkill> skills = service.FindAllWithSkillDays(_schedulerState.RequestedPeriod.DateOnlyPeriod);
+		private void reassociatePeople(IUnitOfWork uow)
+		{
+			using (PerformanceOutput.ForOperation("Reassociating people"))
+			{
+				uow.Reassociate(_schedulerState.AllPermittedPersons);
+			}
+		}
 
-                _schedulerState.SchedulingResultState.Skills.Clear();
-                foreach (ISkill skill in skills)
-                {
+		private void initializeSkills(IUnitOfWork uow)
+		{
+			using (PerformanceOutput.ForOperation("Loading skills"))
+			{
+				ISkillRepository service = _repositoryFactory.CreateSkillRepository(uow);
+				ICollection<ISkill> skills = service.FindAllWithSkillDays(_schedulerState.RequestedPeriod.DateOnlyPeriod);
+
+				_schedulerState.SchedulingResultState.Skills.Clear();
+				foreach (ISkill skill in skills)
+				{
 					_lazyManager.Initialize(skill.SkillType);
-                    _schedulerState.SchedulingResultState.Skills.Add(skill);
-                }
-            }
-        }
+					_schedulerState.SchedulingResultState.Skills.Add(skill);
+				}
+			}
+		}
 
-        private void initializeSkillDays(IUnitOfWork uow, IEnumerable<ISkill> skills)
-        {
-            using (PerformanceOutput.ForOperation("Loading skill days (intraday data)"))
-            {
+		private void initializeSkillDays(IUnitOfWork uow, IEnumerable<ISkill> skills)
+		{
+			using (PerformanceOutput.ForOperation("Loading skill days (intraday data)"))
+			{
 				_schedulerState.SchedulingResultState.SkillDays = new SkillDayLoadHelper(
 					_repositoryFactory.CreateSkillDayRepository(uow),
 					_repositoryFactory.CreateMultisiteDayRepository(uow)).LoadSchedulerSkillDays(
-                    _schedulerState.RequestedPeriod.DateOnlyPeriod,
-                    skills,
-                    _schedulerState.RequestedScenario);
-            }
-        }
+					_schedulerState.RequestedPeriod.DateOnlyPeriod,
+					skills,
+					_schedulerState.RequestedScenario);
+			}
+		}
 
-        private void initializeSchedules(IUnitOfWork uow, IScheduleDateTimePeriod scheduleDateTimePeriod)
-        {
-            IPersonProvider personsProvider = new PersonsInOrganizationProvider(_schedulerState.SchedulingResultState.PersonsInOrganization);
-            IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-            IScheduleRepository scheduleRepository = _repositoryFactory.CreateScheduleRepository(uow);
+		private void initializeSchedules(IUnitOfWork uow, IScheduleDateTimePeriod scheduleDateTimePeriod)
+		{
+			IPersonProvider personsProvider = new PersonsInOrganizationProvider(_schedulerState.SchedulingResultState.PersonsInOrganization);
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+			IScheduleRepository scheduleRepository = _repositoryFactory.CreateScheduleRepository(uow);
 
-            using (PerformanceOutput.ForOperation("Loading schedules"))
-            {
-                uow.Reassociate(_schedulerState.SchedulingResultState.PersonsInOrganization);
-                using(uow.DisableFilter(QueryFilter.Deleted))
-                    _repositoryFactory.CreateActivityRepository(uow).LoadAll();
-                _schedulerState.LoadSchedules(scheduleRepository, personsProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod);
-            }
-        }
+			using (PerformanceOutput.ForOperation("Loading schedules"))
+			{
+				uow.Reassociate(_schedulerState.SchedulingResultState.PersonsInOrganization);
+				using (uow.DisableFilter(QueryFilter.Deleted))
+					_repositoryFactory.CreateActivityRepository(uow).LoadAll();
+				_schedulerState.LoadSchedules(scheduleRepository, personsProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod);
+			}
+		}
 
-        private void initializeScheduleData()
-        {
-            using (PerformanceOutput.ForOperation("Loading schedule data"))
-            {
-                var service = 
-                    new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, new SingleSkillCalculator(), false, new SingleSkillDictionary());
-                service.SchedulingResult(_schedulerState.RequestedPeriod.Period(), new List<IVisualLayerCollection>(), new List<IVisualLayerCollection>());
-            }
-        }
-    }
+		private void initializeScheduleData()
+		{
+			using (PerformanceOutput.ForOperation("Loading schedule data"))
+			{
+				var service =
+					new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, new SingleSkillCalculator(), false, new SingleSkillDictionary());
+				service.SchedulingResult(_schedulerState.RequestedPeriod.Period(), new List<IVisualLayerCollection>(), new List<IVisualLayerCollection>());
+			}
+		}
+	}
 }

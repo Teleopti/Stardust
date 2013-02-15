@@ -1,3 +1,4 @@
+using System;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			_personRepository = personRepository;
 			_scheduleRepository = scheduleRepository;
 			_denormalizedScheduleMessageBuilder = denormalizedScheduleMessageBuilder;
+		    
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -75,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 			var period = new DateTimePeriod(message.StartDateTime, message.EndDateTime);
 			var person = _personRepository.Get(message.PersonId);
-
+                    
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
 			var schedule =

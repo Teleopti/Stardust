@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.ServiceModel;
+using Teleopti.Interfaces.Domain;
 using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Rta.Interfaces;
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.Rta.WebService
         public TeleoptiRtaService()
         {
             XmlConfigurator.Configure();
+            
 
             Log.Info("The real time adherence service is now started");
             string authenticationKey = ConfigurationManager.AppSettings["AuthenticationKey"];
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.Rta.WebService
 
         private void InitializeClientHandler()
         {
-            _rtaDataHandler = new RtaDataHandler();
+            _rtaDataHandler = RtaFactory.DataHandler;
         }
 
         public int SaveExternalUserState(string authenticationKey, string userCode, string stateCode, string stateDescription, bool isLoggedOn, int secondsInState, DateTime timestamp, string platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
@@ -154,7 +156,12 @@ namespace Teleopti.Ccc.Rta.WebService
     		return result;
     	}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "log4net.ILog.ErrorFormat(System.String,System.Object[])")]
+        public void GetUpdatedScheduleChange(Guid personId, DateTime activityStartTimeStamp, DateTime activityEndTimeStamp)
+        {
+           
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "log4net.ILog.ErrorFormat(System.String,System.Object[])")]
 		private static void verifyBatchNotTooLarge(ICollection<ExternalUserState> externalUserStateBatch)
     	{
     		if (externalUserStateBatch.Count>50)

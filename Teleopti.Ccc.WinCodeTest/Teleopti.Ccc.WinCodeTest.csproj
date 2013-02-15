@@ -396,6 +396,7 @@
     <Compile Include="Helpers\CollectionViewComparer.cs" />
     <Compile Include="Helpers\PropertyChangedListener.cs" />
     <Compile Include="Intraday\AgentStateViewAdapterTest.cs" />
+    <Compile Include="Intraday\IntradayMainModelTest.cs" />
     <Compile Include="Intraday\LoadStatisticsAndActualHeadsCommandTest.cs" />
     <Compile Include="Intraday\OnEventScheduleMessageCommandTest.cs" />
     <Compile Include="Intraday\DayLayerModelTest.cs" />
@@ -403,6 +404,7 @@
     <Compile Include="Intraday\IntradayMessageBrokerRetryTest.cs" />
     <Compile Include="Intraday\OnEventForecastMessageCommandTest.cs" />
     <Compile Include="Intraday\OnEventStatisticMessageCommandTest.cs" />
+    <Compile Include="Intraday\OpenIntradayTodayCommandTest.cs" />
     <Compile Include="Intraday\ReforecastModelTest.cs" />
     <Compile Include="Intraday\ReforecastWizardPagesTest.cs" />
     <Compile Include="Matrix\MatrixNavigationModelTest.cs" />

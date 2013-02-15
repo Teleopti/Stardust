@@ -26,8 +26,6 @@ namespace Teleopti.Ccc.Win.Intraday
             builder.RegisterType<SchedulingResultLoader>().As<ISchedulingResultLoader>().InstancePerLifetimeScope();
             builder.RegisterType<RtaStateHolder>().As<IRtaStateHolder>().InstancePerLifetimeScope();
             builder.RegisterType<RangeProjectionService>().As<IRangeProjectionService>().InstancePerLifetimeScope();
-            builder.RegisterType<RtaStateGroupProvider>().As<IRtaStateGroupProvider>().InstancePerLifetimeScope();
-            builder.RegisterType<StateGroupActivityAlarmProvider>().As<IStateGroupActivityAlarmProvider>().InstancePerLifetimeScope();
             builder.RegisterType<PeopleLoader>().As<IPeopleLoader>().InstancePerLifetimeScope();
             builder.RegisterType<IntradaySelectedEntitiesForPeriod>().As<ISelectedEntitiesForPeriod>().InstancePerLifetimeScope();
         }

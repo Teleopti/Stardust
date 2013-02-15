@@ -133,7 +133,16 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created date: 2009-09-01
         /// </remarks>
         IList LoadAgentQueueStat(DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode);
-       
 
+
+        IList<IActualAgentState> LoadActualAgentState(IEnumerable<IPerson> persons);
+
+        IActualAgentState LoadOneActualAgentState(Guid value);
+
+        void AddOrUpdateActualAgentState(IActualAgentState actualAgentState);
+
+        ICollection<Guid> PersonIdsWithExternalLogOn();
     }
+
+
 }

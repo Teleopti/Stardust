@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -22,8 +23,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         private IStateGroupActivityAlarm _stateGroupActivityAlarm;
         private IList<IRtaStateGroup> _rtaStateGroupList;
         private IRangeProjectionService _rangeProjectionService;
-        private IRtaStateGroupProvider _rtaStateGroupProvider;
-        private IStateGroupActivityAlarmProvider _stateGroupActivityAlarmProvider;
+        private IRtaStateGroupRepository _rtaStateGroupRepository;
+        private IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
 
         [SetUp]
         public void Setup()
@@ -33,13 +34,13 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             _rtaStateGroup = _mocks.StrictMock<IRtaStateGroup>();
             _stateGroupActivityAlarm = _mocks.StrictMock<IStateGroupActivityAlarm>();
             _rangeProjectionService = _mocks.StrictMock<IRangeProjectionService>();
-            _rtaStateGroupProvider = _mocks.StrictMock<IRtaStateGroupProvider>();
-            _stateGroupActivityAlarmProvider = _mocks.StrictMock<IStateGroupActivityAlarmProvider>();
+            _rtaStateGroupRepository = _mocks.StrictMock<IRtaStateGroupRepository>();
+            _stateGroupActivityAlarmRepository = _mocks.StrictMock<IStateGroupActivityAlarmRepository>();
 
-            _rtaStateGroupList = new List<IRtaStateGroup> {_rtaStateGroup};
+            _rtaStateGroupList = new List<IRtaStateGroup> { _rtaStateGroup };
 
-            _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupProvider,
-                                         _stateGroupActivityAlarmProvider, _rangeProjectionService);
+            _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository,
+                                         _stateGroupActivityAlarmRepository, _rangeProjectionService);
         }
 
         [Test]
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         {
             using (_mocks.Record())
             {
-                Expect.Call(_rtaStateGroup.StateCollection).Return(new ReadOnlyCollection<IRtaState>(new IRtaState[] {}));
+                Expect.Call(_rtaStateGroup.StateCollection).Return(new ReadOnlyCollection<IRtaState>(new IRtaState[] { }));
                 createStateGroupAndAlarmExpectation();
             }
             using (_mocks.Playback())
@@ -64,15 +65,15 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         public void VerifyCanAddDummyActivitiesFromConstructor()
         {
             IRtaState state = _mocks.StrictMock<IRtaState>();
-            
+
             createStateGroupAndAlarmExpectation();
             Expect.Call(_rtaStateGroup.StateCollection).Return(
-                new ReadOnlyCollection<IRtaState>(new List<IRtaState>{state}));
+                new ReadOnlyCollection<IRtaState>(new List<IRtaState> { state }));
             Expect.Call(state.StateCode).Return("TEST");
             Expect.Call(state.Name).Return("Testar");
 
             _mocks.ReplayAll();
-            _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupProvider, _stateGroupActivityAlarmProvider,_rangeProjectionService);
+            _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository, _stateGroupActivityAlarmRepository, _rangeProjectionService);
             _target.Initialize();
             _mocks.VerifyAll();
         }
@@ -92,8 +93,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
             IPerson person1 = createExpectationForPersonLogOn("LOGON44");
             IPerson person2 = createExpectationForPersonLogOn("LOGON45");
-            
-            IExternalAgentState externalAgentState = getExternalAgentState(startDate, "LOGON45", "002", TimeSpan.FromSeconds(12), DateTime.MinValue,false);
+
+            IExternalAgentState externalAgentState = getExternalAgentState(startDate, "LOGON45", "002", TimeSpan.FromSeconds(12), DateTime.MinValue, false);
 
             Expect.Call(rtaState2.StateGroup).Return(_rtaStateGroup).Repeat.AtLeastOnce();
             Expect.Call(rtaState2.Name).Return("Name");
@@ -105,11 +106,11 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
             _mocks.ReplayAll();
             _target.Initialize();
-            _target.SetFilteredPersons(new List<IPerson> { person1,person2 });
-            _target.CollectAgentStates(new List<IExternalAgentState>{externalAgentState});
+            _target.SetFilteredPersons(new List<IPerson> { person1, person2 });
+            _target.CollectAgentStates(new List<IExternalAgentState> { externalAgentState });
             _mocks.VerifyAll();
 
-            Assert.AreEqual(1,_target.AgentStates.Count);
+            Assert.AreEqual(1, _target.AgentStates.Count);
             Assert.IsTrue(_target.AgentStates.ContainsKey(person2));
             Assert.AreEqual(_rtaStateGroup, _target.AgentStates[person2].RtaVisualLayerCollection[0].Payload);
         }
@@ -174,12 +175,12 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Expect.Call(rtaState2.StateCode).Return("002").Repeat.AtLeastOnce();
 
             IPerson person1 = createExpectationForPersonLogOn("LOGON44");
-            IPerson person2 = createExpectationForPersonLogOn("LOGON45"); 
-            
-            IExternalAgentState externalAgentState1 = getExternalAgentState(startDate, "LOGON45", "002", TimeSpan.Zero, startDate,true);
-            IExternalAgentState externalAgentState2 = getExternalAgentState(startDate, "LOGON44", "002", TimeSpan.Zero, startDate,true);
+            IPerson person2 = createExpectationForPersonLogOn("LOGON45");
+
+            IExternalAgentState externalAgentState1 = getExternalAgentState(startDate, "LOGON45", "002", TimeSpan.Zero, startDate, true);
+            IExternalAgentState externalAgentState2 = getExternalAgentState(startDate, "LOGON44", "002", TimeSpan.Zero, startDate, true);
             IExternalAgentState externalAgentState3 = getExternalAgentState(startDate, "", "", TimeSpan.Zero, startDate, true); //End of batch
-            IExternalAgentState externalAgentState4 = getExternalAgentState(startDate.AddSeconds(15),"","",TimeSpan.Zero, startDate.AddSeconds(15),true); //End of next batch
+            IExternalAgentState externalAgentState4 = getExternalAgentState(startDate.AddSeconds(15), "", "", TimeSpan.Zero, startDate.AddSeconds(15), true); //End of next batch
 
             Expect.Call(rtaState2.StateGroup).Return(_rtaStateGroup).Repeat.AtLeastOnce();
             Expect.Call(rtaState2.Name).Return("Name").Repeat.AtLeastOnce();
@@ -219,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
             IPerson person1 = createExpectationForPersonLogOn("LOGON44");
             IPerson person2 = createExpectationForPersonLogOn("LOGON45");
-            
+
             IExternalAgentState externalAgentState1 = getExternalAgentState(startDate, "", "", TimeSpan.Zero, startDate, true); //End of batch
             IExternalAgentState externalAgentState2 = getExternalAgentState(startDate.AddSeconds(15), "LOGON45", "002", TimeSpan.Zero, startDate.AddSeconds(15), false);
             IExternalAgentState externalAgentState3 = getExternalAgentState(startDate.AddSeconds(15), "LOGON44", "002", TimeSpan.Zero, startDate.AddSeconds(15), false);
@@ -236,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             _mocks.ReplayAll();
             _target.Initialize();
             _target.SetFilteredPersons(new List<IPerson> { person1, person2 });
-            _target.CollectAgentStates(new List<IExternalAgentState> { externalAgentState1});
+            _target.CollectAgentStates(new List<IExternalAgentState> { externalAgentState1 });
             _target.CollectAgentStates(new List<IExternalAgentState> { externalAgentState2, externalAgentState3 });
 
             Assert.AreEqual(2, _target.AgentStates.Count);
@@ -244,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Assert.IsTrue(_target.AgentStates.ContainsKey(person2));
             Assert.IsFalse(_target.AgentStates[person2].RtaVisualLayerCollection[0].IsLoggedOut);
             Assert.IsFalse(_target.AgentStates[person1].RtaVisualLayerCollection[0].IsLoggedOut);
-            
+
             _target.CollectAgentStates(new List<IExternalAgentState> { externalAgentState4 });
 
             Assert.IsTrue(_target.AgentStates[person2].RtaVisualLayerCollection[0].IsLoggedOut);
@@ -274,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
             IPerson person1 = createExpectationForPersonLogOn("LOGON44");
             IPerson person2 = createExpectationForPersonLogOn("LOGON45");
-            
+
             IExternalAgentState externalAgentState = getExternalAgentState(startDate, "LOGON45", "002", TimeSpan.FromSeconds(12), DateTime.MinValue, false);
 
             Expect.Call(rtaState2.StateGroup).Return(_rtaStateGroup).Repeat.AtLeastOnce();
@@ -289,7 +290,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             _target.Initialize();
             _target.SetFilteredPersons(new List<IPerson> { person1, person2 });
             _target.CollectAgentStates(new List<IExternalAgentState> { externalAgentState });
-            _target.UpdateCurrentLayers(startDate.AddHours(7),TimeSpan.FromSeconds(5));
+            _target.UpdateCurrentLayers(startDate.AddHours(7), TimeSpan.FromSeconds(5));
             _mocks.VerifyAll();
 
             Assert.AreEqual(2, _target.AgentStates.Count);
@@ -344,15 +345,15 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             DateTime startDate = DateTime.UtcNow;
             IRtaState rtaState2 = _mocks.StrictMock<IRtaState>();
             Expect.Call(_rtaStateGroup.StateCollection).Return(
-                new ReadOnlyCollection<IRtaState>(new List<IRtaState> {  rtaState2 })).Repeat.AtLeastOnce();
+                new ReadOnlyCollection<IRtaState>(new List<IRtaState> { rtaState2 })).Repeat.AtLeastOnce();
             Expect.Call(rtaState2.PlatformTypeId).Return(_platformId).Repeat.AtLeastOnce();
             Expect.Call(rtaState2.StateCode).Return("002").Repeat.AtLeastOnce();
 
             IPerson person1 = createExpectationForPersonLogOn("LOGON44");
             IPerson person2 = createExpectationForPersonLogOn("LOGON45");
-            
-            IExternalAgentState externalAgentState1 = getExternalAgentState(startDate, "LOGON45", "002", TimeSpan.FromSeconds(12), DateTime.MinValue,false);
-            IExternalAgentState externalAgentState2 = getExternalAgentState(startDate, "LOGON45", "002", TimeSpan.FromSeconds(12), DateTime.MinValue,false);
+
+            IExternalAgentState externalAgentState1 = getExternalAgentState(startDate, "LOGON45", "002", TimeSpan.FromSeconds(12), DateTime.MinValue, false);
+            IExternalAgentState externalAgentState2 = getExternalAgentState(startDate, "LOGON45", "002", TimeSpan.FromSeconds(12), DateTime.MinValue, false);
 
             Expect.Call(rtaState2.StateGroup).Return(_rtaStateGroup).Repeat.AtLeastOnce();
             Expect.Call(rtaState2.Name).Return("State 2").Repeat.AtLeastOnce();
@@ -392,8 +393,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
             IPerson person1 = createExpectationForPersonLogOn("LOGON44");
             IPerson person2 = createExpectationForPersonLogOn("LOGON45");
-            
-            IExternalAgentState externalAgentState = getExternalAgentState(startDate, "LOGON45", "003", TimeSpan.FromSeconds(12), DateTime.MinValue,false);
+
+            IExternalAgentState externalAgentState = getExternalAgentState(startDate, "LOGON45", "003", TimeSpan.FromSeconds(12), DateTime.MinValue, false);
 
             Expect.Call(rtaState1.Name).Return("Name1");
             Expect.Call(rtaState2.Name).Return("Name2");
@@ -436,7 +437,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
             IPerson person1 = createExpectationForPersonLogOn("LOGON44");
             IPerson person2 = createExpectationForPersonLogOn("LOGON45");
-            
+
             IExternalAgentState externalAgentState = _mocks.StrictMock<IExternalAgentState>();
             Expect.Call(externalAgentState.ExternalLogOn).Return("LOGON45").Repeat.AtLeastOnce();
             Expect.Call(externalAgentState.StateCode).Return("003").Repeat.AtLeastOnce();
@@ -459,7 +460,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         {
             IPerson person1 = createExpectationForPersonLogOn("LOGON44");
             IPerson person2 = createExpectationForPersonLogOn("LOGON45");
-            
+
             IExternalAgentState externalAgentState = _mocks.StrictMock<IExternalAgentState>();
             Expect.Call(externalAgentState.ExternalLogOn).Return("LOGON46").Repeat.AtLeastOnce();
 
@@ -479,7 +480,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
             _mocks.ReplayAll();
             _target.SetFilteredPersons(new List<IPerson> { person1, person2 });
-            Assert.AreEqual(2,_target.ExternalLogOnPersons.Count);
+            Assert.AreEqual(2, _target.ExternalLogOnPersons.Count);
             _mocks.VerifyAll();
         }
 
@@ -495,8 +496,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
             IPerson person1 = createExpectationForPersonLogOn("LOGON44");
             IPerson person2 = createExpectationForPersonLogOn("LOGON45");
-            
-            IExternalAgentState externalAgentState = getExternalAgentState(startDate, "LOGON45", "002", TimeSpan.Zero, DateTime.MinValue,false);
+
+            IExternalAgentState externalAgentState = getExternalAgentState(startDate, "LOGON45", "002", TimeSpan.Zero, DateTime.MinValue, false);
 
             Expect.Call(rtaState2.StateGroup).Return(_rtaStateGroup).Repeat.AtLeastOnce();
             Expect.Call(rtaState2.Name).Return("Name");
@@ -530,9 +531,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
         private void createStateGroupAndAlarmExpectation()
         {
-            //Expect.Call(_rtaStateGroup.StateCollection).Return(new ReadOnlyCollection<IRtaState>(new List<IRtaState>()));
-            Expect.Call(_rtaStateGroupProvider.StateGroups()).Return(_rtaStateGroupList);
-            Expect.Call(_stateGroupActivityAlarmProvider.StateGroupActivityAlarms()).Return(new [] { _stateGroupActivityAlarm });
+            Expect.Call(_rtaStateGroupRepository.LoadAllCompleteGraph()).Return(_rtaStateGroupList);
+            Expect.Call(_stateGroupActivityAlarmRepository.LoadAllCompleteGraph()).Return(new[] { _stateGroupActivityAlarm });
         }
 
         [Test, ExpectedException(typeof(DefaultStateGroupException))]
@@ -540,8 +540,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         {
             using (_mocks.Record())
             {
-                Expect.Call(_rtaStateGroupProvider.StateGroups()).Return(new IRtaStateGroup[] { });
-                Expect.Call(_stateGroupActivityAlarmProvider.StateGroupActivityAlarms()).Return(new IStateGroupActivityAlarm[] { });
+                Expect.Call(_rtaStateGroupRepository.LoadAllCompleteGraph()).Return(new IRtaStateGroup[] { });
+                Expect.Call(_stateGroupActivityAlarmRepository.LoadAllCompleteGraph()).Return(new IStateGroupActivityAlarm[] { });
             }
             using (_mocks.Playback())
             {
@@ -553,19 +553,19 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCannotCreateInstanceWithNullRtaStateGroups()
         {
-            _target = new RtaStateHolder(_schedulingResultStateHolder, null, _stateGroupActivityAlarmProvider, new RangeProjectionService());
+            _target = new RtaStateHolder(_schedulingResultStateHolder, null, _stateGroupActivityAlarmRepository, new RangeProjectionService());
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCannotCreateInstanceWithNullStateGroupActivityAlarms()
         {
-            _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupProvider, null, new RangeProjectionService());
+            _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository, null, new RangeProjectionService());
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCannotCreateInstanceWithNullStateHolder()
         {
-            _target = new RtaStateHolder(null, _rtaStateGroupProvider, _stateGroupActivityAlarmProvider, new RangeProjectionService());
+            _target = new RtaStateHolder(null, _rtaStateGroupRepository, _stateGroupActivityAlarmRepository, new RangeProjectionService());
         }
 
         private IPerson createExpectationForPersonLogOn(string logon)
@@ -574,7 +574,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             IPersonPeriod personPeriod1 = _mocks.StrictMock<IPersonPeriod>();
             IExternalLogOn externalLogOn1 = _mocks.StrictMock<IExternalLogOn>();
             Expect.Call(person1.PersonPeriods(new DateOnlyPeriod())).IgnoreArguments().Return(
-                new List<IPersonPeriod> {personPeriod1}).Repeat.AtLeastOnce();
+                new List<IPersonPeriod> { personPeriod1 }).Repeat.AtLeastOnce();
             Expect.Call(personPeriod1.ExternalLogOnCollection).Return(
                 new ReadOnlyCollection<IExternalLogOn>(new List<IExternalLogOn> { externalLogOn1 })).Repeat.AtLeastOnce();
             Expect.Call(externalLogOn1.AcdLogOnOriginalId).Return(logon).Repeat.AtLeastOnce();

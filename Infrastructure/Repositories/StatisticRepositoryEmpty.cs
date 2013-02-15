@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// Created by: rogerkr
         /// Created date: 2008-04-29
         /// </remarks>
-        internal StatisticRepositoryEmpty(){}
+        internal StatisticRepositoryEmpty() { }
 
         /// <summary>
         /// Loads the specific dates.
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         public void PersistFactQueues(DataTable queueDataTable)
-        {           
+        {
         }
 
         //public int PersistDimQueue(int code, string name)
@@ -94,23 +94,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public void DeleteStgQueues()
         {
-            
+
         }
 
         public void LoadFactQueues()
         {
-            
+
         }
 
         public void LoadDimQueues()
         {
-            
+
         }
 
-    	public IList LoadAdherenceData(DateTime dateTime,  string timeZoneId, Guid personCode, Guid agentPersonCode, int languageId, int adherenceId)
-    	{
-			return new List<object>();
-    	}
+        public IList LoadAdherenceData(DateTime dateTime, string timeZoneId, Guid personCode, Guid agentPersonCode, int languageId, int adherenceId)
+        {
+            return new List<object>();
+        }
 
         #region IStatisticRepository Members
 
@@ -122,6 +122,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             return new List<object>();
         }
+
+        public IList<IActualAgentState> LoadActualAgentState(IEnumerable<IPerson> persons)
+        {
+            return new List<IActualAgentState>();
+        }
+
+        public IActualAgentState LoadOneActualAgentState(Guid value)
+        {
+            return new ActualAgentState();
+        }
+
+        public void AddOrUpdateActualAgentState(IActualAgentState actualAgentState)
+        {
+        }
+
+        public ICollection<Guid> PersonIdsWithExternalLogOn()
+        {
+            return new List<Guid>();
+        }
+
         #endregion
     }
 }

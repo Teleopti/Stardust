@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         IEnumerable<IStateGroupActivityAlarm> StateGroupActivityAlarms { get; }
         ISchedulingResultStateHolder SchedulingResultStateHolder { get; }
         IDictionary<IPerson, IAgentState> AgentStates { get; }
+        IDictionary<IPerson, IActualAgentState> ActualAgentStates { get; }
         IList<ExternalLogOnPerson> ExternalLogOnPersons { get; }
         void CollectAgentStates(IEnumerable<IExternalAgentState> externalAgentStates);
         void UpdateCurrentLayers(DateTime timestamp, TimeSpan refreshRate);
@@ -20,5 +21,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         void InitializeSchedules();
         void VerifyDefaultStateGroupExists();
         void Initialize();
+        IEnumerable<IPerson> FilteredPersons { get; }
+        void SetActualAgentState(IActualAgentState actualAgentState);
     }
 }

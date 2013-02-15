@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading;
+using Newtonsoft.Json;
 using log4net;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
@@ -21,7 +23,6 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 using System.Windows.Forms;
-using Teleopti.Messaging.Coders;
 
 namespace Teleopti.Ccc.WinCode.Intraday
 {
@@ -46,22 +47,22 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private readonly OnEventStatisticMessageCommand _onEventStatisticMessageCommand;
         private readonly OnEventForecastDataMessageCommand _onEventForecastDataMessageCommand;
         private readonly OnEventScheduleMessageCommand _onEventScheduleMessageCommand;
-    	private readonly LoadStatisticsAndActualHeadsCommand _loadStatisticsAndActualHeadsCommand;
-    	private readonly Queue<MessageForRetryCommand> _messageForRetryQueue = new Queue<MessageForRetryCommand>();
+        private readonly LoadStatisticsAndActualHeadsCommand _loadStatisticsAndActualHeadsCommand;
+        private readonly Queue<MessageForRetryCommand> _messageForRetryQueue = new Queue<MessageForRetryCommand>();
 
-        public IntradayPresenter(IIntradayView view, 
-            ISchedulingResultLoader schedulingResultLoader, 
-            IMessageBroker messageBroker, 
-            IRtaStateHolder rtaStateHolder, 
+        public IntradayPresenter(IIntradayView view,
+            ISchedulingResultLoader schedulingResultLoader,
+            IMessageBroker messageBroker,
+            IRtaStateHolder rtaStateHolder,
             IEventAggregator eventAggregator,
             IScheduleDictionarySaver scheduleDictionarySaver,
             IScheduleRepository scheduleRepository,
             IUnitOfWorkFactory unitOfWorkFactory,
             IRepositoryFactory repositoryFactory,
-            OnEventStatisticMessageCommand onEventStatisticMessageCommand, 
-            OnEventForecastDataMessageCommand onEventForecastDataMessageCommand, 
+            OnEventStatisticMessageCommand onEventStatisticMessageCommand,
+            OnEventForecastDataMessageCommand onEventForecastDataMessageCommand,
             OnEventScheduleMessageCommand onEventScheduleMessageCommand,
-			LoadStatisticsAndActualHeadsCommand loadStatisticsAndActualHeadsCommand)
+            LoadStatisticsAndActualHeadsCommand loadStatisticsAndActualHeadsCommand)
         {
             _eventAggregator = eventAggregator;
             _scheduleDictionarySaver = scheduleDictionarySaver;
@@ -69,8 +70,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _onEventStatisticMessageCommand = onEventStatisticMessageCommand;
             _onEventForecastDataMessageCommand = onEventForecastDataMessageCommand;
             _onEventScheduleMessageCommand = onEventScheduleMessageCommand;
-        	_loadStatisticsAndActualHeadsCommand = loadStatisticsAndActualHeadsCommand;
-        	_repositoryFactory = repositoryFactory;
+            _loadStatisticsAndActualHeadsCommand = loadStatisticsAndActualHeadsCommand;
+            _repositoryFactory = repositoryFactory;
             _messageBroker = messageBroker;
             _rtaStateHolder = rtaStateHolder;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -110,28 +111,29 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         private void listenForMessageBroker()
         {
-            if (_messageBroker==null) return;
+            if (_messageBroker == null) return;
 
-        	var period = SchedulerStateHolder.RequestedPeriod.Period();
+            var period = SchedulerStateHolder.RequestedPeriod.Period();
             _messageBroker.RegisterEventSubscription(OnEventStatisticMessageHandler,
                                                     typeof(IStatisticTask));
             _messageBroker.RegisterEventSubscription(OnEventScheduleMessageHandler,
                                                     typeof(IPersistableScheduleData),
                                                     period.StartDateTime,
                                                     period.EndDateTime);
-        	_messageBroker.RegisterEventSubscription(OnEventScheduleMessageHandler,
-        	                                         typeof (IMeeting));
+            _messageBroker.RegisterEventSubscription(OnEventScheduleMessageHandler,
+                                                     typeof(IMeeting));
             _messageBroker.RegisterEventSubscription(OnEventForecastDataMessageHandler,
                                                     typeof(IForecastData),
                                                     period.StartDateTime,
                                                     period.EndDateTime);
+
             if (!_realTimeAdherenceEnabled || HistoryOnly) return;
 
             foreach (var person in SchedulerStateHolder.FilteredPersonDictionary.Values)
             {
-                _messageBroker.RegisterEventSubscription(OnEventExternalAgentStateMessageHandler,
+                _messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
                                                         person.Id.GetValueOrDefault(),
-                                                        typeof(IExternalAgentState),
+                                                        typeof(IActualAgentState),
                                                         DateTime.UtcNow,
                                                         DateTime.UtcNow.AddDays(1));
             }
@@ -139,16 +141,17 @@ namespace Teleopti.Ccc.WinCode.Intraday
             addSubscriptionForBatchEvents();
         }
 
-    	private void addSubscriptionForBatchEvents()
-    	{
-    		_messageBroker.RegisterEventSubscription(OnEventExternalAgentStateMessageHandler,
-    		                                         Guid.Empty,
-    		                                         typeof(IExternalAgentState),
-    		                                         DateTime.UtcNow,
-    		                                         DateTime.UtcNow.AddDays(1));
-    	}
+        private void addSubscriptionForBatchEvents()
+        {
+            _messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
+                                                     Guid.Empty,
+                                                     typeof(IActualAgentState),
+                                                     DateTime.UtcNow,
+                                                     DateTime.UtcNow.AddDays(1));
+        }
 
-    	public void OnEventExternalAgentStateMessageHandler(object sender, EventMessageArgs e)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public void OnEventActualAgentStateMessageHandler(object sender, EventMessageArgs e)
         {
             if (e.Message.ModuleId == _moduleId) return;
 
@@ -157,11 +160,15 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         private void handleIncomingExternalEvent(object state)
         {
-            IExternalAgentState externalAgentState =
-                    new ExternalAgentStateDecoder().Decode(state as byte[]);
+            var stateBytes = state as byte[];
+            if (stateBytes == null)
+                return;
+            IActualAgentState agentState = JsonConvert.DeserializeObject<ActualAgentState>(Encoding.UTF8.GetString(stateBytes));
+            //IExternalAgentState externalAgentState =
+            //        new ExternalAgentStateDecoder().Decode(state as byte[]);
 
-            Logger.DebugFormat("Externalstate received: StateCode {0}, ExternalLogon {1}, Timestamp {2}", externalAgentState.StateCode, externalAgentState.ExternalLogOn, externalAgentState.Timestamp);
-            _rtaStateHolder.CollectAgentStates(new List<IExternalAgentState> { externalAgentState });
+            Logger.DebugFormat("Externalstate received: State {0}, PersonId {1}, State start {2}", agentState.State, agentState.PersonId, agentState.StateStart);
+            _rtaStateHolder.SetActualAgentState(agentState);
             if (ExternalAgentStateReceived != null) ExternalAgentStateReceived.Invoke(this, EventArgs.Empty);
         }
 
@@ -173,9 +180,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
         /// Created by: robink
         /// Created date: 2008-10-20
         /// </remarks>
-        public SchedulerStateHolder SchedulerStateHolder
+        public ISchedulerStateHolder SchedulerStateHolder
         {
-            get { return (SchedulerStateHolder)_schedulingResultLoader.SchedulerState; }
+            get { return _schedulingResultLoader.SchedulerState; }
         }
 
         /// <summary>
@@ -226,7 +233,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         {
             if (_view.InvokeRequired)
             {
-                _view.BeginInvoke(new Action<object,EventMessageArgs>(OnEventForecastDataMessageHandler), sender, e);
+                _view.BeginInvoke(new Action<object, EventMessageArgs>(OnEventForecastDataMessageHandler), sender, e);
             }
             else
             {
@@ -238,7 +245,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 }
                 catch (DataSourceException)
                 {
-                    _messageForRetryQueue.Enqueue(new MessageForRetryCommand(_onEventForecastDataMessageCommand,e.Message));
+                    _messageForRetryQueue.Enqueue(new MessageForRetryCommand(_onEventForecastDataMessageCommand, e.Message));
                     _view.ShowBackgroundDataSourceError();
                 }
             }
@@ -247,7 +254,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
         public void OnEventScheduleMessageHandler(object sender, EventMessageArgs e)
         {
             if (_view.InvokeRequired)
+            {
                 _view.BeginInvoke(new Action<object, EventMessageArgs>(OnEventScheduleMessageHandler), sender, e);
+            }
             else
             {
                 if (e.Message.ModuleId == _moduleId) return;
@@ -275,7 +284,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
         public void OnEventStatisticMessageHandler(object sender, EventMessageArgs e)
         {
             if (_view.InvokeRequired)
+            {
                 _view.BeginInvoke(new Action<object, EventMessageArgs>(OnEventStatisticMessageHandler), sender, e);
+            }
             else
             {
                 if (e.Message.ModuleId == _moduleId) return;
@@ -309,26 +320,30 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private void loadExternalAgentStates()
         {
             using (PerformanceOutput.ForOperation("Loading the schedules before first use"))
+            {
                 _rtaStateHolder.InitializeSchedules();
+            }
 
             if (!_realTimeAdherenceEnabled) return; //If RTA isn't enabled, we don't need the rest of the stuff...
 
             var statisticRepository = _repositoryFactory.CreateStatisticRepository();
             using (PerformanceOutput.ForOperation("Read and collect agent states"))
-                _rtaStateHolder.CollectAgentStates(
-                    statisticRepository.LoadRtaAgentStates(SchedulerStateHolder.RequestedPeriod.Period(),
-                                                           _rtaStateHolder.ExternalLogOnPersons));
-            using (PerformanceOutput.ForOperation("Analyzing alarms for initial states"))
-                _rtaStateHolder.AnalyzeAlarmSituations(DateTime.UtcNow);
+            {
+                var tmp = statisticRepository.LoadActualAgentState(_rtaStateHolder.FilteredPersons);
+                foreach (var actualAgentState in tmp)
+                {
+                    _rtaStateHolder.SetActualAgentState(actualAgentState);
+                }
+            }
         }
 
         private void initializeRtaStateHolder()
         {
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingRealTimeAdherenceDataThreeDots);
-            
+
             _rtaStateHolder.Initialize();
             _rtaStateHolder.SetFilteredPersons(SchedulerStateHolder.FilteredPersonDictionary.Values);
-            
+
             if (!_realTimeAdherenceEnabled) return;
 
             _rtaStateHolder.VerifyDefaultStateGroupExists();
@@ -339,7 +354,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         {
             using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var rtaStateGroupRepository = _repositoryFactory.CreateRtaStateGroupRepository(uow);
+                IRtaStateGroupRepository rtaStateGroupRepository = _repositoryFactory.CreateRtaStateGroupRepository(uow);
                 rtaStateGroupRepository.Add(e.Value.StateGroup);
 
                 try
@@ -379,11 +394,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
         /// </remarks>
         public IList<ISkillStaffPeriod> PrepareSkillIntradayCollection()
         {
-            var skill = _view.SelectedSkill;
-            var utcDayPeriod =
+            ISkill skill = _view.SelectedSkill;
+            DateTimePeriod utcDayPeriod =
                 new DateOnlyPeriod(_intradayDate, _intradayDate).ToDateTimePeriod(TimeZoneHelper.CurrentSessionTimeZone);
 
-            var skillStaffPeriods =
+            IList<ISkillStaffPeriod> skillStaffPeriods =
                 SchedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
                     new List<ISkill> { skill }, utcDayPeriod);
             if (skillStaffPeriods.Count == 0) return skillStaffPeriods;
@@ -406,8 +421,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         public void UnregisterMessageBrokerEvents()
         {
-            if (_messageBroker==null) return;
-            _messageBroker.UnregisterEventSubscription(OnEventExternalAgentStateMessageHandler);
+            if (_messageBroker == null) return;
+            _messageBroker.UnregisterEventSubscription(OnEventActualAgentStateMessageHandler);
             _messageBroker.UnregisterEventSubscription(OnEventForecastDataMessageHandler);
             _messageBroker.UnregisterEventSubscription(OnEventScheduleMessageHandler);
             _messageBroker.UnregisterEventSubscription(OnEventStatisticMessageHandler);
@@ -419,16 +434,16 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
             try
             {
-                using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+                using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
                     reassociateCommonStateHolder(uow);
                     uow.Reassociate(_schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization);
                     uow.Reassociate(MultiplicatorDefinitionSets);
-					var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, SchedulerStateHolder.Schedules.DifferenceSinceSnapshot());
+                    var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, SchedulerStateHolder.Schedules.DifferenceSinceSnapshot());
                     uow.PersistAll(this);
-					if (result != null)
-						new ScheduleDictionaryModifiedCallback().Callback(SchedulerStateHolder.Schedules, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
-				}
+                    if (result != null)
+                        new ScheduleDictionaryModifiedCallback().Callback(SchedulerStateHolder.Schedules, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
+                }
             }
             catch (OptimisticLockException optLockEx)
             {
@@ -440,8 +455,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
                 _view.ToggleSchedulePartModified(false);
                 using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+                {
                     _schedulingResultLoader.ReloadScheduleData(unitOfWork);
-                
+                }
                 _rtaStateHolder.InitializeSchedules();
                 _view.RefreshRealTimeScheduleControls();
                 _view.ToggleSchedulePartModified(true);
@@ -453,10 +469,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         public bool CheckIfUserWantsToSaveUnsavedData()
         {
-            if (SchedulerStateHolder.Schedules!=null &&
+            if (SchedulerStateHolder.Schedules != null &&
                 !SchedulerStateHolder.Schedules.DifferenceSinceSnapshot().IsEmpty())
             {
-                var res = _view.ShowConfirmationMessage(UserTexts.Resources.DoYouWantToSaveChangesYouMade,
+                DialogResult res = _view.ShowConfirmationMessage(UserTexts.Resources.DoYouWantToSaveChangesYouMade,
                                                            UserTexts.Resources.Save);
 
                 switch (res)
@@ -484,12 +500,12 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return !SchedulerStateHolder.RequestedPeriod.Period().Contains(DateTime.UtcNow); }
         }
 
-    	public IScenario RequestedScenario
-    	{
+		public IScenario RequestedScenario
+		{
 			get { return SchedulerStateHolder.RequestedScenario; }
-    	}
+		}
 
-    	public event EventHandler ExternalAgentStateReceived;
+        public event EventHandler ExternalAgentStateReceived;
 
         public void RefreshAgentStates(DateTime timestamp, TimeSpan refreshRate)
         {
@@ -499,20 +515,20 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         public IDayLayerViewModel CreateDayLayerViewModel()
         {
-            var viewModel = new DayLayerViewModel(_rtaStateHolder, _eventAggregator, _unitOfWorkFactory,_repositoryFactory,new DispatcherWrapper());
+            var viewModel = new DayLayerViewModel(_rtaStateHolder, _eventAggregator, _unitOfWorkFactory, _repositoryFactory, new DispatcherWrapper());
             viewModel.CreateModels(SchedulerStateHolder.FilteredPersonDictionary.Values,
                                    SchedulerStateHolder.RequestedPeriod);
             return viewModel;
         }
 
-        public IEnumerable<AgentStateViewAdapter> CreateAgentStateViewAdapterCollection()
+        public IEnumerable<AgentStateViewAdapter> CreateAgentStateViewAdapterCollection(IDayLayerViewModel model)
         {
-            return _rtaStateHolder.RtaStateGroups.Select(rtaStateGroup => new AgentStateViewAdapter(_rtaStateHolder, rtaStateGroup));
+            return _rtaStateHolder.RtaStateGroups.Select(rtaStateGroup => new AgentStateViewAdapter(rtaStateGroup, model));
         }
 
         public void RetryHandlingMessages()
         {
-            while(_messageForRetryQueue.Count>0)
+            while (_messageForRetryQueue.Count > 0)
             {
                 var handler = _messageForRetryQueue.Peek();
                 try
@@ -521,13 +537,13 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 }
                 catch (DataSourceException dataSourceException)
                 {
-                    Logger.Error("Something wrong with the data source.",dataSourceException);
+                    Logger.Error("Something wrong with the data source.", dataSourceException);
                     _view.ShowBackgroundDataSourceError();
                     return;
                 }
-                catch(Exception exception)
+                catch (Exception exception)
                 {
-                    Logger.Error("An error occurred!",exception);
+                    Logger.Error("An error occurred!", exception);
                     throw;
                 }
                 _messageForRetryQueue.Dequeue();

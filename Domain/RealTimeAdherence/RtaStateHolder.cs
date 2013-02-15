@@ -14,40 +14,41 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
     public class RtaStateHolder : IRtaStateHolder
     {
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-        private readonly IRtaStateGroupProvider _rtaStateGroupProvider;
-        private readonly IStateGroupActivityAlarmProvider _stateGroupActivityAlarmProvider;
+        private readonly IRtaStateGroupRepository _rtaStateGroupRepository;
+        private readonly IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
         private IEnumerable<IRtaStateGroup> _rtaStateGroups;
         private IEnumerable<IStateGroupActivityAlarm> _stateGroupActivityAlarms;
         private readonly IRangeProjectionService _rangeProjectionService;
-        private readonly IDictionary<IPerson,IAgentState> _agentStates = new Dictionary<IPerson,IAgentState>();
-        private readonly IDictionary<BatchIdentifier,IAgentStateBatch> _agentStateBatchDictionary = new Dictionary<BatchIdentifier, IAgentStateBatch>();
+        private readonly IDictionary<IPerson, IAgentState> _agentStates = new Dictionary<IPerson, IAgentState>();
+        private readonly IDictionary<IPerson, IActualAgentState> _actualAgentStates = new Dictionary<IPerson, IActualAgentState>();
+        private readonly IDictionary<BatchIdentifier, IAgentStateBatch> _agentStateBatchDictionary = new Dictionary<BatchIdentifier, IAgentStateBatch>();
         private IList<IActivity> _rtaStateAsActivities = new List<IActivity>();
         private readonly DateOnlyPeriod _dateOnlyPeriodToday = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
         private readonly IList<ExternalLogOnPerson> _externalLogOnPersons = new List<ExternalLogOnPerson>();
         private static readonly object LockObject = new object();
         private static readonly ILog Logger = LogManager.GetLogger(typeof(RtaStateHolder));
-        
+
         public event EventHandler<CustomEventArgs<IRtaState>> RtaStateCreated;
 
-        public RtaStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IRtaStateGroupProvider rtaStateGroupProvider, IStateGroupActivityAlarmProvider stateGroupActivityAlarmProvider, IRangeProjectionService rangeProjectionService)
+        public RtaStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IRtaStateGroupRepository rtaStateGroupRepository, IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository, IRangeProjectionService rangeProjectionService)
         {
             InParameter.NotNull("schedulingResultStateHolder", schedulingResultStateHolder);
-            InParameter.NotNull("rtaStateGroupProvider", rtaStateGroupProvider);
-            InParameter.NotNull("stateGroupActivityAlarmProvider", stateGroupActivityAlarmProvider);
+            InParameter.NotNull("rtaStateGroupProvider", rtaStateGroupRepository);
+            InParameter.NotNull("stateGroupActivityAlarmProvider", stateGroupActivityAlarmRepository);
 
             _schedulingResultStateHolder = schedulingResultStateHolder;
-            _rtaStateGroupProvider = rtaStateGroupProvider;
-            _stateGroupActivityAlarmProvider = stateGroupActivityAlarmProvider;
+            _rtaStateGroupRepository = rtaStateGroupRepository;
+            _stateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
             _rangeProjectionService = rangeProjectionService;
         }
 
         public void Initialize()
         {
-            _rtaStateGroups = _rtaStateGroupProvider.StateGroups();
+            _rtaStateGroups = _rtaStateGroupRepository.LoadAllCompleteGraph();
             _rtaStateAsActivities = (from g in _rtaStateGroups
                                      from s in g.StateCollection
                                      select (IActivity)new Activity("dummy") { InContractTime = false, Description = new Description(s.Name, s.StateCode) }).ToList();
-            _stateGroupActivityAlarms = _stateGroupActivityAlarmProvider.StateGroupActivityAlarms();
+            _stateGroupActivityAlarms = _stateGroupActivityAlarmRepository.LoadAllCompleteGraph();
         }
 
         public IEnumerable<IRtaStateGroup> RtaStateGroups
@@ -67,7 +68,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 
         public IDictionary<IPerson, IAgentState> AgentStates
         {
-            get { return new ReadOnlyDictionary<IPerson,IAgentState>(_agentStates); }
+            get { return new ReadOnlyDictionary<IPerson, IAgentState>(_agentStates); }
+        }
+
+        public IDictionary<IPerson, IActualAgentState> ActualAgentStates
+        {
+            get { return new ReadOnlyDictionary<IPerson, IActualAgentState>(_actualAgentStates); }
         }
 
         public IList<ExternalLogOnPerson> ExternalLogOnPersons
@@ -75,8 +81,27 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             get { return _externalLogOnPersons; }
         }
 
+        public void SetActualAgentState(IActualAgentState actualAgentState)
+        {
+            IPerson person = null;
+            foreach (var p in FilteredPersons.Where(p => p.Id.Value.Equals(actualAgentState.PersonId)))
+            {
+                person = p;
+            }
+
+            if (person == null)
+                return;
+            if (_actualAgentStates.ContainsKey(person))
+                _actualAgentStates[person] = actualAgentState;
+            else
+            {
+                _actualAgentStates.Add(person, actualAgentState);
+            }
+        }
+
         public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)
         {
+            FilteredPersons = filteredPersons;
             lock (LockObject)
             {
                 _externalLogOnPersons.Clear();
@@ -89,8 +114,14 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
                             _externalLogOnPersons.Add(new ExternalLogOnPerson { ExternalLogOn = externalLogOn.AcdLogOnOriginalId.Trim(), DataSourceId = externalLogOn.DataSourceId, Person = person });
                         }
                     }
-                }                
+                }
             }
+        }
+
+        public IEnumerable<IPerson> FilteredPersons
+        {
+            get;
+            private set;
         }
 
         public void InitializeSchedules()
@@ -100,7 +131,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
                 foreach (var agentState in _agentStates.Values)
                 {
                     agentState.SetSchedule(_schedulingResultStateHolder.Schedules);
-                }                
+                }
             }
         }
 
@@ -129,10 +160,10 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
                     if (externalAgentState.IsSnapshot)
                         InitializeAgentStateBatch(
                             new BatchIdentifier
-                                {
-                                    BatchTimestamp = externalAgentState.BatchId,
-                                    DataSourceId = externalAgentState.DataSourceId
-                                }, person);
+                            {
+                                BatchTimestamp = externalAgentState.BatchId,
+                                DataSourceId = externalAgentState.DataSourceId
+                            }, person);
 
                     if (_agentStateBatchDictionary.Count > 0 && !externalAgentState.IsSnapshot)
                         AddPersonToLastBatch(person);
@@ -161,7 +192,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         {
             IActivity activity = _rtaStateAsActivities.FirstOrDefault(a => a.Description.ShortName == state.StateCode);
             if (activity != null) return activity;
-            activity = new Activity("dummy") {InContractTime = false,Description = new Description(state.Name, state.StateCode)};
+            activity = new Activity("dummy") { InContractTime = false, Description = new Description(state.Name, state.StateCode) };
             _rtaStateAsActivities.Add(activity);
             return activity;
         }
@@ -183,13 +214,13 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             ExternalLogOnPerson externalLogOnPerson =
                 _externalLogOnPersons.FirstOrDefault(
                     e => e.ExternalLogOn == agentState.ExternalLogOn && e.DataSourceId == agentState.DataSourceId);
-            return externalLogOnPerson==null ? null : externalLogOnPerson.Person;
+            return externalLogOnPerson == null ? null : externalLogOnPerson.Person;
         }
 
         private void InitializeAgentStateBatch(BatchIdentifier batchIdentifier, IPerson person)
         {
             IAgentStateBatch agentStateBatch;
-            if(_agentStateBatchDictionary.TryGetValue(batchIdentifier,out agentStateBatch))
+            if (_agentStateBatchDictionary.TryGetValue(batchIdentifier, out agentStateBatch))
             {
                 agentStateBatch.AddPerson(person);
             }
@@ -197,25 +228,25 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             {
                 agentStateBatch = new AgentStateBatch(batchIdentifier);
                 agentStateBatch.AddPerson(person);
-                _agentStateBatchDictionary.Add(batchIdentifier,agentStateBatch);
+                _agentStateBatchDictionary.Add(batchIdentifier, agentStateBatch);
             }
         }
 
         private void HandleEndOfBatch(IExternalAgentState stateEndOfBatch)
         {
             var batchIdentifier = new BatchIdentifier
-                                      {
-                                          BatchTimestamp = stateEndOfBatch.BatchId,
-                                          DataSourceId = stateEndOfBatch.DataSourceId
-                                      };
+            {
+                BatchTimestamp = stateEndOfBatch.BatchId,
+                DataSourceId = stateEndOfBatch.DataSourceId
+            };
             IAgentStateBatch lastBatch;
-            if (!_agentStateBatchDictionary.TryGetValue(batchIdentifier,out lastBatch))
+            if (!_agentStateBatchDictionary.TryGetValue(batchIdentifier, out lastBatch))
             {
                 lastBatch = new AgentStateBatch(batchIdentifier);
-                _agentStateBatchDictionary.Add( batchIdentifier,lastBatch);
+                _agentStateBatchDictionary.Add(batchIdentifier, lastBatch);
             }
             IAgentStateBatch previousBatch =
-                    _agentStateBatchDictionary.LastOrDefault(b => b.Key.BatchTimestamp < batchIdentifier.BatchTimestamp && 
+                    _agentStateBatchDictionary.LastOrDefault(b => b.Key.BatchTimestamp < batchIdentifier.BatchTimestamp &&
                                                                   b.Key.DataSourceId == batchIdentifier.DataSourceId).Value;
             if (previousBatch != null)
             {
@@ -245,22 +276,22 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             if (foundState != null) return foundState;
 
             var defaultStateGroup = _rtaStateGroups.FirstOrDefault(s => s.DefaultStateGroup);
-            if (defaultStateGroup!=null)
+            if (defaultStateGroup != null)
             {
-                foundState = defaultStateGroup.AddState(agentState.StateCode,agentState.StateCode,agentState.PlatformTypeId);
+                foundState = defaultStateGroup.AddState(agentState.StateCode, agentState.StateCode, agentState.PlatformTypeId);
                 OnRtaStateCreated(new CustomEventArgs<IRtaState>(foundState));
                 return foundState;
             }
 
-            Logger.WarnFormat("Could not find a default state group. State not added. State code: {0}, Platform id: {1}",agentState.StateCode,agentState.PlatformTypeId);
+            Logger.WarnFormat("Could not find a default state group. State not added. State code: {0}, Platform id: {1}", agentState.StateCode, agentState.PlatformTypeId);
             return null;
         }
 
         private void OnRtaStateCreated(CustomEventArgs<IRtaState> eventArgs)
         {
-            if (RtaStateCreated!=null)
+            if (RtaStateCreated != null)
             {
-                RtaStateCreated.Invoke(this,eventArgs);
+                RtaStateCreated.Invoke(this, eventArgs);
             }
         }
 
@@ -292,46 +323,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         {
             if (!_rtaStateGroups.Any())
                 throw new DefaultStateGroupException("The RTA state groups must be configured first.");
-        }
-    }
-
-    public interface IStateGroupActivityAlarmProvider
-    {
-        IEnumerable<IStateGroupActivityAlarm> StateGroupActivityAlarms();
-    }
-
-    public class StateGroupActivityAlarmProvider : IStateGroupActivityAlarmProvider
-    {
-        private readonly IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
-
-        public StateGroupActivityAlarmProvider(IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository)
-        {
-            _stateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
-        }
-
-        public IEnumerable<IStateGroupActivityAlarm> StateGroupActivityAlarms()
-        {
-            return _stateGroupActivityAlarmRepository.LoadAllCompleteGraph();
-        }
-    }
-
-    public interface IRtaStateGroupProvider
-    {
-        IEnumerable<IRtaStateGroup> StateGroups();
-    }
-
-    public class RtaStateGroupProvider : IRtaStateGroupProvider
-    {
-        private readonly IRtaStateGroupRepository _rtaStateGroupRepository;
-
-        public RtaStateGroupProvider(IRtaStateGroupRepository rtaStateGroupRepository)
-        {
-            _rtaStateGroupRepository = rtaStateGroupRepository;
-        }
-
-        public IEnumerable<IRtaStateGroup> StateGroups()
-        {
-            return _rtaStateGroupRepository.LoadAllCompleteGraph();
         }
     }
 }

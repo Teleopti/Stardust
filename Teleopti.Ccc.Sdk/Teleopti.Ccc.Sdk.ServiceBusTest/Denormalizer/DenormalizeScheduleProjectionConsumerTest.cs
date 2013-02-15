@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 			target = new DenormalizeScheduleProjectionConsumer(unitOfWorkFactory,scheduleProjectionReadOnlyRepository);
+			
 		}
 
 		[Test]

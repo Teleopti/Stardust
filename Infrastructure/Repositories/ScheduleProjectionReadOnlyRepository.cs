@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -78,5 +79,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List();
 			return result.Count > 0;
 		}
+
+        public DateTime GetNextActivityStartTime(DateTime dateTime, Guid personId)
+        {
+            var uow = _unitOfWorkFactory.CurrentUnitOfWork();
+            string query = string.Format(CultureInfo.InvariantCulture,@"SELECT TOP 1 StartDateTime 
+                                                                      FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta WHERE StartDateTime >= '{0}' 
+                                                                      AND PersonId='{1}' order by StartDateTime", dateTime, personId);
+
+            var result = ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(query).List();
+
+            if (result.Count>0)
+                return (DateTime)result[0];
+            
+            return new DateTime();
+        }
 	}
 }
