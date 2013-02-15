@@ -6,6 +6,7 @@ using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
@@ -14,12 +15,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	{
 		private readonly Func<IShiftTradeRequestProvider> _shiftTradeRequestProvider;
 		private readonly Func<IProjectionProvider> _projectionProvider;
+		private readonly IResolve<IShiftTradeTimeLineHoursViewModelFactory> _shiftTradeTimelineHoursViewModelFactory;
 		private const int TimeLineOffset = 15;
 
-		public ShiftTradeScheduleViewModelMappingProfile(Func<IShiftTradeRequestProvider> shiftTradeRequestProvider, Func<IProjectionProvider> projectionProvider)
+		public ShiftTradeScheduleViewModelMappingProfile(Func<IShiftTradeRequestProvider> shiftTradeRequestProvider, Func<IProjectionProvider> projectionProvider, IResolve<IShiftTradeTimeLineHoursViewModelFactory> shiftTradeTimelineHoursViewModelFactory)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_projectionProvider = projectionProvider;
+			_shiftTradeTimelineHoursViewModelFactory = shiftTradeTimelineHoursViewModelFactory;
 		}
 
 		protected override void Configure()
@@ -90,7 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 							{
 								MySchedule = myScheduleViewModel,
 								PossibleTradePersons = possibleTradePersonViewModelCollection,
-								TimeLineHours = createTimeLineHours(timeLineRangeTot, myScheduleDay.PersonTimeZone, myScheduleDay.PersonCulture),
+								TimeLineHours = CreateTimeLineHours(timeLineRangeTot),
 								TimeLineLengthInMinutes = (int)timeLineRangeTot.EndDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes
 							};
 					});
@@ -158,10 +161,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return returnDay;
 		}
 
-		private static IEnumerable<ShiftTradeTimeLineHoursViewModel> createTimeLineHours(DateTimePeriod timeLinePeriod, TimeZoneInfo timeZone, CultureInfo culture)
+		private  IEnumerable<ShiftTradeTimeLineHoursViewModel> CreateTimeLineHours(DateTimePeriod timeLinePeriod)
 		{
-			//Henke move to ctor...
-			return new ShiftTradeTimeLineHoursViewModelFactory(timeZone, culture,new CreateHourText()).CreateTimeLineHours(timeLinePeriod);
+			return _shiftTradeTimelineHoursViewModelFactory.Invoke().CreateTimeLineHours(timeLinePeriod);
 		}
 
 
