@@ -9,6 +9,9 @@ namespace Teleopti.Interfaces.Messages.General
 	/// </summary>
 	public class QuickForecastWorkloadsMessage : RaptorDomainMessage
 	{
+		/// <summary>
+		/// The Job ID
+		/// </summary>
 		public override Guid Identity
 		{
 			get { return JobId; }
