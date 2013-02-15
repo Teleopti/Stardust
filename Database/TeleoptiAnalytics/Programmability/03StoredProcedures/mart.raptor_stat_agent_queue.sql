@@ -49,6 +49,7 @@ INNER JOIN (SELECT DISTINCT ba.acd_login_id, p.person_code
                                  FROM mart.bridge_acd_login_person ba
                                  INNER JOIN mart.dim_person p
                                             on p.person_id=ba.person_id
+                                            AND (@date_from	between p.valid_from_date AND p.valid_to_date OR  @date_to	between p.valid_from_date AND p.valid_to_date)
                                             AND p.person_code = @person_code) tricky
                                  ON fa.acd_login_id = tricky.acd_login_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
