@@ -138,6 +138,12 @@ from PersonInApplicationRole piar
 inner join Person p on p.Id = piar.Person
 where p.IsDeleted = 1
 
+--Remove deleted budget groups from persons
+update PersonPeriod set BudgetGroup = NULL
+from PersonPeriod pp
+inner join BudgetGroup bg on pp.BudgetGroup = bg.Id
+where bg.IsDeleted = 1
+
 --Messages
 select @MaxDate = dateadd(day,@BatchSize,isnull(min(UpdatedOn),'19900101')) from PushMessageDialogue
 
