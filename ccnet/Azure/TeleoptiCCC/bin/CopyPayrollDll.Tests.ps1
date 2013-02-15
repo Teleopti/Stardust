@@ -7,7 +7,7 @@ Describe "Azure, copy from BlobStorage, check our pre-reqs" {
 	It "We must be admin" {
 		[bool] $isAdmin
 		$isAdmin = Test-Administrator($myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent());
-		$isAdmin.should.be($true)
+		$isAdmin | Should Be $true
 	}
 }
 
@@ -16,7 +16,7 @@ Describe "Azure, copy from BlobStorage, use Robocopy for internal copy" {
     It "Return code from Robocopy shold be 1 when copy one file, first time" {
         Setup -File "srcFolder\someFile.txt" "ContentInRoboCopyFile"
         $returnValue = Roby-Copy "$TestDrive\srcFolder" "$TestDrive\destFolder"
-        $returnValue.should.be(1)
+        $returnValue | Should Be 1
 	}
 
 
@@ -24,7 +24,7 @@ Describe "Azure, copy from BlobStorage, use Robocopy for internal copy" {
         Setup -File "\srcFolder\forTest.txt" "ContentInRoboCopyFile"
         $returnValue = Roby-Copy "$TestDrive\srcFolder" "$TestDrive\destFolder"
         $returnValue = Roby-Copy "$TestDrive\srcFolder" "$TestDrive\destFolder"
-        $returnValue.should.be(0)
+        $returnValue | Should Be 0
 	}
 
     It "File content shold be the same in destFile and srcFile after Robocopy" {
@@ -32,8 +32,9 @@ Describe "Azure, copy from BlobStorage, use Robocopy for internal copy" {
         Setup -File "\srcFolder\forTest.txt" $fileContent
         Roby-Copy "$TestDrive\srcFolder" "$TestDrive\destFolder"
         [string] $testValue = Get-Content "$TestDrive\destFolder\forTest.txt"
-        $testValue.should.be($fileContent)
+        $testValue | Should Be $fileContent
 	}
+}
     
     
 Describe "We should be able to init event log, twice" {
@@ -43,7 +44,4 @@ Describe "We should be able to init event log, twice" {
         EventlogSource-Create "test"
 	}
     
-}
-    
-	
 }

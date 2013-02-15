@@ -149,9 +149,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.days(days);
 			var minDateArr = data.PeriodSelection.SelectedDateRange.MinDate.split('-');
 			var maxDateArr = data.PeriodSelection.SelectedDateRange.MaxDate.split('-');
-			
+
 			self.minDate = moment(new Date(minDateArr[0], minDateArr[1] - 1, minDateArr[2])).add('days', -1).toDate();
-			self.maxDate = moment(new Date(maxDateArr[0], maxDateArr[1] - 1, maxDateArr[2])).add('days',1).toDate();
+			self.maxDate = moment(new Date(maxDateArr[0], maxDateArr[1] - 1, maxDateArr[2])).add('days', 1).toDate();
 		}
 	});
 
@@ -189,6 +189,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.colorForDaySummary = ko.computed(function () {
 			return parent.styles()[self.summaryStyleClassName()];
 		});
+
+		self.textColor = ko.computed(function () {
+
+			var backgroundColor = parent.styles()[self.summaryStyleClassName()];
+			if (backgroundColor != null && backgroundColor != 'undefined') {
+				return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
+			}
+			return 'black';
+		});
 		self.layers = ko.utils.arrayMap(day.Periods, function (item) {
 			return new LayerViewModel(item, parent);
 		});
@@ -223,6 +232,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 		self.timeSpan = ko.observable(layer.TimeSpan);
 		self.color = ko.observable('rgb(' + layer.Color + ')');
+		self.textColor = ko.computed(function () {
+			if (layer.Color != null && layer.Color != 'undefined') {
+				var backgroundColor = 'rgb(' + layer.Color + ')';
+				return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
+			}
+			return 'black';
+		});
 		self.tooltipText = ko.computed(function () {
 			//not nice! rewrite tooltips in the future!
 			if (self.hasMeeting()) {
@@ -552,9 +568,11 @@ Teleopti.MyTimeWeb.Schedule.Request = (function ($) {
 	}
 
 	function _getFormData() {
-		var absenceId = $('#Absence-type').children(":selected").val();
-		if (absenceId == undefined) {
-			absenceId = null;
+		var absenceId = null;
+		var optionId = "#absence-type-" + $('#Absence-type-input').val();
+		var selectedOption = $(optionId);
+		if (selectedOption.length) {
+			absenceId = selectedOption.val();
 		}
 		return {
 			Subject: $('#Schedule-addRequest-subject-input').val(),

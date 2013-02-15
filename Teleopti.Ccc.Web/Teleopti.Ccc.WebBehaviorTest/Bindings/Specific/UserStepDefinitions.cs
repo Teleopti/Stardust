@@ -405,6 +405,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new AbsenceToday());
 		}
 
+		[Given(@"I have a full-day absence today with")]
+		[Given(@"I have a full-day absence with")]
+		public void GivenIHaveAFull_DayAbsenceTodayWith(Table table)
+		{
+			var absence = table.CreateInstance<AbsenceToday>();
+			UserFactory.User().Setup(absence);
+		}
+
 		[Given(@"I have a shift from (.*) to (.*)")]
 		public void GivenIHaveAShiftFrom756To1700(string from, string to)
 		{

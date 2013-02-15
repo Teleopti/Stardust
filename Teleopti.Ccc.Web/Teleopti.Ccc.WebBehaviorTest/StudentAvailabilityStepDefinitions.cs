@@ -10,7 +10,6 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
-using Find = WatiN.Core.Find;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -42,37 +41,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.EditButton.EventualClick();
 		}
 
-		//[When(@"I click the cancel button")]
-		//public void WhenIClickTheCancelButton()
-		//{
-		//    _page.InputPanel.WaitUntilDisplayed();
-		//    _page.CancelButton.EventualClick();
-		//}
-
-		//[When(@"I input student availability values")]
-		//public void WhenIInputStudentAvailabilityValues()
-		//{
-		//    _page.StartTimeTextField.Value = "05:00";
-		//    _page.EndTimeTextField.Value = "14:00";
-		//    _page.NextDay.Checked = false;
-		//}
-
-		//[When(@"I input invalid student availability values")]
-		//public void WhenIInvalidInputStudentAvailabilityValues()
-		//{
-		//    _page.StartTimeTextField.Value = "not-a";
-		//    _page.EndTimeTextField.Value = "-time";
-		//    _page.NextDay.Checked = false;
-		//}
-
-		//[When(@"I input student availability values with end time on next day")]
-		//public void WhenIInputStudentAvailabilityValuesWithEndTimeOnNextDay()
-		//{
-		//    _page.StartTimeTextField.Value = "14:00";
-		//    _page.EndTimeTextField.Value = "05:00";
-		//    _page.NextDay.Checked = true;
-		//}
-
 		[When(@"I navigate to the student availability page")]
 		public void WhenINavigateToTheStudentAvailabilityPage()
 		{
@@ -92,14 +60,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var date = UserFactory.User().UserData<StudentAvailability>().Date;
 			_page.SelectCalendarCellForDateByClick(date);
 		}
-
-		//[Then(@"I should see the student availability values in the input form")]
-		//public void ThenIShouldSeeTheStudentAvailabilityValuesInTheInputForm()
-		//{
-		//    var studentAvailability = UserFactory.User().UserData<StudentAvailability>();
-		//    Assert.That(() => TimeSpan.Parse(_page.StartTimeTextField.Text), Is.EqualTo(studentAvailability.StartTime).After(5000, 10));
-		//    Assert.That(() => TimeSpan.Parse(_page.EndTimeTextField.Text), Is.EqualTo(studentAvailability.EndTime).After(5000, 10));
-		//}
 
 		[Then(@"I should see the student availability period information")]
 		public void ThenIShouldSeeTheStudentAvailabilityPeriodInformation()
@@ -148,8 +108,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var editableDate = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			_page.SelectCalendarCellForDateByClick(editableDate);
 			_page.CalendarCellForDate(editableDate).ClassName.Should().Contain("ui-selected");
-			//_page.EditButton.Click();
-			//Assert.That(() => _page.InputPanel.Style.Display, Is.Not.EqualTo("none").After(5000, 10));
 		}
 
 		[Then(@"the student availability calendar should not be editable")]
@@ -168,12 +126,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			Assert.That(() => Browser.Current.Div("modal-disable").Style.Display, Is.Not.EqualTo("none").After(5000, 10));
 		}
-
-		//[Then(@"I should not see the student availability values")]
-		//public void ThenIShouldNotSeeTheStudentAvailabilityValues()
-		//{
-		//    EventualAssert.That(() => _page.InputPanel.Style.Display, Is.EqualTo("none"));
-		//}
 
 		[Then(@"I should not be able to see student availability link")]
 		public void ThenIShouldNotBeAbleToSeeStudentAvailabilityLink()

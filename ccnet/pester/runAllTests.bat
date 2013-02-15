@@ -2,16 +2,25 @@
 SETLOCAL
 set rootdir=%~dp0
 SET rootdir=%rootdir:~0,-1%
-
+set currentPester=2.0.0
+set obsoletePester=1.1.1;1.0.0
+set outputFile=%rootdir%\Pester.%currentPester%\Test.xml
 ::install
-"%rootdir%\..\..\.nuget\nuget.exe" install pester -o "%rootdir%" -Version 1.1.1
+"%rootdir%\..\..\.nuget\nuget.exe" install pester -o "%rootdir%" -Version %currentPester%
 
 ::pester internal tests fails, remove for now
-cd "%rootdir%\Pester.1.1.1"
+cd "%rootdir%\Pester.%currentPester%"
 del /F /S /Q *.Tests.ps1
 
+::remove obsolete version
+for /f "tokens=1* delims=;" %%a in ("%obsoletePester%") do  if exist "%rootdir%\Pester.%%a" rmdir "%rootdir%\Pester.%%a" /S /Q
+
 ::Run all test
-"%rootdir%\Pester.1.1.1\tools\bin\pester.bat" "%rootdir%\..\.."
+CMD /C ""%rootdir%\Pester.%currentPester%\tools\bin\pester.bat" "%rootdir%\..\..""
+
+::Copy to "main" for ccnet to read
+COPY "%outputFile%" "%rootdir%\..\..\PowerShellTests.xml"
+
 goto :eof
 
 :userInput

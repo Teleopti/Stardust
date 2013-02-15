@@ -62,6 +62,16 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		$('.edit-section-content .ui-button').button("option", "disabled", false);
 	}
 
+	function _getTextColorBasedOnBackgroundColor(backgroundColor) {
+		backgroundColor = backgroundColor.slice(backgroundColor.indexOf('(') + 1, backgroundColor.indexOf(')'));
+
+		var backgroundColorArr = backgroundColor.split(',');
+
+		var brightness = backgroundColorArr[0] * 0.299 + backgroundColorArr[1] * 0.587 + backgroundColorArr[2] * 0.114;
+
+		return brightness < 100 ? 'white' : 'black';
+	}
+
 	function _closeEditSection(editSectionId) {
 		var editsection = $(editSectionId);
 		editsection.hide();
@@ -112,6 +122,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		},
 		CloseEditSection: function (editSectionId) {
 			_closeEditSection(editSectionId);
+		},
+		GetTextColorBasedOnBackgroundColor: function (backgroundColor) {
+			return _getTextColorBasedOnBackgroundColor(backgroundColor);
 		}
 	};
 

@@ -22,7 +22,7 @@ function Roby-Copy
       )
       
 	## Options to be added to RoboCopy
-	$ROBOOPTIONS = @("/MIR")
+	$ROBOOPTIONS = @("/E")
 
 	## Wrap arguments for robocopy
 	$roboArgs = @("$scrFolder","$destFolder",$ROBOOPTIONS)
@@ -146,11 +146,11 @@ Try
         throw "AsCopy generated an error!"
     }
     
-    Roby-Copy $DESTINATION $FILEWATCH
+    $RoboExitCode = Roby-Copy $DESTINATION $FILEWATCH
     
 	##one or more files are new, log info to Eventlog and restart serviceBus
 	If ($RoboExitCode -ge 1) {
-        Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$SOURCE and $DESTINATION in sync."
+        Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$BlobSource and $FILEWATCH in sync."
     	Stop-Service -name $TeleoptiServiceBus
     	write-host "-------------" -ForegroundColor blue
     	Start-Service -name $TeleoptiServiceBus

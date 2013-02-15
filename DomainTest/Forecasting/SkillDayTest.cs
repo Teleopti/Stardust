@@ -59,6 +59,15 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         }
 
         [Test]
+        public void VerifyOpenForWorkProperty()
+        {
+            _skillDay.RecalculateDailyTasks();
+            Assert.IsTrue(_skillDay.SkillStaffPeriodCollection.Count > 0);
+            Assert.IsTrue(_skillDay.OpenForWork.IsOpen);
+            Assert.IsTrue(_skillDay.OpenForWork.IsOpenForIncomingWork);
+        }
+
+        [Test]
         public void VerifyHasInitialCollectionOfSkillStaffPeriods()
         {
             _skillDay.RecalculateDailyTasks(); //Makes sure the class is initialized
@@ -950,6 +959,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(TimePeriod.Combine(openHours), _skillDay.OpenHours(), "Verify Combine is applied on all workloads");
         }
 
+        
         /// <summary>
         /// Verifies the event is triggered when calculation is done.
         /// </summary>
