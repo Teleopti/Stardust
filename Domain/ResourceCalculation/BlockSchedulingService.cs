@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private bool _cancelMe;
 
         public BlockSchedulingService( IBestBlockShiftCategoryFinder blockShiftCategoryFinder,
-            IScheduleDayService scheduleDayService, IBlockFinderFactory blockFinderFactory)
+            IScheduleDayService scheduleDayService, IBlockFinderFactory blockFinderFactory )
         {
             _blockShiftCategoryFinder = blockShiftCategoryFinder;
             _scheduleDayService = scheduleDayService;

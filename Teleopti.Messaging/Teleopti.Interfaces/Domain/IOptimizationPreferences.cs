@@ -351,6 +351,16 @@ namespace Teleopti.Interfaces.Domain
         /// The actual common activity
         /// </summary>
         IActivity CommonActivity { get; set; }
+
+        /// <summary>
+        /// Block finder service for advance optimization service
+        /// </summary>
+        BlockFinderType BlockFinderTypeForAdvanceOptimization { get; set; }
+
+        /// <summary>
+        /// Group page for Leveling property used for block optimization
+        /// </summary>
+        IGroupPageLight GroupPageOnTeamLevelingPer { get; set; }
     }
 
     /// <summary>
