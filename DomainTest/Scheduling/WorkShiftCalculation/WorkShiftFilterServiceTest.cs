@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -66,10 +67,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             var bag = _mocks.StrictMock<IRuleSetBag>();
             var dictionary = _mocks.StrictMock<IScheduleDictionary>();
             var range = _mocks.StrictMock<IScheduleRange>();
-            var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
+            var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
             var caches = getCashes();
             var dateOnly = new DateOnly(2012, 12, 12);
-            _schedulingOptions.ShiftCategory = _category;
             using (_mocks.Record())
             {
                 ExpectCodeForShouldFilterWorkShifts(range, effectiveRestriction, caches, dictionary, dateOnly, bag);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
                                                                                                      new Domain.Specification.
                                                                                                          All<IMainShift>())).
                 IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
-            effectiveRestriction.ShiftCategory = _category;
+            
             Expect.Call(_shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(new DateOnly(), null, null,
                                                                                                     null, null, null)).
                 IgnoreArguments().Return(caches);

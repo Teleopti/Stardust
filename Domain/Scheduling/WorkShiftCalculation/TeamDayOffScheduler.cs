@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
 		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
 		{
             if (matrixListAll == null) return;

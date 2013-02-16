@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			_target = new OpenHoursToEffectiveRestrictionConverter(_schedulingResultStateHolder, _groupPersonSkillAggregator);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldConvertOpenHoursToRestriction()
 		{
 			var dateOnly = new DateOnly(2012, 12, 7);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldAggregateDaysWithoutDayOff()
 		{
 			var dateOnly = new DateOnly(2012, 12, 7);
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldAggregateOpenHoursFromOpenSkills()
 		{
 			var dateOnly = new DateOnly(2012, 12, 7);

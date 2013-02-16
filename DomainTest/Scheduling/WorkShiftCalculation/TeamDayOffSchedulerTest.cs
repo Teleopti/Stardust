@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 											  _schedulingResultStateHolder);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldAddPreferenceDayOffForTeam()
 		{
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldAddContractDayOffForTeam()
 		{
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldAddPreferenceDayOffIndividually()
 		{
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldAddContractDayOffIndividually()
 		{
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldStopAddingPreferenceDayOffIfCanceled()
 		{
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };

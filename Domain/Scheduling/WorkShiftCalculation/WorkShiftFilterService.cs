@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 	        _scheduleDayEquator = scheduleDayEquator;
         }
 
-        public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions)
         {
             FinderResult = new WorkShiftFinderResult(person, dateOnly);
             _workShiftMinMaxCalculator.ResetCache();

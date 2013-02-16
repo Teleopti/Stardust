@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// </summary>
         /// <param name="key">The key.</param>
         /// <remarks>Used in tests only</remarks>
-        public void SetGroupPageOnTeamLevelingper(string key)
+		public void SetGroupPageOnTeamLevelingPerKey(string key)
         {
             _groupPageOnTeamLevelingPerKey = key;
         }

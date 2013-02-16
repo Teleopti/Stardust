@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
     public interface IAdvanceSchedulingService
     {
+		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList, IList<IScheduleMatrixPro> allPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonMatrixList);
     }
     public class AdvanceSchedulingService : IAdvanceSchedulingService
@@ -24,9 +25,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
     	private readonly IWorkShiftSelector _workShiftSelector;
         private readonly IGroupPersonBuilderBasedOnContractTime _groupPersonBuilderBasedOnContractTime;
         private readonly ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
+	    private bool _cancelMe;
 
 
-        public AdvanceSchedulingService(ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
+	    public AdvanceSchedulingService(ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
             IDynamicBlockFinder dynamicBlockFinder, 
             IRestrictionAggregator restrictionAggregator,
             IWorkShiftFilterService workShiftFilterService,
@@ -48,61 +50,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
         }
 
-        
-        private DateOnly StartDate(IList<IScheduleMatrixPro> matrixList, out  List<DateOnly> dayOff, out  List<DateOnly> effectiveDays, out  List<DateOnly> unLockedDays)
+
+		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		public bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList, IList<IScheduleMatrixPro> allPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonMatrixList)
         {
-            var startDate = DateOnly.MinValue;
-            dayOff = new List<DateOnly>();
-            effectiveDays = new List<DateOnly>();
-            unLockedDays = new List<DateOnly>();
-            
-            if (matrixList != null)
-            {
-                for (var i = 0; i < matrixList.Count; i++)
-                {
-                    var openMatrixList = matrixList.Where(x => x.Person.Equals(matrixList[i].Person));
-                    foreach (var scheduleMatrixPro in openMatrixList)
-                    {
-                        foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
-                        {
-                            var daySignificantPart = scheduleDayPro.DaySchedulePart().SignificantPart();
-                            
-                            if (startDate == DateOnly.MinValue &&
-                                (daySignificantPart != SchedulePartView.DayOff &&
-                                 daySignificantPart != SchedulePartView.ContractDayOff &&
-                                 daySignificantPart != SchedulePartView.FullDayAbsence))
-                            {
-                                startDate = scheduleDayPro.Day;
-                            }
-                            
-                            if (daySignificantPart == SchedulePartView.DayOff)
-                                dayOff.Add(scheduleDayPro.Day);
-                            effectiveDays.Add(scheduleDayPro.Day);
-                            
-                            if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
-                                unLockedDays.Add(scheduleDayPro.Day);
-                        }
-                    }
-                }
-
-
-            }
-            return startDate;
-        }
-
-        private DateOnly GetNextDate(DateOnly dateOnly, List<DateOnly> effectiveDays, List<DateOnly> daysOff, List<DateOnly> unLockedDays)
-        {
-            dateOnly = dateOnly.AddDays(1);
-            while (daysOff.Contains(dateOnly))
-               dateOnly = dateOnly.AddDays(1);
-            return effectiveDays.Contains(dateOnly) && unLockedDays.Contains(dateOnly) ? dateOnly : DateOnly.MinValue;
-        }
-
-        public bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList, IList<IScheduleMatrixPro> allPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonMatrixList)
-        {
+			_teamScheduling.DayScheduled += dayScheduled;
             List<DateOnly> dayOff,effectiveDays,unLockedDays;
 
-            var startDate = StartDate(selectedPersonMatrixList, out dayOff, out effectiveDays, out unLockedDays);
+            var startDate = AdvanceSchedulingService.startDate(selectedPersonMatrixList, out dayOff, out effectiveDays, out unLockedDays);
 
             var selectedPerson = selectedPersonMatrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).Distinct().ToList();
             
@@ -122,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, startDate);
                     foreach (var groupPerson in groupPersonList)
                     {
-                        var groupMatrixList = GetScheduleMatrixProList(groupPerson, startDate, allPersonMatrixList);
+                        var groupMatrixList = getScheduleMatrixProList(groupPerson, startDate, allPersonMatrixList);
                         //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
                         var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson,groupMatrixList, _schedulingOptions);
 						if (restriction == null) continue;
@@ -150,18 +107,94 @@ namespace Teleopti.Ccc.Domain.Scheduling
                             //call class that schedules the unscheduled days for the teamblock using the same start time from the given shift, 
                             //this class will handle steady state as well as individual
                             _teamScheduling.Execute(startDate, dateOnlyList, groupMatrixList, groupPerson, restriction, bestShiftProjectionCache, unLockedDays,selectedPerson );
+							if (_cancelMe)
+								break;
                         }
-
+						if (_cancelMe)
+							break;
                     }
+					if (_cancelMe)
+						break;
                 }
-                startDate = GetNextDate(dateOnlyList.OrderByDescending(x => x.Date).First(), effectiveDays,dayOff,unLockedDays );
+				if (_cancelMe)
+					break;
+                startDate = getNextDate(dateOnlyList.OrderByDescending(x => x.Date).First(), effectiveDays,dayOff,unLockedDays );
                 
             }
 
+			_teamScheduling.DayScheduled -= dayScheduled;
             return true;
         }
 
-        private List<IScheduleMatrixPro> GetScheduleMatrixProList(IGroupPerson groupPerson, DateOnly startDate, IEnumerable<IScheduleMatrixPro> matrixList)
+	    void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
+	    {
+		    if (e.Cancel)
+			    _cancelMe = true;
+
+		    OnDayScheduled(e);
+	    }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+		{
+			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
+			if (temp != null)
+			{
+				temp(this, scheduleServiceBaseEventArgs);
+				_cancelMe = scheduleServiceBaseEventArgs.Cancel;
+			}
+		}
+
+		private static DateOnly startDate(IList<IScheduleMatrixPro> matrixList, out  List<DateOnly> dayOff, out  List<DateOnly> effectiveDays, out  List<DateOnly> unLockedDays)
+		{
+			var startDate = DateOnly.MinValue;
+			dayOff = new List<DateOnly>();
+			effectiveDays = new List<DateOnly>();
+			unLockedDays = new List<DateOnly>();
+
+			if (matrixList != null)
+			{
+				for (var i = 0; i < matrixList.Count; i++)
+				{
+					var openMatrixList = matrixList.Where(x => x.Person.Equals(matrixList[i].Person));
+					foreach (var scheduleMatrixPro in openMatrixList)
+					{
+						foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
+						{
+							var daySignificantPart = scheduleDayPro.DaySchedulePart().SignificantPart();
+
+							if (startDate == DateOnly.MinValue &&
+								(daySignificantPart != SchedulePartView.DayOff &&
+								 daySignificantPart != SchedulePartView.ContractDayOff &&
+								 daySignificantPart != SchedulePartView.FullDayAbsence))
+							{
+								startDate = scheduleDayPro.Day;
+							}
+
+							if (daySignificantPart == SchedulePartView.DayOff)
+								dayOff.Add(scheduleDayPro.Day);
+							effectiveDays.Add(scheduleDayPro.Day);
+
+							if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
+								unLockedDays.Add(scheduleDayPro.Day);
+						}
+					}
+				}
+
+
+			}
+			return startDate;
+		}
+
+		private static DateOnly getNextDate(DateOnly dateOnly, List<DateOnly> effectiveDays, List<DateOnly> daysOff, List<DateOnly> unLockedDays)
+		{
+			dateOnly = dateOnly.AddDays(1);
+			while (daysOff.Contains(dateOnly))
+				dateOnly = dateOnly.AddDays(1);
+			return effectiveDays.Contains(dateOnly) && unLockedDays.Contains(dateOnly) ? dateOnly : DateOnly.MinValue;
+		}
+
+        private static List<IScheduleMatrixPro> getScheduleMatrixProList(IGroupPerson groupPerson, DateOnly startDate, IEnumerable<IScheduleMatrixPro> matrixList)
         {
             var person = groupPerson;
             var date = startDate;

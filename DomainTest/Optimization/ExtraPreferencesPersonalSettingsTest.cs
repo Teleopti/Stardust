@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             
             Assert.AreEqual(_extraPreferencesSource.FairnessValue, _extraPreferencesTarget.FairnessValue);
 
-            Assert.AreEqual(_extraPreferencesSource.BlockFinderTypeForAdvanceOptimization,_extraPreferencesTarget.BlockFinderTypeForAdvanceOptimization  );
+            Assert.AreEqual(_extraPreferencesSource.BlockFinderTypeForAdvanceOptimization,_extraPreferencesTarget.BlockFinderTypeForAdvanceOptimization);
 		}
 
 		[Test]
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_target.SetGroupPageOnTeamKey(_groupPage1Key);
 			_target.SetGroupPageOnCompareWithKey(_groupPage1Key);
-            _target.SetGroupPageOnTeamLevelingper(_groupPage1Key);
+            _target.SetGroupPageOnTeamLevelingPerKey(_groupPage1Key);
 			_target.MapTo(_extraPreferencesTarget, _groupPages);
 			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnTeam.Key, _groupPage1Key);
 			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnTeamLevelingPer.Key, _groupPage1Key);
@@ -79,10 +79,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_target.SetGroupPageOnTeamKey(_groupPage2Key);
 			_target.SetGroupPageOnCompareWithKey(_groupPage2Key);
-            _target.SetGroupPageOnTeamLevelingper(_groupPage2Key );
+            _target.SetGroupPageOnTeamLevelingPerKey(_groupPage2Key);
 			_target.MapTo(_extraPreferencesTarget, _groupPages);
 			Assert.IsNull(_extraPreferencesTarget.GroupPageOnTeam);
-            Assert.IsNull(_extraPreferencesTarget.GroupPageOnTeamLevelingPer );
+            Assert.IsNull(_extraPreferencesTarget.GroupPageOnTeamLevelingPer);
 			Assert.IsNull(_extraPreferencesTarget.GroupPageOnCompareWith);
 		}
 	}

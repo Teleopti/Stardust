@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             _mocks = new MockRepository();
             _baseLineData = new BaseLineData();
-            _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
+            _schedulingOptions = new SchedulingOptions();
             _skillDayPeriodIntervalDataGenerator =  _mocks.StrictMock<ISkillDayPeriodIntervalDataGenerator>();
             _dynamicBlockFinder = _mocks.StrictMock<IDynamicBlockFinder>();
             _restrictionAggregator = _mocks.StrictMock<IRestrictionAggregator>();
@@ -63,17 +62,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         }
 
         [Test]
-        public void ShouldVerifyExecution()
+        public void ShouldVerifyWhenMoreThanOneShiftIsFilteredOutExecution()
         {
             var scheduleDayProList = new List<IScheduleDayPro>{_scheduleDayPro };
             var scheduleDayProCollection = new ReadOnlyCollection<IScheduleDayPro>(scheduleDayProList);
             var dateOnlyList = new List<DateOnly> {_baseLineData.BaseDateOnly };
             var groupPersonList = new List<IGroupPerson> {_baseLineData.GroupPerson};
             var matrixList = new List<IScheduleMatrixPro> {_scheduleMatrixPro};
-            var shiftProjectionCacheList = new List<IShiftProjectionCache> {_scheduleProjectionCache};
+			var shiftProjectionCacheList = new List<IShiftProjectionCache> { _scheduleProjectionCache, _scheduleProjectionCache };
             using(_mocks.Record())
             {
-                ExpectCodeShouldVerifyExecution(groupPersonList, shiftProjectionCacheList, matrixList, _baseLineData.BaseDateOnly, scheduleDayProCollection, dateOnlyList);
+                expectCodeShouldVerifyExecution(groupPersonList, shiftProjectionCacheList, matrixList, _baseLineData.BaseDateOnly, scheduleDayProCollection, dateOnlyList);
             }
             using(_mocks.Playback() )
             {
@@ -83,17 +82,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        private void ExpectCodeShouldVerifyExecution(List<IGroupPerson> groupPersonList,
+        private void expectCodeShouldVerifyExecution(List<IGroupPerson> groupPersonList,
                                                      List<IShiftProjectionCache> shiftProjectionCacheList, List<IScheduleMatrixPro> matrixList, DateOnly dateOnly,
                                                      ReadOnlyCollection<IScheduleDayPro> scheduleDayProCollection, List<DateOnly> dateOnlyList)
         {
+	        Expect.Call(() => _teamScheduling.DayScheduled += null).IgnoreArguments();
             //first sub method
             Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(scheduleDayProCollection).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDayPro.Day).Return(dateOnly).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProCollection).Repeat.AtLeastOnce();
-            Expect.Call(_scheduleMatrixPro.Person.Equals(_baseLineData.Person1)).IgnoreArguments().Return((bool)true).Repeat.AtLeastOnce();
+            Expect.Call(_scheduleMatrixPro.Person.Equals(_baseLineData.Person1)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 
 
             Expect.Call(_dynamicBlockFinder.ExtractBlockDays(dateOnly)).IgnoreArguments().Return(dateOnlyList);
@@ -113,10 +113,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Expect.Call(_workShiftFilterService.Filter(dateOnly, _baseLineData.Person1 , matrixList, _effectiveRestriction,
                                                        _schedulingOptions)).
                 IgnoreArguments().Return(shiftProjectionCacheList);
-            Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).Return(new WorkShiftLengthHintOption()).Repeat.AtLeastOnce
-                ();
-            Expect.Call(_schedulingOptions.UseMinimumPersons).Return(false).Repeat.AtLeastOnce();
-            Expect.Call(_schedulingOptions.UseMaximumPersons).Return(false).Repeat.AtLeastOnce();
             Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shiftProjectionCacheList,
                                                                       new Dictionary
                                                                           <IActivity, IDictionary<TimeSpan, ISkillIntervalData>>
@@ -126,8 +122,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                                                                       true)).IgnoreArguments().Return(_scheduleProjectionCache);
             Expect.Call(() => _teamScheduling.Execute(dateOnly, dateOnlyList, matrixList, _baseLineData.GroupPerson, _effectiveRestriction,
                                                       _scheduleProjectionCache, new List<DateOnly>(), new List<IPerson>())).IgnoreArguments();
+			Expect.Call(() => _teamScheduling.DayScheduled -= null).IgnoreArguments();
 
         }
+
+		//private void dayScheduled()
+		//{
+			
+		//}
     }
 
     

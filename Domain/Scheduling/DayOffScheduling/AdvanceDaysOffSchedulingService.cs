@@ -33,16 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
         }
 
 
-        void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
-        {
-            var eventArgs = new SchedulingServiceBaseEventArgs(e.SchedulePart);
-            eventArgs.Cancel = e.Cancel;
-            OnDayScheduled(eventArgs);
-            e.Cancel = eventArgs.Cancel;
-            if (eventArgs.Cancel)
-                _cancelMe = true;
-        }
-
+       
 		public void Execute(IList<IScheduleMatrixPro> allMatrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
@@ -77,5 +68,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
         {
             dayScheduled(sender, e);
         }
+
+		void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
+		{
+			var eventArgs = new SchedulingServiceBaseEventArgs(e.SchedulePart);
+			eventArgs.Cancel = e.Cancel;
+			OnDayScheduled(eventArgs);
+			e.Cancel = eventArgs.Cancel;
+			if (eventArgs.Cancel)
+				_cancelMe = true;
+		}
     }
 }
