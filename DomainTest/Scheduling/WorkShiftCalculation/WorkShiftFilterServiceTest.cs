@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private IShiftCategory _category;
         private IActivity _activity;
 	    private IScheduleDayEquator _mainShiftEquator;
+	    private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
 	    [SetUp]
         public void Setup()
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		    _target = new WorkShiftFilterService(_shiftProjectionCacheManager, _shiftProjectionCacheFilter,
 		                                         _workShiftMinMaxCalculator, _stateHolder, _shiftLengthDecider,
 		                                         _mainShiftEquator);
+		    _personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
         }
 
         [Test]
@@ -72,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             var dateOnly = new DateOnly(2012, 12, 12);
             using (_mocks.Record())
             {
-                ExpectCodeForShouldFilterWorkShifts(range, effectiveRestriction, caches, dictionary, dateOnly, bag);
+                expectCodeForShouldFilterWorkShifts(range, effectiveRestriction, caches, dictionary, dateOnly, bag);
             }
             using (_mocks.Playback())
             {
@@ -81,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
         }
 
-        private void ExpectCodeForShouldFilterWorkShifts(IScheduleRange range, IEffectiveRestriction effectiveRestriction,
+        private void expectCodeForShouldFilterWorkShifts(IScheduleRange range, IEffectiveRestriction effectiveRestriction,
                                                          IList<IShiftProjectionCache> caches, IScheduleDictionary dictionary, DateOnly dateOnly,
                                                          IRuleSetBag bag)
         {
@@ -123,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             var retList = new List<IShiftProjectionCache>();
             foreach (IWorkShift shift in tmpList)
             {
-                var cache = new ShiftProjectionCache(shift);
+                var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
                 cache.SetDate(dateOnly, _timeZoneInfo);
                 retList.Add(cache);
             }
