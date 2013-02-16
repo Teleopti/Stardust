@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private IVirtualSchedulePeriod _virtualSchedulePeriod;
         private BaseLineData _baseLineData;
-	    private int _numberOfEventsFired	;
+	    private int _numberOfEventsFired;
 
-	    [SetUp ]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         }
 
 		[Test]
-		public void ShouldRaiseEventForEveryScheduleDayModifyed()
+		public void ShouldRaiseEventForEveryScheduleDayModified()
 		{
 			DateOnly startDateOfBlock = DateOnly.Today;
 			IList<DateOnly> selectedDays = new List<DateOnly> { startDateOfBlock };
@@ -171,16 +171,51 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mock.Playback())
 			{
-				_target.DayScheduled += targetDayScheduled;
+				_target.DayScheduled += targetDayScheduledNotCanceled;
 				_target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction,
 								_shiftProjectionCache, new List<DateOnly> { startDateOfBlock }, _baseLineData.PersonList);
-				_target.DayScheduled += targetDayScheduled;
+				_target.DayScheduled += targetDayScheduledNotCanceled;
 			}
 
 			Assert.AreEqual(1, _numberOfEventsFired);
 		}
 
-		void targetDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
+		[Test]
+		public void ShouldRespondToCancel()
+		{
+			DateOnly startDateOfBlock = DateOnly.Today;
+			IList<DateOnly> selectedDays = new List<DateOnly> { startDateOfBlock };
+			IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			var dateOnlyPeriod = new DateOnlyPeriod(startDateOfBlock, startDateOfBlock.AddDays(2));
+
+			using (_mock.Record())
+			{
+				expectCallsForCanceled(dateOnlyPeriod);
+
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
+				Expect.Call(() => _scheduleDay.AddMainShift(_mainShift)).IgnoreArguments();
+				Expect.Call(_mainShift.EntityClone()).Return(_mainShift);
+				Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay)).IgnoreArguments();
+				Expect.Call(() => _scheduleDay.Merge(_scheduleDay, false));
+			}
+
+			using (_mock.Playback())
+			{
+				_target.DayScheduled += targetDayScheduledCanceled;
+				_target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction,
+								_shiftProjectionCache, new List<DateOnly> { startDateOfBlock }, _baseLineData.PersonList);
+				_target.DayScheduled += targetDayScheduledCanceled;
+			}
+
+		}
+
+		void targetDayScheduledCanceled(object sender, SchedulingServiceBaseEventArgs e)
+		{
+			e.Cancel = true;
+		}
+
+		void targetDayScheduledNotCanceled(object sender, SchedulingServiceBaseEventArgs e)
 		{
 			_numberOfEventsFired++;
 		}
@@ -199,6 +234,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 																	dateTime,
 																	new List<IScheduleDay> { _scheduleDay })).
 				IgnoreArguments().Return(true);
+			Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
+			Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
+			Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(
+				new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+
+		}
+
+		private void expectCallsForCanceled(DateOnlyPeriod dateOnlyPeriod)
+		{
+			Expect.Call(_groupPerson.GroupMembers).Return(_baseLineData.ReadOnlyCollectionPersonList).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleMatrixPro.Person).Return(_baseLineData.Person1).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(new DateOnly())).IgnoreArguments().Return(
+				_scheduleDayPro).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
+
 			Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
 			Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
 			Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(

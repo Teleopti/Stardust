@@ -46,6 +46,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                     if (groupPerson != null)
 				        foreach (var person in groupPerson.GroupMembers)
 				        {
+							if (_cancelMe)
+								continue;
+
                             if (!selectedPerson.Contains(person)) continue;
                             IPerson tmpPerson = person;
 					        var tempMatrixList = matrixList.Where(scheduleMatrixPro => scheduleMatrixPro.Person == tmpPerson).ToList();
@@ -62,17 +65,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
                                 destinationScheduleDay = assignShiftProjection(startDateOfBlock, shiftProjectionCache, listOfDestinationScheduleDays, matrix, day);
 								OnDayScheduled(new SchedulingServiceBaseEventArgs(destinationScheduleDay));
-								if (_cancelMe)
-								{
-									return;
-								}
 					        }
 
 				        }
+
+					if (_cancelMe)
+						return;
                     if (destinationScheduleDay != null)
                             _resourceCalculateDelayer.CalculateIfNeeded(destinationScheduleDay.DateOnlyAsPeriod.DateOnly,
                                                                         shiftProjectionCache.WorkShiftProjectionPeriod, listOfDestinationScheduleDays) ;
-					
 		        }
                 
 	        }
