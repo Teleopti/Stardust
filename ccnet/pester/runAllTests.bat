@@ -10,7 +10,7 @@ set outputFile=%rootdir%\Pester.%currentPester%\Test.xml
 
 ::pester internal tests fails, remove for now
 cd "%rootdir%\Pester.%currentPester%"
-del /F /S /Q *.Tests.ps1
+del /F /S /Q *.Tests.ps1 > NUL
 
 ::remove obsolete version
 for /f "tokens=1* delims=;" %%a in ("%obsoletePester%") do  if exist "%rootdir%\Pester.%%a" rmdir "%rootdir%\Pester.%%a" /S /Q
@@ -19,7 +19,7 @@ for /f "tokens=1* delims=;" %%a in ("%obsoletePester%") do  if exist "%rootdir%\
 CMD /C ""%rootdir%\Pester.%currentPester%\tools\bin\pester.bat" "%rootdir%\..\..""
 
 ::Copy to "main" for ccnet to read
-COPY "%outputFile%" "%rootdir%\..\..\PowerShellTests.xml"
+COPY "%outputFile%" "%rootdir%\..\..\nunitPowerShell.xml"
 
 goto :eof
 
