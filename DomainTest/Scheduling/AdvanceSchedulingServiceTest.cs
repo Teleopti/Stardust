@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private BaseLineData _baseLineData;
         private IShiftProjectionCache _scheduleProjectionCache;
         private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
+	    private bool _eventCalled;
 
 
         [SetUp]
@@ -72,7 +73,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var shiftProjectionCacheList = new List<IShiftProjectionCache> { _scheduleProjectionCache, _scheduleProjectionCache };
             using(_mocks.Record())
             {
+				Expect.Call(() => _teamScheduling.DayScheduled += null).IgnoreArguments();
                 expectCodeShouldVerifyExecution(groupPersonList, shiftProjectionCacheList, matrixList, _baseLineData.BaseDateOnly, scheduleDayProCollection, dateOnlyList);
+				Expect.Call(() => _teamScheduling.DayScheduled -= null).IgnoreArguments();
             }
             using(_mocks.Playback() )
             {
@@ -81,12 +84,82 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
            
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldJumpIfCanceledByTeamScheduling()
+		{
+			SchedulingServiceBaseEventArgs args = new SchedulingServiceBaseEventArgs(null);
+            args.Cancel = true;
+
+			AdvanceSchedulingServiceForTest target = new AdvanceSchedulingServiceForTest(_skillDayPeriodIntervalDataGenerator,
+												_dynamicBlockFinder,
+												_restrictionAggregator,
+												_workShiftFilterService,
+												_teamScheduling,
+												_schedulingOptions,
+												_workShiftSelector, _groupPersonBuilderBasedOnContractTime, _groupPersonBuilderForOptimization);
+
+			var scheduleDayProList = new List<IScheduleDayPro> { _scheduleDayPro };
+			var scheduleDayProCollection = new ReadOnlyCollection<IScheduleDayPro>(scheduleDayProList);
+			var dateOnlyList = new List<DateOnly> { _baseLineData.BaseDateOnly };
+			var groupPersonList = new List<IGroupPerson> { _baseLineData.GroupPerson, _baseLineData.GroupPerson };
+			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			var shiftProjectionCacheList = new List<IShiftProjectionCache> { _scheduleProjectionCache, _scheduleProjectionCache };
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _teamScheduling.DayScheduled += null).IgnoreArguments();
+				expectCodeShouldVerifyExecution(groupPersonList, shiftProjectionCacheList, matrixList, _baseLineData.BaseDateOnly, scheduleDayProCollection, dateOnlyList);
+				Expect.Call(() => _teamScheduling.Raise(x => x.DayScheduled += target.DayScheduledForTest, this, args));
+				
+				Expect.Call(() => _teamScheduling.DayScheduled -= null).IgnoreArguments();
+			}
+			using (_mocks.Playback())
+			{
+				Assert.That(target.Execute(new Dictionary<string, IWorkShiftFinderResult>(), matrixList, matrixList), Is.True);
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldReRaiseEventFromTeamScheduling()
+		{
+			SchedulingServiceBaseEventArgs args = new SchedulingServiceBaseEventArgs(null);
+			args.Cancel = true;
+
+			AdvanceSchedulingServiceForTest target = new AdvanceSchedulingServiceForTest(_skillDayPeriodIntervalDataGenerator,
+												_dynamicBlockFinder,
+												_restrictionAggregator,
+												_workShiftFilterService,
+												_teamScheduling,
+												_schedulingOptions,
+												_workShiftSelector, _groupPersonBuilderBasedOnContractTime, _groupPersonBuilderForOptimization);
+			target.DayScheduled += dayScheduled;
+
+			var scheduleDayProList = new List<IScheduleDayPro> { _scheduleDayPro };
+			var scheduleDayProCollection = new ReadOnlyCollection<IScheduleDayPro>(scheduleDayProList);
+			var dateOnlyList = new List<DateOnly> { _baseLineData.BaseDateOnly };
+			var groupPersonList = new List<IGroupPerson> { _baseLineData.GroupPerson };
+			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			var shiftProjectionCacheList = new List<IShiftProjectionCache> { _scheduleProjectionCache, _scheduleProjectionCache };
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _teamScheduling.DayScheduled += null).IgnoreArguments();
+				expectCodeShouldVerifyExecution(groupPersonList, shiftProjectionCacheList, matrixList, _baseLineData.BaseDateOnly, scheduleDayProCollection, dateOnlyList);
+				Expect.Call(() => _teamScheduling.Raise(x => x.DayScheduled += target.DayScheduledForTest, this, args));
+				Expect.Call(() => _teamScheduling.DayScheduled -= null).IgnoreArguments();
+			}
+			using (_mocks.Playback())
+			{
+				Assert.That(target.Execute(new Dictionary<string, IWorkShiftFinderResult>(), matrixList, matrixList), Is.True);
+				target.DayScheduled -= dayScheduled;
+				Assert.IsTrue(_eventCalled);
+			}
+		}
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private void expectCodeShouldVerifyExecution(List<IGroupPerson> groupPersonList,
                                                      List<IShiftProjectionCache> shiftProjectionCacheList, List<IScheduleMatrixPro> matrixList, DateOnly dateOnly,
                                                      ReadOnlyCollection<IScheduleDayPro> scheduleDayProCollection, List<DateOnly> dateOnlyList)
         {
-	        Expect.Call(() => _teamScheduling.DayScheduled += null).IgnoreArguments();
+	        
             //first sub method
             Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(scheduleDayProCollection).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDayPro.Day).Return(dateOnly).Repeat.AtLeastOnce();
@@ -99,10 +172,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Expect.Call(_dynamicBlockFinder.ExtractBlockDays(dateOnly)).IgnoreArguments().Return(dateOnlyList);
             Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_baseLineData.Person1,
                                                                             _baseLineData.BaseDateOnly)).Return(_baseLineData.GroupPerson );
-            //Expect.Call(_groupPerson.GroupMembers).Return(_baseLineData.ReadOnlyCollectionPersonList);
-            //Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-            
-            //Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
             Expect.Call(_groupPersonBuilderBasedOnContractTime.SplitTeams(_baseLineData.GroupPerson , dateOnly)).IgnoreArguments().
                 Return(groupPersonList);
             Expect.Call(_restrictionAggregator.Aggregate(dateOnlyList, _baseLineData.GroupPerson, matrixList, _schedulingOptions)).
@@ -122,15 +191,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                                                                       true)).IgnoreArguments().Return(_scheduleProjectionCache);
             Expect.Call(() => _teamScheduling.Execute(dateOnly, dateOnlyList, matrixList, _baseLineData.GroupPerson, _effectiveRestriction,
                                                       _scheduleProjectionCache, new List<DateOnly>(), new List<IPerson>())).IgnoreArguments();
-			Expect.Call(() => _teamScheduling.DayScheduled -= null).IgnoreArguments();
 
         }
 
-		//private void dayScheduled()
-		//{
-			
-		//}
+		private void dayScheduled(object sender, SchedulingServiceBaseEventArgs args)
+		{
+			_eventCalled = true;
+		}
+
+		
     }
 
-    
+    public class AdvanceSchedulingServiceForTest : AdvanceSchedulingService
+    {
+	    public AdvanceSchedulingServiceForTest(ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
+	                                           IDynamicBlockFinder dynamicBlockFinder,
+	                                           IRestrictionAggregator restrictionAggregator,
+	                                           IWorkShiftFilterService workShiftFilterService,
+	                                           ITeamScheduling teamScheduling, ISchedulingOptions schedulingOptions,
+	                                           IWorkShiftSelector workShiftSelector,
+	                                           IGroupPersonBuilderBasedOnContractTime groupPersonBuilderBasedOnContractTime,
+	                                           IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+		    : base(
+			    skillDayPeriodIntervalDataGenerator, dynamicBlockFinder, restrictionAggregator, workShiftFilterService,
+			    teamScheduling, schedulingOptions, workShiftSelector, groupPersonBuilderBasedOnContractTime,
+			    groupPersonBuilderForOptimization)
+	    {
+	    }
+
+		public void DayScheduledForTest(object sender, SchedulingServiceBaseEventArgs args)
+		{
+			OnDayScheduled(args);
+		}
+    }
 }

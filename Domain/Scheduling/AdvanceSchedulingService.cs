@@ -128,9 +128,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	    void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 	    {
-		    if (e.Cancel)
-			    _cancelMe = true;
-
 		    OnDayScheduled(e);
 	    }
 
@@ -141,8 +138,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (temp != null)
 			{
 				temp(this, scheduleServiceBaseEventArgs);
-				_cancelMe = scheduleServiceBaseEventArgs.Cancel;
 			}
+			_cancelMe = scheduleServiceBaseEventArgs.Cancel;
 		}
 
 		private static DateOnly startDate(IList<IScheduleMatrixPro> matrixList, out  List<DateOnly> dayOff, out  List<DateOnly> effectiveDays, out  List<DateOnly> unLockedDays)
