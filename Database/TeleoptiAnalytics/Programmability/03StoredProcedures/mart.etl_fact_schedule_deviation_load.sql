@@ -35,9 +35,10 @@ DECLARE @max_date_id int
 DECLARE @min_date_id int
 DECLARE @business_unit_id int
 DECLARE @scenario_id int
-DECLARE @date_min smalldatetime = '1900-01-01'
+DECLARE @date_min smalldatetime
 DECLARE @intervals_outside_shift int
 declare @interval_length_minutes int 
+SET @date_min='1900-01-01'
 
 CREATE TABLE #fact_schedule_deviation(
 	date_id int,
