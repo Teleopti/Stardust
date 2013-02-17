@@ -36,6 +36,7 @@ exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',
 --				2012-02-15 Changed to uniqueidentifier as report_id - Ola
 --				2012-04-16 Bug 18933
 --				2012-09-06 Added new functionality for report Adherence Per Agent. Parameter @date_to only used by Adherence Per Agent.
+--				2013-02-17 #22358
 -- Description:	Used by reports Adherence per Agent and Adherence per Date.
 -- TODO: remove scenario from this SP and .aspx selection. Only default scenario is calculated in the fact-table
 -- =============================================
@@ -407,7 +408,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 				WHEN 3 THEN isnull(fsd.deviation_contract_s,0)
 			END AS 'deviation_s',
 			isnull(fsd.ready_time_s,0) 'ready_time_s',
-			fsd.is_logged_in,
+			isnull(fsd.is_logged_in,0),
 			isnull(fs.activity_id,-1), --isnull = not defined
 			isnull(fs.absence_id,-1), --isnull = not defined
 			CASE @adherence_id 
@@ -420,15 +421,15 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 			isnull(count_activity_per_interval,2) --fake a mixed shift = white color
 			
 	FROM mart.dim_person p
-	INNER JOIN #fact_schedule_deviation fsd
-		ON fsd.person_id=p.person_id
-	LEFT JOIN #fact_schedule fs
+	INNER JOIN #fact_schedule fs
+		ON p.person_id=fs.person_id
+	LEFT JOIN #fact_schedule_deviation fsd
 		ON fsd.person_id=fs.person_id
 		AND fsd.date_id=fs.schedule_date_id
 		AND fsd.interval_id=fs.interval_id
 	INNER JOIN mart.bridge_time_zone b
-		ON	fsd.interval_id= b.interval_id
-		AND fsd.date_id= b.date_id
+		ON	fs.interval_id= b.interval_id
+		AND fs.schedule_date_id= b.date_id
 	INNER JOIN mart.dim_date d 
 		ON b.local_date_id = d.date_id
 	INNER JOIN mart.dim_interval i
@@ -458,7 +459,7 @@ INSERT #result(date_id,date,interval_id,interval_name,intervals_per_day,site_id,
 			p.person_name,
 			isnull(fsd.deviation_schedule_s,0) 'deviation_s', --@adherence_id =2
 			isnull(fsd.ready_time_s,0) 'ready_time_s',
-			fsd.is_logged_in,
+			isnull(fsd.is_logged_in,0),
 			-1,
 			-1,
 			@intervals_length_s AS 'adherence_calc_s', --Compare to full Interval since there's no Scheduled Time here
@@ -466,7 +467,7 @@ INSERT #result(date_id,date,interval_id,interval_name,intervals_per_day,site_id,
 			@hide_time_zone,
 			2
 FROM mart.dim_person p
-	INNER JOIN #fact_schedule_deviation fsd
+	LEFT JOIN #fact_schedule_deviation fsd
 		ON fsd.person_id=p.person_id
 	INNER JOIN mart.bridge_time_zone b
 		ON	fsd.interval_id= b.interval_id
