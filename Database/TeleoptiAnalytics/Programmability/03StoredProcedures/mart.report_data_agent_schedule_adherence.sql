@@ -1,4 +1,4 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_agent_schedule_adherence]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_agent_schedule_adherence]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[report_data_agent_schedule_adherence]
 GO
 
@@ -39,7 +39,6 @@ exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',
 --				2012-09-06 Added new functionality for report Adherence Per Agent. Parameter @date_to only used by Adherence Per Agent.
 --				2013-01-15 Added statistics based on shiftstart_date to get the entire shift started during the selected period.
 -- Description:	Used by reports Adherence per Agent and Adherence per Date.
--- TODO: remove scenario from this SP and .aspx selection. Only default scenario is calculated in the fact-table
 -- =============================================
 
 
@@ -163,7 +162,6 @@ CREATE TABLE #fact_schedule_raw (
 	schedule_date_id INT,
 	interval_id INT,
 	person_id INT,
-	scenario_id INT,
 	activity_id int,
 	absence_id int,
 	scheduled_time_m INT,
@@ -176,7 +174,6 @@ CREATE TABLE #fact_schedule (
 	schedule_date_id INT,
 	interval_id INT,
 	person_id INT,
-	scenario_id INT,
 	activity_id int,
 	absence_id int,
 	scheduled_time_s INT,
@@ -337,14 +334,13 @@ INNER JOIN #bridge_time_zone b
 --Get all fact_schedule-data for the day in question.
 --Note: local date e.g. incl. time zone
 --step 1 get raw data for speed
-INSERT #fact_schedule_raw(shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,scenario_id,activity_id,absence_id,scheduled_time_m,scheduled_ready_time_m)
+INSERT #fact_schedule_raw(shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,activity_id,absence_id,scheduled_time_m,scheduled_ready_time_m)
 SELECT 
 		shift_startdate_id,
 		shift_startinterval_id,
 		schedule_date_id,
 		fs.interval_id,
 		fs.person_id,
-		fs.scenario_id,
 		activity_id,
 		absence_id,
 		scheduled_time_m,
@@ -360,14 +356,13 @@ INNER JOIN #bridge_time_zone b
 WHERE fs.scenario_id=@scenario_id
 
 
-INSERT #fact_schedule(shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,scenario_id,scheduled_time_s,scheduled_ready_time_s,count_activity_per_interval)
+INSERT #fact_schedule(shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,scheduled_time_s,scheduled_ready_time_s,count_activity_per_interval)
 SELECT
 	fs.shift_startdate_id,
 	fs.shift_startinterval_id,
 	fs.schedule_date_id,
 	fs.interval_id,
 	fs.person_id,
-	fs.scenario_id,
 	SUM(fs.scheduled_time_m)*60,
 	SUM(fs.scheduled_ready_time_m)*60,
 	COUNT(fs.interval_id)		
@@ -377,7 +372,7 @@ INNER JOIN #person_id a
 INNER JOIN #bridge_time_zone b
 	ON	fs.shift_startinterval_id= b.interval_id
 	AND fs.shift_startdate_id= b.date_id
-GROUP BY fs.shift_startdate_id,fs.shift_startinterval_id,fs.schedule_date_id,fs.person_id,fs.interval_id,fs.scenario_id
+GROUP BY fs.shift_startdate_id,fs.shift_startinterval_id,fs.schedule_date_id,fs.person_id,fs.interval_id
 
 --Update with activity.
 --a) In case there are multiple activities per interval, we use activities where in_ready_time = 1
@@ -388,7 +383,6 @@ FROM #fact_schedule_raw fs
 	ON SchTemp.schedule_date_id=fs.schedule_date_id
 	AND SchTemp.person_id=fs.person_id
 	AND SchTemp.interval_id=fs.interval_id
-	AND SchTemp.scenario_id=fs.scenario_id
 INNER JOIN mart.dim_activity a
 	ON a.activity_id=fs.activity_id
 WHERE a.in_ready_time=1
@@ -401,7 +395,6 @@ FROM #fact_schedule_raw fs
 	ON SchTemp.schedule_date_id=fs.schedule_date_id
 	AND SchTemp.person_id=fs.person_id
 	AND SchTemp.interval_id=fs.interval_id
-	AND SchTemp.scenario_id=fs.scenario_id
 INNER JOIN mart.dim_activity a
 	ON a.activity_id=fs.activity_id
 WHERE SchTemp.activity_id IS NULL
@@ -414,7 +407,6 @@ INNER JOIN #fact_schedule SchTemp
 	ON SchTemp.schedule_date_id=fs.schedule_date_id
 	AND SchTemp.person_id=fs.person_id
 	AND SchTemp.interval_id=fs.interval_id
-	AND SchTemp.scenario_id=fs.scenario_id
 WHERE SchTemp.absence_id IS NULL
 
 --Get all intervals for the collection of person and teams
@@ -484,7 +476,6 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 		ON b2.local_interval_id = i.interval_id			
 	INNER JOIN mart.dim_date d 
 		ON b2.local_date_id = d.date_id
-	WHERE fs.scenario_id=@scenario_id
 	AND b2.time_zone_id=@time_zone_id
 ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,b1.date_id,b1.date_date,d.date_id,d.date_date,i.interval_id
 
