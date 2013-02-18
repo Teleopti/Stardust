@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
         public string PageName
         {
-            get { return  "xxSmoothing style"; }
+            get { return  Resources.Smoothing; }
         }
 
         public ICollection<string> ErrorMessages
@@ -67,9 +67,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 			return new List<SmoothingValue>
 			{
 			    new SmoothingValue{Smoothing = 1, Text = Resources.None},
-			    new SmoothingValue{Smoothing = 3, Text = "xxLittle"},
-			    new SmoothingValue{Smoothing = 5, Text = "xxMedium"},
-			    new SmoothingValue{Smoothing = 7, Text = "xxMuch"}
+			    new SmoothingValue{Smoothing = 3, Text = Resources.Little},
+			    new SmoothingValue{Smoothing = 5, Text = Resources.Medium},
+			    new SmoothingValue{Smoothing = 7, Text = Resources.Much}
 			} ;
 		}
 

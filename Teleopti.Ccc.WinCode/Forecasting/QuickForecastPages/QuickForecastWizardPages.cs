@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
@@ -21,12 +22,12 @@ namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 
         public override string Name
         {
-            get { return "xxQuickForecast"; }
+            get { return Resources.QuickForecast; }
         }
 
         public override string WindowText
         {
-			get { return "xxQuickForecast"; }
+			get { return Resources.QuickForecast; }
         }
 
 		

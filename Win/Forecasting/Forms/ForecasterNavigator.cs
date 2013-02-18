@@ -1210,8 +1210,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				var skills = skillRep.FindAllWithWorkloadAndQueues();
 				skills = skills.Except(skills.OfType<IChildSkill>()).ToList();
 				var quickForecastPages = PropertyPagesHelper.GetQuickForecastPages(skills);
-				var model = new QuickForecastCommandDto();
-				model.WorkloadIds = getWorkloadIds(treeViewSkills.SelectedNode);
+				var model = new QuickForecastCommandDto {WorkloadIds = getWorkloadIds(treeViewSkills.SelectedNode)};
 				using (var wwp = new QuickForecastWizardPages(model))
 				{
 					wwp.Initialize(quickForecastPages);
@@ -1452,6 +1451,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			public Guid Id { get; set; }
 			public string Name { get; set; }
+		}
+
+		private void contextMenuStripSkills_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+
 		}
 	}
 }
