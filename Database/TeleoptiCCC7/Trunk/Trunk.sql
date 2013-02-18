@@ -71,7 +71,7 @@ GO
 ----------------  
 --Name: Tamasb
 --Date: 2012-11-26  
---Desc: Bugfix 22336 readd the following application function: AdminWeb
+--Desc: Bugfix 22336 readd the following application function: Anywhere
 --Note: The application function has been once added in v. 375.sql, but there the foreignid is already occupied, so the application function
 --      was not added at all. Adding the function again will correct that bug
 ----------------  
@@ -101,7 +101,7 @@ SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND 
 	
 --insert/modify application function
 SELECT @ForeignId = '0080'
-SELECT @FunctionCode = 'AdminWeb'
+SELECT @FunctionCode = 'Anywhere'
 SELECT @FunctionDescription = 'xxAnywhere'
 SELECT @ParentId = @ParentId
 
@@ -110,7 +110,8 @@ INSERT [dbo].[ApplicationFunction]([Id], [Version], [CreatedBy], [UpdatedBy], [C
 VALUES (newid(),1, @SuperUserId, @SuperUserId, getdate(), getdate(), @ParentId, @FunctionCode, @FunctionDescription, @ForeignId, 'Raptor', 0)
  
 SELECT @FunctionId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
-UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentId WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
+UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentId, [FunctionCode]=@FunctionCode, [FunctionDescription]=@FunctionDescription 
+WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
 
 SET NOCOUNT OFF
 GO
@@ -118,7 +119,7 @@ GO
 ----------------  
 --Name: tamasb
 --Date: 2012-11-28  
---Desc: Bugfix 22336 : readd the following application function: SchedulesAdminWeb
+--Desc: Bugfix 22336 : readd the following application function: SchedulesAnywhere
 --Note: The application function has been once added in v. 375.sql, but later its parent was overriden by mistake by another function 
 ----------------  
 SET NOCOUNT ON
@@ -147,7 +148,7 @@ SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND 
 	
 --insert/modify application function
 SELECT @ForeignId = '0081'
-SELECT @FunctionCode = 'SchedulesAdminWeb'
+SELECT @FunctionCode = 'SchedulesAnywhere'
 SELECT @FunctionDescription = 'xxSchedules'
 SELECT @ParentId = @ParentId
 
@@ -156,7 +157,8 @@ INSERT [dbo].[ApplicationFunction]([Id], [Version], [CreatedBy], [UpdatedBy], [C
 VALUES (newid(),1, @SuperUserId, @SuperUserId, getdate(), getdate(), @ParentId, @FunctionCode, @FunctionDescription, @ForeignId, 'Raptor', 0) 
 
 SELECT @FunctionId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
-UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentId WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
+UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentId, [FunctionCode]=@FunctionCode, [FunctionDescription]=@FunctionDescription 
+WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
 
 SET NOCOUNT OFF
 GO

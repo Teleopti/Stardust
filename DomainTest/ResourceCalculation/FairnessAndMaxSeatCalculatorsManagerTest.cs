@@ -198,13 +198,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_fairnessValueCalculator.CalculateFairnessValue(1, 5, 15, 5, fairnessValueResult, 3, _options)).IgnoreArguments().Return(11);
 
 			Expect.Call(shiftCache.MainShiftProjection).Return(projection).Repeat.AtLeastOnce();
-			//Expect.Call(projection.ContractTime()).Return(TimeSpan.FromHours(7));
-            //Expect.Call(_averageShiftLengthValueCalculator.CalculateShiftValue(11, TimeSpan.FromHours(7),
-            //                                                                   TimeSpan.FromHours(8))).Return(33);
-
             Expect.Call(_seatLimitationWorkShiftCalculator.CalculateShiftValue(_person, projection, maxSeatSkillPeriods,
                                                                                true)).Return(55);
-            //Expect.Call(_averageShiftLengthValueCalculator.CalculateShiftValue(66, TimeSpan.FromHours(7), TimeSpan.FromHours(8))).Return(88);
               
             _mocks.ReplayAll();
             var result = _target.RecalculateFoundValues(allValues, 3, false, _person, dateOnly,  maxSeatSkillPeriods,
@@ -213,6 +208,30 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.That(result[0].Value, Is.EqualTo(66));
             _mocks.VerifyAll();
         }
+
+		[Test]
+		public void ShouldNotRunFairnessCalculatorsIfNoFairnessValue()
+		{
+			var dateOnly = new DateOnly(2011, 4, 28);
+			var maxSeatSkillPeriods = _mocks.StrictMock<IDictionary<ISkill, ISkillStaffPeriodDictionary>>();
+			var shiftCache = _mocks.StrictMock<IShiftProjectionCache>();
+			var projection = _mocks.StrictMock<IVisualLayerCollection>();
+			var allValues = new List<IWorkShiftCalculationResultHolder>
+                              {
+                                  new WorkShiftCalculationResultHolder { Value = 1, ShiftProjection = shiftCache } 
+                              };
+			_options.Fairness = new Percent(0);
+			Expect.Call(shiftCache.MainShiftProjection).Return(projection).Repeat.AtLeastOnce();
+			Expect.Call(_seatLimitationWorkShiftCalculator.CalculateShiftValue(_person, projection, maxSeatSkillPeriods,
+																			   true)).Return(55);
+
+			_mocks.ReplayAll();
+			var result = _target.RecalculateFoundValues(allValues, 3, false, _person, dateOnly, maxSeatSkillPeriods,
+										   TimeSpan.FromHours(8), _options);
+			Assert.That(result.Count, Is.EqualTo(1));
+			Assert.That(result[0].Value, Is.EqualTo(56));
+			_mocks.VerifyAll();
+		}
     }
 
     

@@ -55,11 +55,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			InnerLogon(userName, password);
 		}
 
-		public static void LogonForExistingUser(string userName)
-		{
-			InnerLogon(userName,TestData.CommonPassword);
-		}
-
 		/// <summary>
 		/// Imitates a logon process on UI with the given username and password.
 		/// </summary>

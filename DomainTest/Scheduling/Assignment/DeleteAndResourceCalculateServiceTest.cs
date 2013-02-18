@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			using (_mocks.Playback())
 			{
-				ret = _target.DeleteWithResourceCalculation(_list, _rollbackService);
+				ret = _target.DeleteWithResourceCalculation(_list, _rollbackService, true);
 			}
 
 			Assert.AreEqual(2, ret.Count);

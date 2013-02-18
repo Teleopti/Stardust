@@ -131,6 +131,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoSiteHomePage();
 		}
 
+		[When(@"I view schedules for '(.*)'")]
+		public void WhenIViewSchedules(string date)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAnywhereSchedule(date);
+		}
+
 
 
 
@@ -168,11 +175,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoMobileReports();
 		}
 
-		[When(@"I navigate to Admin Web")]
-		public void WhenINavigateToAdminWeb()
+		[When(@"I navigate to Anywhere")]
+		public void WhenINavigateToAnywhere()
 		{
 			UserFactory.User().MakeUser();
-			Navigation.GotoAdminWeb();
+			Navigation.GotoAnywhere();
 		}
 	}
 }

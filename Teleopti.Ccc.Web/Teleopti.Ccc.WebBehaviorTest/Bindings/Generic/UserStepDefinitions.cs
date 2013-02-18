@@ -24,22 +24,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User(userName).Setup(personPeriod);
 		}
 
-		[Given(@"I have a person period that starts on '(.*)'")]
-		public void GivenIHaveAPersonPeriodThatStartsOn(DateTime date)
+		[Given(@"(.*) have a person period that starts on '(.*)'")]
+		public void GivenIHaveAPersonPeriodThatStartsOn(string userName, DateTime date)
 		{
 			var personPeriod = new PersonPeriodConfigurable
 				{
 					StartDate = date,
 					RuleSetBag = "Common"
 				};
-			UserFactory.User().Setup(personPeriod);
+			UserFactory.User(userName).Setup(personPeriod);
 		}
 
-		[Given(@"I am a user with")]
-		public void GivenIAmAUserWith(Table table)
+		[Given(@"(I am|'(.*)' is a) user with")]
+		public void GivenIAmAUserWith(string what, string userName, Table table)
 		{
 			var user = table.CreateInstance<UserConfigurable>();
-			UserFactory.User().Setup(user);
+			UserFactory.User(userName).Setup(user);
 		}
 
 		[Given(@"I have user credential with")]
