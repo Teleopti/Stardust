@@ -156,17 +156,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public void ShouldRetriveShiftTradeSwapDetailsViewModel()
 		{
 			var personRequestId = new Guid();
-			var setCheckSum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
+			var requestCheckSum = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
 			var shiftTrade = MockRepository.GenerateStub<IShiftTradeRequest>();
 			var personRequest = MockRepository.GenerateStub<IPersonRequest>(); personRequest.Request = shiftTrade;
 			var shiftTradeSwapDetailsViewModel = new ShiftTradeSwapDetailsViewModel();
 
-			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, setCheckSum);
+			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum);
 
 			personRequestProvider.Expect(p => p.RetrieveRequest(personRequestId)).Return(personRequest);
-			setCheckSum.Expect(s => s.SetChecksum(shiftTrade));		
+			requestCheckSum.Expect(s => s.Check(shiftTrade));		
 			mapper.Expect(m => m.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(Arg<IShiftTradeRequest>.Is.Equal(shiftTrade)))
 			      .Return(shiftTradeSwapDetailsViewModel);
 

@@ -30,8 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 																					  var toPeriod = s.ShiftTradeSwapDetails.First()
 						                                                               .SchedulePartTo.Period;
 
-																					_timelineViewModelFactory.Invoke().CreateTimeLineHours(fromPeriod.MaximumPeriod(toPeriod));
-						                                             return new List<ShiftTradeTimeLineHoursViewModel>();
+																					  return _timelineViewModelFactory.Invoke().CreateTimeLineHours(fromPeriod.MaximumPeriod(toPeriod));
 					                                             }));
 		}
 	}

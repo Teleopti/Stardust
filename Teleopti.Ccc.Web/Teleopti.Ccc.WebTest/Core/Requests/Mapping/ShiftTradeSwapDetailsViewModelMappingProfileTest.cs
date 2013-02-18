@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -91,18 +92,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var toStart = new DateTime(2001, 1, 1, 12, 0, 0,DateTimeKind.Utc);
 			var toEnd = new DateTime(2001, 1, 1, 22, 0, 0,DateTimeKind.Utc);
 
-
 			IScheduleDay from = CreatScheduleDayWithPeriod(fromStart, fromEnd);
 			IScheduleDay to = CreatScheduleDayWithPeriod(toStart, toEnd);
 			var shiftTrade = CreateShiftTrade(new DateOnly(fromStart), new DateOnly(fromEnd), from, to);
 
 			var expectedTimelinePeriod = new DateTimePeriod(fromStart, toEnd);
-			var timelineHours = new List<ShiftTradeTimeLineHoursViewModel>();
+			var timelineHours = new List<ShiftTradeTimeLineHoursViewModel>() {new ShiftTradeTimeLineHoursViewModel(),new ShiftTradeTimeLineHoursViewModel()};
 			timeLineHoursViewModelFactory.Expect(s => s.CreateTimeLineHours(expectedTimelinePeriod)).Return(timelineHours);
 
 			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(shiftTrade);
 
 			timeLineHoursViewModelFactory.VerifyAllExpectations();
+
+			Assert.That(result.TimeLineHours, Is.EqualTo(timelineHours));
 
 		}
 

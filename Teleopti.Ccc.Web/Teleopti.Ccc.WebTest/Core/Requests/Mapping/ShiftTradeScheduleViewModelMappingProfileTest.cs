@@ -9,6 +9,8 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -34,13 +36,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			_shiftTradeRequestProvider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
-			_timelineFactory = MockRepository.GenerateMock<IShiftTradeTimeLineHoursViewModelFactory>();
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();
 			_userCulture.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
-			_scheduleFactory = new StubFactory();
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			_person = new Person {Name = new Name("John", "Doe")};
 			_person.PermissionInformation.SetDefaultTimeZone(timeZone);
+			var userCultureStub = MockRepository.GenerateStub<IUserCulture>();
+			var userTimeZoneStub = MockRepository.GenerateStub<IUserTimeZone>();
+			userTimeZoneStub.Expect(u => u.TimeZone()).Repeat.Any().Return(timeZone);
+			ICreateHourText createHourText2 = new CreateHourText(userCultureStub, userTimeZoneStub);
+			_timelineFactory = new ShiftTradeTimeLineHoursViewModelFactory(Depend.On(createHourText2));
+
+			_scheduleFactory = new StubFactory();
+			
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(() => _shiftTradeRequestProvider, () => _projectionProvider, Depend.On(_timelineFactory), () => _userCulture)));
 		}
@@ -511,7 +519,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.PossibleTradePersons.FirstOrDefault().ScheduleLayers.Count().Should().Be.EqualTo(1);
 		}
 
-		[Test, Ignore("Henke: 20130215 I think we can move this test to a separate test and just make sure it calls the timelineviewmodelfactory")]
+		[Test]
 		public void ShouldMapTimeLineStuffWhenScheduleExist()
 		{
 			var possibleTradePersonLayerPeriod = new DateTimePeriod(new DateTime(2013, 1, 1, 12, 0, 0, DateTimeKind.Utc),
@@ -557,7 +565,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.TimeLineLengthInMinutes.Should().Be.EqualTo((int) expectedValue);
 		}
 
-		[Test, Ignore("Henke: 20130215 I think we can move this test to a separate test and just make sure it calls the timelineviewmodelfactory")]
+		[Test]
 		public void ShouldMapTimeLine8To17WhenNoExistingSchedule()
 		{
 			var day = _scheduleFactory.ScheduleDayStub();
