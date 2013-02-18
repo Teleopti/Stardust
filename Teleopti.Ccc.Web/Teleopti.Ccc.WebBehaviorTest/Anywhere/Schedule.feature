@@ -10,7 +10,7 @@ Background:
 	Given there is a role with
 	| Field                      | Value               |
 	| Name                       | Anywhere Team Green |
-	| Team                       | Team green          |
+	| Access to team             | Team green          |
 	| Access to Anywhere         | true                |
 	| View unpublished schedules | true                |
 	And 'Pierre Baldi' is a user with
