@@ -1019,11 +1019,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _allResults.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
             _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);
         }
-
         
-
-        
-
         void blockSchedulingServiceBlockScheduled(object sender, BlockSchedulingServiceEventArgs e)
         {
             if (_backgroundWorker.CancellationPending)
@@ -1059,7 +1055,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             return workShiftSelector;
         }
 
-		private AdvanceSchedulingService CallAdvanceSchedulingService(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> selectedPersonMatrixList,
+		private AdvanceSchedulingService CallAdvanceSchedulingService(ISchedulingOptions schedulingOptions,
+                                                                      IList<IScheduleMatrixPro> selectedPersonMatrixList,
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
             var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder, selectedPersonMatrixList);
@@ -1106,7 +1103,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             return groupPersonBuilderForOptimization;
         }
 
-        public void BlockScheduleForAdvanceScheduling(IList<IScheduleMatrixPro> selectedPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonAllMatrixList, IList<IScheduleMatrixPro> AllPersonMatrixList, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions,IList<IScheduleDay > scheduleDays )
+        public void BlockScheduleForAdvanceScheduling(IList<IScheduleMatrixPro> selectedPersonMatrixList,
+                                                      IList<IScheduleMatrixPro> selectedPersonAllMatrixList, 
+                                                      IList<IScheduleMatrixPro> allPersonMatrixList, 
+                                                      BackgroundWorker backgroundWorker, 
+                                                      ISchedulingOptions schedulingOptions,
+                                                      IList<IScheduleDay > scheduleDays )
         {
             var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
             fixedStaffSchedulingService.ClearFinderResults();
@@ -1127,22 +1129,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var advancedaysOffSchedulingService = _container.Resolve<IAdvanceDaysOffSchedulingService>();
                 advancedaysOffSchedulingService.Execute(selectedPersonAllMatrixList, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions, groupPersonBuilderForOptimization);
 
-                DateOnlyPeriod selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
-                var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
-                var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
-                var teamSteadyStateRunner = new TeamSteadyStateRunner(selectedPersonAllMatrixList, targetTimeCalculator);
-                var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, selectedPersonAllMatrixList, groupPersonsBuilder, schedulingOptions);
-                var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
-                //var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-                //IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
-                //var coherentChecker = new TeamSteadyStateCoherentChecker();
-                //var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-                //var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
-                var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
+                var teamSteadyStateHolder = InitiateTeamSteadyStateHolder(selectedPersonAllMatrixList, schedulingOptions, scheduleDays);
 
                 var advanceSchedulingService = CallAdvanceSchedulingService(schedulingOptions,selectedPersonMatrixList, groupPersonBuilderForOptimization);
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
-                advanceSchedulingService.Execute(schedulingResults, AllPersonMatrixList, selectedPersonMatrixList, teamSteadyStateHolder);
+                advanceSchedulingService.Execute(schedulingResults, allPersonMatrixList, selectedPersonMatrixList, teamSteadyStateHolder);
                 if (schedulingOptions.RotationDaysOnly)
                     schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
                 blockSchedulingService.BlockScheduled -= blockSchedulingServiceBlockScheduled;
@@ -1150,6 +1141,21 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _allResults.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
             }
             _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);
+        }
+
+        private TeamSteadyStateHolder InitiateTeamSteadyStateHolder(IList<IScheduleMatrixPro> selectedPersonAllMatrixList,
+                                                                    ISchedulingOptions schedulingOptions, 
+                                                                    IList<IScheduleDay> scheduleDays)
+        {
+            DateOnlyPeriod selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
+            var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
+            var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
+            var teamSteadyStateRunner = new TeamSteadyStateRunner(selectedPersonAllMatrixList, targetTimeCalculator);
+            var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, selectedPersonAllMatrixList,
+                                                                              groupPersonsBuilder, schedulingOptions);
+            var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
+            var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
+            return teamSteadyStateHolder;
         }
 
         #endregion
