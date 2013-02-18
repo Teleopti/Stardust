@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 				return;
             if (shiftProjectionCache == null) return;
             if (unlockedDays == null) return;
+            if (selectedPerson == null) return;
 
 	        foreach(var day in daysInBlock )
 	        {

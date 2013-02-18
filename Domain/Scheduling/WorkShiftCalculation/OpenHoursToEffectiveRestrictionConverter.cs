@@ -26,7 +26,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 		public IEffectiveRestriction Convert(IGroupPerson groupPerson, IList<DateOnly> dateOnlyList)
 		{
-			var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
+            if (groupPerson == null) return null;
+            if (dateOnlyList == null) return null;
+            var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnlyList.Min(), dateOnlyList.Max());
 			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupPerson, dateOnlyPeriod);
 			var openHours = new List<TimePeriod>();

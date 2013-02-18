@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         }
 
         
-        private DateOnly StartDate(IList<IScheduleMatrixPro> matrixList, out  List<DateOnly> dayOff, out  List<DateOnly> effectiveDays, out  List<DateOnly> unLockedDays)
+        private static DateOnly StartDate(IList<IScheduleMatrixPro> matrixList, out  List<DateOnly> dayOff, out  List<DateOnly> effectiveDays, out  List<DateOnly> unLockedDays)
         {
             var startDate = DateOnly.MinValue;
             dayOff = new List<DateOnly>();
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return startDate;
         }
 
-        private DateOnly GetNextDate(DateOnly dateOnly, List<DateOnly> effectiveDays, List<DateOnly> daysOff, List<DateOnly> unLockedDays)
+        private static DateOnly GetNextDate(DateOnly dateOnly, List<DateOnly> effectiveDays, List<DateOnly> daysOff, List<DateOnly> unLockedDays)
         {
             dateOnly = dateOnly.AddDays(1);
             while (daysOff.Contains(dateOnly))
@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return effectiveDays.Contains(dateOnly) && unLockedDays.Contains(dateOnly) ? dateOnly : DateOnly.MinValue;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList, IList<IScheduleMatrixPro> allPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonMatrixList)
         {
             List<DateOnly> dayOff,effectiveDays,unLockedDays;
@@ -156,7 +157,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return true;
         }
 
-        private List<IScheduleMatrixPro> GetScheduleMatrixProList(IGroupPerson groupPerson, DateOnly startDate, IEnumerable<IScheduleMatrixPro> matrixList)
+        private static List<IScheduleMatrixPro> GetScheduleMatrixProList(IGroupPerson groupPerson, DateOnly startDate, IEnumerable<IScheduleMatrixPro> matrixList)
         {
             var person = groupPerson;
             var date = startDate;

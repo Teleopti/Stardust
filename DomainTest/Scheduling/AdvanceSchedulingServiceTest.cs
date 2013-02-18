@@ -99,10 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Expect.Call(_dynamicBlockFinder.ExtractBlockDays(dateOnly)).IgnoreArguments().Return(dateOnlyList);
             Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_baseLineData.Person1,
                                                                             _baseLineData.BaseDateOnly)).Return(_baseLineData.GroupPerson );
-            //Expect.Call(_groupPerson.GroupMembers).Return(_baseLineData.ReadOnlyCollectionPersonList);
-            //Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-            
-            //Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
+
             Expect.Call(_groupPersonBuilderBasedOnContractTime.SplitTeams(_baseLineData.GroupPerson , dateOnly)).IgnoreArguments().
                 Return(groupPersonList);
             Expect.Call(_restrictionAggregator.Aggregate(dateOnlyList, _baseLineData.GroupPerson, _schedulingOptions)).

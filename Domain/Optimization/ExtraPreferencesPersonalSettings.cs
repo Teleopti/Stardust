@@ -109,7 +109,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// </summary>
         /// <param name="key">The key.</param>
         /// <remarks>Used in tests only</remarks>
-        public void SetGroupPageOnTeamLevelingper(string key)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
+        public void SetGroupPageOnTeamLevellingPer(string key)
         {
             _groupPageOnTeamLevelingPerKey = key;
         }
