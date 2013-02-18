@@ -61,13 +61,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 
 			_jobId = Guid.NewGuid();
 			_statPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 31);
-			_mess = new QuickForecastWorkloadMessage {JobId = _jobId,StatisticPeriod = _statPeriod, UpdateStandardTemplates = true};
+			_mess = new QuickForecastWorkloadMessage {JobId = _jobId,StatisticPeriod = _statPeriod};
 		}
 
 		[Test]
 		public void ShouldExitIfWrongWorkloadId()
 		{
+			var jobResult = _mocks.DynamicMock<IJobResult>();
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			Expect.Call(_jobResultRep.Get(_jobId)).Return(jobResult);
 			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Return(null);
 			_mocks.ReplayAll();
 			_target.Consume(_mess);

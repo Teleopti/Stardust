@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 	        comboBoxSmoothing.SelectedValue = _stateObj.SmoothingStyle;
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool Depopulate(QuickForecastModel stateObj)
 		{
 			stateObj.SmoothingStyle = (int)comboBoxSmoothing.SelectedValue;
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 		{
 			return new List<SmoothingValue>
 			{
-			    new SmoothingValue{Smoothing = 0, Text = Resources.None},
+			    new SmoothingValue{Smoothing = 1, Text = Resources.None},
 			    new SmoothingValue{Smoothing = 3, Text = "xxLittle"},
 			    new SmoothingValue{Smoothing = 5, Text = "xxMedium"},
 			    new SmoothingValue{Smoothing = 7, Text = "xxMuch"}
@@ -74,7 +75,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
 		internal class SmoothingValue
 		{
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
 			public int Smoothing { get; set; }
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
 			public string Text { get; set; }
 		}
 

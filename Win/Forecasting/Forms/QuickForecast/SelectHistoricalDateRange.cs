@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 			reportDateFromToSelector1.WorkPeriodEnd = new DateOnly(_stateObj.StatisticPeriod.EndDate.DateTime);
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool Depopulate(QuickForecastModel stateObj)
         {
 	        stateObj.StatisticPeriod = new DateOnlyPeriodDto

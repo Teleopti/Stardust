@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			_forecastClassesCreator = forecastClassesCreator;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void Consume(QuickForecastWorkloadMessage message)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
