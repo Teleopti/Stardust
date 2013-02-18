@@ -1,9 +1,3 @@
-//-----------------------------------------------------------------------
-// <copyright file="Util.cs" company="Andrew Arnott">
-//     Copyright (c) Andrew Arnott. All rights reserved.
-// </copyright>
-//-----------------------------------------------------------------------
-
 using System;
 using System.Configuration;
 using System.Web;
@@ -13,7 +7,7 @@ using DotNetOpenAuth.OpenId.Provider;
 using System.Web.Mvc;
 using DotNetOpenAuth.Messaging;
 
-namespace Teleopti.Ccc.Web.IdentityProvider.Code
+namespace Teleopti.Ccc.Web.IdentityProvider.Core
 {
 	public class Util
 	{
@@ -63,14 +57,6 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Code
 		{
 			// Verify that RP discovery is successful.
 			if (idrequest.IsReturnUrlDiscoverable(ProviderEndpoint.Provider.Channel.WebRequestHandler) != RelyingPartyDiscoveryResult.Success)
-			{
-				idrequest.IsAuthenticated = false;
-				ProviderEndpoint.Provider.PrepareResponse(idrequest).AsActionResult();
-			}
-
-			// Verify that the RP is on the whitelist.  Realms are case sensitive.
-			string[] whitelist = ConfigurationManager.AppSettings["whitelistedRealms"].Split(';');
-			if (Array.IndexOf(whitelist, idrequest.Realm.ToString()) < 0)
 			{
 				idrequest.IsAuthenticated = false;
 				ProviderEndpoint.Provider.PrepareResponse(idrequest).AsActionResult();

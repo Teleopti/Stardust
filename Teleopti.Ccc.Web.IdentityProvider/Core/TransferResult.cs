@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace Teleopti.Ccc.Web.IdentityProvider.Code
+namespace Teleopti.Ccc.Web.IdentityProvider.Core
 {
     public class TransferResult : RedirectResult
     {

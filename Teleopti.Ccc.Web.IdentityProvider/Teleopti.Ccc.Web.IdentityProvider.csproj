@@ -96,8 +96,8 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\TransferResult.cs" />
-    <Compile Include="Code\Util.cs" />
+    <Compile Include="Core\TransferResult.cs" />
+    <Compile Include="Core\Util.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OpenIdController.cs" />
