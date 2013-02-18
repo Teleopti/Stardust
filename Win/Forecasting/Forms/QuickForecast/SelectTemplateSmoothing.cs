@@ -4,7 +4,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 {
