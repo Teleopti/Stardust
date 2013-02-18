@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
@@ -33,7 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 	    private bool _eventCalled;
 
-
         [SetUp]
         public void Setup()
         {
@@ -65,6 +65,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void ShouldVerifyWhenMoreThanOneShiftIsFilteredOutExecution()
         {
+            var teamSteadyStates = new Dictionary<Guid, bool>();
+            teamSteadyStates.Add(new Guid(), true);
+            var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStates);
+
             var scheduleDayProList = new List<IScheduleDayPro>{_scheduleDayPro };
             var scheduleDayProCollection = new ReadOnlyCollection<IScheduleDayPro>(scheduleDayProList);
             var dateOnlyList = new List<DateOnly> {_baseLineData.BaseDateOnly };
@@ -79,15 +83,56 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             }
             using(_mocks.Playback() )
             {
-                Assert.That(_target.Execute(new Dictionary<string, IWorkShiftFinderResult>(), matrixList, matrixList), Is.True);
+                Assert.That(_target.Execute(new Dictionary<string, IWorkShiftFinderResult>(), matrixList, matrixList, teamSteadyStateHolder), Is.True);
             }
            
+        }
+
+        [Test]
+        public void ShouldNotContinueWhenTeamNotInSteadyState()
+        {
+            var teamSteadyStates = new Dictionary<Guid, bool>();
+            teamSteadyStates.Add(new Guid(), false);
+            var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStates);
+
+            var scheduleDayProList = new List<IScheduleDayPro> { _scheduleDayPro };
+            var scheduleDayProCollection = new ReadOnlyCollection<IScheduleDayPro>(scheduleDayProList);
+            var dateOnlyList = new List<DateOnly> { _baseLineData.BaseDateOnly };
+            var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+            using (_mocks.Record())
+            {
+                Expect.Call(() => _teamScheduling.DayScheduled += null).IgnoreArguments();
+
+                //first sub method
+                Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(scheduleDayProCollection).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro.Day).Return(_baseLineData.BaseDateOnly).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProCollection).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrixPro.Person.Equals(_baseLineData.Person1)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+
+
+                Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_baseLineData.BaseDateOnly )).IgnoreArguments().Return(dateOnlyList);
+                Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_baseLineData.Person1,
+                                                                                _baseLineData.BaseDateOnly)).Return(_baseLineData.GroupPerson);
+                Expect.Call(_scheduleMatrixPro.Person).Return(_baseLineData.Person1).Repeat.AtLeastOnce();
+
+                Expect.Call(() => _teamScheduling.DayScheduled -= null).IgnoreArguments();
+            }
+            using (_mocks.Playback())
+            {
+                Assert.That(_target.Execute(new Dictionary<string, IWorkShiftFinderResult>(), matrixList, matrixList, teamSteadyStateHolder), Is.True);
+            }
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldJumpIfCanceledByTeamScheduling()
 		{
-			SchedulingServiceBaseEventArgs args = new SchedulingServiceBaseEventArgs(null);
+            var teamSteadyStates = new Dictionary<Guid, bool>();
+            teamSteadyStates.Add(new Guid(), true);
+            var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStates);
+
+            SchedulingServiceBaseEventArgs args = new SchedulingServiceBaseEventArgs(null);
             args.Cancel = true;
 
 			AdvanceSchedulingServiceForTest target = new AdvanceSchedulingServiceForTest(_skillDayPeriodIntervalDataGenerator,
@@ -114,14 +159,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			}
 			using (_mocks.Playback())
 			{
-				Assert.That(target.Execute(new Dictionary<string, IWorkShiftFinderResult>(), matrixList, matrixList), Is.True);
+                Assert.That(target.Execute(new Dictionary<string, IWorkShiftFinderResult>(), matrixList, matrixList, teamSteadyStateHolder), Is.True);
 			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldReRaiseEventFromTeamScheduling()
 		{
-			SchedulingServiceBaseEventArgs args = new SchedulingServiceBaseEventArgs(null);
+            var teamSteadyStates = new Dictionary<Guid, bool>();
+            teamSteadyStates.Add(new Guid(), true);
+            var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStates);
+
+            SchedulingServiceBaseEventArgs args = new SchedulingServiceBaseEventArgs(null);
 			args.Cancel = true;
 
 			AdvanceSchedulingServiceForTest target = new AdvanceSchedulingServiceForTest(_skillDayPeriodIntervalDataGenerator,
@@ -148,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			}
 			using (_mocks.Playback())
 			{
-				Assert.That(target.Execute(new Dictionary<string, IWorkShiftFinderResult>(), matrixList, matrixList), Is.True);
+                Assert.That(target.Execute(new Dictionary<string, IWorkShiftFinderResult>(), matrixList, matrixList, teamSteadyStateHolder), Is.True);
 				target.DayScheduled -= dayScheduled;
 				Assert.IsTrue(_eventCalled);
 			}

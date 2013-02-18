@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
     public interface IAdvanceSchedulingService
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList, IList<IScheduleMatrixPro> allPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonMatrixList);
+        bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList, IList<IScheduleMatrixPro> allPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonMatrixList,TeamSteadyStateHolder teamSteadyStateHolder );
     }
     public class AdvanceSchedulingService : IAdvanceSchedulingService
     {
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList, IList<IScheduleMatrixPro> allPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonMatrixList)
+		public bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList, IList<IScheduleMatrixPro> allPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonMatrixList,TeamSteadyStateHolder teamSteadyStateHolder)
         {
 			_teamScheduling.DayScheduled += dayScheduled;
             List<DateOnly> dayOff,effectiveDays,unLockedDays;
@@ -76,6 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 
                 foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
                 {
+                    if(!teamSteadyStateHolder.IsSteadyState(fullGroupPerson)) continue;
                     var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, startDate);
                     foreach (var groupPerson in groupPersonList)
                     {

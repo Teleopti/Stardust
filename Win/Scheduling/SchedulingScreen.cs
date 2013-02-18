@@ -3652,18 +3652,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
                     //when the advance scheduling is required
                     _groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate; 
-                    //var selectedPerson = new List<IPerson>();
-                    //foreach(var matrix in matrixList )
-                    //{
-                    //    if(!selectedPerson.Contains(matrix.Person ))
-                    //    {
-                    //        selectedPerson.Add(matrix.Person);
-                    //    }
-                    //}
-                    //var selectedPersonMatrixList = matrixList;
-                    //var selectedPersonAllMatrixList = matrixListAll;
+
                     var allPersonMatrixList = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
-                    _scheduleOptimizerHelper.BlockScheduleForAdvanceScheduling(matrixList, matrixListAll, allPersonMatrixList, _backgroundWorkerScheduling, schedulingOptions);
+                    _scheduleOptimizerHelper.BlockScheduleForAdvanceScheduling(matrixList, matrixListAll, allPersonMatrixList, _backgroundWorkerScheduling, schedulingOptions, scheduleDays);
                 }
                 
             }
