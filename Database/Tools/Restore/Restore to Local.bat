@@ -142,7 +142,7 @@ GOTO Start
 CLS
 ECHO Available Baselines:
 ECHO -------------------------------------------
-ECHO Database                           @@Version     Comment         Path
+ECHO Database   @@Version/Comment         Path
 ECHO -------------------------------------------
 for /f "usebackq tokens=1,2 delims=;" %%g in ("%Tfiles%\Databases.txt") do echo %%g
 ECHO.
@@ -154,7 +154,7 @@ SET /P Customer=Restore which fileset (e.g. Demo):
 
 findstr /B /C:"%Customer%" /I "%Tfiles%\Databases.txt" > %temp%\string.txt
 if %errorlevel% neq 0 GOTO PickDb
-for /f "tokens=1,2 delims=;" %%g in (%temp%\string.txt) do set DBPath=%%h
+for /f "tokens=1,2,3 delims=;" %%g in (%temp%\string.txt) do set DBPath=%%i
 if "%DBPath%"=="" set DBPath=%Tfiles%
 
 SET AppRar=%Customer%App.rar

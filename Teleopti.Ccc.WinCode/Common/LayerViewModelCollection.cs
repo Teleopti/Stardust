@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WinCode.Common
             {
                 if (_scheduleLayers == null)
                 {
-                    CollectionViewSource viewSource = new CollectionViewSource() { Source = this };
+                    CollectionViewSource viewSource = new CollectionViewSource { Source = this };
                     _scheduleLayers = viewSource.View;
                     _scheduleLayers.Filter = LayersFromSchedulePart;
                     _scheduleLayers.SortDescriptions.Add(new SortDescription("VisualOrderIndex", ListSortDirection.Ascending));
@@ -113,7 +113,6 @@ namespace Teleopti.Ccc.WinCode.Common
             CreateProjectionViewModels(sender.SchedulePart);
 
             Remove(sender);
-            ScheduleLayers.Refresh();
         }
 
         public void RemoveAbsence(ILayerViewModel sender)
@@ -122,7 +121,6 @@ namespace Teleopti.Ccc.WinCode.Common
             CreateProjectionViewModels(sender.SchedulePart);
 
             Remove(sender);
-            ScheduleLayers.Refresh();
         }
 
         public void SelectLayer(ILayerViewModel model)
@@ -245,7 +243,6 @@ namespace Teleopti.Ccc.WinCode.Common
 
         public void LayerMovedVertically(ILayerViewModel sender)
         {
-            ScheduleLayers.Refresh();
             CreateProjectionViewModels(_part);
         }
 

@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             //delete schedule on the two days
             IList<IScheduleDay> listToDelete = new List<IScheduleDay> { firstDay.DaySchedulePart(), secondDay.DaySchedulePart() };
-			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService);
+			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks);
             var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
                                                                         schedulingOptions.ConsiderShortBreaks);
 

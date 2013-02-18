@@ -109,7 +109,7 @@
     	public const string AbsenceRequestsWeb = "0077";
 		public const string AgentScheduleMessenger = "0078";
 		public const string ExtendedPreferencesWeb = "0079";
-		public const string ShiftTradeRequestsWeb = "0080";
+		public const string ShiftTradeRequestsWeb = "0083";
 
 		// Mobile Reports
 		public const string MobileReports = "0074";

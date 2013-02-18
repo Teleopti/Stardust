@@ -977,10 +977,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			SetupForMergeTests();
 
-			//ISignificantPartService absenceService = _mocks.StrictMock<ISignificantPartService>(); //Service for easier testing with Significantpart
 			using (_mocks.Record())
 			{
-				//Expect.Call(absenceService.SignificantPart()).Return(SchedulePartView.Absence).Repeat.Any();
 			}
 
 			using (_mocks.Playback())
@@ -995,7 +993,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				destination.Add(personAbsenceDest);
 				destination.Add(personAssignmentDest);
 
-
 				//merge
 				((ExtractedSchedule)destination).MergeAbsences(source, true);
 
@@ -1003,7 +1000,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Assert.AreEqual(1, destination.PersonDayOffCollection().Count);
 				Assert.AreEqual(3, destination.PersonAbsenceCollection().Count);
 				Assert.AreEqual(1, destination.PersonAssignmentCollection().Count);
-
 			}
 		}
 

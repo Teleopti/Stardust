@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections;
-using System.Data.SqlClient;
 using System.Drawing;
-using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -134,58 +133,10 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
         [Test]
         public void ShouldGetAllExceptionsIfSqlExceptionException()
         {
-            var createSqlException = SqlExceptionCreator.CreateSqlException("Timeout", 123);
+            var createSqlException = SqlExceptionConstructor.CreateSqlException("Timeout", 123);
             var model = new ExceptionHandlerModel(createSqlException, "", _mapi, _fileWriter);
             var expectedString = model.CompleteStackAndAssemblyText();
             expectedString.Should().StartWith("System.Data.SqlClient.SqlError: Timeout\nSystem.Data.SqlClient.SqlError: Timeout2");
-        }
-    }
-
-    /// <summary>
-    /// Class for creating SQL-Exceptions
-    /// </summary>
-    public static class SqlExceptionCreator
-    {
-        public static SqlException CreateSqlException(string errorMessage, int errorNumber)
-        {
-            var collection = GetErrorCollection();
-            var error = GetError(errorNumber, errorMessage);
-            var error2 = GetError(errorNumber+1, errorMessage+"2");
-
-            var addMethod = collection.GetType().GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Instance);
-            addMethod.Invoke(collection, new object[] { error });
-            addMethod.Invoke(collection, new object[] { error2 });
-
-            var types = new[] { typeof(string), typeof(SqlErrorCollection) };
-            var parameters = new object[] { errorMessage, collection };
-
-            var constructor = typeof(SqlException).
-                GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, types, null);
-
-            var exception = (SqlException)constructor.Invoke(parameters);
-
-            return exception;
-        }
-
-        private static SqlError GetError(int errorCode, string message)
-        {
-            var parameters = new object[] {
-            errorCode, (byte)0, (byte)10, "server", message, "procedure", 0 };
-            var types = new[] {
-            typeof(int), typeof(byte), typeof(byte), typeof(string), typeof(string),
-            typeof(string), typeof(int) };
-
-            var constructor = typeof(SqlError).
-                GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, types, null);
-            var error = (SqlError)constructor.Invoke(parameters);
-            return error;
-        }
-
-        private static SqlErrorCollection GetErrorCollection()
-        {
-            var constructor = typeof(SqlErrorCollection).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { }, null);
-            var collection = (SqlErrorCollection) constructor.Invoke(new object[] {});
-            return collection;
         }
     }
 }
