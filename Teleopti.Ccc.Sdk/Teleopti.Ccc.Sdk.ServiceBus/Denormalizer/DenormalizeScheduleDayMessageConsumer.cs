@@ -1,4 +1,5 @@
-﻿using Rhino.ServiceBus;
+﻿using System;
+using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -14,15 +15,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
+	    private readonly IServiceBus _serviceBus;
 
-		public DenormalizeScheduleDayMessageConsumer(IUnitOfWorkFactory unitOfWorkFactory, IScenarioRepository scenarioRepository,
-			IPersonRepository personRepository, IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,IScheduleDayReadModelRepository scheduleDayReadModelRepository)
+	    public DenormalizeScheduleDayMessageConsumer(IUnitOfWorkFactory unitOfWorkFactory, IScenarioRepository scenarioRepository,
+			IPersonRepository personRepository, IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,IScheduleDayReadModelRepository scheduleDayReadModelRepository, IServiceBus serviceBus)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
 			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
+		    _serviceBus = serviceBus;
 		}
 		
 		public void Consume(DenormalizeScheduleDayMessage message)
@@ -36,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 					var period = new DateTimePeriod(message.StartDateTime, message.EndDateTime);
 					var person = _personRepository.Get(message.PersonId);
-
+                    
 					// Get list of readmodels from class that fetch for person and period and turn into list of readmodels
 					_scheduleDayReadModelsCreator.SetInitialLoad(true);
 					var readModels = _scheduleDayReadModelsCreator.GetReadModels(scenario, period, person);
@@ -44,6 +47,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 					if(readModels.Count > 0)
 					    _scheduleDayReadModelRepository.SaveReadModels(readModels);
 				}
+
+                //_serviceBus.Send(new RTAUpdatedScheduleDayMessage(){ ActivityStartDateTime = message.StartDateTime, 
+                //                                                     ActivityEndDateTime = message.EndDateTime, PersonId = message.PersonId, 
+                //                                                     BusinessUnitId = message.BusinessUnitId, Timestamp = message.Timestamp , 
+                //                                                     Datasource = message.Datasource });
+                
 			}
 		}
 	}

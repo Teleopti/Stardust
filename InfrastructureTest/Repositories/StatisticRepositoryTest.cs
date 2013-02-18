@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyPersonIdsWithExternalLogOn()
 		{
-			target.PersonIdsWithExternalLogOn(Guid.NewGuid());
+			target.PersonIdsWithExternalLogOn();
 		}
 
         protected override void SetupForRepositoryTest()

@@ -124,6 +124,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBusTest", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\Teleopti.Ccc.Sdk.ServiceBusTest.csproj", "{C9BC9C31-36DB-48B1-874C-69589E3FDE04}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.csproj", "{9DF2D12C-4895-42D9-A365-6B9F97E787B5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BE2EB225-3FAA-460A-B616-4A67CCF05EFD} = {BE2EB225-3FAA-460A-B616-4A67CCF05EFD}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.DayOffPlanningTest", "Teleopti.Ccc.DayOffPlanningTest\Teleopti.Ccc.DayOffPlanningTest.csproj", "{8CA6DF87-B017-4180-A8E4-A80C16D954F1}"
 EndProject

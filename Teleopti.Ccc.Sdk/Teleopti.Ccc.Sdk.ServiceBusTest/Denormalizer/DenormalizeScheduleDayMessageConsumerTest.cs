@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private IUnitOfWork _unitOfWork;
 		private IScheduleDayReadModelsCreator _readModelsCreator;
 		private IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
+	    private IServiceBus _serviceBus;
 
 		[SetUp]
 		public void Setup()
@@ -34,7 +36,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			_personRepository = _mocks.DynamicMock<IPersonRepository>();
 			_readModelsCreator = _mocks.DynamicMock<IScheduleDayReadModelsCreator>();
 			_scheduleDayReadModelRepository = _mocks.DynamicMock<IScheduleDayReadModelRepository>();
-			_target = new DenormalizeScheduleDayMessageConsumer(_unitOfWorkFactory,_scenarioRepository,_personRepository,_readModelsCreator,_scheduleDayReadModelRepository);
+		    _serviceBus = _mocks.DynamicMock<IServiceBus>();
+			_target = new DenormalizeScheduleDayMessageConsumer(_unitOfWorkFactory,_scenarioRepository,_personRepository,_readModelsCreator,_scheduleDayReadModelRepository,_serviceBus);
 		}
 
 		[Test]

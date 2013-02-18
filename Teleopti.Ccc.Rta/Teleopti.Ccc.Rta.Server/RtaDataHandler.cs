@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Rta.Server
 	public class RtaDataHandler : IRtaDataHandler
 	{
 		private readonly IRtaConsumer _rtaConsumer;
-		private readonly IMessageSender _messageSender;
+	    private readonly IMessageSender _messageSender;
 		private readonly string _connectionStringDataStore;
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private static ILog _loggingSvc;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Rta.Server
 		protected RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
 		                         IDatabaseConnectionFactory databaseConnectionFactory, IDataSourceResolver dataSourceResolver,
 		                         IPersonResolver personResolver,
-		                         IStateResolver stateResolver)
+                                 IStateResolver stateResolver)
 		{
 			_loggingSvc = loggingSvc;
 			_messageSender = messageSender;
@@ -51,7 +51,8 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
 		                      IDatabaseConnectionFactory databaseConnectionFactory, IDataSourceResolver dataSourceResolver,
-		                      IPersonResolver personResolver, IStateResolver stateResolver, IRtaConsumer rtaConsumer)
+                              IPersonResolver personResolver, IStateResolver stateResolver, IRtaConsumer rtaConsumer
+            )
 		{
 			_loggingSvc = loggingSvc;
 			_messageSender = messageSender;
@@ -61,10 +62,13 @@ namespace Teleopti.Ccc.Rta.Server
 			_personResolver = personResolver;
 			_stateResolver = stateResolver;
 			_rtaConsumer = rtaConsumer;
+            
 
-			try
+		    try
 			{
 				_messageSender.InstantiateBrokerService();
+			   // _messageBrokerResolver.MessageBroker.RegisterEventSubscription(getActivityChangeInTheScheduler, typeof(IActivityChangeInTheScheduler));
+
 			}
 			catch (BrokerNotInstantiatedException ex)
 			{
@@ -74,11 +78,12 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 		}
 
-		public RtaDataHandler(IRtaConsumer rtaConsumer)
+       
+        public RtaDataHandler(IRtaConsumer rtaConsumer) 
 			: this(
 				LogManager.GetLogger(typeof (RtaDataHandler)),
 				MessageSenderFactory.CreateMessageSender(ConfigurationManager.AppSettings["MessageBroker"]),
-				ConfigurationManager.AppSettings["DataStore"], new DatabaseConnectionFactory(), null, null, null)
+                ConfigurationManager.AppSettings["DataStore"], new DatabaseConnectionFactory(), null, null, null, null)
 		{
 			_rtaConsumer = rtaConsumer;
 

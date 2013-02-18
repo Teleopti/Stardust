@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private IPerson person;
 		private IScenario scenario;
 		private IScheduleChangedNotification scheduleChangedNotification;
+	    private IServiceBus serviceBus;
 
 		[SetUp]
 		public void Setup()
@@ -31,7 +33,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			scenario = ScenarioFactory.CreateScenarioAggregate();
 			person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
-			target = new UpdateScheduleProjectionReadModel(scheduleProjectionReadOnlyRepository, scheduleRepository, scheduleChangedNotification);
+            serviceBus = mocks.DynamicMock<IServiceBus>();
+			target = new UpdateScheduleProjectionReadModel(scheduleProjectionReadOnlyRepository, scheduleRepository, scheduleChangedNotification, serviceBus);
 		}
 
 		[Test]
