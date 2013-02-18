@@ -36,11 +36,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			_timelineFactory = MockRepository.GenerateMock<IShiftTradeTimeLineHoursViewModelFactory>();
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();
+			_userCulture.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
 			_scheduleFactory = new StubFactory();
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			_person = new Person {Name = new Name("John", "Doe")};
 			_person.PermissionInformation.SetDefaultTimeZone(timeZone);
-
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(() => _shiftTradeRequestProvider, () => _projectionProvider, Depend.On(_timelineFactory), () => _userCulture)));
 		}
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                }));
 			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
 			var expectedDate = TimeZoneHelper.ConvertFromUtc(startDate, _person.PermissionInformation.DefaultTimeZone());
-			result.ScheduleLayers.First().StartTimeText.Should().Be.EqualTo(expectedDate.ToString("HH:mm"));
+			result.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
 		}
 
 		[Test]
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
 
 			var expectedDate = TimeZoneHelper.ConvertFromUtc(endDate, _person.PermissionInformation.DefaultTimeZone());
-			result.ScheduleLayers.First().EndTimeText.Should().Be.EqualTo(expectedDate.ToString("HH:mm"));
+			result.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
 		}
 
 		[Test]
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(startDate));
 
 			var expectedDate = TimeZoneHelper.ConvertFromUtc(startDate, _person.PermissionInformation.DefaultTimeZone());
-			result.MySchedule.ScheduleLayers.First().StartTimeText.Should().Be.EqualTo(expectedDate.ToString("HH:mm"));
+			result.MySchedule.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
 		}
 
 		[Test]
@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(endDate));
 
 			var expectedDate = TimeZoneHelper.ConvertFromUtc(endDate, _person.PermissionInformation.DefaultTimeZone());
-			result.MySchedule.ScheduleLayers.First().EndTimeText.Should().Be.EqualTo(expectedDate.ToString("HH:mm"));
+			result.MySchedule.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
 		}
 
 		[Test]

@@ -192,8 +192,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 											 Payload = visualLayer.DisplayDescription().Name,
 											 LengthInMinutes = (int)length,
 											 Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
-											 StartTimeText = startDate.ToString("HH:mm"),
-											 EndTimeText = endDate.ToString("HH:mm"),
 											 Title = createTitle(startDate, endDate),
 											 ElapsedMinutesSinceShiftStart = (int)startDate.Subtract(TimeZoneHelper.ConvertFromUtc(shiftStartTime, timeZone)).TotalMinutes
 										 }).ToList();
@@ -204,9 +202,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			//make a component for this?
 			var userCulture = _userCulture().GetCulture();
-			//easier testing - not null in runtime 
-			if (userCulture == null)
-				userCulture = CultureInfo.CurrentUICulture;
 			return string.Concat(start.ToString(userCulture.DateTimeFormat.ShortTimePattern, userCulture), " - ",
 													 end.ToString(userCulture.DateTimeFormat.ShortTimePattern, userCulture));
 		}

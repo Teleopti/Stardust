@@ -150,8 +150,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.payload = layer.Payload;
 		self.backgroundColor = layer.Color;
-		self.startTime = layer.StartTimeText;
-		self.endTime = layer.EndTimeText;
 		self.lengthInMinutes = layer.LengthInMinutes;
 		self.leftPx = ko.computed(function () {
 			var timeLineoffset = minutesSinceTimeLineStart;
